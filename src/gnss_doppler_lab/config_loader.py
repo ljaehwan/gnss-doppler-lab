@@ -9,6 +9,13 @@ from gnss_doppler_lab.scenario import ScenarioConfig
 
 def load_scenario_config(path: Path) -> ScenarioConfig:
     data = yaml.safe_load(path.read_text())
+    rinex_nav_path = None
+    if data.get("rinex_nav_path"):
+        nav_path = Path(str(data["rinex_nav_path"]))
+        if not nav_path.is_absolute():
+            nav_path = (path.parent / nav_path).resolve()
+        rinex_nav_path = str(nav_path)
+
     return ScenarioConfig(
         scenario_name=data["scenario_name"],
         latitude_deg=float(data["latitude_deg"]),
@@ -24,5 +31,5 @@ def load_scenario_config(path: Path) -> ScenarioConfig:
         num_satellites=int(data.get("num_satellites", 24)),
         orbital_planes=int(data.get("orbital_planes", 6)),
         carrier_frequency_hz=float(data.get("carrier_frequency_hz", 1_575_420_000.0)),
-        rinex_nav_path=str(data["rinex_nav_path"]) if data.get("rinex_nav_path") else None,
+        rinex_nav_path=rinex_nav_path,
     )

@@ -28,6 +28,7 @@ Thumbs.db
 # Project artifacts
 data/raw_ephemeris/*
 !data/raw_ephemeris/.gitkeep
+!data/raw_ephemeris/BRDC00WRD_S_20240010000_01D_MN.rnx
 data/simulated/*
 !data/simulated/.gitkeep
 data/trajectories/*

@@ -12,3 +12,6 @@ def test_load_scenario_config_reads_extended_fields() -> None:
     assert config.receiver_speed_mps == 22.0
     assert config.num_satellites == 24
     assert config.epoch_count == 11
+    assert config.rinex_nav_path is not None
+    assert Path(config.rinex_nav_path).name == "BRDC00WRD_S_20240010000_01D_MN.rnx"
+    assert Path(config.rinex_nav_path).is_absolute()
