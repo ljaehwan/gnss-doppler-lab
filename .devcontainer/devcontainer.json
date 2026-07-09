@@ -1,0 +1,14 @@
+{
+  "name": "gnss-doppler-lab",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "lab",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+      ]
+    }
+  }
+}
