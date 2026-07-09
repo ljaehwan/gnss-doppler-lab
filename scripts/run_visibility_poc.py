@@ -13,7 +13,7 @@ from gnss_doppler_lab.pipeline import run_visibility_pipeline
 
 if __name__ == "__main__":
     result = run_visibility_pipeline(
-        config_path=REPO_ROOT / "configs" / "seoul_poc.yaml",
+        config_path=REPO_ROOT / "configs" / "seoul_yesterday_13_15.yaml",
         output_root=REPO_ROOT / "artifacts",
     )
     print(f"output_dir={result.output_dir}")
