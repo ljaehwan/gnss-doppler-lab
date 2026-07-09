@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 
 import numpy as np
+import pytest
 
 from gnss_doppler_lab.doppler_simulator import doppler_observation_matrix
 from gnss_doppler_lab.ephemeris_backend import (
@@ -121,3 +122,20 @@ def test_simulate_hover_doppler_scenario_builds_5hz_static_receiver_dataset(tmp_
     assert np.allclose(scenario["receiver_velocities_ecef_mps"], 0.0)
     assert scenario["doppler_hz"].shape == (5, 2)
     assert np.isfinite(scenario["doppler_hz"]).all()
+
+
+
+def test_simulate_hover_doppler_scenario_rejects_time_outside_nav_coverage(tmp_path):
+    nav_path = _write_sample_nav(tmp_path)
+
+    with pytest.raises(ValueError, match="outside NAV coverage"):
+        simulate_hover_doppler_scenario(
+            nav_path,
+            start_time_utc=datetime(2027, 5, 12, 13, 0, 0, tzinfo=timezone.utc),
+            duration_seconds=60.0,
+            sample_rate_hz=1.0,
+            latitude_deg=37.5665,
+            longitude_deg=126.9780,
+            altitude_m=120.0,
+            elevation_mask_deg=-90.0,
+        )

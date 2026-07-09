@@ -345,6 +345,39 @@ def elevation_azimuth_deg(satellite_position_ecef_m: np.ndarray, receiver_ecef_m
     return elevation, azimuth
 
 
+def _validate_requested_times_within_nav_coverage(
+    records: Iterable[GpsBroadcastEphemeris],
+    times_utc: Iterable[datetime],
+    *,
+    max_distance_hours: float = 12.0,
+) -> None:
+    records_list = list(records)
+    times = list(times_utc)
+    if not records_list:
+        raise ValueError("no GPS ephemeris records available in NAV file")
+    if not times:
+        raise ValueError("times_utc must not be empty")
+
+    record_times = [record.toc.astimezone(timezone.utc) for record in records_list]
+    request_times = [time_utc.astimezone(timezone.utc) for time_utc in times]
+    max_distance_seconds = max_distance_hours * 3600.0
+
+    for request_time in request_times:
+        nearest_seconds = min(abs((request_time - record_time).total_seconds()) for record_time in record_times)
+        if nearest_seconds > max_distance_seconds:
+            coverage_start = min(record_times)
+            coverage_end = max(record_times)
+            request_start = min(request_times)
+            request_end = max(request_times)
+            raise ValueError(
+                "requested time window is outside NAV coverage: "
+                f"request=[{request_start.isoformat()} .. {request_end.isoformat()}], "
+                f"nav=[{coverage_start.isoformat()} .. {coverage_end.isoformat()}], "
+                f"nearest_record_gap_hours={nearest_seconds / 3600.0:.3f}"
+            )
+
+
+
 def visible_satellite_states(
     records: list[GpsBroadcastEphemeris],
     times_utc: Iterable[datetime],
@@ -354,6 +387,7 @@ def visible_satellite_states(
 ) -> dict[str, np.ndarray | list[str]]:
     """Prepare hover/static receiver arrays plus visibility metadata."""
     times = list(times_utc)
+    _validate_requested_times_within_nav_coverage(records, times)
     sat_positions, sat_velocities, prns = satellite_states_for_times(records, times)
     receiver_position = np.asarray(receiver_position_ecef_m, dtype=float)
     receiver_positions = np.repeat(receiver_position[None, :], len(times), axis=0)
