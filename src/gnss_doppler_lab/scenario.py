@@ -20,6 +20,7 @@ class ScenarioConfig:
     num_satellites: int = 24
     orbital_planes: int = 6
     carrier_frequency_hz: float = 1_575_420_000.0
+    rinex_nav_path: str | None = None
 
     @property
     def sample_period_s(self) -> float:

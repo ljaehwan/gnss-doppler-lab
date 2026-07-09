@@ -9,6 +9,7 @@ from pathlib import Path
 from gnss_doppler_lab.config_loader import load_scenario_config
 from gnss_doppler_lab.coordinates import add, enu_to_ecef_vector, geodetic_to_ecef, scale
 from gnss_doppler_lab.doppler import compute_doppler_hz
+from gnss_doppler_lab.ephemeris_backend import simulate_hover_doppler_scenario
 from gnss_doppler_lab.satellites import generate_satellite_constellation
 from gnss_doppler_lab.visibility import visible_satellites
 
@@ -40,6 +41,12 @@ def run_visibility_pipeline(config_path: Path, output_root: Path) -> PipelineRes
     output_dir = output_root / config.scenario_name
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    if config.rinex_nav_path:
+        return _run_rinex_nav_pipeline(config, output_dir)
+    return _run_synthetic_pipeline(config, output_dir)
+
+
+def _run_synthetic_pipeline(config, output_dir: Path) -> PipelineResult:
     receiver_start, velocity_ecef, _ = _receiver_kinematics(config)
     timeseries_rows: list[dict[str, float | str | int]] = []
     summary: dict[str, dict[str, float | int]] = {}
@@ -96,6 +103,80 @@ def run_visibility_pipeline(config_path: Path, output_root: Path) -> PipelineRes
             per_satellite["samples"] += 1
             per_satellite["max_elevation_deg"] = max(per_satellite["max_elevation_deg"], visibility_record.elevation_deg)
             per_satellite["min_elevation_deg"] = min(per_satellite["min_elevation_deg"], visibility_record.elevation_deg)
+
+    _write_csv(output_dir / "doppler_timeseries.csv", timeseries_rows)
+    summary_rows = [
+        {
+            "prn": prn,
+            "samples": values["samples"],
+            "min_elevation_deg": round(values["min_elevation_deg"], 3),
+            "max_elevation_deg": round(values["max_elevation_deg"], 3),
+        }
+        for prn, values in sorted(summary.items())
+    ]
+    _write_csv(output_dir / "visibility_summary.csv", summary_rows)
+
+    return PipelineResult(
+        output_dir=output_dir,
+        records_written=len(timeseries_rows),
+        visible_satellite_count=len(summary_rows),
+    )
+
+
+def _run_rinex_nav_pipeline(config, output_dir: Path) -> PipelineResult:
+    scenario = simulate_hover_doppler_scenario(
+        config.rinex_nav_path,
+        start_time_utc=config.start_time,
+        duration_seconds=config.duration_s,
+        sample_rate_hz=config.sample_rate_hz,
+        latitude_deg=config.latitude_deg,
+        longitude_deg=config.longitude_deg,
+        altitude_m=config.altitude_m,
+        elevation_mask_deg=config.mask_angle_deg,
+    )
+
+    timeseries_rows: list[dict[str, float | str | int]] = []
+    summary: dict[str, dict[str, float | int]] = {}
+    times = scenario["times_utc"]
+    prns = scenario["prns"]
+    visibility = scenario["visibility_mask"]
+    elevations = scenario["elevation_deg"]
+    azimuths = scenario["azimuth_deg"]
+    sat_positions = scenario["satellite_positions_ecef_m"]
+    rx_positions = scenario["receiver_positions_ecef_m"]
+    doppler = scenario["doppler_hz"]
+
+    for epoch_index, epoch_time in enumerate(times):
+        elapsed_s = epoch_index * (1.0 / config.sample_rate_hz)
+        for sat_index, prn in enumerate(prns):
+            if not bool(visibility[epoch_index, sat_index]):
+                continue
+            delta = sat_positions[epoch_index, sat_index] - rx_positions[epoch_index]
+            range_m = float((delta @ delta) ** 0.5)
+            elevation = float(elevations[epoch_index, sat_index])
+            timeseries_rows.append(
+                {
+                    "epoch_index": epoch_index,
+                    "time_utc": epoch_time.isoformat().replace("+00:00", "Z"),
+                    "elapsed_s": round(elapsed_s, 3),
+                    "prn": prn,
+                    "azimuth_deg": round(float(azimuths[epoch_index, sat_index]), 3),
+                    "elevation_deg": round(elevation, 3),
+                    "range_m": round(range_m, 3),
+                    "doppler_hz": round(float(doppler[epoch_index, sat_index]), 3),
+                }
+            )
+            per_satellite = summary.setdefault(
+                prn,
+                {
+                    "samples": 0,
+                    "max_elevation_deg": elevation,
+                    "min_elevation_deg": elevation,
+                },
+            )
+            per_satellite["samples"] += 1
+            per_satellite["max_elevation_deg"] = max(per_satellite["max_elevation_deg"], elevation)
+            per_satellite["min_elevation_deg"] = min(per_satellite["min_elevation_deg"], elevation)
 
     _write_csv(output_dir / "doppler_timeseries.csv", timeseries_rows)
     summary_rows = [

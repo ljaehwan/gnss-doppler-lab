@@ -24,4 +24,5 @@ def load_scenario_config(path: Path) -> ScenarioConfig:
         num_satellites=int(data.get("num_satellites", 24)),
         orbital_planes=int(data.get("orbital_planes", 6)),
         carrier_frequency_hz=float(data.get("carrier_frequency_hz", 1_575_420_000.0)),
+        rinex_nav_path=str(data["rinex_nav_path"]) if data.get("rinex_nav_path") else None,
     )
