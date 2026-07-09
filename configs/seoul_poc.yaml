@@ -3,6 +3,13 @@ latitude_deg: 37.5665
 longitude_deg: 126.9780
 altitude_m: 120.0
 start_time_utc: "2026-07-09T00:00:00Z"
-duration_s: 120.0
-sample_rate_hz: 5.0
+duration_s: 10.0
+sample_rate_hz: 1.0
+receiver_speed_mps: 22.0
+receiver_heading_deg: 45.0
+climb_rate_mps: 0.5
+mask_angle_deg: 10.0
+num_satellites: 24
+orbital_planes: 6
+carrier_frequency_hz: 1575420000.0
 notes: "Initial PoC scenario for visibility and Doppler pipeline."
