@@ -9,6 +9,5 @@ services:
     stdin_open: true
     volumes:
       - ./:/workspace
-      - /mnt/user/Storage_HDD/projects/gnss-doppler-lab/data:/workspace/data
       - /mnt/user/Storage_HDD/projects/gnss-doppler-lab/outputs:/workspace/artifacts
     command: bash

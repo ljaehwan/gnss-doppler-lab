@@ -1,0 +1,20 @@
+version: 1
+scenario:
+  name: seoul-normal-smoke-2022
+  constellation: GPS
+  signal: L1CA
+  utc: "2022-01-01T00:00:00Z"
+  duration_seconds: 1
+  position:
+    type: static
+    latitude_deg: 37.5665
+    longitude_deg: 126.9780
+    altitude_m: 38.0
+input:
+  rinex_nav: ../.tools/gps-sdr-sim-src/brdc0010.22n
+output:
+  root: ../artifacts/rf_runs
+  rf_sample_rate_hz: 2600000
+  sample_format: s8_iq
+simulator:
+  executable: gps-sdr-sim
