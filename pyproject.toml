@@ -17,6 +17,9 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "pytest>=8.0",
+  "jupyterlab>=4.0",
+  "ipykernel>=6.0",
+  "nbclient>=0.10",
 ]
 
 [project.scripts]

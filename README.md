@@ -36,6 +36,36 @@ GPS-SDR-SIM 실행(gps_sdr_sim.py)
 
 향후 이 IQ를 GNSS-SDR에 입력하여 PRN별 Doppler, C/N0, correlator, pseudorange 등을 추출합니다.
 
+## 연구 시퀀스 Notebook
+
+자동화 스크립트와 별도로, 연구자가 단계마다 멈춰서 원시 데이터·중간 표·그래프·판정 기준을 확인할 수 있도록 `notebooks/`를 순서대로 구성합니다.
+
+```text
+00_research_sequence.ipynb
+    전체 단계와 현재 산출물 준비 상태
+        ↓
+01_normal_iq_generation_and_inspection.ipynb
+    정상 IQ manifest·표본·파형·I/Q 밀도·PSD·스펙트로그램
+        ↓
+02_gnss_sdr_receiver_analysis.ipynb
+    GNSS-SDR acquisition·tracking·PRN별 Doppler·observables
+        ↓
+03_normal_vs_spoofing_comparison.ipynb
+    정상/스푸핑 IQ와 공격 전후 수신기 값 비교
+        ↓
+04_detection_dataset_and_baselines.ipynb
+    window feature·데이터 분리·통계/ML/DL 기준 모델 평가
+```
+
+VS Code에서 저장소를 연 뒤 `notebooks/00_research_sequence.ipynb`부터 열고 오른쪽 위의 **모두 실행**을 누릅니다. Kernel은 프로젝트의 `.venv/bin/python`을 선택합니다. 이후 Notebook을 번호순으로 진행합니다.
+
+```bash
+python -m pip install -e '.[dev]'
+python -m ipykernel install --user --name gnss-doppler-lab --display-name "GNSS Doppler Lab"
+```
+
+02~04 단계의 데이터가 아직 없더라도 Notebook은 실패하지 않고 필요한 다음 산출물과 예상 열을 표시합니다. 계산 로직은 Notebook 안에 중복 구현하지 않고 `src/gnss_doppler_lab/` 모듈을 호출하므로, 자동화 실행과 대화형 분석이 같은 코드를 사용합니다.
+
 ## 현재 지원 범위
 
 - Constellation: GPS
