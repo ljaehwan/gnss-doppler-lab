@@ -48,7 +48,9 @@ def sequence_status(artifacts_root: str | Path) -> dict[str, dict[str, Any]]:
     root = Path(artifacts_root)
     normal_runs = _complete_rf_runs(root / "rf_runs")
     normal = max(normal_runs, key=lambda p: (p / "manifest.json").stat().st_mtime_ns) if normal_runs else None
-    receiver = _newest_parent(list((root / "receiver_runs").glob("*/observables.csv")))
+    receiver_candidates = list((root / "receiver_runs").glob("*/tracking.csv"))
+    receiver_candidates += list((root / "receiver_runs").glob("*/observables.csv"))
+    receiver = _newest_parent(receiver_candidates)
     spoof = _newest_parent(list((root / "spoofing_runs").glob("*/gps_l1ca_s8_iq.bin")))
     comparison = _newest_parent(list((root / "comparisons").glob("*/comparison.csv")))
     dataset_files = list((root / "datasets").glob("*.csv")) + list((root / "datasets").glob("*.parquet"))

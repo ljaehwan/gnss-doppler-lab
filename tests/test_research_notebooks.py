@@ -23,6 +23,8 @@ def test_single_research_notebook_has_linear_executable_structure() -> None:
         "진행 상황",
         "generate_iq.py",
         "RUN_GENERATION",
+        "RUN_RECEIVER",
+        "GNSS_SDR_PATH",
         "SCENARIO_NAME",
         "SCENARIO_UTC",
         "POSITION_MODE",

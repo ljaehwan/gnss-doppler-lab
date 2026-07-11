@@ -44,7 +44,7 @@ def test_sequence_status_reports_stage_artifacts(tmp_path: Path) -> None:
     run = _make_run(tmp_path / "rf_runs", "normal", 100)
     receiver = tmp_path / "receiver_runs" / "normal"
     receiver.mkdir(parents=True)
-    (receiver / "observables.csv").write_text("time,prn,doppler_hz\n0,G01,1200\n")
+    (receiver / "tracking.csv").write_text("time_s,prn,carrier_doppler_hz\n0,G01,1200\n")
 
     status = sequence_status(tmp_path)
 

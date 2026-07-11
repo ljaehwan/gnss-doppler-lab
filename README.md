@@ -14,7 +14,7 @@ Notebook 실험 설정
 → TEXBAT/OAKBAT/FGI 외부 일반화
 ```
 
-현재 구현 완료 범위는 **정적 위치 GPS L1 C/A 정상 IQ 생성과 기초 IQ 시각화**입니다. 이동 trajectory, GNSS-SDR 자동 처리, 스푸핑 생성과 탐지 모델은 후속 단계입니다.
+현재 구현 완료 범위는 **정적 위치 GPS L1 C/A 정상 IQ 생성, IQ 시각화, GNSS-SDR acquisition/tracking 및 Doppler·C/N₀ CSV 추출**입니다. 이동 trajectory, navigation/PVT용 장시간 run, 스푸핑 생성과 탐지 모델은 후속 단계입니다.
 
 ## 시작점: 통합 Jupyter Notebook
 
@@ -34,6 +34,9 @@ Notebook 맨 앞 설정 셀에서 실험 조건을 바꿉니다.
 
 ```python
 RUN_GENERATION = False
+RUN_RECEIVER = False
+GNSS_SDR_PATH = Path("/usr/bin/gnss-sdr")
+GNSS_SDR_CHANNEL_COUNT = 11
 SCENARIO_NAME = "seoul-normal-static-2022"
 SCENARIO_UTC = "2022-01-01T00:00:00Z"
 DURATION_SECONDS = 1
@@ -50,6 +53,7 @@ RINEX_NAV_PATH = PROJECT_ROOT / ".tools" / "gps-sdr-sim-src" / "brdc0010.22n"
 
 - 기존 최신 IQ 분석: `RUN_GENERATION = False`
 - 새 설정으로 IQ 생성: `RUN_GENERATION = True`
+- 최신 IQ를 GNSS-SDR로 처리: `RUN_RECEIVER = True`
 - 현재 위치 변경: 위도·경도·고도 변경
 - 향후 이동체: `POSITION_MODE="trajectory"`와 `TRAJECTORY_FILE`을 사용할 예정이며 현재는 명시적으로 중단됩니다.
 
@@ -91,6 +95,23 @@ artifacts/rf_runs/<run-id>/
 - IQ 형식: signed 8-bit interleaved complex I/Q
 - 기본 sample rate: 2.6 MHz
 - `manifest.json`: UTC, 위치, NAV/IQ hash, sample 수, 실행 명령과 simulator 정보
+
+GNSS-SDR 처리 결과:
+
+```text
+artifacts/receiver_runs/<run-id>/
+├── receiver.conf
+├── receiver.log
+├── tracking.csv
+├── tracking_summary.csv
+├── raw/
+│   ├── epl_tracking_ch_*.mat
+│   ├── epl_tracking_ch_*.dat
+│   └── observables.mat
+└── manifest.json
+```
+
+`tracking.csv`에는 시간, PRN, carrier Doppler, Doppler rate, C/N₀, Prompt I/Q, carrier/code loop error가 저장됩니다. `manifest.json`은 GNSS-SDR 버전·실행파일/config/IQ hash와 acquisition된 PRN을 보존합니다.
 
 ## 환경 준비
 
