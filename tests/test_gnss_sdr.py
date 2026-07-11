@@ -51,14 +51,36 @@ def test_render_receiver_config_matches_s8_complex_baseband(tmp_path: Path) -> N
     assert str(output.resolve() / "raw" / "epl_tracking_ch_") in config
 
 
-def test_parse_acquired_prns_returns_sorted_unique_gps_ids() -> None:
+def test_parse_acquired_prns_preserves_order_and_deduplicates_gps_ids() -> None:
     log = """
 Tracking of GPS L1 C/A signal started on channel 2 for satellite GPS PRN 18 (Block III)
 Tracking of GPS L1 C/A signal started on channel 4 for satellite GPS PRN 05 (Block IIR-M)
 Tracking of GPS L1 C/A signal started on channel 9 for satellite GPS PRN 18 (Block III)
 """
 
-    assert parse_acquired_prns(log) == ["G05", "G18"]
+    assert parse_acquired_prns(log) == ["G18", "G05"]
+
+
+def test_parse_acquired_prns_handles_interleaved_split_tracking_start() -> None:
+    log = """Current receiver time: Tracking of GPS L1 C/A signal started on channel 13 for satellite  s
+GPS PRN 15 (Block IIR-M)
+GPS PRN 22: detected preamble and decoded NAV subframe
+Tracking of GPS L1 C/A signal started on channel 4 for satellite
+Current receiver time: 41 s
+GPS PRN 05 (Block IIR-M)
+"""
+
+    assert parse_acquired_prns(log) == ["G15", "G05"]
+
+
+def test_parse_acquired_prns_does_not_treat_nav_messages_as_acquisition() -> None:
+    log = """GPS PRN 22: detected preamble and decoded NAV subframe
+NAV message received for GPS PRN 09 (Block IIF)
+Tracking of GPS L1 C/A signal started on channel 1 for satellite
+telemetry decoder: GPS PRN 31 decoded subframe 2
+"""
+
+    assert parse_acquired_prns(log) == []
 
 
 def test_export_tracking_csv_preserves_prn_time_doppler_and_summary(tmp_path: Path) -> None:

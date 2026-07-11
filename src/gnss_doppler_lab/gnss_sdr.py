@@ -100,9 +100,48 @@ PVT.dump=false
 
 
 def parse_acquired_prns(log_text: str) -> list[str]:
-    """Extract unique acquired/tracked GPS PRNs from GNSS-SDR console output."""
-    prns = {int(value) for value in re.findall(r"Tracking of GPS L1 C/A signal started.*?PRN\s+(\d+)", log_text)}
-    return [f"G{prn:02d}" for prn in sorted(prns)]
+    """Extract unique tracked GPS PRNs from GNSS-SDR console output.
+
+    GNSS-SDR writes to stdout from multiple threads, so the satellite part of a
+    tracking-start message can be interrupted by a receiver-time message and/or
+    a newline.  Keep the continuation window deliberately small instead of
+    matching across the entire log: otherwise a later navigation message that
+    mentions ``GPS PRN`` could be attributed to an unrelated tracking start.
+    """
+    start = "Tracking of GPS L1 C/A signal started"
+    prn_pattern = re.compile(r"\bGPS\s+PRN\s+(\d+)\b")
+    lines = log_text.splitlines()
+    prns: list[int] = []
+    seen: set[int] = set()
+
+    for index, line in enumerate(lines):
+        marker = line.find(start)
+        if marker < 0:
+            continue
+
+        candidates = [line[marker + len(start):]]
+        # A split start message resumes either directly with ``GPS PRN`` or
+        # after one interleaved receiver-time line.  Do not consume arbitrary
+        # subsequent log lines.
+        for continuation in lines[index + 1:index + 3]:
+            stripped = continuation.lstrip()
+            if prn_pattern.match(stripped):
+                candidates.append(stripped)
+                break
+            if stripped.startswith("Current receiver time:"):
+                candidates.append(stripped)
+                continue
+            break
+
+        match = next((prn_pattern.search(candidate) for candidate in candidates
+                      if prn_pattern.search(candidate)), None)
+        if match:
+            prn = int(match.group(1))
+            if prn not in seen:
+                seen.add(prn)
+                prns.append(prn)
+
+    return [f"G{prn:02d}" for prn in prns]
 
 
 def _channel_number(path: Path) -> int:

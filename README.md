@@ -1,5 +1,23 @@
 # GNSS Doppler Lab
 
+## GPS-SDR-SIM `-t` timescale
+
+Although upstream documents `-t` as a date/time calendar, the pinned GPS-SDR-SIM
+passes those fields directly to `date2gps`; they are therefore **GPST-like**, not
+UTC. `scenario.utc` remains actual UTC. Generation strictly reads the fixed-column
+`LEAP SECONDS` record from the selected RINEX NAV header and passes
+`scenario.utc + GPS_MINUS_UTC` to `-t` (including date rollover). Missing,
+duplicate, malformed, non-ASCII, or unterminated headers fail closed; no leap
+second value is hardcoded.
+
+Manifest schema 2 records the requested UTC, GPST simulator calendar, GPS-UTC
+offset, GPS week/TOW, and the source NAV path/hash/header record. Static and
+trajectory generation share this conversion. Dynamic validation directly aligns
+PVT UTC to requested UTC for corrected manifests (zero correction). Old manifests
+without timescale metadata are rejected as ambiguous unless the user explicitly
+passes `--legacy-gps-utc-offset-seconds N`; that override is recorded in the
+validation summary and is never inferred automatically.
+
 GPS L1 C/A 정상·스푸핑 RF/IQ를 생성하고 GNSS-SDR 내부값과 Doppler 기반 탐지 방법을 연구하는 프로젝트입니다.
 
 ## 현재 연구 방향
@@ -14,7 +32,7 @@ Notebook 실험 설정
 → TEXBAT/OAKBAT/FGI 외부 일반화
 ```
 
-현재 구현 완료 범위는 **정적 위치 GPS L1 C/A 정상 IQ 생성, IQ 시각화, GNSS-SDR acquisition/tracking 및 Doppler·C/N₀ CSV 추출**입니다. 이동 trajectory, navigation/PVT용 장시간 run, 스푸핑 생성과 탐지 모델은 후속 단계입니다.
+현재 구현 완료 범위는 **정적 위치 및 최대 300초의 10 Hz LLH/ECEF trajectory를 사용하는 GPS L1 C/A 정상 IQ 생성, IQ 시각화, GNSS-SDR acquisition/tracking 및 Doppler·C/N₀ CSV 추출**입니다. navigation/PVT용 장시간 run, 스푸핑 생성과 탐지 모델은 후속 단계입니다. trajectory 지원은 라이브러리/CLI에 한하며, 통합 Notebook은 안전 기본값으로 static-only guard를 유지합니다.
 
 ## 시작점: 통합 Jupyter Notebook
 
@@ -55,7 +73,7 @@ RINEX_NAV_PATH = PROJECT_ROOT / ".tools" / "gps-sdr-sim-src" / "brdc0010.22n"
 - 새 설정으로 IQ 생성: `RUN_GENERATION = True`
 - 최신 IQ를 GNSS-SDR로 처리: `RUN_RECEIVER = True`
 - 현재 위치 변경: 위도·경도·고도 변경
-- 향후 이동체: `POSITION_MODE="trajectory"`와 `TRAJECTORY_FILE`을 사용할 예정이며 현재는 명시적으로 중단됩니다.
+- Notebook 위치 모드는 안전 기본값인 static-only guard로 제한됩니다. 10 Hz LLH/ECEF trajectory(최대 300초)는 아래의 라이브러리/CLI 사용법을 따르십시오.
 
 Notebook은 설정으로 임시 YAML을 만들고 `scripts/generate_iq.py`를 호출합니다. 임시 설정 파일은 실행 후 삭제되며 실험 조건은 최종 `manifest.json`에 보존됩니다.
 
@@ -149,3 +167,19 @@ python scripts/generate_iq.py generate /path/to/config.yaml \
 ```bash
 pytest -q
 ```
+
+## Dynamic trajectories (10 Hz)
+
+Generate headerless WGS-84 LLH truth for Seoul (all distances in m, speeds in m/s, angles in deg):
+
+```bash
+python -m gnss_doppler_lab.trajectory straight trajectories/S1.csv --latitude-deg 37.5665 --longitude-deg 126.9780 --altitude-m 50 --duration-seconds 60 --speed-mps 5
+python -m gnss_doppler_lab.trajectory circle trajectories/S2.csv --latitude-deg 37.5665 --longitude-deg 126.9780 --altitude-m 50 --duration-seconds 60 --speed-mps 5 --radius-m 30
+# Exactly two closed laps in 60 s; --laps determines the effective speed.
+python -m gnss_doppler_lab.trajectory circle trajectories/S2-closed.csv --latitude-deg 37.5665 --longitude-deg 126.9780 --altitude-m 50 --duration-seconds 60 --speed-mps 5 --radius-m 30 --laps 2
+python -m gnss_doppler_lab.trajectory parallel-sweep trajectories/S3.csv --latitude-deg 37.5665 --longitude-deg 126.9780 --altitude-m 50 --duration-seconds 60 --speed-mps 5 --leg-length-m 100 --lane-spacing-m 20
+```
+
+The time contract is exact: duration `D` produces exactly `D * 10` headerless rows at timestamps `0.0, 0.1, ..., D - 0.1`; extra rows are rejected rather than silently truncated. A normal `circle` is constant-radius circular motion and may cover only an arc. Its sidecar reports effective arc, lap count, closure error, and `closed_orbit` without claiming closure. Use a positive integer `--laps` for an exactly closed conceptual orbit (the endpoint at `D` is excluded by the sampling contract); this overrides effective speed while preserving the existing required `--speed-mps` CLI argument.
+
+Each command atomically writes the truth CSV and JSON sidecar. The sidecar includes the CSV SHA-256, generator schema/version, WGS-84 constants/frame, actual row/time bounds, effective distance/speed/laps/closure, parameters, and literature provenance. Pair failure policy removes the old sidecar before CSV publication, so failure can leave an unmistakable CSV-without-sidecar but never a stale mismatched pair. At RF config load, a present standard sidecar is schema-checked and its `csv_sha256` must match the exact CSV bytes; therefore project-generated trajectories retain their integrity binding. External trajectory CSVs without a sidecar remain supported, but are still hashed during validation and the validated snapshot hash is mandatory in the run manifest. The runner rejects source mutation after validation and verifies the staged copy before simulator execution. Configure `scenario.position` as `{type: trajectory, path: ../trajectories/S1.csv, coordinate_system: llh}` (`ecef` is also accepted). Paths resolve relative to the YAML. Library/CLI trajectory runs are strictly validated at 10 Hz and limited to 300 s. Existing static configs remain supported; the integrated notebook intentionally retains its static-only guard as a safe default and does not accept trajectory mode.

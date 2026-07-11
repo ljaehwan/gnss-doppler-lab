@@ -2,18 +2,21 @@ import json
 from pathlib import Path
 import subprocess
 import hashlib
+import shutil
 from dataclasses import replace
 
 import pytest
 
-from gnss_doppler_lab.rf_config import ConfigError, load_rf_config
-from gnss_doppler_lab.gps_sdr_sim import GpsSdrSimRunner, SimulatorError
+from gnss_doppler_lab.rf_config import ConfigError, load_rf_config, TrajectoryPosition
+from gnss_doppler_lab.gps_sdr_sim import GpsSdrSimRunner, SimulatorError, parse_rinex_leap_seconds, simulator_time
 from gnss_doppler_lab.rf_pipeline import generate_iq
 
 
 def config_file(tmp_path, *, position="static"):
     nav = tmp_path / "input.nav"
-    nav.write_text("     2.10           N: GPS NAV DATA                         RINEX VERSION / TYPE\n")
+    nav.write_text("     2.10           N: GPS NAV DATA                         RINEX VERSION / TYPE\n"
+                   "    18                                                      LEAP SECONDS\n"
+                   "                                                            END OF HEADER\n")
     cfg = tmp_path / "scenario.yaml"
     cfg.write_text(f'''version: 1
 scenario:
@@ -39,6 +42,18 @@ simulator:
     return cfg, nav
 
 
+def dynamic_config(tmp_path):
+    cfg_path, _ = config_file(tmp_path)
+    cfg = load_rf_config(cfg_path)
+    source = tmp_path / "trajectory.csv"
+    source.write_text("time_s,lat,lon,h\n0,37.5,127.0,42\n")
+    digest = hashlib.sha256(source.read_bytes()).hexdigest()
+    position = TrajectoryPosition(
+        source, "llh", ((0.0, 37.5, 127.0, 42.0),), digest, None, None
+    )
+    return replace(cfg, scenario=replace(cfg.scenario, position=position))
+
+
 def test_load_versioned_config_and_resolve_paths(tmp_path):
     cfg_path, nav = config_file(tmp_path)
     cfg = load_rf_config(cfg_path)
@@ -49,14 +64,26 @@ def test_load_versioned_config_and_resolve_paths(tmp_path):
     assert cfg.scenario.utc.isoformat() == "2026-07-11T03:04:05+00:00"
 
 
-def test_rejects_unknown_version_and_trajectory(tmp_path):
+def test_rejects_fractional_second_scenario_utc(tmp_path):
+    cfg_path, _ = config_file(tmp_path)
+    cfg_path.write_text(
+        cfg_path.read_text().replace(
+            '2026-07-11T03:04:05Z', '2026-07-11T03:04:05.123456Z'
+        )
+    )
+
+    with pytest.raises(ConfigError, match=r"scenario\.utc.*integer seconds"):
+        load_rf_config(cfg_path)
+
+
+def test_rejects_unknown_version_and_malformed_trajectory(tmp_path):
     cfg_path, _ = config_file(tmp_path)
     text = cfg_path.read_text().replace("version: 1", "version: 2")
     cfg_path.write_text(text)
     with pytest.raises(ConfigError, match="version"):
         load_rf_config(cfg_path)
     cfg_path, _ = config_file(tmp_path, position="trajectory")
-    with pytest.raises(ConfigError, match="not supported"):
+    with pytest.raises(ConfigError, match="coordinate_system"):
         load_rf_config(cfg_path)
 
 
@@ -69,7 +96,7 @@ def test_discovery_precedence_and_command_contract(tmp_path, monkeypatch):
     out = tmp_path / "x.bin"
     assert runner.build_command(cfg, out) == [
         "/explicit/sim", "-e", str(nav.resolve()), "-l", "37.50000000,127.00000000,42.000",
-        "-t", "2026/07/11,03:04:05", "-d", "2", "-s", "2600000", "-b", "8", "-o", str(out),
+        "-t", "2026/07/11,03:04:23", "-d", "2", "-s", "2600000", "-b", "8", "-o", str(out),
     ]
 
 
@@ -150,7 +177,11 @@ def test_pipeline_deterministic_layout_and_manifest(tmp_path):
     manifest_path = generate_iq(cfg, FakeRunner())
     assert manifest_path == cfg.output.root / "seoul-normal_20260711T030405Z" / "manifest.json"
     m = json.loads(manifest_path.read_text())
-    assert m["schema_version"] == 1
+    assert m["schema_version"] == 2
+    assert m["scenario"]["time"]["requested_utc"] == "2026-07-11T03:04:05Z"
+    assert m["scenario"]["time"]["simulator_input_calendar"] == "2026/07/11,03:04:23"
+    assert m["scenario"]["time"]["simulator_input_time_scale"] == "GPST"
+    assert m["scenario"]["time"]["gps_minus_utc_seconds"] == 18
     assert m["input"]["rinex_nav_sha256"]
     assert m["iq"]["actual_bytes"] == 4
     assert m["iq"]["complex_samples"] == 2
@@ -203,6 +234,69 @@ def test_runner_stages_short_nav_name_and_returns_exact_argv(tmp_path, monkeypat
     result = GpsSdrSimRunner("/sim").run(cfg, out, tmp_path / "log")
     assert result["command"] == seen["argv"]
     assert not (out.parent / "nav.rnx").exists()
+
+
+def test_static_run_preserves_preexisting_motion_csv(tmp_path, monkeypatch):
+    cfg_path, _ = config_file(tmp_path)
+    cfg = load_rf_config(cfg_path)
+    output_dir = tmp_path / "out"
+    output_dir.mkdir()
+    existing_motion = output_dir / "motion.csv"
+    existing_motion.write_text("owned by another process")
+
+    def fake_run(argv, **kwargs):
+        (Path(kwargs["cwd"]) / argv[-1]).write_bytes(b"IQ")
+        return subprocess.CompletedProcess(argv, 0, "", "")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    GpsSdrSimRunner("/sim").run(cfg, output_dir / "iq.bin", tmp_path / "log")
+    assert existing_motion.read_text() == "owned by another process"
+
+
+def test_dynamic_motion_collision_cleans_only_nav_created_by_call(tmp_path, monkeypatch):
+    cfg = dynamic_config(tmp_path)
+    output_dir = tmp_path / "out"
+    output_dir.mkdir()
+    existing_motion = output_dir / "motion.csv"
+    existing_motion.write_text("preexisting")
+    monkeypatch.setattr(subprocess, "run", lambda *a, **k: pytest.fail("must not execute"))
+
+    with pytest.raises(SimulatorError, match="motion.csv staging collision"):
+        GpsSdrSimRunner("/sim").run(cfg, output_dir / "iq.bin", tmp_path / "log")
+
+    assert not (output_dir / "nav.rnx").exists()
+    assert existing_motion.read_text() == "preexisting"
+
+
+def test_dynamic_motion_copy_failure_cleans_nav_and_is_simulator_error(tmp_path, monkeypatch):
+    cfg = dynamic_config(tmp_path)
+    output_dir = tmp_path / "out"
+
+    def fail_copy(*args, **kwargs):
+        raise OSError("copy denied")
+
+    monkeypatch.setattr(shutil, "copyfile", fail_copy)
+    with pytest.raises(SimulatorError, match="could not stage motion.csv.*copy denied"):
+        GpsSdrSimRunner("/sim").run(cfg, output_dir / "iq.bin", tmp_path / "log")
+    assert not (output_dir / "nav.rnx").exists()
+    assert not (output_dir / "motion.csv").exists()
+
+
+def test_dynamic_success_cleans_nav_and_motion_staging(tmp_path, monkeypatch):
+    cfg = dynamic_config(tmp_path)
+    output_dir = tmp_path / "out"
+
+    def fake_run(argv, **kwargs):
+        cwd = Path(kwargs["cwd"])
+        assert (cwd / "nav.rnx").is_file()
+        assert (cwd / "motion.csv").read_text() == cfg.scenario.position.path.read_text()
+        (cwd / argv[-1]).write_bytes(b"IQ")
+        return subprocess.CompletedProcess(argv, 0, "", "")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    GpsSdrSimRunner("/sim").run(cfg, output_dir / "iq.bin", tmp_path / "log")
+    assert not (output_dir / "nav.rnx").exists()
+    assert not (output_dir / "motion.csv").exists()
 
 
 def test_manifest_records_unverified_executable_hash_and_cli_contract(tmp_path):
@@ -262,3 +356,28 @@ def test_runner_provenance_hashes_available_path_executable(tmp_path, monkeypatc
     assert probe["provenance"] == "unverified"
     assert probe["cli_contract"].endswith(GpsSdrSimRunner.pinned_commit)
     assert probe["executable_sha256"] == hashlib.sha256(executable.read_bytes()).hexdigest()
+
+
+def test_rinex_timescale_midnight_and_rollover(tmp_path):
+    cfg_path, nav = config_file(tmp_path)
+    cfg_path.write_text(cfg_path.read_text().replace("2026-07-11T03:04:05Z", "2022-01-01T00:00:00Z"))
+    cfg = load_rf_config(cfg_path)
+    t = simulator_time(cfg.scenario.utc, nav)
+    assert t.simulator_input_calendar == "2022/01/01,00:00:18"
+    assert (t.gps_week, t.gps_tow_seconds) == (2190, 518418)
+    cfg_path.write_text(cfg_path.read_text().replace("2022-01-01T00:00:00Z", "2022-01-01T23:59:50Z"))
+    t = simulator_time(load_rf_config(cfg_path).scenario.utc, nav)
+    assert t.simulator_input_calendar == "2022/01/02,00:00:08"
+
+
+@pytest.mark.parametrize("body,match", [
+    ("                                                            END OF HEADER\n", "missing LEAP SECONDS"),
+    ("  nope                                                      LEAP SECONDS\n                                                            END OF HEADER\n", "malformed LEAP SECONDS"),
+    ("    18                                                      LEAP SECONDS\n    18                                                      LEAP SECONDS\n                                                            END OF HEADER\n", "duplicate LEAP SECONDS"),
+    ("    18                                                      LEAP SECONDS\n", "END OF HEADER"),
+])
+def test_rinex_leap_seconds_fail_closed(tmp_path, body, match):
+    nav = tmp_path / "bad.nav"
+    nav.write_text("     2.10           N: GPS NAV DATA                         RINEX VERSION / TYPE\n" + body)
+    with pytest.raises(SimulatorError, match=match):
+        parse_rinex_leap_seconds(nav)
