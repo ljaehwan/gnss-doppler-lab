@@ -1,302 +1,130 @@
-# gnss-doppler-lab
+# GNSS Doppler Lab
 
-실제 GPS 천체력과 지정한 시각·위치를 이용해 **정상 GPS L1 C/A 복소 IQ 파형**을 생성하는 연구용 프로젝트입니다.
+GPS L1 C/A 정상·스푸핑 RF/IQ를 생성하고 GNSS-SDR 내부값과 Doppler 기반 탐지 방법을 연구하는 프로젝트입니다.
 
-현재 단계는 공격 신호나 탐지 AI를 다루지 않습니다. 먼저 재현 가능한 정상 IQ 생성 기반을 확정하는 것이 목적입니다.
-
-> 이 프로젝트는 소프트웨어 IQ 파일만 생성합니다. 실제 RF를 공중으로 송신하지 않습니다.
-
-## 쉽게 보는 동작 구조
+## 현재 연구 방향
 
 ```text
-설정 파일(YAML)
-  ├─ GPS RINEX NAV
-  ├─ 정확한 UTC
-  ├─ 위도·경도·고도
-  ├─ 생성 시간
-  └─ RF sample rate
-         │
-         ▼
-설정 검사(rf_config.py)
-         │
-         ▼
-GPS-SDR-SIM 실행(gps_sdr_sim.py)
-         │
-         ▼
-정상 GPS L1 C/A 연속 IQ 파일
-         │
-         ├─ gps_l1ca_s8_iq.bin
-         ├─ gps-sdr-sim.log
-         └─ manifest.json
-```
-
-- `gps_l1ca_s8_iq.bin`: 여러 가시 GPS 위성 신호가 합쳐진 연속 복소 IQ 파형
-- `gps-sdr-sim.log`: 가시 PRN과 simulator 실행 정보
-- `manifest.json`: NAV/IQ 해시, UTC, 위치, 실제 sample 수, 실행 명령 등 재현 정보
-
-향후 이 IQ를 GNSS-SDR에 입력하여 PRN별 Doppler, C/N0, correlator, pseudorange 등을 추출합니다.
-
-## 통합 연구 Notebook
-
-연구자가 정상 IQ 생성부터 외부 일반화까지 한 화면에서 진행률·중간 표·그래프·판정 기준을 확인하도록 단일 Notebook을 사용합니다.
-
-```text
-notebooks/gnss_spoofing_research_workflow.ipynb
-
-환경·설정 확인
-→ generate_iq.py 정상 IQ 생성
-→ manifest/raw IQ 기초 검증
-→ 가시 PRN·Doppler truth
+Notebook 실험 설정
+→ 실제 RINEX NAV/SP3·수신기 위치/궤적
+→ GPS-SDR-SIM IQ + simulator truth
 → GNSS-SDR acquisition/tracking/observables
-→ 정상 결과와 truth 비교
-→ 스푸핑 생성 및 정상/공격 비교
-→ 특징 데이터셋·통계/ML/DL
+→ 정상/스푸핑 비교
+→ 통계·ML·DL 탐지
 → TEXBAT/OAKBAT/FGI 외부 일반화
 ```
 
-VS Code에서 이 Notebook을 열고 Kernel로 프로젝트의 `.venv/bin/python`을 선택한 다음 위에서 아래로 실행합니다.
+현재 구현 완료 범위는 **정적 위치 GPS L1 C/A 정상 IQ 생성과 기초 IQ 시각화**입니다. 이동 trajectory, GNSS-SDR 자동 처리, 스푸핑 생성과 탐지 모델은 후속 단계입니다.
 
-```bash
-python -m pip install -e '.[dev]'
-python -m ipykernel install --user --name gnss-doppler-lab --display-name "GNSS Doppler Lab"
+## 시작점: 통합 Jupyter Notebook
+
+VS Code에서 다음 파일 하나를 엽니다.
+
+```text
+notebooks/gnss_spoofing_research_workflow.ipynb
 ```
 
-정상 IQ 생성 셀의 기본값은 기존 결과를 재사용하도록 설정되어 있습니다.
+Kernel은 다음을 선택합니다.
+
+```text
+/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python
+```
+
+Notebook 맨 앞 설정 셀에서 실험 조건을 바꿉니다.
 
 ```python
 RUN_GENERATION = False
+SCENARIO_NAME = "seoul-normal-static-2022"
+SCENARIO_UTC = "2022-01-01T00:00:00Z"
+DURATION_SECONDS = 1
+RF_SAMPLE_RATE_HZ = 2_600_000
+
+POSITION_MODE = "static"
+LATITUDE_DEG = 37.5665
+LONGITUDE_DEG = 126.9780
+ALTITUDE_M = 38.0
+TRAJECTORY_FILE = None
+
+RINEX_NAV_PATH = PROJECT_ROOT / ".tools" / "gps-sdr-sim-src" / "brdc0010.22n"
 ```
 
-새 정상 IQ를 생성할 때만 `True`로 변경합니다. Notebook은 `scripts/generate_iq.py`를 호출하고 로그·종료 상태·최신 산출물을 바로 표시합니다. 아직 구현되지 않은 후속 단계는 실패하지 않고 필요한 다음 산출물을 안내합니다. 반복 실행은 `scripts/`, 계산 로직은 `src/`, 실험 데이터는 `artifacts/`에 유지하며 Notebook 실행 복사본은 `artifacts/`에 저장하지 않습니다.
+- 기존 최신 IQ 분석: `RUN_GENERATION = False`
+- 새 설정으로 IQ 생성: `RUN_GENERATION = True`
+- 현재 위치 변경: 위도·경도·고도 변경
+- 향후 이동체: `POSITION_MODE="trajectory"`와 `TRAJECTORY_FILE`을 사용할 예정이며 현재는 명시적으로 중단됩니다.
 
-## 현재 지원 범위
+Notebook은 설정으로 임시 YAML을 만들고 `scripts/generate_iq.py`를 호출합니다. 임시 설정 파일은 실행 후 삭제되며 실험 조건은 최종 `manifest.json`에 보존됩니다.
 
-- Constellation: GPS
-- Signal: L1 C/A
-- Receiver position: 정적 위도·경도·고도
-- IQ format: signed 8-bit interleaved I/Q
-- 기본 RF sample rate: 2.6 MHz
-- NAV input: GPS RINEX 2 NAV
-- Output: 연속 IQ + 로그 + 실행 manifest
-
-아직 지원하지 않는 항목:
-
-- UAV trajectory
-- Mixed RINEX 3 NAV 직접 입력
-- GNSS-SDR 자동 처리
-- 스푸핑 IQ 합성
-- 탐지 모델 학습
-
-지원하지 않는 입력은 조용히 무시하지 않고 명시적인 오류로 중단합니다.
-
-## 프로젝트 구성
+## 주요 구조
 
 ```text
 gnss-doppler-lab/
-├── configs/
-│   └── gps_l1ca_static.example.yaml   # 정상 신호 시나리오 예제
-├── src/gnss_doppler_lab/
-│   ├── rf_config.py                   # YAML 읽기와 입력 검증
-│   ├── gps_sdr_sim.py                 # GPS-SDR-SIM 실행 어댑터
-│   ├── rf_pipeline.py                 # IQ·로그·manifest 생성 관리
-│   └── cli.py                         # gnss-iq 명령어
+├── notebooks/
+│   └── gnss_spoofing_research_workflow.ipynb
 ├── scripts/
-│   ├── generate_iq.py                 # 직접 실행용 진입점
-│   └── run_tests.sh                   # 테스트 실행
+│   ├── generate_iq.py
+│   └── run_tests.sh
+├── src/gnss_doppler_lab/
+│   ├── cli.py
+│   ├── gps_sdr_sim.py
+│   ├── iq_visualization.py
+│   ├── research_sequence.py
+│   ├── rf_config.py
+│   └── rf_pipeline.py
 ├── tools/
-│   └── build-gps-sdr-sim.sh           # pinned simulator 빌드
+│   └── build-gps-sdr-sim.sh
 ├── tests/
-│   ├── test_rf_generation.py
-│   └── test_rf_cli.py
-├── docker/
-│   └── Dockerfile                     # simulator까지 포함한 이미지
-├── artifacts/                         # 생성 결과, Git에서 제외
-├── docker-compose.yml
+├── artifacts/
 └── pyproject.toml
 ```
 
-기존 관측값 수준 Doppler simulator, synthetic constellation, visibility PoC 및 관련 설정·테스트는 현재 RF 방향과 맞지 않아 제거했습니다.
-
-## Windows에서 VS Code로 실행
-
-이 프로젝트의 Python 코드는 Windows에서도 동작하지만, 실제 IQ 생성기인 `gps-sdr-sim`은 Linux 빌드 환경을 기준으로 합니다. 따라서 Windows에 컴파일러를 억지로 맞추기보다 **VS Code Dev Containers**를 사용합니다. 화면은 Windows VS Code 그대로이고, 실행만 프로젝트 전용 Linux 컨테이너에서 이루어집니다.
-
-필요 프로그램:
-
-1. Docker Desktop (`Use WSL 2 based engine` 사용)
-2. VS Code
-3. VS Code 확장 `Dev Containers` (`ms-vscode-remote.remote-containers`)
-
-실행 순서:
-
-1. VS Code로 저장소 폴더를 엽니다.
-2. `Ctrl+Shift+P`를 누릅니다.
-3. `Dev Containers: Reopen in Container`를 선택합니다.
-4. 최초 준비가 끝날 때까지 기다립니다. Python package와 고정 버전 GPS-SDR-SIM이 자동 설치됩니다.
-5. `scripts/generate_iq.py`를 열고 오른쪽 위 **Python 파일 실행 ▶**을 누르거나 `F5`를 누릅니다.
-
-명령행 인자를 직접 넣지 않아도 기본 예제 YAML을 사용합니다. 결과는 Windows에서도 저장소의 다음 폴더에 그대로 나타납니다.
+## IQ 산출물
 
 ```text
-artifacts/rf_runs/
+artifacts/rf_runs/<run-id>/
+├── gps_l1ca_s8_iq.bin
+├── gps-sdr-sim.log
+├── iq_dashboard.png
+└── manifest.json
 ```
 
-같은 시나리오가 이미 생성되어 있으면 안전을 위해 덮어쓰지 않습니다. 다시 실행하려면 기존 run 폴더를 삭제하거나 YAML의 `scenario.name`을 변경합니다.
+- IQ 형식: signed 8-bit interleaved complex I/Q
+- 기본 sample rate: 2.6 MHz
+- `manifest.json`: UTC, 위치, NAV/IQ hash, sample 수, 실행 명령과 simulator 정보
 
-> Windows PowerShell에서 파일을 바로 실행하면 Python 부분은 시작할 수 있어도 Linux용 `gps-sdr-sim` 실행 파일이 없어서 실제 IQ 생성 단계에서 중단됩니다. 권장 실행환경은 Windows VS Code + Dev Container입니다.
+## 환경 준비
 
-## 빠른 실행
-
-### 1. GPS-SDR-SIM 빌드
+Ubuntu VM 프로젝트에서:
 
 ```bash
-cd /opt/data/gnss-doppler-lab
+cd /home/ubuntu/projects/gnss-doppler-lab
+source .venv/bin/activate
+pip install -e '.[dev]'
 ./tools/build-gps-sdr-sim.sh
+pytest -q
 ```
 
-다음 upstream commit을 고정해 빌드합니다.
-
-```text
-osqzss/gps-sdr-sim
-28ca29a6719475195e3aabd5930c4ed02d67190f
-```
-
-### 2. 도구 확인
-
-package 설치 없이 실행할 때:
+Jupyter Kernel이 보이지 않을 때:
 
 ```bash
-PYTHONPATH=src python -m gnss_doppler_lab.cli probe \
+python -m ipykernel install --user \
+  --name gnss-doppler-lab \
+  --display-name "GNSS Doppler Lab"
+```
+
+## 직접 CLI 실행
+
+Notebook 이외에서 실행할 때는 명시적인 YAML 경로가 필요합니다.
+
+```bash
+python scripts/generate_iq.py generate /path/to/config.yaml \
   --executable .tools/gps-sdr-sim-src/gps-sdr-sim
 ```
 
-정상 결과 예시:
-
-```json
-{"available": true, "identity": "osqzss/gps-sdr-sim@28ca29a..."}
-```
-
-### 3. 정상 IQ 생성
-
-```bash
-PYTHONPATH=src python -m gnss_doppler_lab.cli generate \
-  configs/gps_l1ca_static.example.yaml \
-  --executable .tools/gps-sdr-sim-src/gps-sdr-sim
-```
-
-예제는 pinned upstream 소스에 포함된 실제 GPS RINEX 2 NAV 샘플과 일치하는 2022년 UTC를 사용합니다.
-
-### 4. 생성 결과 확인
-
-```text
-artifacts/rf_runs/
-└── seoul-normal-smoke-2022_20220101T000000Z/
-    ├── gps_l1ca_s8_iq.bin
-    ├── gps-sdr-sim.log
-    └── manifest.json
-```
-
-같은 시나리오와 UTC의 실행 디렉터리가 이미 있으면 기존 결과를 덮어쓰지 않습니다.
-
-## 설정 파일
-
-`configs/gps_l1ca_static.example.yaml`:
-
-```yaml
-version: 1
-scenario:
-  name: seoul-normal-smoke-2022
-  constellation: GPS
-  signal: L1CA
-  utc: "2022-01-01T00:00:00Z"
-  duration_seconds: 1
-  position:
-    type: static
-    latitude_deg: 37.5665
-    longitude_deg: 126.9780
-    altitude_m: 38.0
-input:
-  rinex_nav: ../.tools/gps-sdr-sim-src/brdc0010.22n
-output:
-  root: ../artifacts/rf_runs
-  rf_sample_rate_hz: 2600000
-  sample_format: s8_iq
-simulator:
-  executable: gps-sdr-sim
-```
-
-연구용 실행에서는 `rinex_nav`와 `utc`를 반드시 같은 날짜·유효구간으로 맞춰야 합니다.
-
-## RINEX 입력 주의사항
-
-고정한 GPS-SDR-SIM commit의 parser는 **GPS RINEX 2 NAV 형식**을 사용합니다. 현재 IGS에서 자주 제공하는 `RINEX 3.x MIXED NAV`를 그대로 넣으면 안 됩니다.
-
-프로젝트는 RINEX 3.x를 발견하면 잘못된 IQ를 생성하지 않고 다음과 같이 중단합니다.
-
-```text
-the pinned gps-sdr-sim parser requires a GPS RINEX 2 NAV file
-```
-
-Mixed RINEX 3 → GPS-only 호환 NAV 변환은 후속 모듈로 추가할 예정입니다.
-
-## 재현성과 안전 처리
-
-파이프라인은 다음을 보장합니다.
-
-- GPS-SDR-SIM commit 고정
-- `shell=False`로 안전하게 실행
-- RINEX 형식 및 입력 경로 검증
-- 짧은 임시 출력명 사용
-- 성공 후에만 최종 IQ 이름으로 원자적 변경
-- 빈 IQ 파일 거부
-- 기존 run 덮어쓰기 금지
-- NAV와 IQ SHA-256 기록
-- 실제 complex sample 수와 유효 duration 기록
-- 전체 simulator stdout/stderr 보존
-
-## Docker
-
-Docker 이미지에는 Python package와 pinned GPS-SDR-SIM이 같이 설치됩니다.
-
-```bash
-docker compose build
-docker compose run --rm lab gnss-iq probe
-docker compose run --rm lab python -m pytest -q
-```
-
-생성 결과는 compose 설정에 따라 host의 outputs 디렉터리에 저장할 수 있습니다.
+기본 설정 파일은 따로 유지하지 않습니다. 연구 실험 설정은 통합 Notebook 맨 앞에서 관리합니다.
 
 ## 테스트
 
 ```bash
-python -m pytest -q
+pytest -q
 ```
-
-테스트는 다음을 검증합니다.
-
-- config schema와 UTC/좌표 검증
-- GPS L1 C/A 이외 입력 거부
-- RINEX 3 입력 거부
-- 실제 GPS-SDR-SIM CLI 옵션 계약
-- 안전한 subprocess 실행
-- 긴 출력 경로 문제 방지
-- atomic output
-- 실패·빈 파일 처리
-- manifest 및 해시
-- 실제 sample 수와 유효 duration 계산
-- CLI 반환 코드
-
-## 다음 개발 순서
-
-```text
-1. 정상 정적 IQ 생성                ← 현재 완료
-2. Mixed RINEX 3 전처리
-3. UAV trajectory 기반 동적 IQ
-4. IQ → GNSS-SDR 자동 처리
-5. PRN별 tracking/observable export
-6. 정상 데이터셋 생성
-7. 스푸핑 IQ 합성
-8. 탐지 알고리즘 학습·평가
-```
-
-탐지 모델은 정상 IQ → GNSS-SDR 처리 결과가 충분히 검증된 후 추가합니다.
