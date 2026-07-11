@@ -105,7 +105,10 @@ def test_run_receiver_creates_reproducible_run_artifacts(tmp_path: Path, monkeyp
         mat = Path(prefix + "0.mat")
         mat.parent.mkdir(parents=True, exist_ok=True)
         _tracking_mat(mat, prn=5, samples=[2600, 5200], doppler=[1000.0, 1010.0])
-        stdout = "Tracking of GPS L1 C/A signal started on channel 0 for satellite GPS PRN 05 (Block IIR-M)\n"
+        stdout = (
+            "Tracking of GPS L1 C/A signal started on channel 0 for satellite GPS PRN 05 (Block IIR-M)\n"
+            "Tracking of GPS L1 C/A signal started on channel 0 for satellite GPS PRN 23 (Block III)\n"
+        )
         return subprocess.CompletedProcess(command, 0, stdout, "")
 
     monkeypatch.setattr("gnss_doppler_lab.gnss_sdr.subprocess.run", fake_run)
@@ -121,7 +124,8 @@ def test_run_receiver_creates_reproducible_run_artifacts(tmp_path: Path, monkeyp
     run_dir = manifest_path.parent
     assert manifest["source_rf_run_id"] == rf_run.name
     assert manifest["receiver"]["version"] == "gnss-sdr version 0.0.test"
-    assert manifest["acquisition"]["tracked_prns"] == ["G05"]
+    assert manifest["acquisition"]["tracked_prns"] == ["G05", "G23"]
+    assert manifest["tracking"]["prns"] == ["G05"]
     assert manifest["tracking"]["row_count"] == 2
     assert (run_dir / "receiver.conf").is_file()
     assert (run_dir / "receiver.log").is_file()

@@ -249,8 +249,12 @@ def run_receiver(
         sample_rate_hz=sample_rate_hz,
     )
     tracked_prns = parse_acquired_prns(log_text)
-    if tracked_prns != report["prns"]:
-        raise ValueError(f"GNSS-SDR log/MAT PRN mismatch: log={tracked_prns}, mat={report['prns']}")
+    unreported_tracking_prns = sorted(set(report["prns"]) - set(tracked_prns))
+    if unreported_tracking_prns:
+        raise ValueError(
+            "GNSS-SDR MAT contains PRNs absent from the acquisition log: "
+            f"{unreported_tracking_prns}"
+        )
     executable_path = Path(resolved_executable)
     manifest = {
         "schema_version": 1,
