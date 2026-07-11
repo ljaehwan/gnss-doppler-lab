@@ -84,6 +84,34 @@ gnss-doppler-lab/
 
 기존 관측값 수준 Doppler simulator, synthetic constellation, visibility PoC 및 관련 설정·테스트는 현재 RF 방향과 맞지 않아 제거했습니다.
 
+## Windows에서 VS Code로 실행
+
+이 프로젝트의 Python 코드는 Windows에서도 동작하지만, 실제 IQ 생성기인 `gps-sdr-sim`은 Linux 빌드 환경을 기준으로 합니다. 따라서 Windows에 컴파일러를 억지로 맞추기보다 **VS Code Dev Containers**를 사용합니다. 화면은 Windows VS Code 그대로이고, 실행만 프로젝트 전용 Linux 컨테이너에서 이루어집니다.
+
+필요 프로그램:
+
+1. Docker Desktop (`Use WSL 2 based engine` 사용)
+2. VS Code
+3. VS Code 확장 `Dev Containers` (`ms-vscode-remote.remote-containers`)
+
+실행 순서:
+
+1. VS Code로 저장소 폴더를 엽니다.
+2. `Ctrl+Shift+P`를 누릅니다.
+3. `Dev Containers: Reopen in Container`를 선택합니다.
+4. 최초 준비가 끝날 때까지 기다립니다. Python package와 고정 버전 GPS-SDR-SIM이 자동 설치됩니다.
+5. `scripts/generate_iq.py`를 열고 오른쪽 위 **Python 파일 실행 ▶**을 누르거나 `F5`를 누릅니다.
+
+명령행 인자를 직접 넣지 않아도 기본 예제 YAML을 사용합니다. 결과는 Windows에서도 저장소의 다음 폴더에 그대로 나타납니다.
+
+```text
+artifacts/rf_runs/
+```
+
+같은 시나리오가 이미 생성되어 있으면 안전을 위해 덮어쓰지 않습니다. 다시 실행하려면 기존 run 폴더를 삭제하거나 YAML의 `scenario.name`을 변경합니다.
+
+> Windows PowerShell에서 파일을 바로 실행하면 Python 부분은 시작할 수 있어도 Linux용 `gps-sdr-sim` 실행 파일이 없어서 실제 IQ 생성 단계에서 중단됩니다. 권장 실행환경은 Windows VS Code + Dev Container입니다.
+
 ## 빠른 실행
 
 ### 1. GPS-SDR-SIM 빌드

@@ -3,11 +3,9 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
-    container_name: gnss-doppler-lab
     working_dir: /workspace
     tty: true
     stdin_open: true
     volumes:
       - ./:/workspace
-      - /mnt/user/Storage_HDD/projects/gnss-doppler-lab/outputs:/workspace/artifacts
-    command: bash
+    command: sleep infinity
