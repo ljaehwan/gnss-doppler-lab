@@ -28,7 +28,7 @@ def test_generate_script_can_show_help_without_package_install() -> None:
     result = _run("--help")
 
     assert result.returncode == 0, result.stderr
-    assert "Generate normal GPS L1 C/A software IQ" in result.stdout
+    assert "Generate normal or RF-level spoofed GPS L1 C/A software IQ" in result.stdout
 
 
 def test_generate_script_requires_explicit_notebook_created_config() -> None:

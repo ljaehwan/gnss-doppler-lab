@@ -228,6 +228,19 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _source_iq_info(source_manifest: dict) -> tuple[dict, str]:
+    """Select receiver input from normal or spoofing RF manifest schemas."""
+    iq = source_manifest.get("iq")
+    if not isinstance(iq, dict):
+        raise ValueError("RF manifest iq section must be a mapping")
+    if "composite" in iq:
+        composite = iq["composite"]
+        if not isinstance(composite, dict):
+            raise ValueError("spoofing RF manifest iq.composite must be a mapping")
+        return composite, "composite"
+    return iq, "normal"
+
+
 def run_receiver(
     rf_manifest_path: str | Path,
     output_root: str | Path,
@@ -241,7 +254,7 @@ def run_receiver(
     source_manifest = json.loads(source_manifest_path.read_text(encoding="utf-8"))
     source_run = source_manifest_path.parent
     source_run_id = str(source_manifest["run_id"])
-    iq_info = source_manifest["iq"]
+    iq_info, iq_role = _source_iq_info(source_manifest)
     iq_path = (source_run / iq_info.get("path", "gps_l1ca_s8_iq.bin")).resolve()
     if _sha256(iq_path) != iq_info["sha256"]:
         raise ValueError("IQ SHA-256 does not match the source RF manifest")
@@ -303,6 +316,7 @@ def run_receiver(
             "rf_manifest": str(source_manifest_path),
             "rf_manifest_sha256": _sha256(source_manifest_path),
             "iq": str(iq_path),
+            "iq_role": iq_role,
             "iq_sha256": iq_info["sha256"],
             "sample_rate_hz": sample_rate_hz,
         },

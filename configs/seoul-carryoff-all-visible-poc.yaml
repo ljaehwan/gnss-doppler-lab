@@ -1,0 +1,35 @@
+version: 2
+scenario:
+  name: seoul-carryoff-all-visible-poc
+  constellation: GPS
+  signal: L1CA
+  utc: "2022-01-01T00:00:00Z"
+  duration_seconds: 12
+  position:
+    type: static
+    latitude_deg: 37.5665
+    longitude_deg: 126.9780
+    altitude_m: 120.0
+input:
+  rinex_nav: ../.tools/gps-sdr-sim-src/brdc0010.22n
+output:
+  root: ../artifacts/spoofing_runs
+  rf_sample_rate_hz: 2600000
+  sample_format: s8_iq
+spoofing:
+  attack_type: carry_off
+  start_seconds: 4.0
+  transition_seconds: 4.0
+  target_offset_enu_m:
+    east_m: 100.0
+    north_m: 0.0
+    up_m: 0.0
+  prn_selection:
+    mode: all_visible
+  power:
+    initial_advantage_db: -15.0
+    final_advantage_db: 3.0
+    ramp_seconds: 4.0
+  keep_component_iq: true
+simulator:
+  executable: .tools/gps-sdr-sim-src/gps-sdr-sim

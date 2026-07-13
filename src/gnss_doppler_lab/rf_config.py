@@ -50,12 +50,34 @@ class SimulatorConfig:
     executable: str | None = None
 
 @dataclass(frozen=True)
+class PrnSelection:
+    mode: str
+    prns: tuple[int, ...]
+
+@dataclass(frozen=True)
+class SpoofingPower:
+    initial_advantage_db: float
+    final_advantage_db: float
+    ramp_seconds: float
+
+@dataclass(frozen=True)
+class SpoofingConfig:
+    attack_type: str
+    start_seconds: float
+    transition_seconds: float
+    target_offset_enu_m: tuple[float, float, float]
+    prn_selection: PrnSelection
+    power: SpoofingPower
+    keep_component_iq: bool
+
+@dataclass(frozen=True)
 class RFGenerationConfig:
     version: int
     scenario: Scenario
     input: InputConfig
     output: OutputConfig
     simulator: SimulatorConfig
+    spoofing: SpoofingConfig | None = None
 
 
 def _required(obj: dict[str, Any], key: str) -> Any:
@@ -74,6 +96,86 @@ def _strict_integer(value: Any, name: str) -> int:
     if not math.isfinite(number) or not number.is_integer():
         raise ConfigError(f"{name} must be an integer")
     return int(number)
+
+
+def _finite_float(value: Any, name: str) -> float:
+    try:
+        number = float(value)
+    except (TypeError, ValueError) as exc:
+        raise ConfigError(f"{name} must be finite") from exc
+    if not math.isfinite(number):
+        raise ConfigError(f"{name} must be finite")
+    return number
+
+
+def _load_spoofing(data: dict[str, Any], duration_seconds: int) -> SpoofingConfig:
+    raw = _required(data, "spoofing")
+    if not isinstance(raw, dict):
+        raise ConfigError("spoofing must be a mapping")
+    attack_type = str(_required(raw, "attack_type"))
+    if attack_type not in {"abrupt", "carry_off"}:
+        raise ConfigError("spoofing.attack_type must be abrupt or carry_off")
+    start = _finite_float(_required(raw, "start_seconds"), "spoofing.start_seconds")
+    transition = _finite_float(
+        _required(raw, "transition_seconds"), "spoofing.transition_seconds"
+    )
+    if not 0 <= start < duration_seconds:
+        raise ConfigError("spoofing.start_seconds must occur within scenario duration")
+    if transition < 0 or (attack_type == "carry_off" and transition <= 0):
+        raise ConfigError("spoofing.transition_seconds must be positive for carry_off")
+    if start + transition > duration_seconds:
+        raise ConfigError("spoofing transition must finish within scenario duration")
+
+    offset = _required(raw, "target_offset_enu_m")
+    if not isinstance(offset, dict):
+        raise ConfigError("spoofing.target_offset_enu_m must be a mapping")
+    target_offset = tuple(
+        _finite_float(_required(offset, key), f"spoofing.target_offset_enu_m.{key}")
+        for key in ("east_m", "north_m", "up_m")
+    )
+    if target_offset == (0.0, 0.0, 0.0):
+        raise ConfigError("spoofing.target_offset_enu_m must be non-zero")
+
+    selection = _required(raw, "prn_selection")
+    if not isinstance(selection, dict):
+        raise ConfigError("spoofing.prn_selection must be a mapping")
+    mode = str(_required(selection, "mode"))
+    if mode not in {"all_visible", "explicit"}:
+        raise ConfigError("spoofing.prn_selection.mode must be all_visible or explicit")
+    raw_prns = selection.get("prns", ())
+    if not isinstance(raw_prns, (list, tuple)):
+        raise ConfigError("spoofing.prn_selection.prns must be a sequence")
+    prns = tuple(_strict_integer(value, "spoofing PRN") for value in raw_prns)
+    if len(set(prns)) != len(prns):
+        raise ConfigError("spoofing.prn_selection contains duplicate PRNs")
+    if any(not 1 <= prn <= 32 for prn in prns):
+        raise ConfigError("spoofing PRNs must be in [1, 32]")
+    if mode == "explicit" and not prns:
+        raise ConfigError("explicit spoofing PRN selection must not be empty")
+    if mode == "all_visible" and prns:
+        raise ConfigError("all_visible PRN selection must not include an explicit list")
+
+    power = _required(raw, "power")
+    if not isinstance(power, dict):
+        raise ConfigError("spoofing.power must be a mapping")
+    initial_db = _finite_float(
+        _required(power, "initial_advantage_db"),
+        "spoofing.power.initial_advantage_db",
+    )
+    final_db = _finite_float(
+        _required(power, "final_advantage_db"),
+        "spoofing.power.final_advantage_db",
+    )
+    ramp = _finite_float(_required(power, "ramp_seconds"), "spoofing.power.ramp_seconds")
+    if ramp < 0 or start + ramp > duration_seconds:
+        raise ConfigError("spoofing.power.ramp_seconds must be non-negative and finish within duration")
+    keep = raw.get("keep_component_iq", True)
+    if not isinstance(keep, bool):
+        raise ConfigError("spoofing.keep_component_iq must be boolean")
+    return SpoofingConfig(
+        attack_type, start, transition, target_offset,
+        PrnSelection(mode, prns), SpoofingPower(initial_db, final_db, ramp), keep,
+    )
 
 
 def _sha256_bytes(data: bytes) -> str:
@@ -116,7 +218,8 @@ def load_rf_config(path: str | Path) -> RFGenerationConfig:
     try: data = yaml.safe_load(path.read_text())
     except (OSError, yaml.YAMLError) as exc: raise ConfigError(str(exc)) from exc
     if not isinstance(data, dict): raise ConfigError("configuration must be a mapping")
-    if data.get("version") != 1: raise ConfigError("unsupported config version (only version 1)")
+    version = data.get("version")
+    if version not in (1, 2): raise ConfigError("unsupported config version (supported: 1 normal, 2 spoofing)")
     try:
         s, pos = _required(data, "scenario"), _required(data["scenario"], "position")
         position_type = pos.get("type")
@@ -163,7 +266,11 @@ def load_rf_config(path: str | Path) -> RFGenerationConfig:
         fmt = out.get("sample_format", "s8_iq")
         if rate < 1_000_000 or fmt != "s8_iq": raise ConfigError("rf sample rate must be at least 1000000 Hz and sample_format must be s8_iq")
         sim = data.get("simulator", {})
-        return RFGenerationConfig(1, Scenario(name, constellation, signal, utc, duration, position), InputConfig(nav), OutputConfig(root, rate, fmt), SimulatorConfig(sim.get("executable")))
+        if not isinstance(sim, dict): raise ConfigError("simulator must be a mapping")
+        if version == 1 and "spoofing" in data:
+            raise ConfigError("version 1 normal configuration must not contain spoofing")
+        spoofing = _load_spoofing(data, duration) if version == 2 else None
+        return RFGenerationConfig(version, Scenario(name, constellation, signal, utc, duration, position), InputConfig(nav), OutputConfig(root, rate, fmt), SimulatorConfig(sim.get("executable")), spoofing)
     except (KeyError, TypeError, ValueError) as exc:
         if isinstance(exc, ConfigError): raise
         raise ConfigError(f"invalid configuration: {exc}") from exc

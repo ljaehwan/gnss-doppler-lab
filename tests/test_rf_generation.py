@@ -78,7 +78,7 @@ def test_rejects_fractional_second_scenario_utc(tmp_path):
 
 def test_rejects_unknown_version_and_malformed_trajectory(tmp_path):
     cfg_path, _ = config_file(tmp_path)
-    text = cfg_path.read_text().replace("version: 1", "version: 2")
+    text = cfg_path.read_text().replace("version: 1", "version: 3")
     cfg_path.write_text(text)
     with pytest.raises(ConfigError, match="version"):
         load_rf_config(cfg_path)
