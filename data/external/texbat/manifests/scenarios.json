@@ -1,0 +1,130 @@
+{
+  "dataset": "TEXBAT 1.1",
+  "full_name": "Texas Spoofing Test Battery",
+  "source_page": "https://radionavlab.ae.utexas.edu/texbat/",
+  "download_url": "https://radionavlab.ae.utexas.edu/datastore/texbat/",
+  "data_host": "https://rnl-data.ae.utexas.edu/datastore/texbat/",
+  "notes": [
+    "Large .bin IQ files are intentionally not tracked in git.",
+    "Use data/external/texbat/raw/ on the VM for local downloaded originals.",
+    "Use data/external/texbat/derived/ for GNSS-SDR/tracking-derived outputs."
+  ],
+  "signal_format": {
+    "signal": "GPS L1 C/A",
+    "sample_type": "complex IQ",
+    "sample_rate": "25 Msps",
+    "captured_bandwidth": "approximately 20 MHz around L1",
+    "quantization": "16-bit complex samples"
+  },
+  "reference_files": [
+    {
+      "file": "cleanStatic.bin",
+      "role": "clean reference",
+      "platform": "static",
+      "spoofing": false,
+      "used_by": ["ds1", "ds2", "ds3", "ds4", "ds7", "ds8"]
+    },
+    {
+      "file": "cleanDynamic.bin",
+      "role": "clean reference",
+      "platform": "dynamic",
+      "spoofing": false,
+      "used_by": ["ds5", "ds6"]
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "ds1",
+      "file": "ds1.bin",
+      "designation": "Static Switch",
+      "platform": "static",
+      "spoofing_type": "switch",
+      "power_advantage_db": null,
+      "frequency_lock": "unlocked",
+      "noise_padding": "enabled",
+      "approx_size_gb": 43.0,
+      "summary": "Near-instantaneous switch from authentic to counterfeit signal stream."
+    },
+    {
+      "id": "ds2",
+      "file": "ds2.bin",
+      "designation": "Static Overpowered Time Push",
+      "platform": "static",
+      "spoofing_type": "time_push",
+      "power_advantage_db": 10.0,
+      "frequency_lock": "unlocked",
+      "noise_padding": "disabled",
+      "approx_size_gb": 42.5,
+      "target_effect": "approximately 2 microseconds / 600 m equivalent GPS time offset",
+      "summary": "Static high-power time spoofing scenario."
+    },
+    {
+      "id": "ds3",
+      "file": "ds3.bin",
+      "designation": "Static Matched-Power Time Push",
+      "platform": "static",
+      "spoofing_type": "time_push",
+      "power_advantage_db": 1.3,
+      "frequency_lock": "locked",
+      "noise_padding": "disabled",
+      "approx_size_gb": 42.6,
+      "target_effect": "approximately 2 microseconds / 600 m equivalent GPS time offset",
+      "summary": "Static matched-power time spoofing with frequency lock."
+    },
+    {
+      "id": "ds4",
+      "file": "ds4.bin",
+      "designation": "Static Matched-Power Position Push",
+      "platform": "static",
+      "spoofing_type": "position_push",
+      "power_advantage_db": 0.4,
+      "frequency_lock": "locked",
+      "noise_padding": "disabled",
+      "approx_size_gb": 42.6,
+      "target_effect": "approximately 600 m ECEF Z offset",
+      "summary": "Static matched-power position spoofing."
+    },
+    {
+      "id": "ds5",
+      "file": "ds5.bin",
+      "designation": "Dynamic Overpowered Time Push",
+      "platform": "dynamic",
+      "spoofing_type": "time_push",
+      "power_advantage_db": 9.9,
+      "frequency_lock": "unlocked",
+      "noise_padding": "disabled",
+      "approx_size_gb": 38.9,
+      "summary": "Dynamic-platform high-power time spoofing."
+    },
+    {
+      "id": "ds6",
+      "file": "ds6.bin",
+      "designation": "Dynamic Matched-Power Position Push",
+      "platform": "dynamic",
+      "spoofing_type": "position_push",
+      "power_advantage_db": 0.8,
+      "frequency_lock": "locked",
+      "noise_padding": "disabled",
+      "approx_size_gb": 38.9,
+      "summary": "Dynamic-platform matched-power position spoofing."
+    },
+    {
+      "id": "ds7",
+      "file": "ds7.bin",
+      "designation": "Carrier-Aligned Matched-Power Time Push",
+      "platform": "static",
+      "spoofing_type": "time_push",
+      "based_on": "cleanStatic.bin",
+      "summary": "Power-matched time-push scenario like ds3, but more subtle due to carrier phase alignment. Added in TEXBAT 1.1."
+    },
+    {
+      "id": "ds8",
+      "file": "ds8.bin",
+      "designation": "SCER Carrier-Aligned Time Push",
+      "platform": "static",
+      "spoofing_type": "time_push_scer",
+      "based_on": "ds7",
+      "summary": "Scenario identical to ds7 except the spoofer treats navigation bits as unpredictable low-rate security code and attempts zero-delay SCER. Added in TEXBAT 1.1."
+    }
+  ]
+}

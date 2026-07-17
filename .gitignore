@@ -41,3 +41,7 @@ data/external/texbat/raw/**
 !data/external/texbat/raw/.gitkeep
 data/external/texbat/derived/**
 !data/external/texbat/derived/.gitkeep
+
+# TEXBAT download attempt logs
+data/external/texbat/manifests/download_status.json
+data/external/texbat/manifests/*.log

@@ -5,10 +5,10 @@ from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-NOTEBOOK = REPO_ROOT / "notebooks" / "gnss_spoofing_research_workflow.ipynb"
+NOTEBOOK = REPO_ROOT / "notebooks" / "gnss_normal_tracking_workflow.ipynb"
 
 
-def test_single_research_notebook_has_linear_executable_structure() -> None:
+def test_single_research_notebook_has_linear_normal_only_structure() -> None:
     notebook = json.loads(NOTEBOOK.read_text(encoding="utf-8"))
     assert notebook["nbformat"] == 4
     assert notebook["metadata"]["kernelspec"]["name"] == "python3"
@@ -41,9 +41,8 @@ def test_single_research_notebook_has_linear_executable_structure() -> None:
         "tracking correlator peak",
         "PEAK_RECEIVER_RUN",
         "PEAK_PRN",
-        "스푸핑 시나리오",
-        "특징 데이터셋",
-        "외부 일반화",
+        "정상-only 특징 데이터셋",
+        "공개 외부 raw 데이터",
         "최종 판정",
     ]
     for phrase in required:
