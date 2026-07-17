@@ -31,3 +31,13 @@ Thumbs.db
 *.tmp
 artifacts/*
 !artifacts/.gitkeep
+# Local generated IQ temp files from simulator failures
+iq.bin.*.tmp
+
+# Keep derived outputs under artifacts/ only
+
+# Official external datasets: keep only manifests/docs in git; store large IQ files locally.
+data/external/texbat/raw/**
+!data/external/texbat/raw/.gitkeep
+data/external/texbat/derived/**
+!data/external/texbat/derived/.gitkeep

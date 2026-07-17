@@ -25,14 +25,65 @@ GPS L1 C/A 정상·스푸핑 RF/IQ를 생성하고 GNSS-SDR 내부값과 Doppler
 ```text
 Notebook 실험 설정
 → 실제 RINEX NAV/SP3·수신기 위치/궤적
-→ GPS-SDR-SIM IQ + simulator truth
+→ GPS-SDR-SIM 정상 IQ + simulator truth
 → GNSS-SDR acquisition/tracking/observables
-→ 정상/스푸핑 비교
-→ 통계·ML·DL 탐지
-→ TEXBAT/OAKBAT/FGI 외부 일반화
+→ 정상 tracking-peak morphology dataset
+→ normal-only / one-class anomaly detector
+→ TEXBAT 공식 spoofing dataset 외부 검증
 ```
 
-현재 구현 완료 범위는 **정적 위치 및 최대 300초의 10 Hz LLH/ECEF trajectory를 사용하는 GPS L1 C/A 정상 IQ 생성, IQ 시각화, GNSS-SDR acquisition/tracking 및 Doppler·C/N₀ CSV 추출**입니다. navigation/PVT용 장시간 run, 스푸핑 생성과 탐지 모델은 후속 단계입니다. trajectory 지원은 라이브러리/CLI에 한하며, 통합 Notebook은 안전 기본값으로 static-only guard를 유지합니다.
+현재 구현 완료 범위는 **정적 위치 및 최대 300초의 10 Hz LLH/ECEF trajectory를 사용하는 GPS L1 C/A 정상 IQ 생성, IQ 시각화, GNSS-SDR acquisition/tracking 및 Doppler·C/N₀ CSV 추출**입니다. navigation/PVT용 장시간 run, 탐지 모델 고도화와 TEXBAT 외부 검증은 후속 단계입니다. trajectory 지원은 라이브러리/CLI에 한하며, 통합 Notebook은 안전 기본값으로 static-only guard를 유지합니다.
+
+### 논문 방향 고정: 정상 기준 tracking-peak morphology
+
+본 프로젝트의 주 detector 방향은 **스푸핑을 직접 생성해 supervised 학습하는 방식이 아니라**, 정상 GNSS-SDR tracking 출력에서 정상적인 peak 형태와 PRN 간 관계를 학습한 뒤 외부 spoofing dataset에서 이탈을 검증하는 방식입니다.
+
+핵심 원칙:
+
+- 학습 기준: 정상/authentic IQ 및 GNSS-SDR tracking 출력
+- 검증 기준: 나중에 TEXBAT 같은 공식 공개 spoofing dataset 사용
+- 메인 입력: 수신 세기 자체가 아니라 정규화된 correlation peak shape
+- 제외 또는 보조 분석: C/N₀ 평균, Prompt magnitude 평균, raw power, AGC처럼 NLOS·잡음·안테나 자세 변화에 민감한 절대 세기 feature
+- GPS L1 C/A 기본 GNSS-SDR 출력이 3-tap이면 우선 `E/P/L` 3-tap morphology로 진행
+- `VE/VL`은 GNSS-SDR dump 포맷에 항목이 있어도 GPS L1 C/A 기본 tracking에서 실제 계산되지 않을 수 있으므로, 공식 주장은 3-tap 기준으로 안전하게 둠
+- 5/7/9-tap peak slice는 후속 확장으로 raw IQ + tracking state 기반 local re-correlation에서 복원하는 방향
+
+3-tap 기준 주 feature 후보:
+
+```text
+E = sqrt(E_I^2 + E_Q^2)
+P = sqrt(P_I^2 + P_Q^2)
+L = sqrt(L_I^2 + L_Q^2)
+
+near_sym         = (E - L) / (E + L + eps)
+sharpness        = (2P - E - L) / (P + eps)
+prompt_dominance = P / (E + L + eps)
+peak_com_3tap    = (-E + L) / (E + P + L + eps)
+shape_entropy    = -sum(normalized(E,P,L) * log(normalized(E,P,L) + eps))
+```
+
+PRN 간 관계는 **PRN별 peak 자체가 서로 비슷하다는 가정**이 아니라, 각 PRN에서 측정한 peak-shape feature의 시간적 이탈과 동시성을 receiver-level로 묶는 방식으로 사용합니다. 예를 들어 단일 PRN만 튀면 NLOS/multipath 가능성이 크고, 여러 PRN의 shape anomaly score가 같은 시간대에 함께 상승하면 spoofing-like common-mode anomaly 가능성이 커집니다.
+
+Receiver-level aggregation 후보:
+
+```text
+tracked_prn_count
+shape_score_median
+shape_score_top_k_mean
+frac_prn_above_threshold
+onset_concentration
+common_mode_energy  # PRN별 Δshape matrix의 PC1 explained variance 등
+residual_dispersion # common-mode 제거 후 남는 PRN별 산포
+```
+
+따라서 논문 표현은 다음처럼 유지합니다.
+
+```text
+Power-independent normalized tracking-correlation peak morphology
+and cross-PRN common-mode anomaly detection for GNSS spoofing-like tracking anomalies.
+```
+
+Notebook 안의 spoofing 생성/비교 코드는 현재 연구의 **학습 주 경로가 아닙니다**. 향후 synthetic ablation 또는 detector sanity-check에는 보조적으로 사용할 수 있지만, 메인 실험은 정상 기준 학습과 TEXBAT 외부 검증으로 둡니다.
 
 ## 시작점: 통합 Jupyter Notebook
 
