@@ -125,3 +125,46 @@ def test_same_prn_reappearance_is_returned_as_distinct_segments(tmp_path: Path) 
     segments = load_receiver_tracking_peak_series_segments(_multi_prn_receiver_run(tmp_path), "G31")
     assert [segment.segment_index for segment in segments] == [0, 2]
     assert [segment.time_s.tolist() for segment in segments] == [[0.0, 1.0], [10.0, 11.0]]
+
+
+def _nine_tap_tracking_mat(path: Path, *, prn: int, samples: list[int]) -> None:
+    with h5py.File(path, "w") as handle:
+        n = len(samples)
+        values = {
+            "PRN": np.array(samples, dtype=np.uint32) * 0 + prn,
+            "PRN_start_sample_count": np.array(samples, dtype=np.uint64),
+            "carrier_doppler_hz": np.arange(n, dtype=np.float32) + 100.0,
+            "CN0_SNV_dB_Hz": np.arange(n, dtype=np.float32) + 45.0,
+            "Prompt_I": np.arange(n, dtype=np.float32) + 10.0,
+            "Prompt_Q": np.arange(n, dtype=np.float32),
+            "code_error_chips": np.arange(n, dtype=np.float32) / 100.0,
+            "code_freq_chips": np.arange(n, dtype=np.float32) + 1023000.0,
+            "abs_E4": np.arange(n, dtype=np.float32) * 0.1 + 1.0,
+            "abs_E3": np.arange(n, dtype=np.float32) * 0.1 + 2.0,
+            "abs_E2": np.arange(n, dtype=np.float32) * 0.1 + 3.0,
+            "abs_E": np.arange(n, dtype=np.float32) * 0.1 + 4.0,
+            "abs_P": np.arange(n, dtype=np.float32) * 0.1 + 10.0,
+            "abs_L": np.arange(n, dtype=np.float32) * 0.1 + 5.0,
+            "abs_L2": np.arange(n, dtype=np.float32) * 0.1 + 3.5,
+            "abs_L3": np.arange(n, dtype=np.float32) * 0.1 + 2.5,
+            "abs_L4": np.arange(n, dtype=np.float32) * 0.1 + 1.5,
+        }
+        for key, value in values.items():
+            handle.create_dataset(key, data=value.reshape(-1, 1))
+
+
+def test_load_receiver_tracking_peak_series_can_select_real_nine_tap_layout(tmp_path: Path) -> None:
+    run_dir = tmp_path / "nine_tap_run"
+    raw = run_dir / "raw"
+    raw.mkdir(parents=True)
+    _nine_tap_tracking_mat(raw / "epl_tracking_ch_0.mat", prn=5, samples=[10, 20, 30])
+    (run_dir / "manifest.json").write_text(json.dumps({
+        "source": {"sample_rate_hz": 10},
+        "tracking": {"raw_directory": "raw", "prns": ["G05"], "tap_count": 9},
+    }))
+
+    series = load_receiver_tracking_peak_series(run_dir, "G05", tap_count=9)
+
+    assert series.tap_names == ("E4", "E3", "E2", "E", "P", "L", "L2", "L3", "L4")
+    assert series.magnitudes.shape == (3, 9)
+    assert np.allclose(series.magnitudes[0], [1.0, 2.0, 3.0, 4.0, 10.0, 5.0, 3.5, 2.5, 1.5])

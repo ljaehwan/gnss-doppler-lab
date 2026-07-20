@@ -12,6 +12,7 @@ import numpy as np
 from gnss_doppler_lab.gnss_sdr import (
     export_tracking_csv,
     parse_acquired_prns,
+    parse_receiver_reported_prns,
     render_receiver_config,
     run_receiver,
 )
@@ -42,7 +43,7 @@ def test_render_receiver_config_matches_s8_complex_baseband(tmp_path: Path) -> N
     config = render_receiver_config(iq, output, sample_rate_hz=2_600_000, channel_count=11)
 
     assert f"SignalSource.filename={iq.resolve()}" in config
-    assert "SignalSource.item_type=byte" in config
+    assert "SignalSource.item_type=ibyte" in config
     assert "DataTypeAdapter.implementation=Ibyte_To_Complex" in config
     assert "GNSS-SDR.internal_fs_sps=2600000" in config
     assert "Channels_1C.count=11" in config
@@ -81,6 +82,24 @@ telemetry decoder: GPS PRN 31 decoded subframe 2
 """
 
     assert parse_acquired_prns(log) == []
+
+
+def test_parse_acquired_prns_handles_two_interleaved_starts_on_one_line() -> None:
+    log = """Tracking of GPS L1 C/A signal started on channel 2 for satellite Tracking of GPS L1 C/A signal started on channel 9 for satellite GPS PRN 13 (Block IIR)
+GPS PRN 12 (Block IIR-M)
+"""
+
+    assert parse_acquired_prns(log) == ["G12", "G13"]
+
+
+def test_parse_receiver_reported_prns_includes_bit_sync_and_nav_evidence() -> None:
+    log = """Tracking of GPS L1 C/A signal started on channel 2 for satellite Tracking of GPS L1 C/A signal started on channel 9 for satellite GPS PRN 13 (Block IIR)
+GPS PRN 12 (Block IIR-M)
+GPS L1 C/A tracking bit synchronization locked in channel 9 for satellite GPS PRN 12 (Block IIR-M)
+New GPS NAV message received in channel 9: subframe 1 from satellite GPS PRN 12 (Block IIR-M) with CN0=50 dB-Hz
+"""
+
+    assert parse_receiver_reported_prns(log) == ["G13", "G12"]
 
 
 def test_export_tracking_csv_preserves_prn_time_doppler_and_summary(tmp_path: Path) -> None:
@@ -147,9 +166,25 @@ def test_run_receiver_creates_reproducible_run_artifacts(tmp_path: Path, monkeyp
     assert manifest["source_rf_run_id"] == rf_run.name
     assert manifest["receiver"]["version"] == "gnss-sdr version 0.0.test"
     assert manifest["acquisition"]["tracked_prns"] == ["G05", "G23"]
+    assert manifest["acquisition"]["receiver_reported_prns"] == ["G05", "G23"]
     assert manifest["tracking"]["prns"] == ["G05"]
     assert manifest["tracking"]["row_count"] == 2
+    assert manifest["tracking"]["tap_count"] == 3
+    assert manifest["tracking"]["tap_spacing_chips"] == 0.125
     assert (run_dir / "receiver.conf").is_file()
     assert (run_dir / "receiver.log").is_file()
     assert (run_dir / "tracking.csv").is_file()
     assert (run_dir / "tracking_summary.csv").is_file()
+
+
+def test_render_receiver_config_allows_configurable_tracking_tap_count(tmp_path: Path) -> None:
+    config = render_receiver_config(tmp_path / "iq.bin", tmp_path / "out", sample_rate_hz=2_600_000, tracking_tap_count=9)
+
+    assert "Tracking_1C.tap_count=9" in config
+    assert "Tracking_1C.tap_spacing_chips=0.125" in config
+
+
+def test_render_receiver_config_rejects_unsupported_tracking_tap_count(tmp_path: Path) -> None:
+    import pytest
+    with pytest.raises(ValueError, match="tracking_tap_count must be one of 3, 5, or 9"):
+        render_receiver_config(tmp_path / "iq.bin", tmp_path / "out", sample_rate_hz=2_600_000, tracking_tap_count=7)

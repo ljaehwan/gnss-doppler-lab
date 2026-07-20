@@ -32,12 +32,18 @@ def render_receiver_config(
     *,
     sample_rate_hz: int,
     channel_count: int = 11,
+    tracking_tap_count: int = 3,
+    tracking_tap_spacing_chips: float = 0.125,
 ) -> str:
     """Build a GPS L1 C/A file-receiver configuration for s8 interleaved IQ."""
     if sample_rate_hz < 1_000_000:
         raise ValueError("sample_rate_hz must be at least 1000000")
     if channel_count < 1:
         raise ValueError("channel_count must be positive")
+    if tracking_tap_count not in {3, 5, 9}:
+        raise ValueError("tracking_tap_count must be one of 3, 5, or 9")
+    if tracking_tap_spacing_chips <= 0:
+        raise ValueError("tracking_tap_spacing_chips must be positive")
     iq = Path(iq_path).resolve()
     output = Path(output_dir).resolve()
     tracking_prefix = output / "raw" / "epl_tracking_ch_"
@@ -47,7 +53,7 @@ GNSS-SDR.internal_fs_sps={sample_rate_hz}
 
 SignalSource.implementation=File_Signal_Source
 SignalSource.filename={iq}
-SignalSource.item_type=byte
+SignalSource.item_type=ibyte
 SignalSource.sampling_frequency={sample_rate_hz}
 SignalSource.samples=0
 SignalSource.repeat=false
@@ -81,6 +87,8 @@ Tracking_1C.dll_bw_hz=1.5
 Tracking_1C.order=3
 Tracking_1C.dump=true
 Tracking_1C.dump_filename={tracking_prefix}
+Tracking_1C.tap_count={tracking_tap_count}
+Tracking_1C.tap_spacing_chips={tracking_tap_spacing_chips}
 
 TelemetryDecoder_1C.implementation=GPS_L1_CA_Telemetry_Decoder
 TelemetryDecoder_1C.dump=false
@@ -99,50 +107,75 @@ PVT.dump=false
 """
 
 
+def _ordered_gps_prns_from_matches(matches: Iterable[re.Match[str]]) -> list[str]:
+    prns: list[int] = []
+    seen: set[int] = set()
+    for match in matches:
+        prn = int(match.group(1))
+        if prn not in seen:
+            seen.add(prn)
+            prns.append(prn)
+    return [f"G{prn:02d}" for prn in prns]
+
+
 def parse_acquired_prns(log_text: str) -> list[str]:
-    """Extract unique tracked GPS PRNs from GNSS-SDR console output.
+    """Extract unique GNSS-SDR tracking-start GPS PRNs from console output.
 
     GNSS-SDR writes to stdout from multiple threads, so the satellite part of a
-    tracking-start message can be interrupted by a receiver-time message and/or
-    a newline.  Keep the continuation window deliberately small instead of
-    matching across the entire log: otherwise a later navigation message that
-    mentions ``GPS PRN`` could be attributed to an unrelated tracking start.
+    tracking-start message can be interrupted by another tracking-start message,
+    a receiver-time message, and/or a newline. Treat the result as an audit set,
+    not the sole evidence that a PRN was validly tracked.
     """
     start = "Tracking of GPS L1 C/A signal started"
     prn_pattern = re.compile(r"\bGPS\s+PRN\s+(\d+)\b")
     lines = log_text.splitlines()
-    prns: list[int] = []
-    seen: set[int] = set()
+    found: list[re.Match[str]] = []
 
     for index, line in enumerate(lines):
-        marker = line.find(start)
-        if marker < 0:
-            continue
+        markers = [m.start() for m in re.finditer(re.escape(start), line)]
+        for offset, marker in enumerate(markers):
+            end = markers[offset + 1] if offset + 1 < len(markers) else len(line)
+            candidates = [line[marker + len(start):end]]
+            if not prn_pattern.search(candidates[0]):
+                for continuation in lines[index + 1:index + 3]:
+                    stripped = continuation.lstrip()
+                    if prn_pattern.match(stripped):
+                        candidates.append(stripped)
+                        break
+                    if stripped.startswith("Current receiver time:"):
+                        candidates.append(stripped)
+                        continue
+                    break
+            match = next((prn_pattern.search(candidate) for candidate in candidates
+                          if prn_pattern.search(candidate)), None)
+            if match:
+                found.append(match)
 
-        candidates = [line[marker + len(start):]]
-        # A split start message resumes either directly with ``GPS PRN`` or
-        # after one interleaved receiver-time line.  Do not consume arbitrary
-        # subsequent log lines.
-        for continuation in lines[index + 1:index + 3]:
-            stripped = continuation.lstrip()
-            if prn_pattern.match(stripped):
-                candidates.append(stripped)
-                break
-            if stripped.startswith("Current receiver time:"):
-                candidates.append(stripped)
-                continue
-            break
+    return _ordered_gps_prns_from_matches(found)
 
-        match = next((prn_pattern.search(candidate) for candidate in candidates
-                      if prn_pattern.search(candidate)), None)
-        if match:
-            prn = int(match.group(1))
-            if prn not in seen:
-                seen.add(prn)
-                prns.append(prn)
 
-    return [f"G{prn:02d}" for prn in prns]
-
+def parse_receiver_reported_prns(log_text: str) -> list[str]:
+    """Extract PRNs with receiver evidence from tracking, bit-sync, or NAV logs."""
+    evidence_markers = (
+        "Tracking of GPS L1 C/A signal started",
+        "GPS L1 C/A tracking bit synchronization locked",
+        "New GPS NAV message received",
+    )
+    prn_pattern = re.compile(r"\bGPS\s+PRN\s+(\d{1,2})\b")
+    lines = log_text.splitlines()
+    found: list[re.Match[str]] = []
+    for index, line in enumerate(lines):
+        if any(marker in line for marker in evidence_markers):
+            for match in prn_pattern.finditer(line):
+                prn = int(match.group(1))
+                if 1 <= prn <= 32:
+                    found.append(match)
+            if not prn_pattern.search(line) and index + 1 < len(lines):
+                stripped = lines[index + 1].lstrip()
+                match = prn_pattern.match(stripped)
+                if match and 1 <= int(match.group(1)) <= 32:
+                    found.append(match)
+    return _ordered_gps_prns_from_matches(found)
 
 def _channel_number(path: Path) -> int:
     match = re.search(r"_ch_(\d+)\.mat$", path.name)
@@ -235,6 +268,8 @@ def run_receiver(
     executable: str | Path = "gnss-sdr",
     channel_count: int = 11,
     timeout_seconds: int = 300,
+    tracking_tap_count: int = 3,
+    tracking_tap_spacing_chips: float = 0.125,
 ) -> Path:
     """Process one RF run with GNSS-SDR and publish normalized receiver artifacts."""
     source_manifest_path = Path(rf_manifest_path).resolve()
@@ -259,7 +294,14 @@ def run_receiver(
 
     resolved_executable = shutil.which(str(executable)) or str(Path(executable).resolve())
     config_path.write_text(
-        render_receiver_config(iq_path, run_dir, sample_rate_hz=sample_rate_hz, channel_count=channel_count),
+        render_receiver_config(
+            iq_path,
+            run_dir,
+            sample_rate_hz=sample_rate_hz,
+            channel_count=channel_count,
+            tracking_tap_count=tracking_tap_count,
+            tracking_tap_spacing_chips=tracking_tap_spacing_chips,
+        ),
         encoding="utf-8",
     )
     version_result = subprocess.run(
@@ -288,10 +330,11 @@ def run_receiver(
         sample_rate_hz=sample_rate_hz,
     )
     tracked_prns = parse_acquired_prns(log_text)
-    unreported_tracking_prns = sorted(set(report["prns"]) - set(tracked_prns))
+    receiver_reported_prns = parse_receiver_reported_prns(log_text)
+    unreported_tracking_prns = sorted(set(report["prns"]) - set(receiver_reported_prns))
     if unreported_tracking_prns:
         raise ValueError(
-            "GNSS-SDR MAT contains PRNs absent from the acquisition log: "
+            "GNSS-SDR MAT contains PRNs absent from receiver tracking/NAV evidence: "
             f"{unreported_tracking_prns}"
         )
     executable_path = Path(resolved_executable)
@@ -320,12 +363,16 @@ def run_receiver(
             "channel_count": channel_count,
             "tracked_prns": tracked_prns,
             "tracked_prn_count": len(tracked_prns),
+            "receiver_reported_prns": receiver_reported_prns,
+            "receiver_reported_prn_count": len(receiver_reported_prns),
         },
         "tracking": {
             **report,
             "csv": "tracking.csv",
             "summary_csv": "tracking_summary.csv",
             "raw_directory": "raw",
+            "tap_count": tracking_tap_count,
+            "tap_spacing_chips": tracking_tap_spacing_chips,
         },
     }
     manifest_path = run_dir / "manifest.json"

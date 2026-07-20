@@ -1,0 +1,20 @@
+{
+  "created_utc": "2026-07-18T09:19:02.162811+00:00",
+  "duration_seconds_per_run": 300,
+  "location_count": 100,
+  "policy": "100 capitals x three UTC epochs (00/04/08) within available RINEX2 ephemeris coverage; static 5-min normal candidates; full-run split by city index; no PRN-ID assumption",
+  "rinex_nav": "data/ephemeris/brdc1990.26n",
+  "row_count": 300,
+  "schema": "gnss-doppler-lab.normal-v3-large-run-candidates",
+  "split_counts": {
+    "test": 30,
+    "train": 240,
+    "val": 30
+  },
+  "times_per_location": [
+    "epoch-a",
+    "epoch-b",
+    "epoch-c"
+  ],
+  "total_duration_seconds": 90000
+}

@@ -2,6 +2,29 @@
 
 Last updated: 2026-07-11
 
+## Current artifact organization update — 2026-07-18
+
+The active generated files are now exposed through:
+
+```text
+artifacts/current_pipeline/
+```
+
+This stage-based folder is the preferred place to inspect the current workflow:
+
+```text
+YAML config
+→ RF IQ source runs
+→ GNSS-SDR receiver tracking
+→ whole tracking feature CSV
+→ two model-input CSVs
+→ normal-only trained predictors
+→ TEXBAT ds4 external validation raw data
+```
+
+Inactive/stale generated outputs were removed: legacy time-scale run copies, spoofing PoC outputs, v1 morphology-only dataset, old temporal predictor outputs, paper-baseline outputs, generated acquisition figures, temp root IQ, notebook backup, and cache debris.
+
+
 ## Repository
 
 - Project: `gnss-doppler-lab`

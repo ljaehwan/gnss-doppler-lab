@@ -152,3 +152,30 @@ def test_collection_never_windows_across_prn_or_time_gap_segments_and_honors_fil
     filtered = collect_receiver_run_tracking_feature_records(run_dir, window_s=1.0, stride_s=1.0, min_epochs=2, prns=["G01"])
     assert {(r.prn, r.segment_index) for r in filtered} == {("G01", 1)}
     assert all(r.window_end_s - r.window_start_s == pytest.approx(1.0) for r in records)
+
+
+def test_export_receiver_run_tap_feature_csv_writes_configurable_nine_tap_columns(tmp_path: Path) -> None:
+    from gnss_doppler_lab.tracking_feature_windows import export_receiver_run_tap_feature_csv
+    from test_tracking_peaks import _nine_tap_tracking_mat
+    run_dir = tmp_path / "nine_tap_run"
+    raw = run_dir / "raw"
+    raw.mkdir(parents=True)
+    _nine_tap_tracking_mat(raw / "epl_tracking_ch_0.mat", prn=5, samples=[0, 2, 4, 6, 8])
+    (run_dir / "manifest.json").write_text(json.dumps({
+        "source": {"sample_rate_hz": 10},
+        "tracking": {"raw_directory": "raw", "prns": ["G05"], "tap_count": 9},
+    }))
+    output = tmp_path / "nine_tap_features.csv"
+
+    written = export_receiver_run_tap_feature_csv(run_dir, output_path=output, tap_count=9, window_s=1.0, stride_s=1.0, min_epochs=4)
+
+    rows = list(csv.DictReader(written.open()))
+    assert len(rows) == 1
+    row = rows[0]
+    assert row["tap_count"] == "9"
+    assert row["tap_layout"] == "E4,E3,E2,E,P,L,L2,L3,L4"
+    assert row["tap_E4_mean"] == "1.2"
+    assert row["tap_P_mean"] == "10.2"
+    assert row["tap_L4_mean"] == "1.7"
+    assert "left_right_imbalance_mean" in row
+    assert "peak_sharpness_mean" in row

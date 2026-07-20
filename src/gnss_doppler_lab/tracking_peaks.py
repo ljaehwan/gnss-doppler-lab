@@ -12,8 +12,23 @@ import h5py
 import numpy as np
 
 
-# GNSS-SDR 0.0.19 emits real E/P/L only; abs_VE/abs_VL are zero placeholders.
-TAP_DATASETS: tuple[tuple[str, str], ...] = (("E", "abs_E"), ("P", "abs_P"), ("L", "abs_L"))
+# Supported odd correlator layouts. 3 is the stock GNSS-SDR 0.0.19 GPS L1 C/A
+# dump; 5 and 9 are for patched/method-A runs that write real measured extra taps.
+TAP_DATASET_LAYOUTS: dict[int, tuple[tuple[str, str], ...]] = {
+    3: (("E", "abs_E"), ("P", "abs_P"), ("L", "abs_L")),
+    5: (("VE", "abs_VE"), ("E", "abs_E"), ("P", "abs_P"), ("L", "abs_L"), ("VL", "abs_VL")),
+    9: (
+        ("E4", "abs_E4"), ("E3", "abs_E3"), ("E2", "abs_E2"), ("E", "abs_E"),
+        ("P", "abs_P"),
+        ("L", "abs_L"), ("L2", "abs_L2"), ("L3", "abs_L3"), ("L4", "abs_L4"),
+    ),
+}
+
+def tap_dataset_layout(tap_count: int) -> tuple[tuple[str, str], ...]:
+    try:
+        return TAP_DATASET_LAYOUTS[int(tap_count)]
+    except (KeyError, ValueError) as exc:
+        raise ValueError("tap_count must be one of 3, 5, or 9") from exc
 
 
 @dataclass(frozen=True)
@@ -115,7 +130,7 @@ def _slice_indices(indices: np.ndarray, *, max_epochs: int | None, epoch_step: i
     return selected
 
 
-def _series_from_indices(mat_path: Path, handle: h5py.File, indices: np.ndarray, *, sample_rate_hz: int, prn: str, segment_index: int) -> TrackingPeakSeries:
+def _series_from_indices(mat_path: Path, handle: h5py.File, indices: np.ndarray, *, sample_rate_hz: int, prn: str, segment_index: int, tap_count: int = 3) -> TrackingPeakSeries:
     epoch_count = len(_read_vector(handle, "PRN"))
     def take(name: str) -> np.ndarray:
         values = _read_vector(handle, name)
@@ -125,12 +140,12 @@ def _series_from_indices(mat_path: Path, handle: h5py.File, indices: np.ndarray,
     sample_counts = take("PRN_start_sample_count")
     tap_names: list[str] = []
     tap_columns: list[np.ndarray] = []
-    for label, dataset in TAP_DATASETS:
+    for label, dataset in tap_dataset_layout(tap_count):
         if dataset not in handle:
-            continue
+            raise ValueError(f"Tracking MAT is missing {tap_count}-tap dataset {dataset}: {mat_path}")
         values = take(dataset).astype(np.float64)
         if np.allclose(values, 0.0):
-            raise ValueError(f"Real E/P/L correlator tap {label} is all-zero: {mat_path}")
+            raise ValueError(f"Real {tap_count}-tap correlator tap {label} is all-zero: {mat_path}")
         tap_names.append(label)
         tap_columns.append(values)
     if indices.size == 0:
@@ -148,12 +163,14 @@ def _series_from_indices(mat_path: Path, handle: h5py.File, indices: np.ndarray,
     )
 
 
-def load_receiver_tracking_peak_series_segments(receiver_run_dir: str | Path, prn: str | int, *, max_epochs: int | None = None, epoch_step: int = 1) -> list[TrackingPeakSeries]:
+def load_receiver_tracking_peak_series_segments(receiver_run_dir: str | Path, prn: str | int, *, max_epochs: int | None = None, epoch_step: int = 1, tap_count: int | None = None) -> list[TrackingPeakSeries]:
     """Load distinct contiguous channel segments for prn."""
     run_dir = Path(receiver_run_dir)
     manifest = _receiver_manifest(run_dir)
     sample_rate_hz = int(manifest["source"]["sample_rate_hz"])
     target = _normalized_prn(prn)
+    requested_tap_count = int(tap_count or manifest.get("tracking", {}).get("tap_count", 3))
+    tap_dataset_layout(requested_tap_count)
     result: list[TrackingPeakSeries] = []
     for mat_path in _raw_mat_paths(run_dir):
         with h5py.File(mat_path, "r") as handle:
@@ -170,7 +187,7 @@ def load_receiver_tracking_peak_series_segments(receiver_run_dir: str | Path, pr
                     if value == target:
                         indices = _slice_indices(np.arange(start, end), max_epochs=max_epochs, epoch_step=epoch_step)
                         if len(indices):
-                            result.append(_series_from_indices(mat_path, handle, indices, sample_rate_hz=sample_rate_hz, prn=target, segment_index=segment_index))
+                            result.append(_series_from_indices(mat_path, handle, indices, sample_rate_hz=sample_rate_hz, prn=target, segment_index=segment_index, tap_count=requested_tap_count))
                     segment_index += 1
                 start = end
     if not result:
@@ -178,9 +195,9 @@ def load_receiver_tracking_peak_series_segments(receiver_run_dir: str | Path, pr
     return result
 
 
-def load_receiver_tracking_peak_series(receiver_run_dir: str | Path, prn: str | int, *, max_epochs: int | None = None, epoch_step: int = 1) -> TrackingPeakSeries:
+def load_receiver_tracking_peak_series(receiver_run_dir: str | Path, prn: str | int, *, max_epochs: int | None = None, epoch_step: int = 1, tap_count: int | None = None) -> TrackingPeakSeries:
     """Load one PRN, concatenating segments for backwards compatibility."""
-    segments = load_receiver_tracking_peak_series_segments(receiver_run_dir, prn, max_epochs=max_epochs, epoch_step=epoch_step)
+    segments = load_receiver_tracking_peak_series_segments(receiver_run_dir, prn, max_epochs=max_epochs, epoch_step=epoch_step, tap_count=tap_count)
     if len(segments) == 1:
         return segments[0]
     first = segments[0]
