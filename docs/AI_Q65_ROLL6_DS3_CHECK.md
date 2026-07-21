@@ -29,3 +29,22 @@ The roll6 context smoothing slightly improves the AI q99 ds3 detection rate vers
 Artifacts generated but not tracked by default:
 - `artifacts/ai_morph_gru_cleanStatic_q70_frame/q65_roll6_event_calibration/summary_all.json`
 - `artifacts/ai_morph_gru_cleanStatic_q70_frame/q65_roll6_event_calibration/q65_roll6_ds1_ds2_ds3_ds4_ai_q_metrics.csv`
+
+## Roll-window extension probe (2026-07-22)
+
+To test whether more temporal context improves the AI event score without changing the clean-reference calibration contract, I ran a ds3-only probe for roll windows 7, 8, and 9 using the same `ai_rmse_q_tau50_gate` score, cleanStatic PRN-node q0.65 low-surprise cutoff, current tracked-PRN-set q0.70 event aggregation, and cleanStatic+cleanDynamic event quantile thresholds.
+
+| roll window | AUC | q99 pre FP | q99 post det | q99 first delay s | q99 threshold |
+|---:|---:|---:|---:|---:|---:|
+| 6 (current) | 0.994459 | 0.000000 | 0.969828 | 20.5 | 2.681208 |
+| 7 | 0.994391 | 0.000000 | 0.961207 | 21.5 | 2.986935 |
+| 8 | 0.994391 | 0.000000 | 0.961207 | 22.0 | 2.961511 |
+| 9 | 0.994391 | 0.000000 | 0.965517 | 22.0 | 2.934375 |
+
+Conclusion: extending the quorum smoothing beyond 6 bins is not beneficial on ds3. The degradation is small but consistent in first-delay and post-detection rate, so roll6 remains the best current AI setting. This points away from a simple temporal-smoothing issue and toward either feature/model limitations or a need for conditional relation context that suppresses clean false positives without delaying the morphology-driven onset.
+
+Generated probe directories, ignored by git:
+- `artifacts/ai_morph_gru_cleanStatic_q70_frame/tick_roll7_probe/`
+- `artifacts/ai_morph_gru_cleanStatic_q70_frame/tick_roll8_probe/`
+- `artifacts/ai_morph_gru_cleanStatic_q70_frame/tick_roll9_probe/`
+
