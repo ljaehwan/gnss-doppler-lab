@@ -131,8 +131,12 @@ def main() -> None:
     args = ap.parse_args()
 
     out_root = Path(args.out_root)
+    if not out_root.is_absolute():
+        out_root = ROOT / out_root
     out_root.mkdir(parents=True, exist_ok=True)
     feature_root = Path(args.feature_root)
+    if not feature_root.is_absolute():
+        feature_root = ROOT / feature_root
     clean_static = pd.read_csv(CLEAN_STATIC_PATH)
     clean_combined = pd.read_csv(CLEAN_COMBINED_PATH)
     cols = morphology_cols(clean_static)

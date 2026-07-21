@@ -143,12 +143,17 @@ def run_receiver(scenario: str, raw: Path, out: Path, *, exe: str, force: bool, 
     mats = sorted(raw_dir.glob("epl_tracking_ch_*.mat"), key=channel_number)
     if not mats:
         import re
-        for src in sorted(raw_dir.glob("epl_tracking_c*.mat"), key=channel_number):
-            m = re.search(r"epl_tracking_c(\d+)\.mat$", src.name)
-            if m:
-                dst = raw_dir / f"epl_tracking_ch_{m.group(1)}.mat"
-                if not dst.exists():
-                    dst.symlink_to(src.name)
+        fallback_patterns = [
+            ("epl_tracking_c*.mat", r"epl_tracking_c(\d+)\.mat$"),
+            ("e*.mat", r"e(\d+)\.mat$"),
+        ]
+        for pattern, regex in fallback_patterns:
+            for src in sorted(raw_dir.glob(pattern), key=channel_number):
+                m = re.search(regex, src.name)
+                if m:
+                    dst = raw_dir / f"epl_tracking_ch_{m.group(1)}.mat"
+                    if not dst.exists():
+                        dst.symlink_to(src.name)
         mats = sorted(raw_dir.glob("epl_tracking_ch_*.mat"), key=channel_number)
     if not mats:
         raise RuntimeError(f"GNSS-SDR produced no tracking MAT files for {scenario}")
@@ -339,6 +344,7 @@ def main():
     ap.add_argument("--force-features", action="store_true")
     ap.add_argument("--feature-mode", choices=["all", "normalized_dmcpd"], default="all")
     ap.add_argument("--samples", type=int, default=0)
+    ap.add_argument("--skip-score", action="store_true", help="Stop after receiver/features/dataset export; useful for non-neural q70 morphology evaluation.")
     args = ap.parse_args()
     out_root = Path(args.out_root); out_root.mkdir(parents=True, exist_ok=True)
     summaries = {}
@@ -350,7 +356,10 @@ def main():
         out.mkdir(parents=True, exist_ok=True)
         manifest = run_receiver(scenario, raw, out, exe=args.exe, force=args.force_receiver, samples=args.samples)
         node_csv, graph_csv, feature_csv = build_features(scenario, out, manifest, force=args.force_features, feature_mode=args.feature_mode)
-        summaries[scenario] = score(node_csv, graph_csv, model_dir=Path(args.model_dir), out=out, scenario=scenario)
+        if args.skip_score:
+            summaries[scenario] = {"node_csv": str(node_csv), "graph_csv": str(graph_csv), "feature_csv": str(feature_csv), "score_skipped": True}
+        else:
+            summaries[scenario] = score(node_csv, graph_csv, model_dir=Path(args.model_dir), out=out, scenario=scenario)
         print(json.dumps({scenario: summaries[scenario]}, indent=2, sort_keys=True), flush=True)
     combined = {"schema":"gnss-doppler-lab.texbat-9tap-external-validation-combined", "model_dir":args.model_dir, "feature_mode": args.feature_mode, "scenarios": summaries}
     (out_root / "combined_9tap_onset_summary.json").write_text(json.dumps(combined, indent=2, sort_keys=True)+"\n", encoding="utf-8")
