@@ -107,7 +107,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--score-root", default="artifacts/ai_morph_gru_cleanStatic_q70_frame/scored")
     ap.add_argument("--out-dir", default="artifacts/ai_morph_gru_cleanStatic_q70_frame/q70_event_calibration")
-    ap.add_argument("--scenario", default="ds3")
+    ap.add_argument("--scenario", default="ds3",
+                    help="Scenario to evaluate, comma-separated scenarios, or all (all scored ds* directories).")
     ap.add_argument("--low-node-quantile", type=float, default=LOW_NODE_Q,
                     help="CleanStatic PRN-node RMSE quantile used to form the morphology quorum fraction.")
     ap.add_argument("--aggregation-quantile", type=float, default=AGG_Q,
@@ -127,35 +128,56 @@ def main() -> None:
     clean_static_ev = event_scores(clean_static_prn, low_thr, aggregation_quantile=args.aggregation_quantile, roll_window=args.roll_window)
     clean_dynamic_ev = event_scores(clean_dynamic_prn, low_thr, aggregation_quantile=args.aggregation_quantile, roll_window=args.roll_window)
     cal = pd.concat([clean_static_ev, clean_dynamic_ev], ignore_index=True)
-    scenario_prn = pd.read_csv(score_root / args.scenario / f"texbat_{args.scenario}_prn_local_scores.csv")
-    scenario_ev = event_scores(scenario_prn, low_thr, aggregation_quantile=args.aggregation_quantile, roll_window=args.roll_window)
-    score_cols = ["ai_rmse_mean_tau50_gate", "ai_rmse_q_tau50_gate", "ai_rmse_top3_mean_tau50_gate"]
-    score_cols = add_score_persistence(cal, score_cols, args.score_persistence_window)
-    add_score_persistence(scenario_ev, ["ai_rmse_mean_tau50_gate", "ai_rmse_q_tau50_gate", "ai_rmse_top3_mean_tau50_gate"], args.score_persistence_window)
-    metrics = [eval_scenario(scenario_ev, cal, c) | {"scenario": args.scenario} for c in score_cols]
-    scenario_ev.to_csv(out_dir / f"{args.scenario}_ai_morph_gru_q70_event_scores.csv", index=False)
-    pd.DataFrame(metrics).to_csv(out_dir / f"{args.scenario}_ai_morph_gru_q70_metrics.csv", index=False)
-    summary = {
-        "schema": "gnss-doppler-lab.ai-morph-gru-q70-event-calibration.v1",
-        "purpose": "AI normal-only PRN-local morphology GRU scored with q70 morphology-quorum framing; no PRN ID thresholds; cleanStatic+cleanDynamic event quantile calibration.",
-        "scenario": args.scenario,
-        "low_node_quantile": args.low_node_quantile,
-        "low_node_threshold_cleanStatic_prn_rmse": low_thr,
-        "aggregation_quantile": args.aggregation_quantile,
-        "quorum_tau": QUORUM_TAU,
-        "roll_window": args.roll_window,
-        "score_persistence_window": args.score_persistence_window,
-        "calibration_event_windows": int(len(cal)),
-        "metrics": metrics,
-        "events_csv": str((out_dir / f"{args.scenario}_ai_morph_gru_q70_event_scores.csv").relative_to(ROOT)),
-        "metrics_csv": str((out_dir / f"{args.scenario}_ai_morph_gru_q70_metrics.csv").relative_to(ROOT)),
+    base_score_cols = ["ai_rmse_mean_tau50_gate", "ai_rmse_q_tau50_gate", "ai_rmse_top3_mean_tau50_gate"]
+    score_cols = add_score_persistence(cal, base_score_cols, args.score_persistence_window)
+
+    if args.scenario == "all":
+        scenarios = sorted(p.name for p in score_root.iterdir() if p.is_dir() and p.name.startswith("ds"))
+    else:
+        scenarios = [s.strip() for s in args.scenario.split(",") if s.strip()]
+    if not scenarios:
+        raise RuntimeError("no scenarios requested")
+
+    all_metrics: list[dict[str, object]] = []
+    summaries: list[dict[str, object]] = []
+    for scenario in scenarios:
+        scenario_prn = pd.read_csv(score_root / scenario / f"texbat_{scenario}_prn_local_scores.csv")
+        scenario_ev = event_scores(scenario_prn, low_thr, aggregation_quantile=args.aggregation_quantile, roll_window=args.roll_window)
+        add_score_persistence(scenario_ev, base_score_cols, args.score_persistence_window)
+        metrics = [eval_scenario(scenario_ev, cal, c) | {"scenario": scenario} for c in score_cols]
+        scenario_ev.to_csv(out_dir / f"{scenario}_ai_morph_gru_q70_event_scores.csv", index=False)
+        pd.DataFrame(metrics).to_csv(out_dir / f"{scenario}_ai_morph_gru_q70_metrics.csv", index=False)
+        all_metrics.extend(metrics)
+        summary = {
+            "schema": "gnss-doppler-lab.ai-morph-gru-q70-event-calibration.v1",
+            "purpose": "AI normal-only PRN-local morphology GRU scored with q70 morphology-quorum framing; no PRN ID thresholds; cleanStatic+cleanDynamic event quantile calibration.",
+            "scenario": scenario,
+            "low_node_quantile": args.low_node_quantile,
+            "low_node_threshold_cleanStatic_prn_rmse": low_thr,
+            "aggregation_quantile": args.aggregation_quantile,
+            "quorum_tau": QUORUM_TAU,
+            "roll_window": args.roll_window,
+            "score_persistence_window": args.score_persistence_window,
+            "calibration_event_windows": int(len(cal)),
+            "metrics": metrics,
+            "events_csv": str((out_dir / f"{scenario}_ai_morph_gru_q70_event_scores.csv").relative_to(ROOT)),
+            "metrics_csv": str((out_dir / f"{scenario}_ai_morph_gru_q70_metrics.csv").relative_to(ROOT)),
+        }
+        summary_text = json.dumps(summary, indent=2, sort_keys=True) + "\n"
+        (out_dir / f"summary_{scenario}.json").write_text(summary_text)
+        summaries.append(summary)
+
+    pd.DataFrame(all_metrics).to_csv(out_dir / "all_scenarios_ai_morph_gru_q70_metrics.csv", index=False)
+    combined = {
+        "schema": "gnss-doppler-lab.ai-morph-gru-q70-event-calibration.multi-scenario.v1",
+        "scenarios": scenarios,
+        "scenario_count": len(scenarios),
+        "combined_metrics_csv": str((out_dir / "all_scenarios_ai_morph_gru_q70_metrics.csv").relative_to(ROOT)),
+        "summaries": summaries,
     }
-    summary_text = json.dumps(summary, indent=2, sort_keys=True) + "\n"
-    # Keep a scenario-specific summary so multi-scenario sweeps do not silently
-    # overwrite the previous scenario; preserve summary.json for back-compat.
-    (out_dir / f"summary_{args.scenario}.json").write_text(summary_text)
-    (out_dir / "summary.json").write_text(summary_text)
-    print(summary_text, end="")
+    combined_text = json.dumps(combined, indent=2, sort_keys=True) + "\n"
+    (out_dir / "summary.json").write_text(combined_text)
+    print(combined_text, end="")
 
 
 if __name__ == "__main__":
