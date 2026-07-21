@@ -33,24 +33,26 @@ def auc_rank(labels: np.ndarray, scores: np.ndarray) -> float | None:
     return float((r1 - n1 * (n1 + 1) / 2) / (n1 * n0))
 
 
-def event_scores(prn_scores: pd.DataFrame, low_thr: float) -> pd.DataFrame:
+def event_scores(prn_scores: pd.DataFrame, low_thr: float, *, aggregation_quantile: float, roll_window: int) -> pd.DataFrame:
     df = prn_scores.copy()
     df["event_bin_s"] = (df["window_mid_s"].astype(float) * 2).round() / 2.0
     df["low_high"] = df["prn_node_rmse"] > low_thr
     g = df.groupby("event_bin_s", sort=True)
     ev = g["prn_node_rmse"].agg(
         ai_rmse_mean="mean",
-        ai_rmse_q70=lambda s: s.quantile(AGG_Q),
+        ai_rmse_q=lambda s: s.quantile(aggregation_quantile),
         ai_rmse_top3_mean=lambda s: np.sort(s.to_numpy(float))[::-1][: min(3, len(s))].mean(),
         ai_rmse_max="max",
         tracked_prn_count="size",
     ).reset_index().rename(columns={"event_bin_s": "window_mid_s"})
     ev["low_high_fraction"] = g["low_high"].mean().to_numpy(float)
-    ev["low_high_fraction_roll3"] = ev["low_high_fraction"].rolling(ROLL_WINDOW, min_periods=ROLL_MIN_PERIODS).mean().fillna(ev["low_high_fraction"])
-    for base in ["ai_rmse_mean", "ai_rmse_q70", "ai_rmse_top3_mean"]:
+    roll_min_periods = min(roll_window, ROLL_MIN_PERIODS)
+    roll_col = f"low_high_fraction_roll{roll_window}"
+    ev[roll_col] = ev["low_high_fraction"].rolling(roll_window, min_periods=roll_min_periods).mean().fillna(ev["low_high_fraction"])
+    for base in ["ai_rmse_mean", "ai_rmse_q", "ai_rmse_top3_mean"]:
         ev[f"{base}_tau50_gate"] = np.where(
-            ev["low_high_fraction_roll3"] >= QUORUM_TAU,
-            ev[base] * (1.0 + SOFT_ALPHA * ev["low_high_fraction_roll3"]) + OFFSET_BETA * ev["low_high_fraction_roll3"],
+            ev[roll_col] >= QUORUM_TAU,
+            ev[base] * (1.0 + SOFT_ALPHA * ev[roll_col]) + OFFSET_BETA * ev[roll_col],
             ev[base],
         )
     return ev
@@ -87,6 +89,12 @@ def main() -> None:
     ap.add_argument("--score-root", default="artifacts/ai_morph_gru_cleanStatic_q70_frame/scored")
     ap.add_argument("--out-dir", default="artifacts/ai_morph_gru_cleanStatic_q70_frame/q70_event_calibration")
     ap.add_argument("--scenario", default="ds3")
+    ap.add_argument("--low-node-quantile", type=float, default=LOW_NODE_Q,
+                    help="CleanStatic PRN-node RMSE quantile used to form the morphology quorum fraction.")
+    ap.add_argument("--aggregation-quantile", type=float, default=AGG_Q,
+                    help="Per-event quantile over the currently tracked PRN set; 0.70 keeps the q70 baseline framing.")
+    ap.add_argument("--roll-window", type=int, default=ROLL_WINDOW,
+                    help="Number of adjacent 0.5 s event bins used to stabilize the quorum fraction.")
     args = ap.parse_args()
     score_root = ROOT / args.score_root
     out_dir = ROOT / args.out_dir
@@ -94,13 +102,13 @@ def main() -> None:
 
     clean_static_prn = pd.read_csv(score_root / "cleanStatic" / "texbat_cleanStatic_prn_local_scores.csv")
     clean_dynamic_prn = pd.read_csv(score_root / "cleanDynamic" / "texbat_cleanDynamic_prn_local_scores.csv")
-    low_thr = float(clean_static_prn["prn_node_rmse"].quantile(LOW_NODE_Q))
-    clean_static_ev = event_scores(clean_static_prn, low_thr)
-    clean_dynamic_ev = event_scores(clean_dynamic_prn, low_thr)
+    low_thr = float(clean_static_prn["prn_node_rmse"].quantile(args.low_node_quantile))
+    clean_static_ev = event_scores(clean_static_prn, low_thr, aggregation_quantile=args.aggregation_quantile, roll_window=args.roll_window)
+    clean_dynamic_ev = event_scores(clean_dynamic_prn, low_thr, aggregation_quantile=args.aggregation_quantile, roll_window=args.roll_window)
     cal = pd.concat([clean_static_ev, clean_dynamic_ev], ignore_index=True)
     scenario_prn = pd.read_csv(score_root / args.scenario / f"texbat_{args.scenario}_prn_local_scores.csv")
-    scenario_ev = event_scores(scenario_prn, low_thr)
-    score_cols = ["ai_rmse_mean_tau50_gate", "ai_rmse_q70_tau50_gate", "ai_rmse_top3_mean_tau50_gate"]
+    scenario_ev = event_scores(scenario_prn, low_thr, aggregation_quantile=args.aggregation_quantile, roll_window=args.roll_window)
+    score_cols = ["ai_rmse_mean_tau50_gate", "ai_rmse_q_tau50_gate", "ai_rmse_top3_mean_tau50_gate"]
     metrics = [eval_scenario(scenario_ev, cal, c) | {"scenario": args.scenario} for c in score_cols]
     scenario_ev.to_csv(out_dir / f"{args.scenario}_ai_morph_gru_q70_event_scores.csv", index=False)
     pd.DataFrame(metrics).to_csv(out_dir / f"{args.scenario}_ai_morph_gru_q70_metrics.csv", index=False)
@@ -108,10 +116,11 @@ def main() -> None:
         "schema": "gnss-doppler-lab.ai-morph-gru-q70-event-calibration.v1",
         "purpose": "AI normal-only PRN-local morphology GRU scored with q70 morphology-quorum framing; no PRN ID thresholds; cleanStatic+cleanDynamic event quantile calibration.",
         "scenario": args.scenario,
-        "low_node_quantile": LOW_NODE_Q,
+        "low_node_quantile": args.low_node_quantile,
         "low_node_threshold_cleanStatic_prn_rmse": low_thr,
-        "aggregation_quantile": AGG_Q,
+        "aggregation_quantile": args.aggregation_quantile,
         "quorum_tau": QUORUM_TAU,
+        "roll_window": args.roll_window,
         "calibration_event_windows": int(len(cal)),
         "metrics": metrics,
         "events_csv": str((out_dir / f"{args.scenario}_ai_morph_gru_q70_event_scores.csv").relative_to(ROOT)),
