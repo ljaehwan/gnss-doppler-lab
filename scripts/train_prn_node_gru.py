@@ -39,6 +39,7 @@ class TrainConfig:
     emb_dim: int = 128
     dropout: float = 0.05
     seed: int = 11
+    feature_subset: str = "all_numeric"
 
 
 def seed_all(seed: int) -> None:
@@ -50,6 +51,15 @@ def seed_all(seed: int) -> None:
 
 def numeric_feature_columns(df: pd.DataFrame) -> list[str]:
     return [c for c in df.columns if c not in META_COLS and pd.api.types.is_numeric_dtype(df[c])]
+
+
+def select_feature_columns(df: pd.DataFrame, subset: str) -> list[str]:
+    cols = numeric_feature_columns(df)
+    if subset == "all_numeric":
+        return cols
+    if subset == "tap_rel_prompt_mean":
+        return [c for c in cols if c.startswith("tap_") and "_rel_prompt_mean" in c]
+    raise ValueError(f"unknown --feature-subset: {subset}")
 
 
 def fit_standardizer(values: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
@@ -158,13 +168,15 @@ def main() -> None:
     ap.add_argument("--seq-len", type=int, default=12)
     ap.add_argument("--epochs", type=int, default=40)
     ap.add_argument("--batch-size", type=int, default=256)
+    ap.add_argument("--feature-subset", choices=["all_numeric", "tap_rel_prompt_mean"], default="all_numeric",
+                    help="Feature family for shared PRN encoder; tap_rel_prompt_mean matches q70 morphology framing.")
     args = ap.parse_args()
-    cfg = TrainConfig(node_csv=args.node_csv, output_dir=args.output_dir, seq_len=args.seq_len, epochs=args.epochs, batch_size=args.batch_size)
+    cfg = TrainConfig(node_csv=args.node_csv, output_dir=args.output_dir, seq_len=args.seq_len, epochs=args.epochs, batch_size=args.batch_size, feature_subset=args.feature_subset)
     seed_all(cfg.seed)
     out = Path(cfg.output_dir)
     out.mkdir(parents=True, exist_ok=True)
     df = pd.read_csv(cfg.node_csv)
-    feature_cols = numeric_feature_columns(df)
+    feature_cols = select_feature_columns(df, cfg.feature_subset)
     if not feature_cols:
         raise RuntimeError("no numeric Doppler/tap feature columns found")
     run_ids = sorted(df["run_id"].astype(str).unique())
@@ -227,7 +239,7 @@ def main() -> None:
         "device": str(device),
         "torch": {"version": torch.__version__, "cuda": torch.version.cuda, "cuda_available": torch.cuda.is_available(), "gpu": gpu},
         "data": {"node_csv": cfg.node_csv, "node_rows": len(df), "train_windows": len(train_ds), "val_windows": len(val_ds), "split": split_doc},
-        "features": {"node_feature_count": len(feature_cols), "node_feature_columns": feature_cols},
+        "features": {"feature_subset": cfg.feature_subset, "node_feature_count": len(feature_cols), "node_feature_columns": feature_cols},
         "best_val_loss": best_val,
         "validation_score_summary": val_scores.describe(percentiles=[.5, .9, .95, .99, .995, .999]).to_dict(),
         "artifacts": {"model": str(best_path), "history": str(out / "training_history.csv"), "scores": str(out / "validation_prn_node_scores.csv")},
