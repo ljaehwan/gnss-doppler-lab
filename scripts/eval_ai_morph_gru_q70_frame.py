@@ -11,9 +11,13 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 ONSET = 100.0
 BUFFER = 10.0
-LOW_NODE_Q = 0.65
-AGG_Q = 0.70
-ROLL_WINDOW = 3
+# Validated against ds3 with cleanStatic+cleanDynamic calibration in
+# artifacts/ai_morph_gru_cleanStatic_q70_frame/tick_sweep_20260721.
+# LOW_NODE_Q keeps the q70 morphology-quorum framing; AGG_Q is the
+# current tracked-PRN-set score quantile, not a PRN-ID-specific threshold.
+LOW_NODE_Q = 0.70
+AGG_Q = 0.65
+ROLL_WINDOW = 4
 ROLL_MIN_PERIODS = 3
 SCORE_PERSISTENCE_WINDOW = 1
 QUORUM_TAU = 0.50

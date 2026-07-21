@@ -32,3 +32,29 @@ def test_add_score_persistence_disabled_returns_original_cols_without_mutation()
 
     assert cols == ["score"]
     assert list(ev.columns) == ["score"]
+
+def test_q70_eval_defaults_match_validated_morphology_quorum_frame():
+    mod = _load_eval_module()
+
+    assert mod.LOW_NODE_Q == 0.70
+    assert mod.AGG_Q == 0.65
+    assert mod.ROLL_WINDOW == 4
+    assert mod.QUORUM_TAU == 0.50
+
+
+def test_event_scores_uses_current_tracked_set_quantile_and_quorum_gate():
+    mod = _load_eval_module()
+    prn_scores = pd.DataFrame({
+        "window_mid_s": [0.0, 0.0, 0.0, 0.5, 0.5, 0.5],
+        "prn_node_rmse": [1.0, 2.0, 10.0, 1.0, 9.0, 11.0],
+    })
+
+    ev = mod.event_scores(prn_scores, low_thr=8.0, aggregation_quantile=0.65, roll_window=1)
+
+    assert ev["tracked_prn_count"].tolist() == [3, 3]
+    assert ev["low_high_fraction"].tolist() == [1 / 3, 2 / 3]
+    assert ev.loc[0, "ai_rmse_q"] == pd.Series([1.0, 2.0, 10.0]).quantile(0.65)
+    assert ev.loc[0, "ai_rmse_q_tau50_gate"] == ev.loc[0, "ai_rmse_q"]
+    expected_gated = ev.loc[1, "ai_rmse_q"] * (1.0 + mod.SOFT_ALPHA * (2 / 3)) + mod.OFFSET_BETA * (2 / 3)
+    assert abs(ev.loc[1, "ai_rmse_q_tau50_gate"] - expected_gated) < 1e-12
+
