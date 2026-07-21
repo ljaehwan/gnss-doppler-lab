@@ -39,6 +39,7 @@ def test_q70_eval_defaults_match_validated_morphology_quorum_frame():
     assert mod.LOW_NODE_Q == 0.70
     assert mod.AGG_Q == 0.65
     assert mod.ROLL_WINDOW == 4
+    assert mod.SCORE_PERSISTENCE_WINDOW == 10
     assert mod.QUORUM_TAU == 0.50
 
 

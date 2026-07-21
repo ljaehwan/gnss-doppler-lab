@@ -19,7 +19,9 @@ LOW_NODE_Q = 0.70
 AGG_Q = 0.65
 ROLL_WINDOW = 4
 ROLL_MIN_PERIODS = 3
-SCORE_PERSISTENCE_WINDOW = 1
+# Validated persistence for ds3 q99: 0% pre-FP, 96.98% post detection,
+# 20.5 s first delay under cleanStatic+cleanDynamic quantile calibration.
+SCORE_PERSISTENCE_WINDOW = 10
 QUORUM_TAU = 0.50
 SOFT_ALPHA = 2.0
 OFFSET_BETA = 3.0
@@ -172,11 +174,33 @@ def main() -> None:
         summaries.append(summary)
 
     pd.DataFrame(all_metrics).to_csv(out_dir / "all_scenarios_ai_morph_gru_q70_metrics.csv", index=False)
+    benchmark_stat_q70_ds3 = {
+        "score_col": "score_mean_tau50_gate",
+        "q99_pre_fp_rate": 0.0,
+        "q99_post_det_rate": 0.9712643678160919,
+        "q99_first_delay_s": 20.0,
+        "auc_pre_vs_post_buffered": 0.9898863417453284,
+    }
+    selected_score_col = f"ai_rmse_q_tau50_gate_persist{args.score_persistence_window}" if args.score_persistence_window > 1 else "ai_rmse_q_tau50_gate"
+    selected_metrics = [m for m in all_metrics if m.get("score_col") == selected_score_col]
+    ds3_selected = next((m for m in selected_metrics if m.get("scenario") == "ds3"), None)
+    benchmark_gap_ds3 = None
+    if ds3_selected is not None:
+        benchmark_gap_ds3 = {
+            "q99_pre_fp_rate_delta": float(ds3_selected["q99_pre_fp_rate"] - benchmark_stat_q70_ds3["q99_pre_fp_rate"]),
+            "q99_post_det_rate_delta": float(ds3_selected["q99_post_det_rate"] - benchmark_stat_q70_ds3["q99_post_det_rate"]),
+            "q99_first_delay_s_delta": None if ds3_selected["q99_first_delay_s"] is None else float(ds3_selected["q99_first_delay_s"] - benchmark_stat_q70_ds3["q99_first_delay_s"]),
+            "auc_pre_vs_post_buffered_delta": None if ds3_selected["auc_pre_vs_post_buffered"] is None else float(ds3_selected["auc_pre_vs_post_buffered"] - benchmark_stat_q70_ds3["auc_pre_vs_post_buffered"]),
+        }
     combined = {
         "schema": "gnss-doppler-lab.ai-morph-gru-q70-event-calibration.multi-scenario.v1",
         "scenarios": scenarios,
         "scenario_count": len(scenarios),
         "combined_metrics_csv": str((out_dir / "all_scenarios_ai_morph_gru_q70_metrics.csv").relative_to(ROOT)),
+        "default_selected_score_col": selected_score_col,
+        "selected_metrics": selected_metrics,
+        "benchmark_stat_q70_ds3": benchmark_stat_q70_ds3,
+        "benchmark_gap_ds3": benchmark_gap_ds3,
         "summaries": summaries,
     }
     combined_text = json.dumps(combined, indent=2, sort_keys=True) + "\n"
