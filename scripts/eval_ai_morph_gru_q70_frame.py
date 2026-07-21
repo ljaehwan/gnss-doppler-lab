@@ -126,8 +126,12 @@ def main() -> None:
         "events_csv": str((out_dir / f"{args.scenario}_ai_morph_gru_q70_event_scores.csv").relative_to(ROOT)),
         "metrics_csv": str((out_dir / f"{args.scenario}_ai_morph_gru_q70_metrics.csv").relative_to(ROOT)),
     }
-    (out_dir / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
-    print(json.dumps(summary, indent=2, sort_keys=True))
+    summary_text = json.dumps(summary, indent=2, sort_keys=True) + "\n"
+    # Keep a scenario-specific summary so multi-scenario sweeps do not silently
+    # overwrite the previous scenario; preserve summary.json for back-compat.
+    (out_dir / f"summary_{args.scenario}.json").write_text(summary_text)
+    (out_dir / "summary.json").write_text(summary_text)
+    print(summary_text, end="")
 
 
 if __name__ == "__main__":
