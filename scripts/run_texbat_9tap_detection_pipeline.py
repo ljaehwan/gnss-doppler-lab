@@ -37,6 +37,8 @@ SCENARIOS = {
     "ds2": "TEXBAT ds2 static overpowered time push",
     "ds3": "TEXBAT ds3 static matched-power time push",
     "ds4": "TEXBAT ds4 static matched-power position push",
+    "ds5": "TEXBAT ds5 dynamic overpowered time push",
+    "ds6": "TEXBAT ds6 dynamic matched-power position push",
 }
 ONSET_S = 100.0
 
