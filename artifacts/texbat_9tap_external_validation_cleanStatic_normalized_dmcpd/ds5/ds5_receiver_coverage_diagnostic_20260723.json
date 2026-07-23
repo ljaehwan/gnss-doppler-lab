@@ -1,0 +1,225 @@
+{
+  "schema": "gnss-doppler-lab.ds5_receiver_coverage_diagnostic.v1",
+  "hypothesis": "TEXBAT ds5\uc758 \ubbf8\uac80\ucd9c\uc740 detector threshold \ubb38\uc81c\uac00 \uc544\ub2c8\ub77c receiver/tracking coverage\uac00 \uacf5\uaca9 onset(100s) \uc804\uc5d0 \uc885\ub8cc\ub418\uc5b4 post-onset scoreable window\uac00 \uc5c6\uae30 \ub54c\ubb38\uc778\uc9c0 \ud655\uc778\ud55c\ub2e4.",
+  "attack_onset_s": 100.0,
+  "post_scoreable_start_s": 110.0,
+  "receiver_manifest": "artifacts/texbat_9tap_external_validation_cleanStatic_normalized_dmcpd/ds5/receiver/texbat-ds5-method-a-9tap-external-validation/manifest.json",
+  "tracking_summary_csv": "artifacts/texbat_9tap_external_validation_cleanStatic_normalized_dmcpd/ds5/receiver/texbat-ds5-method-a-9tap-external-validation/tracking_summary.csv",
+  "tracking": {
+    "channels": 11,
+    "valid_track_channels_epoch_ge_100": 10,
+    "epoch_count_min": 2,
+    "epoch_count_median": 20961.0,
+    "epoch_count_max": 20962,
+    "end_time_s_min": 0.0,
+    "end_time_s_median": 21.0841678,
+    "end_time_s_max": 23.10224144,
+    "channels_reaching_attack_onset": 0,
+    "channels_reaching_post_scoreable_start": 0,
+    "prns": [
+      "G01",
+      "G03",
+      "G06",
+      "G09",
+      "G14",
+      "G15",
+      "G18",
+      "G21",
+      "G22",
+      "G27",
+      "G29"
+    ]
+  },
+  "feature_csv": "artifacts/texbat_9tap_external_validation_cleanStatic_normalized_dmcpd/ds5/tap9_tracking_features_w1.0_s0.5.csv",
+  "feature_stats": {
+    "exists": true,
+    "rows": 181,
+    "columns": 98,
+    "time_col": "window_mid_s",
+    "time_min_s": 0.54105636,
+    "time_max_s": 9.6431952,
+    "pre_windows_lt_90": 181,
+    "attack_or_later_windows_ge_100": 0,
+    "post_scoreable_windows_ge_110": 0,
+    "unique_prns": [
+      "G03",
+      "G06",
+      "G09",
+      "G14",
+      "G15",
+      "G18",
+      "G21",
+      "G22",
+      "G27",
+      "G29"
+    ],
+    "unique_prn_count": 10
+  },
+  "graph_csv": "artifacts/texbat_9tap_external_validation_cleanStatic_normalized_dmcpd/ds5/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_receiver_graph_windows.csv",
+  "graph_stats": {
+    "exists": true,
+    "rows": 19,
+    "columns": 162,
+    "time_col": "window_bin_s",
+    "time_min_s": 0.5,
+    "time_max_s": 9.5,
+    "pre_windows_lt_90": 19,
+    "attack_or_later_windows_ge_100": 0,
+    "post_scoreable_windows_ge_110": 0,
+    "tracked_prn_count_min": 8,
+    "tracked_prn_count_max": 10,
+    "tracked_prn_count_median": 10.0
+  },
+  "node_csv": "artifacts/texbat_9tap_external_validation_cleanStatic_normalized_dmcpd/ds5/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+  "node_stats": {
+    "exists": true,
+    "rows": 181,
+    "columns": 84,
+    "time_col": "window_mid_s",
+    "time_min_s": 0.54105636,
+    "time_max_s": 9.6431952,
+    "pre_windows_lt_90": 181,
+    "attack_or_later_windows_ge_100": 0,
+    "post_scoreable_windows_ge_110": 0,
+    "unique_prns": [
+      "G03",
+      "G06",
+      "G09",
+      "G14",
+      "G15",
+      "G18",
+      "G21",
+      "G22",
+      "G27",
+      "G29"
+    ],
+    "unique_prn_count": 10
+  },
+  "event_score_csv": "artifacts/ai_morph_gru_cleanStatic_q70_frame/ds5_frozen_holdout_20260723/ds5_ai_morph_gru_q70_event_scores.csv",
+  "event_score_stats": {
+    "exists": true,
+    "rows": 7,
+    "columns": 43,
+    "time_col": "window_mid_s",
+    "time_min_s": 6.5,
+    "time_max_s": 9.5,
+    "pre_windows_lt_90": 7,
+    "attack_or_later_windows_ge_100": 0,
+    "post_scoreable_windows_ge_110": 0,
+    "tracked_prn_count_min": 8,
+    "tracked_prn_count_max": 10,
+    "tracked_prn_count_median": 8.0
+  },
+  "metrics_csv": "artifacts/ai_morph_gru_cleanStatic_q70_frame/ds5_frozen_holdout_20260723/ds5_ai_morph_gru_q70_metrics.csv",
+  "metrics_excerpt": [
+    {
+      "score_col": "ai_rmse_mean_tau50_gate",
+      "pre_windows_t_lt_90": 7,
+      "post_windows_t_ge_110": 0,
+      "pre_score_median": 0.05033525060862298,
+      "post_score_median": null,
+      "q95_threshold": 2.746968464528726,
+      "q95_post_det_rate": 0.0
+    },
+    {
+      "score_col": "ai_rmse_q_tau50_gate",
+      "pre_windows_t_lt_90": 7,
+      "post_windows_t_ge_110": 0,
+      "pre_score_median": 0.05250407829880712,
+      "post_score_median": null,
+      "q95_threshold": 2.393413347948343,
+      "q95_post_det_rate": 0.0
+    },
+    {
+      "score_col": "ai_rmse_top3_mean_tau50_gate",
+      "pre_windows_t_lt_90": 7,
+      "post_windows_t_ge_110": 0,
+      "pre_score_median": 0.07487359146277102,
+      "post_score_median": null,
+      "q95_threshold": 4.312251240762345,
+      "q95_post_det_rate": 0.0
+    },
+    {
+      "score_col": "ai_rmse_mean_pscc",
+      "pre_windows_t_lt_90": 7,
+      "post_windows_t_ge_110": 0,
+      "pre_score_median": 0.050810076339109174,
+      "post_score_median": null,
+      "q95_threshold": 0.4786813979069018,
+      "q95_post_det_rate": 0.0
+    },
+    {
+      "score_col": "ai_rmse_q_pscc",
+      "pre_windows_t_lt_90": 7,
+      "post_windows_t_ge_110": 0,
+      "pre_score_median": 0.05250407829880712,
+      "post_score_median": null,
+      "q95_threshold": 0.2184527375495117,
+      "q95_post_det_rate": 0.0
+    },
+    {
+      "score_col": "ai_rmse_top3_mean_pscc",
+      "pre_windows_t_lt_90": 7,
+      "post_windows_t_ge_110": 0,
+      "pre_score_median": 0.07487359146277102,
+      "post_score_median": null,
+      "q95_threshold": 1.379922723840434,
+      "q95_post_det_rate": 0.0
+    },
+    {
+      "score_col": "ai_rmse_mean_pscc_gate",
+      "pre_windows_t_lt_90": 7,
+      "post_windows_t_ge_110": 0,
+      "pre_score_median": 0.05033525060862298,
+      "post_score_median": null,
+      "q95_threshold": 1.090613670527499,
+      "q95_post_det_rate": 0.0
+    },
+    {
+      "score_col": "ai_rmse_mean_pscc_gate_fixed",
+      "pre_windows_t_lt_90": 7,
+      "post_windows_t_ge_110": 0,
+      "pre_score_median": 0.05033525060862298,
+      "post_score_median": null,
+      "q95_threshold": 4.903363350996789,
+      "q95_post_det_rate": 0.0
+    },
+    {
+      "score_col": "ai_rmse_q_pscc_gate",
+      "pre_windows_t_lt_90": 7,
+      "post_windows_t_ge_110": 0,
+      "pre_score_median": 0.05250407829880712,
+      "post_score_median": null,
+      "q95_threshold": 0.5127184896001564,
+      "q95_post_det_rate": 0.0
+    },
+    {
+      "score_col": "ai_rmse_q_pscc_gate_fixed",
+      "pre_windows_t_lt_90": 7,
+      "post_windows_t_ge_110": 0,
+      "pre_score_median": 0.05250407829880712,
+      "post_score_median": null,
+      "q95_threshold": 4.885865721724641,
+      "q95_post_det_rate": 0.0
+    },
+    {
+      "score_col": "ai_rmse_top3_mean_pscc_gate",
+      "pre_windows_t_lt_90": 7,
+      "post_windows_t_ge_110": 0,
+      "pre_score_median": 0.07487359146277102,
+      "post_score_median": null,
+      "q95_threshold": 3.2122241171942854,
+      "q95_post_det_rate": 0.0
+    },
+    {
+      "score_col": "ai_rmse_top3_mean_pscc_gate_fixed",
+      "pre_windows_t_lt_90": 7,
+      "post_windows_t_ge_110": 0,
+      "pre_score_median": 0.07487359146277102,
+      "post_score_median": null,
+      "q95_threshold": 6.022403120233544,
+      "q95_post_det_rate": 0.0
+    }
+  ],
+  "conclusion": "ds5 receiver/tracking \uc0b0\ucd9c\ubb3c\uc740 \uc57d 23.1s\uc5d0\uc11c \uc885\ub8cc\ub418\uc5b4 onset 100s \ubc0f post-scoreable 110s \uc774\ud6c4 window\uac00 0\uac1c\ub2e4. \ub530\ub77c\uc11c ds5\ub294 detection miss\uac00 \uc544\ub2c8\ub77c receiver/tracking coverage \ubb38\uc81c\ub85c \ubd84\ub9ac\ud574\uc57c \ud55c\ub2e4."
+}
