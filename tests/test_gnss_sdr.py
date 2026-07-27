@@ -36,6 +36,17 @@ def _tracking_mat(path: Path, *, prn: int, samples: list[int], doppler: list[flo
             handle.create_dataset(key, data=value.reshape(-1, 1))
 
 
+def _empty_tracking_sentinel_mat(path: Path) -> None:
+    """Reproduce GNSS-SDR's HDF5 converter output for a zero-byte dump."""
+    with h5py.File(path, "w") as handle:
+        for key in ("PRN", "PRN_start_sample_count", *(
+            "carrier_doppler_hz", "carrier_doppler_rate_hz", "CN0_SNV_dB_Hz",
+            "Prompt_I", "Prompt_Q", "carrier_lock_test", "carr_error_hz",
+            "code_error_chips",
+        )):
+            handle.create_dataset(key, data=np.array([1, 0]).reshape(-1, 1))
+
+
 def test_render_receiver_config_matches_s8_complex_baseband(tmp_path: Path) -> None:
     iq = tmp_path / "normal iq.bin"
     output = tmp_path / "receiver"
@@ -122,6 +133,21 @@ def test_export_tracking_csv_preserves_prn_time_doppler_and_summary(tmp_path: Pa
     g05 = next(row for row in summaries if row["prn"] == "G05")
     assert int(g05["epoch_count"]) == 2
     assert float(g05["median_cn0_db_hz"]) == 45.0
+
+
+def test_export_tracking_csv_skips_zero_byte_dump_converter_sentinel(tmp_path: Path) -> None:
+    empty = tmp_path / "epl_tracking_ch_0.mat"
+    tracked = tmp_path / "epl_tracking_ch_1.mat"
+    _empty_tracking_sentinel_mat(empty)
+    _tracking_mat(tracked, prn=15, samples=[2600, 5200], doppler=[1000.0, 1010.0])
+
+    output = tmp_path / "tracking.csv"
+    summary = tmp_path / "tracking_summary.csv"
+    report = export_tracking_csv([empty, tracked], output, summary, sample_rate_hz=2_600_000)
+
+    assert report == {"row_count": 2, "prns": ["G15"], "channel_count": 1}
+    assert {row["prn"] for row in csv.DictReader(output.open())} == {"G15"}
+    assert {row["prn"] for row in csv.DictReader(summary.open())} == {"G15"}
 
 
 def test_run_receiver_creates_reproducible_run_artifacts(tmp_path: Path, monkeypatch) -> None:

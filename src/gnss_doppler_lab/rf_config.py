@@ -1,5 +1,5 @@
 """Versioned configuration for normal GPS L1 C/A IQ generation."""
-from dataclasses import dataclass
+from dataclasses import dataclass, fields, replace
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -56,6 +56,85 @@ class RFGenerationConfig:
     input: InputConfig
     output: OutputConfig
     simulator: SimulatorConfig
+    impairments: Any
+
+
+def _load_impairments(raw: Any, sample_rate_hz: int):
+    """Parse strict profile semantics into a complete realized configuration."""
+    from .rf_impairments import ImpairmentConfig, MultipathTap, clean_impairments, open_sky_normal
+    if raw is None:
+        return clean_impairments()  # legacy omission remains a zero-cost clean path
+    if not isinstance(raw, dict):
+        raise ConfigError("impairments must be a mapping")
+    if not raw:
+        raise ConfigError("impairments mapping must not be empty; omit it for the legacy clean path")
+    allowed = {f.name for f in fields(ImpairmentConfig)}
+    unknown = set(raw) - allowed
+    if unknown:
+        raise ConfigError(f"unknown impairment key(s): {', '.join(sorted(unknown))}")
+    profile = raw.get("profile")
+    if profile is None:
+        if raw.get("enabled") is False:
+            profile = "clean"
+        elif set(raw) - {"enabled", "seed"}:
+            profile = "explicit"
+        else:
+            raise ConfigError("enabled impairments would be an expensive identity pass; select a profile or explicit effects")
+    if profile not in {"clean", "explicit", "open_sky_normal"}:
+        raise ConfigError("impairments.profile must be clean, explicit, or open_sky_normal")
+    default_enabled = profile != "clean"
+    enabled = raw.get("enabled", default_enabled)
+    if not isinstance(enabled, bool):
+        raise ConfigError("impairments.enabled must be boolean")
+    if profile == "clean" and enabled:
+        raise ConfigError("clean profile requires impairments to be disabled")
+    if profile == "open_sky_normal" and not enabled:
+        raise ConfigError("open_sky_normal profile requires impairments to be enabled")
+    if profile == "explicit" and not enabled:
+        raise ConfigError("explicit profile requires impairments to be enabled")
+    preset_keys = {"enabled", "profile", "seed"}
+    if profile in {"clean", "open_sky_normal"} and set(raw) - preset_keys:
+        raise ConfigError(f"{profile} preset accepts only enabled, profile, and seed")
+    seed = _strict_integer(raw.get("seed", 0), "impairments.seed")
+    if not 0 <= seed < 2**64:
+        raise ConfigError("impairments.seed must be an integer in [0, 2^64)")
+    if profile == "explicit" and not (set(raw) - preset_keys):
+        raise ConfigError("explicit enabled impairments would be an expensive identity pass")
+    try:
+        if profile == "open_sky_normal":
+            return open_sky_normal(seed, sample_rate_hz)
+        if profile == "clean":
+            return replace(clean_impairments(), seed=seed)
+        base = ImpairmentConfig(enabled=True, profile="explicit", seed=seed)
+        values = {"enabled": True, "profile": "explicit", "seed": seed}
+        integer_fields = {"seed", "frontend_order", "chunk_samples"}
+        nullable_fields = {"sample_snr_db", "frontend_cutoff_hz", "agc_target_rms"}
+        for key, value in raw.items():
+            if key in {"enabled", "profile", "seed"}:
+                continue
+            if key in integer_fields:
+                values[key] = _strict_integer(value, f"impairments.{key}")
+            elif key == "multipath":
+                if not isinstance(value, list):
+                    raise ConfigError("impairments.multipath must be a list")
+                taps = []
+                for index, tap in enumerate(value):
+                    if not isinstance(tap, dict) or set(tap) != {"delay_samples", "attenuation_db", "phase_deg"}:
+                        raise ConfigError(f"impairments.multipath[{index}] requires exactly delay_samples, attenuation_db, phase_deg")
+                    taps.append(MultipathTap(*(float(tap[k]) for k in ("delay_samples", "attenuation_db", "phase_deg"))))
+                values[key] = tuple(taps)
+            elif value is None and key in nullable_fields:
+                values[key] = None
+            else:
+                values[key] = float(value)
+        cfg = replace(base, **values)
+        if cfg.frontend_cutoff_hz is not None and cfg.frontend_cutoff_hz >= sample_rate_hz / 2:
+            raise ConfigError("impairments.frontend_cutoff_hz must be below Nyquist")
+        return cfg
+    except (TypeError, ValueError) as exc:
+        if isinstance(exc, ConfigError):
+            raise
+        raise ConfigError(f"invalid impairments: {exc}") from exc
 
 
 def _required(obj: dict[str, Any], key: str) -> Any:
@@ -64,16 +143,16 @@ def _required(obj: dict[str, Any], key: str) -> Any:
 
 
 def _strict_integer(value: Any, name: str) -> int:
-    """Accept integer-valued YAML numbers, never lossy int() coercion."""
+    """Accept exact integers without routing Python/YAML ints through binary64."""
     if isinstance(value, bool):
         raise ConfigError(f"{name} must be an integer")
-    try:
-        number = float(value)
-    except (TypeError, ValueError) as exc:
-        raise ConfigError(f"{name} must be an integer") from exc
-    if not math.isfinite(number) or not number.is_integer():
+    if isinstance(value, int):
+        return value
+    if isinstance(value, float):
+        if math.isfinite(value) and value.is_integer():
+            return int(value)
         raise ConfigError(f"{name} must be an integer")
-    return int(number)
+    raise ConfigError(f"{name} must be an integer")
 
 
 def _sha256_bytes(data: bytes) -> str:
@@ -163,7 +242,8 @@ def load_rf_config(path: str | Path) -> RFGenerationConfig:
         fmt = out.get("sample_format", "s8_iq")
         if rate < 1_000_000 or fmt != "s8_iq": raise ConfigError("rf sample rate must be at least 1000000 Hz and sample_format must be s8_iq")
         sim = data.get("simulator", {})
-        return RFGenerationConfig(1, Scenario(name, constellation, signal, utc, duration, position), InputConfig(nav), OutputConfig(root, rate, fmt), SimulatorConfig(sim.get("executable")))
+        impairments = _load_impairments(data.get("impairments"), rate)
+        return RFGenerationConfig(1, Scenario(name, constellation, signal, utc, duration, position), InputConfig(nav), OutputConfig(root, rate, fmt), SimulatorConfig(sim.get("executable")), impairments)
     except (KeyError, TypeError, ValueError) as exc:
         if isinstance(exc, ConfigError): raise
         raise ConfigError(f"invalid configuration: {exc}") from exc

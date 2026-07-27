@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import os
 import shutil
@@ -64,7 +65,13 @@ def actual_run_id(row: dict[str, str]) -> str:
     return f"{row['run_id']}_{compact_utc}"
 
 
-def write_rf_config(row: dict[str, str], config_dir: Path, rf_root: Path, simulator: Path) -> Path:
+def impairment_seed(run_id: str) -> int:
+    """Stable 64-bit seed with independent realizations across candidates."""
+    return int.from_bytes(hashlib.sha256(f"normal-v3-rf:{run_id}".encode()).digest()[:8], "big")
+
+
+def write_rf_config(row: dict[str, str], config_dir: Path, rf_root: Path, simulator: Path,
+                    impairment_profile: str = "open_sky_normal") -> Path:
     run_id = row["run_id"]
     utc = row["utc"]
     nav = row["rinex_nav"]
@@ -77,6 +84,12 @@ def write_rf_config(row: dict[str, str], config_dir: Path, rf_root: Path, simula
         return os.path.relpath((REPO_ROOT / p).resolve() if not Path(p).is_absolute() else Path(p), config_dir.resolve())
 
     sim_for_yaml = os.path.relpath((REPO_ROOT / simulator).resolve() if not simulator.is_absolute() else simulator.resolve(), REPO_ROOT)
+    if impairment_profile == "clean":
+        impairment_yaml = "impairments:\n  enabled: false\n  profile: clean\n"
+    elif impairment_profile == "open_sky_normal":
+        impairment_yaml = f"impairments:\n  enabled: true\n  profile: open_sky_normal\n  seed: {impairment_seed(run_id)}\n"
+    else:
+        raise ValueError(f"unsupported impairment profile: {impairment_profile}")
     text = f"""version: 1
 scenario:
   name: {run_id}
@@ -95,7 +108,7 @@ output:
   root: {rel(rf_root)}
   rf_sample_rate_hz: 2600000
   sample_format: s8_iq
-simulator:
+{impairment_yaml}simulator:
   executable: {sim_for_yaml}
 """
     config_dir.mkdir(parents=True, exist_ok=True)
@@ -203,6 +216,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--resume-after")
     ap.add_argument("--keep-iq", action="store_true")
     ap.add_argument("--keep-raw", action="store_true")
+    ap.add_argument("--impairment-profile", choices=["open_sky_normal", "clean"], default="open_sky_normal",
+                    help="RF realism policy; choose clean to disable all post-simulator impairments")
     ap.add_argument("--force", action="store_true", help="remove existing per-run RF/receiver outputs before rerun")
     args = ap.parse_args(argv)
 
@@ -236,7 +251,7 @@ def main(argv: list[str] | None = None) -> int:
             run_reports.append({"candidate_id": candidate_id, "run_id": run_id, "status": "skipped_existing_feature"})
             continue
 
-        cfg = write_rf_config(row, config_dir, rf_root, args.simulator)
+        cfg = write_rf_config(row, config_dir, rf_root, args.simulator, args.impairment_profile)
         gen = run_cmd([sys.executable, "scripts/generate_iq.py", "generate", str(cfg)], timeout=1800)
         if gen.returncode != 0:
             raise RuntimeError(f"IQ generation failed for {candidate_id}\nSTDOUT:\n{gen.stdout}\nSTDERR:\n{gen.stderr}")
@@ -271,6 +286,11 @@ def main(argv: list[str] | None = None) -> int:
         "elapsed_seconds": round(time.time() - started, 3),
         "keep_iq": args.keep_iq,
         "keep_raw": args.keep_raw,
+        "impairment_policy": {
+            "profile": args.impairment_profile,
+            "enabled": args.impairment_profile != "clean",
+            "seed_derivation": "uint64(big-endian, sha256('normal-v3-rf:' + candidate_run_id)[:8])",
+        },
         "reports": run_reports,
     }
     summary_path = out / "pipeline_summary.json"

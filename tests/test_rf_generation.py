@@ -100,6 +100,18 @@ def test_discovery_precedence_and_command_contract(tmp_path, monkeypatch):
     ]
 
 
+def test_pinned_runner_expected_bytes_accounts_for_initial_100ms_warmup(tmp_path):
+    cfg_path, _ = config_file(tmp_path)
+    cfg = load_rf_config(cfg_path)
+    cfg = replace(cfg, scenario=replace(cfg.scenario, duration_seconds=1))
+    runner = GpsSdrSimRunner(executable="/sim")
+    # The pinned simulator initializes at 0.1 s and writes 0.2..duration in
+    # 0.1-second blocks, so a requested second contains nine output blocks.
+    assert runner.expected_output_bytes(cfg) == 4_680_000
+    long_cfg = replace(cfg, scenario=replace(cfg.scenario, duration_seconds=300))
+    assert runner.expected_output_bytes(long_cfg) == 1_559_480_000
+
+
 def test_relative_explicit_executable_is_resolved_before_changing_cwd(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     tool = tmp_path / "tools" / "gps-sdr-sim"
@@ -166,6 +178,11 @@ def test_runner_rejects_rinex3_before_execution(tmp_path, monkeypatch):
 def test_pipeline_deterministic_layout_and_manifest(tmp_path):
     cfg_path, nav = config_file(tmp_path)
     cfg = load_rf_config(cfg_path)
+    cfg = replace(
+        cfg,
+        scenario=replace(cfg.scenario, duration_seconds=1),
+        output=replace(cfg.output, rf_sample_rate_hz=2),
+    )
     class FakeRunner:
         identity = "fake-gps-sdr-sim"
         executable = "/fake/sim"
@@ -185,7 +202,7 @@ def test_pipeline_deterministic_layout_and_manifest(tmp_path):
     assert m["input"]["rinex_nav_sha256"]
     assert m["iq"]["actual_bytes"] == 4
     assert m["iq"]["complex_samples"] == 2
-    assert m["iq"]["actual_duration_seconds"] == pytest.approx(2 / 2_600_000)
+    assert m["iq"]["actual_duration_seconds"] == pytest.approx(1.0)
     assert m["iq"]["sample_format"] == "s8_iq"
     assert m["simulator"]["identity"] == "fake-gps-sdr-sim"
     with pytest.raises(FileExistsError):
@@ -302,6 +319,11 @@ def test_dynamic_success_cleans_nav_and_motion_staging(tmp_path, monkeypatch):
 def test_manifest_records_unverified_executable_hash_and_cli_contract(tmp_path):
     cfg_path, _ = config_file(tmp_path)
     cfg = load_rf_config(cfg_path)
+    cfg = replace(
+        cfg,
+        scenario=replace(cfg.scenario, duration_seconds=1),
+        output=replace(cfg.output, rf_sample_rate_hz=1),
+    )
     executable = tmp_path / "arbitrary-sim"
     executable.write_bytes(b"not the pinned build")
     class FakeRunner:
@@ -331,6 +353,28 @@ def test_pipeline_rejects_odd_s8_iq_byte_count(tmp_path):
             return {"command": [self.executable], "actual_bytes": 3}
     with pytest.raises(ValueError, match="even"):
         generate_iq(cfg, OddRunner())
+
+
+@pytest.mark.parametrize("written,reported,match", [
+    (18, 18, "expected 20"),
+    (22, 22, "expected 20"),
+    (20, 18, "reported.*filesystem"),
+])
+def test_pipeline_requires_exact_recording_size_and_runner_agreement(tmp_path, written, reported, match):
+    cfg_path, _ = config_file(tmp_path)
+    cfg = load_rf_config(cfg_path)
+    cfg = replace(
+        cfg,
+        scenario=replace(cfg.scenario, duration_seconds=1),
+        output=replace(cfg.output, rf_sample_rate_hz=10),
+    )
+    class SizedRunner:
+        executable = "/fake"; identity = "fake"
+        def run(self, config, output, log):
+            output.write_bytes(b"I" * written); log.write_text("")
+            return {"command": [self.executable], "actual_bytes": reported}
+    with pytest.raises(ValueError, match=match):
+        generate_iq(cfg, SizedRunner())
 
 
 def test_pipeline_defensively_keeps_run_directory_under_output_root(tmp_path):

@@ -96,6 +96,18 @@ class GpsSdrSimRunner:
         self.identity = "unverified gps-sdr-sim executable"; self.provenance = "unverified"
         self.cli_contract = f"osqzss/gps-sdr-sim@{self.pinned_commit}"
 
+    def expected_output_bytes(self, config) -> int:
+        """Return the pinned simulator's exact s8-IQ byte contract.
+
+        gps-sdr-sim primes its state at 0.1 seconds, then writes 0.1-second
+        blocks from 0.2 seconds through the requested duration.  Consequently
+        its file is one block shorter than the nominal requested interval.
+        The C implementation truncates samples per block with integer division.
+        """
+        blocks = config.scenario.duration_seconds * 10 - 1
+        samples_per_block = config.output.rf_sample_rate_hz // 10
+        return blocks * samples_per_block * 2
+
     def build_command(self, config, output: Path, nav: str | Path | None = None, time=None) -> list[str]:
         s, p = config.scenario, config.scenario.position
         from .rf_config import TrajectoryPosition

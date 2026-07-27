@@ -209,6 +209,13 @@ def export_tracking_csv(
             prn_values = _vector(handle, "PRN")
             sample_counts = _vector(handle, "PRN_start_sample_count")
             fields = {name: _vector(handle, name) for name in TRACKING_FIELDS}
+        # GNSS-SDR's MAT converter represents an empty zero-byte channel dump
+        # as two sentinel values [1, 0] in every dataset.  It is not a two-epoch
+        # observation of PRN 1 and must not enter tracking evidence/features.
+        sentinel = np.array([1, 0])
+        vectors = (prn_values, sample_counts, *fields.values())
+        if all(values.shape == (2,) and np.array_equal(values, sentinel) for values in vectors):
+            continue
         lengths = {len(prn_values), len(sample_counts), *(len(values) for values in fields.values())}
         if len(lengths) != 1 or not prn_values.size:
             raise ValueError(f"Tracking datasets have inconsistent or empty lengths: {path}")
