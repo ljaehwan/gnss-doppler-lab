@@ -1,5 +1,6 @@
 import importlib.util,json
 from pathlib import Path
+import numpy as np
 import pandas as pd
 import pytest
 P=Path(__file__).parents[1]/"scripts/evaluate_oakbat_cleanstatic_detector.py"
@@ -34,3 +35,31 @@ def test_resume_report_tamper_rejected(tmp_path,monkeypatch):
     assert m.load_valid_resume("os2",tmp_path,{"x":1},c)
     forged=m.build_report("os2",s,e,99.,{"x":1},tmp_path);m.atomic_json(tmp_path/"report.json",forged)
     assert m.load_valid_resume("os2",tmp_path,{"x":1},c) is None
+
+
+def test_resume_accepts_normal_noninteger_csv_round_trip(tmp_path,monkeypatch):
+    m=mod();k=m.gate_lib.FINAL_SCORE
+    times=np.arange(100.0,131.5,0.5);n=len(times)
+    s=pd.DataFrame({"run_id":["oakbat-os2-method-a-9tap"]*n,"prn":["G01"]*n,"window_bin_s":times,"window_start_s":times,"window_mid_s":times+0.5,"window_end_s":times+1.0,"prn_node_rmse":np.sin(times)*0.123456789+0.5})
+    e=pd.DataFrame({"window_start_s":times,k:np.cos(times)*0.234567891+2.0})
+    c={"node_thresholds":{"q50":1.,"q70":2.,"q80":3.},"alpha":.75,"event_q99_threshold":2.1}
+    monkeypatch.setattr(m,"build_attack_events",lambda scores,calibration:e.copy())
+    m.atomic_csv(tmp_path/"attack_prn_scores.csv",s);m.atomic_csv(tmp_path/"attack_event_scores.csv",e)
+    persisted_s=pd.read_csv(tmp_path/"attack_prn_scores.csv");persisted_e=pd.read_csv(tmp_path/"attack_event_scores.csv")
+    m.atomic_json(tmp_path/"report.json",m.build_report("os2",persisted_s,persisted_e,2.1,{"x":1},tmp_path))
+    assert m.load_valid_resume("os2",tmp_path,{"x":1},c)
+
+
+def test_failed_rerun_invalidates_old_complete_manifest_and_preflights(tmp_path,monkeypatch):
+    m=mod();out=tmp_path/"out";out.mkdir();m.atomic_json(out/"manifest.json",{"complete":True,"stale":True})
+    campaign=tmp_path/"campaign";campaign.mkdir()
+    monkeypatch.setattr(m.trainer,"load_frozen_artifacts",lambda p:{"calibration":{"node_thresholds":{"q50":1.,"q70":2.,"q80":3.},"normal_only":True,"attack_inputs_read":False,"alpha":.75,"event_q99_threshold":4.}})
+    monkeypatch.setattr(m,"identity",lambda p:{"path":str(Path(p)),"size_bytes":1,"sha256":"a"*64})
+    calls=[]
+    monkeypatch.setattr(m.pipeline,"preflight_output_space",lambda root,**kw:calls.append((Path(root),kw)) or {"free_bytes":100,"required_free_bytes":10})
+    monkeypatch.setattr(m,"evaluate_scenario",lambda *a,**kw:(_ for _ in ()).throw(RuntimeError("receiver failed")))
+    with pytest.raises(RuntimeError,match="receiver failed"):
+        m.run_evaluation(campaign,tmp_path/"raw",out,["os1"],"exe",minimum_free_bytes=10)
+    state=json.loads((out/"manifest.json").read_text())
+    assert state["complete"] is False and state["status"]=="running"
+    assert len(calls)==2 and all(call[1]["scenario_count"]==1 for call in calls)

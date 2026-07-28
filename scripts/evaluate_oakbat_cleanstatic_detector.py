@@ -75,7 +75,8 @@ def load_valid_resume(s,out,inputs,calibration):
  try:
   out=Path(out);r=readj(out/"report.json");a=pd.read_csv(out/"attack_prn_scores.csv");b=pd.read_csv(out/"attack_event_scores.csv")
   validate_scores(a,s);expected_events=build_attack_events(a,calibration);trainer._semantic_frame_equal(b,expected_events,"resumed attack event scores")
-  x=build_report(s,a,expected_events,float(calibration["event_q99_threshold"]),inputs,out);return r if r==x else None
+  x=build_report(s,a,expected_events,float(calibration["event_q99_threshold"]),inputs,out)
+  trainer._semantic_equal(r,x,"resumed scenario report");return r
  except Exception:return None
 def evaluate_scenario(s,raw,pre,scored,c,frozen,exe,timeout_s,fr=False,ff=False,fs=False):
  iq=Path(raw)/(s+".bin");pipeline.validate_iq(iq);p=Path(pre)/s;p.mkdir(parents=True,exist_ok=True);r=pipeline.run_receiver(s,iq,p,exe=exe,timeout_s=timeout_s,force=fr);node=pipeline.build_features(s,p,r,force=ff);frame,attack=authenticate(s,iq,r,node,exe);inputs={"frozen":frozen,"attack":attack,"semantics":{"schema":SCHEMA,"onset_s":120.,"guard_s":10.,"pre_end_s":110.,"post_start_s":130.,"availability_offset_s":1.,"alpha":.75,"run_id":f"oakbat-{s}-method-a-9tap"}};out=Path(scored)/s;out.mkdir(parents=True,exist_ok=True)
@@ -83,15 +84,20 @@ def evaluate_scenario(s,raw,pre,scored,c,frozen,exe,timeout_s,fr=False,ff=False,
   old=load_valid_resume(s,out,inputs,c)
   if old:return old
  scores=trainer.score_partition(frame,Path(frozen["checkpoint"]["path"]));validate_scores(scores,s);events=build_attack_events(scores,c);atomic_csv(out/"attack_prn_scores.csv",scores);atomic_csv(out/"attack_event_scores.csv",events);x=build_report(s,scores,events,float(c["event_q99_threshold"]),inputs,out);atomic_json(out/"report.json",x);return x
-def run_evaluation(campaign_root,raw_root,output_root,scenarios,exe,timeout_s=21600,preprocessing_root=None,force_receiver=False,force_features=False,force_scoring=False):
+def run_evaluation(campaign_root,raw_root,output_root,scenarios,exe,timeout_s=21600,preprocessing_root=None,force_receiver=False,force_features=False,force_scoring=False,minimum_free_bytes=pipeline.DEFAULT_MIN_FREE_BYTES):
  scenarios=list(scenarios)
  if not scenarios or len(set(scenarios))!=len(scenarios) or any(s not in SCENARIOS for s in scenarios):raise ValueError("scenarios restricted to os1-os4")
+ if isinstance(minimum_free_bytes,bool) or not isinstance(minimum_free_bytes,int) or minimum_free_bytes<0:raise ValueError("minimum_free_bytes must be a nonnegative integer")
  z=trainer.load_frozen_artifacts(campaign_root);c=z["calibration"];root=Path(campaign_root).resolve()
  if set(c.get("node_thresholds",{}))!={"q50","q70","q80"} or c.get("normal_only") is not True or c.get("attack_inputs_read") is not False:raise ValueError("frozen semantics")
  frozen={"campaign_manifest":identity(root/"campaign_manifest.json"),"checkpoint":identity(root/"model.pt"),"calibration":identity(root/"calibration.json")};out=Path(output_root);pre=Path(preprocessing_root) if preprocessing_root else out/"preprocessed";scored=out/"scored"
+ running={"schema":"gnss-doppler-lab.oakbat-cleanstatic-attack-evaluation-manifest.v1","complete":False,"status":"running","selected_scenarios":scenarios,"serial":True,"frozen":frozen,"normal_only_training":True,"attack_inputs_read_during_training":False}
+ atomic_json(out/"manifest.json",running)
+ disk={"preprocessing":pipeline.preflight_output_space(pre,scenario_count=len(scenarios),minimum_free_bytes=minimum_free_bytes),"scoring":pipeline.preflight_output_space(scored,scenario_count=len(scenarios),minimum_free_bytes=minimum_free_bytes)}
+ running["disk_preflight"]=disk;atomic_json(out/"manifest.json",running)
  for s in scenarios:evaluate_scenario(s,raw_root,pre,scored,c,frozen,exe,timeout_s,force_receiver,force_features,force_scoring)
- m={"schema":"gnss-doppler-lab.oakbat-cleanstatic-attack-evaluation-manifest.v1","complete":True,"selected_scenarios":scenarios,"serial":True,"frozen":frozen,"scenario_reports":{s:identity(scored/s/"report.json") for s in scenarios},"normal_only_training":True,"attack_inputs_read_during_training":False};atomic_json(out/"manifest.json",m);return m
+ m={**running,"complete":True,"status":"complete","scenario_reports":{s:identity(scored/s/"report.json") for s in scenarios}};atomic_json(out/"manifest.json",m);return m
 def build_parser():
- p=argparse.ArgumentParser();p.add_argument("--campaign-root",required=True);p.add_argument("--raw-root",default="/home/ubuntu/unraid_hdd/oakbat/gps_l1ca/raw");p.add_argument("--output-root",default=str(ROOT/"artifacts/oakbat_cleanstatic_detector_eval_v1"));p.add_argument("--preprocessing-root");p.add_argument("--scenarios",nargs="+",choices=list(SCENARIOS),default=list(SCENARIOS));p.add_argument("--exe",default=os.environ.get("GNSS_SDR_METHOD_A_EXE",str(ROOT/".tools/gnss-sdr-method-a-9tap")));p.add_argument("--timeout-s",type=int,default=21600);p.add_argument("--force-receiver",action="store_true");p.add_argument("--force-features",action="store_true");p.add_argument("--force-scoring",action="store_true");return p
+ p=argparse.ArgumentParser();p.add_argument("--campaign-root",required=True);p.add_argument("--raw-root",default="/home/ubuntu/unraid_hdd/oakbat/gps_l1ca/raw");p.add_argument("--output-root",default=str(ROOT/"artifacts/oakbat_cleanstatic_detector_eval_v1"));p.add_argument("--preprocessing-root");p.add_argument("--scenarios",nargs="+",choices=list(SCENARIOS),default=list(SCENARIOS));p.add_argument("--exe",default=os.environ.get("GNSS_SDR_METHOD_A_EXE",str(ROOT/".tools/gnss-sdr-method-a-9tap")));p.add_argument("--timeout-s",type=int,default=21600);p.add_argument("--min-free-gib",type=float,default=20.0);p.add_argument("--force-receiver",action="store_true");p.add_argument("--force-features",action="store_true");p.add_argument("--force-scoring",action="store_true");return p
 if __name__=="__main__":
- a=build_parser().parse_args();print(json.dumps(run_evaluation(a.campaign_root,a.raw_root,a.output_root,a.scenarios,a.exe,a.timeout_s,a.preprocessing_root,a.force_receiver,a.force_features,a.force_scoring),indent=2))
+ a=build_parser().parse_args();print(json.dumps(run_evaluation(a.campaign_root,a.raw_root,a.output_root,a.scenarios,a.exe,a.timeout_s,a.preprocessing_root,a.force_receiver,a.force_features,a.force_scoring,int(a.min_free_gib*(1024**3))),indent=2))
