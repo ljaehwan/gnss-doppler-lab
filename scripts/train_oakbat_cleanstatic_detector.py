@@ -14,6 +14,7 @@ import json
 import math
 import os
 import random
+import shutil
 import sys
 import tempfile
 from dataclasses import asdict
@@ -37,6 +38,10 @@ NODE_SCHEMA="gnss-doppler-lab.method-a-9tap-multi-prn-dataset"
 FEATURE_CACHE_SCHEMA="gnss-doppler-lab.oakbat-feature-cache.v1"
 RUN_ID="oakbat-cleanStatic-method-a-9tap"
 SEQ_LEN=12
+CADENCE_S=0.5
+TIME_TOLERANCE_S=1e-6
+MAX_MODEL_DIM=4096
+MAX_CHECKPOINT_TENSORS=100_000_000
 ARTIFACT_ROSTER={"model.pt","training_history.csv","split_manifest.json","model_metadata.json","calibration_prn_scores.csv","calibration.json","held_clean_prn_scores.csv","held_clean_event_scores.csv","held_clean_fpr.json","partitions/train.csv","partitions/validation.csv","partitions/calibration.csv","partitions/held_clean.csv"}
 DEFAULTS={"seq_len":12,"epochs":25,"batch_size":256,"lr":.001,"weight_decay":.0001,"hidden_dim":128,"emb_dim":128,"dropout":.05,"seed":11}
 
@@ -135,10 +140,16 @@ def validate_clean_frame(df):
  if not (df.tap_layout.astype(str)==TAP_LAYOUT).all(): raise ValueError("tap_layout mismatch")
  if df[["run_id","prn"]].isna().any().any() or (df.run_id.astype(str).str.len()==0).any() or (df.prn.astype(str).str.len()==0).any(): raise ValueError("missing run_id/PRN")
  numeric=["window_bin_s","window_start_s","window_mid_s","window_end_s","tap_count",*FEATURE_COLUMNS]
- values=df[numeric].apply(pd.to_numeric,errors="coerce").to_numpy(float)
- if not np.isfinite(values).all(): raise ValueError("non-finite required data")
+ converted=df[numeric].apply(pd.to_numeric,errors="coerce")
+ if not np.isfinite(converted.to_numpy(float)).all(): raise ValueError("non-finite required data")
+ bins=converted["window_bin_s"].to_numpy(float); starts=converted["window_start_s"].to_numpy(float)
+ if not np.allclose(bins/CADENCE_S,np.rint(bins/CADENCE_S),rtol=0.,atol=TIME_TOLERANCE_S/CADENCE_S): raise ValueError("window_bin_s is not on the expected 0.5-s grid")
+ offsets=starts-bins
+ if not np.allclose(offsets,offsets[0],rtol=0.,atol=TIME_TOLERANCE_S): raise ValueError("window_start_s/window_bin_s global offset disagreement")
  key=["run_id","window_bin_s","prn"]
- if df.duplicated(key,keep=False).any(): raise ValueError("duplicate (run_id,window_bin_s,prn)")
+ if df.duplicated(key,keep=False).any(): raise ValueError("duplicate/non-unique (run_id,window_bin_s,prn)")
+ for _,group in df.assign(_bin=bins).groupby(["run_id","prn"],sort=False):
+  if len(group)>1 and not (np.diff(group._bin.to_numpy(float))>TIME_TOLERANCE_S).all(): raise ValueError("window bins must be monotonic within each PRN")
 
 def _sort(df):
  cols=[c for c in ("run_id","prn","window_bin_s","window_start_s") if c in df.columns]
@@ -157,6 +168,9 @@ def validate_partitions(parts,seq_len):
   if part.prn.astype(str).nunique()<2: raise ValueError(f"insufficient PRNs in {name}")
   counts=part.groupby(["run_id","prn"],dropna=False).size()
   if counts.empty or (counts<seq_len+1).any(): raise ValueError(f"insufficient PRN history in {name}; need seq_len+1 per series")
+  for _,group in part.groupby(["run_id","prn"],sort=False):
+   bins=np.sort(group.window_bin_s.to_numpy(float))
+   if len(bins)>1 and not np.allclose(np.diff(bins),CADENCE_S,rtol=0.,atol=TIME_TOLERANCE_S): raise ValueError(f"temporal cadence/gap in {name}; sequences cannot bridge gaps")
 
 def split_chronologically(df,seq_len=12):
  validate_clean_frame(df); t=df.window_start_s.astype(float); parts={}
@@ -178,7 +192,21 @@ def fit_train_standardizer(parts):
  if not np.isfinite(values).all(): raise ValueError("non-finite training features")
  return train_lib.fit_standardizer(values)
 
+def _validate_hparams(hparams):
+ for name in ("seq_len","epochs","batch_size","hidden_dim","emb_dim"):
+  value=hparams.get(name)
+  if isinstance(value,bool) or not isinstance(value,int) or value<1: raise ValueError(f"{name} must be a positive integer")
+ if hparams["hidden_dim"]>MAX_MODEL_DIM or hparams["emb_dim"]>MAX_MODEL_DIM: raise ValueError("hidden_dim/emb_dim exceeds safety limit")
+ for name in ("lr","weight_decay","dropout"):
+  value=hparams.get(name)
+  if isinstance(value,bool) or not isinstance(value,(int,float)) or not math.isfinite(float(value)): raise ValueError(f"{name} must be finite")
+ if hparams["lr"]<=0: raise ValueError("lr must be positive")
+ if hparams["weight_decay"]<0: raise ValueError("weight_decay must be nonnegative")
+ if not 0<=hparams["dropout"]<1: raise ValueError("dropout must satisfy 0 <= dropout < 1")
+ if isinstance(hparams.get("seed"),bool) or not isinstance(hparams.get("seed"),int): raise ValueError("seed must be an integer")
+
 def _config(source,out,**hparams):
+ _validate_hparams(hparams)
  return train_lib.TrainConfig(node_csv=str(source),output_dir=str(out),feature_subset="tap_rel_prompt_mean",**hparams)
 
 def _datasets(parts,cfg,mean,std):
@@ -199,16 +227,56 @@ def train_model(parts,cfg,mean,std,out):
   if va["loss"]<best: best=va["loss"]; best_epoch=epoch; best_state={k:v.detach().cpu().clone() for k,v in model.state_dict().items()}
  if best_state is None or not math.isfinite(best): raise ValueError("no finite validation checkpoint")
  checkpoint=Path(out)/"model.pt"
- torch.save({"model_state_dict":best_state,"config":asdict(cfg),"node_feature_columns":FEATURE_COLUMNS,"standardizer":{"node_mean":mean.tolist(),"node_std":std.tolist()},"selected_epoch":best_epoch,"best_validation_loss":best,"checkpoint_selection":"minimum validation loss"},checkpoint)
+ atomic_torch_save(checkpoint,{"model_state_dict":best_state,"config":asdict(cfg),"node_feature_columns":FEATURE_COLUMNS,"standardizer":{"node_mean":mean.tolist(),"node_std":std.tolist()},"selected_epoch":best_epoch,"best_validation_loss":best,"checkpoint_selection":"minimum validation loss"})
  atomic_csv(Path(out)/"training_history.csv",pd.DataFrame(history)); return checkpoint,best_epoch,best
 
+def atomic_torch_save(path,value):
+ path=Path(path); path.parent.mkdir(parents=True,exist_ok=True); fd,tmp=tempfile.mkstemp(prefix="."+path.name,dir=path.parent); os.close(fd)
+ try:
+  torch.save(value,tmp)
+  with open(tmp,"rb") as f: os.fsync(f.fileno())
+  os.replace(tmp,path)
+ finally:
+  if os.path.exists(tmp): os.unlink(tmp)
+
+
+def _validated_checkpoint_payload(payload):
+ expected={"model_state_dict","config","node_feature_columns","standardizer","selected_epoch","best_validation_loss","checkpoint_selection"}
+ if not isinstance(payload,dict) or set(payload)!=expected: raise ValueError("checkpoint payload key/type mismatch")
+ config=payload["config"]; config_keys=set(train_lib.TrainConfig.__dataclass_fields__)
+ if not isinstance(config,dict) or set(config)!=config_keys: raise ValueError("checkpoint config key/type mismatch")
+ if not isinstance(config.get("node_csv"),str) or not isinstance(config.get("output_dir"),str) or config.get("feature_subset")!="tap_rel_prompt_mean": raise ValueError("checkpoint config contract mismatch")
+ _validate_hparams({k:config[k] for k in DEFAULTS})
+ if config["seq_len"]!=SEQ_LEN: raise ValueError("checkpoint seq_len contract mismatch")
+ if payload["node_feature_columns"]!=FEATURE_COLUMNS or payload["checkpoint_selection"]!="minimum validation loss": raise ValueError("checkpoint feature/selection contract mismatch")
+ epoch=payload["selected_epoch"]; loss=payload["best_validation_loss"]
+ if isinstance(epoch,bool) or not isinstance(epoch,int) or not 1<=epoch<=config["epochs"]: raise ValueError("checkpoint selected_epoch contract mismatch")
+ if isinstance(loss,bool) or not isinstance(loss,(int,float)) or not math.isfinite(float(loss)): raise ValueError("checkpoint validation loss contract mismatch")
+ standardizer=payload["standardizer"]
+ if not isinstance(standardizer,dict) or set(standardizer)!={"node_mean","node_std"}: raise ValueError("checkpoint standardizer key/type mismatch")
+ for name in ("node_mean","node_std"):
+  values=standardizer[name]
+  if not isinstance(values,(list,tuple)) or len(values)!=len(FEATURE_COLUMNS) or any(isinstance(v,bool) or not isinstance(v,(int,float)) for v in values): raise ValueError("checkpoint standardizer nested type mismatch")
+ state=payload["model_state_dict"]
+ if not isinstance(state,dict) or not state or any(not isinstance(k,str) or not isinstance(v,torch.Tensor) for k,v in state.items()): raise ValueError("checkpoint model state must contain only named tensors")
+ if sum(v.numel() for v in state.values())>MAX_CHECKPOINT_TENSORS: raise ValueError("checkpoint model state exceeds tensor safety limit")
+ for tensor in state.values():
+  if tensor.layout!=torch.strided or tensor.device.type!="cpu" or tensor.dtype not in (torch.float16,torch.float32,torch.float64) or not torch.isfinite(tensor).all().item(): raise ValueError("checkpoint model state tensor contract mismatch")
+ return config
+
+
 def _open_model(checkpoint):
- payload=torch.load(checkpoint,map_location="cpu",weights_only=False); cfg=train_lib.TrainConfig(**payload["config"])
- if payload.get("node_feature_columns")!=FEATURE_COLUMNS or cfg.feature_subset!="tap_rel_prompt_mean": raise ValueError("checkpoint feature contract mismatch")
- model=train_lib.PrnLocalGRU(len(FEATURE_COLUMNS),cfg); model.load_state_dict(payload["model_state_dict"]); model.eval()
+ try: payload=torch.load(checkpoint,map_location="cpu",weights_only=True)
+ except Exception as exc: raise ValueError("invalid or unsupported safe checkpoint payload") from exc
+ config=_validated_checkpoint_payload(payload)
+ try: cfg=train_lib.TrainConfig(**config)
+ except (TypeError,ValueError) as exc: raise ValueError("checkpoint config construction mismatch") from exc
  mean=np.asarray(payload["standardizer"]["node_mean"],np.float32); std=np.asarray(payload["standardizer"]["node_std"],np.float32)
  if mean.shape!=(9,) or std.shape!=(9,) or not np.isfinite(mean).all() or not np.isfinite(std).all() or (std<=0).any(): raise ValueError("checkpoint standardizer contract mismatch")
- return payload,cfg,model,mean,std
+ model=train_lib.PrnLocalGRU(len(FEATURE_COLUMNS),cfg)
+ try: model.load_state_dict(payload["model_state_dict"],strict=True)
+ except (RuntimeError,TypeError,ValueError) as exc: raise ValueError("checkpoint model state shape/key mismatch") from exc
+ model.eval(); return payload,cfg,model,mean,std
 
 def score_partition(part,checkpoint):
  _,cfg,model,mean,std=_open_model(checkpoint); rows=[]
@@ -243,12 +311,12 @@ def held_clean_report(held_scores,calibration):
  report={"schema":"gnss-doppler-lab.oakbat-held-clean-fpr.v1","threshold_source_partition":"calibration","partition":"held_clean","event_windows":int(len(events)),"false_positive_events":int(flags.sum()),"false_positive_rate":float(flags.mean())}
  return events.assign(gate_flag=flags),report
 
-def run_campaign(clean_node_csv,output_dir,**overrides):
+def _run_campaign(clean_node_csv,output_dir,**overrides):
  hparams=dict(DEFAULTS); unknown=set(overrides)-set(hparams)
  if unknown: raise TypeError(f"unknown training knobs: {sorted(unknown)}")
  hparams.update(overrides)
  if hparams["seq_len"]!=SEQ_LEN: raise ValueError("seq_len is frozen at 12")
- if hparams["epochs"]<1 or hparams["batch_size"]<1: raise ValueError("epochs and batch_size must be positive")
+ _validate_hparams(hparams)
  source,frame,parent_manifests=authenticate_clean_input(clean_node_csv); out=Path(output_dir).resolve()
  if out.exists() and any(out.iterdir()): raise FileExistsError("output directory must be absent or empty")
  out.mkdir(parents=True,exist_ok=True); source_hash=sha256(source); parts=split_chronologically(frame,SEQ_LEN)
@@ -271,6 +339,19 @@ def run_campaign(clean_node_csv,output_dir,**overrides):
  names=["model.pt","training_history.csv","split_manifest.json","model_metadata.json","calibration_prn_scores.csv","calibration.json","held_clean_prn_scores.csv","held_clean_event_scores.csv","held_clean_fpr.json",*[d["path"] for d in partition_docs.values()]]
  manifest={"schema":SCHEMA,"complete":True,"normal_only":True,"attack_inputs_read":False,"source":{"path":str(source),"sha256":source_hash,"parent_manifests":parent_manifests},"checkpoint":"model.pt","calibration":"calibration.json","split":"split_manifest.json","artifacts":{name:sha256(out/name) for name in names}}
  atomic_json(out/"campaign_manifest.json",manifest); return manifest
+
+def run_campaign(clean_node_csv,output_dir,**overrides):
+ hparams=dict(DEFAULTS); unknown=set(overrides)-set(hparams)
+ if unknown: raise TypeError(f"unknown training knobs: {sorted(unknown)}")
+ hparams.update(overrides)
+ if hparams["seq_len"]!=SEQ_LEN: raise ValueError("seq_len is frozen at 12")
+ _validate_hparams(hparams)
+ out=Path(output_dir).resolve(); existed=out.exists()
+ try: return _run_campaign(clean_node_csv,out,**overrides)
+ except Exception:
+  if not existed and out.exists(): shutil.rmtree(out)
+  raise
+
 
 def _under_root(root, relative, description):
  if not isinstance(relative,str) or not relative or Path(relative).is_absolute(): raise ValueError(f"invalid {description} pointer")
@@ -338,24 +419,28 @@ def load_frozen_artifacts(output_dir):
   frame=pd.read_csv(_under_root(root,expected_rel,"split partition"))
   if doc.get("rows")!=len(frame) or doc.get("prns")!=frame.prn.astype(str).nunique(): raise ValueError(f"split partition metadata mismatch: {name}")
   _semantic_frame_equal(frame,expected_parts[name],f"split partition {name}")
+ payload,cfg,model,mean,std=_open_model(checkpoint)
  if (calibration.get("schema")!="gnss-doppler-lab.oakbat-cleanstatic-calibration.v1" or calibration.get("normal_only") is not True or
      calibration.get("attack_inputs_read") is not False or calibration.get("input_partition")!="calibration" or
      calibration.get("threshold_source_partition")!="calibration" or set(calibration.get("node_thresholds",{}))!={"q50","q70","q80"}):
   raise ValueError("calibration contract/linkage mismatch")
  calibration_scores=pd.read_csv(root/"calibration_prn_scores.csv")
- expected_calibration=derive_calibration(calibration_scores)
+ rescored_calibration=score_partition(expected_parts["calibration"],checkpoint)
+ _semantic_frame_equal(calibration_scores,rescored_calibration,"calibration checkpoint scores")
+ expected_calibration=derive_calibration(rescored_calibration)
  expected_calibration.update({"input_csv":"calibration_prn_scores.csv","input_sha256":sha256(root/"calibration_prn_scores.csv"),"checkpoint_sha256":checkpoint_hash})
  _semantic_equal(calibration,expected_calibration,"calibration")
  held=_json(root/"held_clean_fpr.json","held-clean report")
  if held.get("threshold_source_partition")!="calibration" or held.get("partition")!="held_clean" or held.get("calibration_sha256")!=artifacts.get("calibration.json") or held.get("score_input_sha256")!=artifacts.get("held_clean_prn_scores.csv"):
   raise ValueError("held-clean linkage mismatch")
  held_scores=pd.read_csv(root/"held_clean_prn_scores.csv")
- expected_events,expected_held=held_clean_report(held_scores,expected_calibration)
+ rescored_held=score_partition(expected_parts["held_clean"],checkpoint)
+ _semantic_frame_equal(held_scores,rescored_held,"held-clean checkpoint scores")
+ expected_events,expected_held=held_clean_report(rescored_held,expected_calibration)
  frozen_events=pd.read_csv(root/"held_clean_event_scores.csv")
  _semantic_frame_equal(frozen_events,expected_events,"held-clean event scores")
  expected_held.update({"score_input_sha256":sha256(root/"held_clean_prn_scores.csv"),"calibration_sha256":sha256(root/"calibration.json")})
  _semantic_equal(held,expected_held,"held-clean report")
- payload,cfg,model,mean,std=_open_model(checkpoint)
  checkpoint_config=payload.get("config",{})
  if (cfg.seq_len!=SEQ_LEN or metadata.get("hparams")!= {k:checkpoint_config.get(k) for k in DEFAULTS} or
      metadata.get("hparams",{}).get("seq_len")!=SEQ_LEN or metadata.get("checkpoint_selection")!="minimum validation loss" or

@@ -171,3 +171,82 @@ def test_authentication_rejects_receiver_schema_and_feature_contract_tamper(tmp_
  feature=json.loads(chain["feature"].read_text()); feature["feature_contract"]["node_feature_columns"]=list(reversed(m.FEATURE_COLUMNS)); chain["feature"].write_text(json.dumps(feature))
  with pytest.raises(ValueError,match="feature.*contract"):
   m.authenticate_clean_input(source)
+
+@pytest.mark.parametrize("mutation,match", [
+    (lambda d: d.assign(window_bin_s=d.window_bin_s + 0.1), "grid"),
+    (lambda d: d.assign(window_start_s=np.where(d.prn == "G02", d.window_start_s + 0.01, d.window_start_s)), "offset"),
+])
+def test_temporal_contract_rejects_grid_and_prn_clock_disagreement(mutation, match):
+    m=load_runner()
+    with pytest.raises(ValueError, match=match):
+        m.split_chronologically(mutation(clean_frame()), 12)
+
+
+def test_temporal_contract_rejects_gap_duplicate_and_nonmonotonic_input():
+    m=load_runner(); frame=tiny_frame()
+    gap=frame[~((frame.prn == "G01") & (frame.window_start_s == 2.0))]
+    with pytest.raises(ValueError, match="cadence|gap"):
+        m.split_chronologically(gap, 12)
+    duplicate=pd.concat([frame, frame.iloc[[0]]], ignore_index=True)
+    with pytest.raises(ValueError, match="duplicate|unique"):
+        m.split_chronologically(duplicate, 12)
+    indices=list(frame.index); indices[0],indices[1]=indices[1],indices[0]
+    with pytest.raises(ValueError, match="monotonic"):
+        m.split_chronologically(frame.loc[indices].reset_index(drop=True), 12)
+
+
+@pytest.mark.parametrize("knob,value", [
+    ("lr", 0.0), ("lr", float("nan")), ("weight_decay", -1.0),
+    ("weight_decay", float("inf")), ("dropout", -0.1), ("dropout", 1.0),
+    ("hidden_dim", 0), ("emb_dim", -1), ("epochs", 0), ("batch_size", 0),
+])
+def test_invalid_hparams_fail_before_output_creation(tmp_path, knob, value):
+    m=load_runner(); source,_=authenticated_source(tmp_path/"source")
+    out=tmp_path/"must-not-exist"
+    with pytest.raises((TypeError, ValueError), match=knob.replace("_", ".*")):
+        m.run_campaign(source, out, **{knob:value})
+    assert not out.exists()
+
+
+def test_open_model_uses_weights_only_and_rejects_nested_non_tensor_payload(tmp_path, monkeypatch):
+    m=load_runner(); source,_=authenticated_source(tmp_path/"source"); root=tmp_path/"frozen"
+    m.run_campaign(source,root,epochs=1,batch_size=32,hidden_dim=8,emb_dim=8)
+    real_load=m.torch.load; calls=[]
+    def checked_load(*args, **kwargs):
+        calls.append(kwargs.get("weights_only")); return real_load(*args, **kwargs)
+    monkeypatch.setattr(m.torch,"load",checked_load)
+    m._open_model(root/"model.pt")
+    assert calls == [True]
+    payload=real_load(root/"model.pt",map_location="cpu",weights_only=True)
+    payload["model_state_dict"][next(iter(payload["model_state_dict"]))] = {"unsupported":"nested payload"}
+    bad=tmp_path/"malicious-like.pt"; m.torch.save(payload,bad)
+    monkeypatch.setattr(m.train_lib,"PrnLocalGRU",lambda *a,**k: pytest.fail("model constructed before payload validation"))
+    with pytest.raises(ValueError, match="checkpoint.*state|tensor"):
+        m._open_model(bad)
+
+
+def test_loader_rejects_coordinated_checkpoint_metadata_and_score_substitution(tmp_path):
+    m=load_runner(); source,_=authenticated_source(tmp_path/"source")
+    root=tmp_path/"frozen"; substitute=tmp_path/"substitute"
+    m.run_campaign(source,root,epochs=1,batch_size=32,hidden_dim=8,emb_dim=8,seed=11)
+    m.run_campaign(source,substitute,epochs=1,batch_size=32,hidden_dim=8,emb_dim=8,seed=12)
+    for name in ("model.pt","model_metadata.json"):
+        (root/name).write_bytes((substitute/name).read_bytes())
+    checkpoint_hash=m.sha256(root/"model.pt")
+    calibration_scores=pd.read_csv(root/"calibration_prn_scores.csv"); calibration_scores["prn_node_rmse"] += .5
+    m.atomic_csv(root/"calibration_prn_scores.csv",calibration_scores)
+    calibration=m.derive_calibration(calibration_scores)
+    calibration.update({"input_csv":"calibration_prn_scores.csv","input_sha256":m.sha256(root/"calibration_prn_scores.csv"),"checkpoint_sha256":checkpoint_hash})
+    m.atomic_json(root/"calibration.json",calibration)
+    held_scores=pd.read_csv(root/"held_clean_prn_scores.csv"); held_scores["prn_node_rmse"] += .5
+    m.atomic_csv(root/"held_clean_prn_scores.csv",held_scores)
+    events,report=m.held_clean_report(held_scores,calibration); m.atomic_csv(root/"held_clean_event_scores.csv",events)
+    report.update({"score_input_sha256":m.sha256(root/"held_clean_prn_scores.csv"),"calibration_sha256":m.sha256(root/"calibration.json")})
+    m.atomic_json(root/"held_clean_fpr.json",report)
+    replaced=("model.pt","model_metadata.json","calibration_prn_scores.csv","calibration.json",
+              "held_clean_prn_scores.csv","held_clean_event_scores.csv","held_clean_fpr.json")
+    campaign=json.loads((root/"campaign_manifest.json").read_text())
+    for name in replaced: campaign["artifacts"][name]=m.sha256(root/name)
+    (root/"campaign_manifest.json").write_text(json.dumps(campaign))
+    with pytest.raises(ValueError, match="score|checkpoint|rescor"):
+        m.load_frozen_artifacts(root)
