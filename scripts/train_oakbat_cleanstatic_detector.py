@@ -145,10 +145,10 @@ def validate_clean_frame(df):
  bins=converted["window_bin_s"].to_numpy(float); starts=converted["window_start_s"].to_numpy(float)
  if not np.allclose(bins/CADENCE_S,np.rint(bins/CADENCE_S),rtol=0.,atol=TIME_TOLERANCE_S/CADENCE_S): raise ValueError("window_bin_s is not on the expected 0.5-s grid")
  offsets=starts-bins
- if not np.allclose(offsets,offsets[0],rtol=0.,atol=TIME_TOLERANCE_S): raise ValueError("window_start_s/window_bin_s global offset disagreement")
  key=["run_id","window_bin_s","prn"]
  if df.duplicated(key,keep=False).any(): raise ValueError("duplicate/non-unique (run_id,window_bin_s,prn)")
- for _,group in df.assign(_bin=bins).groupby(["run_id","prn"],sort=False):
+ for _,group in df.assign(_bin=bins,_offset=offsets).groupby(["run_id","prn"],sort=False):
+  if not np.allclose(group._offset,group._offset.iloc[0],rtol=0.,atol=TIME_TOLERANCE_S): raise ValueError("window_start_s/window_bin_s per-PRN offset disagreement")
   if len(group)>1 and not (np.diff(group._bin.to_numpy(float))>TIME_TOLERANCE_S).all(): raise ValueError("window bins must be monotonic within each PRN")
 
 def _sort(df):

@@ -172,9 +172,16 @@ def test_authentication_rejects_receiver_schema_and_feature_contract_tamper(tmp_
  with pytest.raises(ValueError,match="feature.*contract"):
   m.authenticate_clean_input(source)
 
+def test_temporal_contract_accepts_stable_per_prn_acquisition_offsets():
+    m=load_runner(); frame=clean_frame()
+    frame.loc[frame.prn == "G02", "window_start_s"] += 0.01
+    parts=m.split_chronologically(frame, 12)
+    assert {name: len(part) for name,part in parts.items()} == {"train":960,"validation":320,"calibration":280,"held_clean":80}
+
+
 @pytest.mark.parametrize("mutation,match", [
     (lambda d: d.assign(window_bin_s=d.window_bin_s + 0.1), "grid"),
-    (lambda d: d.assign(window_start_s=np.where(d.prn == "G02", d.window_start_s + 0.01, d.window_start_s)), "offset"),
+    (lambda d: d.assign(window_start_s=d.window_start_s + np.where((d.prn == "G02") & (d.window_bin_s == 100.0), 0.01, 0.0)), "offset"),
 ])
 def test_temporal_contract_rejects_grid_and_prn_clock_disagreement(mutation, match):
     m=load_runner()
