@@ -149,7 +149,6 @@ def validate_clean_frame(df):
  if df.duplicated(key,keep=False).any(): raise ValueError("duplicate/non-unique (run_id,window_bin_s,prn)")
  for _,group in df.assign(_bin=bins,_offset=offsets).groupby(["run_id","prn"],sort=False):
   if not np.allclose(group._offset,group._offset.iloc[0],rtol=0.,atol=TIME_TOLERANCE_S): raise ValueError("window_start_s/window_bin_s per-PRN offset disagreement")
-  if len(group)>1 and not (np.diff(group._bin.to_numpy(float))>TIME_TOLERANCE_S).all(): raise ValueError("window bins must be monotonic within each PRN")
 
 def _sort(df):
  cols=[c for c in ("run_id","prn","window_bin_s","window_start_s") if c in df.columns]

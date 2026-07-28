@@ -189,7 +189,7 @@ def test_temporal_contract_rejects_grid_and_prn_clock_disagreement(mutation, mat
         m.split_chronologically(mutation(clean_frame()), 12)
 
 
-def test_temporal_contract_rejects_gap_duplicate_and_nonmonotonic_input():
+def test_temporal_contract_rejects_gap_and_duplicate_but_accepts_unordered_rows():
     m=load_runner(); frame=tiny_frame()
     gap=frame[~((frame.prn == "G01") & (frame.window_start_s == 2.0))]
     with pytest.raises(ValueError, match="cadence|gap"):
@@ -197,9 +197,11 @@ def test_temporal_contract_rejects_gap_duplicate_and_nonmonotonic_input():
     duplicate=pd.concat([frame, frame.iloc[[0]]], ignore_index=True)
     with pytest.raises(ValueError, match="duplicate|unique"):
         m.split_chronologically(duplicate, 12)
-    indices=list(frame.index); indices[0],indices[1]=indices[1],indices[0]
-    with pytest.raises(ValueError, match="monotonic"):
-        m.split_chronologically(frame.loc[indices].reset_index(drop=True), 12)
+    shuffled=frame.sample(frac=1.0,random_state=17).reset_index(drop=True)
+    parts=m.split_chronologically(shuffled,12)
+    for part in parts.values():
+        for _,group in part.groupby(["run_id","prn"]):
+            assert np.allclose(np.diff(group.window_bin_s.to_numpy(float)),0.5)
 
 
 @pytest.mark.parametrize("knob,value", [
