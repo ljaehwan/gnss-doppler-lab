@@ -19,11 +19,12 @@ btail_max_507080_ewma075
 Interpretation:
 1. Estimate per-PRN node RMSE from the tap9-only GRU.
 2. From cleanStatic + cleanDynamic, calibrate node-RMSE quantiles q50, q70, q80.
-3. At each event/window with N tracked PRNs, count how many PRNs exceed each clean node threshold: K50, K70, K80.
-4. Convert K-of-N exceedance counts into binomial-tail surprise: `-log10(P_clean[X >= K])`.
+3. Group PRN rows by the frozen receiver `window_bin_s`; at each event with N tracked PRNs, count threshold exceedances K50, K70, K80.
+4. Convert K-of-N exceedance counts into natural-log binomial-tail surprise: `-ln(P_clean[X >= K])`.
 5. Combine the q50/q70/q80 tail surprises by taking the maximum: `btail_max_507080`.
-6. Apply causal EWMA persistence with alpha 0.75: `btail_max_507080_ewma075`.
+6. Apply the frozen causal recurrence `state_t = 0.75*state_(t-1) + 0.25*score_t`, initialized at zero for each run.
 7. Calibrate detector thresholds only from cleanStatic + cleanDynamic event-score distributions.
+8. For the frozen ds1-ds4 report, exclude the onset transition buffer: pre `<90 s`, post `>=110 s`, while delay remains relative to the 100 s onset.
 
 ## Why this is the baseline
 
@@ -39,7 +40,7 @@ This keeps the detector anchored to the tap9 morphology GRU while making the mul
 ## Fixed q99 baseline results
 
 Clean threshold source: cleanStatic + cleanDynamic.
-Pre-onset false positive rate is measured before each scenario onset.
+Pre-onset false positive rate is measured on the buffered authentic prefix (`window_start_s < 90 s`); the `[90,110) s` onset-transition interval is excluded from the frozen ds1-ds4 report.
 
 - ds1: pre FP 0.0%, post detection 95.73%, first delay 25.04s, threshold 4.169878
 - ds2: pre FP 0.0%, post detection 100.00%, first delay 10.37s, threshold 4.169878
@@ -59,7 +60,42 @@ Tracked summary files:
 - `all_scenarios_binomial_tail_metrics.csv`
 - `btail_max_507080_ewma075_q99_baseline.csv`
 
-Large per-event score dumps are intentionally left under the ignored artifact directory unless explicitly force-added for a paper freeze.
+Frozen model files:
+- `prn_local_gru_predictor.pt`
+- `training_summary.json`
+- `training_history.csv`
+- `validation_prn_node_scores.csv`
+
+Frozen checkpoint SHA-256:
+
+```text
+f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b
+```
+
+The frozen feature contract is exactly the nine prompt-normalized Method-A taps
+`E4,E3,E2,E,P,L,L2,L3,L4`. The checkpoint does not use PRN identity, receiver
+graphs, or cross-PRN relation features as model inputs. Cross-PRN evidence enters
+only through the clean-calibrated support gate described above.
+
+The executable gate implementation and contract tests are:
+
+```text
+scripts/eval_btail_support_gate.py
+tests/test_btail_support_gate.py
+```
+
+Example evaluation after generating per-PRN score CSVs:
+
+```bash
+python scripts/eval_btail_support_gate.py \
+  --score-root artifacts/<score-root>/scored \
+  --out-dir artifacts/<score-root>/btail_eval \
+  --scenarios ds1,ds2,ds3,ds4
+```
+
+The score root must contain `cleanStatic`, `cleanDynamic`, and each requested
+scenario directory, each with `texbat_<scenario>_prn_local_scores.csv`.
+Large per-event score dumps remain ignored unless explicitly frozen.
 
 ## Guardrails against overfitting
 

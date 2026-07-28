@@ -1,0 +1,80 @@
+{
+  "architecture": "PrnLocalGRU",
+  "artifacts": {
+    "history": "artifacts/ai_morph_gru_cleanStatic_q70_frame/training_history.csv",
+    "model": "artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt",
+    "scores": "artifacts/ai_morph_gru_cleanStatic_q70_frame/validation_prn_node_scores.csv"
+  },
+  "best_val_loss": 0.13545269563264056,
+  "data": {
+    "node_csv": "artifacts/texbat_clean_normal_9tap_features/cleanStatic_normalized_dmcpd/multi_prn_method_a_9tap_normalized_dmcpd/normal_prn_node_windows.csv",
+    "node_rows": 9986,
+    "split": {
+      "mode": "prn_holdout",
+      "val_prns": [
+        "G30",
+        "G31",
+        "G32"
+      ]
+    },
+    "train_windows": 8746,
+    "val_windows": 1012
+  },
+  "device": "cuda",
+  "features": {
+    "feature_subset": "tap_rel_prompt_mean",
+    "node_feature_columns": [
+      "tap_E4_rel_prompt_mean",
+      "tap_E3_rel_prompt_mean",
+      "tap_E2_rel_prompt_mean",
+      "tap_E_rel_prompt_mean",
+      "tap_P_rel_prompt_mean",
+      "tap_L_rel_prompt_mean",
+      "tap_L2_rel_prompt_mean",
+      "tap_L3_rel_prompt_mean",
+      "tap_L4_rel_prompt_mean"
+    ],
+    "node_feature_count": 9
+  },
+  "purpose": "normal-only spoofing anomaly baseline using only per-PRN Doppler/tap features",
+  "score": "per-PRN next-window standardized feature prediction RMSE",
+  "torch": {
+    "cuda": "13.0",
+    "cuda_available": true,
+    "gpu": {
+      "name": "NVIDIA RTX A6000",
+      "total_memory_gb": 47.40374755859375
+    },
+    "version": "2.13.0+cu130"
+  },
+  "uses_prn_id_as_input": false,
+  "uses_receiver_graph_or_prn_relation": false,
+  "validation_score_summary": {
+    "prn_node_mae": {
+      "50%": 0.12855061888694763,
+      "90%": 0.24098947346210478,
+      "95%": 0.31125805079936963,
+      "99%": 1.8180915069580066,
+      "99.5%": 2.1643379175663,
+      "99.9%": 2.5050770130157476,
+      "count": 1012.0,
+      "max": 2.784391164779663,
+      "mean": 0.18428005413943718,
+      "min": 0.013058260083198547,
+      "std": 0.2735643967636726
+    },
+    "prn_node_rmse": {
+      "50%": 0.1654071807861328,
+      "90%": 0.3006304770708084,
+      "95%": 0.37185819596052166,
+      "99%": 1.9537145757675163,
+      "99.5%": 2.3321437692642224,
+      "99.9%": 2.6779066314697273,
+      "count": 1012.0,
+      "max": 2.9675867557525635,
+      "mean": 0.22320911987673625,
+      "min": 0.015391498804092407,
+      "std": 0.2927713966822988
+    }
+  }
+}

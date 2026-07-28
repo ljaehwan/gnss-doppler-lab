@@ -1,5 +1,20 @@
 # GNSS Doppler Lab
 
+## Current frozen detector
+
+The current operational research baseline is the normal-only, tap9-only
+PRN-local GRU plus the clean-calibrated exact binomial-tail PRN-set support gate:
+
+```text
+btail_max_507080_ewma075
+```
+
+Its checkpoint, feature contract, executable evaluator, frozen q99 results, and
+overfitting guardrails are documented in
+[`docs/BINOMIAL_TAIL_GATE_BASELINE.md`](docs/BINOMIAL_TAIL_GATE_BASELINE.md).
+The later synthetic-normal-only 30-run experiment is retained as a negative
+sim-to-real result and is not a replacement for this frozen detector.
+
 ## GPS-SDR-SIM `-t` timescale
 
 Although upstream documents `-t` as a date/time calendar, the pinned GPS-SDR-SIM
