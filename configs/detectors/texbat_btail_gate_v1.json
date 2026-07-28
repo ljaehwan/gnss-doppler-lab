@@ -1,0 +1,17 @@
+{
+  "schema": "gnss-doppler-lab.btail-gate-calibration.v1",
+  "detector": "btail_max_507080_ewma075",
+  "node_thresholds": {
+    "q50": 0.0914354398846626,
+    "q70": 0.12956311106681812,
+    "q80": 0.1630456149578094
+  },
+  "event_q99_threshold": 4.169877716047041,
+  "surprise_log_base": "e",
+  "ewma_previous_state_weight": 0.75,
+  "checkpoint_sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
+  "source_score_sha256": {
+    "cleanStatic": "9a6bc537bd8f1bc16a17257a5f7ae2e47f327c10e215c63d7ebd82ca0b80c36a",
+    "cleanDynamic": "855c5ad2b2ea355136f027c49cc22e7234fab2147a6b812f832213b0c7ab082c"
+  }
+}

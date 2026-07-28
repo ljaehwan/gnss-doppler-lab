@@ -12,6 +12,25 @@ import numpy as np
 import pandas as pd
 
 FINAL_SCORE = "btail_max_507080_ewma075"
+TIMING_CONTRACT = {
+    "score_time_field": "window_start_s",
+    "window_duration_s": 1.0,
+    "window_availability_offset_s": 1.0,
+    "interpretation": "scores timestamped at frozen window start become available one full window later",
+}
+FROZEN_CALIBRATION_CONTRACT = {
+    "schema": "gnss-doppler-lab.btail-gate-calibration.v1",
+    "detector": FINAL_SCORE,
+    "node_thresholds": {"q50": 0.0914354398846626, "q70": 0.12956311106681812, "q80": 0.1630456149578094},
+    "event_q99_threshold": 4.169877716047041,
+    "surprise_log_base": "e",
+    "ewma_previous_state_weight": 0.75,
+    "checkpoint_sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
+    "source_score_sha256": {
+        "cleanStatic": "9a6bc537bd8f1bc16a17257a5f7ae2e47f327c10e215c63d7ebd82ca0b80c36a",
+        "cleanDynamic": "855c5ad2b2ea355136f027c49cc22e7234fab2147a6b812f832213b0c7ab082c",
+    },
+}
 NODE_QUANTILES = {"q50": 0.50, "q70": 0.70, "q80": 0.80}
 DEFAULT_ONSETS = {"ds1": 100.0, "ds2": 100.0, "ds3": 100.0, "ds4": 100.0, "ds7": 110.0, "ds8": 110.0}
 DS7_DS8_PHASE_WINDOWS = (
@@ -32,6 +51,19 @@ class GateCalibration:
     event_q99_threshold: float
     clean_static_events: pd.DataFrame
     clean_dynamic_events: pd.DataFrame
+
+
+
+def load_frozen_calibration(path: Path) -> GateCalibration:
+    """Load only the byte-semantically canonical frozen champion contract."""
+    try:
+        doc = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"invalid calibration JSON {path}: {exc}") from exc
+    if doc != FROZEN_CALIBRATION_CONTRACT:
+        raise ValueError("calibration is not the exact canonical frozen contract")
+    empty = pd.DataFrame()
+    return GateCalibration(dict(doc["node_thresholds"]), float(doc["event_q99_threshold"]), empty, empty)
 
 
 def binomial_tail_surprise(k: int, n: int, exceedance_probability: float) -> float:
@@ -178,8 +210,27 @@ def evaluate_scenario(
     return result
 
 
-def read_prn_scores(score_root: Path, scenario: str) -> pd.DataFrame:
-    path = score_root / scenario / f"texbat_{scenario}_prn_local_scores.csv"
+def evaluate_clean_scenario(events: pd.DataFrame, threshold: float) -> dict[str, object]:
+    """Evaluate a clean negative control without inventing an attack onset."""
+    if events.empty:
+        raise ValueError("clean evaluation requires at least one window")
+    flags = events[FINAL_SCORE] > threshold
+    return {
+        "q99_threshold": float(threshold),
+        "windows": int(len(events)),
+        "false_positive_flags": int(flags.sum()),
+        "false_positive_exceedance_rate": float(flags.mean()),
+        "any_false_positive": bool(flags.any()),
+    }
+
+
+def read_prn_scores(score_root: Path, scenario: str, score_prefix: str = "texbat",
+                    score_filename: str = "{prefix}_{scenario}_prn_local_scores.csv") -> pd.DataFrame:
+    try:
+        filename = score_filename.format(prefix=score_prefix, scenario=scenario)
+    except (KeyError, ValueError) as exc:
+        raise ValueError("score filename must use only {prefix} and {scenario}") from exc
+    path = score_root / scenario / filename
     if not path.exists():
         raise FileNotFoundError(path)
     return pd.read_csv(path)
@@ -195,6 +246,9 @@ def main() -> None:
     parser.add_argument("--onset-buffer-s", type=float, default=10.0,
                         help="Exclude this many seconds on both sides of onset for overall metrics.")
     parser.add_argument("--onsets-json", default="", help="Optional JSON object overriding scenario onset seconds.")
+    parser.add_argument("--calibration-json", default="", help="Validated frozen calibration; forbids clean score access/recalibration.")
+    parser.add_argument("--score-prefix", default="texbat")
+    parser.add_argument("--score-filename", default="{prefix}_{scenario}_prn_local_scores.csv")
     args = parser.parse_args()
 
     score_root = Path(args.score_root)
@@ -204,16 +258,23 @@ def main() -> None:
     if args.onsets_json:
         onsets.update({k: float(v) for k, v in json.loads(args.onsets_json).items()})
 
-    clean_static = read_prn_scores(score_root, "cleanStatic")
-    clean_dynamic = read_prn_scores(score_root, "cleanDynamic")
-    calibration = calibrate_clean_gate(clean_static, clean_dynamic, alpha=args.alpha)
-    calibration.clean_static_events.to_csv(out_dir / "cleanStatic_event_scores.csv", index=False)
-    calibration.clean_dynamic_events.to_csv(out_dir / "cleanDynamic_event_scores.csv", index=False)
+    frozen_mode = bool(args.calibration_json)
+    if frozen_mode:
+        calibration = load_frozen_calibration(Path(args.calibration_json))
+        calibration_label = f"frozen:{args.calibration_json}"
+    else:
+        clean_static = read_prn_scores(score_root, "cleanStatic", args.score_prefix, args.score_filename)
+        clean_dynamic = read_prn_scores(score_root, "cleanDynamic", args.score_prefix, args.score_filename)
+        calibration = calibrate_clean_gate(clean_static, clean_dynamic, alpha=args.alpha)
+        calibration.clean_static_events.to_csv(out_dir / "cleanStatic_event_scores.csv", index=False)
+        calibration.clean_dynamic_events.to_csv(out_dir / "cleanDynamic_event_scores.csv", index=False)
+        calibration_label = "cleanStatic+cleanDynamic only"
 
     summary: dict[str, object] = {
         "schema": "gnss-doppler-lab.clean-calibrated-btail-gate.v1",
         "detector": FINAL_SCORE,
-        "calibration": "cleanStatic+cleanDynamic only",
+        "calibration": calibration_label,
+        "frozen_calibration": frozen_mode,
         "node_thresholds": calibration.node_thresholds,
         "event_q99_threshold": calibration.event_q99_threshold,
         "surprise_log_base": "e",
@@ -223,17 +284,17 @@ def main() -> None:
         "scenarios": {},
     }
     for scenario in [s.strip() for s in args.scenarios.split(",") if s.strip()]:
-        prn = read_prn_scores(score_root, scenario)
+        prn = read_prn_scores(score_root, scenario, args.score_prefix, args.score_filename)
         events = build_event_scores(prn, calibration.node_thresholds, alpha=args.alpha)
         events.to_csv(out_dir / f"{scenario}_event_scores.csv", index=False)
-        phase_windows = DS7_DS8_PHASE_WINDOWS if scenario in {"ds7", "ds8"} else None
-        summary["scenarios"][scenario] = evaluate_scenario(
-            events,
-            calibration.event_q99_threshold,
-            onsets[scenario],
-            phase_windows=phase_windows,
-            onset_buffer_s=args.onset_buffer_s,
-        )
+        if scenario in onsets:
+            phase_windows = DS7_DS8_PHASE_WINDOWS if scenario in {"ds7", "ds8"} else None
+            summary["scenarios"][scenario] = evaluate_scenario(
+                events, calibration.event_q99_threshold, onsets[scenario],
+                phase_windows=phase_windows, onset_buffer_s=args.onset_buffer_s,
+            )
+        else:
+            summary["scenarios"][scenario] = evaluate_clean_scenario(events, calibration.event_q99_threshold)
 
     (out_dir / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     print(json.dumps(summary, indent=2, sort_keys=True))
