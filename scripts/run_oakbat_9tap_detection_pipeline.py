@@ -23,8 +23,9 @@ from gnss_doppler_lab.tracking_feature_windows import export_receiver_run_tap_fe
 from gnss_doppler_lab.normal_multi_prn_dataset import export_tap_multi_prn_dataset
 
 SAMPLE_RATE=5_000_000; DURATION_S=480.0; EXPECTED_COMPLEX_SAMPLES=2_400_000_000
-SIGNAL_SOURCE_SCALAR_ITEMS=4_800_000_000
-SIGNAL_SOURCE_SAMPLES_UNIT="scalar_int16_items"
+AVAILABLE_SCALAR_INT16_ITEMS=4_800_000_000
+CONFIGURED_SIGNAL_SOURCE_SAMPLES=0
+SIGNAL_SOURCE_SAMPLES_SEMANTICS="auto_until_eof"
 EXPECTED_IQ_BYTES=9_600_000_000; ONSET_S=120.0; GUARD_S=10.0; CHANNELS=11
 FROZEN_CHECKPOINT_SHA256="f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b"
 FROZEN_FEATURE_COLUMNS=["tap_E4_rel_prompt_mean","tap_E3_rel_prompt_mean","tap_E2_rel_prompt_mean","tap_E_rel_prompt_mean","tap_P_rel_prompt_mean","tap_L_rel_prompt_mean","tap_L2_rel_prompt_mean","tap_L3_rel_prompt_mean","tap_L4_rel_prompt_mean"]
@@ -76,7 +77,7 @@ def validate_iq(path: Path) -> None:
         raise ValueError(f"OAKBAT IQ must have exact size {EXPECTED_IQ_BYTES} bytes (480 s, 5 MHz, interleaved int16 IQ); got {path.stat().st_size}: {path}")
 
 
-def receiver_config(iq: Path, run_dir: Path, *, samples: int=SIGNAL_SOURCE_SCALAR_ITEMS) -> str:
+def receiver_config(iq: Path, run_dir: Path, *, samples: int=CONFIGURED_SIGNAL_SOURCE_SAMPLES) -> str:
     prefix=run_dir/"raw"/"epl_tracking_ch_"
     return f"""[GNSS-SDR]
 GNSS-SDR.internal_fs_sps={SAMPLE_RATE}
@@ -211,8 +212,8 @@ def receiver_cache_contract(scenario: str, iq: Path, run_dir: Path, exe: str | P
     if not mats: raise ValueError("receiver cache missing Method-A tracking output")
     outputs["tracking_mat_files"]=[_artifact(x,run_dir) for x in mats]
     return {
-      "schema_version":3,"status":"complete","receiver_run_id":f"oakbat-{scenario}-method-a-9tap","source_rf_run_id":f"oakbat-{scenario}",
-      "source":{"dataset":"OAKBAT","scenario_id":scenario,"iq":str(iq.resolve()),"iq_size_bytes":identity["size_bytes"],"iq_sha256":identity["sha256"],"sample_rate_hz":SAMPLE_RATE,"duration_s":DURATION_S,"sample_format":"interleaved_int16_iq","complex_samples":EXPECTED_COMPLEX_SAMPLES,"signal_source_samples":SIGNAL_SOURCE_SCALAR_ITEMS,"signal_source_samples_unit":SIGNAL_SOURCE_SAMPLES_UNIT},
+      "schema_version":4,"status":"complete","receiver_run_id":f"oakbat-{scenario}-method-a-9tap","source_rf_run_id":f"oakbat-{scenario}",
+      "source":{"dataset":"OAKBAT","scenario_id":scenario,"iq":str(iq.resolve()),"iq_size_bytes":identity["size_bytes"],"iq_sha256":identity["sha256"],"sample_rate_hz":SAMPLE_RATE,"duration_s":DURATION_S,"sample_format":"interleaved_int16_iq","available_scalar_int16_items":AVAILABLE_SCALAR_INT16_ITEMS,"expected_complex_samples":EXPECTED_COMPLEX_SAMPLES,"configured_signal_source_samples":CONFIGURED_SIGNAL_SOURCE_SAMPLES,"signal_source_samples_semantics":SIGNAL_SOURCE_SAMPLES_SEMANTICS,"signal_source_repeat":False},
       "receiver":{"name":"GNSS-SDR Method-A","executable":str(exe_path),"executable_sha256":sha256(exe_path),"config":config.name,"config_sha256":sha256(config)},
       "tracking":{"tap_count":9,"tap_spacing_chips":0.125,"raw_directory":"raw","coverage":receiver_tracking_coverage(run_dir)},"completed_outputs":outputs,
     }
@@ -228,7 +229,7 @@ def validate_cached_receiver(manifest: Path, scenario: str, iq: Path, exe: str |
         raise ValueError("stale cached receiver config contract; rerun with --force-receiver")
     try: expected=receiver_cache_contract(scenario,iq,run_dir,exe,iq_identity)
     except (OSError,ValueError) as exc: raise ValueError(f"stale or incomplete receiver cache: {exc}") from exc
-    for section,keys in {"source":["iq","iq_size_bytes","iq_sha256","sample_rate_hz","duration_s","sample_format","complex_samples","signal_source_samples","signal_source_samples_unit"],"receiver":["executable","executable_sha256","config","config_sha256"],"tracking":["tap_count","tap_spacing_chips","raw_directory","coverage"]}.items():
+    for section,keys in {"source":["iq","iq_size_bytes","iq_sha256","sample_rate_hz","duration_s","sample_format","available_scalar_int16_items","expected_complex_samples","configured_signal_source_samples","signal_source_samples_semantics","signal_source_repeat"],"receiver":["executable","executable_sha256","config","config_sha256"],"tracking":["tap_count","tap_spacing_chips","raw_directory","coverage"]}.items():
         if not isinstance(doc.get(section),dict) or any(doc[section].get(k)!=expected[section][k] for k in keys):
             raise ValueError(f"stale cached receiver {section} contract; rerun with --force-receiver")
     if doc.get("status")!="complete" or doc.get("completed_outputs")!=expected["completed_outputs"]:

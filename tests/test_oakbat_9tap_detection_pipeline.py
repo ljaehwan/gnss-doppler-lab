@@ -30,9 +30,12 @@ def test_receiver_config_is_exact_oakbat_5mhz_method_a_contract(tmp_path):
     text = mod.receiver_config(tmp_path / "os1.bin", tmp_path / "run")
     assert "GNSS-SDR.internal_fs_sps=5000000" in text
     assert "SignalSource.item_type=ishort" in text
-    assert "SignalSource.samples=4800000000" in text
+    assert "SignalSource.samples=0" in text
+    assert "SignalSource.samples=4800000000" not in text
+    assert "SignalSource.repeat=false" in text
     assert mod.EXPECTED_COMPLEX_SAMPLES == 2_400_000_000
-    assert mod.SIGNAL_SOURCE_SCALAR_ITEMS == 4_800_000_000
+    assert mod.AVAILABLE_SCALAR_INT16_ITEMS == 4_800_000_000
+    assert mod.CONFIGURED_SIGNAL_SOURCE_SAMPLES == 0
     assert "DataTypeAdapter.implementation=Ishort_To_Complex" in text
     assert "Tracking_1C.tap_count=9" in text
     assert "Tracking_1C.tap_spacing_chips=0.125" in text
@@ -75,7 +78,7 @@ def _write_receiver_cache(mod, tmp_path, *, iq_bytes=b"iqiq", exe_bytes=b"exe"):
     return iq, exe, manifest
 
 
-@pytest.mark.parametrize("stale", ["iq_path", "iq_size", "iq_sha", "config_sha", "tap", "exe_sha", "output"])
+@pytest.mark.parametrize("stale", ["iq_path", "iq_size", "iq_sha", "available_items", "configured_samples", "config_sha", "tap", "exe_sha", "output"])
 def test_receiver_cache_fails_closed_on_stale_provenance_or_incomplete_outputs(tmp_path, monkeypatch, stale):
     mod = _load_module(); monkeypatch.setattr(mod, "EXPECTED_IQ_BYTES", 4)
     iq, exe, manifest = _write_receiver_cache(mod, tmp_path)
@@ -83,12 +86,26 @@ def test_receiver_cache_fails_closed_on_stale_provenance_or_incomplete_outputs(t
     if stale == "iq_path": doc["source"]["iq"] = str(tmp_path / "other.bin")
     elif stale == "iq_size": doc["source"]["iq_size_bytes"] = 3
     elif stale == "iq_sha": doc["source"]["iq_sha256"] = "0" * 64
+    elif stale == "available_items": doc["source"]["available_scalar_int16_items"] = 0
+    elif stale == "configured_samples": doc["source"]["configured_signal_source_samples"] = 4_800_000_000
     elif stale == "config_sha": doc["receiver"]["config_sha256"] = "0" * 64
     elif stale == "tap": doc["tracking"]["tap_count"] = 3
     elif stale == "exe_sha": doc["receiver"]["executable_sha256"] = "0" * 64
     else: (manifest.parent / "tracking.csv").unlink()
     manifest.write_text(json.dumps(doc))
     with pytest.raises(ValueError, match="cache|cached|stale|output|contract"):
+        mod.validate_cached_receiver(manifest, "os1", iq, exe)
+
+
+def test_receiver_cache_rejects_explicit_full_boundary_sample_config(tmp_path):
+    mod = _load_module()
+    iq, exe, manifest = _write_receiver_cache(mod, tmp_path)
+    boundary = mod.receiver_config(
+        iq, manifest.parent, samples=mod.AVAILABLE_SCALAR_INT16_ITEMS
+    )
+    assert "SignalSource.samples=4800000000" in boundary
+    (manifest.parent / "receiver.conf").write_text(boundary)
+    with pytest.raises(ValueError, match="config contract"):
         mod.validate_cached_receiver(manifest, "os1", iq, exe)
 
 
@@ -301,13 +318,17 @@ def test_pipeline_help_invocation_works_outside_repository(tmp_path):
 
 
 
-def test_receiver_source_provenance_distinguishes_complex_samples_from_scalar_items(tmp_path):
+def test_receiver_source_provenance_distinguishes_available_expected_and_configured_samples(tmp_path):
     mod = _load_module()
     iq, exe, manifest = _write_receiver_cache(mod, tmp_path)
     source = json.loads(manifest.read_text())["source"]
-    assert source["complex_samples"] == 2_400_000_000
-    assert source["signal_source_samples"] == 4_800_000_000
-    assert source["signal_source_samples_unit"] == "scalar_int16_items"
+    assert source["available_scalar_int16_items"] == 4_800_000_000
+    assert source["expected_complex_samples"] == 2_400_000_000
+    assert source["configured_signal_source_samples"] == 0
+    assert source["signal_source_samples_semantics"] == "auto_until_eof"
+    assert source["signal_source_repeat"] is False
+    assert "signal_source_samples" not in source
+    assert source["configured_signal_source_samples"] != source["available_scalar_int16_items"]
 
 
 def test_full_receiver_coverage_rejects_240_seconds_and_accepts_small_tail(tmp_path):
@@ -321,6 +342,7 @@ def test_full_receiver_coverage_rejects_240_seconds_and_accepts_small_tail(tmp_p
     (run / "tracking_summary.csv").write_text("end_time_s,prn,row_count\n479.5,G01,2\n")
     got = mod.receiver_tracking_coverage(run)
     assert got["required_min_time_s"] == 478.0
+    assert got["allowed_max_time_s"] == 481.0
     assert got["tracking_csv_max_time_s"] == 479.5
     assert got["tracking_summary_max_time_s"] == 479.5
     assert got["valid_tracking_prns"] == ["G01"]
