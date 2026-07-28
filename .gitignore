@@ -36,11 +36,18 @@ iq.bin.*.tmp
 
 # Keep derived outputs under artifacts/ only
 
+# Generated normal-v3 execution shards are reproducible from the frozen master
+# experiment manifest and should not dirty research worktrees.
+configs/generated/normal_v3_large_300/normal_v3_initial_worker_*.csv
+configs/generated/normal_v3_large_300/normal_v3_initial_30.csv
+
 # Official external datasets: keep only manifests/docs in git; store large IQ files locally.
 data/external/texbat/raw/**
 !data/external/texbat/raw/.gitkeep
 data/external/texbat/derived/**
 !data/external/texbat/derived/.gitkeep
+data/external/oakbat/raw/**
+!data/external/oakbat/raw/.gitkeep
 
 # TEXBAT download attempt logs
 data/external/texbat/manifests/download_status.json
