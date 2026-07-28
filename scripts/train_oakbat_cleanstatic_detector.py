@@ -278,6 +278,20 @@ def _under_root(root, relative, description):
  if root!=path and root not in path.parents: raise ValueError(f"{description} path traversal")
  return path
 
+
+def _semantic_equal(actual,expected,description):
+ """Compare recomputed semantics with deterministic numeric tolerance."""
+ if isinstance(expected,dict):
+  if not isinstance(actual,dict) or set(actual)!=set(expected): raise ValueError(f"{description} semantic key mismatch")
+  for key,value in expected.items(): _semantic_equal(actual[key],value,f"{description}.{key}")
+ elif isinstance(expected,(int,float)) and not isinstance(expected,bool):
+  if isinstance(actual,bool) or not isinstance(actual,(int,float)) or not math.isfinite(float(actual)) or not math.isclose(float(actual),float(expected),rel_tol=1e-12,abs_tol=1e-12): raise ValueError(f"{description} semantic numeric mismatch")
+ elif actual!=expected: raise ValueError(f"{description} semantic mismatch")
+
+def _semantic_frame_equal(actual,expected,description):
+ try: pd.testing.assert_frame_equal(actual.reset_index(drop=True),expected.reset_index(drop=True),check_dtype=False,check_exact=False,rtol=1e-12,atol=1e-12)
+ except AssertionError as exc: raise ValueError(f"{description} semantic content mismatch") from exc
+
 def load_frozen_artifacts(output_dir):
  root=Path(output_dir).resolve(); manifest=_json(root/"campaign_manifest.json","frozen campaign manifest")
  if manifest.get("schema")!=SCHEMA or manifest.get("complete") is not True or manifest.get("normal_only") is not True or manifest.get("attack_inputs_read") is not False: raise ValueError("invalid frozen campaign contract")
@@ -295,7 +309,7 @@ def load_frozen_artifacts(output_dir):
   path=Path(identity["path"])
   if not path.is_file() or sha256(path)!=identity.get("sha256"): raise ValueError(f"parent manifest tamper/hash mismatch: {name}")
  # Re-authentication detects parent substitution even if a caller rewrites hashes.
- auth_source,_,authenticated=authenticate_clean_input(source)
+ auth_source,authenticated_frame,authenticated=authenticate_clean_input(source)
  if auth_source!=source or authenticated!=parents: raise ValueError("authenticated source chain substitution")
  artifacts=manifest.get("artifacts")
  if not isinstance(artifacts,dict) or set(artifacts)!=ARTIFACT_ROSTER: raise ValueError("frozen artifact inventory mismatch")
@@ -315,6 +329,7 @@ def load_frozen_artifacts(output_dir):
      split.get("boundaries")!=expected_boundaries or split.get("purge_intervals")!=expected_purges or
      split.get("history_contract")!="each partition forms sequences independently; no history crosses boundaries"):
   raise ValueError("split source/sequence/boundary linkage mismatch")
+ expected_parts=split_chronologically(authenticated_frame,SEQ_LEN)
  partition_csvs=split.get("partition_csvs")
  if not isinstance(partition_csvs,dict) or set(partition_csvs)!=set(PARTITION_RULES): raise ValueError("split partition inventory mismatch")
  for name,doc in partition_csvs.items():
@@ -322,13 +337,24 @@ def load_frozen_artifacts(output_dir):
   if not isinstance(doc,dict) or doc.get("path")!=expected_rel or doc.get("sha256")!=artifacts.get(expected_rel): raise ValueError(f"split partition pointer/hash mismatch: {name}")
   frame=pd.read_csv(_under_root(root,expected_rel,"split partition"))
   if doc.get("rows")!=len(frame) or doc.get("prns")!=frame.prn.astype(str).nunique(): raise ValueError(f"split partition metadata mismatch: {name}")
+  _semantic_frame_equal(frame,expected_parts[name],f"split partition {name}")
  if (calibration.get("schema")!="gnss-doppler-lab.oakbat-cleanstatic-calibration.v1" or calibration.get("normal_only") is not True or
      calibration.get("attack_inputs_read") is not False or calibration.get("input_partition")!="calibration" or
      calibration.get("threshold_source_partition")!="calibration" or set(calibration.get("node_thresholds",{}))!={"q50","q70","q80"}):
   raise ValueError("calibration contract/linkage mismatch")
+ calibration_scores=pd.read_csv(root/"calibration_prn_scores.csv")
+ expected_calibration=derive_calibration(calibration_scores)
+ expected_calibration.update({"input_csv":"calibration_prn_scores.csv","input_sha256":sha256(root/"calibration_prn_scores.csv"),"checkpoint_sha256":checkpoint_hash})
+ _semantic_equal(calibration,expected_calibration,"calibration")
  held=_json(root/"held_clean_fpr.json","held-clean report")
  if held.get("threshold_source_partition")!="calibration" or held.get("partition")!="held_clean" or held.get("calibration_sha256")!=artifacts.get("calibration.json") or held.get("score_input_sha256")!=artifacts.get("held_clean_prn_scores.csv"):
   raise ValueError("held-clean linkage mismatch")
+ held_scores=pd.read_csv(root/"held_clean_prn_scores.csv")
+ expected_events,expected_held=held_clean_report(held_scores,expected_calibration)
+ frozen_events=pd.read_csv(root/"held_clean_event_scores.csv")
+ _semantic_frame_equal(frozen_events,expected_events,"held-clean event scores")
+ expected_held.update({"score_input_sha256":sha256(root/"held_clean_prn_scores.csv"),"calibration_sha256":sha256(root/"calibration.json")})
+ _semantic_equal(held,expected_held,"held-clean report")
  payload,cfg,model,mean,std=_open_model(checkpoint)
  checkpoint_config=payload.get("config",{})
  if (cfg.seq_len!=SEQ_LEN or metadata.get("hparams")!= {k:checkpoint_config.get(k) for k in DEFAULTS} or

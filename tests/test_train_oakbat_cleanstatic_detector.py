@@ -142,6 +142,25 @@ def test_loader_rejects_split_semantic_pointer_tamper_even_with_rehashed_manifes
 
 
 
+def test_loader_rejects_coordinated_calibration_and_held_clean_forge(tmp_path):
+ m=load_runner(); source,_=authenticated_source(tmp_path); root=tmp_path/"frozen"
+ m.run_campaign(source,root,epochs=1,batch_size=32,hidden_dim=8,emb_dim=8)
+ campaign=json.loads((root/"campaign_manifest.json").read_text())
+ calibration=json.loads((root/"calibration.json").read_text())
+ calibration["event_q99_threshold"] += 1.0
+ (root/"calibration.json").write_text(json.dumps(calibration))
+ held=json.loads((root/"held_clean_fpr.json").read_text())
+ held["false_positive_events"]=(held["false_positive_events"]+1)%(held["event_windows"]+1)
+ held["false_positive_rate"]=(held["false_positive_rate"]+.25)%1.0
+ held["calibration_sha256"]=m.sha256(root/"calibration.json")
+ (root/"held_clean_fpr.json").write_text(json.dumps(held))
+ campaign["artifacts"]["calibration.json"]=m.sha256(root/"calibration.json")
+ campaign["artifacts"]["held_clean_fpr.json"]=m.sha256(root/"held_clean_fpr.json")
+ (root/"campaign_manifest.json").write_text(json.dumps(campaign))
+ with pytest.raises(ValueError,match="calibration|held-clean|semantic"):
+  m.load_frozen_artifacts(root)
+
+
 def test_authentication_rejects_receiver_schema_and_feature_contract_tamper(tmp_path):
  m=load_runner(); source,chain=authenticated_source(tmp_path)
  receiver=json.loads(chain["receiver"].read_text()); receiver["schema_version"]=2; chain["receiver"].write_text(json.dumps(receiver))
