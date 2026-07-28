@@ -17,11 +17,22 @@ def _load_module():
     return mod
 
 
+def _write_minimal_covered_receiver(mod, manifest):
+    manifest.parent.mkdir(parents=True, exist_ok=True)
+    (manifest.parent / "tracking.csv").write_text("time_s,prn\n0,G01\n479.5,G01\n")
+    (manifest.parent / "tracking_summary.csv").write_text("end_time_s,prn,epoch_count\n479.5,G01,2\n")
+    manifest.write_text(json.dumps({"status":"complete","tracking":{"coverage":mod.receiver_tracking_coverage(manifest.parent)}}))
+    return manifest
+
+
 def test_receiver_config_is_exact_oakbat_5mhz_method_a_contract(tmp_path):
     mod = _load_module()
-    text = mod.receiver_config(tmp_path / "os1.bin", tmp_path / "run", samples=mod.EXPECTED_COMPLEX_SAMPLES)
+    text = mod.receiver_config(tmp_path / "os1.bin", tmp_path / "run")
     assert "GNSS-SDR.internal_fs_sps=5000000" in text
     assert "SignalSource.item_type=ishort" in text
+    assert "SignalSource.samples=4800000000" in text
+    assert mod.EXPECTED_COMPLEX_SAMPLES == 2_400_000_000
+    assert mod.SIGNAL_SOURCE_SCALAR_ITEMS == 4_800_000_000
     assert "DataTypeAdapter.implementation=Ishort_To_Complex" in text
     assert "Tracking_1C.tap_count=9" in text
     assert "Tracking_1C.tap_spacing_chips=0.125" in text
@@ -54,8 +65,10 @@ def _write_receiver_cache(mod, tmp_path, *, iq_bytes=b"iqiq", exe_bytes=b"exe"):
     exe = tmp_path / "gnss-sdr"; exe.write_bytes(exe_bytes); exe.chmod(0o755)
     run_dir = tmp_path / "out" / "receiver" / "oakbat-os1-method-a-9tap"
     (run_dir / "raw").mkdir(parents=True)
-    config = run_dir / "receiver.conf"; config.write_text(mod.receiver_config(iq, run_dir, samples=mod.EXPECTED_COMPLEX_SAMPLES))
-    for name in ["receiver.log", "tracking.csv", "tracking_summary.csv"]: (run_dir / name).write_text(name)
+    config = run_dir / "receiver.conf"; config.write_text(mod.receiver_config(iq, run_dir))
+    (run_dir / "receiver.log").write_text("receiver log")
+    (run_dir / "tracking.csv").write_text("time_s,prn\n0.0,G01\n479.5,G01\n")
+    (run_dir / "tracking_summary.csv").write_text("end_time_s,prn,row_count\n479.5,G01,2\n")
     (run_dir / "raw" / "epl_tracking_ch_0.mat").write_bytes(b"mat")
     doc = mod.receiver_cache_contract("os1", iq, run_dir, exe)
     manifest = run_dir / "manifest.json"; manifest.write_text(json.dumps(doc))
@@ -81,10 +94,10 @@ def test_receiver_cache_fails_closed_on_stale_provenance_or_incomplete_outputs(t
 
 def test_feature_cache_validates_receiver_relationship_schema_hash_and_finiteness(tmp_path):
     mod = _load_module()
-    receiver = tmp_path / "receiver" / "manifest.json"; receiver.parent.mkdir(); receiver.write_text("{}")
+    receiver = _write_minimal_covered_receiver(mod, tmp_path / "receiver" / "manifest.json")
     out = tmp_path / "scenario"; out.mkdir()
     features = out / "tap9_tracking_features_w1.0_s0.5.csv"
-    features.write_text('run_id,prn,window_bin_s,tap_count,tap_layout,tap_E4_mean\nr,G01,0.5,9,"E4,E3,E2,E,P,L,L2,L3,L4",1.0\n')
+    features.write_text('run_id,prn,window_start_s,window_end_s,window_mid_s,tap_count,tap_layout,tap_E4_mean\nr,G01,0.0,1.0,0.5,9,"E4,E3,E2,E,P,L,L2,L3,L4",1.0\n')
     dataset = out / "multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd"; dataset.mkdir()
     node = dataset / "normal_prn_node_windows.csv"; cols = ["run_id", "prn", "window_bin_s", *mod.FROZEN_FEATURE_COLUMNS]
     node.write_text(",".join(cols) + "\n" + ",".join(["r", "G01", "0.5", *(["1.0"] * len(mod.FROZEN_FEATURE_COLUMNS))]) + "\n")
@@ -119,10 +132,10 @@ def test_top_manifest_contains_frozen_contract_and_artifact_hashes(tmp_path):
 
 def test_feature_cache_rejects_hash_consistent_but_wrong_node_schema(tmp_path):
     mod = _load_module()
-    receiver = tmp_path / "receiver.json"; receiver.write_text("{}")
+    receiver = _write_minimal_covered_receiver(mod, tmp_path / "receiver" / "manifest.json")
     out = tmp_path / "scenario"; out.mkdir()
     features = out / "features.csv"
-    features.write_text('run_id,prn,window_bin_s,tap_count,tap_layout,tap_E4_mean\nr,G01,0.5,9,"E4,E3,E2,E,P,L,L2,L3,L4",1.0\n')
+    features.write_text('run_id,prn,window_start_s,window_end_s,window_mid_s,tap_count,tap_layout,tap_E4_mean\nr,G01,0.0,1.0,0.5,9,"E4,E3,E2,E,P,L,L2,L3,L4",1.0\n')
     node = out / "nodes.csv"
     cols = ["run_id", "prn", "window_bin_s", *mod.FROZEN_FEATURE_COLUMNS]
     node.write_text(",".join(cols) + "\n" + ",".join(["r", "G01", "0.5", *(["1.0"] * len(mod.FROZEN_FEATURE_COLUMNS))]) + "\n")
@@ -285,3 +298,118 @@ def test_pipeline_help_invocation_works_outside_repository(tmp_path):
     )
     assert result.returncode == 0
     assert "--model-dir" in result.stdout and "--calibration-json" in result.stdout
+
+
+
+def test_receiver_source_provenance_distinguishes_complex_samples_from_scalar_items(tmp_path):
+    mod = _load_module()
+    iq, exe, manifest = _write_receiver_cache(mod, tmp_path)
+    source = json.loads(manifest.read_text())["source"]
+    assert source["complex_samples"] == 2_400_000_000
+    assert source["signal_source_samples"] == 4_800_000_000
+    assert source["signal_source_samples_unit"] == "scalar_int16_items"
+
+
+def test_full_receiver_coverage_rejects_240_seconds_and_accepts_small_tail(tmp_path):
+    mod = _load_module()
+    run = tmp_path / "run"; run.mkdir()
+    (run / "tracking.csv").write_text("time_s,prn\n0,G01\n240.08,G01\n")
+    (run / "tracking_summary.csv").write_text("end_time_s,prn,row_count\n240.08,G01,2\n")
+    with pytest.raises(ValueError, match="coverage"):
+        mod.receiver_tracking_coverage(run)
+    (run / "tracking.csv").write_text("time_s,prn\n0,G01\n479.5,G01\n")
+    (run / "tracking_summary.csv").write_text("end_time_s,prn,row_count\n479.5,G01,2\n")
+    got = mod.receiver_tracking_coverage(run)
+    assert got["required_min_time_s"] == 478.0
+    assert got["tracking_csv_max_time_s"] == 479.5
+    assert got["tracking_summary_max_time_s"] == 479.5
+    assert got["valid_tracking_prns"] == ["G01"]
+    assert got["valid_tracking_row_count"] == 2
+
+
+def test_receiver_coverage_rejects_invalid_prns_and_rows(tmp_path):
+    mod = _load_module()
+    (tmp_path / "tracking.csv").write_text("time_s,prn\n479.5,not-a-prn\n")
+    (tmp_path / "tracking_summary.csv").write_text("end_time_s,prn,row_count\n479.5,not-a-prn,1\n")
+    with pytest.raises(ValueError, match="PRN|tracking"):
+        mod.receiver_tracking_coverage(tmp_path)
+
+
+def test_incomplete_coverage_writes_structured_failure_and_no_complete_manifest(tmp_path, monkeypatch):
+    mod = _load_module(); monkeypatch.setattr(mod, "EXPECTED_IQ_BYTES", 4)
+    iq = tmp_path / "os1.bin"; iq.write_bytes(b"iqiq")
+    exe = tmp_path / "fake.py"; _write_success_receiver(exe, iq)
+    def incomplete(mats, output, summary, *, sample_rate_hz):
+        Path(output).write_text("time_s,prn\n0,G01\n240.08,G01\n")
+        Path(summary).write_text("end_time_s,prn,row_count\n240.08,G01,2\n")
+        return {"row_count":2,"prns":["G01"],"channel_count":1}
+    monkeypatch.setattr(mod, "export_tracking_csv", incomplete)
+    with pytest.raises(RuntimeError, match="coverage"):
+        mod.run_receiver("os1", iq, tmp_path / "out", exe=str(exe), timeout_s=5, force=True)
+    run = tmp_path / "out/receiver/oakbat-os1-method-a-9tap"
+    assert not (run / "manifest.json").exists()
+    failure = json.loads((run / "receiver_failure.json").read_text())
+    assert failure["failure_kind"] == "incomplete_tracking_coverage"
+    assert failure["coverage"]["expected_duration_s"] == 480.0
+    assert failure["coverage"]["required_min_time_s"] == 478.0
+    assert failure["coverage"]["tracking_csv_max_time_s"] == 240.08
+
+
+def test_receiver_cache_rejects_manifest_coverage_claim_and_artifact_tampering(tmp_path, monkeypatch):
+    mod = _load_module(); monkeypatch.setattr(mod, "EXPECTED_IQ_BYTES", 4)
+    iq, exe, manifest = _write_receiver_cache(mod, tmp_path)
+    doc = json.loads(manifest.read_text())
+    doc["tracking"]["coverage"]["tracking_csv_max_time_s"] = 480.0
+    manifest.write_text(json.dumps(doc))
+    with pytest.raises(ValueError, match="coverage|cache"):
+        mod.validate_cached_receiver(manifest, "os1", iq, exe)
+
+
+def test_raw_feature_schema_uses_window_bounds_while_node_schema_keeps_window_bin(tmp_path):
+    mod = _load_module()
+    raw = tmp_path / "raw.csv"
+    raw.write_text('run_id,prn,window_start_s,window_end_s,window_mid_s,tap_count,tap_layout,tap_E4_mean\nr,G01,0,1,0.5,9,"E4,E3,E2,E,P,L,L2,L3,L4",1\n')
+    frame = mod._finite_csv(raw, mod.RAW_FEATURE_REQUIRED_COLUMNS)
+    assert "window_bin_s" not in frame.columns
+    assert "window_mid_s" in frame.columns
+    wrong = tmp_path / "wrong.csv"
+    wrong.write_text('run_id,prn,window_bin_s,tap_count,tap_layout\nr,G01,0.5,9,"E4,E3,E2,E,P,L,L2,L3,L4"\n')
+    with pytest.raises(ValueError, match="schema"):
+        mod._finite_csv(wrong, mod.RAW_FEATURE_REQUIRED_COLUMNS)
+
+
+def test_feature_use_reauthenticates_receiver_full_coverage(tmp_path, monkeypatch):
+    mod = _load_module(); monkeypatch.setattr(mod, "EXPECTED_IQ_BYTES", 4)
+    iq, exe, receiver = _write_receiver_cache(mod, tmp_path)
+    out = tmp_path / "scenario"; out.mkdir()
+    features = out / "tap9_tracking_features_w1.0_s0.5.csv"
+    features.write_text('run_id,prn,window_start_s,window_end_s,window_mid_s,tap_count,tap_layout,tap_E4_mean\nr,G01,0,1,0.5,9,"E4,E3,E2,E,P,L,L2,L3,L4",1\n')
+    node = out / "nodes.csv"; cols=["run_id","prn","window_bin_s",*mod.FROZEN_FEATURE_COLUMNS]
+    node.write_text(",".join(cols)+"\n"+",".join(["r","G01","0.5",*(["1"]*len(mod.FROZEN_FEATURE_COLUMNS))])+"\n")
+    mod.write_feature_cache_contract(out, receiver, features, node)
+    (receiver.parent / "tracking.csv").write_text("time_s,prn\n240.08,G01\n")
+    with pytest.raises(ValueError, match="coverage|receiver"):
+        mod.validate_cached_features(out, receiver)
+
+
+def test_force_features_rebuilds_partial_failed_feature_file(tmp_path, monkeypatch):
+    mod = _load_module()
+    receiver = tmp_path / "receiver/manifest.json"; receiver.parent.mkdir(parents=True)
+    (receiver.parent / "tracking.csv").write_text("time_s,prn\n0,G01\n479.5,G01\n")
+    (receiver.parent / "tracking_summary.csv").write_text("end_time_s,prn,row_count\n479.5,G01,2\n")
+    receiver.write_text(json.dumps({"status":"complete","tracking":{"coverage":mod.receiver_tracking_coverage(receiver.parent)}}))
+    out = tmp_path / "scenario"; out.mkdir()
+    partial = out / "tap9_tracking_features_w1.0_s0.5.csv"; partial.write_text("run_id,prn\nr,G01\n")
+    with pytest.raises(ValueError, match="stale|schema|cache"):
+        mod.build_features("os1", out, receiver, force=False)
+    def export_raw(*args, output_path, **kwargs):
+        output_path.write_text('run_id,prn,window_start_s,window_end_s,window_mid_s,tap_count,tap_layout,tap_E4_mean\nr,G01,0,1,0.5,9,"E4,E3,E2,E,P,L,L2,L3,L4",1\n')
+    def export_nodes(features, *, output_dir, **kwargs):
+        output_dir.mkdir(parents=True)
+        node=output_dir/"normal_prn_node_windows.csv"; cols=["run_id","prn","window_bin_s",*mod.FROZEN_FEATURE_COLUMNS]
+        node.write_text(",".join(cols)+"\n"+",".join(["r","G01","0.5",*(["1"]*len(mod.FROZEN_FEATURE_COLUMNS))])+"\n")
+        return node, output_dir/"graph.csv", output_dir/"manifest.json"
+    monkeypatch.setattr(mod,"export_receiver_run_tap_feature_csv",export_raw)
+    monkeypatch.setattr(mod,"export_tap_multi_prn_dataset",export_nodes)
+    assert mod.build_features("os1",out,receiver,force=True).name == "normal_prn_node_windows.csv"
+    assert "window_start_s" in partial.read_text().splitlines()[0]

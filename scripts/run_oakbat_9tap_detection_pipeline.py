@@ -23,12 +23,18 @@ from gnss_doppler_lab.tracking_feature_windows import export_receiver_run_tap_fe
 from gnss_doppler_lab.normal_multi_prn_dataset import export_tap_multi_prn_dataset
 
 SAMPLE_RATE=5_000_000; DURATION_S=480.0; EXPECTED_COMPLEX_SAMPLES=2_400_000_000
+SIGNAL_SOURCE_SCALAR_ITEMS=4_800_000_000
+SIGNAL_SOURCE_SAMPLES_UNIT="scalar_int16_items"
 EXPECTED_IQ_BYTES=9_600_000_000; ONSET_S=120.0; GUARD_S=10.0; CHANNELS=11
 FROZEN_CHECKPOINT_SHA256="f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b"
 FROZEN_FEATURE_COLUMNS=["tap_E4_rel_prompt_mean","tap_E3_rel_prompt_mean","tap_E2_rel_prompt_mean","tap_E_rel_prompt_mean","tap_P_rel_prompt_mean","tap_L_rel_prompt_mean","tap_L2_rel_prompt_mean","tap_L3_rel_prompt_mean","tap_L4_rel_prompt_mean"]
 TIMING_CONTRACT={'score_time_field':'window_start_s','window_duration_s':1.0,'window_availability_offset_s':1.0,'interpretation':'scores timestamped at frozen window start become available one full window later'}
 DEFAULT_MIN_FREE_BYTES=20*1024**3
 ESTIMATED_OUTPUT_BYTES_PER_SCENARIO=2*1024**3
+COVERAGE_TAIL_TOLERANCE_S=2.0
+COVERAGE_LATE_TOLERANCE_S=1.0
+RAW_FEATURE_REQUIRED_COLUMNS={"run_id","prn","window_start_s","window_end_s","window_mid_s","tap_count","tap_layout"}
+NODE_REQUIRED_COLUMNS={"run_id","prn","window_bin_s"}
 FEATURE_CONTRACT={"tap_count":9,"tap_spacing_chips":0.125,"window_s":1.0,"stride_s":0.5,"min_epochs":4,"min_prns_per_graph":2,"feature_mode":"normalized_dmcpd","node_feature_columns":FROZEN_FEATURE_COLUMNS}
 SCENARIOS={"os1":"os1.bin","os2":"os2.bin","os3":"os3.bin","os4":"os4.bin","cleanStatic":"cleanStatic_gps.bin"}
 
@@ -70,7 +76,7 @@ def validate_iq(path: Path) -> None:
         raise ValueError(f"OAKBAT IQ must have exact size {EXPECTED_IQ_BYTES} bytes (480 s, 5 MHz, interleaved int16 IQ); got {path.stat().st_size}: {path}")
 
 
-def receiver_config(iq: Path, run_dir: Path, *, samples: int=EXPECTED_COMPLEX_SAMPLES) -> str:
+def receiver_config(iq: Path, run_dir: Path, *, samples: int=SIGNAL_SOURCE_SCALAR_ITEMS) -> str:
     prefix=run_dir/"raw"/"epl_tracking_ch_"
     return f"""[GNSS-SDR]
 GNSS-SDR.internal_fs_sps={SAMPLE_RATE}
@@ -133,6 +139,70 @@ def _artifact(path: Path, base: Path | None=None) -> dict[str, object]:
     return {"path":str(path.relative_to(base) if base else path.resolve()),"size_bytes":path.stat().st_size,"sha256":sha256(path)}
 
 
+class TrackingCoverageError(ValueError):
+    def __init__(self, message: str, coverage: dict[str, object]):
+        super().__init__(message)
+        self.coverage = coverage
+
+
+def _tracking_table(path: Path, time_field: str) -> pd.DataFrame:
+    try:
+        frame = pd.read_csv(path)
+    except Exception as exc:
+        raise ValueError(f"tracking coverage table is unreadable: {path}: {exc}") from exc
+    required = {time_field, "prn"}
+    if frame.empty or not required.issubset(frame.columns):
+        raise ValueError(f"tracking coverage table has invalid schema: {path}")
+    times = pd.to_numeric(frame[time_field], errors="coerce")
+    prns = frame["prn"].astype(str)
+    valid = times.notna() & np.isfinite(times) & prns.str.fullmatch(r"G(?:0[1-9]|[12][0-9]|3[0-2])")
+    if not valid.all():
+        raise ValueError(f"tracking coverage contains non-finite rows or invalid GPS PRNs: {path}")
+    return frame.assign(**{time_field: times})
+
+
+def receiver_tracking_coverage(run_dir: Path) -> dict[str, object]:
+    """Authenticate near-full 480 s coverage from valid long-form and summary rows."""
+    run_dir = Path(run_dir)
+    tracking = _tracking_table(run_dir / "tracking.csv", "time_s")
+    summary = _tracking_table(run_dir / "tracking_summary.csv", "end_time_s")
+    lower = DURATION_S - COVERAGE_TAIL_TOLERANCE_S
+    upper = DURATION_S + COVERAGE_LATE_TOLERANCE_S
+    csv_max = float(tracking["time_s"].max())
+    summary_max = float(summary["end_time_s"].max())
+    csv_prns = set(tracking["prn"].astype(str))
+    summary_prns = set(summary["prn"].astype(str))
+    common_prns = sorted(csv_prns & summary_prns)
+    coverage = {
+        "expected_duration_s": DURATION_S,
+        "tail_tolerance_s": COVERAGE_TAIL_TOLERANCE_S,
+        "required_min_time_s": lower,
+        "allowed_max_time_s": upper,
+        "tracking_csv_max_time_s": csv_max,
+        "tracking_summary_max_time_s": summary_max,
+        "valid_tracking_row_count": int(len(tracking)),
+        "valid_tracking_summary_row_count": int(len(summary)),
+        "valid_tracking_prns": common_prns,
+    }
+    if not common_prns or not (lower <= csv_max <= upper) or not (lower <= summary_max <= upper):
+        raise TrackingCoverageError(
+            f"tracking coverage outside [{lower}, {upper}]s: tracking.csv={csv_max}s, tracking_summary.csv={summary_max}s",
+            coverage,
+        )
+    return coverage
+
+
+def validate_receiver_manifest_coverage(manifest: Path) -> dict[str, object]:
+    try:
+        doc = json.loads(Path(manifest).read_text())
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"invalid receiver manifest for coverage: {exc}") from exc
+    actual = receiver_tracking_coverage(Path(manifest).parent)
+    if doc.get("status") != "complete" or doc.get("tracking", {}).get("coverage") != actual:
+        raise ValueError("receiver manifest coverage is missing, stale, or incomplete")
+    return actual
+
+
 def receiver_cache_contract(scenario: str, iq: Path, run_dir: Path, exe: str | Path, iq_identity: dict[str, object] | None=None) -> dict[str, object]:
     exe_path=resolve_executable(exe); config=run_dir/"receiver.conf"
     identity=iq_identity or iq_file_identity(iq)
@@ -141,10 +211,10 @@ def receiver_cache_contract(scenario: str, iq: Path, run_dir: Path, exe: str | P
     if not mats: raise ValueError("receiver cache missing Method-A tracking output")
     outputs["tracking_mat_files"]=[_artifact(x,run_dir) for x in mats]
     return {
-      "schema_version":2,"status":"complete","receiver_run_id":f"oakbat-{scenario}-method-a-9tap","source_rf_run_id":f"oakbat-{scenario}",
-      "source":{"dataset":"OAKBAT","scenario_id":scenario,"iq":str(iq.resolve()),"iq_size_bytes":identity["size_bytes"],"iq_sha256":identity["sha256"],"sample_rate_hz":SAMPLE_RATE,"duration_s":DURATION_S,"sample_format":"interleaved_int16_iq"},
+      "schema_version":3,"status":"complete","receiver_run_id":f"oakbat-{scenario}-method-a-9tap","source_rf_run_id":f"oakbat-{scenario}",
+      "source":{"dataset":"OAKBAT","scenario_id":scenario,"iq":str(iq.resolve()),"iq_size_bytes":identity["size_bytes"],"iq_sha256":identity["sha256"],"sample_rate_hz":SAMPLE_RATE,"duration_s":DURATION_S,"sample_format":"interleaved_int16_iq","complex_samples":EXPECTED_COMPLEX_SAMPLES,"signal_source_samples":SIGNAL_SOURCE_SCALAR_ITEMS,"signal_source_samples_unit":SIGNAL_SOURCE_SAMPLES_UNIT},
       "receiver":{"name":"GNSS-SDR Method-A","executable":str(exe_path),"executable_sha256":sha256(exe_path),"config":config.name,"config_sha256":sha256(config)},
-      "tracking":{"tap_count":9,"tap_spacing_chips":0.125,"raw_directory":"raw"},"completed_outputs":outputs,
+      "tracking":{"tap_count":9,"tap_spacing_chips":0.125,"raw_directory":"raw","coverage":receiver_tracking_coverage(run_dir)},"completed_outputs":outputs,
     }
 
 
@@ -158,7 +228,7 @@ def validate_cached_receiver(manifest: Path, scenario: str, iq: Path, exe: str |
         raise ValueError("stale cached receiver config contract; rerun with --force-receiver")
     try: expected=receiver_cache_contract(scenario,iq,run_dir,exe,iq_identity)
     except (OSError,ValueError) as exc: raise ValueError(f"stale or incomplete receiver cache: {exc}") from exc
-    for section,keys in {"source":["iq","iq_size_bytes","iq_sha256","sample_rate_hz","duration_s","sample_format"],"receiver":["executable","executable_sha256","config","config_sha256"],"tracking":["tap_count","tap_spacing_chips","raw_directory"]}.items():
+    for section,keys in {"source":["iq","iq_size_bytes","iq_sha256","sample_rate_hz","duration_s","sample_format","complex_samples","signal_source_samples","signal_source_samples_unit"],"receiver":["executable","executable_sha256","config","config_sha256"],"tracking":["tap_count","tap_spacing_chips","raw_directory","coverage"]}.items():
         if not isinstance(doc.get(section),dict) or any(doc[section].get(k)!=expected[section][k] for k in keys):
             raise ValueError(f"stale cached receiver {section} contract; rerun with --force-receiver")
     if doc.get("status")!="complete" or doc.get("completed_outputs")!=expected["completed_outputs"]:
@@ -295,7 +365,24 @@ def run_receiver(scenario: str, iq: Path, out: Path, *, exe: str, timeout_s: int
             handle.write("\n[OAKBAT PIPELINE FAILURE] IQ identity changed during tracking export\n")
         raise RuntimeError(f"OAKBAT IQ changed during tracking export for {scenario}")
 
+    try:
+        coverage = receiver_tracking_coverage(run_dir)
+    except (TrackingCoverageError, ValueError) as exc:
+        detail = getattr(exc, "coverage", {
+            "expected_duration_s": DURATION_S,
+            "required_min_time_s": DURATION_S - COVERAGE_TAIL_TOLERANCE_S,
+        })
+        _write_receiver_failure(run_dir, {
+            "failure_kind": "incomplete_tracking_coverage", **common,
+            "coverage": detail, "error": str(exc),
+        })
+        with log_path.open("a", encoding="utf-8") as handle:
+            handle.write(f"\n[OAKBAT PIPELINE FAILURE] incomplete tracking coverage: {exc}\n")
+        raise RuntimeError(f"GNSS-SDR tracking coverage incomplete for {scenario}: {exc}") from exc
+
     doc = receiver_cache_contract(scenario, iq, run_dir, exe_path, identity_before)
+    if doc["tracking"]["coverage"] != coverage:
+        raise RuntimeError("receiver coverage changed before manifest publication")
     doc["receiver"].update({
         "version": version_text.strip().splitlines()[0] if version_text else "unknown",
         "command": command, "exit_code": process.returncode,
@@ -320,8 +407,9 @@ def _finite_csv(path: Path, required: set[str]) -> pd.DataFrame:
 
 
 def write_feature_cache_contract(out: Path, receiver_manifest: Path, features: Path, node_csv: Path) -> Path:
-    _finite_csv(features,{"run_id","prn","window_bin_s","tap_count","tap_layout"})
-    node=_finite_csv(node_csv,{"run_id","prn","window_bin_s"})
+    validate_receiver_manifest_coverage(receiver_manifest)
+    _finite_csv(features,RAW_FEATURE_REQUIRED_COLUMNS)
+    node=_finite_csv(node_csv,NODE_REQUIRED_COLUMNS)
     if not set(FROZEN_FEATURE_COLUMNS).issubset(node.columns):
         raise ValueError("node feature schema does not contain the frozen model features")
     doc={"schema":"gnss-doppler-lab.oakbat-feature-cache.v1","receiver_manifest":{"path":str(receiver_manifest.resolve()),"sha256":sha256(receiver_manifest)},"feature_contract":FEATURE_CONTRACT,"features":_artifact(features),"node_table":_artifact(node_csv)}
@@ -338,21 +426,23 @@ def validate_cached_features(out: Path, receiver_manifest: Path) -> Path:
     features=Path(doc["features"]["path"]); node=Path(doc["node_table"]["path"])
     for key,target in (("features",features),("node_table",node)):
         if not target.is_file() or doc[key]!=_artifact(target): raise ValueError(f"stale feature cache hash: {target}")
-    _finite_csv(features,{"run_id","prn","window_bin_s","tap_count","tap_layout"})
-    node_frame=_finite_csv(node,{"run_id","prn","window_bin_s"})
+    validate_receiver_manifest_coverage(receiver_manifest)
+    _finite_csv(features,RAW_FEATURE_REQUIRED_COLUMNS)
+    node_frame=_finite_csv(node,NODE_REQUIRED_COLUMNS)
     if not set(FROZEN_FEATURE_COLUMNS).issubset(node_frame.columns):
         raise ValueError("stale node feature schema does not contain the frozen model features")
     return node
 
 
 def build_features(scenario: str, out: Path, receiver_manifest: Path, *, force: bool) -> Path:
+    validate_receiver_manifest_coverage(receiver_manifest)
     features=out/"tap9_tracking_features_w1.0_s0.5.csv"; dataset=out/"multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd"; node=dataset/"normal_prn_node_windows.csv"; cache=out/"oakbat_feature_cache_manifest.json"
     if not force and (features.exists() or node.exists() or cache.exists()): return validate_cached_features(out,receiver_manifest)
     if force:
         for target in (features,cache): target.unlink(missing_ok=True)
         if dataset.exists(): shutil.rmtree(dataset)
     export_receiver_run_tap_feature_csv(receiver_manifest.parent,output_path=features,tap_count=9,window_s=1.0,stride_s=0.5,min_epochs=4,label=f"oakbat_{scenario}_9tap")
-    _finite_csv(features,{"run_id","prn","window_bin_s","tap_count","tap_layout"})
+    _finite_csv(features,RAW_FEATURE_REQUIRED_COLUMNS)
     node_csv,_,_=export_tap_multi_prn_dataset(features,output_dir=dataset,stride_s=0.5,min_prns_per_graph=2,feature_mode="normalized_dmcpd")
     write_feature_cache_contract(out,receiver_manifest,features,Path(node_csv)); return Path(node_csv)
 
