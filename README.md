@@ -15,6 +15,19 @@ overfitting guardrails are documented in
 The later synthetic-normal-only 30-run experiment is retained as a negative
 sim-to-real result and is not a replacement for this frozen detector.
 
+## Candidate second detector: raw-IQ noise/fingerprint continuity
+
+In addition to the frozen B0 detector above, the repository records a candidate
+second method, M1: an online, per-recording, normal-only detector that learns
+raw pre-correlation IQ noise/fingerprint continuity from the first 90 seconds of
+a TEXBAT recording and scores continuity breaks afterward. This is documented in
+[`docs/RAW_IQ_NOISE_CONTINUITY_SECOND_METHOD.md`](docs/RAW_IQ_NOISE_CONTINUITY_SECOND_METHOD.md)
+and implemented in `scripts/iq_noise_continuity_detector.py`.
+
+M1 is a research note, not a replacement for B0. The current safe claim is a
+raw-IQ fingerprint continuity break, not yet isolated satellite-specific
+microscopic noise.
+
 ## GPS-SDR-SIM `-t` timescale
 
 Although upstream documents `-t` as a date/time calendar, the pinned GPS-SDR-SIM
