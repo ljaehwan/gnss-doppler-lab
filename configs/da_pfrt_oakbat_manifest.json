@@ -1,0 +1,62 @@
+{
+  "schema": "gnss-doppler-lab.da-pfrt-dataset-manifest.v1",
+  "description": "OAKBAT aligned 9-tap peak morphology and sparse raw-IQ floor features for strict leave-one-scenario-out DA-PFRT evaluation.",
+  "datasets": {
+    "cleanStatic": {
+      "morph_csv": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+      "floor_csv": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-cleanStatic-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_cleanStatic_raw_iq_noise_features.csv",
+      "onset_s": null,
+      "morph_sha256": "93b862e03cb979f48d3cf030e3c3f7b008f20a727b4b07046b7ebc4a64bdeb4e",
+      "floor_sha256": "2c0029db94a448b1bbe00c38d3bd2477844c0dcb68a0c8f9c74ffce7e9990c4c",
+      "identity": {
+        "scenario": "cleanStatic",
+        "morph_label": "oakbat_cleanStatic_9tap",
+        "morph_run_id": "oakbat-cleanStatic-method-a-9tap",
+        "morph_source_fingerprint": "b1d061c31cfbbcdd901824ee8eab2c25a56258077f7429b409d2685a7b9d100e",
+        "floor_scenario": "oakbat_cleanStatic"
+      }
+    },
+    "os2": {
+      "morph_csv": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+      "floor_csv": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os2-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_os2_raw_iq_noise_features.csv",
+      "onset_s": 120.0,
+      "morph_sha256": "b356db20e3d03a65cdca64994ea84283e5eae723a2c558f2f9fa679b9b43175b",
+      "floor_sha256": "6a310df95770f412ecd72a3c9ae066dd339b86f84362c8ba0a4d8d522bb9f65e",
+      "identity": {
+        "scenario": "os2",
+        "morph_label": "oakbat_os2_9tap",
+        "morph_run_id": "oakbat-os2-method-a-9tap",
+        "morph_source_fingerprint": "ff4a092415e07427a93d475ecbc4f4f17663ec22bb8fc95791ffe0f76aa3d64f",
+        "floor_scenario": "oakbat_os2"
+      }
+    },
+    "os3": {
+      "morph_csv": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+      "floor_csv": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os3-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_os3_raw_iq_noise_features.csv",
+      "onset_s": 120.0,
+      "morph_sha256": "fa76a7118f65439ec97cee2a70291c59771fcaa87a3c35b84ec5db4d74a3a3b6",
+      "floor_sha256": "f6b843dcdf4c599b179e16146b2692bae2a9509e931c22fd1071070749ee1014",
+      "identity": {
+        "scenario": "os3",
+        "morph_label": "oakbat_os3_9tap",
+        "morph_run_id": "oakbat-os3-method-a-9tap",
+        "morph_source_fingerprint": "f1566e51cfd4f5fbbf698bf9324580d9d63f64120e298cb7d764384667552ff3",
+        "floor_scenario": "oakbat_os3"
+      }
+    },
+    "os4": {
+      "morph_csv": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+      "floor_csv": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os4-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_os4_raw_iq_noise_features.csv",
+      "onset_s": 120.0,
+      "morph_sha256": "2bc572eeaf49818fd8ba5253b3b7bb5956d0997ea2a49306f5ff6842ab53144a",
+      "floor_sha256": "bf6921c204336ba559086eccd24cb82bae96632485158ee9efc8df9c7eb3a7e9",
+      "identity": {
+        "scenario": "os4",
+        "morph_label": "oakbat_os4_9tap",
+        "morph_run_id": "oakbat-os4-method-a-9tap",
+        "morph_source_fingerprint": "c62271293ae843adf42bf5331bdb3f7f7acb419d505b92d1271119722cd93960",
+        "floor_scenario": "oakbat_os4"
+      }
+    }
+  }
+}
