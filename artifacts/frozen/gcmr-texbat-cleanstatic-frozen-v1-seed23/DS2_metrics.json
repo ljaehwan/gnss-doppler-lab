@@ -1,0 +1,67 @@
+{
+  "cache_sha256": "c18201693e4240247b06647e5fae5eb7e51cf82a703018b838c03e678880a24d",
+  "checkpoint_sha256": "4eccfdbad1c3e86cce2248d98d87efb019d63048226df04e7f9bb270908bf4a5",
+  "event_count": 913,
+  "first_alarm_delay_from_primary_onset_s": null,
+  "first_alarm_score_end_s": null,
+  "post120_sensitivity": {
+    "alarm_count": 0,
+    "alarm_rate": 0.0,
+    "event_count": 673,
+    "first_alarm_score_end_s": null,
+    "score_median": 2.193702481564504,
+    "score_q99": 32.10519379500585
+  },
+  "source_sha256": {
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/gps_ephemeris.xml": "3ad57e22266b980f148801eec0ebde3e58ba043b66db652b835b43fd2492a2e9",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/nmea_pvt.nmea": "4ea787e39b33481b438964003ff42daccad8d938866693143d29ff2470e1cf79",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_0.mat": "4e96b2aa923347e8dbac4629da887ab3f85e62d2180612a4e5073a71d28f389e",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_1.mat": "15f872d599db0080a2de171294088627da245d1e29b49e494d3c2042b7d2fbf6",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_10.mat": "87d8e289d782d09a93c01266b0e326a4547e51c594e31ecc8e347da1269ef727",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_2.mat": "7b780c8a2c0323c166b1cb54a80d923c57974e5bc3b4dce9e1bacb4b98517718",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_3.mat": "1e44fb636339118f3ac7aa4aa0df754e5ce59dc792be28b0e44f55008a880be2",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_4.mat": "6aca23985674ce95fe2a4b1d816638a5c8ce445ae16399597d57d4d38ae47c54",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_5.mat": "4e10b512bfcfbec0ae714ba796c7060ffdbb5077aa7eb7215b385501f014702a",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_6.mat": "26ea2d62ca6acd16da82fbf80b594ed5037a15340ddd161e9c762dd2ef7fc668",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_7.mat": "62d1bd4aa17c41f2b8803f4ce5f18cadf93695ee75c9f67e287530863a839b5d",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_8.mat": "951f9e9779c50d9fc519dcea06a15ad85d09d79495b1cfd5a3070d9bace24481",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_9.mat": "f2276f1da4c5c28fcf154356d6bf5a6eeebcc4fa40713b120634d0de8c433ae8",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/observables.mat": "efb83de3075b9df37895c75512f934f23696ba22a38ff39da8c478326efe2edf"
+  },
+  "stable_post": {
+    "alarm_count": 0,
+    "alarm_rate": 0.0,
+    "event_count": 693,
+    "first_alarm_score_end_s": null,
+    "score_median": 2.197380243070997,
+    "score_q99": 32.07209514283173
+  },
+  "stable_pre": {
+    "alarm_count": 0,
+    "alarm_rate": 0.0,
+    "event_count": 119,
+    "first_alarm_score_end_s": null,
+    "score_median": 0.6741824710483024,
+    "score_q99": 17.983338421585437
+  },
+  "strict_alarm_rule": "score > threshold",
+  "threshold": 134914.8453732542,
+  "transition": {
+    "alarm_count": 0,
+    "alarm_rate": 0.0,
+    "event_count": 39,
+    "first_alarm_score_end_s": null,
+    "score_median": 1.9170424008218019,
+    "score_q99": 15.519012231535646
+  },
+  "window_range_s": [
+    [
+      0.0,
+      1.0
+    ],
+    [
+      456.0,
+      457.0
+    ]
+  ]
+}

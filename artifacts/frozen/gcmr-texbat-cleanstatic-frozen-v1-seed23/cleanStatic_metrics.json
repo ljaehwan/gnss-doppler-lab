@@ -1,0 +1,48 @@
+{
+  "event_count": 119,
+  "first_alarm_delay_from_primary_onset_s": null,
+  "first_alarm_score_end_s": null,
+  "post120_sensitivity": {
+    "alarm_count": 0,
+    "alarm_rate": 0.0,
+    "event_count": 119,
+    "first_alarm_score_end_s": null,
+    "score_median": 0.5718388865855122,
+    "score_q99": 1.8105772620967544
+  },
+  "stable_post": {
+    "alarm_count": 0,
+    "alarm_rate": 0.0,
+    "event_count": 119,
+    "first_alarm_score_end_s": null,
+    "score_median": 0.5718388865855122,
+    "score_q99": 1.8105772620967544
+  },
+  "stable_pre": {
+    "alarm_count": 0,
+    "alarm_rate": null,
+    "event_count": 0,
+    "first_alarm_score_end_s": null,
+    "score_median": null,
+    "score_q99": null
+  },
+  "strict_alarm_rule": "score > threshold",
+  "transition": {
+    "alarm_count": 0,
+    "alarm_rate": null,
+    "event_count": 0,
+    "first_alarm_score_end_s": null,
+    "score_median": null,
+    "score_q99": null
+  },
+  "window_range_s": [
+    [
+      410.0,
+      411.0
+    ],
+    [
+      469.0,
+      470.0
+    ]
+  ]
+}

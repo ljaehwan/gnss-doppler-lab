@@ -1,0 +1,71 @@
+{
+  "cache_sha256": "518be3f9154b52f58a777351f97f81d3a3e3998d6a3343f9cae6791d129c576f",
+  "checkpoint_sha256": "4eccfdbad1c3e86cce2248d98d87efb019d63048226df04e7f9bb270908bf4a5",
+  "event_count": 255,
+  "first_alarm_delay_from_primary_onset_s": null,
+  "first_alarm_score_end_s": null,
+  "onset_conflict": {
+    "auxiliary_onset_s": 110.0,
+    "primary_onset_s": 100.0,
+    "resolution": "primary onset 100 retained; post>=120 is secondary sensitivity"
+  },
+  "post120_sensitivity": {
+    "alarm_count": 0,
+    "alarm_rate": 0.0,
+    "event_count": 15,
+    "first_alarm_score_end_s": null,
+    "score_median": 2.0586926213945516,
+    "score_q99": 3.735538942454341
+  },
+  "source_sha256": {
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/gps_ephemeris.xml": "5bb0ec551875771eaec98e62fb869da3bbd053c518960f7cd1abd5db263a6d0c",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/nmea_pvt.nmea": "8e50ff1bec876c9172fa2aaaa00e7026f4b44fb4c4463a2e7b2f5c7a45fc5be3",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_0.mat": "3a8d8292423373a8ba2d2ccfd5bae2fadb2ac50380e88995b7955dc4f8cfeaf4",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_1.mat": "460b2cc0cd75933cf70ca9ccec1bb99a257ff7c81379ecba556184c3b4be7d37",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_10.mat": "fd0a01c3c9a447ba247509e7e14eea5e7ad6071a5207935c2d5d26b28afd91b6",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_2.mat": "2c0b7ab0a409ecf9274995ff61560c538aa538c6b012970b9a3b6cd3e2542ae1",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_3.mat": "7863aba5f3b80895cfaa4e4974a7a78f7c6edfbf8766fdcfc20266ee65314346",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_4.mat": "d0c3d01e62859e2ee5f7e9aa060c36056c8b4449f4c564a4d931e0788471daa2",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_5.mat": "e5c2658853b3e1f5f810c29a8454e3492a602012dd484d8ac0da08513beeba4d",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_6.mat": "78f3446c7f0e9a980cc762e74ccc1c664a2ff45086fd13066f0757284c2238db",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_7.mat": "e6b4b6fc6d341b64651668e48c0f747ce5bb1c5c5966d422b4c512f40946aed7",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_8.mat": "9f1455045fb1755d57fa6dc63b8ac0a7fe6f9912a538f4662529329c5b949d03",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_9.mat": "ea5f342606793b937e2bee14f54405fea1fa0ddcfa5f4de3016917b90c239e8d"
+  },
+  "stable_post": {
+    "alarm_count": 0,
+    "alarm_rate": 0.0,
+    "event_count": 35,
+    "first_alarm_score_end_s": null,
+    "score_median": 2.533086178398386,
+    "score_q99": 22.886161976271723
+  },
+  "stable_pre": {
+    "alarm_count": 0,
+    "alarm_rate": 0.0,
+    "event_count": 119,
+    "first_alarm_score_end_s": null,
+    "score_median": 0.7538302977503124,
+    "score_q99": 2.774147096808379
+  },
+  "strict_alarm_rule": "score > threshold",
+  "threshold": 134914.8453732542,
+  "transition": {
+    "alarm_count": 0,
+    "alarm_rate": 0.0,
+    "event_count": 39,
+    "first_alarm_score_end_s": null,
+    "score_median": 0.7728758990123202,
+    "score_q99": 2.48884117899542
+  },
+  "window_range_s": [
+    [
+      0.0,
+      1.0
+    ],
+    [
+      127.0,
+      128.0
+    ]
+  ]
+}
