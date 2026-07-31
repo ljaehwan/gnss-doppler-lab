@@ -255,12 +255,24 @@ def relation_destruction(Z: np.ndarray, seed: int = 0, eps: float = _EPS) -> np.
 
 
 def binomial_tail_from_exceedances(exceedances: int, node_count: int, normal_rate: float) -> float:
-    """Exact upper binomial tail for the A1 comparison-only baseline."""
+    """Numerically stable upper binomial tail for the A1 comparison-only baseline.
+
+    The tail can be below the smallest IEEE-754 float for many PRNs at a
+    calibration-only low false-positive rate.  Calculate in log space and
+    floor only at the smallest positive float, rather than returning zero and
+    invalidating the A1 diagnostic.
+    """
     if node_count < 1 or not 0 <= exceedances <= node_count or not 0 < normal_rate < 1:
         raise ValueError("invalid binomial-tail inputs")
-    from math import comb
-    return float(sum(comb(node_count, k) * normal_rate ** k * (1.0 - normal_rate) ** (node_count - k)
-                     for k in range(exceedances, node_count + 1)))
+    from math import lgamma, log, log1p
+    terms = np.asarray([
+        lgamma(node_count + 1) - lgamma(k + 1) - lgamma(node_count - k + 1)
+        + k * log(normal_rate) + (node_count - k) * log1p(-normal_rate)
+        for k in range(exceedances, node_count + 1)
+    ], dtype=float)
+    maximum = float(np.max(terms))
+    log_tail = maximum + float(np.log(np.exp(terms - maximum).sum()))
+    return float(max(np.exp(log_tail), np.nextafter(0.0, 1.0)))
 
 
 def build_event_diagnostics(z: np.ndarray, relation_model: PairRelationModel, los: np.ndarray,

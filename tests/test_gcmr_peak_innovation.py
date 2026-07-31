@@ -140,3 +140,6 @@ def test_normal_loading_threshold_and_event_diagnostics_a1():
                                    np.array([0.1, 2.0, 3.0]), normal_scalar_threshold=1.0)
     assert 0 < diag.binomial_tail <= 1
     assert binomial_tail_from_exceedances(2, 3, .01) < binomial_tail_from_exceedances(1, 3, .01)
+    # A1 is comparison-only but must never become zero via IEEE-754 underflow.
+    tail = binomial_tail_from_exceedances(120, 120, 1e-6)
+    assert 0.0 < tail <= 1.0
