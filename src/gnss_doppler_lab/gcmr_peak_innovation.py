@@ -272,7 +272,9 @@ def binomial_tail_from_exceedances(exceedances: int, node_count: int, normal_rat
     ], dtype=float)
     maximum = float(np.max(terms))
     log_tail = maximum + float(np.log(np.exp(terms - maximum).sum()))
-    return float(max(np.exp(log_tail), np.nextafter(0.0, 1.0)))
+    # Clamp both floating-point boundaries: an upper tail is mathematically
+    # in (0, 1], although log-sum-exp can round a zero-exceedance tail above 1.
+    return float(min(1.0, max(np.exp(log_tail), np.nextafter(0.0, 1.0))))
 
 
 def build_event_diagnostics(z: np.ndarray, relation_model: PairRelationModel, los: np.ndarray,
