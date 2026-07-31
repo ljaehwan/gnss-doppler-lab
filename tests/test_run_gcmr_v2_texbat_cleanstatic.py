@@ -56,9 +56,14 @@ def test_synthetic_smoke_cli_records_truthful_unpinned_producer(tmp_path):
  )
  assert completed.returncode==0, completed.stderr
  provenance=json.loads((output/"provenance.json").read_text())
+ summary=json.loads((output/"summary.json").read_text())
  identity=provenance["cache_producer_identity"]
  assert identity["producer_kind"]=="synthetic-smoke"
  assert identity["producer_implementation"] != provenance["campaign_consumer_implementation"]
  assert identity["pinned_input"] is False
  assert provenance["clean_cache"]["path"] is None
  assert provenance["clean_cache"]["sha256"] is None
+ assert provenance["score_batching_contract"]["unit"]=="full scenario/role batch"
+ assert summary["checkpoint_roundtrip_identity"]["event_count"]==119
+ assert summary["checkpoint_roundtrip_identity"]["batching"]=="full clean_reference role batch"
+ assert summary["checkpoint_roundtrip_identity"]["max_abs_pair_error"] <= summary["checkpoint_roundtrip_identity"]["tolerance_abs"]

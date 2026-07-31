@@ -148,13 +148,18 @@ def main(argv=None):
  if not a.synthetic_smoke and cal_prn8==0:raise RuntimeError("PRN8 absent from calibration; retention cannot be proven")
  Rs=[float(np.mean(1/(1+np.exp(-np.clip(normalizer.transform(x["raw"])-tau,-709,709))))) for x in cal];multi=linear_q99(Rs)
  consumer_implementation=v1.implementation_manifest(); implementation=consumer_implementation; role_doc={k:list(v) for k,v in ROLES.items()};source_doc=source_hashes(sources) if sources else {"synthetic":"seed23"}
- provenance={"classification":"gcmr-v2-synthetic-smoke" if a.synthetic_smoke else "gcmr-v2-clean-only-frozen-external",**implementation_provenance(clean_identity,consumer_implementation),"source_sha256":source_doc,"clean_cache":{"path":None if a.synthetic_smoke else str(a.clean_cache.resolve()),"sha256":clean_cache_hash,"metadata":saved_meta},"roles":role_doc,"role_counts":ROLE_COUNTS,"config":config,"calibration":{"event_count":len(cal),"prn8_event_count":cal_prn8,"all_events_contributed":True},"no_filter_proof":{"prn_filtering":False,"qc_filtering":False,"geometry_residual_exclusion":False,"input_output_prn_set_asserted":True},"versions":{"python":platform.python_version(),"numpy":np.__version__,"torch":str(torch.__version__)},"git_commit":git(["git","rev-parse","HEAD"]),"git_status":git(["git","status","--short"])}
+ provenance={"classification":"gcmr-v2-synthetic-smoke" if a.synthetic_smoke else "gcmr-v2-clean-only-frozen-external",**implementation_provenance(clean_identity,consumer_implementation),"source_sha256":source_doc,"clean_cache":{"path":None if a.synthetic_smoke else str(a.clean_cache.resolve()),"sha256":clean_cache_hash,"metadata":saved_meta},"roles":role_doc,"role_counts":ROLE_COUNTS,"config":config,"calibration":{"event_count":len(cal),"prn8_event_count":cal_prn8,"all_events_contributed":True},"score_batching_contract":{"unit":"full scenario/role batch","event_order":"deterministic cache order","roundtrip_tolerance_abs":1e-7},"no_filter_proof":{"prn_filtering":False,"qc_filtering":False,"geometry_residual_exclusion":False,"input_output_prn_set_asserted":True},"versions":{"python":platform.python_version(),"numpy":np.__version__,"torch":str(torch.__version__)},"git_commit":git(["git","rev-parse","HEAD"]),"git_status":git(["git","status","--short"])}
  model_path=out/"model-v2.pt";save_native_checkpoint(model_path,training=training,normalizer=normalizer,tau_prn=tau,multi_threshold=multi,provenance=provenance);checkpoint_hash=sha256(model_path);gate.checkpoint_saved()
  model,norm2,tau2,multi2,payload=load_native_checkpoint(model_path,expected_provenance=provenance,expected_sha256=checkpoint_hash,device=a.device);gate.checkpoint_reloaded()
- # Round-trip score identity is checked before any sealed/external I/O.
- ref2=score_groups(model,roles["clean_reference"][:2],a.device)
- for before,after in zip(ref[:2],ref2):
-  if not np.array_equal(before["pair_prns"],after["pair_prns"]) or not np.allclose(before["pair_errors"],after["pair_errors"],rtol=0,atol=1e-7):raise RuntimeError("checkpoint score identity failure")
+ # Round-trip score identity is checked with the exact full-role batch and order.
+ ref2=score_groups(model,roles["clean_reference"],a.device)
+ max_roundtrip_error=0.0
+ for before,after in zip(ref,ref2):
+  if not np.array_equal(before["pair_prns"],after["pair_prns"]):raise RuntimeError("checkpoint pair identity failure")
+  err=float(np.max(np.abs(before["pair_errors"]-after["pair_errors"])))
+  max_roundtrip_error=max(max_roundtrip_error,err)
+ if len(ref2)!=len(ref) or max_roundtrip_error>1e-7:raise RuntimeError("checkpoint score identity failure")
+ roundtrip_identity={"event_count":len(ref2),"batching":"full clean_reference role batch","deterministic_event_order":True,"max_abs_pair_error":max_roundtrip_error,"tolerance_abs":1e-7}
  hashes={"checkpoint_sha256":checkpoint_hash,"implementation_hash":implementation["aggregate_sha256"],"source_hash":canonical_json_hash(source_doc),"cache_contract_hash":canonical_json_hash(saved_meta),"role_hash":canonical_json_hash(role_doc),"config_hash":canonical_json_hash(config),"tau_prn":tau2,"multi_threshold":multi2}
  held=score_model_events(model,roles["sealed"],norm2,tau2,multi2,device=a.device);write_scores(out,"clean-sealed",held,hashes);(out/"clean-sealed-metrics.json").write_text(json.dumps(metrics(held),indent=2)+"\n");gate.sealed_scored()
  results={"clean-sealed":metrics(held)};ds_id=[]
@@ -163,7 +168,7 @@ def main(argv=None):
    gate.allow_ds();events,meta,ds_producer_identity=load_frozen_producer_cache(Path(a.ds_cache_dir)/f'{name.lower()}.relations.npz',expected_cache_sha256=v1.DS_CACHE_SHA256[name],expected_producer_aggregate=None);ch=ds_producer_identity['cache_sha256']
    rows=score_model_events(model,events,norm2,tau2,multi2,device=a.device);identity=dict(hashes);write_scores(out,name,rows,identity);m=metrics(rows);m.update({"cache_sha256":ch,"source_sha256":meta["source_sha256"],"cache_producer_identity":ds_producer_identity});(out/f"{name}-metrics.json").write_text(json.dumps(m,indent=2,default=_json)+"\n");results[name]=m;ds_id.append(identity)
   assert_same_frozen_hashes(ds_id)
- summary={"checkpoint":"model-v2.pt","best_epoch":training.best_epoch,"thresholds":{"tau_prn":tau2,"temperature":1.0,"multi_threshold":multi2},"results":results,"provenance":provenance};(out/"provenance.json").write_text(json.dumps(provenance,indent=2,sort_keys=True,default=_json)+"\n");(out/"summary.json").write_text(json.dumps(summary,indent=2,sort_keys=True,default=_json)+"\n")
+ summary={"checkpoint":"model-v2.pt","best_epoch":training.best_epoch,"thresholds":{"tau_prn":tau2,"temperature":1.0,"multi_threshold":multi2},"checkpoint_roundtrip_identity":roundtrip_identity,"results":results,"provenance":provenance};(out/"provenance.json").write_text(json.dumps(provenance,indent=2,sort_keys=True,default=_json)+"\n");(out/"summary.json").write_text(json.dumps(summary,indent=2,sort_keys=True,default=_json)+"\n")
  files=sorted(x for x in out.iterdir() if x.is_file() and x.name!="SHA256SUMS");(out/"SHA256SUMS").write_text("".join(f"{sha256(x)}  {x.name}\n" for x in files));print(json.dumps({"output_dir":str(out),"checkpoint_sha256":checkpoint_hash,"synthetic":a.synthetic_smoke},indent=2));return 0
 class _GateAdapter:
  def __init__(self,g):self.g=g
