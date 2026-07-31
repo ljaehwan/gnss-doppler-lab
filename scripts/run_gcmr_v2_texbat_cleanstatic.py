@@ -109,12 +109,30 @@ def write_scores(out,name,rows,identity):
    degrees={int(p):int(np.sum(np.asarray(x["pair_prns"])==p)) for p in s.prns}
    for p,a,z,act in zip(s.prns,s.raw,s.z,s.activation):nw.writerow({**base,"prn":p,"a":a,"z":z,"activation":act,"degree":degrees[int(p)]})
    for pair,err in zip(x["pair_prns"],x["pair_errors"]):pw.writerow({**base,"prn_i":pair[0],"prn_j":pair[1],"e":err})
-def metrics(rows):
+def metrics(rows,*,all_only=False):
  def one(mask):
-  x=[r for r,m in zip(rows,mask) if m]; alarm=[r["score"].classification!="none" for r in x]
-  return {"event_count":len(x),"alarm_count":sum(alarm),"alarm_rate":sum(alarm)/len(x) if x else None,"first_alarm_score_end_s":next((r["event"].window_end_s for r,a in zip(x,alarm) if a),None)}
- starts=np.asarray([r["event"].window_start_s for r in rows]);ends=np.asarray([r["event"].window_end_s for r in rows])
- return {k:one(m) for k,m in {"pre":(starts>=30)&(ends<=90),"transition":(starts>=90)&(ends<=110),"post":starts>=110}.items()}
+  x=[r for r,m in zip(rows,mask) if m]; single=[bool(r["score"].single_alarm) for r in x];multi=[bool(r["score"].multi_alarm) for r in x];any_alarm=[a or b for a,b in zip(single,multi)];n=len(x)
+  first=lambda alarms:next((float(r["event"].window_end_s) for r,a in zip(x,alarms) if a),None)
+  return {"event_count":n,"single_alarm_count":sum(single),"single_alarm_rate":sum(single)/n if n else None,"first_single_alarm_availability_s":first(single),"multi_alarm_count":sum(multi),"multi_alarm_rate":sum(multi)/n if n else None,"first_multi_alarm_availability_s":first(multi),"any_alarm_count":sum(any_alarm),"any_alarm_rate":sum(any_alarm)/n if n else None}
+ starts=np.asarray([r["event"].window_start_s for r in rows]);ends=np.asarray([r["event"].window_end_s for r in rows]);all_mask=np.ones(len(rows),bool)
+ if all_only:return {"all":one(all_mask)}
+ masks={"pre":(starts>=30)&(ends<=90),"transition":(starts>=90)&(ends<=110),"post":starts>=110}
+ crossing=np.zeros(len(rows),bool)
+ for boundary in (30,90,110):crossing|=(starts<boundary)&(ends>boundary)
+ return {"all":one(all_mask),**{k:one(v) for k,v in masks.items()},"crossing_windows_excluded":{"event_count":int(np.sum(crossing)),"definition":"windows straddling a region boundary (30, 90, or 110 s) are excluded from per-region metrics"}}
+
+def audit_threshold_traces(out,normalizer,tau_prn,multi_threshold,tolerance=1e-12):
+ def read(name):
+  with (out/name).open(newline="") as f:return list(csv.DictReader(f))
+ ref=read("clean-reference-nodes.csv");cal=read("clean-calibration-nodes.csv")
+ raw=np.asarray([float(x["a"]) for x in ref]);center=float(np.median(raw));scale=max(float(1.4826*np.median(np.abs(raw-center))),1e-9);tau=linear_q99((raw-center)/scale)
+ groups={}
+ for x in cal:groups.setdefault(int(x["event_index"]),[]).append(float(x["a"]))
+ Rs=[float(np.mean(1/(1+np.exp(-np.clip((np.asarray(v)-center)/scale-tau,-709,709))))) for _,v in sorted(groups.items())];multi=linear_q99(Rs)
+ expected={"node_center":float(normalizer.center),"node_scale":float(normalizer.scale),"tau_prn":float(tau_prn),"multi_threshold":float(multi_threshold)};recomputed={"node_center":center,"node_scale":scale,"tau_prn":tau,"multi_threshold":multi}
+ errors={k:abs(expected[k]-recomputed[k]) for k in expected};passed=all(v<=tolerance for v in errors.values())
+ if not passed:raise RuntimeError(f"emitted threshold trace audit failed: {errors}")
+ return {"passed":True,"tolerance_abs":tolerance,"expected":expected,"recomputed":recomputed,"absolute_errors":errors,"reference_event_rows":len({x["event_index"] for x in ref}),"calibration_event_rows":len(groups),"method":"CSV-only median/MAD, linear q99, sigmoid activation/R recomputation"}
 def synthetic_events():
  from gnss_doppler_lab.gcmr_relations import GcmrPairRelationEvent
  rng=np.random.default_rng(23);events=[];prns=np.array([1,2,3,8]);pairs=np.array([(a,b) for i,a in enumerate(prns) for b in prns[i+1:]])
@@ -161,14 +179,20 @@ def main(argv=None):
  if len(ref2)!=len(ref) or max_roundtrip_error>1e-7:raise RuntimeError("checkpoint score identity failure")
  roundtrip_identity={"event_count":len(ref2),"batching":"full clean_reference role batch","deterministic_event_order":True,"max_abs_pair_error":max_roundtrip_error,"tolerance_abs":1e-7}
  hashes={"checkpoint_sha256":checkpoint_hash,"implementation_hash":implementation["aggregate_sha256"],"source_hash":canonical_json_hash(source_doc),"cache_contract_hash":canonical_json_hash(saved_meta),"role_hash":canonical_json_hash(role_doc),"config_hash":canonical_json_hash(config),"tau_prn":tau2,"multi_threshold":multi2}
- held=score_model_events(model,roles["sealed"],norm2,tau2,multi2,device=a.device);write_scores(out,"clean-sealed",held,hashes);(out/"clean-sealed-metrics.json").write_text(json.dumps(metrics(held),indent=2)+"\n");gate.sealed_scored()
- results={"clean-sealed":metrics(held)};ds_id=[]
+ # Self-auditing clean traces are emitted from the reloaded checkpoint, in full-role cache order, before sealed scoring.
+ reference_rows=score_model_events(model,roles["clean_reference"],norm2,tau2,multi2,device=a.device);write_scores(out,"clean-reference",reference_rows,hashes)
+ calibration_rows=score_model_events(model,roles["calibration"],norm2,tau2,multi2,device=a.device);write_scores(out,"clean-calibration",calibration_rows,hashes)
+ reference_metrics=metrics(reference_rows,all_only=True);calibration_metrics=metrics(calibration_rows,all_only=True)
+ (out/"clean-reference-metrics.json").write_text(json.dumps(reference_metrics,indent=2)+"\n");(out/"clean-calibration-metrics.json").write_text(json.dumps(calibration_metrics,indent=2)+"\n")
+ threshold_trace_audit=audit_threshold_traces(out,norm2,tau2,multi2);provenance["threshold_trace_audit"]=threshold_trace_audit
+ held=score_model_events(model,roles["sealed"],norm2,tau2,multi2,device=a.device);write_scores(out,"clean-sealed",held,hashes);sealed_metrics=metrics(held);(out/"clean-sealed-metrics.json").write_text(json.dumps(sealed_metrics,indent=2)+"\n");gate.sealed_scored()
+ results={"clean-reference":reference_metrics,"clean-calibration":calibration_metrics,"clean-sealed":sealed_metrics};ds_id=[]
  if not a.synthetic_smoke:
   for name in ("DS1","DS2","DS3","DS4"):
    gate.allow_ds();events,meta,ds_producer_identity=load_frozen_producer_cache(Path(a.ds_cache_dir)/f'{name.lower()}.relations.npz',expected_cache_sha256=v1.DS_CACHE_SHA256[name],expected_producer_aggregate=None);ch=ds_producer_identity['cache_sha256']
    rows=score_model_events(model,events,norm2,tau2,multi2,device=a.device);identity=dict(hashes);write_scores(out,name,rows,identity);m=metrics(rows);m.update({"cache_sha256":ch,"source_sha256":meta["source_sha256"],"cache_producer_identity":ds_producer_identity});(out/f"{name}-metrics.json").write_text(json.dumps(m,indent=2,default=_json)+"\n");results[name]=m;ds_id.append(identity)
   assert_same_frozen_hashes(ds_id)
- summary={"checkpoint":"model-v2.pt","best_epoch":training.best_epoch,"thresholds":{"tau_prn":tau2,"temperature":1.0,"multi_threshold":multi2},"checkpoint_roundtrip_identity":roundtrip_identity,"results":results,"provenance":provenance};(out/"provenance.json").write_text(json.dumps(provenance,indent=2,sort_keys=True,default=_json)+"\n");(out/"summary.json").write_text(json.dumps(summary,indent=2,sort_keys=True,default=_json)+"\n")
+ summary={"checkpoint":"model-v2.pt","best_epoch":training.best_epoch,"thresholds":{"node_center":norm2.center,"node_scale":norm2.scale,"tau_prn":tau2,"temperature":1.0,"multi_threshold":multi2},"checkpoint_roundtrip_identity":roundtrip_identity,"threshold_trace_audit":threshold_trace_audit,"results":results,"provenance":provenance};(out/"provenance.json").write_text(json.dumps(provenance,indent=2,sort_keys=True,default=_json)+"\n");(out/"summary.json").write_text(json.dumps(summary,indent=2,sort_keys=True,default=_json)+"\n")
  files=sorted(x for x in out.iterdir() if x.is_file() and x.name!="SHA256SUMS");(out/"SHA256SUMS").write_text("".join(f"{sha256(x)}  {x.name}\n" for x in files));print(json.dumps({"output_dir":str(out),"checkpoint_sha256":checkpoint_hash,"synthetic":a.synthetic_smoke},indent=2));return 0
 class _GateAdapter:
  def __init__(self,g):self.g=g

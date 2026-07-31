@@ -67,3 +67,50 @@ def test_synthetic_smoke_cli_records_truthful_unpinned_producer(tmp_path):
  assert summary["checkpoint_roundtrip_identity"]["event_count"]==119
  assert summary["checkpoint_roundtrip_identity"]["batching"]=="full clean_reference role batch"
  assert summary["checkpoint_roundtrip_identity"]["max_abs_pair_error"] <= summary["checkpoint_roundtrip_identity"]["tolerance_abs"]
+
+
+def test_metrics_explicitly_separate_single_multi_and_availability():
+ from types import SimpleNamespace as NS
+ def row(start,end,single=False,multi=False):
+  classification="multi" if multi else "single" if single else "none"
+  return {"event":NS(window_start_s=start,window_end_s=end),"score":NS(single_alarm=single,multi_alarm=multi,classification=classification)}
+ result=m.metrics([row(30,31,True),row(40,41,False,True),row(89.5,90.5,False,True),row(110,111,True,True)])
+ for region in ("all","pre","transition","post"):
+  assert "alarm_count" not in result[region] and "alarm_rate" not in result[region]
+  assert {"event_count","single_alarm_count","single_alarm_rate","first_single_alarm_availability_s","multi_alarm_count","multi_alarm_rate","first_multi_alarm_availability_s","any_alarm_count","any_alarm_rate"} <= result[region].keys()
+ assert result["pre"]["first_multi_alarm_availability_s"]==41
+ assert result["post"]["first_multi_alarm_availability_s"]==111
+ assert result["crossing_windows_excluded"]=={"event_count":1,"definition":"windows straddling a region boundary (30, 90, or 110 s) are excluded from per-region metrics"}
+
+def test_synthetic_emits_auditable_clean_role_traces_and_manifest(tmp_path):
+ import csv,hashlib,json,subprocess,sys,numpy as np
+ output=tmp_path/"audit"
+ completed=subprocess.run([sys.executable,str(P),"--synthetic-smoke","--max-epochs","1","--output-dir",str(output)],text=True,capture_output=True,timeout=120)
+ assert completed.returncode==0,completed.stderr
+ summary=json.loads((output/"summary.json").read_text())
+ for role in ("clean-reference","clean-calibration"):
+  events=list(csv.DictReader((output/f"{role}-events.csv").open()))
+  nodes=list(csv.DictReader((output/f"{role}-nodes.csv").open()))
+  pairs=list(csv.DictReader((output/f"{role}-pairs.csv").open()))
+  assert len(events)==119 and nodes and pairs
+  assert {int(x["event_index"]) for x in nodes}==set(range(119))
+  assert {int(x["event_index"]) for x in pairs}==set(range(119))
+  assert any(int(x["prn"])==8 for x in nodes)
+ ref=np.array([float(x["a"]) for x in csv.DictReader((output/"clean-reference-nodes.csv").open())])
+ center=float(np.median(ref));scale=max(float(1.4826*np.median(np.abs(ref-center))),1e-9)
+ z=(ref-center)/scale;tau=float(np.quantile(z,.99,method="linear"))
+ cal=list(csv.DictReader((output/"clean-calibration-nodes.csv").open()))
+ groups={}
+ for x in cal:groups.setdefault(int(x["event_index"]),[]).append(float(x["a"]))
+ Rs=[np.mean(1/(1+np.exp(-np.clip((np.array(v)-center)/scale-tau,-709,709)))) for _,v in sorted(groups.items())]
+ multi=float(np.quantile(Rs,.99,method="linear"))
+ audit=summary["threshold_trace_audit"]
+ assert np.isclose(center,audit["recomputed"]["node_center"],rtol=0,atol=1e-12)
+ assert np.isclose(scale,audit["recomputed"]["node_scale"],rtol=0,atol=1e-12)
+ assert np.isclose(tau,summary["thresholds"]["tau_prn"],rtol=0,atol=1e-12)
+ assert np.isclose(multi,summary["thresholds"]["multi_threshold"],rtol=0,atol=1e-12)
+ assert set(summary["results"]) >= {"clean-reference","clean-calibration","clean-sealed"}
+ manifest={line.split("  ",1)[1]:line.split("  ",1)[0] for line in (output/"SHA256SUMS").read_text().splitlines()}
+ for path in output.iterdir():
+  if path.is_file() and path.name!="SHA256SUMS":
+   assert manifest[path.name]==hashlib.sha256(path.read_bytes()).hexdigest()
