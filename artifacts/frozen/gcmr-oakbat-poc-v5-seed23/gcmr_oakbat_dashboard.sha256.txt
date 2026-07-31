@@ -1,0 +1,22 @@
+OAKBAT GCMR frozen v5 dashboard SHA256 manifest
+frozen_threshold=2.8224338538365963
+threshold_source=cleanStatic event_calibration only q99
+stable_pre_definition=60<=score_available_s<110
+stable_post_definition=score_available_s>=130
+
+7cdfd1e39d9c149e9037f02214375dc0147a009d618ca262db13975ef8e7e3ed  gcmr_oakbat_dashboard.png
+2f4a7e5c6b89e651377cbf77f3ace0c21aae13b309ae35eedb15855cf1549b1d  plot_gcmr_oakbat_dashboard.py
+
+Source integrity (read-only):
+9b2b8b5ea2bc32d174e49ff5de117f654e8e3c59bf83023b8d8c427dc2209b46  summary.json
+9b44effe96385395534e93767290a1c8e37cb69ea9b840061641bb0a168ff3b5  cleanStatic_scores.csv
+4b32c06556215cc929883348cc4bbfdc31f0e4894917ca488aa6849b219c6f42  os1_scores.csv
+09716a4cbc8231d56e21db349130cd5ffcaf5df131eadacb82e19833fd558f2d  os2_scores.csv
+85fcae6080d8cd031afd320a921b8c5404c5aa6589bc9a3f1629420e5894207e  os3_scores.csv
+b876568af804a1e775ae39b3aeb95cd5632d5ed6cf315cba6349e8861cbdf62b  os4_scores.csv
+
+Recomputed stable phase counts:
+OS1: pre=5/100 (0.050000), post=125/700 (0.178571)
+OS2: pre=5/100 (0.050000), post=700/700 (1.000000)
+OS3: pre=5/100 (0.050000), post=700/700 (1.000000)
+OS4: pre=3/100 (0.030000), post=700/700 (1.000000)

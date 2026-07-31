@@ -1,0 +1,1518 @@
+{
+  "attacks_open": true,
+  "best_epoch": 30,
+  "contract": {
+    "attack_use": "evaluation only after sealed held freeze",
+    "score_availability": "window_end_s",
+    "training": "clean-only normal"
+  },
+  "ephemeris_health": {
+    "excluded_ephemeris_health_by_prn": {
+      "18": 63
+    },
+    "excluded_tracking_prns": [
+      18
+    ],
+    "health_acceptance_rule": "SV_health == 0",
+    "healthy_ephemeris_prns": [
+      8,
+      10,
+      11,
+      12,
+      14,
+      15,
+      21,
+      24,
+      25,
+      27
+    ],
+    "healthy_tracked_prns": [
+      8,
+      10,
+      11,
+      12,
+      14,
+      15,
+      21,
+      24,
+      25,
+      27
+    ],
+    "tracked_prns_without_ephemeris": []
+  },
+  "geometry_preflight": {
+    "configured_tow0_s": 381618.0,
+    "decoded_snapshot": {
+      "available": true,
+      "limitation": "saved map may be an end-of-run offline oracle snapshot",
+      "relation": "after_recording_start_allowed_offline_oracle",
+      "required_at_or_before_recording_start": false
+    },
+    "ephemeris_alignment": {
+      "decoded_snapshot_available": true,
+      "decoded_snapshot_relation": "after_recording_start_allowed_offline_oracle",
+      "decoded_snapshot_tow_s": [
+        382068.0,
+        382068.0,
+        382068.0,
+        382068.0,
+        382068.0,
+        382068.0,
+        382068.0,
+        382068.0,
+        382068.0,
+        382068.0,
+        382068.0
+      ],
+      "fit_interval_flag_by_prn": {
+        "8": 0,
+        "10": 0,
+        "11": 0,
+        "12": 0,
+        "14": 0,
+        "15": 0,
+        "18": 0,
+        "21": 0,
+        "24": 0,
+        "25": 0,
+        "27": 0
+      },
+      "full_gps_week": 2097,
+      "health_by_prn": {
+        "8": 0,
+        "10": 0,
+        "11": 0,
+        "12": 0,
+        "14": 0,
+        "15": 0,
+        "18": 63,
+        "21": 0,
+        "24": 0,
+        "25": 0,
+        "27": 0
+      },
+      "max_toe_age_s": 7200.0,
+      "recording_start_tow_s": 381618.0,
+      "toc_available_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        15,
+        18,
+        21,
+        24,
+        25,
+        27
+      ],
+      "toe_age_s_by_prn": {
+        "8": 7182.0,
+        "10": 7182.0,
+        "11": 7182.0,
+        "12": 7182.0,
+        "14": 7182.0,
+        "15": 7182.0,
+        "18": 7182.0,
+        "21": 7182.0,
+        "24": 7182.0,
+        "25": 7182.0,
+        "27": 7182.0
+      },
+      "week_modulus": 1024
+    },
+    "ephemeris_health": {
+      "excluded_ephemeris_health_by_prn": {
+        "18": 63
+      },
+      "excluded_tracking_prns": [
+        18
+      ],
+      "health_acceptance_rule": "SV_health == 0",
+      "healthy_ephemeris_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        15,
+        21,
+        24,
+        25,
+        27
+      ],
+      "healthy_tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        15,
+        21,
+        24,
+        25,
+        27
+      ],
+      "tracked_prns_without_ephemeris": []
+    },
+    "full_gps_week": 2097,
+    "geometry_contract": {
+      "classification": "offline_trusted_static_receive_time_approximation",
+      "omitted_corrections": [
+        "transmit_time",
+        "Sagnac",
+        "satellite_clock"
+      ],
+      "operational_precise_doppler": false,
+      "receiver_position": "trusted static pre-onset NMEA oracle held fixed",
+      "time_basis": "receive_time"
+    },
+    "recording_start_rx_time_s": 381618.02,
+    "tow_tolerance_s": 0.05
+  },
+  "inference_diagnostics": {
+    "geometry_channels_permutation": {
+      "alarm_count": 13,
+      "alarm_rate": 0.1092436974789916,
+      "claim": "deterministic inference ablation; model not retrained",
+      "events": 119,
+      "first_alarm_s": 414.5,
+      "score_median": 1.1671685589627225,
+      "score_q99": 4.011680860294489
+    },
+    "geometry_channels_zero": {
+      "alarm_count": 119,
+      "alarm_rate": 1.0,
+      "claim": "deterministic inference ablation; model not retrained",
+      "events": 119,
+      "first_alarm_s": 411.0,
+      "score_median": 22.418398693223114,
+      "score_q99": 26.090380414467838
+    }
+  },
+  "provenance": {
+    "clean_sources_sha256": {
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/receiver/oakbat-cleanStatic-method-a-9tap/gps_ephemeris.xml": "f21e9902cd84f747e844755581cc1cbce4c8c5a7a877fd23af4db1b347c3e0f4",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/receiver/oakbat-cleanStatic-method-a-9tap/nmea_pvt.nmea": "c0b3db8f2782ac3bb7109f0d5114f39199ce910faf08fffc5681e929be26bb3b",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/receiver/oakbat-cleanStatic-method-a-9tap/raw/epl_tracking_ch_0.mat": "d094cd48a1575fe0bb254f080de9fc8dc571a84bf3afddd2ba8e5911a8cbbb32",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/receiver/oakbat-cleanStatic-method-a-9tap/raw/epl_tracking_ch_1.mat": "7460f3ff63f33ddd5fc62bee528219f0b0d23fd7f36c18ad0145f26d02f122bc",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/receiver/oakbat-cleanStatic-method-a-9tap/raw/epl_tracking_ch_10.mat": "12df52f97c14ef6dc7f00d248c5ebbf96e4ff7bfcf4d136112f51c2eb2060a20",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/receiver/oakbat-cleanStatic-method-a-9tap/raw/epl_tracking_ch_2.mat": "978618443325208f076b798c9f42fb86c602610905b5b420092a09c6edea50fd",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/receiver/oakbat-cleanStatic-method-a-9tap/raw/epl_tracking_ch_3.mat": "2a44329938bc67dfa6a0292c1e15f399e80e93f3713d0c29fddb26fe51b58faf",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/receiver/oakbat-cleanStatic-method-a-9tap/raw/epl_tracking_ch_4.mat": "f79ac725285f06d3a155b287d2183463b4edfe7fe3ac88e8a1a2bda3a24b4041",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/receiver/oakbat-cleanStatic-method-a-9tap/raw/epl_tracking_ch_5.mat": "df9b5085e48d44f6301c930f6a34b9d3f4992fc3d3c8408d1d49ebc966a93757",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/receiver/oakbat-cleanStatic-method-a-9tap/raw/epl_tracking_ch_6.mat": "d32b58893f5c6bcc7c2e7efef8f41a53e93c68c5bbf16d7790951255b3747871",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/receiver/oakbat-cleanStatic-method-a-9tap/raw/epl_tracking_ch_7.mat": "72d7ab0b2b4c75ff7b1e0c56753a169561356827c17ba4a9be7def03ac0d6f7c",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/receiver/oakbat-cleanStatic-method-a-9tap/raw/epl_tracking_ch_8.mat": "bc412a41238ba3f98a820e6123e40bc015fc92b1c5c450edeac2f01db896e82c",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/receiver/oakbat-cleanStatic-method-a-9tap/raw/epl_tracking_ch_9.mat": "7c704a9a1b8fb89508106745679de6cc5cb0c4259fbf3a7e61b1b9987cd4fefc",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/receiver/oakbat-cleanStatic-method-a-9tap/raw/observables.mat": "88c71857c93ea514dcfe8ded825710bc33f78c6959a95dca9fce1c303917f638"
+    },
+    "ephemeris_health": {
+      "excluded_ephemeris_health_by_prn": {
+        "18": 63
+      },
+      "excluded_tracking_prns": [
+        18
+      ],
+      "health_acceptance_rule": "SV_health == 0",
+      "healthy_ephemeris_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        15,
+        21,
+        24,
+        25,
+        27
+      ],
+      "healthy_tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        15,
+        21,
+        24,
+        25,
+        27
+      ],
+      "tracked_prns_without_ephemeris": []
+    },
+    "geometry_preflight": {
+      "configured_tow0_s": 381618.0,
+      "decoded_snapshot": {
+        "available": true,
+        "limitation": "saved map may be an end-of-run offline oracle snapshot",
+        "relation": "after_recording_start_allowed_offline_oracle",
+        "required_at_or_before_recording_start": false
+      },
+      "ephemeris_alignment": {
+        "decoded_snapshot_available": true,
+        "decoded_snapshot_relation": "after_recording_start_allowed_offline_oracle",
+        "decoded_snapshot_tow_s": [
+          382068.0,
+          382068.0,
+          382068.0,
+          382068.0,
+          382068.0,
+          382068.0,
+          382068.0,
+          382068.0,
+          382068.0,
+          382068.0,
+          382068.0
+        ],
+        "fit_interval_flag_by_prn": {
+          "8": 0,
+          "10": 0,
+          "11": 0,
+          "12": 0,
+          "14": 0,
+          "15": 0,
+          "18": 0,
+          "21": 0,
+          "24": 0,
+          "25": 0,
+          "27": 0
+        },
+        "full_gps_week": 2097,
+        "health_by_prn": {
+          "8": 0,
+          "10": 0,
+          "11": 0,
+          "12": 0,
+          "14": 0,
+          "15": 0,
+          "18": 63,
+          "21": 0,
+          "24": 0,
+          "25": 0,
+          "27": 0
+        },
+        "max_toe_age_s": 7200.0,
+        "recording_start_tow_s": 381618.0,
+        "toc_available_prns": [
+          8,
+          10,
+          11,
+          12,
+          14,
+          15,
+          18,
+          21,
+          24,
+          25,
+          27
+        ],
+        "toe_age_s_by_prn": {
+          "8": 7182.0,
+          "10": 7182.0,
+          "11": 7182.0,
+          "12": 7182.0,
+          "14": 7182.0,
+          "15": 7182.0,
+          "18": 7182.0,
+          "21": 7182.0,
+          "24": 7182.0,
+          "25": 7182.0,
+          "27": 7182.0
+        },
+        "week_modulus": 1024
+      },
+      "ephemeris_health": {
+        "excluded_ephemeris_health_by_prn": {
+          "18": 63
+        },
+        "excluded_tracking_prns": [
+          18
+        ],
+        "health_acceptance_rule": "SV_health == 0",
+        "healthy_ephemeris_prns": [
+          8,
+          10,
+          11,
+          12,
+          14,
+          15,
+          21,
+          24,
+          25,
+          27
+        ],
+        "healthy_tracked_prns": [
+          8,
+          10,
+          11,
+          12,
+          14,
+          15,
+          21,
+          24,
+          25,
+          27
+        ],
+        "tracked_prns_without_ephemeris": []
+      },
+      "full_gps_week": 2097,
+      "geometry_contract": {
+        "classification": "offline_trusted_static_receive_time_approximation",
+        "omitted_corrections": [
+          "transmit_time",
+          "Sagnac",
+          "satellite_clock"
+        ],
+        "operational_precise_doppler": false,
+        "receiver_position": "trusted static pre-onset NMEA oracle held fixed",
+        "time_basis": "receive_time"
+      },
+      "recording_start_rx_time_s": 381618.02,
+      "tow_tolerance_s": 0.05
+    },
+    "git_commit": "d4deb4dc0aba0070d99886f515a3917c4827144c",
+    "git_status": "",
+    "implementation": {
+      "aggregate_sha256": "3fa42dd28f1b585713a6134599df8742675a128f3ab8ac2a2fc1d5f7860d6659",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "862061d8137f8b5fe9ba36d123f1f8b3d0453e5333af807b5df8386c37c1bc22"
+        },
+        {
+          "path": "scripts/run_gcmr_oakbat_poc.py",
+          "sha256": "d70c9d5763ea534b55f31c4b761be873c360916ae26df04decec3ea9a1e53f91"
+        },
+        {
+          "path": "src/gnss_doppler_lab/gcmr_experiment.py",
+          "sha256": "bb0a60ae59211ee3460d49d54cb653bfd4d9c567356a0b4b1f42abb8886c3147"
+        },
+        {
+          "path": "src/gnss_doppler_lab/gcmr_geometry.py",
+          "sha256": "781b66b8c485f4a656da3ed4ce82726f47f47a94cc4ea702eeab727708208921"
+        },
+        {
+          "path": "src/gnss_doppler_lab/gcmr_model.py",
+          "sha256": "04971ef93fadfa9f6bd5494b730ab2677054ad26ed862810c2793a1f9b3b5a99"
+        },
+        {
+          "path": "src/gnss_doppler_lab/gcmr_relations.py",
+          "sha256": "2679db9534b5c8ac840b5fee046f74b167692b0fb6d95d61dd77e07be901e968"
+        },
+        {
+          "path": "src/gnss_doppler_lab/trajectory.py",
+          "sha256": "c95fdd8fb513d3d800c8ace3a433063673f26eddc20315e229d234d28267227b"
+        },
+        {
+          "path": "tests/test_gcmr_experiment.py",
+          "sha256": "65fca63334c04903bc9cccd039a60b6c674a81e0d87e00c57f954be1e5703d9a"
+        },
+        {
+          "path": "tests/test_gcmr_geometry.py",
+          "sha256": "cf958c4e7b66e31970d941c7560cc35e20c1e193ac08179c0162e37cbaa5cfe1"
+        },
+        {
+          "path": "tests/test_gcmr_model.py",
+          "sha256": "5ac18b34613cf9bccbae73a135308003d50653571c2bec4a8de24ac7f4053d62"
+        },
+        {
+          "path": "tests/test_gcmr_relations.py",
+          "sha256": "c7ceea3241db4a1ad9abbd3e328c9618f12dfce1861cd286d62b4a908ba2491c"
+        }
+      ]
+    },
+    "leakage_contract": {
+      "attacks": "never fit any artifact",
+      "epoch_selection": "selection_val only",
+      "scaler_model_fit": "train only",
+      "score_calibrator_fit": "clean_reference only",
+      "sealed_held": "read only after freeze",
+      "threshold_q99": "event_calibration only"
+    },
+    "oracle_deployment_assumption": "trusted pre-onset static NMEA GGA oracle; position held fixed; post-onset PVT prohibited",
+    "python": "3.12.3",
+    "receiver_position": {
+      "assumption": "trusted pre-onset static NMEA GGA oracle; position held fixed; post-onset PVT prohibited",
+      "ecef": [
+        512599.5391507977,
+        -5145260.9575743005,
+        3722104.160706072
+      ],
+      "llh": [
+        35.930544505,
+        -84.31064868166666,
+        255.714
+      ],
+      "sample_count": 599,
+      "timing": {
+        "gps_tow_at_time_zero_s": 381618.0,
+        "gps_utc_leap_offset_s": 18,
+        "onset_s": 120.0,
+        "position_window_s": [
+          20.0,
+          90.0
+        ],
+        "source": "absolute UTC RMC/GGA"
+      }
+    },
+    "roles": [
+      {
+        "end_s": 180,
+        "name": "train",
+        "start_s": 30
+      },
+      {
+        "end_s": 260,
+        "name": "selection_val",
+        "start_s": 190
+      },
+      {
+        "end_s": 330,
+        "name": "clean_reference",
+        "start_s": 270
+      },
+      {
+        "end_s": 400,
+        "name": "event_calibration",
+        "start_s": 340
+      },
+      {
+        "end_s": 470,
+        "name": "sealed_held",
+        "start_s": 410
+      }
+    ],
+    "runner": "clean-only GCMR OAKBAT",
+    "seed": 23,
+    "timing_contract": {
+      "gps_tow_at_time_zero_s": 381618.0,
+      "max_toe_age_s": 7200.0,
+      "min_common_samples": 20,
+      "min_prns": 4,
+      "onset_s": 120.0,
+      "resample_bin_s": 0.02,
+      "sample_rate_hz": 5000000.0,
+      "score_available_at": "window_end_s",
+      "stride_s": 0.5,
+      "tow0_rx_tolerance_s": 0.05,
+      "window_interval": "[start,end)",
+      "window_s": 1.0
+    },
+    "torch": "2.13.0+cu130"
+  },
+  "results": {
+    "os1": {
+      "attack_context": "evaluation_only_never_used_for_fit",
+      "first_alarm_delay_s": 0.0,
+      "first_alarm_s": 120.0,
+      "geometry_preflight": {
+        "configured_tow0_s": 381618.0,
+        "decoded_snapshot": {
+          "available": true,
+          "limitation": "saved map may be an end-of-run offline oracle snapshot",
+          "relation": "after_recording_start_allowed_offline_oracle",
+          "required_at_or_before_recording_start": false
+        },
+        "ephemeris_alignment": {
+          "decoded_snapshot_available": true,
+          "decoded_snapshot_relation": "after_recording_start_allowed_offline_oracle",
+          "decoded_snapshot_tow_s": [
+            382068.0,
+            382068.0,
+            381708.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0
+          ],
+          "fit_interval_flag_by_prn": {
+            "8": 0,
+            "10": 0,
+            "12": 0,
+            "14": 0,
+            "15": 0,
+            "18": 0,
+            "20": 0,
+            "21": 0,
+            "24": 0,
+            "27": 0,
+            "31": 0,
+            "32": 0
+          },
+          "full_gps_week": 2097,
+          "health_by_prn": {
+            "8": 0,
+            "10": 0,
+            "12": 0,
+            "14": 0,
+            "15": 0,
+            "18": 63,
+            "20": 0,
+            "21": 0,
+            "24": 0,
+            "27": 0,
+            "31": 0,
+            "32": 0
+          },
+          "max_toe_age_s": 7200.0,
+          "recording_start_tow_s": 381618.0,
+          "toc_available_prns": [
+            8,
+            10,
+            12,
+            14,
+            15,
+            18,
+            20,
+            21,
+            24,
+            27,
+            31,
+            32
+          ],
+          "toe_age_s_by_prn": {
+            "8": 7182.0,
+            "10": 7182.0,
+            "12": 7182.0,
+            "14": 7182.0,
+            "15": 7182.0,
+            "18": 7182.0,
+            "20": 7182.0,
+            "21": 7182.0,
+            "24": 7182.0,
+            "27": 7182.0,
+            "31": 7182.0,
+            "32": 7166.0
+          },
+          "week_modulus": 1024
+        },
+        "ephemeris_health": {
+          "excluded_ephemeris_health_by_prn": {
+            "18": 63
+          },
+          "excluded_tracking_prns": [
+            11,
+            18,
+            25
+          ],
+          "health_acceptance_rule": "SV_health == 0",
+          "healthy_ephemeris_prns": [
+            8,
+            10,
+            12,
+            14,
+            15,
+            20,
+            21,
+            24,
+            27,
+            31,
+            32
+          ],
+          "healthy_tracked_prns": [
+            8,
+            10,
+            12,
+            14,
+            15,
+            20,
+            21,
+            24,
+            27,
+            31,
+            32
+          ],
+          "tracked_prns_without_ephemeris": [
+            11,
+            25
+          ]
+        },
+        "full_gps_week": 2097,
+        "geometry_contract": {
+          "classification": "offline_trusted_static_receive_time_approximation",
+          "omitted_corrections": [
+            "transmit_time",
+            "Sagnac",
+            "satellite_clock"
+          ],
+          "operational_precise_doppler": false,
+          "receiver_position": "trusted static pre-onset NMEA oracle held fixed",
+          "time_basis": "receive_time"
+        },
+        "recording_start_rx_time_s": 381618.02,
+        "tow_tolerance_s": 0.05
+      },
+      "normal_context": "ood_normal_pre_attack",
+      "post": {
+        "alarm_count": 125,
+        "alarm_rate": 0.17857142857142858,
+        "events": 700,
+        "first_alarm_s": 130.0,
+        "score_median": 1.9429961229408028,
+        "score_q99": 17.423657170513703
+      },
+      "pre": {
+        "alarm_count": 71,
+        "alarm_rate": 0.3256880733944954,
+        "events": 218,
+        "first_alarm_s": 1.0,
+        "score_median": 1.9206807634720413,
+        "score_q99": 40865.412289482825
+      },
+      "receiver_position": {
+        "assumption": "trusted pre-onset static NMEA GGA oracle; position held fixed; post-onset PVT prohibited",
+        "ecef": [
+          512599.3573043811,
+          -5145260.97722954,
+          3722104.2753273104
+        ],
+        "llh": [
+          35.93054533333333,
+          -84.31065070833333,
+          255.7825
+        ],
+        "sample_count": 660,
+        "timing": {
+          "gps_tow_at_time_zero_s": 381618.0,
+          "gps_utc_leap_offset_s": 18,
+          "onset_s": 120.0,
+          "position_window_s": [
+            20.0,
+            90.0
+          ],
+          "source": "absolute UTC RMC/GGA"
+        }
+      },
+      "source_sha256": {
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/receiver/oakbat-os1-method-a-9tap/gps_ephemeris.xml": "d7e34682a3609638194ee09ace46961bfbef14406cb198004a0110345f59973f",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/receiver/oakbat-os1-method-a-9tap/nmea_pvt.nmea": "81b332b3367fd9a5c99d8257c046a6cf5c2fcfcf57d00232cf63f0a52435f3c4",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/receiver/oakbat-os1-method-a-9tap/raw/epl_tracking_ch_0.mat": "69ae121c88f3995826f36ef69b168d0f549cb10491223daa4e91a40048556f10",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/receiver/oakbat-os1-method-a-9tap/raw/epl_tracking_ch_1.mat": "8599a6beb251bde93f0aa8a42cc71da1f67fb12f58a3bf195246e913ce1a3f9b",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/receiver/oakbat-os1-method-a-9tap/raw/epl_tracking_ch_10.mat": "f57b2f955f48347fd543e3a9810202bf39c470cfba643093f67a6f127dc9fb4a",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/receiver/oakbat-os1-method-a-9tap/raw/epl_tracking_ch_2.mat": "cced6dbb7657d9331cd21ac2beeab259c6fe6d43ed6c71ef2b2d8c6b8ae58976",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/receiver/oakbat-os1-method-a-9tap/raw/epl_tracking_ch_3.mat": "6fa3245af7359fa660ff73ab2389693fa6b3fc2fb05a35c48204bde075331c82",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/receiver/oakbat-os1-method-a-9tap/raw/epl_tracking_ch_4.mat": "12ff156ae39f664c9ed53e5ceca1077c6c53a26be9a7a5f36135f1788ae9f6bf",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/receiver/oakbat-os1-method-a-9tap/raw/epl_tracking_ch_5.mat": "7e702cd69e534186a67dbea3aa5875dc968b436d36ff328721f717343edb4b0a",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/receiver/oakbat-os1-method-a-9tap/raw/epl_tracking_ch_6.mat": "daca93ca2bb339ea7a7f3c88792c5abb9d0189db4402186e963a4c77542db8a6",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/receiver/oakbat-os1-method-a-9tap/raw/epl_tracking_ch_7.mat": "a1762658ac7e10d8e4f79e02bd36eaae77636b20770a5dcaa03c37819718ed94",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/receiver/oakbat-os1-method-a-9tap/raw/epl_tracking_ch_8.mat": "1c12f090c8e5e6275f05499e872bcdefa94180c2407ad49de6b9578e2387b320",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/receiver/oakbat-os1-method-a-9tap/raw/epl_tracking_ch_9.mat": "81f9854122c53d931d8ece2cae93ecd3280278140cd68cf2d91bc666d0ee369f",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/receiver/oakbat-os1-method-a-9tap/raw/observables.mat": "57044d71dc4600fbd9de9bfb389e1a50d86248d653ae6b2a033fe57ec56a2358"
+      },
+      "transition": {
+        "alarm_count": 21,
+        "alarm_rate": 0.525,
+        "events": 40,
+        "first_alarm_s": 112.0,
+        "score_median": 6.661758225403207,
+        "score_q99": 2140.0946465166453
+      }
+    },
+    "os2": {
+      "attack_context": "evaluation_only_never_used_for_fit",
+      "first_alarm_delay_s": 0.0,
+      "first_alarm_s": 120.0,
+      "geometry_preflight": {
+        "configured_tow0_s": 381618.0,
+        "decoded_snapshot": {
+          "available": true,
+          "limitation": "saved map may be an end-of-run offline oracle snapshot",
+          "relation": "after_recording_start_allowed_offline_oracle",
+          "required_at_or_before_recording_start": false
+        },
+        "ephemeris_alignment": {
+          "decoded_snapshot_available": true,
+          "decoded_snapshot_relation": "after_recording_start_allowed_offline_oracle",
+          "decoded_snapshot_tow_s": [
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0
+          ],
+          "fit_interval_flag_by_prn": {
+            "8": 0,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "15": 0,
+            "20": 0,
+            "21": 0,
+            "24": 0,
+            "25": 0,
+            "27": 0,
+            "31": 0
+          },
+          "full_gps_week": 2097,
+          "health_by_prn": {
+            "8": 0,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "15": 0,
+            "20": 0,
+            "21": 0,
+            "24": 0,
+            "25": 0,
+            "27": 0,
+            "31": 0
+          },
+          "max_toe_age_s": 7200.0,
+          "recording_start_tow_s": 381618.0,
+          "toc_available_prns": [
+            8,
+            10,
+            11,
+            12,
+            15,
+            20,
+            21,
+            24,
+            25,
+            27,
+            31
+          ],
+          "toe_age_s_by_prn": {
+            "8": 7182.0,
+            "10": 7182.0,
+            "11": 7182.0,
+            "12": 7182.0,
+            "15": 7182.0,
+            "20": 7182.0,
+            "21": 7182.0,
+            "24": 7182.0,
+            "25": 7182.0,
+            "27": 7182.0,
+            "31": 7182.0
+          },
+          "week_modulus": 1024
+        },
+        "ephemeris_health": {
+          "excluded_ephemeris_health_by_prn": {},
+          "excluded_tracking_prns": [
+            18
+          ],
+          "health_acceptance_rule": "SV_health == 0",
+          "healthy_ephemeris_prns": [
+            8,
+            10,
+            11,
+            12,
+            15,
+            20,
+            21,
+            24,
+            25,
+            27,
+            31
+          ],
+          "healthy_tracked_prns": [
+            8,
+            10,
+            11,
+            12,
+            15,
+            20,
+            21,
+            24,
+            25,
+            27,
+            31
+          ],
+          "tracked_prns_without_ephemeris": [
+            18
+          ]
+        },
+        "full_gps_week": 2097,
+        "geometry_contract": {
+          "classification": "offline_trusted_static_receive_time_approximation",
+          "omitted_corrections": [
+            "transmit_time",
+            "Sagnac",
+            "satellite_clock"
+          ],
+          "operational_precise_doppler": false,
+          "receiver_position": "trusted static pre-onset NMEA oracle held fixed",
+          "time_basis": "receive_time"
+        },
+        "recording_start_rx_time_s": 381618.02,
+        "tow_tolerance_s": 0.05
+      },
+      "normal_context": "ood_normal_pre_attack",
+      "post": {
+        "alarm_count": 700,
+        "alarm_rate": 1.0,
+        "events": 700,
+        "first_alarm_s": 130.0,
+        "score_median": 51.7498604516838,
+        "score_q99": 66.20938914239409
+      },
+      "pre": {
+        "alarm_count": 71,
+        "alarm_rate": 0.3256880733944954,
+        "events": 218,
+        "first_alarm_s": 1.0,
+        "score_median": 1.8674977545042128,
+        "score_q99": 16367.637022789699
+      },
+      "receiver_position": {
+        "assumption": "trusted pre-onset static NMEA GGA oracle; position held fixed; post-onset PVT prohibited",
+        "ecef": [
+          512599.3014561853,
+          -5145260.10940888,
+          3722103.82240115
+        ],
+        "llh": [
+          35.93054662416667,
+          -84.31065037083333,
+          254.813
+        ],
+        "sample_count": 660,
+        "timing": {
+          "gps_tow_at_time_zero_s": 381618.0,
+          "gps_utc_leap_offset_s": 18,
+          "onset_s": 120.0,
+          "position_window_s": [
+            20.0,
+            90.0
+          ],
+          "source": "absolute UTC RMC/GGA"
+        }
+      },
+      "source_sha256": {
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/receiver/oakbat-os2-method-a-9tap/gps_ephemeris.xml": "1690eb1bc8c9040df5daa3da9adf9b57d823a211d243a4848fb85db8d901779f",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/receiver/oakbat-os2-method-a-9tap/nmea_pvt.nmea": "f1168ecec5d8576e3ce836f59a454371616a1ec6a4bf6288f7a7196416315175",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/receiver/oakbat-os2-method-a-9tap/raw/epl_tracking_ch_0.mat": "4876380b2acecf75c00b983e8bae0de35314f8f849f50931dd47119355af266f",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/receiver/oakbat-os2-method-a-9tap/raw/epl_tracking_ch_1.mat": "40b0ee6adba82d9b7b4e91ef5b783b38a2acaf3d77a9c8b85c42234d74c4efd1",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/receiver/oakbat-os2-method-a-9tap/raw/epl_tracking_ch_10.mat": "92fb70db533b285010b809921e6e8de34886d1966ba8575ec4802b68a807506d",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/receiver/oakbat-os2-method-a-9tap/raw/epl_tracking_ch_2.mat": "193133cca548eb47efc42d89941e64dad6c5e9a08319dc6ff2d3d42f4e0f9da5",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/receiver/oakbat-os2-method-a-9tap/raw/epl_tracking_ch_3.mat": "a34c52f317ec4d68407e639d508b585968d9b115c12ef5bf267339714dc717d9",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/receiver/oakbat-os2-method-a-9tap/raw/epl_tracking_ch_4.mat": "589f5accea4bd94fa24203b168f98323b7c23912bc6fa8f0ce32a0730d923725",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/receiver/oakbat-os2-method-a-9tap/raw/epl_tracking_ch_5.mat": "82162b6bbbf40063b73e63ee8dc77ea73bbab2a1e6be52ab34c3a10a48afd2d5",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/receiver/oakbat-os2-method-a-9tap/raw/epl_tracking_ch_6.mat": "2973b16c2a413fb29a0025f76ad2c4e5a50458d62a32842a498209ce8c6e134b",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/receiver/oakbat-os2-method-a-9tap/raw/epl_tracking_ch_7.mat": "84f6a1521634604383e8fe173fb6f4e8b59e2a839e58a5459e0864940598133f",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/receiver/oakbat-os2-method-a-9tap/raw/epl_tracking_ch_8.mat": "c1b80317826876926ddab555d49d42151a876ffa75948ded7c5581e980bb034e",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/receiver/oakbat-os2-method-a-9tap/raw/epl_tracking_ch_9.mat": "9fa196e1af7a5ec62b2640da92205c982f156697c8845cede0a15454eb532599",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/receiver/oakbat-os2-method-a-9tap/raw/observables.mat": "77e719843e2226be44dfed2d33f64c9e3066890c5651b504eddf0eac4cc543e0"
+      },
+      "transition": {
+        "alarm_count": 20,
+        "alarm_rate": 0.5,
+        "events": 40,
+        "first_alarm_s": 120.0,
+        "score_median": 7.891623601612339,
+        "score_q99": 60.147930966043454
+      }
+    },
+    "os3": {
+      "attack_context": "evaluation_only_never_used_for_fit",
+      "first_alarm_delay_s": 1.5,
+      "first_alarm_s": 121.5,
+      "geometry_preflight": {
+        "configured_tow0_s": 381618.0,
+        "decoded_snapshot": {
+          "available": true,
+          "limitation": "saved map may be an end-of-run offline oracle snapshot",
+          "relation": "after_recording_start_allowed_offline_oracle",
+          "required_at_or_before_recording_start": false
+        },
+        "ephemeris_alignment": {
+          "decoded_snapshot_available": true,
+          "decoded_snapshot_relation": "after_recording_start_allowed_offline_oracle",
+          "decoded_snapshot_tow_s": [
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0
+          ],
+          "fit_interval_flag_by_prn": {
+            "8": 0,
+            "10": 0,
+            "11": 0,
+            "14": 0,
+            "15": 0,
+            "18": 0,
+            "20": 0,
+            "21": 0,
+            "24": 0,
+            "25": 0,
+            "27": 0
+          },
+          "full_gps_week": 2097,
+          "health_by_prn": {
+            "8": 0,
+            "10": 0,
+            "11": 0,
+            "14": 0,
+            "15": 0,
+            "18": 63,
+            "20": 0,
+            "21": 0,
+            "24": 0,
+            "25": 0,
+            "27": 0
+          },
+          "max_toe_age_s": 7200.0,
+          "recording_start_tow_s": 381618.0,
+          "toc_available_prns": [
+            8,
+            10,
+            11,
+            14,
+            15,
+            18,
+            20,
+            21,
+            24,
+            25,
+            27
+          ],
+          "toe_age_s_by_prn": {
+            "8": 7182.0,
+            "10": 7182.0,
+            "11": 7182.0,
+            "14": 7182.0,
+            "15": 7182.0,
+            "18": 7182.0,
+            "20": 7182.0,
+            "21": 7182.0,
+            "24": 7182.0,
+            "25": 7182.0,
+            "27": 7182.0
+          },
+          "week_modulus": 1024
+        },
+        "ephemeris_health": {
+          "excluded_ephemeris_health_by_prn": {
+            "18": 63
+          },
+          "excluded_tracking_prns": [
+            18
+          ],
+          "health_acceptance_rule": "SV_health == 0",
+          "healthy_ephemeris_prns": [
+            8,
+            10,
+            11,
+            14,
+            15,
+            20,
+            21,
+            24,
+            25,
+            27
+          ],
+          "healthy_tracked_prns": [
+            8,
+            10,
+            11,
+            14,
+            15,
+            20,
+            21,
+            24,
+            25,
+            27
+          ],
+          "tracked_prns_without_ephemeris": []
+        },
+        "full_gps_week": 2097,
+        "geometry_contract": {
+          "classification": "offline_trusted_static_receive_time_approximation",
+          "omitted_corrections": [
+            "transmit_time",
+            "Sagnac",
+            "satellite_clock"
+          ],
+          "operational_precise_doppler": false,
+          "receiver_position": "trusted static pre-onset NMEA oracle held fixed",
+          "time_basis": "receive_time"
+        },
+        "recording_start_rx_time_s": 381618.02,
+        "tow_tolerance_s": 0.05
+      },
+      "normal_context": "ood_normal_pre_attack",
+      "post": {
+        "alarm_count": 700,
+        "alarm_rate": 1.0,
+        "events": 700,
+        "first_alarm_s": 130.0,
+        "score_median": 10.085859135930251,
+        "score_q99": 15.838976057619615
+      },
+      "pre": {
+        "alarm_count": 82,
+        "alarm_rate": 0.3761467889908257,
+        "events": 218,
+        "first_alarm_s": 1.0,
+        "score_median": 1.8650110591191882,
+        "score_q99": 125473.64422874851
+      },
+      "receiver_position": {
+        "assumption": "trusted pre-onset static NMEA GGA oracle; position held fixed; post-onset PVT prohibited",
+        "ecef": [
+          512599.5350842278,
+          -5145260.778687677,
+          3722104.2075063186
+        ],
+        "llh": [
+          35.93054579,
+          -84.31064853,
+          255.597
+        ],
+        "sample_count": 599,
+        "timing": {
+          "gps_tow_at_time_zero_s": 381618.0,
+          "gps_utc_leap_offset_s": 18,
+          "onset_s": 120.0,
+          "position_window_s": [
+            20.0,
+            90.0
+          ],
+          "source": "absolute UTC RMC/GGA"
+        }
+      },
+      "source_sha256": {
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/receiver/oakbat-os3-method-a-9tap/gps_ephemeris.xml": "d6308c919d0bcd6682834cb04adb54aaf8aa349f387cc1a5e66827aa3a8f4cce",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/receiver/oakbat-os3-method-a-9tap/nmea_pvt.nmea": "fe781a2c003c5f0edaa6134025cfa0d6c03168147ad5bad4b42af4a4a7679dcf",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/receiver/oakbat-os3-method-a-9tap/raw/epl_tracking_ch_0.mat": "9dd69fb0c2803bd26f23492cbab7562d20a1154a6731478c00ee6ff9749ab677",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/receiver/oakbat-os3-method-a-9tap/raw/epl_tracking_ch_1.mat": "4552d0fb09f888dde71e165ca367aad0ab7afafe6535bf02427f0f67fce683b7",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/receiver/oakbat-os3-method-a-9tap/raw/epl_tracking_ch_10.mat": "132ea9bb4cf9cc4b32b4e3bf4666df011287da7f78037d2dfecaeb69a4af8d32",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/receiver/oakbat-os3-method-a-9tap/raw/epl_tracking_ch_2.mat": "e67d8c9f0a9bd3eb5b2b827ca081b7b0d2e8c8a7be8921a3b0033eff4d9e66ff",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/receiver/oakbat-os3-method-a-9tap/raw/epl_tracking_ch_3.mat": "8ad78d526ebd097fbcef07948bf9f8015b345a84bce5f78be66e8037afd63ebd",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/receiver/oakbat-os3-method-a-9tap/raw/epl_tracking_ch_4.mat": "edb589aaeab8647ad61b089b024b668db877ac23c186264a5163c980db653709",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/receiver/oakbat-os3-method-a-9tap/raw/epl_tracking_ch_5.mat": "b7dd56ed7f17072d0277c2a48cb44baa246faccc1ea2a816c79ca3b32c3caa5d",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/receiver/oakbat-os3-method-a-9tap/raw/epl_tracking_ch_6.mat": "cdd7649a977822d344d6c4c40e8274c1d797bf93d5ee01ecf15b1452ee85338f",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/receiver/oakbat-os3-method-a-9tap/raw/epl_tracking_ch_7.mat": "b8e8b9a47d3d31bb4626433e26b80e492f2182dc1f45957a28b4d5a186a47f74",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/receiver/oakbat-os3-method-a-9tap/raw/epl_tracking_ch_8.mat": "0589d842096dfd03af5abf3204529c74c99acb5b1329c313d0de56406f4e5a09",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/receiver/oakbat-os3-method-a-9tap/raw/epl_tracking_ch_9.mat": "a7ce456f33fef7376f5459a2750844672031f60034faac47286c8b638e1c6daa",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/receiver/oakbat-os3-method-a-9tap/raw/observables.mat": "2e573413ccdfebab67d5be162b7a7a284d2b41860116ddcfcc9285e75ec10b75"
+      },
+      "transition": {
+        "alarm_count": 17,
+        "alarm_rate": 0.425,
+        "events": 40,
+        "first_alarm_s": 121.5,
+        "score_median": 1.6900525039750267,
+        "score_q99": 12.983464208507309
+      }
+    },
+    "os4": {
+      "attack_context": "evaluation_only_never_used_for_fit",
+      "first_alarm_delay_s": 0.5,
+      "first_alarm_s": 120.5,
+      "geometry_preflight": {
+        "configured_tow0_s": 381618.0,
+        "decoded_snapshot": {
+          "available": true,
+          "limitation": "saved map may be an end-of-run offline oracle snapshot",
+          "relation": "after_recording_start_allowed_offline_oracle",
+          "required_at_or_before_recording_start": false
+        },
+        "ephemeris_alignment": {
+          "decoded_snapshot_available": true,
+          "decoded_snapshot_relation": "after_recording_start_allowed_offline_oracle",
+          "decoded_snapshot_tow_s": [
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            382068.0,
+            381708.0
+          ],
+          "fit_interval_flag_by_prn": {
+            "8": 0,
+            "10": 0,
+            "11": 0,
+            "14": 0,
+            "15": 0,
+            "18": 0,
+            "20": 0,
+            "21": 0,
+            "24": 0,
+            "25": 0,
+            "27": 0
+          },
+          "full_gps_week": 2097,
+          "health_by_prn": {
+            "8": 0,
+            "10": 0,
+            "11": 0,
+            "14": 0,
+            "15": 0,
+            "18": 63,
+            "20": 0,
+            "21": 0,
+            "24": 0,
+            "25": 0,
+            "27": 0
+          },
+          "max_toe_age_s": 7200.0,
+          "recording_start_tow_s": 381618.0,
+          "toc_available_prns": [
+            8,
+            10,
+            11,
+            14,
+            15,
+            18,
+            20,
+            21,
+            24,
+            25,
+            27
+          ],
+          "toe_age_s_by_prn": {
+            "8": 7182.0,
+            "10": 7182.0,
+            "11": 7182.0,
+            "14": 7182.0,
+            "15": 7182.0,
+            "18": 7182.0,
+            "20": 7182.0,
+            "21": 7182.0,
+            "24": 7182.0,
+            "25": 7182.0,
+            "27": 7182.0
+          },
+          "week_modulus": 1024
+        },
+        "ephemeris_health": {
+          "excluded_ephemeris_health_by_prn": {
+            "18": 63
+          },
+          "excluded_tracking_prns": [
+            18
+          ],
+          "health_acceptance_rule": "SV_health == 0",
+          "healthy_ephemeris_prns": [
+            8,
+            10,
+            11,
+            14,
+            15,
+            20,
+            21,
+            24,
+            25,
+            27
+          ],
+          "healthy_tracked_prns": [
+            8,
+            10,
+            11,
+            14,
+            15,
+            20,
+            21,
+            24,
+            25,
+            27
+          ],
+          "tracked_prns_without_ephemeris": []
+        },
+        "full_gps_week": 2097,
+        "geometry_contract": {
+          "classification": "offline_trusted_static_receive_time_approximation",
+          "omitted_corrections": [
+            "transmit_time",
+            "Sagnac",
+            "satellite_clock"
+          ],
+          "operational_precise_doppler": false,
+          "receiver_position": "trusted static pre-onset NMEA oracle held fixed",
+          "time_basis": "receive_time"
+        },
+        "recording_start_rx_time_s": 381618.02,
+        "tow_tolerance_s": 0.05
+      },
+      "normal_context": "ood_normal_pre_attack",
+      "post": {
+        "alarm_count": 700,
+        "alarm_rate": 1.0,
+        "events": 700,
+        "first_alarm_s": 130.0,
+        "score_median": 125.90080314542293,
+        "score_q99": 279.9667654257635
+      },
+      "pre": {
+        "alarm_count": 64,
+        "alarm_rate": 0.29357798165137616,
+        "events": 218,
+        "first_alarm_s": 1.0,
+        "score_median": 1.4851734133295238,
+        "score_q99": 62118.80005603085
+      },
+      "receiver_position": {
+        "assumption": "trusted pre-onset static NMEA GGA oracle; position held fixed; post-onset PVT prohibited",
+        "ecef": [
+          512599.4575507709,
+          -5145260.699124314,
+          3722104.089632557
+        ],
+        "llh": [
+          35.93054538916667,
+          -84.31064929749999,
+          255.4575
+        ],
+        "sample_count": 660,
+        "timing": {
+          "gps_tow_at_time_zero_s": 381618.0,
+          "gps_utc_leap_offset_s": 18,
+          "onset_s": 120.0,
+          "position_window_s": [
+            20.0,
+            90.0
+          ],
+          "source": "absolute UTC RMC/GGA"
+        }
+      },
+      "source_sha256": {
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/receiver/oakbat-os4-method-a-9tap/gps_ephemeris.xml": "77728c6e2bc7917524565ecd65e978d10fe98d68a68d08ad6eb85b6c2822dba8",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/receiver/oakbat-os4-method-a-9tap/nmea_pvt.nmea": "6f40327f0fc0790af64ab230fb114fad17eeb470c6f360060dc6caf6b2ebe5de",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/receiver/oakbat-os4-method-a-9tap/raw/epl_tracking_ch_0.mat": "31f213296ce0c341b031dda261a7d789c0e9b1657d34f3e7d286d618f69e646f",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/receiver/oakbat-os4-method-a-9tap/raw/epl_tracking_ch_1.mat": "bb7596df435c2d427171fa0ba9b4b0649d6534165a1964118202c5b40af639f8",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/receiver/oakbat-os4-method-a-9tap/raw/epl_tracking_ch_10.mat": "5171c8a3785227629aadefacfcfd729fd54ce028764e318c98c63ecb18c3c550",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/receiver/oakbat-os4-method-a-9tap/raw/epl_tracking_ch_2.mat": "79090095377310c54d17fec6e960e3a1ee9690158a541a3bb7aa2c44039ec4da",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/receiver/oakbat-os4-method-a-9tap/raw/epl_tracking_ch_3.mat": "ce31b2b3419e8eff01e313468c0b244a5b7bd84044bd1989d5283800e38f68e3",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/receiver/oakbat-os4-method-a-9tap/raw/epl_tracking_ch_4.mat": "e9442f1b2cb2a79ba0e4240c2fc693c6d5aa7486f6350e3206f8b9e86598857f",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/receiver/oakbat-os4-method-a-9tap/raw/epl_tracking_ch_5.mat": "bfdb3261009b8976cb246e628f111e093c91b46541d354a04f0a82dbf07c710e",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/receiver/oakbat-os4-method-a-9tap/raw/epl_tracking_ch_6.mat": "2fd86350744702bffd7599546599afec41955422df84fe49aeb3f98ca94eeb7f",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/receiver/oakbat-os4-method-a-9tap/raw/epl_tracking_ch_7.mat": "69b3e4b8ac4b0476a2220f019a659a44bbb6f4333dbf7fdeb903d8f431ad99f8",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/receiver/oakbat-os4-method-a-9tap/raw/epl_tracking_ch_8.mat": "a8e44b1f62b09e9c908f241c3e6d6791d743c09497d97583c6735e0bcc6093ab",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/receiver/oakbat-os4-method-a-9tap/raw/epl_tracking_ch_9.mat": "031bcb8b210df651122d58fb9abb9127762220453640909384cddfa11bd6101f",
+        "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/receiver/oakbat-os4-method-a-9tap/raw/observables.mat": "c2cb3080d6274ea19eeaf12c97c42575a74dd9e93ee030e98be9a7936b651b22"
+      },
+      "transition": {
+        "alarm_count": 19,
+        "alarm_rate": 0.475,
+        "events": 40,
+        "first_alarm_s": 120.5,
+        "score_median": 2.560734959513786,
+        "score_q99": 228.36823392606107
+      }
+    },
+    "sealed_held": {
+      "alarm_count": 2,
+      "alarm_rate": 0.01680672268907563,
+      "ephemeris_health": {
+        "excluded_ephemeris_health_by_prn": {
+          "18": 63
+        },
+        "excluded_tracking_prns": [
+          18
+        ],
+        "health_acceptance_rule": "SV_health == 0",
+        "healthy_ephemeris_prns": [
+          8,
+          10,
+          11,
+          12,
+          14,
+          15,
+          21,
+          24,
+          25,
+          27
+        ],
+        "healthy_tracked_prns": [
+          8,
+          10,
+          11,
+          12,
+          14,
+          15,
+          21,
+          24,
+          25,
+          27
+        ],
+        "tracked_prns_without_ephemeris": []
+      },
+      "events": 119,
+      "first_alarm_s": 435.0,
+      "normal_context": "same_recording_held_normal",
+      "role": "sealed_held",
+      "score_median": 0.5468547944247852,
+      "score_q99": 2.9082170945044523
+    }
+  },
+  "threshold": 2.8224338538365963,
+  "threshold_source": "cleanStatic event_calibration only q99",
+  "training_history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.9539523720741272,
+      "val_reconstruction_loss": 0.9472612142562866
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.9420540928840637,
+      "val_reconstruction_loss": 0.9395379424095154
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.9337663054466248,
+      "val_reconstruction_loss": 0.9342874884605408
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.92803955078125,
+      "val_reconstruction_loss": 0.9305586218833923
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.9238381385803223,
+      "val_reconstruction_loss": 0.9277336001396179
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.9215361475944519,
+      "val_reconstruction_loss": 0.9253940582275391
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.9192408919334412,
+      "val_reconstruction_loss": 0.9232114553451538
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.9168957471847534,
+      "val_reconstruction_loss": 0.9211419820785522
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.9143677353858948,
+      "val_reconstruction_loss": 0.9191677570343018
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.9118906855583191,
+      "val_reconstruction_loss": 0.9172523021697998
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.9094673991203308,
+      "val_reconstruction_loss": 0.9153692722320557
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.9071306586265564,
+      "val_reconstruction_loss": 0.9134756922721863
+    },
+    {
+      "epoch": 13,
+      "train_loss": 0.9049350619316101,
+      "val_reconstruction_loss": 0.9115360379219055
+    },
+    {
+      "epoch": 14,
+      "train_loss": 0.9028578996658325,
+      "val_reconstruction_loss": 0.9095656275749207
+    },
+    {
+      "epoch": 15,
+      "train_loss": 0.9008375406265259,
+      "val_reconstruction_loss": 0.9076108336448669
+    },
+    {
+      "epoch": 16,
+      "train_loss": 0.8988369703292847,
+      "val_reconstruction_loss": 0.9057023525238037
+    },
+    {
+      "epoch": 17,
+      "train_loss": 0.8968312740325928,
+      "val_reconstruction_loss": 0.9038447737693787
+    },
+    {
+      "epoch": 18,
+      "train_loss": 0.8948136568069458,
+      "val_reconstruction_loss": 0.9020268321037292
+    },
+    {
+      "epoch": 19,
+      "train_loss": 0.8928045630455017,
+      "val_reconstruction_loss": 0.900223970413208
+    },
+    {
+      "epoch": 20,
+      "train_loss": 0.8908219933509827,
+      "val_reconstruction_loss": 0.8984097838401794
+    },
+    {
+      "epoch": 21,
+      "train_loss": 0.8888689875602722,
+      "val_reconstruction_loss": 0.8965779542922974
+    },
+    {
+      "epoch": 22,
+      "train_loss": 0.8869444131851196,
+      "val_reconstruction_loss": 0.8947464823722839
+    },
+    {
+      "epoch": 23,
+      "train_loss": 0.8850507140159607,
+      "val_reconstruction_loss": 0.8929439783096313
+    },
+    {
+      "epoch": 24,
+      "train_loss": 0.8831904530525208,
+      "val_reconstruction_loss": 0.8911948204040527
+    },
+    {
+      "epoch": 25,
+      "train_loss": 0.8813597559928894,
+      "val_reconstruction_loss": 0.8895100355148315
+    },
+    {
+      "epoch": 26,
+      "train_loss": 0.879546582698822,
+      "val_reconstruction_loss": 0.8878878355026245
+    },
+    {
+      "epoch": 27,
+      "train_loss": 0.8777412176132202,
+      "val_reconstruction_loss": 0.8863187432289124
+    },
+    {
+      "epoch": 28,
+      "train_loss": 0.8759456872940063,
+      "val_reconstruction_loss": 0.884785532951355
+    },
+    {
+      "epoch": 29,
+      "train_loss": 0.8741631507873535,
+      "val_reconstruction_loss": 0.8832676410675049
+    },
+    {
+      "epoch": 30,
+      "train_loss": 0.872393786907196,
+      "val_reconstruction_loss": 0.881758987903595
+    }
+  ]
+}
