@@ -52,14 +52,14 @@ class PeakWindowRecord:
             raise ValueError("window CN0 aggregate must be finite")
 
 
-def _validate_series(series: Any) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+def _validate_series(series: Any, expected_tap_names: tuple[str, ...] = REQUIRED_TAPS) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Validate a ``TrackingPeakSeries``-compatible value and return arrays."""
-    if tuple(getattr(series, "tap_names", ())) != REQUIRED_TAPS:
-        raise ValueError("only exactly ('E', 'P', 'L') real taps are accepted; VE/VL/placeholders are forbidden")
+    if tuple(getattr(series, "tap_names", ())) != tuple(expected_tap_names):
+        raise ValueError(f"tracking series tap layout must be exactly {tuple(expected_tap_names)!r}")
     time_s = np.asarray(getattr(series, "time_s"), dtype=np.float64)
     magnitudes = np.asarray(getattr(series, "magnitudes"), dtype=np.float64)
     cn0 = np.asarray(getattr(series, "cn0_db_hz"), dtype=np.float64)
-    if time_s.ndim != 1 or len(time_s) == 0 or magnitudes.shape != (len(time_s), 3) or cn0.shape != (len(time_s),):
+    if time_s.ndim != 1 or len(time_s) == 0 or magnitudes.shape != (len(time_s), len(expected_tap_names)) or cn0.shape != (len(time_s),):
         raise ValueError("TrackingPeakSeries must have aligned nonempty time_s, magnitudes [N,3], and cn0_db_hz")
     if not np.isfinite(time_s).all() or not np.isfinite(magnitudes).all() or not np.isfinite(cn0).all():
         raise ValueError("tracking peak inputs must be finite")
@@ -231,4 +231,78 @@ def build_event_record(relation_event: Any, peak_windows: Mapping[int | str, Seq
     return record
 
 
-__all__ = ["REQUIRED_TAPS", "CausalEventBuildError", "PeakWindowRecord", "aggregate_peak_windows", "build_event_record"]
+@dataclass(frozen=True)
+class PeakWindowIndex:
+    """Indexed aggregates for one contiguous PRN segment.
+
+    Requested windows use ``searchsorted(..., side='left')`` plus prefix sums,
+    preserving exact ``[start,end)`` membership without one raw scan per event.
+    """
+    records: Mapping[tuple[float, float], PeakWindowRecord]
+
+    def target(self, start: float, end: float) -> PeakWindowRecord | None:
+        return self.records.get((float(start), float(end)))
+
+    def history_before(self, start: float, count: int) -> list[PeakWindowRecord] | None:
+        prior = sorted((r for r in self.records.values() if r.window_end_s <= start),
+                       key=lambda r: (r.window_end_s, r.window_start_s))
+        return prior[-count:] if len(prior) >= count else None
+
+
+def index_peak_windows(series: Any, windows: Sequence[tuple[float, float]], *, min_epochs: int = 1, expected_tap_names: tuple[str, ...] = REQUIRED_TAPS) -> PeakWindowIndex:
+    """Index only target and requested historical E/P/L windows for one segment."""
+    if int(min_epochs) != min_epochs or min_epochs < 1:
+        raise ValueError("min_epochs must be a positive integer")
+    time_s, magnitudes, cn0 = _validate_series(series, expected_tap_names)
+    requested = sorted({(float(a), float(b)) for a, b in windows})
+    prefix_mag = np.vstack((np.zeros((1, magnitudes.shape[1])), np.cumsum(magnitudes, axis=0)))
+    prefix_cn0 = np.r_[0.0, np.cumsum(cn0)]
+    output: dict[tuple[float, float], PeakWindowRecord] = {}
+    for start, end in requested:
+        if not (math.isfinite(start) and math.isfinite(end) and start < end):
+            raise ValueError("requested windows must be finite and strictly ordered")
+        # left/left implements precisely [start,end): epochs equal to end excluded.
+        lo = int(np.searchsorted(time_s, start, side="left"))
+        hi = int(np.searchsorted(time_s, end, side="left"))
+        n = hi - lo
+        if n < min_epochs:
+            continue
+        output[(start, end)] = PeakWindowRecord(start, end, (prefix_mag[hi] - prefix_mag[lo]) / n,
+                                                  float((prefix_cn0[hi] - prefix_cn0[lo]) / n), tuple(expected_tap_names))
+    return PeakWindowIndex(output)
+
+
+def build_event_record_indexed(relation_event: Any, peak_indexes: Mapping[int | str, Sequence[PeakWindowIndex]], *, history_window: int, event_record_type: Callable[..., Any] | None = None) -> Any:
+    """Build a causal record from one contiguous index; never cross reacquisition segments."""
+    start, end, pair_conditions, prns, elevations = _event_pairs(relation_event)
+    if int(history_window) != history_window or history_window < 1:
+        raise ValueError("history_window must be a positive integer")
+    expected = {(a, b) for i, a in enumerate(prns) for b in prns[i + 1:]}
+    if expected.difference(pair_conditions):
+        raise CausalEventBuildError("relation event lacks complete pair conditions")
+    normalized = {_prn_label(k): list(v) for k, v in peak_indexes.items()}
+    targets=[]; histories={}; cn0=[]; unavailable=[]
+    for prn in prns:
+        found=[]
+        for index in normalized.get(prn, []):
+            target=index.target(start,end)
+            if target is not None:
+                found.append((target, index.history_before(start, int(history_window))))
+        valid=[x for x in found if x[1] is not None]
+        if len(valid) != 1:
+            unavailable.append(f"{prn} needs exactly one same-segment target and {history_window} prior windows; found {len(valid)}")
+            continue
+        target, history = valid[0]
+        targets.append(np.asarray(target.epl, dtype=np.float64).copy())
+        histories[prn]=np.stack([r.epl for r in history]).astype(np.float64,copy=True)
+        cn0.append(float(target.cn0))
+    if unavailable:
+        raise CausalEventBuildError("cannot build causal EventRecord: " + "; ".join(unavailable))
+    event_type = _event_record_type() if event_record_type is None else event_record_type
+    record=event_type(float(end),prns,np.asarray(targets),histories,np.asarray(cn0),np.asarray([elevations[p] for p in prns]),pair_conditions)
+    validate=getattr(record,"validate",None)
+    if callable(validate): validate(int(history_window))
+    return record
+
+
+__all__ = ["REQUIRED_TAPS", "CausalEventBuildError", "PeakWindowRecord", "PeakWindowIndex", "aggregate_peak_windows", "index_peak_windows", "build_event_record", "build_event_record_indexed"]

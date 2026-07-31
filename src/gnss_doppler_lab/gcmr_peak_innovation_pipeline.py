@@ -29,14 +29,15 @@ class EventRecord:
         n = len(self.prns)
         if n < 2 or len(set(self.prns)) != n:
             raise ValueError("event requires at least two unique PRNs")
-        if np.asarray(self.epl).shape != (n, 3) or np.asarray(self.cn0).shape != (n,) or np.asarray(self.elevation).shape != (n,):
-            raise ValueError("epl, cn0, and elevation shapes must match PRNs")
+        feature_dim = np.asarray(self.epl).shape[1] if np.asarray(self.epl).ndim == 2 else -1
+        if feature_dim < 1 or np.asarray(self.epl).shape != (n, feature_dim) or np.asarray(self.cn0).shape != (n,) or np.asarray(self.elevation).shape != (n,):
+            raise ValueError("tap features, cn0, and elevation shapes must match PRNs")
         if not all(np.isfinite(np.asarray(x, float)).all() for x in (self.epl, self.cn0, self.elevation)):
             raise ValueError("event values must be finite")
         if set(self.histories) != set(self.prns): raise ValueError("histories must cover exactly the event PRNs")
         for prn in self.prns:
-            if np.asarray(self.histories[prn]).shape != (window, 3):
-                raise ValueError("every history must have shape (W, 3)")
+            if np.asarray(self.histories[prn]).shape != (window, feature_dim):
+                raise ValueError("every history must have shape (W, tap_count)")
         if require_pairs:
             for i, a in enumerate(self.prns):
                 for b in self.prns[i + 1:]:
@@ -46,8 +47,8 @@ class EventRecord:
 
 
 class _GRU(nn.Module):
-    def __init__(self, hidden: int):
-        super().__init__(); self.gru = nn.GRU(3, hidden, batch_first=True); self.out = nn.Linear(hidden, 3)
+    def __init__(self, hidden: int, feature_dim: int = 3):
+        super().__init__(); self.gru = nn.GRU(feature_dim, hidden, batch_first=True); self.out = nn.Linear(hidden, feature_dim)
     def forward(self, x): return self.out(self.gru(x)[0][:, -1])
 
 
@@ -79,10 +80,10 @@ class GCMRPeakInnovationPipeline:
     ``fit_normal`` is the only mutating calibration API.  ``score_attack`` has
     no fitting arguments and raises until normal calibration is complete.
     """
-    def __init__(self, window: int, hidden_size: int = 8, epochs: int = 30, learning_rate: float = .02, seed: int = 0):
-        if window < 1 or hidden_size < 1 or epochs < 1 or learning_rate <= 0: raise ValueError("invalid configuration")
-        self.window, self.epochs, self.learning_rate, self.seed = window, epochs, learning_rate, seed
-        torch.manual_seed(seed); self.network = _GRU(hidden_size)
+    def __init__(self, window: int, hidden_size: int = 8, epochs: int = 30, learning_rate: float = .02, seed: int = 0, feature_dim: int = 3):
+        if window < 1 or hidden_size < 1 or epochs < 1 or learning_rate <= 0 or feature_dim < 1: raise ValueError("invalid configuration")
+        self.window, self.epochs, self.learning_rate, self.seed, self.feature_dim = window, epochs, learning_rate, seed, feature_dim
+        torch.manual_seed(seed); self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu"); self.network = _GRU(hidden_size, feature_dim).to(self.device)
         self.whitener = ConditionalInnovationWhitener(min_bin_samples=2)
         self.pairs = DirectPairRelationModel(); self.calibrator = NormalOnlyCalibrator()
 
@@ -95,7 +96,7 @@ class GCMRPeakInnovationPipeline:
         return hn, yn
     def _predict_residual(self, event: EventRecord):
         h,y=self._arrays(event)
-        with torch.no_grad(): pred=self.network(torch.tensor(h,dtype=torch.float32)).cpu().numpy()
+        with torch.no_grad(): pred=self.network(torch.tensor(h,dtype=torch.float32,device=self.device)).cpu().numpy()
         return y-pred
     @staticmethod
     def _cos(a,b):
@@ -115,7 +116,7 @@ class GCMRPeakInnovationPipeline:
         opt=torch.optim.Adam(self.network.parameters(), lr=self.learning_rate)
         self.network.train()
         for _ in range(self.epochs):
-            opt.zero_grad(); loss=((self.network(torch.tensor(x,dtype=torch.float32))-torch.tensor(y,dtype=torch.float32))**2).mean(); loss.backward(); opt.step()
+            opt.zero_grad(); loss=((self.network(torch.tensor(x,dtype=torch.float32,device=self.device))-torch.tensor(y,dtype=torch.float32,device=self.device))**2).mean(); loss.backward(); opt.step()
         self.network.eval()
         raw=[self._predict_residual(e) for e in normal_validation]
         all_r=np.concatenate(raw); all_c=np.concatenate([e.cn0 for e in normal_validation])
