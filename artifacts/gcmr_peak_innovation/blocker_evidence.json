@@ -1,0 +1,6 @@
+{
+  "status": "actual_OAKBAT_attack_campaign_interrupted",
+  "evidence": "os1 real 3-tap E/P/L extraction had not completed after 12 minutes at 100% CPU; no attack metrics/thresholds were written or claimed",
+  "completed": "cleanStatic model and sealed score CSV were generated before attack extraction",
+  "limitation": "runner currently materializes all requested native peak windows per PRN/scenario; optimize streaming/indexed extraction before a full os1-os4 run"
+}
