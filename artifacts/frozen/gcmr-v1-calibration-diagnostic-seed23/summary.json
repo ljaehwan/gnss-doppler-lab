@@ -1,0 +1,306 @@
+{
+  "affected_window_count": 29,
+  "affected_window_range_s": [
+    340.0,
+    354.0
+  ],
+  "calibration_events_rescored": 119,
+  "frozen_checkpoint_sha256": "4eccfdbad1c3e86cce2248d98d87efb019d63048226df04e7f9bb270908bf4a5",
+  "frozen_threshold": 134914.8453732542,
+  "incident_pairs_removed": 290,
+  "invalid_bin_count": 30,
+  "invalid_prns": [
+    8
+  ],
+  "model_or_training_modified": false,
+  "original_ds_score_hashes_after": {
+    "DS1_scores.csv": "fe249a7406354fb394664f60917882722584968aad62e442d3a21ea5b85bf219",
+    "DS2_scores.csv": "af797b1ccfc7883047d045120b4ab315882cade2c47ef513eaf17ebc1fc9c82a",
+    "DS3_scores.csv": "34fc7745235ccfbe0465cf447c1a1b474b0777160a11f74fd989eac10d403610",
+    "DS4_scores.csv": "1e95e5f2c45890dc2dd69516d8eb5fbecdac72784259e9ef165b0d15f261b105"
+  },
+  "original_ds_score_hashes_before": {
+    "DS1_scores.csv": "fe249a7406354fb394664f60917882722584968aad62e442d3a21ea5b85bf219",
+    "DS2_scores.csv": "af797b1ccfc7883047d045120b4ab315882cade2c47ef513eaf17ebc1fc9c82a",
+    "DS3_scores.csv": "34fc7745235ccfbe0465cf447c1a1b474b0777160a11f74fd989eac10d403610",
+    "DS4_scores.csv": "1e95e5f2c45890dc2dd69516d8eb5fbecdac72784259e9ef165b0d15f261b105"
+  },
+  "original_ds_scores_immutable": true,
+  "overlays": {
+    "DS1_scores": {
+      "alarms": 577,
+      "events": 922,
+      "sha256": "3c11bde25f0013e86c0c7b5a7031139d7ba4c75ded11d2b629ed163161d28856"
+    },
+    "DS2_scores": {
+      "alarms": 550,
+      "events": 913,
+      "sha256": "944318b7629f74d44507d7aef02594521208ad8f178c01b5f5e3c61ddcbd2f10"
+    },
+    "DS3_scores": {
+      "alarms": 618,
+      "events": 914,
+      "sha256": "0e3e82b84cd0cde28cdfdc508e5a23aac07b6d59ecaeac5313cdc4fb7f394192"
+    },
+    "DS4_scores": {
+      "alarms": 71,
+      "events": 255,
+      "sha256": "7902de2862a34b0785adae03d536bd5bec51d2f062ede44334802c51ad66dfb4"
+    }
+  },
+  "provenance": {
+    "frozen_bundle": {
+      "files": [
+        {
+          "path": "DS1_metrics.json",
+          "sha256": "c4def6cc4f406c7470f765e1b889a2adb715969f74ba35abc3098b12b712d78e"
+        },
+        {
+          "path": "DS1_scores.csv",
+          "sha256": "fe249a7406354fb394664f60917882722584968aad62e442d3a21ea5b85bf219"
+        },
+        {
+          "path": "DS2_metrics.json",
+          "sha256": "547d330bc2c09d6c79680233db9572e95a61ce8a43537f48c31319604fadf336"
+        },
+        {
+          "path": "DS2_scores.csv",
+          "sha256": "af797b1ccfc7883047d045120b4ab315882cade2c47ef513eaf17ebc1fc9c82a"
+        },
+        {
+          "path": "DS3_metrics.json",
+          "sha256": "8959ac15ad60c946e5fb770205398bbe3c7569cb12af0351172d9a76a2928249"
+        },
+        {
+          "path": "DS3_scores.csv",
+          "sha256": "34fc7745235ccfbe0465cf447c1a1b474b0777160a11f74fd989eac10d403610"
+        },
+        {
+          "path": "DS4_metrics.json",
+          "sha256": "64387520cb336a9c1262faeeffff43c8fa80ad41e54076607dd58d93860f21d7"
+        },
+        {
+          "path": "DS4_scores.csv",
+          "sha256": "1e95e5f2c45890dc2dd69516d8eb5fbecdac72784259e9ef165b0d15f261b105"
+        },
+        {
+          "path": "README.md",
+          "sha256": "dcba86e9f02fa098f946f63ee4328bc21785b8a614e590358d9db8257bbece49"
+        },
+        {
+          "path": "cleanStatic_metrics.json",
+          "sha256": "07790a0bb1721fc3e066251de8594354754b48ef26de2717cdc7c3eb50b9a6d3"
+        },
+        {
+          "path": "cleanStatic_scores.csv",
+          "sha256": "b2a760d5b6345a3d008063e338660bf5a323d8a9426cd9926faa5a5f8cedbbdd"
+        },
+        {
+          "path": "model.pt",
+          "sha256": "4eccfdbad1c3e86cce2248d98d87efb019d63048226df04e7f9bb270908bf4a5"
+        },
+        {
+          "path": "plot_texbat_cleanstatic_frozen_dashboard.py",
+          "sha256": "b47c72a70cbd4e846e1522b6ce92da5e077e9cfe5f1379acd9ec4b9a1afff82b"
+        },
+        {
+          "path": "provenance.json",
+          "sha256": "55ee9f6cec80eb7d9cae89d2dead4921b2c815c8e075a0a001e5156c9cbb6e6c"
+        },
+        {
+          "path": "summary.json",
+          "sha256": "484040cf70928e117105de7a523c94ad9b9f21ec5c0f1d85db7444f70c9d2459"
+        },
+        {
+          "path": "texbat_cleanstatic_frozen_dashboard.png",
+          "sha256": "b499222e30f415ce34d49169cef9a54e3e684b9cc12b4109ce2abc47480c8706"
+        },
+        {
+          "path": "texbat_cleanstatic_frozen_dashboard.sha256",
+          "sha256": "2d24f2c85007198b8d8a5a04815014f97fb2d0c327951c3c63a40bd51d43d779"
+        }
+      ],
+      "path": "/home/ubuntu/projects/gnss-doppler-gcmr-v1-caldiag/artifacts/frozen/gcmr-texbat-cleanstatic-frozen-v1-seed23"
+    },
+    "qc_binning": {
+      "cadence": "receiver samples aggregated by median",
+      "interval": "half-open [start,end)",
+      "range_s": [
+        340.0,
+        400.0
+      ],
+      "width_s": 0.5
+    },
+    "qc_rule": {
+      "conjunction": "all",
+      "median_carrier_lock_test": {
+        "operator": "<",
+        "threshold": 0.5
+      },
+      "median_cn0_db_hz": {
+        "operator": "<",
+        "threshold": 35.0
+      },
+      "residual_abs_hz": {
+        "operator": ">",
+        "threshold": 500.0
+      },
+      "strict": true
+    },
+    "receiver": {
+      "ecef_m": [
+        -741990.7825215176,
+        -5462234.606077743,
+        3198026.1342494916
+      ],
+      "gps_tow_at_receiver_time_zero_s": 477900.0
+    },
+    "runtime": {
+      "libraries": {
+        "numpy": "2.5.1",
+        "pandas": "3.0.3",
+        "scipy": "1.18.0",
+        "torch": "2.13.0"
+      },
+      "platform": "Linux-6.8.0-136-generic-x86_64-with-glibc2.39",
+      "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]"
+    },
+    "script": {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcmr-v1-caldiag/scripts/diagnose_gcmr_v1_calibration_false_lock.py",
+      "sha256": "11f97db7ad6a77c420beb4abc5936683c2c7020cf5919d619274b0a881c02613"
+    },
+    "source_inputs": {
+      "clean_cache": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/gcmr-texbat-cleanstatic-event-cache-v1/cleanStatic.relations.npz",
+        "sha256": "b59c40eeb1c70b3ae1db123f4a7710001f9c0403a67432d37c6e2cf700f0910a"
+      },
+      "ephemeris": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/gps_ephemeris.xml",
+        "sha256": "7de95e83e9ab1c3db38897265c4aa91ca91c8e64988130c53e2bec2b6b9321eb"
+      },
+      "raw_tracking": [
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_0.dat",
+          "sha256": "1f4c5a3c030ab49c2bd473d82c3e1a770e99d3419bab79eeb1384dc7d4bd7e47"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_1.dat",
+          "sha256": "d8af5655a1c6c9382e2fa246a47f005610a796b78cb85cbaf202f102d38272ac"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_10.dat",
+          "sha256": "3d97ebfdc17f6baf3ea5a3366522492b9ca5b6e9b402d7891b2ba994a4078f15"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_2.dat",
+          "sha256": "727d3a2cd25e5605ab12aae5159fc827a7cfc87383f203399580881279a99f00"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_3.dat",
+          "sha256": "4dce93acd174104a31d48767a6d5f3060f40e09f33f97700b7769b366fed6cda"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_4.dat",
+          "sha256": "4f0c46e31d201bdc2edc686f21a87a9ac24e2a2d0d55d0798a7803af6d303664"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_5.dat",
+          "sha256": "7f72814937373a138b1a4ee315d043b441e0608ae5b8aad843662d77ca4be354"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_6.dat",
+          "sha256": "072a8acad334d6ca4980c088fedd7ea9a8f94f844b61ad8aefb4fb45cf0109af"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_7.dat",
+          "sha256": "caa184ae5d76a0e40fa43868292415aba21bab582b8231a557abc9116024718e"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_8.dat",
+          "sha256": "2ba3fcb62c57045e0c6452ebd115b6409f4765fc8b4db0b7dec5ad0b692a70b2"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_9.dat",
+          "sha256": "42a15dd08c20d62caf131a4aeaaa2ba913ebd9048ec4f23d3daed0ac6836faaf"
+        }
+      ]
+    }
+  },
+  "qc_bins_sha256": "3135578bee09611e3773b3338038d054bf69dc1a50cd1e0b1118190a4ef006a4",
+  "root_cause_confirmed": true,
+  "same_checkpoint_scaler_calibrator": true,
+  "support_contract": "each event >=4 PRNs and >=6 pairs; fail closed",
+  "threshold": 1.7693133951565987,
+  "threshold_rule": "q99 numpy linear; strict alarm score > threshold",
+  "topology_matched_healthy_prn_controls": [
+    {
+      "affected_windows": 29,
+      "prn": 3,
+      "removed_pairs": 290,
+      "threshold_q99": 148382.8302822549
+    },
+    {
+      "affected_windows": 29,
+      "prn": 6,
+      "removed_pairs": 290,
+      "threshold_q99": 148386.0716418154
+    },
+    {
+      "affected_windows": 29,
+      "prn": 7,
+      "removed_pairs": 290,
+      "threshold_q99": 148429.88015731395
+    },
+    {
+      "affected_windows": 29,
+      "prn": 10,
+      "removed_pairs": 290,
+      "threshold_q99": 148389.9151233139
+    },
+    {
+      "affected_windows": 29,
+      "prn": 13,
+      "removed_pairs": 290,
+      "threshold_q99": 148398.62367748388
+    },
+    {
+      "affected_windows": 29,
+      "prn": 16,
+      "removed_pairs": 290,
+      "threshold_q99": 148419.2492659616
+    },
+    {
+      "affected_windows": 29,
+      "prn": 19,
+      "removed_pairs": 290,
+      "threshold_q99": 148405.27545584145
+    },
+    {
+      "affected_windows": 29,
+      "prn": 20,
+      "removed_pairs": 290,
+      "threshold_q99": 148429.54988069332
+    },
+    {
+      "affected_windows": 29,
+      "prn": 23,
+      "removed_pairs": 290,
+      "threshold_q99": 148388.13543731972
+    },
+    {
+      "affected_windows": 29,
+      "prn": 30,
+      "removed_pairs": 290,
+      "threshold_q99": 148432.02239293864
+    }
+  ],
+  "uniqueness_contract": {
+    "definition": "min healthy-control q99 / automatically-flagged exclusion q99 and corresponding difference",
+    "difference": 148381.06096885973,
+    "healthy_min_threshold": 148382.8302822549,
+    "minimum_difference": 10.0,
+    "minimum_ratio": 10.0,
+    "ratio": 83864.6396327779
+  },
+  "warning": "DIAGNOSTIC ONLY: phase-1 calibration QC; not a refit, retraining, model revision, or v2 detector."
+}
