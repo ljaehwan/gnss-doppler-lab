@@ -1,0 +1,50 @@
+{
+  "all": {
+    "event_count": 119,
+    "single_alarm_count": 0,
+    "single_alarm_rate": 0.0,
+    "first_single_alarm_availability_s": null,
+    "multi_alarm_count": 0,
+    "multi_alarm_rate": 0.0,
+    "first_multi_alarm_availability_s": null,
+    "any_alarm_count": 0,
+    "any_alarm_rate": 0.0
+  },
+  "pre": {
+    "event_count": 0,
+    "single_alarm_count": 0,
+    "single_alarm_rate": null,
+    "first_single_alarm_availability_s": null,
+    "multi_alarm_count": 0,
+    "multi_alarm_rate": null,
+    "first_multi_alarm_availability_s": null,
+    "any_alarm_count": 0,
+    "any_alarm_rate": null
+  },
+  "transition": {
+    "event_count": 0,
+    "single_alarm_count": 0,
+    "single_alarm_rate": null,
+    "first_single_alarm_availability_s": null,
+    "multi_alarm_count": 0,
+    "multi_alarm_rate": null,
+    "first_multi_alarm_availability_s": null,
+    "any_alarm_count": 0,
+    "any_alarm_rate": null
+  },
+  "post": {
+    "event_count": 119,
+    "single_alarm_count": 0,
+    "single_alarm_rate": 0.0,
+    "first_single_alarm_availability_s": null,
+    "multi_alarm_count": 0,
+    "multi_alarm_rate": 0.0,
+    "first_multi_alarm_availability_s": null,
+    "any_alarm_count": 0,
+    "any_alarm_rate": 0.0
+  },
+  "crossing_windows_excluded": {
+    "event_count": 0,
+    "definition": "windows straddling a region boundary (30, 90, or 110 s) are excluded from per-region metrics"
+  }
+}

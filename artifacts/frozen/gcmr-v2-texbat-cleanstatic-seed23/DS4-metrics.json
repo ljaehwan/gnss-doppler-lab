@@ -1,0 +1,127 @@
+{
+  "all": {
+    "event_count": 255,
+    "single_alarm_count": 27,
+    "single_alarm_rate": 0.10588235294117647,
+    "first_single_alarm_availability_s": 1.0,
+    "multi_alarm_count": 12,
+    "multi_alarm_rate": 0.047058823529411764,
+    "first_multi_alarm_availability_s": 1.0,
+    "any_alarm_count": 27,
+    "any_alarm_rate": 0.10588235294117647
+  },
+  "pre": {
+    "event_count": 119,
+    "single_alarm_count": 3,
+    "single_alarm_rate": 0.025210084033613446,
+    "first_single_alarm_availability_s": 70.5,
+    "multi_alarm_count": 0,
+    "multi_alarm_rate": 0.0,
+    "first_multi_alarm_availability_s": null,
+    "any_alarm_count": 3,
+    "any_alarm_rate": 0.025210084033613446
+  },
+  "transition": {
+    "event_count": 39,
+    "single_alarm_count": 0,
+    "single_alarm_rate": 0.0,
+    "first_single_alarm_availability_s": null,
+    "multi_alarm_count": 0,
+    "multi_alarm_rate": 0.0,
+    "first_multi_alarm_availability_s": null,
+    "any_alarm_count": 0,
+    "any_alarm_rate": 0.0
+  },
+  "post": {
+    "event_count": 35,
+    "single_alarm_count": 11,
+    "single_alarm_rate": 0.3142857142857143,
+    "first_single_alarm_availability_s": 114.5,
+    "multi_alarm_count": 0,
+    "multi_alarm_rate": 0.0,
+    "first_multi_alarm_availability_s": null,
+    "any_alarm_count": 11,
+    "any_alarm_rate": 0.3142857142857143
+  },
+  "crossing_windows_excluded": {
+    "event_count": 3,
+    "definition": "windows straddling a region boundary (30, 90, or 110 s) are excluded from per-region metrics"
+  },
+  "cache_sha256": "518be3f9154b52f58a777351f97f81d3a3e3998d6a3343f9cae6791d129c576f",
+  "source_sha256": {
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/gps_ephemeris.xml": "5bb0ec551875771eaec98e62fb869da3bbd053c518960f7cd1abd5db263a6d0c",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/nmea_pvt.nmea": "8e50ff1bec876c9172fa2aaaa00e7026f4b44fb4c4463a2e7b2f5c7a45fc5be3",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_0.mat": "3a8d8292423373a8ba2d2ccfd5bae2fadb2ac50380e88995b7955dc4f8cfeaf4",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_1.mat": "460b2cc0cd75933cf70ca9ccec1bb99a257ff7c81379ecba556184c3b4be7d37",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_10.mat": "fd0a01c3c9a447ba247509e7e14eea5e7ad6071a5207935c2d5d26b28afd91b6",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_2.mat": "2c0b7ab0a409ecf9274995ff61560c538aa538c6b012970b9a3b6cd3e2542ae1",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_3.mat": "7863aba5f3b80895cfaa4e4974a7a78f7c6edfbf8766fdcfc20266ee65314346",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_4.mat": "d0c3d01e62859e2ee5f7e9aa060c36056c8b4449f4c564a4d931e0788471daa2",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_5.mat": "e5c2658853b3e1f5f810c29a8454e3492a602012dd484d8ac0da08513beeba4d",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_6.mat": "78f3446c7f0e9a980cc762e74ccc1c664a2ff45086fd13066f0757284c2238db",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_7.mat": "e6b4b6fc6d341b64651668e48c0f747ce5bb1c5c5966d422b4c512f40946aed7",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_8.mat": "9f1455045fb1755d57fa6dc63b8ac0a7fe6f9912a538f4662529329c5b949d03",
+    "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_9.mat": "ea5f342606793b937e2bee14f54405fea1fa0ddcfa5f4de3016917b90c239e8d"
+  },
+  "cache_producer_identity": {
+    "cache_sha256": "518be3f9154b52f58a777351f97f81d3a3e3998d6a3343f9cae6791d129c576f",
+    "producer_implementation": {
+      "adapter_hash_contract": "SHA256 is computed directly from adapter bytes at runtime; this output manifest is not an embedded expected hash",
+      "boundary": "frozen core is checkpoint-embedded and hash-validated; external adapter is evaluation-only and identified by its runtime SHA256",
+      "external_adapter": {
+        "path": "scripts/run_gcmr_texbat_external.py",
+        "sha256": "756cea2362565b1c84f4fb5e852d29536fafe183d58872ba15c8b5291b4a871c"
+      },
+      "frozen_core": {
+        "provenance_source": "loaded_checkpoint",
+        "validation": "checkpoint-embedded frozen implementation manifest is revalidated before evaluation"
+      }
+    },
+    "producer_implementation_hash": "54c6a5ff2bd53ebddfa98efe48c23189e8066e83cf335e0891a6d376d1d9aa28",
+    "producer_source_sha256": {
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/gps_ephemeris.xml": "5bb0ec551875771eaec98e62fb869da3bbd053c518960f7cd1abd5db263a6d0c",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/nmea_pvt.nmea": "8e50ff1bec876c9172fa2aaaa00e7026f4b44fb4c4463a2e7b2f5c7a45fc5be3",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_0.mat": "3a8d8292423373a8ba2d2ccfd5bae2fadb2ac50380e88995b7955dc4f8cfeaf4",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_1.mat": "460b2cc0cd75933cf70ca9ccec1bb99a257ff7c81379ecba556184c3b4be7d37",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_10.mat": "fd0a01c3c9a447ba247509e7e14eea5e7ad6071a5207935c2d5d26b28afd91b6",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_2.mat": "2c0b7ab0a409ecf9274995ff61560c538aa538c6b012970b9a3b6cd3e2542ae1",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_3.mat": "7863aba5f3b80895cfaa4e4974a7a78f7c6edfbf8766fdcfc20266ee65314346",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_4.mat": "d0c3d01e62859e2ee5f7e9aa060c36056c8b4449f4c564a4d931e0788471daa2",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_5.mat": "e5c2658853b3e1f5f810c29a8454e3492a602012dd484d8ac0da08513beeba4d",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_6.mat": "78f3446c7f0e9a980cc762e74ccc1c664a2ff45086fd13066f0757284c2238db",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_7.mat": "e6b4b6fc6d341b64651668e48c0f747ce5bb1c5c5966d422b4c512f40946aed7",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_8.mat": "9f1455045fb1755d57fa6dc63b8ac0a7fe6f9912a538f4662529329c5b949d03",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/raw/epl_9.mat": "ea5f342606793b937e2bee14f54405fea1fa0ddcfa5f4de3016917b90c239e8d"
+    },
+    "producer_source_hash": "cf4e1488a6256e868fd5fbc1ca12455419de464d2f0765ec5ab6ec2b6899d41d",
+    "producer_schema": {
+      "schema_version": 4,
+      "relation_contract_version": 4,
+      "observation_features": [
+        "spearman_rD",
+        "median_abs_diff_rD",
+        "spearman_DLL",
+        "median_abs_diff_DLL",
+        "pearson_PLL",
+        "median_abs_diff_PLL",
+        "spearman_CC",
+        "median_abs_diff_CC",
+        "pearson_micro",
+        "median_abs_diff_micro"
+      ],
+      "condition_features": [
+        "los_dot",
+        "min_elevation_sin",
+        "max_elevation_sin",
+        "abs_predicted_doppler_diff",
+        "min_cn0",
+        "max_cn0",
+        "min_lock",
+        "max_lock"
+      ]
+    },
+    "producer_schema_hash": "edb52dc026d46457da9a84b821d4b13fb8aa2bf9605f2e82be72a1a6f6d5eea6",
+    "producer_role_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "producer_config_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "all": {
+    "event_count": 913,
+    "single_alarm_count": 208,
+    "single_alarm_rate": 0.22782037239868566,
+    "first_single_alarm_availability_s": 1.0,
+    "multi_alarm_count": 162,
+    "multi_alarm_rate": 0.1774370208105148,
+    "first_multi_alarm_availability_s": 1.0,
+    "any_alarm_count": 208,
+    "any_alarm_rate": 0.22782037239868566
+  },
+  "pre": {
+    "event_count": 119,
+    "single_alarm_count": 2,
+    "single_alarm_rate": 0.01680672268907563,
+    "first_single_alarm_availability_s": 89.5,
+    "multi_alarm_count": 0,
+    "multi_alarm_rate": 0.0,
+    "first_multi_alarm_availability_s": null,
+    "any_alarm_count": 2,
+    "any_alarm_rate": 0.01680672268907563
+  },
+  "transition": {
+    "event_count": 39,
+    "single_alarm_count": 12,
+    "single_alarm_rate": 0.3076923076923077,
+    "first_single_alarm_availability_s": 91.0,
+    "multi_alarm_count": 0,
+    "multi_alarm_rate": 0.0,
+    "first_multi_alarm_availability_s": null,
+    "any_alarm_count": 12,
+    "any_alarm_rate": 0.3076923076923077
+  },
+  "post": {
+    "event_count": 693,
+    "single_alarm_count": 149,
+    "single_alarm_rate": 0.215007215007215,
+    "first_single_alarm_availability_s": 111.0,
+    "multi_alarm_count": 138,
+    "multi_alarm_rate": 0.19913419913419914,
+    "first_multi_alarm_availability_s": 111.0,
+    "any_alarm_count": 149,
+    "any_alarm_rate": 0.215007215007215
+  },
+  "crossing_windows_excluded": {
+    "event_count": 3,
+    "definition": "windows straddling a region boundary (30, 90, or 110 s) are excluded from per-region metrics"
+  },
+  "cache_sha256": "c18201693e4240247b06647e5fae5eb7e51cf82a703018b838c03e678880a24d",
+  "source_sha256": {
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/gps_ephemeris.xml": "3ad57e22266b980f148801eec0ebde3e58ba043b66db652b835b43fd2492a2e9",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/nmea_pvt.nmea": "4ea787e39b33481b438964003ff42daccad8d938866693143d29ff2470e1cf79",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_0.mat": "4e96b2aa923347e8dbac4629da887ab3f85e62d2180612a4e5073a71d28f389e",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_1.mat": "15f872d599db0080a2de171294088627da245d1e29b49e494d3c2042b7d2fbf6",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_10.mat": "87d8e289d782d09a93c01266b0e326a4547e51c594e31ecc8e347da1269ef727",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_2.mat": "7b780c8a2c0323c166b1cb54a80d923c57974e5bc3b4dce9e1bacb4b98517718",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_3.mat": "1e44fb636339118f3ac7aa4aa0df754e5ce59dc792be28b0e44f55008a880be2",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_4.mat": "6aca23985674ce95fe2a4b1d816638a5c8ce445ae16399597d57d4d38ae47c54",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_5.mat": "4e10b512bfcfbec0ae714ba796c7060ffdbb5077aa7eb7215b385501f014702a",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_6.mat": "26ea2d62ca6acd16da82fbf80b594ed5037a15340ddd161e9c762dd2ef7fc668",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_7.mat": "62d1bd4aa17c41f2b8803f4ce5f18cadf93695ee75c9f67e287530863a839b5d",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_8.mat": "951f9e9779c50d9fc519dcea06a15ad85d09d79495b1cfd5a3070d9bace24481",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_9.mat": "f2276f1da4c5c28fcf154356d6bf5a6eeebcc4fa40713b120634d0de8c433ae8",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/observables.mat": "efb83de3075b9df37895c75512f934f23696ba22a38ff39da8c478326efe2edf"
+  },
+  "cache_producer_identity": {
+    "cache_sha256": "c18201693e4240247b06647e5fae5eb7e51cf82a703018b838c03e678880a24d",
+    "producer_implementation": {
+      "adapter_hash_contract": "SHA256 is computed directly from adapter bytes at runtime; this output manifest is not an embedded expected hash",
+      "boundary": "frozen core is checkpoint-embedded and hash-validated; external adapter is evaluation-only and identified by its runtime SHA256",
+      "external_adapter": {
+        "path": "scripts/run_gcmr_texbat_external.py",
+        "sha256": "756cea2362565b1c84f4fb5e852d29536fafe183d58872ba15c8b5291b4a871c"
+      },
+      "frozen_core": {
+        "provenance_source": "loaded_checkpoint",
+        "validation": "checkpoint-embedded frozen implementation manifest is revalidated before evaluation"
+      }
+    },
+    "producer_implementation_hash": "54c6a5ff2bd53ebddfa98efe48c23189e8066e83cf335e0891a6d376d1d9aa28",
+    "producer_source_sha256": {
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/gps_ephemeris.xml": "3ad57e22266b980f148801eec0ebde3e58ba043b66db652b835b43fd2492a2e9",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/nmea_pvt.nmea": "4ea787e39b33481b438964003ff42daccad8d938866693143d29ff2470e1cf79",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_0.mat": "4e96b2aa923347e8dbac4629da887ab3f85e62d2180612a4e5073a71d28f389e",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_1.mat": "15f872d599db0080a2de171294088627da245d1e29b49e494d3c2042b7d2fbf6",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_10.mat": "87d8e289d782d09a93c01266b0e326a4547e51c594e31ecc8e347da1269ef727",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_2.mat": "7b780c8a2c0323c166b1cb54a80d923c57974e5bc3b4dce9e1bacb4b98517718",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_3.mat": "1e44fb636339118f3ac7aa4aa0df754e5ce59dc792be28b0e44f55008a880be2",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_4.mat": "6aca23985674ce95fe2a4b1d816638a5c8ce445ae16399597d57d4d38ae47c54",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_5.mat": "4e10b512bfcfbec0ae714ba796c7060ffdbb5077aa7eb7215b385501f014702a",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_6.mat": "26ea2d62ca6acd16da82fbf80b594ed5037a15340ddd161e9c762dd2ef7fc668",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_7.mat": "62d1bd4aa17c41f2b8803f4ce5f18cadf93695ee75c9f67e287530863a839b5d",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_8.mat": "951f9e9779c50d9fc519dcea06a15ad85d09d79495b1cfd5a3070d9bace24481",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/epl_tracking_ch_9.mat": "f2276f1da4c5c28fcf154356d6bf5a6eeebcc4fa40713b120634d0de8c433ae8",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/raw/observables.mat": "efb83de3075b9df37895c75512f934f23696ba22a38ff39da8c478326efe2edf"
+    },
+    "producer_source_hash": "9419a603750f7e360c00322d7aa22a9a3c6d6f38b0b779e820642490805ab33f",
+    "producer_schema": {
+      "schema_version": 4,
+      "relation_contract_version": 4,
+      "observation_features": [
+        "spearman_rD",
+        "median_abs_diff_rD",
+        "spearman_DLL",
+        "median_abs_diff_DLL",
+        "pearson_PLL",
+        "median_abs_diff_PLL",
+        "spearman_CC",
+        "median_abs_diff_CC",
+        "pearson_micro",
+        "median_abs_diff_micro"
+      ],
+      "condition_features": [
+        "los_dot",
+        "min_elevation_sin",
+        "max_elevation_sin",
+        "abs_predicted_doppler_diff",
+        "min_cn0",
+        "max_cn0",
+        "min_lock",
+        "max_lock"
+      ]
+    },
+    "producer_schema_hash": "edb52dc026d46457da9a84b821d4b13fb8aa2bf9605f2e82be72a1a6f6d5eea6",
+    "producer_role_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "producer_config_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+  }
+}

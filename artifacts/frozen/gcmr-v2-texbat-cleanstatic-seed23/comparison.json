@@ -1,0 +1,82 @@
+{
+  "title": "Honest GCMR v2 comparison",
+  "comparison_policy": "No matched-superiority claim. B0/M1 matched re-evaluation remains pending.",
+  "contract": {
+    "pre": "availability <= 90 s",
+    "transition": "90\u2013110 s",
+    "post": "window start >= 110 s",
+    "availability": "window end"
+  },
+  "rows": [
+    {
+      "method": "GCMR v1 original",
+      "scope": "cleanStatic-frozen \u2192 DS1\u2013DS4",
+      "threshold": 134914.845,
+      "result": "All DS multi/combined alarms: 0",
+      "status": "Original threshold failure"
+    },
+    {
+      "method": "GCMR v1 recalibrated diagnostic",
+      "scope": "post-hoc diagnostic",
+      "threshold": 1.7693,
+      "result": "Diagnostic only; not final performance",
+      "status": "Not a frozen final result"
+    },
+    {
+      "method": "GCMR v2 single",
+      "scope": "cleanStatic-frozen \u2192 DS1\u2013DS4",
+      "threshold": 8.157904927719994,
+      "result": {
+        "post": {
+          "DS1": "49/702",
+          "DS2": "149/693",
+          "DS3": "122/694",
+          "DS4": "11/35"
+        },
+        "pre": {
+          "DS1": "0/119",
+          "DS2": "2/119",
+          "DS3": "1/119",
+          "DS4": "3/119"
+        }
+      },
+      "status": "Single-PRN tracking fault diagnostic; not final multi-PRN spoof alarm"
+    },
+    {
+      "method": "GCMR v2 multi",
+      "scope": "cleanStatic-frozen \u2192 DS1\u2013DS4",
+      "threshold": 0.09195067847110018,
+      "result": {
+        "sealed": "0/119",
+        "post": {
+          "DS1": "0/702",
+          "DS2": "138/693 (19.91%), first 111.0 s",
+          "DS3": "37/694 (5.33%), first 120.5 s",
+          "DS4": "0/35"
+        },
+        "pre": "all 0/119"
+      },
+      "status": "Final frozen GCMR v2 result"
+    },
+    {
+      "method": "B0 frozen tap9 GRU baseline",
+      "scope": "current B0 artifact",
+      "threshold": null,
+      "result": "Not reported as a matched comparison",
+      "status": "Not matched to the DS1\u2013DS4 contract; matched re-evaluation pending"
+    },
+    {
+      "method": "M1 dense raw-IQ",
+      "scope": "per-scenario 0\u201390 s self-fit; DS1 unavailable",
+      "threshold": null,
+      "result": {
+        "DS2": "delay 8.85 s; post 49.58%",
+        "DS3": "delay 19.71 s; post 34.32%",
+        "DS4": "onset 110 s; delay 3.99 s; post 77.85%",
+        "pre_rate": "~0.09%"
+      },
+      "status": "Descriptive only: not cleanStatic-frozen external; incomparable; matched re-evaluation pending"
+    }
+  ],
+  "excluded": "Failed v2 artifacts are preserved separately and excluded from results."
+}
