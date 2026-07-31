@@ -25,6 +25,10 @@ dev = [
   "nbclient>=0.10",
 ]
 
+gcmr = [
+  "torch>=2.2",
+]
+
 [project.scripts]
 gnss-iq = "gnss_doppler_lab.cli:main"
 
