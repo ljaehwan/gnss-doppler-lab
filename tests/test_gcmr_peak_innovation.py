@@ -8,7 +8,10 @@ from gnss_doppler_lab.gcmr_peak_innovation import (
     PairRelationModel,
     SharedLocalPredictor,
     aggregate_event_score,
+    binomial_tail_from_exceedances,
+    build_event_diagnostics,
     common_drive_statistics,
+    normal_loading_threshold,
     geometry_features,
     pair_anomaly_score,
     relation_destruction,
@@ -110,3 +113,30 @@ def test_calibrator_quantiles_validation_and_full_excludes_binomial_tail():
     assert np.isfinite(aggregate_event_score(d, cal, "A2"))
     assert np.isfinite(aggregate_event_score(d, cal, "A3"))
     assert np.isfinite(aggregate_event_score(d, cal, "A4"))
+
+
+def test_pair_relation_variable_node_events_and_geometry_validation():
+    rng = np.random.default_rng(44)
+    first = rng.normal(size=(3, 3)); second = rng.normal(size=(5, 3))
+    los3 = np.eye(3); los5 = rng.normal(size=(5, 3))
+    elev3 = np.array([20., 35., 50.]); elev5 = np.linspace(15., 65., 5)
+    model = PairRelationModel().fit_events([(first, los3, elev3), (second, los5, elev5)])
+    assert np.isfinite(pair_anomaly_score(second, model, los5, elev5))
+    with pytest.raises(ValueError):
+        model.expected_matrix(np.ones((5, 2)), elev5)
+
+
+def test_normal_loading_threshold_and_event_diagnostics_a1():
+    rng = np.random.default_rng(9)
+    events = [rng.normal(size=(4, 3)), rng.normal(size=(6, 3))]
+    threshold = normal_loading_threshold(events, .95)
+    assert threshold >= 0
+    stats = common_drive_statistics(events[0], loading_threshold=threshold)
+    assert stats.loading_count <= stats.n
+    los = np.eye(3)
+    zfit = rng.normal(size=(8, 3, 3))
+    relation = PairRelationModel().fit(zfit, los=los, elevation=np.array([20., 40., 60.]))
+    diag = build_event_diagnostics(zfit[0], relation, los, np.array([20., 40., 60.]),
+                                   np.array([0.1, 2.0, 3.0]), normal_scalar_threshold=1.0)
+    assert 0 < diag.binomial_tail <= 1
+    assert binomial_tail_from_exceedances(2, 3, .01) < binomial_tail_from_exceedances(1, 3, .01)

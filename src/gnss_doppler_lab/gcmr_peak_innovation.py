@@ -113,15 +113,28 @@ class ConditionalInnovationWhitener:
         return output.reshape(x.shape)
 
 
+def _validated_geometry(los: np.ndarray, elevation: np.ndarray, n: int) -> tuple[np.ndarray, np.ndarray]:
+    """Validate and unit-normalize LOS geometry for an N-node event."""
+    vectors = np.asarray(los, float)
+    elevations = np.asarray(elevation, float)
+    if vectors.shape != (n, 3) or elevations.shape != (n,):
+        raise ValueError("LOS must have shape (N, 3) and elevation shape (N,)")
+    norms = np.linalg.norm(vectors, axis=1)
+    if not (np.isfinite(vectors).all() and np.isfinite(elevations).all() and np.all(norms > _EPS)):
+        raise ValueError("LOS/elevation must be finite and LOS vectors non-zero")
+    return vectors / norms[:, None], elevations
+
+
 def geometry_features(los_i: np.ndarray, elevation_i: float,
                       los_j: np.ndarray, elevation_j: float) -> np.ndarray:
-    """Symmetric pair geometry: dot product then sorted elevations."""
+    """Symmetric pair geometry: normalized LOS dot product and sorted elevations."""
     a, b = np.asarray(los_i, float), np.asarray(los_j, float)
-    if a.shape != b.shape or a.ndim != 1 or not (np.isfinite(a).all() and np.isfinite(b).all()):
-        raise ValueError("LOS vectors must be matching finite vectors")
-    if not np.isfinite([elevation_i, elevation_j]).all():
-        raise ValueError("elevations must be finite")
-    return np.array([np.dot(a, b), min(elevation_i, elevation_j), max(elevation_i, elevation_j)], float)
+    if a.shape != (3,) or b.shape != (3,) or not (np.isfinite(a).all() and np.isfinite(b).all()):
+        raise ValueError("LOS vectors must be finite 3-vectors")
+    na, nb = np.linalg.norm(a), np.linalg.norm(b)
+    if na <= _EPS or nb <= _EPS or not np.isfinite([elevation_i, elevation_j]).all():
+        raise ValueError("LOS must be non-zero and elevations finite")
+    return np.array([np.dot(a / na, b / nb), min(elevation_i, elevation_j), max(elevation_i, elevation_j)], float)
 
 
 def _cosine_matrix(z: np.ndarray, eps: float = _EPS) -> np.ndarray:
@@ -136,32 +149,41 @@ class PairRelationModel:
             raise ValueError("ridge must be positive")
         self.ridge = ridge
 
-    def fit(self, normal_z: np.ndarray, *, los: np.ndarray, elevation: np.ndarray):
-        z = _validate_innovations(normal_z)
-        if z.ndim != 3:
-            raise ValueError("normal_z must have shape (samples, N, 3)")
-        n = z.shape[1]
-        los, elevation = np.asarray(los, float), np.asarray(elevation, float)
-        if los.shape[0] != n or elevation.shape != (n,):
-            raise ValueError("geometry must match PRN dimension")
+    def fit_events(self, normal_events) -> "PairRelationModel":
+        """Fit from variable-cardinality normal `(z, los, elevation)` events only."""
         features, targets = [], []
-        for s in range(z.shape[0]):
-            cosine = _cosine_matrix(z[s])
-            for i in range(n):
-                for j in range(i + 1, n):
+        for z_event, los_event, elevation_event in normal_events:
+            z = _validate_innovations(z_event)
+            if z.ndim != 2 or len(z) < 2:
+                raise ValueError("each normal event must have shape (N, 3), N >= 2")
+            los, elevation = _validated_geometry(los_event, elevation_event, len(z))
+            cosine = _cosine_matrix(z)
+            for i in range(len(z)):
+                for j in range(i + 1, len(z)):
                     features.append(geometry_features(los[i], elevation[i], los[j], elevation[j]))
                     targets.append(cosine[i, j])
+        if not features:
+            raise ValueError("normal pair relation fit requires at least one pair")
         X = np.column_stack([np.ones(len(features)), np.asarray(features)])
         self.coef_ = np.linalg.solve(X.T @ X + self.ridge * np.eye(X.shape[1]), X.T @ np.asarray(targets))
         return self
 
+    def fit(self, normal_z: np.ndarray, *, los: np.ndarray, elevation: np.ndarray):
+        """Fixed-N compatibility wrapper; prefer :meth:`fit_events` for real data."""
+        z = _validate_innovations(normal_z)
+        if z.ndim != 3:
+            raise ValueError("normal_z must have shape (samples, N, 3)")
+        vectors, elevations = _validated_geometry(los, elevation, z.shape[1])
+        return self.fit_events([(z[index], vectors, elevations) for index in range(z.shape[0])])
+
     def expected_matrix(self, los: np.ndarray, elevation: np.ndarray) -> np.ndarray:
         if not hasattr(self, "coef_"):
             raise RuntimeError("fit on normal data first")
-        n, output = len(elevation), np.eye(len(elevation))
+        vectors, elevations = _validated_geometry(los, elevation, len(elevation))
+        n, output = len(elevations), np.eye(len(elevations))
         for i in range(n):
             for j in range(i + 1, n):
-                feature = np.r_[1., geometry_features(los[i], elevation[i], los[j], elevation[j])]
+                feature = np.r_[1., geometry_features(vectors[i], elevations[i], vectors[j], elevations[j])]
                 output[i, j] = output[j, i] = np.clip(feature @ self.coef_, -1., 1.)
         return output
 
@@ -184,7 +206,23 @@ class CommonDriveStatistics:
     s_common: float
 
 
-def common_drive_statistics(Z: np.ndarray, loading_threshold: float = 0.25,
+def normal_loading_threshold(normal_z_events, quantile: float = .99) -> float:
+    """Fit an absolute loading diagnostic threshold from normal events only."""
+    if not 0 < quantile < 1:
+        raise ValueError("quantile must lie in (0, 1)")
+    loadings = []
+    for z_event in normal_z_events:
+        z = _validate_innovations(z_event)
+        if z.ndim != 2 or len(z) < 2:
+            raise ValueError("each normal event must have shape (N, 3), N >= 2")
+        u, _, _ = np.linalg.svd(z, full_matrices=False)
+        loadings.extend(np.abs(u[:, 0]).tolist())
+    if not loadings:
+        raise ValueError("normal loading calibration requires events")
+    return float(np.quantile(np.asarray(loadings), quantile))
+
+
+def common_drive_statistics(Z: np.ndarray, loading_threshold: float | None = None,
                             eps: float = _EPS) -> CommonDriveStatistics:
     z = _validate_innovations(Z)
     if z.ndim != 2 or len(z) < 2:
@@ -196,7 +234,10 @@ def common_drive_statistics(Z: np.ndarray, loading_threshold: float = 0.25,
     loading = np.abs(u[:, 0])
     participation = loading / max(loading.sum(), eps)
     n_eff = float(1. / np.sum(participation ** 2))
-    loading_count = int(np.count_nonzero(loading >= loading_threshold * loading.max()))
+    threshold = (0.25 * loading.max()) if loading_threshold is None else float(loading_threshold)
+    if not np.isfinite(threshold) or threshold < 0:
+        raise ValueError("loading_threshold must be a finite non-negative normal-calibrated value")
+    loading_count = int(np.count_nonzero(loading >= threshold))
     return CommonDriveStatistics(len(z), n_eff, loading_count, loading_count >= 4, s_common)
 
 
@@ -211,6 +252,39 @@ def relation_destruction(Z: np.ndarray, seed: int = 0, eps: float = _EPS) -> np.
     if len(z) > 1 and np.array_equal(perm, np.arange(len(z))):
         perm = np.roll(perm, 1)
     return directions[perm] * norms[:, None]
+
+
+def binomial_tail_from_exceedances(exceedances: int, node_count: int, normal_rate: float) -> float:
+    """Exact upper binomial tail for the A1 comparison-only baseline."""
+    if node_count < 1 or not 0 <= exceedances <= node_count or not 0 < normal_rate < 1:
+        raise ValueError("invalid binomial-tail inputs")
+    from math import comb
+    return float(sum(comb(node_count, k) * normal_rate ** k * (1.0 - normal_rate) ** (node_count - k)
+                     for k in range(exceedances, node_count + 1)))
+
+
+def build_event_diagnostics(z: np.ndarray, relation_model: PairRelationModel, los: np.ndarray,
+                            elevation: np.ndarray, scalar_residuals: np.ndarray,
+                            loading_threshold: float | None = None, normal_scalar_threshold: float | None = None,
+                            normal_exceedance_rate: float = .01) -> EventDiagnostics:
+    """Compute one event’s PI statistics without duplicating relation formulas in runners."""
+    values = _validate_innovations(z)
+    if values.ndim != 2 or len(values) < 2:
+        raise ValueError("z must have shape (N, 3), N >= 2")
+    residuals = np.asarray(scalar_residuals, float).reshape(-1)
+    if residuals.shape != (len(values),) or not np.isfinite(residuals).all():
+        raise ValueError("scalar_residuals must be finite shape (N,)")
+    stats = common_drive_statistics(values, loading_threshold=loading_threshold)
+    if normal_scalar_threshold is None:
+        btail = 1.0
+    else:
+        btail = binomial_tail_from_exceedances(int(np.count_nonzero(residuals > normal_scalar_threshold)),
+                                               len(values), normal_exceedance_rate)
+    return EventDiagnostics(n=stats.n, n_eff=stats.n_eff, loading_count=stats.loading_count,
+                            at_least_four=stats.at_least_four, s_common=stats.s_common,
+                            s_pair=pair_anomaly_score(values, relation_model, los, elevation),
+                            energy=float(np.mean(np.sum(values * values, axis=1))),
+                            scalar_rmse=float(np.sqrt(np.mean(residuals * residuals))), binomial_tail=btail)
 
 
 @dataclass(frozen=True)
