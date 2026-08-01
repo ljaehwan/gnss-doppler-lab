@@ -1,0 +1,12 @@
+{
+  "artifact_commit": "6f51f4809bbd4c012b39424003f8bcc40e22cf4a",
+  "diagnostic_base_commit": "6b5e478d5efecab54515051e25473e385b1f3f67",
+  "paths_compared": [
+    "src/gnss_doppler_lab/gcmr_peak_innovation.py",
+    "src/gnss_doppler_lab/gcmr_peak_innovation_pipeline.py",
+    "src/gnss_doppler_lab/gcmr_peak_innovation_adapter.py",
+    "scripts/train_gcmr_peak_innovation.py"
+  ],
+  "changed_paths": [],
+  "conclusion": "No relevant tracked source diff exists between the artifact commit and the corrected diagnostic base."
+}
