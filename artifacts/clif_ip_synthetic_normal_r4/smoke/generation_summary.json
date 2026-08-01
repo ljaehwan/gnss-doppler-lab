@@ -1,0 +1,24 @@
+{
+  "campaign_kind": "smoke",
+  "indexed_rows": 2,
+  "processed_rows": 2,
+  "reports": [
+    {
+      "b0_rows": 183,
+      "elapsed_s": 31.21831202507019,
+      "m1_rows": 40,
+      "run_id": "smoke-syn-oak",
+      "status": "ok",
+      "tracked_prns": 7
+    },
+    {
+      "b0_rows": 144,
+      "elapsed_s": 144.1332278251648,
+      "m1_rows": 40,
+      "run_id": "smoke-syn-tex",
+      "status": "ok",
+      "tracked_prns": 4
+    }
+  ],
+  "schema": "clif-ip.synthetic-normal.r4.generation.v1"
+}

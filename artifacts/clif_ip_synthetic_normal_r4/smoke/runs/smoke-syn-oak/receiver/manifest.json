@@ -1,0 +1,59 @@
+{
+  "acquisition": {
+    "receiver_reported_prns": [
+      "G06",
+      "G19",
+      "G17",
+      "G26",
+      "G31",
+      "G12",
+      "G01"
+    ],
+    "tracked_prns": [
+      "G06",
+      "G19",
+      "G17",
+      "G26",
+      "G31",
+      "G12",
+      "G01"
+    ]
+  },
+  "receiver": {
+    "command": [
+      "/home/ubuntu/build-gnss-sdr-complex9/build-complex/src/main/gnss-sdr",
+      "--config_file=/home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-oak/receiver/receiver.conf",
+      "--keyboard=false"
+    ],
+    "config": "receiver.conf",
+    "executable": "/home/ubuntu/build-gnss-sdr-complex9/build-complex/src/main/gnss-sdr",
+    "exit_code": 0,
+    "name": "GNSS-SDR Method-A"
+  },
+  "receiver_run_id": "smoke-syn-oak",
+  "schema_version": 4,
+  "source": {
+    "iq": "/home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-oak/final_s16le_iq.bin",
+    "iq_sha256": "9bd0c5071ff4db9accab30046488f7c810d7bb81a1c62a9d20616af6ad4d0864",
+    "sample_format": "little-endian interleaved int16 IQ",
+    "sample_rate_hz": 5000000
+  },
+  "source_rf_run_id": "smoke-syn-oak",
+  "status": "complete",
+  "tracking": {
+    "channel_count": 7,
+    "prns": [
+      "G01",
+      "G06",
+      "G12",
+      "G17",
+      "G19",
+      "G26",
+      "G31"
+    ],
+    "raw_directory": "raw",
+    "row_count": 74868,
+    "tap_count": 9,
+    "tap_spacing_chips": 0.125
+  }
+}

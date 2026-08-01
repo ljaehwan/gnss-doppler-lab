@@ -1,0 +1,8 @@
+TDD RED: pytest tests/test_clif_synthetic.py -> intended ModuleNotFoundError gnss_doppler_lab.clif_ip_synthetic
+TDD GREEN: pytest tests/test_clif_synthetic.py -> 11 passed
+real smoke command: /usr/bin/time -v /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/generate_clif_synthetic_normal.py --smoke --out artifacts/clif_ip_synthetic_normal_r4/smoke --duration 20 --receiver-timeout 1800
+real smoke result: exit 0; wall 183.51 s; max RSS 2388784 KB
+SYN-OAK: 20 s, 5 Msps, 400000000 bytes, 7 tracked PRNs, 74868 tracking rows, 183 B0 rows, 40 M1 rows
+SYN-TEX: 20 s, 25 Msps, 2000000000 bytes, 4 tracked PRNs, 50751 tracking rows, 144 B0 rows, 40 M1 rows
+final 60x120s campaign: NOT STARTED by contract
+final evaluation metrics: NA until campaign/training/evaluation is run

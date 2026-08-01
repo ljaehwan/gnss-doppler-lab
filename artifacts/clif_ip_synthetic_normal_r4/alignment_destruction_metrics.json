@@ -1,0 +1,14 @@
+{
+  "schema": "clif-ip.synthetic-normal.r4.alignment.v1",
+  "status": "NA",
+  "na_reason": "final 60x120 s campaign and evaluation not run",
+  "intended_repetitions": 199,
+  "p_value_resolution": 0.005,
+  "region_local_block_epochs": 8,
+  "required_regions": [
+    "clean_test",
+    "attack_pre",
+    "attack_established"
+  ],
+  "results": {}
+}

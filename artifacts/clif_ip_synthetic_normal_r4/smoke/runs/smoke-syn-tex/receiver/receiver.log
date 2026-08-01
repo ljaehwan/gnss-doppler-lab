@@ -1,0 +1,52 @@
+Initializing GNSS-SDR v0.0.19 ... Please wait.
+Logging will be written at "/tmp"
+Use gnss-sdr --log_dir=/path/to/log to change that.
+RF Channels: 1
+Processing file /home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-tex/final_s16le_iq.bin, which contains 1000000000 samples (2000000000 bytes)
+GNSS signal recorded time to be processed: 19.95 [s]
+Current receiver time: 1 s
+Tracking of GPS L1 C/A signal started on channel 5 for satellite GPS PRN 06 (Block IIF)
+Tracking of GPS L1 C/A signal started on channel 2 for satellite GPS PRN 19 (Block IIR)
+Tracking of GPS L1 C/A signal started on channel 6 for satellite GPS PRN 17 (Block IIR-M)
+Tracking of GPS L1 C/A signal started on channel 1 for satellite GPS PRN 26 (Block IIF)
+Current receiver time: 2 s
+Current receiver time: 3 s
+Current receiver time: 4 s
+Current receiver time: 5 s
+Current receiver time: 6 s
+Current receiver time: 7 s
+Current receiver time: 8 s
+Current receiver time: 9 s
+Current receiver time: 10 s
+Current receiver time: 11 s
+Current receiver time: 12 s
+GPS L1 C/A tracking bit synchronization locked in channel 2 for satellite GPS PRN 19 (Block IIR)
+GPS L1 C/A tracking bit synchronization locked in channel 5 for satellite GPS PRN 06 (Block IIF)
+GPS L1 C/A tracking bit synchronization locked in channel 6 for satellite GPS PRN 17 (Block IIR-M)
+Current receiver time: 13 s
+Current receiver time: 14 s
+Current receiver time: 15 s
+Current receiver time: 16 s
+Current receiver time: 17 s
+Loss of lock in channel 1!
+Current receiver time: 18 s
+New GPS NAV message received in channel 2: subframe 3 from satellite GPS PRN 19 (Block IIR) with CN0=48 dB-Hz
+New GPS NAV message received in channel 5: subframe 3 from satellite GPS PRN 06 (Block IIF) with CN0=47 dB-Hz
+New GPS NAV message received in channel 6: subframe 3 from satellite GPS PRN 17 (Block IIR-M) with CN0=44 dB-Hz
+Current receiver time: 19 s
+Current receiver time: 20 s
+Stopping GNSS-SDR, please wait!
+Generating .mat file for /home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-tex/receiver/raw/epl_tracking_ch_0.dat
+Generating .mat file for /home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-tex/receiver/raw/epl_tracking_ch_1.dat
+Generating .mat file for /home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-tex/receiver/raw/epl_tracking_ch_2.dat
+Generating .mat file for /home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-tex/receiver/raw/epl_tracking_ch_3.dat
+Generating .mat file for /home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-tex/receiver/raw/epl_tracking_ch_4.dat
+Generating .mat file for /home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-tex/receiver/raw/epl_tracking_ch_5.dat
+Generating .mat file for /home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-tex/receiver/raw/epl_tracking_ch_6.dat
+Generating .mat file for /home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-tex/receiver/raw/epl_tracking_ch_7.dat
+Generating .mat file for /home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-tex/receiver/raw/epl_tracking_ch_8.dat
+Generating .mat file for /home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-tex/receiver/raw/epl_tracking_ch_9.dat
+Generating .mat file for /home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-tex/receiver/raw/epl_tracking_ch_10.dat
+Generating .mat file for /home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-tex/receiver/raw/observables.dat
+Total GNSS-SDR run time: 31.8291 [seconds]
+GNSS-SDR program ended.

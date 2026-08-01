@@ -1,0 +1,50 @@
+{
+  "acquisition": {
+    "receiver_reported_prns": [
+      "G06",
+      "G19",
+      "G17",
+      "G26"
+    ],
+    "tracked_prns": [
+      "G06",
+      "G19",
+      "G17",
+      "G26"
+    ]
+  },
+  "receiver": {
+    "command": [
+      "/home/ubuntu/build-gnss-sdr-complex9/build-complex/src/main/gnss-sdr",
+      "--config_file=/home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-tex/receiver/receiver.conf",
+      "--keyboard=false"
+    ],
+    "config": "receiver.conf",
+    "executable": "/home/ubuntu/build-gnss-sdr-complex9/build-complex/src/main/gnss-sdr",
+    "exit_code": 0,
+    "name": "GNSS-SDR Method-A"
+  },
+  "receiver_run_id": "smoke-syn-tex",
+  "schema_version": 4,
+  "source": {
+    "iq": "/home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-tex/final_s16le_iq.bin",
+    "iq_sha256": "1f3500c2607bbe2334578964820e9a75990574ae35b739b16aa3fcdbbe5b7b5e",
+    "sample_format": "little-endian interleaved int16 IQ",
+    "sample_rate_hz": 25000000
+  },
+  "source_rf_run_id": "smoke-syn-tex",
+  "status": "complete",
+  "tracking": {
+    "channel_count": 4,
+    "prns": [
+      "G06",
+      "G17",
+      "G19",
+      "G26"
+    ],
+    "raw_directory": "raw",
+    "row_count": 50751,
+    "tap_count": 9,
+    "tap_spacing_chips": 0.125
+  }
+}

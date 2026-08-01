@@ -1,0 +1,81 @@
+{
+  "b0_iq_sha256": "9bd0c5071ff4db9accab30046488f7c810d7bb81a1c62a9d20616af6ad4d0864",
+  "b0_rows": 183,
+  "b0_semantics": "Method-A receiver-backed 9-tap magnitudes; signed 9D innovation is x-xhat in shared PRN-local model, not raw complex signed taps",
+  "completed_utc": "2026-08-01T15:34:00.348416+00:00",
+  "domain": "SYN-OAK",
+  "duration_s": 20.0,
+  "elapsed_s": 31.21831202507019,
+  "finite": true,
+  "generator": {
+    "binary_sha256": "27cd471d2023b8a26262584b14f71ebed602159da47b54172b22da9299011e28",
+    "command": [
+      "/home/ubuntu/projects/gnss-doppler-lab/.tools/gps-sdr-sim-src/gps-sdr-sim",
+      "-e",
+      "/home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/data/ephemeris/brdc1990.26n",
+      "-l",
+      "37.5665,126.978,50.0",
+      "-t",
+      "2026/07/18,00:00:00",
+      "-d",
+      "20.1",
+      "-s",
+      "5000000",
+      "-b",
+      "16",
+      "-o",
+      "artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-oak/gpssim_clean_s16le.bin"
+    ],
+    "native_options": "arbitrary -s and -b 16 verified",
+    "transform": {
+      "direct_target_generation": true,
+      "equation": "z1=LPF((I*g)+j(Q*cos(phi)+I*sin(phi))/g)*exp(j*cumsum(2pi*(CFO+drift*t)/Fs+Wiener)); z2=AGC*z1+DC+n; E|n|^2=Pclean*Fs/10^(CN0/10); round+clip to s16le",
+      "noise_sigma_per_component": 2054.7210777329083,
+      "resampling": false,
+      "signal_power_probe": 79389.2778844,
+      "source_sha256": "6d370f6bf96f262aa975c2440d4b73a4979964e1b80553419d1b4898f890d0e3",
+      "target_sha256": "9bd0c5071ff4db9accab30046488f7c810d7bb81a1c62a9d20616af6ad4d0864"
+    }
+  },
+  "impairments": {
+    "agc_gain_db": -0.3642643674683063,
+    "attack": false,
+    "awgn_cn0_dbhz": 46.72196108281268,
+    "cfo_drift_hz_s": 0.06568838199593884,
+    "cfo_hz": 7.166091800102798,
+    "clipping_fullscale": 30000,
+    "dc_i": -10.697303600720613,
+    "dc_q": 10.319985836644275,
+    "frontend_bw_hz": 1784320.262179706,
+    "iq_gain_imbalance_db": 0.12214367903402296,
+    "iq_phase_imbalance_deg": 1.0479618099271735,
+    "phase_noise_std_rad": 6.037755024212742e-05,
+    "profile": "open_sky_normal",
+    "quantization_bits": 16,
+    "spoofing": false
+  },
+  "iq_bytes": 400000000,
+  "iq_sha256": "9bd0c5071ff4db9accab30046488f7c810d7bb81a1c62a9d20616af6ad4d0864",
+  "label": "normal",
+  "m1_iq_sha256": "9bd0c5071ff4db9accab30046488f7c810d7bb81a1c62a9d20616af6ad4d0864",
+  "m1_rows": 40,
+  "receiver": {
+    "manifest": "artifacts/clif_ip_synthetic_normal_r4/smoke/runs/smoke-syn-oak/receiver/manifest.json",
+    "tracked_prns": [
+      "G01",
+      "G06",
+      "G12",
+      "G17",
+      "G19",
+      "G26",
+      "G31"
+    ],
+    "tracking_rows": 74868
+  },
+  "run_id": "smoke-syn-oak",
+  "sample_format": "little-endian int16 interleaved IQ (ishort)",
+  "sample_rate_hz": 5000000,
+  "schema": "clif-ip.synthetic-normal.r4.run.v1",
+  "split": "train",
+  "zero_placeholder": false
+}

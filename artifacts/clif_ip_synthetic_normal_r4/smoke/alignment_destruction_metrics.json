@@ -1,0 +1,77 @@
+{
+  "method": "3 deterministic region-local 8-epoch block permutations on actual smoke features",
+  "results": {
+    "smoke-syn-oak": {
+      "region": "clean_smoke",
+      "block_epochs": 8,
+      "repetitions": 3,
+      "p_value": 0.5,
+      "p_value_resolution": 0.25,
+      "marginals_preserved": true,
+      "observed_aligned_mse": 0.9715337875852751,
+      "delta_ci": [
+        -4.951594689828198e-15,
+        4.2743586448068513e-16
+      ],
+      "raw_metrics": [
+        {
+          "replicate": 0,
+          "seed": 91,
+          "aligned_mse": 0.9715337875852751,
+          "shuffled_mse": 0.9715337875852745,
+          "delta": 5.551115123125783e-16
+        },
+        {
+          "replicate": 1,
+          "seed": 92,
+          "aligned_mse": 0.9715337875852751,
+          "shuffled_mse": 0.9715337875852771,
+          "delta": -1.9984014443252818e-15
+        },
+        {
+          "replicate": 2,
+          "seed": 93,
+          "aligned_mse": 0.9715337875852751,
+          "shuffled_mse": 0.9715337875852802,
+          "delta": -5.10702591327572e-15
+        }
+      ]
+    },
+    "smoke-syn-tex": {
+      "region": "clean_smoke",
+      "block_epochs": 8,
+      "repetitions": 3,
+      "p_value": 1.0,
+      "p_value_resolution": 0.25,
+      "marginals_preserved": true,
+      "observed_aligned_mse": 0.9888325977776994,
+      "delta_ci": [
+        1.1102230246251565e-16,
+        1.1102230246251565e-16
+      ],
+      "raw_metrics": [
+        {
+          "replicate": 0,
+          "seed": 91,
+          "aligned_mse": 0.9888325977776994,
+          "shuffled_mse": 0.9888325977776993,
+          "delta": 1.1102230246251565e-16
+        },
+        {
+          "replicate": 1,
+          "seed": 92,
+          "aligned_mse": 0.9888325977776994,
+          "shuffled_mse": 0.9888325977776993,
+          "delta": 1.1102230246251565e-16
+        },
+        {
+          "replicate": 2,
+          "seed": 93,
+          "aligned_mse": 0.9888325977776994,
+          "shuffled_mse": 0.9888325977776993,
+          "delta": 1.1102230246251565e-16
+        }
+      ]
+    }
+  }
+}

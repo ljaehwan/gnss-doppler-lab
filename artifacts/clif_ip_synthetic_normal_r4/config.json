@@ -1,0 +1,22 @@
+{
+  "schema": "clif-ip.synthetic-normal.r4",
+  "final_runs": 60,
+  "per_domain": {
+    "train": 24,
+    "validation": 3,
+    "synthetic_test": 3
+  },
+  "duration_s": 120,
+  "targets": {
+    "SYN-OAK": "5 Msps s16le IQ/ishort",
+    "SYN-TEX": "25 Msps s16le IQ/ishort"
+  },
+  "threshold_fit": "per regime/domain normal validation only",
+  "real_static": {
+    "OAKBAT": "os1--os4",
+    "TEXBAT": "DS1--DS4 primary; stable pre 30--90, exclude 90--110, post >=110"
+  },
+  "permutations": 199,
+  "r0": "read-only exact R3 baseline",
+  "success": "P3<P1 and Full AUC>M1/simple fusion with controlled independent clean FPR"
+}
