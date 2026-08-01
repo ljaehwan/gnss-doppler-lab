@@ -1,0 +1,9 @@
+TDD red: 2 failed because gate script was absent (observed before implementation).
+
+$ python3 scripts/verify_clif_ip_provenance_r2.py artifacts/clif_ip_feasibility_r2/provenance_manifest.json
+{"gate": "BLOCKED", "permitted_scenarios": []}
+verifier_exit=2 (expected 2: BLOCKED)
+
+$ /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/pytest -q tests/test_clif_ip_provenance_r2.py tests/test_clif_ip_feasibility.py tests/test_gcmr_relations.py
+.................                                                        [100%]
+17 passed in 1.59s

@@ -1,0 +1,182 @@
+{
+  "schema": "clif-ip.phase1.r2.provenance.v1",
+  "base_commit": "18fdba7af3a21847451f9b7de307b799c042dc8b",
+  "gate_result": "BLOCKED",
+  "evaluator_invoked": false,
+  "scenarios": [
+    {
+      "scenario": "OAKBAT os1",
+      "raw_iq_path": "/home/ubuntu/unraid_hdd/oakbat/gps_l1ca/raw/os1.bin",
+      "raw_iq_sha256": "e9ef8ab33a3e59c5e55b3f6fb9b8bb3ba18aaf380402ae00abbe535858b1deb7",
+      "sample_rate_hz": 5000000,
+      "recording_start_sample": null,
+      "explicit_time_origin": null,
+      "b0_source": {
+        "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+        "sha256": "b565d71d966dac78b2f7d84c5ff9856e7133342109b27e8d80406e3fb6901fae",
+        "evidence_manifest": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/receiver/oakbat-os1-method-a-9tap/manifest.json"
+      },
+      "m1_source": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os1-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_os1_raw_iq_noise_features.csv",
+        "sha256": null,
+        "evidence_summary": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os1-raw-iq-noise-continuity-m1-v0-fs5m-full/summary.json"
+      },
+      "b0_window_sample_range": null,
+      "m1_block_sample_range": null,
+      "alignment_offset_samples": null,
+      "same_recording_proven": false,
+      "sample_rate_match_proven": false,
+      "same_time_origin_proven": false,
+      "same_physical_interval_proven": false,
+      "sample_ranges_calculable": false,
+      "causal_alignment_proven": false,
+      "permitted": false,
+      "blocked_reasons": [
+        "paired M1 feature artifact is absent",
+        "M1 evidence does not authenticate raw IQ with SHA-256",
+        "neither modality records a shared recording-start sample or explicit time origin",
+        "B0 receiver/tracking delay is not quantified, so receiver-delay-aware causal alignment is unproven",
+        "derived 0.5 s timestamps alone do not prove a common physical receive interval"
+      ]
+    },
+    {
+      "scenario": "OAKBAT os2",
+      "raw_iq_path": "/home/ubuntu/unraid_hdd/oakbat/gps_l1ca/raw/os2.bin",
+      "raw_iq_sha256": "17de8e3f54095ad2eafad8a54ca7f5008596936ded35578710dfed17a5b670c1",
+      "sample_rate_hz": 5000000,
+      "recording_start_sample": null,
+      "explicit_time_origin": null,
+      "b0_source": {
+        "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+        "sha256": "b356db20e3d03a65cdca64994ea84283e5eae723a2c558f2f9fa679b9b43175b",
+        "evidence_manifest": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/receiver/oakbat-os2-method-a-9tap/manifest.json"
+      },
+      "m1_source": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os2-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_os2_raw_iq_noise_features.csv",
+        "sha256": "6a310df95770f412ecd72a3c9ae066dd339b86f84362c8ba0a4d8d522bb9f65e",
+        "evidence_summary": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os2-raw-iq-noise-continuity-m1-v0-fs5m-full/summary.json"
+      },
+      "b0_window_sample_range": null,
+      "m1_block_sample_range": null,
+      "alignment_offset_samples": null,
+      "same_recording_proven": false,
+      "sample_rate_match_proven": true,
+      "same_time_origin_proven": false,
+      "same_physical_interval_proven": false,
+      "sample_ranges_calculable": false,
+      "causal_alignment_proven": false,
+      "permitted": false,
+      "blocked_reasons": [
+        "M1 evidence does not authenticate raw IQ with SHA-256",
+        "neither modality records a shared recording-start sample or explicit time origin",
+        "B0 receiver/tracking delay is not quantified, so receiver-delay-aware causal alignment is unproven",
+        "derived 0.5 s timestamps alone do not prove a common physical receive interval"
+      ]
+    },
+    {
+      "scenario": "OAKBAT os3",
+      "raw_iq_path": "/home/ubuntu/unraid_hdd/oakbat/gps_l1ca/raw/os3.bin",
+      "raw_iq_sha256": "2a3c3c5cf1accaa287fe14181e43070903500e0250c69e3c335f91c89c0cdc6c",
+      "sample_rate_hz": 5000000,
+      "recording_start_sample": null,
+      "explicit_time_origin": null,
+      "b0_source": {
+        "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+        "sha256": "fa76a7118f65439ec97cee2a70291c59771fcaa87a3c35b84ec5db4d74a3a3b6",
+        "evidence_manifest": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/receiver/oakbat-os3-method-a-9tap/manifest.json"
+      },
+      "m1_source": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os3-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_os3_raw_iq_noise_features.csv",
+        "sha256": "f6b843dcdf4c599b179e16146b2692bae2a9509e931c22fd1071070749ee1014",
+        "evidence_summary": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os3-raw-iq-noise-continuity-m1-v0-fs5m-full/summary.json"
+      },
+      "b0_window_sample_range": null,
+      "m1_block_sample_range": null,
+      "alignment_offset_samples": null,
+      "same_recording_proven": false,
+      "sample_rate_match_proven": true,
+      "same_time_origin_proven": false,
+      "same_physical_interval_proven": false,
+      "sample_ranges_calculable": false,
+      "causal_alignment_proven": false,
+      "permitted": false,
+      "blocked_reasons": [
+        "M1 evidence does not authenticate raw IQ with SHA-256",
+        "neither modality records a shared recording-start sample or explicit time origin",
+        "B0 receiver/tracking delay is not quantified, so receiver-delay-aware causal alignment is unproven",
+        "derived 0.5 s timestamps alone do not prove a common physical receive interval",
+        "B0 node CSV current SHA-256 differs from cache-manifest recorded SHA-256 b1ad3dc.../feature cache expectation; current file hash is recorded here without treating it as authenticated"
+      ]
+    },
+    {
+      "scenario": "OAKBAT os4",
+      "raw_iq_path": "/home/ubuntu/unraid_hdd/oakbat/gps_l1ca/raw/os4.bin",
+      "raw_iq_sha256": "803f3c76bcc618efbc6b394eb536fe61ed8c3e34b1822c0088b4475621bfa8e4",
+      "sample_rate_hz": 5000000,
+      "recording_start_sample": null,
+      "explicit_time_origin": null,
+      "b0_source": {
+        "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+        "sha256": "2bc572eeaf49818fd8ba5253b3b7bb5956d0997ea2a49306f5ff6842ab53144a",
+        "evidence_manifest": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/receiver/oakbat-os4-method-a-9tap/manifest.json"
+      },
+      "m1_source": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os4-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_os4_raw_iq_noise_features.csv",
+        "sha256": "bf6921c204336ba559086eccd24cb82bae96632485158ee9efc8df9c7eb3a7e9",
+        "evidence_summary": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os4-raw-iq-noise-continuity-m1-v0-fs5m-full/summary.json"
+      },
+      "b0_window_sample_range": null,
+      "m1_block_sample_range": null,
+      "alignment_offset_samples": null,
+      "same_recording_proven": false,
+      "sample_rate_match_proven": true,
+      "same_time_origin_proven": false,
+      "same_physical_interval_proven": false,
+      "sample_ranges_calculable": false,
+      "causal_alignment_proven": false,
+      "permitted": false,
+      "blocked_reasons": [
+        "M1 evidence does not authenticate raw IQ with SHA-256",
+        "neither modality records a shared recording-start sample or explicit time origin",
+        "B0 receiver/tracking delay is not quantified, so receiver-delay-aware causal alignment is unproven",
+        "derived 0.5 s timestamps alone do not prove a common physical receive interval"
+      ]
+    },
+    {
+      "scenario": "TEXBAT",
+      "raw_iq_path": null,
+      "raw_iq_sha256": null,
+      "sample_rate_hz": null,
+      "recording_start_sample": null,
+      "explicit_time_origin": null,
+      "b0_source": {
+        "path": null,
+        "sha256": null
+      },
+      "m1_source": {
+        "path": null,
+        "sha256": null
+      },
+      "b0_window_sample_range": null,
+      "m1_block_sample_range": null,
+      "alignment_offset_samples": null,
+      "same_recording_proven": false,
+      "sample_rate_match_proven": false,
+      "same_time_origin_proven": false,
+      "same_physical_interval_proven": false,
+      "sample_ranges_calculable": false,
+      "causal_alignment_proven": false,
+      "permitted": false,
+      "blocked_reasons": [
+        "no scenario-level paired B0/M1 evidence was identified; therefore TEXBAT was not opened or evaluated"
+      ]
+    }
+  ],
+  "exact_needed_data": [
+    "For each scenario, B0 and M1 manifests independently naming the identical raw-IQ path and SHA-256",
+    "A shared recording_start_sample=0 (or explicit absolute time origin) and any preprocessing seek/skip offsets",
+    "Sample format/rate and formulas mapping every B0 window and M1 block to half-open raw complex-sample ranges",
+    "Measured/configured receiver processing delay and an availability convention proving causal alignment",
+    "For TEXBAT, scenario-level paired B0 and M1 artifacts satisfying all preceding items"
+  ]
+}
