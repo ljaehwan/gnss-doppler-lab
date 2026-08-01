@@ -1,0 +1,58 @@
+{
+  "method": "cache-observation direction shuffle proxy; norms preserved; source epochs differ by >1 and PRN when feasible; fixed seed; 20 repetitions",
+  "warning": "The frozen cache retains relation observations, not GRU residuals. This is a structural sensitivity diagnostic, not a re-scored model claim.",
+  "scenarios": {
+    "os1": {
+      "repetitions": 20,
+      "attack_events": 700,
+      "mean_delta": 0.4987196587904689,
+      "median_delta": 0.49046700733318394,
+      "fraction_decreased": 1.0,
+      "bootstrap95_ci": [
+        0.49538883023728936,
+        0.5019498134253163
+      ],
+      "wilcoxon_p": 2.865557570921551e-116,
+      "effect_size_rank_biserial": 1.0
+    },
+    "os2": {
+      "repetitions": 20,
+      "attack_events": 700,
+      "mean_delta": 0.5017060183049034,
+      "median_delta": 0.4957615894934033,
+      "fraction_decreased": 1.0,
+      "bootstrap95_ci": [
+        0.49872351713790564,
+        0.5048449317162397
+      ],
+      "wilcoxon_p": 2.865557570921551e-116,
+      "effect_size_rank_biserial": 1.0
+    },
+    "os3": {
+      "repetitions": 20,
+      "attack_events": 700,
+      "mean_delta": 0.4919733044634488,
+      "median_delta": 0.4854837213969433,
+      "fraction_decreased": 1.0,
+      "bootstrap95_ci": [
+        0.4889783224897891,
+        0.4950702542447657
+      ],
+      "wilcoxon_p": 2.865557570921551e-116,
+      "effect_size_rank_biserial": 1.0
+    },
+    "os4": {
+      "repetitions": 20,
+      "attack_events": 700,
+      "mean_delta": 0.5001531870364152,
+      "median_delta": 0.49467966890908455,
+      "fraction_decreased": 1.0,
+      "bootstrap95_ci": [
+        0.49660721350268133,
+        0.5034801681254455
+      ],
+      "wilcoxon_p": 2.865557570921551e-116,
+      "effect_size_rank_biserial": 1.0
+    }
+  }
+}
