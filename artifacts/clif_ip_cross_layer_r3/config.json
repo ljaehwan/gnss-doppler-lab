@@ -5,7 +5,7 @@
     "validation": "whole containment [250,330] then reset transform/history",
     "independent_test": "whole containment [340,end] then reset transform/history"
   },
-  "lag": 6,
+  "lag": 2,
   "alphas": {
     "P1": 100.0,
     "P2": 100.0,
@@ -21,14 +21,11 @@
     ],
     "minus_M1": [
       "B0",
-      "P3",
-      "concordance"
+      "P1"
     ],
     "minus_B0history": [
-      "B0",
       "M1",
-      "P2",
-      "concordance"
+      "P2"
     ],
     "minus_concordance": [
       "B0",
@@ -36,12 +33,19 @@
       "P3"
     ]
   },
+  "ablation_definitions": {
+    "minus_M1": "B0 marginal + P1 residual only; no M1 scalar, P3, or concordance",
+    "minus_B0history": "M1 marginal + P2 residual only; no B0 marginal/history or concordance",
+    "minus_concordance": "B0 + M1 + P3 without concordance"
+  },
   "onsets": {
     "os1": 120.0,
     "os2": 120.0,
     "os3": 120.0,
     "os4": 120.0
   },
-  "timing_basis": "available_s",
-  "b0_checkpoint_sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b"
+  "timing_basis": "available_s processing-time proxy; physical delay unavailable without receiver-delay/common-anchor verification",
+  "b0": "existing B0 architecture retrained/frozen on CLIF clean train",
+  "b0_training_max_window_end_s": 239.71602,
+  "b0_checkpoint_sha256": "c9b004179c1cea486dec581939af5399284b5b3cfffa726dd7ac8dc7b75c65ac"
 }

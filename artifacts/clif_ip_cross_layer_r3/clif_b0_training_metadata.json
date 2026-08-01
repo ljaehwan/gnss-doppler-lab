@@ -1,0 +1,61 @@
+{
+  "schema": "clif-ip.r3.b0-training.v1",
+  "architecture": "existing B0 architecture retrained/frozen on CLIF clean train",
+  "fit_scope": {
+    "scope": "CLIF clean train whole-contained windows only",
+    "min_window_start_s": 0.0137804,
+    "max_window_end_s": 239.71602,
+    "selected_rows": 5258,
+    "model_fit_rows": 4302,
+    "validation_rows": 956,
+    "train_windows": 4194,
+    "validation_windows": 932,
+    "train_prns": [
+      "G08",
+      "G10",
+      "G11",
+      "G12",
+      "G14",
+      "G15",
+      "G18",
+      "G21",
+      "G24"
+    ],
+    "validation_prns": [
+      "G25",
+      "G27"
+    ],
+    "training_input_sha256": "7c8cbb878ff63687cdd0a6679c706bebb6ecc3cda011b3ef84fdc24910574076",
+    "source_csv_sha256_live": "93b862e03cb979f48d3cf030e3c3f7b008f20a727b4b07046b7ebc4a64bdeb4e"
+  },
+  "standardizer": {
+    "fit_scope": "CLIF clean train rows only",
+    "fit_rows": 4302,
+    "fit_prns": [
+      "G08",
+      "G10",
+      "G11",
+      "G12",
+      "G14",
+      "G15",
+      "G18",
+      "G21",
+      "G24"
+    ]
+  },
+  "best_validation_loss": 0.042061781582658386,
+  "epochs": 40,
+  "device": "cuda",
+  "source_csv": {
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+    "sha256_live": "93b862e03cb979f48d3cf030e3c3f7b008f20a727b4b07046b7ebc4a64bdeb4e"
+  },
+  "reused_loader_source": {
+    "path": "/home/ubuntu/projects/gnss-doppler-clif-ip-cross-layer-r3/scripts/train_prn_node_gru.py",
+    "sha256_live": "b1bbfe29dfaa2116d63f4b0a3914c1fc68642543bc4c727ac15e00b601d67727"
+  },
+  "checkpoint": {
+    "path": "artifacts/clif_ip_cross_layer_r3/clif_b0_prn_local_gru.pt",
+    "sha256": "c9b004179c1cea486dec581939af5399284b5b3cfffa726dd7ac8dc7b75c65ac"
+  }
+}

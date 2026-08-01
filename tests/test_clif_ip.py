@@ -4,6 +4,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import pytest
+import json
+import subprocess
 from gnss_doppler_lab.clif_ip import (
     M1FitAudit, fit_m1, transform_m1, make_history, true_exceed_fraction,
     aggregate_prns, fit_threshold, independent_fpr, shuffle_pairing,
@@ -14,6 +16,8 @@ from gnss_doppler_lab.clif_ip import (
 ROOT=Path(__file__).resolve().parents[1]
 SPEC=importlib.util.spec_from_file_location("eval_clif_ip",ROOT/"scripts/eval_clif_ip.py")
 EVAL=importlib.util.module_from_spec(SPEC); import sys; sys.modules[SPEC.name]=EVAL; SPEC.loader.exec_module(EVAL)
+TRAIN_SPEC=importlib.util.spec_from_file_location("train_clif_ip",ROOT/"scripts/train_clif_ip.py")
+TRAIN=importlib.util.module_from_spec(TRAIN_SPEC);sys.modules[TRAIN_SPEC.name]=TRAIN;TRAIN_SPEC.loader.exec_module(TRAIN)
 
 
 def features(n=40, d=8, seed=1):
@@ -168,3 +172,107 @@ def test_hash_record_has_actual_stat_and_hash(tmp_path):
     p=tmp_path/"x";p.write_bytes(b"actual")
     r=EVAL.file_record(p)
     assert r["bytes"]==6 and r["sha256"]==hashlib.sha256(b"actual").hexdigest() and r["exists"]
+
+
+def test_ablation_dependency_sets_are_independent_and_exact():
+    assert EVAL.COMPONENT_SPECS == {
+        "Full": ["B0", "M1", "P3", "concordance"],
+        "minus_M1": ["B0", "P1"],
+        "minus_B0history": ["M1", "P2"],
+        "minus_concordance": ["B0", "M1", "P3"],
+    }
+
+
+def test_b0_training_digest_ignores_independent_test_mutation():
+    d=pd.DataFrame({"run_id":["r"]*4,"prn":[1]*4,"window_start_s":[0.,.5,340.,340.5],
+                    "window_end_s":[.5,1.,340.5,341.],"window_bin_s":[0.,.5,340.,340.5],"f":[1.,2.,3.,4.]})
+    before=TRAIN.training_input_digest(d,["f"]);d.loc[d.window_start_s>=340,"f"]=1e12
+    assert TRAIN.training_input_digest(d,["f"]) == before
+
+
+def test_actual_clif_artifact_bundle_regressions():
+    out=ROOT/"artifacts/clif_ip_cross_layer_r3"
+    meta=json.loads((out/"clif_b0_training_metadata.json").read_text())
+    assert meta["fit_scope"]["max_window_end_s"] <= 240
+    assert meta["standardizer"]["fit_scope"] == "CLIF clean train rows only"
+    ck=EVAL.torch.load(out/"clif_b0_prn_local_gru.pt",map_location="cpu",weights_only=False)
+    assert ck["training_provenance"]["max_window_end_s"] <= 240
+    for name in ("clean_validation","clean_test","os1","os2","os3","os4"):
+        d=pd.read_csv(out/f"per_epoch_scores_{name}.csv")
+        assert (d.M1 >= 0).all()
+        supports=[d[f"P{k}_tracked"].tolist() for k in range(4)]
+        assert supports.count(supports[0]) == 4
+    lag=pd.read_csv(out/"lag_analysis.csv")
+    assert {"alignment_shift_epochs","alignment_shift_s","predictor_history_lag_epochs","predictor_history_lag_s"} <= set(lag)
+
+
+def test_artifact_checksums_and_tracked_completeness():
+    out=ROOT/"artifacts/clif_ip_cross_layer_r3"
+    manifest=json.loads((out/"provenance_manifest.json").read_text())
+    checks=manifest["artifact_checksums"]
+    assert "provenance_manifest.json" not in checks and "test_summary.txt" in checks
+    for rel,digest in checks.items():
+        assert hashlib.sha256((out/rel).read_bytes()).hexdigest() == digest
+    tracked=set(subprocess.check_output(["git","ls-files"],cwd=ROOT,text=True).splitlines())
+    required={
+        "README.md","config.json","provenance_manifest.json","frozen_m1_fit_summary.json",
+        "clif_b0_prn_local_gru.pt","clif_b0_training_metadata.json","clif_b0_training_history.csv",
+        "predictor_comparison.csv","hyperparameter_selection.csv","scenario_metrics.csv",
+        "fusion_comparison.csv","ablation_metrics.csv","lag_analysis.csv",
+        "alignment_destruction_metrics.json","test_summary.txt",
+    }
+    assert not {str((out/r).relative_to(ROOT)) for r in required} - tracked
+
+
+def test_readme_csv_key_metrics_are_synchronized():
+    out=ROOT/"artifacts/clif_ip_cross_layer_r3"; text=(out/"README.md").read_text()
+    pc=pd.read_csv(out/"predictor_comparison.csv")
+    p1=pc.query("split=='test' and model=='P1'").mse.iloc[0]
+    p3=pc.query("split=='test' and model=='P3'").mse.iloc[0]
+    assert f"P1 test MSE={p1:.9g}" in text and f"P3={p3:.9g}" in text
+    assert "existing B0 architecture retrained/frozen on CLIF clean train" in text
+
+
+def test_b0_checkpoint_and_metadata_hash_agree():
+    out=ROOT/"artifacts/clif_ip_cross_layer_r3"
+    meta=json.loads((out/"clif_b0_training_metadata.json").read_text())
+    assert hashlib.sha256((out/"clif_b0_prn_local_gru.pt").read_bytes()).hexdigest() == meta["checkpoint"]["sha256"]
+
+
+def test_generated_csvs_are_nonempty_and_numeric_values_finite():
+    out=ROOT/"artifacts/clif_ip_cross_layer_r3"
+    for p in out.glob("*.csv"):
+        d=pd.read_csv(p,keep_default_na=False);assert len(d)>0
+        for c in d:
+            numeric=pd.to_numeric(d[c],errors="coerce")
+            values=numeric[numeric.notna()].to_numpy(float)
+            assert np.isfinite(values).all(),f"{p.name}:{c}"
+    pc=pd.read_csv(out/"predictor_comparison.csv",keep_default_na=False)
+    assert set(pc.loc[pc.model.eq("P0"),"alpha"]) == {"N/A"}
+
+
+def test_raw_iq_provenance_distinguishes_cached_from_live_hashes():
+    p=json.loads((ROOT/"artifacts/clif_ip_cross_layer_r3/provenance_manifest.json").read_text())
+    for s in p["scenarios"]:
+        if s["scenario"].startswith("os"):
+            assert s["raw_iq"]["digest_reverified_this_run"] is False
+            assert "not reverified this run" in s["raw_iq"]["hash_method"]
+        assert s["b0_source_csv"]["digest_reverified_this_run"] is True
+        assert s["m1_source_csv"]["digest_reverified_this_run"] is True
+
+
+def test_actual_permutation_resolution_and_interval_definition():
+    p=json.loads((ROOT/"artifacts/clif_ip_cross_layer_r3/alignment_destruction_metrics.json").read_text())
+    for region in p["results"].values():
+        for k in ("P2","P3","Full"):
+            stat=region[f"{k}_delta_statistics"]
+            assert stat["repetitions"]==19 and stat["p_value_resolution"]==pytest.approx(.05)
+            assert "permutation delta" in stat["ci_definition"]
+
+
+def test_docs_config_b0_scope_and_alpha_sync():
+    out=ROOT/"artifacts/clif_ip_cross_layer_r3";cfg=json.loads((out/"config.json").read_text())
+    doc=(ROOT/"docs/CLIF_IP.md").read_text()
+    assert cfg["b0_training_max_window_end_s"]==pytest.approx(239.71602)
+    assert cfg["b0_checkpoint_sha256"] in doc
+    assert "alpha 100 independently for P1/P2/P3" in doc

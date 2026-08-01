@@ -1,7 +1,7 @@
 {
-  "schema": "clif-ip.r3.provenance.v2",
-  "generated_utc": "2026-08-01T13:46:43.223561+00:00",
-  "source_commit_at_execution": "cc706703f0a5dc23da6f414c8e7f9615cd919283",
+  "schema": "clif-ip.r3.provenance.v3",
+  "generated_utc": "2026-08-01T14:24:24.263167+00:00",
+  "source_commit_at_execution": "cc8cf55f382d600b341e8dbf4890ff773afccb62",
   "dependencies": {
     "numpy": "2.5.1",
     "pandas": "3.0.3",
@@ -10,12 +10,40 @@
     "matplotlib": "3.11.0"
   },
   "b0_checkpoint": {
-    "path": "/home/ubuntu/projects/gnss-doppler-clif-ip-cross-layer-r3/artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt",
+    "path": "artifacts/clif_ip_cross_layer_r3/clif_b0_prn_local_gru.pt",
     "exists": true,
-    "bytes": 545490,
-    "mtime_ns": 1785584566186305956,
-    "sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
-    "hash_method": "sha256-full-file"
+    "bytes": 546096,
+    "mtime_ns": 1785593618594432496,
+    "sha256": "c9b004179c1cea486dec581939af5399284b5b3cfffa726dd7ac8dc7b75c65ac",
+    "hash_method": "sha256-full-file",
+    "digest_reverified_this_run": true,
+    "training_provenance": {
+      "scope": "CLIF clean train whole-contained windows only",
+      "min_window_start_s": 0.0137804,
+      "max_window_end_s": 239.71602,
+      "selected_rows": 5258,
+      "model_fit_rows": 4302,
+      "validation_rows": 956,
+      "train_windows": 4194,
+      "validation_windows": 932,
+      "train_prns": [
+        "G08",
+        "G10",
+        "G11",
+        "G12",
+        "G14",
+        "G15",
+        "G18",
+        "G21",
+        "G24"
+      ],
+      "validation_prns": [
+        "G25",
+        "G27"
+      ],
+      "training_input_sha256": "7c8cbb878ff63687cdd0a6679c706bebb6ecc3cda011b3ef84fdc24910574076",
+      "source_csv_sha256_live": "93b862e03cb979f48d3cf030e3c3f7b008f20a727b4b07046b7ebc4a64bdeb4e"
+    }
   },
   "scenarios": [
     {
@@ -27,7 +55,8 @@
         "bytes": 9600000000,
         "mtime_ns": 1785200321000000000,
         "sha256": null,
-        "hash_method": "live stat only; no trustworthy cleanStatic canonical hash available"
+        "hash_method": "live stat only; no trustworthy cleanStatic canonical hash available",
+        "digest_reverified_this_run": false
       },
       "sample_rate_hz": 5000000,
       "sample_format": "interleaved little-endian int16 IQ",
@@ -35,14 +64,15 @@
       "seek_samples": 0,
       "m1_block_ms": 10,
       "stride_s": 0.5,
-      "alignment": "timestamp reconstructed; receiver processing delay unavailable",
+      "alignment": "timestamp reconstructed; receiver processing delay and independently authenticated common anchor unavailable",
       "b0_source_csv": {
         "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
         "exists": true,
         "bytes": 16115957,
         "mtime_ns": 1785222624141540267,
         "sha256": "93b862e03cb979f48d3cf030e3c3f7b008f20a727b4b07046b7ebc4a64bdeb4e",
-        "hash_method": "sha256-full-file"
+        "hash_method": "sha256-full-file",
+        "digest_reverified_this_run": true
       },
       "m1_source_csv": {
         "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-cleanStatic-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_cleanStatic_raw_iq_noise_features.csv",
@@ -50,7 +80,8 @@
         "bytes": 1143673,
         "mtime_ns": 1785318137000000000,
         "sha256": "2c0029db94a448b1bbe00c38d3bd2477844c0dcb68a0c8f9c74ffce7e9990c4c",
-        "hash_method": "sha256-full-file"
+        "hash_method": "sha256-full-file",
+        "digest_reverified_this_run": true
       }
     },
     {
@@ -62,7 +93,8 @@
         "bytes": 9600000000,
         "mtime_ns": 1785200302000000000,
         "sha256": "e9ef8ab33a3e59c5e55b3f6fb9b8bb3ba18aaf380402ae00abbe535858b1deb7",
-        "hash_method": "cached canonical SHA-256; live path/size/mtime verified during this run"
+        "hash_method": "cached canonical digest; current path/stat recorded but digest not reverified this run",
+        "digest_reverified_this_run": false
       },
       "sample_rate_hz": 5000000,
       "sample_format": "interleaved little-endian int16 IQ",
@@ -70,14 +102,15 @@
       "seek_samples": 0,
       "m1_block_ms": 10,
       "stride_s": 0.5,
-      "alignment": "timestamp reconstructed; receiver processing delay unavailable",
+      "alignment": "timestamp reconstructed; receiver processing delay and independently authenticated common anchor unavailable",
       "b0_source_csv": {
         "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
         "exists": true,
         "bytes": 15960803,
         "mtime_ns": 1785232141353953863,
         "sha256": "b565d71d966dac78b2f7d84c5ff9856e7133342109b27e8d80406e3fb6901fae",
-        "hash_method": "sha256-full-file"
+        "hash_method": "sha256-full-file",
+        "digest_reverified_this_run": true
       },
       "m1_source_csv": {
         "path": "artifacts/clif_ip_cross_layer_r3/input_cache/oakbat_os1_raw_iq_noise_features.csv",
@@ -85,7 +118,8 @@
         "bytes": 1129133,
         "mtime_ns": 1785585344924677635,
         "sha256": "91f4b075b918b387d1c1ca1c1f441a5d4b58e04fd018bbc14675402b0869c6b7",
-        "hash_method": "sha256-full-file"
+        "hash_method": "sha256-full-file",
+        "digest_reverified_this_run": true
       }
     },
     {
@@ -97,7 +131,8 @@
         "bytes": 9600000000,
         "mtime_ns": 1785200317000000000,
         "sha256": "17de8e3f54095ad2eafad8a54ca7f5008596936ded35578710dfed17a5b670c1",
-        "hash_method": "cached canonical SHA-256; live path/size/mtime verified during this run"
+        "hash_method": "cached canonical digest; current path/stat recorded but digest not reverified this run",
+        "digest_reverified_this_run": false
       },
       "sample_rate_hz": 5000000,
       "sample_format": "interleaved little-endian int16 IQ",
@@ -105,14 +140,15 @@
       "seek_samples": 0,
       "m1_block_ms": 10,
       "stride_s": 0.5,
-      "alignment": "timestamp reconstructed; receiver processing delay unavailable",
+      "alignment": "timestamp reconstructed; receiver processing delay and independently authenticated common anchor unavailable",
       "b0_source_csv": {
         "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
         "exists": true,
         "bytes": 16001248,
         "mtime_ns": 1785232558831079585,
         "sha256": "b356db20e3d03a65cdca64994ea84283e5eae723a2c558f2f9fa679b9b43175b",
-        "hash_method": "sha256-full-file"
+        "hash_method": "sha256-full-file",
+        "digest_reverified_this_run": true
       },
       "m1_source_csv": {
         "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os2-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_os2_raw_iq_noise_features.csv",
@@ -120,7 +156,8 @@
         "bytes": 1127650,
         "mtime_ns": 1785317986000000000,
         "sha256": "6a310df95770f412ecd72a3c9ae066dd339b86f84362c8ba0a4d8d522bb9f65e",
-        "hash_method": "sha256-full-file"
+        "hash_method": "sha256-full-file",
+        "digest_reverified_this_run": true
       }
     },
     {
@@ -132,7 +169,8 @@
         "bytes": 9600000000,
         "mtime_ns": 1785201703000000000,
         "sha256": "2a3c3c5cf1accaa287fe14181e43070903500e0250c69e3c335f91c89c0cdc6c",
-        "hash_method": "cached canonical SHA-256; live path/size/mtime verified during this run"
+        "hash_method": "cached canonical digest; current path/stat recorded but digest not reverified this run",
+        "digest_reverified_this_run": false
       },
       "sample_rate_hz": 5000000,
       "sample_format": "interleaved little-endian int16 IQ",
@@ -140,14 +178,15 @@
       "seek_samples": 0,
       "m1_block_ms": 10,
       "stride_s": 0.5,
-      "alignment": "timestamp reconstructed; receiver processing delay unavailable",
+      "alignment": "timestamp reconstructed; receiver processing delay and independently authenticated common anchor unavailable",
       "b0_source_csv": {
         "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
         "exists": true,
         "bytes": 15963687,
         "mtime_ns": 1785232980794266239,
         "sha256": "fa76a7118f65439ec97cee2a70291c59771fcaa87a3c35b84ec5db4d74a3a3b6",
-        "hash_method": "sha256-full-file"
+        "hash_method": "sha256-full-file",
+        "digest_reverified_this_run": true
       },
       "m1_source_csv": {
         "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os3-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_os3_raw_iq_noise_features.csv",
@@ -155,7 +194,8 @@
         "bytes": 1130558,
         "mtime_ns": 1785318013000000000,
         "sha256": "f6b843dcdf4c599b179e16146b2692bae2a9509e931c22fd1071070749ee1014",
-        "hash_method": "sha256-full-file"
+        "hash_method": "sha256-full-file",
+        "digest_reverified_this_run": true
       }
     },
     {
@@ -167,7 +207,8 @@
         "bytes": 9600000000,
         "mtime_ns": 1785201422000000000,
         "sha256": "803f3c76bcc618efbc6b394eb536fe61ed8c3e34b1822c0088b4475621bfa8e4",
-        "hash_method": "cached canonical SHA-256; live path/size/mtime verified during this run"
+        "hash_method": "cached canonical digest; current path/stat recorded but digest not reverified this run",
+        "digest_reverified_this_run": false
       },
       "sample_rate_hz": 5000000,
       "sample_format": "interleaved little-endian int16 IQ",
@@ -175,14 +216,15 @@
       "seek_samples": 0,
       "m1_block_ms": 10,
       "stride_s": 0.5,
-      "alignment": "timestamp reconstructed; receiver processing delay unavailable",
+      "alignment": "timestamp reconstructed; receiver processing delay and independently authenticated common anchor unavailable",
       "b0_source_csv": {
         "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
         "exists": true,
         "bytes": 15924382,
         "mtime_ns": 1785233402108453762,
         "sha256": "2bc572eeaf49818fd8ba5253b3b7bb5956d0997ea2a49306f5ff6842ab53144a",
-        "hash_method": "sha256-full-file"
+        "hash_method": "sha256-full-file",
+        "digest_reverified_this_run": true
       },
       "m1_source_csv": {
         "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os4-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_os4_raw_iq_noise_features.csv",
@@ -190,36 +232,41 @@
         "bytes": 1131753,
         "mtime_ns": 1785318039000000000,
         "sha256": "bf6921c204336ba559086eccd24cb82bae96632485158ee9efc8df9c7eb3a7e9",
-        "hash_method": "sha256-full-file"
+        "hash_method": "sha256-full-file",
+        "digest_reverified_this_run": true
       }
     }
   ],
   "artifact_checksums": {
-    "README.md": "6cc641de0528d296e1eaf0eaeb9d5e4adf3ec70a98267a62257fc7b73b24e06c",
-    "ablation_metrics.csv": "bc8a0e154e62ce7adc4692b670943fe5812a3c176c1efbf5712b344b0bcf4baf",
-    "alignment_destruction_metrics.json": "3d9839932502862b4ca25e710a02c1eb3a8022f6ee8de62368a89bea7e7b945d",
-    "config.json": "f973559855cc6c1f996e0583477854135921af2932845b49f0f87539ed318db8",
+    "README.md": "01bdd11f07ab3fc5fde4a358cd1ab60bda69895e8c4b13981f48210076dbdfce",
+    "ablation_metrics.csv": "f652f956a40d12f56439ff0a25860aaae1032c2ec8fd1c36e6ffdd277dab542d",
+    "alignment_destruction_metrics.json": "668c37736c3757b1025d6e582db11108658b9e605cf665c2a3afee89e60ee9fe",
+    "clif_b0_prn_local_gru.pt": "c9b004179c1cea486dec581939af5399284b5b3cfffa726dd7ac8dc7b75c65ac",
+    "clif_b0_training_history.csv": "544e7b1e460b7b530f6c4509b2e950b69fb718eab0343b9e0e69d76f185896c8",
+    "clif_b0_training_metadata.json": "e71aef305297195e3cf9bb0525cc67c2af9c44e16b38cde0e8940ca65081d8e1",
+    "config.json": "0574107b65648b4e2ad303a835af142cd6065b2feb16e8d9a76a41e7dbd1126a",
     "frozen_m1_fit_summary.json": "eb9f819a9f3ad5311bd2b23c1d1414bda37832c97a9618833c88b89069760bd7",
-    "fusion_comparison.csv": "dcd9cb12b21dd0095100d94a9904a1a4faec782a4941393cd5dad30e7fa113ea",
-    "hyperparameter_selection.csv": "56ddd10400fc78a3b22c75a87e782636db98186841f907e5db9410a1b61c2ffc",
+    "fusion_comparison.csv": "52cc5ab91b1f793731318402f57063816bb58a313cd416e321821eefc5ab3df3",
+    "hyperparameter_selection.csv": "b3fb3d41da3684b04360e475fd2ee1e0f762cdd139c9a7143a9de0ae2f70de75",
     "input_cache/oakbat_os1_raw_iq_noise_features.csv": "91f4b075b918b387d1c1ca1c1f441a5d4b58e04fd018bbc14675402b0869c6b7",
-    "input_cache/os1_extraction_manifest.json": "382dffd2bb1e475c85ef70fd0a2807b217d932218e5811f37cc589031ffbb4ed",
-    "lag_analysis.csv": "3ee57ec0cf75b3dcdb349edeb235a752e6a7758d7c9bbc677ca09447961d0026",
-    "per_epoch_scores_clean_test.csv": "ee342e22f5e48c9874576fe3cff6387e9cd2e4fe466c64815deb89e023b470e1",
-    "per_epoch_scores_clean_validation.csv": "ab19b61dd7be10e002c291880eab0c0bad5b0cb3f69ff2b23134c5acd3693c46",
-    "per_epoch_scores_os1.csv": "14312ea73a5b0bcd3151ccff2df657b09b05b8366644060f81b82ead043b5a67",
-    "per_epoch_scores_os2.csv": "86baed103215b4cb656ca99a6ddde752711869e6a1c9d8f9dfc1cd2390b09482",
-    "per_epoch_scores_os3.csv": "dd42e8f89da2e08aa74e8da30d7dfd1bf243b51144e64333ab8a220d4b70997d",
-    "per_epoch_scores_os4.csv": "a662c1cb83649755a0714ae3648af255f7c49a7af5930262a109aa57b298b010",
-    "plots/aligned_shuffled.png": "b1b6efcc8170f45148dd232742cde23e09fd459ebf040866cf1f4d9fef36d6cf",
-    "plots/lag_analysis.png": "92bb19b719bb5b5825f935f069a1518c22bb8b2e6f0288fa9d1165bbf6056348",
-    "plots/os1_timeline.png": "57559ae7314e5d6437609b0684331b06dae7ba216806adcc02b3d3663b7fb8c9",
-    "plots/os2_timeline.png": "d604a79d8dee49d3d74b50ee4b48bd6fc706de5f955b59f7c6497efe67ee4111",
-    "plots/os3_timeline.png": "b10d36360a4f845e6ef5245f5beea935de3b4f8941e7ce0a7b5142f8653c15db",
-    "plots/os4_timeline.png": "3850be29a668a75bed7932951b5cf83c6b82880a6f243acb5702fbae185c0318",
-    "plots/tap_residual_distribution.png": "e19fc557bcbb025a21c7b8f4ff6304f31e2dbe560ee7a77cd2db2cdc671c02b1",
-    "predictor_comparison.csv": "310db16a45b703d5ef7fdf2c3013049685c01c5fdf19d73f49d9781ed3ee8609",
-    "scenario_metrics.csv": "8841907cf3c822820d3274caa38e54c3b20c4634797a4a72eeb77417627cd6d8",
-    "test_summary.txt": "ded662f6e4f35d29cde32b3c4db0b438a9b6c938d2be4d29c82ba22c839f9c76"
-  }
+    "input_cache/os1_extraction_manifest.json": "5c94a663d05d1d2804e13f7581f281532f8128afb2efbeb21454fb6beead5b0f",
+    "lag_analysis.csv": "e9caa4f352d5f9a8f501553dc8de75ecae6ec5f9744628fbeb8f862cff871825",
+    "per_epoch_scores_clean_test.csv": "b3953224ace3ced6af554e320b8e71a378d0bcf787245a496a44c9ce75785cc9",
+    "per_epoch_scores_clean_validation.csv": "8768e1d6d376099c5abe779234e5f4c01fee3da84db50c3764da6abc671535da",
+    "per_epoch_scores_os1.csv": "afa2f2786d5717e9c74b08f66ff6068d21885b5f1fe9945636cb18ff1f784f3a",
+    "per_epoch_scores_os2.csv": "8a370b8b7f97d1ccf9fa5ad005bf8c39da8260c650e85eac3e10962db27aab85",
+    "per_epoch_scores_os3.csv": "f14fba6a0b808d7d8ba7f7103faba8d68999bdec62b5f3fe444051ba9725db8b",
+    "per_epoch_scores_os4.csv": "17bac179bc68f27b6b0418cbb3a870423a486a49b35549842e5fd2b096e94fd0",
+    "plots/aligned_shuffled.png": "0d6fc87c4677ff0ac15dfc9b9aca9044a9f1cef641d4161729832024a585b97b",
+    "plots/lag_analysis.png": "029104eaba8837ae2eb7f7295fb1915ea98f9ac9a4522dd148663988fb5b5461",
+    "plots/os1_timeline.png": "41bbf244a0d97f9d2d20946bef0e08836876d264e719cc2698dd09dcf4220d95",
+    "plots/os2_timeline.png": "7bd153512575308b712600d5b91953abf31612670729e380393f741913c8a039",
+    "plots/os3_timeline.png": "d3caf82b85f88e9febd5cf2c2341bd2cfe072aee35af57d70f6abdc2bbf9264b",
+    "plots/os4_timeline.png": "af828ef5f935a6de1a74a45d4d63e7682c2ed5ddd61fcbb452d3f250576c31e5",
+    "plots/tap_residual_distribution.png": "9c6798f6e60842d278efb52f31712bacf55e563d7168ae7a50b035aa4a39ba06",
+    "predictor_comparison.csv": "9c27e31cefd8ab0dcec8fac8e82c8052a5b38f8b441983d3a7525976558e0f9a",
+    "scenario_metrics.csv": "d3532da381ab21cbedf6ac748529342aa85cb45ed7d2ed537b97c030c3f7e9ed",
+    "test_summary.txt": "a2561febd0a106c2ccca6a254d04ccbb901c0292f5197eb2ef836b0581836f30"
+  },
+  "checksum_policy": "SHA-256 of every artifact file after test_summary finalization; provenance_manifest.json excludes itself"
 }

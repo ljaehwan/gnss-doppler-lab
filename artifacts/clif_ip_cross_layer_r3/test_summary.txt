@@ -1,10 +1,35 @@
-experiment_command: python scripts/eval_clif_ip.py --out artifacts/clif_ip_cross_layer_r3 --permutations 19
-experiment_completed_utc: 2026-08-01T13:46:43.245990+00:00
-experiment_exit: 0
-fit_count: 1
-fit_rows: 480
-P1_test_MSE: 0.0209227215
-P3_test_MSE: 0.0216904497
-Full_mean_ROC_AUC: 0.889791
+EXPERIMENT
+command: /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/train_clif_ip.py --out artifacts/clif_ip_cross_layer_r3 --skip-os1 --epochs 40
+result: exit 0; B0 selected_rows=5258; model_fit_rows=4302; standardizer_fit_rows=4302; max_window_end_s=239.71602
+checkpoint_sha256: c9b004179c1cea486dec581939af5399284b5b3cfffa726dd7ac8dc7b75c65ac
+command: /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/eval_clif_ip.py --out artifacts/clif_ip_cross_layer_r3 --permutations 19
+result: exit 0; completed 2026-08-01T14:24:24.271273+00:00; M1 fit_count=1; fit_rows=480
+P1_test_MSE: 0.0104566329
+P3_test_MSE: 0.0106082819
+Full_mean_ROC_AUC: 0.8943
 verdict: NO-GO
-pytest: pending post-experiment verification
+
+TDD RED
+command: /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/pytest -q tests/test_clif_ip.py
+result: 4 failed, 22 passed (expected regression RED before implementation)
+
+CLIF TARGETED GREEN
+command: /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/pytest -q tests/test_clif_ip.py
+result: 32 passed in 3.81s
+
+RELATED GREEN
+command: /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/pytest -q tests/test_clif_ip.py tests/test_clif_ip_feasibility.py tests/test_clif_ip_provenance_r2.py
+result: 36 passed in 3.77s
+
+PRE-EXISTING UNRELATED FAILURES (NOT CLIF SUCCESS)
+command: /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/pytest -q
+result on the pre-change suite snapshot: 467 passed, 6 failed
+result on this final tree after adding 10 CLIF regression tests: 477 passed, 6 failed in 31.97s
+classification: all six failures are pre-existing unrelated baseline import failures caused by missing scripts/train_peak_floor_temporal_autoencoder.py; this file was intentionally not repaired.
+failed tests:
+- tests/test_peak_floor_contrastive_predictive.py::test_predictive_pairs_use_only_past_context_and_future_endpoint
+- tests/test_peak_floor_contrastive_predictive.py::test_info_nce_prefers_correct_future_pairing
+- tests/test_peak_floor_contrastive_predictive.py::test_model_predicts_normalized_future_embedding_from_joint_peak_floor_context
+- tests/test_peak_floor_contrastive_predictive.py::test_scoring_timestamp_is_future_endpoint_and_is_causal
+- tests/test_peak_floor_contrastive_predictive.py::test_tiny_normal_only_campaign_writes_cpc_artifacts
+- tests/test_score_peak_floor_contrastive_predictive.py::test_frozen_cpc_scores_attack_run_without_refitting
