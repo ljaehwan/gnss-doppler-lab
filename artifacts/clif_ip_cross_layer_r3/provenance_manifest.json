@@ -1,7 +1,30 @@
 {
   "schema": "clif-ip.r3.provenance.v3",
   "generated_utc": "2026-08-01T14:24:24.263167+00:00",
-  "source_commit_at_execution": "cc8cf55f382d600b341e8dbf4890ff773afccb62",
+  "source_commit_at_execution": "7390c5d694a4e5c995f173a69e90a74ccbeb7090",
+  "source_code_files": [
+    {
+      "path": "scripts/train_clif_ip.py",
+      "hash": "138319c69685f86e79c7041881036d227f1088affbce99a66f515858ac5aa43a",
+      "hash_method": "sha256-full-file"
+    },
+    {
+      "path": "scripts/eval_clif_ip.py",
+      "hash": "2e0b34647acd21d99b673ba5e7f8da51a46b27ae1699ba5b6c91d317f968e670",
+      "hash_method": "sha256-full-file"
+    },
+    {
+      "path": "scripts/finalize_clif_ip_artifacts.py",
+      "hash": "b10ba7aa32f94ce47a5f8a2369e8ded68015d579f4ea2aec094e4879bb5b86da",
+      "hash_method": "sha256-full-file"
+    },
+    {
+      "path": "src/gnss_doppler_lab/clif_ip.py",
+      "hash": "22698e1066dd5c2feaba4774f3fe36876e917dd5ec777fe33fa4007a0f03c14d",
+      "hash_method": "sha256-full-file"
+    }
+  ],
+  "source_tree_binding": "Commit 7390c5d694a4e5c995f173a69e90a74ccbeb7090 contains the clean artifact-generating code and the complete artifact tree. The source hashes were reverified from the live clean worktree and against that commit; provenance_manifest.json is excluded from artifact checksums.",
   "dependencies": {
     "numpy": "2.5.1",
     "pandas": "3.0.3",
