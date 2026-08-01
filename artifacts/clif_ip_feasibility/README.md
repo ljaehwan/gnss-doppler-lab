@@ -1,68 +1,70 @@
-# CLIF-IP Phase 1 feasibility — No-Go (provenance gate)
+# CLIF-IP Phase 1 feasibility
 
-## Decision
+## Verdict — **No-Go for Phase 2**
 
-**No-Go: the requested cross-layer model comparison was not run.**
+This is an observational OAKBAT-only Phase 1 analysis, not proof of physical causality. It evaluates the frozen B0 predictor and an M1-style PCA/AR raw-IQ innovation constructed from existing paired RF-floor feature files. The result does **not** justify a GRU/cross-attention CLIF-IP implementation.
 
-The prerequisite is not merely that B0 and M1 have a numerically matching relative-time grid. The project must prove that the paired RF and peak evidence comes from the **same immutable raw-IQ recording** and shares one recording-start/sample-time anchor. The current OAKBAT pairing satisfies the former time-grid candidate but does not record an M1 raw-IQ hash or start-sample anchor. TEXBAT raw/derived evidence is not available in the tracked repository for an equivalent paired verification.
+Reasons:
 
-Implementing C0–C5, lag selection, a shuffled-time test, ROC/PR metrics, or a Go conclusion from those inputs would turn an unproven scenario-label join into a cross-layer physical claim. This branch deliberately fails closed instead.
+1. There is no TEXBAT paired derived evidence in this run, and OAKBAT has only one clean recording split chronologically rather than recorder/run holdout.
+2. Clean-validation lag association is weak and inconsistent: the largest absolute correlation is diagnostic *future* lag -0.5 s (`0.133`), while causal lags are `-0.158` (0 s), `-0.147` (0.5 s), `0.006` (1 s), `0.031` (1.5 s). This is not evidence for a stable causal M1→B0 delay.
+3. Alignment destruction changes the simple continuous cascade proxy, but its direction changes by scenario: aligned minus shifted is positive for os2/os4 and negative for os3. That is not a reproducible cascade signature.
+4. C4 lagged score is highly discriminative in the available OAKBAT scenarios but has unstable behavior and no independent recorder/dataset confirmation. C5 does not reliably exceed the simpler alternatives.
+5. Existing M1 RF-floor pair records lack a modality-pair raw-IQ SHA/start-sample anchor. Relative epoch alignment is operationally used here, but same-sample provenance remains a limitation.
 
-## Actual B0 evidence
+## Actual evidence
 
-- Input: PRN-local, prompt-normalized 9 correlation taps `E4,E3,E2,E,P,L,L2,L3,L4`.
-- Predictor: frozen GRU takes `[batch, 12, 9]` and predicts the next 9-tap target.
-- Before scalar/binomial-tail aggregation: a signed standardized 9-tap prediction residual exists; the standard B0 scorer persists PRN RMSE/MAE, not the signed vector.
-- Time: 1.0 s tracking window, 0.5 s stride; target `window_start_s`, causally available at the target window end.
-- Normalization: frozen training-split feature mean/std.
-- Threshold: cleanStatic+cleanDynamic PRN quantiles → exact binomial-tail surprise → causal EWMA → clean q99.
+### B0
+- Frozen PRN-local GRU: prior 12 epochs of 9 prompt-normalized correlation taps predict the next 9-tap vector.
+- `B0` evidence retained before binomial tail: signed 9-dimensional residual, per-PRN RMSE, event median/q90/q99 RMSE, residual energy, tracked PRN count, and q99 exceedance fraction.
+- B0 input does **not** contain PRN identity.
+- Peak window: 1.0 s, 0.5 s cadence; target score is causally available at window end.
 
-Code evidence: `scripts/train_prn_node_gru.py`, `scripts/score_texbat_prn_node_gru.py`, `scripts/eval_btail_support_gate.py`, `configs/detectors/texbat_btail_gate_v1.json`.
+### M1
+- Existing raw-IQ floor features only: I/Q/power, phase increment/coherence, PSD entropy/flatness/bands, amplitude statistics, complex autocorrelation.
+- M1 innovation: clean-trained PCA representation followed by AR(6) residual vector, AR-RMSE, and robust feature-level drift.
+- RF block: 10 ms, 0.5 s cadence. No B0 feature was used to construct M1.
 
-## Actual M1 evidence
+## Alignment and normal-only protocol
 
-- Input: pre-correlation raw interleaved int16 I/Q.
-- Actual features: I/Q/power statistics, phase-increment/coherence, PSD entropy/flatness/band powers, amplitude statistics, and complex autocorrelation.
-- Before scalar score: PCA AR innovation vector; its AR-RMSE and a robust feature-level drift vector are the scalar-score inputs.
-- Time: 10 ms RF block at 0.5 s stride, recording-relative `window_start_s`.
-- Normalization: fit-prefix mean/std before PCA; median/MAD residual/level scaling.
-- Threshold: per-recording authentic-prefix causal-EWMA q99.
+OAKBAT `cleanStatic`, `os2`, `os3`, `os4` have B0 and M1 0.5-second relative grids. B0 availability is its tracking-window end; M1 availability is raw block end; rows are joined only by matching recording-relative epoch.
 
-Code evidence: `scripts/iq_noise_continuity_detector.py`, `docs/RAW_IQ_NOISE_CONTINUITY_SECOND_METHOD.md`.
+Normal-only fitting:
+- B0 frozen checkpoint unchanged.
+- `cleanStatic [0,240] s`: PCA, AR, feature normalizers, joint covariance, ridge predictor, full-score covariance.
+- `cleanStatic [250,330] s`: validation calibration (`q99`, `q99.5`, and reference tails).
+- Attack rows are shifted beyond 1000 s internally before score transforms, so they cannot enter any fit/validation interval.
+- No random window split, attack-label lag selection, attack-derived weight, or attack-derived threshold is used.
 
-## Alignment result
+This is **not** a recorder-level generalization split. It cannot exclude M1 front-end/capture/AGC fingerprint shortcuts.
 
-For `cleanStatic`, `os2`, `os3`, `os4`, the existing OAKBAT manifest paths exist, file hashes match their manifest entries, and both exported timestamp grids are 0.5 s. This proves only **candidate relative-time alignment**.
+## Compared scores
 
-It does not prove the required raw-data identity:
+- C0: B0 evidence distance.
+- C1: M1 AR-RMSE + level drift distance.
+- C2: clean-tail mean, max, Fisher combination.
+- C3: Ledoit-Wolf same-time B0/M1 joint distance.
+- C4: Ridge prediction of current B0 evidence from causal 0–3 s M1 history; score is residual Mahalanobis distance.
+- C5: covariance score of B0, M1, cross-layer residual, and causal cascade.
 
-- B0 morphology provenance is strong, but the pair record does not expose an immutable `raw_iq_sha256` for direct cross-modal equality.
-- M1 floor evidence has an output-file SHA and `floor_scenario` string only; it lacks the source raw-IQ SHA-256, recording-start sample/offset, and extractor provenance tied to B0.
-- Therefore `window_start_s=120.0` cannot be asserted to mean the same physical samples in both layers.
+See `fusion_comparison.csv` and `scenario_metrics.csv`. ROC/PR use each attack recording's pre-onset region (≤110 s) versus post-guard attack region (≥130 s); normal FPR is fixed from clean validation q99.
 
-`data_alignment_report.json` is the machine-readable gate evidence. No attack label, onset, lag, feature weight, threshold, or metric was used to make this decision.
+## What may be claimed
 
-## Leakage and generalization checks
+- It is feasible to extract frozen B0 residual evidence and M1 AR innovation on a shared 0.5-second OAKBAT relative grid.
+- Simple temporal correspondence affects a cascade proxy while leaving each marginal series unchanged.
+- The current evidence is insufficient to claim a stable, transferable RF-to-peak relationship.
 
-- B0’s frozen calibration is clean-only, but OAKBAT cleanStatic training is chronological partitions of one recording, not a recorder/run holdout.
-- M1 is per-recording prefix self-calibration; independent cleanStatic/cleanDynamic recorder-stability evidence is not present in this pairing.
-- M1 raw-IQ features can encode AGC/power/front-end/transmitter/campaign identity. Without paired raw provenance and recorder-group controls, cross-layer gains could be recorder/capture shortcuts.
+## What may not be claimed
 
-## What is not claimed
+- Physical causation from RF innovation to tracking peak innovation.
+- Cross-dataset or cross-recorder robustness.
+- Superiority of Full CLIF-IP over B0/M1/simple fusion.
+- Any result for TEXBAT or OAKBAT os1.
 
-- No claim that RF innovations causally produce peak innovations.
-- No claim that a cross-layer relationship exists or does not exist.
-- No ROC-AUC, PR-AUC, alarm delay, FPR, or comparison of C0–C5: those are **not estimable under the failed pair-provenance gate**.
-- No temporal-alignment destruction or lag-sensitivity result: a shuffle test on an unproven join would not validate a physical temporal relation.
+## Outputs
 
-## Required evidence before reopening Phase 1
-
-For every B0/M1 pair, create an immutable pairing manifest containing:
-
-1. identical `raw_iq_sha256`, byte size, sample rate, format, and recording/run ID;
-2. raw sample-index or UTC/GPST recording-start mapping for both extractors;
-3. B0 tracking feature/receiver-manifest hashes and M1 extractor/version/config hash;
-4. whole-recording/run group splits, clean-only calibration sets, and separate OAKBAT/TEXBAT contracts;
-5. M1 recorder/fingerprint ablations (power/AGC, PSD, phase-only, autocorrelation-only).
-
-Only after this gate passes should C0–C5 be fit on normal-only data and evaluated with causal lag/degradation tests.
+- `*_epoch_scores.csv`: time-resolved B0, M1, cross-layer and cascade scores.
+- `plots/*_timeline.png`: B0/M1/cross/cascade timelines.
+- `plots/*_aligned_vs_shuffled.png`: circular-time-shift destruction diagnostic.
+- `plots/lag_sensitivity.png`: clean-only lag diagnostic.

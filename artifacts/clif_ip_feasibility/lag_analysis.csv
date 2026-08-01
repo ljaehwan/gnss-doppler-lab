@@ -1,5 +1,8 @@
-scenario,lag_s,model_permitted,status,reason
-cleanStatic,0.0,false,not_run,paired raw-IQ provenance gate failed
-os2,0.0,false,not_run,paired raw-IQ provenance gate failed
-os3,0.0,false,not_run,paired raw-IQ provenance gate failed
-os4,0.0,false,not_run,paired raw-IQ provenance gate failed
+lag_s,causal_for_model,clean_validation_pearson,status
+-1.5,False,-0.02802774200042188,diagnostic
+-1.0,False,0.04264354129337115,diagnostic
+-0.5,False,0.1332239438890873,diagnostic
+0.0,True,-0.1581931596499608,diagnostic
+0.5,True,-0.14703636531460962,diagnostic
+1.0,True,0.006249662287602882,diagnostic
+1.5,True,0.030923889809789034,diagnostic

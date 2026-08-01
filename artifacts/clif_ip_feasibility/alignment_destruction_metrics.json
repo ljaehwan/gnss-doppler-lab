@@ -1,9 +1,39 @@
 {
-  "status": "not_run",
-  "reason": "Temporal destruction is meaningful only after same-recording and common-time provenance is established. Existing paired OAKBAT artifacts expose matching relative grids but no M1 raw_iq_sha256 or recording-start sample anchor.",
-  "marginal_score_preservation_verified": false,
-  "aligned_cross_layer_score": null,
-  "shuffled_cross_layer_score": null,
-  "aligned_cascade_score": null,
-  "shuffled_cascade_score": null
+  "status": "evaluated_proxy",
+  "definition": "continuous B0 score multiplied by same-time M1 score; this is a diagnostic cascade proxy, not a physical causal claim",
+  "results": {
+    "os2": {
+      "circular_shift_epochs": 315,
+      "circular_shift_s": 157.5,
+      "b0_marginal_mean_before": 72.97687946966776,
+      "b0_marginal_mean_after": 72.97687946966776,
+      "m1_marginal_mean_before": 223.17373665467557,
+      "m1_marginal_mean_after": 223.1737366546756,
+      "aligned_cascade_proxy": 20727.027043986713,
+      "shuffled_cascade_proxy": 14846.86177469309,
+      "difference": 5880.165269293622
+    },
+    "os3": {
+      "circular_shift_epochs": 315,
+      "circular_shift_s": 157.5,
+      "b0_marginal_mean_before": 4.601933387596992,
+      "b0_marginal_mean_after": 4.601933387596992,
+      "m1_marginal_mean_before": 43.87834834650774,
+      "m1_marginal_mean_after": 43.87834834650774,
+      "aligned_cascade_proxy": 44.42501340168492,
+      "shuffled_cascade_proxy": 251.00859488936348,
+      "difference": -206.58358148767854
+    },
+    "os4": {
+      "circular_shift_epochs": 315,
+      "circular_shift_s": 157.5,
+      "b0_marginal_mean_before": 87.09276805375708,
+      "b0_marginal_mean_after": 87.09276805375708,
+      "m1_marginal_mean_before": 31.27615961315518,
+      "m1_marginal_mean_after": 31.276159613155187,
+      "aligned_cascade_proxy": 3324.026079884276,
+      "shuffled_cascade_proxy": 2520.184422153913,
+      "difference": 803.8416577303628
+    }
+  }
 }

@@ -1,6 +1,25 @@
-scenario,model,roc_auc,pr_auc,normal_fpr,attack_detection_rate,first_alarm_delay_s,persistent_alarm_ratio,status,reason
-cleanStatic,all,,,,,,,,not_run,same-recording raw-IQ provenance gate failed
-os2,all,,,,,,,,not_run,same-recording raw-IQ provenance gate failed
-os3,all,,,,,,,,not_run,same-recording raw-IQ provenance gate failed
-os4,all,,,,,,,,not_run,same-recording raw-IQ provenance gate failed
-TEXBAT,all,,,,,,,,not_run,paired B0/M1 raw and derived evidence unavailable in tracked repository
+scenario,model,roc_auc,pr_auc,normal_fpr,attack_detection_rate,first_alarm_delay_s,persistent_alarm_ratio,threshold_q99,threshold_q995,status,reason
+os2,C0_B0,0.9665662484868494,0.961150832867607,0.012422360248447204,1.0,0.0,1.0,1.5994348939835146,1.6272267943997676,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os2,C1_M1,1.0,1.0,0.012422360248447204,1.0,0.0,1.0,3.7136640311636877,4.199159927564291,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os2,C2_mean,0.9971869153736107,0.9987457024970758,0.012422360248447204,1.0,0.0,1.0,2.208288290277003,2.4689754029957784,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os2,C2_max,0.9951923076923077,0.9912317451851342,0.012422360248447204,1.0,0.0,1.0,3.7136640311636877,4.199159927564291,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os2,C2_fisher,0.9672437273027403,0.9761704152830254,0.012422360248447204,1.0,0.0,1.0,13.064088988355378,13.926988513621865,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os2,C3_joint,1.0,1.0,0.012422360248447204,1.0,0.0,1.0,0.3621917941571406,0.41972891695013254,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os2,C4_lagged,1.0,1.0,0.012903225806451613,1.0,0.0,1.0,1.2160356415554454,1.2549938608415003,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os2,C5_full,1.0,1.0,0.012903225806451613,1.0,0.0,1.0,0.22724078379216436,0.2577860140783496,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os3,C0_B0,0.43309122922856824,0.6954250418806163,0.012422360248447204,0.08297567954220315,6.0,0.08297567954220315,1.5994348939835146,1.6272267943997676,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os3,C1_M1,1.0,1.0,0.012422360248447204,1.0,0.5,1.0,3.7136640311636877,4.199159927564291,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os3,C2_mean,0.9279533949598326,0.9190427356721586,0.012422360248447204,1.0,0.5,1.0,2.208288290277003,2.4689754029957784,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os3,C2_max,0.9284554858589193,0.9193691197527165,0.012422360248447204,1.0,0.5,1.0,3.7136640311636877,4.199159927564291,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os3,C2_fisher,0.8993961153295917,0.9318210644894676,0.012422360248447204,0.765379113018598,0.5,0.765379113018598,13.064088988355378,13.926988513621865,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os3,C3_joint,0.9683751513150655,0.9587661927322645,0.012422360248447204,1.0,0.5,1.0,0.3621917941571406,0.41972891695013254,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os3,C4_lagged,1.0,1.0,0.012903225806451613,1.0,0.0,1.0,1.2160356415554454,1.2549938608415003,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os3,C5_full,0.91005694948828,0.9058458528423675,0.012903225806451613,1.0,0.0,1.0,0.22724078379216436,0.2577860140783496,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os4,C0_B0,0.9803015296577529,0.9816079107465416,0.012422360248447204,1.0,0.0,1.0,1.5994348939835146,1.6272267943997676,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os4,C1_M1,1.0,1.0,0.012422360248447204,1.0,0.0,1.0,3.7136640311636877,4.199159927564291,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os4,C2_mean,0.9867049081104875,0.9872557861465074,0.012422360248447204,1.0,0.0,1.0,2.208288290277003,2.4689754029957784,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os4,C2_max,0.9804184549356223,0.9816420623924633,0.012422360248447204,1.0,0.0,1.0,3.7136640311636877,4.199159927564291,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os4,C2_fisher,0.982963299218664,0.9872578551408161,0.012422360248447204,1.0,0.0,1.0,13.064088988355378,13.926988513621865,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os4,C3_joint,0.9865948607901397,0.9862091177823984,0.012422360248447204,1.0,0.0,1.0,0.3621917941571406,0.41972891695013254,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os4,C4_lagged,0.9987000660283923,0.9996812863359071,0.012903225806451613,1.0,0.0,1.0,1.2160356415554454,1.2549938608415003,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"
+os4,C5_full,1.0,1.0,0.012903225806451613,1.0,0.0,1.0,0.22724078379216436,0.2577860140783496,evaluated,"normal-only cleanStatic train [0,240] and validation [250,330]; attack rows shifted outside fitting intervals"

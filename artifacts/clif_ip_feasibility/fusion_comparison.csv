@@ -1,7 +1,9 @@
-model,status,reason
-C0_B0_only,not_run,blocked_before_cross-layer analysis; baseline not recomputed
-C1_M1_only,not_run,paired raw-IQ provenance unavailable
-C2_simple_late_fusion,not_run,same-recording gate failed
-C3_same_time_joint,not_run,same-recording gate failed
-C4_lagged_iq_to_peak,not_run,same-recording gate failed
-C5_full_CLIF_IP,not_run,same-recording gate failed
+model,roc_auc,pr_auc,attack_detection_rate,normal_fpr
+C0_B0,0.7933196691243901,0.8793945951649217,0.6943252265140677,0.012422360248447206
+C1_M1,1.0,1.0,1.0,0.012422360248447206
+C2_fisher,0.949867713950332,0.9650831116377697,0.9217930376728659,0.012422360248447206
+C2_max,0.9680220828289497,0.9640809757767714,1.0,0.012422360248447206
+C2_mean,0.9706150728146437,0.9683480747719139,1.0,0.012422360248447206
+C3_joint,0.9849900040350684,0.981658436838221,1.0,0.012422360248447206
+C4_lagged,0.9995666886761309,0.9998937621119691,1.0,0.012903225806451613
+C5_full,0.97001898316276,0.9686152842807892,1.0,0.012903225806451613

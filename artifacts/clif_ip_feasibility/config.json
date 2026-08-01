@@ -1,10 +1,23 @@
 {
-  "schema": "gnss-doppler-lab.clif-ip-feasibility-config.v1",
-  "phase": 1,
-  "datasets": ["OAKBAT", "TEXBAT"],
-  "candidate_lags_s": [0.0, 0.5, 1.0, 2.0, 3.0],
-  "causal_only_for_models": true,
-  "training_contract": "normal-only, recording/run-group split, no attack-label model selection",
-  "execution_status": "blocked_before_model_fit",
-  "blocker": "same-recording raw-IQ provenance is not established for B0/M1 pairs"
+  "schema": "clif-ip.phase1.v1",
+  "device": "cuda",
+  "datasets": {
+    "OAKBAT": {
+      "evaluated": [
+        "os2",
+        "os3",
+        "os4"
+      ],
+      "missing": [
+        "os1"
+      ],
+      "normal_training": "cleanStatic chronological 0-240s; validation 250-330s; no attack rows used to fit B0/M1 normalizers, covariance, predictor, or thresholds",
+      "limitation": "single-recording normal split; not recorder-holdout"
+    },
+    "TEXBAT": {
+      "status": "not_run",
+      "reason": "paired derived artifacts unavailable"
+    }
+  },
+  "conclusion": "No-Go: OAKBAT-only, single-clean-recording evidence is insufficient for a cross-dataset/recorder claim. M1-alone scores dominate several scenarios and q99 false-positive rates are not stable; C5 does not establish improvement over simple fusion."
 }
