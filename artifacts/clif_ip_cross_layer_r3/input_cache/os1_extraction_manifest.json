@@ -1,8 +1,13 @@
 {
-  "schema": "clif-ip.r3.preparation.v1",
+  "schema": "clif-ip.r3.preparation.v2",
   "scenario": "os1",
   "raw": "/home/ubuntu/unraid_hdd/oakbat/gps_l1ca/raw/os1.bin",
   "raw_bytes": 9600000000,
+  "raw_mtime_ns": 1785200302000000000,
+  "raw_sha256": "e9ef8ab33a3e59c5e55b3f6fb9b8bb3ba18aaf380402ae00abbe535858b1deb7",
+  "raw_hash_method": "cached canonical SHA-256 with live size/mtime verification",
+  "extractor_source": "/home/ubuntu/projects/gnss-doppler-lab/scripts/iq_noise_continuity_detector.py",
+  "extractor_sha256": "93e28547d44a96e23bca32455e8b087b3c1de4cf50df667aed7e1ca98e303658",
   "sample_rate_hz": 5000000,
   "sample_format": "interleaved int16 IQ",
   "recording_start_sample": 0,
@@ -11,5 +16,6 @@
   "stride_s": 0.5,
   "rows": 960,
   "output": "artifacts/clif_ip_cross_layer_r3/input_cache/oakbat_os1_raw_iq_noise_features.csv",
+  "output_sha256": "91f4b075b918b387d1c1ca1c1f441a5d4b58e04fd018bbc14675402b0869c6b7",
   "note": "feature extraction only; no M1 fit"
 }

@@ -5,15 +5,17 @@
     "cleanStatic"
   ],
   "transform_recordings": [
-    "cleanStatic",
+    "cleanStatic_train",
+    "cleanStatic_validation",
+    "cleanStatic_test",
     "os1",
     "os2",
     "os3",
     "os4"
   ],
-  "frozen_sha256": "b19343d63af2aa942b911e2ad9cf51e62cb33402a84cad8c9dde63120eaf0fad",
-  "fit_scope": "cleanStatic whole windows 0-240 s",
-  "fit_rows": 481,
+  "frozen_sha256": "e192ea2d410d836dc2764b1d9c576be6680f8c51e5d358f4223e03da03d07887",
+  "fit_scope": "cleanStatic whole windows: start>=0 and end<=240 s",
+  "fit_rows": 480,
   "pca_dim": 8,
   "ar_lag": 6
 }

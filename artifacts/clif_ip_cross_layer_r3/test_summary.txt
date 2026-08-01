@@ -1,8 +1,10 @@
-M1: M1-style surrogate (actual raw-IQ features; no reusable frozen M1 checkpoint found)
-M1 hash: b19343d63af2aa942b911e2ad9cf51e62cb33402a84cad8c9dde63120eaf0fad
-P3 test MSE: 0.0218397996
-P1 test MSE: 0.0210666203
-P3 improvement %: -3.67016
-Full mean ROC-AUC: 0.887926
-Full mean PR-AUC: 0.932904
-Go/No-Go: NO-GO
+experiment_command: python scripts/eval_clif_ip.py --out artifacts/clif_ip_cross_layer_r3 --permutations 19
+experiment_completed_utc: 2026-08-01T13:46:43.245990+00:00
+experiment_exit: 0
+fit_count: 1
+fit_rows: 480
+P1_test_MSE: 0.0209227215
+P3_test_MSE: 0.0216904497
+Full_mean_ROC_AUC: 0.889791
+verdict: NO-GO
+pytest: pending post-experiment verification
