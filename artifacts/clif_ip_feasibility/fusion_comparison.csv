@@ -1,0 +1,7 @@
+model,status,reason
+C0_B0_only,not_run,blocked_before_cross-layer analysis; baseline not recomputed
+C1_M1_only,not_run,paired raw-IQ provenance unavailable
+C2_simple_late_fusion,not_run,same-recording gate failed
+C3_same_time_joint,not_run,same-recording gate failed
+C4_lagged_iq_to_peak,not_run,same-recording gate failed
+C5_full_CLIF_IP,not_run,same-recording gate failed

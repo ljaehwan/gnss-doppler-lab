@@ -1,0 +1,6 @@
+scenario,model,roc_auc,pr_auc,normal_fpr,attack_detection_rate,first_alarm_delay_s,persistent_alarm_ratio,status,reason
+cleanStatic,all,,,,,,,,not_run,same-recording raw-IQ provenance gate failed
+os2,all,,,,,,,,not_run,same-recording raw-IQ provenance gate failed
+os3,all,,,,,,,,not_run,same-recording raw-IQ provenance gate failed
+os4,all,,,,,,,,not_run,same-recording raw-IQ provenance gate failed
+TEXBAT,all,,,,,,,,not_run,paired B0/M1 raw and derived evidence unavailable in tracked repository

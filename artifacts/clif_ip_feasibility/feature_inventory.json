@@ -1,0 +1,16 @@
+{
+  "B0": {
+    "input": "per-PRN 9 prompt-normalized Method-A correlation taps; [batch, 12, 9] history predicts next [9] target",
+    "evidence_before_binomial_tail": "per-PRN standardized 9-tap prediction residual exists before RMSE; standard scorer persists RMSE/MAE rather than signed vector",
+    "window": "1.0 s window, 0.5 s stride, target window_start_s; available at window end",
+    "normalization": "train-split feature mean/std in frozen checkpoint",
+    "threshold": "cleanStatic+cleanDynamic PRN quantiles -> binomial tail -> EWMA q99"
+  },
+  "M1": {
+    "input": "raw pre-correlation interleaved int16 I/Q features: power, phase increments/coherence, PSD entropy/flatness/bands, autocorrelation, amplitude statistics",
+    "evidence_before_scalar": "PCA AR innovation vector and its RMSE; feature-level robust drift vector",
+    "window": "10 ms raw-IQ block at 0.5 s stride; recording-relative window_start_s",
+    "normalization": "fit-prefix mean/std before PCA; robust median/MAD for residual and level scores",
+    "threshold": "per-recording fit-prefix q99 of causal EWMA ratios"
+  }
+}

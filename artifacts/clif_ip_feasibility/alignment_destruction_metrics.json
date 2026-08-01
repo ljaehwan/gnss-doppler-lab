@@ -1,0 +1,9 @@
+{
+  "status": "not_run",
+  "reason": "Temporal destruction is meaningful only after same-recording and common-time provenance is established. Existing paired OAKBAT artifacts expose matching relative grids but no M1 raw_iq_sha256 or recording-start sample anchor.",
+  "marginal_score_preservation_verified": false,
+  "aligned_cross_layer_score": null,
+  "shuffled_cross_layer_score": null,
+  "aligned_cascade_score": null,
+  "shuffled_cascade_score": null
+}

@@ -1,0 +1,10 @@
+{
+  "schema": "gnss-doppler-lab.clif-ip-feasibility-config.v1",
+  "phase": 1,
+  "datasets": ["OAKBAT", "TEXBAT"],
+  "candidate_lags_s": [0.0, 0.5, 1.0, 2.0, 3.0],
+  "causal_only_for_models": true,
+  "training_contract": "normal-only, recording/run-group split, no attack-label model selection",
+  "execution_status": "blocked_before_model_fit",
+  "blocker": "same-recording raw-IQ provenance is not established for B0/M1 pairs"
+}
