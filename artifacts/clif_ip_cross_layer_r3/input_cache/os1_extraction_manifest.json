@@ -1,0 +1,15 @@
+{
+  "schema": "clif-ip.r3.preparation.v1",
+  "scenario": "os1",
+  "raw": "/home/ubuntu/unraid_hdd/oakbat/gps_l1ca/raw/os1.bin",
+  "raw_bytes": 9600000000,
+  "sample_rate_hz": 5000000,
+  "sample_format": "interleaved int16 IQ",
+  "recording_start_sample": 0,
+  "seek_samples": 0,
+  "block_ms": 10.0,
+  "stride_s": 0.5,
+  "rows": 960,
+  "output": "artifacts/clif_ip_cross_layer_r3/input_cache/oakbat_os1_raw_iq_noise_features.csv",
+  "note": "feature extraction only; no M1 fit"
+}

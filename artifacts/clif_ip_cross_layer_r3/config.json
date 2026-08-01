@@ -1,0 +1,21 @@
+{
+  "schema": "clif-ip.cross-layer.r3",
+  "device": "CPU Ridge (GPU not required)",
+  "splits": {
+    "train": "0-240 whole containment",
+    "guard1": "240-250",
+    "validation_calibration": "250-330",
+    "guard2": "330-340",
+    "independent_test": ">=340"
+  },
+  "lag": 6,
+  "alpha": 10.0,
+  "selection": "validation only",
+  "onsets": {
+    "os1": 120.0,
+    "os2": 120.0,
+    "os3": 120.0,
+    "os4": 120.0
+  },
+  "b0_checkpoint_sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b"
+}
