@@ -1,0 +1,11 @@
+{
+  "contract": "No proxy calculation. Relation destruction is forbidden until actual raw residual/whitened innovation reproduction matches frozen r3 scores.",
+  "destruction_executed": false,
+  "exception_type": "FailClosedError",
+  "frozen_model": "artifacts/frozen/gcmr-pi-oakbat-3t-r3/model.pt",
+  "innovation_archives_emitted": false,
+  "reason": "os1: frozen r3 reproduction mismatch; max_abs={'S_common': 0.002693733701070955, 'N_eff': 0.18620261374661773, 'S_pair': 0.009889015334658247, 'energy': 0.09415225772457347, 'Full': 0.26002502016527274}; tolerance=1e-08",
+  "scenarios_checked": [],
+  "status": "blocked",
+  "thresholds_emitted": false
+}
