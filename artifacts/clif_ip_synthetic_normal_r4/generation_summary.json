@@ -1,7 +1,143 @@
 {
   "campaign_kind": "final-60x120s",
+  "completed_rows": 16,
   "generator_direct_s16le": true,
   "indexed_rows": 60,
-  "reports": [],
+  "pending_rows": 44,
+  "reports": [
+    {
+      "b0_rows": 1386,
+      "elapsed_s": 183.6382212638855,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-001",
+      "status": "ok",
+      "tracked_prns": 9
+    },
+    {
+      "b0_rows": 1288,
+      "elapsed_s": 177.78206706047058,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-002",
+      "status": "ok",
+      "tracked_prns": 9
+    },
+    {
+      "b0_rows": 1289,
+      "elapsed_s": 182.8198459148407,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-003",
+      "status": "ok",
+      "tracked_prns": 8
+    },
+    {
+      "b0_rows": 1702,
+      "elapsed_s": 178.27099514007568,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-004",
+      "status": "ok",
+      "tracked_prns": 11
+    },
+    {
+      "b0_rows": 1231,
+      "elapsed_s": 176.18641090393066,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-005",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 1161,
+      "elapsed_s": 188.28329730033875,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-006",
+      "status": "ok",
+      "tracked_prns": 11
+    },
+    {
+      "b0_rows": 1283,
+      "elapsed_s": 189.1420702934265,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-007",
+      "status": "ok",
+      "tracked_prns": 8
+    },
+    {
+      "b0_rows": 2091,
+      "elapsed_s": 179.7850980758667,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-008",
+      "status": "ok",
+      "tracked_prns": 11
+    },
+    {
+      "b0_rows": 1866,
+      "elapsed_s": 184.93243288993835,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-009",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 1948,
+      "elapsed_s": 185.47314953804016,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-010",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 2190,
+      "elapsed_s": 181.23175382614136,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-011",
+      "status": "ok",
+      "tracked_prns": 11
+    },
+    {
+      "b0_rows": 1064,
+      "elapsed_s": 205.0507493019104,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-012",
+      "status": "ok",
+      "tracked_prns": 9
+    },
+    {
+      "b0_rows": 1059,
+      "elapsed_s": 191.59061074256897,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-013",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 2159,
+      "elapsed_s": 184.96394562721252,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-014",
+      "status": "ok",
+      "tracked_prns": 11
+    },
+    {
+      "b0_rows": 961,
+      "elapsed_s": 193.53369879722595,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-015",
+      "status": "ok",
+      "tracked_prns": 9
+    },
+    {
+      "b0_rows": 1340,
+      "elapsed_s": 186.0829119682312,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-016",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "error": "RuntimeError: gps-sdr-sim rc=1; artifacts/clif_ip_synthetic_normal_r4/runs/syn-oak-r4-017/generator.log",
+      "run_id": "syn-oak-r4-017",
+      "status": "failed"
+    }
+  ],
   "schema": "clif-ip.synthetic-normal.r4.generation.v1"
 }

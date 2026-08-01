@@ -7,6 +7,16 @@
     "synthetic_test": 3
   },
   "duration_s": 120,
+  "utc_schedule": {
+    "nav_validity_source": "RINEX-2 first/last broadcast ephemeris epochs (gps-sdr-sim -t bounds)",
+    "rinex_nav": "data/ephemeris/brdc1990.26n",
+    "valid_start_min_utc": "2026-07-17T12:00:00Z",
+    "valid_start_max_utc": "2026-07-18T10:00:00Z",
+    "new_scenario_grid_minutes": 10,
+    "new_scenarios": "rows 17-30 paired across SYN-OAK/SYN-TEX; unique within each domain",
+    "full_duration_deadline_utc": "2026-07-18T10:00:00Z",
+    "immutable_completed_exception": "syn-oak-r4-016 starts at tmax and is retained because _SUCCESS predates this contract"
+  },
   "targets": {
     "SYN-OAK": "5 Msps s16le IQ/ishort",
     "SYN-TEX": "25 Msps s16le IQ/ishort"

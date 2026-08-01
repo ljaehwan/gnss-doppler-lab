@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate/extract target-matched CLIF-IP R4 runs with bounded storage."""
 from __future__ import annotations
-import argparse,csv,hashlib,json,os,shutil,subprocess,sys,time
+import argparse,csv,hashlib,io,json,os,shutil,subprocess,sys,time
 from datetime import datetime,timezone
 from pathlib import Path
 import numpy as np,pandas as pd
@@ -27,6 +27,55 @@ def atomic_csv(d,p):
  p.parent.mkdir(parents=True,exist_ok=True);t=p.with_suffix(p.suffix+".tmp");d.to_csv(t,index=False);os.replace(t,p)
 def atomic_json(d,p):
  p.parent.mkdir(parents=True,exist_ok=True);t=p.with_suffix(p.suffix+".tmp");t.write_text(json.dumps(d,indent=2,sort_keys=True)+"\n");os.replace(t,p)
+
+INDEX_COLUMNS=("run_id","domain","split","label","location_id","latitude_deg","longitude_deg","altitude_m","utc","duration_s","impairment_seed","rinex_nav","sample_rate_hz","sample_format","impairments_json")
+
+def csv_row_map(frame):
+ return {r["run_id"]:r for r in csv.DictReader(io.StringIO(frame.to_csv(index=False,lineterminator="\n")))}
+
+def assert_run_index_identity(row,out):
+ """Verify an atomic run was generated from the manifest row being resumed."""
+ paths=PipelinePaths.for_run(out,str(row.run_id));m=validate_run_bundle(paths)
+ expected={"run_id":str(row.run_id),"domain":str(row.domain),"split":str(row.split),"label":str(row.label),
+  "duration_s":float(row.duration_s),"sample_rate_hz":int(row.sample_rate_hz),"impairments":json.loads(row.impairments_json)}
+ for key,value in expected.items():
+  if m.get(key)!=value:raise RuntimeError(f"completed run/index mismatch {row.run_id}:{key}")
+ cmd=m.get("generator",{}).get("command",[]);utc=pd.Timestamp(row.utc)
+ required=(str((ROOT/str(row.rinex_nav)).resolve()),f"{row.latitude_deg},{row.longitude_deg},{row.altitude_m}",utc.strftime("%Y/%m/%d,%H:%M:%S"))
+ if any(value not in cmd for value in required):raise RuntimeError(f"completed run/index generator mismatch: {row.run_id}")
+ return m
+
+def reconcile_index(expected,out,resume):
+ """Regenerate deterministically while refusing to rewrite any successful identity."""
+ index=out/"synthetic_run_manifest.csv";expected_rows=csv_row_map(expected);current=None
+ if index.exists():
+  with index.open(newline="") as f:current={r["run_id"]:r for r in csv.DictReader(f)}
+ successes=[]
+ for row in expected.itertuples():
+  paths=PipelinePaths.for_run(out,str(row.run_id))
+  if not paths.success.exists():continue
+  successes.append(str(row.run_id))
+  if not resume:raise RuntimeError("existing successful campaign requires --resume")
+  if current is None:raise RuntimeError("cannot prove completed row identity without existing index")
+  if current.get(str(row.run_id))!=expected_rows[str(row.run_id)]:raise RuntimeError(f"refusing to change completed index row: {row.run_id}")
+  assert_run_index_identity(row,out)
+ atomic_csv(expected,index)
+ return successes
+
+def archive_failed_attempt(paths):
+ """Archive diagnostics and clear only a non-successful run before retry."""
+ if paths.success.exists():raise RuntimeError(f"refusing to clean successful run: {paths.run_dir}")
+ log=paths.run_dir/"generator.log"
+ if log.is_file():
+  data=log.read_bytes();diag=paths.root/"failure_diagnostics"/str(paths.run_dir.name);diag.mkdir(parents=True,exist_ok=True)
+  archived=diag/f"generator-{hashlib.sha256(data).hexdigest()[:16]}.log"
+  if not archived.exists():archived.write_bytes(data)
+ if paths.run_dir.exists():shutil.rmtree(paths.run_dir)
+
+def generation_state(out,campaign,indexed,reports):
+ completed=sum(PipelinePaths.for_run(out,str(run)).success.exists() for run in indexed.run_id)
+ return {"schema":"clif-ip.synthetic-normal.r4.generation.v1","campaign_kind":campaign,"indexed_rows":len(indexed),
+  "completed_rows":completed,"pending_rows":len(indexed)-completed,"generator_direct_s16le":True,"reports":reports}
 
 def smoke_index(duration):
  d=build_final_index().groupby("domain",sort=False).head(1).copy();d["duration_s"]=float(duration)
@@ -121,8 +170,8 @@ def run_receiver(iq,run_dir,run_id,fs,exe,timeout):
 
 def process_row(row,out,sim,receiver,timeout,keep):
  paths=PipelinePaths.for_run(out,str(row.run_id))
- if paths.success.exists():validate_run_bundle(paths);return {"run_id":row.run_id,"status":"resumed_valid"}
- paths.run_dir.mkdir(parents=True,exist_ok=True);clean=paths.run_dir/"gpssim_clean_s16le.bin";imp=json.loads(row.impairments_json);fs=int(row.sample_rate_hz);started=time.time()
+ if paths.success.exists():assert_run_index_identity(row,out);return {"run_id":row.run_id,"status":"resumed_valid"}
+ archive_failed_attempt(paths);paths.run_dir.mkdir(parents=True,exist_ok=True);clean=paths.run_dir/"gpssim_clean_s16le.bin";imp=json.loads(row.impairments_json);fs=int(row.sample_rate_hz);started=time.time()
  nav=(ROOT/str(row.rinex_nav)).resolve();utc=pd.Timestamp(row.utc);stamp=utc.strftime("%Y/%m/%d,%H:%M:%S")
  # This gps-sdr-sim writes d-0.1 s (its first 0.1 s update is not emitted).
  # Request d+0.1 and verify exact target bytes; use -t with matching broadcast
@@ -156,18 +205,33 @@ def main():
  ap.add_argument("--limit",type=int);ap.add_argument("--resume",action="store_true");ap.add_argument("--domains",nargs="*",choices=DOMAINS);ap.add_argument("--duration",type=float,default=120);ap.add_argument("--smoke",action="store_true");ap.add_argument("--index-only",action="store_true");ap.add_argument("--keep-transients",action="store_true");ap.add_argument("--receiver-timeout",type=int,default=1800);a=ap.parse_args()
  if a.smoke:
   if not 2<=a.duration<=30:raise SystemExit("smoke duration must be 2--30 seconds")
-  out=a.out;d=smoke_index(a.duration)
+  out=a.out;d=smoke_index(a.duration);campaign="smoke"
+  atomic_csv(d,out/"synthetic_run_manifest.csv")
  else:
   if a.duration!=120:raise SystemExit("final campaign duration is fixed at 120 seconds")
-  out=a.out;d=build_final_index();validate_final_index(d)
- if a.domains:d=d[d.domain.isin(a.domains)]
- index=out/"synthetic_run_manifest.csv";atomic_csv(d,index)
- atomic_json({"schema":"clif-ip.synthetic-normal.r4.generation.v1","campaign_kind":"smoke" if a.smoke else "final-60x120s","indexed_rows":len(d),"generator_direct_s16le":True,"reports":[]},out/"generation_summary.json")
+  out=a.out;d=build_final_index();validate_final_index(d);campaign="final-60x120s"
+  reconcile_index(d,out,a.resume)
+ summary_path=out/"generation_summary.json";old={}
+ if summary_path.exists():
+  try:old=json.loads(summary_path.read_text())
+  except (ValueError,OSError):old={}
+ reports=list(old.get("reports",[]));report_pos={str(x.get("run_id")):i for i,x in enumerate(reports) if x.get("run_id")}
+ atomic_json(generation_state(out,campaign,d,reports),summary_path)
  if a.index_only:return
- rows=d.iloc[:a.limit] if a.limit else d;reports=[]
+ rows=d[d.domain.isin(a.domains)] if a.domains else d
+ rows=rows.iloc[:a.limit] if a.limit else rows
  for row in rows.itertuples():
-  try:reports.append(process_row(row,out,a.simulator,a.receiver,a.receiver_timeout,a.keep_transients))
+  try:
+   report=process_row(row,out,a.simulator,a.receiver,a.receiver_timeout,a.keep_transients)
+   # Preserve richer original completion reports when a valid success is skipped.
+   if not (report["status"]=="resumed_valid" and str(row.run_id) in report_pos):
+    if str(row.run_id) in report_pos:reports[report_pos[str(row.run_id)]]=report
+    else:report_pos[str(row.run_id)]=len(reports);reports.append(report)
   except Exception as e:
-   reports.append({"run_id":row.run_id,"status":"failed","error":f"{type(e).__name__}: {e}"});atomic_json({"reports":reports},out/"generation_summary.json");raise
- atomic_json({"schema":"clif-ip.synthetic-normal.r4.generation.v1","campaign_kind":"smoke" if a.smoke else "final-60x120s","indexed_rows":len(d),"processed_rows":len(reports),"reports":reports},out/"generation_summary.json");print(json.dumps(reports,indent=2))
+   report={"run_id":row.run_id,"status":"failed","error":f"{type(e).__name__}: {e}"}
+   if str(row.run_id) in report_pos:reports[report_pos[str(row.run_id)]]=report
+   else:report_pos[str(row.run_id)]=len(reports);reports.append(report)
+   atomic_json(generation_state(out,campaign,d,reports),summary_path);raise
+  atomic_json(generation_state(out,campaign,d,reports),summary_path)
+ print(json.dumps(reports,indent=2))
 if __name__=="__main__":main()

@@ -12,6 +12,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import tempfile
 
@@ -68,19 +69,72 @@ def _impairments(seed:int,domain:str)->dict[str,object]:
       "profile":"open_sky_normal"}
 
 
+def rinex_nav_validity(path:Path)->tuple[datetime,datetime]:
+    """Return the epoch bounds gps-sdr-sim reports for a RINEX-2 NAV file.
+
+    gps-sdr-sim derives its accepted ``-t`` interval from the first and last
+    broadcast ephemeris epochs.  Reading those epochs from the selected NAV
+    file keeps index construction tied to the actual simulator input instead
+    of a campaign-date assumption.
+    """
+    p=Path(path)
+    if not p.is_file():raise FileNotFoundError(p)
+    epoch=re.compile(r"^\s*\d{1,2}\s+(\d{2})\s+(\d{1,2})\s+(\d{1,2})\s+(\d{1,2})\s+(\d{1,2})\s+(\d+(?:\.\d*)?)")
+    times=[];in_body=False
+    with p.open(errors="replace") as f:
+        for line in f:
+            if not in_body:
+                in_body="END OF HEADER" in line
+                continue
+            m=epoch.match(line)
+            if not m:continue
+            yy,month,day,hour,minute,second=m.groups();year=2000+int(yy) if int(yy)<80 else 1900+int(yy)
+            sec=float(second);whole=int(sec)
+            times.append(datetime(year,int(month),int(day),int(hour),int(minute),whole,
+                                  round((sec-whole)*1_000_000),tzinfo=timezone.utc))
+    if not times:raise ValueError(f"no RINEX-2 navigation epochs: {p}")
+    return min(times),max(times)
+
+
+def _paired_unused_utc_slots(loc:pd.DataFrame,base:datetime,duration_s:float,reserved:set[datetime],count:int)->list[datetime]:
+    """Choose deterministic paired 10-minute starts inside all selected NAVs."""
+    bounds={str(rel):rinex_nav_validity(ROOT/str(rel)) for rel in loc.rinex_nav.unique()}
+    tmin=max(x[0] for x in bounds.values());tmax=min(x[1] for x in bounds.values())
+    earliest=max(base,tmin);earliest=earliest.replace(second=0,microsecond=0)
+    if earliest<max(base,tmin):earliest+=timedelta(minutes=1)
+    earliest+=timedelta(minutes=(-earliest.minute)%10)
+    latest=tmax-timedelta(seconds=float(duration_s))
+    slots=[];utc=earliest
+    while utc<=latest and len(slots)<count:
+        if utc not in reserved:slots.append(utc)
+        utc+=timedelta(minutes=10)
+    if len(slots)!=count:raise ValueError(f"selected RINEX validity has only {len(slots)} safe unused slots; need {count}")
+    return slots
+
+
 def build_final_index(duration_s:float=120)->pd.DataFrame:
     if float(duration_s)!=120: raise ValueError("final campaign duration is fixed at exactly 120 seconds")
     loc=_candidate_locations(); rows=[]
     split=["train"]*24+["validation"]*3+["synthetic_test"]*3
     base=datetime(2026,7,18,tzinfo=timezone.utc)
+    # OAK rows 1--16 predate validity-aware scheduling and are immutable because
+    # they are already atomically published.  TEX row 16 was not started and
+    # is moved from tmax+1 s to a safe slot.  New scenarios use paired, unused
+    # slots whose complete duration ends no later than the NAV maximum.
+    reserved={base+timedelta(minutes=i*40,seconds=di) for di in range(len(DOMAINS)) for i in range(16)}
+    paired_slots=_paired_unused_utc_slots(loc,base,duration_s,reserved,14)
     for di,domain in enumerate(DOMAINS):
         for i,s in enumerate(split):
             source=loc.iloc[i]; run_id=f"{domain.lower()}-r4-{i+1:03d}"
             seed=int.from_bytes(hashlib.sha256(f"clif-r4:{domain}:{i}".encode()).digest()[:8],"big")
-            # The day-199 RINEX contains epochs throughout this UTC day.  Use a
-            # unique in-day minute plus a domain offset, rather than altering
-            # TOE/TOC (-T), which this simulator probe showed can yield silence.
-            utc=base+timedelta(minutes=i*40,seconds=di)
+            if domain=="SYN-OAK" and i<16:
+                utc=base+timedelta(minutes=i*40)
+            elif domain=="SYN-TEX" and i<15:
+                utc=base+timedelta(minutes=i*40,seconds=1)
+            elif domain=="SYN-TEX" and i==15:
+                utc=base+timedelta(hours=9,minutes=50)
+            else:
+                utc=paired_slots[i-16]
             rows.append({"run_id":run_id,"domain":domain,"split":s,"label":"normal",
               "location_id":f"{source.country_code}-{source.capital}","latitude_deg":float(source.latitude_deg),
               "longitude_deg":float(source.longitude_deg),"altitude_m":float(source.altitude_m),
@@ -103,6 +157,16 @@ def validate_final_index(d:pd.DataFrame)->None:
         for text in g.impairments_json:
             imp=json.loads(text)
             if not set(IMPAIRMENT_AXES)<=set(imp) or imp.get("attack") is not False or imp.get("spoofing") is not False:raise ValueError("incomplete/non-normal impairment manifest")
+    # Cross-domain repetition is intentional target matching; scenarios 17--30
+    # share UTC while each domain remains internally collision/split-leak free.
+    paired=[g.iloc[16:].utc.reset_index(drop=True) for _,g in d.groupby("domain",sort=False)]
+    if len(paired)!=2 or not paired[0].equals(paired[1]) or paired[0].duplicated().any():raise ValueError("new scenarios require unique paired UTC slots")
+    for nav_rel,g in d.groupby("rinex_nav"):
+        tmin,tmax=rinex_nav_validity(ROOT/str(nav_rel));starts=pd.to_datetime(g.utc,utc=True)
+        if not (starts.ge(tmin).all() and starts.le(tmax).all()):raise ValueError(f"UTC outside selected RINEX validity: {nav_rel}")
+        safe=g[~g.run_id.eq("syn-oak-r4-016")]
+        ends=pd.to_datetime(safe.utc,utc=True)+pd.to_timedelta(safe.duration_s,unit="s")
+        if not ends.le(tmax).all():raise ValueError(f"120 s run exceeds selected RINEX validity: {nav_rel}")
 
 
 def iq_memmap(path:Path)->np.ndarray:

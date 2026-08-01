@@ -10,7 +10,8 @@ from gnss_doppler_lab.clif_ip_synthetic import (
     DOMAINS, IMPAIRMENT_AXES, TAP_ORDER, PipelinePaths, artifact_checksums,
     build_final_index, cleanup_after_success, domain_gap, exact_iq_bytes,
     extract_m1_features, fit_multirun_ar, history_design, iq_memmap,
-    permutation_test, publish_success, target_spec, validate_final_index,
+    permutation_test, publish_success, rinex_nav_validity, target_spec,
+    validate_final_index,
     validate_run_bundle,
 )
 
@@ -27,6 +28,37 @@ def test_final_index_exact_split_disjoint_and_deterministic():
             assert all(groups[i].isdisjoint(groups[j]) for i in range(3) for j in range(i))
     assert not a.label.str.contains("spoof|attack",case=False).any()
     validate_final_index(a)
+
+
+def test_final_index_uses_actual_rinex_validity_and_preserves_completed_prefix():
+    idx=build_final_index(duration_s=120)
+    root=Path(__file__).resolve().parents[1]
+
+    # Every requested start is accepted by gps-sdr-sim's RINEX epoch range.
+    # Unfinished scenarios additionally reserve the complete 120 s before tmax;
+    # row 16 is the immutable, already-successful boundary-start exception.
+    for nav_rel,g in idx.groupby("rinex_nav"):
+        tmin,tmax=rinex_nav_validity(root/nav_rel)
+        starts=pd.to_datetime(g.utc,utc=True)
+        assert starts.ge(tmin).all() and starts.le(tmax).all()
+        safe=g[~g.run_id.eq("syn-oak-r4-016")]
+        ends=pd.to_datetime(safe.utc,utc=True)+pd.to_timedelta(safe.duration_s,unit="s")
+        assert ends.le(tmax).all()
+
+    # OAK 1--16 are already published and their complete row identity is immutable.
+    prefixes=[]
+    oak_prefix=idx[idx.domain.eq("SYN-OAK")].iloc[:16]
+    prefixes.append(oak_prefix)
+    got=hashlib.sha256(oak_prefix.to_csv(index=False,lineterminator="\n").encode()).hexdigest()
+    assert got=="46eba730ffdd3848ee9d2e9f146b49840731bfe9c05ebd6d3ab30cec9d360630"
+    prefixes.append(idx[idx.domain.eq("SYN-TEX")].iloc[:16])
+
+    # New scenarios are paired across targets, deterministic, and collision-free.
+    oak=idx[idx.domain.eq("SYN-OAK")].iloc[16:].reset_index(drop=True)
+    tex=idx[idx.domain.eq("SYN-TEX")].iloc[16:].reset_index(drop=True)
+    assert oak.utc.tolist()==tex.utc.tolist()
+    assert oak.utc.nunique()==14
+    assert set(oak.utc).isdisjoint(set(pd.concat(prefixes).utc))
 
 
 def test_target_specs_and_exact_bytes():
