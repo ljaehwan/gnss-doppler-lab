@@ -1,0 +1,21 @@
+{
+  "history": 4,
+  "tap_count": 3,
+  "timing": {
+    "sample_rate_hz": 5000000.0,
+    "gps_tow_at_time_zero_s": 381618.0,
+    "onset_s": 120.0,
+    "window_s": 1.0,
+    "stride_s": 0.5,
+    "resample_bin_s": 0.02,
+    "min_common_samples": 20,
+    "min_prns": 4,
+    "max_toe_age_s": 7200.0,
+    "tow0_rx_tolerance_s": 0.05,
+    "score_available_at": "window_end_s",
+    "window_interval": "[start,end)"
+  },
+  "open_attacks": true,
+  "contract": "real E/P/L only; PRN labels are joins only; indexed half-open target/history extraction",
+  "gpu": "cuda"
+}

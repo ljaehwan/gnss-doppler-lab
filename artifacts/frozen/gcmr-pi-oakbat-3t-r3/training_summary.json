@@ -1,0 +1,144 @@
+{
+  "normal_source": "OAKBAT cleanStatic only",
+  "roles": {
+    "train": 299,
+    "selection_val": 139,
+    "clean_reference": 119,
+    "event_calibration": 119,
+    "sealed_held": 119
+  },
+  "seed": 7,
+  "epochs": 30,
+  "gpu_device": "cuda",
+  "cuda_available": true,
+  "geometry": {
+    "recording_start_rx_time_s": 381618.02,
+    "configured_tow0_s": 381618.0,
+    "ephemeris_health": {
+      "health_acceptance_rule": "SV_health == 0",
+      "healthy_ephemeris_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        15,
+        21,
+        24,
+        25,
+        27
+      ],
+      "healthy_tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        15,
+        21,
+        24,
+        25,
+        27
+      ],
+      "excluded_ephemeris_health_by_prn": {
+        "18": 63
+      },
+      "excluded_tracking_prns": [
+        18
+      ],
+      "tracked_prns_without_ephemeris": []
+    },
+    "tow_tolerance_s": 0.05,
+    "full_gps_week": 2097,
+    "ephemeris_alignment": {
+      "full_gps_week": 2097,
+      "week_modulus": 1024,
+      "recording_start_tow_s": 381618.0,
+      "max_toe_age_s": 7200.0,
+      "toe_age_s_by_prn": {
+        "8": 7182.0,
+        "10": 7182.0,
+        "11": 7182.0,
+        "12": 7182.0,
+        "14": 7182.0,
+        "15": 7182.0,
+        "18": 7182.0,
+        "21": 7182.0,
+        "24": 7182.0,
+        "25": 7182.0,
+        "27": 7182.0
+      },
+      "toc_available_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        15,
+        18,
+        21,
+        24,
+        25,
+        27
+      ],
+      "health_by_prn": {
+        "8": 0,
+        "10": 0,
+        "11": 0,
+        "12": 0,
+        "14": 0,
+        "15": 0,
+        "18": 63,
+        "21": 0,
+        "24": 0,
+        "25": 0,
+        "27": 0
+      },
+      "fit_interval_flag_by_prn": {
+        "8": 0,
+        "10": 0,
+        "11": 0,
+        "12": 0,
+        "14": 0,
+        "15": 0,
+        "18": 0,
+        "21": 0,
+        "24": 0,
+        "25": 0,
+        "27": 0
+      },
+      "decoded_snapshot_available": true,
+      "decoded_snapshot_tow_s": [
+        382068.0,
+        382068.0,
+        382068.0,
+        382068.0,
+        382068.0,
+        382068.0,
+        382068.0,
+        382068.0,
+        382068.0,
+        382068.0,
+        382068.0
+      ],
+      "decoded_snapshot_relation": "after_recording_start_allowed_offline_oracle"
+    },
+    "decoded_snapshot": {
+      "available": true,
+      "relation": "after_recording_start_allowed_offline_oracle",
+      "required_at_or_before_recording_start": false,
+      "limitation": "saved map may be an end-of-run offline oracle snapshot"
+    },
+    "geometry_contract": {
+      "classification": "offline_trusted_static_receive_time_approximation",
+      "time_basis": "receive_time",
+      "receiver_position": "trusted static pre-onset NMEA oracle held fixed",
+      "omitted_corrections": [
+        "transmit_time",
+        "Sagnac",
+        "satellite_clock"
+      ],
+      "operational_precise_doppler": false
+    }
+  }
+}
