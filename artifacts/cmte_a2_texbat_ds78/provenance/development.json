@@ -1,0 +1,130 @@
+{
+  "artifact_execution_source_recorded": true,
+  "attack_or_test_fit": false,
+  "clean_tree_asserted": true,
+  "execution_source_commit": "71d00f310b6152868b2e02df2ca955cfecd43eb3",
+  "inputs": {
+    "DS1": {
+      "history_audit": {
+        "bridged": false,
+        "cadence_s": 0.5,
+        "chunks": 19,
+        "examples": 9244,
+        "filled_or_interpolated": false,
+        "gaps_detected": 0,
+        "input_rows": 9472,
+        "prn_local": true,
+        "reset_dimensions": [
+          "role",
+          "split",
+          "physical_recording_id",
+          "segment",
+          "channel",
+          "cadence_gap"
+        ],
+        "seq_len": 12
+      },
+      "manifest": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-input-dev123-71d00f3/DS1_manifest.json",
+      "manifest_sha256": "537cb8725a4fc7cacdec898985da357025d61e5cd549084d7518bdb95c8c1dd2",
+      "node": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-input-dev123-71d00f3/DS1_nodes.csv",
+      "node_sha256": "c641a999ae2e71c3cf8c90824b97f103007147634fc513cbdfe4cfa457709d7e",
+      "onset_s": 100.0,
+      "producer_grade": "reconstructed_equivalence"
+    },
+    "DS2": {
+      "history_audit": {
+        "bridged": false,
+        "cadence_s": 0.5,
+        "chunks": 18,
+        "examples": 8220,
+        "filled_or_interpolated": false,
+        "gaps_detected": 0,
+        "input_rows": 8436,
+        "prn_local": true,
+        "reset_dimensions": [
+          "role",
+          "split",
+          "physical_recording_id",
+          "segment",
+          "channel",
+          "cadence_gap"
+        ],
+        "seq_len": 12
+      },
+      "manifest": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-input-dev123-71d00f3/DS2_manifest.json",
+      "manifest_sha256": "cfb226b0ea8a727831006d0126e76b3e42bcc6e3ad51f224a08314e986271ecd",
+      "node": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-input-dev123-71d00f3/DS2_nodes.csv",
+      "node_sha256": "c26309c7d12adfc0dc735b6ef41535a3c7616a39d77b81379c13295bbdefa206",
+      "onset_s": 100.0,
+      "producer_grade": "reconstructed_equivalence"
+    },
+    "DS3": {
+      "history_audit": {
+        "bridged": false,
+        "cadence_s": 0.5,
+        "chunks": 27,
+        "examples": 3277,
+        "filled_or_interpolated": false,
+        "gaps_detected": 0,
+        "input_rows": 3601,
+        "prn_local": true,
+        "reset_dimensions": [
+          "role",
+          "split",
+          "physical_recording_id",
+          "segment",
+          "channel",
+          "cadence_gap"
+        ],
+        "seq_len": 12
+      },
+      "manifest": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-input-dev123-71d00f3/DS3_manifest.json",
+      "manifest_sha256": "e4047c55db97a33f356f3d4b6c1c059a3903bfc6e1eec35559e189c3333ce4e7",
+      "node": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-input-dev123-71d00f3/DS3_nodes.csv",
+      "node_sha256": "55c431cbf1bbfc033145ea66144958630d29b80833a9f2ed0d4144d46064b1d8",
+      "onset_s": 100.0,
+      "producer_grade": "reconstructed_equivalence"
+    },
+    "DS4": {
+      "history_audit": {
+        "bridged": false,
+        "cadence_s": 0.5,
+        "chunks": 13,
+        "examples": 2525,
+        "filled_or_interpolated": false,
+        "gaps_detected": 0,
+        "input_rows": 2678,
+        "prn_local": true,
+        "reset_dimensions": [
+          "role",
+          "split",
+          "physical_recording_id",
+          "segment",
+          "channel",
+          "cadence_gap"
+        ],
+        "seq_len": 12
+      },
+      "manifest": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-input-ds4-71d00f3/DS4_manifest.json",
+      "manifest_sha256": "c8827b0567448ddd0d7fd9759224439776452ed07766c5266b8f2591f3c0f86d",
+      "node": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-input-ds4-71d00f3/DS4_nodes.csv",
+      "node_sha256": "1b5373a7462efc137ae024ca6d8d42f7db365bdb12101c81f29827f2c2db5ff4",
+      "onset_s": 100.0,
+      "producer_grade": "verified_node_artifact"
+    }
+  },
+  "prereg_ancestor_verified": false,
+  "prereg_commit": "e7cb2e5822923a129d72c475706f87721ddd8104",
+  "schema": "gnss-doppler-lab.cmte-a2-evaluation-provenance.v1",
+  "state": {
+    "checkpoint_sha256": "44bc85320e4fdf6ffdff3b4c12941a1f90d39832d4b13707ecb4a0317f936fa0",
+    "directory": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-state-71d00f3",
+    "qcal_sha256": "3f51e819677ae1b8d4cb3971859a858e59479183a94d01174e5d6545fb4c64d9",
+    "scaler_sha256": "be545d830237b130e3689f97cffe4a7ded036e782de7fb7be515d85f397cbd50",
+    "state_sha256": "b29b791bbb9898d481016cb7e53d0d9721d83ccb8cc97f2a15a96ed2c24ebca3",
+    "thresholds_sha256": "f6d4dd2da5ebcab1430793c9f4df4558415406807d8638aacc16e90760d21628"
+  },
+  "threshold_refit": false,
+  "tier": "development",
+  "tiers_mixed": false
+}

@@ -1,0 +1,22 @@
+## command 1
+$ ["/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/.venv/bin/python", "-m", "pytest", "-q", "tests/test_cmte_a2.py", "tests/test_cmte_a2_core_hardening.py"]
+started_utc=2026-08-02T15:11:08Z
+....................................                                     [100%]
+36 passed in 6.60s
+
+completed_utc=2026-08-02T15:11:16Z
+exit_code=0
+## command 2
+$ ["/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/.venv/bin/python", "-m", "pytest", "-q", "tests/test_cmte_a2_campaign.py", "tests/test_cmte_a2_remaining_gaps.py", "tests/test_cmte_a2_execution_evidence.py"]
+started_utc=2026-08-02T15:11:16Z
+..................................................                       [100%]
+=============================== warnings summary ===============================
+tests/test_cmte_a2_campaign.py::test_ds4_prepare_preserves_authoritative_onset_provenance_and_eval_accepts_it
+  /home/ubuntu/.local/lib/python3.12/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+    warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+50 passed, 1 warning in 10.53s
+
+completed_utc=2026-08-02T15:11:27Z
+exit_code=0

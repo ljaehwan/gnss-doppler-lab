@@ -1,0 +1,31 @@
+{
+  "actual_evaluator_imported": true,
+  "calibration_path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/configs/detectors/texbat_btail_gate_v1.json",
+  "calibration_sha256": "45e4df9beed4b689700e928ef8217cbed17c2178a47ff240c40eec3c74e3f414",
+  "compared": [
+    "N",
+    "K",
+    "tails",
+    "raw",
+    "retention_ewma",
+    "strict_alarm"
+  ],
+  "evaluator_path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/scripts/eval_btail_support_gate.py",
+  "evaluator_sha256": "1bb353101d1a98a8bd6a6feaa72757829669f718f3e2e2d497e64422177c5e10",
+  "golden_max_absolute_error": 1.7763568394002505e-15,
+  "golden_path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/artifacts/cmte_a2_historical_b0/ds1_golden_events.csv",
+  "golden_sha256": "2a3a82dfe813248d8d70c1506f5d1b8c7d5b83fddc5f39169f431e5bd849642d",
+  "golden_strict_alarm_equal": true,
+  "historical_dataset": "DS1",
+  "holdout_accessed": false,
+  "implementation_sha256": "c50ed6acc167f44843613efecc16114f93ba5f1dedbd98fa7e12d10210eac7e4",
+  "input_path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/artifacts/cmte_texbat_poc/per_prn/DS1.csv",
+  "input_sha256": "3a5b5cf7d33270ba8296c0dcd95fa5196e70fce13341fc31371ff4ade18a7989",
+  "max_absolute_error": 3.552713678800501e-15,
+  "new_checkpoint_score_equivalence_claim": false,
+  "passed": true,
+  "schema": "gnss-doppler-lab.cmte-a2-historical-gate-equivalence.v1",
+  "strict_alarm_equal": true,
+  "strict_alarm_threshold": 4.169877716047041,
+  "tolerance": 1e-12
+}

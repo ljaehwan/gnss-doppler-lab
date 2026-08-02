@@ -1,0 +1,151 @@
+{
+  "evidence": {
+    "confirm_input_manifest.json": "91efbf6ab197cea748eb0c83fb2fe778827b197f009109ce24b73f19ba4ff04a",
+    "confirmatory.json": "d482fd99a4cbdcbf03a29c6bc151428f2d04c4c001f2e389527e1fa4d6fe9ad3",
+    "development.json": "a3bad8972d86f90c3477df6677f535db30aba12f4d3ca832f8fbf65bd8b25aa7",
+    "one_shot_ledger.json": "c17ef2df68a2d640865758f9975decbb646b797a53cf20f58d1fad347ad147a1",
+    "preflight_tests.log": "c90022817f8f2a8e09382a9b71f2f4bed5fc606856a50e0fae744f6b714fba5a",
+    "test_attestation.json": "02a2aae62c331b4902d821b98ef838f9b65cb95001aacfa533d06cc0df963a7d",
+    "trust_anchor.json": "bc9f76fc26fb48b0e974f626cf386758a375eadb254966ad216502db01b21430"
+  },
+  "frozen_state": {
+    "calibration_sha256": "80d6a9426a49ef18c31571a425024b06e52ada20cd559b08e213b1a3f88eedd1",
+    "checkpoint_sha256": "44bc85320e4fdf6ffdff3b4c12941a1f90d39832d4b13707ecb4a0317f936fa0",
+    "config_sha256": "34d59cb56cf11d39064f3fe0dff1ef5fbb70970fa01a8b4b8addb24080c03e02",
+    "qcal_sha256": "3f51e819677ae1b8d4cb3971859a858e59479183a94d01174e5d6545fb4c64d9",
+    "scaler_sha256": "be545d830237b130e3689f97cffe4a7ded036e782de7fb7be515d85f397cbd50",
+    "state_sha256": "b29b791bbb9898d481016cb7e53d0d9721d83ccb8cc97f2a15a96ed2c24ebca3",
+    "thresholds_sha256": "f6d4dd2da5ebcab1430793c9f4df4558415406807d8638aacc16e90760d21628",
+    "training_sha256": "01f1c247f4729855c787ab5c09dc79d9dda93c1a750a17416279f99c2fa6f6a3"
+  },
+  "prepared_inputs": {
+    "DS7/input_manifest": {
+      "bytes": 2018,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-input-ds7-71d00f3/DS7_manifest.json",
+      "producer_hashes": {
+        "converter": "5e6db2ef2a07b01a5753d2ac3729df0da47c95821ce61fc4118b634efb671f5a",
+        "exporter": "30a45f988cec15fdce84552ff30747b472c7d76df07d93f79d6ae236166d4039",
+        "receiver": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+        "template": "1e5d7d50c11627e4be214811042fd061ba1397cc27915f38c93f8609795bc84c",
+        "wrapper": "a5318f9871b66f1d8273b66ce93e4f907c53dad980169a11d81559974bab6ef2"
+      },
+      "sha256": "56fac345d5ae09367890a4c4e2481f26aaa2133864c60103c06a703fc24ab7fe"
+    },
+    "DS7/node": {
+      "bytes": 599231,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-input-ds7-71d00f3/DS7_nodes.csv",
+      "producer_hashes": {
+        "converter": "5e6db2ef2a07b01a5753d2ac3729df0da47c95821ce61fc4118b634efb671f5a",
+        "exporter": "30a45f988cec15fdce84552ff30747b472c7d76df07d93f79d6ae236166d4039",
+        "receiver": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+        "template": "1e5d7d50c11627e4be214811042fd061ba1397cc27915f38c93f8609795bc84c",
+        "wrapper": "a5318f9871b66f1d8273b66ce93e4f907c53dad980169a11d81559974bab6ef2"
+      },
+      "sha256": "f61a9ef4c18e218affbb7e09ba933c5f5356748b2b0070db54d3b1a2312bed75"
+    },
+    "DS7/npz": {
+      "bytes": 27091621,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/exports/ds7.npz",
+      "producer_hashes": {
+        "converter": "5e6db2ef2a07b01a5753d2ac3729df0da47c95821ce61fc4118b634efb671f5a",
+        "exporter": "30a45f988cec15fdce84552ff30747b472c7d76df07d93f79d6ae236166d4039",
+        "receiver": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+        "template": "1e5d7d50c11627e4be214811042fd061ba1397cc27915f38c93f8609795bc84c",
+        "wrapper": "a5318f9871b66f1d8273b66ce93e4f907c53dad980169a11d81559974bab6ef2"
+      },
+      "sha256": "d0e6da4e27d51e3e96abf2ef7786501124072f28667671e4e40da756eb35f3c8"
+    },
+    "DS7/raw": {
+      "bytes": 27059290112,
+      "path": "/home/ubuntu/unraid/gnss-datasets/texbat/raw/ds7.bin",
+      "producer_hashes": {
+        "converter": "5e6db2ef2a07b01a5753d2ac3729df0da47c95821ce61fc4118b634efb671f5a",
+        "exporter": "30a45f988cec15fdce84552ff30747b472c7d76df07d93f79d6ae236166d4039",
+        "receiver": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+        "template": "1e5d7d50c11627e4be214811042fd061ba1397cc27915f38c93f8609795bc84c",
+        "wrapper": "a5318f9871b66f1d8273b66ce93e4f907c53dad980169a11d81559974bab6ef2"
+      },
+      "sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e"
+    },
+    "DS8/input_manifest": {
+      "bytes": 2029,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-input-ds8-71d00f3/DS8_manifest.json",
+      "producer_hashes": {
+        "converter": "5e6db2ef2a07b01a5753d2ac3729df0da47c95821ce61fc4118b634efb671f5a",
+        "exporter": "30a45f988cec15fdce84552ff30747b472c7d76df07d93f79d6ae236166d4039",
+        "receiver": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+        "template": "1e5d7d50c11627e4be214811042fd061ba1397cc27915f38c93f8609795bc84c",
+        "wrapper": "a5318f9871b66f1d8273b66ce93e4f907c53dad980169a11d81559974bab6ef2"
+      },
+      "sha256": "284dc9e3a789f4c3bcee0db480728b4763c3564cecae01affb695f29b7667fcb"
+    },
+    "DS8/node": {
+      "bytes": 2645032,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-input-ds8-71d00f3/DS8_nodes.csv",
+      "producer_hashes": {
+        "converter": "5e6db2ef2a07b01a5753d2ac3729df0da47c95821ce61fc4118b634efb671f5a",
+        "exporter": "30a45f988cec15fdce84552ff30747b472c7d76df07d93f79d6ae236166d4039",
+        "receiver": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+        "template": "1e5d7d50c11627e4be214811042fd061ba1397cc27915f38c93f8609795bc84c",
+        "wrapper": "a5318f9871b66f1d8273b66ce93e4f907c53dad980169a11d81559974bab6ef2"
+      },
+      "sha256": "b09201b84425fdf851058d52d4ebfb333793ae708ca7d2204ea18115a0ccff6f"
+    },
+    "DS8/npz": {
+      "bytes": 35783824,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/exports/ds8.npz",
+      "producer_hashes": {
+        "converter": "5e6db2ef2a07b01a5753d2ac3729df0da47c95821ce61fc4118b634efb671f5a",
+        "exporter": "30a45f988cec15fdce84552ff30747b472c7d76df07d93f79d6ae236166d4039",
+        "receiver": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+        "template": "1e5d7d50c11627e4be214811042fd061ba1397cc27915f38c93f8609795bc84c",
+        "wrapper": "a5318f9871b66f1d8273b66ce93e4f907c53dad980169a11d81559974bab6ef2"
+      },
+      "sha256": "d1973fa150b7b4e7359df4827f36ce60289f206e9db11c1ac2bc1fd33a0df533"
+    },
+    "DS8/prep_manifest": {
+      "bytes": 6785,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/manifest.json",
+      "producer_hashes": {
+        "converter": "5e6db2ef2a07b01a5753d2ac3729df0da47c95821ce61fc4118b634efb671f5a",
+        "exporter": "30a45f988cec15fdce84552ff30747b472c7d76df07d93f79d6ae236166d4039",
+        "receiver": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+        "template": "1e5d7d50c11627e4be214811042fd061ba1397cc27915f38c93f8609795bc84c",
+        "wrapper": "a5318f9871b66f1d8273b66ce93e4f907c53dad980169a11d81559974bab6ef2"
+      },
+      "sha256": "021a9e3f3854bd18b13593759172790545d181e0c4fc6f5805c3da68495f5bd3"
+    },
+    "DS8/raw": {
+      "bytes": 47000141168,
+      "path": "/home/ubuntu/unraid/gnss-datasets/texbat/raw/ds8.bin",
+      "producer_hashes": {
+        "converter": "5e6db2ef2a07b01a5753d2ac3729df0da47c95821ce61fc4118b634efb671f5a",
+        "exporter": "30a45f988cec15fdce84552ff30747b472c7d76df07d93f79d6ae236166d4039",
+        "receiver": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+        "template": "1e5d7d50c11627e4be214811042fd061ba1397cc27915f38c93f8609795bc84c",
+        "wrapper": "a5318f9871b66f1d8273b66ce93e4f907c53dad980169a11d81559974bab6ef2"
+      },
+      "sha256": "1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78"
+    },
+    "DS8/rendered_config": {
+      "bytes": 1913,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/receiver.conf",
+      "producer_hashes": {
+        "converter": "5e6db2ef2a07b01a5753d2ac3729df0da47c95821ce61fc4118b634efb671f5a",
+        "exporter": "30a45f988cec15fdce84552ff30747b472c7d76df07d93f79d6ae236166d4039",
+        "receiver": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+        "template": "1e5d7d50c11627e4be214811042fd061ba1397cc27915f38c93f8609795bc84c",
+        "wrapper": "a5318f9871b66f1d8273b66ce93e4f907c53dad980169a11d81559974bab6ef2"
+      },
+      "sha256": "57aaa9d419c0b126ead3c98d1a90a267f3c9c23a37ad4e2f30cab5b6a8202f5a"
+    }
+  },
+  "producer_hashes": {
+    "converter": "5e6db2ef2a07b01a5753d2ac3729df0da47c95821ce61fc4118b634efb671f5a",
+    "exporter": "30a45f988cec15fdce84552ff30747b472c7d76df07d93f79d6ae236166d4039",
+    "receiver": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+    "template": "1e5d7d50c11627e4be214811042fd061ba1397cc27915f38c93f8609795bc84c",
+    "wrapper": "a5318f9871b66f1d8273b66ce93e4f907c53dad980169a11d81559974bab6ef2"
+  },
+  "schema": "gnss-doppler-lab.cmte-a2-final-hash-inventory.v1"
+}

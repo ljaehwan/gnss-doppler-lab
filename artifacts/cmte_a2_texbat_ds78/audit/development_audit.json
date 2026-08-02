@@ -1,0 +1,444 @@
+{
+  "bootstrap": {
+    "iid_fallback": false,
+    "phase_recording_producer_cadence_safe": true,
+    "point_estimate_uses_all_eligible_epochs": true,
+    "post_includes_persistent": true,
+    "subphase_boundaries": [
+      "metadata_onset",
+      "onset+20",
+      "onset+40"
+    ]
+  },
+  "comparator_reset": {
+    "attack_scored_from_recording_start": true,
+    "clean_test_sliced_after_full_recording_score": true,
+    "phase_reset": false,
+    "reset_dimension": "physical_recording_id",
+    "role_reset": false
+  },
+  "confirmatory_placeholder_created": false,
+  "evaluation_history_audit": {
+    "DS1": {
+      "bridged": false,
+      "cadence_s": 0.5,
+      "chunks": 19,
+      "examples": 9244,
+      "filled_or_interpolated": false,
+      "gaps_detected": 0,
+      "input_rows": 9472,
+      "prn_local": true,
+      "reset_dimensions": [
+        "role",
+        "split",
+        "physical_recording_id",
+        "segment",
+        "channel",
+        "cadence_gap"
+      ],
+      "seq_len": 12
+    },
+    "DS2": {
+      "bridged": false,
+      "cadence_s": 0.5,
+      "chunks": 18,
+      "examples": 8220,
+      "filled_or_interpolated": false,
+      "gaps_detected": 0,
+      "input_rows": 8436,
+      "prn_local": true,
+      "reset_dimensions": [
+        "role",
+        "split",
+        "physical_recording_id",
+        "segment",
+        "channel",
+        "cadence_gap"
+      ],
+      "seq_len": 12
+    },
+    "DS3": {
+      "bridged": false,
+      "cadence_s": 0.5,
+      "chunks": 27,
+      "examples": 3277,
+      "filled_or_interpolated": false,
+      "gaps_detected": 0,
+      "input_rows": 3601,
+      "prn_local": true,
+      "reset_dimensions": [
+        "role",
+        "split",
+        "physical_recording_id",
+        "segment",
+        "channel",
+        "cadence_gap"
+      ],
+      "seq_len": 12
+    },
+    "DS4": {
+      "bridged": false,
+      "cadence_s": 0.5,
+      "chunks": 13,
+      "examples": 2525,
+      "filled_or_interpolated": false,
+      "gaps_detected": 0,
+      "input_rows": 2678,
+      "prn_local": true,
+      "reset_dimensions": [
+        "role",
+        "split",
+        "physical_recording_id",
+        "segment",
+        "channel",
+        "cadence_gap"
+      ],
+      "seq_len": 12
+    }
+  },
+  "exact_n": {
+    "aggregation_changed": false,
+    "sparse_pooled": false
+  },
+  "matched_fpr": {
+    "diagnostic_only": true,
+    "threshold_role_fit_only": true
+  },
+  "primary_metric_file": "development_metrics.csv",
+  "role_audit": {
+    "comparator_ewma_reset": {
+      "clean_test_sliced_after_continuous_scoring": true,
+      "phase_reset": false,
+      "reset_dimension": "physical_recording_id",
+      "role_reset": false,
+      "test_or_attack_used_for_fit": false,
+      "threshold_sliced_after_continuous_scoring": true,
+      "whole_recording_event_count": 8615
+    },
+    "distribution_fit_gradient": {
+      "content_sha256": "be6fee7cee9944201bf01b35560610b71214a6d6aeb3b11d6c759f9e41db7e3c",
+      "prn_count": 15,
+      "prns": [
+        "G01",
+        "G03",
+        "G06",
+        "G07",
+        "G08",
+        "G10",
+        "G11",
+        "G12",
+        "G13",
+        "G16",
+        "G18",
+        "G19",
+        "G20",
+        "G23",
+        "G24"
+      ],
+      "role": "prefix-gradient",
+      "rows": 4454,
+      "window_end_max_s": 239.78039548,
+      "window_end_min_s": 1.04025756,
+      "window_start_max_s": 238.78039548,
+      "window_start_min_s": 0.04025756
+    },
+    "hash_method": "pandas_hash_rows_sha256",
+    "history_resets": {
+      "clean_test": {
+        "bridged": false,
+        "cadence_s": 0.5,
+        "chunks": 13,
+        "examples": 2714,
+        "filled_or_interpolated": false,
+        "gaps_detected": 0,
+        "input_rows": 2870,
+        "prn_local": true,
+        "reset_dimensions": [
+          "role",
+          "split",
+          "physical_recording_id",
+          "segment",
+          "channel",
+          "cadence_gap"
+        ],
+        "seq_len": 12
+      },
+      "fit": {
+        "bridged": false,
+        "cadence_s": 0.5,
+        "chunks": 15,
+        "examples": 4274,
+        "filled_or_interpolated": false,
+        "gaps_detected": 0,
+        "input_rows": 4454,
+        "prn_local": true,
+        "reset_dimensions": [
+          "role",
+          "split",
+          "physical_recording_id",
+          "segment",
+          "channel",
+          "cadence_gap"
+        ],
+        "seq_len": 12
+      },
+      "prefix": {
+        "bridged": false,
+        "cadence_s": 0.5,
+        "chunks": 18,
+        "examples": 4772,
+        "filled_or_interpolated": false,
+        "gaps_detected": 0,
+        "input_rows": 4988,
+        "prn_local": true,
+        "reset_dimensions": [
+          "role",
+          "split",
+          "physical_recording_id",
+          "segment",
+          "channel",
+          "cadence_gap"
+        ],
+        "seq_len": 12
+      },
+      "qcal": {
+        "bridged": false,
+        "cadence_s": 0.5,
+        "chunks": 11,
+        "examples": 669,
+        "filled_or_interpolated": false,
+        "gaps_detected": 0,
+        "input_rows": 801,
+        "prn_local": true,
+        "reset_dimensions": [
+          "role",
+          "split",
+          "physical_recording_id",
+          "segment",
+          "channel",
+          "cadence_gap"
+        ],
+        "seq_len": 12
+      },
+      "threshold": {
+        "bridged": false,
+        "cadence_s": 0.5,
+        "chunks": 10,
+        "examples": 460,
+        "filled_or_interpolated": false,
+        "gaps_detected": 0,
+        "input_rows": 580,
+        "prn_local": true,
+        "reset_dimensions": [
+          "role",
+          "split",
+          "physical_recording_id",
+          "segment",
+          "channel",
+          "cadence_gap"
+        ],
+        "seq_len": 12
+      }
+    },
+    "qcal": {
+      "content_sha256": "59fda7c2e96786dcf7b2d613e4fe4343b6d0bee2789f9d5a900281123dd1a67c",
+      "prn_count": 11,
+      "prns": [
+        "G03",
+        "G06",
+        "G07",
+        "G10",
+        "G11",
+        "G13",
+        "G16",
+        "G19",
+        "G20",
+        "G23",
+        "G30"
+      ],
+      "role": "qcal",
+      "rows": 801,
+      "window_end_max_s": 289.83954804,
+      "window_end_min_s": 251.04025756,
+      "window_start_max_s": 288.83954804,
+      "window_start_min_s": 250.04025756
+    },
+    "role_overlap": false,
+    "roles": {
+      "clean_test": {
+        "content_sha256": "4bc4b5231656855d0ad520eac58480af07819513d69ab3d4568ea8e786c19c95",
+        "prn_count": 12,
+        "prns": [
+          "G03",
+          "G06",
+          "G07",
+          "G08",
+          "G10",
+          "G13",
+          "G16",
+          "G19",
+          "G20",
+          "G23",
+          "G25",
+          "G30"
+        ],
+        "role": "clean_test",
+        "rows": 2870,
+        "window_end_max_s": 480.12360144,
+        "window_end_min_s": 341.04025756,
+        "window_start_max_s": 479.12360144,
+        "window_start_min_s": 340.04025756
+      },
+      "prefix": {
+        "content_sha256": "c7713b95c5a1e4129e9411cabd757597f5f8e6d9a2691808563cd4f6edbe62b8",
+        "prn_count": 18,
+        "prns": [
+          "G01",
+          "G03",
+          "G06",
+          "G07",
+          "G08",
+          "G10",
+          "G11",
+          "G12",
+          "G13",
+          "G16",
+          "G18",
+          "G19",
+          "G20",
+          "G23",
+          "G24",
+          "G29",
+          "G30",
+          "G31"
+        ],
+        "role": "prefix",
+        "rows": 4988,
+        "window_end_max_s": 239.83954804,
+        "window_end_min_s": 1.04025756,
+        "window_start_max_s": 238.83954804,
+        "window_start_min_s": 0.04025756
+      },
+      "qcal": {
+        "content_sha256": "59fda7c2e96786dcf7b2d613e4fe4343b6d0bee2789f9d5a900281123dd1a67c",
+        "prn_count": 11,
+        "prns": [
+          "G03",
+          "G06",
+          "G07",
+          "G10",
+          "G11",
+          "G13",
+          "G16",
+          "G19",
+          "G20",
+          "G23",
+          "G30"
+        ],
+        "role": "qcal",
+        "rows": 801,
+        "window_end_max_s": 289.83954804,
+        "window_end_min_s": 251.04025756,
+        "window_start_max_s": 288.83954804,
+        "window_start_min_s": 250.04025756
+      },
+      "threshold": {
+        "content_sha256": "45ac9ecc3e404c608af765381ee40f039b16ad2bdd8acf4bda364db98dbef187",
+        "prn_count": 10,
+        "prns": [
+          "G03",
+          "G06",
+          "G07",
+          "G10",
+          "G13",
+          "G16",
+          "G19",
+          "G20",
+          "G23",
+          "G30"
+        ],
+        "role": "threshold",
+        "rows": 580,
+        "window_end_max_s": 329.83954804,
+        "window_end_min_s": 301.04025756,
+        "window_start_max_s": 328.83954804,
+        "window_start_min_s": 300.04025756
+      }
+    },
+    "test": {
+      "content_sha256": "4bc4b5231656855d0ad520eac58480af07819513d69ab3d4568ea8e786c19c95",
+      "prn_count": 12,
+      "prns": [
+        "G03",
+        "G06",
+        "G07",
+        "G08",
+        "G10",
+        "G13",
+        "G16",
+        "G19",
+        "G20",
+        "G23",
+        "G25",
+        "G30"
+      ],
+      "role": "clean_test",
+      "rows": 2870,
+      "window_end_max_s": 480.12360144,
+      "window_end_min_s": 341.04025756,
+      "window_start_max_s": 479.12360144,
+      "window_start_min_s": 340.04025756
+    },
+    "threshold": {
+      "content_sha256": "45ac9ecc3e404c608af765381ee40f039b16ad2bdd8acf4bda364db98dbef187",
+      "prn_count": 10,
+      "prns": [
+        "G03",
+        "G06",
+        "G07",
+        "G10",
+        "G13",
+        "G16",
+        "G19",
+        "G20",
+        "G23",
+        "G30"
+      ],
+      "role": "threshold",
+      "rows": 580,
+      "window_end_max_s": 329.83954804,
+      "window_end_min_s": 301.04025756,
+      "window_start_max_s": 328.83954804,
+      "window_start_min_s": 300.04025756
+    },
+    "train": {
+      "content_sha256": "be6fee7cee9944201bf01b35560610b71214a6d6aeb3b11d6c759f9e41db7e3c",
+      "prn_count": 15,
+      "prns": [
+        "G01",
+        "G03",
+        "G06",
+        "G07",
+        "G08",
+        "G10",
+        "G11",
+        "G12",
+        "G13",
+        "G16",
+        "G18",
+        "G19",
+        "G20",
+        "G23",
+        "G24"
+      ],
+      "role": "train",
+      "rows": 4454,
+      "window_end_max_s": 239.78039548,
+      "window_end_min_s": 1.04025756,
+      "window_start_max_s": 238.78039548,
+      "window_start_min_s": 0.04025756
+    }
+  },
+  "schema": "gnss-doppler-lab.cmte-a2-evaluation-audit.v1",
+  "tier": "development"
+}

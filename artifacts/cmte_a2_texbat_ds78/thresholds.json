@@ -1,0 +1,138 @@
+{
+  "CMTE-A2": {
+    "q99": 3.7346889901452305,
+    "q995": 4.204692619390966,
+    "target1": 3.7346889901452305
+  },
+  "alarm_strict_greater": true,
+  "baseline_labels": {
+    "A0": "A0",
+    "B0-Enhanced": "B0-Enhanced",
+    "B0-Exact": "chronological B0 with exact gate semantics"
+  },
+  "baselines": {
+    "A0": {
+      "q99": 0.24201982672104702,
+      "q995": 0.2494109175234141,
+      "target1": 0.24201982672104702
+    },
+    "B0-Enhanced": {
+      "q99": 1.5970957357676276,
+      "q995": 1.599113102743291,
+      "target1": 1.5970957357676276
+    },
+    "B0-Exact": {
+      "q99": 1.1468059431154347,
+      "q995": 1.1610976584180601,
+      "target1": 1.1468059431154347
+    }
+  },
+  "comparator_calibration": {
+    "alarm_comparison": "strict_greater",
+    "attack_or_test_fit": false,
+    "enhanced_empirical_rates": {
+      "q50": 0.49782608695652175,
+      "q70": 0.29782608695652174,
+      "q80": 0.19782608695652174
+    },
+    "ewma_reset_audit": {
+      "event_count": 5901,
+      "phase_reset": false,
+      "recording_count": 1,
+      "reset_dimension": "physical_recording_id",
+      "role_reset": false,
+      "threshold_sliced_after_continuous_scoring": true
+    },
+    "final_thresholds": {
+      "A0": {
+        "q99": 0.24201982672104702,
+        "q995": 0.2494109175234141,
+        "target1": 0.24201982672104702
+      },
+      "B0-Enhanced": {
+        "q99": 1.5970957357676276,
+        "q995": 1.599113102743291,
+        "target1": 1.5970957357676276
+      },
+      "B0-Exact": {
+        "q99": 1.1468059431154347,
+        "q995": 1.1610976584180601,
+        "target1": 1.1468059431154347
+      }
+    },
+    "limitation": "Short 30-second threshold-role self-calibration jointly estimates comparator node and final thresholds.",
+    "node_quantile_method": "higher",
+    "node_thresholds": {
+      "q50": 0.06790462179624362,
+      "q70": 0.08727364085629546,
+      "q80": 0.10823066131160267
+    },
+    "source_epochs": 460,
+    "source_interval_s": [
+      300.0,
+      330.0
+    ],
+    "source_role": "threshold",
+    "source_rows": 460,
+    "source_sha256": "5d22b23a8ceb86530d5ca3aae0fba5ae3fe1d37d32b433ae9521868159e43814"
+  },
+  "enhanced_empirical_rates": {
+    "q50": 0.49782608695652175,
+    "q70": 0.29782608695652174,
+    "q80": 0.19782608695652174
+  },
+  "enhanced_rate_source": "same threshold role; empirical strict RMSE exceedance",
+  "matched_fpr_diagnostic": {
+    "attack_or_test_fit": false,
+    "diagnostic_only": true,
+    "fit_role": "threshold",
+    "grid": "unique_observed_threshold_role_scores",
+    "models": {
+      "A0": {
+        "absolute_difference": 0.0,
+        "candidate_count": 460,
+        "candidates_are_exact_unique_observed_scores": true,
+        "target_occupancy": 0.0,
+        "threshold": 0.28953821768271315,
+        "threshold_role_strict_exceedance": 0.0,
+        "tie_break": "higher_threshold"
+      },
+      "B0-Enhanced": {
+        "absolute_difference": 0.0,
+        "candidate_count": 460,
+        "candidates_are_exact_unique_observed_scores": true,
+        "target_occupancy": 0.0,
+        "threshold": 1.6092837911130156,
+        "threshold_role_strict_exceedance": 0.0,
+        "tie_break": "higher_threshold"
+      },
+      "B0-Exact": {
+        "absolute_difference": 0.0,
+        "candidate_count": 460,
+        "candidates_are_exact_unique_observed_scores": true,
+        "target_occupancy": 0.0,
+        "threshold": 1.1885129980787237,
+        "threshold_role_strict_exceedance": 0.0,
+        "tie_break": "higher_threshold"
+      }
+    },
+    "primary_model": "CMTE-A2",
+    "primary_threshold": 4.204692619390966,
+    "replaces_primary": false,
+    "source_interval_s": [
+      300.0,
+      330.0
+    ]
+  },
+  "method": "higher",
+  "node_threshold_source": "cleanStatic fully-contained threshold role [300,330) only",
+  "node_thresholds": {
+    "q50": 0.06790462179624362,
+    "q70": 0.08727364085629546,
+    "q80": 0.10823066131160267
+  },
+  "primary": "q995",
+  "schema": "gnss-doppler-lab.cmte-a2-thresholds.v1",
+  "short_self_calibration_limitation": "Short 30-second threshold-role self-calibration jointly estimates comparator node and final thresholds.",
+  "source": "cleanStatic fully-contained [300,330)"
+}

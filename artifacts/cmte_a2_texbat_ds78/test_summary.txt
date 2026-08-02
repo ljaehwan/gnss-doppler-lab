@@ -1,0 +1,6 @@
+CMTE-A2 TEXBAT DS7/DS8 test summary
+======================================
+Pre-campaign fixed attestation: 86 passed, 0 failed, 0 skipped.
+One-shot campaign: completed under frozen trust anchor.
+Post-run validity audit: PRIMARY INVALID because every per-epoch row has tracked_prn_count=1.
+Final clean-tree regression rerun will be recorded in the metadata follow-up commit.

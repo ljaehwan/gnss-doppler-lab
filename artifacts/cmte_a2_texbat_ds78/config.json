@@ -1,0 +1,40 @@
+{
+  "alarm": "strict score > threshold",
+  "forbidden": [
+    "mixture e-values",
+    "e-CUSUM",
+    "restart capital",
+    "sequential score",
+    "online normalization"
+  ],
+  "history": 12,
+  "primary_operating_point": "q995_higher",
+  "roles": {
+    "clean_test_start": 340,
+    "prefix": [
+      0,
+      240
+    ],
+    "qcal": [
+      250,
+      290
+    ],
+    "threshold": [
+      300,
+      330
+    ]
+  },
+  "schema": "gnss-doppler-lab.cmte-a2-config.v1",
+  "score": "mean_i[-ln(p_i)]",
+  "tap_order": [
+    "E4",
+    "E3",
+    "E2",
+    "E",
+    "P",
+    "L",
+    "L2",
+    "L3",
+    "L4"
+  ]
+}

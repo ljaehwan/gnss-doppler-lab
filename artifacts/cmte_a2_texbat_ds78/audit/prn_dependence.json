@@ -1,0 +1,163 @@
+{
+  "aggregation_changed": false,
+  "empty_strata_explicit_epoch_count_zero": true,
+  "overall": {
+    "aggregation_changed": false,
+    "coefficient": null,
+    "diagnostic": "prn_count_dependence",
+    "empty_strata_explicit_epoch_count_zero": true,
+    "method": "spearman_exact_epoch_N_vs_score",
+    "passed": true,
+    "reason": "insufficient_N_variation",
+    "sparse_strata_pooled": false
+  },
+  "passed": true,
+  "rows": [
+    {
+      "aggregation_changed": false,
+      "coefficient": null,
+      "diagnostic": "prn_count_dependence",
+      "empty_strata_explicit_epoch_count_zero": true,
+      "method": "spearman_exact_epoch_N_vs_score",
+      "model": "A0",
+      "passed": true,
+      "reason": "insufficient_N_variation",
+      "scenario": "DS7",
+      "sparse_strata_pooled": false
+    },
+    {
+      "aggregation_changed": false,
+      "coefficient": null,
+      "diagnostic": "prn_count_dependence",
+      "empty_strata_explicit_epoch_count_zero": true,
+      "method": "spearman_exact_epoch_N_vs_score",
+      "model": "B0-Enhanced",
+      "passed": true,
+      "reason": "insufficient_N_variation",
+      "scenario": "DS7",
+      "sparse_strata_pooled": false
+    },
+    {
+      "aggregation_changed": false,
+      "coefficient": null,
+      "diagnostic": "prn_count_dependence",
+      "empty_strata_explicit_epoch_count_zero": true,
+      "method": "spearman_exact_epoch_N_vs_score",
+      "model": "B0-Exact",
+      "passed": true,
+      "reason": "insufficient_N_variation",
+      "scenario": "DS7",
+      "sparse_strata_pooled": false
+    },
+    {
+      "aggregation_changed": false,
+      "coefficient": null,
+      "diagnostic": "prn_count_dependence",
+      "empty_strata_explicit_epoch_count_zero": true,
+      "method": "spearman_exact_epoch_N_vs_score",
+      "model": "CMTE-A2",
+      "passed": true,
+      "reason": "insufficient_N_variation",
+      "scenario": "DS7",
+      "sparse_strata_pooled": false
+    },
+    {
+      "aggregation_changed": false,
+      "coefficient": null,
+      "diagnostic": "prn_count_dependence",
+      "empty_strata_explicit_epoch_count_zero": true,
+      "method": "spearman_exact_epoch_N_vs_score",
+      "model": "A0",
+      "passed": true,
+      "reason": "insufficient_N_variation",
+      "scenario": "DS8",
+      "sparse_strata_pooled": false
+    },
+    {
+      "aggregation_changed": false,
+      "coefficient": null,
+      "diagnostic": "prn_count_dependence",
+      "empty_strata_explicit_epoch_count_zero": true,
+      "method": "spearman_exact_epoch_N_vs_score",
+      "model": "B0-Enhanced",
+      "passed": true,
+      "reason": "insufficient_N_variation",
+      "scenario": "DS8",
+      "sparse_strata_pooled": false
+    },
+    {
+      "aggregation_changed": false,
+      "coefficient": null,
+      "diagnostic": "prn_count_dependence",
+      "empty_strata_explicit_epoch_count_zero": true,
+      "method": "spearman_exact_epoch_N_vs_score",
+      "model": "B0-Exact",
+      "passed": true,
+      "reason": "insufficient_N_variation",
+      "scenario": "DS8",
+      "sparse_strata_pooled": false
+    },
+    {
+      "aggregation_changed": false,
+      "coefficient": null,
+      "diagnostic": "prn_count_dependence",
+      "empty_strata_explicit_epoch_count_zero": true,
+      "method": "spearman_exact_epoch_N_vs_score",
+      "model": "CMTE-A2",
+      "passed": true,
+      "reason": "insufficient_N_variation",
+      "scenario": "DS8",
+      "sparse_strata_pooled": false
+    },
+    {
+      "aggregation_changed": false,
+      "coefficient": null,
+      "diagnostic": "prn_count_dependence",
+      "empty_strata_explicit_epoch_count_zero": true,
+      "method": "spearman_exact_epoch_N_vs_score",
+      "model": "A0",
+      "passed": true,
+      "reason": "insufficient_N_variation",
+      "scenario": "clean_test",
+      "sparse_strata_pooled": false
+    },
+    {
+      "aggregation_changed": false,
+      "coefficient": null,
+      "diagnostic": "prn_count_dependence",
+      "empty_strata_explicit_epoch_count_zero": true,
+      "method": "spearman_exact_epoch_N_vs_score",
+      "model": "B0-Enhanced",
+      "passed": true,
+      "reason": "insufficient_N_variation",
+      "scenario": "clean_test",
+      "sparse_strata_pooled": false
+    },
+    {
+      "aggregation_changed": false,
+      "coefficient": null,
+      "diagnostic": "prn_count_dependence",
+      "empty_strata_explicit_epoch_count_zero": true,
+      "method": "spearman_exact_epoch_N_vs_score",
+      "model": "B0-Exact",
+      "passed": true,
+      "reason": "insufficient_N_variation",
+      "scenario": "clean_test",
+      "sparse_strata_pooled": false
+    },
+    {
+      "aggregation_changed": false,
+      "coefficient": null,
+      "diagnostic": "prn_count_dependence",
+      "empty_strata_explicit_epoch_count_zero": true,
+      "method": "spearman_exact_epoch_N_vs_score",
+      "model": "CMTE-A2",
+      "passed": true,
+      "reason": "insufficient_N_variation",
+      "scenario": "clean_test",
+      "sparse_strata_pooled": false
+    }
+  ],
+  "schema": "gnss-doppler-lab.cmte-a2-prn-dependence.v1",
+  "sparse_strata_pooled": false
+}

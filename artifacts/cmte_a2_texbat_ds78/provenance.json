@@ -1,0 +1,64 @@
+{
+  "chronology": [
+    "normal-only training",
+    "development DS1-DS4",
+    "pre-holdout freeze",
+    "O_EXCL one-shot ledger",
+    "confirmatory DS7-DS8",
+    "finalization"
+  ],
+  "confirmatory_checksums_sha256": "dbcfde6f7f607652ccc526a869b59074d327aa3f4ff1ec85b623b543a8f7699d",
+  "development_checksums_sha256": "2a80e4aa76f3b95e868dc10d6339c4882365738d7449cd7cfd253c3261d63974",
+  "immutable_preregistration_commit": "e7cb2e5822923a129d72c475706f87721ddd8104",
+  "immutable_preregistration_hashes": {
+    "configs/cmte_a2_preregistration.json": "c2e090aba28acbbd094272aa6bd2c13edab4399d8e406811ec0417d941ebfd8f",
+    "docs/CMTE_A2_PREREGISTRATION.md": "5bc92fb711ed85ee20f67e9c8deac7b10bbc9de01d65736eaf4b797d87b6a64f"
+  },
+  "ledger_sha256": "c17ef2df68a2d640865758f9975decbb646b797a53cf20f58d1fad347ad147a1",
+  "preregistration_immutability_derivation": "working bytes and prereg commit blobs equal immutable registered SHA-256 values",
+  "preregistration_not_edited_after_result_exposure": true,
+  "preregistration_sha256": "c2e090aba28acbbd094272aa6bd2c13edab4399d8e406811ec0417d941ebfd8f",
+  "producer_exceptions": {
+    "DS4": "development sensitivity; mixed producer; never confirmatory"
+  },
+  "result_commit_may_be_finalized_without_scientific_metric_changes": true,
+  "result_commit_sha": "71d00f310b6152868b2e02df2ca955cfecd43eb3",
+  "schema": "gnss-doppler-lab.cmte-a2-final-provenance.v1",
+  "sealed_provenance": {
+    "confirm_input_manifest.json": {
+      "path": "provenance/confirm_input_manifest.json",
+      "sha256": "91efbf6ab197cea748eb0c83fb2fe778827b197f009109ce24b73f19ba4ff04a"
+    },
+    "confirmatory.json": {
+      "path": "provenance/confirmatory.json",
+      "sha256": "d482fd99a4cbdcbf03a29c6bc151428f2d04c4c001f2e389527e1fa4d6fe9ad3"
+    },
+    "development.json": {
+      "path": "provenance/development.json",
+      "sha256": "a3bad8972d86f90c3477df6677f535db30aba12f4d3ca832f8fbf65bd8b25aa7"
+    },
+    "hash_inventory.json": {
+      "path": "provenance/hash_inventory.json",
+      "sha256": "1db22fd5992b9f8fa793e708dd0ca7c6fd1806bec789352ea406b5e7049cc6a9"
+    },
+    "one_shot_ledger.json": {
+      "path": "provenance/one_shot_ledger.json",
+      "sha256": "c17ef2df68a2d640865758f9975decbb646b797a53cf20f58d1fad347ad147a1"
+    },
+    "preflight_tests.log": {
+      "path": "provenance/preflight_tests.log",
+      "sha256": "c90022817f8f2a8e09382a9b71f2f4bed5fc606856a50e0fae744f6b714fba5a"
+    },
+    "test_attestation.json": {
+      "path": "provenance/test_attestation.json",
+      "sha256": "02a2aae62c331b4902d821b98ef838f9b65cb95001aacfa533d06cc0df963a7d"
+    },
+    "trust_anchor.json": {
+      "path": "provenance/trust_anchor.json",
+      "sha256": "bc9f76fc26fb48b0e974f626cf386758a375eadb254966ad216502db01b21430"
+    }
+  },
+  "source_commit": "71d00f310b6152868b2e02df2ca955cfecd43eb3",
+  "state_checksums_sha256": "d8c0826cc5493731c8bae5532dfda924d208029aec68ad22978b320ffccd05de",
+  "trust_anchor_sha256": "bc9f76fc26fb48b0e974f626cf386758a375eadb254966ad216502db01b21430"
+}

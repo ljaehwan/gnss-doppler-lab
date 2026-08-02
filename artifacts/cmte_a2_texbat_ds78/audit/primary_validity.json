@@ -1,0 +1,38 @@
+{
+  "affected_scenarios": [
+    "DS1",
+    "DS2",
+    "DS3",
+    "DS4",
+    "DS7",
+    "DS8"
+  ],
+  "claim_scope": "audit-only sealed primary; no confirmatory multi-PRN performance claim",
+  "confidence_intervals_valid_for_intended_detector": false,
+  "decision": "NO-GO",
+  "n_distribution": {
+    "DS1": {
+      "1": 9244
+    },
+    "DS2": {
+      "1": 8220
+    },
+    "DS3": {
+      "1": 3277
+    },
+    "DS4": {
+      "1": 2525
+    },
+    "DS7": {
+      "1": 1764
+    },
+    "DS8": {
+      "1": 8441
+    }
+  },
+  "posthoc_replacement_performed": false,
+  "primary_preserved": true,
+  "reason": "Exact floating availability timestamps were grouped as physical epochs; every DS1-DS4/DS7/DS8 per-epoch row has tracked_prn_count=1, so the preregistered primary did not implement multi-PRN mean evidence.",
+  "schema": "gnss-doppler-lab.cmte-a2-primary-validity.v1",
+  "status": "INVALID"
+}

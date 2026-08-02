@@ -1,0 +1,106 @@
+{
+  "all_passed": false,
+  "criteria": [
+    {
+      "clean_fpr_values": [
+        0.015843773028739867,
+        0.015843773028739867
+      ],
+      "id": 1,
+      "name": "independent_clean_fpr",
+      "passed": false,
+      "required": true
+    },
+    {
+      "id": 2,
+      "name": "per_scenario_stable_pre",
+      "passed": true,
+      "required": true,
+      "scenario_values": {
+        "DS7": 0.007978723404255319,
+        "DS8": 0.0009149130832570906
+      }
+    },
+    {
+      "guard": "stable_pre_fpr_strictly_below_0.20",
+      "id": 3,
+      "name": "catastrophic_pre_alarm_guard",
+      "passed": true,
+      "required": true
+    },
+    {
+      "id": 4,
+      "improved_scenarios": [],
+      "name": "improvement_over_b0_exact",
+      "passed": false,
+      "required": true,
+      "scenario_evidence": {
+        "DS7": {
+          "improvements": [],
+          "pre_alarm_delay_invalid": true,
+          "similar_clean_fpr": false
+        },
+        "DS8": {
+          "improvements": [],
+          "pre_alarm_delay_invalid": true,
+          "similar_clean_fpr": false
+        }
+      }
+    },
+    {
+      "id": 5,
+      "name": "no_catastrophic_degradation_on_other_scenario",
+      "other_scenario_not_simultaneously_worse": {
+        "DS7": true,
+        "DS8": true
+      },
+      "passed": false,
+      "required": true
+    },
+    {
+      "aggregation_changed": false,
+      "aggregation_unchanged": true,
+      "empty_strata_explicit_na": true,
+      "id": 6,
+      "missing_strata": [],
+      "name": "prn_count_diagnostic_complete",
+      "observed": [
+        "CLEAN_TEST",
+        "DS7",
+        "DS8"
+      ],
+      "passed": true,
+      "required": [
+        "CLEAN_TEST",
+        "DS7",
+        "DS8"
+      ],
+      "required_models": [
+        "A0",
+        "B0-Enhanced",
+        "B0-Exact",
+        "CMTE-A2"
+      ],
+      "required_phases": {
+        "DS7_DS8": [
+          "stable_pre",
+          "post",
+          "persistent"
+        ],
+        "clean_test": [
+          "clean"
+        ]
+      },
+      "required_scenarios": [
+        "CLEAN_TEST",
+        "DS7",
+        "DS8"
+      ],
+      "sparse_strata_pooled": false,
+      "sparse_unpooled": true
+    }
+  ],
+  "decision": "NO-GO",
+  "na_required_fails": true,
+  "schema": "gnss-doppler-lab.cmte-a2-success-audit.v1"
+}

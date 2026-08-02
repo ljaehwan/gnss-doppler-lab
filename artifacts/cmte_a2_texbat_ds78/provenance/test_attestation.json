@@ -1,0 +1,70 @@
+{
+  "clean_tree_asserted": true,
+  "commands": [
+    {
+      "argv": [
+        "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_cmte_a2.py",
+        "tests/test_cmte_a2_core_hardening.py"
+      ],
+      "completed_utc": "2026-08-02T15:11:16Z",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78",
+      "exit_code": 0,
+      "failed": 0,
+      "passed": 36,
+      "skipped": 0,
+      "started_utc": "2026-08-02T15:11:08Z"
+    },
+    {
+      "argv": [
+        "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_cmte_a2_campaign.py",
+        "tests/test_cmte_a2_remaining_gaps.py",
+        "tests/test_cmte_a2_execution_evidence.py"
+      ],
+      "completed_utc": "2026-08-02T15:11:27Z",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78",
+      "exit_code": 0,
+      "failed": 0,
+      "passed": 50,
+      "skipped": 0,
+      "started_utc": "2026-08-02T15:11:16Z"
+    }
+  ],
+  "completed_utc": "2026-08-02T15:11:27Z",
+  "environment": {
+    "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+    "PYTHONHASHSEED": "",
+    "PYTHONPATH": "",
+    "VIRTUAL_ENV": ""
+  },
+  "exit_code": 0,
+  "fixed_suite": true,
+  "holdout_accessed": false,
+  "log": {
+    "bytes": 1424,
+    "path": "/home/ubuntu/cmte-a2-preflight-71d00f310b6152868b2e02df2ca955cfecd43eb3.json.log",
+    "sha256": "c90022817f8f2a8e09382a9b71f2f4bed5fc606856a50e0fae744f6b714fba5a"
+  },
+  "python": {
+    "executable": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/.venv/bin/python",
+    "platform": "Linux-6.8.0-136-generic-x86_64-with-glibc2.39",
+    "version": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]"
+  },
+  "schema": "gnss-doppler-lab.cmte-a2-test-attestation.v1",
+  "source_commit": "71d00f310b6152868b2e02df2ca955cfecd43eb3",
+  "started_utc": "2026-08-02T15:11:08Z",
+  "subprocess_e2e_attested": false,
+  "summary": {
+    "failed": 0,
+    "passed": 86,
+    "skipped": 0,
+    "tests": 86
+  }
+}

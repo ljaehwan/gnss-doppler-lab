@@ -1,0 +1,194 @@
+{
+  "confirm_input_manifest": {
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-confirm-input-71d00f3.json",
+    "sha256": "91efbf6ab197cea748eb0c83fb2fe778827b197f009109ce24b73f19ba4ff04a"
+  },
+  "development_checksums_sha256": "2a80e4aa76f3b95e868dc10d6339c4882365738d7449cd7cfd253c3261d63974",
+  "development_dir": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-development-71d00f3",
+  "every_confirm_input_hash_bound": true,
+  "immutable": true,
+  "pre_holdout_files": {
+    "code/configs/cmte_a2_ds8_receiver.conf": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/configs/cmte_a2_ds8_receiver.conf",
+      "sha256": "1e5d7d50c11627e4be214811042fd061ba1397cc27915f38c93f8609795bc84c"
+    },
+    "code/scripts/build_cmte_a2_confirm_input_manifest.py": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/scripts/build_cmte_a2_confirm_input_manifest.py",
+      "sha256": "10d6f5c219158428af0fb36d7435f0c61e39cf8c6a68ed1344430aef896a1eb1"
+    },
+    "code/scripts/check_cmte_a2_historical_b0.py": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/scripts/check_cmte_a2_historical_b0.py",
+      "sha256": "e39879448911359dc23b07903074df9150790e21ebad887fdb9edd557d320020"
+    },
+    "code/scripts/confirm_cmte_a2_texbat.py": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/scripts/confirm_cmte_a2_texbat.py",
+      "sha256": "3db1565eaadd1c2a0e9fe1eb7763e1d6dc67328ae10c197f928f05cca6706af2"
+    },
+    "code/scripts/eval_cmte_a2_texbat.py": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/scripts/eval_cmte_a2_texbat.py",
+      "sha256": "ecc61675af965019ebaf181dfc899763c4392c3bfef13c4b5a1fbd4c5d8c5278"
+    },
+    "code/scripts/finalize_cmte_a2_campaign.py": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/scripts/finalize_cmte_a2_campaign.py",
+      "sha256": "212720584038d28b5e35ddf63f331475a45b551788e40d990e3df7e84fb1a562"
+    },
+    "code/scripts/freeze_cmte_a2_campaign.py": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/scripts/freeze_cmte_a2_campaign.py",
+      "sha256": "9bd112a06596e7da6a2b9d392145447b2b5ad19e66a54bc08362b940d8425d25"
+    },
+    "code/scripts/prepare_cmte_a2_ds8_complex.py": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/scripts/prepare_cmte_a2_ds8_complex.py",
+      "sha256": "18d44976b67e8cc622e3947834c2160e3d19819bd817b9d51f9f62f80cd17eca"
+    },
+    "code/scripts/prepare_cmte_a2_inputs.py": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/scripts/prepare_cmte_a2_inputs.py",
+      "sha256": "2297974e6a0363f515c7c9c6d80822a757b8f63f984eab52745244dc5fe18c7c"
+    },
+    "code/scripts/smoke_cmte_a2_receiver_config.py": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/scripts/smoke_cmte_a2_receiver_config.py",
+      "sha256": "04f3c3b14eaf5fee447d7e596ca9b9c852a030aff6134ae2968800433d87b504"
+    },
+    "code/scripts/train_cmte_a2_texbat.py": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/scripts/train_cmte_a2_texbat.py",
+      "sha256": "da54d6af5a8faab9369708c66e48e00f1a83a79e2385bfa12c9a44ed18cb2bfc"
+    },
+    "code/src/gnss_doppler_lab/cmte_a2.py": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/src/gnss_doppler_lab/cmte_a2.py",
+      "sha256": "c50ed6acc167f44843613efecc16114f93ba5f1dedbd98fa7e12d10210eac7e4"
+    },
+    "code/src/gnss_doppler_lab/cmte_a2_campaign.py": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/src/gnss_doppler_lab/cmte_a2_campaign.py",
+      "sha256": "c3c2f408efeadd05683af2ba87aefc1768de691f5669781d504a1f01d3aee8c2"
+    },
+    "code/src/gnss_doppler_lab/cmte_a2_inputs.py": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/src/gnss_doppler_lab/cmte_a2_inputs.py",
+      "sha256": "a5318f9871b66f1d8273b66ce93e4f907c53dad980169a11d81559974bab6ef2"
+    },
+    "development/audit.json": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-development-71d00f3/audit.json",
+      "sha256": "3e8dfca2915ff8fd3d94fd70b1d7ed1ed501d778db7dcd364689abd1e59a0b59"
+    },
+    "development/baseline_metrics.csv": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-development-71d00f3/baseline_metrics.csv",
+      "sha256": "9638b09aab9f5d097bf26fccbd93c4b5ca1f4005db0ec30114faedb3d466bbc5"
+    },
+    "development/bootstrap.csv": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-development-71d00f3/bootstrap.csv",
+      "sha256": "127e7a79b55e1236ea132bc41793e4be925120bffde53dfaf501a23411b241f8"
+    },
+    "development/checksums.json": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-development-71d00f3/checksums.json",
+      "sha256": "2a80e4aa76f3b95e868dc10d6339c4882365738d7449cd7cfd253c3261d63974"
+    },
+    "development/development_metrics.csv": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-development-71d00f3/development_metrics.csv",
+      "sha256": "82b8ddd0e1b10c60b07cd3a5916f993dce3c7bc2cdba424d7f9e89f3c2b5e035"
+    },
+    "development/exact_n_diagnostics.csv": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-development-71d00f3/exact_n_diagnostics.csv",
+      "sha256": "528c5b2b17336ad464d9ea1cb9a5ebed1c1dbc9482d1638bd98e67ae37dc6da7"
+    },
+    "development/historical_b0_gate_equivalence.json": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-development-71d00f3/historical_b0_gate_equivalence.json",
+      "sha256": "ad71bb6ffdf618a87e20fa022fdf94ce084dc13df00dce54c6a93a3168129af3"
+    },
+    "development/matched_fpr.csv": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-development-71d00f3/matched_fpr.csv",
+      "sha256": "3d15ad5d28190634de376fee97c2635be02acda6e96ce981a97f0a9400342d7c"
+    },
+    "development/prn_dependence.json": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-development-71d00f3/prn_dependence.json",
+      "sha256": "04bec0305aacd97201fcb741e546cd56569dcb2d8f61c748b0936938043c1125"
+    },
+    "development/provenance/provenance.json": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-development-71d00f3/provenance/provenance.json",
+      "sha256": "a3bad8972d86f90c3477df6677f535db30aba12f4d3ca832f8fbf65bd8b25aa7"
+    },
+    "development/success_audit.json": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-development-71d00f3/success_audit.json",
+      "sha256": "928b9e9bc9e1853423cb9fd0f50b622831357f79d2d9fa059c6ca80c7758a526"
+    },
+    "development/test_summary.json": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-development-71d00f3/test_summary.json",
+      "sha256": "c3af4062766daadfe6d7a060ef47110e2630837b8bc6d79d9dbda666c78c3903"
+    },
+    "fixture/artifacts/cmte_a2_historical_b0/ds1_golden_events.csv": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/artifacts/cmte_a2_historical_b0/ds1_golden_events.csv",
+      "sha256": "2a3a82dfe813248d8d70c1506f5d1b8c7d5b83fddc5f39169f431e5bd849642d"
+    },
+    "fixture/artifacts/cmte_a2_receiver_smoke/exporter_fixture.json": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/artifacts/cmte_a2_receiver_smoke/exporter_fixture.json",
+      "sha256": "67ac19b73f05a902489dee9981f84353fb643a04daab99195d35587ec345c60b"
+    },
+    "fixture/artifacts/cmte_a2_receiver_smoke/exporter_fixture.npz": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/artifacts/cmte_a2_receiver_smoke/exporter_fixture.npz",
+      "sha256": "291ea16e93c78a72d18ff500ea79e8bd1d8e46561e2bc57b386c3e3a2d64ac21"
+    },
+    "fixture/artifacts/cmte_texbat_poc/per_prn/DS1.csv": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/artifacts/cmte_texbat_poc/per_prn/DS1.csv",
+      "sha256": "3a5b5cf7d33270ba8296c0dcd95fa5196e70fce13341fc31371ff4ade18a7989"
+    },
+    "state/a2_state.json": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-state-71d00f3/a2_state.json",
+      "sha256": "b29b791bbb9898d481016cb7e53d0d9721d83ccb8cc97f2a15a96ed2c24ebca3"
+    },
+    "state/b0_model.pt": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-state-71d00f3/b0_model.pt",
+      "sha256": "44bc85320e4fdf6ffdff3b4c12941a1f90d39832d4b13707ecb4a0317f936fa0"
+    },
+    "state/calibration.json": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-state-71d00f3/calibration.json",
+      "sha256": "80d6a9426a49ef18c31571a425024b06e52ada20cd559b08e213b1a3f88eedd1"
+    },
+    "state/checksums.json": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-state-71d00f3/checksums.json",
+      "sha256": "d8c0826cc5493731c8bae5532dfda924d208029aec68ad22978b320ffccd05de"
+    },
+    "state/config.json": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-state-71d00f3/config.json",
+      "sha256": "34d59cb56cf11d39064f3fe0dff1ef5fbb70970fa01a8b4b8addb24080c03e02"
+    },
+    "state/freeze_manifest.json": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-state-71d00f3/freeze_manifest.json",
+      "sha256": "99c36e7a854be3ac14c2ed129c9fbca24d7217f77283ee5cbdd8c1b8ace9ddc2"
+    },
+    "state/historical_b0_gate_equivalence.json": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-state-71d00f3/historical_b0_gate_equivalence.json",
+      "sha256": "ad71bb6ffdf618a87e20fa022fdf94ce084dc13df00dce54c6a93a3168129af3"
+    },
+    "state/preregistration.json": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-state-71d00f3/preregistration.json",
+      "sha256": "c2e090aba28acbbd094272aa6bd2c13edab4399d8e406811ec0417d941ebfd8f"
+    },
+    "state/provenance.json": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-state-71d00f3/provenance.json",
+      "sha256": "1dc2790db050272de7c55b1205c2a8699bd20e855172a795178706a43404defd"
+    },
+    "state/thresholds.json": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-state-71d00f3/thresholds.json",
+      "sha256": "f6d4dd2da5ebcab1430793c9f4df4558415406807d8638aacc16e90760d21628"
+    },
+    "state/training.json": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-state-71d00f3/training.json",
+      "sha256": "01f1c247f4729855c787ab5c09dc79d9dda93c1a750a17416279f99c2fa6f6a3"
+    }
+  },
+  "prereg_commit": "e7cb2e5822923a129d72c475706f87721ddd8104",
+  "preregistration_hashes": {
+    "configs/cmte_a2_preregistration.json": "c2e090aba28acbbd094272aa6bd2c13edab4399d8e406811ec0417d941ebfd8f",
+    "docs/CMTE_A2_PREREGISTRATION.md": "5bc92fb711ed85ee20f67e9c8deac7b10bbc9de01d65736eaf4b797d87b6a64f"
+  },
+  "schema": "gnss-doppler-lab.cmte-a2-campaign-freeze.v1",
+  "source_commit": "71d00f310b6152868b2e02df2ca955cfecd43eb3",
+  "state_checksums_sha256": "d8c0826cc5493731c8bae5532dfda924d208029aec68ad22978b320ffccd05de",
+  "state_dir": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-state-71d00f3",
+  "test_attestation": {
+    "log": {
+      "bytes": 1424,
+      "path": "/home/ubuntu/cmte-a2-preflight-71d00f310b6152868b2e02df2ca955cfecd43eb3.json.log",
+      "sha256": "c90022817f8f2a8e09382a9b71f2f4bed5fc606856a50e0fae744f6b714fba5a"
+    },
+    "path": "/home/ubuntu/cmte-a2-preflight-71d00f310b6152868b2e02df2ca955cfecd43eb3.json",
+    "sha256": "02a2aae62c331b4902d821b98ef838f9b65cb95001aacfa533d06cc0df963a7d"
+  }
+}
