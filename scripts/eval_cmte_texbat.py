@@ -118,6 +118,7 @@ def main(argv=None):
         for prn,g in nodes.groupby("prn"): prn_summary.append({"scenario":name,"prn":prn,"rows":len(g),"p_median":g.p.median(),"e_q99":g.e.quantile(.99)})
         save_plot(out/"plots"/f"{name}_scores.png",epoch,scores["Full"],threshold_map(thresholds,"Full")["target1"],name)
         pivot=nodes.pivot_table(index="prn",columns="window_bin_s",values="e",aggfunc="mean"); fig,ax=plt.subplots(figsize=(10,4)); im=ax.imshow(np.log1p(pivot),aspect="auto"); fig.colorbar(im,ax=ax); fig.tight_layout(); fig.savefig(out/"plots"/f"{name}_prn_heatmap.png",dpi=120); plt.close(fig)
+        fig,ax=plt.subplots(); ax.hist(nodes.p,bins=20); ax.set_title(f"{name} conformal p-values"); fig.tight_layout(); fig.savefig(out/"plots"/f"{name}_pvalues.png",dpi=120); plt.close(fig)
         perm=epoch.sample(frac=1,random_state=2026).reset_index(drop=True); alt=sequential_scores(np.log(perm.mean_e),[name]*len(perm),drift=thresholds["sequence"]["drift"])
         selected="s1_log_capital" if thresholds["sequence"]["choice"]=="S1" else "s2_e_cusum"; original=np.asarray(seq[selected]); shuffled=np.asarray(alt[selected])
         diag={"diagnostic_only":True,"single_factor":"physical epoch order only; recording/reset structure fixed","recording_id":name,"original_reset_count":seq.attrs["reset_count"],"shuffled_reset_count":alt.attrs["reset_count"],"epoch_multiset_identical":bool(np.allclose(np.sort(epoch.mean_e),np.sort(perm.mean_e))),"sequential_trajectory_l2_delta":float(np.linalg.norm(original-shuffled)),"sequential_final_delta":float(abs(original[-1]-shuffled[-1])),"N_distribution":epoch.N.value_counts().sort_index().to_dict(),"prn_permutation_invariant_by_symmetric_aggregation":True}
@@ -125,6 +126,12 @@ def main(argv=None):
         (out/"diagnostics"/f"{name}_order_shuffle.json").write_text(json.dumps(diag,indent=2,sort_keys=True)+"\n")
         provenance["scenario_inputs"][name]={"node":str(node),"node_sha256":file_sha256(node),"manifest":str(manifest),"manifest_sha256":file_sha256(manifest),"producer_grade":doc["producer_grade"],"recording_id":name,"cadence_chunk_audit":str(audit_path.relative_to(out))}
     mf=pd.DataFrame(metrics); mf.to_csv(out/"scenario_metrics.csv",index=False); pd.DataFrame(ablations).to_csv(out/"ablation_metrics.csv",index=False); pd.DataFrame(prn_summary).to_csv(out/"per_prn_evidence_summary.csv",index=False)
+    primary=mf[mf.operating_point=="target1"]
+    fig,ax=plt.subplots(figsize=(10,4))
+    for method in ("A0","A1","Full"):
+        group=primary[primary.method==method]; ax.plot(group.scenario,group.persistent_detection,marker="o",label=method)
+    ax.set_ylabel("established persistent detection"); ax.legend(); fig.tight_layout(); fig.savefig(out/"plots"/"baseline_vs_full.png",dpi=120); plt.close(fig)
+    ds1=pd.read_csv(out/"per_epoch"/"DS1.csv"); fig,ax=plt.subplots(figsize=(10,4)); pre=ds1.availability_time_s<110; ax.plot(ds1.loc[pre,"availability_time_s"],ds1.loc[pre,"score_Full"]); ax.axhline(threshold_map(thresholds,"Full")["target1"],color="r",ls="--"); ax.axvspan(30,90,color="green",alpha=.08); ax.set(xlabel="availability_time_s",ylabel="Full",title="DS1 pre/transition diagnostic"); fig.tight_layout(); fig.savefig(out/"plots"/"DS1_pre_zoom.png",dpi=120); plt.close(fig)
     target=mf[mf.operating_point=="target1"].copy(); full=target[target.method=="Full"].set_index("scenario")
     comparisons=[]
     for scenario in ("DS1","DS2","DS3","DS4"):
