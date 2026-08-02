@@ -113,7 +113,8 @@ def main(argv=None):
             for op,threshold in threshold_map(thresholds,method).items(): metrics.append(metric_row(name,method,score,epoch.availability_time_s,threshold,clean_lookup[(method,op)],op))
         epoch["phase"]=label_epochs(epoch.availability_time_s); epoch=pd.concat([epoch,seq],axis=1); epoch.to_csv(out/"per_epoch"/f"{name}.csv",index=False)
         for method in SCORE_METHODS:
-            tmp=nodes.copy(); tmp["p"]=tmp[f"p_{method}"]; tmp["e"]=tmp[f"e_{method}"]; z=aggregate_epochs(tmp); ablations.append(metric_row(name,method,z.mean_e,z.availability_time_s,np.finfo(float).max,0.,"diagnostic_no_alarm_threshold"))
+            tmp=nodes.copy(); tmp["p"]=tmp[f"p_{method}"]; tmp["e"]=tmp[f"e_{method}"]; z=aggregate_epochs(tmp)
+            ablations.append({"scenario":name,"method":method,"diagnostic_only":True,"thresholded":False,"epoch_count":len(z),"score_median":float(z.mean_e.median()),"score_q99":float(z.mean_e.quantile(.99))})
         for prn,g in nodes.groupby("prn"): prn_summary.append({"scenario":name,"prn":prn,"rows":len(g),"p_median":g.p.median(),"e_q99":g.e.quantile(.99)})
         save_plot(out/"plots"/f"{name}_scores.png",epoch,scores["Full"],threshold_map(thresholds,"Full")["target1"],name)
         pivot=nodes.pivot_table(index="prn",columns="window_bin_s",values="e",aggfunc="mean"); fig,ax=plt.subplots(figsize=(10,4)); im=ax.imshow(np.log1p(pivot),aspect="auto"); fig.colorbar(im,ax=ax); fig.tight_layout(); fig.savefig(out/"plots"/f"{name}_prn_heatmap.png",dpi=120); plt.close(fig)
