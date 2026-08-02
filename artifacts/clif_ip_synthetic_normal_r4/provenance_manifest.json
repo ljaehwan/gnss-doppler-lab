@@ -1,0 +1,31 @@
+{
+  "schema": "clif-ip.synthetic-normal.r4.provenance.v2",
+  "finalized_utc": "2026-08-02T01:46:27.052959+00:00",
+  "source_commit_before_r4_finalize": "5c5705898ca17516e32549f6cd537efdc6aa39b9",
+  "source_tree_sha256": "f733f25064135577935adbe6b8f9eab2b14c1f3445ed9b1fd09bd83033e8cf1a",
+  "campaign": {
+    "success_runs": 60,
+    "b0_rows": 83202,
+    "m1_rows": 14400,
+    "attack_rows_in_generation": 0
+  },
+  "training_sources": {
+    "SYN-OAK": {
+      "b0_cleanStatic": "93b862e03cb979f48d3cf030e3c3f7b008f20a727b4b07046b7ebc4a64bdeb4e",
+      "m1_cleanStatic": "2c0029db94a448b1bbe00c38d3bd2477844c0dcb68a0c8f9c74ffce7e9990c4c"
+    },
+    "SYN-TEX": {
+      "b0_cleanStatic": "fcd1d378c28e79fe4a550b65fc1208cde3c8fb334db11406a07fed4d90fba237",
+      "m1_cleanStatic": "f7c2666073899b0c0340e6d1c7b9a162660fec779801f51a127ad850900fb966"
+    }
+  },
+  "immutability": {
+    "R3_modified": false,
+    "R0_mode": "read-only"
+  },
+  "unavailable": {
+    "R0_TEX": "no complete chronological compatible Method-A node training export",
+    "S0_S1_TEX_DS1_DS3": "compatible Method-A attack node rows absent; values not fabricated"
+  },
+  "manifest_self_excluded_from_checksums": true
+}

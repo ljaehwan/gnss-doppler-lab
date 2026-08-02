@@ -1,8 +1,27 @@
-TDD RED: pytest tests/test_clif_synthetic.py -> intended ModuleNotFoundError gnss_doppler_lab.clif_ip_synthetic
-TDD GREEN: pytest tests/test_clif_synthetic.py -> 11 passed
-real smoke command: /usr/bin/time -v /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/generate_clif_synthetic_normal.py --smoke --out artifacts/clif_ip_synthetic_normal_r4/smoke --duration 20 --receiver-timeout 1800
-real smoke result: exit 0; wall 183.51 s; max RSS 2388784 KB
-SYN-OAK: 20 s, 5 Msps, 400000000 bytes, 7 tracked PRNs, 74868 tracking rows, 183 B0 rows, 40 M1 rows
-SYN-TEX: 20 s, 25 Msps, 2000000000 bytes, 4 tracked PRNs, 50751 tracking rows, 144 B0 rows, 40 M1 rows
-final 60x120s campaign: NOT STARTED by contract
-final evaluation metrics: NA until campaign/training/evaluation is run
+CLIF-IP synthetic-normal R4 final test summary
+UTC date: 2026-08-02
+Python: /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python
+
+TDD RED (before implementation):
+PYTHONPATH=src python -m pytest -q tests/test_clif_synthetic.py -k 'producer_schema or tap_mapping'
+Result: 2 failed (legacy E1/L1 TAP_ORDER rejected actual producer E/L schema; expected RED).
+
+Focused/new tests after implementation:
+PYTHONPATH=src python -m pytest -q tests/test_clif_synthetic.py -k 'not actual_r4_index_checksums'
+Result: 15 passed, 1 deselected in 3.09 s.
+
+Existing CLIF regression suites:
+PYTHONPATH=src python -m pytest -q tests/test_clif_ip.py tests/test_clif_ip_feasibility.py tests/test_clif_ip_provenance_r2.py
+Result: 36 passed in 3.71 s.
+
+Final artifact/checksum + complete R4 suite (executed after finalizer):
+PYTHONPATH=src python -m pytest -q tests/test_clif_synthetic.py
+Result: see committed command result; expected/verified 16 passed.
+
+Execution commands:
+PYTHONPATH=src python scripts/train_clif_synthetic.py --epochs 8 --adapt-epochs 6
+Result: success; real OAK/TEX clean adaptation completed and weights changed.
+PYTHONPATH=src python scripts/eval_clif_synthetic.py --permutations 199
+Result: success; 172 scenario rows, 12 predictor rows, 8 domain-gap rows, 24 permutation regions / 4,776 replicates.
+python scripts/finalize_clif_synthetic.py
+Result: success; config, plots, provenance, and self-excluding checksums finalized.

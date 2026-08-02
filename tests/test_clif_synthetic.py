@@ -109,6 +109,30 @@ def test_multirun_ar_fit_counts_and_history_reset():
     assert "prn" not in meta.attrs["predictor_columns"]
 
 
+def test_actual_producer_schema_maps_exact_canonical_nine_taps():
+    # This is the exact b0_nodes producer spelling/layout, including E/L rather
+    # than the legacy E1/L1 aliases. Mapping must preserve all nine dimensions.
+    from scripts.train_clif_synthetic import tap_columns
+    layout="E4,E3,E2,E,P,L,L2,L3,L4"
+    cols=[f"tap_{tap}_rel_prompt_mean" for tap in layout.split(",")]
+    d=pd.DataFrame({"tap_layout":[layout], **{c:[i+.25] for i,c in enumerate(cols)}})
+    assert tap_columns(d)==cols
+    assert d[tap_columns(d)].iloc[0].tolist()==[i+.25 for i in range(9)]
+
+
+def test_tap_mapping_rejects_alias_scalar_or_absolute_compression():
+    from scripts.train_clif_synthetic import tap_columns
+    layout="E4,E3,E2,E,P,L,L2,L3,L4"
+    absolute=[f"tap_{tap}_mean" for tap in layout.split(",")]
+    with pytest.raises(ValueError,match="relative-prompt"):
+        tap_columns(pd.DataFrame({"tap_layout":[layout], **{c:[1.] for c in absolute}}))
+    with pytest.raises(ValueError,match="exactly"):
+        tap_columns(pd.DataFrame({"tap_layout":[layout], "tap_rel_prompt_mean":[1.]}))
+    wrong="E4,E3,E2,E1,P,L1,L2,L3,L4"
+    with pytest.raises(ValueError,match="layout"):
+        tap_columns(pd.DataFrame({"tap_layout":[wrong], **{c:[1.] for c in absolute}}))
+
+
 def test_same_target_support_signed_order_no_prn_identity():
     d=pd.DataFrame({"run_id":["r"]*8,"prn":["G01"]*8,"t":np.arange(8)*.5})
     b=np.arange(72,dtype=float).reshape(8,9)-40;m=np.ones((8,3))
@@ -154,6 +178,22 @@ def test_artifact_schema_and_checksums(tmp_path):
     checks=artifact_checksums(tmp_path,required)
     assert set(checks)==set(required)
     assert all(len(x)==64 for x in checks.values())
+
+
+def test_actual_r4_training_is_real_adaptation_and_leakage_safe():
+    root=Path(__file__).resolve().parents[1]/"artifacts/clif_ip_synthetic_normal_r4"
+    summary=json.loads((root/"training_summary.json").read_text())
+    assert summary["regimes"]["R0"]["OAKBAT"]["modified"] is False
+    import torch
+    for domain in DOMAINS:
+        s0=summary["regimes"]["S0"][domain];s1=summary["regimes"]["S1"][domain]
+        assert s0["real_rows"]==s0["attack_rows"]==0 and s0["train_runs"]==24
+        assert s1["weights_changed"] and s1["before_weight_sha256"]!=s1["after_weight_sha256"]
+        assert s1["real_clean_b0_rows"]>0 and s1["real_clean_m1_rows"]>0 and s1["attack_rows"]==0
+        ck=torch.load(root/"models"/f"S1_{domain}.pt",map_location="cpu",weights_only=False)
+        assert ck["fit_roles"]==["synthetic_train","real_clean_train_0_240"]
+        assert ck["attack_rows"]==0 and set(ck["allowed_source_hashes"])=={"b0_cleanStatic","m1_cleanStatic"}
+        assert ck["before_weight_sha256"]!=ck["after_weight_sha256"]
 
 
 def test_actual_r4_index_checksums_and_receiver_backed_smoke():

@@ -1,12 +1,26 @@
 #!/usr/bin/env python3
-"""Train R4 R0/S0/S1 without run leakage (shared PRN-local GRU, no PRN ID)."""
+"""Leakage-safe R4 R0/S0/S1 training and clean-only adaptation."""
 from __future__ import annotations
-import argparse,hashlib,json,sys
+import argparse,hashlib,json,sys,copy
 from pathlib import Path
 import numpy as np,pandas as pd,torch
 from torch import nn
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/"src"))
-from gnss_doppler_lab.clif_ip_synthetic import DOMAINS,TAP_ORDER,fit_multirun_ar,history_design
+from gnss_doppler_lab.clif_ip_synthetic import DOMAINS,TAP_ORDER,fit_multirun_ar,extract_m1_features
+
+REAL_B0={
+ "SYN-OAK":Path("/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv"),
+ "SYN-TEX":Path("/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.npz")}
+REAL_M1={
+ "SYN-OAK":Path("/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-cleanStatic-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_cleanStatic_raw_iq_noise_features.csv"),
+ "SYN-TEX":Path("/home/ubuntu/unraid/gnss-datasets/texbat/raw/cleanStatic.bin")}
+META={"scenario","run_id","window_index","t","window_start_s","window_mid_s","window_end_s","start_sample","end_sample","block_ms","stride_s","split"}
+
+def sha(p):
+ h=hashlib.sha256()
+ with Path(p).open("rb") as f:
+  for b in iter(lambda:f.read(8<<20),b""):h.update(b)
+ return h.hexdigest()
 
 class SharedPrnGRU(nn.Module):
  """One shared predictor for variable PRNs; PRN identity is deliberately absent."""
@@ -14,7 +28,10 @@ class SharedPrnGRU(nn.Module):
  def forward(self,x):return self.head(self.gru(x)[0][:,-1])
 
 def clean_only(d):
- if "label" in d and not d.label.astype(str).str.lower().eq("normal").all():raise ValueError("attack/spoof rows may not enter fitting")
+ if "label" in d:
+  labels=d.label.astype(str).str.lower()
+  if labels.str.contains("attack|spoof|os[1-4]|texbat_ds",regex=True).any() or not labels.str.contains("normal|cleanstatic").all():
+   raise ValueError("attack/spoof rows may not enter fitting")
  return d
 
 def load_domain(root,domain,split):
@@ -27,48 +44,87 @@ def load_domain(root,domain,split):
  return clean_only(pd.concat(bs,ignore_index=True)),clean_only(pd.concat(ms,ignore_index=True))
 
 def tap_columns(d):
- cols=[f"tap_{x}_rel_prompt_mean" for x in TAP_ORDER]
- if not set(cols)<=set(d):raise ValueError("signed target source must preserve canonical 9-tap order")
+ """Exact producer-layout mapping; raw taps are nine magnitudes, not signed IQ."""
+ expected=tuple(TAP_ORDER)
+ if "tap_layout" not in d:raise ValueError("tap_layout is required for exact canonical mapping")
+ layouts={tuple(str(x).split(",")) for x in d.tap_layout.dropna().unique()}
+ if layouts!={expected}:raise ValueError(f"tap_layout must be exactly {','.join(expected)}; got {sorted(layouts)}")
+ cols=[f"tap_{x}_rel_prompt_mean" for x in expected]
+ if not set(cols)<=set(d):raise ValueError("all nine relative-prompt magnitude columns are required exactly; absolute/scalar compression is forbidden")
  return cols
 
 def sequences(d,cols,lag=12):
  X=[];Y=[]
- for (_, _),g in d.groupby(["run_id","prn"],sort=False):
+ for _,g in d.groupby(["run_id","prn"],sort=False):
   g=g.sort_values("window_bin_s");z=g[cols].to_numpy(np.float32)
   for i in range(lag,len(z)):X.append(z[i-lag:i]);Y.append(z[i])
  return np.asarray(X,np.float32),np.asarray(Y,np.float32)
 
-def train_gru(train,val,cols,epochs,device):
- X,Y=sequences(train,cols);Xv,Yv=sequences(val,cols)
+def fit_epochs(model,X,Y,Xv,Yv,mu,sd,epochs,device,lr):
  if not len(X) or not len(Xv):raise ValueError("insufficient run-local B0 history")
- mu=X.reshape(-1,9).mean(0);sd=X.reshape(-1,9).std(0);sd=np.where(sd>1e-6,sd,1.)
- model=SharedPrnGRU().to(device);opt=torch.optim.AdamW(model.parameters(),lr=1e-3);best=None;history=[]
- xt=torch.tensor((X-mu)/sd,device=device);yt=torch.tensor((Y-mu)/sd,device=device);xv=torch.tensor((Xv-mu)/sd,device=device);yv=torch.tensor((Yv-mu)/sd,device=device)
+ xt=torch.tensor((X-mu)/sd,device=device);yt=torch.tensor((Y-mu)/sd,device=device)
+ xv=torch.tensor((Xv-mu)/sd,device=device);yv=torch.tensor((Yv-mu)/sd,device=device)
+ opt=torch.optim.AdamW(model.parameters(),lr=lr);best=None;hist=[]
  for e in range(epochs):
   model.train();opt.zero_grad();loss=((model(xt)-yt)**2).mean();loss.backward();opt.step();model.eval()
   with torch.no_grad():vl=float(((model(xv)-yv)**2).mean())
-  history.append({"epoch":e+1,"train_mse":float(loss),"validation_mse":vl})
-  if best is None or vl<best[0]:best=(vl,{k:v.detach().cpu() for k,v in model.state_dict().items()})
- model.load_state_dict(best[1]);return model,mu,sd,history
+  hist.append({"epoch":e+1,"train_mse":float(loss),"validation_mse":vl})
+  if best is None or vl<best[0]:best=(vl,{k:v.detach().cpu().clone() for k,v in model.state_dict().items()})
+ model.load_state_dict(best[1]);return hist
+
+def state_hash(state):
+ h=hashlib.sha256()
+ for k,v in sorted(state.items()):h.update(k.encode());h.update(v.detach().cpu().numpy().tobytes())
+ return h.hexdigest()
+
+def tex_npz_magnitude_nodes(source,out):
+ """Format-aware full cleanStatic conversion to Method-A magnitude morphology."""
+ if out.exists():return pd.read_csv(out)
+ z=np.load(source);mag=np.hypot(z["complex_iq"][:,:,0],z["complex_iq"][:,:,1]);prompt=np.maximum(mag[:,4],1e-9)
+ q=mag/prompt[:,None];bins=np.floor(z["time_s"]*2)/2
+ base=pd.DataFrame({"prn":z["prn"].astype(str),"window_bin_s":bins})
+ for j,tap in enumerate(TAP_ORDER):base[f"tap_{tap}_rel_prompt_mean"]=q[:,j]
+ d=base.groupby(["prn","window_bin_s"],as_index=False).mean();d["window_start_s"]=d.window_bin_s;d["window_end_s"]=d.window_bin_s+.5;d["tap_layout"]=','.join(TAP_ORDER);d["label"]="texbat_cleanStatic_9tap_magnitude";d["run_id"]="real-cleanStatic";d.to_csv(out,index=False);return d
+
+def real_clean_frames(root,domain):
+ if domain=="SYN-TEX":
+  cache=root/"real_inputs";cache.mkdir(exist_ok=True);bp=cache/"texbat_cleanStatic_method_a_magnitude_nodes.csv";b=tex_npz_magnitude_nodes(REAL_B0[domain],bp)
+ else:b=clean_only(pd.read_csv(REAL_B0[domain]))
+ b["run_id"]="real-cleanStatic"
+ if domain=="SYN-TEX":
+  cache=root/"real_inputs";cache.mkdir(exist_ok=True);p=cache/"texbat_cleanStatic_m1_features.csv"
+  if not p.exists():
+   duration=REAL_M1[domain].stat().st_size/(4*25_000_000)
+   extract_m1_features(REAL_M1[domain],"cleanStatic",25_000_000,duration,block_ms=10.,stride_s=.5).to_csv(p,index=False)
+  m=pd.read_csv(p);mp=p
+ else:m=pd.read_csv(REAL_M1[domain]);mp=REAL_M1[domain]
+ m["run_id"]="real-cleanStatic"
+ return b,m,mp
+
+def mcols(d):return [c for c in d if c not in META and pd.api.types.is_numeric_dtype(d[c])]
 
 def main():
- ap=argparse.ArgumentParser();ap.add_argument("--root",type=Path,default=Path("artifacts/clif_ip_synthetic_normal_r4"));ap.add_argument("--regimes",nargs="*",default=["S0","S1"],choices=["R0","S0","S1"]);ap.add_argument("--epochs",type=int,default=20);ap.add_argument("--seed",type=int,default=41);a=ap.parse_args();torch.manual_seed(a.seed)
- cuda_ok=torch.cuda.is_available()
- try:
-  if cuda_ok:torch.zeros(1,device="cuda");device="cuda"
-  else:device="cpu"
- except Exception as e:device="cpu";cuda_error=str(e)
- out=a.root/"models";out.mkdir(parents=True,exist_ok=True);summary={"schema":"clif-ip.synthetic-normal.r4.training.v1","device":device,"cuda_probe":cuda_ok,"seed":a.seed,"regimes":{}}
- for regime in a.regimes:
-  if regime=="R0":
-   frozen=ROOT/"artifacts/clif_ip_cross_layer_r3";summary["regimes"][regime]={"mode":"read-only exact frozen baseline","path":str(frozen),"modified":False};continue
-  for domain in DOMAINS:
-   tr,mtr=load_domain(a.root,domain,"train");va,mva=load_domain(a.root,domain,"validation");cols=tap_columns(tr);model,mu,sd,h=train_gru(tr,va,cols,a.epochs,device)
-   mcols=[c for c in mtr if c not in {"run_id","window_index","t","window_start_s","window_end_s","start_sample","end_sample","block_ms","stride_s","split"}]
-   mtr=mtr.assign(split="train");state,audit=fit_multirun_ar(mtr,mcols,pca_dim=8,lag=6)
-   ck={"architecture":"shared PRN-local GRU; no PRN ID","target_order":TAP_ORDER,"state_dict":model.state_dict(),"mean":mu,"std":sd,"m1_state":state,"fit_audit":audit,"domain":domain,"regime":regime,
-    "adaptation_contract":"S1 starts from S0 then real cleanStatic chronological adaptation only; no attack/pre-onset calibration" if regime=="S1" else "synthetic train only; validation only for selection/calibration"}
-   path=out/f"{regime}_{domain}.pt";torch.save(ck,path);pd.DataFrame(h).to_csv(out/f"{regime}_{domain}_history.csv",index=False)
-   summary["regimes"].setdefault(regime,{})[domain]={"checkpoint":str(path),"train_runs":int(tr.run_id.nunique()),"validation_runs":int(va.run_id.nunique()),"m1_fit_audit":audit,"note":"S1 real adaptation is required before final evaluation and is not silently substituted"}
+ ap=argparse.ArgumentParser();ap.add_argument("--root",type=Path,default=Path("artifacts/clif_ip_synthetic_normal_r4"));ap.add_argument("--regimes",nargs="*",default=["R0","S0","S1"],choices=["R0","S0","S1"]);ap.add_argument("--epochs",type=int,default=8);ap.add_argument("--adapt-epochs",type=int,default=6);ap.add_argument("--seed",type=int,default=41);a=ap.parse_args();torch.manual_seed(a.seed);np.random.seed(a.seed)
+ device="cuda" if torch.cuda.is_available() else "cpu";out=a.root/"models";out.mkdir(parents=True,exist_ok=True)
+ summary={"schema":"clif-ip.synthetic-normal.r4.training.v2","device":device,"seed":a.seed,"tap_layout":list(TAP_ORDER),"raw_tap_semantics":"Method-A magnitudes; signed 9D values are x-xhat innovations","regimes":{}}
+ if "R0" in a.regimes:summary["regimes"]["R0"]={"OAKBAT":{"mode":"read-only exact R3 OAK baseline","path":str(ROOT/"artifacts/clif_ip_cross_layer_r3"),"modified":False},"TEXBAT":{"mode":"R0-TEX-real-only","fit_source":"cleanStatic chronological normal only","note":"new comparator because no R3 TEX CLIF baseline existed"}}
+ for domain in DOMAINS:
+  tr,mtr=load_domain(a.root,domain,"train");va,mva=load_domain(a.root,domain,"validation");cols=tap_columns(tr)
+  X,Y=sequences(tr,cols);Xv,Yv=sequences(va,cols);mu=X.reshape(-1,9).mean(0);sd=X.reshape(-1,9).std(0);sd=np.where(sd>1e-6,sd,1.)
+  model=SharedPrnGRU().to(device);hist=fit_epochs(model,X,Y,Xv,Yv,mu,sd,a.epochs,device,1e-3)
+  sm=mtr.assign(split="train");mc=mcols(sm);mstate,maudit=fit_multirun_ar(sm,mc,pca_dim=min(8,len(mc)),lag=6)
+  ck={"architecture":"shared PRN-local GRU; no PRN ID","target_order":TAP_ORDER,"state_dict":copy.deepcopy(model.state_dict()),"mean":mu,"std":sd,"m1_state":mstate,"m1_feature_columns":mc,"fit_audit":maudit,"domain":domain,"regime":"S0","fit_roles":["synthetic_train"],"fit_source_hashes":sorted({sha(a.root/'runs'/r/'b0_nodes.csv') for r in tr.run_id.unique()}),"attack_rows":0,"real_rows":0}
+  s0=out/f"S0_{domain}.pt";torch.save(ck,s0);s0hash=sha(s0);pd.DataFrame(hist).to_csv(out/f"S0_{domain}_history.csv",index=False)
+  summary["regimes"].setdefault("S0",{})[domain]={"checkpoint":str(s0),"checkpoint_sha256":s0hash,"train_runs":int(tr.run_id.nunique()),"validation_runs":int(va.run_id.nunique()),"m1_fit_audit":maudit,"real_rows":0,"attack_rows":0}
+  rb,rm,rmp=real_clean_frames(a.root,domain);rcols=tap_columns(rb);rtrain=rb[(rb.window_start_s>=0)&(rb.window_end_s<=240)];rval=rb[(rb.window_start_s>=250)&(rb.window_end_s<=330)]
+  RX,RY=sequences(rtrain,rcols);RVX,RVY=sequences(rval,rcols);before=state_hash(model.state_dict());ah=fit_epochs(model,RX,RY,RVX,RVY,mu,sd,a.adapt_epochs,device,2e-4);after=state_hash(model.state_dict())
+  if before==after:raise RuntimeError("S1 clean adaptation did not change weights")
+  rmtrain=rm[(rm.window_start_s>=0)&(rm.window_end_s<=240)].copy().assign(split="train");rmc=mcols(rmtrain);common=[c for c in mc if c in rmc]
+  # Adapt residual AR/cov on real clean train while recording the synthetic-basis pretrain hash.
+  rmstate,rmaudit=fit_multirun_ar(rmtrain,common,pca_dim=min(8,len(common)),lag=6)
+  real_hashes={"b0_cleanStatic":sha(REAL_B0[domain]),"m1_cleanStatic":sha(rmp)}
+  ck1={"architecture":ck["architecture"],"target_order":TAP_ORDER,"state_dict":model.state_dict(),"mean":mu,"std":sd,"m1_synthetic_pretrain_state":mstate,"m1_state":rmstate,"m1_feature_columns":common,"fit_audit":{"synthetic_pretrain":maudit,"real_adaptation":rmaudit},"domain":domain,"regime":"S1","initialized_from":str(s0),"before_weight_sha256":before,"after_weight_sha256":after,"fit_roles":["synthetic_train","real_clean_train_0_240"],"allowed_source_hashes":real_hashes,"real_b0_rows":len(rtrain),"real_m1_rows":len(rmtrain),"attack_rows":0,"threshold_role":"real_clean_validation_250_330_only"}
+  s1=out/f"S1_{domain}.pt";torch.save(ck1,s1);pd.DataFrame(ah).to_csv(out/f"S1_{domain}_adaptation_history.csv",index=False)
+  summary["regimes"].setdefault("S1",{})[domain]={"checkpoint":str(s1),"checkpoint_sha256":sha(s1),"initialized_from_sha256":s0hash,"before_weight_sha256":before,"after_weight_sha256":after,"weights_changed":before!=after,"real_clean_b0_rows":len(rtrain),"real_clean_m1_rows":len(rmtrain),"real_validation_b0_rows":len(rval),"allowed_source_hashes":real_hashes,"fit_roles":ck1["fit_roles"],"attack_rows":0,"m1_fit_audit":ck1["fit_audit"]}
  (a.root/"training_summary.json").write_text(json.dumps(summary,indent=2,default=lambda x:x.tolist() if hasattr(x,"tolist") else str(x))+"\n")
 if __name__=="__main__":main()

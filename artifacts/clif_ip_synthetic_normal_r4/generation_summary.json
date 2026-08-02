@@ -1,9 +1,9 @@
 {
   "campaign_kind": "final-60x120s",
-  "completed_rows": 16,
+  "completed_rows": 60,
   "generator_direct_s16le": true,
   "indexed_rows": 60,
-  "pending_rows": 44,
+  "pending_rows": 0,
   "reports": [
     {
       "b0_rows": 1386,
@@ -134,9 +134,356 @@
       "tracked_prns": 10
     },
     {
-      "error": "RuntimeError: gps-sdr-sim rc=1; artifacts/clif_ip_synthetic_normal_r4/runs/syn-oak-r4-017/generator.log",
+      "b0_rows": 1670,
+      "elapsed_s": 176.88397598266602,
+      "m1_rows": 240,
       "run_id": "syn-oak-r4-017",
-      "status": "failed"
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 1627,
+      "elapsed_s": 179.22341203689575,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-018",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 1712,
+      "elapsed_s": 180.37840270996094,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-019",
+      "status": "ok",
+      "tracked_prns": 11
+    },
+    {
+      "b0_rows": 1031,
+      "elapsed_s": 174.0337781906128,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-020",
+      "status": "ok",
+      "tracked_prns": 11
+    },
+    {
+      "b0_rows": 1426,
+      "elapsed_s": 183.4339315891266,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-021",
+      "status": "ok",
+      "tracked_prns": 11
+    },
+    {
+      "b0_rows": 1426,
+      "elapsed_s": 198.76276993751526,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-022",
+      "status": "ok",
+      "tracked_prns": 11
+    },
+    {
+      "b0_rows": 1369,
+      "elapsed_s": 175.32923340797424,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-023",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 1571,
+      "elapsed_s": 205.1336178779602,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-024",
+      "status": "ok",
+      "tracked_prns": 11
+    },
+    {
+      "b0_rows": 1180,
+      "elapsed_s": 175.00998425483704,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-025",
+      "status": "ok",
+      "tracked_prns": 9
+    },
+    {
+      "b0_rows": 1481,
+      "elapsed_s": 181.3627519607544,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-026",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 1443,
+      "elapsed_s": 184.03983640670776,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-027",
+      "status": "ok",
+      "tracked_prns": 11
+    },
+    {
+      "b0_rows": 1410,
+      "elapsed_s": 195.89663577079773,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-028",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 1329,
+      "elapsed_s": 179.00737285614014,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-029",
+      "status": "ok",
+      "tracked_prns": 11
+    },
+    {
+      "b0_rows": 2143,
+      "elapsed_s": 185.65195417404175,
+      "m1_rows": 240,
+      "run_id": "syn-oak-r4-030",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 1326,
+      "elapsed_s": 869.0253500938416,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-001",
+      "status": "ok",
+      "tracked_prns": 11
+    },
+    {
+      "b0_rows": 1130,
+      "elapsed_s": 836.8041229248047,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-002",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 1629,
+      "elapsed_s": 875.520260810852,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-003",
+      "status": "ok",
+      "tracked_prns": 9
+    },
+    {
+      "b0_rows": 1377,
+      "elapsed_s": 853.713048696518,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-004",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 1138,
+      "elapsed_s": 844.0817046165466,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-005",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 1249,
+      "elapsed_s": 936.7182621955872,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-006",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 974,
+      "elapsed_s": 892.6783754825592,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-007",
+      "status": "ok",
+      "tracked_prns": 9
+    },
+    {
+      "b0_rows": 972,
+      "elapsed_s": 891.5759320259094,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-008",
+      "status": "ok",
+      "tracked_prns": 9
+    },
+    {
+      "b0_rows": 1075,
+      "elapsed_s": 915.2419216632843,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-009",
+      "status": "ok",
+      "tracked_prns": 8
+    },
+    {
+      "b0_rows": 1621,
+      "elapsed_s": 872.6749324798584,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-010",
+      "status": "ok",
+      "tracked_prns": 9
+    },
+    {
+      "b0_rows": 1021,
+      "elapsed_s": 878.8738687038422,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-011",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 2117,
+      "elapsed_s": 929.0504131317139,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-012",
+      "status": "ok",
+      "tracked_prns": 11
+    },
+    {
+      "b0_rows": 827,
+      "elapsed_s": 933.9157938957214,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-013",
+      "status": "ok",
+      "tracked_prns": 8
+    },
+    {
+      "b0_rows": 1390,
+      "elapsed_s": 901.4718761444092,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-014",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 1571,
+      "elapsed_s": 898.2248871326447,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-015",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 859,
+      "elapsed_s": 874.3971180915833,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-016",
+      "status": "ok",
+      "tracked_prns": 9
+    },
+    {
+      "b0_rows": 1716,
+      "elapsed_s": 863.8221507072449,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-017",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 1451,
+      "elapsed_s": 853.5641131401062,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-018",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 1673,
+      "elapsed_s": 864.8233368396759,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-019",
+      "status": "ok",
+      "tracked_prns": 11
+    },
+    {
+      "b0_rows": 952,
+      "elapsed_s": 847.0605263710022,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-020",
+      "status": "ok",
+      "tracked_prns": 9
+    },
+    {
+      "b0_rows": 1511,
+      "elapsed_s": 869.4648239612579,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-021",
+      "status": "ok",
+      "tracked_prns": 9
+    },
+    {
+      "b0_rows": 1154,
+      "elapsed_s": 873.3456246852875,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-022",
+      "status": "ok",
+      "tracked_prns": 8
+    },
+    {
+      "b0_rows": 1176,
+      "elapsed_s": 864.6960394382477,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-023",
+      "status": "ok",
+      "tracked_prns": 9
+    },
+    {
+      "b0_rows": 1286,
+      "elapsed_s": 842.4427251815796,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-024",
+      "status": "ok",
+      "tracked_prns": 11
+    },
+    {
+      "b0_rows": 1296,
+      "elapsed_s": 837.1032729148865,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-025",
+      "status": "ok",
+      "tracked_prns": 11
+    },
+    {
+      "b0_rows": 1147,
+      "elapsed_s": 838.0591385364532,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-026",
+      "status": "ok",
+      "tracked_prns": 9
+    },
+    {
+      "b0_rows": 1138,
+      "elapsed_s": 839.2371623516083,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-027",
+      "status": "ok",
+      "tracked_prns": 10
+    },
+    {
+      "b0_rows": 1066,
+      "elapsed_s": 838.3444745540619,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-028",
+      "status": "ok",
+      "tracked_prns": 8
+    },
+    {
+      "b0_rows": 971,
+      "elapsed_s": 839.8734765052795,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-029",
+      "status": "ok",
+      "tracked_prns": 8
+    },
+    {
+      "b0_rows": 1553,
+      "elapsed_s": 892.7252564430237,
+      "m1_rows": 240,
+      "run_id": "syn-tex-r4-030",
+      "status": "ok",
+      "tracked_prns": 9
     }
   ],
   "schema": "clif-ip.synthetic-normal.r4.generation.v1"

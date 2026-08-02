@@ -1,4 +1,131 @@
 {
-  "status": "NA",
-  "na_reason": "not generated; final campaign not run"
+  "schema": "clif-ip.synthetic-normal.r4.training.v2",
+  "device": "cuda",
+  "seed": 41,
+  "tap_layout": [
+    "E4",
+    "E3",
+    "E2",
+    "E",
+    "P",
+    "L",
+    "L2",
+    "L3",
+    "L4"
+  ],
+  "raw_tap_semantics": "Method-A magnitudes; signed 9D values are x-xhat innovations",
+  "regimes": {
+    "R0": {
+      "OAKBAT": {
+        "mode": "read-only exact R3 OAK baseline",
+        "path": "/home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_cross_layer_r3",
+        "modified": false
+      },
+      "TEXBAT": {
+        "mode": "R0-TEX-real-only",
+        "fit_source": "cleanStatic chronological normal only",
+        "note": "new comparator because no R3 TEX CLIF baseline existed"
+      }
+    },
+    "S0": {
+      "SYN-OAK": {
+        "checkpoint": "artifacts/clif_ip_synthetic_normal_r4/models/S0_SYN-OAK.pt",
+        "checkpoint_sha256": "7541d626c2a0ca7385a0ba62f47aec80acd8fff409dd66021b50599b89b6d4d0",
+        "train_runs": 24,
+        "validation_runs": 3,
+        "m1_fit_audit": {
+          "fit_runs": 24,
+          "fit_rows": 5760,
+          "ar_target_rows": 5616,
+          "history_resets": 24
+        },
+        "real_rows": 0,
+        "attack_rows": 0
+      },
+      "SYN-TEX": {
+        "checkpoint": "artifacts/clif_ip_synthetic_normal_r4/models/S0_SYN-TEX.pt",
+        "checkpoint_sha256": "0db3949abb78e20fd74e331e1ee28cfb0fc24b6a2cb7ed0118f2485ec0d64353",
+        "train_runs": 24,
+        "validation_runs": 3,
+        "m1_fit_audit": {
+          "fit_runs": 24,
+          "fit_rows": 5760,
+          "ar_target_rows": 5616,
+          "history_resets": 24
+        },
+        "real_rows": 0,
+        "attack_rows": 0
+      }
+    },
+    "S1": {
+      "SYN-OAK": {
+        "checkpoint": "artifacts/clif_ip_synthetic_normal_r4/models/S1_SYN-OAK.pt",
+        "checkpoint_sha256": "fd0ee1f1d84182040e58e17f9739c97dd2cb9271733a28d42a6f3dc89cd221bb",
+        "initialized_from_sha256": "7541d626c2a0ca7385a0ba62f47aec80acd8fff409dd66021b50599b89b6d4d0",
+        "before_weight_sha256": "78f0491f98e0af218dea4ae06820732bf1d887d5195b5b62a8c1105620947e8b",
+        "after_weight_sha256": "57acb0934b66a88cdda2d097e28d2c9659b2570612b6d37a47ebd2275494eedb",
+        "weights_changed": true,
+        "real_clean_b0_rows": 5258,
+        "real_clean_m1_rows": 480,
+        "real_validation_b0_rows": 1738,
+        "allowed_source_hashes": {
+          "b0_cleanStatic": "93b862e03cb979f48d3cf030e3c3f7b008f20a727b4b07046b7ebc4a64bdeb4e",
+          "m1_cleanStatic": "2c0029db94a448b1bbe00c38d3bd2477844c0dcb68a0c8f9c74ffce7e9990c4c"
+        },
+        "fit_roles": [
+          "synthetic_train",
+          "real_clean_train_0_240"
+        ],
+        "attack_rows": 0,
+        "m1_fit_audit": {
+          "synthetic_pretrain": {
+            "fit_runs": 24,
+            "fit_rows": 5760,
+            "ar_target_rows": 5616,
+            "history_resets": 24
+          },
+          "real_adaptation": {
+            "fit_runs": 1,
+            "fit_rows": 480,
+            "ar_target_rows": 474,
+            "history_resets": 1
+          }
+        }
+      },
+      "SYN-TEX": {
+        "checkpoint": "artifacts/clif_ip_synthetic_normal_r4/models/S1_SYN-TEX.pt",
+        "checkpoint_sha256": "e52d4b900c55311301ab2c22745d464c1d565e62a4233b5fa4f974238610c4d8",
+        "initialized_from_sha256": "0db3949abb78e20fd74e331e1ee28cfb0fc24b6a2cb7ed0118f2485ec0d64353",
+        "before_weight_sha256": "acf81928ba176874992fd71d653d76b388eaa36168d9581dc335f778cd09603a",
+        "after_weight_sha256": "47769b571234e9042ccf1d24be96086c50caf1d55030f47e12190237fcdad6a2",
+        "weights_changed": true,
+        "real_clean_b0_rows": 5031,
+        "real_clean_m1_rows": 480,
+        "real_validation_b0_rows": 1705,
+        "allowed_source_hashes": {
+          "b0_cleanStatic": "fcd1d378c28e79fe4a550b65fc1208cde3c8fb334db11406a07fed4d90fba237",
+          "m1_cleanStatic": "f7c2666073899b0c0340e6d1c7b9a162660fec779801f51a127ad850900fb966"
+        },
+        "fit_roles": [
+          "synthetic_train",
+          "real_clean_train_0_240"
+        ],
+        "attack_rows": 0,
+        "m1_fit_audit": {
+          "synthetic_pretrain": {
+            "fit_runs": 24,
+            "fit_rows": 5760,
+            "ar_target_rows": 5616,
+            "history_resets": 24
+          },
+          "real_adaptation": {
+            "fit_runs": 1,
+            "fit_rows": 480,
+            "ar_target_rows": 474,
+            "history_resets": 1
+          }
+        }
+      }
+    }
+  }
 }

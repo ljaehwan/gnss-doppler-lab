@@ -22,7 +22,7 @@ from scipy.spatial.distance import cdist
 from scipy.stats import wasserstein_distance
 
 DOMAINS=("SYN-OAK","SYN-TEX")
-TAP_ORDER=("E4","E3","E2","E1","P","L1","L2","L3","L4")
+TAP_ORDER=("E4","E3","E2","E","P","L","L2","L3","L4")
 IMPAIRMENT_AXES=("awgn_cn0_dbhz","cfo_hz","cfo_drift_hz_s","phase_noise_std_rad",
                  "frontend_bw_hz","iq_gain_imbalance_db","iq_phase_imbalance_deg",
                  "dc_i","dc_q","agc_gain_db","quantization_bits","clipping_fullscale")

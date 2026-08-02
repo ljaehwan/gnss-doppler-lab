@@ -1,5 +1,5 @@
 {
-  "schema": "clif-ip.synthetic-normal.r4",
+  "schema": "clif-ip.synthetic-normal.r4.final.v2",
   "final_runs": 60,
   "per_domain": {
     "train": 24,
@@ -7,26 +7,53 @@
     "synthetic_test": 3
   },
   "duration_s": 120,
-  "utc_schedule": {
-    "nav_validity_source": "RINEX-2 first/last broadcast ephemeris epochs (gps-sdr-sim -t bounds)",
-    "rinex_nav": "data/ephemeris/brdc1990.26n",
-    "valid_start_min_utc": "2026-07-17T12:00:00Z",
-    "valid_start_max_utc": "2026-07-18T10:00:00Z",
-    "new_scenario_grid_minutes": 10,
-    "new_scenarios": "rows 17-30 paired across SYN-OAK/SYN-TEX; unique within each domain",
-    "full_duration_deadline_utc": "2026-07-18T10:00:00Z",
-    "immutable_completed_exception": "syn-oak-r4-016 starts at tmax and is retained because _SUCCESS predates this contract"
+  "tap_layout": [
+    "E4",
+    "E3",
+    "E2",
+    "E",
+    "P",
+    "L",
+    "L2",
+    "L3",
+    "L4"
+  ],
+  "tap_semantics": "Method-A prompt-relative magnitudes; signed vectors are x-xhat innovations",
+  "regimes": {
+    "R0": "read-only exact R3 OAK; TEX unavailable with explicit reason",
+    "S0": "synthetic only; native synthetic validation threshold",
+    "S1": "S0 initialization plus real clean 0-240 adaptation; real clean 250-330 threshold; >=340 test"
   },
-  "targets": {
-    "SYN-OAK": "5 Msps s16le IQ/ishort",
-    "SYN-TEX": "25 Msps s16le IQ/ishort"
-  },
-  "threshold_fit": "per regime/domain normal validation only",
-  "real_static": {
-    "OAKBAT": "os1--os4",
-    "TEXBAT": "DS1--DS4 primary; stable pre 30--90, exclude 90--110, post >=110"
+  "attacks": {
+    "OAKBAT": {
+      "scenarios": [
+        "os1",
+        "os2",
+        "os3",
+        "os4"
+      ],
+      "onset_s": 120
+    },
+    "TEXBAT": {
+      "scenarios": [
+        "DS1",
+        "DS2",
+        "DS3",
+        "DS4"
+      ],
+      "nominal_onset_s": 100,
+      "stable_pre_s": [
+        30,
+        90
+      ],
+      "excluded_s": [
+        90,
+        110
+      ],
+      "post_start_s": 110
+    }
   },
   "permutations": 199,
-  "r0": "read-only exact R3 baseline",
-  "success": "P3<P1 and Full AUC>M1/simple fusion with controlled independent clean FPR"
+  "permutation_block_epochs": 8,
+  "p_value_resolution": 0.005
 }
