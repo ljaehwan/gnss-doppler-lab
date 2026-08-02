@@ -1,0 +1,52 @@
+{
+  "B0_exact_function_reused": "gnss_doppler_lab.cmte_a2.b0_exact_scores",
+  "DS7_DS8_status": "developmental_exploratory_post_exposure",
+  "attack_or_test_model_fit": false,
+  "frozen_checkpoint_sha256": "44bc85320e4fdf6ffdff3b4c12941a1f90d39832d4b13707ecb4a0317f936fa0",
+  "frozen_conformal_state_sha256": "b29b791bbb9898d481016cb7e53d0d9721d83ccb8cc97f2a15a96ed2c24ebca3",
+  "frozen_state_checksum_count": 14,
+  "historical_B0_gate_equivalence": {
+    "actual_evaluator_imported": true,
+    "calibration_path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/configs/detectors/texbat_btail_gate_v1.json",
+    "calibration_sha256": "45e4df9beed4b689700e928ef8217cbed17c2178a47ff240c40eec3c74e3f414",
+    "compared": [
+      "N",
+      "K",
+      "tails",
+      "raw",
+      "retention_ewma",
+      "strict_alarm"
+    ],
+    "evaluator_path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/scripts/eval_btail_support_gate.py",
+    "evaluator_sha256": "1bb353101d1a98a8bd6a6feaa72757829669f718f3e2e2d497e64422177c5e10",
+    "golden_max_absolute_error": 1.7763568394002505e-15,
+    "golden_path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/artifacts/cmte_a2_historical_b0/ds1_golden_events.csv",
+    "golden_sha256": "2a3a82dfe813248d8d70c1506f5d1b8c7d5b83fddc5f39169f431e5bd849642d",
+    "golden_strict_alarm_equal": true,
+    "historical_dataset": "DS1",
+    "holdout_accessed": false,
+    "implementation_sha256": "c50ed6acc167f44843613efecc16114f93ba5f1dedbd98fa7e12d10210eac7e4",
+    "input_path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/artifacts/cmte_texbat_poc/per_prn/DS1.csv",
+    "input_sha256": "3a5b5cf7d33270ba8296c0dcd95fa5196e70fce13341fc31371ff4ade18a7989",
+    "max_absolute_error": 3.552713678800501e-15,
+    "new_checkpoint_score_equivalence_claim": false,
+    "passed": true,
+    "schema": "gnss-doppler-lab.cmte-a2-historical-gate-equivalence.v1",
+    "strict_alarm_equal": true,
+    "strict_alarm_threshold": 4.169877716047041,
+    "tolerance": 1e-12
+  },
+  "input_hashes": {
+    "clean_per_prn.csv": "11cc01c503af098328c1122e65f74704c6296de42d273f61a39d64901a84bd6f",
+    "per_prn/DS1.csv": "79eed0f4a37f449c5e3f3fd14622811cb42d8da19abc274847f443e2f5219dbc",
+    "per_prn/DS2.csv": "645ab926e1823726ed9eae5e59b42b1aa90d7d6841df9c4388858209109c194f",
+    "per_prn/DS3.csv": "84ad57b0a03b1f4f4548d9b2285b3469523dd67f4b9a59f9fcbf17b23c4c45d7",
+    "per_prn/DS4.csv": "4047e67c1bde5dd072919577fd1f8965148e4472959a1752bd071fdb8ee9c506",
+    "per_prn/DS7.csv": "557569242af2504df340d72cdc563a0bf8bc1ac13d540f88302ce9273f15772c",
+    "per_prn/DS8.csv": "6605d57747547073e5de9b376c5886084e08338b3a3f69dc67ad34af7e53a6e2"
+  },
+  "primary_invalid_artifact_preserved": true,
+  "primary_invalid_checksum_count": 63,
+  "schema": "gnss-doppler-lab.cmte-a2-epochfix-exploratory.v1",
+  "source_commit": "1fc5f710c27bd1c179df565132cdcda4df62c7f5"
+}

@@ -1,0 +1,39 @@
+{
+  "matched_fpr_fit": "clean test diagnostic only; no attack fit",
+  "policy": {
+    "availability_column": "window_end_s",
+    "causality": "selected availability <= decision_time + tolerance",
+    "first_grid_index_formula": "ceil((availability-origin-tolerance)/stride)",
+    "grid_formula": "t_k = origin + k*stride, k integer",
+    "grid_origin_s": 0.0,
+    "grid_stride_s": 0.5,
+    "mapping": "first grid t_k >= availability, within numerical tolerance; latest causal residual per PRN is retained",
+    "max_residual_age_s": 0.55,
+    "prn_identity_usage": "grouping and diagnostics only; never a score feature",
+    "source_index_decision": {
+      "target_window_index": "not used as a global key: it is history/channel local",
+      "window_bin_s": "not used: it can precede residual availability"
+    },
+    "state_boundaries": [
+      "physical_recording_id",
+      "history_id",
+      "segment",
+      "channel",
+      "cadence gap via maximum age"
+    ],
+    "tie_break": "maximum availability, then lexicographically maximum SHA-256 of stable row content",
+    "timestamp_tolerance_s": 1e-09
+  },
+  "primary_operating_point": "q99.5 higher",
+  "scenarios": [
+    "DS1",
+    "DS2",
+    "DS3",
+    "DS4",
+    "DS7",
+    "DS8"
+  ],
+  "source_commit": "1fc5f710c27bd1c179df565132cdcda4df62c7f5",
+  "status": "developmental_exploratory_post_exposure",
+  "threshold_fit": "cleanStatic [300,330) only"
+}

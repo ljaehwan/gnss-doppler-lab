@@ -1,0 +1,13 @@
+{
+  "DS7_or_DS8_improves_B0_exact_at_matched_clean_fpr": true,
+  "all_scenario_median_N_gt_1": true,
+  "all_stable_pre_fpr_lt_0.05": false,
+  "decision": "NO-GO",
+  "improved_scenarios": [
+    "DS7",
+    "DS8"
+  ],
+  "independent_clean_fpr_le_0.015": false,
+  "no_catastrophic_other_holdout_degradation": true,
+  "scientific_status": "exploratory_only; external confirmatory data still required"
+}

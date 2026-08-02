@@ -1,0 +1,31 @@
+{
+  "algorithm": "sha256",
+  "files": {
+    "README.md": "8619453f3a0cd03aed3b40fcb68a024428cd0ff644d96869cddb4398e56f979b",
+    "baseline_metrics.csv": "10b83d6a2157db608e76ebda9e708fb1115ff903e0f39e797f41d7c185741c50",
+    "cmte_a2_vs_b0_exact.csv": "edc63518501a6047cc790a36c9dc33814a274fe0267808c77c9fa8852a0fc727",
+    "config.json": "b65a00ba4c8681875e6a8969512ba0c68f2ed91f1ccd70984e05b69ee35f65ab",
+    "decision.json": "30ac539ac4fd55ee768d0195825d71bd009f13b578f76100811bb87c51e4edab",
+    "epoch_policy.json": "556e392d4b11bbe2332ab06eba2f3bdfe67ab40c6ae80a97c55d754910eabccc",
+    "matched_fpr.csv": "e53d44075d1fac4071361b49aed261f88fc541e5b695eb4c1bb792cdf5df7f57",
+    "per_epoch/DS1.csv": "464f9802c39b3c9e83cda9efbab0223e06428775ca96ce43755622922364788d",
+    "per_epoch/DS2.csv": "8107e78e5dd133d2a4a80f4139dd5524149df93f4fac1c4cf5f387e5c60c6c5e",
+    "per_epoch/DS3.csv": "7d51a5fb1a9e3dd79d62e9e691b4791a099387710b9044edffe3c7a2e11fa9f4",
+    "per_epoch/DS4.csv": "3956bedcecfdbd58a4dd310fdb68fa704a72a653342ddab7a8a663ed07a45556",
+    "per_epoch/DS7.csv": "ff13783244371070f6ad9960700a14dd5d8f031179a302034252cc57d18c286d",
+    "per_epoch/DS8.csv": "25d84928af923d26892d60c53d14c239c81bb2d0e591b6812acfdda5dc13f22f",
+    "per_epoch/cleanStatic_test.csv": "800a97a0ecbe5f2756f42ddd86f533f13666a1eb38fc43ad50c5e4a08bfc5ca0",
+    "per_epoch/cleanStatic_threshold.csv": "5bb345671a7094f73a92bfce9a30b56a7e2dd072105a52a799b0e1f6f7ef9348",
+    "plots/DS1_scores_and_N.png": "39f1398e6e2d2376f72ba0fb051e1a425be29374e40ae62b54eb44d0d7d4e54f",
+    "plots/DS2_scores_and_N.png": "a1794c9446148d9b07e4bd241493e04b64c0171bf97216b47fa9f2cc62827719",
+    "plots/DS3_scores_and_N.png": "05913e097302b4c5bb15f1ac8c621dd3a0626d6aaf367bed70a5926e3e858528",
+    "plots/DS4_scores_and_N.png": "bc4ed27a1c00eaeb412b9b7eee35bffce999a90b074b800100630cf9db573e0c",
+    "plots/DS7_scores_and_N.png": "9360d1b4560c3931a7f2aafbc4c186b6752fbf087aafca8fe6a38b9003ba0e1b",
+    "plots/DS8_scores_and_N.png": "2fc26c80d574240e94a659bd5b84032a912af8f4e9cfc93d1a9f6c03a4fcbcb4",
+    "provenance.json": "55ea998a18d6caed76c8cca2ab01a4dbad94fd1e96d68602c2b659e4dcbd3ce7",
+    "scenario_metrics.csv": "fbd461262b4839b24b5b8379bdfcc472dab9cd346dcd505ef884eff84e5e22c0",
+    "test_summary.txt": "c9d124ef97caea8ca7571c74628abc00fcfb93377a4bbf9f54831d9756192dab",
+    "thresholds.json": "cf013a78a9ec91ba764d1ca86ce2582962466e3e70a0bcb10400836852b00ce2",
+    "tracked_prn_count.csv": "11aaae745ec57c2483656914e4219afe4714c332499a5613906cd350cdc80673"
+  }
+}

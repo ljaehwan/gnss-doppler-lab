@@ -1,0 +1,71 @@
+{
+  "alarm_comparison": "strict_greater",
+  "attack_fit": false,
+  "enhanced_empirical_rates": {
+    "q50": 0.49782608695652175,
+    "q70": 0.29782608695652174,
+    "q80": 0.19782608695652174
+  },
+  "matched_clean_fpr_diagnostic": {
+    "A0": {
+      "absolute_difference": 0.0,
+      "attack_fit": false,
+      "clean_test_fpr": 0.0898876404494382,
+      "fit_source": "independent_clean_test_diagnostic_only",
+      "target_clean_test_fpr": 0.0898876404494382,
+      "threshold": 0.3768719048002563
+    },
+    "B0-Enhanced": {
+      "absolute_difference": 0.0,
+      "attack_fit": false,
+      "clean_test_fpr": 0.0898876404494382,
+      "fit_source": "independent_clean_test_diagnostic_only",
+      "target_clean_test_fpr": 0.0898876404494382,
+      "threshold": 1.7667224500162375
+    },
+    "B0-Exact": {
+      "absolute_difference": 0.0,
+      "attack_fit": false,
+      "clean_test_fpr": 0.0898876404494382,
+      "fit_source": "independent_clean_test_diagnostic_only",
+      "target_clean_test_fpr": 0.0898876404494382,
+      "threshold": 1.4791443751079276
+    },
+    "CMTE-A2": {
+      "absolute_difference": 0.0,
+      "attack_fit": false,
+      "clean_test_fpr": 0.0898876404494382,
+      "fit_source": "independent_clean_test_diagnostic_only",
+      "target_clean_test_fpr": 0.0898876404494382,
+      "threshold": 1.2143515402746485
+    }
+  },
+  "node_thresholds": {
+    "q50": 0.0679046217962436,
+    "q70": 0.0872736408562954,
+    "q80": 0.1082306613116026
+  },
+  "primary": {
+    "A0": {
+      "q99": 0.2895382176827131,
+      "q995": 0.2895382176827131,
+      "target1": 0.2895382176827131
+    },
+    "B0-Enhanced": {
+      "q99": 1.726241551131593,
+      "q995": 1.726241551131593,
+      "target1": 1.726241551131593
+    },
+    "B0-Exact": {
+      "q99": 1.7035537524611113,
+      "q995": 1.7035537524611113,
+      "target1": 1.7035537524611113
+    },
+    "CMTE-A2": {
+      "q99": 1.2189356312242086,
+      "q995": 1.2189356312242086,
+      "target1": 1.2189356312242086
+    }
+  },
+  "threshold_role_epoch_count": 46
+}

@@ -1,0 +1,7 @@
+CMTE-A2 epochfix final test summary
+===================================
+Policy/runner tests: 12 passed.
+Focused epochfix + related TEXBAT B0 tests: 53 passed in 4.66 s.
+All actual scenarios and cleanStatic threshold/test have median tracked PRN count > 1.
+Frozen checkpoint, conformal state, original PRIMARY INVALID artifact, and all per-PRN inputs were hash-verified.
+Decision: NO-GO (independent clean FPR 8.9888%; DS1/DS2/DS4/DS7 stable-pre FPR >= 5%).
