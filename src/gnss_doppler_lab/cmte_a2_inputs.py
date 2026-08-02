@@ -1,14 +1,15 @@
 """CMTE-A2 canonical input wrappers and tier/provenance validation."""
 from __future__ import annotations
 import hashlib, json, os, re, shutil
+from collections.abc import Iterable, Mapping
 from pathlib import Path
-from typing import Iterable
 import pandas as pd
 from gnss_doppler_lab.cmte_inputs import convert_complex_npz, copy_verified_ds4, sha256, validate_node_table
 
 DEVELOPMENT=frozenset({"DS1","DS2","DS3","DS4"})
 CONFIRMATORY=frozenset({"DS7","DS8"})
-UNIFORM_COMPLEX=frozenset({"CLEANSTATIC","DS1","DS2","DS3","DS7","DS8"})
+CANONICAL_COMPLEX_SCENARIOS=("cleanStatic","DS1","DS2","DS3","DS7","DS8")
+UNIFORM_COMPLEX=frozenset(CANONICAL_COMPLEX_SCENARIOS)
 TAP_ORDER=["E4","E3","E2","E","P","L","L2","L3","L4"]
 CONVERTER_SEMANTICS={"magnitude":"hypot(I,Q)","tap_order":TAP_ORDER,"window_seconds":1.0,"stride_seconds":0.5,
  "prompt_relative":True,"prompt_normalization":"per_epoch_tap_magnitude_divided_by_prompt_magnitude_then_window_mean",
@@ -41,19 +42,21 @@ def parse_scenario_mappings(items:Iterable[str],*,tier:str,require_exists:bool=T
  return specs
 
 
-def _named_specs(items:Iterable[str])->dict[str,Path]:
+def _named_specs(items:Mapping[str,str|Path])->dict[str,Path]:
+ if not isinstance(items,Mapping):
+  raise TypeError("named complex sources must be a Mapping of canonical scenario name to path")
+ if not items: raise ValueError("at least one named complex source required")
  specs={}
- for item in items:
-  if "=" not in item: raise ValueError("mapping must be NAME=/complex.npz")
-  name,raw=item.split("=",1); name=name.upper()
-  if name in specs: raise ValueError(f"duplicate {name}")
+ for name,raw in items.items():
+  if not isinstance(name,str) or not name: raise ValueError("scenario name must be non-empty")
   if name not in UNIFORM_COMPLEX: raise ValueError(f"unsupported complex scenario {name}")
+  if not isinstance(raw,(str,os.PathLike)) or not os.fspath(raw):
+   raise ValueError(f"scenario path must be non-empty: {name}")
   specs[name]=Path(raw).resolve(strict=True)
- if not specs: raise ValueError("at least one named complex source required")
  return specs
 
 
-def prepare_named_complex_inputs(items:Iterable[str],out_dir:str|Path,*,source_metadata:dict|None=None)->dict[str,dict]:
+def prepare_named_complex_inputs(items:Mapping[str,str|Path],out_dir:str|Path,*,source_metadata:dict|None=None)->dict[str,dict]:
  """Atomically apply one exact converter to cleanStatic/DS1-3/DS7/DS8."""
  specs=_named_specs(items); out=Path(out_dir).resolve()
  if out.exists(): raise FileExistsError("atomic non-overwrite output required")
@@ -64,8 +67,8 @@ def prepare_named_complex_inputs(items:Iterable[str],out_dir:str|Path,*,source_m
  wrapper_path=Path(__file__).resolve(strict=True); converter_sha=_content_sha(converter_path); wrapper_sha=_content_sha(wrapper_path)
  fingerprint=_fingerprint(converter_sha,wrapper_sha)
  try:
-  for name,source in sorted(specs.items()):
-   scenario="cleanStatic" if name=="CLEANSTATIC" else name
+  for name,source in specs.items():
+   scenario=name
    csv_path=staging/f"{scenario}_nodes.csv"; manifest_path=staging/f"{scenario}_manifest.json"
    metadata=dict(source_metadata or {}); metadata.update({"source_npz_sha256":sha256(source),"campaign_converter_fingerprint":fingerprint})
    convert_complex_npz(source,csv_path,manifest_path,scenario=scenario,source_metadata=metadata)
@@ -75,13 +78,13 @@ def prepare_named_complex_inputs(items:Iterable[str],out_dir:str|Path,*,source_m
     "campaign_converter_fingerprint":fingerprint,"source_sha256":sha256(source),"mixed_producer":False,
     "confirmatory_eligible":name in {"DS7","DS8"}})
    manifest_path.write_text(json.dumps(doc,indent=2,sort_keys=True)+"\n"); manifests[name]=doc
-  campaign={"schema":"gnss-doppler-lab.cmte-a2-input-campaign.v2","scenarios":sorted(specs),
+  campaign={"schema":"gnss-doppler-lab.cmte-a2-input-campaign.v2","scenarios":list(specs),
    "uniform_converter_semantics":True,"mixed_producer_DS4":False,"converter_content_sha256":converter_sha,
    "wrapper_content_sha256":wrapper_sha,"campaign_converter_fingerprint":fingerprint,
    "window_seconds":1.0,"stride_seconds":0.5,"tap_order":TAP_ORDER,
    "prompt_normalization":CONVERTER_SEMANTICS["prompt_normalization"],
-   "source_sha256":{name:sha256(source) for name,source in sorted(specs.items())},
-   "manifests":{name:f"{('cleanStatic' if name=='CLEANSTATIC' else name)}_manifest.json" for name in manifests}}
+   "source_sha256":{name:sha256(source) for name,source in specs.items()},
+   "manifests":{name:f"{name}_manifest.json" for name in manifests}}
   (staging/"manifest.json").write_text(json.dumps(campaign,indent=2,sort_keys=True)+"\n")
   os.replace(staging,out); return manifests
  except Exception:

@@ -34,17 +34,78 @@ def test_committed_ds8_template_exact_placeholders_and_receiver_contract():
 def test_named_prepare_is_atomic_and_binds_campaign_fingerprint(tmp_path):
     from gnss_doppler_lab.cmte_a2_inputs import prepare_named_complex_inputs
     a=tmp_path/"a.npz"; b=tmp_path/"b.npz"; complex_npz(a); complex_npz(b)
-    docs=prepare_named_complex_inputs([f"cleanStatic={a}",f"DS8={b}"],tmp_path/"ok")
+    docs=prepare_named_complex_inputs({"cleanStatic":a,"DS8":b},tmp_path/"ok")
     campaign=json.loads((tmp_path/"ok/manifest.json").read_text())
-    assert set(docs)=={"CLEANSTATIC","DS8"}
+    assert list(docs)==["cleanStatic","DS8"]
     fp=campaign["campaign_converter_fingerprint"]
     assert len(fp)==64 and campaign["converter_content_sha256"]
     assert campaign["window_seconds"]==1.0 and campaign["stride_seconds"]==0.5
     assert campaign["prompt_normalization"]=="per_epoch_tap_magnitude_divided_by_prompt_magnitude_then_window_mean"
     bad=tmp_path/"bad.npz"; complex_npz(bad,broken=True)
     with pytest.raises(ValueError):
-        prepare_named_complex_inputs([f"DS1={a}",f"DS2={bad}"],tmp_path/"partial")
+        prepare_named_complex_inputs({"DS1":a,"DS2":bad},tmp_path/"partial")
     assert not (tmp_path/"partial").exists()
+
+
+def _run_input_prep(*args):
+    return subprocess.run(
+        [sys.executable,str(ROOT/"scripts/prepare_cmte_a2_inputs.py"),*map(str,args)],
+        cwd=ROOT,text=True,capture_output=True,
+    )
+
+
+def test_input_prep_cli_repeated_mappings_emit_exact_scenario_names_and_files(tmp_path):
+    first=tmp_path/"first.npz"; second=tmp_path/"second.npz"
+    complex_npz(first); complex_npz(second)
+    out=tmp_path/"prepared"
+    result=_run_input_prep("--scenario-npz",f"cleanStatic={first}",
+                           "--scenario-npz",f"DS2={second}","--out",out)
+    assert result.returncode==0, result.stderr
+    assert json.loads(result.stdout)=={"out":str(out.resolve()),"scenarios":["cleanStatic","DS2"]}
+    assert json.loads((out/"manifest.json").read_text())["scenarios"]==["cleanStatic","DS2"]
+    assert {p.name for p in out.iterdir()}=={
+        "manifest.json","cleanStatic_manifest.json","cleanStatic_nodes.csv",
+        "DS2_manifest.json","DS2_nodes.csv",
+    }
+
+
+def test_input_prep_cli_rejects_duplicate_names_before_output(tmp_path):
+    source=tmp_path/"synthetic.npz"; complex_npz(source); out=tmp_path/"prepared"
+    result=_run_input_prep("--scenario-npz",f"DS1={source}",
+                           "--scenario-npz",f"DS1={source}","--out",out)
+    assert result.returncode!=0
+    assert "duplicate" in result.stderr.lower()
+    assert not out.exists()
+
+
+@pytest.mark.parametrize("mapping",["DS1","=/missing.npz","DS1=","notCanonical=/missing.npz","ds1=/missing.npz"])
+def test_input_prep_cli_rejects_missing_empty_or_noncanonical_mapping(mapping,tmp_path):
+    out=tmp_path/"prepared"
+    result=_run_input_prep("--scenario-npz",mapping,"--out",out)
+    assert result.returncode!=0
+    assert not out.exists()
+
+
+def test_input_prep_parser_allows_only_the_exact_canonical_names():
+    from gnss_doppler_lab.cmte_a2_inputs import CANONICAL_COMPLEX_SCENARIOS
+    module=load_script("prepare_cmte_a2_inputs.py")
+    mappings=module.parse_scenario_npz_mappings(
+        [f"{name}=/synthetic/{name}.npz" for name in CANONICAL_COMPLEX_SCENARIOS]
+    )
+    assert list(mappings)==["cleanStatic","DS1","DS2","DS3","DS7","DS8"]
+    assert all(isinstance(path,Path) for path in mappings.values())
+
+
+def test_named_prepare_requires_mapping_and_canonical_names(tmp_path):
+    from gnss_doppler_lab.cmte_a2_inputs import CANONICAL_COMPLEX_SCENARIOS, prepare_named_complex_inputs
+    assert CANONICAL_COMPLEX_SCENARIOS==("cleanStatic","DS1","DS2","DS3","DS7","DS8")
+    source=tmp_path/"synthetic.npz"; complex_npz(source)
+    with pytest.raises(TypeError,match="Mapping"):
+        prepare_named_complex_inputs([f"DS1={source}"],tmp_path/"list")
+    with pytest.raises(TypeError,match="Mapping"):
+        prepare_named_complex_inputs(f"DS1={source}",tmp_path/"string")
+    with pytest.raises(ValueError,match="unsupported"):
+        prepare_named_complex_inputs({"DS4":source},tmp_path/"unsupported")
 
 
 def test_ds4_separate_sensitivity_markers(tmp_path):
@@ -52,7 +113,7 @@ def test_ds4_separate_sensitivity_markers(tmp_path):
     # Reuse a canonical output produced by the exact wrapper.
     source=tmp_path/"source.npz"; complex_npz(source)
     from gnss_doppler_lab.cmte_a2_inputs import prepare_named_complex_inputs
-    prepare_named_complex_inputs([f"DS3={source}"],tmp_path/"up")
+    prepare_named_complex_inputs({"DS3":source},tmp_path/"up")
     doc=prepare_ds4_sensitivity(tmp_path/"up/DS3_nodes.csv",tmp_path/"ds4")
     assert doc["tier"]=="development_sensitivity"
     assert doc["mixed_producer"] is True and doc["confirmatory_eligible"] is False

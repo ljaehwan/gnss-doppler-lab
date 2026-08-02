@@ -282,7 +282,7 @@ def test_uniform_complex_producer_and_hash_manifests(tmp_path):
         iq=np.ones((n,9,2),np.float32); iq[:,:,1]=np.arange(9)[None,:]
         np.savez(path,complex_iq=iq,prn=np.ones(n,int),time_s=np.arange(n)*.05,
                  segment=np.zeros(n,int),channel=np.zeros(n,int)); paths.append(f"{name}={path}")
-    manifests=prepare_named_complex_inputs(paths,tmp_path/"prepared")
+    manifests=prepare_named_complex_inputs(dict(item.split("=",1) for item in paths),tmp_path/"prepared")
     assert manifests["DS1"]["converter_semantics"]==manifests["DS2"]["converter_semantics"]
     for name in ("DS1","DS2"):
         node=tmp_path/"prepared"/f"{name}_nodes.csv"
