@@ -237,5 +237,60 @@ def test_actual_png_writer_and_metric_schema(tmp_path):
     png=tmp_path/"plot.png"; mod.save_plot(png,epoch,[0.,1.,2.,3.],1.5,"DS1")
     assert png.read_bytes()[:8]==b"\x89PNG\r\n\x1a\n" and png.stat().st_size>1000
     row=mod.metric_row("DS1","Full",[0.,1.,2.,3.],[30.,31.,110.,111.],1.5,.01)
-    required={"roc_auc","pr_auc","independent_clean_fpr","stable_pre_fpr","false_alarms_per_min","detection","first_alarm_delay_s","persistent_detection","pre_summary","post_summary"}
+    required={"roc_auc","pr_auc","independent_clean_fpr","stable_pre_fpr","false_alarms_per_min","alarm_epoch_occupancy_per_min","false_alarm_events","sequence_any_alarm_fraction","first_crossing_epoch","censored_run_length_epochs","detection","first_alarm_delay_s","persistent_detection","pre_summary","post_summary"}
     assert required <= set(row)
+
+
+def _eval_module():
+    import importlib.util
+    path=Path(__file__).resolve().parents[1]/"scripts/eval_cmte_texbat.py"
+    spec=importlib.util.spec_from_file_location("cmte_eval_semantics_test",path)
+    mod=importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
+    return mod
+
+
+def test_false_alarm_events_are_rising_edges_not_alarm_occupancy():
+    mod=_eval_module()
+    epoch=pd.DataFrame({"recording_id":["r"]*6,"availability_time_s":np.arange(6)*.5})
+    report=mod.clean_alarm_metrics(epoch,[0.,2.,2.,2.,2.,2.],1.)
+    assert report["alarm_epoch_count"]==5 and report["false_alarm_events"]==1
+    assert report["false_alarms_per_min"]==pytest.approx(20.)
+    assert report["alarm_epoch_occupancy_per_min"]==pytest.approx(100.)
+    assert report["sequence_any_alarm_fraction"]==1.
+    assert report["first_crossing_epoch"]==2 and report["censored_run_length_epochs"]==2
+
+
+def test_catastrophic_is_stable_pre_occupancy_ge_twenty_percent_and_blocks_go():
+    mod=_eval_module()
+    assert mod.catastrophic_failure(pd.Series([.199999,.01])) is False
+    assert mod.catastrophic_failure(pd.Series([.20,.01])) is True
+    assert mod.final_go({"required":True},catastrophic=True) is False
+
+
+def test_comparator_lower_pre_fpr_does_not_require_similar_clean_fpr():
+    mod=_eval_module()
+    full=pd.Series({"stable_pre_fpr":.01,"first_alarm_delay_s":20.,"persistent_detection":.2,"detection":True,"cmte_calibration_independent_clean_fpr":.20})
+    base=pd.Series({"stable_pre_fpr":.10,"first_alarm_delay_s":30.,"persistent_detection":.2,"detection":True,"cmte_calibration_independent_clean_fpr":.01})
+    audit=mod.compare_scenario(full,base)
+    assert audit["qualifies"] is True
+    assert "lower_stable_pre_fpr" in audit["qualifying_criteria"]
+    assert audit["similar_clean_fpr"] is False
+
+
+def test_real_epoch_permutation_preserves_multiset_but_changes_trajectory():
+    mod=_eval_module()
+    epoch=pd.DataFrame({"recording_id":["a"]*5+["b"]*5,"availability_time_s":np.arange(10)*.5,"mean_e":[.1,10,.1,10,.1,1.,9.,1.,9.,1.]})
+    shuffled=mod.permute_epochs_within_recording(epoch,seed=2026)
+    assert sorted(epoch.mean_e)==sorted(shuffled.mean_e)
+    assert list(shuffled.recording_id)==list(epoch.recording_id)
+    original=sequential_scores(np.log(epoch.mean_e),epoch.recording_id,drift=.01)
+    altered=sequential_scores(np.log(shuffled.mean_e),shuffled.recording_id,drift=.01)
+    assert not np.allclose(original.s2_e_cusum,altered.s2_e_cusum)
+
+
+def test_criterion_five_has_required_non_performance_name():
+    mod=_eval_module()
+    full=pd.DataFrame({"cmte_calibration_independent_clean_fpr":[.01],"stable_pre_fpr":[.01]},index=["DS1"])
+    criteria=mod.build_criteria(full,{"DS1":True,"DS2":True,"DS3":True,"DS4":True},True,True)
+    assert "5_PRN permutation invariance and variable-cardinality support verified" in criteria
+    assert not any("non_dependence" in key for key in criteria)

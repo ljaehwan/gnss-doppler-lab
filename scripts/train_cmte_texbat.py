@@ -18,9 +18,15 @@ def operating_points(x):
 def binomial_tail(k,n,rate): return float(sum(math.comb(n,j)*rate**j*(1-rate)**(n-j) for j in range(k,n+1)))
 def blocks(frame,score,threshold):
     x=frame.assign(_score=np.asarray(score),_block=np.floor(frame.availability_time_s/20).astype(int)); alarms=x._score>threshold
-    maxima=x.groupby(["run_id","_block"])._score.max(); any_alarm=x.assign(_alarm=alarms).groupby(["run_id","_block"])._alarm.any()
-    duration=max(1e-9,len(x)*.5/60); first=np.flatnonzero(alarms)
-    return {"epoch_fpr":float(alarms.mean()),"false_alarms_per_min":float(alarms.sum()/duration),"censored_arl_epochs":float(first[0]+1 if len(first) else len(x)),
+    run_col="recording_id" if "recording_id" in x else "run_id"; rising=np.zeros(len(x),dtype=bool); first_lengths=[]; sequence_any=[]
+    for _,indices in x.groupby(run_col,sort=False).indices.items():
+        idx=np.asarray(indices); a=alarms.iloc[idx].to_numpy(); edges=a & ~np.r_[False,a[:-1]]; rising[idx]=edges
+        hits=np.flatnonzero(edges); first_lengths.append(int(hits[0]+1) if len(hits) else len(a)); sequence_any.append(bool(a.any()))
+    maxima=x.groupby([run_col,"_block"])._score.max(); any_alarm=x.assign(_alarm=alarms).groupby([run_col,"_block"])._alarm.any()
+    duration=max(1e-9,len(x)*.5/60)
+    return {"epoch_fpr":float(alarms.mean()),"alarm_epoch_count":int(alarms.sum()),"alarm_epoch_occupancy_per_min":float(alarms.sum()/duration),
+      "false_alarm_events":int(rising.sum()),"false_alarms_per_min":float(rising.sum()/duration),"sequence_any_alarm_fraction":float(np.mean(sequence_any)),
+      "first_crossing_epoch":None if not rising.any() else int(np.flatnonzero(rising)[0]+1),"censored_run_length_epochs":float(np.mean(first_lengths)),"censored_arl_epochs":float(np.mean(first_lengths)),
       "block_any_alarm_fraction":float(any_alarm.mean()),"blocks":int(len(maxima)),"block_maxima":maxima.tolist()}
 def a1_scores(nodes,thresholds,rates):
     rows=[]
@@ -76,12 +82,12 @@ def main(argv=None):
     config_doc={"schema":"cmte-config-v3","source_commit":source_commit,"timing_policy":{"authority":"user-requested TEX policy","nominal_onset_s":100,"stable_s":[30,90],"transition_s":[90,110],"established_from_s":110,"clock":"availability_time_s","DS4_caveat":"short post-onset coverage"},"default_method":"full_shrinkage_mahalanobis","q_semantics":"squared quadratic","splits":{"train":"windows fully inside [0,240)","validation":"windows fully inside [250,330)","test":"windows start >=340"},"split_reset":True,"seq_len":12,"checkpoint_sha256":actual}
     cadence_audits={k:v.attrs["cadence_chunk_audit"] for k,v in roles.items()}
     training={"source_commit":source_commit,"clean_node":str(node),"clean_manifest":str(man),"source_node_sha256":file_sha256(node),"checkpoint":str(ck),"checkpoint_sha256":actual,"rows":{k:len(v) for k,v in roles.items()},"audit":audit,"cadence_chunk_audit":cadence_audits,"input_provenance":provenance,"historical_caveat":"CMTE-calibration-independent only; B0 trained across cleanStatic with PRN holdout"}
-    shuffled_nodes=val_nodes.sample(frac=1,random_state=2026); shuffled_epoch=aggregate_epochs(shuffled_nodes)
+    rng=np.random.default_rng(2026); shuffled_epoch=pd.concat([g.iloc[rng.permutation(len(g))].reset_index(drop=True) for _,g in val.groupby("recording_id",sort=False)],ignore_index=True)
     val_seq=sequential_scores(np.log(val.mean_e),val.recording_id,drift=chosen["drift"]); shuffled_seq=sequential_scores(np.log(shuffled_epoch.mean_e),shuffled_epoch.recording_id,drift=chosen["drift"])
     seq_column="s1_log_capital" if chosen["detector"]=="S1" else "s2_e_cusum"
     original_long=blocks(val,val_seq[seq_column],chosen["threshold"]); shuffled_long=blocks(shuffled_epoch,shuffled_seq[seq_column],chosen["threshold"])
     calibration={"reference":"validation residual Q_cal only","n":len(roles["validation"]),"fit_n":len(roles["train"]),"inclusive_plus_one":True,"validation_p_summary":{k:score_residuals(roles["validation"],state)[f"p_{k}"].describe().to_dict() for k in SCORE_METHODS},
-      "validation_normal_order_shuffle":{"diagnostic_only":True,"seed":2026,"epoch_multiset_identical":bool(np.allclose(np.sort(val.mean_e),np.sort(shuffled_epoch.mean_e))),"original_sequential_long_fa":original_long,"shuffled_sequential_long_fa":shuffled_long}}
+      "validation_normal_order_shuffle":{"diagnostic_only":True,"interpretation":"order sensitivity only; equality is not a success condition","seed":2026,"aggregated_before_permutation":True,"order_actually_changed":bool(not np.array_equal(val.mean_e.to_numpy(),shuffled_epoch.mean_e.to_numpy())),"epoch_multiset_identical":bool(np.allclose(np.sort(val.mean_e),np.sort(shuffled_epoch.mean_e))),"original_reset_count":val_seq.attrs["reset_count"],"shuffled_reset_count":shuffled_seq.attrs["reset_count"],"original_final_state":float(val_seq[seq_column].iloc[-1]),"shuffled_final_state":float(shuffled_seq[seq_column].iloc[-1]),"original_max_state":float(val_seq[seq_column].max()),"shuffled_max_state":float(shuffled_seq[seq_column].max()),"original_sequential_long_fa":original_long,"shuffled_sequential_long_fa":shuffled_long}}
     code_paths=[ROOT/"src/gnss_doppler_lab/cmte.py",ROOT/"src/gnss_doppler_lab/cmte_inputs.py",ROOT/"src/gnss_doppler_lab/tap_residual_common_drive.py",ROOT/"scripts/score_tap_residual_common_drive.py",ROOT/"scripts/prepare_cmte_texbat_inputs.py",ROOT/"scripts/eval_cmte_texbat.py",Path(__file__).resolve()]
     code={str(p.relative_to(ROOT)):file_sha256(p) for p in code_paths}
     residual_manifest={"schema":"cmte-residual-manifest-v1","source_commit":source_commit,"checkpoint":{"path":str(ck),"sha256":actual},"source_node":{"path":str(node),"sha256":file_sha256(node)},"source_manifest":{"path":str(man),"sha256":file_sha256(man)},"code_sha256":code,"semantics":{"features":list(RESIDUAL_COLUMNS),"tap_order":list(TAP_ORDER),"residual":"signed standardized target-minus-frozen-B0-prediction","availability":"window_end_s","q_default":"full shrinkage squared Mahalanobis"},"history":"partition nodes before extraction; reset each split/run/PRN and contiguous 0.5 s cadence chunk; first target index 12; never fill/interpolate/bridge","split_reset":True,"cadence_chunk_audit":cadence_audits,"roles":{k:{"rows":len(v),"run_ids":sorted(v.run_id.astype(str).unique())} for k,v in roles.items()}}
