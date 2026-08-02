@@ -7,15 +7,11 @@ import numpy as np, pandas as pd, torch
 ROOT=Path(__file__).resolve().parents[1]; sys.path.insert(0,str(ROOT/"src"))
 from gnss_doppler_lab.cmte_a2 import (
     B0Config, FEATURE_COLUMNS, PREREG_COMMIT, aggregate_epochs, baseline_epoch_inputs,
-    b0_enhanced_scores, b0_exact_scores, create_freeze_manifest, file_sha256,
-    fit_distribution, higher_quantile, partition_normal_roles, predict_residuals,
-    save_fit_state, score_residuals, select_prn_holdout, threshold_operating_points,
-    train_b0, write_checksums,
+    audit_normal_roles, b0_enhanced_scores, b0_exact_scores, calibrate_comparators,
+    create_freeze_manifest, file_sha256, fit_distribution, matched_fpr_diagnostic,
+    partition_normal_roles, predict_residuals, role_frame_audit, save_fit_state,
+    score_residuals, select_prn_holdout, threshold_operating_points, train_b0, write_checksums,
 )
-
-
-def _node_thresholds(values):
-    return {name:higher_quantile(values,q) for name,q in (("q50",.5),("q70",.7),("q80",.8))}
 
 
 def _copy_prereg(out):
@@ -54,13 +50,21 @@ def main(argv=None):
         epochs={name:aggregate_epochs(frame) for name,frame in scored.items()}
         ops=threshold_operating_points(epochs["threshold"].score_A2)
         baseline_input=baseline_epoch_inputs(scored["threshold"])
-        fit_matrix=residuals["fit"].loc[:,[f"residual_{i:03d}" for i in range(9)]].to_numpy(float)
-        fit_rmse=np.sqrt(np.mean(fit_matrix**2,axis=1))
-        node_thresholds=_node_thresholds(fit_rmse)
-        rates={name:float(np.mean(fit_rmse>value)) for name,value in node_thresholds.items()}
+        comparator_calibration=calibrate_comparators(scored["threshold"])
+        node_thresholds=comparator_calibration["node_thresholds"]
+        rates=comparator_calibration["enhanced_empirical_rates"]
         exact=b0_exact_scores(baseline_input,node_thresholds); enhanced=b0_enhanced_scores(baseline_input,node_thresholds,rates)
-        baseline_ops={"A0":threshold_operating_points(baseline_input.A0),
-                      "B0-Exact":threshold_operating_points(exact.score),"B0-Enhanced":threshold_operating_points(enhanced.score)}
+        baseline_ops=comparator_calibration["final_thresholds"]
+        threshold_role_scores={"CMTE-A2":epochs["threshold"].score_A2.to_numpy(),"A0":baseline_input.A0.to_numpy(),
+                               "B0-Exact":exact.score.to_numpy(),"B0-Enhanced":enhanced.score.to_numpy()}
+        matched=matched_fpr_diagnostic(threshold_role_scores,primary_threshold=ops["q995"])
+        role_audit=audit_normal_roles(roles)
+        role_audit["distribution_fit_gradient"] = role_frame_audit(gradient,"prefix-gradient")
+        role_audit["train"] = role_frame_audit(gradient,"train")
+        role_audit["qcal"] = role_audit["roles"]["qcal"]
+        role_audit["threshold"] = role_audit["roles"]["threshold"]
+        role_audit["test"] = role_audit["roles"]["clean_test"]
+        role_audit["history_resets"]={name:frame.attrs.get("history_audit",{}) for name,frame in residuals.items()}
         checkpoint={"schema":"gnss-doppler-lab.cmte-a2-b0.v1","model_state":model.cpu().state_dict(),"config":B0Config(),
                     "scaler_mean":mean,"scaler_std":std,"training_audit":audit}
         torch.save(checkpoint,staging/"b0_model.pt")
@@ -73,15 +77,17 @@ def main(argv=None):
         training={"schema":"gnss-doppler-lab.cmte-a2-training.v1","source_node":str(source),"source_node_sha256":file_sha256(source),
                   "source_manifest":str(manifest),"source_manifest_sha256":file_sha256(manifest),"audit":audit,
                   "role_rows":{name:len(frame) for name,frame in roles.items()},"residual_rows":{name:len(frame) for name,frame in residuals.items()},
-                  "checkpoint_sha256":file_sha256(staging/"b0_model.pt")}
+                  "role_audit":role_audit,"checkpoint_sha256":file_sha256(staging/"b0_model.pt")}
         calibration={"schema":"gnss-doppler-lab.cmte-a2-calibration.v1","distribution_fit_n":len(residuals["fit"]),
                      "distribution_state_hash":state.state_hash,"shrinkage":state.shrinkage,"epsilon":state.epsilon,"qcal_n":len(state.qcal),
                      "qcal_source":"cleanStatic fully-contained [250,290)","inclusive_ties":True,"plus_one":True}
         thresholds={"schema":"gnss-doppler-lab.cmte-a2-thresholds.v1","source":"cleanStatic fully-contained [300,330)",
                     "CMTE-A2":ops,"primary":"q995","method":"higher","alarm_strict_greater":True,"baselines":baseline_ops,
                     "baseline_labels":{"A0":"A0","B0-Exact":"chronological B0 with exact gate semantics","B0-Enhanced":"B0-Enhanced"},
-                    "node_threshold_source":"cleanStatic prefix gradient-training PRNs only","node_thresholds":node_thresholds,
-                    "enhanced_empirical_rates":rates}
+                    "node_threshold_source":"cleanStatic fully-contained threshold role [300,330) only","node_thresholds":node_thresholds,
+                    "enhanced_rate_source":"same threshold role; empirical strict RMSE exceedance","enhanced_empirical_rates":rates,
+                    "comparator_calibration":comparator_calibration,"matched_fpr_diagnostic":matched,
+                    "short_self_calibration_limitation":comparator_calibration["limitation"]}
         for name,doc in (("config.json",config),("training.json",training),("calibration.json",calibration),("thresholds.json",thresholds)):
             (staging/name).write_text(json.dumps(doc,indent=2,sort_keys=True)+"\n")
         pd.concat([frame.assign(role=name) for name,frame in scored.items()],ignore_index=True).to_csv(staging/"clean_per_prn.csv",index=False)
