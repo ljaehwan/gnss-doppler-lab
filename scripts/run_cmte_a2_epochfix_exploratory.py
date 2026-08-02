@@ -52,14 +52,17 @@ def sha256(path: Path) -> str:
 
 def verify_checksums(root: Path) -> int:
     document = json.loads((root / "checksums.json").read_text())
+    files = document["files"] if isinstance(document.get("files"), dict) else document
+    if not isinstance(files, dict) or not files:
+        raise ValueError("checksum manifest must contain a nonempty file mapping")
     bad = []
-    for relative, expected in document["files"].items():
+    for relative, expected in files.items():
         path = root / relative
         if not path.is_file() or sha256(path) != expected:
             bad.append(relative)
     if bad:
         raise ValueError(f"checksum mismatch: {bad}")
-    return len(document["files"])
+    return len(files)
 
 
 def score_models(per_prn: pd.DataFrame, node_thresholds: dict[str, float], rates: dict[str, float]) -> pd.DataFrame:
