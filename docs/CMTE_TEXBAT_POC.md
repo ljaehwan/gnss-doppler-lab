@@ -37,7 +37,7 @@ False-alarm outputs have distinct schemas: `epoch_fpr`/`stable_pre_fpr` are the 
 
 The final comparator audits Full against each of A0/A1 per scenario. A strict improvement is lower stable-pre FPR (tolerance `1e-12`), faster first alarm (at least one 0.5 s epoch), higher persistent detection (`1e-12`), or similar calibration-independent clean FPR (absolute tolerance `.005`) with higher detection rate. Similar clean FPR qualifies only the fourth criterion. At least three scenarios must qualify, including DS3 or DS4. Catastrophic failure is unambiguously any Full `stable_pre_fpr >= .20` and always makes GO false.
 
-Criterion 5 is named only **PRN permutation invariance and variable-cardinality support verified**. It does not claim performance independence from N. Evaluation emits Full clean/stable occupancy and score stratified by N; with one campaign, performance-N independence is declared inconclusive (or dependent if a substantial trend/variance is visible), not proven.
+Criterion 5 is named only **PRN permutation invariance and variable-cardinality support verified**. It does not claim performance independence from N. Evaluation emits Full clean/stable occupancy and score stratified by N. A predeclared eligible stratum has at least 20 epochs; an occupancy spread of at least 0.10 across eligible N strata is reported as substantial dependence/heterogeneity. With one campaign, performance-N independence is never claimed as proven.
 
 ## Commands
 
