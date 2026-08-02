@@ -1,0 +1,29 @@
+{
+  "checkpoint_sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
+  "default_method": "full_shrinkage_mahalanobis",
+  "q_semantics": "squared quadratic",
+  "schema": "cmte-config-v3",
+  "seq_len": 12,
+  "source_commit": "bf81eef66b5103d4ba19660634762efcef697dff",
+  "split_reset": true,
+  "splits": {
+    "test": "windows start >=340",
+    "train": "windows fully inside [0,240)",
+    "validation": "windows fully inside [250,330)"
+  },
+  "timing_policy": {
+    "DS4_caveat": "short post-onset coverage",
+    "authority": "user-requested TEX policy",
+    "clock": "availability_time_s",
+    "established_from_s": 110,
+    "nominal_onset_s": 100,
+    "stable_s": [
+      30,
+      90
+    ],
+    "transition_s": [
+      90,
+      110
+    ]
+  }
+}

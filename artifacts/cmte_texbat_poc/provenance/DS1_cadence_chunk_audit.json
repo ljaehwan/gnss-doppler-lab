@@ -1,0 +1,326 @@
+{
+  "cadence_seconds": 0.5,
+  "chunks": [
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-e2735fd1c66d0bbec281",
+      "first_window_bin_s": 258.5,
+      "identity": {
+        "channel": "7",
+        "prn": "G01",
+        "run_id": "DS1",
+        "segment": "7"
+      },
+      "input_rows": 30,
+      "last_window_bin_s": 273.0,
+      "prediction_rows": 18,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-afde485afd9b3e76acc8",
+      "first_window_bin_s": 0.5,
+      "identity": {
+        "channel": "2",
+        "prn": "G03",
+        "run_id": "DS1",
+        "segment": "0"
+      },
+      "input_rows": 922,
+      "last_window_bin_s": 461.0,
+      "prediction_rows": 910,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-08318944757d75b106ad",
+      "first_window_bin_s": 26.0,
+      "identity": {
+        "channel": "7",
+        "prn": "G04",
+        "run_id": "DS1",
+        "segment": "1"
+      },
+      "input_rows": 30,
+      "last_window_bin_s": 40.5,
+      "prediction_rows": 18,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-269a70ba61aafdb2b22e",
+      "first_window_bin_s": 191.0,
+      "identity": {
+        "channel": "7",
+        "prn": "G05",
+        "run_id": "DS1",
+        "segment": "6"
+      },
+      "input_rows": 30,
+      "last_window_bin_s": 205.5,
+      "prediction_rows": 18,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-137f03057cc738b95741",
+      "first_window_bin_s": 0.5,
+      "identity": {
+        "channel": "5",
+        "prn": "G06",
+        "run_id": "DS1",
+        "segment": "0"
+      },
+      "input_rows": 922,
+      "last_window_bin_s": 461.0,
+      "prediction_rows": 910,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-2c39601eb8f99461090c",
+      "first_window_bin_s": 0.5,
+      "identity": {
+        "channel": "6",
+        "prn": "G07",
+        "run_id": "DS1",
+        "segment": "0"
+      },
+      "input_rows": 922,
+      "last_window_bin_s": 461.0,
+      "prediction_rows": 910,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-e0ccf9f66610b9f7ab6d",
+      "first_window_bin_s": 277.0,
+      "identity": {
+        "channel": "7",
+        "prn": "G08",
+        "run_id": "DS1",
+        "segment": "8"
+      },
+      "input_rows": 21,
+      "last_window_bin_s": 287.0,
+      "prediction_rows": 9,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-b56d0a45043c34476c02",
+      "first_window_bin_s": 153.0,
+      "identity": {
+        "channel": "7",
+        "prn": "G09",
+        "run_id": "DS1",
+        "segment": "5"
+      },
+      "input_rows": 30,
+      "last_window_bin_s": 167.5,
+      "prediction_rows": 18,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-93681e971ab23bb16110",
+      "first_window_bin_s": 0.5,
+      "identity": {
+        "channel": "9",
+        "prn": "G10",
+        "run_id": "DS1",
+        "segment": "0"
+      },
+      "input_rows": 922,
+      "last_window_bin_s": 461.0,
+      "prediction_rows": 910,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-ae0cb79c3c26bdf0df40",
+      "first_window_bin_s": 135.5,
+      "identity": {
+        "channel": "7",
+        "prn": "G12",
+        "run_id": "DS1",
+        "segment": "4"
+      },
+      "input_rows": 30,
+      "last_window_bin_s": 150.0,
+      "prediction_rows": 18,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-47d906501eab7ee72b8a",
+      "first_window_bin_s": 0.5,
+      "identity": {
+        "channel": "8",
+        "prn": "G13",
+        "run_id": "DS1",
+        "segment": "0"
+      },
+      "input_rows": 922,
+      "last_window_bin_s": 461.0,
+      "prediction_rows": 910,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-6399164990bb50e4f1e8",
+      "first_window_bin_s": 0.5,
+      "identity": {
+        "channel": "1",
+        "prn": "G16",
+        "run_id": "DS1",
+        "segment": "0"
+      },
+      "input_rows": 922,
+      "last_window_bin_s": 461.0,
+      "prediction_rows": 910,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-e02759700c65f653f25f",
+      "first_window_bin_s": 0.5,
+      "identity": {
+        "channel": "4",
+        "prn": "G19",
+        "run_id": "DS1",
+        "segment": "0"
+      },
+      "input_rows": 922,
+      "last_window_bin_s": 461.0,
+      "prediction_rows": 910,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-989ce5ac38eb13123f59",
+      "first_window_bin_s": 2.0,
+      "identity": {
+        "channel": "3",
+        "prn": "G20",
+        "run_id": "DS1",
+        "segment": "0"
+      },
+      "input_rows": 919,
+      "last_window_bin_s": 461.0,
+      "prediction_rows": 907,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-aa748b4a68f6c1839ed0",
+      "first_window_bin_s": 0.5,
+      "identity": {
+        "channel": "0",
+        "prn": "G23",
+        "run_id": "DS1",
+        "segment": "0"
+      },
+      "input_rows": 922,
+      "last_window_bin_s": 461.0,
+      "prediction_rows": 910,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-c9ddb9c676efb36e2eea",
+      "first_window_bin_s": 3.5,
+      "identity": {
+        "channel": "7",
+        "prn": "G24",
+        "run_id": "DS1",
+        "segment": "0"
+      },
+      "input_rows": 30,
+      "last_window_bin_s": 18.0,
+      "prediction_rows": 18,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-f372b3fd36d8948c4193",
+      "first_window_bin_s": 57.5,
+      "identity": {
+        "channel": "7",
+        "prn": "G24",
+        "run_id": "DS1",
+        "segment": "2"
+      },
+      "input_rows": 30,
+      "last_window_bin_s": 72.0,
+      "prediction_rows": 18,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-d739b818212ec0de3412",
+      "first_window_bin_s": 90.5,
+      "identity": {
+        "channel": "7",
+        "prn": "G29",
+        "run_id": "DS1",
+        "segment": "3"
+      },
+      "input_rows": 30,
+      "last_window_bin_s": 105.0,
+      "prediction_rows": 18,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-883682ceb3352c937f18",
+      "first_window_bin_s": 3.5,
+      "identity": {
+        "channel": "10",
+        "prn": "G30",
+        "run_id": "DS1",
+        "segment": "0"
+      },
+      "input_rows": 916,
+      "last_window_bin_s": 461.0,
+      "prediction_rows": 904,
+      "reason": null,
+      "status": "scored"
+    }
+  ],
+  "chunks_dropped": 0,
+  "chunks_scored": 19,
+  "chunks_total": 19,
+  "dropped_reasons": {},
+  "gaps_detected": 0,
+  "identity_columns": [
+    "run_id",
+    "prn",
+    "segment",
+    "channel"
+  ],
+  "identity_groups": 19,
+  "input_rows": 9472,
+  "never_interpolate_fill_or_bridge": true,
+  "rows_dropped": 0,
+  "schema": "cmte-cadence-chunk-audit-v1",
+  "seq_len": 12
+}

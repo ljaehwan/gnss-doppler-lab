@@ -1,0 +1,814 @@
+{
+  "cadence_chunk_audit": {
+    "test": {
+      "cadence_seconds": 0.5,
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-9fb3e349a53e44658173",
+          "first_window_bin_s": 340.5,
+          "identity": {
+            "channel": "2",
+            "prn": "G03",
+            "run_id": "cleanStatic::test",
+            "segment": "0"
+          },
+          "input_rows": 279,
+          "last_window_bin_s": 479.5,
+          "prediction_rows": 267,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-1ec89b23feee95b10c4d",
+          "first_window_bin_s": 340.5,
+          "identity": {
+            "channel": "5",
+            "prn": "G06",
+            "run_id": "cleanStatic::test",
+            "segment": "0"
+          },
+          "input_rows": 279,
+          "last_window_bin_s": 479.5,
+          "prediction_rows": 267,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-e51ff6cfd398160bd617",
+          "first_window_bin_s": 340.5,
+          "identity": {
+            "channel": "6",
+            "prn": "G07",
+            "run_id": "cleanStatic::test",
+            "segment": "0"
+          },
+          "input_rows": 279,
+          "last_window_bin_s": 479.5,
+          "prediction_rows": 267,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-ddf31a908568f358a9f3",
+          "first_window_bin_s": 341.0,
+          "identity": {
+            "channel": "10",
+            "prn": "G08",
+            "run_id": "cleanStatic::test",
+            "segment": "9"
+          },
+          "input_rows": 27,
+          "last_window_bin_s": 354.0,
+          "prediction_rows": 15,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-6d1a5ad37c5e536c6838",
+          "first_window_bin_s": 403.5,
+          "identity": {
+            "channel": "10",
+            "prn": "G08",
+            "run_id": "cleanStatic::test",
+            "segment": "11"
+          },
+          "input_rows": 26,
+          "last_window_bin_s": 416.0,
+          "prediction_rows": 14,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-7f5603011d93eb20521b",
+          "first_window_bin_s": 341.0,
+          "identity": {
+            "channel": "9",
+            "prn": "G10",
+            "run_id": "cleanStatic::test",
+            "segment": "0"
+          },
+          "input_rows": 278,
+          "last_window_bin_s": 479.5,
+          "prediction_rows": 266,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-9db4dc81fc0e05e4eac4",
+          "first_window_bin_s": 340.5,
+          "identity": {
+            "channel": "7",
+            "prn": "G13",
+            "run_id": "cleanStatic::test",
+            "segment": "0"
+          },
+          "input_rows": 279,
+          "last_window_bin_s": 479.5,
+          "prediction_rows": 267,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-895707dc58c78a829df3",
+          "first_window_bin_s": 340.5,
+          "identity": {
+            "channel": "4",
+            "prn": "G16",
+            "run_id": "cleanStatic::test",
+            "segment": "0"
+          },
+          "input_rows": 279,
+          "last_window_bin_s": 479.5,
+          "prediction_rows": 267,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-3b50094508ece972f544",
+          "first_window_bin_s": 340.5,
+          "identity": {
+            "channel": "1",
+            "prn": "G19",
+            "run_id": "cleanStatic::test",
+            "segment": "0"
+          },
+          "input_rows": 279,
+          "last_window_bin_s": 479.5,
+          "prediction_rows": 267,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-64047bdb04752266b4b1",
+          "first_window_bin_s": 340.5,
+          "identity": {
+            "channel": "3",
+            "prn": "G20",
+            "run_id": "cleanStatic::test",
+            "segment": "0"
+          },
+          "input_rows": 278,
+          "last_window_bin_s": 479.0,
+          "prediction_rows": 266,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-4e851124036c536f1d96",
+          "first_window_bin_s": 340.5,
+          "identity": {
+            "channel": "8",
+            "prn": "G23",
+            "run_id": "cleanStatic::test",
+            "segment": "0"
+          },
+          "input_rows": 279,
+          "last_window_bin_s": 479.5,
+          "prediction_rows": 267,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-c980b3c477e709b41828",
+          "first_window_bin_s": 361.5,
+          "identity": {
+            "channel": "10",
+            "prn": "G25",
+            "run_id": "cleanStatic::test",
+            "segment": "10"
+          },
+          "input_rows": 30,
+          "last_window_bin_s": 376.0,
+          "prediction_rows": 18,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-d6ceb276333bd35b11f4",
+          "first_window_bin_s": 341.0,
+          "identity": {
+            "channel": "0",
+            "prn": "G30",
+            "run_id": "cleanStatic::test",
+            "segment": "0"
+          },
+          "input_rows": 278,
+          "last_window_bin_s": 479.5,
+          "prediction_rows": 266,
+          "reason": null,
+          "status": "scored"
+        }
+      ],
+      "chunks_dropped": 0,
+      "chunks_scored": 13,
+      "chunks_total": 13,
+      "dropped_reasons": {},
+      "gaps_detected": 0,
+      "identity_columns": [
+        "run_id",
+        "prn",
+        "segment",
+        "channel"
+      ],
+      "identity_groups": 13,
+      "input_rows": 2870,
+      "never_interpolate_fill_or_bridge": true,
+      "rows_dropped": 0,
+      "schema": "cmte-cadence-chunk-audit-v1",
+      "seq_len": 12
+    },
+    "train": {
+      "cadence_seconds": 0.5,
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-4b735930a5d8883079a2",
+          "first_window_bin_s": 233.0,
+          "identity": {
+            "channel": "10",
+            "prn": "G01",
+            "run_id": "cleanStatic::train",
+            "segment": "7"
+          },
+          "input_rows": 13,
+          "last_window_bin_s": 239.0,
+          "prediction_rows": 1,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-fc493677fce51468cd99",
+          "first_window_bin_s": 0.5,
+          "identity": {
+            "channel": "2",
+            "prn": "G03",
+            "run_id": "cleanStatic::train",
+            "segment": "0"
+          },
+          "input_rows": 478,
+          "last_window_bin_s": 239.0,
+          "prediction_rows": 466,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-a9ff55c1253c8a81c27d",
+          "first_window_bin_s": 0.5,
+          "identity": {
+            "channel": "5",
+            "prn": "G06",
+            "run_id": "cleanStatic::train",
+            "segment": "0"
+          },
+          "input_rows": 478,
+          "last_window_bin_s": 239.0,
+          "prediction_rows": 466,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-c9baf63552c1b5d40734",
+          "first_window_bin_s": 0.5,
+          "identity": {
+            "channel": "6",
+            "prn": "G07",
+            "run_id": "cleanStatic::train",
+            "segment": "0"
+          },
+          "input_rows": 478,
+          "last_window_bin_s": 239.0,
+          "prediction_rows": 466,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-3cc9e89c3b52fea6bca6",
+          "first_window_bin_s": 91.0,
+          "identity": {
+            "channel": "10",
+            "prn": "G08",
+            "run_id": "cleanStatic::train",
+            "segment": "3"
+          },
+          "input_rows": 30,
+          "last_window_bin_s": 105.5,
+          "prediction_rows": 18,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-9f90c3e5975a9d88c3b7",
+          "first_window_bin_s": 1.5,
+          "identity": {
+            "channel": "9",
+            "prn": "G10",
+            "run_id": "cleanStatic::train",
+            "segment": "0"
+          },
+          "input_rows": 477,
+          "last_window_bin_s": 239.5,
+          "prediction_rows": 465,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-0790ec0b318b8aa9e5ad",
+          "first_window_bin_s": 9.5,
+          "identity": {
+            "channel": "10",
+            "prn": "G11",
+            "run_id": "cleanStatic::train",
+            "segment": "0"
+          },
+          "input_rows": 30,
+          "last_window_bin_s": 24.0,
+          "prediction_rows": 18,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-bcd49a8455a383fe5431",
+          "first_window_bin_s": 39.0,
+          "identity": {
+            "channel": "10",
+            "prn": "G12",
+            "run_id": "cleanStatic::train",
+            "segment": "1"
+          },
+          "input_rows": 30,
+          "last_window_bin_s": 53.5,
+          "prediction_rows": 18,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-1c4c1b4fe8d8a48ca5e5",
+          "first_window_bin_s": 0.5,
+          "identity": {
+            "channel": "7",
+            "prn": "G13",
+            "run_id": "cleanStatic::train",
+            "segment": "0"
+          },
+          "input_rows": 478,
+          "last_window_bin_s": 239.0,
+          "prediction_rows": 466,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-8dafc65a7187222d6aa0",
+          "first_window_bin_s": 0.5,
+          "identity": {
+            "channel": "4",
+            "prn": "G16",
+            "run_id": "cleanStatic::train",
+            "segment": "0"
+          },
+          "input_rows": 478,
+          "last_window_bin_s": 239.0,
+          "prediction_rows": 466,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-a837ea865b2aa01f187c",
+          "first_window_bin_s": 204.5,
+          "identity": {
+            "channel": "10",
+            "prn": "G18",
+            "run_id": "cleanStatic::train",
+            "segment": "6"
+          },
+          "input_rows": 30,
+          "last_window_bin_s": 219.0,
+          "prediction_rows": 18,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-644bb9bf2fb80930b703",
+          "first_window_bin_s": 0.5,
+          "identity": {
+            "channel": "1",
+            "prn": "G19",
+            "run_id": "cleanStatic::train",
+            "segment": "0"
+          },
+          "input_rows": 478,
+          "last_window_bin_s": 239.0,
+          "prediction_rows": 466,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-5c8ed8ec22efd5cac81e",
+          "first_window_bin_s": 5.5,
+          "identity": {
+            "channel": "3",
+            "prn": "G20",
+            "run_id": "cleanStatic::train",
+            "segment": "0"
+          },
+          "input_rows": 468,
+          "last_window_bin_s": 239.0,
+          "prediction_rows": 456,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-1e5832ff66d9ec602fb3",
+          "first_window_bin_s": 0.5,
+          "identity": {
+            "channel": "8",
+            "prn": "G23",
+            "run_id": "cleanStatic::train",
+            "segment": "0"
+          },
+          "input_rows": 478,
+          "last_window_bin_s": 239.0,
+          "prediction_rows": 466,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-e59573b26f5405ac5885",
+          "first_window_bin_s": 176.5,
+          "identity": {
+            "channel": "10",
+            "prn": "G24",
+            "run_id": "cleanStatic::train",
+            "segment": "5"
+          },
+          "input_rows": 30,
+          "last_window_bin_s": 191.0,
+          "prediction_rows": 18,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-27bbb2fe14b565d96cdf",
+          "first_window_bin_s": 123.0,
+          "identity": {
+            "channel": "10",
+            "prn": "G29",
+            "run_id": "cleanStatic::train",
+            "segment": "4"
+          },
+          "input_rows": 30,
+          "last_window_bin_s": 137.5,
+          "prediction_rows": 18,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-49d1955b50373e5aa95f",
+          "first_window_bin_s": 3.0,
+          "identity": {
+            "channel": "0",
+            "prn": "G30",
+            "run_id": "cleanStatic::train",
+            "segment": "0"
+          },
+          "input_rows": 474,
+          "last_window_bin_s": 239.5,
+          "prediction_rows": 462,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-adc6278fff6b7c6a212c",
+          "first_window_bin_s": 57.0,
+          "identity": {
+            "channel": "10",
+            "prn": "G31",
+            "run_id": "cleanStatic::train",
+            "segment": "2"
+          },
+          "input_rows": 30,
+          "last_window_bin_s": 71.5,
+          "prediction_rows": 18,
+          "reason": null,
+          "status": "scored"
+        }
+      ],
+      "chunks_dropped": 0,
+      "chunks_scored": 18,
+      "chunks_total": 18,
+      "dropped_reasons": {},
+      "gaps_detected": 0,
+      "identity_columns": [
+        "run_id",
+        "prn",
+        "segment",
+        "channel"
+      ],
+      "identity_groups": 18,
+      "input_rows": 4988,
+      "never_interpolate_fill_or_bridge": true,
+      "rows_dropped": 0,
+      "schema": "cmte-cadence-chunk-audit-v1",
+      "seq_len": 12
+    },
+    "validation": {
+      "cadence_seconds": 0.5,
+      "chunks": [
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-8e128e1c815a84ecdd50",
+          "first_window_bin_s": 250.5,
+          "identity": {
+            "channel": "2",
+            "prn": "G03",
+            "run_id": "cleanStatic::validation",
+            "segment": "0"
+          },
+          "input_rows": 158,
+          "last_window_bin_s": 329.0,
+          "prediction_rows": 146,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-bff51193c913cbc8c98e",
+          "first_window_bin_s": 250.5,
+          "identity": {
+            "channel": "5",
+            "prn": "G06",
+            "run_id": "cleanStatic::validation",
+            "segment": "0"
+          },
+          "input_rows": 158,
+          "last_window_bin_s": 329.0,
+          "prediction_rows": 146,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-5c5fcf461770d914bab9",
+          "first_window_bin_s": 250.5,
+          "identity": {
+            "channel": "6",
+            "prn": "G07",
+            "run_id": "cleanStatic::validation",
+            "segment": "0"
+          },
+          "input_rows": 158,
+          "last_window_bin_s": 329.0,
+          "prediction_rows": 146,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-a6fc52b8a89f8ea28d23",
+          "first_window_bin_s": 251.0,
+          "identity": {
+            "channel": "9",
+            "prn": "G10",
+            "run_id": "cleanStatic::validation",
+            "segment": "0"
+          },
+          "input_rows": 158,
+          "last_window_bin_s": 329.5,
+          "prediction_rows": 146,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-794da9682122bfa1f6c0",
+          "first_window_bin_s": 257.0,
+          "identity": {
+            "channel": "10",
+            "prn": "G11",
+            "run_id": "cleanStatic::validation",
+            "segment": "8"
+          },
+          "input_rows": 21,
+          "last_window_bin_s": 267.0,
+          "prediction_rows": 9,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-d0786573552710f4bbb0",
+          "first_window_bin_s": 250.5,
+          "identity": {
+            "channel": "7",
+            "prn": "G13",
+            "run_id": "cleanStatic::validation",
+            "segment": "0"
+          },
+          "input_rows": 158,
+          "last_window_bin_s": 329.0,
+          "prediction_rows": 146,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-c2023560b171884251a0",
+          "first_window_bin_s": 250.5,
+          "identity": {
+            "channel": "4",
+            "prn": "G16",
+            "run_id": "cleanStatic::validation",
+            "segment": "0"
+          },
+          "input_rows": 158,
+          "last_window_bin_s": 329.0,
+          "prediction_rows": 146,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-58d4ae43fd31d803fd46",
+          "first_window_bin_s": 250.5,
+          "identity": {
+            "channel": "1",
+            "prn": "G19",
+            "run_id": "cleanStatic::validation",
+            "segment": "0"
+          },
+          "input_rows": 158,
+          "last_window_bin_s": 329.0,
+          "prediction_rows": 146,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-c7db6aba5522cd035602",
+          "first_window_bin_s": 250.5,
+          "identity": {
+            "channel": "3",
+            "prn": "G20",
+            "run_id": "cleanStatic::validation",
+            "segment": "0"
+          },
+          "input_rows": 158,
+          "last_window_bin_s": 329.0,
+          "prediction_rows": 146,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-e265ab7969fd3a69700b",
+          "first_window_bin_s": 250.5,
+          "identity": {
+            "channel": "8",
+            "prn": "G23",
+            "run_id": "cleanStatic::validation",
+            "segment": "0"
+          },
+          "input_rows": 158,
+          "last_window_bin_s": 329.0,
+          "prediction_rows": 146,
+          "reason": null,
+          "status": "scored"
+        },
+        {
+          "chunk_index": 0,
+          "chunk_run_id": "history-a3383cb5b6286b66e775",
+          "first_window_bin_s": 251.0,
+          "identity": {
+            "channel": "0",
+            "prn": "G30",
+            "run_id": "cleanStatic::validation",
+            "segment": "0"
+          },
+          "input_rows": 158,
+          "last_window_bin_s": 329.5,
+          "prediction_rows": 146,
+          "reason": null,
+          "status": "scored"
+        }
+      ],
+      "chunks_dropped": 0,
+      "chunks_scored": 11,
+      "chunks_total": 11,
+      "dropped_reasons": {},
+      "gaps_detected": 0,
+      "identity_columns": [
+        "run_id",
+        "prn",
+        "segment",
+        "channel"
+      ],
+      "identity_groups": 11,
+      "input_rows": 1601,
+      "never_interpolate_fill_or_bridge": true,
+      "rows_dropped": 0,
+      "schema": "cmte-cadence-chunk-audit-v1",
+      "seq_len": 12
+    }
+  },
+  "checkpoint": {
+    "path": "/home/ubuntu/projects/gnss-doppler-cmte-texbat-poc/artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt",
+    "sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b"
+  },
+  "code_sha256": {
+    "scripts/eval_cmte_texbat.py": "b3f6534aa94cbdc79d867b9b0b89d958f76c882452ff9d20db5b48229022addf",
+    "scripts/prepare_cmte_texbat_inputs.py": "273033596d79f19c2f9d9bd9cf14ef166808e2f86ab05c8098d9ec66c866b3f2",
+    "scripts/score_tap_residual_common_drive.py": "ba7c8c684fe65196d968d530c66e805bd501debd30cd9ceffa87f01086c82759",
+    "scripts/train_cmte_texbat.py": "ba1e7daa1e060a3834c15444d1fdb9e4511521a98be3fe5afb2cdfd4a2a9e2d3",
+    "src/gnss_doppler_lab/cmte.py": "cc0fea15609b54f1c6137283b69e52423894eb37c2d9f2ac95dfe3f7cf1c1b0d",
+    "src/gnss_doppler_lab/cmte_inputs.py": "5e6db2ef2a07b01a5753d2ac3729df0da47c95821ce61fc4118b634efb671f5a",
+    "src/gnss_doppler_lab/tap_residual_common_drive.py": "f4543737234b4c5488217e87b654d8e4cbf0cfa96baaf0127321117103231632"
+  },
+  "history": "partition nodes before extraction; reset each split/run/PRN and contiguous 0.5 s cadence chunk; first target index 12; never fill/interpolate/bridge",
+  "roles": {
+    "test": {
+      "rows": 2714,
+      "run_ids": [
+        "cleanStatic::test"
+      ]
+    },
+    "train": {
+      "rows": 4772,
+      "run_ids": [
+        "cleanStatic::train"
+      ]
+    },
+    "validation": {
+      "rows": 1469,
+      "run_ids": [
+        "cleanStatic::validation"
+      ]
+    }
+  },
+  "schema": "cmte-residual-manifest-v1",
+  "semantics": {
+    "availability": "window_end_s",
+    "features": [
+      "residual_000",
+      "residual_001",
+      "residual_002",
+      "residual_003",
+      "residual_004",
+      "residual_005",
+      "residual_006",
+      "residual_007",
+      "residual_008"
+    ],
+    "q_default": "full shrinkage squared Mahalanobis",
+    "residual": "signed standardized target-minus-frozen-B0-prediction",
+    "tap_order": [
+      "E4",
+      "E3",
+      "E2",
+      "E",
+      "P",
+      "L",
+      "L2",
+      "L3",
+      "L4"
+    ]
+  },
+  "source_commit": "bf81eef66b5103d4ba19660634762efcef697dff",
+  "source_manifest": {
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-texbat-inputs-v1/cleanStatic_manifest.json",
+    "sha256": "babfa1eaeb3f49b034bb95673453cdded5ccb7048f30b31e377958cc7154dd11"
+  },
+  "source_node": {
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-texbat-inputs-v1/cleanStatic_nodes.csv",
+    "sha256": "2f48d10144de81ac2235b2c8fe4af123d94660c1208b70f78e4b61016a84cba9"
+  },
+  "split_reset": true
+}

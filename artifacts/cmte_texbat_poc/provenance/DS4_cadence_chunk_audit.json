@@ -1,0 +1,232 @@
+{
+  "cadence_seconds": 0.5,
+  "chunks": [
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-c61f87286156ff592137",
+      "first_window_bin_s": 0.5,
+      "identity": {
+        "channel": "3",
+        "prn": "G03",
+        "run_id": "DS4",
+        "segment": "0"
+      },
+      "input_rows": 255,
+      "last_window_bin_s": 127.5,
+      "prediction_rows": 243,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-91fcf330febe6dec3d62",
+      "first_window_bin_s": 0.5,
+      "identity": {
+        "channel": "6",
+        "prn": "G06",
+        "run_id": "DS4",
+        "segment": "0"
+      },
+      "input_rows": 255,
+      "last_window_bin_s": 127.5,
+      "prediction_rows": 243,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-337ae68f0d4aa0a06f95",
+      "first_window_bin_s": 0.5,
+      "identity": {
+        "channel": "7",
+        "prn": "G07",
+        "run_id": "DS4",
+        "segment": "0"
+      },
+      "input_rows": 255,
+      "last_window_bin_s": 127.5,
+      "prediction_rows": 243,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-7eae7c85e82c011c1bc0",
+      "first_window_bin_s": 70.5,
+      "identity": {
+        "channel": "9",
+        "prn": "G08",
+        "run_id": "DS4",
+        "segment": "1"
+      },
+      "input_rows": 97,
+      "last_window_bin_s": 118.5,
+      "prediction_rows": 85,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-fbeb1bce9a0363ec8f3a",
+      "first_window_bin_s": 0.5,
+      "identity": {
+        "channel": "10",
+        "prn": "G10",
+        "run_id": "DS4",
+        "segment": "0"
+      },
+      "input_rows": 255,
+      "last_window_bin_s": 127.5,
+      "prediction_rows": 243,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-30f556fba4a6e8a79a16",
+      "first_window_bin_s": 123.5,
+      "identity": {
+        "channel": "9",
+        "prn": "G11",
+        "run_id": "DS4",
+        "segment": "2"
+      },
+      "input_rows": 9,
+      "last_window_bin_s": 127.5,
+      "prediction_rows": 0,
+      "reason": "insufficient_history_rows_le_seq_len",
+      "status": "dropped"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-251f0eebd738eda43817",
+      "first_window_bin_s": 0.5,
+      "identity": {
+        "channel": "1",
+        "prn": "G13",
+        "run_id": "DS4",
+        "segment": "0"
+      },
+      "input_rows": 255,
+      "last_window_bin_s": 127.5,
+      "prediction_rows": 243,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-6b4fd2df4355699bf2e3",
+      "first_window_bin_s": 0.5,
+      "identity": {
+        "channel": "5",
+        "prn": "G16",
+        "run_id": "DS4",
+        "segment": "0"
+      },
+      "input_rows": 255,
+      "last_window_bin_s": 127.5,
+      "prediction_rows": 243,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-094552d90a9c89755411",
+      "first_window_bin_s": 1.5,
+      "identity": {
+        "channel": "9",
+        "prn": "G18",
+        "run_id": "DS4",
+        "segment": "0"
+      },
+      "input_rows": 30,
+      "last_window_bin_s": 16.0,
+      "prediction_rows": 18,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-be6dbbeffe77557b9c1f",
+      "first_window_bin_s": 0.5,
+      "identity": {
+        "channel": "2",
+        "prn": "G19",
+        "run_id": "DS4",
+        "segment": "0"
+      },
+      "input_rows": 255,
+      "last_window_bin_s": 127.5,
+      "prediction_rows": 243,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-d4086e477009bd00c16e",
+      "first_window_bin_s": 3.5,
+      "identity": {
+        "channel": "8",
+        "prn": "G20",
+        "run_id": "DS4",
+        "segment": "0"
+      },
+      "input_rows": 249,
+      "last_window_bin_s": 127.5,
+      "prediction_rows": 237,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-f4c30260767cd64aa027",
+      "first_window_bin_s": 0.5,
+      "identity": {
+        "channel": "0",
+        "prn": "G23",
+        "run_id": "DS4",
+        "segment": "0"
+      },
+      "input_rows": 255,
+      "last_window_bin_s": 127.5,
+      "prediction_rows": 243,
+      "reason": null,
+      "status": "scored"
+    },
+    {
+      "chunk_index": 0,
+      "chunk_run_id": "history-c5fdd4d5843611046c55",
+      "first_window_bin_s": 1.5,
+      "identity": {
+        "channel": "4",
+        "prn": "G30",
+        "run_id": "DS4",
+        "segment": "0"
+      },
+      "input_rows": 253,
+      "last_window_bin_s": 127.5,
+      "prediction_rows": 241,
+      "reason": null,
+      "status": "scored"
+    }
+  ],
+  "chunks_dropped": 1,
+  "chunks_scored": 12,
+  "chunks_total": 13,
+  "dropped_reasons": {
+    "insufficient_history_rows_le_seq_len": 1
+  },
+  "gaps_detected": 0,
+  "identity_columns": [
+    "run_id",
+    "prn",
+    "segment",
+    "channel"
+  ],
+  "identity_groups": 13,
+  "input_rows": 2678,
+  "never_interpolate_fill_or_bridge": true,
+  "rows_dropped": 9,
+  "schema": "cmte-cadence-chunk-audit-v1",
+  "seq_len": 12
+}

@@ -1,0 +1,9 @@
+scenario,baseline,qualifies,qualifying_criteria,similar_clean_fpr,lower_stable_pre_fpr,faster_first_alarm,higher_persistent_detection,similar_clean_fpr_and_higher_detection_rate,fpr_improvement_tolerance,delay_improvement_tolerance_s,detection_improvement_tolerance,clean_fpr_similarity_tolerance,full_stable_pre_fpr,baseline_stable_pre_fpr,full_persistent,baseline_persistent,full_delay,baseline_delay
+DS1,A0,True,faster_first_alarm;higher_persistent_detection,False,False,True,True,False,1e-12,0.5,1e-12,0.005,1.0,0.25833333333333336,1.0,0.9247159090909091,10.148097519999993,26.148097519999993
+DS1,A1,True,faster_first_alarm;higher_persistent_detection,False,False,True,True,False,1e-12,0.5,1e-12,0.005,1.0,0.0,1.0,0.9559659090909091,10.148097519999993,19.148097519999993
+DS2,A0,True,higher_persistent_detection,False,False,False,True,False,1e-12,0.5,1e-12,0.005,0.43333333333333335,0.14166666666666666,0.9985611510791367,0.437410071942446,10.62368472,10.62368472
+DS2,A1,False,,False,False,False,False,False,1e-12,0.5,1e-12,0.005,0.43333333333333335,0.008333333333333333,0.9985611510791367,0.9985611510791367,10.62368472,10.62368472
+DS3,A0,True,faster_first_alarm;higher_persistent_detection,False,False,True,True,False,1e-12,0.5,1e-12,0.005,0.6666666666666666,0.041666666666666664,0.9655172413793104,0.5517241379310345,22.123281160000005,33.13209532000002
+DS3,A1,False,,False,False,False,False,False,1e-12,0.5,1e-12,0.005,0.6666666666666666,0.0,0.9655172413793104,0.9698275862068966,22.123281160000005,20.623281160000005
+DS4,A0,True,higher_persistent_detection,False,False,False,True,False,1e-12,0.5,1e-12,0.005,0.9,0.058333333333333334,0.7567567567567568,0.4864864864864865,14.625813160000007,13.125813160000007
+DS4,A1,False,,False,False,False,False,False,1e-12,0.5,1e-12,0.005,0.9,0.016666666666666666,0.7567567567567568,0.7567567567567568,14.625813160000007,14.625813160000007

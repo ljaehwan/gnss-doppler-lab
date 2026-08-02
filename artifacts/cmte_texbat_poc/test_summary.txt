@@ -1,0 +1,46 @@
+CMTE TEXBAT PoC final execution summary
+======================================
+
+Code commit used for train/eval:
+  bf81eef66b5103d4ba19660634762efcef697dff
+
+Frozen B0 checkpoint:
+  artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt
+  SHA-256 f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b
+
+TRAIN command:
+  /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/train_cmte_texbat.py --checkpoint artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt --expected-sha f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b --clean-node-csv /home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-texbat-inputs-v1/cleanStatic_nodes.csv --clean-manifest /home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-texbat-inputs-v1/cleanStatic_manifest.json --out /home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-texbat-state-v1 --device cpu
+TRAIN result:
+  residual rows train=4772 validation=1469 test=2714
+
+EVAL command:
+  /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/eval_cmte_texbat.py --state-dir /home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-texbat-state-v1 --checkpoint artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt --expected-sha f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b --scenario DS1=.../DS1_nodes.csv=.../DS1_manifest.json --scenario DS2=.../DS2_nodes.csv=.../DS2_manifest.json --scenario DS3=.../DS3_nodes.csv=.../DS3_manifest.json --scenario DS4=.../DS4_nodes.csv=.../DS4_manifest.json --out /home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-texbat-eval-v1 --device cpu
+EVAL result:
+  decision=NO-GO
+  catastrophic_failure=true
+  physical epochs DS1=910 DS2=901 DS3=902 DS4=243
+  Full target1 threshold=3.606925652969479
+  Full clean alarm-state occupancy=98.8764%, one rising-edge event, sequence-any=1/1
+
+Final focused/related regression command:
+  /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_cmte.py tests/test_cmte_review.py tests/test_tap_residual_common_drive.py tests/test_score_texbat_prn_node_gru.py
+Result:
+  74 passed in 5.25s
+
+Full repository command:
+  /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q
+Result:
+  474 passed, 6 failed in 33.07s
+  The six failures are pre-existing CPC tests caused by the missing main-branch file scripts/train_peak_floor_temporal_autoencoder.py. No CMTE or related B0 test failed.
+
+Independent artifact audit:
+  - all artifact checksums matched
+  - state/eval source commit and code hashes matched the commit above
+  - all JSON parsed; all numeric CSV/JSON outputs were finite
+  - per-epoch recomputation matched scenario_metrics.csv
+  - physical epoch counts and PRN aggregation were verified
+  - no duplicate PRN existed within a physical epoch
+  - attack inputs were absent from fit/calibration provenance
+
+Final independent review:
+  APPROVED as a reproducible artifact; scientific model decision remains NO-GO.

@@ -1,0 +1,28 @@
+{
+  "N_distribution": {
+    "7": 1,
+    "8": 17,
+    "9": 753,
+    "10": 130
+  },
+  "diagnostic_only": true,
+  "epoch_multiset_identical": true,
+  "interpretation": "order sensitivity diagnostic; identity equality is not a success condition",
+  "order_actually_changed": true,
+  "original_block_any": 0.8695652173913043,
+  "original_epoch_occupancy": 0.8679245283018868,
+  "original_final_state": 1377.890428714808,
+  "original_max_state": 1377.890428714808,
+  "original_reset_count": 1,
+  "original_rising_edge_alarm_event_rate_per_min": 0.2663706992230854,
+  "prn_permutation_invariant_by_symmetric_aggregation": true,
+  "recording_id": "DS2",
+  "sequential_trajectory_l2_delta": 4886.53102334365,
+  "shuffled_block_any": 1.0,
+  "shuffled_epoch_occupancy": 0.9988901220865705,
+  "shuffled_final_state": 1344.5331488258594,
+  "shuffled_max_state": 1344.5331488258594,
+  "shuffled_reset_count": 1,
+  "shuffled_rising_edge_alarm_event_rate_per_min": 0.1331853496115427,
+  "single_factor": "physical epoch order only; recording/reset structure fixed"
+}

@@ -1,0 +1,81 @@
+{
+  "attack_labels_used": false,
+  "baselines": {
+    "A0": {
+      "definition": "epoch max PRN scalar RMSE",
+      "operating_points": {
+        "q99": 0.35194873809814453,
+        "q995": 0.3682686388492584,
+        "target1": 0.35194873809814453
+      },
+      "threshold": 0.35194873809814453
+    },
+    "A1": {
+      "definition": "max q50/q70/q80 exact-binomial surprise EWMA alpha=.75",
+      "operating_points": {
+        "q99": 2.959124947792766,
+        "q995": 3.6266467613498405,
+        "target1": 2.959124947792766
+      },
+      "threshold": 2.959124947792766,
+      "train_exceedance_rates": {
+        "50": 0.49979044425817265,
+        "70": 0.2998742665549036,
+        "80": 0.19991617770326908
+      },
+      "train_node_thresholds": {
+        "50": 0.07443580031394958,
+        "70": 0.10672284662723541,
+        "80": 0.13659583032131195
+      }
+    },
+    "A2": {
+      "definition": "epoch mean -log conformal p",
+      "operating_points": {
+        "q99": 1.619448445563424,
+        "q995": 2.653551098051885,
+        "target1": 1.619448445563424
+      },
+      "threshold": 1.619448445563424
+    },
+    "A3": {
+      "definition": "epoch mean scalar RMSE resettable CUSUM",
+      "drift": 0.09256701022386551,
+      "operating_points": {
+        "q99": 0.15721452988006848,
+        "q995": 0.15979958369650618,
+        "target1": 0.15721452988006848
+      },
+      "threshold": 0.15721452988006848
+    },
+    "A4": {
+      "definition": "epoch mean mixture e",
+      "operating_points": {
+        "q99": 2.067049237638354,
+        "q995": 2.5606663272854315,
+        "target1": 2.067049237638354
+      },
+      "threshold": 2.067049237638354
+    }
+  },
+  "epoch_target": "empirical FPR <=1% using higher q99",
+  "operating_point_names": [
+    "q99",
+    "q995",
+    "target1"
+  ],
+  "sequence": {
+    "block_seconds": 20,
+    "choice": "S2",
+    "criterion": "validation 20 s block-max empirical target; no attack selection",
+    "drift": 0.0,
+    "finite_sample_limitation": "only 5 validation blocks; q99/q99.5 collapse to observed order statistics",
+    "operating_points": {
+      "q99": 3.606925652969479,
+      "q995": 3.606925652969479,
+      "target1": 3.606925652969479
+    },
+    "threshold": 3.606925652969479
+  },
+  "source": "validation_only"
+}

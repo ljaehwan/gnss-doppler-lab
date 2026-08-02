@@ -1,0 +1,57 @@
+{
+  "N_stratum_rule": {
+    "catastrophic_occupancy_ge": 0.2,
+    "minimum_epochs": 20,
+    "no_catastrophic_stratum": false,
+    "substantial_occupancy_spread_ge": 0.1
+  },
+  "catastrophic_definition": "any Full stable_pre_fpr >= 0.20",
+  "catastrophic_failure": true,
+  "criteria": {
+    "1_caveat": "B0 training is not independent",
+    "1_cmte_calibration_independent_clean_fpr_near1_pass_le1p5": false,
+    "2_DS1_4_stable_pre_fpr_le5": false,
+    "2_no_catastrophic_Full_stable_pre_fpr_ge20": false,
+    "3_full_improves_A0_or_A1_in_at_least_3_scenarios": true,
+    "3_scenario_audit": {
+      "DS1": true,
+      "DS2": true,
+      "DS3": true,
+      "DS4": true
+    },
+    "4_DS3_or_DS4_matched_power_improvement": true,
+    "5_PRN permutation invariance and variable-cardinality support verified": false,
+    "5_attack_tuning": false
+  },
+  "decision": "NO-GO",
+  "epoch_counts": {
+    "DS1": 910,
+    "DS2": 901,
+    "DS3": 902,
+    "DS4": 243
+  },
+  "expected_epoch_count_reference": {
+    "DS1": 910,
+    "DS2": 901,
+    "DS3": 902,
+    "DS4": 243
+  },
+  "go": false,
+  "performance_N_independence": "dependence/heterogeneity observed: at least one eligible dataset/phase has >=0.10 occupancy spread across N strata; performance-N independence is not established",
+  "status": "finalized_by_actual_eval",
+  "timing_policy": {
+    "DS4_caveat": "short post-onset coverage",
+    "authority": "user-requested TEX policy",
+    "clock": "availability_time_s",
+    "established_from_s": 110,
+    "nominal_onset_s": 100,
+    "stable_s": [
+      30,
+      90
+    ],
+    "transition_s": [
+      90,
+      110
+    ]
+  }
+}

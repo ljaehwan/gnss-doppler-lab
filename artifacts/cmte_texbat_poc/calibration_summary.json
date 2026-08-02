@@ -1,0 +1,104 @@
+{
+  "fit_n": 4772,
+  "inclusive_plus_one": true,
+  "n": 1469,
+  "reference": "validation residual Q_cal only",
+  "validation_normal_order_shuffle": {
+    "aggregated_before_permutation": true,
+    "diagnostic_only": true,
+    "epoch_multiset_identical": true,
+    "interpretation": "order sensitivity only; equality is not a success condition",
+    "order_actually_changed": true,
+    "original_final_state": 1.0945499161636478,
+    "original_max_state": 3.606925652969479,
+    "original_reset_count": 1,
+    "original_sequential_long_fa": {
+      "alarm_epoch_count": 0,
+      "alarm_epoch_occupancy_per_min": 0.0,
+      "block_any_alarm_fraction": 0.0,
+      "block_maxima": [
+        0.0,
+        3.606925652969479,
+        0.9725092174125118,
+        0.2327062592057639,
+        1.0945499161636478
+      ],
+      "blocks": 5,
+      "censored_arl_epochs": 147.0,
+      "censored_run_length_epochs": 147.0,
+      "epoch_fpr": 0.0,
+      "false_alarm_events": 0,
+      "false_alarms_per_min": 0.0,
+      "first_crossing_censored": true,
+      "first_crossing_epoch": 147,
+      "sequence_any_alarm_fraction": 0.0
+    },
+    "seed": 2026,
+    "shuffled_final_state": 0.0,
+    "shuffled_max_state": 1.3885146857229023,
+    "shuffled_reset_count": 1,
+    "shuffled_sequential_long_fa": {
+      "alarm_epoch_count": 0,
+      "alarm_epoch_occupancy_per_min": 0.0,
+      "block_any_alarm_fraction": 0.0,
+      "block_maxima": [
+        0.4088889725200008,
+        1.3885146857229023,
+        0.7052950643715072,
+        0.8371863220634632,
+        1.079208427469894
+      ],
+      "blocks": 5,
+      "censored_arl_epochs": 147.0,
+      "censored_run_length_epochs": 147.0,
+      "epoch_fpr": 0.0,
+      "false_alarm_events": 0,
+      "false_alarms_per_min": 0.0,
+      "first_crossing_censored": true,
+      "first_crossing_epoch": 147,
+      "sequence_any_alarm_fraction": 0.0
+    }
+  },
+  "validation_p_summary": {
+    "diag_mahalanobis": {
+      "25%": 0.2510204081632653,
+      "50%": 0.5006802721088436,
+      "75%": 0.7503401360544217,
+      "count": 1469.0,
+      "max": 1.0,
+      "mean": 0.5006802721088435,
+      "min": 0.0013605442176870747,
+      "std": 0.2885769290690607
+    },
+    "full_shrinkage_mahalanobis": {
+      "25%": 0.2510204081632653,
+      "50%": 0.5006802721088436,
+      "75%": 0.7503401360544217,
+      "count": 1469.0,
+      "max": 1.0,
+      "mean": 0.5006802721088435,
+      "min": 0.0013605442176870747,
+      "std": 0.2885769290690607
+    },
+    "max_standardized_tap": {
+      "25%": 0.2510204081632653,
+      "50%": 0.5006802721088436,
+      "75%": 0.7503401360544217,
+      "count": 1469.0,
+      "max": 1.0,
+      "mean": 0.5006802721088435,
+      "min": 0.0013605442176870747,
+      "std": 0.2885769290690607
+    },
+    "rmse": {
+      "25%": 0.2510204081632653,
+      "50%": 0.5006802721088436,
+      "75%": 0.7503401360544217,
+      "count": 1469.0,
+      "max": 1.0,
+      "mean": 0.5006802721088435,
+      "min": 0.0013605442176870747,
+      "std": 0.2885769290690607
+    }
+  }
+}
