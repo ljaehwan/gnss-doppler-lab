@@ -1,0 +1,21 @@
+{
+  "schema": "texbat.ds1.m1.raw-provenance.v1",
+  "source": {
+    "path": "/home/ubuntu/unraid/gnss-datasets/texbat/raw/ds1.bin",
+    "sha256": "8c8f4caa41c8a2253688eef47818a445e3a06139b729cf587c03be33e6b6744c",
+    "bytes": 46170898432,
+    "sample_rate_hz": 25000000,
+    "format": "s16le_interleaved_iq"
+  },
+  "extractor": {
+    "command": "extract_m1_features(ds1.bin, 'DS1', 25000000, bytes/(4*25000000), block_ms=10, stride_s=0.5)",
+    "function_source_sha256": "493ffd230e9df0633c64be2e0b6139c4e5998e7d891f8171e8c1d43dfe0dc638",
+    "module_path": "/home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/src/gnss_doppler_lab/clif_ip_synthetic.py",
+    "module_sha256": "950899c185c9def841dc95bdee46104612c012d690eac6d5e53de9561bf55661"
+  },
+  "derived": {
+    "path": "artifacts/clif_ip_synthetic_normal_r4/real_inputs/texbat_DS1_m1_features.csv",
+    "sha256": "b44cd72d8dcbff66c75dd6c1e1fc20ac848a351df8c1d0a13ae2d3efe3cd9572",
+    "bytes": 463387
+  }
+}

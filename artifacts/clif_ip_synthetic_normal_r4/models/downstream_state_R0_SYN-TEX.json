@@ -1,0 +1,121 @@
+{
+  "schema": "clif-ip.downstream-state.audit.v1",
+  "predictors_pickle": {
+    "path": "models/predictors_R0_SYN-TEX.pkl",
+    "sha256": "2bc4fbc58df859cfdb60be4c171b33085b534cca78df5cc0a896ded865af3b00",
+    "bytes": 20986
+  },
+  "calibration_pickle": {
+    "path": "models/calibration_R0_SYN-TEX.pkl",
+    "sha256": "3e0664d2d98414350d8f5db41ea64f84187a5727467e101438e044faad281d84",
+    "bytes": 1565
+  },
+  "P0": {
+    "prediction_mean": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "predictors": {
+    "P1": {
+      "schema": "recursive_additive_ridge_v1",
+      "mean_sha256": "6584d23da00dacbd1663d784f272b91a0a7c789eacb39ed701bd737b5c11524b",
+      "scale_sha256": "2d1f771d4479004c7020addf5160421277338041854e9f6bf2a06af7e00bac74",
+      "alpha": 10.0,
+      "coef_sha256": "1b8f0142f73df84ce20a2647f35ad11dfe5006a400ee9103e20530f360ce3cc2",
+      "input_dimensions": 54,
+      "target_dimensions": 9
+    },
+    "P2": {
+      "schema": "recursive_additive_ridge_v1",
+      "mean_sha256": "d639de351d316a881bcff432f7bbb1bcaea3afab75f15cadc56ec43321938eb6",
+      "scale_sha256": "fb7c51014046872333178b435167d0e9986c565e65fa14c48d87ada674da6e12",
+      "alpha": 100.0,
+      "coef_sha256": "d017d2f157d305d933a4714b8d32fea83cd75080cc5599ccf33f8559452eb27a",
+      "input_dimensions": 56,
+      "target_dimensions": 9
+    },
+    "P3": {
+      "schema": "recursive_additive_ridge_v1",
+      "mean_sha256": "1a1aac6300d90f30f4903e928808551485e1ce5d82d37dcc3ce8c73b13bd5e8b",
+      "scale_sha256": "5c46a9fc7ac4195b8d3f9d0119d6b3a1178f642083ac7d39f2a3dbf3bda2edee",
+      "alpha": 10.0,
+      "coef_sha256": "a7b74e197dcb4f13d6843e360ea9949460ffa92f4090a052dbc7b92953965278",
+      "input_dimensions": 110,
+      "target_dimensions": 9
+    }
+  },
+  "calibration": {
+    "component_mean": {
+      "B0": 0.02054924036182657,
+      "M1": 1.2216278455526617,
+      "P3": 0.00013383130114785717
+    },
+    "component_scale": {
+      "B0": 0.0024230056835260944,
+      "M1": 0.32236521631640114,
+      "P3": 5.096125521446846e-05
+    },
+    "sets": {
+      "B0_M1": [
+        0,
+        1
+      ],
+      "B0_P3": [
+        0,
+        2
+      ],
+      "M1_P3": [
+        1,
+        2
+      ],
+      "Full": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "fits": {
+      "B0_M1": {
+        "center": "6a8d2c72886d608bb864d8104811b4f85ac9a0a792983f88fb54d1d79234ce86",
+        "covariance": "adfb875ad4b9e56868688a185c904396f90874e96d0aad6d508e78cd2d2d184a",
+        "inverse": "900979ed629f9c7a3289cd98b079a380fa6583e2ce86aeab62c9a45e83fe37c7"
+      },
+      "B0_P3": {
+        "center": "fbd5603a166806db91c9452b2767a5d7b59bb78de02c7c4a8ac4faf4ccb2a25b",
+        "covariance": "4d7b721abfc549876f6c37f4f2cec796529d995f1e823c74d126c13a48f2afa6",
+        "inverse": "d74553f9a4f84f1c5de4828b6edaefe11611c17da0876aede7831bfa0f41d473"
+      },
+      "M1_P3": {
+        "center": "6feff73f52a6eef923f670a84ea3431323613253840a9be032b0210ecdb9b59b",
+        "covariance": "47a57148041251459513afbc6d3907d9763a1f9a40a7cc4c427407fcde624e22",
+        "inverse": "0952864cfcd8941d0b8399183a35321b4acf1469064487b6da890c66a0770c62"
+      },
+      "Full": {
+        "center": "41d69b2b952d25382500d7f63a6bf12b87d1c23ce611db07edec544ff5b13ffa",
+        "covariance": "a5a15bbd978e8ecd1ca304ff352d982f213262a317355ae4a34e0a68eb2a9b98",
+        "inverse": "432364773b46c02b35d4ed101b5de49b6ce14c4f9f6ea8861737f98ce8b321d8"
+      }
+    },
+    "thresholds": {
+      "B0": 0.026649284698069094,
+      "M1": 2.061649121790439,
+      "P0": 0.0007102470249096083,
+      "P1": 0.00025419352366737406,
+      "P2": 0.0010622217943260888,
+      "P3": 0.0002808784210365503,
+      "B0_M1": 10.114068904011663,
+      "B0_P3": 9.932659281226039,
+      "M1_P3": 10.950394611009825,
+      "Full": 24.918913589493908
+    }
+  }
+}

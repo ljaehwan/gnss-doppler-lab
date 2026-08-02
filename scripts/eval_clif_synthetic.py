@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Scientifically complete R4 evaluation with frozen calibration and raw evidence."""
 from __future__ import annotations
-import argparse,hashlib,json,sys
+import argparse,copy,hashlib,inspect,json,pickle,sys
 from pathlib import Path
 import numpy as np,pandas as pd,torch
 from sklearn.linear_model import Ridge
@@ -18,6 +18,7 @@ TEX_M1={s:SSD/f"{s.lower()}-raw-iq-noise-continuity-20260729-v0"/f"{s.lower()}_r
 TEX_DS4_NODE=LAB/"artifacts/ai_morph_gru_window_ablation_ds4_20260723/w1.0_s0.5/ds4/multi_prn_method_a_9tap_normalized_dmcpd_w1.0_s0.5/normal_prn_node_windows.csv"
 ALPHAS=(.1,1.,10.,100.);LAG=6;KINDS=("P1","P2","P3")
 INPUT_PROVENANCE={}
+_DS1_PROVENANCE=None
 
 def digest_obj(*xs):
  h=hashlib.sha256()
@@ -68,22 +69,33 @@ def design(d,kind):
  return np.asarray(X,float),np.asarray(Y,float).reshape(-1,9),pd.DataFrame(meta)
 
 def predict_matrix(spec,X):
- z=(X-spec["mean"])/spec["scale"];base=spec["base_model"].predict(z) if spec.get("base_model") is not None else 0.
- return base+spec["model"].predict(z)
+ """Score a recursively frozen predictor without sharing normalization layers."""
+ z=(X-spec["mean"])/spec["scale"]
+ correction=spec["model"].predict(z)
+ if spec.get("base_spec") is None:return correction
+ # The S0 branch owns its original mean/scale. Never apply the S1 correction
+ # normalization to the frozen S0 estimator.
+ return predict_matrix(spec["base_spec"],X)+correction
+
+def predictor_audit(spec):
+ model=spec["model"]
+ out={"schema":spec["schema"],"mean_sha256":digest_obj(spec["mean"]),"scale_sha256":digest_obj(spec["scale"]),"alpha":float(spec["alpha"]),"coef_sha256":digest_obj(model.coef_,model.intercept_),"input_dimensions":int(len(spec["mean"])),"target_dimensions":int(model.coef_.shape[0])}
+ if spec.get("base_spec") is not None:out["base_spec"]=predictor_audit(spec["base_spec"])
+ return out
 
 def fit_predictors(train,val,base_models=None):
  out={};details=[]
  for kind in KINDS:
-  X,y,_=design(train,kind);Xv,yv,_=design(val,kind);mu=X.mean(0);sd=np.where(X.std(0)>1e-9,X.std(0),1.);base=None
+  X,y,_=design(train,kind);Xv,yv,_=design(val,kind);mu=X.mean(0);sd=np.where(X.std(0)>1e-9,X.std(0),1.);base_spec=None
   if base_models is not None:
-   old=base_models[kind];base=old["model"];base_train=predict_matrix(old,X);base_val=predict_matrix(old,Xv);target=y-base_train
+   old=base_models[kind];base_spec=copy.deepcopy(old);base_train=predict_matrix(old,X);base_val=predict_matrix(old,Xv);target=y-base_train
   else:base_val=0.;target=y
   best=None
   for a in ALPHAS:
    model=Ridge(alpha=a).fit((X-mu)/sd,target);pred=(base_val+model.predict((Xv-mu)/sd));mse=float(np.mean((yv-pred)**2))
    if best is None or mse<best[0]:best=(mse,a,model,pred)
-  spec={"model":best[2],"base_model":base,"mean":mu,"scale":sd,"alpha":best[1],"correction":base_models is not None};out[kind]=spec
-  basehash="NA" if base is None else digest_obj(base.coef_,base.intercept_);corrhash=digest_obj(best[2].coef_,best[2].intercept_)
+  spec={"schema":"recursive_additive_ridge_v1","model":best[2],"base_spec":base_spec,"mean":mu,"scale":sd,"alpha":best[1],"correction":base_models is not None};out[kind]=spec
+  basehash="NA" if base_spec is None else predictor_audit(base_spec)["coef_sha256"];corrhash=digest_obj(best[2].coef_,best[2].intercept_)
   details.append({"model":kind,"alpha":best[1],"validation_mse":best[0],"parameter_count":int(best[2].coef_.size+best[2].intercept_.size),"train_support":len(y),"validation_support":len(yv),"s0_base_coef_hash":basehash,"correction_coef_hash":corrhash,"correction_nonzero":bool(np.any(np.abs(best[2].coef_)>0))})
  return out,details
 
@@ -109,7 +121,7 @@ def epoch_base(pred):
 def _fit_mahal(x):
  x=np.asarray(x,float);center=x.mean(0);raw=np.cov(x-center,rowvar=False)
  if np.ndim(raw)==0:raw=np.asarray([[float(raw)]])
- cov=.9*raw+.1*np.diag(np.diag(raw))+1e-9*np.eye(raw.shape[0]);return center,np.linalg.pinv(cov)
+ cov=.9*raw+.1*np.diag(np.diag(raw))+1e-9*np.eye(raw.shape[0]);return {"center":center,"covariance":cov,"inverse":np.linalg.pinv(cov)}
 
 def fit_fusion(validation):
  base=validation.copy();mu={c:float(base[c].mean()) for c in ("B0","M1","P3")};sd={c:max(float(base[c].std(ddof=1)),1e-9) for c in mu}
@@ -121,7 +133,7 @@ def apply_fusion(d,cal):
  z=d.copy();arr=np.column_stack([(z[c].to_numpy(float)-cal["component_mean"][c])/cal["component_scale"][c] for c in ("B0","M1","P3")])
  z["B0z"],z["M1z"],z["P3z"]=arr[:,0],arr[:,1],arr[:,2];z["concordance"]=np.maximum(arr[:,0],0)*np.maximum(arr[:,1],0);q=np.c_[arr,z.concordance]
  for name,ix in cal["sets"].items():
-  center,inv=cal["fits"][name];v=q[:,ix]-center;z[name]=np.einsum("ij,jk,ik->i",v,inv,v)
+  fit=cal["fits"][name];v=q[:,ix]-fit["center"];z[name]=np.einsum("ij,jk,ik->i",v,fit["inverse"],v)
  return z
 
 def split_prediction_metrics(pred,regime,domain,split):
@@ -133,16 +145,34 @@ def split_prediction_metrics(pred,regime,domain,split):
   rows.append(row)
  return rows
 
-def scenario_metrics(val,clean,attacks,regime,domain):
+def scenario_metrics(val,clean,attacks,regime,domain,cal=None):
  rows=[];models=("B0","M1","P0","P1","P2","P3","B0_M1","B0_P3","M1_P3","Full")
  for model in models:
   th=float(val[model].quantile(.99));fpr=float((clean[model]>th).mean())
+  if cal is not None:cal.setdefault("thresholds",{})[model]=th
   for sc,d in attacks.items():
    masks=evaluation_masks(d.available_s,domain);pre=d[masks["stable_pre"]];post=d[masks["established_post"]];y=np.r_[np.zeros(len(pre)),np.ones(len(post))];x=np.r_[pre[model],post[model]];alarm=post[post[model]>th].available_s
    rows.append({"regime":regime,"target_domain":domain,"comparison_scope":"r4_same_protocol","scenario":sc,"model":model,"roc_auc":float(roc_auc_score(y,x)),"pr_auc":float(average_precision_score(y,x)),"stable_pre_fpr":float((pre[model]>th).mean()),"independent_clean_fpr":fpr,"post_detection_rate":float((post[model]>th).mean()),"first_alarm_delay_s":float(alarm.iloc[0]-masks["nominal_onset_s"]) if len(alarm) else "NA","persistent_detection_rate":float((post[model].rolling(3).min()>th).mean()),"threshold":th,"threshold_source":"validation_only","nominal_onset_s":masks["nominal_onset_s"],"score_time_field":"available_s","transition_excluded":("110<=t<130" if domain=="SYN-OAK" else "90<=t<110"),"stable_pre_samples":len(pre),"established_post_samples":len(post),"na_reason":"no established-post threshold crossing; delay NA" if not len(alarm) else ""})
  return rows
 
 def _record_input(p,role):INPUT_PROVENANCE[role]={"path":str(p),"sha256":sha(p),"bytes":p.stat().st_size}
+
+def _ds1_m1(cache):
+ global _DS1_PROVENANCE
+ raw=TEX_RAW/"ds1.bin";mp=cache/"texbat_DS1_m1_features.csv";prov=mp.with_suffix(".provenance.json")
+ if _DS1_PROVENANCE is not None:
+  INPUT_PROVENANCE["SYN-TEX:DS1:raw_IQ"]=_DS1_PROVENANCE;return mp
+ raw_meta={"path":str(raw),"sha256":sha(raw),"bytes":raw.stat().st_size,"sample_rate_hz":25_000_000,"format":"s16le_interleaved_iq"}
+ code_file=ROOT/"src/gnss_doppler_lab/clif_ip_synthetic.py"
+ extractor={"command":"extract_m1_features(ds1.bin, 'DS1', 25000000, bytes/(4*25000000), block_ms=10, stride_s=0.5)","function_source_sha256":hashlib.sha256(inspect.getsource(extract_m1_features).encode()).hexdigest(),"module_path":str(code_file),"module_sha256":sha(code_file)}
+ valid=False
+ if mp.exists() and prov.exists():
+  old=json.loads(prov.read_text());valid=old.get("source",{}).get("sha256")==raw_meta["sha256"] and old.get("source",{}).get("bytes")==raw_meta["bytes"] and old.get("extractor")==extractor and old.get("derived",{}).get("sha256")==sha(mp)
+ if not valid:
+  duration=raw.stat().st_size/(4*25_000_000);extract_m1_features(raw,"DS1",25_000_000,duration,block_ms=10,stride_s=.5).to_csv(mp,index=False)
+ payload={"schema":"texbat.ds1.m1.raw-provenance.v1","source":raw_meta,"extractor":extractor,"derived":{"path":str(mp),"sha256":sha(mp),"bytes":mp.stat().st_size}}
+ prov.write_text(json.dumps(payload,indent=2)+"\n");_DS1_PROVENANCE=payload;INPUT_PROVENANCE["SYN-TEX:DS1:raw_IQ"]=payload
+ return mp
 
 def real_paths(root,domain,scenario,ck):
  if domain=="SYN-OAK":
@@ -157,9 +187,7 @@ def real_paths(root,domain,scenario,ck):
    if not bp.exists():tex_npz_magnitude_nodes(src,bp,scenario)
    bd=pd.read_csv(bp)
    if scenario=="DS1":
-    mp=cache/"texbat_DS1_m1_features.csv"
-    if not mp.exists():
-     raw=TEX_RAW/"ds1.bin";duration=raw.stat().st_size/(4*25_000_000);extract_m1_features(raw,"DS1",25_000_000,duration,block_ms=10,stride_s=.5).to_csv(mp,index=False)
+    mp=_ds1_m1(cache)
    else:mp=TEX_M1[scenario]
    md=pd.read_csv(mp)
   elif scenario=="DS4":bp=TEX_DS4_NODE;mp=TEX_M1[scenario];bd=pd.read_csv(bp);md=pd.read_csv(mp)
@@ -201,17 +229,25 @@ def run_regime(root,regime,domain,ck,base_models=None,repetitions=199):
  cleanbase=real_paths(root,domain,"cleanStatic",ck);testbase=cleanbase[cleanbase.t>=340];testpred=score_predictors(testbase,models,True);testepoch=apply_fusion(epoch_base(testpred),cal)
  return models,details,cal,valbase,valpred,valepoch,testbase,testpred,testepoch
 
+def persist_downstream(root,regime,domain,models,cal):
+ """Persist all state needed to score retained designs independently."""
+ bundle={"schema":"clif-ip.predictors.recursive.v1","regime":regime,"domain":domain,"lag":LAG,"tap_order":TAP_ORDER,"P0":{"kind":"zero_residual_baseline","prediction_mean":np.zeros(9)},"predictors":models}
+ paths={"predictors":root/"models"/f"predictors_{regime}_{domain}.pkl","calibration":root/"models"/f"calibration_{regime}_{domain}.pkl"}
+ for key,obj in (("predictors",bundle),("calibration",cal)):
+  with paths[key].open("wb") as f:pickle.dump(obj,f,protocol=4)
+ audit={"schema":"clif-ip.downstream-state.audit.v1","predictors_pickle":{"path":str(paths["predictors"].relative_to(root)),"sha256":sha(paths["predictors"]),"bytes":paths["predictors"].stat().st_size},"calibration_pickle":{"path":str(paths["calibration"].relative_to(root)),"sha256":sha(paths["calibration"]),"bytes":paths["calibration"].stat().st_size},"P0":{"prediction_mean":bundle["P0"]["prediction_mean"].tolist()},"predictors":{k:predictor_audit(v) for k,v in models.items()},"calibration":{"component_mean":cal["component_mean"],"component_scale":cal["component_scale"],"sets":cal["sets"],"fits":{k:{x:digest_obj(v[x]) for x in ("center","covariance","inverse")} for k,v in cal["fits"].items()},"thresholds":cal.get("thresholds",{})}}
+ ap=root/"models"/f"downstream_state_{regime}_{domain}.json";ap.write_text(json.dumps(audit,indent=2)+"\n");audit["audit_json"]={"path":str(ap.relative_to(root)),"sha256":sha(ap),"bytes":ap.stat().st_size};return audit
+
 def main():
  ap=argparse.ArgumentParser();ap.add_argument("--root",type=Path,default=Path("artifacts/clif_ip_synthetic_normal_r4"));ap.add_argument("--permutations",type=int,default=199);a=ap.parse_args()
  if a.permutations!=199:raise SystemExit("final requires 199 destruction replicates")
  (a.root/"per_epoch").mkdir(exist_ok=True);(a.root/"predictions").mkdir(exist_ok=True)
- scenarios=[];predrows=[];gaps=[];groupsummaries=[];rawperm=[];model_cache={};calibration_summary={};epoch_files=[]
+ scenarios=[];predrows=[];gaps=[];groupsummaries=[];rawperm=[];model_cache={};calibration_summary={};downstream_state={};epoch_files=[]
  plans=[("S0","SYN-OAK"),("S1","SYN-OAK"),("S0","SYN-TEX"),("S1","SYN-TEX"),("R0","SYN-TEX")]
  results={}
  for regime,domain in plans:
   ck=torch.load(a.root/"models"/f"{regime}_{domain}.pt",map_location="cpu",weights_only=False)
   base=model_cache.get(("S0",domain));models,details,cal,valbase,valpred,vale,testbase,testpred,teste=run_regime(a.root,regime,domain,ck,base,a.permutations);model_cache[(regime,domain)]=models
-  calibration_summary[f"{regime}:{domain}"]={"fit_rows":cal["fit_rows"],"source":cal["source"],"concordance":cal["concordance"],"component_mean":cal["component_mean"],"component_scale":cal["component_scale"]}
   for x in details:predrows.append({"regime":regime,"target_domain":domain,"split":"fit_audit","na_reason":"clean split metrics/support hash/per-tap errors not applicable to fit-audit row",**x})
   predrows.extend(split_prediction_metrics(valpred,regime,domain,"clean_validation"));predrows.extend(split_prediction_metrics(testpred,regime,domain,"independent_clean_test"))
   for split,p,e in (("clean_validation",valpred,vale),("clean_test",testpred,teste)):
@@ -220,7 +256,9 @@ def main():
   for sc in names:
    x=real_paths(a.root,domain,sc,ck);p=score_predictors(x,models,True);e=apply_fusion(epoch_base(p),cal);attacks[sc]=e;rawattacks[sc]=x
    pf=a.root/"predictions"/f"{regime}_{domain}_{sc}.csv";ef=a.root/"per_epoch"/f"{regime}_{domain}_{sc}.csv";p.to_csv(pf,index=False);e.to_csv(ef,index=False);epoch_files.append(ef)
-  scenarios.extend(scenario_metrics(vale,teste,attacks,regime,domain))
+  scenarios.extend(scenario_metrics(vale,teste,attacks,regime,domain,cal))
+  downstream_state[f"{regime}:{domain}"]=persist_downstream(a.root,regime,domain,models,cal)
+  calibration_summary[f"{regime}:{domain}"]={"fit_rows":cal["fit_rows"],"source":cal["source"],"concordance":cal["concordance"],"component_mean":cal["component_mean"],"component_scale":cal["component_scale"],"thresholds":cal["thresholds"],"full_center_sha256":digest_obj(cal["fits"]["Full"]["center"]),"full_covariance_sha256":digest_obj(cal["fits"]["Full"]["covariance"]),"full_inverse_sha256":digest_obj(cal["fits"]["Full"]["inverse"])}
   syn=synth_frame(a.root,domain,"synthetic_test",ck);real=testbase
   for group,cols in (("B0_residual_9D",[f"r{i}" for i in range(9)]),("M1_innovation",[c for c in syn if c.startswith("m") and c[1:].isdigit()])):
    for source,frame in (("synthetic",syn),("real",real)):
@@ -239,9 +277,9 @@ def main():
  # Immutable R3 OAK rows are explicitly segregated as historical/noncomparable.
  r3=pd.read_csv(ROOT/"artifacts/clif_ip_cross_layer_r3/scenario_metrics.csv")
  for _,r in r3.iterrows():scenarios.append({"regime":"R0","target_domain":"SYN-OAK",**r.to_dict(),"comparison_scope":"historical_r3_noncomparable","na_reason":"exact immutable R3 result; not R4 timing/training protocol"})
- raw=pd.DataFrame(rawperm);summary={"schema":"clif-ip.synthetic-normal.r4.alignment.v3","repetitions":199,"p_value_resolution":.005,"actual_predictor_rescoring":True,"target_dimensions":9,"results":{}}
+ raw=pd.DataFrame(rawperm);summary={"schema":"clif-ip.synthetic-normal.r4.alignment.v4","repetitions":199,"p_value_resolution":.005,"actual_predictor_rescoring":True,"target_dimensions":9,"results":{}}
  for key,g in raw.groupby(["region_key","model"]):
   delta=g.delta.to_numpy();summary["results"][":".join(key)]={"aligned":float(g.aligned.iloc[0]),"shuffled_mean":float(g.shuffled.mean()),"delta_mean":float(delta.mean()),"delta_ci":[float(np.quantile(delta,.025)),float(np.quantile(delta,.975))],"p_value":float((1+np.sum(delta>=0))/200),"replicates":199,"support_preserved":bool(g.support_preserved.all()),"marginals_preserved":bool(g.marginals_preserved.all())}
  pd.DataFrame(predrows).to_csv(a.root/"predictor_comparison.csv",index=False);pd.DataFrame(scenarios).to_csv(a.root/"scenario_metrics.csv",index=False);pd.DataFrame(gaps).to_csv(a.root/"domain_gap_metrics.csv",index=False);pd.DataFrame(groupsummaries).to_csv(a.root/"domain_gap_group_summaries.csv",index=False);raw.to_csv(a.root/"alignment_destruction_raw_metrics.csv",index=False)
- (a.root/"alignment_destruction_metrics.json").write_text(json.dumps(summary,indent=2)+"\n");(a.root/"evaluation_provenance.json").write_text(json.dumps({"inputs":INPUT_PROVENANCE,"calibration":calibration_summary,"per_epoch_files":{str(p.relative_to(a.root)):sha(p) for p in epoch_files}},indent=2)+"\n")
+ (a.root/"alignment_destruction_metrics.json").write_text(json.dumps(summary,indent=2)+"\n");(a.root/"evaluation_provenance.json").write_text(json.dumps({"schema":"clif-ip.synthetic-normal.r4.evaluation-provenance.v4","inputs":INPUT_PROVENANCE,"downstream_state":downstream_state,"calibration":calibration_summary,"per_epoch_files":{str(p.relative_to(a.root)):sha(p) for p in epoch_files}},indent=2)+"\n")
 if __name__=="__main__":main()

@@ -15,7 +15,7 @@ Raw B0 taps are nine **Method-A prompt-relative magnitudes** in `E4,E3,E2,E,P,L,
 
 DS1–DS3 B0 nodes are reconstructed from their existing `complex_iq,time_s,prn,...` NPZ exports using the same converter as cleanStatic: `abs(complex_iq)/abs(prompt)`, then arithmetic aggregation by `(PRN, floor(time_s*2)/2)`. This is compatible for the nine magnitude/prompt taps only; auxiliary historical Method-A fields and exact producer-window aggregation cannot be reconstructed. A cleanStatic comparison found 1,767 matched nodes / 15,903 tap values, MAE 0.006369 and maximum absolute difference 0.081885, so this is explicitly **reconstructed equivalence, not numerical or byte identity**. Each conversion has source/output hashes and an aggregation caveat in its adjacent provenance JSON.
 
-DS1 M1 was extracted format-aware from the live 25 Msps little-endian interleaved int16 IQ (`ds1.bin`). DS2–DS4 use existing live M1 feature files with recorded hashes. Power, PSD and autocorrelation are represented in M1. AGC telemetry is unavailable and is explicit NA, not inferred.
+DS1 M1 was extracted format-aware from the live 25 Msps little-endian interleaved int16 IQ (`ds1.bin`, 46,170,898,432 bytes, SHA256 `8c8f4caa41c8a2253688eef47818a445e3a06139b729cf587c03be33e6b6744c`). The retained extractor provenance records the exact command, extractor function/module hashes, and source-to-derived hash; cache reuse requires those values and the live source hash to match. DS2–DS4 use existing live M1 feature files with recorded hashes. Power, PSD and autocorrelation are represented in M1. AGC telemetry is unavailable and is explicit NA, not inferred.
 
 ## Regimes and leakage controls
 
@@ -36,12 +36,12 @@ Values below are ROC-AUC / PR-AUC. R4 values share the corrected timing protocol
 
 - **Historical R0 OAK Full:** os1 0.582318 / 0.833644; os2 1.000000 / 1.000000; os3 0.994881 / 0.991178; os4 1.000000 / 1.000000.
 - **S0 OAK Full:** os1 0.466136 / 0.770115; os2 1.000000 / 1.000000; os3 0.989993 / 0.983907; os4 0.972743 / 0.993225. Independent real-clean FPR is 1.0, exposing failed synthetic calibration transfer.
-- **S1 OAK Full:** os1 0.475593 / 0.755995; os2 1.000000 / 1.000000; os3 0.955557 / 0.953206; os4 1.000000 / 1.000000. Independent clean FPR is 0.032847.
+- **S1 OAK Full:** os1 0.500686 / 0.790533; os2 1.000000 / 1.000000; os3 0.985836 / 0.983904; os4 1.000000 / 1.000000. Independent clean FPR is 0.036496.
 - **R0 TEX Full:** DS1 0.976714 / 0.996400; DS2 0.999916 / 0.999986; DS3 0.986573 / 0.997920; DS4 0.926351 / 0.918509.
 - **S0 TEX Full:** DS1 0.972636 / 0.995795; DS2 0.999389 / 0.999900; DS3 0.984194 / 0.997540; DS4 0.896622 / 0.879482. Independent real-clean FPR is 1.0.
-- **S1 TEX Full:** DS1 0.981466 / 0.997095; DS2 0.999808 / 0.999968; DS3 0.987673 / 0.998092; DS4 0.928604 / 0.900035. Independent clean FPR is 0.036364.
+- **S1 TEX Full:** DS1 0.982163 / 0.997210; DS2 0.999868 / 0.999978; DS3 0.992073 / 0.998735; DS4 0.890766 / 0.873163. Independent clean FPR is 0.029091.
 
-The prediction result is mixed and reported without a positive-effect claim. On independent clean test, P3 vs P1 MSE is: S0 OAK 0.000484 vs 0.000349; S1 OAK 0.005354 vs 0.005406; S0 TEX 0.001217 vs 0.001162; S1 TEX 0.020292 vs 0.020283; R0 TEX 0.000368 vs 0.000366. Only the small S1 OAK improvement is positive.
+The prediction result is mixed and reported without a positive-effect claim. On independent clean test, P3 vs P1 MSE is: S0 OAK 0.000484 vs 0.000349; S1 OAK 0.000094 vs 0.000089; S0 TEX 0.001217 vs 0.001162; S1 TEX 0.000389 vs 0.000385; R0 TEX 0.000368 vs 0.000366. None is positive.
 
 ## Domain gap and destruction
 
@@ -51,7 +51,7 @@ Alignment destruction contains 45 clean/pre/post regime-domain regions × P2/P3/
 
 ## Reproducibility and repository limits
 
-`synthetic_bundle_ledger.csv` contains every run ID, row counts, B0/M1 output hashes, IQ/source/generator hashes, receiver hashes and a canonical leaf hash; `provenance_manifest.json` records the aggregate ledger/Merkle hash, all real evaluation input hashes, source tree and code-file hashes. Counts are calculated from live bundles by the finalizer, never hard-coded.
+`synthetic_bundle_ledger.csv` contains every run ID, row counts, B0/M1 output hashes, IQ/source/generator hashes, receiver hashes and a canonical leaf hash; `provenance_manifest.json` records the aggregate ledger/Merkle hash, all real evaluation input hashes, source tree and code-file hashes. Counts are calculated from live bundles by the finalizer, never hard-coded. For every evaluated regime/domain, `models/predictors_*.pkl` recursively retains each Ridge estimator with its own mean/scale and exact frozen S0 base, while `models/calibration_*.pkl` retains component centers/scales, every shrinkage covariance and inverse, Full state, and all validation thresholds. Adjacent JSON audit files and `evaluation_provenance.json` hash these reloadable states.
 
 A clone contains code, ledgers, summaries, per-epoch scores/predictions, plots and provenance, but **does not contain approximately 3 GB of ignored per-run feature bundles**. The ledger is sufficient to verify those retained local files; it cannot recreate absent feature bytes by itself.
 

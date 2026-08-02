@@ -206,6 +206,17 @@ def test_tex_npz_converter_materializes_real_nine_tap_schema(tmp_path):
     assert np.isfinite(d.select_dtypes("number")).all().all()
 
 
+def test_s1_recursive_predictor_preserves_s0_normalization_exactly():
+    from sklearn.linear_model import Ridge
+    from scripts.eval_clif_synthetic import predict_matrix
+    rng=np.random.default_rng(813);x=rng.normal(size=(37,5));mu=rng.normal(size=5);scale=rng.uniform(.2,3,size=5)
+    base={"schema":"recursive_additive_ridge_v1","model":Ridge().fit((x-mu)/scale,rng.normal(size=(37,9))),"base_spec":None,"mean":mu,"scale":scale,"alpha":1.,"correction":False}
+    s1={"schema":"recursive_additive_ridge_v1","model":Ridge().fit((x+4)/7,np.zeros((37,9))),"base_spec":base,"mean":np.full(5,-4.),"scale":np.full(5,7.),"alpha":1.,"correction":True}
+    arbitrary=rng.normal(size=(19,5))
+    np.testing.assert_array_equal(predict_matrix(base,arbitrary),predict_matrix(s1["base_spec"],arbitrary))
+    np.testing.assert_allclose(predict_matrix(s1,arbitrary),predict_matrix(base,arbitrary),rtol=0,atol=1e-14)
+
+
 def test_artifact_schema_and_checksums(tmp_path):
     required=("config.json","synthetic_run_manifest.csv","generation_summary.json","impairment_distribution.json","training_summary.json","predictor_comparison.csv","scenario_metrics.csv","domain_gap_metrics.csv","alignment_destruction_metrics.json","test_summary.txt","README.md")
     (tmp_path/"plots").mkdir()
@@ -255,6 +266,45 @@ def test_actual_complete_r4_outputs_are_recomputable_and_nonempty():
     from sklearn.metrics import roc_auc_score
     got=roc_auc_score(np.r_[np.zeros(m["stable_pre"].sum()),np.ones(m["established_post"].sum())],np.r_[e.loc[m["stable_pre"],"Full"],e.loc[m["established_post"],"Full"]])
     assert got==pytest.approx(float(row.roc_auc),abs=1e-12)
+    # Recompute every R4 scenario row from committed validation/clean/scenario epochs.
+    from sklearn.metrics import average_precision_score
+    r4=s[s.comparison_scope.eq("r4_same_protocol")]
+    for r in r4.itertuples(index=False):
+        prefix=f"{r.regime}_{r.target_domain}";val=pd.read_csv(root/"per_epoch"/f"{prefix}_clean_validation.csv");clean=pd.read_csv(root/"per_epoch"/f"{prefix}_clean_test.csv");attack=pd.read_csv(root/"per_epoch"/f"{prefix}_{r.scenario}.csv");mask=evaluation_masks(attack.available_s,r.target_domain);pre=attack[mask["stable_pre"]];post=attack[mask["established_post"]];threshold=float(val[r.model].quantile(.99));labels=np.r_[np.zeros(len(pre)),np.ones(len(post))];scores=np.r_[pre[r.model],post[r.model]]
+        assert float(r.threshold)==pytest.approx(threshold,abs=1e-12)
+        assert float(r.roc_auc)==pytest.approx(roc_auc_score(labels,scores),abs=1e-12)
+        assert float(r.pr_auc)==pytest.approx(average_precision_score(labels,scores),abs=1e-12)
+        assert float(r.stable_pre_fpr)==pytest.approx(float((pre[r.model]>threshold).mean()),abs=1e-12)
+        assert float(r.independent_clean_fpr)==pytest.approx(float((clean[r.model]>threshold).mean()),abs=1e-12)
+        assert float(r.post_detection_rate)==pytest.approx(float((post[r.model]>threshold).mean()),abs=1e-12)
+
+
+def test_actual_downstream_state_reload_scores_retained_calibration():
+    import pickle
+    from scripts.eval_clif_synthetic import apply_fusion,design,predict_matrix
+    root=Path(__file__).resolve().parents[1]/"artifacts/clif_ip_synthetic_normal_r4"
+    prov=json.loads((root/"evaluation_provenance.json").read_text())
+    assert prov["schema"].endswith("v4") and "SYN-TEX:DS1:raw_IQ" in prov["inputs"]
+    raw=prov["inputs"]["SYN-TEX:DS1:raw_IQ"]
+    assert raw["source"]["format"]=="s16le_interleaved_iq" and raw["source"]["sample_rate_hz"]==25_000_000
+    assert raw["source"]["bytes"]>0 and len(raw["source"]["sha256"])==64
+    assert raw["derived"]["sha256"]==hashlib.sha256((root/"real_inputs/texbat_DS1_m1_features.csv").read_bytes()).hexdigest()
+    for regime,domain in (("S0","SYN-OAK"),("S1","SYN-OAK"),("S0","SYN-TEX"),("S1","SYN-TEX"),("R0","SYN-TEX")):
+        with (root/"models"/f"predictors_{regime}_{domain}.pkl").open("rb") as f:bundle=pickle.load(f)
+        with (root/"models"/f"calibration_{regime}_{domain}.pkl").open("rb") as f:cal=pickle.load(f)
+        spec=bundle["predictors"]["P3"]
+        retained=pd.read_csv(root/"predictions"/f"{regime}_{domain}_clean_validation.csv")
+        x,_,meta=design(retained,"P3");rescored=predict_matrix(spec,x)
+        assert len(rescored)>0 and rescored.shape[1]==9 and len(cal["thresholds"])==10
+        for j,tap in enumerate(TAP_ORDER):np.testing.assert_allclose(rescored[:,j],meta[f"pred_P3_{tap}"],rtol=0,atol=1e-12)
+        epoch=pd.read_csv(root/"per_epoch"/f"{regime}_{domain}_clean_validation.csv")
+        got=apply_fusion(epoch[["run_id","t","B0","M1","P3"]],cal)
+        np.testing.assert_allclose(got.Full,epoch.Full,rtol=0,atol=1e-10)
+        if regime=="S1":
+            assert spec["base_spec"] is not None
+            with (root/"models"/f"predictors_S0_{domain}.pkl").open("rb") as f:s0=pickle.load(f)
+            arbitrary=np.random.default_rng(7).normal(size=(3,len(spec["mean"])))
+            np.testing.assert_array_equal(predict_matrix(spec["base_spec"],arbitrary),predict_matrix(s0["predictors"]["P3"],arbitrary))
 
 
 def test_actual_destruction_is_199_true_9d_rescoring_and_ledger():
