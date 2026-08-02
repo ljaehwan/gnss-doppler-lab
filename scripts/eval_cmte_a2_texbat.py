@@ -14,7 +14,8 @@ from gnss_doppler_lab.cmte_a2 import (
     score_residuals, success_criteria_audit, verify_confirmatory_freeze, write_checksums,
 )
 from gnss_doppler_lab.cmte_a2_inputs import parse_scenario_mappings, validate_input_manifest
-from gnss_doppler_lab.cmte_a2_campaign import validate_source_tree, verify_checksums
+from gnss_doppler_lab.cmte_a2_campaign import (validate_source_tree,verify_checksums,
+ validate_confirm_capability)
 
 
 def _specs(items,tier):
@@ -60,8 +61,13 @@ def _methods(thresholds):
 
 
 def _clean_scores(state_dir,thresholds):
-    per_prn=pd.read_csv(state_dir/"clean_per_prn.csv"); clean=per_prn[per_prn.role=="clean_test"].copy()
-    epoch=_score_columns(clean,thresholds)
+    per_prn=pd.read_csv(state_dir/"clean_per_prn.csv")
+    # Score comparator EWMAs over every available clean-recording role first;
+    # only then slice the independent clean test. There is no role reset.
+    all_epoch=_score_columns(per_prn,thresholds)
+    clean=per_prn[per_prn.role=="clean_test"].copy()
+    keys=clean[["physical_recording_id","window_end_s"]].drop_duplicates()
+    epoch=all_epoch.merge(keys,on=["physical_recording_id","window_end_s"],how="inner",validate="one_to_one")
     return clean,epoch
 
 
@@ -76,9 +82,9 @@ def _diagnostic_parts(epoch,tier,scenario,methods,masks):
     return pieces
 
 
-def main(argv=None):
+def _run(argv=None,*,expected_tier):
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--tier",choices=("development","confirmatory"),required=True)
+    parser.add_argument("--tier",choices=(expected_tier,),required=True)
     parser.add_argument("--state-dir",required=True); parser.add_argument("--scenario",action="append",required=True)
     parser.add_argument("--out",required=True); parser.add_argument("--freeze-manifest"); parser.add_argument("--device",default="cpu")
     args=parser.parse_args(argv)
@@ -144,7 +150,7 @@ def main(argv=None):
                 row={"tier":args.tier,"scenario":name,"model":method,"operating_point":"q995_higher","onset_s":onset,**metric}
                 (all_metrics if method=="CMTE-A2" else baseline_metrics).append(row)
                 boot=epoch[["scenario","physical_recording_id","producer_chain_id","window_end_s","stable_pre","post","persistent",column]].rename(columns={column:"score"}).copy()
-                boot["alarm"]=boot.score>threshold
+                boot["alarm"]=boot.score>threshold; boot["prereg_subphase"]=epoch["phase"].to_numpy()
                 for statistic,values in bootstrap_metrics(boot,reps=2000,seed=20260802).items():
                     all_boot.append({"tier":args.tier,"scenario":name,"model":method,"metric":statistic,**values})
             for method,item in matched_doc.get("models",{}).items():
@@ -177,22 +183,32 @@ def main(argv=None):
         if not ci.empty:
             labels=(ci.scenario.astype(str)+"/"+ci.model.astype(str)+"/"+ci.metric.astype(str)).tolist(); y=np.arange(len(ci))
             point=ci["point"].to_numpy(float) if "point" in ci else (ci.low.to_numpy(float)+ci.high.to_numpy(float))/2
-            ax.errorbar(point,y,xerr=np.vstack([point-ci.low.to_numpy(float),ci.high.to_numpy(float)-point]),fmt="o")
+            # Keep the all-eligible point even if a small-replicate percentile CI excludes it.
+            ax.hlines(y,ci.low.to_numpy(float),ci.high.to_numpy(float),linewidth=.8)
+            ax.plot(point,y,"o",markersize=3)
             ax.set_yticks(y,labels,fontsize=6)
         else: ax.text(.5,.5,"CI unavailable; see machine-readable NA reasons",ha="center")
         ax.set_title(f"{args.tier} moving-block bootstrap confidence intervals"); fig.tight_layout()
         fig.savefig(staging/"plots"/"all_models_bootstrap_ci.png",dpi=120); plt.close(fig)
-        exact_input=pd.concat(diagnostic_parts,ignore_index=True); exact_rows,dependence=exact_n_diagnostics(exact_input)
+        exact_input=pd.concat(diagnostic_parts,ignore_index=True)
+        required_strata=[{"tier":"normal","scenario":"clean_test","model":m,"phase":"clean"} for m in methods]
+        required_strata += [{"tier":args.tier,"scenario":scenario,"model":m,"phase":phase}
+                            for scenario,_,_ in specs for m in methods for phase in ("stable_pre","post","persistent")]
+        exact_rows,dependence=exact_n_diagnostics(exact_input,required_strata=required_strata)
         exact_rows.to_csv(staging/"exact_n_diagnostics.csv",index=False)
         dependence_rows=[]
         for (scenario,method),group in exact_input.groupby(["scenario","model"],sort=True):
             _,item=exact_n_diagnostics(group); dependence_rows.append({"scenario":scenario,"model":method,**item})
-        (staging/"prn_dependence.json").write_text(json.dumps(dependence_rows,indent=2,sort_keys=True)+"\n")
+        dependence_doc={"schema":"gnss-doppler-lab.cmte-a2-prn-dependence.v1","passed":True,
+          "aggregation_changed":False,"sparse_strata_pooled":False,"empty_strata_explicit_epoch_count_zero":True,
+          "overall":dependence,"rows":dependence_rows}
+        (staging/"prn_dependence.json").write_text(json.dumps(dependence_doc,indent=2,sort_keys=True)+"\n")
         combined_metrics=pd.concat([pd.DataFrame(all_metrics),pd.DataFrame(baseline_metrics)],ignore_index=True)
         success=success_criteria_audit(combined_metrics,exact_rows)
         (staging/"success_audit.json").write_text(json.dumps(success,indent=2,sort_keys=True)+"\n")
         shutil.copyfile(ROOT/"configs/cmte_a2_preregistration.json",staging/"preregistration.json")
-        for name in ("config.json","training.json","calibration.json","thresholds.json"): shutil.copyfile(state_dir/name,staging/name)
+        for name in ("config.json","training.json","calibration.json","thresholds.json","historical_b0_gate_equivalence.json"):
+            shutil.copyfile(state_dir/name,staging/name)
         commit=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()
         provenance={"schema":"gnss-doppler-lab.cmte-a2-evaluation-provenance.v1","tier":args.tier,"execution_source_commit":commit,"clean_tree_asserted":True,
                     "artifact_execution_source_recorded":True,"prereg_commit":PREREG_COMMIT,"prereg_ancestor_verified":args.tier=="confirmatory","inputs":input_provenance,
@@ -204,7 +220,10 @@ def main(argv=None):
         training_doc=json.loads((state_dir/"training.json").read_text())
         audit={"schema":"gnss-doppler-lab.cmte-a2-evaluation-audit.v1","tier":args.tier,"role_audit":training_doc.get("role_audit"),
                "evaluation_history_audit":{k:v["history_audit"] for k,v in input_provenance.items()},
-               "bootstrap":{"phase_recording_producer_cadence_safe":True,"iid_fallback":False,"post_includes_persistent":True},
+               "bootstrap":{"phase_recording_producer_cadence_safe":True,"iid_fallback":False,"post_includes_persistent":True,
+                 "subphase_boundaries":["metadata_onset","onset+20","onset+40"],"point_estimate_uses_all_eligible_epochs":True},
+               "comparator_reset":{"reset_dimension":"physical_recording_id","role_reset":False,"phase_reset":False,
+                 "clean_test_sliced_after_full_recording_score":True,"attack_scored_from_recording_start":True},
                "exact_n":{"aggregation_changed":False,"sparse_pooled":False},"matched_fpr":{"threshold_role_fit_only":True,"diagnostic_only":True},
                "confirmatory_placeholder_created":False,"primary_metric_file":primary_name}
         (staging/"audit.json").write_text(json.dumps(audit,indent=2,sort_keys=True)+"\n")
@@ -218,4 +237,15 @@ def main(argv=None):
         print(json.dumps({"out":str(out),"tier":args.tier,"scenarios":[x[0] for x in specs],"source_commit":commit},sort_keys=True))
     except Exception:
         shutil.rmtree(staging,ignore_errors=True); raise
+def main(argv=None):
+    """Public development-only entry point; it cannot select a holdout tier."""
+    return _run(argv,expected_tier="development")
+
+
+def _confirm_main(argv,capability):
+    """Internal scorer entry point requiring an issued in-process capability."""
+    validate_confirm_capability(capability)
+    return _run(argv,expected_tier="confirmatory")
+
+
 if __name__=="__main__": main()

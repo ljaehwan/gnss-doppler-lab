@@ -1,0 +1,29 @@
+{
+  "component_order": [
+    "I",
+    "Q"
+  ],
+  "exporter_content_sha256": "30a45f988cec15fdce84552ff30747b472c7d76df07d93f79d6ae236166d4039",
+  "holdout": false,
+  "npz": "exporter_fixture.npz",
+  "npz_sha256": "291ea16e93c78a72d18ff500ea79e8bd1d8e46561e2bc57b386c3e3a2d64ac21",
+  "rows": 4,
+  "schema": "gnss-doppler-lab.cmte-a2-exporter-smoke-fixture.v1",
+  "shape": [
+    4,
+    9,
+    2
+  ],
+  "synthetic": true,
+  "tap_order": [
+    "E4",
+    "E3",
+    "E2",
+    "E",
+    "P",
+    "L",
+    "L2",
+    "L3",
+    "L4"
+  ]
+}

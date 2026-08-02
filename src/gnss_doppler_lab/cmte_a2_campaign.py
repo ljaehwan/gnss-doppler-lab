@@ -19,6 +19,8 @@ DS8_RAW_SHA="1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78"
 RECEIVER_SHA="6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb"
 EXPORTER_SHA="30a45f988cec15fdce84552ff30747b472c7d76df07d93f79d6ae236166d4039"
 CONVERTER_SHA="5e6db2ef2a07b01a5753d2ac3729df0da47c95821ce61fc4118b634efb671f5a"
+_VALIDATED_ANCHORS:dict[int,tuple[dict[str,Any],str]]={}
+_ISSUED_CONFIRM_CAPABILITIES:set[Any]=set()
 
 
 def file_sha256(path:str|Path)->str:
@@ -116,8 +118,14 @@ def build_confirm_input_manifest(output:str|Path,*,ds7_raw,ds7_npz,ds7_node,ds7_
   "window_seconds":1.0,"stride_seconds":0.5,"prompt_relative":True,
   "prompt_normalization":"per_epoch_tap_magnitude_divided_by_prompt_magnitude_then_window_mean",
   "gap_bridging":False,"source_tensor":"complex_iq[N,9,2]","component_order":["I","Q"]}
- expected_fp=canonical_sha({"converter_content_sha256":CONVERTER_SHA,**semantics})
- if fp7!=expected_fp: raise ValueError("forged/stale campaign converter fingerprint")
+ required={"converter","wrapper","receiver","exporter","template"}
+ if set(code_hashes)!=required or any(len(str(v))!=64 for v in code_hashes.values()): raise ValueError("exact producer code hashes required")
+ wrappers={d7.get("wrapper_content_sha256"),d8.get("wrapper_content_sha256")}
+ if None in wrappers or len(wrappers)!=1: raise ValueError("input manifest wrapper content hashes disagree")
+ wrapper_sha=next(iter(wrappers))
+ if wrapper_sha!=code_hashes.get("wrapper"): raise ValueError("input manifest wrapper differs from code_hashes wrapper")
+ expected_fp=canonical_sha({"converter_content_sha256":CONVERTER_SHA,"wrapper_content_sha256":wrapper_sha,**semantics})
+ if fp7!=expected_fp: raise ValueError("forged/stale campaign converter+wrapper fingerprint")
  for document,scenario in ((d7,"DS7"),(d8,"DS8")):
   if document.get("converter_content_sha256")!=CONVERTER_SHA or document.get("converter_semantics")!=semantics:
    raise ValueError(f"{scenario} converter content/semantics mismatch")
@@ -149,31 +157,76 @@ def validate_trust_anchor(anchor_path:str|Path,expected_sha:str,*,repo:str|Path)
  source=doc.get("source_commit")
  if not source: raise ValueError("trust anchor source commit missing")
  validate_source_tree(repo,source,require_clean=True)
- for key,item in doc.get("pre_holdout_files",{}).items():
+ pre=doc.get("pre_holdout_files",{})
+ if not isinstance(pre,dict) or not pre: raise ValueError("trust anchor pre-holdout inventory missing")
+ for key,item in pre.items():
   p=require_nonempty(item["path"])
   if file_sha256(p)!=item["sha256"]: raise ValueError(f"frozen pre-holdout file mismatch: {key}")
+ _VALIDATED_ANCHORS[id(doc)]=(doc,expected_sha)
  return doc
 
 
 def resolve_confirmatory_inputs(anchor:Mapping[str,Any])->dict[str,dict[str,Path]]:
- # Called only after validate_trust_anchor. It is the first holdout path boundary.
- entry=anchor.get("confirm_input_manifest") or {}
- manifest=require_nonempty(entry.get("path",""))
+ # Called only after validate_trust_anchor and O_EXCL ledger. First holdout boundary.
+ entry=anchor.get("confirm_input_manifest") or {}; manifest=require_nonempty(entry.get("path",""))
  if file_sha256(manifest)!=entry.get("sha256"): raise ValueError("confirm input manifest hash mismatch")
- doc=json.loads(manifest.read_text()); resolved={}
+ doc=json.loads(manifest.read_text())
+ # Validate every source/preparation/config/node/manifest byte before semantic use.
+ for key,item in doc.get("files",{}).items():
+  p=require_nonempty(item["path"])
+  if file_sha256(p)!=item["sha256"]: raise ValueError(f"confirm input checksum mismatch: {key}")
+ producer=doc.get("producer_hashes",{}); current_wrapper=file_sha256(Path(__file__).with_name("cmte_a2_inputs.py"))
+ current_template=file_sha256(Path(__file__).resolve().parents[2]/"configs/cmte_a2_ds8_receiver.conf")
+ expected={"converter":CONVERTER_SHA,"wrapper":current_wrapper,"receiver":RECEIVER_SHA,"exporter":EXPORTER_SHA,"template":current_template}
+ if producer!=expected: raise ValueError("confirm input producer converter/wrapper/receiver/exporter/template mismatch")
+ expected_fp=canonical_sha({"converter_content_sha256":CONVERTER_SHA,"wrapper_content_sha256":current_wrapper,
+   "magnitude":"hypot(I,Q)","tap_order":["E4","E3","E2","E","P","L","L2","L3","L4"],"window_seconds":1.0,
+   "stride_seconds":0.5,"prompt_relative":True,"prompt_normalization":"per_epoch_tap_magnitude_divided_by_prompt_magnitude_then_window_mean",
+   "gap_bridging":False,"source_tensor":"complex_iq[N,9,2]","component_order":["I","Q"]})
+ resolved={}
  for scenario in ("DS7","DS8"):
   resolved[scenario]={}
   for kind in ("node","input_manifest"):
    item=doc.get("files",{}).get(f"{scenario}/{kind}")
    if not item: raise ValueError(f"frozen confirm input missing {scenario}/{kind}")
-   p=require_nonempty(item["path"])
-   if file_sha256(p)!=item["sha256"]: raise ValueError(f"confirm input checksum mismatch: {scenario}/{kind}")
-   resolved[scenario][kind]=p
- # Re-validate every frozen input, including raw/NPZ/config/prep, before scoring.
- for key,item in doc.get("files",{}).items():
-  p=require_nonempty(item["path"])
-  if file_sha256(p)!=item["sha256"]: raise ValueError(f"confirm input checksum mismatch: {key}")
+   resolved[scenario][kind]=Path(item["path"]).resolve(strict=True)
+  input_doc=json.loads(resolved[scenario]["input_manifest"].read_text())
+  if input_doc.get("converter_content_sha256")!=CONVERTER_SHA or input_doc.get("wrapper_content_sha256")!=current_wrapper:
+   raise ValueError(f"confirm input expected converter+wrapper mismatch: {scenario}")
+  if input_doc.get("campaign_converter_fingerprint")!=expected_fp or doc.get("campaign_converter_fingerprint")!=expected_fp:
+   raise ValueError(f"confirm input converter+wrapper campaign fingerprint mismatch: {scenario}")
  return resolved
+
+
+_CONFIRM_CAPABILITY_SECRET=object()
+
+
+class _ConfirmCapability:
+ __slots__=("_secret","anchor_sha256","ledger_path")
+ def __init__(self,secret,anchor_sha256,ledger_path):
+  if secret is not _CONFIRM_CAPABILITY_SECRET: raise PermissionError("confirm capability cannot be constructed")
+  self._secret=secret; self.anchor_sha256=str(anchor_sha256); self.ledger_path=str(ledger_path)
+
+
+def _issue_confirm_capability(anchor:Mapping[str,Any],ledger_path:str|Path,anchor_sha:str)->_ConfirmCapability:
+ """Issue only after byte/source guards and an O_EXCL started ledger exist."""
+ ledger=json.loads(require_nonempty(ledger_path).read_text())
+ if ledger.get("status")!="started" or ledger.get("trust_anchor_sha256")!=anchor_sha:
+  raise PermissionError("confirm capability requires the started one-shot ledger")
+ registered=_VALIDATED_ANCHORS.get(id(anchor))
+ if registered is None or registered[0] is not anchor or registered[1]!=anchor_sha:
+  raise PermissionError("confirm capability requires a byte/source-validated trust anchor")
+ capability=_ConfirmCapability(_CONFIRM_CAPABILITY_SECRET,anchor_sha,Path(ledger_path).resolve())
+ _ISSUED_CONFIRM_CAPABILITIES.add(capability); return capability
+
+
+def validate_confirm_capability(value:Any)->None:
+ if (not isinstance(value,_ConfirmCapability) or value._secret is not _CONFIRM_CAPABILITY_SECRET
+     or value not in _ISSUED_CONFIRM_CAPABILITIES):
+  raise PermissionError("valid issued internal confirm capability required")
+ ledger=json.loads(require_nonempty(value.ledger_path).read_text())
+ if ledger.get("status")!="started" or ledger.get("trust_anchor_sha256")!=value.anchor_sha256:
+  raise PermissionError("confirm capability ledger is no longer in started state")
 
 
 def create_ledger(path:str|Path,anchor_sha:str)->dict[str,Any]:
@@ -192,9 +245,9 @@ def collect_freeze(repo:str|Path,state_dir:str|Path,development_dir:str|Path,con
  root=Path(repo).resolve(strict=True); state=Path(state_dir).resolve(strict=True); dev=Path(development_dir).resolve(strict=True)
  state_checks=verify_checksums(state); dev_checks=verify_checksums(dev)
  required_state=("b0_model.pt","a2_state.json","config.json","training.json","calibration.json","thresholds.json",
-                 "preregistration.json","provenance.json","freeze_manifest.json","checksums.json")
+                 "preregistration.json","provenance.json","freeze_manifest.json","historical_b0_gate_equivalence.json","checksums.json")
  required_dev=("development_metrics.csv","baseline_metrics.csv","bootstrap.csv","exact_n_diagnostics.csv","matched_fpr.csv",
-              "audit.json","test_summary.json","provenance/provenance.json","checksums.json")
+              "audit.json","test_summary.json","success_audit.json","prn_dependence.json","historical_b0_gate_equivalence.json","provenance/provenance.json","checksums.json")
  for name in required_state: require_nonempty(state/name)
  for name in required_dev: require_nonempty(dev/name)
  for s in ("DS1","DS2","DS3","DS4"):
@@ -210,13 +263,17 @@ def collect_freeze(repo:str|Path,state_dir:str|Path,development_dir:str|Path,con
  confirm=require_nonempty(confirm_input_manifest); cdoc=json.loads(confirm.read_text())
  if cdoc.get("scenarios")!=["DS7","DS8"] or not cdoc.get("confirmatory_eligible"): raise ValueError("invalid confirm input manifest")
  code_rel=("src/gnss_doppler_lab/cmte_a2.py","src/gnss_doppler_lab/cmte_a2_inputs.py","src/gnss_doppler_lab/cmte_a2_campaign.py",
- "scripts/train_cmte_a2_texbat.py","scripts/eval_cmte_a2_texbat.py","scripts/prepare_cmte_a2_inputs.py",
+ "scripts/train_cmte_a2_texbat.py","scripts/eval_cmte_a2_texbat.py","scripts/check_cmte_a2_historical_b0.py",
+ "scripts/smoke_cmte_a2_receiver_config.py","scripts/prepare_cmte_a2_inputs.py",
  "scripts/prepare_cmte_a2_ds8_complex.py","scripts/build_cmte_a2_confirm_input_manifest.py","scripts/freeze_cmte_a2_campaign.py",
  "scripts/confirm_cmte_a2_texbat.py","scripts/finalize_cmte_a2_campaign.py","configs/cmte_a2_ds8_receiver.conf")
  pre={}
  for rel in required_state: pre[f"state/{rel}"]={"path":str((state/rel).resolve()),"sha256":file_sha256(state/rel)}
  for rel in required_dev: pre[f"development/{rel}"]={"path":str((dev/rel).resolve()),"sha256":file_sha256(dev/rel)}
  for rel in code_rel: pre[f"code/{rel}"]={"path":str((root/rel).resolve()),"sha256":file_sha256(root/rel)}
+ historical_rel=("artifacts/cmte_texbat_poc/per_prn/DS1.csv","artifacts/cmte_a2_historical_b0/ds1_golden_events.csv",
+  "artifacts/cmte_a2_receiver_smoke/exporter_fixture.npz","artifacts/cmte_a2_receiver_smoke/exporter_fixture.json")
+ for rel in historical_rel: pre[f"fixture/{rel}"]={"path":str((root/rel).resolve()),"sha256":file_sha256(root/rel)}
  return {"schema":"gnss-doppler-lab.cmte-a2-campaign-freeze.v1","source_commit":source,"prereg_commit":PREREG_COMMIT,
   "preregistration_hashes":dict(PREREG_HASHES),"state_dir":str(state),"development_dir":str(dev),
   "state_checksums_sha256":file_sha256(state/"checksums.json"),"development_checksums_sha256":file_sha256(dev/"checksums.json"),

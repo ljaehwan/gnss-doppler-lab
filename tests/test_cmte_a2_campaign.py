@@ -78,11 +78,11 @@ def test_confirm_input_builder_binds_all_ds7_ds8_layers(tmp_path):
     for name in ("ds7.raw","ds7.npz","ds7.node","ds7.input.json","ds8.raw","ds8.npz","ds8.conf","ds8.prep.json","ds8.node","ds8.input.json"):
         p=tmp_path/name; p.write_text(name); files[name]=p
     from gnss_doppler_lab.cmte_a2_inputs import CONVERTER_SEMANTICS, _fingerprint
-    fingerprint=_fingerprint(CONVERTER_SHA)
+    wrapper=file_sha256(ROOT/"src/gnss_doppler_lab/cmte_a2_inputs.py"); fingerprint=_fingerprint(CONVERTER_SHA,wrapper)
     for n in ("ds7.input.json","ds8.input.json"):
         scenario="DS7" if n.startswith("ds7") else "DS8"
         files[n].write_text(json.dumps({"scenario":scenario,"campaign_converter_fingerprint":fingerprint,
-          "converter_content_sha256":CONVERTER_SHA,"converter_semantics":CONVERTER_SEMANTICS,
+          "converter_content_sha256":CONVERTER_SHA,"converter_semantics":CONVERTER_SEMANTICS,"wrapper_content_sha256":wrapper,
           "source_sha256":file_sha256(files[n.replace("input.json","npz")]),"node_sha256":file_sha256(files[n.replace("input.json","node")])}))
     prep={"status":"prepared","raw_sha256":file_sha256(files["ds8.raw"]),"npz":{"sha256":file_sha256(files["ds8.npz"])},
           "rendered_config_sha256":file_sha256(files["ds8.conf"])}
@@ -91,7 +91,7 @@ def test_confirm_input_builder_binds_all_ds7_ds8_layers(tmp_path):
       ds7_node=files["ds7.node"],ds7_input_manifest=files["ds7.input.json"],ds8_raw=files["ds8.raw"],
       ds8_npz=files["ds8.npz"],ds8_rendered_config=files["ds8.conf"],ds8_prep_manifest=files["ds8.prep.json"],
       ds8_node=files["ds8.node"],ds8_input_manifest=files["ds8.input.json"],expected_ds7_raw_sha=file_sha256(files["ds7.raw"]),
-      expected_ds8_raw_sha=file_sha256(files["ds8.raw"]),code_hashes={"converter":CONVERTER_SHA,"wrapper":"c"*64,"receiver":RECEIVER_SHA,
+      expected_ds8_raw_sha=file_sha256(files["ds8.raw"]),code_hashes={"converter":CONVERTER_SHA,"wrapper":wrapper,"receiver":RECEIVER_SHA,
       "exporter":EXPORTER_SHA,"template":"f"*64})
     assert set(doc["scenarios"])=={"DS7","DS8"}; assert doc["campaign_converter_fingerprint"]==fingerprint
     assert len(doc["files"])==10 and all(len(x["sha256"])==64 for x in doc["files"].values())
@@ -126,10 +126,10 @@ def test_runtime_provenance_rejects_forged_source_and_mixed_converter_before_out
     from gnss_doppler_lab.cmte_a2_inputs import CONVERTER_SEMANTICS,_fingerprint
     paths={name:tmp_path/name for name in ("d7raw","d7npz","d7node","d7manifest","d8raw","d8npz","d8conf","d8prep","d8node","d8manifest")}
     for name,p in paths.items(): p.write_text(name)
-    fp=_fingerprint(CONVERTER_SHA)
+    wrapper=file_sha256(ROOT/"src/gnss_doppler_lab/cmte_a2_inputs.py"); fp=_fingerprint(CONVERTER_SHA,wrapper)
     def input_doc(scenario,npz,node,fingerprint=fp):
         return {"scenario":scenario,"campaign_converter_fingerprint":fingerprint,"converter_content_sha256":CONVERTER_SHA,
-          "converter_semantics":CONVERTER_SEMANTICS,"source_sha256":file_sha256(npz),"node_sha256":file_sha256(node)}
+          "converter_semantics":CONVERTER_SEMANTICS,"wrapper_content_sha256":wrapper,"source_sha256":file_sha256(npz),"node_sha256":file_sha256(node)}
     paths["d7manifest"].write_text(json.dumps(input_doc("DS7",paths["d7npz"],paths["d7node"])))
     paths["d8manifest"].write_text(json.dumps(input_doc("DS8",paths["d8npz"],paths["d8node"])))
     paths["d8prep"].write_text(json.dumps({"status":"prepared","raw_sha256":file_sha256(paths["d8raw"]),
@@ -137,7 +137,7 @@ def test_runtime_provenance_rejects_forged_source_and_mixed_converter_before_out
     kwargs=dict(ds7_raw=paths["d7raw"],ds7_npz=paths["d7npz"],ds7_node=paths["d7node"],ds7_input_manifest=paths["d7manifest"],
       ds8_raw=paths["d8raw"],ds8_npz=paths["d8npz"],ds8_rendered_config=paths["d8conf"],ds8_prep_manifest=paths["d8prep"],
       ds8_node=paths["d8node"],ds8_input_manifest=paths["d8manifest"],expected_ds7_raw_sha=file_sha256(paths["d7raw"]),
-      expected_ds8_raw_sha=file_sha256(paths["d8raw"]),code_hashes={"converter":CONVERTER_SHA,"wrapper":"a"*64,
+      expected_ds8_raw_sha=file_sha256(paths["d8raw"]),code_hashes={"converter":CONVERTER_SHA,"wrapper":wrapper,
       "receiver":RECEIVER_SHA,"exporter":EXPORTER_SHA,"template":"b"*64})
     forged=input_doc("DS7",paths["d7npz"],paths["d7node"]); forged["source_sha256"]="0"*64
     paths["d7manifest"].write_text(json.dumps(forged))

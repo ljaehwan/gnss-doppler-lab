@@ -9,8 +9,8 @@ from gnss_doppler_lab.cmte_a2_campaign import validate_source_tree
 from gnss_doppler_lab.cmte_a2 import (
     B0Config, FEATURE_COLUMNS, PREREG_COMMIT, aggregate_epochs, baseline_epoch_inputs,
     audit_normal_roles, b0_enhanced_scores, b0_exact_scores, calibrate_comparators,
-    create_freeze_manifest, file_sha256, fit_distribution, matched_fpr_diagnostic,
-    partition_normal_roles, predict_residuals, role_frame_audit, save_fit_state,
+    create_freeze_manifest, file_sha256, fit_distribution, historical_gate_equivalence_files,
+    matched_fpr_diagnostic, comparator_event_stream, partition_normal_roles, predict_residuals, role_frame_audit, save_fit_state,
     score_residuals, select_prn_holdout, threshold_operating_points, train_b0, write_checksums,
 )
 
@@ -24,6 +24,9 @@ def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--clean-node-csv",required=True); parser.add_argument("--clean-manifest",required=True)
     parser.add_argument("--out",required=True); parser.add_argument("--device",default="cpu")
+    parser.add_argument("--historical-node-csv",default=str(ROOT/"artifacts/cmte_texbat_poc/per_prn/DS1.csv"))
+    parser.add_argument("--historical-golden-event-csv",default=str(ROOT/"artifacts/cmte_a2_historical_b0/ds1_golden_events.csv"))
+    parser.add_argument("--historical-evaluator",default=str(ROOT/"scripts/eval_btail_support_gate.py"))
     args=parser.parse_args(argv)
     source_commit=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()
     validate_source_tree(ROOT,source_commit,require_clean=True)
@@ -41,7 +44,7 @@ def main(argv=None):
         mean=np.asarray(audit["scaler_mean"]); std=np.asarray(audit["scaler_std"])
         gradient,_=select_prn_holdout(roles["prefix"])
         residuals={"fit":predict_residuals(gradient,model,mean,std,role="fit",device=args.device)}
-        for name in ("qcal","threshold","clean_test"):
+        for name in ("prefix","qcal","threshold","clean_test"):
             residuals[name]=predict_residuals(roles[name],model,mean,std,role=name,device=args.device)
         state=fit_distribution(residuals["fit"])
         state.qcal=np.sort(np.asarray([] if residuals["qcal"].empty else
@@ -52,14 +55,18 @@ def main(argv=None):
         scored={name:score_residuals(frame,state) for name,frame in residuals.items() if name!="fit"}
         epochs={name:aggregate_epochs(frame) for name,frame in scored.items()}
         ops=threshold_operating_points(epochs["threshold"].score_A2)
-        baseline_input=baseline_epoch_inputs(scored["threshold"])
-        comparator_calibration=calibrate_comparators(scored["threshold"])
-        node_thresholds=comparator_calibration["node_thresholds"]
-        rates=comparator_calibration["enhanced_empirical_rates"]
-        exact=b0_exact_scores(baseline_input,node_thresholds); enhanced=b0_enhanced_scores(baseline_input,node_thresholds,rates)
+        calibration_recording=pd.concat([scored[name] for name in ("prefix","qcal","threshold")],ignore_index=True)
+        comparator_calibration=calibrate_comparators(scored["threshold"],calibration_recording)
+        # Future clean-test rows are not an argument to any fit. After all event
+        # parameters freeze, score the complete available physical recording.
+        comparator_recording=pd.concat([scored[name] for name in ("prefix","qcal","threshold","clean_test")],ignore_index=True)
+        node_thresholds=comparator_calibration["node_thresholds"]; rates=comparator_calibration["enhanced_empirical_rates"]
+        all_comparator_events=comparator_event_stream(comparator_recording,node_thresholds,rates)
+        threshold_keys=scored["threshold"][["physical_recording_id","window_end_s"]].drop_duplicates()
+        threshold_comparator=all_comparator_events.merge(threshold_keys,on=["physical_recording_id","window_end_s"],validate="one_to_one")
         baseline_ops=comparator_calibration["final_thresholds"]
-        threshold_role_scores={"CMTE-A2":epochs["threshold"].score_A2.to_numpy(),"A0":baseline_input.A0.to_numpy(),
-                               "B0-Exact":exact.score.to_numpy(),"B0-Enhanced":enhanced.score.to_numpy()}
+        threshold_role_scores={"CMTE-A2":epochs["threshold"].score_A2.to_numpy(),"A0":threshold_comparator.A0.to_numpy(),
+                               "B0-Exact":threshold_comparator.B0_Exact.to_numpy(),"B0-Enhanced":threshold_comparator.B0_Enhanced.to_numpy()}
         matched=matched_fpr_diagnostic(threshold_role_scores,primary_threshold=ops["q995"])
         role_audit=audit_normal_roles(roles)
         role_audit["distribution_fit_gradient"] = role_frame_audit(gradient,"prefix-gradient")
@@ -68,8 +75,15 @@ def main(argv=None):
         role_audit["threshold"] = role_audit["roles"]["threshold"]
         role_audit["test"] = role_audit["roles"]["clean_test"]
         role_audit["history_resets"]={name:frame.attrs.get("history_audit",{}) for name,frame in residuals.items()}
+        role_audit["comparator_ewma_reset"]={"reset_dimension":"physical_recording_id","role_reset":False,"phase_reset":False,
+          "whole_recording_event_count":int(len(all_comparator_events)),"threshold_sliced_after_continuous_scoring":True,
+          "clean_test_sliced_after_continuous_scoring":True,"test_or_attack_used_for_fit":False}
         checkpoint={"schema":"gnss-doppler-lab.cmte-a2-b0.v1","model_state":model.cpu().state_dict(),"config":B0Config(),
                     "scaler_mean":mean,"scaler_std":std,"training_audit":audit}
+        historical=historical_gate_equivalence_files(args.historical_node_csv,args.historical_golden_event_csv,
+          evaluator_path=args.historical_evaluator,calibration_path=ROOT/"configs/detectors/texbat_btail_gate_v1.json",
+          evidence_path=staging/"historical_b0_gate_equivalence.json")
+        if historical.get("passed") is not True: raise ValueError("historical B0 gate equivalence failed")
         torch.save(checkpoint,staging/"b0_model.pt")
         save_fit_state(state,staging/"a2_state.json")
         prereg=_copy_prereg(staging)
@@ -96,20 +110,22 @@ def main(argv=None):
             (staging/name).write_text(json.dumps(doc,indent=2,sort_keys=True)+"\n")
         pd.concat([frame.assign(role=name) for name,frame in scored.items()],ignore_index=True).to_csv(staging/"clean_per_prn.csv",index=False)
         pd.concat([frame.assign(role=name) for name,frame in epochs.items()],ignore_index=True).to_csv(staging/"clean_per_epoch.csv",index=False)
-        pd.DataFrame({"physical_recording_id":exact.physical_recording_id,"window_end_s":exact.window_end_s,"A0":baseline_input.A0,
-                      "B0_Exact":exact.score,"B0_Enhanced":enhanced.score}).to_csv(staging/"baseline_threshold_epoch.csv",index=False)
+        threshold_comparator.to_csv(staging/"baseline_threshold_epoch.csv",index=False)
         provenance={"schema":"gnss-doppler-lab.cmte-a2-provenance.v1","execution_source_commit":source_commit,"clean_tree_asserted":True,"prereg_unchanged_asserted":True,
                     "preregistration":prereg,"training_tier":"normal_only","DS7_DS8_accessed":False}
         (staging/"provenance.json").write_text(json.dumps(provenance,indent=2,sort_keys=True)+"\n")
         (staging/"test_summary.txt").write_text("Generator code tests must be executed and recorded before a campaign. No DS7/DS8 scoring was run.\n")
         (staging/"README.md").write_text("# CMTE-A2 frozen training state\n\nNormal-only chronological B0, distribution, Qcal, and threshold artifacts. No DS7/DS8 inference or scoring.\n")
-        freeze_paths=[staging/p for p in ("b0_model.pt","a2_state.json","config.json","training.json","calibration.json","thresholds.json","preregistration.json")]
+        freeze_paths=[staging/p for p in ("b0_model.pt","a2_state.json","config.json","training.json","calibration.json","thresholds.json","preregistration.json","historical_b0_gate_equivalence.json")]
         freeze_paths += [ROOT/p for p in ("src/gnss_doppler_lab/cmte_a2.py","src/gnss_doppler_lab/cmte_a2_inputs.py",
                                           "src/gnss_doppler_lab/cmte_a2_campaign.py","scripts/train_cmte_a2_texbat.py",
-                                          "scripts/eval_cmte_a2_texbat.py","scripts/prepare_cmte_a2_inputs.py",
+                                          "scripts/eval_cmte_a2_texbat.py","scripts/check_cmte_a2_historical_b0.py","scripts/smoke_cmte_a2_receiver_config.py",
+                                          "scripts/prepare_cmte_a2_inputs.py",
                                           "scripts/prepare_cmte_a2_ds8_complex.py","scripts/build_cmte_a2_confirm_input_manifest.py",
                                           "scripts/freeze_cmte_a2_campaign.py","scripts/confirm_cmte_a2_texbat.py",
-                                          "scripts/finalize_cmte_a2_campaign.py","configs/cmte_a2_ds8_receiver.conf")]
+                                          "scripts/finalize_cmte_a2_campaign.py","configs/cmte_a2_ds8_receiver.conf",
+                                          "artifacts/cmte_texbat_poc/per_prn/DS1.csv","artifacts/cmte_a2_historical_b0/ds1_golden_events.csv",
+                                          "artifacts/cmte_a2_receiver_smoke/exporter_fixture.npz","artifacts/cmte_a2_receiver_smoke/exporter_fixture.json")]
         create_freeze_manifest(ROOT,staging,freeze_paths,staging/"freeze_manifest.json")
         write_checksums(staging); os.replace(staging,out)
         print(json.dumps({"out":str(out),"checkpoint_sha256":training["checkpoint_sha256"],"qcal_n":len(state.qcal),"threshold":ops["q995"]},sort_keys=True))

@@ -71,3 +71,22 @@ recording interval is explicitly a conditional temporal CI.
 
 Intentionally blank until the one-shot confirmatory campaign is executed from
 a verified freeze.
+
+## Confirmatory hardening and pre-holdout gates
+
+- `eval_cmte_a2_texbat.py` is development-only. The confirmatory entry point is
+  `confirm_cmte_a2_texbat.py`, which validates anchor bytes and all frozen
+  pre-holdout state/dev/code bytes, creates an `O_EXCL` one-shot ledger, and
+  only then resolves any DS7/DS8 input. Its internal scorer requires an issued
+  in-process capability tied to that validated anchor and started ledger.
+- Comparator event parameters use only the normal threshold role. B0 Exact and
+  Enhanced EWMA trajectories are then built in time order across each physical
+  recording and reset only at a recording boundary, never at a role, guard, or
+  attack subphase boundary.
+- `check_cmte_a2_historical_b0.py` must pass (tolerance `1e-12`) on the committed
+  historical DS1 precomputed node scores and golden events. Its nonempty JSON
+  is required in state, development, confirmation, freeze, and final output.
+- `smoke_cmte_a2_receiver_config.py` runs the pinned complex9 GNSS-SDR binary on
+  synthetic `ishort` zeros, requires the controlled no-signal/too-short exit,
+  rejects parser-format errors, and validates the committed synthetic exporter
+  fixture. It never opens a TEXBAT holdout.

@@ -45,10 +45,17 @@ def validate_source_contract(iq,executable,template):
  if not iq.is_file() or iq.stat().st_size!=RAW_BYTES or sha(iq)!=RAW_SHA: raise ValueError("DS8 raw IQ identity mismatch")
  if not executable.is_file() or sha(executable)!=EXEC_SHA: raise ValueError("patched GNSS-SDR binary identity mismatch")
  text=template.read_text(); template_sha=committed_hash(template)
- required=("SignalSource.item_type=ishort","SignalSource.sampling_frequency=25000000","Channels_1C.count=11",
-           "Tracking_1C.tap_count=9","Tracking_1C.tap_spacing_chips=0.125")
- if not all(token in text for token in required): raise ValueError("receiver template violates 25MHz/11-channel/9-tap/.125-chip/ishort contract")
+ required=("SignalSource.item_type=ishort","SignalSource.sampling_frequency=25000000","Channels_1C.count=11","Channel.signal=1C",
+           "InputFilter.input_item_type=gr_complex","InputFilter.output_item_type=gr_complex","Resampler.item_type=gr_complex",
+           "Acquisition_1C.dump=false","Tracking_1C.order=3","Tracking_1C.tap_count=9","Tracking_1C.tap_spacing_chips=0.125")
+ if not all(token in text for token in required): raise ValueError("receiver template violates verified complex9 GNSS-SDR syntax/contract")
+ if text.count("[GNSS-SDR]")!=1 or text.count("[")!=1: raise ValueError("receiver template must have one GNSS-SDR property section")
  if text.count(INPUT_PLACEHOLDER)!=1 or text.count(OUTPUT_PLACEHOLDER)!=1: raise ValueError("receiver template placeholders must occur exactly once")
+ fixture=ROOT/"artifacts/cmte_a2_receiver_smoke/exporter_fixture.npz"; fixture_doc=ROOT/"artifacts/cmte_a2_receiver_smoke/exporter_fixture.json"
+ fd=json.loads(fixture_doc.read_text())
+ if sha(fixture)!=fd.get("npz_sha256") or fd.get("exporter_content_sha256")!=EXPORTER_SHA: raise ValueError("validated exporter fixture provenance mismatch")
+ with np.load(fixture,allow_pickle=False) as z:
+  if z["complex_iq"].shape!=(fd.get("rows"),9,2): raise ValueError("validated exporter fixture shape mismatch")
  return text,template_sha
 
 

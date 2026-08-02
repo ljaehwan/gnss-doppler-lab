@@ -74,11 +74,11 @@ def test_exact_n_rows_and_dependence():
  assert required.issubset(rows.columns) and rows["sparse"].all() and rows.na_reason.notna().all()
  assert dep["diagnostic"]=="prn_count_dependence" and dep["aggregation_changed"] is False
 
-def test_matched_fpr_threshold_percentile_grid_only():
+def test_matched_fpr_exact_observed_grid_only():
  role={"CMTE-A2":np.arange(100.),"B0-Exact":np.arange(100.)**2,"A0":np.arange(100.)[::-1]}
  got=matched_fpr_diagnostic(role,primary_model="CMTE-A2",primary_threshold=97.,percentiles=np.linspace(0,1,21))
  assert got["fit_role"]=="threshold" and got["attack_or_test_fit"] is False and got["diagnostic_only"] is True
- assert got["grid"]=="threshold_role_percentiles" and set(got["models"])=={"B0-Exact","A0"}
+ assert got["grid"]=="unique_observed_threshold_role_scores" and set(got["models"])=={"B0-Exact","A0"}
 
 def metric(model,scenario,**kw):
  row={"scenario":scenario,"model":model,"independent_clean_fpr":.01,"stable_pre_fpr":.01,

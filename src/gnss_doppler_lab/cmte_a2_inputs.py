@@ -18,8 +18,9 @@ CONVERTER_SEMANTICS={"magnitude":"hypot(I,Q)","tap_order":TAP_ORDER,"window_seco
 def _content_sha(path:Path)->str: return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def _fingerprint(converter_sha:str)->str:
- payload={"converter_content_sha256":converter_sha,**CONVERTER_SEMANTICS}
+def _fingerprint(converter_sha:str,wrapper_sha:str|None=None)->str:
+ if wrapper_sha is None: wrapper_sha=_content_sha(Path(__file__).resolve(strict=True))
+ payload={"converter_content_sha256":converter_sha,"wrapper_content_sha256":wrapper_sha,**CONVERTER_SEMANTICS}
  return hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(",",":")).encode()).hexdigest()
 
 
@@ -61,7 +62,7 @@ def prepare_named_complex_inputs(items:Iterable[str],out_dir:str|Path,*,source_m
  staging.mkdir(); manifests={}
  converter_path=Path(convert_complex_npz.__code__.co_filename).resolve(strict=True)
  wrapper_path=Path(__file__).resolve(strict=True); converter_sha=_content_sha(converter_path); wrapper_sha=_content_sha(wrapper_path)
- fingerprint=_fingerprint(converter_sha)
+ fingerprint=_fingerprint(converter_sha,wrapper_sha)
  try:
   for name,source in sorted(specs.items()):
    scenario="cleanStatic" if name=="CLEANSTATIC" else name

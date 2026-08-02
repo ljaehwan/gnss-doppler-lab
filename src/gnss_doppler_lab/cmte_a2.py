@@ -403,8 +403,26 @@ def baseline_epoch_inputs(scored:pd.DataFrame)->pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def calibrate_comparators(threshold_prn:pd.DataFrame)->dict[str,Any]:
-    """Calibrate every comparator component from the short normal threshold role only."""
+def comparator_event_stream(recording_prn:pd.DataFrame,node_thresholds:Mapping[str,float],rates:Mapping[str,float])->pd.DataFrame:
+    """Score one continuous event stream per physical recording.
+
+    Predictor histories may be constructed separately by preregistered role,
+    but comparator EWMA state never resets at role, guard, or phase boundaries.
+    """
+    inp=baseline_epoch_inputs(recording_prn)
+    exact=b0_exact_scores(inp,node_thresholds); enhanced=b0_enhanced_scores(inp,node_thresholds,rates)
+    out=inp[["physical_recording_id","window_end_s","A0"]].copy()
+    out["B0_Exact"]=exact.score.to_numpy(); out["B0_Enhanced"]=enhanced.score.to_numpy()
+    return out
+
+
+def _slice_events(events:pd.DataFrame,source_prn:pd.DataFrame)->pd.DataFrame:
+    keys=source_prn[["physical_recording_id","window_end_s"]].drop_duplicates()
+    return events.merge(keys,on=["physical_recording_id","window_end_s"],how="inner",validate="one_to_one")
+
+
+def calibrate_comparators(threshold_prn:pd.DataFrame,recording_prn:pd.DataFrame|None=None)->dict[str,Any]:
+    """Fit parameters on threshold only; score EWMA over the whole recording."""
     required={"physical_recording_id","window_start_s","window_end_s","prn","rmse"}
     missing=sorted(required-set(threshold_prn))
     if missing: raise ValueError(f"threshold comparator calibration missing {missing}")
@@ -418,14 +436,21 @@ def calibrate_comparators(threshold_prn:pd.DataFrame)->dict[str,Any]:
     if not np.isfinite(rmse).all(): raise ValueError("finite threshold-role RMSE required")
     node={name:higher_quantile(rmse,q) for name,q in (("q50",.5),("q70",.7),("q80",.8))}
     rates={name:float(np.mean(rmse>value)) for name,value in node.items()}
-    inp=baseline_epoch_inputs(threshold_prn)
-    exact=b0_exact_scores(inp,node); enhanced=b0_enhanced_scores(inp,node,rates)
-    final={"A0":threshold_operating_points(inp.A0),"B0-Exact":threshold_operating_points(exact.score),
-           "B0-Enhanced":threshold_operating_points(enhanced.score)}
+    whole=threshold_prn if recording_prn is None else recording_prn
+    required_whole={"physical_recording_id","window_end_s","rmse"}
+    if sorted(required_whole-set(whole)): raise ValueError("whole-recording comparator stream is incomplete")
+    events=comparator_event_stream(whole,node,rates); selected=_slice_events(events,threshold_prn)
+    expected=threshold_prn[["physical_recording_id","window_end_s"]].drop_duplicates().shape[0]
+    if len(selected)!=expected: raise ValueError("threshold events absent from continuous comparator stream")
+    final={"A0":threshold_operating_points(selected.A0),"B0-Exact":threshold_operating_points(selected.B0_Exact),
+           "B0-Enhanced":threshold_operating_points(selected.B0_Enhanced)}
     return {"source_role":"threshold","source_interval_s":[300.,330.],"source_rows":int(len(threshold_prn)),
-            "source_epochs":int(len(inp)),"source_sha256":role_frame_audit(threshold_prn,"threshold")["content_sha256"],
+            "source_epochs":int(len(selected)),"source_sha256":role_frame_audit(threshold_prn,"threshold")["content_sha256"],
             "node_thresholds":node,"enhanced_empirical_rates":rates,"final_thresholds":final,
             "node_quantile_method":"higher","alarm_comparison":"strict_greater","attack_or_test_fit":False,
+            "ewma_reset_audit":{"reset_dimension":"physical_recording_id","role_reset":False,"phase_reset":False,
+              "recording_count":int(events.physical_recording_id.nunique()),"event_count":int(len(events)),
+              "threshold_sliced_after_continuous_scoring":True},
             "limitation":"Short 30-second threshold-role self-calibration jointly estimates comparator node and final thresholds."}
 
 
@@ -499,7 +524,7 @@ def _phase_selector(frame:pd.DataFrame,phase:str)->np.ndarray:
 def _complete_blocks(frame:pd.DataFrame,phase:str,block_epochs:int=20,cadence_s:float=.5)->list[np.ndarray]:
     mask=_phase_selector(frame,phase); subset=frame.loc[mask].sort_values(["physical_recording_id","window_end_s"],kind="mergesort")
     if subset.empty:return []
-    candidates=("scenario","physical_recording_id","producer_chain_id","cadence_chain_id","history_chain_id","segment","channel")
+    candidates=("scenario","prereg_subphase","physical_recording_id","producer_chain_id","cadence_chain_id","history_chain_id","segment","channel")
     chains=[c for c in candidates if c in subset]
     if "physical_recording_id" not in chains: raise ValueError("bootstrap requires physical_recording_id")
     blocks=[]
@@ -525,7 +550,12 @@ def bootstrap_metrics(frame:pd.DataFrame,*,reps:int=2000,seed:int=20260802,block
             "point_estimate_uses_all_eligible_epochs":True,
             "block_boundary_dimensions":["scenario","phase","physical_recording_id","producer_chain_id","cadence_chain_id","cadence_gap"]}
     for statistic,phases in requirements.items():
-        metadata={**common,"stratum_epoch_counts":{p:int(masks[p].sum()) for p in phases},
+        if statistic=="roc_auc":
+            neg=frame.loc[masks["stable_pre"],"score"].to_numpy(); pos=frame.loc[masks["post"],"score"].to_numpy()
+            point=_auc(np.r_[np.zeros(len(neg)),np.ones(len(pos))],np.r_[neg,pos])[0]
+        else: point=float(frame.loc[masks[phases[0]],"alarm"].mean()) if masks[phases[0]].any() else None
+        metadata={**common,"point":None if point is None or not np.isfinite(point) else float(point),
+                  "stratum_epoch_counts":{p:int(masks[p].sum()) for p in phases},
                   "stratum_complete_block_counts":{p:int(len(pools[p])) for p in phases}}
         insufficient=[phase for phase in phases if len(pools[phase])<2]
         if insufficient:
@@ -594,7 +624,7 @@ def write_checksums(root:str|Path)->dict[str,str]:
 
 
 
-def exact_n_diagnostics(frame:pd.DataFrame,*,min_epochs:int=20)->tuple[pd.DataFrame,dict[str,Any]]:
+def exact_n_diagnostics(frame:pd.DataFrame,*,min_epochs:int=20,required_strata:Sequence[Mapping[str,Any]]|None=None)->tuple[pd.DataFrame,dict[str,Any]]:
     """Exact-N score/alarm diagnostics; sparse strata remain separate and explicit."""
     required={"tier","scenario","model","phase","tracked_prn_count","score","alarm"}
     missing=sorted(required-set(frame))
@@ -605,33 +635,44 @@ def exact_n_diagnostics(frame:pd.DataFrame,*,min_epochs:int=20)->tuple[pd.DataFr
         rows.append({"tier":tier,"scenario":scenario,"model":model,"phase":phase,"N":int(n),"epoch_count":int(count),
                      "score_median":float(np.median(scores)),"score_q90":float(np.quantile(scores,.9)),
                      "score_q99":float(np.quantile(scores,.99)),"alarm_occupancy":float(g.alarm.astype(bool).mean()),
-                     "sparse":bool(sparse),"na_reason":f"sparse_exact_N:fewer_than_{min_epochs}_epochs" if sparse else None})
+                     "sparse":bool(sparse),"na_reason":f"sparse_exact_N:fewer_than_{min_epochs}_epochs" if sparse else None,
+                     "complete":True,"aggregation_changed":False,"sparse_pooled":False})
+    observed={(str(r["tier"]),str(r["scenario"]),str(r["model"]),str(r["phase"])) for r in rows}
+    for item in required_strata or ():
+        key=tuple(str(item[x]) for x in ("tier","scenario","model","phase"))
+        if key not in observed:
+            rows.append({"tier":key[0],"scenario":key[1],"model":key[2],"phase":key[3],"N":None,"epoch_count":0,
+                         "score_median":None,"score_q90":None,"score_q99":None,"alarm_occupancy":None,"sparse":True,
+                         "na_reason":"no_eligible_epochs","complete":True,"aggregation_changed":False,"sparse_pooled":False})
     out=pd.DataFrame(rows)
     pairs=frame[["tracked_prn_count","score"]].dropna()
     corr=None if len(pairs)<2 or pairs.tracked_prn_count.nunique()<2 else float(pairs.corr(method="spearman").iloc[0,1])
     dependence={"diagnostic":"prn_count_dependence","method":"spearman_exact_epoch_N_vs_score","coefficient":corr,
-                "reason":"insufficient_N_variation" if corr is None else None,"aggregation_changed":False,"sparse_strata_pooled":False}
+                "reason":"insufficient_N_variation" if corr is None else None,"aggregation_changed":False,"sparse_strata_pooled":False,
+                "empty_strata_explicit_epoch_count_zero":True,"passed":True}
     return out,dependence
 
 
 def matched_fpr_diagnostic(threshold_role_scores:Mapping[str,Sequence[float]],*,primary_model:str="CMTE-A2",
                            primary_threshold:float,percentiles:Sequence[float]|None=None)->dict[str,Any]:
-    """Freeze diagnostic comparator cutoffs on a threshold-role percentile grid only."""
+    """Choose only an actually observed threshold-role score (strict occupancy)."""
     if primary_model not in threshold_role_scores: raise ValueError("primary threshold-role scores required")
-    grid=np.asarray(np.linspace(0,1,201) if percentiles is None else percentiles,float)
-    if not len(grid) or np.any(~np.isfinite(grid)) or np.any((grid<0)|(grid>1)): raise ValueError("finite percentile grid in [0,1] required")
-    primary=np.asarray(threshold_role_scores[primary_model],float); target=float(np.mean(primary>float(primary_threshold)))
-    models={}
+    primary=np.asarray(threshold_role_scores[primary_model],float)
+    if not len(primary) or not np.isfinite(primary).all(): raise ValueError("finite primary threshold-role scores required")
+    target=float(np.mean(primary>float(primary_threshold))); models={}
     for model,raw in threshold_role_scores.items():
         if model==primary_model:continue
-        values=np.asarray(raw,float); candidates=np.unique([higher_quantile(values,float(q)) for q in grid])
-        occupancy=np.asarray([np.mean(values>t) for t in candidates],float); distance=np.abs(occupancy-target)
-        best=np.flatnonzero(np.isclose(distance,distance.min(),atol=1e-15,rtol=0)); index=best[np.argmax(candidates[best])]
+        values=np.asarray(raw,float)
+        if not len(values) or not np.isfinite(values).all(): raise ValueError("finite comparator threshold-role scores required")
+        candidates=np.unique(values); occupancy=np.asarray([np.mean(values>t) for t in candidates],float)
+        distance=np.abs(occupancy-target); minimum=float(distance.min())
+        tied=np.flatnonzero(distance==minimum); index=int(tied[np.argmax(candidates[tied])])
         models[model]={"threshold":float(candidates[index]),"threshold_role_strict_exceedance":float(occupancy[index]),
-                       "target_occupancy":target,"absolute_difference":float(distance[index]),"tie_break":"higher_threshold"}
-    return {"fit_role":"threshold","source_interval_s":[300.,330.],"grid":"threshold_role_percentiles",
-            "percentiles":[float(x) for x in grid],"primary_model":primary_model,"primary_threshold":float(primary_threshold),
-            "models":models,"attack_or_test_fit":False,"diagnostic_only":True,"replaces_primary":False}
+                       "target_occupancy":target,"absolute_difference":float(distance[index]),"tie_break":"higher_threshold",
+                       "candidate_count":int(len(candidates)),"candidates_are_exact_unique_observed_scores":True}
+    return {"fit_role":"threshold","source_interval_s":[300.,330.],"grid":"unique_observed_threshold_role_scores",
+            "primary_model":primary_model,"primary_threshold":float(primary_threshold),"models":models,
+            "attack_or_test_fit":False,"diagnostic_only":True,"replaces_primary":False}
 
 
 def _is_censored(row:Mapping[str,Any],delay_name:str)->bool:
@@ -688,12 +729,29 @@ def success_criteria_audit(metrics:pd.DataFrame,prn_diagnostics:pd.DataFrame)->d
     if complete and "sparse" in prn_diagnostics:
         sparse=prn_diagnostics[prn_diagnostics["sparse"].astype(bool)]
         complete=bool(sparse.empty or ("na_reason" in sparse and sparse.na_reason.notna().all()))
+    criterion6_detail={"required_scenarios":sorted(required),"aggregation_changed":False,"sparse_strata_pooled":False}
+    structural={"tier","scenario","model","phase","epoch_count","score_median","score_q90","score_q99","alarm_occupancy",
+                "na_reason","aggregation_changed","sparse_pooled"}
+    if complete and structural.issubset(prn_diagnostics):
+        models={"CMTE-A2","A0","B0-Exact","B0-Enhanced"}; expected=[]
+        expected += [("CLEAN_TEST",m,"clean") for m in models]
+        expected += [(scenario,m,phase) for scenario in ("DS7","DS8") for m in models for phase in ("stable_pre","post","persistent")]
+        observed={(str(x.scenario).upper(),str(x.model),str(x.phase)) for x in prn_diagnostics.itertuples()}
+        missing=sorted(set(expected)-observed); complete=not missing
+        empty=prn_diagnostics[pd.to_numeric(prn_diagnostics.epoch_count,errors="coerce").fillna(-1).eq(0)]
+        metric_fields=["score_median","score_q90","score_q99","alarm_occupancy"]
+        explicit_na=all(empty[x].isna().all() for x in metric_fields) and (empty.empty or empty.na_reason.notna().all())
+        unchanged=not prn_diagnostics.aggregation_changed.astype(bool).any()
+        unpooled=not prn_diagnostics.sparse_pooled.astype(bool).any()
+        complete=bool(complete and explicit_na and unchanged and unpooled)
+        criterion6_detail.update({"required_models":sorted(models),"required_phases":{"clean_test":["clean"],"DS7_DS8":["stable_pre","post","persistent"]},
+          "missing_strata":[list(x) for x in missing],"empty_strata_explicit_na":explicit_na,"aggregation_unchanged":unchanged,"sparse_unpooled":unpooled})
     c6=bool(complete); values=[c1,c2,c3,c4,c5,c6]
     names=("independent_clean_fpr","per_scenario_stable_pre","catastrophic_pre_alarm_guard","improvement_over_b0_exact",
            "no_catastrophic_degradation_on_other_scenario","prn_count_diagnostic_complete")
     detail=({"clean_fpr_values":clean_values.tolist()},{"scenario_values":{x:None if a[x] is None else a[x].get("stable_pre_fpr") for x in a}},
             {"guard":"stable_pre_fpr_strictly_below_0.20"},{"scenario_evidence":evidence,"improved_scenarios":improvements},
-            {"other_scenario_not_simultaneously_worse":no_degradation},{"required":sorted(required),"observed":sorted(scenarios)})
+            {"other_scenario_not_simultaneously_worse":no_degradation},{"required":sorted(required),"observed":sorted(scenarios),**criterion6_detail})
     criteria=[{"id":i+1,"name":names[i],"passed":bool(values[i]),"required":True,**detail[i]} for i in range(6)]
     passed=all(values)
     return {"schema":"gnss-doppler-lab.cmte-a2-success-audit.v1","criteria":criteria,"all_passed":passed,
@@ -728,4 +786,38 @@ def historical_gate_equivalence(prn_scores:pd.DataFrame,node_thresholds:Mapping[
               "tolerance":float(tolerance),"max_absolute_error":maximum,"strict_alarm_equal":alarms_equal,
               "strict_alarm_threshold":float(alarm_threshold),"passed":bool(passed),"new_checkpoint_score_equivalence_claim":False}
     if evidence_path is not None:write_runtime_json_evidence(evidence,evidence_path)
+    return evidence
+
+
+
+def historical_gate_equivalence_files(node_score_csv:str|Path,golden_event_csv:str|Path,*,evaluator_path:str|Path,
+                                      calibration_path:str|Path,evidence_path:str|Path|None=None,tolerance:float=1e-12)->dict[str,Any]:
+    """Production pre-holdout check against committed historical DS1 inputs/golden."""
+    node_path=Path(node_score_csv).resolve(strict=True); golden_path=Path(golden_event_csv).resolve(strict=True)
+    calibration_path=Path(calibration_path).resolve(strict=True); evaluator_path=Path(evaluator_path).resolve(strict=True)
+    source=pd.read_csv(node_path)
+    if "prn_node_rmse" not in source and "b0_prn_node_rmse" in source:
+        source=source.rename(columns={"b0_prn_node_rmse":"prn_node_rmse"})
+    required=["run_id","prn","window_bin_s","window_start_s","window_mid_s","prn_node_rmse"]
+    if sorted(set(required)-set(source)): raise ValueError("historical node-score CSV schema incomplete")
+    source=source[required].copy(); calibration=json.loads(calibration_path.read_text())
+    evidence=historical_gate_equivalence(source,calibration["node_thresholds"],alarm_threshold=float(calibration["event_q99_threshold"]),
+                                         evaluator_path=evaluator_path,tolerance=tolerance)
+    spec=importlib.util.spec_from_file_location("cmte_a2_historical_golden_runtime",evaluator_path)
+    if spec is None or spec.loader is None: raise ValueError("cannot import historical evaluator")
+    module=importlib.util.module_from_spec(spec); import sys; sys.modules[spec.name]=module; spec.loader.exec_module(module)
+    actual=module.build_event_scores(source,calibration["node_thresholds"],alpha=.75); golden=pd.read_csv(golden_path)
+    columns=["tracked_prn_count","k_q50","k_q70","k_q80","btail_q50","btail_q70","btail_q80",
+             "btail_max_507080",module.FINAL_SCORE]
+    if len(actual)!=len(golden) or sorted(set(columns)-set(golden)): raise ValueError("historical golden event schema/rows mismatch")
+    errors=[float(np.max(np.abs(actual[c].to_numpy(float)-golden[c].to_numpy(float)))) for c in columns]
+    alarm=(actual[module.FINAL_SCORE].to_numpy(float)>float(calibration["event_q99_threshold"]))
+    golden_alarm=golden["strict_alarm"].astype(str).str.lower().isin(["true","1"]).to_numpy()
+    golden_equal=bool(np.array_equal(alarm,golden_alarm)); maximum=max([evidence["max_absolute_error"],*errors],default=0.)
+    evidence.update({"input_path":str(node_path),"input_sha256":file_sha256(node_path),"golden_path":str(golden_path),
+      "golden_sha256":file_sha256(golden_path),"calibration_path":str(calibration_path),"calibration_sha256":file_sha256(calibration_path),
+      "implementation_sha256":file_sha256(Path(__file__)),"golden_max_absolute_error":max(errors,default=0.),
+      "golden_strict_alarm_equal":golden_equal,"max_absolute_error":maximum,
+      "passed":bool(evidence["passed"] and maximum<=tolerance and golden_equal),"historical_dataset":"DS1","holdout_accessed":False})
+    if evidence_path is not None: write_runtime_json_evidence(evidence,evidence_path)
     return evidence

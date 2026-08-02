@@ -5,7 +5,7 @@ import argparse, json, os, shutil, subprocess, sys
 from pathlib import Path
 import pandas as pd
 ROOT=Path(__file__).resolve().parents[1]; sys.path.insert(0,str(ROOT/"src"))
-from gnss_doppler_lab.cmte_a2_campaign import (PREREG_HASHES,atomic_json,copy_tree_files,file_sha256,
+from gnss_doppler_lab.cmte_a2_campaign import (PREREG_COMMIT,PREREG_HASHES,atomic_json,copy_tree_files,file_sha256,
  require_nonempty,validate_trust_anchor,verify_checksums)
 from gnss_doppler_lab.cmte_a2 import write_checksums
 
@@ -13,6 +13,23 @@ def _csv(paths):
  frames=[pd.read_csv(require_nonempty(p)) for p in paths]
  if any(x.empty for x in frames): raise ValueError("empty placeholder table rejected")
  return pd.concat(frames,ignore_index=True)
+
+def _audit_json(path,expected_schema):
+ doc=json.loads(require_nonempty(path).read_text())
+ if not isinstance(doc,dict) or doc.get("schema")!=expected_schema: raise ValueError(f"audit schema mismatch: {path}")
+ return doc
+
+def _validate_evaluation_audits(directory):
+ success=_audit_json(directory/"success_audit.json","gnss-doppler-lab.cmte-a2-success-audit.v1")
+ if [x.get("id") for x in success.get("criteria",[])]!=[1,2,3,4,5,6] or success.get("decision") not in {"GO","NO-GO"}:
+  raise ValueError("success audit criteria/decision schema invalid")
+ dependence=_audit_json(directory/"prn_dependence.json","gnss-doppler-lab.cmte-a2-prn-dependence.v1")
+ if dependence.get("passed") is not True or dependence.get("aggregation_changed") is not False or dependence.get("sparse_strata_pooled") is not False:
+  raise ValueError("PRN dependence audit failed or altered aggregation")
+ historical=_audit_json(directory/"historical_b0_gate_equivalence.json","gnss-doppler-lab.cmte-a2-historical-gate-equivalence.v1")
+ if historical.get("passed") is not True or float(historical.get("max_absolute_error",1))>1e-12 or historical.get("strict_alarm_equal") is not True:
+  raise ValueError("historical B0 equivalence audit failed")
+ return success,dependence,historical
 
 def main(argv=None):
  p=argparse.ArgumentParser(description=__doc__)
@@ -25,14 +42,16 @@ def main(argv=None):
  ledger=json.loads(require_nonempty(a.ledger).read_text())
  if ledger.get("status")!="completed" or ledger.get("trust_anchor_sha256")!=a.expected_anchor_sha256: raise ValueError("one-shot ledger is not completed for this anchor")
  if ledger.get("result_sha256")!=file_sha256(confirm/"checksums.json"): raise ValueError("ledger confirm result checksum mismatch")
- required_state=("b0_model.pt","a2_state.json","config.json","training.json","calibration.json","thresholds.json","preregistration.json","provenance.json")
+ required_state=("b0_model.pt","a2_state.json","config.json","training.json","calibration.json","thresholds.json","preregistration.json","provenance.json","historical_b0_gate_equivalence.json")
  for n in required_state: require_nonempty(state/n)
- required_eval=("baseline_metrics.csv","bootstrap.csv","exact_n_diagnostics.csv","matched_fpr.csv","audit.json","test_summary.json","provenance/provenance.json")
+ required_eval=("baseline_metrics.csv","bootstrap.csv","exact_n_diagnostics.csv","matched_fpr.csv","audit.json","test_summary.json",
+ "success_audit.json","prn_dependence.json","historical_b0_gate_equivalence.json","provenance/provenance.json")
  for d,primary,scenarios in ((dev,"development_metrics.csv",("DS1","DS2","DS3","DS4")),(confirm,"confirmatory_metrics.csv",("DS7","DS8"))):
   require_nonempty(d/primary)
   for n in required_eval: require_nonempty(d/n)
   for s in scenarios:
    require_nonempty(d/"per_epoch"/f"{s}.csv"); require_nonempty(d/"per_prn"/f"{s}.csv")
+  _validate_evaluation_audits(d)
  source=anchor["source_commit"]
  for d in (dev,confirm):
   prov=json.loads((d/"provenance/provenance.json").read_text())
@@ -59,15 +78,22 @@ def main(argv=None):
   copy_tree_files(dev/"plots",staging/"plots"/"development")
   copy_tree_files(confirm/"plots",staging/"plots"/"confirmatory")
   (staging/"audit").mkdir(); shutil.copyfile(dev/"audit.json",staging/"audit/development_audit.json"); shutil.copyfile(confirm/"audit.json",staging/"audit/confirmatory_audit.json")
-  for name in ("success_audit.json","prn_dependence.json"):
-   if (confirm/name).is_file(): shutil.copyfile(confirm/name,staging/"audit"/name)
+  for name in ("success_audit.json","prn_dependence.json","historical_b0_gate_equivalence.json"):
+   shutil.copyfile(confirm/name,staging/"audit"/name)
   provenance={"schema":"gnss-doppler-lab.cmte-a2-final-provenance.v1","source_commit":source,
    "result_commit_sha":a.result_commit_sha,"result_commit_may_be_finalized_without_scientific_metric_changes":True,
-   "preregistration_sha256":file_sha256(prereg),"trust_anchor_sha256":a.expected_anchor_sha256,
+   "preregistration_sha256":file_sha256(prereg),"immutable_preregistration_hashes":dict(PREREG_HASHES),
+   "immutable_preregistration_commit":PREREG_COMMIT,
+   "preregistration_not_edited_after_result_exposure":all(file_sha256(ROOT/rel)==digest and
+     __import__("hashlib").sha256(subprocess.check_output(["git","show",f"{PREREG_COMMIT}:{rel}"],cwd=ROOT)).hexdigest()==digest
+     for rel,digest in PREREG_HASHES.items()),
+   "preregistration_immutability_derivation":"working bytes and prereg commit blobs equal immutable registered SHA-256 values",
+   "trust_anchor_sha256":a.expected_anchor_sha256,
    "ledger_sha256":file_sha256(a.ledger),"state_checksums_sha256":file_sha256(state/"checksums.json"),
    "development_checksums_sha256":file_sha256(dev/"checksums.json"),"confirmatory_checksums_sha256":file_sha256(confirm/"checksums.json"),
    "chronology":["normal-only training","development DS1-DS4","pre-holdout freeze","O_EXCL one-shot ledger","confirmatory DS7-DS8","finalization"],
    "producer_exceptions":{"DS4":"development sensitivity; mixed producer; never confirmatory"}}
+  if provenance["preregistration_not_edited_after_result_exposure"] is not True: raise ValueError("preregistration blob equality failed")
   atomic_json(staging/"provenance.json",provenance)
   tests={"state":(state/"test_summary.txt").read_text(),"development":json.loads((dev/"test_summary.json").read_text()),
          "confirmatory":json.loads((confirm/"test_summary.json").read_text())}
