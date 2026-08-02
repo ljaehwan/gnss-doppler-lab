@@ -19,18 +19,30 @@
       "OAKBAT": {
         "mode": "read-only exact R3 OAK baseline",
         "path": "/home/ubuntu/projects/gnss-doppler-clif-ip-synthetic-normal-r4/artifacts/clif_ip_cross_layer_r3",
-        "modified": false
+        "modified": false,
+        "comparison_scope": "historical_r3_noncomparable"
       },
       "TEXBAT": {
         "mode": "R0-TEX-real-only",
-        "fit_source": "cleanStatic chronological normal only",
-        "note": "new comparator because no R3 TEX CLIF baseline existed"
+        "fit_source": "cleanStatic train 0-240; validation 250-330; independent test >=340",
+        "comparison_scope": "r4_real_only",
+        "checkpoint": "artifacts/clif_ip_synthetic_normal_r4/models/R0_SYN-TEX.pt",
+        "checkpoint_sha256": "c0ac4f2c559e909d7ad6e01a230a0431b312dbe3926b79e2e22cc629b3cc0ec0",
+        "real_b0_rows": 5031,
+        "real_m1_rows": 480,
+        "attack_rows": 0,
+        "m1_fit_audit": {
+          "fit_runs": 1,
+          "fit_rows": 480,
+          "ar_target_rows": 474,
+          "history_resets": 1
+        }
       }
     },
     "S0": {
       "SYN-OAK": {
         "checkpoint": "artifacts/clif_ip_synthetic_normal_r4/models/S0_SYN-OAK.pt",
-        "checkpoint_sha256": "7541d626c2a0ca7385a0ba62f47aec80acd8fff409dd66021b50599b89b6d4d0",
+        "checkpoint_sha256": "9153c55523d7ab900fd45deef83e44a844b06e419fadf85988a812ab3c37fef9",
         "train_runs": 24,
         "validation_runs": 3,
         "m1_fit_audit": {
@@ -44,7 +56,7 @@
       },
       "SYN-TEX": {
         "checkpoint": "artifacts/clif_ip_synthetic_normal_r4/models/S0_SYN-TEX.pt",
-        "checkpoint_sha256": "0db3949abb78e20fd74e331e1ee28cfb0fc24b6a2cb7ed0118f2485ec0d64353",
+        "checkpoint_sha256": "484fd67e46e7aacf7470a4215c9ed6eaeb1b9cae22474f41f31a6a8071deba8b",
         "train_runs": 24,
         "validation_runs": 3,
         "m1_fit_audit": {
@@ -60,10 +72,10 @@
     "S1": {
       "SYN-OAK": {
         "checkpoint": "artifacts/clif_ip_synthetic_normal_r4/models/S1_SYN-OAK.pt",
-        "checkpoint_sha256": "fd0ee1f1d84182040e58e17f9739c97dd2cb9271733a28d42a6f3dc89cd221bb",
-        "initialized_from_sha256": "7541d626c2a0ca7385a0ba62f47aec80acd8fff409dd66021b50599b89b6d4d0",
-        "before_weight_sha256": "78f0491f98e0af218dea4ae06820732bf1d887d5195b5b62a8c1105620947e8b",
-        "after_weight_sha256": "57acb0934b66a88cdda2d097e28d2c9659b2570612b6d37a47ebd2275494eedb",
+        "checkpoint_sha256": "2346431d0d212d4ea19b5a954e515c47d88cadfcecab3c173d3fdec8edd88d2d",
+        "initialized_from_sha256": "9153c55523d7ab900fd45deef83e44a844b06e419fadf85988a812ab3c37fef9",
+        "before_weight_sha256": "b4b03dd137dfb98c53f6016ecdf5420e5d786f529c83aab47cb7cd2673170a42",
+        "after_weight_sha256": "43ff7920faf4602f80fe63ef7e4940ac0a0b41494d2a4bde873737d8988e0dbe",
         "weights_changed": true,
         "real_clean_b0_rows": 5258,
         "real_clean_m1_rows": 480,
@@ -77,6 +89,8 @@
           "real_clean_train_0_240"
         ],
         "attack_rows": 0,
+        "m1_basis_frozen": true,
+        "m1_ar_changed": true,
         "m1_fit_audit": {
           "synthetic_pretrain": {
             "fit_runs": 24,
@@ -88,16 +102,20 @@
             "fit_runs": 1,
             "fit_rows": 480,
             "ar_target_rows": 474,
-            "history_resets": 1
+            "history_resets": 1,
+            "basis_hash_before": "6ee38e013efa39c56b7a02e22170e888422e339584eea715814ed503d108bd66",
+            "basis_hash_after": "6ee38e013efa39c56b7a02e22170e888422e339584eea715814ed503d108bd66",
+            "ar_hash_before": "63ec37bbfbae08fe11be804007c1d5ec80d01498edac38acc15659fe48f667c1",
+            "ar_hash_after": "3a6d9370f2065c8bc6b4dc6684db694aaf19f769b579ba1156966c3e2c32aa71"
           }
         }
       },
       "SYN-TEX": {
         "checkpoint": "artifacts/clif_ip_synthetic_normal_r4/models/S1_SYN-TEX.pt",
-        "checkpoint_sha256": "e52d4b900c55311301ab2c22745d464c1d565e62a4233b5fa4f974238610c4d8",
-        "initialized_from_sha256": "0db3949abb78e20fd74e331e1ee28cfb0fc24b6a2cb7ed0118f2485ec0d64353",
-        "before_weight_sha256": "acf81928ba176874992fd71d653d76b388eaa36168d9581dc335f778cd09603a",
-        "after_weight_sha256": "47769b571234e9042ccf1d24be96086c50caf1d55030f47e12190237fcdad6a2",
+        "checkpoint_sha256": "f693d9708f38d792a22b9c55dc52c999b1e4c0e183378656cfefc6454975929b",
+        "initialized_from_sha256": "484fd67e46e7aacf7470a4215c9ed6eaeb1b9cae22474f41f31a6a8071deba8b",
+        "before_weight_sha256": "4bb8252627b50c6f1f63e5a30c5612fd28e046e063b405d8b65a2f864c1de96a",
+        "after_weight_sha256": "76d6e224edaf7c28f30b4ffb013a4549f09f283d63ac63bad8ce75a354d6e16d",
         "weights_changed": true,
         "real_clean_b0_rows": 5031,
         "real_clean_m1_rows": 480,
@@ -111,6 +129,8 @@
           "real_clean_train_0_240"
         ],
         "attack_rows": 0,
+        "m1_basis_frozen": true,
+        "m1_ar_changed": true,
         "m1_fit_audit": {
           "synthetic_pretrain": {
             "fit_runs": 24,
@@ -122,7 +142,11 @@
             "fit_runs": 1,
             "fit_rows": 480,
             "ar_target_rows": 474,
-            "history_resets": 1
+            "history_resets": 1,
+            "basis_hash_before": "272ed8a6900943837fd9327192b01d94769431c3522a07de01bb2c9e144f663e",
+            "basis_hash_after": "272ed8a6900943837fd9327192b01d94769431c3522a07de01bb2c9e144f663e",
+            "ar_hash_before": "e2565dce14d89521dffcb9dd266d12b59a9eefcf28dd0191ae1410443e0d8c9d",
+            "ar_hash_after": "585fe1c510b3a6aba3614409f2beae48aae23e1c13442ff3bb60f896350fe7ac"
           }
         }
       }

@@ -1,13 +1,124 @@
 {
-  "schema": "clif-ip.synthetic-normal.r4.provenance.v2",
-  "finalized_utc": "2026-08-02T01:46:27.052959+00:00",
-  "source_commit_before_r4_finalize": "5c5705898ca17516e32549f6cd537efdc6aa39b9",
-  "source_tree_sha256": "f733f25064135577935adbe6b8f9eab2b14c1f3445ed9b1fd09bd83033e8cf1a",
+  "schema": "clif-ip.synthetic-normal.r4.provenance.v3",
+  "finalized_utc": "2026-08-02T02:51:41.406251+00:00",
+  "source_commit_parent": "fa605f66f2253e276887549a8f4b87300be7cbc0",
+  "source_tree": "7765d51c4bd94d87360712ddc85b3e0644e3da9d",
+  "code_sha256": {
+    "src/gnss_doppler_lab/clif_ip_synthetic.py": "950899c185c9def841dc95bdee46104612c012d690eac6d5e53de9561bf55661",
+    "scripts/train_clif_synthetic.py": "f8f0ef912c431d29e7e0097f8ada0dbdafb454efd6dd59d85b81a5c82d89e2e2",
+    "scripts/eval_clif_synthetic.py": "fe16d02010dbd107389aa7bdbc4eb8d74b3b7a0b692e017f7d4f8b9e37d68ef0",
+    "scripts/finalize_clif_synthetic.py": "e694338f92492c34893370a3942efd20bca7232746ce1351aaab3c0f79bd058b",
+    "tests/test_clif_synthetic.py": "86458a13253da06fdd953f9a45a28f7e68d97581901905b784398d60b6a6c4aa"
+  },
   "campaign": {
     "success_runs": 60,
     "b0_rows": 83202,
     "m1_rows": 14400,
-    "attack_rows_in_generation": 0
+    "tracked_rows": 17698025
+  },
+  "bundle_ledger_sha256": "b3476dfefa4781c44d00b713086b9528089ab6a172c2835e43d8d4d6f2ece68a",
+  "bundle_merkle_sha256": "2a68c3c9c4c128591035d75034585ce8c6cff32084c050bf2786db37c6bb9836",
+  "evaluation_inputs": {
+    "SYN-OAK:cleanStatic:B0": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+      "sha256": "93b862e03cb979f48d3cf030e3c3f7b008f20a727b4b07046b7ebc4a64bdeb4e",
+      "bytes": 16115957
+    },
+    "SYN-OAK:cleanStatic:M1": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-cleanStatic-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_cleanStatic_raw_iq_noise_features.csv",
+      "sha256": "2c0029db94a448b1bbe00c38d3bd2477844c0dcb68a0c8f9c74ffce7e9990c4c",
+      "bytes": 1143673
+    },
+    "SYN-OAK:os1:B0": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+      "sha256": "b565d71d966dac78b2f7d84c5ff9856e7133342109b27e8d80406e3fb6901fae",
+      "bytes": 15960803
+    },
+    "SYN-OAK:os1:M1": {
+      "path": "artifacts/clif_ip_synthetic_normal_r4/../clif_ip_cross_layer_r3/input_cache/oakbat_os1_raw_iq_noise_features.csv",
+      "sha256": "91f4b075b918b387d1c1ca1c1f441a5d4b58e04fd018bbc14675402b0869c6b7",
+      "bytes": 1129133
+    },
+    "SYN-OAK:os2:B0": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+      "sha256": "b356db20e3d03a65cdca64994ea84283e5eae723a2c558f2f9fa679b9b43175b",
+      "bytes": 16001248
+    },
+    "SYN-OAK:os2:M1": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os2-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_os2_raw_iq_noise_features.csv",
+      "sha256": "6a310df95770f412ecd72a3c9ae066dd339b86f84362c8ba0a4d8d522bb9f65e",
+      "bytes": 1127650
+    },
+    "SYN-OAK:os3:B0": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+      "sha256": "fa76a7118f65439ec97cee2a70291c59771fcaa87a3c35b84ec5db4d74a3a3b6",
+      "bytes": 15963687
+    },
+    "SYN-OAK:os3:M1": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os3-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_os3_raw_iq_noise_features.csv",
+      "sha256": "f6b843dcdf4c599b179e16146b2692bae2a9509e931c22fd1071070749ee1014",
+      "bytes": 1130558
+    },
+    "SYN-OAK:os4:B0": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+      "sha256": "2bc572eeaf49818fd8ba5253b3b7bb5956d0997ea2a49306f5ff6842ab53144a",
+      "bytes": 15924382
+    },
+    "SYN-OAK:os4:M1": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os4-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_os4_raw_iq_noise_features.csv",
+      "sha256": "bf6921c204336ba559086eccd24cb82bae96632485158ee9efc8df9c7eb3a7e9",
+      "bytes": 1131753
+    },
+    "SYN-TEX:cleanStatic:B0": {
+      "path": "artifacts/clif_ip_synthetic_normal_r4/real_inputs/texbat_cleanStatic_method_a_magnitude_nodes.csv",
+      "sha256": "116a4cddbf62b2d985ce2ad326df47d38c7a05ca9aebf001b299965040fbf397",
+      "bytes": 2004179
+    },
+    "SYN-TEX:cleanStatic:M1": {
+      "path": "artifacts/clif_ip_synthetic_normal_r4/real_inputs/texbat_cleanStatic_m1_features.csv",
+      "sha256": "f7c2666073899b0c0340e6d1c7b9a162660fec779801f51a127ad850900fb966",
+      "bytes": 485979
+    },
+    "SYN-TEX:DS1:B0": {
+      "path": "artifacts/clif_ip_synthetic_normal_r4/real_inputs/texbat_DS1_method_a_magnitude_nodes.csv",
+      "sha256": "d9d56b4af819142ba5133230e9580cde663fb240a82dcc186f58730b43745693",
+      "bytes": 1782422
+    },
+    "SYN-TEX:DS1:M1": {
+      "path": "artifacts/clif_ip_synthetic_normal_r4/real_inputs/texbat_DS1_m1_features.csv",
+      "sha256": "b44cd72d8dcbff66c75dd6c1e1fc20ac848a351df8c1d0a13ae2d3efe3cd9572",
+      "bytes": 463387
+    },
+    "SYN-TEX:DS2:B0": {
+      "path": "artifacts/clif_ip_synthetic_normal_r4/real_inputs/texbat_DS2_method_a_magnitude_nodes.csv",
+      "sha256": "f9b874cd0bd7af52e7e7c8514541244b0440011bb6e65abcef1154691161196c",
+      "bytes": 1771049
+    },
+    "SYN-TEX:DS2:M1": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds2-raw-iq-noise-continuity-20260729-v0/ds2_raw_iq_noise_features.csv",
+      "sha256": "e8f82ff40cbb239acc718f8f9a9315ffde5c24c82bad4dfd05ad207f7c11e756",
+      "bytes": 1067734
+    },
+    "SYN-TEX:DS3:B0": {
+      "path": "artifacts/clif_ip_synthetic_normal_r4/real_inputs/texbat_DS3_method_a_magnitude_nodes.csv",
+      "sha256": "010b2bd0341f5dfb35207cd7f622ae916e47416cf5a4bfa3a0e0138ead28c4a8",
+      "bytes": 1781194
+    },
+    "SYN-TEX:DS3:M1": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds3-raw-iq-noise-continuity-20260729-v0/ds3_raw_iq_noise_features.csv",
+      "sha256": "0cc7256b5028b7e5cd0053296d637736d8162c9cb2dc6b39ff18b471ab7b2fc7",
+      "bytes": 1071397
+    },
+    "SYN-TEX:DS4:B0": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/w1.0_s0.5/ds4/multi_prn_method_a_9tap_normalized_dmcpd_w1.0_s0.5/normal_prn_node_windows.csv",
+      "sha256": "6a59775957b6f1da171752d2cf1e118e9fb410765012b372a6e909f61da7af42",
+      "bytes": 4100933
+    },
+    "SYN-TEX:DS4:M1": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds4-raw-iq-noise-continuity-20260729-v0/ds4_raw_iq_noise_features.csv",
+      "sha256": "70b8f1252735acb3467f286b4bdd56e2325620aae2dc0d87779e63ad81d14c01",
+      "bytes": 301729
+    }
   },
   "training_sources": {
     "SYN-OAK": {
@@ -21,11 +132,8 @@
   },
   "immutability": {
     "R3_modified": false,
-    "R0_mode": "read-only"
+    "R0_OAK_comparison_scope": "historical_r3_noncomparable"
   },
-  "unavailable": {
-    "R0_TEX": "no complete chronological compatible Method-A node training export",
-    "S0_S1_TEX_DS1_DS3": "compatible Method-A attack node rows absent; values not fabricated"
-  },
+  "clone_completeness": "Clone includes ledger and reported artifacts but not approximately 3 GB of ignored per-run feature bundles; verify retained local bundles against ledger.",
   "manifest_self_excluded_from_checksums": true
 }

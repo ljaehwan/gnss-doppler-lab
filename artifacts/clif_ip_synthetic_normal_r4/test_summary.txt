@@ -1,27 +1,32 @@
-CLIF-IP synthetic-normal R4 final test summary
-UTC date: 2026-08-02
-Python: /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python
+CLIF-IP synthetic-normal R4 corrected evaluation test summary
+Generated: 2026-08-02 UTC
 
-TDD RED (before implementation):
-PYTHONPATH=src python -m pytest -q tests/test_clif_synthetic.py -k 'producer_schema or tap_mapping'
-Result: 2 failed (legacy E1/L1 TAP_ORDER rejected actual producer E/L schema; expected RED).
+R4 focused integration/unit suite (tests/test_clif_synthetic.py):
+  21 passed (standalone rerun after finalization; 4.08 s)
 
-Focused/new tests after implementation:
-PYTHONPATH=src python -m pytest -q tests/test_clif_synthetic.py -k 'not actual_r4_index_checksums'
-Result: 15 passed, 1 deselected in 3.09 s.
+Full repository suite:
+  498 passed, 6 failed in 35.47 s
 
-Existing CLIF regression suites:
-PYTHONPATH=src python -m pytest -q tests/test_clif_ip.py tests/test_clif_ip_feasibility.py tests/test_clif_ip_provenance_r2.py
-Result: 36 passed in 3.71 s.
+All six failures are outside R4 and share one pre-existing repository blocker:
+  scripts/train_peak_floor_temporal_autoencoder.py is absent from this worktree.
+Affected tests:
+  - 5 tests in tests/test_peak_floor_contrastive_predictive.py
+  - 1 test in tests/test_score_peak_floor_contrastive_predictive.py
+The R4 repair does not add or modify that unrelated historical model implementation.
 
-Final artifact/checksum + complete R4 suite (executed after finalizer):
-PYTHONPATH=src python -m pytest -q tests/test_clif_synthetic.py
-Result: see committed command result; expected/verified 16 passed.
+R4 assertions covered:
+  - exact OAK/TEX onset-mask boundaries and availability-time contract
+  - DS1-DS3 NPZ conversion schema/provenance and nonempty real artifacts
+  - real-only R0 TEX and immutable/noncomparable R0 OAK scope
+  - P0-P3 validation/test MSE, MAE, 9-D tap errors and common support hashes
+  - S1 exact S0 initialization, real B0 adaptation, frozen M1 basis, changed AR
+  - S1 nonzero residual Ridge correction with base/correction hashes
+  - validation-only centered shrinkage-covariance fusion and co-elevation concordance
+  - independently recomputed per-epoch DS1 Full ROC-AUC
+  - actual 199-replicate P2/P3 9-D and Full rescoring, support/marginal preservation
+  - 60-run live bundle ledger row counts and hashes
 
-Execution commands:
-PYTHONPATH=src python scripts/train_clif_synthetic.py --epochs 8 --adapt-epochs 6
-Result: success; real OAK/TEX clean adaptation completed and weights changed.
-PYTHONPATH=src python scripts/eval_clif_synthetic.py --permutations 199
-Result: success; 172 scenario rows, 12 predictor rows, 8 domain-gap rows, 24 permutation regions / 4,776 replicates.
-python scripts/finalize_clif_synthetic.py
-Result: success; config, plots, provenance, and self-excluding checksums finalized.
+Evaluation execution:
+  - 30 scenario/clean epoch CSVs and 30 PRN-level prediction CSVs retained
+  - 45 destruction regions x 3 models x 199 = 26,865 raw replicate rows
+  - p-value resolution 0.005

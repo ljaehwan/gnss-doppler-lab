@@ -11,7 +11,8 @@ from gnss_doppler_lab.clif_ip_synthetic import (
     build_final_index, cleanup_after_success, domain_gap, exact_iq_bytes,
     extract_m1_features, fit_multirun_ar, history_design, iq_memmap,
     permutation_test, publish_success, rinex_nav_validity, target_spec,
-    validate_final_index,
+    validate_final_index,evaluation_masks,adapt_m1_residual_state,array_hash,
+    tex_npz_magnitude_nodes,
     validate_run_bundle,
 )
 
@@ -171,6 +172,40 @@ def test_domain_gap_finite_and_rmse_ratio():
     assert all(np.isfinite(v) for v in got.values())
 
 
+def test_domain_specific_onset_masks_exact_boundaries():
+    t=np.array([109.9,110.,120.,129.9,130.]);oak=evaluation_masks(t,"SYN-OAK")
+    assert oak["stable_pre"].tolist()==[True,False,False,False,False]
+    assert oak["transition"].tolist()==[False,True,True,True,False]
+    assert oak["established_post"].tolist()==[False,False,False,False,True]
+    assert oak["nominal_onset_s"]==120
+    tex=evaluation_masks(np.array([29.9,30.,89.9,90.,109.9,110.]),"SYN-TEX")
+    assert tex["stable_pre"].tolist()==[False,True,True,False,False,False]
+    assert tex["transition"].tolist()==[False,False,False,True,True,False]
+    assert tex["established_post"].tolist()==[False,False,False,False,False,True]
+    assert tex["nominal_onset_s"]==100
+
+
+def test_s1_m1_adaptation_freezes_basis_and_changes_ar():
+    rng=np.random.default_rng(2);frames=[]
+    for run in ("a","b"):frames.append(pd.DataFrame({"run_id":run,"split":"train","f0":rng.normal(size=30),"f1":rng.normal(size=30)}))
+    d=pd.concat(frames,ignore_index=True);base,_=fit_multirun_ar(d,["f0","f1"],pca_dim=2,lag=2)
+    before=array_hash(base["components"]);adapt,audit=adapt_m1_residual_state(base,d,["f0","f1"])
+    assert before==array_hash(adapt["components"])
+    assert audit["basis_hash_before"]==audit["basis_hash_after"]
+    assert audit["ar_hash_before"]!=audit["ar_hash_after"]
+    assert {"residual_center","residual_scale","residual_cov"}<=set(adapt)
+
+
+def test_tex_npz_converter_materializes_real_nine_tap_schema(tmp_path):
+    from scripts.train_clif_synthetic import tap_columns
+    n=20;iq=np.ones((n,9,2),np.float32);iq[:,4]=2
+    src=tmp_path/"ds.npz";np.savez(src,complex_iq=iq,time_s=np.arange(n)*.1,prn=np.repeat([1,2],10))
+    out=tmp_path/"nodes.csv";d=tex_npz_magnitude_nodes(src,out,"DS1")
+    assert out.is_file() and out.with_suffix(".provenance.json").is_file() and len(d)>0
+    assert tap_columns(d)==[f"tap_{x}_rel_prompt_mean" for x in TAP_ORDER]
+    assert np.isfinite(d.select_dtypes("number")).all().all()
+
+
 def test_artifact_schema_and_checksums(tmp_path):
     required=("config.json","synthetic_run_manifest.csv","generation_summary.json","impairment_distribution.json","training_summary.json","predictor_comparison.csv","scenario_metrics.csv","domain_gap_metrics.csv","alignment_destruction_metrics.json","test_summary.txt","README.md")
     (tmp_path/"plots").mkdir()
@@ -194,6 +229,48 @@ def test_actual_r4_training_is_real_adaptation_and_leakage_safe():
         assert ck["fit_roles"]==["synthetic_train","real_clean_train_0_240"]
         assert ck["attack_rows"]==0 and set(ck["allowed_source_hashes"])=={"b0_cleanStatic","m1_cleanStatic"}
         assert ck["before_weight_sha256"]!=ck["after_weight_sha256"]
+        audit=ck["fit_audit"]["real_adaptation"]
+        assert audit["basis_hash_before"]==audit["basis_hash_after"]
+        assert audit["ar_hash_before"]!=audit["ar_hash_after"]
+
+
+def test_actual_complete_r4_outputs_are_recomputable_and_nonempty():
+    root=Path(__file__).resolve().parents[1]/"artifacts/clif_ip_synthetic_normal_r4"
+    pred=pd.read_csv(root/"predictor_comparison.csv")
+    for regime,domain in (("S0","SYN-OAK"),("S1","SYN-OAK"),("S0","SYN-TEX"),("S1","SYN-TEX"),("R0","SYN-TEX")):
+        q=pred[(pred.regime==regime)&(pred.target_domain==domain)&pred.split.isin(["clean_validation","independent_clean_test"])]
+        assert set(q.model)==set(("P0","P1","P2","P3")) and len(q)==8
+        assert q.groupby("split").support_sha256.nunique().eq(1).all()
+        assert pd.to_numeric(q.mse).notna().all() and pd.to_numeric(q.mae).notna().all()
+    s=pd.read_csv(root/"scenario_metrics.csv")
+    tex=s[(s.target_domain=="SYN-TEX")&s.regime.isin(["R0","S0","S1"])]
+    assert set(tex.scenario)=={"DS1","DS2","DS3","DS4"}
+    assert not tex[tex.comparison_scope.eq("r4_same_protocol")].roc_auc.isna().any()
+    for scenario in ("DS1","DS2","DS3"):
+        p=root/"real_inputs"/f"texbat_{scenario}_method_a_magnitude_nodes.csv"
+        assert p.is_file() and p.stat().st_size>1000 and p.with_suffix(".provenance.json").is_file()
+    # Scenario AUC can be independently reconstructed from retained epoch rows.
+    row=s[(s.regime=="S1")&(s.target_domain=="SYN-TEX")&(s.scenario=="DS1")&(s.model=="Full")].iloc[0]
+    e=pd.read_csv(root/"per_epoch/S1_SYN-TEX_DS1.csv");m=evaluation_masks(e.available_s,"SYN-TEX")
+    from sklearn.metrics import roc_auc_score
+    got=roc_auc_score(np.r_[np.zeros(m["stable_pre"].sum()),np.ones(m["established_post"].sum())],np.r_[e.loc[m["stable_pre"],"Full"],e.loc[m["established_post"],"Full"]])
+    assert got==pytest.approx(float(row.roc_auc),abs=1e-12)
+
+
+def test_actual_destruction_is_199_true_9d_rescoring_and_ledger():
+    root=Path(__file__).resolve().parents[1]/"artifacts/clif_ip_synthetic_normal_r4"
+    raw=pd.read_csv(root/"alignment_destruction_raw_metrics.csv")
+    assert set(raw.model)=={"P2","P3","Full"} and raw.predictor_scoring_called.all()
+    assert raw.support_preserved.all() and raw.marginals_preserved.all()
+    assert raw.groupby(["region_key","model"]).size().eq(199).all()
+    assert set(pd.to_numeric(raw[raw.model.isin(["P2","P3"])].target_dimensions))=={9}
+    summary=json.loads((root/"alignment_destruction_metrics.json").read_text())
+    assert summary["actual_predictor_rescoring"] and summary["p_value_resolution"]==.005
+    assert all(x["replicates"]==199 for x in summary["results"].values())
+    ledger=pd.read_csv(root/"synthetic_bundle_ledger.csv")
+    assert len(ledger)==60 and ledger.run_id.nunique()==60
+    assert ledger.b0_rows.gt(0).all() and ledger.m1_rows.gt(0).all()
+    assert ledger.leaf_sha256.str.len().eq(64).all()
 
 
 def test_actual_r4_index_checksums_and_receiver_backed_smoke():

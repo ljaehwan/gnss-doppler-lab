@@ -1,0 +1,12 @@
+{
+  "scenario": "DS1",
+  "source": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds1.npz",
+  "source_sha256": "b24d947c83890dbfa1c801bfbcb72e1fd192dd66509e927eb5afb8118902b072",
+  "output": "artifacts/clif_ip_synthetic_normal_r4/real_inputs/texbat_DS1_method_a_magnitude_nodes.csv",
+  "output_sha256": "d9d56b4af819142ba5133230e9580cde663fb240a82dcc186f58730b43745693",
+  "source_rows": 497577,
+  "node_rows": 9867,
+  "tap_semantics": "abs(complex_iq)/abs(prompt)",
+  "aggregation": "arithmetic mean by (PRN,floor(time_s*2)/2); auxiliary Method-A fields unavailable",
+  "equivalence_scope": "nine magnitude/prompt taps only; reconstructed-equivalence, not byte-identical historical tables"
+}

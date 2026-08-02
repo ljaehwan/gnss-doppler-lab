@@ -217,6 +217,72 @@ def fit_multirun_ar(frame:pd.DataFrame,feature_cols:list[str],*,pca_dim:int=8,la
     return state,{"fit_runs":runs,"fit_rows":len(d),"ar_target_rows":len(A),"history_resets":runs}
 
 
+def array_hash(a:np.ndarray)->str:
+    """Stable hash including dtype and shape."""
+    x=np.ascontiguousarray(a);h=hashlib.sha256()
+    h.update(str(x.dtype).encode());h.update(str(x.shape).encode());h.update(x.tobytes())
+    return h.hexdigest()
+
+
+def adapt_m1_residual_state(base:dict[str,object],frame:pd.DataFrame,feature_cols:list[str])->tuple[dict[str,object],dict[str,object]]:
+    """Adapt AR and innovation distribution while freezing synthetic PCA basis."""
+    x=frame[feature_cols].to_numpy(float);mu=np.asarray(base["mean"]);sd=np.asarray(base["scale"]);comp=np.asarray(base["components"])
+    if x.shape[1]!=len(mu):raise ValueError("real M1 columns do not match frozen synthetic basis")
+    lag=int(base["lag"]);A=[];Y=[];runs=0
+    for _,g in frame.groupby("run_id",sort=False):
+        runs+=1;p=((g[feature_cols].to_numpy(float)-mu)/sd)@comp
+        for i in range(lag,len(p)):A.append(p[i-lag:i].reshape(-1));Y.append(p[i])
+    if not A:raise ValueError("insufficient real-clean histories for M1 adaptation")
+    A=np.asarray(A);Y=np.asarray(Y);coef=np.linalg.solve(A.T@A+1e-6*np.eye(A.shape[1]),A.T@Y)
+    residual=Y-A@coef;center=residual.mean(0);raw=np.cov(residual-center,rowvar=False)
+    if np.ndim(raw)==0:raw=np.asarray([[float(raw)]])
+    shrink=.1;cov=(1-shrink)*raw+shrink*np.diag(np.diag(raw))+1e-9*np.eye(raw.shape[0]);scale=np.sqrt(np.maximum(np.diag(cov),1e-12))
+    state={"mean":mu.copy(),"scale":sd.copy(),"components":comp.copy(),"ar_coef":coef,"lag":lag,
+           "residual_center":center,"residual_scale":scale,"residual_cov":cov,"covariance_shrinkage":shrink}
+    audit={"fit_runs":runs,"fit_rows":int(len(frame)),"ar_target_rows":int(len(Y)),"history_resets":runs,
+           "basis_hash_before":array_hash(comp),"basis_hash_after":array_hash(state["components"]),
+           "ar_hash_before":array_hash(np.asarray(base["ar_coef"])),"ar_hash_after":array_hash(coef)}
+    if audit["basis_hash_before"]!=audit["basis_hash_after"] or audit["ar_hash_before"]==audit["ar_hash_after"]:raise RuntimeError("M1 adaptation role contract failed")
+    return state,audit
+
+
+def evaluation_masks(available_s,domain:str,*,oak_pre_end:float=110.)->dict[str,np.ndarray|float]:
+    """Domain contracts based on score availability, not nominal window time."""
+    t=np.asarray(available_s,float)
+    if domain in {"OAK","SYN-OAK"}:
+        pre=t<float(oak_pre_end);post=t>=130.;transition=(t>=float(oak_pre_end))&(t<130.);onset=120.
+    elif domain in {"TEX","SYN-TEX"}:
+        pre=(t>=30.)&(t<90.);post=t>=110.;transition=(t>=90.)&(t<110.);onset=100.
+    else:raise ValueError(f"unknown evaluation domain {domain}")
+    return {"stable_pre":pre,"transition":transition,"established_post":post,"nominal_onset_s":onset}
+
+
+def tex_npz_magnitude_nodes(source:Path,out:Path,scenario:str)->pd.DataFrame:
+    """Common converter for TEXBAT complex Method-A NPZ exports.
+
+    Reconstructs nine magnitude/prompt ratios and aggregates raw tracking rows
+    to 0.5-s (PRN,time) nodes. Auxiliary historical Method-A fields cannot be
+    reconstructed and are explicitly outside the equivalence claim.
+    """
+    source=Path(source);out=Path(out);z=np.load(source);required={"complex_iq","time_s","prn"}
+    if not required<=set(z.files):raise ValueError(f"missing NPZ arrays: {sorted(required-set(z.files))}")
+    iq=np.asarray(z["complex_iq"])
+    if iq.ndim!=3 or iq.shape[1:]!=(9,2):raise ValueError("complex_iq must be [row,9,2]")
+    mag=np.hypot(iq[:,:,0],iq[:,:,1]);q=mag/np.maximum(mag[:,4,None],1e-9);bins=np.floor(np.asarray(z["time_s"],float)*2)/2
+    base=pd.DataFrame({"prn":np.asarray(z["prn"]).astype(str),"window_bin_s":bins})
+    for j,tap in enumerate(TAP_ORDER):base[f"tap_{tap}_rel_prompt_mean"]=q[:,j]
+    d=base.groupby(["prn","window_bin_s"],as_index=False).mean();d["window_start_s"]=d.window_bin_s;d["window_end_s"]=d.window_bin_s+.5
+    d["tap_layout"]=','.join(TAP_ORDER);d["label"]=f"texbat_{scenario}_reconstructed_method_a_magnitude";d["run_id"]=scenario
+    if d.empty or not np.isfinite(d.select_dtypes("number")).all().all():raise ValueError("invalid converted TEX nodes")
+    out.parent.mkdir(parents=True,exist_ok=True);d.to_csv(out,index=False)
+    provenance={"scenario":scenario,"source":str(source),"source_sha256":_sha(source),"output":str(out),"output_sha256":_sha(out),
+      "source_rows":int(len(iq)),"node_rows":int(len(d)),"tap_semantics":"abs(complex_iq)/abs(prompt)",
+      "aggregation":"arithmetic mean by (PRN,floor(time_s*2)/2); auxiliary Method-A fields unavailable",
+      "equivalence_scope":"nine magnitude/prompt taps only; reconstructed-equivalence, not byte-identical historical tables"}
+    out.with_suffix(".provenance.json").write_text(json.dumps(provenance,indent=2)+"\n")
+    return d
+
+
 def history_design(meta:pd.DataFrame,b0:np.ndarray,m1:np.ndarray,lag:int,kind:str):
     if kind not in {"P0","P1","P2","P3"}:raise ValueError(kind)
     b0=np.asarray(b0,float);m1=np.asarray(m1,float)
@@ -286,13 +352,17 @@ def permutation_test(b0:np.ndarray,m1:np.ndarray,*,repetitions:int=199,seed:int=
 
 
 def domain_gap(synthetic:np.ndarray,real:np.ndarray)->dict[str,float]:
+    """Standardized gaps and exploratory unbiased-MMD estimate."""
     a=np.asarray(synthetic,float);b=np.asarray(real,float);d=min(a.shape[1],b.shape[1]);a=a[:,:d];b=b[:,:d]
-    pooled=np.sqrt((a.var(0)+b.var(0))/2)+1e-9;smd=np.abs(a.mean(0)-b.mean(0))/pooled
-    wd=np.array([wasserstein_distance(a[:,j],b[:,j]) for j in range(d)])
+    if len(a)<2 or len(b)<2:raise ValueError("domain gap needs at least two independent rows")
+    pooled=np.sqrt((a.var(0,ddof=1)+b.var(0,ddof=1))/2)+1e-9;smd=np.abs(a.mean(0)-b.mean(0))/pooled
+    wd=np.array([wasserstein_distance(a[:,j],b[:,j])/pooled[j] for j in range(d)])
     z=np.vstack((a,b));scale=float(np.median(cdist(z,z,"sqeuclidean")));gamma=1/max(scale,1e-9)
-    kaa=np.exp(-gamma*cdist(a,a,"sqeuclidean"));kbb=np.exp(-gamma*cdist(b,b,"sqeuclidean"));kab=np.exp(-gamma*cdist(a,b,"sqeuclidean"));mmd=max(0,float(kaa.mean()+kbb.mean()-2*kab.mean()))**.5
+    kaa=np.exp(-gamma*cdist(a,a,"sqeuclidean"));kbb=np.exp(-gamma*cdist(b,b,"sqeuclidean"));kab=np.exp(-gamma*cdist(a,b,"sqeuclidean"))
+    mmd2=float((kaa.sum()-np.trace(kaa))/(len(a)*(len(a)-1))+(kbb.sum()-np.trace(kbb))/(len(b)*(len(b)-1))-2*kab.mean())
     ratio=float(np.sqrt(np.mean(b*b))/max(np.sqrt(np.mean(a*a)),1e-9))
-    return {"smd_mean":float(smd.mean()),"wasserstein_mean":float(wd.mean()),"mmd_rbf":mmd,"rmse_ratio_5p5x":ratio}
+    return {"smd_mean":float(smd.mean()),"standardized_wasserstein_mean":float(wd.mean()),"wasserstein_mean":float(wd.mean()),
+            "mmd2_unbiased_exploratory":mmd2,"mmd_rbf":float(np.sign(mmd2)*np.sqrt(abs(mmd2))),"rmse_ratio":ratio,"rmse_ratio_5p5x":ratio}
 
 
 def artifact_checksums(root:Path,required)->dict[str,str]:

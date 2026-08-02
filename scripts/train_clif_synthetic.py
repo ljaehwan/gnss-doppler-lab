@@ -6,7 +6,8 @@ from pathlib import Path
 import numpy as np,pandas as pd,torch
 from torch import nn
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/"src"))
-from gnss_doppler_lab.clif_ip_synthetic import DOMAINS,TAP_ORDER,fit_multirun_ar,extract_m1_features
+from gnss_doppler_lab.clif_ip_synthetic import (DOMAINS,TAP_ORDER,fit_multirun_ar,extract_m1_features,
+    tex_npz_magnitude_nodes as convert_tex_nodes,adapt_m1_residual_state,array_hash)
 
 REAL_B0={
  "SYN-OAK":Path("/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv"),
@@ -78,13 +79,9 @@ def state_hash(state):
  return h.hexdigest()
 
 def tex_npz_magnitude_nodes(source,out):
- """Format-aware full cleanStatic conversion to Method-A magnitude morphology."""
- if out.exists():return pd.read_csv(out)
- z=np.load(source);mag=np.hypot(z["complex_iq"][:,:,0],z["complex_iq"][:,:,1]);prompt=np.maximum(mag[:,4],1e-9)
- q=mag/prompt[:,None];bins=np.floor(z["time_s"]*2)/2
- base=pd.DataFrame({"prn":z["prn"].astype(str),"window_bin_s":bins})
- for j,tap in enumerate(TAP_ORDER):base[f"tap_{tap}_rel_prompt_mean"]=q[:,j]
- d=base.groupby(["prn","window_bin_s"],as_index=False).mean();d["window_start_s"]=d.window_bin_s;d["window_end_s"]=d.window_bin_s+.5;d["tap_layout"]=','.join(TAP_ORDER);d["label"]="texbat_cleanStatic_9tap_magnitude";d["run_id"]="real-cleanStatic";d.to_csv(out,index=False);return d
+ """Compatibility wrapper around the single validated converter."""
+ if out.exists() and out.with_suffix(".provenance.json").exists():return pd.read_csv(out)
+ return convert_tex_nodes(source,out,"cleanStatic")
 
 def real_clean_frames(root,domain):
  if domain=="SYN-TEX":
@@ -107,7 +104,15 @@ def main():
  ap=argparse.ArgumentParser();ap.add_argument("--root",type=Path,default=Path("artifacts/clif_ip_synthetic_normal_r4"));ap.add_argument("--regimes",nargs="*",default=["R0","S0","S1"],choices=["R0","S0","S1"]);ap.add_argument("--epochs",type=int,default=8);ap.add_argument("--adapt-epochs",type=int,default=6);ap.add_argument("--seed",type=int,default=41);a=ap.parse_args();torch.manual_seed(a.seed);np.random.seed(a.seed)
  device="cuda" if torch.cuda.is_available() else "cpu";out=a.root/"models";out.mkdir(parents=True,exist_ok=True)
  summary={"schema":"clif-ip.synthetic-normal.r4.training.v2","device":device,"seed":a.seed,"tap_layout":list(TAP_ORDER),"raw_tap_semantics":"Method-A magnitudes; signed 9D values are x-xhat innovations","regimes":{}}
- if "R0" in a.regimes:summary["regimes"]["R0"]={"OAKBAT":{"mode":"read-only exact R3 OAK baseline","path":str(ROOT/"artifacts/clif_ip_cross_layer_r3"),"modified":False},"TEXBAT":{"mode":"R0-TEX-real-only","fit_source":"cleanStatic chronological normal only","note":"new comparator because no R3 TEX CLIF baseline existed"}}
+ if "R0" in a.regimes:
+  summary["regimes"]["R0"]={"OAKBAT":{"mode":"read-only exact R3 OAK baseline","path":str(ROOT/"artifacts/clif_ip_cross_layer_r3"),"modified":False,"comparison_scope":"historical_r3_noncomparable"},"TEXBAT":{"mode":"R0-TEX-real-only","fit_source":"cleanStatic train 0-240; validation 250-330; independent test >=340","comparison_scope":"r4_real_only"}}
+  rb,rm,rmp=real_clean_frames(a.root,"SYN-TEX");cols=tap_columns(rb);rtr=rb[(rb.window_start_s>=0)&(rb.window_end_s<=240)];rva=rb[(rb.window_start_s>=250)&(rb.window_end_s<=330)]
+  X,Y=sequences(rtr,cols);Xv,Yv=sequences(rva,cols);mu=X.reshape(-1,9).mean(0);sd=np.where(X.reshape(-1,9).std(0)>1e-6,X.reshape(-1,9).std(0),1.)
+  rmodel=SharedPrnGRU().to(device);rh=fit_epochs(rmodel,X,Y,Xv,Yv,mu,sd,a.epochs,device,1e-3)
+  rmtr=rm[(rm.window_start_s>=0)&(rm.window_end_s<=240)].copy().assign(split="train");rmc=mcols(rmtr);rst,raud=fit_multirun_ar(rmtr,rmc,pca_dim=min(8,len(rmc)),lag=6)
+  rck={"architecture":"shared PRN-local GRU; no PRN ID","target_order":TAP_ORDER,"state_dict":rmodel.state_dict(),"mean":mu,"std":sd,"m1_state":rst,"m1_feature_columns":rmc,"domain":"SYN-TEX","regime":"R0","fit_roles":["real_clean_train_0_240"],"attack_rows":0,"real_rows":int(len(rtr)),"fit_source_hashes":{"b0":sha(REAL_B0["SYN-TEX"]),"m1":sha(rmp)}}
+  rp=out/"R0_SYN-TEX.pt";torch.save(rck,rp);pd.DataFrame(rh).to_csv(out/"R0_SYN-TEX_history.csv",index=False)
+  summary["regimes"]["R0"]["TEXBAT"].update({"checkpoint":str(rp),"checkpoint_sha256":sha(rp),"real_b0_rows":len(rtr),"real_m1_rows":len(rmtr),"attack_rows":0,"m1_fit_audit":raud})
  for domain in DOMAINS:
   tr,mtr=load_domain(a.root,domain,"train");va,mva=load_domain(a.root,domain,"validation");cols=tap_columns(tr)
   X,Y=sequences(tr,cols);Xv,Yv=sequences(va,cols);mu=X.reshape(-1,9).mean(0);sd=X.reshape(-1,9).std(0);sd=np.where(sd>1e-6,sd,1.)
@@ -120,11 +125,12 @@ def main():
   RX,RY=sequences(rtrain,rcols);RVX,RVY=sequences(rval,rcols);before=state_hash(model.state_dict());ah=fit_epochs(model,RX,RY,RVX,RVY,mu,sd,a.adapt_epochs,device,2e-4);after=state_hash(model.state_dict())
   if before==after:raise RuntimeError("S1 clean adaptation did not change weights")
   rmtrain=rm[(rm.window_start_s>=0)&(rm.window_end_s<=240)].copy().assign(split="train");rmc=mcols(rmtrain);common=[c for c in mc if c in rmc]
-  # Adapt residual AR/cov on real clean train while recording the synthetic-basis pretrain hash.
-  rmstate,rmaudit=fit_multirun_ar(rmtrain,common,pca_dim=min(8,len(common)),lag=6)
+  # Freeze synthetic normalization/PCA; adapt only AR and innovation distribution.
+  if common!=mc:raise RuntimeError("real clean input lacks one or more frozen synthetic M1 features")
+  rmstate,rmaudit=adapt_m1_residual_state(mstate,rmtrain,common)
   real_hashes={"b0_cleanStatic":sha(REAL_B0[domain]),"m1_cleanStatic":sha(rmp)}
-  ck1={"architecture":ck["architecture"],"target_order":TAP_ORDER,"state_dict":model.state_dict(),"mean":mu,"std":sd,"m1_synthetic_pretrain_state":mstate,"m1_state":rmstate,"m1_feature_columns":common,"fit_audit":{"synthetic_pretrain":maudit,"real_adaptation":rmaudit},"domain":domain,"regime":"S1","initialized_from":str(s0),"before_weight_sha256":before,"after_weight_sha256":after,"fit_roles":["synthetic_train","real_clean_train_0_240"],"allowed_source_hashes":real_hashes,"real_b0_rows":len(rtrain),"real_m1_rows":len(rmtrain),"attack_rows":0,"threshold_role":"real_clean_validation_250_330_only"}
+  ck1={"architecture":ck["architecture"],"target_order":TAP_ORDER,"state_dict":model.state_dict(),"mean":mu,"std":sd,"m1_synthetic_pretrain_state":mstate,"m1_state":rmstate,"m1_feature_columns":common,"fit_audit":{"synthetic_pretrain":maudit,"real_adaptation":rmaudit},"domain":domain,"regime":"S1","initialized_from":str(s0),"s0_checkpoint_sha256":s0hash,"before_weight_sha256":before,"after_weight_sha256":after,"fit_roles":["synthetic_train","real_clean_train_0_240"],"allowed_source_hashes":real_hashes,"real_b0_rows":len(rtrain),"real_m1_rows":len(rmtrain),"attack_rows":0,"threshold_role":"real_clean_validation_250_330_only"}
   s1=out/f"S1_{domain}.pt";torch.save(ck1,s1);pd.DataFrame(ah).to_csv(out/f"S1_{domain}_adaptation_history.csv",index=False)
-  summary["regimes"].setdefault("S1",{})[domain]={"checkpoint":str(s1),"checkpoint_sha256":sha(s1),"initialized_from_sha256":s0hash,"before_weight_sha256":before,"after_weight_sha256":after,"weights_changed":before!=after,"real_clean_b0_rows":len(rtrain),"real_clean_m1_rows":len(rmtrain),"real_validation_b0_rows":len(rval),"allowed_source_hashes":real_hashes,"fit_roles":ck1["fit_roles"],"attack_rows":0,"m1_fit_audit":ck1["fit_audit"]}
+  summary["regimes"].setdefault("S1",{})[domain]={"checkpoint":str(s1),"checkpoint_sha256":sha(s1),"initialized_from_sha256":s0hash,"before_weight_sha256":before,"after_weight_sha256":after,"weights_changed":before!=after,"real_clean_b0_rows":len(rtrain),"real_clean_m1_rows":len(rmtrain),"real_validation_b0_rows":len(rval),"allowed_source_hashes":real_hashes,"fit_roles":ck1["fit_roles"],"attack_rows":0,"m1_basis_frozen":rmaudit["basis_hash_before"]==rmaudit["basis_hash_after"],"m1_ar_changed":rmaudit["ar_hash_before"]!=rmaudit["ar_hash_after"],"m1_fit_audit":ck1["fit_audit"]}
  (a.root/"training_summary.json").write_text(json.dumps(summary,indent=2,default=lambda x:x.tolist() if hasattr(x,"tolist") else str(x))+"\n")
 if __name__=="__main__":main()

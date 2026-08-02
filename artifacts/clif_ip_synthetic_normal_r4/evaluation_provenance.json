@@ -1,0 +1,213 @@
+{
+  "inputs": {
+    "SYN-OAK:cleanStatic:B0": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+      "sha256": "93b862e03cb979f48d3cf030e3c3f7b008f20a727b4b07046b7ebc4a64bdeb4e",
+      "bytes": 16115957
+    },
+    "SYN-OAK:cleanStatic:M1": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-cleanStatic-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_cleanStatic_raw_iq_noise_features.csv",
+      "sha256": "2c0029db94a448b1bbe00c38d3bd2477844c0dcb68a0c8f9c74ffce7e9990c4c",
+      "bytes": 1143673
+    },
+    "SYN-OAK:os1:B0": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+      "sha256": "b565d71d966dac78b2f7d84c5ff9856e7133342109b27e8d80406e3fb6901fae",
+      "bytes": 15960803
+    },
+    "SYN-OAK:os1:M1": {
+      "path": "artifacts/clif_ip_synthetic_normal_r4/../clif_ip_cross_layer_r3/input_cache/oakbat_os1_raw_iq_noise_features.csv",
+      "sha256": "91f4b075b918b387d1c1ca1c1f441a5d4b58e04fd018bbc14675402b0869c6b7",
+      "bytes": 1129133
+    },
+    "SYN-OAK:os2:B0": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+      "sha256": "b356db20e3d03a65cdca64994ea84283e5eae723a2c558f2f9fa679b9b43175b",
+      "bytes": 16001248
+    },
+    "SYN-OAK:os2:M1": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os2-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_os2_raw_iq_noise_features.csv",
+      "sha256": "6a310df95770f412ecd72a3c9ae066dd339b86f84362c8ba0a4d8d522bb9f65e",
+      "bytes": 1127650
+    },
+    "SYN-OAK:os3:B0": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+      "sha256": "fa76a7118f65439ec97cee2a70291c59771fcaa87a3c35b84ec5db4d74a3a3b6",
+      "bytes": 15963687
+    },
+    "SYN-OAK:os3:M1": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os3-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_os3_raw_iq_noise_features.csv",
+      "sha256": "f6b843dcdf4c599b179e16146b2692bae2a9509e931c22fd1071070749ee1014",
+      "bytes": 1130558
+    },
+    "SYN-OAK:os4:B0": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+      "sha256": "2bc572eeaf49818fd8ba5253b3b7bb5956d0997ea2a49306f5ff6842ab53144a",
+      "bytes": 15924382
+    },
+    "SYN-OAK:os4:M1": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat-os4-raw-iq-noise-continuity-m1-v0-fs5m-full/oakbat_os4_raw_iq_noise_features.csv",
+      "sha256": "bf6921c204336ba559086eccd24cb82bae96632485158ee9efc8df9c7eb3a7e9",
+      "bytes": 1131753
+    },
+    "SYN-TEX:cleanStatic:B0": {
+      "path": "artifacts/clif_ip_synthetic_normal_r4/real_inputs/texbat_cleanStatic_method_a_magnitude_nodes.csv",
+      "sha256": "116a4cddbf62b2d985ce2ad326df47d38c7a05ca9aebf001b299965040fbf397",
+      "bytes": 2004179
+    },
+    "SYN-TEX:cleanStatic:M1": {
+      "path": "artifacts/clif_ip_synthetic_normal_r4/real_inputs/texbat_cleanStatic_m1_features.csv",
+      "sha256": "f7c2666073899b0c0340e6d1c7b9a162660fec779801f51a127ad850900fb966",
+      "bytes": 485979
+    },
+    "SYN-TEX:DS1:B0": {
+      "path": "artifacts/clif_ip_synthetic_normal_r4/real_inputs/texbat_DS1_method_a_magnitude_nodes.csv",
+      "sha256": "d9d56b4af819142ba5133230e9580cde663fb240a82dcc186f58730b43745693",
+      "bytes": 1782422
+    },
+    "SYN-TEX:DS1:M1": {
+      "path": "artifacts/clif_ip_synthetic_normal_r4/real_inputs/texbat_DS1_m1_features.csv",
+      "sha256": "b44cd72d8dcbff66c75dd6c1e1fc20ac848a351df8c1d0a13ae2d3efe3cd9572",
+      "bytes": 463387
+    },
+    "SYN-TEX:DS2:B0": {
+      "path": "artifacts/clif_ip_synthetic_normal_r4/real_inputs/texbat_DS2_method_a_magnitude_nodes.csv",
+      "sha256": "f9b874cd0bd7af52e7e7c8514541244b0440011bb6e65abcef1154691161196c",
+      "bytes": 1771049
+    },
+    "SYN-TEX:DS2:M1": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds2-raw-iq-noise-continuity-20260729-v0/ds2_raw_iq_noise_features.csv",
+      "sha256": "e8f82ff40cbb239acc718f8f9a9315ffde5c24c82bad4dfd05ad207f7c11e756",
+      "bytes": 1067734
+    },
+    "SYN-TEX:DS3:B0": {
+      "path": "artifacts/clif_ip_synthetic_normal_r4/real_inputs/texbat_DS3_method_a_magnitude_nodes.csv",
+      "sha256": "010b2bd0341f5dfb35207cd7f622ae916e47416cf5a4bfa3a0e0138ead28c4a8",
+      "bytes": 1781194
+    },
+    "SYN-TEX:DS3:M1": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds3-raw-iq-noise-continuity-20260729-v0/ds3_raw_iq_noise_features.csv",
+      "sha256": "0cc7256b5028b7e5cd0053296d637736d8162c9cb2dc6b39ff18b471ab7b2fc7",
+      "bytes": 1071397
+    },
+    "SYN-TEX:DS4:B0": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/w1.0_s0.5/ds4/multi_prn_method_a_9tap_normalized_dmcpd_w1.0_s0.5/normal_prn_node_windows.csv",
+      "sha256": "6a59775957b6f1da171752d2cf1e118e9fb410765012b372a6e909f61da7af42",
+      "bytes": 4100933
+    },
+    "SYN-TEX:DS4:M1": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds4-raw-iq-noise-continuity-20260729-v0/ds4_raw_iq_noise_features.csv",
+      "sha256": "70b8f1252735acb3467f286b4bdd56e2325620aae2dc0d87779e63ad81d14c01",
+      "bytes": 301729
+    }
+  },
+  "calibration": {
+    "S0:SYN-OAK": {
+      "fit_rows": 661,
+      "source": "validation_only_centered_mean_shrinkage_cov",
+      "concordance": "positive_tail(B0z)*positive_tail(M1z)",
+      "component_mean": {
+        "B0": 0.11905408387442941,
+        "M1": 0.9141552938220829,
+        "P3": 0.00018500262821185442
+      },
+      "component_scale": {
+        "B0": 0.03169622011506296,
+        "M1": 0.2639232254075398,
+        "P3": 0.00014480234981146942
+      }
+    },
+    "S1:SYN-OAK": {
+      "fit_rows": 154,
+      "source": "validation_only_centered_mean_shrinkage_cov",
+      "concordance": "positive_tail(B0z)*positive_tail(M1z)",
+      "component_mean": {
+        "B0": 0.11511948603120717,
+        "M1": 1.0621734026107403,
+        "P3": 0.004558395512418021
+      },
+      "component_scale": {
+        "B0": 0.002916423900333413,
+        "M1": 0.26914091139601687,
+        "P3": 0.0009431387599254821
+      }
+    },
+    "S0:SYN-TEX": {
+      "fit_rows": 661,
+      "source": "validation_only_centered_mean_shrinkage_cov",
+      "concordance": "positive_tail(B0z)*positive_tail(M1z)",
+      "component_mean": {
+        "B0": 0.13093375371213942,
+        "M1": 0.9242400457409579,
+        "P3": 0.00014523270922710998
+      },
+      "component_scale": {
+        "B0": 0.04080899285491403,
+        "M1": 0.26658985410979863,
+        "P3": 0.00015849874149462156
+      }
+    },
+    "S1:SYN-TEX": {
+      "fit_rows": 154,
+      "source": "validation_only_centered_mean_shrinkage_cov",
+      "concordance": "positive_tail(B0z)*positive_tail(M1z)",
+      "component_mean": {
+        "B0": 0.12487665167102566,
+        "M1": 0.9525901274726278,
+        "P3": 0.004664097673684503
+      },
+      "component_scale": {
+        "B0": 0.002899283782560379,
+        "M1": 0.24070319411351893,
+        "P3": 0.0008460533955324072
+      }
+    },
+    "R0:SYN-TEX": {
+      "fit_rows": 154,
+      "source": "validation_only_centered_mean_shrinkage_cov",
+      "concordance": "positive_tail(B0z)*positive_tail(M1z)",
+      "component_mean": {
+        "B0": 0.02054924036182657,
+        "M1": 1.2216278455526617,
+        "P3": 0.00013383130114785717
+      },
+      "component_scale": {
+        "B0": 0.0024230056835260944,
+        "M1": 0.32236521631640114,
+        "P3": 5.096125521446846e-05
+      }
+    }
+  },
+  "per_epoch_files": {
+    "per_epoch/S0_SYN-OAK_clean_validation.csv": "b1cc78a6d474a6dd455cfca0e138224e0c11b0b91b8ceaa81da929db8ed7faff",
+    "per_epoch/S0_SYN-OAK_clean_test.csv": "29ff4ca60939e63a95c6adf197e7de9f2f9d77b3cdac47dafaf3d89392cce814",
+    "per_epoch/S0_SYN-OAK_os1.csv": "fb54bb4dda088db4702e63bdd7846b3cc791d97651c3118e10bd70784afe4243",
+    "per_epoch/S0_SYN-OAK_os2.csv": "f3a066e20b9a9e7d39586f77f7b3d09dfc42fb2195f66acc97c9791ce5feb477",
+    "per_epoch/S0_SYN-OAK_os3.csv": "810808d1a41b7bfdf6d2d0411511b2b2268e9d0b166f165b4fd06d60d2396cfd",
+    "per_epoch/S0_SYN-OAK_os4.csv": "5d0a4c996a3dd46950006fa085f336f53610815c1f8fcfb42cf814827356bbc5",
+    "per_epoch/S1_SYN-OAK_clean_validation.csv": "1b913b7541c13897765b68d7aa8bd271ec4fd71a691fc3d23972493069fc9cce",
+    "per_epoch/S1_SYN-OAK_clean_test.csv": "d86469cb3af454bf85c6aa523b816674a3fdb36ea145e9aaac0bc3cee31af011",
+    "per_epoch/S1_SYN-OAK_os1.csv": "0be7fbafafafbb2fec22b0f2fdfa5d5b25b3208224267c79b0930d101123a9e4",
+    "per_epoch/S1_SYN-OAK_os2.csv": "3078989fefecae1d14893fad43dac7f0c67218698f1c3e7385b189b8870e7771",
+    "per_epoch/S1_SYN-OAK_os3.csv": "b95701b8df714f0f4edba86b5f26c522596e04fcaa8da359f52a86e148da67ff",
+    "per_epoch/S1_SYN-OAK_os4.csv": "a90f3832e406172eeaf7cb839dc7eb8decb3a3cc5e2d9aba83c4e87bd9dce274",
+    "per_epoch/S0_SYN-TEX_clean_validation.csv": "411130e3c56a21c45e42246d0ebc9b11e742276b359e42376b50a2ebfe15c43f",
+    "per_epoch/S0_SYN-TEX_clean_test.csv": "ef81889ec61aad67d5761b2fde256ca80c399174c3b63f660386bc0a7bd53e99",
+    "per_epoch/S0_SYN-TEX_DS1.csv": "cd49b7ec46b94d0e5f0a498ce9895c399c33bbc36bb4d8a21624c56375ebf02b",
+    "per_epoch/S0_SYN-TEX_DS2.csv": "0f65e1794a1de3e737b64e405210410b813b05a8c52a446d169c3c35c5802e44",
+    "per_epoch/S0_SYN-TEX_DS3.csv": "90cc318127d3b5d5c786f2acdaa1ebde330e8ca4090b53e94fe0bf133f30b22a",
+    "per_epoch/S0_SYN-TEX_DS4.csv": "587c8b084acfa9f15b60adb6ffe5c0609d3703ae745d42f23119d0fa75f6283e",
+    "per_epoch/S1_SYN-TEX_clean_validation.csv": "29a91fea151e4e47dfa23a24022d7e1da2eb50a1a924f6bb88731fba6b3759c6",
+    "per_epoch/S1_SYN-TEX_clean_test.csv": "60361ad6c09600dc95c77d7b2e2eb11450e28c878ba0a64edf7c689bbe46d5fb",
+    "per_epoch/S1_SYN-TEX_DS1.csv": "a3f06d8b277710c432c49f898a31146d112786e54e60a11279b5cebd663c2317",
+    "per_epoch/S1_SYN-TEX_DS2.csv": "3a09cd3e194b0178a24f52187cf04ca9651399577f37b54b3aae3204cc43b033",
+    "per_epoch/S1_SYN-TEX_DS3.csv": "1bd241dfed5013091103f7e1759fd2ef4ff50a024d9ee8123947dbe7e242a378",
+    "per_epoch/S1_SYN-TEX_DS4.csv": "e3e21090e4e5abc33dd965be4dceb3e8693b45ecf57c2023d06a645322bf15b4",
+    "per_epoch/R0_SYN-TEX_clean_validation.csv": "266347acea2227f967fcd922bf83a3d3997662289902d6b362cb3ee13d2f03e8",
+    "per_epoch/R0_SYN-TEX_clean_test.csv": "0c218a59722ce8ae6ef4e4c820839278a8739d4dfeba4a9962dfd238cc9240a1",
+    "per_epoch/R0_SYN-TEX_DS1.csv": "9c69a62f6081acb58cdf5e63501e0da87d6f3ce6b1febcd021752c3da95dfc97",
+    "per_epoch/R0_SYN-TEX_DS2.csv": "00bd39a08c23e7d8b76b5ea453e863537b4dcdf9bb85e4628b674edbbd9233c3",
+    "per_epoch/R0_SYN-TEX_DS3.csv": "b6f6387c9f236ffd0830d922c268059a49bd0fd4f2c94fc36babdb858934afcd",
+    "per_epoch/R0_SYN-TEX_DS4.csv": "934d8fdeaa9056a0195dc4a3c2e76518fee17707358ff81e61cfc008eb18603f"
+  }
+}

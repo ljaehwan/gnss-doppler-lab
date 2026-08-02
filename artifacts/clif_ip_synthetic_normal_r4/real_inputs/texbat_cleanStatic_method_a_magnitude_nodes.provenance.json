@@ -1,0 +1,21 @@
+{
+  "scenario": "cleanStatic",
+  "source": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.npz",
+  "source_sha256": "fcd1d378c28e79fe4a550b65fc1208cde3c8fb334db11406a07fed4d90fba237",
+  "output": "artifacts/clif_ip_synthetic_normal_r4/real_inputs/texbat_cleanStatic_method_a_magnitude_nodes.csv",
+  "output_sha256": "116a4cddbf62b2d985ce2ad326df47d38c7a05ca9aebf001b299965040fbf397",
+  "source_rows": 553639,
+  "node_rows": 10184,
+  "tap_semantics": "abs(complex_iq)/abs(prompt)",
+  "aggregation": "arithmetic mean by (PRN,floor(time_s*2)/2); auxiliary Method-A fields unavailable",
+  "equivalence_scope": "nine magnitude/prompt taps only; reconstructed-equivalence, not byte-identical historical tables",
+  "historical_comparison": {
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/w1.0_s0.5/cleanStatic/multi_prn_method_a_9tap_normalized_dmcpd_w1.0_s0.5/normal_prn_node_windows.csv",
+    "sha256": "f4be5df272aa6239e84fa1c8cf5f0001cef7a65e696b6e714c8f530d2b8394bf",
+    "matched_nodes": 1767,
+    "tap_values": 15903,
+    "mae": 0.0063686862156791795,
+    "max_abs_error": 0.08188475623500002,
+    "interpretation": "different producer window aggregation; validates compatible magnitude/prompt semantics only, not numeric identity"
+  }
+}
