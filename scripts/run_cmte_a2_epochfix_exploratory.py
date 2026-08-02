@@ -102,6 +102,24 @@ def match_clean_fpr(clean: pd.DataFrame, target: float) -> dict[str, dict[str, f
     return result
 
 
+def tracked_n_histogram(scenario: str, epoch: pd.DataFrame) -> list[dict[str, Any]]:
+    counts = epoch.tracked_prn_count.astype(int)
+    if counts.empty:
+        raise ValueError(f"tracked PRN histogram input is empty: {scenario}")
+    rows = []
+    for n, count in counts.value_counts().sort_index().items():
+        rows.append({
+            "scenario": scenario,
+            "N": int(n),
+            "epoch_count": int(count),
+            "fraction": float(count / len(epoch)),
+            "median_N": float(counts.median()),
+            "min_N": int(counts.min()),
+            "max_N": int(counts.max()),
+        })
+    return rows
+
+
 def metric_row(epoch: pd.DataFrame, model: str, threshold: float, onset: float, clean_fpr: float, operating: str) -> dict[str, Any]:
     column = MODELS[model]
     row = epoch_metrics(epoch, column, threshold, onset_s=onset, clean_fpr=clean_fpr)
@@ -179,6 +197,8 @@ def main() -> None:
     all_primary: list[dict[str, Any]] = []
     all_matched: list[dict[str, Any]] = []
     hist_rows: list[dict[str, Any]] = []
+    hist_rows.extend(tracked_n_histogram("cleanStatic_threshold", threshold_epoch))
+    hist_rows.extend(tracked_n_histogram("cleanStatic_test", clean_test))
     input_hashes = {"clean_per_prn.csv": sha256(state_dir / "clean_per_prn.csv")}
 
     clean_test.assign(scenario="CLEAN_TEST").drop(columns=["rmse_values"]).to_csv(staging / "per_epoch" / "cleanStatic_test.csv", index=False)
@@ -201,16 +221,7 @@ def main() -> None:
         epoch.drop(columns=["rmse_values"]).to_csv(staging / "per_epoch" / f"{scenario}.csv", index=False)
 
         counts = epoch.tracked_prn_count
-        for n, count in counts.value_counts().sort_index().items():
-            hist_rows.append({
-                "scenario": scenario,
-                "N": int(n),
-                "epoch_count": int(count),
-                "fraction": float(count / len(epoch)),
-                "median_N": float(counts.median()),
-                "min_N": int(counts.min()),
-                "max_N": int(counts.max()),
-            })
+        hist_rows.extend(tracked_n_histogram(scenario, epoch))
         if counts.median() <= 1:
             raise ValueError(f"epochfix failed: {scenario} median tracked PRN count <= 1")
 
