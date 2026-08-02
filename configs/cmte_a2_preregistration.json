@@ -1,0 +1,441 @@
+{
+  "schema": "gnss-doppler-lab.cmte-a2-preregistration.v1",
+  "preregistration_id": "CMTE-A2-TEXBAT-DS7-DS8-20260802",
+  "created_at": "2026-08-02T10:42:34Z",
+  "created_before_confirmatory_scoring": true,
+  "base_commit": "d19115e48f8859330ae05bbab59c0ffd5f3d2004",
+  "expected_prereg_commit": "SELF",
+  "branch": "research/cmte-a2-texbat-ds78",
+  "commit_message": "docs: preregister CMTE-A2 TEXBAT DS7/DS8",
+  "immutability": {
+    "no_post_exposure_edits": true,
+    "rule": "Do not edit either preregistration file after any CMTE-A2 DS7/DS8 residual, nonconformity, p-value, epoch score, alarm, or result is exposed. Corrections require a new, explicitly superseding preregistration before any further holdout access.",
+    "confirmatory_evaluations_per_scenario": 1
+  },
+  "study": {
+    "name": "CMTE-A2",
+    "expanded_name": "Multivariate Conformal Epoch Evidence detector",
+    "primary_claim_scope": "CMTE-A2-specific one-shot TEXBAT DS7/DS8 holdout",
+    "preregistration_only": true,
+    "ds7_ds8_cmte_a2_inference_or_scoring_already_performed": false
+  },
+  "data_tiers": {
+    "development": {
+      "scenarios": ["DS1", "DS2", "DS3", "DS4"],
+      "uses": ["development", "reproduction", "implementation tests"],
+      "previously_exposed_for": ["CMTE-A2 aggregation selection", "q99.5 operating-point selection"],
+      "confirmatory": false
+    },
+    "confirmatory": {
+      "scenarios": ["DS7", "DS8"],
+      "designation": "CMTE-A2-specific one-shot holdout",
+      "project_wide_pristine": false,
+      "reason": "The TEXBAT corpus, repository metadata, and historical evaluator/artifacts were previously exposed.",
+      "forbidden_uses": [
+        "model architecture or hyperparameter changes",
+        "feature, residual, covariance, nonconformity, p-value, or score changes",
+        "threshold or operating-point changes",
+        "PRN aggregation changes",
+        "timing, phase, metric, bootstrap, or success-criterion changes",
+        "choosing a DS8 fallback based on observed performance"
+      ]
+    }
+  },
+  "prior_exposure_disclosure": {
+    "project_wide_pristine_holdout": false,
+    "known_exposure": [
+      "DS7/DS8 corpus names, official attack descriptions, phase boundaries, raw-file metadata, and recording lengths",
+      "repository and external-storage manifests and prepared-input metadata",
+      "historical Method-A/node and historical B0/evaluator artifacts in the broader project",
+      "DS1-DS4 CMTE development results and prior selection of A2 with q99.5"
+    ],
+    "not_exposed_before_this_preregistration": "No CMTE-A2 DS7/DS8 model inference, signed residual, Q score, conformal p-value, epoch score, alarm, or confirmatory metric has been generated.",
+    "interpretation": "Results may support a prespecified CMTE-A2-specific holdout claim, not a claim that DS7/DS8 were pristine to the project or investigators."
+  },
+  "authoritative_sources": {
+    "scenario_manifest": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/data/external/texbat/manifests/scenarios.json",
+      "sha256": "4a9f011bd2bc151e8b98862199c5460427887a8a98fe13d980bd21899f3bf86e"
+    },
+    "ds7_ds8_pdf": {
+      "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/data/external/texbat/docs/texbat_ds7_and_ds8.pdf",
+      "sha256": "3ac9a01f79a7f099f93b91f2def613b6fa41897f0cf700cb4434795b974aa149"
+    },
+    "science_db_mirror_manifest": {
+      "path": "/home/ubuntu/unraid/gnss-datasets/texbat/manifests/ds7_ds8_scidb_manifest.tsv",
+      "sha256": "05fe26aeae3a14726ce84d260aae9d1f16563d87cfcbd00f8e4872aa687681a5"
+    }
+  },
+  "sources": {
+    "DS7": {
+      "attack": "Carrier-Aligned Matched-Power Time Push",
+      "phases_s": {
+        "no_spoof": [0.0, 110.0],
+        "carrier_phase_amplitude_ramp": [110.0, 130.0],
+        "takeover_antipodal_hold": [130.0, 150.0],
+        "time_push": [150.0, null]
+      },
+      "time_push_rate_m_per_s": 1.2,
+      "raw_iq": {
+        "path": "/home/ubuntu/unraid/gnss-datasets/texbat/raw/ds7.bin",
+        "sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+        "bytes": 27059290112,
+        "sample_rate_hz": 25000000,
+        "sample_format": "ishort interleaved IQ",
+        "actual_coverage_s": 270.59290112,
+        "coverage_note": "The byte-derived coverage is authoritative for available data even though the PDF describes a longer scenario."
+      },
+      "primary_prepared_input": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/exports/ds7.npz",
+        "sha256": "d0e6da4e27d51e3e96abf2ef7786501124072f28667671e4e40da756eb35f3c8",
+        "manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/exports/ds7.manifest.json",
+        "manifest_sha256": "8dec0643850c9d545b3980ea45bf2c3b9081cd2e314e208faab6bc51fa6e8959",
+        "tensor": "complex_iq",
+        "tensor_order": ["epoch", "tap", "component"],
+        "shape": [351746, 9, 2],
+        "component_order": ["I", "Q"]
+      }
+    },
+    "DS8": {
+      "attack": "SCER Carrier-Aligned Time Push",
+      "scenario_type": "time_push_scer",
+      "zero_delay_scer": true,
+      "phases_s": {
+        "no_spoof": [0.0, 110.0],
+        "carrier_phase_amplitude_ramp": [110.0, 130.0],
+        "takeover_antipodal_hold": [130.0, 150.0],
+        "time_push": [150.0, null]
+      },
+      "bit_estimation_effect_us": 50.0,
+      "bit_estimation_interpretation": "The approximately 50 microsecond bit-estimation effect is not a separate timing/onset claim at one-second analysis windows.",
+      "raw_iq": {
+        "path": "/home/ubuntu/unraid/gnss-datasets/texbat/raw/ds8.bin",
+        "sha256": "1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78",
+        "bytes": 47000141168,
+        "sample_rate_hz": 25000000,
+        "sample_format": "ishort interleaved IQ",
+        "actual_coverage_s": 470.00141168
+      },
+      "primary_prepared_input": {
+        "status_at_preregistration": "not_created",
+        "path": null,
+        "sha256": null,
+        "manifest_path": null,
+        "manifest_sha256": null,
+        "preparation_policy": "deterministic source-only preparation before any CMTE-A2 model access; freeze generated NPZ, manifest, rendered configuration, and wrapper hashes before confirmatory evaluation",
+        "on_preparation_failure": "Primary DS8 result is NA with an explicit reason. Historical Method-A node data may be reported only as sensitivity and may never silently replace the primary input."
+      }
+    },
+    "producer": {
+      "patched_gnss_sdr": {
+        "path": "/home/ubuntu/build-gnss-sdr-complex9/build-complex/src/main/gnss-sdr",
+        "sha256": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb"
+      },
+      "configuration": {
+        "channels": 11,
+        "taps": 9,
+        "tap_order": ["E4", "E3", "E2", "E", "P", "L", "L2", "L3", "L4"],
+        "tap_spacing_chips": 0.125,
+        "sample_rate_hz": 25000000
+      },
+      "complex_exporter": {
+        "repository_git_dir": "/home/ubuntu/projects/gnss-doppler-lab/.git",
+        "git_object": "f8a97987a8f48bd8f2f15dc249fc181a65d97842:src/gnss_doppler_lab/multiview/complex_taps.py",
+        "content_sha256": "30a45f988cec15fdce84552ff30747b472c7d76df07d93f79d6ae236166d4039"
+      },
+      "cmte_converter": {
+        "path": "/home/ubuntu/projects/gnss-doppler-cmte-a2-texbat-ds78/src/gnss_doppler_lab/cmte_inputs.py",
+        "base_content_sha256": "5e6db2ef2a07b01a5753d2ac3729df0da47c95821ce61fc4118b634efb671f5a",
+        "applies_to": ["cleanStatic", "DS1", "DS2", "DS3", "DS7", "fresh DS8"],
+        "magnitude_equation": "m_j = hypot(I_j, Q_j)",
+        "normalization": "per-epoch prompt-relative tap magnitude",
+        "window_seconds": 1.0,
+        "stride_seconds": 0.5,
+        "gap_bridging": false
+      },
+      "new_cmte_a2_wrapper": {
+        "path": null,
+        "sha256": null,
+        "requirement": "The wrapper and all implementation/code hashes must be frozen in a separate pre-evaluation commit before DS7/DS8 confirmatory evaluation."
+      }
+    },
+    "DS4_caveat": "No complex NPZ exists. Existing node input is an explicit mixed-producer development sensitivity source only and cannot support a confirmatory claim."
+  },
+  "frozen_model": {
+    "input": {
+      "signal": "raw receiver tap magnitude followed by prompt-relative normalization and prefix-fitted feature scaling",
+      "tap_order": ["E4", "E3", "E2", "E", "P", "L", "L2", "L3", "L4"],
+      "feature_count": 9,
+      "history_epochs": 12,
+      "causal": true,
+      "shared_prn_local": true,
+      "prn_identity_feature": false
+    },
+    "architecture": {
+      "encoder": [
+        "Linear(9,128)",
+        "LayerNorm(128)",
+        "GELU",
+        "Dropout(0.05)",
+        "Linear(128,128)",
+        "GELU"
+      ],
+      "recurrent": "GRU(input_size=128, hidden_size=128, num_layers=1, batch_first=true, bidirectional=false)",
+      "head": ["Linear(128,128)", "GELU", "Linear(128,9)"],
+      "prediction": "use the final causal GRU timestep to predict the next 9-vector"
+    },
+    "training": {
+      "source": "cleanStatic",
+      "prefix_s": [0.0, 240.0],
+      "window_membership": "fully contained: window_start_s >= 0 and window_end_s <= 240",
+      "existing_prn_holdout_within_prefix": true,
+      "holdout_use": "model selection only; no gradient or scaler fitting",
+      "scaler": "feature-wise nanmean and population nanstd (ddof=0) on prefix gradient-training PRNs only; non-finite mean -> 0; non-finite or <1e-6 std -> 1; standardized non-finite -> 0",
+      "optimizer": "AdamW",
+      "learning_rate": 0.001,
+      "weight_decay": 0.0001,
+      "adamw_betas": [0.9, 0.999],
+      "adamw_epsilon": 1e-8,
+      "amsgrad": false,
+      "epochs": 25,
+      "batch_size": 256,
+      "seed": 11,
+      "loss": "MSE over batch and 9 outputs",
+      "gradient_clip_global_norm": 1.0,
+      "scheduler": null,
+      "early_stopping": false,
+      "run_all_epochs": true,
+      "selection": "strict minimum held-PRN prefix validation MSE; ties retain the earlier checkpoint",
+      "excluded_from_training_and_selection_s": [250.0, null]
+    },
+    "history_reset": {
+      "dimensions": ["role", "split", "physical recording", "segment", "channel", "cadence gap"],
+      "prn_local_sequences": true,
+      "expected_cadence_s": 0.5,
+      "never_fill_interpolate_or_bridge": true
+    },
+    "residual": {
+      "equation": "r_i = x_i - xhat_i",
+      "signed": true,
+      "coordinate_system": "prefix-scaled 9-feature model space",
+      "distribution_fit_source": "eligible cleanStatic prefix residuals in [0,240), excluding held-PRN model-selection rows",
+      "distribution_fit_exclusions": ["cleanStatic >=240", "Qcal", "threshold role", "clean test", "DS1-DS8"]
+    },
+    "distribution": {
+      "dimension": 9,
+      "n": "number of eligible residual vectors in the distribution-fit role",
+      "mean_equation": "mu = (1/n) sum_j r_j",
+      "empirical_covariance_equation": "S = sum_j (r_j-mu)(r_j-mu)^T / max(1,n-1)",
+      "epsilon": 1e-8,
+      "shrinkage_equation": "lambda = min(1, 10/max(10,n))",
+      "diagonal_equation": "D = diag(max(diag(S), epsilon))",
+      "covariance_equation": "Sigma = (1-lambda)S + lambda D + epsilon I_9",
+      "nonconformity_equation": "q(r) = max(0, (r-mu)^T inverse(Sigma) (r-mu))",
+      "q_semantics": "full-shrinkage squared Mahalanobis"
+    },
+    "conformal_calibration": {
+      "source": "cleanStatic",
+      "interval_s": [250.0, 290.0],
+      "window_membership": "fully contained: window_start_s >= 250 and window_end_s <= 290",
+      "equation": "p_i = (1 + count_{q in Qcal}[q >= q_i]) / (n_cal + 1)",
+      "inclusive_ties": true,
+      "plus_one": true,
+      "reuse_for_threshold": false
+    },
+    "epoch_score": {
+      "epoch_key": ["physical_recording", "window_end_s"],
+      "current_tracked_prns_only": true,
+      "duplicate_prn_policy": "fail closed",
+      "equation": "A2_t = (1/N_t) sum_{i=1}^{N_t} [-ln(p_i)]",
+      "exact_name": "mean_i[-ln(p_i)]",
+      "alarm_comparison": "A2_t > threshold",
+      "online_normalization": false,
+      "sequential": false
+    },
+    "threshold": {
+      "source": "cleanStatic",
+      "interval_s": [300.0, 330.0],
+      "window_membership": "fully contained: window_start_s >= 300 and window_end_s <= 330",
+      "primary": "q99.5_higher",
+      "quantile_equation": "sort scores ascending as z[0..n-1]; q_higher(p) = z[ceil(p*(n-1))]",
+      "primary_probability": 0.995,
+      "alarm_is_strict_greater_than": true,
+      "diagnostics": {
+        "q99_higher": 0.99,
+        "empirical_target1": "smallest observed threshold-role score tau such that mean(score > tau) <= 0.01; ties use the higher tau"
+      },
+      "diagnostic_operating_points_cannot_replace_primary": true
+    },
+    "independent_clean_test": {
+      "source": "cleanStatic",
+      "interval_s": [340.0, null],
+      "window_membership": "window_start_s >= 340",
+      "fully_independent_end_to_end": true,
+      "uses": ["clean FPR", "comparator clean FPR", "matched-clean-FPR diagnostic evaluation only"],
+      "forbidden_uses": ["training", "scaler fit", "model selection", "residual distribution fit", "Qcal", "threshold selection"]
+    }
+  },
+  "comparators": {
+    "B0_Exact": {
+      "label": "chronological B0 with exact gate semantics",
+      "checkpoint": "same newly trained prefix-only chronological shared PRN-local GRU",
+      "node_score": "per-PRN scalar RMSE = sqrt(mean_i(r_i^2))",
+      "node_thresholds": ["q50_higher", "q70_higher", "q80_higher"],
+      "node_threshold_source": "cleanStatic threshold role [300,330) only",
+      "nominal_binomial_p": {"q50": 0.5, "q70": 0.3, "q80": 0.2},
+      "per_epoch": {
+        "K": "count of current PRNs with node_score > node_threshold",
+        "N": "number of current tracked PRNs",
+        "tail": "P[X >= K] for X ~ Binomial(N,p), computed by the exact finite sum",
+        "surprise": "-ln(max(tail,1e-300))",
+        "raw": "max(surprise_q50, surprise_q70, surprise_q80)"
+      },
+      "causal_smoothing": "state_t = 0.75*state_(t-1) + 0.25*raw_t, state before first epoch = 0",
+      "ewma_previous_state_weight": 0.75,
+      "reset": "physical recording/run reset; no cross-recording carry",
+      "final_threshold_source": "cleanStatic threshold role [300,330) only",
+      "final_threshold": "q99.5_higher with strict score > threshold",
+      "recalibration": "normal-only chronological recalibration; do not reuse the historical threshold tied to the old checkpoint",
+      "historical_numerical_equivalence": "A separate gate-only test must compare exact K/N, tails, max surprise, EWMA, and alarms against the historical evaluator/golden using historical precomputed node inputs. It does not assert new chronological checkpoint score equivalence."
+    },
+    "B0_Enhanced": {
+      "label": "B0-Enhanced",
+      "checkpoint": "same newly trained prefix-only chronological shared PRN-local GRU",
+      "node_score": "per-PRN scalar RMSE",
+      "node_thresholds": ["q50_higher", "q70_higher", "q80_higher"],
+      "node_threshold_source": "cleanStatic threshold role [300,330) only",
+      "binomial_p": "empirical strict exceedance probabilities in the same normal threshold role",
+      "raw": "maximum exact-binomial-tail surprise over q50/q70/q80",
+      "causal_smoothing": "pandas-style ewm(alpha=0.75, adjust=false): current weight 0.75, previous weight 0.25, initialized at the first raw value",
+      "final_threshold_source": "cleanStatic threshold role [300,330) only",
+      "final_threshold": "q99.5_higher with strict score > threshold",
+      "relationship": "Separate comparator matching previous CMTE A1 semantics; never label as B0-Exact."
+    },
+    "A0": {
+      "label": "A0",
+      "score": "maximum current per-PRN scalar RMSE",
+      "threshold_source": "cleanStatic threshold role [300,330) only",
+      "threshold": "q99.5_higher with strict score > threshold"
+    },
+    "common": {
+      "attack_labels_used_for_thresholds": false,
+      "all_thresholds_normal_threshold_role_only": true,
+      "primary_clean_test_threshold_tuning": false,
+      "similar_clean_fpr_absolute_tolerance": 0.005,
+      "matched_clean_fpr_diagnostic": "Using [300,330) only, choose for each comparator the observed threshold-role score with strict-exceedance occupancy nearest to CMTE-A2's threshold-role occupancy (absolute difference; tie -> higher threshold), freeze it, then evaluate on clean test and DS7/DS8. Diagnostic only; it cannot replace primary thresholds or success decisions."
+    }
+  },
+  "timing": {
+    "authority_priority": "official onset metadata",
+    "onset_s": {"DS7": 110.0, "DS8": 110.0},
+    "primary_availability_field": "window_end_s",
+    "delay_equation": "delay_s = window_end_s - 110",
+    "window_seconds": 1.0,
+    "stride_seconds": 0.5,
+    "stable_pre_rule": "[30,onset-20)",
+    "stable_pre_s": [30.0, 90.0],
+    "transition_s": [90.0, 110.0],
+    "established_s": [110.0, null],
+    "phase_sensitivity": {
+      "ramp": [110.0, 130.0],
+      "takeover_hold": [130.0, 150.0],
+      "time_push": [150.0, null]
+    },
+    "boundary_policy": "A window belongs to an interval only when fully contained in it. Windows crossing 90, 110, 130, or 150 seconds are excluded from both adjacent phase metrics.",
+    "ds8_50us_policy": "No onset, delay, or phase claim is made at 50 microseconds because primary windows are one second."
+  },
+  "metrics": {
+    "alarm": "score > frozen primary threshold",
+    "clean_fpr": "mean alarm occupancy over eligible independent clean-test epochs",
+    "stable_pre_fpr": "mean alarm occupancy over eligible [30,90) epochs",
+    "post_detection_rate": "mean alarm occupancy over eligible epochs fully contained in [110,recording end)",
+    "persistent_detection_rate": "mean alarm occupancy over eligible epochs fully contained in [150,recording end)",
+    "first_alarm_delay_s": "minimum window_end_s-110 among alarmed eligible post-onset epochs; NA/censored if none",
+    "persistent_3_epoch_delay_s": "delay of the first epoch in the first run of three alarmed, same-recording, 0.5-second-contiguous eligible post-onset epochs; NA/censored if none",
+    "roc_auc": "epoch-score ROC-AUC using stable-pre [30,90) as negative and post-onset [110,end) as positive; transition and boundary-crossing windows excluded",
+    "phase_detection_rates": ["110-130", "130-150", ">=150"],
+    "prn_count_diagnostic": {
+      "required": true,
+      "fields": ["epoch N distribution", "score distribution by exact N", "alarm occupancy by exact N", "clean/stable/post counts by N"],
+      "claim_policy": "diagnostic only; sparse N strata are reported as NA rather than pooled or used to change aggregation"
+    }
+  },
+  "bootstrap": {
+    "method": "moving-block bootstrap",
+    "seed": 20260802,
+    "replicates": 2000,
+    "confidence_level": 0.95,
+    "interval": "percentile",
+    "cadence_s": 0.5,
+    "block_epochs": 20,
+    "block_seconds": 10.0,
+    "minimum_block_seconds": 10.0,
+    "statistics": ["ROC-AUC", "stable-pre FPR", "persistent detection rate", "post detection rate"],
+    "construction": "Within each scenario, physical recording, phase, segment/channel-derived gap-safe epoch chunk, form non-overlapping 20-epoch blocks anchored at the chunk/phase start. Resample whole blocks with replacement within each statistic's required phase stratum to its original complete-block count. Never cross a phase, recording, or cadence gap.",
+    "point_estimates": "use all eligible epochs; complete blocks govern confidence intervals only",
+    "minimum_for_ci": "at least two complete 20-epoch blocks in every phase/class required by the statistic",
+    "insufficient_policy": "CI is NA with a machine-readable reason naming the insufficient contiguous phase/class",
+    "iid_fallback": false
+  },
+  "success_criteria": {
+    "decision_rule": "All criteria 1-6 must pass; NA in a required primary DS result fails the overall success decision but remains an honest NA result.",
+    "criteria": [
+      {
+        "id": 1,
+        "name": "independent_clean_fpr",
+        "pass": "CMTE-A2 clean_fpr <= 0.015"
+      },
+      {
+        "id": 2,
+        "name": "per_scenario_stable_pre",
+        "pass": "DS7 CMTE-A2 stable_pre_fpr <= 0.05 and DS8 CMTE-A2 stable_pre_fpr <= 0.05"
+      },
+      {
+        "id": 3,
+        "name": "catastrophic_pre_alarm_guard",
+        "pass": "Neither DS7 nor DS8 CMTE-A2 stable_pre_fpr is >= 0.20",
+        "note": "This explicit catastrophic guard is retained even though criterion 2 is stricter."
+      },
+      {
+        "id": 4,
+        "name": "improvement_over_b0_exact",
+        "pass": "At least one of DS7/DS8 improves chronological B0 with exact gate semantics at similar independent clean FPR (absolute difference <=0.005) by either first_alarm_delay_s at least 0.5 s faster, persistent_3_epoch_delay_s at least 0.5 s faster, post_detection_rate higher, or persistent_detection_rate higher. Rate comparisons are strict (> with numerical tolerance 1e-12). A pre-onset-alarming detector cannot claim a delay advantage on that scenario."
+      },
+      {
+        "id": 5,
+        "name": "no_catastrophic_degradation_on_other_scenario",
+        "pass": "On the other scenario, CMTE-A2 is not simultaneously worse than B0-Exact in every available attack metric: first-alarm delay, persistent-3-epoch delay, post-detection rate, and persistent-detection rate. A missing CMTE-A2 detection when B0-Exact detects is worse; both censored is a tie. Stable-pre and clean guards in criteria 1-3 still apply."
+      },
+      {
+        "id": 6,
+        "name": "prn_count_diagnostic_complete",
+        "pass": "The preregistered PRN-count diagnostic is produced for clean test, DS7, and DS8, including explicit NA reasons for sparse strata, with no aggregation change based on N."
+      }
+    ]
+  },
+  "forbidden_methods": [
+    "mixture e-values",
+    "mean e or any e-value aggregation",
+    "e-CUSUM",
+    "betting capital or restart capital",
+    "any sequential detector score or sequential threshold",
+    "online normalization, adaptive scaler, adaptive covariance, or adaptive threshold",
+    "PRN identity input or learned PRN embedding",
+    "cross-PRN graph/relation features",
+    "DS7/DS8-driven model, threshold, aggregation, timing, metric, or code selection",
+    "reuse of the historical B0 threshold with the new chronological checkpoint",
+    "silent substitution of historical Method-A node input for failed DS8 primary preparation",
+    "IID bootstrap fallback",
+    "bridging role, split, recording, segment, channel, or cadence gaps"
+  ],
+  "required_audit_outputs_after_future_evaluation": [
+    "implementation/freeze commit SHA and code hashes",
+    "all source, prepared-input, wrapper, checkpoint, scaler, state, calibration, and threshold hashes",
+    "role/split/history reset and row-count audit",
+    "gate-only historical B0 numerical-equivalence audit",
+    "primary and diagnostic operating points kept separate",
+    "point estimates, bootstrap CIs or explicit NA reasons",
+    "success-criterion audit",
+    "statement that the preregistration files were not edited after result exposure"
+  ]
+}
