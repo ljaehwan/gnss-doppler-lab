@@ -5,12 +5,8 @@ import argparse, json, os, platform, re, subprocess, sys
 from datetime import datetime, timezone
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]; sys.path.insert(0,str(ROOT/"src"))
-from gnss_doppler_lab.cmte_a2_campaign import TEST_ATTESTATION_SCHEMA,atomic_json,file_sha256,validate_source_tree
+from gnss_doppler_lab.cmte_a2_campaign import (TEST_ATTESTATION_SCHEMA,atomic_json,canonical_preflight_argv,file_sha256,validate_source_tree)
 
-FIXED_TEST_COMMANDS=(
- ("tests/test_cmte_a2.py","tests/test_cmte_a2_core_hardening.py"),
- ("tests/test_cmte_a2_campaign.py","tests/test_cmte_a2_remaining_gaps.py","tests/test_cmte_a2_execution_evidence.py"),
-)
 COUNT_RE=re.compile(r"(?P<count>\d+)\s+(?P<kind>passed|failed|error|errors|skipped|xfailed|xpassed)")
 
 def _utc(): return datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00","Z")
@@ -33,8 +29,8 @@ def main(argv=None):
  started=_utc(); commands=[]; aggregate_exit=0
  try:
   with tmp_log.open("w",encoding="utf-8") as stream:
-   for index,tests in enumerate(FIXED_TEST_COMMANDS,1):
-    command=[sys.executable,"-m","pytest","-q",*tests]; command_started=_utc()
+   for index,canonical in enumerate(canonical_preflight_argv(ROOT),1):
+    command=list(canonical); command_started=_utc()
     stream.write(f"## command {index}\n$ {json.dumps(command)}\nstarted_utc={command_started}\n"); stream.flush()
     result=subprocess.run(command,cwd=ROOT,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,check=False)
     stream.write(result.stdout); command_completed=_utc(); stream.write(f"\ncompleted_utc={command_completed}\nexit_code={result.returncode}\n"); stream.flush(); os.fsync(stream.fileno())
@@ -46,9 +42,9 @@ def main(argv=None):
   doc={"schema":TEST_ATTESTATION_SCHEMA,"source_commit":a.source_commit,"clean_tree_asserted":True,
     "started_utc":started,"completed_utc":_utc(),"exit_code":aggregate_exit,"commands":commands,"summary":summary,
     "log":{"path":str(log.resolve()),"sha256":file_sha256(log),"bytes":log.stat().st_size},
-    "python":{"executable":sys.executable,"version":sys.version,"platform":platform.platform()},
+    "python":{"executable":commands[0]["argv"][0],"version":sys.version,"platform":platform.platform()},
     "environment":{k:os.environ.get(k,"") for k in ("PYTHONHASHSEED","PYTHONPATH","VIRTUAL_ENV","PATH")},
-    "fixed_suite":True,"holdout_accessed":False}
+    "fixed_suite":True,"holdout_accessed":False,"subprocess_e2e_attested":False}
   atomic_json(out,doc,exclusive=True); print(json.dumps({"attestation":str(out),"log":str(log),"source_commit":a.source_commit,**summary},sort_keys=True))
   return aggregate_exit
  finally:

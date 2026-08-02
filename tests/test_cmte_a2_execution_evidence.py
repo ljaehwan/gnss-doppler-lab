@@ -1,5 +1,5 @@
 from __future__ import annotations
-import ast, hashlib, importlib.util, inspect, json, sys
+import ast, hashlib, importlib.util, inspect, json, subprocess, sys
 from pathlib import Path
 import pytest
 ROOT=Path(__file__).resolve().parents[1]
@@ -22,29 +22,66 @@ def test_eval_module_is_development_only_by_ast_and_confirm_capability_is_first_
   confirm.score_confirmatory(object(),["--state-dir",str(missing),"--scenario",f"DS7={missing}={missing}","--out",str(tmp_path/"out")])
  assert not (tmp_path/"out").exists()
 
-def _attestation(tmp_path, commit="a"*40, exit_code=0, failed=0, passed=35):
- log=tmp_path/"preflight.log"; log.write_text(f"## command 1\n{passed} passed, {failed} failed\n")
+def _head():
+ return subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()
+
+def _attestation(tmp_path, commit=None, exit_code=0, failed=0, passed=35):
+ from gnss_doppler_lab.cmte_a2_campaign import canonical_preflight_argv
+ commit=commit or _head(); argv=[list(x) for x in canonical_preflight_argv(ROOT)]
+ per_command=[passed,0]; log=tmp_path/"preflight.log"
+ log.write_text("".join(f"## command {i}\n{per_command[i-1]} passed, {failed if i==1 else 0} failed\n" for i in range(1,len(argv)+1)))
+ commands=[]
+ for index,command in enumerate(argv):
+  commands.append({"argv":command,"cwd":str(ROOT),"started_utc":"2026-08-02T00:00:00Z","completed_utc":"2026-08-02T00:01:00Z",
+   "exit_code":exit_code if index==0 else 0,"passed":per_command[index],"failed":failed if index==0 else 0,"skipped":0})
  doc={"schema":"gnss-doppler-lab.cmte-a2-test-attestation.v1","source_commit":commit,"clean_tree_asserted":True,
-  "started_utc":"2026-08-02T00:00:00Z","completed_utc":"2026-08-02T00:01:00Z","exit_code":exit_code,
-  "commands":[{"argv":[sys.executable,"-m","pytest","tests/test_cmte_a2.py"],"cwd":str(ROOT),"started_utc":"2026-08-02T00:00:00Z","completed_utc":"2026-08-02T00:01:00Z","exit_code":exit_code,"passed":passed,"failed":failed,"skipped":0}],
+  "started_utc":"2026-08-02T00:00:00Z","completed_utc":"2026-08-02T00:01:00Z","exit_code":exit_code,"commands":commands,
   "summary":{"passed":passed,"failed":failed,"skipped":0,"tests":passed+failed},
   "log":{"path":str(log.resolve()),"sha256":hashlib.sha256(log.read_bytes()).hexdigest(),"bytes":log.stat().st_size},
-  "python":{"executable":sys.executable,"version":sys.version,"platform":sys.platform},"environment":{"PYTHONHASHSEED":""}}
+  "python":{"executable":argv[0][0],"version":sys.version,"platform":sys.platform},"environment":{"PYTHONHASHSEED":""},
+  "fixed_suite":True,"holdout_accessed":False,"subprocess_e2e_attested":False}
  att=tmp_path/"attestation.json"; att.write_text(json.dumps(doc)); return att,doc,log
 
 def test_attestation_validator_rejects_missing_fake_wrong_commit_and_nonzero(tmp_path):
  from gnss_doppler_lab.cmte_a2_campaign import validate_test_attestation
- with pytest.raises((FileNotFoundError,ValueError)): validate_test_attestation(tmp_path/"missing.json","a"*40)
+ commit=_head()
+ with pytest.raises((FileNotFoundError,ValueError)): validate_test_attestation(tmp_path/"missing.json",commit)
  att,doc,log=_attestation(tmp_path)
- assert validate_test_attestation(att,"a"*40)["summary"]["passed"]==35
+ assert validate_test_attestation(att,commit)["summary"]["passed"]==35
  doc["source_commit"]="b"*40; att.write_text(json.dumps(doc))
- with pytest.raises(ValueError,match="commit"): validate_test_attestation(att,"a"*40)
- doc["source_commit"]="a"*40; doc["exit_code"]=1; doc["commands"][0]["exit_code"]=1; att.write_text(json.dumps(doc))
- with pytest.raises(ValueError,match="exit|failed"): validate_test_attestation(att,"a"*40)
+ with pytest.raises(ValueError,match="commit"): validate_test_attestation(att,commit)
+ doc["source_commit"]=commit; doc["exit_code"]=1; doc["commands"][0]["exit_code"]=1; att.write_text(json.dumps(doc))
+ with pytest.raises(ValueError,match="exit|failed"): validate_test_attestation(att,commit)
  doc["exit_code"]=0; doc["commands"][0]["exit_code"]=0; doc["summary"]["failed"]=1; att.write_text(json.dumps(doc))
- with pytest.raises(ValueError,match="failed"): validate_test_attestation(att,"a"*40)
+ with pytest.raises(ValueError,match="failed"): validate_test_attestation(att,commit)
  doc["summary"]["failed"]=0; log.write_text("tampered") ; att.write_text(json.dumps(doc))
- with pytest.raises(ValueError,match="log"): validate_test_attestation(att,"a"*40)
+ with pytest.raises(ValueError,match="log"): validate_test_attestation(att,commit)
+
+def test_attestation_validator_rejects_forged_true_command_and_false_contract_flags(tmp_path):
+ from gnss_doppler_lab.cmte_a2_campaign import validate_test_attestation
+ att,doc,_=_attestation(tmp_path)
+ doc["commands"][0]["argv"]=["/bin/true"]
+ doc["fixed_suite"]=False
+ doc["holdout_accessed"]=True
+ att.write_text(json.dumps(doc))
+ with pytest.raises(ValueError,match="fixed|holdout|command"):
+  validate_test_attestation(att,doc["source_commit"])
+
+@pytest.mark.parametrize(("mutation","match"),[
+ ("wrong_command","command"),("wrong_order","command"),("wrong_cwd","cwd"),
+ ("fixed_false","fixed_suite"),("fixed_one","fixed_suite"),
+ ("holdout_true","holdout_accessed"),("holdout_zero","holdout_accessed"),
+])
+def test_attestation_validator_authenticates_exact_suite_contract(tmp_path,mutation,match):
+ from gnss_doppler_lab.cmte_a2_campaign import validate_test_attestation
+ att,doc,_=_attestation(tmp_path)
+ if mutation=="wrong_command": doc["commands"][0]["argv"]=["/bin/true"]
+ elif mutation=="wrong_order": doc["commands"][0]["argv"][-2:]=reversed(doc["commands"][0]["argv"][-2:])
+ elif mutation=="wrong_cwd": doc["commands"][0]["cwd"]=str(tmp_path)
+ elif mutation.startswith("fixed"): doc["fixed_suite"]=False if mutation.endswith("false") else 1
+ else: doc["holdout_accessed"]=True if mutation.endswith("true") else 0
+ att.write_text(json.dumps(doc))
+ with pytest.raises(ValueError,match=match): validate_test_attestation(att,doc["source_commit"])
 
 def test_freeze_and_finalizer_require_real_attestation_and_sealed_provenance_names():
  campaign=(ROOT/"src/gnss_doppler_lab/cmte_a2_campaign.py").read_text()

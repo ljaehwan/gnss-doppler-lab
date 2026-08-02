@@ -249,6 +249,21 @@ def update_ledger(path:str|Path,*,status:str,detail:str|None=None,result_sha256:
 
 TEST_ATTESTATION_SCHEMA="gnss-doppler-lab.cmte-a2-test-attestation.v1"
 MINIMUM_PREFLIGHT_TESTS=30
+CMTE_A2_REPOSITORY_ROOT=Path(__file__).resolve().parents[2]
+CMTE_A2_PROJECT_PYTHON=CMTE_A2_REPOSITORY_ROOT/".venv/bin/python"
+FIXED_PREFLIGHT_TEST_COMMANDS=(
+ ("tests/test_cmte_a2.py","tests/test_cmte_a2_core_hardening.py"),
+ ("tests/test_cmte_a2_campaign.py","tests/test_cmte_a2_remaining_gaps.py","tests/test_cmte_a2_execution_evidence.py"),
+)
+SUBPROCESS_E2E_TEST="tests/test_cmte_a2_campaign_e2e.py"
+
+
+def canonical_preflight_argv(repo:str|Path=CMTE_A2_REPOSITORY_ROOT)->tuple[tuple[str,...],...]:
+ """Return the only command inventory accepted as focused preflight evidence."""
+ root=Path(repo).resolve(strict=True); project_python=root/".venv/bin/python"
+ if not project_python.is_file() or not os.access(project_python,os.X_OK):
+  raise ValueError(f"executable project venv Python required: {project_python}")
+ return tuple((str(project_python),"-m","pytest","-q",*tests) for tests in FIXED_PREFLIGHT_TEST_COMMANDS)
 
 
 def validate_test_attestation(path:str|Path,source_commit:str,*,minimum_tests:int=MINIMUM_PREFLIGHT_TESTS)->dict[str,Any]:
@@ -258,14 +273,28 @@ def validate_test_attestation(path:str|Path,source_commit:str,*,minimum_tests:in
   raise ValueError("test attestation schema mismatch; placeholder summaries are rejected")
  if doc.get("source_commit")!=source_commit: raise ValueError("test attestation source commit mismatch")
  if doc.get("clean_tree_asserted") is not True: raise ValueError("test attestation clean-tree assertion missing")
+ if doc.get("fixed_suite") is not True: raise ValueError("test attestation fixed_suite must be exactly true")
+ if doc.get("holdout_accessed") is not False: raise ValueError("test attestation holdout_accessed must be exactly false")
+ if doc.get("subprocess_e2e_attested") is not False:
+  raise ValueError("focused preflight must distinguish the separately run subprocess E2E test")
+ root=CMTE_A2_REPOSITORY_ROOT.resolve(strict=True)
+ if Path(_git(root,"rev-parse","--show-toplevel")).resolve(strict=True)!=root:
+  raise ValueError("test attestation repository root mismatch")
+ if _git(root,"rev-parse","HEAD")!=source_commit:
+  raise ValueError("test attestation source commit is not this worktree HEAD")
+ expected_commands=canonical_preflight_argv(root)
  for field in ("started_utc","completed_utc"):
   if not isinstance(doc.get(field),str) or not doc[field].endswith("Z"): raise ValueError(f"test attestation {field} invalid")
  commands=doc.get("commands")
- if not isinstance(commands,list) or not commands: raise ValueError("test attestation commands missing")
- for item in commands:
-  if (not isinstance(item,dict) or not isinstance(item.get("argv"),list) or not item["argv"]
+ if not isinstance(commands,list) or len(commands)!=len(expected_commands):
+  raise ValueError("test attestation canonical command inventory missing")
+ for item,expected_argv in zip(commands,expected_commands):
+  if (not isinstance(item,dict) or item.get("argv")!=list(expected_argv)
       or item.get("cwd") is None or item.get("exit_code")!=0):
-   raise ValueError("test attestation command exit/record invalid")
+   raise ValueError("test attestation canonical command exit/record invalid")
+  try: command_cwd=Path(item["cwd"]).resolve(strict=True)
+  except (OSError,TypeError): raise ValueError("test attestation command cwd invalid") from None
+  if command_cwd!=root: raise ValueError("test attestation command cwd is not the exact repository root")
   if any(not isinstance(item.get(k),int) or item[k]<0 for k in ("passed","failed","skipped")):
    raise ValueError("test attestation parsed command counts invalid")
   if item["failed"]!=0: raise ValueError("test attestation command failed count nonzero")
@@ -284,8 +313,9 @@ def validate_test_attestation(path:str|Path,source_commit:str,*,minimum_tests:in
  if not text.strip() or not all("command "+str(i) in text for i in range(1,len(commands)+1)):
   raise ValueError("test attestation log content/command sections missing")
  python=doc.get("python",{})
- if not all(python.get(k) for k in ("executable","version","platform")) or not isinstance(doc.get("environment"),dict):
-  raise ValueError("test attestation Python/environment evidence missing")
+ if (python.get("executable")!=expected_commands[0][0] or not python.get("version") or not python.get("platform")
+     or not isinstance(doc.get("environment"),dict)):
+  raise ValueError("test attestation exact project Python/environment evidence missing")
  return doc
 
 
