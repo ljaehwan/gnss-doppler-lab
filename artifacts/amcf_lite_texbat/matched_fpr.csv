@@ -1,0 +1,16 @@
+model,threshold,clean_test_fpr,target_primary_clean_test_fpr,fit_source,diagnostic_only,attack_fit
+B0-Exact,1.4326209677940234,0.04918032786885246,0.04918032786885246,normal-only clean_test diagnostic,True,False
+complex K3,-0.5010720862470395,0.04918032786885246,0.04918032786885246,normal-only clean_test diagnostic,True,False
+complex adaptive K5,-0.4030021545718566,0.04918032786885246,0.04918032786885246,normal-only clean_test diagnostic,True,False
+complex adaptive K7,-0.3598863839709283,0.04918032786885246,0.04918032786885246,normal-only clean_test diagnostic,True,False
+complex all9,-0.3161939669534101,0.04918032786885246,0.04918032786885246,normal-only clean_test diagnostic,True,False
+complex fixed K5,-0.4323939835258368,0.04918032786885246,0.04918032786885246,normal-only clean_test diagnostic,True,False
+complex fixed K7,-0.3759186258604709,0.04918032786885246,0.04918032786885246,normal-only clean_test diagnostic,True,False
+complex random K5 seed11,-0.36121344211751794,0.04918032786885246,0.04918032786885246,normal-only clean_test diagnostic,True,False
+complex random K5 seed23,-0.39317544182811687,0.04918032786885246,0.04918032786885246,normal-only clean_test diagnostic,True,False
+complex random K5 seed37,-0.3866168234738952,0.04918032786885246,0.04918032786885246,normal-only clean_test diagnostic,True,False
+complex random K7 seed11,-0.3447372818503796,0.04918032786885246,0.04918032786885246,normal-only clean_test diagnostic,True,False
+complex random K7 seed23,-0.3853745166275971,0.04918032786885246,0.04918032786885246,normal-only clean_test diagnostic,True,False
+complex random K7 seed37,-0.33896503084097634,0.04918032786885246,0.04918032786885246,normal-only clean_test diagnostic,True,False
+magnitude all9,-0.07253682470136491,0.04918032786885246,0.04918032786885246,normal-only clean_test diagnostic,True,False
+phase all9,-0.3997493525168968,0.04918032786885246,0.04918032786885246,normal-only clean_test diagnostic,True,False

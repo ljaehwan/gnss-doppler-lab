@@ -1,0 +1,47 @@
+{
+  "complex": {
+    "df": 4.0,
+    "epochs_cap": 25,
+    "hidden": 32,
+    "iterations": 25,
+    "masked_examples": 15054,
+    "optimizer_message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+    "optimizer_success": false,
+    "prn_feature": false,
+    "seed": 20260802,
+    "state_sha256": "6af91e332ab05e09b46578d4d7a9f7778e08ecefb6210fce7099b0e49165a9a1",
+    "train_objective": -0.8971970001119887,
+    "train_rows": 5018,
+    "validation_nll": -0.9653378740155637
+  },
+  "magnitude": {
+    "df": 4.0,
+    "epochs_cap": 25,
+    "hidden": 32,
+    "iterations": 25,
+    "masked_examples": 15054,
+    "optimizer_message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+    "optimizer_success": false,
+    "prn_feature": false,
+    "seed": 20260803,
+    "state_sha256": "a348196d95c8c4d96b133ca1b640bfdb1c0024993265e59ed8a35c89c4d4e125",
+    "train_objective": -0.902683820753151,
+    "train_rows": 5018,
+    "validation_nll": -0.9856688185663095
+  },
+  "phase": {
+    "df": 4.0,
+    "epochs_cap": 25,
+    "hidden": 32,
+    "iterations": 25,
+    "masked_examples": 15054,
+    "optimizer_message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+    "optimizer_success": false,
+    "prn_feature": false,
+    "seed": 20260804,
+    "state_sha256": "960be1a507639c0586e05e8d5e90789dd9fef31d0a47aa019ee45c7660f645c8",
+    "train_objective": -1.8490361064180858,
+    "train_rows": 5018,
+    "validation_nll": -1.8946981330607793
+  }
+}

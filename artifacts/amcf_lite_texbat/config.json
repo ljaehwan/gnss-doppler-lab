@@ -1,0 +1,28 @@
+{
+  "diagnostic_threshold": "q995",
+  "epochs": 25,
+  "hidden": 32,
+  "onsets": {
+    "DS1": 100.0,
+    "DS2": 100.0,
+    "DS3": 100.0,
+    "DS7": 110.0,
+    "DS8": 110.0
+  },
+  "primary_threshold": "q99 normal-only calibration",
+  "random_seeds": [
+    11,
+    23,
+    37
+  ],
+  "roles": {
+    "calibration": "[340,410)",
+    "clean_test": "[420,inf)",
+    "train": "[0,240)",
+    "validation": "[250,330)"
+  },
+  "schema": "gnss-doppler-lab.amcf-lite-config.v1",
+  "seed": 20260802,
+  "smoke": false,
+  "status": "post-exposure developmental feasibility; not confirmatory"
+}

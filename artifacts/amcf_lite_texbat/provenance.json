@@ -1,0 +1,84 @@
+{
+  "DS4": "NA: producer mismatch; excluded by design",
+  "base_commit": "1537c958f7e82a83a32cd40a7d5c22a1328b3cf8",
+  "branch": "research/amcf-lite-texbat",
+  "input_npz": {
+    "DS1": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds1.npz",
+      "rows": 497577,
+      "sha256": "b24d947c83890dbfa1c801bfbcb72e1fd192dd66509e927eb5afb8118902b072",
+      "shape": [
+        497577,
+        9,
+        2
+      ]
+    },
+    "DS2": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds2.npz",
+      "rows": 474168,
+      "sha256": "dae0f245cbb107febd220c6de33b9a279a2bad356cb0ba772daf9418bc75d7c9",
+      "shape": [
+        474168,
+        9,
+        2
+      ]
+    },
+    "DS3": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds3.npz",
+      "rows": 616599,
+      "sha256": "38eb5842dfec306d99bf0c5d61df6cffcb6faa25ed63721cafa8e3c3776f9b3e",
+      "shape": [
+        616599,
+        9,
+        2
+      ]
+    },
+    "DS7": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/exports/ds7.npz",
+      "rows": 351746,
+      "sha256": "d0e6da4e27d51e3e96abf2ef7786501124072f28667671e4e40da756eb35f3c8",
+      "shape": [
+        351746,
+        9,
+        2
+      ]
+    },
+    "DS8": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/exports/ds8.npz",
+      "rows": 464692,
+      "sha256": "d1973fa150b7b4e7359df4827f36ce60289f206e9db11c1ac2bc1fd33a0df533",
+      "shape": [
+        464692,
+        9,
+        2
+      ]
+    },
+    "cleanStatic": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.npz",
+      "rows": 553639,
+      "sha256": "fcd1d378c28e79fe4a550b65fc1208cde3c8fb334db11406a07fed4d90fba237",
+      "shape": [
+        553639,
+        9,
+        2
+      ]
+    }
+  },
+  "model_state_sha256": {
+    "complex": "6af91e332ab05e09b46578d4d7a9f7778e08ecefb6210fce7099b0e49165a9a1",
+    "magnitude": "a348196d95c8c4d96b133ca1b640bfdb1c0024993265e59ed8a35c89c4d4e125",
+    "phase": "960be1a507639c0586e05e8d5e90789dd9fef31d0a47aa019ee45c7660f645c8"
+  },
+  "normal_only": {
+    "attack_fit_or_selection_or_calibration": false,
+    "independent_test": "cleanStatic >=420",
+    "model_fit": "cleanStatic [0,240)",
+    "quality_gate_fit": "cleanStatic [0,240)",
+    "threshold_calibration": "cleanStatic [340,410)",
+    "validation": "cleanStatic [250,330)"
+  },
+  "raw_iq_or_receiver_rerun": false,
+  "schema": "gnss-doppler-lab.amcf-lite-provenance.v1",
+  "source_commit": "6138894e6f35b1408db25958b001ce08ea99203c",
+  "status": "post-exposure exploratory"
+}

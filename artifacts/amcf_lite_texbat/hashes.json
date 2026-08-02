@@ -1,0 +1,31 @@
+{
+  "algorithm": "sha256",
+  "files": {
+    "README.md": "6909abc194065612010552dc8f3330237c782b9428ea84e37b83e97b519b81f4",
+    "adaptive_gain.csv": "2065fd73ab8e07da4c81df7a2c54b9298a0f8d3d823dbf8b1eeea82158f0be01",
+    "budget_summary.csv": "d0be71a7f68feeb4e71f9926dbbfb3137f844ae3a5af158ceba3990dff962470",
+    "config.json": "bf972fa3ba076e002c20bd40572c2b2969c8e7468622937dc08ca22a440f4aa0",
+    "feasibility_summary.json": "570e326d804766d1f83385d94bc30dfe6be975e349a0eab94084a1e05e0d28de",
+    "matched_fpr.csv": "9ec6ec62b450216711f97654749769c15654fbc0041f31fbab73631806a80b32",
+    "matched_metrics.csv": "d651e2b4b77761be9983af97cdb2bfec9c48dabae9aaec3417796978a90219f5",
+    "metrics.csv": "b94f51fd5a129fac64c6931b5bb51e9122e15100cac8f342eae0c89b84d50d7e",
+    "model_audit.json": "ca77df845ff87dd94cbe7e630fa2413e66cbca0f3dbdf8c249c2792f69817bc5",
+    "per_epoch/DS1.csv": "ec9629bdd778566e82e5c63fdd0a1fbbe1c348f8a046e9fb814d9b57ed3a1d5c",
+    "per_epoch/DS2.csv": "e2dade031f44a477c99026e12aecc27d70e47ad137ed7084dc22c99f9cce3aa1",
+    "per_epoch/DS3.csv": "5751c458e20fbaa4017d12aeb8ab4fdccc44b0d6f9fc4da813a3c7dac148bfbf",
+    "per_epoch/DS7.csv": "35e6f865d968f6b97b8eeaf892ac231b6c90fa0092b8f51f57a2b43cbaf930d9",
+    "per_epoch/DS8.csv": "87c97a66198054e585a0081d7c3ffa896cd204a5d78a4ce66a3d1ad6037f4735",
+    "per_epoch/cleanStatic.csv": "4cd2e5b15a7dcee733fc026bb003b8a61e9bdc74659e91c0e16aaaf96504b572",
+    "plots/DS1.png": "e766362bc780d9cbec81fbf04eea8e5dac0e3521cb0111ed603c9445d6289cca",
+    "plots/DS2.png": "d70c74ad42607d3eadc679108c1b7f74dc7a40802326642ce3d119ea15ec7471",
+    "plots/DS3.png": "2cdbcc7b3f06399281cb128d4e32e58e384a1167bf15e6dea00df12a5792eb46",
+    "plots/DS7.png": "40d1e465ed8e8a6b7d64cf9628fcb65beee6d6fce52b84c0f1f89cde8f98dfa9",
+    "plots/DS8.png": "a4306f2d2979eb08a8feb3d41950e2ffef32c4568480d0d556c71a324ff3e2ba",
+    "plots/cleanStatic.png": "af4463b0824ff179c88457074d7cd9f0ca47c3ff1ddcefa11a2c4049aa6a082d",
+    "provenance.json": "6abff581aa890eeecba2beb239643457fa33b817db77ea0cffd57706dfbb9976",
+    "qa.json": "406b55b28dcbf0fca2fb7ecb06986af38ba110a7f5e628fd4a47f2e06e5d4a38",
+    "tap_selection_histogram.csv": "0694e81402897f400420e3f5b6575611791ca6d5c5efe5be6944e67bfffa730d",
+    "test_summary.txt": "677304b47c8b07db5cf648b837cc68446fa7b81da6bf226e650cfa6d00a1913b",
+    "thresholds.json": "1e900044f96cd3cbd63f0caabe6e373f923d65ed87577b344267ecb8fe4044cb"
+  }
+}

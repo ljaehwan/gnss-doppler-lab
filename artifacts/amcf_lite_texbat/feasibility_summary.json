@@ -1,0 +1,552 @@
+{
+  "adaptive_selection": {
+    "complex adaptive K5": {
+      "DS1": [
+        {
+          "fraction": 0.2,
+          "tap": "E4",
+          "tap_index": 0
+        },
+        {
+          "fraction": 0.2,
+          "tap": "E3",
+          "tap_index": 1
+        },
+        {
+          "fraction": 0.2,
+          "tap": "E",
+          "tap_index": 3
+        },
+        {
+          "fraction": 0.2,
+          "tap": "P",
+          "tap_index": 4
+        },
+        {
+          "fraction": 0.2,
+          "tap": "L",
+          "tap_index": 5
+        }
+      ],
+      "DS2": [
+        {
+          "fraction": 0.2,
+          "tap": "E4",
+          "tap_index": 0
+        },
+        {
+          "fraction": 0.2,
+          "tap": "E3",
+          "tap_index": 1
+        },
+        {
+          "fraction": 0.2,
+          "tap": "E",
+          "tap_index": 3
+        },
+        {
+          "fraction": 0.2,
+          "tap": "P",
+          "tap_index": 4
+        },
+        {
+          "fraction": 0.2,
+          "tap": "L",
+          "tap_index": 5
+        }
+      ],
+      "DS3": [
+        {
+          "fraction": 0.2,
+          "tap": "E4",
+          "tap_index": 0
+        },
+        {
+          "fraction": 0.2,
+          "tap": "E3",
+          "tap_index": 1
+        },
+        {
+          "fraction": 0.2,
+          "tap": "E",
+          "tap_index": 3
+        },
+        {
+          "fraction": 0.2,
+          "tap": "P",
+          "tap_index": 4
+        },
+        {
+          "fraction": 0.2,
+          "tap": "L",
+          "tap_index": 5
+        }
+      ],
+      "DS7": [
+        {
+          "fraction": 0.2,
+          "tap": "E4",
+          "tap_index": 0
+        },
+        {
+          "fraction": 0.2,
+          "tap": "E3",
+          "tap_index": 1
+        },
+        {
+          "fraction": 0.2,
+          "tap": "E",
+          "tap_index": 3
+        },
+        {
+          "fraction": 0.2,
+          "tap": "P",
+          "tap_index": 4
+        },
+        {
+          "fraction": 0.2,
+          "tap": "L",
+          "tap_index": 5
+        }
+      ],
+      "DS8": [
+        {
+          "fraction": 0.2,
+          "tap": "E4",
+          "tap_index": 0
+        },
+        {
+          "fraction": 0.2,
+          "tap": "E3",
+          "tap_index": 1
+        },
+        {
+          "fraction": 0.2,
+          "tap": "E",
+          "tap_index": 3
+        },
+        {
+          "fraction": 0.2,
+          "tap": "P",
+          "tap_index": 4
+        },
+        {
+          "fraction": 0.2,
+          "tap": "L",
+          "tap_index": 5
+        }
+      ],
+      "cleanStatic": [
+        {
+          "fraction": 0.2,
+          "tap": "E4",
+          "tap_index": 0
+        },
+        {
+          "fraction": 0.2,
+          "tap": "E3",
+          "tap_index": 1
+        },
+        {
+          "fraction": 0.2,
+          "tap": "E",
+          "tap_index": 3
+        },
+        {
+          "fraction": 0.2,
+          "tap": "P",
+          "tap_index": 4
+        },
+        {
+          "fraction": 0.2,
+          "tap": "L",
+          "tap_index": 5
+        }
+      ]
+    },
+    "complex adaptive K7": {
+      "DS1": [
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E4",
+          "tap_index": 0
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E3",
+          "tap_index": 1
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E2",
+          "tap_index": 2
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E",
+          "tap_index": 3
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "P",
+          "tap_index": 4
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "L",
+          "tap_index": 5
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "L2",
+          "tap_index": 6
+        }
+      ],
+      "DS2": [
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E4",
+          "tap_index": 0
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E3",
+          "tap_index": 1
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E2",
+          "tap_index": 2
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E",
+          "tap_index": 3
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "P",
+          "tap_index": 4
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "L",
+          "tap_index": 5
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "L2",
+          "tap_index": 6
+        }
+      ],
+      "DS3": [
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E4",
+          "tap_index": 0
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E3",
+          "tap_index": 1
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E2",
+          "tap_index": 2
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E",
+          "tap_index": 3
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "P",
+          "tap_index": 4
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "L",
+          "tap_index": 5
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "L2",
+          "tap_index": 6
+        }
+      ],
+      "DS7": [
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E4",
+          "tap_index": 0
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E3",
+          "tap_index": 1
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E2",
+          "tap_index": 2
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E",
+          "tap_index": 3
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "P",
+          "tap_index": 4
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "L",
+          "tap_index": 5
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "L2",
+          "tap_index": 6
+        }
+      ],
+      "DS8": [
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E4",
+          "tap_index": 0
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E3",
+          "tap_index": 1
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E2",
+          "tap_index": 2
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E",
+          "tap_index": 3
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "P",
+          "tap_index": 4
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "L",
+          "tap_index": 5
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "L2",
+          "tap_index": 6
+        }
+      ],
+      "cleanStatic": [
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E4",
+          "tap_index": 0
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E3",
+          "tap_index": 1
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E2",
+          "tap_index": 2
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "E",
+          "tap_index": 3
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "P",
+          "tap_index": 4
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "L",
+          "tap_index": 5
+        },
+        {
+          "fraction": 0.14285714285714285,
+          "tap": "L2",
+          "tap_index": 6
+        }
+      ]
+    }
+  },
+  "all9_proximity": {
+    "K5": {
+      "all_scenarios_near": false,
+      "scenario_checks": {
+        "DS1": true,
+        "DS2": true,
+        "DS3": true,
+        "DS7": false,
+        "DS8": false
+      }
+    },
+    "K7": {
+      "all_scenarios_near": false,
+      "scenario_checks": {
+        "DS1": true,
+        "DS2": true,
+        "DS3": true,
+        "DS7": false,
+        "DS8": false
+      }
+    }
+  },
+  "conclusion": "Complex all-nine-tap fields contain information missed by magnitude-only on DS1-DS3, but the active uncertainty policy is not consistently superior, does not approach all-nine performance on DS7/DS8, and does not beat B0-Exact at matched FPR.",
+  "criteria": {
+    "K5_or_K7_near_all9_all_scenarios": false,
+    "adaptive_K5_comparison_count": 20,
+    "adaptive_K5_roc_better_than_every_fixed_random_scenario_comparison": false,
+    "adaptive_K5_win_count": 8,
+    "adaptive_K7_comparison_count": 20,
+    "adaptive_K7_roc_better_than_every_fixed_random_scenario_comparison": false,
+    "adaptive_K7_win_count": 10,
+    "adaptive_consistently_superior": false,
+    "all_stable_pre_fpr_lt_0.05": true,
+    "go": false,
+    "independent_clean_fpr": 0.0491803278688524,
+    "independent_clean_fpr_le_0.015": false,
+    "matched_fpr_material_b0_improvement": false,
+    "stable_pre_fpr": {
+      "DS1": 0.01,
+      "DS2": 0.01,
+      "DS3": 0.0,
+      "DS7": 0.0083333333333333,
+      "DS8": 0.0083333333333333
+    }
+  },
+  "evidence_status": "developmental/post-exposure exploratory; not confirmatory",
+  "matched_b0": {
+    "DS1": {
+      "adaptive_post_detection_rate": 0.8977900552486188,
+      "adaptive_roc_auc": 0.9601243093922652,
+      "adaptive_stable_pre_fpr": 0.02,
+      "b0_post_detection_rate": 0.9654696132596684,
+      "b0_roc_auc": 0.9735911602209943,
+      "b0_stable_pre_fpr": 0.18,
+      "delta_post_detection_rate": -0.06767955801104963,
+      "delta_roc_auc": -0.013466850828729116
+    },
+    "DS2": {
+      "adaptive_post_detection_rate": 0.9174825174825176,
+      "adaptive_roc_auc": 0.9828111888111888,
+      "adaptive_stable_pre_fpr": 0.02,
+      "b0_post_detection_rate": 0.9706293706293706,
+      "b0_roc_auc": 0.9898461538461538,
+      "b0_stable_pre_fpr": 0.01,
+      "delta_post_detection_rate": -0.05314685314685297,
+      "delta_roc_auc": -0.007034965034965035
+    },
+    "DS3": {
+      "adaptive_post_detection_rate": 0.9134078212290504,
+      "adaptive_roc_auc": 0.974972067039106,
+      "adaptive_stable_pre_fpr": 0.01,
+      "b0_post_detection_rate": 0.9413407821229052,
+      "b0_roc_auc": 0.959217877094972,
+      "b0_stable_pre_fpr": 0.0,
+      "delta_post_detection_rate": -0.027932960893854775,
+      "delta_roc_auc": 0.015754189944134023
+    },
+    "DS7": {
+      "adaptive_post_detection_rate": 0.3819875776397515,
+      "adaptive_roc_auc": 0.7549689440993789,
+      "adaptive_stable_pre_fpr": 0.0083333333333333,
+      "b0_post_detection_rate": 0.6894409937888198,
+      "b0_roc_auc": 0.8899068322981366,
+      "b0_stable_pre_fpr": 0.1416666666666666,
+      "delta_post_detection_rate": -0.30745341614906835,
+      "delta_roc_auc": -0.13493788819875774
+    },
+    "DS8": {
+      "adaptive_post_detection_rate": 0.5527777777777778,
+      "adaptive_roc_auc": 0.8514583333333333,
+      "adaptive_stable_pre_fpr": 0.0083333333333333,
+      "b0_post_detection_rate": 0.9361111111111112,
+      "b0_roc_auc": 0.9815162037037036,
+      "b0_stable_pre_fpr": 0.0,
+      "delta_post_detection_rate": -0.3833333333333334,
+      "delta_roc_auc": -0.1300578703703703
+    }
+  },
+  "primary_model": "complex adaptive K7",
+  "representation_comparison": {
+    "DS1": {
+      "complex_minus_magnitude_roc_auc": 0.4657044198895026,
+      "complex_minus_phase_roc_auc": 0.14712707182320428,
+      "complex_post_detection_rate": 0.8729281767955801,
+      "complex_roc_auc": 0.9495165745856352,
+      "magnitude_post_detection_rate": 0.0151933701657458,
+      "magnitude_roc_auc": 0.4838121546961326,
+      "phase_post_detection_rate": 0.0966850828729281,
+      "phase_roc_auc": 0.8023895027624309
+    },
+    "DS2": {
+      "complex_minus_magnitude_roc_auc": 0.7321958041958043,
+      "complex_minus_phase_roc_auc": 0.29295104895104895,
+      "complex_post_detection_rate": 0.8167832167832167,
+      "complex_roc_auc": 0.9717622377622378,
+      "magnitude_post_detection_rate": 0.0587412587412587,
+      "magnitude_roc_auc": 0.2395664335664335,
+      "phase_post_detection_rate": 0.1104895104895104,
+      "phase_roc_auc": 0.6788111888111888
+    },
+    "DS3": {
+      "complex_minus_magnitude_roc_auc": 0.3249720670391061,
+      "complex_minus_phase_roc_auc": 0.10375698324022342,
+      "complex_post_detection_rate": 0.8952513966480447,
+      "complex_roc_auc": 0.9732122905027932,
+      "magnitude_post_detection_rate": 0.2108938547486033,
+      "magnitude_roc_auc": 0.6482402234636871,
+      "phase_post_detection_rate": 0.3254189944134078,
+      "phase_roc_auc": 0.8694553072625698
+    },
+    "DS7": {
+      "complex_minus_magnitude_roc_auc": -0.006055900621118049,
+      "complex_minus_phase_roc_auc": -0.005357142857142949,
+      "complex_post_detection_rate": 0.4937888198757764,
+      "complex_roc_auc": 0.8130175983436853,
+      "magnitude_post_detection_rate": 0.4875776397515527,
+      "magnitude_roc_auc": 0.8190734989648033,
+      "phase_post_detection_rate": 0.3447204968944099,
+      "phase_roc_auc": 0.8183747412008282
+    },
+    "DS8": {
+      "complex_minus_magnitude_roc_auc": 0.019872685185185146,
+      "complex_minus_phase_roc_auc": 0.015416666666666745,
+      "complex_post_detection_rate": 0.7972222222222223,
+      "complex_roc_auc": 0.9373032407407408,
+      "magnitude_post_detection_rate": 0.7694444444444445,
+      "magnitude_roc_auc": 0.9174305555555556,
+      "phase_post_detection_rate": 0.7208333333333333,
+      "phase_roc_auc": 0.921886574074074
+    }
+  },
+  "schema": "gnss-doppler-lab.amcf-lite-feasibility-summary.v1",
+  "selector_diagnostic": {
+    "sample_dependent_selection_observed": false,
+    "degenerated_to_static_policy": true,
+    "adaptive_K5_added_taps_all_epochs": ["E4", "E3"],
+    "adaptive_K7_added_taps_all_epochs": ["E4", "E3", "E2", "L2"],
+    "interpretation": "Predictive-scale ranking was identical on cleanStatic and DS1/DS2/DS3/DS7/DS8; no evidence of sample-dependent informative querying."
+  },
+  "status": "NO-GO"
+}

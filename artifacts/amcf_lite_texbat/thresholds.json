@@ -1,0 +1,137 @@
+{
+  "B0-Exact": {
+    "attack_fit": false,
+    "comparison": "strict_greater",
+    "fit_count": 125,
+    "fit_role": "calibration",
+    "fit_scenario": "cleanStatic",
+    "q99": 1.9453127765750735,
+    "q995": 1.9880378324299022
+  },
+  "complex K3": {
+    "attack_fit": false,
+    "comparison": "strict_greater",
+    "fit_count": 125,
+    "fit_role": "calibration",
+    "fit_scenario": "cleanStatic",
+    "q99": -0.47994853752557864,
+    "q995": -0.34556454640371054
+  },
+  "complex adaptive K5": {
+    "attack_fit": false,
+    "comparison": "strict_greater",
+    "fit_count": 125,
+    "fit_role": "calibration",
+    "fit_scenario": "cleanStatic",
+    "q99": -0.3479183784859982,
+    "q995": -0.34556454640371054
+  },
+  "complex adaptive K7": {
+    "attack_fit": false,
+    "comparison": "strict_greater",
+    "fit_count": 125,
+    "fit_role": "calibration",
+    "fit_scenario": "cleanStatic",
+    "q99": -0.3479183784859982,
+    "q995": -0.34556454640371054
+  },
+  "complex all9": {
+    "attack_fit": false,
+    "comparison": "strict_greater",
+    "fit_count": 125,
+    "fit_role": "calibration",
+    "fit_scenario": "cleanStatic",
+    "q99": -0.30931693380844905,
+    "q995": -0.2854974355207343
+  },
+  "complex fixed K5": {
+    "attack_fit": false,
+    "comparison": "strict_greater",
+    "fit_count": 125,
+    "fit_role": "calibration",
+    "fit_scenario": "cleanStatic",
+    "q99": -0.43276511138249457,
+    "q995": -0.34556454640371054
+  },
+  "complex fixed K7": {
+    "attack_fit": false,
+    "comparison": "strict_greater",
+    "fit_count": 125,
+    "fit_role": "calibration",
+    "fit_scenario": "cleanStatic",
+    "q99": -0.39678467263579087,
+    "q995": -0.34556454640371054
+  },
+  "complex random K5 seed11": {
+    "attack_fit": false,
+    "comparison": "strict_greater",
+    "fit_count": 125,
+    "fit_role": "calibration",
+    "fit_scenario": "cleanStatic",
+    "q99": -0.34556454640371054,
+    "q995": -0.29671779756134975
+  },
+  "complex random K5 seed23": {
+    "attack_fit": false,
+    "comparison": "strict_greater",
+    "fit_count": 125,
+    "fit_role": "calibration",
+    "fit_scenario": "cleanStatic",
+    "q99": -0.34556454640371054,
+    "q995": -0.3114668949425018
+  },
+  "complex random K5 seed37": {
+    "attack_fit": false,
+    "comparison": "strict_greater",
+    "fit_count": 125,
+    "fit_role": "calibration",
+    "fit_scenario": "cleanStatic",
+    "q99": -0.3479183784859982,
+    "q995": -0.34556454640371054
+  },
+  "complex random K7 seed11": {
+    "attack_fit": false,
+    "comparison": "strict_greater",
+    "fit_count": 125,
+    "fit_role": "calibration",
+    "fit_scenario": "cleanStatic",
+    "q99": -0.3479183784859982,
+    "q995": -0.34556454640371054
+  },
+  "complex random K7 seed23": {
+    "attack_fit": false,
+    "comparison": "strict_greater",
+    "fit_count": 125,
+    "fit_role": "calibration",
+    "fit_scenario": "cleanStatic",
+    "q99": -0.34556454640371054,
+    "q995": -0.27144266795263866
+  },
+  "complex random K7 seed37": {
+    "attack_fit": false,
+    "comparison": "strict_greater",
+    "fit_count": 125,
+    "fit_role": "calibration",
+    "fit_scenario": "cleanStatic",
+    "q99": -0.34556454640371054,
+    "q995": -0.2549215051117632
+  },
+  "magnitude all9": {
+    "attack_fit": false,
+    "comparison": "strict_greater",
+    "fit_count": 125,
+    "fit_role": "calibration",
+    "fit_scenario": "cleanStatic",
+    "q99": 0.22827645160655868,
+    "q995": 0.24459215379641341
+  },
+  "phase all9": {
+    "attack_fit": false,
+    "comparison": "strict_greater",
+    "fit_count": 125,
+    "fit_role": "calibration",
+    "fit_scenario": "cleanStatic",
+    "q99": 0.6088638328956528,
+    "q995": 0.6248404374588015
+  }
+}

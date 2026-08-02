@@ -1,0 +1,1603 @@
+{
+  "attack_fit_or_selection_or_calibration": false,
+  "causal_grid": {
+    "future_allowed": false,
+    "mapping": "first causal grid; latest row per epoch/PRN",
+    "origin_s": 0.0,
+    "stride_s": 0.5
+  },
+  "cleanStatic": {
+    "alignment_passed": true,
+    "causal_future_rows": 0,
+    "channel_count": 11,
+    "cn0_present": true,
+    "complex_iq_shape": [
+      553639,
+      9,
+      2
+    ],
+    "component_order": [
+      "I",
+      "Q"
+    ],
+    "decision_epochs": 961,
+    "duplicate_epoch_prn": 0,
+    "invariance": {
+      "global_phase_max_abs_error": 6.44528681875474e-08,
+      "navigation_sign_max_abs_error": 0.0,
+      "valid_masks_equal": true
+    },
+    "npz_fields": [
+      "channel",
+      "cn0_db_hz",
+      "complex_iq",
+      "prn",
+      "sample_count",
+      "segment_index",
+      "time_s"
+    ],
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.npz",
+    "prn_count": 19,
+    "prompt_magnitude": {
+      "median": 2796099.5,
+      "q01": 122506.229375,
+      "q99": 7285709.56
+    },
+    "prompt_near_zero_count": 2593,
+    "prompt_rejected_selected_count": 4,
+    "rows": 553639,
+    "segment_count": 12,
+    "selected_rows": 10180,
+    "sha256": "fcd1d378c28e79fe4a550b65fc1208cde3c8fb334db11406a07fed4d90fba237",
+    "tap_magnitude": {
+      "median": 0.7475465636178794,
+      "q01": 0.3430902895352968,
+      "q99": 1.1351730700811764
+    },
+    "tap_magnitude_curvature": {
+      "median": -0.012364143549903311,
+      "q01": -0.33568178081786765,
+      "q99": 0.23538420893314302
+    },
+    "tap_order": [
+      "E4",
+      "E3",
+      "E2",
+      "E",
+      "P",
+      "L",
+      "L2",
+      "L3",
+      "L4"
+    ],
+    "tap_phase_rad": {
+      "median": 0.0,
+      "q01": -0.514392377216003,
+      "q99": 0.5408481347957351
+    },
+    "tapwise_complex_distribution": {
+      "E": {
+        "magnitude": {
+          "count": 10180,
+          "median": 0.8875250341338219,
+          "q01": 0.7330491991001064,
+          "q99": 1.125391756316266
+        },
+        "phase_curvature_rad": {
+          "count": 10180,
+          "median": 0.003152065359843033,
+          "q01": -0.25122534242090055,
+          "q99": 0.26479486642720523
+        },
+        "phase_rad": {
+          "count": 10180,
+          "median": -0.004566052106388018,
+          "q01": -0.21733941627635492,
+          "q99": 0.20875374262312377
+        }
+      },
+      "E2": {
+        "magnitude": {
+          "count": 10180,
+          "median": 0.7637292062525819,
+          "q01": 0.5307191592374788,
+          "q99": 1.20731021439318
+        },
+        "phase_curvature_rad": {
+          "count": 10180,
+          "median": 0.0008625320617465446,
+          "q01": -0.2985193122182336,
+          "q99": 0.3398642386322453
+        },
+        "phase_rad": {
+          "count": 10180,
+          "median": -0.006255638653452479,
+          "q01": -0.3697663283226645,
+          "q99": 0.3493523741081865
+        }
+      },
+      "E3": {
+        "magnitude": {
+          "count": 10180,
+          "median": 0.6407337078419477,
+          "q01": 0.3787244430214364,
+          "q99": 1.2303012344891362
+        },
+        "phase_curvature_rad": {
+          "count": 10180,
+          "median": -0.002859877175655348,
+          "q01": -0.43603789012948097,
+          "q99": 0.37267215592241515
+        },
+        "phase_rad": {
+          "count": 10180,
+          "median": -0.0062329130862614265,
+          "q01": -0.5777311424070544,
+          "q99": 0.5738022089184892
+        }
+      },
+      "E4": {
+        "magnitude": {
+          "count": 10180,
+          "median": 0.5177547940892555,
+          "q01": 0.23413179729334563,
+          "q99": 1.24770120995501
+        },
+        "phase_curvature_rad": {
+          "count": 0,
+          "median": null,
+          "q01": null,
+          "q99": null
+        },
+        "phase_rad": {
+          "count": 10180,
+          "median": -0.008855511907163039,
+          "q01": -0.8752995833075794,
+          "q99": 0.8760384045063069
+        }
+      },
+      "L": {
+        "magnitude": {
+          "count": 10180,
+          "median": 0.8876970560424138,
+          "q01": 0.7187561800823514,
+          "q99": 1.1320725565663643
+        },
+        "phase_curvature_rad": {
+          "count": 10180,
+          "median": -0.0016410662695479621,
+          "q01": -0.26681925062505923,
+          "q99": 0.26575632003582667
+        },
+        "phase_rad": {
+          "count": 10180,
+          "median": 0.002231782005756448,
+          "q01": -0.18616425717633747,
+          "q99": 0.2215282807127347
+        }
+      },
+      "L2": {
+        "magnitude": {
+          "count": 10180,
+          "median": 0.7631297983644059,
+          "q01": 0.5287316551492894,
+          "q99": 1.1874073685516486
+        },
+        "phase_curvature_rad": {
+          "count": 10180,
+          "median": 0.00038449667437659603,
+          "q01": -0.323299264726826,
+          "q99": 0.28862195317602335
+        },
+        "phase_rad": {
+          "count": 10180,
+          "median": 0.004392280893046271,
+          "q01": -0.3560254475092483,
+          "q99": 0.4292582817274548
+        }
+      },
+      "L3": {
+        "magnitude": {
+          "count": 10180,
+          "median": 0.6402329713719823,
+          "q01": 0.3813483939030344,
+          "q99": 1.2554025973688185
+        },
+        "phase_curvature_rad": {
+          "count": 10180,
+          "median": -0.0016582495710445698,
+          "q01": -0.40729175583241223,
+          "q99": 0.3892106488748346
+        },
+        "phase_rad": {
+          "count": 10180,
+          "median": 0.00514265036559715,
+          "q01": -0.5230203045939469,
+          "q99": 0.5964462328834857
+        }
+      },
+      "L4": {
+        "magnitude": {
+          "count": 10180,
+          "median": 0.5184254780912751,
+          "q01": 0.24480308077073293,
+          "q99": 1.2900328045361775
+        },
+        "phase_curvature_rad": {
+          "count": 0,
+          "median": null,
+          "q01": null,
+          "q99": null
+        },
+        "phase_rad": {
+          "count": 10180,
+          "median": 0.004398633014521048,
+          "q01": -0.8133176588810598,
+          "q99": 0.9107074841188443
+        }
+      },
+      "P": {
+        "magnitude": {
+          "count": 10180,
+          "median": 1.0,
+          "q01": 0.9999999999999996,
+          "q99": 1.0000000000000004
+        },
+        "phase_curvature_rad": {
+          "count": 10180,
+          "median": -0.002631623584984124,
+          "q01": -0.27868442956322825,
+          "q99": 0.291665079819129
+        },
+        "phase_rad": {
+          "count": 10180,
+          "median": 0.0,
+          "q01": 0.0,
+          "q99": 0.0
+        }
+      }
+    },
+    "time_range_s": [
+      0.04025756,
+      480.16138036
+    ],
+    "tracked_N": {
+      "median": 11.0,
+      "q01": 9.6,
+      "q99": 11.0
+    }
+  },
+  "component_order": [
+    "I",
+    "Q"
+  ],
+  "passed": true,
+  "prompt_gate": {
+    "attack_fit": false,
+    "fit_interval": [
+      0.0,
+      240.0
+    ],
+    "fit_rows": 362743,
+    "fit_source": "cleanStatic train only",
+    "min_prompt_magnitude": 83196.60403133683,
+    "quantile": 0.005
+  },
+  "scenarios": {
+    "DS1": {
+      "alignment_passed": true,
+      "causal_future_rows": 0,
+      "channel_count": 11,
+      "cn0_present": true,
+      "complex_iq_shape": [
+        497577,
+        9,
+        2
+      ],
+      "component_order": [
+        "I",
+        "Q"
+      ],
+      "decision_epochs": 924,
+      "duplicate_epoch_prn": 0,
+      "invariance": {
+        "global_phase_max_abs_error": 6.337783990132939e-08,
+        "navigation_sign_max_abs_error": 0.0,
+        "valid_masks_equal": true
+      },
+      "npz_fields": [
+        "channel",
+        "cn0_db_hz",
+        "complex_iq",
+        "prn",
+        "sample_count",
+        "segment_index",
+        "time_s"
+      ],
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds1.npz",
+      "prn_count": 18,
+      "prompt_magnitude": {
+        "median": 242483.046875,
+        "q01": 8520.9046875,
+        "q99": 2649889.9899999998
+      },
+      "prompt_near_zero_count": 96843,
+      "prompt_rejected_selected_count": 844,
+      "rows": 497577,
+      "segment_count": 9,
+      "selected_rows": 9023,
+      "sha256": "b24d947c83890dbfa1c801bfbcb72e1fd192dd66509e927eb5afb8118902b072",
+      "tap_magnitude": {
+        "median": 0.775054746086267,
+        "q01": 0.3597810450111007,
+        "q99": 1.041395557500153
+      },
+      "tap_magnitude_curvature": {
+        "median": -0.02593506873752105,
+        "q01": -0.28837414236632236,
+        "q99": 0.1889844282490662
+      },
+      "tap_order": [
+        "E4",
+        "E3",
+        "E2",
+        "E",
+        "P",
+        "L",
+        "L2",
+        "L3",
+        "L4"
+      ],
+      "tap_phase_rad": {
+        "median": 0.010871060099495468,
+        "q01": -0.3920005041476725,
+        "q99": 0.4842249143741966
+      },
+      "tapwise_complex_distribution": {
+        "E": {
+          "magnitude": {
+            "count": 9023,
+            "median": 0.9151502321901819,
+            "q01": 0.7614500248540035,
+            "q99": 1.078457476965195
+          },
+          "phase_curvature_rad": {
+            "count": 9023,
+            "median": 0.0480252495986149,
+            "q01": -0.1999741020786696,
+            "q99": 0.27625613904768115
+          },
+          "phase_rad": {
+            "count": 9023,
+            "median": -0.02651383232170816,
+            "q01": -0.18849932725650778,
+            "q99": 0.14476430844907506
+          }
+        },
+        "E2": {
+          "magnitude": {
+            "count": 9023,
+            "median": 0.800118170036714,
+            "q01": 0.5823853780940029,
+            "q99": 1.0412833780891269
+          },
+          "phase_curvature_rad": {
+            "count": 9023,
+            "median": 0.0023245794461969616,
+            "q01": -0.2699451465388731,
+            "q99": 0.2948861914376152
+          },
+          "phase_rad": {
+            "count": 9023,
+            "median": -0.003977912097063842,
+            "q01": -0.2912366679140815,
+            "q99": 0.2877981456145249
+          }
+        },
+        "E3": {
+          "magnitude": {
+            "count": 9023,
+            "median": 0.6659882057941452,
+            "q01": 0.41864057078661737,
+            "q99": 0.981206431639946
+          },
+          "phase_curvature_rad": {
+            "count": 9023,
+            "median": -0.0011733359035473925,
+            "q01": -0.3327708861542546,
+            "q99": 0.32173390034068416
+          },
+          "phase_rad": {
+            "count": 9023,
+            "median": 0.019840522110730268,
+            "q01": -0.4299742513803479,
+            "q99": 0.4749598273909146
+          }
+        },
+        "E4": {
+          "magnitude": {
+            "count": 9023,
+            "median": 0.5316918425308464,
+            "q01": 0.2608765800074658,
+            "q99": 0.8789698291986899
+          },
+          "phase_curvature_rad": {
+            "count": 0,
+            "median": null,
+            "q01": null,
+            "q99": null
+          },
+          "phase_rad": {
+            "count": 9023,
+            "median": 0.04302170444042697,
+            "q01": -0.6608429108090583,
+            "q99": 0.7148264641740756
+          }
+        },
+        "L": {
+          "magnitude": {
+            "count": 9023,
+            "median": 0.9153542696004987,
+            "q01": 0.7765431090061493,
+            "q99": 1.0847115793280282
+          },
+          "phase_curvature_rad": {
+            "count": 9023,
+            "median": -0.034191629236113186,
+            "q01": -0.26451456453975497,
+            "q99": 0.18798118662317254
+          },
+          "phase_rad": {
+            "count": 9023,
+            "median": 0.04824732179092579,
+            "q01": -0.12123470306499455,
+            "q99": 0.220197423378698
+          }
+        },
+        "L2": {
+          "magnitude": {
+            "count": 9023,
+            "median": 0.7889677220312005,
+            "q01": 0.5893863813265394,
+            "q99": 1.045896492688157
+          },
+          "phase_curvature_rad": {
+            "count": 9023,
+            "median": -0.0077405098463515795,
+            "q01": -0.2699465280424905,
+            "q99": 0.26755664133479423
+          },
+          "phase_rad": {
+            "count": 9023,
+            "median": 0.05686847575517727,
+            "q01": -0.2503181898483122,
+            "q99": 0.35830041526199163
+          }
+        },
+        "L3": {
+          "magnitude": {
+            "count": 9023,
+            "median": 0.6668530354234411,
+            "q01": 0.4203447899466543,
+            "q99": 0.9848081717861247
+          },
+          "phase_curvature_rad": {
+            "count": 9023,
+            "median": 0.0037992414823615483,
+            "q01": -0.35209497514944166,
+            "q99": 0.3461169130871242
+          },
+          "phase_rad": {
+            "count": 9023,
+            "median": 0.06195894869135804,
+            "q01": -0.39442977182969885,
+            "q99": 0.5012223404166202
+          }
+        },
+        "L4": {
+          "magnitude": {
+            "count": 9023,
+            "median": 0.5370105281523314,
+            "q01": 0.27223961055363066,
+            "q99": 0.9068255993150909
+          },
+          "phase_curvature_rad": {
+            "count": 0,
+            "median": null,
+            "q01": null,
+            "q99": null
+          },
+          "phase_rad": {
+            "count": 9023,
+            "median": 0.07171714694736214,
+            "q01": -0.6084032805154904,
+            "q99": 0.7232520823579445
+          }
+        },
+        "P": {
+          "magnitude": {
+            "count": 9023,
+            "median": 1.0,
+            "q01": 0.9999999999999996,
+            "q99": 1.0000000000000004
+          },
+          "phase_curvature_rad": {
+            "count": 9023,
+            "median": 0.01934755842465857,
+            "q01": -0.1888897155920713,
+            "q99": 0.24218534755871368
+          },
+          "phase_rad": {
+            "count": 9023,
+            "median": 0.0,
+            "q01": 0.0,
+            "q99": 0.0
+          }
+        }
+      },
+      "time_range_s": [
+        0.03711056,
+        461.65776344
+      ],
+      "tracked_N": {
+        "median": 10.0,
+        "q01": 8.0,
+        "q99": 11.0
+      }
+    },
+    "DS2": {
+      "alignment_passed": true,
+      "causal_future_rows": 0,
+      "channel_count": 11,
+      "cn0_present": true,
+      "complex_iq_shape": [
+        474168,
+        9,
+        2
+      ],
+      "component_order": [
+        "I",
+        "Q"
+      ],
+      "decision_epochs": 915,
+      "duplicate_epoch_prn": 0,
+      "invariance": {
+        "global_phase_max_abs_error": 8.03924075259092e-08,
+        "navigation_sign_max_abs_error": 0.0,
+        "valid_masks_equal": true
+      },
+      "npz_fields": [
+        "channel",
+        "cn0_db_hz",
+        "complex_iq",
+        "prn",
+        "sample_count",
+        "segment_index",
+        "time_s"
+      ],
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds2.npz",
+      "prn_count": 15,
+      "prompt_magnitude": {
+        "median": 1898365.8125,
+        "q01": 95823.63609375,
+        "q99": 7982513.240000003
+      },
+      "prompt_near_zero_count": 3620,
+      "prompt_rejected_selected_count": 6,
+      "rows": 474168,
+      "segment_count": 7,
+      "selected_rows": 9795,
+      "sha256": "dae0f245cbb107febd220c6de33b9a279a2bad356cb0ba772daf9418bc75d7c9",
+      "tap_magnitude": {
+        "median": 0.7804965751633729,
+        "q01": 0.3536448065871522,
+        "q99": 1.0507611972827757
+      },
+      "tap_magnitude_curvature": {
+        "median": -0.025504777362155284,
+        "q01": -0.2757152182181118,
+        "q99": 0.17083749388632224
+      },
+      "tap_order": [
+        "E4",
+        "E3",
+        "E2",
+        "E",
+        "P",
+        "L",
+        "L2",
+        "L3",
+        "L4"
+      ],
+      "tap_phase_rad": {
+        "median": 0.016060896404785713,
+        "q01": -0.40481817344583504,
+        "q99": 0.5200724894303815
+      },
+      "tapwise_complex_distribution": {
+        "E": {
+          "magnitude": {
+            "count": 9795,
+            "median": 0.9198737906485309,
+            "q01": 0.7814662084298114,
+            "q99": 1.0932596118699718
+          },
+          "phase_curvature_rad": {
+            "count": 9795,
+            "median": 0.05907316680385614,
+            "q01": -0.15627303653483518,
+            "q99": 0.25587525324941374
+          },
+          "phase_rad": {
+            "count": 9795,
+            "median": -0.029970336670094255,
+            "q01": -0.18362604027139448,
+            "q99": 0.1361632000258606
+          }
+        },
+        "E2": {
+          "magnitude": {
+            "count": 9795,
+            "median": 0.8057796607268636,
+            "q01": 0.5966723595695683,
+            "q99": 1.0961044252025196
+          },
+          "phase_curvature_rad": {
+            "count": 9795,
+            "median": 0.0027327707128232265,
+            "q01": -0.22510243437346728,
+            "q99": 0.23818457340255844
+          },
+          "phase_rad": {
+            "count": 9795,
+            "median": -0.002442382304122416,
+            "q01": -0.2875275957300563,
+            "q99": 0.301071946786639
+          }
+        },
+        "E3": {
+          "magnitude": {
+            "count": 9795,
+            "median": 0.6707245090009849,
+            "q01": 0.41570221574528143,
+            "q99": 1.0947689384443806
+          },
+          "phase_curvature_rad": {
+            "count": 9795,
+            "median": -0.001329709748947681,
+            "q01": -0.2984781321368178,
+            "q99": 0.3190500604519007
+          },
+          "phase_rad": {
+            "count": 9795,
+            "median": 0.027457974915520107,
+            "q01": -0.42805698357591393,
+            "q99": 0.49055383107942513
+          }
+        },
+        "E4": {
+          "magnitude": {
+            "count": 9795,
+            "median": 0.5333832702223883,
+            "q01": 0.2643809690734262,
+            "q99": 1.0920123531295811
+          },
+          "phase_curvature_rad": {
+            "count": 0,
+            "median": null,
+            "q01": null,
+            "q99": null
+          },
+          "phase_rad": {
+            "count": 9795,
+            "median": 0.05778494908834769,
+            "q01": -0.650597761469427,
+            "q99": 0.7728749034072315
+          }
+        },
+        "L": {
+          "magnitude": {
+            "count": 9795,
+            "median": 0.9205694132848563,
+            "q01": 0.7631293156494126,
+            "q99": 1.0691964990442626
+          },
+          "phase_curvature_rad": {
+            "count": 9795,
+            "median": -0.041407840782120064,
+            "q01": -0.23833064312044136,
+            "q99": 0.17867963605567821
+          },
+          "phase_rad": {
+            "count": 9795,
+            "median": 0.05463834155883932,
+            "q01": -0.12720459001026355,
+            "q99": 0.21922310702311862
+          }
+        },
+        "L2": {
+          "magnitude": {
+            "count": 9795,
+            "median": 0.7933447361512891,
+            "q01": 0.572837883919502,
+            "q99": 1.0381008336603679
+          },
+          "phase_curvature_rad": {
+            "count": 9795,
+            "median": -0.008084984135915504,
+            "q01": -0.24080929139153254,
+            "q99": 0.25889961194538863
+          },
+          "phase_rad": {
+            "count": 9795,
+            "median": 0.06361874912213843,
+            "q01": -0.27122798282404115,
+            "q99": 0.36507971946333734
+          }
+        },
+        "L3": {
+          "magnitude": {
+            "count": 9795,
+            "median": 0.6671105893980219,
+            "q01": 0.39142686835304236,
+            "q99": 0.999102949554772
+          },
+          "phase_curvature_rad": {
+            "count": 9795,
+            "median": 0.003603552549010347,
+            "q01": -0.29796643931112177,
+            "q99": 0.3361818654255151
+          },
+          "phase_rad": {
+            "count": 9795,
+            "median": 0.065749814427633,
+            "q01": -0.43409468930726375,
+            "q99": 0.5493575691597103
+          }
+        },
+        "L4": {
+          "magnitude": {
+            "count": 9795,
+            "median": 0.5373090918682004,
+            "q01": 0.24108406358034576,
+            "q99": 0.9762385061258595
+          },
+          "phase_curvature_rad": {
+            "count": 0,
+            "median": null,
+            "q01": null,
+            "q99": null
+          },
+          "phase_rad": {
+            "count": 9795,
+            "median": 0.07328199487187007,
+            "q01": -0.70713128699562,
+            "q99": 0.854894752034345
+          }
+        },
+        "P": {
+          "magnitude": {
+            "count": 9795,
+            "median": 1.0,
+            "q01": 0.9999999999999996,
+            "q99": 1.0000000000000004
+          },
+          "phase_curvature_rad": {
+            "count": 9795,
+            "median": 0.024041449141382662,
+            "q01": -0.17407139843536726,
+            "q99": 0.22166821423045024
+          },
+          "phase_rad": {
+            "count": 9795,
+            "median": 0.0,
+            "q01": 0.0,
+            "q99": 0.0
+          }
+        }
+      },
+      "time_range_s": [
+        0.04133652,
+        457.1279394
+      ],
+      "tracked_N": {
+        "median": 11.0,
+        "q01": 9.0,
+        "q99": 11.0
+      }
+    },
+    "DS3": {
+      "alignment_passed": true,
+      "causal_future_rows": 0,
+      "channel_count": 11,
+      "cn0_present": true,
+      "complex_iq_shape": [
+        616599,
+        9,
+        2
+      ],
+      "component_order": [
+        "I",
+        "Q"
+      ],
+      "decision_epochs": 916,
+      "duplicate_epoch_prn": 0,
+      "invariance": {
+        "global_phase_max_abs_error": 1.1741510038488853e-07,
+        "navigation_sign_max_abs_error": 0.0,
+        "valid_masks_equal": true
+      },
+      "npz_fields": [
+        "channel",
+        "cn0_db_hz",
+        "complex_iq",
+        "prn",
+        "sample_count",
+        "segment_index",
+        "time_s"
+      ],
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds3.npz",
+      "prn_count": 18,
+      "prompt_magnitude": {
+        "median": 1262319.25,
+        "q01": 67011.3465625,
+        "q99": 3603583.315000004
+      },
+      "prompt_near_zero_count": 9416,
+      "prompt_rejected_selected_count": 30,
+      "rows": 616599,
+      "segment_count": 4,
+      "selected_rows": 9831,
+      "sha256": "38eb5842dfec306d99bf0c5d61df6cffcb6faa25ed63721cafa8e3c3776f9b3e",
+      "tap_magnitude": {
+        "median": 0.7880562355044448,
+        "q01": 0.30931814500749577,
+        "q99": 1.1695398499938263
+      },
+      "tap_magnitude_curvature": {
+        "median": -0.02389966734378135,
+        "q01": -0.32412867466927586,
+        "q99": 0.2690354363342633
+      },
+      "tap_order": [
+        "E4",
+        "E3",
+        "E2",
+        "E",
+        "P",
+        "L",
+        "L2",
+        "L3",
+        "L4"
+      ],
+      "tap_phase_rad": {
+        "median": 0.0018078035469070392,
+        "q01": -0.7462654914552559,
+        "q99": 0.8118712585819668
+      },
+      "tapwise_complex_distribution": {
+        "E": {
+          "magnitude": {
+            "count": 9831,
+            "median": 0.918964886491159,
+            "q01": 0.7164914822478917,
+            "q99": 1.1595159615137436
+          },
+          "phase_curvature_rad": {
+            "count": 9831,
+            "median": 0.04393076559241911,
+            "q01": -0.27988678041782156,
+            "q99": 0.37030109694550195
+          },
+          "phase_rad": {
+            "count": 9831,
+            "median": -0.02564783029970244,
+            "q01": -0.360290391320117,
+            "q99": 0.22958817828912143
+          }
+        },
+        "E2": {
+          "magnitude": {
+            "count": 9831,
+            "median": 0.8032693394257344,
+            "q01": 0.5188589136151995,
+            "q99": 1.2024681728280193
+          },
+          "phase_curvature_rad": {
+            "count": 9831,
+            "median": 0.006579877048363436,
+            "q01": -0.3706669856893745,
+            "q99": 0.4117605805394751
+          },
+          "phase_rad": {
+            "count": 9831,
+            "median": -0.007502573955890594,
+            "q01": -0.5891867746173038,
+            "q99": 0.48970676169157823
+          }
+        },
+        "E3": {
+          "magnitude": {
+            "count": 9831,
+            "median": 0.6735314300915856,
+            "q01": 0.3379880963783844,
+            "q99": 1.2379016252251374
+          },
+          "phase_curvature_rad": {
+            "count": 9831,
+            "median": 0.0016829813039336285,
+            "q01": -0.4555800587227516,
+            "q99": 0.49168551086458706
+          },
+          "phase_rad": {
+            "count": 9831,
+            "median": 0.015383394067455234,
+            "q01": -0.830172833913372,
+            "q99": 0.7942187028570568
+          }
+        },
+        "E4": {
+          "magnitude": {
+            "count": 9831,
+            "median": 0.541779650487531,
+            "q01": 0.2105957029461902,
+            "q99": 1.3161794625809633
+          },
+          "phase_curvature_rad": {
+            "count": 0,
+            "median": null,
+            "q01": null,
+            "q99": null
+          },
+          "phase_rad": {
+            "count": 9831,
+            "median": 0.037077205112633474,
+            "q01": -1.1825872389591956,
+            "q99": 1.1919465574718193
+          }
+        },
+        "L": {
+          "magnitude": {
+            "count": 9831,
+            "median": 0.91824986845622,
+            "q01": 0.7144918013613584,
+            "q99": 1.1452777770655755
+          },
+          "phase_curvature_rad": {
+            "count": 9831,
+            "median": -0.03038374934260142,
+            "q01": -0.3594378882394903,
+            "q99": 0.2845537209173459
+          },
+          "phase_rad": {
+            "count": 9831,
+            "median": 0.03873839398021573,
+            "q01": -0.20802482472033507,
+            "q99": 0.3121601056197418
+          }
+        },
+        "L2": {
+          "magnitude": {
+            "count": 9831,
+            "median": 0.7929336000158742,
+            "q01": 0.5030919973118988,
+            "q99": 1.188651269844896
+          },
+          "phase_curvature_rad": {
+            "count": 9831,
+            "median": -0.0027213452340273943,
+            "q01": -0.41130295296663993,
+            "q99": 0.3760843422339265
+          },
+          "phase_rad": {
+            "count": 9831,
+            "median": 0.044254020130314514,
+            "q01": -0.45979927433755396,
+            "q99": 0.5649068284192047
+          }
+        },
+        "L3": {
+          "magnitude": {
+            "count": 9831,
+            "median": 0.6692092441761002,
+            "q01": 0.33065093529100414,
+            "q99": 1.2237097412703712
+          },
+          "phase_curvature_rad": {
+            "count": 9831,
+            "median": 0.004647576171488144,
+            "q01": -0.5567144719408783,
+            "q99": 0.5417496281353235
+          },
+          "phase_rad": {
+            "count": 9831,
+            "median": 0.045763817464858185,
+            "q01": -0.8025268566860907,
+            "q99": 0.924644689582194
+          }
+        },
+        "L4": {
+          "magnitude": {
+            "count": 9831,
+            "median": 0.5424118372497937,
+            "q01": 0.1887415268213328,
+            "q99": 1.2536004487533599
+          },
+          "phase_curvature_rad": {
+            "count": 0,
+            "median": null,
+            "q01": null,
+            "q99": null
+          },
+          "phase_rad": {
+            "count": 9831,
+            "median": 0.05328496208540986,
+            "q01": -1.2797004443038387,
+            "q99": 1.4297760378181814
+          }
+        },
+        "P": {
+          "magnitude": {
+            "count": 9831,
+            "median": 1.0,
+            "q01": 0.9999999999999996,
+            "q99": 1.0000000000000004
+          },
+          "phase_curvature_rad": {
+            "count": 9831,
+            "median": 0.009682653581217324,
+            "q01": -0.29986091453212893,
+            "q99": 0.30743357289298245
+          },
+          "phase_rad": {
+            "count": 9831,
+            "median": 0.0,
+            "q01": 0.0,
+            "q99": 0.0
+          }
+        }
+      },
+      "time_range_s": [
+        0.04107404,
+        457.79806748
+      ],
+      "tracked_N": {
+        "median": 11.0,
+        "q01": 9.0,
+        "q99": 11.0
+      }
+    },
+    "DS7": {
+      "alignment_passed": true,
+      "causal_future_rows": 0,
+      "channel_count": 11,
+      "cn0_present": false,
+      "complex_iq_shape": [
+        351746,
+        9,
+        2
+      ],
+      "component_order": [
+        "I",
+        "Q"
+      ],
+      "decision_epochs": 542,
+      "duplicate_epoch_prn": 0,
+      "invariance": {
+        "global_phase_max_abs_error": 6.237107030244185e-08,
+        "navigation_sign_max_abs_error": 0.0,
+        "valid_masks_equal": true
+      },
+      "npz_fields": [
+        "channel",
+        "complex_iq",
+        "prn",
+        "sample_count",
+        "segment_index",
+        "time_s"
+      ],
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/exports/ds7.npz",
+      "prn_count": 15,
+      "prompt_magnitude": {
+        "median": 3533859.25,
+        "q01": 129996.20703125001,
+        "q99": 7347874.349999998
+      },
+      "prompt_near_zero_count": 1418,
+      "prompt_rejected_selected_count": 3,
+      "rows": 351746,
+      "segment_count": 6,
+      "selected_rows": 5662,
+      "sha256": "d0e6da4e27d51e3e96abf2ef7786501124072f28667671e4e40da756eb35f3c8",
+      "tap_magnitude": {
+        "median": 0.7451809687488373,
+        "q01": 0.13432053698734234,
+        "q99": 1.1508827619307087
+      },
+      "tap_magnitude_curvature": {
+        "median": -0.011112017006934871,
+        "q01": -0.37422746948749486,
+        "q99": 0.3685410822407507
+      },
+      "tap_order": [
+        "E4",
+        "E3",
+        "E2",
+        "E",
+        "P",
+        "L",
+        "L2",
+        "L3",
+        "L4"
+      ],
+      "tap_phase_rad": {
+        "median": 0.0,
+        "q01": -0.8799057341316759,
+        "q99": 0.9660164401163726
+      },
+      "tapwise_complex_distribution": {
+        "E": {
+          "magnitude": {
+            "count": 5662,
+            "median": 0.8879147512029735,
+            "q01": 0.7201542769268242,
+            "q99": 1.1161614755685945
+          },
+          "phase_curvature_rad": {
+            "count": 5662,
+            "median": 0.00319662397272949,
+            "q01": -0.2828234424366568,
+            "q99": 0.29467484304403463
+          },
+          "phase_rad": {
+            "count": 5662,
+            "median": -0.0041910350827736005,
+            "q01": -0.23875359665887655,
+            "q99": 0.2180095780408914
+          }
+        },
+        "E2": {
+          "magnitude": {
+            "count": 5662,
+            "median": 0.7718126275205042,
+            "q01": 0.5087672105421978,
+            "q99": 1.219632974241205
+          },
+          "phase_curvature_rad": {
+            "count": 5662,
+            "median": -0.0002746023645580093,
+            "q01": -0.3479341637431094,
+            "q99": 0.34263677159880296
+          },
+          "phase_rad": {
+            "count": 5662,
+            "median": -0.003758983090308446,
+            "q01": -0.4003622754712856,
+            "q99": 0.38195091914667584
+          }
+        },
+        "E3": {
+          "magnitude": {
+            "count": 5662,
+            "median": 0.6555595056904584,
+            "q01": 0.35785831915247396,
+            "q99": 1.2628473172816648
+          },
+          "phase_curvature_rad": {
+            "count": 5662,
+            "median": -0.002066869314789277,
+            "q01": -0.4307217157651433,
+            "q99": 0.43067010325828103
+          },
+          "phase_rad": {
+            "count": 5662,
+            "median": -0.002787865166073715,
+            "q01": -0.6206183989570396,
+            "q99": 0.6327875984887177
+          }
+        },
+        "E4": {
+          "magnitude": {
+            "count": 5662,
+            "median": 0.5387008289685579,
+            "q01": 0.24161250318834845,
+            "q99": 1.3739255631378235
+          },
+          "phase_curvature_rad": {
+            "count": 0,
+            "median": null,
+            "q01": null,
+            "q99": null
+          },
+          "phase_rad": {
+            "count": 5662,
+            "median": -0.0065762935579072816,
+            "q01": -0.9260267852040313,
+            "q99": 0.9534436450196414
+          }
+        },
+        "L": {
+          "magnitude": {
+            "count": 5662,
+            "median": 0.8898328500282064,
+            "q01": 0.7127116532091198,
+            "q99": 1.1846603903176183
+          },
+          "phase_curvature_rad": {
+            "count": 5662,
+            "median": -0.0013907864898946472,
+            "q01": -0.3501304876559934,
+            "q99": 0.35357731042434554
+          },
+          "phase_rad": {
+            "count": 5662,
+            "median": 0.00273698069480724,
+            "q01": -0.22712697299391985,
+            "q99": 0.22649970527323093
+          }
+        },
+        "L2": {
+          "magnitude": {
+            "count": 5662,
+            "median": 0.7384037536707414,
+            "q01": 0.36313448881877375,
+            "q99": 1.188130127162763
+          },
+          "phase_curvature_rad": {
+            "count": 5662,
+            "median": 0.0007801223361221226,
+            "q01": -0.6669889402574377,
+            "q99": 0.6837171907963422
+          },
+          "phase_rad": {
+            "count": 5662,
+            "median": 0.003913303416068016,
+            "q01": -0.5053692472706156,
+            "q99": 0.48661624500048384
+          }
+        },
+        "L3": {
+          "magnitude": {
+            "count": 5662,
+            "median": 0.6127201283106278,
+            "q01": 0.09816245064307594,
+            "q99": 1.1608746680494566
+          },
+          "phase_curvature_rad": {
+            "count": 5662,
+            "median": -0.001596357848381073,
+            "q01": -1.747929374977078,
+            "q99": 1.6596633550692566
+          },
+          "phase_rad": {
+            "count": 5662,
+            "median": 0.007027930480836095,
+            "q01": -1.211224070899847,
+            "q99": 1.2099934621009614
+          }
+        },
+        "L4": {
+          "magnitude": {
+            "count": 5662,
+            "median": 0.4870523533358897,
+            "q01": 0.0479791922076592,
+            "q99": 1.2950013971862528
+          },
+          "phase_curvature_rad": {
+            "count": 0,
+            "median": null,
+            "q01": null,
+            "q99": null
+          },
+          "phase_rad": {
+            "count": 5662,
+            "median": 0.0064752970370506105,
+            "q01": -2.55147086308883,
+            "q99": 2.6390816868136513
+          }
+        },
+        "P": {
+          "magnitude": {
+            "count": 5662,
+            "median": 1.0,
+            "q01": 0.9999999999999996,
+            "q99": 1.0000000000000004
+          },
+          "phase_curvature_rad": {
+            "count": 5662,
+            "median": -0.001156393492714177,
+            "q01": -0.2863701315592215,
+            "q99": 0.2831832918015947
+          },
+          "phase_rad": {
+            "count": 5662,
+            "median": 0.0,
+            "q01": 0.0,
+            "q99": 0.0
+          }
+        }
+      },
+      "time_range_s": [
+        0.04125756,
+        270.54110244
+      ],
+      "tracked_N": {
+        "median": 10.0,
+        "q01": 9.0,
+        "q99": 11.0
+      }
+    },
+    "DS8": {
+      "alignment_passed": true,
+      "causal_future_rows": 0,
+      "channel_count": 11,
+      "cn0_present": false,
+      "complex_iq_shape": [
+        464692,
+        9,
+        2
+      ],
+      "component_order": [
+        "I",
+        "Q"
+      ],
+      "decision_epochs": 940,
+      "duplicate_epoch_prn": 0,
+      "invariance": {
+        "global_phase_max_abs_error": 6.289248268140735e-08,
+        "navigation_sign_max_abs_error": 0.0,
+        "valid_masks_equal": true
+      },
+      "npz_fields": [
+        "channel",
+        "complex_iq",
+        "prn",
+        "sample_count",
+        "segment_index",
+        "time_s"
+      ],
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/exports/ds8.npz",
+      "prn_count": 15,
+      "prompt_magnitude": {
+        "median": 3783555.875,
+        "q01": 237502.73078125,
+        "q99": 7276578.495
+      },
+      "prompt_near_zero_count": 626,
+      "prompt_rejected_selected_count": 2,
+      "rows": 464692,
+      "segment_count": 6,
+      "selected_rows": 10018,
+      "sha256": "d1973fa150b7b4e7359df4827f36ce60289f206e9db11c1ac2bc1fd33a0df533",
+      "tap_magnitude": {
+        "median": 0.7417023111771899,
+        "q01": 0.08251327828848051,
+        "q99": 1.0782528424294033
+      },
+      "tap_magnitude_curvature": {
+        "median": -0.016843630082430117,
+        "q01": -0.3633810655009535,
+        "q99": 0.37565338778256924
+      },
+      "tap_order": [
+        "E4",
+        "E3",
+        "E2",
+        "E",
+        "P",
+        "L",
+        "L2",
+        "L3",
+        "L4"
+      ],
+      "tap_phase_rad": {
+        "median": 0.0,
+        "q01": -1.7037195164713657,
+        "q99": 1.997871394142969
+      },
+      "tapwise_complex_distribution": {
+        "E": {
+          "magnitude": {
+            "count": 10018,
+            "median": 0.8983037341189474,
+            "q01": 0.7188987500475331,
+            "q99": 1.0908497463737554
+          },
+          "phase_curvature_rad": {
+            "count": 10018,
+            "median": 0.0025151606661301673,
+            "q01": -0.2266692166790921,
+            "q99": 0.2473548180570539
+          },
+          "phase_rad": {
+            "count": 10018,
+            "median": -0.003267573158426023,
+            "q01": -0.18977348974484712,
+            "q99": 0.1760800558161614
+          }
+        },
+        "E2": {
+          "magnitude": {
+            "count": 10018,
+            "median": 0.7842601084872902,
+            "q01": 0.5228568689325968,
+            "q99": 1.1176199976702608
+          },
+          "phase_curvature_rad": {
+            "count": 10018,
+            "median": 0.0006361310241262979,
+            "q01": -0.28505921130031864,
+            "q99": 0.2921071078138668
+          },
+          "phase_rad": {
+            "count": 10018,
+            "median": -0.0035797102325977833,
+            "q01": -0.34445678823892606,
+            "q99": 0.3446093663314261
+          }
+        },
+        "E3": {
+          "magnitude": {
+            "count": 10018,
+            "median": 0.6680409646864522,
+            "q01": 0.35652420690883735,
+            "q99": 1.086999312896763
+          },
+          "phase_curvature_rad": {
+            "count": 10018,
+            "median": -0.0005871213772567314,
+            "q01": -0.35118066559351646,
+            "q99": 0.3686098677695154
+          },
+          "phase_rad": {
+            "count": 10018,
+            "median": -0.004312901344819856,
+            "q01": -0.5600867551664871,
+            "q99": 0.5774210410754417
+          }
+        },
+        "E4": {
+          "magnitude": {
+            "count": 10018,
+            "median": 0.5444869758417948,
+            "q01": 0.2204093011674442,
+            "q99": 1.027314903115617
+          },
+          "phase_curvature_rad": {
+            "count": 0,
+            "median": null,
+            "q01": null,
+            "q99": null
+          },
+          "phase_rad": {
+            "count": 10018,
+            "median": -0.004298195667567317,
+            "q01": -0.829801447877279,
+            "q99": 0.902480697951893
+          }
+        },
+        "L": {
+          "magnitude": {
+            "count": 10018,
+            "median": 0.8985968519266694,
+            "q01": 0.7324177029835084,
+            "q99": 1.1350330329949516
+          },
+          "phase_curvature_rad": {
+            "count": 10018,
+            "median": 0.0006091101177064101,
+            "q01": -0.2919537177385966,
+            "q99": 0.3250869788214589
+          },
+          "phase_rad": {
+            "count": 10018,
+            "median": 0.003367102563112996,
+            "q01": -0.18926274250053615,
+            "q99": 0.19390283659547736
+          }
+        },
+        "L2": {
+          "magnitude": {
+            "count": 10018,
+            "median": 0.68903112676456,
+            "q01": 0.37027836941025233,
+            "q99": 1.0740940375229582
+          },
+          "phase_curvature_rad": {
+            "count": 10018,
+            "median": 0.00410642662490366,
+            "q01": -0.7644309862231186,
+            "q99": 0.8897347266394572
+          },
+          "phase_rad": {
+            "count": 10018,
+            "median": 0.006845013329369554,
+            "q01": -0.4436173150689176,
+            "q99": 0.5008369893824007
+          }
+        },
+        "L3": {
+          "magnitude": {
+            "count": 10018,
+            "median": 0.48901733719846374,
+            "q01": 0.08702249279911847,
+            "q99": 1.0377250435907774
+          },
+          "phase_curvature_rad": {
+            "count": 10018,
+            "median": 0.005242618491701817,
+            "q01": -2.8183780366019078,
+            "q99": 2.782335923709186
+          },
+          "phase_rad": {
+            "count": 10018,
+            "median": 0.013800792137672263,
+            "q01": -1.3280067578411607,
+            "q99": 1.4823348660764304
+          }
+        },
+        "L4": {
+          "magnitude": {
+            "count": 10018,
+            "median": 0.3646118662533661,
+            "q01": 0.026894504290408294,
+            "q99": 1.0114544270762533
+          },
+          "phase_curvature_rad": {
+            "count": 0,
+            "median": null,
+            "q01": null,
+            "q99": null
+          },
+          "phase_rad": {
+            "count": 10018,
+            "median": 0.02293849469475804,
+            "q01": -2.9863033787107756,
+            "q99": 2.994566345679757
+          }
+        },
+        "P": {
+          "magnitude": {
+            "count": 10018,
+            "median": 1.0,
+            "q01": 0.9999999999999996,
+            "q99": 1.0000000000000004
+          },
+          "phase_curvature_rad": {
+            "count": 10018,
+            "median": 0.0004183906003612757,
+            "q01": -0.23540465983672554,
+            "q99": 0.20648941729741743
+          },
+          "phase_rad": {
+            "count": 10018,
+            "median": 0.0,
+            "q01": 0.0,
+            "q99": 0.0
+          }
+        }
+      },
+      "time_range_s": [
+        0.03956928,
+        469.94670808
+      ],
+      "tracked_N": {
+        "median": 11.0,
+        "q01": 10.0,
+        "q99": 11.0
+      }
+    }
+  },
+  "schema": "gnss-doppler-lab.amcf-lite-qa.v1",
+  "tap_order": [
+    "E4",
+    "E3",
+    "E2",
+    "E",
+    "P",
+    "L",
+    "L2",
+    "L3",
+    "L4"
+  ]
+}

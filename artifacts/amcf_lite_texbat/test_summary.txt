@@ -1,0 +1,2 @@
+AMCF-Lite unit/runner + corrected epoch/B0 related regression: 70 passed in 5.10s
+Command: pytest -q tests/test_amcf_lite.py tests/test_amcf_lite_runner.py tests/test_cmte_a2_epochfix.py tests/test_cmte_a2_epochfix_runner.py tests/test_score_texbat_prn_node_gru.py tests/test_tap_residual_common_drive.py
