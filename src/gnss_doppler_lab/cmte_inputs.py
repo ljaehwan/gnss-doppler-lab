@@ -59,17 +59,15 @@ def split_contiguous_history_chunks(nodes, *, seq_len=12, cadence_s=.5, toleranc
     if local.duplicated([*identity,"window_bin_s"]).any(): raise ValueError("duplicate canonical node window in cadence identity")
     parts=[]; chunks=[]; gaps=0
     ordered=local.sort_values([*identity,"window_bin_s","window_start_s"],kind="mergesort")
-    channel_counts=ordered.groupby(["run_id","prn","segment"],dropna=False)["channel"].nunique(dropna=False).to_dict()
     for key,group in ordered.groupby(identity,sort=True,dropna=False):
         group=group.reset_index(drop=True); bins=group.window_bin_s.to_numpy(float)
         breaks=np.flatnonzero(~np.isclose(np.diff(bins),cadence_s,atol=tolerance_s,rtol=0))+1
         gaps += int(len(breaks)); cuts=np.r_[0,breaks,len(group)]
         for chunk_index,(start,stop) in enumerate(zip(cuts[:-1],cuts[1:])):
             piece=group.iloc[int(start):int(stop)].copy(); rows=int(len(piece)); predictions=max(0,rows-seq_len)
-            base=str(key[0]); channel_suffix=""
-            if channel_counts[(key[0],key[1],key[2])]>1:
-                channel_suffix=f"::channel-{hashlib.sha256(str(key[3]).encode()).hexdigest()[:12]}"
-            chunk_run=f"{base}{channel_suffix}::cadence-chunk-{chunk_index:04d}"
+            base=str(key[0])
+            identity_text=f"{base}|{key[1]}|{key[2]}|{key[3]}|{chunk_index}"
+            chunk_run=f"history-{hashlib.sha256(identity_text.encode()).hexdigest()[:20]}"
             reason=None if predictions else "insufficient_history_rows_le_seq_len"
             record={"identity":{"run_id":str(key[0]),"prn":str(key[1]),"segment":str(key[2]),"channel":str(key[3])},
                     "chunk_index":int(chunk_index),"chunk_run_id":chunk_run,"first_window_bin_s":float(bins[int(start)]),
@@ -77,6 +75,12 @@ def split_contiguous_history_chunks(nodes, *, seq_len=12, cadence_s=.5, toleranc
                     "status":"scored" if predictions else "dropped","reason":reason}
             chunks.append(record)
             if predictions:
+                piece["recording_id"]=base
+                piece["history_id"]=chunk_run
+                piece["source_segment"]=str(key[2])
+                piece["source_channel"]=str(key[3])
+                piece["history_chunk"]=int(chunk_index)
+                # Frozen B0 groups by run_id/prn. Temporarily expose history_id.
                 piece["run_id"]=chunk_run; parts.append(piece)
     scored=pd.concat(parts,ignore_index=True) if parts else ordered.iloc[:0].copy()
     dropped=[x for x in chunks if x["status"]=="dropped"]
@@ -100,6 +104,15 @@ def extract_innovations(nodes,model,features,mean,std,*,seq_len=12,device="cpu",
 def _extract_chunked(nodes,model,features,mean,std,*,seq_len,device,extractor):
     chunked,audit=split_contiguous_history_chunks(nodes,seq_len=seq_len)
     residual=extract_innovations(chunked,model,features,mean,std,seq_len=seq_len,device=device,extractor=extractor)
+    identity_columns=["recording_id","history_id","source_segment","source_channel","history_chunk"]
+    if chunked.empty:
+        for column in identity_columns: residual[column]=pd.Series(dtype="object")
+    else:
+        metadata=chunked[["run_id","prn","window_bin_s",*identity_columns]]
+        residual=residual.merge(metadata,on=["run_id","prn","window_bin_s"],how="left",validate="one_to_one")
+        if residual[["recording_id","history_id"]].isna().any().any():
+            raise ValueError("lost immutable CMTE identity while adapting frozen B0")
+        residual["run_id"]=residual["recording_id"].astype(str)
     residual.attrs["cadence_chunk_audit"]=audit
     return residual
 
@@ -117,16 +130,14 @@ def extract_role_innovations(nodes,model,features,mean,std,*,seq_len=12,device="
         if hi is not None: mask &= nodes.window_end_s.astype(float).le(hi)
         local=nodes.loc[mask].copy()
         local["source_run_id"]=local.run_id.astype(str)
-        segment=local["segment_index"].astype(str) if "segment_index" in local else local.get("segment",pd.Series("0",index=local.index)).astype(str)
-        local["run_id"]=local.run_id.astype(str)+f"::cmte-{role}-reset::segment-"+segment
+        local["run_id"]=f"cleanStatic::{role}"
         result[role]=_extract_chunked(local,model,features,mean,std,seq_len=seq_len,device=device,extractor=extractor)
     return result
 
 
 def extract_recording_innovations(nodes,model,features,mean,std,*,scenario,seq_len=12,device="cpu",extractor=None):
     local=nodes.copy(); local["source_run_id"]=local.run_id.astype(str)
-    segment=local["segment_index"].astype(str) if "segment_index" in local else local.get("segment",pd.Series("0",index=local.index)).astype(str)
-    local["run_id"]=f"cmte-{scenario}-fresh::"+local.run_id.astype(str)+"::segment-"+segment
+    local["run_id"]=str(scenario).upper()
     return _extract_chunked(local,model,features,mean,std,seq_len=seq_len,device=device,extractor=extractor)
 
 

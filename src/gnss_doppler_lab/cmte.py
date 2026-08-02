@@ -42,7 +42,8 @@ def validate_residual_frame(frame,*,require_history_reset=False):
         if not np.allclose(expected,frame.b0_prn_node_rmse,atol=1e-9,rtol=1e-6): raise ValueError("B0 residual RMSE mismatch")
     if require_history_reset:
         if "target_window_index" not in frame: raise ValueError("target_window_index required for history reset audit")
-        first=frame.sort_values(["run_id","prn","window_end_s"],kind="mergesort").groupby(["run_id","prn"],sort=False).head(1)
+        identity="history_id" if "history_id" in frame else "run_id"
+        first=frame.sort_values([identity,"prn","window_end_s"],kind="mergesort").groupby([identity,"prn"],sort=False).head(1)
         if not first.target_window_index.astype(int).eq(12).all(): raise ValueError("history reset requires first target_window_index=12")
     return {"feature_columns":list(RESIDUAL_COLUMNS),"prn_identity_feature":False,"tap_order":list(TAP_ORDER),"availability_field":"window_end_s"}
 
@@ -167,12 +168,15 @@ def score_residuals(frame,state,*,require_calibration=True):
 
 
 def aggregate_epochs(scored):
-    cols=["run_id","window_bin_s","availability_time_s","N","mean_e","mean_neg_log_p","min_p","median_p","max_e","top25_mean_e"]
+    cols=["recording_id","run_id","window_bin_s","availability_time_s","N","mean_e","mean_neg_log_p","min_p","median_p","max_e","top25_mean_e"]
     if scored.empty: out=pd.DataFrame(columns=cols); out.attrs["contract"]="skip_epoch; summary metrics NaN"; return out
     key="window_bin_s" if "window_bin_s" in scored else "window_end_s"; rows=[]
-    for (run,t),g in scored.groupby(["run_id",key],sort=True):
+    identity="recording_id" if "recording_id" in scored else "run_id"
+    if scored.duplicated([identity,key,"prn"]).any():
+        raise ValueError("duplicate PRN in physical recording epoch")
+    for (run,t),g in scored.groupby([identity,key],sort=True):
         e=np.sort(g.e.to_numpy(float)); p=g.p.to_numpy(float); top=max(1,int(np.ceil(.25*len(g))))
-        rows.append({"run_id":str(run),"window_bin_s":float(t),"availability_time_s":float(g.window_end_s.max()),"N":len(g),
+        rows.append({"recording_id":str(run),"run_id":str(run),"window_bin_s":float(t),"availability_time_s":float(g.window_end_s.max()),"N":len(g),
           "mean_e":float(e.mean()),"mean_neg_log_p":float(np.mean(-np.log(np.maximum(p,1e-300)))),"min_p":float(p.min()),
           "median_p":float(np.median(p)),"max_e":float(e.max()),"top25_mean_e":float(e[-top:].mean())})
     return pd.DataFrame(rows,columns=cols).sort_values(["run_id","window_bin_s"],kind="mergesort").reset_index(drop=True)
@@ -180,24 +184,33 @@ def aggregate_epochs(scored):
 
 def baseline_epoch_scores(scored):
     rows=[]
-    for (run,t),g in scored.groupby(["run_id","window_bin_s"],sort=True):
-        rows.append({"run_id":run,"window_bin_s":t,"availability_time_s":float(g.window_end_s.max()),
+    identity="recording_id" if "recording_id" in scored else "run_id"
+    for (run,t),g in scored.groupby([identity,"window_bin_s"],sort=True):
+        rows.append({"recording_id":run,"run_id":run,"window_bin_s":t,"availability_time_s":float(g.window_end_s.max()),
           "A0":float(g.b0_prn_node_rmse.max()),"A2":float(np.mean(-np.log(np.maximum(g.p,1e-300)))),"A4":float(g.e.mean())})
     return pd.DataFrame(rows)
 
 
-def sequential_scores(log_e,run_ids,*,drift=0.,horizon=4096):
+def sequential_scores(log_e,run_ids,*,drift=0.,horizon=4096,capital_cap=1e300):
     values=np.asarray(log_e,float); runs=np.asarray(run_ids).astype(str)
     if len(values)!=len(runs) or drift<0 or horizon<1 or not np.isfinite(values).all(): raise ValueError("invalid sequential input")
-    output=[]; previous=None; capitals=[]; step=0; g=0.; reserve=1.
+    if not np.isfinite(capital_cap) or capital_cap<=0: raise ValueError("capital_cap must be positive and finite")
+    output=[]; previous=None; log_capitals=[]; step=0; g=0.; resets=0; clipped=0
+    log2=float(np.log(2.)); log_cap=float(np.log(capital_cap))
     for value,run in zip(values,runs):
-        if run!=previous: capitals=[]; step=0; g=0.; reserve=1.; previous=run
+        if run!=previous: log_capitals=[]; step=0; g=0.; previous=run; resets+=1
         if step>=horizon: raise ValueError("S1 fixed prior horizon exhausted")
-        weight=2.**(-(step+1)); reserve-=weight; capitals=[c*np.exp(value) for c in capitals]+[weight*np.exp(value)]
-        capital=reserve+sum(capitals); g=max(0.,g+float(value)-drift)
-        output.append({"s1_capital":capital,"s1_log_capital":float(np.log(max(capital,1e-300))),"s1_total_fund":reserve+sum(2.**(-(i+1)) for i in range(step+1)),"s1_reserve":reserve,"s2_e_cusum":g})
+        log_weight=-(step+1)*log2
+        log_capitals=[c+float(value) for c in log_capitals]+[log_weight+float(value)]
+        # Unallocated fixed-prior tail is exactly 2^-(step+1).
+        log_total=float(np.logaddexp.reduce(np.asarray([log_weight,*log_capitals],float)))
+        if log_total>log_cap: clipped+=1
+        capital=float(np.exp(min(log_total,log_cap)))
+        reserve=float(np.exp(max(log_weight,np.log(np.nextafter(0.,1.)))))
+        g=float(np.clip(max(0.,g+float(value)-drift),0.,capital_cap))
+        output.append({"s1_capital":capital,"s1_log_capital":log_total,"s1_total_fund":1.,"s1_reserve":reserve,"s2_e_cusum":g})
         step+=1
-    return pd.DataFrame(output)
+    frame=pd.DataFrame(output); frame.attrs.update({"capital_cap":float(capital_cap),"capital_clipped_count":clipped,"reset_count":resets,"primary":"s1_log_capital"}); return frame
 
 
 def epoch_masks(times,*,onset_s=100.):

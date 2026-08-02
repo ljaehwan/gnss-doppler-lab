@@ -8,7 +8,8 @@ import torch
 
 from gnss_doppler_lab.cmte import (
     RESIDUAL_COLUMNS, attach_calibration, fit_distribution, score_residuals,
-    sequential_scores, baseline_epoch_scores, validate_clean_provenance,
+    sequential_scores, baseline_epoch_scores, aggregate_epochs,
+    validate_clean_provenance,
 )
 from gnss_doppler_lab.cmte_inputs import (
     extract_innovations, extract_recording_innovations,
@@ -96,10 +97,13 @@ def cadence_gap_frame(chunk_lengths=(20,20), starts=(0.,20.)):
 def test_recording_extraction_splits_cadence_gaps_and_resets_b0_history():
     nodes,features=cadence_gap_frame()
     out=extract_recording_innovations(nodes,Last(),features,np.zeros(9),np.ones(9),scenario="DS2",seq_len=12)
-    first=out.sort_values(["run_id","prn","window_bin_s"]).groupby(["run_id","prn"],sort=False).head(1)
+    first=out.sort_values(["history_id","prn","window_bin_s"]).groupby(["history_id","prn"],sort=False).head(1)
     assert len(first)==2 and first.target_window_index.eq(12).all()
     assert sorted(first.window_bin_s.tolist())==[6.5,26.5]
-    assert out.run_id.nunique()==2  # chunk-specific extractor identity
+    assert out.history_id.nunique()==2  # chunk-specific predictor identity
+    assert out.recording_id.nunique()==1 and out.run_id.nunique()==1
+    assert out.recording_id.iloc[0]=="DS2"
+    assert {"source_segment","source_channel","history_chunk"} <= set(out)
     assert not out.window_bin_s.between(10.5,26.,inclusive="both").any()
 
 
@@ -107,7 +111,7 @@ def test_clean_role_extraction_resets_at_internal_cadence_gap_too():
     nodes,features=cadence_gap_frame()
     roles=extract_role_innovations(nodes,Last(),features,np.zeros(9),np.ones(9),seq_len=12)
     train=roles["train"]
-    first=train.sort_values(["run_id","prn","window_bin_s"]).groupby(["run_id","prn"],sort=False).head(1)
+    first=train.sort_values(["history_id","prn","window_bin_s"]).groupby(["history_id","prn"],sort=False).head(1)
     assert len(first)==2 and first.target_window_index.eq(12).all()
     assert train.attrs["cadence_chunk_audit"]["gaps_detected"]==1
     assert roles["validation"].empty and roles["test"].empty
@@ -123,7 +127,7 @@ def test_source_segment_identity_detects_gap_despite_converter_piece_labels():
     audit=out.attrs["cadence_chunk_audit"]
     assert audit["identity_groups"]==1 and audit["gaps_detected"]==1
     assert audit["chunks_total"]==2
-    first=out.sort_values(["run_id","prn","window_bin_s"]).groupby(["run_id","prn"]).head(1)
+    first=out.sort_values(["history_id","prn","window_bin_s"]).groupby(["history_id","prn"]).head(1)
     assert len(first)==2 and first.target_window_index.eq(12).all()
 
 
@@ -131,7 +135,7 @@ def test_same_prn_multiple_channels_get_disjoint_history_identities():
     nodes,features=cadence_gap_frame()
     nodes.loc[nodes.window_start_s>=20,"channel"]=3
     out=extract_recording_innovations(nodes,Last(),features,np.zeros(9),np.ones(9),scenario="DS3",seq_len=12)
-    first=out.sort_values(["run_id","prn","window_bin_s"]).groupby(["run_id","prn"],sort=False).head(1)
+    first=out.sort_values(["history_id","prn","window_bin_s"]).groupby(["history_id","prn"],sort=False).head(1)
     assert len(first)==2 and first.target_window_index.eq(12).all()
     assert sorted(first.window_bin_s.tolist())==[6.5,26.5]
 
@@ -173,6 +177,33 @@ def test_s1_fixed_prior_fund_accounting_and_a2_distinct_a4():
     scored=residual_frame(); scored["q"]=np.arange(len(scored)); scored["p"]=np.linspace(.1,.9,len(scored)); scored["e"]=np.linspace(.2,3,len(scored))
     b=baseline_epoch_scores(scored)
     assert not np.allclose(b.A2,b.A4)
+
+
+def test_s1_is_log_domain_finite_for_extreme_long_sequence():
+    values=np.r_[np.full(600,1e4),np.full(600,-1e4)]
+    z=sequential_scores(values,["physical-recording"]*len(values),horizon=2048)
+    assert np.isfinite(z[["s1_log_capital","s1_capital","s1_total_fund","s1_reserve","s2_e_cusum"]]).all().all()
+    assert z.s1_total_fund.eq(1.).all()
+    assert z.s1_capital.le(z.attrs["capital_cap"]).all()
+    assert z.attrs["capital_clipped_count"]>0
+
+
+def test_history_identity_is_not_event_identity_and_epochs_recombine():
+    f=pd.concat([residual_frame().iloc[:1],residual_frame().iloc[:1]],ignore_index=True)
+    f["recording_id"]="DS1"; f["run_id"]="DS1"
+    f["history_id"]=["segment-a/channel-1/chunk-0","segment-b/channel-2/chunk-0"]
+    f["prn"]=["G01","G02"]; f["p"]=[.2,.3]; f["e"]=[2.,4.]
+    epoch=aggregate_epochs(f)
+    assert len(epoch)==1 and epoch.iloc[0].N==2
+    assert epoch.iloc[0].recording_id=="DS1" and epoch.iloc[0].run_id=="DS1"
+
+
+def test_sequential_state_resets_once_per_recording_not_history_chunk():
+    z=sequential_scores(np.log([2.,2.,2.]),["DS1"]*3,horizon=8)
+    separately=sequential_scores(np.log([2.,2.,2.]),["h0","h1","h2"],horizon=8)
+    assert z.attrs["reset_count"]==1
+    assert separately.attrs["reset_count"]==3
+    assert z.s1_log_capital.iloc[-1]>separately.s1_log_capital.iloc[-1]
 
 
 def test_converter_does_not_bridge_segments_and_records_grade(tmp_path):
