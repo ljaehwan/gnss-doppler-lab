@@ -12,7 +12,7 @@ The checkpoint SHA is `f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a633
 
 ## Split-reset extraction and conformal roles
 
-Canonical node windows are partitioned **before** B0 extraction. Only windows fully inside train `[0,240)`, validation `[250,330)`, and test `[340,∞)` are retained. Role-specific run IDs force fresh PRN histories; every first eligible target has role-local `target_window_index=12`. Each evaluation recording also starts fresh. No history window crosses a role boundary.
+Canonical node windows are partitioned **before** B0 extraction. Only windows fully inside train `[0,240)`, validation `[250,330)`, and test `[340,∞)` are retained. Role-specific run IDs force fresh PRN histories. Within every role and evaluation recording, each `run_id/prn/segment/channel` identity is sorted deterministically and split again at every non-0.5 s cadence boundary. Every scored chunk gets a chunk-specific run identity and its first eligible target has `target_window_index=12`; no predictor window crosses a role, recording, segment, channel, or cadence-gap boundary. Chunks with at most `seq_len=12` rows produce no prediction and are dropped without interpolation/fill, with input/scored/dropped row counts and explicit reasons persisted in training residual manifests and per-scenario evaluation provenance audits.
 
 `fit_distribution(train)` fits only shared μ, diagonal scales and a fixed deterministic diagonal-shrinkage covariance. `attach_calibration(state, validation)` freezes all `Q_cal` arrays from validation residuals only. Test and DS rows are query-only. Full and diagonal Mahalanobis scores are squared quantities:
 

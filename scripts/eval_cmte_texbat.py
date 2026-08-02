@@ -59,7 +59,7 @@ def main(argv=None):
  clean_base=baseline_epoch_scores(clean);clean_rmse=clean.groupby(["run_id","window_bin_s"],sort=True).b0_prn_node_rmse.mean().to_numpy(); clean_scores={"A0":clean_base.A0,"A1":a1(clean,thresholds["baselines"]["A1"]),"A2":clean_base.A2,"A3":cusum(clean_rmse,clean_epoch.run_id,thresholds["baselines"]["A3"]["drift"]),"A4":clean_base.A4}
  cs=sequential_scores(np.log(np.maximum(clean_epoch.mean_e,1e-300)),clean_epoch.run_id,drift=thresholds["sequence"]["drift"]);clean_scores["Full"]=cs.s1_log_capital if thresholds["sequence"]["choice"]=="S1" else cs.s2_e_cusum
  th={k:v["threshold"] for k,v in thresholds["baselines"].items()};th["Full"]=thresholds["sequence"]["threshold"];clean_fpr={k:float(np.mean(np.asarray(v)>th[k])) for k,v in clean_scores.items()}
- metrics=[];ablations=[];prn_summary=[];provenance={"checkpoint":str(ck),"checkpoint_sha256":actual,"state_dir":str(sd),"scenario_inputs":{},"frozen_parameters":True,"attack_tuning":False};clip_total=0
+ metrics=[];ablations=[];prn_summary=[];eval_code_paths=[ROOT/"src/gnss_doppler_lab/cmte.py",ROOT/"src/gnss_doppler_lab/cmte_inputs.py",Path(__file__).resolve()];provenance={"checkpoint":str(ck),"checkpoint_sha256":actual,"state_dir":str(sd),"scenario_inputs":{},"frozen_parameters":True,"attack_tuning":False,"evaluation_code_sha256":{str(p.relative_to(ROOT)):file_sha256(p) for p in eval_code_paths}};clip_total=0
  for name,node,man in specs:
   doc=json.loads(man.read_text());
   if doc.get("scenario","").upper()!=name or doc.get("role")!="evaluation_only" or doc.get("checkpoint_sha256","").lower()!=actual.lower():raise ValueError("scenario manifest identity/checkpoint mismatch")
@@ -67,6 +67,9 @@ def main(argv=None):
   if not all(__import__("re").fullmatch(r"[0-9a-fA-F]{64}",str(doc.get(k,""))) for k in ("source_sha256","node_sha256","checkpoint_sha256")):raise ValueError("scenario manifest hashes invalid")
   if file_sha256(node).lower()!=doc.get("node_sha256","").lower():raise ValueError("scenario node SHA mismatch")
   raw=pd.read_csv(node); residual=extract_recording_innovations(raw,model,features,mean,std,scenario=name,seq_len=cfg.seq_len,device=a.device);validate_residual_frame(residual,require_history_reset=True)
+  cadence_audit=residual.attrs["cadence_chunk_audit"]
+  cadence_audit_path=out/"provenance"/f"{name}_cadence_chunk_audit.json"
+  cadence_audit_path.write_text(json.dumps(cadence_audit,indent=2,sort_keys=True)+"\n")
   nodes=score_residuals(residual,state);nodes.to_csv(out/"per_prn"/f"{name}.csv",index=False);epoch=aggregate_epochs(nodes);base=baseline_epoch_scores(nodes);rmse=nodes.groupby(["run_id","window_bin_s"],sort=True).b0_prn_node_rmse.mean().to_numpy()
   seq=sequential_scores(np.log(np.maximum(epoch.mean_e,1e-300)),epoch.run_id,drift=thresholds["sequence"]["drift"]);full=seq.s1_log_capital if thresholds["sequence"]["choice"]=="S1" else seq.s2_e_cusum
   scores={"A0":base.A0.to_numpy(),"A1":a1(nodes,thresholds["baselines"]["A1"]),"A2":base.A2.to_numpy(),"A3":cusum(rmse,epoch.run_id,thresholds["baselines"]["A3"]["drift"]),"A4":base.A4.to_numpy(),"Full":np.asarray(full)}
@@ -79,7 +82,7 @@ def main(argv=None):
   pivot=nodes.pivot_table(index="prn",columns="window_bin_s",values="e",aggfunc="mean");fig,ax=plt.subplots(figsize=(10,4));im=ax.imshow(np.log1p(pivot),aspect="auto");fig.colorbar(im,ax=ax);ax.set_title(f"{name} PRN log(1+e)");fig.tight_layout();fig.savefig(out/"plots"/f"{name}_prn_heatmap.png",dpi=120);plt.close(fig)
   fig,ax=plt.subplots();ax.hist(nodes.p,bins=20);ax.set_title(f"{name} conformal p distribution");fig.savefig(out/"plots"/f"{name}_pvalues.png",dpi=120);plt.close(fig)
   perm=epoch.sample(frac=1,random_state=2026);alt=sequential_scores(np.log(np.maximum(perm.mean_e,1e-300)),[name]*len(perm),drift=thresholds["sequence"]["drift"]);diag={"diagnostic_only":True,"epoch_multiset_invariant":np.allclose(np.sort(epoch.mean_e),np.sort(perm.mean_e)),"sequential_final_delta":float(abs(seq.s2_e_cusum.iloc[-1]-alt.s2_e_cusum.iloc[-1])),"trajectory_l2_delta":float(np.linalg.norm(np.sort(seq.s2_e_cusum)-np.sort(alt.s2_e_cusum))),"e_clip":1e-15,"e_clipped_count":int((nodes.p<1e-15).sum())};clip_total+=diag["e_clipped_count"];(out/"diagnostics"/f"{name}_order_shuffle.json").write_text(json.dumps(diag,indent=2)+"\n")
-  provenance["scenario_inputs"][name]={"node":str(node),"node_sha256":file_sha256(node),"manifest":str(man),"manifest_sha256":file_sha256(man),"producer_grade":doc["producer_grade"]}
+  provenance["scenario_inputs"][name]={"node":str(node),"node_sha256":file_sha256(node),"manifest":str(man),"manifest_sha256":file_sha256(man),"producer_grade":doc["producer_grade"],"cadence_chunk_audit":str(cadence_audit_path.relative_to(out)),"cadence_chunk_counts":{k:cadence_audit[k] for k in ("input_rows","identity_groups","gaps_detected","chunks_total","chunks_scored","chunks_dropped","rows_dropped")},"dropped_reasons":cadence_audit["dropped_reasons"]}
  pd.DataFrame(metrics).to_csv(out/"scenario_metrics.csv",index=False);pd.DataFrame(ablations).to_csv(out/"ablation_metrics.csv",index=False);pd.DataFrame(prn_summary).to_csv(out/"per_prn_evidence_summary.csv",index=False)
  # baseline-vs-Full and DS1 pre-onset zoom are actual plots.
  mf=pd.DataFrame(metrics);fig,ax=plt.subplots(figsize=(10,4));

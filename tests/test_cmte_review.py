@@ -10,7 +10,10 @@ from gnss_doppler_lab.cmte import (
     RESIDUAL_COLUMNS, attach_calibration, fit_distribution, score_residuals,
     sequential_scores, baseline_epoch_scores, validate_clean_provenance,
 )
-from gnss_doppler_lab.cmte_inputs import extract_role_innovations, convert_complex_npz
+from gnss_doppler_lab.cmte_inputs import (
+    extract_innovations, extract_recording_innovations,
+    extract_role_innovations, convert_complex_npz,
+)
 
 
 def residual_frame(offset=0., run="cleanStatic-role"):
@@ -76,6 +79,58 @@ def test_role_local_extraction_resets_history_and_no_crossing():
     assert roles["train"].window_start_s.min()>=0 and roles["train"].window_end_s.max()<=240
     # A continuous extraction would let validation use train/gap history and starts earlier.
     assert roles["validation"].window_start_s.min()>=256
+
+
+def cadence_gap_frame(chunk_lengths=(20,20), starts=(0.,20.)):
+    _,features=node_frame(0,run="same-recording")
+    rows=[]
+    for length,start in zip(chunk_lengths,starts):
+        for i in range(length):
+            row={"run_id":"same-recording","prn":"G01","segment":7,"channel":2,
+                 "window_bin_s":start+i*.5+.5,"window_start_s":start+i*.5,
+                 "window_end_s":start+i*.5+1.,"window_mid_s":start+i*.5+.5}
+            row.update({f:float(start+i+j) for j,f in enumerate(features)}); rows.append(row)
+    return pd.DataFrame(rows),features
+
+
+def test_recording_extraction_splits_cadence_gaps_and_resets_b0_history():
+    nodes,features=cadence_gap_frame()
+    out=extract_recording_innovations(nodes,Last(),features,np.zeros(9),np.ones(9),scenario="DS2",seq_len=12)
+    first=out.sort_values(["run_id","prn","window_bin_s"]).groupby(["run_id","prn"],sort=False).head(1)
+    assert len(first)==2 and first.target_window_index.eq(12).all()
+    assert sorted(first.window_bin_s.tolist())==[6.5,26.5]
+    assert out.run_id.nunique()==2  # chunk-specific extractor identity
+    assert not out.window_bin_s.between(10.5,26.,inclusive="both").any()
+
+
+def test_clean_role_extraction_resets_at_internal_cadence_gap_too():
+    nodes,features=cadence_gap_frame()
+    roles=extract_role_innovations(nodes,Last(),features,np.zeros(9),np.ones(9),seq_len=12)
+    train=roles["train"]
+    first=train.sort_values(["run_id","prn","window_bin_s"]).groupby(["run_id","prn"],sort=False).head(1)
+    assert len(first)==2 and first.target_window_index.eq(12).all()
+    assert train.attrs["cadence_chunk_audit"]["gaps_detected"]==1
+    assert roles["validation"].empty and roles["test"].empty
+
+
+def test_gap_split_is_deterministic_drops_short_chunks_and_preserves_no_gap_values():
+    nodes,features=cadence_gap_frame((20,20,12),(0.,20.,40.))
+    a=extract_recording_innovations(nodes.sample(frac=1,random_state=4),Last(),features,np.zeros(9),np.ones(9),scenario="DS3",seq_len=12)
+    b=extract_recording_innovations(nodes,Last(),features,np.zeros(9),np.ones(9),scenario="DS3",seq_len=12)
+    pd.testing.assert_frame_equal(a,b)
+    audit=a.attrs["cadence_chunk_audit"]
+    assert audit["identity_groups"]==1 and audit["chunks_total"]==3
+    assert audit["chunks_scored"]==2 and audit["chunks_dropped"]==1
+    assert audit["rows_dropped"]==12
+    assert audit["dropped_reasons"]=={"insufficient_history_rows_le_seq_len":1}
+    assert audit["chunks"][-1]["reason"]=="insufficient_history_rows_le_seq_len"
+
+    continuous=nodes[nodes.window_start_s<10].copy()
+    old=extract_innovations(continuous,Last(),features,np.zeros(9),np.ones(9),seq_len=12)
+    new=extract_recording_innovations(continuous,Last(),features,np.zeros(9),np.ones(9),scenario="DS1",seq_len=12)
+    columns=[c for c in old if c!="run_id"]
+    pd.testing.assert_frame_equal(old[columns],new[columns])
+    assert new.attrs["cadence_chunk_audit"]["gaps_detected"]==0
 
 
 def test_full_and_diag_q_are_squared_quadratic():
