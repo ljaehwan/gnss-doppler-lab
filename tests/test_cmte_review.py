@@ -113,6 +113,15 @@ def test_clean_role_extraction_resets_at_internal_cadence_gap_too():
     assert roles["validation"].empty and roles["test"].empty
 
 
+def test_same_prn_multiple_channels_get_disjoint_history_identities():
+    nodes,features=cadence_gap_frame()
+    nodes.loc[nodes.window_start_s>=20,"channel"]=3
+    out=extract_recording_innovations(nodes,Last(),features,np.zeros(9),np.ones(9),scenario="DS3",seq_len=12)
+    first=out.sort_values(["run_id","prn","window_bin_s"]).groupby(["run_id","prn"],sort=False).head(1)
+    assert len(first)==2 and first.target_window_index.eq(12).all()
+    assert sorted(first.window_bin_s.tolist())==[6.5,26.5]
+
+
 def test_gap_split_is_deterministic_drops_short_chunks_and_preserves_no_gap_values():
     nodes,features=cadence_gap_frame((20,20,12),(0.,20.,40.))
     a=extract_recording_innovations(nodes.sample(frac=1,random_state=4),Last(),features,np.zeros(9),np.ones(9),scenario="DS3",seq_len=12)

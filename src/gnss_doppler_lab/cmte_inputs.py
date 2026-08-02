@@ -55,13 +55,17 @@ def split_contiguous_history_chunks(nodes, *, seq_len=12, cadence_s=.5, toleranc
     if local.duplicated([*identity,"window_bin_s"]).any(): raise ValueError("duplicate canonical node window in cadence identity")
     parts=[]; chunks=[]; gaps=0
     ordered=local.sort_values([*identity,"window_bin_s","window_start_s"],kind="mergesort")
+    channel_counts=ordered.groupby(["run_id","prn","segment"],dropna=False)["channel"].nunique(dropna=False).to_dict()
     for key,group in ordered.groupby(identity,sort=True,dropna=False):
         group=group.reset_index(drop=True); bins=group.window_bin_s.to_numpy(float)
         breaks=np.flatnonzero(~np.isclose(np.diff(bins),cadence_s,atol=tolerance_s,rtol=0))+1
         gaps += int(len(breaks)); cuts=np.r_[0,breaks,len(group)]
         for chunk_index,(start,stop) in enumerate(zip(cuts[:-1],cuts[1:])):
             piece=group.iloc[int(start):int(stop)].copy(); rows=int(len(piece)); predictions=max(0,rows-seq_len)
-            base=str(key[0]); chunk_run=f"{base}::cadence-chunk-{chunk_index:04d}"
+            base=str(key[0]); channel_suffix=""
+            if channel_counts[(key[0],key[1],key[2])]>1:
+                channel_suffix=f"::channel-{hashlib.sha256(str(key[3]).encode()).hexdigest()[:12]}"
+            chunk_run=f"{base}{channel_suffix}::cadence-chunk-{chunk_index:04d}"
             reason=None if predictions else "insufficient_history_rows_le_seq_len"
             record={"identity":{"run_id":str(key[0]),"prn":str(key[1]),"segment":str(key[2]),"channel":str(key[3])},
                     "chunk_index":int(chunk_index),"chunk_run_id":chunk_run,"first_window_bin_s":float(bins[int(start)]),
