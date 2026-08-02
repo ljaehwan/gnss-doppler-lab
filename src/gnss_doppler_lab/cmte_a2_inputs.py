@@ -91,7 +91,8 @@ def prepare_named_complex_inputs(items:Mapping[str,str|Path],out_dir:str|Path,*,
   shutil.rmtree(staging,ignore_errors=True); raise
 
 
-def prepare_ds4_sensitivity(source:str|Path,out_dir:str|Path,*,source_manifest:str|Path|None=None)->dict:
+def prepare_ds4_sensitivity(source:str|Path,out_dir:str|Path,*,source_manifest:str|Path|None=None,
+                            source_metadata:dict|None=None,onset_s:float|None=None)->dict:
  out=Path(out_dir).resolve()
  if out.exists(): raise FileExistsError("atomic non-overwrite output required")
  out.parent.mkdir(parents=True,exist_ok=True); staging=out.with_name(out.name+f".tmp-{os.getpid()}"); staging.mkdir()
@@ -99,11 +100,38 @@ def prepare_ds4_sensitivity(source:str|Path,out_dir:str|Path,*,source_manifest:s
   csv=staging/"DS4_nodes.csv"; manifest=staging/"DS4_manifest.json"
   copy_verified_ds4(source,csv,manifest,source_manifest=source_manifest)
   doc=json.loads(manifest.read_text()); upstream=json.loads(Path(source_manifest).read_text()) if source_manifest else {}
-  source_meta=upstream.get("source_metadata",{})
+  upstream_meta=upstream.get("source_metadata",{}) or {}
+  if not isinstance(upstream_meta,Mapping): raise ValueError("upstream source_metadata must be a mapping")
+  supplied_meta=dict(source_metadata or {})
+  source_meta=dict(upstream_meta); source_meta.update(supplied_meta)
+  if onset_s is not None:
+   explicit=float(onset_s)
+   supplied=supplied_meta.get("onset_s")
+   if supplied is not None and float(supplied)!=explicit: raise ValueError("conflicting authoritative onset metadata")
+   source_meta["onset_s"]=explicit
+  if source_meta.get("onset_s") is not None:
+   onset=float(source_meta["onset_s"])
+   if "onset_s" in supplied_meta:
+    origin=supplied_meta.get("onset_origin","caller:source_metadata")
+    grade=supplied_meta.get("onset_grade","authoritative")
+   elif onset_s is not None:
+    origin=source_meta.get("onset_origin","explicit:onset_s")
+    grade=source_meta.get("onset_grade","authoritative")
+   else:
+    origin=source_meta.get("onset_origin","upstream_manifest:source_metadata")
+    grade=source_meta.get("onset_grade","authoritative")
+  elif upstream.get("onset_s") is not None:
+   onset=float(upstream["onset_s"])
+   origin=upstream.get("onset_origin","upstream_manifest:onset_s")
+   grade=upstream.get("onset_grade","authoritative")
+  else:
+   onset=origin=grade=None
+  if onset is not None:
+   source_meta.update({"onset_s":onset,"onset_origin":origin,"onset_grade":grade})
   doc.update({"schema":"gnss-doppler-lab.cmte-a2-input.v2","scenario":"DS4",
    "node_path":str((out/"DS4_nodes.csv").resolve()),"tier":"development_sensitivity","mixed_producer":True,
    "confirmatory_eligible":False,"caveat":"historical mixed-producer development sensitivity",
-   "onset_s":upstream.get("onset_s",source_meta.get("onset_s")),"source_metadata":source_meta})
+   "onset_s":onset,"onset_origin":origin,"onset_grade":grade,"source_metadata":source_meta})
   manifest.write_text(json.dumps(doc,indent=2,sort_keys=True)+"\n")
   campaign={"schema":"gnss-doppler-lab.cmte-a2-input-campaign.v2","scenarios":["DS4"],"tier":"development_sensitivity",
    "mixed_producer":True,"confirmatory_eligible":False,"manifests":{"DS4":"DS4_manifest.json"}}

@@ -41,7 +41,8 @@ def main(argv=None):
         manifests=prepare_named_complex_inputs(mappings,args.out,source_metadata={"onset_s":args.onset_seconds} if args.onset_seconds is not None else None)
         scenario_names.extend(manifests)
     if args.ds4_node:
-        prepare_ds4_sensitivity(args.ds4_node,args.out,source_manifest=args.ds4_manifest)
+        metadata={"onset_s":args.onset_seconds,"onset_origin":"cli:--onset-seconds","onset_grade":"authoritative"} if args.onset_seconds is not None else None
+        prepare_ds4_sensitivity(args.ds4_node,args.out,source_manifest=args.ds4_manifest,source_metadata=metadata)
         scenario_names.append("DS4")
     print(json.dumps({"out":str(Path(args.out).resolve()),"scenarios":scenario_names},sort_keys=True))
 if __name__=="__main__": main()

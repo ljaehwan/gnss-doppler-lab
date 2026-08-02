@@ -119,6 +119,50 @@ def test_ds4_separate_sensitivity_markers(tmp_path):
     assert doc["mixed_producer"] is True and doc["confirmatory_eligible"] is False
 
 
+def test_ds4_prepare_preserves_authoritative_onset_provenance_and_eval_accepts_it(tmp_path):
+    from gnss_doppler_lab.cmte_a2_inputs import prepare_ds4_sensitivity, prepare_named_complex_inputs
+    source=tmp_path/"source.npz"; complex_npz(source)
+    prepare_named_complex_inputs({"DS3":source},tmp_path/"up")
+    metadata={"onset_s":100.0,"onset_origin":"scenario_manifest","onset_grade":"authoritative"}
+    doc=prepare_ds4_sensitivity(
+        tmp_path/"up/DS3_nodes.csv",tmp_path/"ds4",
+        source_manifest=tmp_path/"up/DS3_manifest.json",source_metadata=metadata,
+    )
+    persisted=json.loads((tmp_path/"ds4/DS4_manifest.json").read_text())
+    assert doc==persisted
+    assert persisted["onset_s"]==100.0
+    assert persisted["onset_origin"]=="scenario_manifest"
+    assert persisted["onset_grade"]=="authoritative"
+    assert persisted["source_metadata"]["onset_s"]==100.0
+    evaluator=load_script("eval_cmte_a2_texbat.py")
+    assert evaluator._onset("DS4",persisted)==100.0
+
+
+def test_ds4_prep_cli_forwards_onset_and_missing_onset_remains_fail_closed(tmp_path):
+    from gnss_doppler_lab.cmte_a2_inputs import prepare_named_complex_inputs
+    source=tmp_path/"source.npz"; complex_npz(source)
+    prepare_named_complex_inputs({"DS3":source},tmp_path/"up")
+    out=tmp_path/"with-onset"
+    result=_run_input_prep(
+        "--ds4-node",tmp_path/"up/DS3_nodes.csv",
+        "--ds4-manifest",tmp_path/"up/DS3_manifest.json",
+        "--onset-seconds","100","--out",out,
+    )
+    assert result.returncode==0, result.stderr
+    manifest=json.loads((out/"DS4_manifest.json").read_text())
+    assert manifest["onset_s"]==100.0
+    assert manifest["onset_origin"]=="cli:--onset-seconds"
+    assert manifest["onset_grade"]=="authoritative"
+    evaluator=load_script("eval_cmte_a2_texbat.py")
+    assert evaluator._onset("DS4",manifest)==100.0
+
+    missing=tmp_path/"missing-onset"
+    result=_run_input_prep("--ds4-node",tmp_path/"up/DS3_nodes.csv","--out",missing)
+    assert result.returncode==0, result.stderr
+    with pytest.raises(ValueError,match="authoritative metadata"):
+        evaluator._onset("DS4",json.loads((missing/"DS4_manifest.json").read_text()))
+
+
 def test_ds8_prevalidation_failure_is_atomic_explicit_na(tmp_path,monkeypatch):
     mod=load_script("prepare_cmte_a2_ds8_complex.py")
     monkeypatch.setattr(mod,"RAW_BYTES",4); monkeypatch.setattr(mod,"RAW_SHA","0"*64)
