@@ -5,6 +5,7 @@ import argparse, json, os, shutil, subprocess, sys
 from pathlib import Path
 import numpy as np, pandas as pd, torch
 ROOT=Path(__file__).resolve().parents[1]; sys.path.insert(0,str(ROOT/"src"))
+from gnss_doppler_lab.cmte_a2_campaign import validate_source_tree
 from gnss_doppler_lab.cmte_a2 import (
     B0Config, FEATURE_COLUMNS, PREREG_COMMIT, aggregate_epochs, baseline_epoch_inputs,
     audit_normal_roles, b0_enhanced_scores, b0_exact_scores, calibrate_comparators,
@@ -24,6 +25,8 @@ def main(argv=None):
     parser.add_argument("--clean-node-csv",required=True); parser.add_argument("--clean-manifest",required=True)
     parser.add_argument("--out",required=True); parser.add_argument("--device",default="cpu")
     args=parser.parse_args(argv)
+    source_commit=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()
+    validate_source_tree(ROOT,source_commit,require_clean=True)
     source=Path(args.clean_node_csv).resolve(strict=True); manifest=Path(args.clean_manifest).resolve(strict=True)
     manifest_doc=json.loads(manifest.read_text())
     if manifest_doc.get("scenario")!="cleanStatic" or manifest_doc.get("role")!="normal_clean": raise ValueError("exact cleanStatic normal_clean source required")
@@ -77,7 +80,8 @@ def main(argv=None):
         training={"schema":"gnss-doppler-lab.cmte-a2-training.v1","source_node":str(source),"source_node_sha256":file_sha256(source),
                   "source_manifest":str(manifest),"source_manifest_sha256":file_sha256(manifest),"audit":audit,
                   "role_rows":{name:len(frame) for name,frame in roles.items()},"residual_rows":{name:len(frame) for name,frame in residuals.items()},
-                  "role_audit":role_audit,"checkpoint_sha256":file_sha256(staging/"b0_model.pt")}
+                  "role_audit":role_audit,"checkpoint_sha256":file_sha256(staging/"b0_model.pt"),
+                  "execution":{"source_commit":source_commit,"clean_tree_asserted":True,"prereg_unchanged_asserted":True}}
         calibration={"schema":"gnss-doppler-lab.cmte-a2-calibration.v1","distribution_fit_n":len(residuals["fit"]),
                      "distribution_state_hash":state.state_hash,"shrinkage":state.shrinkage,"epsilon":state.epsilon,"qcal_n":len(state.qcal),
                      "qcal_source":"cleanStatic fully-contained [250,290)","inclusive_ties":True,"plus_one":True}
@@ -94,16 +98,18 @@ def main(argv=None):
         pd.concat([frame.assign(role=name) for name,frame in epochs.items()],ignore_index=True).to_csv(staging/"clean_per_epoch.csv",index=False)
         pd.DataFrame({"physical_recording_id":exact.physical_recording_id,"window_end_s":exact.window_end_s,"A0":baseline_input.A0,
                       "B0_Exact":exact.score,"B0_Enhanced":enhanced.score}).to_csv(staging/"baseline_threshold_epoch.csv",index=False)
-        source_commit=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()
-        provenance={"schema":"gnss-doppler-lab.cmte-a2-provenance.v1","execution_source_commit":source_commit,
+        provenance={"schema":"gnss-doppler-lab.cmte-a2-provenance.v1","execution_source_commit":source_commit,"clean_tree_asserted":True,"prereg_unchanged_asserted":True,
                     "preregistration":prereg,"training_tier":"normal_only","DS7_DS8_accessed":False}
         (staging/"provenance.json").write_text(json.dumps(provenance,indent=2,sort_keys=True)+"\n")
         (staging/"test_summary.txt").write_text("Generator code tests must be executed and recorded before a campaign. No DS7/DS8 scoring was run.\n")
         (staging/"README.md").write_text("# CMTE-A2 frozen training state\n\nNormal-only chronological B0, distribution, Qcal, and threshold artifacts. No DS7/DS8 inference or scoring.\n")
         freeze_paths=[staging/p for p in ("b0_model.pt","a2_state.json","config.json","training.json","calibration.json","thresholds.json","preregistration.json")]
         freeze_paths += [ROOT/p for p in ("src/gnss_doppler_lab/cmte_a2.py","src/gnss_doppler_lab/cmte_a2_inputs.py",
-                                          "scripts/train_cmte_a2_texbat.py","scripts/eval_cmte_a2_texbat.py",
-                                          "scripts/prepare_cmte_a2_inputs.py","scripts/prepare_cmte_a2_ds8_complex.py")]
+                                          "src/gnss_doppler_lab/cmte_a2_campaign.py","scripts/train_cmte_a2_texbat.py",
+                                          "scripts/eval_cmte_a2_texbat.py","scripts/prepare_cmte_a2_inputs.py",
+                                          "scripts/prepare_cmte_a2_ds8_complex.py","scripts/build_cmte_a2_confirm_input_manifest.py",
+                                          "scripts/freeze_cmte_a2_campaign.py","scripts/confirm_cmte_a2_texbat.py",
+                                          "scripts/finalize_cmte_a2_campaign.py","configs/cmte_a2_ds8_receiver.conf")]
         create_freeze_manifest(ROOT,staging,freeze_paths,staging/"freeze_manifest.json")
         write_checksums(staging); os.replace(staging,out)
         print(json.dumps({"out":str(out),"checkpoint_sha256":training["checkpoint_sha256"],"qcal_n":len(state.qcal),"threshold":ops["q995"]},sort_keys=True))

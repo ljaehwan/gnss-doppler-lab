@@ -14,6 +14,7 @@ from gnss_doppler_lab.cmte_a2 import (
     score_residuals, success_criteria_audit, verify_confirmatory_freeze, write_checksums,
 )
 from gnss_doppler_lab.cmte_a2_inputs import parse_scenario_mappings, validate_input_manifest
+from gnss_doppler_lab.cmte_a2_campaign import validate_source_tree, verify_checksums
 
 
 def _specs(items,tier):
@@ -81,15 +82,22 @@ def main(argv=None):
     parser.add_argument("--state-dir",required=True); parser.add_argument("--scenario",action="append",required=True)
     parser.add_argument("--out",required=True); parser.add_argument("--freeze-manifest"); parser.add_argument("--device",default="cpu")
     args=parser.parse_args(argv)
-    state_dir=Path(args.state_dir).resolve(strict=True); specs=_specs(args.scenario,args.tier)
-    freeze_doc=None
-    if args.tier=="confirmatory":
-        if not args.freeze_manifest: raise ValueError("confirmatory tier requires --freeze-manifest")
-        supplied=Path(args.freeze_manifest).resolve(strict=True)
-        if supplied!=(state_dir/"freeze_manifest.json").resolve(): raise ValueError("confirmatory freeze manifest must be the state directory manifest")
-        freeze_doc=verify_confirmatory_freeze(supplied,repo=ROOT)
-        required_state={"STATE/b0_model.pt","STATE/a2_state.json","STATE/thresholds.json","STATE/config.json"}
-        if not required_state.issubset(freeze_doc.get("files",{})): raise ValueError("freeze manifest omits required model/state/threshold files")
+    current_commit=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()
+    validate_source_tree(ROOT,current_commit,require_clean=True)
+    state_dir=Path(args.state_dir).resolve(strict=True)
+    verify_checksums(state_dir)
+    training_guard=json.loads((state_dir/"training.json").read_text()); provenance_guard=json.loads((state_dir/"provenance.json").read_text())
+    execution=training_guard.get("execution",{})
+    if execution.get("source_commit")!=current_commit or execution.get("clean_tree_asserted") is not True:
+        raise ValueError("state training execution source/clean-tree assertion missing or stale")
+    if provenance_guard.get("execution_source_commit")!=current_commit or provenance_guard.get("clean_tree_asserted") is not True:
+        raise ValueError("state provenance execution source/clean-tree assertion missing or stale")
+    supplied=Path(args.freeze_manifest).resolve(strict=True) if args.freeze_manifest else (state_dir/"freeze_manifest.json").resolve(strict=True)
+    if supplied!=(state_dir/"freeze_manifest.json").resolve(): raise ValueError("freeze manifest must be the state directory manifest")
+    freeze_doc=verify_confirmatory_freeze(supplied,repo=ROOT)
+    required_state={"STATE/b0_model.pt","STATE/a2_state.json","STATE/thresholds.json","STATE/config.json"}
+    if not required_state.issubset(freeze_doc.get("files",{})): raise ValueError("freeze manifest omits required model/state/threshold files")
+    specs=_specs(args.scenario,args.tier)
     checkpoint_path=state_dir/"b0_model.pt"; state_path=state_dir/"a2_state.json"; thresholds_path=state_dir/"thresholds.json"
     for path in (checkpoint_path,state_path,thresholds_path,state_dir/"freeze_manifest.json"):
         if not path.is_file(): raise ValueError(f"missing frozen state artifact {path}")
@@ -97,6 +105,12 @@ def main(argv=None):
     predictor.load_state_dict(checkpoint["model_state"]); predictor.to(args.device).eval()
     mean=np.asarray(checkpoint["scaler_mean"]); std=np.asarray(checkpoint["scaler_std"])
     state=load_fit_state(state_path); thresholds=json.loads(thresholds_path.read_text()); methods=_methods(thresholds)
+    validated_inputs={}; expected_fingerprint=None
+    for input_name,input_node,input_manifest in specs:
+        item=validate_input_manifest(input_manifest,input_node,input_name,confirmatory=args.tier=="confirmatory",expected_fingerprint=expected_fingerprint)
+        fingerprint=item["manifest"].get("campaign_converter_fingerprint")
+        if args.tier=="confirmatory" and expected_fingerprint is None: expected_fingerprint=fingerprint
+        validated_inputs[input_name]=item
     clean_prn,clean_epoch=_clean_scores(state_dir,thresholds)
     clean_fpr={model:float((clean_epoch[column]>threshold).mean()) for model,(column,threshold) in methods.items()}
     out=Path(args.out).resolve()
@@ -114,7 +128,7 @@ def main(argv=None):
         matched_clean={name:float((clean_epoch[{"A0":"score_A0","B0-Exact":"score_B0_Exact","B0-Enhanced":"score_B0_Enhanced"}[name]]>item["threshold"]).mean())
                        for name,item in matched_doc.get("models",{}).items()}
         for name,node,manifest_path in specs:
-            validated=validate_input_manifest(manifest_path,node,name,confirmatory=args.tier=="confirmatory")
+            validated=validated_inputs[name]
             manifest=validated["manifest"]; onset=_onset(name,manifest)
             residual=predict_residuals(validated["frame"],predictor,mean,std,role=f"{args.tier}:{name}",device=args.device)
             scored=score_residuals(residual,state); scored.to_csv(staging/"per_prn"/f"{name}.csv",index=False)
@@ -143,14 +157,31 @@ def main(argv=None):
             ax.axhline(methods["CMTE-A2"][1],color="r",ls="--",label="q99.5 higher")
             ax.axvline(onset,color="k",ls=":",label="metadata onset"); ax.set(xlabel="availability window_end_s",ylabel="mean -log(p)",title=name)
             ax.legend(); fig.tight_layout(); fig.savefig(staging/"plots"/f"{name}_a2.png",dpi=120); plt.close(fig)
+            fig,axes=plt.subplots(2,1,figsize=(11,7),sharex=True)
+            for method,(column,threshold) in methods.items():
+                axes[0].plot(epoch.window_end_s,epoch[column],label=method,linewidth=.9); axes[0].axhline(threshold,ls="--",linewidth=.6)
+            axes[0].axvline(onset,color="k",ls=":"); axes[0].set_ylabel("frozen score"); axes[0].legend(ncol=2)
+            axes[1].step(epoch.window_end_s,epoch.tracked_prn_count,where="post"); axes[1].axvline(onset,color="k",ls=":")
+            axes[1].set(xlabel="availability window_end_s",ylabel="exact tracked PRN N"); fig.suptitle(f"{name}: all models and exact-N timeline")
+            fig.tight_layout(); fig.savefig(staging/"plots"/f"{name}_all_models_prn_n.png",dpi=120); plt.close(fig)
             input_provenance[name]={"node":str(node),"node_sha256":file_sha256(node),"manifest":str(manifest_path),
                                     "manifest_sha256":file_sha256(manifest_path),"onset_s":onset,"producer_grade":manifest.get("producer_grade"),
                                     "history_audit":residual.attrs.get("history_audit",{})}
         primary_name="development_metrics.csv" if args.tier=="development" else "confirmatory_metrics.csv"
         pd.DataFrame(all_metrics).to_csv(staging/primary_name,index=False)
         pd.DataFrame(baseline_metrics).to_csv(staging/"baseline_metrics.csv",index=False)
-        pd.DataFrame(all_boot).to_csv(staging/"bootstrap.csv",index=False)
+        boot_frame=pd.DataFrame(all_boot); boot_frame.to_csv(staging/"bootstrap.csv",index=False)
         pd.DataFrame(matched_rows).to_csv(staging/"matched_fpr.csv",index=False)
+        ci=boot_frame.dropna(subset=["low","high"] if {"low","high"}.issubset(boot_frame) else []).copy()
+        fig,ax=plt.subplots(figsize=(12,5))
+        if not ci.empty:
+            labels=(ci.scenario.astype(str)+"/"+ci.model.astype(str)+"/"+ci.metric.astype(str)).tolist(); y=np.arange(len(ci))
+            point=ci["point"].to_numpy(float) if "point" in ci else (ci.low.to_numpy(float)+ci.high.to_numpy(float))/2
+            ax.errorbar(point,y,xerr=np.vstack([point-ci.low.to_numpy(float),ci.high.to_numpy(float)-point]),fmt="o")
+            ax.set_yticks(y,labels,fontsize=6)
+        else: ax.text(.5,.5,"CI unavailable; see machine-readable NA reasons",ha="center")
+        ax.set_title(f"{args.tier} moving-block bootstrap confidence intervals"); fig.tight_layout()
+        fig.savefig(staging/"plots"/"all_models_bootstrap_ci.png",dpi=120); plt.close(fig)
         exact_input=pd.concat(diagnostic_parts,ignore_index=True); exact_rows,dependence=exact_n_diagnostics(exact_input)
         exact_rows.to_csv(staging/"exact_n_diagnostics.csv",index=False)
         dependence_rows=[]
@@ -163,8 +194,8 @@ def main(argv=None):
         shutil.copyfile(ROOT/"configs/cmte_a2_preregistration.json",staging/"preregistration.json")
         for name in ("config.json","training.json","calibration.json","thresholds.json"): shutil.copyfile(state_dir/name,staging/name)
         commit=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()
-        provenance={"schema":"gnss-doppler-lab.cmte-a2-evaluation-provenance.v1","tier":args.tier,"execution_source_commit":commit,
-                    "prereg_commit":PREREG_COMMIT,"prereg_ancestor_verified":args.tier=="confirmatory","inputs":input_provenance,
+        provenance={"schema":"gnss-doppler-lab.cmte-a2-evaluation-provenance.v1","tier":args.tier,"execution_source_commit":commit,"clean_tree_asserted":True,
+                    "artifact_execution_source_recorded":True,"prereg_commit":PREREG_COMMIT,"prereg_ancestor_verified":args.tier=="confirmatory","inputs":input_provenance,
                     "state":{"directory":str(state_dir),"checkpoint_sha256":file_sha256(checkpoint_path),"state_sha256":file_sha256(state_path),
                              "thresholds_sha256":file_sha256(thresholds_path),"scaler_sha256":hashlib.sha256(mean.tobytes()+std.tobytes()).hexdigest(),
                              "qcal_sha256":hashlib.sha256(np.asarray(state.qcal).tobytes()).hexdigest()},

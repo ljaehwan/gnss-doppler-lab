@@ -686,7 +686,7 @@ def success_criteria_audit(metrics:pd.DataFrame,prn_diagnostics:pd.DataFrame)->d
     if complete and "complete" in prn_diagnostics:
         complete=bool(prn_diagnostics[prn_diagnostics.scenario.astype(str).str.upper().isin(required)].complete.all())
     if complete and "sparse" in prn_diagnostics:
-        sparse=prn_diagnostics[prn_diagnostics.sparse.astype(bool)]
+        sparse=prn_diagnostics[prn_diagnostics["sparse"].astype(bool)]
         complete=bool(sparse.empty or ("na_reason" in sparse and sparse.na_reason.notna().all()))
     c6=bool(complete); values=[c1,c2,c3,c4,c5,c6]
     names=("independent_clean_fpr","per_scenario_stable_pre","catastrophic_pre_alarm_guard","improvement_over_b0_exact",

@@ -13,10 +13,11 @@ def main(argv=None):
     parser.add_argument("--ds4-node",help="optional historical mixed-producer DS4 development sensitivity")
     parser.add_argument("--ds4-manifest")
     parser.add_argument("--out",required=True)
+    parser.add_argument("--onset-seconds",type=float,help="authoritative metadata onset copied uniformly; preparation never infers it")
     args=parser.parse_args(argv)
     if not args.scenario_npz and not args.ds4_node: parser.error("at least one source mapping is required")
     result={}
-    if args.scenario_npz: result["complex"]=prepare_named_complex_inputs(args.scenario_npz,args.out)
+    if args.scenario_npz: result["complex"]=prepare_named_complex_inputs(args.scenario_npz,args.out,source_metadata={"onset_s":args.onset_seconds} if args.onset_seconds is not None else None)
     if args.ds4_node:
         if args.scenario_npz: raise ValueError("DS4 mixed producer must use a separate output directory/campaign")
         result["DS4"]=prepare_ds4_sensitivity(args.ds4_node,args.out,source_manifest=args.ds4_manifest)
