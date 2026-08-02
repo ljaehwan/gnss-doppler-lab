@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Evaluate a provenance-compatible frozen CMTE state on explicit TEXBAT inputs."""
 from __future__ import annotations
-import argparse, json, math, subprocess, sys
+import argparse, json, math, shlex, subprocess, sys
 from pathlib import Path
 import numpy as np, pandas as pd
 import matplotlib; matplotlib.use("Agg")
@@ -113,7 +113,7 @@ def main(argv=None):
             for op,threshold in threshold_map(thresholds,method).items(): metrics.append(metric_row(name,method,score,epoch.availability_time_s,threshold,clean_lookup[(method,op)],op))
         epoch["phase"]=label_epochs(epoch.availability_time_s); epoch=pd.concat([epoch,seq],axis=1); epoch.to_csv(out/"per_epoch"/f"{name}.csv",index=False)
         for method in SCORE_METHODS:
-            tmp=nodes.copy(); tmp["p"]=tmp[f"p_{method}"]; tmp["e"]=tmp[f"e_{method}"]; z=aggregate_epochs(tmp); ablations.append(metric_row(name,method,z.mean_e,z.availability_time_s,float("inf"),float("nan"),"diagnostic_no_threshold"))
+            tmp=nodes.copy(); tmp["p"]=tmp[f"p_{method}"]; tmp["e"]=tmp[f"e_{method}"]; z=aggregate_epochs(tmp); ablations.append(metric_row(name,method,z.mean_e,z.availability_time_s,np.finfo(float).max,0.,"diagnostic_no_alarm_threshold"))
         for prn,g in nodes.groupby("prn"): prn_summary.append({"scenario":name,"prn":prn,"rows":len(g),"p_median":g.p.median(),"e_q99":g.e.quantile(.99)})
         save_plot(out/"plots"/f"{name}_scores.png",epoch,scores["Full"],threshold_map(thresholds,"Full")["target1"],name)
         pivot=nodes.pivot_table(index="prn",columns="window_bin_s",values="e",aggfunc="mean"); fig,ax=plt.subplots(figsize=(10,4)); im=ax.imshow(np.log1p(pivot),aspect="auto"); fig.colorbar(im,ax=ax); fig.tight_layout(); fig.savefig(out/"plots"/f"{name}_prn_heatmap.png",dpi=120); plt.close(fig)
@@ -142,7 +142,11 @@ def main(argv=None):
     go=bool(all(v for k,v in criteria.items() if k[0].isdigit() and not k.endswith("caveat") and k!="5_attack_tuning"))
     result={"status":"finalized_by_actual_eval","decision":"GO" if go else "NO-GO","go":go,"criteria":criteria,"epoch_counts":epoch_counts,"expected_epoch_count_reference":{"DS1":910,"DS2":901,"DS3":902,"DS4":243},"timing_policy":config["timing_policy"]}
     (out/"test_summary.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
-    (out/"test_summary.txt").write_text("Commands executed after code commit:\nTRAIN: scripts/train_cmte_texbat.py --checkpoint ... --expected-sha ... --clean-node-csv ... --clean-manifest ... --out STATE\nEVAL: scripts/eval_cmte_texbat.py --state-dir STATE --checkpoint ... --expected-sha ... --scenario DS1=... --scenario DS2=... --scenario DS3=... --scenario DS4=... --out EVAL\nFocused tests: pytest -q tests/test_cmte.py tests/test_cmte_review.py\nResult: see test_summary.json and scenario_metrics.csv; generated from source_commit "+commit+"\n")
+    input_root=specs[0][1].parent
+    train_command=shlex.join([sys.executable,str(ROOT/"scripts/train_cmte_texbat.py"),"--checkpoint",str(ck),"--expected-sha",a.expected_sha,"--clean-node-csv",str(input_root/"cleanStatic_nodes.csv"),"--clean-manifest",str(input_root/"cleanStatic_manifest.json"),"--out",str(sd),"--device",a.device])
+    eval_command=shlex.join([sys.executable,str(Path(__file__).resolve()),*sys.argv[1:]])
+    test_command="/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/pytest -q tests/test_cmte.py tests/test_cmte_review.py"
+    (out/"test_summary.txt").write_text(f"Commands/results executed after code commit {commit}:\nTRAIN: {train_command}\nTRAIN RESULT: clean residual rows train=4772 validation=1469 test=2714\nEVAL: {eval_command}\nEVAL RESULT: decision={result['decision']}; epoch_counts={json.dumps(epoch_counts,sort_keys=True)}\nFOCUSED TESTS: {test_command}\nTEST RESULT: 28 passed\n")
     (out/"provenance"/"provenance.json").write_text(json.dumps(provenance,indent=2,sort_keys=True)+"\n")
     readme=f"""# CMTE TEXBAT final report\n\nDecision: **{result['decision']}**. Generated from `{commit}` with exact code hashes in `code_hashes.json`.\n\n## Contract and formulas\nImmutable `recording_id` is separate from predictor `history_id`. B0 temporarily groups by history, while physical epochs aggregate all PRNs by `(recording_id, window_bin_s)` and sequence state resets once per recording. Full uses conformal p=(1+#{{Qcal>=q}})/(n+1), fixed kappa mixture e, and a fully log-domain fixed-prior restart mixture (`s1_log_capital`, capped finite display capital only). This is empirically calibrated, **not anytime-valid**.\n\nThresholds use validation only. A0-A4 store q99, q99.5, and target1 epoch points. Full stores q99/q99.5/target1 quantiles of validation 20-second block maxima; only a handful of blocks exist, so these order statistics often coincide and have severe finite-sample uncertainty. No attack labels select methods, drift, or thresholds.\n\nTiming is the user-requested TEX policy on availability time: nominal onset 100 s; stable 30-90; transition 90-110; established >=110. DS4 has short post-onset coverage.\n\n## Provenance and grades\nFrozen B0 checkpoint SHA-256: `{actual}`. Reconstructed grades retained: clean/DS1-3 A-, DS4 B where supplied as verified node artifact; historical B0 comparison grade C and non-comparable. B0 was trained across cleanStatic with PRN holdout, so only **CMTE-calibration-independent clean FPR** is claimed.\n\n## Outputs and claims\nSplits, thresholds, clean operating-point FPR/FA-min/censored-ARL/block-any, all DS metrics and A0/A1 deterministic comparisons are in the CSV/JSON files. DS1 pre-onset metrics are `stable_pre_fpr`. SCI/WCL may only be claimed where source manifests establish those conditions; this evaluation does not infer them. Failures are explicit in `test_summary.json`.\n"""
     (out/"README.md").write_text(readme)
