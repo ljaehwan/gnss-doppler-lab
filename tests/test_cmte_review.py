@@ -113,6 +113,20 @@ def test_clean_role_extraction_resets_at_internal_cadence_gap_too():
     assert roles["validation"].empty and roles["test"].empty
 
 
+def test_source_segment_identity_detects_gap_despite_converter_piece_labels():
+    nodes,features=cadence_gap_frame()
+    nodes["segment_index"]=7
+    nodes["segment"]=nodes["segment"].astype(str)
+    nodes.loc[nodes.window_start_s<20,"segment"]="7:0"
+    nodes.loc[nodes.window_start_s>=20,"segment"]="7:1"
+    out=extract_recording_innovations(nodes,Last(),features,np.zeros(9),np.ones(9),scenario="DS2",seq_len=12)
+    audit=out.attrs["cadence_chunk_audit"]
+    assert audit["identity_groups"]==1 and audit["gaps_detected"]==1
+    assert audit["chunks_total"]==2
+    first=out.sort_values(["run_id","prn","window_bin_s"]).groupby(["run_id","prn"]).head(1)
+    assert len(first)==2 and first.target_window_index.eq(12).all()
+
+
 def test_same_prn_multiple_channels_get_disjoint_history_identities():
     nodes,features=cadence_gap_frame()
     nodes.loc[nodes.window_start_s>=20,"channel"]=3

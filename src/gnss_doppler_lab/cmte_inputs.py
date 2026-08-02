@@ -36,13 +36,17 @@ def _rename_innovations(frame):
 def split_contiguous_history_chunks(nodes, *, seq_len=12, cadence_s=.5, tolerance_s=1e-7):
     """Create deterministic frozen-B0 identities for contiguous cadence chunks.
 
-    The identity contract is ``run_id/prn/segment/channel``.  No rows are
-    interpolated or moved across a gap.  Chunks with too little history to
+    The identity contract is ``run_id/prn/segment/channel``.  When the input
+    carries ``segment_index``, that source-recording segment is authoritative;
+    converter piece labels in ``segment`` must not hide a cadence gap.  No rows
+    are interpolated or moved across a gap.  Chunks with too little history to
     produce a target are omitted and represented explicitly in the audit.
     """
     if seq_len < 1:
         raise ValueError("seq_len must be positive")
     local=nodes.copy()
+    if "segment_index" in local:
+        local["segment"]=local["segment_index"]
     for column,default in (("segment","0"),("channel","0")):
         if column not in local: local[column]=default
     required=("run_id","prn","segment","channel","window_bin_s")
@@ -113,7 +117,7 @@ def extract_role_innovations(nodes,model,features,mean,std,*,seq_len=12,device="
         if hi is not None: mask &= nodes.window_end_s.astype(float).le(hi)
         local=nodes.loc[mask].copy()
         local["source_run_id"]=local.run_id.astype(str)
-        segment=local["segment"].astype(str) if "segment" in local else local.get("segment_index",pd.Series("0",index=local.index)).astype(str)
+        segment=local["segment_index"].astype(str) if "segment_index" in local else local.get("segment",pd.Series("0",index=local.index)).astype(str)
         local["run_id"]=local.run_id.astype(str)+f"::cmte-{role}-reset::segment-"+segment
         result[role]=_extract_chunked(local,model,features,mean,std,seq_len=seq_len,device=device,extractor=extractor)
     return result
@@ -121,7 +125,7 @@ def extract_role_innovations(nodes,model,features,mean,std,*,seq_len=12,device="
 
 def extract_recording_innovations(nodes,model,features,mean,std,*,scenario,seq_len=12,device="cpu",extractor=None):
     local=nodes.copy(); local["source_run_id"]=local.run_id.astype(str)
-    segment=local["segment"].astype(str) if "segment" in local else local.get("segment_index",pd.Series("0",index=local.index)).astype(str)
+    segment=local["segment_index"].astype(str) if "segment_index" in local else local.get("segment",pd.Series("0",index=local.index)).astype(str)
     local["run_id"]=f"cmte-{scenario}-fresh::"+local.run_id.astype(str)+"::segment-"+segment
     return _extract_chunked(local,model,features,mean,std,seq_len=seq_len,device=device,extractor=extractor)
 
