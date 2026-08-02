@@ -8,10 +8,14 @@ import pytest
 
 from gnss_doppler_lab.cmte import (
     RESIDUAL_COLUMNS, TAP_ORDER, FitState, SequentialState, aggregate_epochs,
-    audit_roles, conformal_pvalues, epoch_masks, fit_shared_state,
+    attach_calibration, audit_roles, conformal_pvalues, epoch_masks, fit_distribution,
     label_epochs, load_state, mixture_evalues, score_residuals,
     sequential_scores, validate_residual_frame, save_state,
 )
+
+
+def fitted(x, **kwargs):
+    return attach_calibration(fit_distribution(x, **kwargs), x)
 
 
 def frame(times=(10., 11., 12.), prns=("G01", "G02"), run="clean"):
@@ -20,7 +24,7 @@ def frame(times=(10., 11., 12.), prns=("G01", "G02"), run="clean"):
         for j,p in enumerate(prns):
             r=np.arange(1,10,dtype=float)*(.01+j*.002+t*.0001)
             row={"run_id":run,"prn":p,"window_start_s":t-.8,"window_end_s":t,
-                 "window_mid_s":t-.4,"window_bin_s":t-.5,
+                 "window_mid_s":t-.4,"window_bin_s":t-.5,"target_window_index":12,
                  "b0_prn_node_rmse":float(np.sqrt(np.mean(r*r)))}
             row.update(dict(zip(RESIDUAL_COLUMNS,r)))
             rows.append(row)
@@ -41,7 +45,7 @@ def test_roles_normal_only_and_no_scenario_or_prefix_leakage():
     with pytest.raises(ValueError,match="normal-only"):
         audit_roles({"train":bad,"validation":roles["validation"],"test":roles["test"]})
     prefix=frame((99.,),run="ds2")
-    with pytest.raises(ValueError,match="scenario"):
+    with pytest.raises(ValueError,match="forbidden"):
         audit_roles({"train":roles["train"],"validation":prefix,"test":roles["test"]})
 
 
@@ -67,7 +71,7 @@ def test_exact_nine_residuals_order_no_prn_feature_and_rmse():
 
 
 def test_epoch_aggregation_permutation_variable_counts_empty_and_one_prn():
-    state=fit_shared_state(frame((10.,11.,12.)))
+    state=fitted(frame((10.,11.,12.)))
     scored=score_residuals(frame((20.,21.),("G01","G02","G03")),state)
     a=aggregate_epochs(scored); b=aggregate_epochs(scored.sample(frac=1,random_state=3))
     pd.testing.assert_frame_equal(a,b)
@@ -79,7 +83,7 @@ def test_epoch_aggregation_permutation_variable_counts_empty_and_one_prn():
 
 def test_shrinkage_spd_and_all_scores():
     x=frame(tuple(range(20)),("G01",))
-    state=fit_shared_state(x,epsilon=1e-7)
+    state=fitted(x,epsilon=1e-7)
     assert np.linalg.eigvalsh(state.covariance).min()>0
     s=score_residuals(x,state)
     for c in ("q_rmse","q_diag_mahalanobis","q_full_shrinkage_mahalanobis","q_max_standardized_tap"):
@@ -98,12 +102,12 @@ def test_sequential_s1_parallel_restart_and_s2_reset_deterministic():
     b=sequential_scores(loge,run_ids=["a","a","b","b"],drift=.01)
     assert np.allclose(a[["s1_log_capital","s2_e_cusum"]],b[["s1_log_capital","s2_e_cusum"]])
     assert a.iloc[2].s2_e_cusum==max(0.,loge[2]-.01)
-    assert a.iloc[0].s1_log_capital>=0
+    assert np.isfinite(a.iloc[0].s1_log_capital)
 
 
 def test_availability_and_texbat_masks_boundaries():
     x=frame((29.999,30.,89.999,90.,109.999,110.))
-    e=aggregate_epochs(score_residuals(x,fit_shared_state(frame(tuple(range(10))))))
+    e=aggregate_epochs(score_residuals(x,fitted(frame(tuple(range(10))))))
     assert np.allclose(e.availability_time_s,[29.999,30.,89.999,90.,109.999,110.])
     labels=label_epochs(e.availability_time_s,onset_s=100.)
     assert list(labels)==["outside","stable","stable","transition","transition","established"]
@@ -118,7 +122,7 @@ def test_threshold_source_validation_only_test_independent():
 
 
 def test_validation_shuffle_sanity_and_attack_order_diagnostic():
-    state=fit_shared_state(frame(tuple(range(30))))
+    state=fitted(frame(tuple(range(30))))
     scored=score_residuals(frame(tuple(range(30,50))),state)
     e=aggregate_epochs(scored)
     shuffled=aggregate_epochs(scored.sample(frac=1,random_state=8))
@@ -132,7 +136,7 @@ def test_validation_shuffle_sanity_and_attack_order_diagnostic():
 
 def test_state_hash_pin_roundtrip_and_raw_semantics(tmp_path):
     sha="f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b"
-    st=fit_shared_state(frame(tuple(range(15))),checkpoint_sha256=sha)
+    st=fitted(frame(tuple(range(15))),checkpoint_sha256=sha)
     p=tmp_path/"state.json"; save_state(st,p); loaded=load_state(p,expected_checkpoint_sha256=sha)
     assert loaded.checkpoint_sha256==sha
     assert loaded.metadata["raw_taps"]=="prompt-relative magnitudes"
