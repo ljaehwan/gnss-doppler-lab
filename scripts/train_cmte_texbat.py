@@ -26,7 +26,7 @@ def blocks(frame,score,threshold):
     duration=max(1e-9,len(x)*.5/60)
     return {"epoch_fpr":float(alarms.mean()),"alarm_epoch_count":int(alarms.sum()),"alarm_epoch_occupancy_per_min":float(alarms.sum()/duration),
       "false_alarm_events":int(rising.sum()),"false_alarms_per_min":float(rising.sum()/duration),"sequence_any_alarm_fraction":float(np.mean(sequence_any)),
-      "first_crossing_epoch":None if not rising.any() else int(np.flatnonzero(rising)[0]+1),"censored_run_length_epochs":float(np.mean(first_lengths)),"censored_arl_epochs":float(np.mean(first_lengths)),
+      "first_crossing_epoch":int(len(x) if not rising.any() else np.flatnonzero(rising)[0]+1),"first_crossing_censored":bool(not rising.any()),"censored_run_length_epochs":float(np.mean(first_lengths)),"censored_arl_epochs":float(np.mean(first_lengths)),
       "block_any_alarm_fraction":float(any_alarm.mean()),"blocks":int(len(maxima)),"block_maxima":maxima.tolist()}
 def a1_scores(nodes,thresholds,rates):
     rows=[]

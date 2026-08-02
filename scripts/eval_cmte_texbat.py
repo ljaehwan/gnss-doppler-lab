@@ -50,7 +50,7 @@ def alarm_run_metrics(alarm,runs):
     return {"epoch_fpr":float(alarm.mean()) if n else 0.,"alarm_epoch_count":int(alarm.sum()),
       "alarm_epoch_occupancy_per_min":float(alarm.sum()/duration),"false_alarm_events":int(rising.sum()),
       "false_alarms_per_min":float(rising.sum()/duration),"sequence_any_alarm_fraction":float(np.mean(sequence_any)) if sequence_any else 0.,
-      "first_crossing_epoch":None if not len(first) else int(first[0]+1),
+      "first_crossing_epoch":int(n if not len(first) else first[0]+1),"first_crossing_censored":bool(not len(first)),
       "censored_run_length_epochs":float(np.mean(first_crossings)) if first_crossings else 0.,
       "censored_arl_epochs":float(np.mean(first_crossings)) if first_crossings else 0.}
 def clean_alarm_metrics(epoch,score,threshold):
@@ -64,14 +64,14 @@ def metric_row(scenario,method,score,times,threshold,clean_fpr,operating_point="
     stable=masks["stable"]; established=masks["established"]
     auc=float(roc_auc_score(labels,score[keep])) if len(np.unique(labels))==2 else float("nan")
     pr=float(average_precision_score(labels,score[keep])) if len(np.unique(labels))==2 else float("nan")
-    hits=np.flatnonzero(alarm&established); first=None if not len(hits) else float(times[hits[0]])
+    hits=np.flatnonzero(alarm&established); detected=bool(len(hits)); first=float(times[hits[0]]) if detected else float(times[established][-1])
     stable_metrics=alarm_run_metrics(alarm[stable],[scenario]*int(stable.sum()))
     return {"scenario":scenario,"method":method,"operating_point":operating_point,"threshold":float(threshold),"roc_auc":auc,"pr_auc":pr,
       "cmte_calibration_independent_clean_fpr":float(clean_fpr),"independent_clean_fpr":float(clean_fpr),
       "independent_clean_fpr_caveat":"CMTE calibration independent; frozen B0 was trained across cleanStatic with PRN holdout",
       "stable_pre_fpr":stable_metrics["epoch_fpr"] if stable.any() else float("nan"),
       **{k:(v if stable.any() else float("nan")) for k,v in stable_metrics.items() if k!="epoch_fpr"},
-      "detection":bool(np.any(alarm&established)),"first_alarm_availability_s":first,"first_alarm_delay_s":None if first is None else first-100.,
+      "detection":detected,"first_alarm_censored":not detected,"first_alarm_availability_s":first,"first_alarm_delay_s":first-100.,
       "persistent_detection":float(alarm[established].mean()) if established.any() else float("nan"),"pre_summary":json.dumps(summary_values(score,stable),sort_keys=True),"post_summary":json.dumps(summary_values(score,established),sort_keys=True)}
 def permute_epochs_within_recording(epoch,seed=2026):
     """Permute already-aggregated epochs while retaining recording reset positions."""
@@ -83,7 +83,7 @@ def permute_epochs_within_recording(epoch,seed=2026):
 def compare_scenario(full,baseline):
     lower_pre=bool(full.stable_pre_fpr < baseline.stable_pre_fpr-FPR_IMPROVEMENT_TOL)
     fdelay,bdelay=full.first_alarm_delay_s,baseline.first_alarm_delay_s
-    faster=bool(pd.notna(fdelay) and (pd.isna(bdelay) or fdelay < bdelay-DELAY_IMPROVEMENT_TOL_S))
+    faster=bool(full.detection and (not baseline.detection or fdelay < bdelay-DELAY_IMPROVEMENT_TOL_S))
     higher_persistent=bool(full.persistent_detection > baseline.persistent_detection+DETECTION_IMPROVEMENT_TOL)
     similar=bool(abs(full.cmte_calibration_independent_clean_fpr-baseline.cmte_calibration_independent_clean_fpr)<=CLEAN_FPR_SIMILAR_TOL)
     higher_detection=bool(similar and int(bool(full.detection))>int(bool(baseline.detection)))
