@@ -10,7 +10,7 @@ from gnss_doppler_lab.cmte_a2_campaign import (
  file_sha256,_issue_confirm_capability)
 
 def _load_guarded_evaluator():
- path=ROOT/"scripts/eval_cmte_a2_texbat.py"
+ path=ROOT/"scripts/score_cmte_a2_confirmatory.py"
  spec=importlib.util.spec_from_file_location("cmte_a2_guarded_confirm_evaluator",path)
  if spec is None or spec.loader is None: raise RuntimeError("cannot load guarded evaluator")
  module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module); return module
@@ -30,7 +30,7 @@ def main(argv=None):
   args=["--tier","confirmatory","--state-dir",str(state),"--freeze-manifest",str(state/"freeze_manifest.json"),
         "--scenario",f"DS7={inputs['DS7']['node']}={inputs['DS7']['input_manifest']}",
         "--scenario",f"DS8={inputs['DS8']['node']}={inputs['DS8']['input_manifest']}","--out",a.out,"--device",a.device]
-  _load_guarded_evaluator()._confirm_main(args,capability)
+  _load_guarded_evaluator().score_confirmatory(capability,args)
   result_hash=file_sha256(Path(a.out)/"checksums.json"); update_ledger(a.ledger,status="completed",result_sha256=result_hash)
   print(json.dumps({"out":str(Path(a.out).resolve()),"ledger":str(Path(a.ledger).resolve()),"status":"completed","result_checksums_sha256":result_hash},sort_keys=True))
  except BaseException as exc:

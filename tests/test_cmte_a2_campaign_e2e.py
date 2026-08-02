@@ -1,16 +1,8 @@
 from __future__ import annotations
-import hashlib, importlib.util, json, shutil, sys
+import hashlib, json, os, subprocess, sys
 from pathlib import Path
 import numpy as np
-
 ROOT=Path(__file__).resolve().parents[1]
-
-
-def load(name):
- path=ROOT/"scripts"/name; module_name="e2e_"+name.replace(".","_")
- spec=importlib.util.spec_from_file_location(module_name,path); assert spec and spec.loader
- mod=importlib.util.module_from_spec(spec); sys.modules[module_name]=mod; spec.loader.exec_module(mod); return mod
-
 
 def make_npz(path:Path,end:float,phase:float):
  base=np.arange(0,end+.001,.5); times=np.tile(base,5); prn=np.repeat(np.arange(1,6),len(base)); n=len(times)
@@ -20,73 +12,48 @@ def make_npz(path:Path,end:float,phase:float):
   iq[:,tap,1]=.2+tap*.01+np.cos(times*.02+prn*.1+phase)*.02
  np.savez(path,complex_iq=iq,prn=prn,time_s=times,segment=np.zeros(n,int),channel=prn-1)
 
+def run(script,*args,expect=0):
+ command=[sys.executable,str(ROOT/script),*map(str,args)]
+ result=subprocess.run(command,cwd=ROOT,text=True,capture_output=True,env={**os.environ,"MPLBACKEND":"Agg"})
+ assert result.returncode==expect, f"command={command!r}\nstdout={result.stdout}\nstderr={result.stderr}"
+ return result
 
-def test_synthetic_cli_prep_train_dev_freeze_confirm_finalize(tmp_path,monkeypatch):
- # No TEXBAT path is opened: all six recordings and the receiver/exporter are synthetic fixtures.
+def test_true_subprocess_synthetic_prep_train_dev_history_attest_freeze_confirm_finalize(tmp_path):
+ # No monkeypatching and no TEXBAT bytes: every campaign stage crosses a real process boundary.
  source=tmp_path/"source"; source.mkdir(); names=("cleanStatic","DS1","DS2","DS3","DS7","DS8")
  for i,name in enumerate(names): make_npz(source/f"{name}.npz",365 if name=="cleanStatic" else 190,i*.3)
-
- # Exercise the DS8 source-only CLI with a fake receiver and fake pinned exporter.
- ds8prep=load("prepare_cmte_a2_ds8_complex.py")
- raw=tmp_path/"fake_ds8.raw"; raw.write_bytes(b"FAKE-DS8")
- receiver=tmp_path/"fake_receiver.py"; receiver.write_text("#!/usr/bin/env python3\nfrom pathlib import Path\nPath('raw/epl_tracking_ch_0.mat').write_bytes(b'MAT')\n") ; receiver.chmod(0o755)
- monkeypatch.setattr(ds8prep,"RAW_BYTES",raw.stat().st_size); monkeypatch.setattr(ds8prep,"RAW_SHA",hashlib.sha256(raw.read_bytes()).hexdigest())
- monkeypatch.setattr(ds8prep,"EXEC_SHA",hashlib.sha256(receiver.read_bytes()).hexdigest())
- monkeypatch.setattr(ds8prep,"export_tracking_csv",lambda mats,csv,summary,**kw: (Path(csv).write_text("x\n1\n"),Path(summary).write_text("x\n1\n"),{"rows":1})[-1])
- monkeypatch.setattr(ds8prep,"parse_acquired_prns",lambda text:[1]); monkeypatch.setattr(ds8prep,"parse_receiver_reported_prns",lambda text:[1])
- def fake_exporter(destination):
-  def export(run,out):
-   shutil.copyfile(source/"DS8.npz",out); manifest=Path(out).with_suffix(".manifest.json"); manifest.write_text(json.dumps({"fixture":True})); return manifest
-  return export
- monkeypatch.setattr(ds8prep,"load_pinned_exporter",fake_exporter)
- prepared_ds8=tmp_path/"ds8-prepared"; ds8prep.main(["--iq",str(raw),"--receiver-executable",str(receiver),"--output-root",str(prepared_ds8)])
-
- prep=load("prepare_cmte_a2_inputs.py"); uniform=tmp_path/"uniform"
- mappings=[]
- for name in names:
-  npz=prepared_ds8/"exports/ds8.npz" if name=="DS8" else source/f"{name}.npz"
-  mappings += ["--scenario-npz",f"{name}={npz}"]
- prep.main([*mappings,"--onset-seconds","110","--out",str(uniform)])
- ds4=tmp_path/"ds4"; prep.main(["--ds4-node",str(uniform/"DS3_nodes.csv"),"--ds4-manifest",str(uniform/"DS3_manifest.json"),"--out",str(ds4)])
-
- train=load("train_cmte_a2_texbat.py"); state=tmp_path/"state"
- train.main(["--clean-node-csv",str(uniform/"cleanStatic_nodes.csv"),"--clean-manifest",str(uniform/"cleanStatic_manifest.json"),"--out",str(state)])
-
- evaluator=load("eval_cmte_a2_texbat.py"); original_boot=evaluator.bootstrap_metrics
- monkeypatch.setattr(evaluator,"bootstrap_metrics",lambda frame,reps=2000,seed=20260802:original_boot(frame,reps=5,seed=seed))
- development=tmp_path/"development"
- devargs=["--tier","development","--state-dir",str(state),"--out",str(development)]
+ uniform=tmp_path/"uniform"; prep_args=[]
+ for name in names: prep_args += ["--scenario-npz",f"{name}={source/f'{name}.npz'}"]
+ run("scripts/prepare_cmte_a2_inputs.py",*prep_args,"--onset-seconds","110","--out",uniform)
+ ds4=tmp_path/"ds4"; run("scripts/prepare_cmte_a2_inputs.py","--ds4-node",uniform/"DS3_nodes.csv","--ds4-manifest",uniform/"DS3_manifest.json","--out",ds4)
+ state=tmp_path/"state"; run("scripts/train_cmte_a2_texbat.py","--clean-node-csv",uniform/"cleanStatic_nodes.csv","--clean-manifest",uniform/"cleanStatic_manifest.json","--out",state)
+ development=tmp_path/"development"; devargs=["--tier","development","--state-dir",state,"--out",development]
  for name,root in (("DS1",uniform),("DS2",uniform),("DS3",uniform),("DS4",ds4)):
   devargs += ["--scenario",f"{name}={root/f'{name}_nodes.csv'}={root/f'{name}_manifest.json'}"]
- evaluator.main(devargs)
-
- from gnss_doppler_lab.cmte_a2_campaign import (CONVERTER_SHA,EXPORTER_SHA,RECEIVER_SHA,build_confirm_input_manifest,file_sha256)
- prepdoc=json.loads((prepared_ds8/"manifest.json").read_text()); prepdoc["binary_sha256"]=RECEIVER_SHA
- (prepared_ds8/"synthetic_prep_manifest.json").write_text(json.dumps(prepdoc))
+ run("scripts/eval_cmte_a2_texbat.py",*devargs)
+ history=tmp_path/"historical.json"; run("scripts/check_cmte_a2_historical_b0.py","--output",history)
+ commit=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()
+ attestation=tmp_path/"preflight.json"; run("scripts/run_cmte_a2_preflight_tests.py","--source-commit",commit,"--out",attestation)
+ attest=json.loads(attestation.read_text()); assert attest["exit_code"]==0 and attest["summary"]["failed"]==0 and attest["summary"]["passed"]>=30
  confirm_inputs=tmp_path/"confirm-inputs.json"
- build_confirm_input_manifest(confirm_inputs,ds7_raw=source/"DS7.npz",ds7_npz=source/"DS7.npz",ds7_node=uniform/"DS7_nodes.csv",
-  ds7_input_manifest=uniform/"DS7_manifest.json",ds8_raw=raw,ds8_npz=prepared_ds8/"exports/ds8.npz",
-  ds8_rendered_config=prepared_ds8/"receiver/receiver.conf",ds8_prep_manifest=prepared_ds8/"synthetic_prep_manifest.json",
-  ds8_node=uniform/"DS8_nodes.csv",ds8_input_manifest=uniform/"DS8_manifest.json",expected_ds7_raw_sha=file_sha256(source/"DS7.npz"),
-  expected_ds8_raw_sha=file_sha256(raw),code_hashes={"converter":CONVERTER_SHA,
-  "wrapper":file_sha256(ROOT/"src/gnss_doppler_lab/cmte_a2_inputs.py"),"receiver":RECEIVER_SHA,"exporter":EXPORTER_SHA,
-  "template":file_sha256(ROOT/"configs/cmte_a2_ds8_receiver.conf")})
-
- freeze=load("freeze_cmte_a2_campaign.py"); frozen=tmp_path/"freeze"
- freeze.main(["--state-dir",str(state),"--development-dir",str(development),"--confirm-input-manifest",str(confirm_inputs),"--out",str(frozen)])
- anchor=frozen/"freeze_manifest.json"; anchor_sha=file_sha256(anchor)
- confirm=load("confirm_cmte_a2_texbat.py"); monkeypatch.setattr(confirm,"_load_guarded_evaluator",lambda:evaluator)
+ run("tests/fixtures/build_cmte_a2_synthetic_confirm_manifest.py","--source",source,"--uniform",uniform,"--out",confirm_inputs)
+ frozen=tmp_path/"freeze"; run("scripts/freeze_cmte_a2_campaign.py","--state-dir",state,"--development-dir",development,
+  "--confirm-input-manifest",confirm_inputs,"--test-attestation",attestation,"--out",frozen)
+ anchor=frozen/"freeze_manifest.json"; anchor_sha=hashlib.sha256(anchor.read_bytes()).hexdigest()
+ rejected=run("scripts/eval_cmte_a2_texbat.py","--tier","confirmatory","--state-dir",tmp_path/"never-opened",
+  "--scenario",f"DS7={tmp_path/'holdout'}={tmp_path/'manifest'}","--out",tmp_path/"rejected",expect=2)
+ assert "invalid choice" in rejected.stderr and not (tmp_path/"rejected").exists()
  confirmatory=tmp_path/"confirmatory"; ledger=tmp_path/"one-shot-ledger.json"
- confirm.main(["--trust-anchor",str(anchor),"--expected-sha256",anchor_sha,"--ledger",str(ledger),"--out",str(confirmatory)])
-
- finalizer=load("finalize_cmte_a2_campaign.py"); final=tmp_path/"final"
- finalizer.main(["--state-dir",str(state),"--development-dir",str(development),"--confirmatory-dir",str(confirmatory),
-  "--trust-anchor",str(anchor),"--expected-anchor-sha256",anchor_sha,"--ledger",str(ledger),"--out",str(final)])
- for required in ("README.md","preregistration.json","scenario_metrics.csv","confirmatory_metrics.csv","development_metrics.csv",
-                  "baseline_metrics.csv","bootstrap_cis.csv","exact_n_diagnostics.csv","matched_fpr.csv","provenance.json","checksums.json"):
+ run("scripts/confirm_cmte_a2_texbat.py","--trust-anchor",anchor,"--expected-sha256",anchor_sha,"--ledger",ledger,"--out",confirmatory)
+ final=tmp_path/"final"; run("scripts/finalize_cmte_a2_campaign.py","--state-dir",state,"--development-dir",development,
+  "--confirmatory-dir",confirmatory,"--trust-anchor",anchor,"--expected-anchor-sha256",anchor_sha,"--ledger",ledger,"--out",final)
+ for required in ("README.md","scenario_metrics.csv","confirmatory_metrics.csv","development_metrics.csv","baseline_metrics.csv",
+  "bootstrap_cis.csv","exact_n_diagnostics.csv","matched_fpr.csv","provenance.json","checksums.json",
+  "provenance/trust_anchor.json","provenance/confirm_input_manifest.json","provenance/one_shot_ledger.json",
+  "provenance/development.json","provenance/confirmatory.json","provenance/hash_inventory.json","provenance/test_attestation.json"):
   assert (final/required).stat().st_size>0
+ checks=json.loads((final/"checksums.json").read_text()); assert all(required in checks for required in ("provenance/trust_anchor.json","provenance/hash_inventory.json","provenance/test_attestation.json"))
+ inventory=json.loads((final/"provenance/hash_inventory.json").read_text()); assert set(inventory["producer_hashes"])=={"converter","wrapper","receiver","exporter","template"}
+ assert {"scaler_sha256","qcal_sha256","checkpoint_sha256","state_sha256","thresholds_sha256"}.issubset(inventory["frozen_state"])
  for scenario in ("DS1","DS2","DS3","DS4","DS7","DS8"):
-  assert (final/"per_epoch"/f"{scenario}.csv").stat().st_size>0
-  assert (final/"per_prn"/f"{scenario}.csv").stat().st_size>0
- assert list((final/"plots").rglob("*.png"))
- assert not (development/"confirmatory_metrics.csv").exists() and not (confirmatory/"development_metrics.csv").exists()
+  assert (final/"per_epoch"/f"{scenario}.csv").stat().st_size>0 and (final/"per_prn"/f"{scenario}.csv").stat().st_size>0

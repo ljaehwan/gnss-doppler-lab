@@ -154,9 +154,14 @@ def validate_trust_anchor(anchor_path:str|Path,expected_sha:str,*,repo:str|Path)
  raw=anchor.read_bytes()
  if hashlib.sha256(raw).hexdigest()!=expected_sha: raise ValueError("trust anchor SHA mismatch")
  doc=json.loads(raw)
+ if doc.get("schema")!="gnss-doppler-lab.cmte-a2-campaign-freeze.v1" or doc.get("immutable") is not True:
+  raise ValueError("trust anchor schema/immutability mismatch")
  source=doc.get("source_commit")
  if not source: raise ValueError("trust anchor source commit missing")
  validate_source_tree(repo,source,require_clean=True)
+ att=doc.get("test_attestation",{}); att_path=require_nonempty(att.get("path",""))
+ if file_sha256(att_path)!=att.get("sha256"): raise ValueError("test attestation hash mismatch")
+ validate_test_attestation(att_path,source)
  pre=doc.get("pre_holdout_files",{})
  if not isinstance(pre,dict) or not pre: raise ValueError("trust anchor pre-holdout inventory missing")
  for key,item in pre.items():
@@ -241,7 +246,50 @@ def update_ledger(path:str|Path,*,status:str,detail:str|None=None,result_sha256:
  atomic_json(p,doc)
 
 
-def collect_freeze(repo:str|Path,state_dir:str|Path,development_dir:str|Path,confirm_input_manifest:str|Path)->dict[str,Any]:
+
+TEST_ATTESTATION_SCHEMA="gnss-doppler-lab.cmte-a2-test-attestation.v1"
+MINIMUM_PREFLIGHT_TESTS=30
+
+
+def validate_test_attestation(path:str|Path,source_commit:str,*,minimum_tests:int=MINIMUM_PREFLIGHT_TESTS)->dict[str,Any]:
+ """Validate independently captured, pre-holdout subprocess test evidence."""
+ attestation=require_nonempty(path); doc=json.loads(attestation.read_text())
+ if not isinstance(doc,dict) or doc.get("schema")!=TEST_ATTESTATION_SCHEMA:
+  raise ValueError("test attestation schema mismatch; placeholder summaries are rejected")
+ if doc.get("source_commit")!=source_commit: raise ValueError("test attestation source commit mismatch")
+ if doc.get("clean_tree_asserted") is not True: raise ValueError("test attestation clean-tree assertion missing")
+ for field in ("started_utc","completed_utc"):
+  if not isinstance(doc.get(field),str) or not doc[field].endswith("Z"): raise ValueError(f"test attestation {field} invalid")
+ commands=doc.get("commands")
+ if not isinstance(commands,list) or not commands: raise ValueError("test attestation commands missing")
+ for item in commands:
+  if (not isinstance(item,dict) or not isinstance(item.get("argv"),list) or not item["argv"]
+      or item.get("cwd") is None or item.get("exit_code")!=0):
+   raise ValueError("test attestation command exit/record invalid")
+  if any(not isinstance(item.get(k),int) or item[k]<0 for k in ("passed","failed","skipped")):
+   raise ValueError("test attestation parsed command counts invalid")
+  if item["failed"]!=0: raise ValueError("test attestation command failed count nonzero")
+ summary=doc.get("summary",{})
+ if doc.get("exit_code")!=0: raise ValueError("test attestation aggregate exit code nonzero")
+ if summary.get("failed")!=0: raise ValueError("test attestation aggregate failed count nonzero")
+ passed=sum(x["passed"] for x in commands); failed=sum(x["failed"] for x in commands); skipped=sum(x["skipped"] for x in commands)
+ if summary.get("passed")!=passed or summary.get("failed")!=failed or summary.get("skipped")!=skipped:
+  raise ValueError("test attestation summary/count mismatch")
+ if summary.get("tests")!=passed+failed or passed<minimum_tests:
+  raise ValueError(f"test attestation minimum test count not met: {passed} < {minimum_tests}")
+ log=doc.get("log",{}); log_path=require_nonempty(log.get("path",""))
+ if file_sha256(log_path)!=log.get("sha256") or log_path.stat().st_size!=log.get("bytes"):
+  raise ValueError("test attestation log hash/content mismatch")
+ text=log_path.read_text(errors="replace")
+ if not text.strip() or not all("command "+str(i) in text for i in range(1,len(commands)+1)):
+  raise ValueError("test attestation log content/command sections missing")
+ python=doc.get("python",{})
+ if not all(python.get(k) for k in ("executable","version","platform")) or not isinstance(doc.get("environment"),dict):
+  raise ValueError("test attestation Python/environment evidence missing")
+ return doc
+
+
+def collect_freeze(repo:str|Path,state_dir:str|Path,development_dir:str|Path,confirm_input_manifest:str|Path,test_attestation:str|Path)->dict[str,Any]:
  root=Path(repo).resolve(strict=True); state=Path(state_dir).resolve(strict=True); dev=Path(development_dir).resolve(strict=True)
  state_checks=verify_checksums(state); dev_checks=verify_checksums(dev)
  required_state=("b0_model.pt","a2_state.json","config.json","training.json","calibration.json","thresholds.json",
@@ -260,6 +308,7 @@ def collect_freeze(repo:str|Path,state_dir:str|Path,development_dir:str|Path,con
  if dev_prov.get("execution_source_commit")!=source or dev_prov.get("clean_tree_asserted") is not True:
   raise ValueError("development execution source/clean-tree assertion missing")
  validate_source_tree(root,source,require_clean=True)
+ attestation=require_nonempty(test_attestation); validate_test_attestation(attestation,source)
  confirm=require_nonempty(confirm_input_manifest); cdoc=json.loads(confirm.read_text())
  if cdoc.get("scenarios")!=["DS7","DS8"] or not cdoc.get("confirmatory_eligible"): raise ValueError("invalid confirm input manifest")
  code_rel=("src/gnss_doppler_lab/cmte_a2.py","src/gnss_doppler_lab/cmte_a2_inputs.py","src/gnss_doppler_lab/cmte_a2_campaign.py",
@@ -277,7 +326,8 @@ def collect_freeze(repo:str|Path,state_dir:str|Path,development_dir:str|Path,con
  return {"schema":"gnss-doppler-lab.cmte-a2-campaign-freeze.v1","source_commit":source,"prereg_commit":PREREG_COMMIT,
   "preregistration_hashes":dict(PREREG_HASHES),"state_dir":str(state),"development_dir":str(dev),
   "state_checksums_sha256":file_sha256(state/"checksums.json"),"development_checksums_sha256":file_sha256(dev/"checksums.json"),
-  "confirm_input_manifest":{"path":str(confirm),"sha256":file_sha256(confirm)},"pre_holdout_files":pre,
+  "confirm_input_manifest":{"path":str(confirm),"sha256":file_sha256(confirm)},
+  "test_attestation":{"path":str(attestation),"sha256":file_sha256(attestation),"log":json.loads(attestation.read_text())["log"]},"pre_holdout_files":pre,
   "every_confirm_input_hash_bound":True,"immutable":True}
 
 

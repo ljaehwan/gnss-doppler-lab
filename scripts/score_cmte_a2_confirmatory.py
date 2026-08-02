@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Evaluate CMTE-A2 development scenarios only."""
+"""Capability-gated confirmatory CMTE-A2 scorer; not a public CLI."""
 from __future__ import annotations
 import argparse, hashlib, json, os, shutil, subprocess, sys
 from pathlib import Path
@@ -14,7 +14,8 @@ from gnss_doppler_lab.cmte_a2 import (
     score_residuals, success_criteria_audit, verify_confirmatory_freeze, write_checksums,
 )
 from gnss_doppler_lab.cmte_a2_inputs import parse_scenario_mappings, validate_input_manifest
-from gnss_doppler_lab.cmte_a2_campaign import validate_source_tree,verify_checksums
+from gnss_doppler_lab.cmte_a2_campaign import (validate_source_tree,verify_checksums,
+ validate_confirm_capability)
 
 
 def _specs(items,tier):
@@ -81,9 +82,10 @@ def _diagnostic_parts(epoch,tier,scenario,methods,masks):
     return pieces
 
 
-def evaluate_development(argv=None):
+def score_confirmatory(capability,argv=None):
+    validate_confirm_capability(capability)
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--tier",choices=("development",),required=True)
+    parser.add_argument("--tier",choices=("confirmatory",),required=True)
     parser.add_argument("--state-dir",required=True); parser.add_argument("--scenario",action="append",required=True)
     parser.add_argument("--out",required=True); parser.add_argument("--freeze-manifest"); parser.add_argument("--device",default="cpu")
     args=parser.parse_args(argv)
@@ -236,9 +238,3 @@ def evaluate_development(argv=None):
         print(json.dumps({"out":str(out),"tier":args.tier,"scenarios":[x[0] for x in specs],"source_commit":commit},sort_keys=True))
     except Exception:
         shutil.rmtree(staging,ignore_errors=True); raise
-def main(argv=None):
-    """Public development-only entry point."""
-    return evaluate_development(argv)
-
-
-if __name__=="__main__": main()

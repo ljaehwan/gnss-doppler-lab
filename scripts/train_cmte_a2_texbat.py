@@ -114,7 +114,6 @@ def main(argv=None):
         provenance={"schema":"gnss-doppler-lab.cmte-a2-provenance.v1","execution_source_commit":source_commit,"clean_tree_asserted":True,"prereg_unchanged_asserted":True,
                     "preregistration":prereg,"training_tier":"normal_only","DS7_DS8_accessed":False}
         (staging/"provenance.json").write_text(json.dumps(provenance,indent=2,sort_keys=True)+"\n")
-        (staging/"test_summary.txt").write_text("Generator code tests must be executed and recorded before a campaign. No DS7/DS8 scoring was run.\n")
         (staging/"README.md").write_text("# CMTE-A2 frozen training state\n\nNormal-only chronological B0, distribution, Qcal, and threshold artifacts. No DS7/DS8 inference or scoring.\n")
         freeze_paths=[staging/p for p in ("b0_model.pt","a2_state.json","config.json","training.json","calibration.json","thresholds.json","preregistration.json","historical_b0_gate_equivalence.json")]
         freeze_paths += [ROOT/p for p in ("src/gnss_doppler_lab/cmte_a2.py","src/gnss_doppler_lab/cmte_a2_inputs.py",
@@ -122,7 +121,7 @@ def main(argv=None):
                                           "scripts/eval_cmte_a2_texbat.py","scripts/check_cmte_a2_historical_b0.py","scripts/smoke_cmte_a2_receiver_config.py",
                                           "scripts/prepare_cmte_a2_inputs.py",
                                           "scripts/prepare_cmte_a2_ds8_complex.py","scripts/build_cmte_a2_confirm_input_manifest.py",
-                                          "scripts/freeze_cmte_a2_campaign.py","scripts/confirm_cmte_a2_texbat.py",
+                                          "scripts/freeze_cmte_a2_campaign.py","scripts/confirm_cmte_a2_texbat.py","scripts/score_cmte_a2_confirmatory.py","scripts/run_cmte_a2_preflight_tests.py",
                                           "scripts/finalize_cmte_a2_campaign.py","configs/cmte_a2_ds8_receiver.conf",
                                           "artifacts/cmte_texbat_poc/per_prn/DS1.csv","artifacts/cmte_a2_historical_b0/ds1_golden_events.csv",
                                           "artifacts/cmte_a2_receiver_smoke/exporter_fixture.npz","artifacts/cmte_a2_receiver_smoke/exporter_fixture.json")]

@@ -27,8 +27,8 @@ def test_confirm_ledger_precedes_holdout_and_failure_is_recorded(tmp_path,monkey
  assert order==["anchor","ledger","resolve"] and json.loads(ledger.read_text())["status"]=="failed"
  with pytest.raises(FileExistsError): mod.main(["--trust-anchor",str(tmp_path/"anchor"),"--expected-sha256","a"*64,"--ledger",str(ledger),"--out",str(tmp_path/"out")])
 def test_internal_confirm_api_rejects_forged_capability():
- mod=load_script("eval_cmte_a2_texbat.py")
- with pytest.raises(PermissionError,match="capability"): mod._confirm_main([],object())
+ mod=load_script("score_cmte_a2_confirmatory.py")
+ with pytest.raises(PermissionError,match="capability"): mod.score_confirmatory(object(),[])
 def test_comparator_ewma_no_role_reset_and_recording_only_reset():
  from gnss_doppler_lab.cmte_a2 import b0_exact_scores,b0_enhanced_scores
  thresholds={"q50":.5,"q70":.5,"q80":.5}; rates={"q50":.5,"q70":.3,"q80":.2}

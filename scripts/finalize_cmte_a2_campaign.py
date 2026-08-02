@@ -5,8 +5,8 @@ import argparse, json, os, shutil, subprocess, sys
 from pathlib import Path
 import pandas as pd
 ROOT=Path(__file__).resolve().parents[1]; sys.path.insert(0,str(ROOT/"src"))
-from gnss_doppler_lab.cmte_a2_campaign import (PREREG_COMMIT,PREREG_HASHES,atomic_json,copy_tree_files,file_sha256,
- require_nonempty,validate_trust_anchor,verify_checksums)
+from gnss_doppler_lab.cmte_a2_campaign import (CONVERTER_SHA,EXPORTER_SHA,PREREG_COMMIT,PREREG_HASHES,RECEIVER_SHA,atomic_json,copy_tree_files,file_sha256,
+ require_nonempty,validate_test_attestation,validate_trust_anchor,verify_checksums)
 from gnss_doppler_lab.cmte_a2 import write_checksums
 
 def _csv(paths):
@@ -40,6 +40,7 @@ def main(argv=None):
  if str(state)!=anchor["state_dir"] or str(dev)!=anchor["development_dir"]: raise ValueError("artifact directories differ from trust anchor")
  for directory in (state,dev,confirm): verify_checksums(directory)
  ledger=json.loads(require_nonempty(a.ledger).read_text())
+ if ledger.get("schema")!="gnss-doppler-lab.cmte-a2-one-shot-ledger.v1" or ledger.get("one_shot") is not True: raise ValueError("one-shot ledger schema invalid")
  if ledger.get("status")!="completed" or ledger.get("trust_anchor_sha256")!=a.expected_anchor_sha256: raise ValueError("one-shot ledger is not completed for this anchor")
  if ledger.get("result_sha256")!=file_sha256(confirm/"checksums.json"): raise ValueError("ledger confirm result checksum mismatch")
  required_state=("b0_model.pt","a2_state.json","config.json","training.json","calibration.json","thresholds.json","preregistration.json","provenance.json","historical_b0_gate_equivalence.json")
@@ -53,6 +54,20 @@ def main(argv=None):
    require_nonempty(d/"per_epoch"/f"{s}.csv"); require_nonempty(d/"per_prn"/f"{s}.csv")
   _validate_evaluation_audits(d)
  source=anchor["source_commit"]
+ attestation_path=Path(anchor["test_attestation"]["path"]); attestation=validate_test_attestation(attestation_path,source)
+ confirm_manifest_path=Path(anchor["confirm_input_manifest"]["path"]); confirm_inputs=json.loads(require_nonempty(confirm_manifest_path).read_text())
+ if confirm_inputs.get("schema")!="gnss-doppler-lab.cmte-a2-confirm-inputs.v1" or confirm_inputs.get("scenarios")!=["DS7","DS8"]: raise ValueError("confirm input manifest schema/scenarios invalid")
+ producer_hashes=confirm_inputs.get("producer_hashes",{})
+ if set(producer_hashes)!={"converter","wrapper","receiver","exporter","template"} or any(len(str(x))!=64 for x in producer_hashes.values()): raise ValueError("confirm producer hash inventory invalid")
+ expected_producers={"converter":file_sha256(ROOT/"src/gnss_doppler_lab/cmte_inputs.py"),"wrapper":file_sha256(ROOT/"src/gnss_doppler_lab/cmte_a2_inputs.py"),
+  "receiver":RECEIVER_SHA,"exporter":EXPORTER_SHA,"template":file_sha256(ROOT/"configs/cmte_a2_ds8_receiver.conf")}
+ if producer_hashes!=expected_producers or producer_hashes["converter"]!=CONVERTER_SHA: raise ValueError("confirm producer bytes differ from frozen production producers")
+ for key,item in confirm_inputs.get("files",{}).items():
+  candidate=require_nonempty(item.get("path",""))
+  if file_sha256(candidate)!=item.get("sha256") or candidate.stat().st_size!=item.get("bytes"): raise ValueError(f"confirm prepared input inventory mismatch: {key}")
+ dev_prov=json.loads(require_nonempty(dev/"provenance/provenance.json").read_text()); confirm_prov=json.loads(require_nonempty(confirm/"provenance/provenance.json").read_text())
+ if dev_prov.get("schema")!="gnss-doppler-lab.cmte-a2-evaluation-provenance.v1" or dev_prov.get("tier")!="development": raise ValueError("development provenance schema/tier invalid")
+ if confirm_prov.get("schema")!="gnss-doppler-lab.cmte-a2-evaluation-provenance.v1" or confirm_prov.get("tier")!="confirmatory": raise ValueError("confirmatory provenance schema/tier invalid")
  for d in (dev,confirm):
   prov=json.loads((d/"provenance/provenance.json").read_text())
   if prov.get("execution_source_commit")!=source: raise ValueError("evaluation source commit mismatch")
@@ -62,6 +77,23 @@ def main(argv=None):
  if out.exists(): raise FileExistsError("final artifact is atomic and non-overwriting")
  staging=out.with_name(out.name+f".tmp-{os.getpid()}"); staging.mkdir(parents=True)
  try:
+  provenance_dir=staging/"provenance"; provenance_dir.mkdir()
+  copies=((a.trust_anchor,"trust_anchor.json"),(confirm_manifest_path,"confirm_input_manifest.json"),(a.ledger,"one_shot_ledger.json"),
+   (dev/"provenance/provenance.json","development.json"),(confirm/"provenance/provenance.json","confirmatory.json"),(attestation_path,"test_attestation.json"),
+   (attestation["log"]["path"],"preflight_tests.log"))
+  for source_path,name in copies: shutil.copyfile(source_path,provenance_dir/name)
+  state_hashes={"checkpoint_sha256":file_sha256(state/"b0_model.pt"),"state_sha256":file_sha256(state/"a2_state.json"),
+   "thresholds_sha256":file_sha256(state/"thresholds.json"),"config_sha256":file_sha256(state/"config.json"),"calibration_sha256":file_sha256(state/"calibration.json"),"training_sha256":file_sha256(state/"training.json")}
+  eval_state=dev_prov.get("state",{})
+  for key in ("checkpoint_sha256","state_sha256","thresholds_sha256","scaler_sha256","qcal_sha256"):
+   if not eval_state.get(key) or eval_state.get(key)!=confirm_prov.get("state",{}).get(key): raise ValueError(f"evaluation state hash disagreement: {key}")
+  for key in ("checkpoint_sha256","state_sha256","thresholds_sha256"):
+   if eval_state[key]!=state_hashes[key]: raise ValueError(f"frozen state hash mismatch: {key}")
+  hash_inventory={"schema":"gnss-doppler-lab.cmte-a2-final-hash-inventory.v1","producer_hashes":producer_hashes,
+   "prepared_inputs":{key:{**item,"producer_hashes":producer_hashes} for key,item in confirm_inputs["files"].items()},
+   "frozen_state":{**state_hashes,"scaler_sha256":eval_state["scaler_sha256"],"qcal_sha256":eval_state["qcal_sha256"]},
+   "evidence":{name:file_sha256(provenance_dir/name) for name in ("trust_anchor.json","confirm_input_manifest.json","one_shot_ledger.json","development.json","confirmatory.json","test_attestation.json","preflight_tests.log")}}
+  atomic_json(provenance_dir/"hash_inventory.json",hash_inventory)
   shutil.copyfile(prereg,staging/"preregistration.json")
   for n in ("config.json","training.json","calibration.json","thresholds.json","a2_state.json","b0_model.pt"): shutil.copyfile(state/n,staging/n)
   _csv([dev/"development_metrics.csv",confirm/"confirmatory_metrics.csv"]).to_csv(staging/"scenario_metrics.csv",index=False)
@@ -92,10 +124,11 @@ def main(argv=None):
    "ledger_sha256":file_sha256(a.ledger),"state_checksums_sha256":file_sha256(state/"checksums.json"),
    "development_checksums_sha256":file_sha256(dev/"checksums.json"),"confirmatory_checksums_sha256":file_sha256(confirm/"checksums.json"),
    "chronology":["normal-only training","development DS1-DS4","pre-holdout freeze","O_EXCL one-shot ledger","confirmatory DS7-DS8","finalization"],
-   "producer_exceptions":{"DS4":"development sensitivity; mixed producer; never confirmatory"}}
+   "producer_exceptions":{"DS4":"development sensitivity; mixed producer; never confirmatory"},
+   "sealed_provenance":{name:{"path":f"provenance/{name}","sha256":file_sha256(provenance_dir/name)} for name in ("trust_anchor.json","confirm_input_manifest.json","one_shot_ledger.json","development.json","confirmatory.json","hash_inventory.json","test_attestation.json","preflight_tests.log")}}
   if provenance["preregistration_not_edited_after_result_exposure"] is not True: raise ValueError("preregistration blob equality failed")
   atomic_json(staging/"provenance.json",provenance)
-  tests={"state":(state/"test_summary.txt").read_text(),"development":json.loads((dev/"test_summary.json").read_text()),
+  tests={"pre_campaign_attestation":attestation,"development":json.loads((dev/"test_summary.json").read_text()),
          "confirmatory":json.loads((confirm/"test_summary.json").read_text())}
   atomic_json(staging/"test_summary.json",tests)
   metrics=pd.read_csv(staging/"scenario_metrics.csv"); rows=[]
@@ -106,6 +139,9 @@ def main(argv=None):
   readme+="## Chronological evidence\n\n1. Normal-only training and calibration.\n2. DS1-DS4 development evaluation.\n3. External pre-holdout trust anchor.\n4. O_EXCL one-shot ledger.\n5. DS7/DS8 confirmation.\n6. Atomic finalization.\n\n"
   readme+="## Producer exception\n\nDS4 is mixed-producer development sensitivity only; DS7/DS8 share the frozen complex converter fingerprint.\n\n## Results\n\n"+"\n".join(rows)+"\n\n## Criteria and claims\n\n"+decision+" Claims are limited to the preregistered CMTE-A2-specific holdout scope.\n"
   (staging/"README.md").write_text(readme)
+  for rel in ("provenance/trust_anchor.json","provenance/confirm_input_manifest.json","provenance/one_shot_ledger.json",
+              "provenance/development.json","provenance/confirmatory.json","provenance/hash_inventory.json","provenance/test_attestation.json","provenance/preflight_tests.log"):
+   require_nonempty(staging/rel)
   # Assert all six scenario files survived and plots are nonempty.
   for s in ("DS1","DS2","DS3","DS4","DS7","DS8"):
    require_nonempty(staging/"per_epoch"/f"{s}.csv"); require_nonempty(staging/"per_prn"/f"{s}.csv")

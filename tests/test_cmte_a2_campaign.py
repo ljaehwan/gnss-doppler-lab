@@ -152,7 +152,11 @@ def test_trust_anchor_tamper_and_confirm_input_tamper_fail(monkeypatch,tmp_path)
     import gnss_doppler_lab.cmte_a2_campaign as campaign
     monkeypatch.setattr(campaign,"validate_source_tree",lambda *a,**k: None)
     state=tmp_path/"state"; state.write_text("state")
-    anchor_doc={"source_commit":"a"*40,"pre_holdout_files":{"state":{"path":str(state),"sha256":campaign.file_sha256(state)}}}
+    att=tmp_path/"att.json"; att.write_text("attestation")
+    monkeypatch.setattr(campaign,"validate_test_attestation",lambda *a,**k: {})
+    anchor_doc={"schema":"gnss-doppler-lab.cmte-a2-campaign-freeze.v1","immutable":True,"source_commit":"a"*40,
+      "test_attestation":{"path":str(att),"sha256":campaign.file_sha256(att)},
+      "pre_holdout_files":{"state":{"path":str(state),"sha256":campaign.file_sha256(state)}}}
     anchor=tmp_path/"anchor.json"; anchor.write_text(json.dumps(anchor_doc)); digest=campaign.file_sha256(anchor)
     assert campaign.validate_trust_anchor(anchor,digest,repo=tmp_path)["source_commit"]=="a"*40
     state.write_text("tampered")
