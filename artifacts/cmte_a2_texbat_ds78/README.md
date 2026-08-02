@@ -13,6 +13,7 @@ No post-hoc threshold change, aggregation change, or holdout rerun was used to r
 - Base branch commit: `d19115e48f8859330ae05bbab59c0ffd5f3d2004`
 - Preregistration commit: `e7cb2e5822923a129d72c475706f87721ddd8104`
 - Frozen execution/source commit: `71d00f310b6152868b2e02df2ca955cfecd43eb3`
+- Result-bearing artifact commit: `92f78f4c49bee98ce840e84c74f8387042b401cb`
 - Trust-anchor SHA-256: `bc9f76fc26fb48b0e974f626cf386758a375eadb254966ad216502db01b21430`
 - One-shot ledger status: `completed`
 - Result checksum-manifest SHA-256 recorded by ledger: `dbcfde6f7f607652ccc526a869b59074d327aa3f4ff1ec85b623b543a8f7699d`

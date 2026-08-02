@@ -1,6 +1,27 @@
-CMTE-A2 TEXBAT DS7/DS8 test summary
-======================================
-Pre-campaign fixed attestation: 86 passed, 0 failed, 0 skipped.
-One-shot campaign: completed under frozen trust anchor.
-Post-run validity audit: PRIMARY INVALID because every per-epoch row has tracked_prn_count=1.
-Final clean-tree regression rerun will be recorded in the metadata follow-up commit.
+CMTE-A2 TEXBAT DS7/DS8 final test summary
+=============================================
+
+Pre-campaign frozen attestation:
+  86 passed, 0 failed, 0 skipped
+
+Final focused CMTE-A2 + related TEXBAT B0 suite:
+  128 passed in 376.25s
+
+Full repository suite:
+  561 passed, 6 failed in 394.13s
+
+The six full-suite failures are pre-existing CPC tests that import the absent
+scripts/train_peak_floor_temporal_autoencoder.py. They are unrelated to CMTE-A2.
+No CMTE-A2 or related TEXBAT B0 focused test failed.
+
+Campaign chronology:
+  preregistration commit: e7cb2e5822923a129d72c475706f87721ddd8104
+  frozen execution commit: 71d00f310b6152868b2e02df2ca955cfecd43eb3
+  result-bearing artifact commit: 92f78f4c49bee98ce840e84c74f8387042b401cb
+  one-shot ledger: completed
+
+Post-run scientific validity audit:
+  PRIMARY INVALID / NO-GO
+  Every DS1-DS4/DS7/DS8 per-epoch row has tracked_prn_count=1 because exact
+  floating channel timestamps were used as epoch keys. The sealed primary did
+  not implement the intended multi-PRN epoch mean. Results and CIs are audit-only.
