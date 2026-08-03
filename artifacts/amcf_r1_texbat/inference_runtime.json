@@ -1,0 +1,23 @@
+{
+  "batch_size": 256,
+  "batched_cuda": true,
+  "benchmark_min_200": true,
+  "canonical_to_loaded_input_ratio": 1.0,
+  "device": "cuda",
+  "estimate_method": "measured 200-record batched CUDA scoring scaled by canonical input-row ratio and declared 16 policies x 3 seeds; measured full-epoch training added",
+  "estimated_full_campaign_hours": 0.7727506609305338,
+  "estimated_full_record_policy_rows": 2543280.0,
+  "estimated_full_scoring_hours": 0.4292222836366596,
+  "estimated_full_training_hours": 0.18583333333333332,
+  "estimated_full_window_artifact_hours": 0.1576950439605409,
+  "evaluation_subsampled": false,
+  "full_data_records_loaded": 52985,
+  "inference_ms_mean": 0.5070581420317405,
+  "mc_samples": 8,
+  "scored_record_policy_rows": 2543280,
+  "scoring_seconds": 1545.2002210919745,
+  "training_benchmark": "2.23 s for one full complex model epoch, Ntrain=4803/Nval=1552; scaled to 2 reps x 3 seeds x 50 epochs",
+  "under_6h_target": true,
+  "unique_benchmark_records": 52985,
+  "wall_seconds": 2112.902379349922
+}

@@ -1,0 +1,142 @@
+{
+  "DS4": "NA: canonical producer mismatch; excluded by preregistered design",
+  "attack_fit": false,
+  "base_model_checkpoint_hashes": {
+    "complex_seed101.pt": "105ac598ccb00b216b1836a76ba740cd3c8165b8b643b3871b77cd27876e7569",
+    "complex_seed202.pt": "a894bf18085fafea08855620dcbf0d8926ebee3df93578495c61c6e8450b9f03",
+    "complex_seed303.pt": "9434366b7868dd15143993a1242e0d5f3cb620caaf38c3561dfb235aa76a0870",
+    "magnitude_seed101.pt": "9b440290db6a0bc566e371406917d230dd01534b893485ef1233188d3c874d8e",
+    "magnitude_seed202.pt": "f805a59f506963cc7347a720832d8275fb96639747d41108984ea1c12d301608",
+    "magnitude_seed303.pt": "48f0920fab50b1e8d4d0c538ed00776140f30930ca31404249318ec7e068b8dc"
+  },
+  "fit_selection_calibration": "clean-only",
+  "held_out_wording": "held-out chronological clean segments; not independent",
+  "inputs": {
+    "DS1": {
+      "fields": [
+        "channel",
+        "cn0_db_hz",
+        "complex_iq",
+        "prn",
+        "sample_count",
+        "segment_index",
+        "time_s"
+      ],
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds1.npz",
+      "rows": 497577,
+      "scenario": "DS1",
+      "sha256": "b24d947c83890dbfa1c801bfbcb72e1fd192dd66509e927eb5afb8118902b072",
+      "shape": [
+        497577,
+        9,
+        2
+      ]
+    },
+    "DS2": {
+      "fields": [
+        "channel",
+        "cn0_db_hz",
+        "complex_iq",
+        "prn",
+        "sample_count",
+        "segment_index",
+        "time_s"
+      ],
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds2.npz",
+      "rows": 474168,
+      "scenario": "DS2",
+      "sha256": "dae0f245cbb107febd220c6de33b9a279a2bad356cb0ba772daf9418bc75d7c9",
+      "shape": [
+        474168,
+        9,
+        2
+      ]
+    },
+    "DS3": {
+      "fields": [
+        "channel",
+        "cn0_db_hz",
+        "complex_iq",
+        "prn",
+        "sample_count",
+        "segment_index",
+        "time_s"
+      ],
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds3.npz",
+      "rows": 616599,
+      "scenario": "DS3",
+      "sha256": "38eb5842dfec306d99bf0c5d61df6cffcb6faa25ed63721cafa8e3c3776f9b3e",
+      "shape": [
+        616599,
+        9,
+        2
+      ]
+    },
+    "DS7": {
+      "fields": [
+        "channel",
+        "complex_iq",
+        "prn",
+        "sample_count",
+        "segment_index",
+        "time_s"
+      ],
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/exports/ds7.npz",
+      "rows": 351746,
+      "scenario": "DS7",
+      "sha256": "d0e6da4e27d51e3e96abf2ef7786501124072f28667671e4e40da756eb35f3c8",
+      "shape": [
+        351746,
+        9,
+        2
+      ]
+    },
+    "DS8": {
+      "fields": [
+        "channel",
+        "complex_iq",
+        "prn",
+        "sample_count",
+        "segment_index",
+        "time_s"
+      ],
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/exports/ds8.npz",
+      "rows": 464692,
+      "scenario": "DS8",
+      "sha256": "d1973fa150b7b4e7359df4827f36ce60289f206e9db11c1ac2bc1fd33a0df533",
+      "shape": [
+        464692,
+        9,
+        2
+      ]
+    },
+    "cleanStatic": {
+      "fields": [
+        "channel",
+        "cn0_db_hz",
+        "complex_iq",
+        "prn",
+        "sample_count",
+        "segment_index",
+        "time_s"
+      ],
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.npz",
+      "rows": 553639,
+      "scenario": "cleanStatic",
+      "sha256": "fcd1d378c28e79fe4a550b65fc1208cde3c8fb334db11406a07fed4d90fba237",
+      "shape": [
+        553639,
+        9,
+        2
+      ]
+    }
+  },
+  "raw_iq_or_receiver_rerun": false,
+  "schema": "gnss-doppler-lab.amcf-r1-provenance.v2",
+  "source_commit": "d8aef46389d1e32f3649d3f24e0f3352e1c5301e",
+  "source_hashes": {
+    "scripts/run_amcf_r1_texbat.py": "5bfa5a34ab6cbe928dbf6bfae60b2fc3aad7ffa39d9b7b0d11f6b9fefc8d57ad",
+    "scripts/summarize_amcf_r1.py": "b28d9346d606724c0cd36ea2a3cd34e082fb56b7bd452520343fbe38dcc058ad",
+    "src/gnss_doppler_lab/amcf_r1.py": "c285e1ac7eca1c73c412e61c5f18704ec1041a3d0cf2ed82debc77e1fb8f38c6"
+  }
+}

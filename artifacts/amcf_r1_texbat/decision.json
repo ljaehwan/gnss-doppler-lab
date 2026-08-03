@@ -1,0 +1,25 @@
+{
+  "C3_scenario_wins": 3,
+  "C8_material_scenarios": 0,
+  "criteria": {
+    "C1": true,
+    "C2": false,
+    "C3": false,
+    "C4": false,
+    "C5": false,
+    "C6": false,
+    "C7": true,
+    "C8": false,
+    "C9": false
+  },
+  "decisions": {
+    "Active": "NO-GO",
+    "Complex": "NO-GO",
+    "Detector operating point": "NO-GO",
+    "WCL": "NO-GO"
+  },
+  "independence_note": "clean calibration/test are held-out chronological segments, not independent datasets",
+  "primary_source_audit": true,
+  "schema": "gnss-doppler-lab.amcf-r1-decision.v2",
+  "status": "developmental: DS1-3; post-exposure exploratory: DS7/8; DS4 NA"
+}

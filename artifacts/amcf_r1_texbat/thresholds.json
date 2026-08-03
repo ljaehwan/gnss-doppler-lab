@@ -1,0 +1,25 @@
+{
+  "B0_Exact": {
+    "comparison": "strict_greater",
+    "count": 125,
+    "held_out_wording": "held-out chronological clean segment (not independent)",
+    "matched_actual_clean_fpr": 0.0,
+    "matched_clean_diagnostic": 1.7807607565755852,
+    "matched_target_fpr": 0.0,
+    "q99": 1.9453127765750735,
+    "q995": 1.9880378324299022
+  },
+  "calibration_count_caution": "q99/q99.5 are order statistics; q99.5 may be the second maximum or maximum when calibration N is small",
+  "primary": {
+    "comparison": "strict_greater",
+    "count": 126,
+    "held_out_wording": "held-out chronological clean segment (not independent)",
+    "matched_actual_clean_fpr": 0.0,
+    "matched_clean_diagnostic": 0.6419843749454966,
+    "matched_target_fpr": 0.0,
+    "primary_model": "3-seed mean complex IG K7",
+    "q99": 0.6407554168390331,
+    "q995": 0.64445963452102
+  },
+  "primary_threshold_never_overwritten": true
+}

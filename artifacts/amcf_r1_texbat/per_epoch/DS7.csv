@@ -1,0 +1,1055 @@
+scenario,decision_time_s,score,phase,model,model_seed,policy_seed,alarm_primary_q99,alarm_primary_q995,alarm_matched_clean_diagnostic,threshold_source,tracked_prn_count
+DS7,7.5,0.0,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,7.5,1.5016678672734207,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,8
+DS7,8.0,0.0,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,8.0,1.503815605586486,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,8
+DS7,8.5,0.0,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,8.5,1.5028241010208088,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,8
+DS7,9.0,0.0,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,9.0,1.5036591888730853,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,9
+DS7,9.5,0.0,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,9.5,1.5041481200928157,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,9
+DS7,10.0,0.036030455011091374,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,10.0,1.5046317768717736,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,9
+DS7,10.5,0.0630532962694099,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,10.5,1.5045126365354882,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,9
+DS7,11.0,0.0833204272131488,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,11.0,1.5058348115741875,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,9
+DS7,11.5,0.09852077542095297,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,11.5,1.5079814623515013,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,12.0,0.1099210365768061,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,12.0,1.5052145592662198,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,12.5,0.2002657500499586,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,12.5,1.5064145840048848,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,13.0,0.26802428515482296,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,13.0,1.5052209381811859,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,13.5,0.5351848270456355,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,13.5,1.504281570613702,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,14.0,0.735555233463745,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,14.0,1.5042549643343184,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,14.5,1.4218889627406597,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,14.5,1.5007618370245897,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,15.0,1.644878793373684,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,15.0,1.4971351055462918,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,15.5,1.5006192525306021,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,15.5,1.4935392703525123,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,16.0,1.788606487308753,excluded,B0 Exact,NA,,False,False,True,B0 Exact clean calibration,
+DS7,16.0,1.4964381792073407,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,16.5,1.919916936799754,excluded,B0 Exact,NA,,False,False,True,B0 Exact clean calibration,
+DS7,16.5,1.4950442109494766,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,17.0,2.0183997739180044,excluded,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,17.0,1.4925296588434545,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,17.5,1.8547472068834587,excluded,B0 Exact,NA,,False,False,True,B0 Exact clean calibration,
+DS7,17.5,1.4910885408014625,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,18.0,1.7320077816075494,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,18.0,1.491244106246798,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,18.5,1.6399532126506173,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,18.5,1.4925482202835403,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,19.0,1.3292201248193383,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,19.0,1.4899854151958873,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,19.5,1.096170308945879,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,19.5,1.4887886587781693,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,20.0,1.2755063319671804,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,20.0,1.4838922605927702,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,20.5,1.0558849643067607,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,20.5,1.4868508682613468,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,21.0,1.1260803364095888,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,21.0,1.4857604914152205,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,21.5,1.0239202205894389,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,21.5,1.4861293675386376,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,22.0,1.287800550862038,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,22.0,1.483884841719228,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,22.5,1.145210381428776,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,22.5,1.482657518159452,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,23.0,0.8922906342277126,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,23.0,1.4828510164576407,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,23.5,0.8485779439530319,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,23.5,1.484371535687858,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,24.0,1.019552675789267,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,24.0,1.4850015533908285,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,24.5,0.9440244751241976,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,24.5,1.485770771524334,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,25.0,0.8873783246253957,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,25.0,1.4843675304063393,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,25.5,0.838820538609033,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,25.5,1.4855348407120834,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,26.0,0.8084753722390222,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,26.0,1.4852527588854938,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,26.5,0.7857164974615141,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,26.5,1.48499212244025,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,27.0,0.768647341378383,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,27.0,1.4859748387696872,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,27.5,1.1423266009939783,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,27.5,1.4845265167968051,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,28.0,1.3766053361654427,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,28.0,1.484930095922462,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,28.5,1.1374718172484637,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,28.5,1.4827220280508902,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,29.0,0.9848426143603162,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,29.0,1.481069685674778,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,29.5,0.8072740690968366,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,29.5,1.4832556610871945,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,30.0,0.737194303246596,excluded,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,30.0,1.4849037501583142,excluded,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,30.5,0.5690303577193397,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,30.5,1.4825263975658782,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,31.0,0.42677276828950483,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,31.0,1.4825704495989027,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,31.5,0.4137529385774813,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,31.5,1.4845669526658813,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,32.0,0.4039880662934637,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,32.0,1.4833225285601939,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,32.5,0.5666638251226432,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,32.5,1.4819392750477218,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,33.0,0.49363997716858193,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,33.0,1.4836055283211822,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,33.5,0.5495899511586838,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,33.5,1.4853807948766813,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,34.0,0.5172102784933945,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,34.0,1.4845431010722885,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,34.5,0.4929255239944276,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,34.5,1.4853410290354565,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,35.0,0.4747119581202024,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,35.0,1.4846623738948221,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,35.5,0.5293207637301381,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,35.5,1.4838234546467823,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,36.0,0.5763505410798511,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,36.0,1.4836595701873516,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,36.5,0.6116228740921357,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,36.5,1.4837423443835076,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,37.0,0.6380771238513492,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,37.0,1.4822959548863597,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,37.5,0.5835756580128936,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,37.5,1.4822460675833167,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,38.0,0.6170417117919176,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,38.0,1.4836609984544555,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,38.5,0.6421412521261856,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,38.5,1.4824969812809616,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,39.0,0.48160593909463917,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,39.0,1.4820689767376416,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,39.5,0.5405644226032268,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,39.5,1.4822144254419332,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,40.0,0.5847832852346675,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,40.0,1.4830221837343762,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,40.5,0.9584478493459596,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,40.5,1.4834616285152527,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,41.0,1.1019551048339629,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,41.0,1.4820000760812106,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,41.5,1.0058262969077194,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,41.5,1.4830790615321157,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,42.0,0.9337296909630369,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,42.0,1.4817556559184635,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,42.5,0.8796572365045251,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,42.5,1.482733449809303,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,43.0,0.7647607425027755,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,43.0,1.482709318101805,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,43.5,0.837243332279627,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,43.5,1.4886671996288408,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,44.0,0.7596712506336887,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,44.0,1.4844896416121252,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,44.5,0.9973443957312815,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,44.5,1.4852006798737436,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,45.0,1.1755992545544762,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,45.0,1.4841842014797766,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,45.5,1.3092903986718722,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,45.5,1.4813773919978386,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,46.0,1.2727555014553245,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,46.0,1.4829012498680882,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,46.5,1.5746957014631704,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,46.5,1.4881499498898052,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,47.0,1.6086127338533929,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,47.0,1.4892191738426401,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,47.5,1.47013232579259,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,47.5,1.488955274678749,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,48.0,1.5301902021004576,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,48.0,1.4855518509616683,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,48.5,1.8407898321352887,stable_pre,B0 Exact,NA,,False,False,True,B0 Exact clean calibration,
+DS7,48.5,1.481021517957876,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,49.0,1.512331125525435,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,49.0,1.4816998437850988,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,49.5,1.754377419515753,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,49.5,1.4874690030532502,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,50.0,2.00893024519676,stable_pre,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,50.0,1.4877859875356936,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,50.5,2.126826759269247,stable_pre,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,50.5,1.4846081746827604,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,51.0,2.0227110272079503,stable_pre,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,51.0,1.4896083176854578,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,51.5,1.9446242281619777,stable_pre,B0 Exact,NA,,False,False,True,B0 Exact clean calibration,
+DS7,51.5,1.4877053037344996,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,52.0,2.1516153516814285,stable_pre,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,52.0,1.4862143951121582,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,52.5,1.718729328885453,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,52.5,1.4833933842692757,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,53.0,1.3224298448202205,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,53.0,1.4827703786298754,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,53.5,1.096840198739547,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,53.5,1.4828308948577746,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,54.0,1.0019901173369077,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,54.0,1.4842996197596452,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,54.5,0.9308525562849282,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,54.5,1.482835978652555,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,55.0,0.8774993854959436,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,55.0,1.483365560657555,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,55.5,0.8374845074042051,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,55.5,1.482514387436356,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,56.0,1.011232598377647,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,56.0,1.4852427458236972,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,56.5,1.1415436666077283,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,56.5,1.4839076328720948,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,57.0,1.3760181353757552,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,57.0,1.4830874059872727,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,57.5,1.5978546964920075,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,57.5,1.4847643213350576,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,58.0,2.1013706256134577,stable_pre,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,58.0,1.4836611452748312,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,58.5,1.7493147643500797,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,58.5,1.4866457847450247,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,59.0,1.491346041544807,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,59.0,1.486088265642233,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,59.5,1.2978694994408526,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,59.5,1.4873468087076587,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,60.0,1.1527620928628868,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,60.0,1.4883142565136744,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,60.5,1.0439315379294125,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,60.5,1.4869735062845144,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,61.0,1.1660678712715524,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,61.0,1.4851832764559847,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,61.5,1.2576701212781574,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,61.5,1.485604808315589,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,62.0,1.1226125592408653,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,62.0,1.4866075429125993,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,62.5,1.225078637255142,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,62.5,1.4866244605987387,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,63.0,1.3019281957658497,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,63.0,1.4881733340511119,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,63.5,1.081463961948769,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,63.5,1.485533912854324,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,64.0,0.9904579397438241,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,64.0,1.4845794141216715,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,64.5,0.9222034230901155,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,64.5,1.4828945649535703,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,65.0,0.7966703824419683,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,65.0,1.4844150681173591,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,65.5,0.7768627551137236,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,65.5,1.4842044032108461,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,66.0,0.7620070346175402,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,66.0,1.4826592965219572,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,66.5,1.0913656613831142,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,66.5,1.4817178715126857,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,67.0,0.9978842143195831,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,67.0,1.4820382767613234,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,67.5,0.9216999558796737,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,67.5,1.481142476759331,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,68.0,1.0743941847342484,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,68.0,1.4801477496833115,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,68.5,0.9851556068329338,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,68.5,1.481901542720909,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,69.0,1.2587270905446593,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,69.0,1.482070159307213,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,69.5,1.0490631330328761,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,69.5,1.4827165893377654,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,70.0,0.9661573180569045,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,70.0,1.4839314599828721,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,70.5,0.9039779568249259,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,70.5,1.4827674308217864,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,71.0,0.8573434359009419,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,71.0,1.4823795558475046,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,71.5,0.8223675452079539,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,71.5,1.4821266913947184,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,72.0,1.1826167538661565,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,72.0,1.4799372049247606,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,72.5,0.9203454135557481,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,72.5,1.4801531169288975,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,73.0,0.690259060166811,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,73.0,1.4810972220239222,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,73.5,0.5176942951251082,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,73.5,1.4834398273859044,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,74.0,0.49328853646821286,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,74.0,1.483497480678734,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,74.5,0.5493263706334071,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,74.5,1.4812255571746713,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,75.0,0.5913547462573027,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,75.0,1.480345373556703,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,75.5,0.6228760279752245,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,75.5,1.4816647820501334,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,76.0,0.6465169892636657,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,76.0,1.4824504703094126,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,76.5,0.51827059010388,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,76.5,1.4842275062751653,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,77.0,0.5680629108601574,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,77.0,1.4832070924729743,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,77.5,0.4594300313012487,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,77.5,1.4823066034026906,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,78.0,0.5178593186159228,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,78.0,1.4818408483104022,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,78.5,0.7715137067864352,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,78.5,1.4814389263438323,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,79.0,0.612018128245957,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,79.0,1.482929607096569,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,79.5,0.6383735644667152,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,79.5,1.4821634761499112,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,80.0,0.6581401416322838,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,80.0,1.4806586974440423,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,80.5,0.5986229213485945,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,80.5,1.481652746510094,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,81.0,0.6283271592936933,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,81.0,1.482187333005543,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,81.5,0.6506053377525174,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,81.5,1.4824094076953684,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,82.0,0.6673139715966354,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,82.0,1.480720755013025,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,82.5,0.6055032938218583,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,82.5,1.4836826753343095,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,83.0,0.48751031852252436,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,83.0,1.4821327082881108,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,83.5,0.399015587048024,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,83.5,1.4820272160986894,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,84.0,0.47862165856826544,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,84.0,1.4833612529737294,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,84.5,0.5383262122084465,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,84.5,1.4827374209543673,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,85.0,0.7868638769808278,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,85.0,1.4814462976954286,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,85.5,0.7695078760178683,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,85.5,1.4808641520649515,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,86.0,0.5771309070134012,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,86.0,1.481300877731999,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,86.5,0.6122081485422983,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,86.5,1.4813598190276773,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,87.0,0.6385160796889712,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,87.0,1.4813532968196481,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,87.5,1.0447281547269194,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,87.5,1.4812417598437104,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,88.0,0.962906084327437,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,88.0,1.4843477048902478,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,88.5,0.7221795632455777,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,88.5,1.483403588359117,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,89.0,0.9247538902586763,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,89.0,1.4811165277913354,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,89.5,0.7269482658501378,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,89.5,1.4814386272989573,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,90.0,1.0650715848075625,stable_pre,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,90.0,1.4824793697333865,stable_pre,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,90.5,0.9781636568879193,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,90.5,1.4829914346104014,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,91.0,0.9129827109481868,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,91.0,1.4841675392414178,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,91.5,0.8580238283511264,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,91.5,1.4834156758492398,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,92.0,1.1633782566833037,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,92.0,1.4836075076328115,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,92.5,0.9059165406686085,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,92.5,1.481386538445545,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,93.0,0.6794374055014564,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,93.0,1.482760618025025,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,93.5,0.6889380224083397,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,93.5,1.48223555950744,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,94.0,0.6960634850885022,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,94.0,1.4793597361505209,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,94.5,0.7014075820986241,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,94.5,1.480233573540211,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,95.0,0.5946977949005675,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,95.0,1.4800760551646404,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,95.5,0.5396967085357782,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,95.5,1.4794883797529554,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,96.0,0.49844589376218634,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,96.0,1.478216784526554,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,96.5,0.66462212277306,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,96.5,1.47798987915352,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,97.0,1.1185956674514719,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,97.0,1.4803009389122914,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,97.5,0.8550813808729967,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,97.5,1.4811113108481486,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,98.0,0.7730497870787161,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,98.0,1.4815317153650025,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,98.5,0.7115260917330055,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,98.5,1.4827925663334873,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,99.0,0.6653833202237227,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,99.0,1.4823778147263722,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,99.5,0.7627102655703375,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,99.5,1.4838920853260307,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,100.0,0.5720326991777531,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,100.0,1.4835849120356095,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,100.5,0.4624073725394455,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,100.5,1.482004401955525,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,101.0,0.5261654976868315,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,101.0,1.4801740478062368,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,101.5,0.5739840915473711,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,101.5,1.4802891705563574,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,102.0,0.6098480369427757,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,102.0,1.479721446773348,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,102.5,0.8405052455315748,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,102.5,1.4795314398897619,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,103.0,0.8097389024309285,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,103.0,1.4800561676251185,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,103.5,1.1731452717833872,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,103.5,1.479168969793115,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,104.0,1.0592189221197879,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,104.0,1.479795769453852,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,104.5,0.9737741598720883,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,104.5,1.479169505873491,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,105.0,0.8353484350284479,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,105.0,1.4780649478566021,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,105.5,0.8058712945535834,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,105.5,1.478639849984969,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,106.0,0.783763439197435,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,106.0,1.478154426158241,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,106.5,0.7671825476803237,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,106.5,1.479010618469103,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,107.0,0.7547468790424902,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,107.0,1.4783101595148027,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,107.5,0.745420127564115,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,107.5,1.4812762886561235,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,108.0,0.9421843134975794,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,108.0,1.4787108446746962,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,108.5,1.2724793300833754,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,108.5,1.4790443738888026,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,109.0,1.133719465844779,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,109.0,1.477936174437298,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,109.5,0.9553074145079659,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,109.5,1.4747721229270747,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,110.0,1.2823216558411654,transition,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,110.0,1.4773393642292385,transition,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,110.5,0.9617412418808741,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,110.5,1.4779569076263872,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,111.0,0.900665899692903,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,111.0,1.476532637046602,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,111.5,1.0586186425941704,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,111.5,1.4785478792054088,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,112.0,0.9733239502278752,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,112.0,1.4773973402089213,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,112.5,0.9093529309531538,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,112.5,1.4760087113066647,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,113.0,0.8613746664971128,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,113.0,1.480227043576351,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,113.5,0.8253909681550821,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,113.5,1.4821487478888387,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,114.0,0.798403194398559,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,114.0,1.4786883905313246,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,114.5,0.9819216136234123,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,114.5,1.4800122112221399,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,115.0,0.9158011784998067,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,115.0,1.4828428737788595,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,115.5,0.7918686989992367,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,115.5,1.482214485877659,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,116.0,0.9770207420739205,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,116.0,1.4844526547151509,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,116.5,1.2986066515156314,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,116.5,1.4834372398867288,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,117.0,1.153314956918971,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,117.0,1.4821591653098025,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,117.5,1.2481054355137213,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,117.5,1.4820233124069666,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,118.0,1.319198294459784,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,118.0,1.4801529116355654,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,118.5,1.1687586891270854,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,118.5,1.4804513721747423,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,119.0,0.9099518650014446,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,119.0,1.4820077696863052,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,119.5,1.2483049937112745,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,119.5,1.482271628989011,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,120.0,1.1155887135657032,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,120.0,1.4808908261131284,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,120.5,1.0160515034565247,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,120.5,1.4794405067233303,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,121.0,1.1451578454168867,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,121.0,1.4810787642818515,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,121.5,0.858868384062665,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,121.5,1.4823115459765648,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,122.0,0.8235112563292462,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,122.0,1.4767907337528345,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,122.5,0.7226512573713163,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,122.5,1.4786172097771901,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,123.0,1.1078295379886782,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,123.0,1.4791646672470886,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,123.5,1.010232121773756,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,123.5,1.47864764662477,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,124.0,1.1407933091548101,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,124.0,1.4745045910246517,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,124.5,1.0288817770060938,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,124.5,1.4763765971108704,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,125.0,1.1547805505790634,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,125.0,1.4772058065941769,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,125.5,1.045445381216545,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,125.5,1.4751027914940524,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,126.0,1.3039444213323677,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,126.0,1.4761368504800003,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,126.5,1.157318284281523,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,126.5,1.4802354175531338,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,127.0,1.0473486814933897,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,127.0,1.47663051641923,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,127.5,1.1686307289445352,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,127.5,1.4736816883378114,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,128.0,1.2595922645328945,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,128.0,1.4734198508688017,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,128.5,1.4645545838196297,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,128.5,1.4785592975200423,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,129.0,1.2777759061469696,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,129.0,1.4787537145404501,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,129.5,1.3414511474347202,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,129.5,1.4791210678722058,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,130.0,1.039471208732171,ramp,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,130.0,1.4818565499443246,ramp,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,130.5,0.9589633748313756,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,130.5,1.4798980738547218,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,131.0,0.8242403462479134,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,131.0,1.4782796815803856,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,131.5,1.184021354646126,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,131.5,1.4798651637208995,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,132.0,1.4078764014045535,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,132.0,1.4810964255170787,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,132.5,1.575767686473374,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,132.5,1.4805108548097163,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,133.0,1.7016861502749894,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,133.0,1.4817421091932996,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,133.5,1.4556245809884893,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,133.5,1.478912477482308,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,134.0,1.2710784040236143,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,134.0,1.4778343315911926,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,134.5,1.3364280208422037,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,134.5,1.4791626027938662,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,135.0,1.5221814010516117,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,135.0,1.4777206518277843,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,135.5,1.3209960190709562,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,135.5,1.4779965326476436,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,136.0,1.3738662321277102,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,136.0,1.4751029576597172,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,136.5,1.5502600595157414,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,136.5,1.477600059816161,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,137.0,1.5458142624612992,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,137.0,1.480001833075325,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,137.5,1.5424799146704675,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,137.5,1.4790578101545566,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,138.0,1.7227010309630417,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,138.0,1.4784666582029056,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,138.5,1.325408621378412,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,138.5,1.4790931801805958,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,139.0,1.377175683858302,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,139.0,1.478730214193737,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,139.5,1.5987228578539177,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,139.5,1.4788282657564116,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,140.0,1.3040599585148198,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,140.0,1.4775936232748308,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,140.5,1.1574049371683621,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,140.5,1.4776158557758132,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,141.0,1.041340498016258,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,141.0,1.4828392792941891,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,141.5,0.9603653417944409,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,141.5,1.4791644087171563,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,142.0,0.899633974628078,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,142.0,1.4778248906810922,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,142.5,1.1945858663910176,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,142.5,1.4776279183864363,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,143.0,1.2790586176177563,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,143.0,1.480819394215472,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,143.5,1.3424131810378104,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,143.5,1.4817440859235713,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,144.0,1.1861698540606052,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,144.0,1.4815104421374692,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,144.5,1.4094877759654127,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,144.5,1.4790055550510015,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,145.0,1.1621336470984411,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,145.0,1.4799797023019898,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,145.5,1.4374413302840217,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,145.5,1.47960687221247,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,146.0,1.981060600957468,takeover,B0 Exact,NA,,True,False,True,B0 Exact clean calibration,
+DS7,146.0,1.478317336841931,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,146.5,1.6590822458580874,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,146.5,1.4804252505756583,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,147.0,1.417598479533552,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,147.0,1.4813658798663918,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,147.5,1.2425588279324111,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,147.5,1.4818776030717453,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,148.0,1.3150383387738014,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,148.0,1.4815433400320204,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,148.5,1.1656387223625984,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,148.5,1.4820159493277298,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,149.0,1.053589010054196,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,149.0,1.4800249646441035,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,149.5,1.17331097536514,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,149.5,1.4795265861649394,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,150.0,1.0593431998061025,takeover,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,150.0,1.47945289917768,takeover,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,150.5,0.9738673681368243,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,150.5,1.4821830820370927,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,151.0,1.2502609115225771,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,151.0,1.4802458955970768,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,151.5,1.840675286886385,persistent,B0 Exact,NA,,False,False,True,B0 Exact clean calibration,
+DS7,151.5,1.4784294195274184,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,152.0,1.9003668505847475,persistent,B0 Exact,NA,,False,False,True,B0 Exact clean calibration,
+DS7,152.0,1.4804673886747401,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,152.5,1.604635106220808,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,152.5,1.4798478941578923,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,153.0,1.3828362979478532,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,153.0,1.4812163505982718,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,153.5,1.2164871917431372,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,153.5,1.476875240554162,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,154.0,1.0917253620896004,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,154.0,1.4785636574873688,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,154.5,1.338654406987159,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,154.5,1.4810455223430203,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,155.0,1.3871100230648625,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,155.0,1.4792756031572587,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,155.5,1.0737153654547775,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,155.5,1.4779366689167581,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,156.0,0.9846464923733306,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,156.0,1.47806502253982,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,156.5,0.9178448375622453,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,156.5,1.4774675858852,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,157.0,0.8677435964539314,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,157.0,1.4764276179017894,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,157.5,0.830167665622696,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,157.5,1.4773963732473427,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,158.0,0.8019857174992694,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,158.0,1.480473077191606,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,158.5,0.7808492564066994,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,158.5,1.4788237713722185,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,159.0,0.9687561601295176,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,159.0,1.4776750058103305,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,159.5,0.7599499682532689,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,159.5,1.4788786363151714,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,160.0,0.7493224444721991,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,160.0,1.476093549635282,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,160.5,0.7413518016363968,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,160.5,1.4795158779956432,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,161.0,0.7353738195095451,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,161.0,1.4804942439273603,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,161.5,0.7308903329144062,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,161.5,1.4814212088236498,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,162.0,1.1140088446459955,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,162.0,1.4808902722737398,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,162.5,1.014866601766744,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,162.5,1.4802330740244791,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,163.0,1.144269169149551,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,163.0,1.4777363190123207,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,163.5,1.0375618451444106,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,163.5,1.4778904209781958,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,164.0,0.9575313521405554,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,164.0,1.478631143280418,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,164.5,0.7515313622615473,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,164.5,1.4792770881585575,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,165.0,0.7430084899784078,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,165.0,1.4797006567037194,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,165.5,0.9403755853082989,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,165.5,1.4788523046114899,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,166.0,1.0884009068057172,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,166.0,1.4807860946109745,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,166.5,1.3821417750644789,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,166.5,1.4788814717851817,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,167.0,1.1416241464227408,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,167.0,1.4786238900887316,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,167.5,1.3760784952370146,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,167.5,1.4788933805655133,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,168.0,1.415178089252254,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,168.0,1.4787371567132623,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,168.5,1.5812439523591495,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,168.5,1.478191944962665,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,169.0,1.705793349689321,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,169.0,1.4760197652671732,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,169.5,1.458704980549238,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,169.5,1.4765200022425955,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,170.0,1.4771479532364216,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,170.0,1.4784316521650378,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,170.5,2.314939399252891,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,170.5,1.476389691042601,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,171.0,2.119323767264161,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,171.0,1.4782081741338289,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,171.5,1.7688527937303682,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,171.5,1.477654811949922,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,172.0,1.8924806902579672,persistent,B0 Exact,NA,,False,False,True,B0 Exact clean calibration,
+DS7,172.0,1.4790220192115082,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,172.5,1.9392209031134344,persistent,B0 Exact,NA,,False,False,True,B0 Exact clean calibration,
+DS7,172.5,1.4779486666498816,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,173.0,1.6337756456173231,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,173.0,1.480143926312584,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,173.5,1.6084509520374854,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,173.5,1.4748006965482288,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,174.0,1.7721793089883051,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,174.0,1.4769731447607224,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,174.5,1.712253699565722,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,174.5,1.477916541448952,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,175.0,1.8500313696344826,persistent,B0 Exact,NA,,False,False,True,B0 Exact clean calibration,
+DS7,175.0,1.4763814230951624,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,175.5,1.770642745050355,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,175.5,1.473916102141911,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,176.0,1.5012688539277526,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,176.0,1.4763248477449231,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,176.5,1.6458120258657734,persistent,B0 Exact,NA,,False,False,False,B0 Exact clean calibration,
+DS7,176.5,1.4753974785894524,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,177.0,1.8002001143595212,persistent,B0 Exact,NA,,False,False,True,B0 Exact clean calibration,
+DS7,177.0,1.473727265467791,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,177.5,1.8700104711896,persistent,B0 Exact,NA,,False,False,True,B0 Exact clean calibration,
+DS7,177.5,1.4735612777688305,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,178.0,1.922368238812159,persistent,B0 Exact,NA,,False,False,True,B0 Exact clean calibration,
+DS7,178.0,1.4725032600519086,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,178.5,1.961636564529078,persistent,B0 Exact,NA,,True,False,True,B0 Exact clean calibration,
+DS7,178.5,1.470979094813895,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,179.0,1.9910878088167676,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,179.0,1.4703209722399986,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,179.5,2.0591569515727666,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,179.5,1.4688802203767288,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,180.0,2.4473473169240267,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,180.0,1.4722429182917491,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,180.5,2.355370873112979,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,180.5,1.4709681529929135,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,181.0,2.6695077580791864,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,181.0,1.4690291428373496,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,181.5,2.521991203979349,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,181.5,1.4728823677303842,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,182.0,3.098571837310087,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,182.0,1.4700073744634656,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,182.5,2.8897699729427564,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,182.5,1.468308186721366,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,183.0,3.070307082951519,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,183.0,1.4687902462731544,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,183.5,3.5098087465392145,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,183.5,1.469233519498692,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,184.0,3.839434994229986,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,184.0,1.467869590465981,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,184.5,4.086654679998064,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,184.5,1.4684647910765476,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,185.0,4.272069444324123,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,185.0,1.466785131595696,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,185.5,4.107031686487544,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,185.5,1.4690340766980716,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,186.0,4.287352199191233,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,186.0,1.4700690768024005,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,186.5,4.422592583719,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,186.5,1.46924113348911,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,187.0,4.92638235022335,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,187.0,1.4720835000843924,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,187.5,5.304224675101613,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,187.5,1.4748037002206988,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,188.0,4.879303082746256,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,188.0,1.4731575574467992,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,188.5,4.560611888479738,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,188.5,1.4728918788315977,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,189.0,4.321593492779851,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,189.0,1.470543332649972,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,189.5,4.8506330320189885,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,189.5,1.4721664247813797,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,190.0,5.2474126864483415,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,190.0,1.4719529844354307,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,190.5,5.544997427270356,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,190.5,1.4721936358342802,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,191.0,5.362720874778703,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,191.0,1.468763190987459,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,191.5,4.923175232504073,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,191.5,1.4696053397328257,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,192.0,4.896354228703991,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,192.0,1.4678771874002905,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,192.5,4.57340024794804,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,192.5,1.464321463747817,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,193.0,5.039488098395131,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,193.0,1.467092754658332,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,193.5,4.680750650216394,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,193.5,1.4674001934824272,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,194.0,5.120000900096396,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,194.0,1.4678633779688728,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,194.5,5.0439734793982325,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,194.5,1.4664567523118297,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,195.0,5.392418021982775,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,195.0,1.465897993134413,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,195.5,5.653751428921182,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,195.5,1.4665307031449466,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,196.0,5.447392006016461,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,196.0,1.4662056470335854,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,196.5,5.29262243883792,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,196.5,1.466971692802269,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,197.0,5.176545263454015,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,197.0,1.4669709212142266,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,197.5,5.089487381916086,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,197.5,1.4618332887538081,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,198.0,5.02419397076264,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,198.0,1.466581588782949,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,198.5,4.9752239123975555,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,198.5,1.4669613020123282,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,199.0,4.938496368623742,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,199.0,1.4668558521782258,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,199.5,4.910950710793381,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,199.5,1.4681304440113332,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,200.0,4.890291467420611,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,200.0,1.4672670222254307,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,200.5,4.874797034891033,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,200.5,1.4663687340997065,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,201.0,4.86317621049385,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,201.0,1.4648452797549727,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,201.5,4.854460592195963,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,201.5,1.4709147138727767,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,202.0,4.847923878472548,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,202.0,1.4680752607491228,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,202.5,4.843021343179986,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,202.5,1.469831338978051,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,203.0,4.839344441710565,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,203.0,1.4668066975841476,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,203.5,4.836586765608498,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,203.5,1.4692437367109255,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,204.0,4.834518508531948,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,204.0,1.4732361626008188,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,204.5,4.832967315724536,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,204.5,1.4718299440120168,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,205.0,4.831803921118977,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,205.0,1.4729747864406597,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,205.5,4.830931375164808,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,205.5,1.472901171006427,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,206.0,4.830276965699181,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,206.0,1.472339622399326,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,206.5,4.82978615859996,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,206.5,1.47543412636569,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,207.0,4.829418053275545,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,207.0,1.4703793207381999,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,207.5,4.8291419742822335,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,207.5,1.4736527930842882,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,208.0,4.82893491503725,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,208.0,1.4785109174293511,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,208.5,4.8287796206035125,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,208.5,1.4764772375507569,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,209.0,4.82866314977821,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,209.0,1.4740345399584467,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,209.5,4.828575796659233,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,209.5,1.476337478083325,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,210.0,4.82851028182,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,210.0,1.478847704817228,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,210.5,4.828461145690575,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,210.5,1.4774740019334682,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,211.0,4.828424293593507,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,211.0,1.4771069067518334,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,211.5,4.828396654520706,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,211.5,1.476273078332678,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,212.0,4.828375925216104,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,212.0,1.4767549227372054,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,212.5,4.828360378237653,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,212.5,1.4759761664655713,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,213.0,4.828348718003815,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,213.0,1.4774493429428395,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,213.5,4.828339972828436,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,213.5,1.4773733474165525,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,214.0,4.828333413946902,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,214.0,1.475778756706923,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,214.5,4.828328494785752,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,214.5,1.477515840217686,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,215.0,4.828324805414889,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,215.0,1.4777220851434034,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,215.5,4.828322038386742,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,215.5,1.4750101836139864,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,216.0,4.828319963115632,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,216.0,1.4722884845143007,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,216.5,4.8283184066623,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,216.5,1.475387089792987,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,217.0,4.8283172393223,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,217.0,1.4779414473553445,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,217.5,4.828316363817301,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,217.5,1.4756769870496296,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,218.0,4.828315707188551,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,218.0,1.4762799750389008,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,218.5,4.828315214716989,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,218.5,1.4740515891378687,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,219.0,4.828314845363317,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,219.0,1.4739578896518681,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,219.5,4.828314568348063,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,219.5,1.4752388843832307,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,220.0,4.8283143605866226,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,220.0,1.47472204023969,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,220.5,4.828314204765542,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,220.5,1.4762181359628084,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,221.0,4.828314087899732,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,221.0,1.4757668528243209,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,221.5,4.828314000250375,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,221.5,1.476967043253456,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,222.0,4.828313934513356,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,222.0,1.4754060863414562,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,222.5,4.8283138852105925,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,222.5,1.4737093242837158,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,223.0,4.8283138482335195,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,223.0,1.4758321218555608,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,223.5,4.828313820500714,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,223.5,1.4747274944258078,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,224.0,4.82831379970111,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,224.0,1.473136432385593,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,224.5,4.828313784101407,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,224.5,1.474597241340643,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,225.0,4.82831377240163,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,225.0,1.4736049376429818,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,225.5,4.828313763626798,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,225.5,1.4763573390781453,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,226.0,4.828313757045674,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,226.0,1.4761109565439259,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,226.5,4.82831375210983,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,226.5,1.4745794895818483,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,227.0,4.828313748407948,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,227.0,1.4763317398235831,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,227.5,4.828313745631537,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,227.5,1.4792107819981155,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,228.0,4.828313743549227,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,228.0,1.4800798663781265,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,228.5,4.828313741987495,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,228.5,1.4775239634114168,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,229.0,4.8283137408161965,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,229.0,1.4764018449662746,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,229.5,4.828313739937723,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,229.5,1.4780315258674601,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,230.0,4.828313739278867,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,230.0,1.480926284012799,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,230.5,4.8283137387847255,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,230.5,1.4804190568295619,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,231.0,4.828313738414119,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,231.0,1.480412330544249,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,231.5,4.828313738136164,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,231.5,1.4803068839989384,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,232.0,4.828313737927699,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,232.0,1.4798285338645538,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,232.5,4.828313737771349,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,232.5,1.4813550717406254,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,233.0,4.828313737654087,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,233.0,1.4806999443132216,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,233.5,4.82831373756614,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,233.5,1.4802286421185515,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,234.0,4.82831373750018,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,234.0,1.4812004112893231,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,234.5,4.82831373745071,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,234.5,1.4819849979673905,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,235.0,4.828313737413607,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,235.0,1.4843550188506747,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,235.5,4.8283137373857805,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,235.5,1.4829258301740387,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,236.0,4.82831373736491,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,236.0,1.4820862191449828,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,236.5,4.828313737349258,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,236.5,1.4789525296452695,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,237.0,4.828313737337519,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,237.0,1.482775172351477,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,237.5,4.828313737328714,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,237.5,1.4806817099131218,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,238.0,4.8283137373221106,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,238.0,1.4810099449812704,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,238.5,4.828313737317158,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,238.5,1.4838155488099407,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,239.0,4.828313737313444,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,239.0,1.480482519661262,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,239.5,4.828313737310658,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,239.5,1.479021773255848,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,240.0,4.828313737308569,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,240.0,1.4793144447387838,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,240.5,4.828313737307003,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,240.5,1.481227733497916,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,241.0,4.828313737305827,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,241.0,1.480725115906117,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,241.5,4.828313737304946,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,241.5,1.4830027453706573,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,242.0,4.828313737304285,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,242.0,1.4856415853729814,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,242.5,4.828313737303789,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,242.5,1.4859571668837683,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,243.0,4.828313737303417,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,243.0,1.4879028889535053,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,243.5,4.828313737303137,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,243.5,1.4870105733420413,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,244.0,4.828313737302928,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,244.0,1.4885477220855716,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,244.5,4.828313737302771,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,244.5,1.4887296950378122,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,245.0,4.828313737302654,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,245.0,1.4860568565887486,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,245.5,4.828313737302565,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,245.5,1.4854745907598275,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,246.0,4.8283137373025,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,246.0,1.4842516874833604,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,246.5,4.82831373730245,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,246.5,1.4859160193763035,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,247.0,4.8283137373024125,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,247.0,1.4867012357428864,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,247.5,4.828313737302384,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,247.5,1.486088077030078,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,248.0,4.828313737302363,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,248.0,1.485788101640895,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,248.5,4.828313737302347,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,248.5,1.4860184166975248,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,249.0,5.23067321541086,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,249.0,1.487395351211789,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,249.5,5.532442823992246,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,249.5,1.4867267610483221,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,250.0,5.758770030428285,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,250.0,1.4865270843245957,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,250.5,5.928515435255314,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,250.5,1.4889794188918188,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,251.0,6.0558244888755866,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,251.0,1.4846304720455772,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,251.5,6.15130627909079,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,251.5,1.4847905027023047,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,252.0,6.2229176217521935,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,252.0,1.4887608028604824,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,252.5,6.276626128748245,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,252.5,1.4858914102994636,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,253.0,6.316907508995285,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,253.0,1.4861845534516334,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,253.5,6.347118544180564,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,253.5,1.4845469326221845,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,254.0,6.369776820569523,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,254.0,1.4864661161507102,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,254.5,6.386770527861243,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,254.5,1.486126518771691,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,255.0,6.399515808330032,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,255.0,1.4862224075210182,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,255.5,6.4090747686816245,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,255.5,1.4885388311579775,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,256.0,6.416243988945319,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,256.0,1.4868471560887897,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,256.5,6.42162090414309,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,256.5,1.4874084772259248,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,257.0,6.425653590541418,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,257.0,1.487671809240295,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,257.5,6.428678105340164,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,257.5,1.4861023958622288,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,258.0,6.028587013330698,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,258.0,1.4875197799526232,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,258.5,5.728518694323599,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,258.5,1.4899182953043741,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,259.0,5.503467455068275,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,259.0,1.4842582794238723,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,259.5,5.334679025626782,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,259.5,1.4828010872885062,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,260.0,5.208087703545662,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,260.0,1.486883746947596,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,260.5,5.113144211984821,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,260.5,1.4868927293750496,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,261.0,5.04193659331419,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,261.0,1.488769028266104,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,261.5,4.988530879311218,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,261.5,1.4850351429646877,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,262.0,4.948476593808989,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,262.0,1.4856346248760193,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,262.5,4.918435879682317,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,262.5,1.4841478925706584,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,263.0,4.895905344087312,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,263.0,1.4861815116195185,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,263.5,4.879007442391059,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,263.5,1.486053115277849,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,264.0,4.86633401611887,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,264.0,1.488367140764178,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,264.5,4.856828946414728,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,264.5,1.4894052253603676,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,265.0,4.849700144136621,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,265.0,1.4904916004664124,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,265.5,4.844353542428041,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,265.5,1.4928780679402494,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,266.0,4.840343591146606,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,266.0,1.4896969611266637,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,266.5,4.83733612768553,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,266.5,1.4885412069701467,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,267.0,4.835080530089723,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,267.0,1.4886981085823245,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,267.5,4.833388831892867,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,267.5,1.4863992495605591,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,10
+DS7,268.0,4.832120058245225,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,268.0,1.48496917460817,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,268.5,4.831168478009494,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,268.5,1.4874025701537892,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,269.0,4.830454792832695,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,269.0,1.4885281098855974,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,269.5,4.8299195289500965,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,269.5,1.4874081657959846,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,270.0,4.829518081038147,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,270.0,1.4901460496092043,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11
+DS7,270.5,4.8292169951041855,persistent,B0 Exact,NA,,True,True,True,B0 Exact clean calibration,
+DS7,270.5,1.491282304378059,persistent,primary 3-seed mean complex IG K7,mean,,True,True,True,primary clean calibration,11

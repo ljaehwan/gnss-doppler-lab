@@ -1,0 +1,58 @@
+{
+  "DS4": "NA: canonical producer mismatch; excluded by preregistered design",
+  "bootstrap_reps": 100,
+  "device": "cuda",
+  "epochs": 50,
+  "hidden": 32,
+  "history_windows_required": 12,
+  "magnitude_projection": "same 7-D slots; imaginary/phase slots deterministic zero",
+  "mc_samples": 8,
+  "model_seeds": [
+    101,
+    202,
+    303
+  ],
+  "patience": 8,
+  "policy_seeds": [
+    11,
+    23,
+    37
+  ],
+  "primary": "3-seed mean complex IG K7",
+  "prompt_index": 4,
+  "same_model_class_and_dims": true,
+  "scenarios": [
+    "DS1",
+    "DS2",
+    "DS3",
+    "DS7",
+    "DS8"
+  ],
+  "schema": "gnss-doppler-lab.amcf-r1-config.v2",
+  "side_indices": [
+    0,
+    1,
+    2,
+    3,
+    5,
+    6,
+    7,
+    8
+  ],
+  "smoke_limits": {
+    "evaluation": null,
+    "train": null,
+    "validation": null
+  },
+  "tap_order": [
+    "E4",
+    "E3",
+    "E2",
+    "E",
+    "P",
+    "L",
+    "L2",
+    "L3",
+    "L4"
+  ]
+}

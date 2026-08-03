@@ -1,0 +1,12 @@
+{
+  "cuda_available": true,
+  "cuda_device": "NVIDIA RTX A6000",
+  "cuda_runtime": "13.0",
+  "git_source_commit": "d8aef46389d1e32f3649d3f24e0f3352e1c5301e",
+  "numpy": "2.5.1",
+  "nvml_note": "NVML driver/library mismatch is known; successful PyTorch CUDA tensors/forwards are authoritative",
+  "os": "Linux-6.8.0-136-generic-x86_64-with-glibc2.39",
+  "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]",
+  "pytorch": "2.13.0+cu130",
+  "scipy": "1.18.0"
+}
