@@ -76,6 +76,16 @@ All clauses are mandatory at q99:
 
 The machine decision emits criterion-level PASS/FAIL plus full-precision evidence. Exact scenarios `DS1,DS2,DS3,DS7,DS8` are mandatory; missing/duplicate scenarios hard-fail. Strict boundaries are used (`FPR < .05`, AUC/CI direction `> 0`, B0 gains `>=`, FPR degradation `<=`). Any criterion failure means final **NO-GO** and **AMCF WCL no-go**. q995 is diagnostic, is rejected by the primary decision API, and cannot rescue q99. No attack retune is allowed after seeing any DS result.
 
+## Campaign runner and deterministic replay
+
+`scripts/run_amcf_shape_only.py` is the sole end-to-end entry point. Primary mode requires a clean committed tree, verifies all six canonical SHA-256 pins, performs a real CUDA tensor probe, reads only the six allowlisted NPZ fields (never C/N0), writes through an atomic staging directory, and refuses overwrite. Its only primary destination is exactly `artifacts/amcf_r1_shape_only/`. A synthetic `--smoke` mode must use another destination and cannot create the final result. The too-small-P gate is `abs(P) >= max(clean-train q0.005 higher, float64 positive floor)` together with the explicit `abs(P) > 0` quality rule, so an exact-zero Prompt is rejected even when the empirical quantile is zero.
+
+Feature provenance binds the input digest, Prompt gate, literal representation schema, causal/role QA, and actual feature tensor digest. Scaler, validation-bank, convergence, checkpoint, calibration, metric, paired-comparison, schema-collapse, and alarm evidence are persisted. Fit and GO paths fail closed when these bindings differ. A primary ensemble requires exactly three converged seeds; nonconverged models are marked excluded and cannot be silently averaged.
+
+`scripts/summarize_amcf_shape_only.py` accepts finalized artifacts only. It verifies `hashes.json` before parsing evidence, independently recomputes strict alarms, metrics, and the q99-only GO criteria from saved score tables, checks checkpoint/convergence digests, and requires a byte-identical deterministic README. q995 remains diagnostic. Every attack result is exploratory/developmental.
+
+The required inventory is `README.md`, `config.json`, `feature_schema.json`, `provenance.json`, `input_hashes.json`, `training_history.csv`, `convergence_audit.json`, `thresholds.json`, `scenario_metrics.csv`, `seed_metrics.csv`, `paired_comparisons.csv`, `per_epoch/`, `plots/`, `models/`, and self-excluding `hashes.json`; additional QA and feature-cache evidence is allowed.
+
 ## Scope of this source commit
 
-This commit provides only the core module, leakage/invariance tests, and this preregistration. It does not execute attack scenarios and does not generate result artifacts or a campaign decision.
+This source commit adds the leakage-safe campaign runner, deterministic summarizer, and synthetic runner tests. It deliberately does **not** execute the full attack campaign or create `artifacts/amcf_r1_shape_only/`.
