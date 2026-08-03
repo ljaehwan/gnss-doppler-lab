@@ -261,3 +261,97 @@ is type-checked before conversion: only Python/NumPy real scalars are accepted
 for numeric evidence (never bool, string, list, ndarray, or arbitrary object),
 and physics flags accept only `bool`/`np.bool_`. Malformed evidence always yields
 **INCONCLUSIVE** with `validation_errors`.
+
+
+## Production execution and sealed stage order
+
+The default CLI is the production entry, not a smoke command:
+
+```bash
+python scripts/eval_texbat_nc_topi_stage0.py
+```
+
+It publishes only to `artifacts/nc_topi_stage0` and refuses overwrite.  Its explicit
+one-way order is input/source verification; cleanStatic canonical node and frozen-B0
+pair construction; source-support role assignment; clean-train typed covariance fit;
+TOPI on every clean pair; event-level causal IQ extraction; typed conditioner and
+within-train shuffled-control fits; clean-calibration q995 caps; the exact ten-method
+clean score/mask and median/top25 aggregation; typed q99/q995 threshold calibration;
+freeze seal; and only then attack/cleanDynamic loading, labels, metrics, 2000-replicate
+block bootstrap, reconstructable physics, decision, plots, independent verification,
+and atomic rename. `--stop-after-freeze --out /tmp/<unique>` emits only a diagnostic
+freeze bundle and machine-checks `attack_loader_calls=0`.
+
+The roles are independently determined from target source support: train has
+`source_end <= 300`; calibration has `source_start >= 320 && source_end <= 400`;
+holdout has `source_start >= 420`; every crossing is excluded.  Attack rows, scenario
+identity, onset, PRN ID, and holdout rows cannot enter any fit.  `attack_fit=false` is
+a machine guard, not a narrative attestation.  CovarianceFit, both RobustConditioner
+objects and caps, and every ThresholdCalibration are sealed as actual typed objects
+with ordered `EpochIdentity` digests before freeze.
+
+## Regenerated B0 lineage (limitation, not legacy identity)
+
+The primary campaign uses one canonical **regenerated Stage-0 lineage** for
+cleanStatic and DS1/2/3/7/8, one hash-pinned frozen B0, no retraining, and exactly the
+same Stage-0 pair/valid mask for B0 and all TOPI/NC-TOPI comparators.  It reproduces
+the original producer `_window_starts`, endpoint mask, segment/channel/PRN node
+production, `window_bin_s`, 12-significant-digit CSV roundtrip, float32
+standardization, and the historical scorer grouping (`run_id, prn` sorted by
+`window_bin_s`) and positional target index.  There is deliberately no ad-hoc cadence
+run partition before node production.
+
+Canonical NPZ regeneration is **not claimed byte-identical to unavailable legacy
+actual-node epochs**.  Stored legacy predictions/residuals are diagnostic only when an
+exact key set and value positive control succeeds.  The available DS7 actual legacy
+node CSV is replayed directly through B0; its 5,465 stored RMSE keys match under the
+preregistered absolute 3e-4 historical CUDA replay tolerance.  This positive control
+does not substitute its epochs into primary evidence.  Regenerated-versus-legacy
+coverage and availability are stored in model lineage audit evidence.
+
+## Raw IQ and event causality
+
+The config pins seven raw recordings (cleanStatic, cleanDynamic, DS1/2/3/7/8) by exact
+path, byte size, known external SHA256, and first/last 1 MiB witnesses.  The default
+checks size and witnesses and records the full hash as `expected_not_recomputed`;
+`--verify-full-raw-hash` recomputes all seven full hashes.  Four features are computed
+from int16 IQ exactly as configured: log power, log robust noise-floor scale, spectral
+flatness, and lag-1 autocorrelation magnitude.
+
+For each event, the as-of time is the minimum source start over all tracked PRNs.
+Exactly four contiguous 0.5 s-history blocks from the same physical recording, each
+ending no later than that minimum, are reduced by the arithmetic mean and the same
+four-vector is broadcast to every PRN in the event. `iq_context.csv/.npz` stores raw
+sample offsets/counts, block start/end times, all four block feature vectors, reduced
+context, linked event, and PRNs.  The verifier deterministically rereads at least ten
+contexts per scenario from raw int16 IQ and independently recomputes features,
+history, cadence, recording linkage, reduction, and causality.  Missing IQ in any
+primary scenario, including cleanDynamic, is fatal.
+
+## Exact score, metric, uncertainty, and plot inventory
+
+Every valid PRN row contains finite values on one identical identity mask for exactly:
+B0, total, amp_only, shift_only, amp_shift, amp_shift_width, TOPI, NC_TOPI,
+NC_TOPI_time_shuffle, and NC_TOPI_conditioning_removed.  Every method has median and
+top25_mean event reductions and independently calibrated q99/q995 thresholds.
+Scenario metrics have an exact unique inventory over clean holdout, cleanDynamic, and
+all five attacks; ablation rows have the exact ten-method inventory.  Bootstrap is
+exactly five attacks x two aggregators x four paired comparisons (NC-B0, TOPI-B0,
+NC-TOPI, shuffleNC-TOPI), 2,000 repetitions when core complete-block support exists;
+otherwise only the core class/block-support reason is permitted.
+
+Physics stores actual/predicted/residual reference vectors, standardizer, coordinates,
+basis, Sigma/W, covariance fit identity binding, equal-RMSE raw tangent/orthogonal
+perturbations, the full second-peak grid, and amplitude/small-shift/noise nuisance raw
+perturbations.  Nuisance pass is required with equal-RMSE and second-peak pass.  The
+verifier reconstructs rather than trusting summary scalars.  Plots are rendered from
+stored data only: each scenario B0/TOPI/NC traces and PRN heatmap, tangent-vs-orthogonal,
+clean distributions, actual ROC and <=0.05 zoom, and second-peak heatmap.  Placeholder
+diagonals or empty axes are forbidden; `plot_provenance.json` records a positive data
+series and point count for every required PNG.
+
+The decision is regenerated solely from verifier-recomputed metrics, paired bootstrap,
+and physics evidence.  README and complete self-excluding SHA256 inventory are
+byte-deterministic.  PD-ML, correlator LASSO, and B0 remain distinct baselines; no
+result here identifies a universal detector or a causal RF mechanism, and historical
+B0 training overlap remains an explicit limitation.

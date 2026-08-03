@@ -19,6 +19,56 @@ r=load("eval_texbat_nc_topi_stage0.py")
 v=load("summarize_nc_topi_stage0.py")
 
 
+
+def test_production_cli_and_campaign_entry_are_real_and_default(monkeypatch, tmp_path):
+    """RED: the old smoke-only CLI is not an acceptable campaign entry."""
+    assert hasattr(r, "run_campaign")
+    called = []
+    monkeypatch.setattr(r, "run_campaign", lambda config, out, **kw: called.append((config, out, kw)))
+    assert r.main(["--out", str(tmp_path/"campaign"), "--stop-after-freeze"]) == 0
+    assert called and called[0][2]["stop_after_freeze"] is True
+
+
+def test_stage_gate_requires_typed_fit_objects_not_string_attestations():
+    """RED: digesting arbitrary cleanStatic strings was the leakage blocker."""
+    gate = r.StageGate()
+    with pytest.raises(TypeError):
+        gate.seal_fit("covariance", object(), ("cleanStatic/fake",))
+
+
+def test_strict_verifier_rejects_incomplete_production_inventory(tmp_path):
+    """RED: a plausible but incomplete artifact must fail closed."""
+    artifact=tiny_artifact(tmp_path/"artifact")
+    config=json.loads((artifact/"config.json").read_text())
+    config["canonical_inputs"]={"cleanStatic":{"path":"x","sha256":"0"*64}}
+    (artifact/"config.json").write_text(json.dumps(config))
+    v.write_hash_inventory(artifact)
+    result=v.verify_artifact(artifact,verify_source=False)
+    assert not result["ok"]
+    assert any("inventory" in error or "method" in error or "scenario" in error for error in result["errors"])
+
+
+def test_source_role_rejects_holdout_mislabeled_as_calibration():
+    node=r.NodeWindow("r","cleanStatic","G01",0,0,0,421.,422.,421.5,421.5,4,0,3,np.ones(9))
+    assert r.source_role(node)=="normal_holdout"
+
+
+def test_production_ast_wires_all_typed_apis_and_freeze_precedes_loader():
+    import ast,inspect
+    tree=ast.parse(Path(r.__file__).read_text())
+    calls=set()
+    for node in ast.walk(tree):
+        if isinstance(node,ast.Call) and isinstance(node.func,ast.Attribute) and isinstance(node.func.value,ast.Name) and node.func.value.id=="core":
+            calls.add(node.func.attr)
+    assert {"source_support_split","fit_shrinkage_covariance","primary_tangent_basis",
+      "produce_topi_scores","produce_nc_topi_scores","build_width_ablation_basis",
+      "produce_width_ablation_scores","aggregate_prn_scores","shuffled_control_target",
+      "calibrate_threshold","paired_pauc_delta_block_bootstrap","evaluate_stage0_decision"}<=calls
+    source=inspect.getsource(r.run_campaign)
+    assert source.index("gate.freeze()") < source.index("loader(cfg,b0)") < source.index("gate.load_attack_labels")
+    assert "assert_same_epoch_mask" in Path(r.__file__).read_text()
+
+
 def make_npz(path):
     rows=[]
     for seg,start,prn,ch in [(0,0.,2,1),(0,0.,1,0),(1,10.,1,0)]:
@@ -43,18 +93,16 @@ def test_npz_to_windows_sort_normalization_and_source_support(tmp_path):
     assert (node.source_sample_min,node.source_sample_max)==(0,1000)
 
 
-def test_sequence_history_is_segment_and_gap_safe():
+def test_sequence_reproduces_legacy_run_prn_grouping_without_cadence_runs():
     nodes=[]
     for seg,start in [(0,0.),(1,10.)]:
         for i in range(14):
             t=start+i*.5
             nodes.append(r.NodeWindow("rec","cleanStatic","G01",0,seg,i,t,t+1,t+.5,t+.5,4,i,i,np.ones(9)))
     examples,audit=r.build_sequence_examples(nodes)
-    assert len(examples)==4 and audit["cross_segment_examples"]==0
-    assert all(all(x.segment_index==e.target.segment_index for x in e.history) for e in examples)
-    broken=list(nodes[:14]); data=broken[6].to_dict();data["window_bin_s"]=99
-    broken[6]=r.NodeWindow(**data)
-    assert not r.build_sequence_examples(broken)[0]
+    assert len(examples)==16 and audit["legacy_grouping"]==["run_id","prn"]
+    assert audit["rejected_noncontiguous"]==0 and audit["cross_segment_examples"]>0
+    assert [x.target_index for x in examples]==list(range(12,28))
 
 
 def test_frozen_checkpoint_schema_no_train_and_deterministic_inference():
@@ -64,6 +112,20 @@ def test_frozen_checkpoint_schema_no_train_and_deterministic_inference():
     x=np.ones((3,12,9),np.float32);a=model.predict(x);b=model.predict(x)
     assert a.shape==(3,9) and np.array_equal(a,b) and not model.model.training
     with pytest.raises(RuntimeError,match="frozen"):model.train()
+
+
+def test_legacy_ds7_actual_node_rows_replay_b0_with_defined_gpu_tolerance():
+    config=json.loads((ROOT/"configs/nc_topi_stage0.json").read_text())
+    model=r.FrozenB0(ROOT/"artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt",config["b0"],device="cpu")
+    result=r.legacy_b0_positive_control(
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/texbat_ds7_9tap_eval_20260724/ds7/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+      "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds7/texbat_ds7_prn_local_scores.csv",model,
+      node_sha256="d75a97433d5a4ff25fda7605de599054aed44db3ffa8fd4456baa5114fd771f7",
+      score_sha256="d6a3480485d557a5710750ff65c09c836673339a1f23d90d1a41365e9fa91c08")
+    assert result["positive_control_pass"] and result["key_sets_equal"]
+    assert result["legacy_rows"]==result["covered_keys"]==5465
+    assert result["max_abs_rmse_error"]<=result["defined_tolerance"]==3e-4
+    assert result["primary_use"] is False
 
 
 def test_prediction_inverse_alignment_pairs_and_common_mask():
@@ -77,13 +139,12 @@ def test_prediction_inverse_alignment_pairs_and_common_mask():
     with pytest.raises(ValueError,match="same exact"):r.assert_same_epoch_mask({"B0":pairs,"TOPI":pairs[:-1]})
 
 
-def test_attack_label_loader_requires_all_clean_fit_seals():
+def test_attack_label_loader_requires_all_typed_clean_fit_seals():
     gate=r.StageGate()
     with pytest.raises(RuntimeError,match="sealed"):gate.load_attack_labels({"DS1":100})
-    for name in gate.REQUIRED_FITS:gate.seal_fit(name,["cleanStatic:normal_train:x"])
-    gate.freeze();assert gate.load_attack_labels({"DS1":100})=={"DS1":100.}
-    assert gate.audit["attack_fit"] is False
-    with pytest.raises(RuntimeError,match="frozen"):gate.seal_fit("thresholds",["cleanStatic:x"])
+    with pytest.raises(TypeError):gate.seal_fit("covariance",object(),("cleanStatic:fake",))
+    with pytest.raises(RuntimeError,match="must be sealed"):gate.freeze()
+    assert gate.audit["attack_fit"] is False and gate.audit["attack_loader_calls"]==0
 
 
 def test_iq_features_memmap_and_strict_history4_causality(tmp_path):
@@ -111,7 +172,7 @@ def tiny_artifact(root):
     # Valid 1x1 RGBA PNG.
     (root/"plots"/"scores.png").write_bytes(bytes.fromhex("89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c4890000000d49444154789c63606060f80f0001040100b51c0c020000000049454e44ae426082"))
     rows=[]
-    base={"scenario":"cleanStatic","physical_recording_id":"rec","event_id":"e0","target_index":"1","availability_time_s":"421","source_start_s":"420","source_end_s":"421","role":"normal_calibration","phase":"normal","label":"","valid":"1","tracked_prn_count":"2"}
+    base={"scenario":"cleanStatic","physical_recording_id":"rec","event_id":"e0","target_index":"1","availability_time_s":"321","source_start_s":"320","source_end_s":"321","role":"normal_calibration","phase":"normal","label":"","valid":"1","tracked_prn_count":"2"}
     rows.append({**base,"row_level":"prn","prn":"G01","B0":"1","TOPI":"2","NC_TOPI":"3"})
     rows.append({**base,"row_level":"prn","prn":"G02","B0":"3","TOPI":"4","NC_TOPI":"5"})
     rows.append({**base,"row_level":"event","prn":"","B0_median":"2","TOPI_median":"3","NC_TOPI_median":"4","B0_top25_mean":"3","TOPI_top25_mean":"4","NC_TOPI_top25_mean":"5"})

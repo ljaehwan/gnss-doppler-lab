@@ -128,7 +128,7 @@ def verify_epoch_rows(root: Path, errors: list[str]) -> dict[str,object]:
     events=[r for r in rows if r.get("row_level")=="event"]
     if not prn: errors.append("per_epoch_scores has no PRN rows")
     if not events: errors.append("per_epoch_scores has no event rows")
-    methods=sorted(c for c in (prn[0] if prn else {}) if c not in required|{"prn"}
+    methods=sorted(c for c in (prn[0] if prn else {}) if c not in required|{"prn","prn_target_index","pair_sequence_index"}
                    and not c.endswith("_median") and not c.endswith("_top25_mean")
                    and all((row.get(c,"")!="") for row in prn))
     # Every method is required on exactly the same physical PRN identity mask.
@@ -168,6 +168,15 @@ def verify_epoch_rows(root: Path, errors: list[str]) -> dict[str,object]:
                         errors.append(f"tampered aggregation {column}: {key}; expected {expected!r}")
             checked += 1
         except Exception as exc: errors.append(f"event reconstruction failed {key}: {exc}")
+    for i,row in enumerate(rows):
+        try:
+            start=_number(row["source_start_s"],"source_start_s"); end=_number(row["source_end_s"],"source_end_s")
+            expected_role=_source_role(row["scenario"],start,end)
+            if row["role"] != expected_role: errors.append(f"source-support role mismatch row {i}: expected {expected_role}")
+            valid=_bool(row["valid"],"valid")
+            if row["scenario"] in ("cleanStatic","cleanDynamic") and not valid: errors.append(f"normal row invalid at {i}")
+            if row["phase"]=="transition_excluded" and (valid or row.get("label","")!=""): errors.append(f"transition validity/label mismatch row {i}")
+        except Exception as exc: errors.append(f"row role/valid reconstruction {i}: {exc}")
     return {"rows":len(rows),"prn_rows":len(prn),"event_rows":len(events),
             "events_reaggregated":checked,"methods":methods,"rows_data":rows}
 
@@ -250,6 +259,30 @@ def _spearman(x,y):
 
 def recompute_synthetic(data: Mapping[str,object], errors: list[str]) -> dict[str,object]:
     raw=data.get("raw_trials",[])
+    reference=data.get("reference_state",{})
+    if reference:
+      try:
+       W=np.asarray(reference["W"],float);Sigma=np.asarray(reference["Sigma"],float)
+       if W.shape!=(9,9) or Sigma.shape!=(9,9) or not np.allclose(W,np.linalg.pinv(Sigma,rcond=1e-10,hermitian=True),rtol=1e-10,atol=1e-12): raise ValueError("W/Sigma mismatch")
+       def project(residual,basis):
+        residual=np.asarray(residual,float);J=np.asarray(basis,float);normal=J.T@W@J
+        fitted=J@np.linalg.pinv(normal,rcond=1e-10,hermitian=True)@(J.T@W@residual);perp=residual-fitted
+        return float(perp@W@perp),float(residual@W@residual)
+       for i,row in enumerate(raw):
+        tangent=np.asarray(row["tangent_raw"],float);orth=np.asarray(row["orthogonal_raw"],float);std=np.asarray(row["standardizer_std"],float);basis=row["basis_matrix"]
+        tb=float(np.sqrt(np.mean((tangent/std)**2)));ob=float(np.sqrt(np.mean((orth/std)**2)));tq,_=project(tangent,basis);oq,total=project(orth,basis)
+        checks=((tb,row["b0_tangent"]),(ob,row["b0_orthogonal"]),(tq,row["tangent_topi"]),(oq,row["orthogonal_topi"]))
+        if any(not math.isclose(a,float(b),rel_tol=1e-10,abs_tol=1e-12) for a,b in checks): raise ValueError(f"equal-RMSE raw reconstruction row {i}")
+       pred=np.asarray(reference["predicted_raw"],float);basis=reference["basis_matrix"];std=np.asarray(reference["standardizer_std"],float)
+       for i,row in enumerate(data.get("second_peak_grid",[])):
+        residual=np.asarray(row["residual_raw"],float);changed=np.asarray(row["changed_raw"],float)
+        if not np.allclose(residual,changed-pred,rtol=0,atol=1e-14): raise ValueError(f"second peak residual row {i}")
+        topi,_=project(residual,basis);b0=float(np.sqrt(np.mean((residual/std)**2)))
+        if not math.isclose(topi,float(row["topi"]),rel_tol=1e-10,abs_tol=1e-12) or not math.isclose(b0,float(row["b0"]),rel_tol=1e-10,abs_tol=1e-12): raise ValueError(f"second peak reconstruction row {i}")
+       for i,row in enumerate(data.get("nuisance_grid",[])):
+        residual=np.asarray(row["residual_raw"],float);topi,_=project(residual,basis);b0=float(np.sqrt(np.mean((residual/std)**2)))
+        if not math.isclose(topi,float(row["topi"]),rel_tol=1e-10,abs_tol=1e-12) or not math.isclose(b0,float(row["b0"]),rel_tol=1e-10,abs_tol=1e-12): raise ValueError(f"nuisance reconstruction row {i}")
+      except Exception as exc:errors.append(f"synthetic raw vector reconstruction: {exc}")
     stated=data.get("criteria",{})
     result={}
     if raw:
@@ -271,6 +304,12 @@ def recompute_synthetic(data: Mapping[str,object], errors: list[str]) -> dict[st
                 passes.append(_spearman([float(x["separation_chips"]) for x in rows],[float(x["topi"]) for x in rows])>=.8)
             result["second_peak_pass"]=bool(all(passes))
         except Exception as exc: errors.append(f"synthetic second-peak reconstruction: {exc}")
+    nuisance=data.get("nuisance_grid",[])
+    if nuisance:
+      try:
+       kinds={kind:bool(np.median([float(x["topi_normalized"]) for x in nuisance if x["kind"]==kind]) < np.median([float(x["b0_normalized"]) for x in nuisance if x["kind"]==kind])) for kind in ("amplitude","shift","noise")}
+       result["nuisance_pass"]=bool(all(kinds.values()))
+      except Exception as exc:errors.append(f"synthetic nuisance reconstruction: {exc}")
     for name,value in result.items():
         if name in stated and bool(stated[name]) != value: errors.append(f"synthetic criterion tampered: {name}")
     return {"raw_trials":len(raw),"second_peak_grid_rows":len(grid),"recomputed":result}
@@ -331,7 +370,7 @@ def verify_metrics(root: Path, errors: list[str]) -> dict[str,object]:
     return {"rows":total,"recomputed_rows":checked}
 
 
-def verify_source(root: Path, errors: list[str]) -> dict[str,object]:
+def verify_source_manifest(root: Path, errors: list[str]) -> dict[str,object]:
     try: provenance=_json(root/"provenance.json")
     except Exception as exc: errors.append(f"provenance unreadable: {exc}"); return {"checked":False}
     source_commit=provenance.get("source_commit")
@@ -339,12 +378,233 @@ def verify_source(root: Path, errors: list[str]) -> dict[str,object]:
     if not isinstance(source_commit,str) or len(source_commit)!=40:
         errors.append("provenance source_commit missing/noncanonical"); return {"checked":False}
     try:
-        subprocess.run(["git","merge-base","--is-ancestor",source_commit,"HEAD"],cwd=source_root,check=True,
-                       stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        head=subprocess.run(["git","rev-parse","HEAD"],cwd=source_root,check=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE).stdout.strip()
+        if source_commit!=head or provenance.get("execution_code_commit")!=head: raise ValueError("source commit is not exact execution HEAD")
+        tracked=subprocess.run(["git","ls-files"],cwd=source_root,check=True,text=True,stdout=subprocess.PIPE).stdout.splitlines()
+        expected=sorted(x for x in tracked if ("nc_topi" in x.lower() or x=="docs/NC_TOPI_STAGE0.md"))
+        if sorted(provenance.get("source_file_sha256",{}))!=expected: raise ValueError("source_file_sha256 inventory is incomplete or extra")
         for rel,expected in provenance.get("source_file_sha256",{}).items():
             if sha256_file(source_root/rel)!=expected: errors.append(f"source file hash mismatch: {rel}")
         return {"checked":True,"source_commit":source_commit,"source_root":str(source_root)}
     except Exception as exc: errors.append(f"source commit ancestry check failed: {exc}"); return {"checked":False}
+
+
+PRODUCTION_METHODS=("B0","total","amp_only","shift_only","amp_shift","amp_shift_width",
+                    "TOPI","NC_TOPI","NC_TOPI_time_shuffle","NC_TOPI_conditioning_removed")
+PRODUCTION_SCENARIOS=("cleanStatic","cleanDynamic","DS1","DS2","DS3","DS7","DS8")
+ATTACKS=("DS1","DS2","DS3","DS7","DS8")
+
+
+def verify_freeze_bundle(root: str|Path) -> dict[str,object]:
+    root=Path(root);required={"freeze_manifest.json","config.json","data_manifest.json","fit_audit.json",
+      "model_lineage_audit.json","iq_context.csv","iq_context.npz"}
+    present={x.name for x in root.iterdir() if x.is_file()}
+    if present!=required: raise ValueError(f"freeze bundle inventory mismatch missing={sorted(required-present)} extra={sorted(present-required)}")
+    freeze=_json(root/"freeze_manifest.json");fit=_json(root/"fit_audit.json")
+    if freeze.get("attack_loader_calls")!=0 or fit.get("attack_loader_calls")!=0: raise ValueError("freeze bundle loaded attacks")
+    if freeze.get("attack_fit") is not False or fit.get("attack_fit") is not False: raise ValueError("freeze bundle attack_fit guard failed")
+    expected=("covariance","conditioner","conditioner_cap","shuffled_conditioner","shuffled_cap","thresholds")
+    if set(freeze.get("sealed_fits",{}))!=set(expected): raise ValueError("freeze typed seal inventory mismatch")
+    trace=freeze.get("phase_trace",[])
+    if "attack_loader_called" in trace or not trace or trace[-1]!="freeze_sealed": raise ValueError("freeze stage trace invalid")
+    rows=_csv(root/"iq_context.csv")
+    if len(rows)!=int(freeze.get("iq_context_count",-1)) or not rows: raise ValueError("freeze IQ context count mismatch")
+    return {"ok":True,"pair_count":freeze["pair_count"],"split_counts":freeze["split_counts"],
+            "iq_context_count":len(rows),"attack_loader_calls":0,"sealed_fits":sorted(expected)}
+
+
+def _source_role(scenario,start,end):
+    if scenario!="cleanStatic": return "evaluation"
+    if end<=300:return "normal_train"
+    if start>=320 and end<=400:return "normal_calibration"
+    if start>=420:return "normal_holdout"
+    return "excluded_boundary_crossing"
+
+
+def _iq_features_independent(raw,epsilon=1e-12):
+    # Independent implementation of the frozen four formulas (does not call the runner).
+    z=raw[:,0].astype(np.float64)+1j*raw[:,1].astype(np.float64)
+    power=float(np.mean(np.abs(z)**2))
+    diff=np.abs(np.diff(z)); noise=float(np.median(np.abs(diff-np.median(diff)))/.67448975)
+    take=min(len(z),65536); spectrum=np.abs(np.fft.fft(z[:take]))**2/max(1,take)
+    flat=math.exp(float(np.mean(np.log(spectrum+epsilon))))/float(np.mean(spectrum+epsilon))
+    lag=abs(np.vdot(z[:-1],z[1:]))/math.sqrt(float(np.vdot(z[:-1],z[:-1]).real*np.vdot(z[1:],z[1:]).real)+epsilon)
+    return np.asarray([math.log(power+epsilon),math.log(noise+epsilon),flat,lag])
+
+def verify_production_contract(root: Path, errors: list[str]) -> dict[str,object]:
+    result={};cfg=_json(root/"config.json");manifest=_json(root/"data_manifest.json")
+    rows=_csv(root/"per_epoch_scores.csv");prn=[x for x in rows if x.get("row_level")=="prn"]
+    events=[x for x in rows if x.get("row_level")=="event"]
+    required_meta={"row_level","scenario","physical_recording_id","event_id","target_index","availability_time_s",
+      "source_start_s","source_end_s","role","phase","label","valid","tracked_prn_count","prn",
+      "prn_target_index","pair_sequence_index"}
+    if not prn or not events: errors.append("production epoch inventory requires PRN and event rows")
+    if prn:
+      missing=set(PRODUCTION_METHODS)-set(prn[0]);unknown={x for x in set(prn[0])-required_meta-set(PRODUCTION_METHODS)
+               if not any(x==f"{m}_{a}" for m in PRODUCTION_METHODS for a in AGGREGATORS)}
+      if missing: errors.append(f"production method inventory missing: {sorted(missing)}")
+      if unknown: errors.append(f"production method inventory has unknown/alias columns: {sorted(unknown)}")
+      for i,row in enumerate(prn):
+       for method in PRODUCTION_METHODS:
+        try:_number(row.get(method),f"PRN {i}/{method}")
+        except Exception as exc:errors.append(str(exc))
+       try:
+        start=_number(row["source_start_s"],"source_start");end=_number(row["source_end_s"],"source_end")
+        expected=_source_role(row["scenario"],start,end)
+        if row["role"]!=expected: errors.append(f"source-support role mismatch row {i}: expected {expected}")
+       except Exception as exc:errors.append(f"role reconstruction row {i}: {exc}")
+    if set(x["scenario"] for x in events)!=set(PRODUCTION_SCENARIOS): errors.append("production scenario event set is not exact")
+    # Threshold inventory is exact, not at-least-one.
+    thresholds=_json(root/"thresholds.json")
+    expected_thresholds={f"{m}/{a}/{q}" for m in PRODUCTION_METHODS for a in AGGREGATORS for q in ("q99","q995")}
+    if set(thresholds)!=expected_thresholds: errors.append(f"threshold inventory mismatch missing={sorted(expected_thresholds-set(thresholds))} extra={sorted(set(thresholds)-expected_thresholds)}")
+    # Metrics inventory emitted by the production runner.
+    sm=_csv(root/"scenario_metrics.csv");keys=[(x.get("scenario"),x.get("method"),x.get("aggregator"),x.get("quantile"),x.get("metric"),x.get("phase")) for x in sm]
+    expected=set()
+    for s in PRODUCTION_SCENARIOS:
+     for m in PRODUCTION_METHODS:
+      for a in AGGREGATORS:
+       for q in ("0.99","0.995"):
+        phase="normal_holdout" if s=="cleanStatic" else ("normal" if s=="cleanDynamic" else "stable_pre")
+        expected.add((s,m,a,q,"fpr",phase))
+        if s in ATTACKS: expected.add((s,m,a,q,"pauc","stable_pre+post"))
+    if len(keys)!=len(set(keys)): errors.append("duplicate scenario metric key")
+    if set(keys)!=expected: errors.append(f"scenario metric inventory mismatch missing={len(expected-set(keys))} extra={len(set(keys)-expected)}")
+    ab=_csv(root/"ablation_metrics.csv");abkeys=[(x.get("method"),x.get("aggregator"),x.get("quantile"),x.get("metric")) for x in ab]
+    expected_ab={(m,a,q,"mean_attack_pauc") for m in PRODUCTION_METHODS for a in AGGREGATORS for q in ("0.99","0.995")}
+    if len(abkeys)!=len(set(abkeys)) or set(abkeys)!=expected_ab: errors.append("ablation metric inventory is not exact/unique")
+    # Recompute every metric directly from stored event scores and typed thresholds.
+    metric_recomputed=0
+    for i,item in enumerate(sm):
+     try:
+      scenario=item["scenario"];method=item["method"];agg=item["aggregator"];q=float(item["quantile"])
+      subset=[x for x in events if x["scenario"]==scenario]
+      if item["metric"]=="fpr":
+       if scenario=="cleanStatic": eligible=[x for x in subset if x["role"]=="normal_holdout"]
+       elif scenario=="cleanDynamic": eligible=subset
+       else: eligible=[x for x in subset if x["phase"]=="stable_pre"]
+       suffix="q99" if q==.99 else "q995"; threshold=_number(thresholds[f"{method}/{agg}/{suffix}"]["value"],"threshold")
+       scores=[_number(x[f"{method}_{agg}"],"event score") for x in eligible]
+       alarms=[x>threshold for x in scores]
+       if not scores: raise ValueError("empty FPR eligibility")
+       expected_value=sum(alarms)/len(alarms)
+       if int(float(item["numerator"]))!=sum(alarms) or int(float(item["denominator"]))!=len(alarms): raise ValueError("FPR counts mismatch")
+      elif item["metric"]=="pauc":
+       eligible=[x for x in subset if x["phase"] in ("stable_pre","post")]
+       labels=[int(x["label"]) for x in eligible];scores=[_number(x[f"{method}_{agg}"],"event score") for x in eligible]
+       if set(labels)!={0,1}: raise ValueError("pAUC class inventory")
+       expected_value=core.standardized_pauc(labels,scores,max_fpr=.05)
+       if json.loads(item["labels_json"])!=labels or not np.array_equal(np.asarray(json.loads(item["scores_json"]),float),np.asarray(scores,float)): raise ValueError("pAUC raw evidence mismatch")
+      else: raise ValueError("unknown production metric")
+      if not math.isclose(_number(item["value"],"metric value"),expected_value,rel_tol=1e-12,abs_tol=1e-12): raise ValueError("metric value mismatch")
+      metric_recomputed+=1
+     except Exception as exc: errors.append(f"scenario metric row {i} reconstruction: {exc}")
+    for i,item in enumerate(ab):
+     try:
+      selected=[_number(x["value"],"attack pAUC") for x in sm if x["scenario"] in ATTACKS and x["method"]==item["method"] and x["aggregator"]==item["aggregator"] and x["quantile"]==item["quantile"] and x["metric"]=="pauc"]
+      if len(selected)!=5: raise ValueError("ablation attack inventory")
+      expected_value=float(np.mean(selected))
+      if not math.isclose(_number(item["value"],"ablation value"),expected_value,rel_tol=1e-12,abs_tol=1e-12): raise ValueError("ablation value mismatch")
+      if not math.isclose(_number(item["numerator"],"ablation numerator"),sum(selected),rel_tol=1e-12,abs_tol=1e-12) or int(float(item["denominator"]))!=5: raise ValueError("ablation reduction mismatch")
+     except Exception as exc: errors.append(f"ablation metric row {i} reconstruction: {exc}")
+    result["metric_rows_recomputed"]=metric_recomputed
+    # Rebuild ordered typed fit identities from PRN/event rows and require disjoint roles.
+    fit_data=_json(root/"fit_audit.json");sealed=fit_data.get("sealed_fits",{})
+    def payload(row,event=False):
+     return {"type":"EpochIdentity.v1","recording_id":row["physical_recording_id"],"scenario":"cleanStatic","prn":"EVENT" if event else row["prn"],"target_index":int(float(row["target_index"] if event else row["prn_target_index"])),"availability_time_s":float(row["availability_time_s"])}
+    train_rows=sorted([x for x in prn if x["scenario"]=="cleanStatic" and x["role"]=="normal_train"],key=lambda x:int(float(x["pair_sequence_index"])))
+    cal_rows=sorted([x for x in prn if x["scenario"]=="cleanStatic" and x["role"]=="normal_calibration"],key=lambda x:int(float(x["pair_sequence_index"])))
+    cal_events=sorted([x for x in events if x["scenario"]=="cleanStatic" and x["role"]=="normal_calibration"],key=lambda x:int(float(x["target_index"])))
+    expected_fit={"covariance":[payload(x) for x in train_rows],"conditioner":[payload(x) for x in train_rows],"shuffled_conditioner":[payload(x) for x in train_rows],"conditioner_cap":[payload(x) for x in cal_rows],"shuffled_cap":[payload(x) for x in cal_rows],"thresholds":[payload(x,True) for x in cal_events]}
+    for name,expected_ids in expected_fit.items():
+     item=sealed.get(name,{})
+     if item.get("identities")!=expected_ids: errors.append(f"fit identity rows mismatch: {name}")
+     digest=hashlib.sha256(json.dumps(expected_ids,sort_keys=True,separators=(",",":")).encode()).hexdigest()
+     if item.get("identity_digest_sha256")!=digest or int(item.get("identity_count",-1))!=len(expected_ids): errors.append(f"fit identity digest/count mismatch: {name}")
+    train_keys={json.dumps(x,sort_keys=True) for x in expected_fit["covariance"]};cal_keys={json.dumps(x,sort_keys=True) for x in expected_fit["conditioner_cap"]}
+    if train_keys & cal_keys: errors.append("clean train/calibration fit identities overlap")
+    for audit_name,seal_name in (("covariance_audit","covariance"),("conditioner_fit","conditioner"),("shuffle_fit","shuffled_conditioner"),("conditioner_cap","conditioner_cap"),("shuffle_cap","shuffled_cap")):
+     if fit_data.get(audit_name,{}).get("identity_digest_sha256")!=sealed.get(seal_name,{}).get("identity_digest_sha256"): errors.append(f"fit audit identity binding mismatch: {audit_name}")
+    result["split_counts"]={"normal_train":len(train_rows),"normal_calibration":len(cal_rows),"normal_holdout":len([x for x in prn if x["scenario"]=="cleanStatic" and x["role"]=="normal_holdout"]),"excluded_boundary_crossing":len([x for x in prn if x["scenario"]=="cleanStatic" and x["role"]=="excluded_boundary_crossing"])}
+    boot=_json(root/"bootstrap_results.json").get("comparisons",[])
+    bkeys=[(x.get("scenario"),x.get("aggregator"),x.get("comparison")) for x in boot]
+    expected_b={(s,a,c) for s in ATTACKS for a in AGGREGATORS for c in ("NC-B0","TOPI-B0","NC-TOPI","shuffleNC-TOPI")}
+    if len(bkeys)!=len(set(bkeys)) or set(bkeys)!=expected_b: errors.append("bootstrap inventory must be exact 5x2x4 and unique")
+    for item in boot:
+     if item.get("available") and int(item.get("valid_reps",0))!=2000: errors.append("available bootstrap does not have 2000 valid reps")
+     if not item.get("available") and item.get("reason") not in ("class-deficient eligible epochs","too few complete blocks in one or both class strata","no valid bootstrap replicates"):
+      errors.append("bootstrap unavailable reason is not a core block-support failure")
+    # Data inventory and raw witness contract.
+    if set(manifest.get("canonical_npz",{}))!={"cleanStatic","DS1","DS2","DS3","DS7","DS8"}: errors.append("canonical NPZ manifest inventory is not exact six")
+    if set(manifest.get("raw_iq",{}))!=set(PRODUCTION_SCENARIOS): errors.append("raw IQ manifest inventory is not exact seven")
+    for s,item in manifest.get("canonical_npz",{}).items():
+     cfgitem=cfg.get("canonical_inputs",{}).get(s,{})
+     if item.get("expected_sha256")!=cfgitem.get("sha256") or item.get("sha256_recomputed")!=cfgitem.get("sha256"): errors.append(f"canonical NPZ manifest hash mismatch {s}")
+    for s,item in manifest.get("raw_iq",{}).items():
+     expected=cfg.get("raw_iq_inputs",{}).get(s,{})
+     for key in ("size_bytes","first_1MiB_sha256","last_1MiB_sha256"):
+      if item.get(key)!=expected.get(key): errors.append(f"raw manifest mismatch {s}/{key}")
+     if item.get("expected_full_sha256")!=expected.get("sha256"): errors.append(f"raw expected hash mismatch {s}")
+     if not item.get("full_sha256_recomputed") and item.get("full_hash_status")!="expected_not_recomputed": errors.append(f"raw full hash status invalid {s}")
+    dynamic=manifest.get("cleanDynamic_nodes",{})
+    if dynamic.get("available") is not True or dynamic.get("sha256_recomputed")!=cfg.get("clean_dynamic_nodes",{}).get("sha256"): errors.append("cleanDynamic availability/hash manifest invalid")
+    # Deterministic independent raw IQ audit: first ten contexts in every scenario.
+    iqrows=_csv(root/"iq_context.csv");checked=0
+    for scenario in PRODUCTION_SCENARIOS:
+     sample=sorted([x for x in iqrows if x.get("scenario")==scenario],key=lambda x:(x.get("event_id","")))[:10]
+     if len(sample)<10: errors.append(f"IQ verifier has fewer than 10 contexts for {scenario}");continue
+     rawcfg=cfg["raw_iq_inputs"][scenario];rate=int(cfg["iq_conditioner"]["sample_rate_hz"])
+     path=Path(rawcfg["path"]);mem=np.memmap(path,mode="r",dtype="<i2",shape=(path.stat().st_size//4,2))
+     for row in sample:
+      try:
+       offsets=[int(x) for x in row["sample_offset"].split(";")];counts=[int(x) for x in row["sample_count"].split(";")]
+       ends=[float(x) for x in row["block_end_s"].split(";")];stored=np.asarray(json.loads(row["block_features_json"]),float)
+       if len(offsets)!=4 or not np.allclose(np.diff(ends),.5,rtol=0,atol=1e-8): raise ValueError("history/cadence")
+       actual=np.stack([_iq_features_independent(mem[o:o+n]) for o,n in zip(offsets,counts)])
+       if not np.allclose(actual,stored,rtol=1e-12,atol=1e-12): raise ValueError("raw feature mismatch")
+       context=np.asarray(json.loads(row["context_features_json"]),float)
+       if not np.allclose(context,actual.mean(axis=0),rtol=1e-12,atol=1e-12): raise ValueError("history reduction mismatch")
+       if ends[-1]>float(row["target_source_start_s"])+1e-12: raise ValueError("causality")
+       checked+=1
+      except Exception as exc:errors.append(f"IQ independent sample {scenario}: {exc}")
+     del mem
+    result["iq_raw_contexts_recomputed"]=checked
+    physics_data=_json(root/"synthetic_physics_tests.json");fit_data=_json(root/"fit_audit.json")
+    ref=physics_data.get("reference_state",{})
+    if ref.get("covariance_fit_identity_digest_sha256")!=fit_data.get("covariance_audit",{}).get("identity_digest_sha256"):
+        errors.append("physics reference is not bound to clean-train covariance identities")
+    # Derive decision evidence only from independently reconstructable metric/bootstrap/physics rows.
+    try:
+     def one_metric(s,m,metric,phase):
+      hits=[x for x in sm if x["scenario"]==s and x["method"]==m and x["aggregator"]=="median" and x["quantile"]=="0.99" and x["metric"]==metric and x["phase"]==phase]
+      if len(hits)!=1: raise ValueError(f"decision metric not unique {s}/{m}/{metric}")
+      return _number(hits[0]["value"],"decision metric")
+     nc={s:one_metric(s,"NC_TOPI","pauc","stable_pre+post") for s in ATTACKS};b0p={s:one_metric(s,"B0","pauc","stable_pre+post") for s in ATTACKS}
+     bootmap={(x["scenario"],x["aggregator"],x["comparison"]):x for x in boot}
+     lower={s:(float(bootmap[(s,"median","NC-B0")]["ci"][0]) if bootmap[(s,"median","NC-B0")]["available"] else -1.) for s in ATTACKS}
+     upper={s:(float(bootmap[(s,"median","NC-B0")]["ci"][1]) if bootmap[(s,"median","NC-B0")]["available"] else 1.) for s in ATTACKS}
+     criteria=physics_data.get("criteria",{})
+     evidence={"clean_nc_fpr":one_metric("cleanStatic","NC_TOPI","fpr","normal_holdout"),
+      "clean_b0_fpr":one_metric("cleanStatic","B0","fpr","normal_holdout"),
+      "stable_pre_fpr":{s:one_metric(s,"NC_TOPI","fpr","stable_pre") for s in ATTACKS},
+      "nc_pauc":nc,"b0_pauc":b0p,"pauc_delta":{s:nc[s]-b0p[s] for s in ATTACKS},
+      "nc_delay":{s:None for s in ATTACKS},"b0_delay":{s:None for s in ATTACKS},
+      "pauc_ci_lower":lower,"pauc_ci_upper":upper,
+      "equal_rmse_pass":bool(criteria.get("equal_rmse_pass") and criteria.get("nuisance_pass")),
+      "second_peak_pass":bool(criteria.get("second_peak_pass")),
+      "actual_nc_mean_pauc":float(np.mean(list(nc.values()))),
+      "topi_mean_pauc":float(np.mean([one_metric(s,"TOPI","pauc","stable_pre+post") for s in ATTACKS])),
+      "shuffled_nc_mean_pauc":float(np.mean([one_metric(s,"NC_TOPI_time_shuffle","pauc","stable_pre+post") for s in ATTACKS]))}
+     rebuilt=core.evaluate_stage0_decision(**evidence);stored_decision=_json(root/"decision.json")
+     if stored_decision.get("evidence")!=evidence or stored_decision.get("status")!=rebuilt.status or stored_decision.get("criteria")!=rebuilt.criteria:
+      errors.append("decision is not derived solely from verifier-recomputed metrics/bootstrap/physics")
+    except Exception as exc:errors.append(f"independent decision evidence derivation: {exc}")
+    plots=_json(root/"plot_provenance.json") if (root/"plot_provenance.json").exists() else {}
+    required_plots={f"score_comparison_{s}.png" for s in PRODUCTION_SCENARIOS}|{f"prn_orth_heatmap_{s}.png" for s in PRODUCTION_SCENARIOS}|{"tangent_orth_energy.png","clean_distributions.png","roc.png","roc_low_fpr.png","second_peak_heatmap.png"}
+    if set(plots.get("plots",{}))!=required_plots: errors.append("plot provenance inventory mismatch")
+    for name,item in plots.get("plots",{}).items():
+     if int(item.get("data_series",0))<1 or int(item.get("data_points",0))<1: errors.append(f"plot has no nonzero data series: {name}")
+    return result
 
 
 def compute_summary(root: str | Path, *, verify_hashes: bool=True,
@@ -387,12 +647,17 @@ def compute_summary(root: str | Path, *, verify_hashes: bool=True,
     physics=recompute_synthetic(_json(root/"synthetic_physics_tests.json"),errors) if (root/"synthetic_physics_tests.json").exists() else {}
     bootstrap=recompute_bootstrap(_json(root/"bootstrap_results.json"),errors) if (root/"bootstrap_results.json").exists() else {}
     metrics=verify_metrics(root,errors)
-    source=verify_source(root,errors) if verify_source and (root/"provenance.json").exists() else {"checked":False}
+    source=verify_source_manifest(root,errors) if verify_source and (root/"provenance.json").exists() else {"checked":False}
     # Full frozen config activates production inventory/evidence requirements; tiny verifier fixtures remain possible.
     production=False
     try: production=bool(_json(root/"config.json").get("canonical_inputs"))
     except Exception: pass
+    production_contract={}
     if production:
+        for required in ("iq_context.csv","iq_context.npz","model_lineage_audit.json","plot_provenance.json"):
+            if not (root/required).is_file(): errors.append(f"missing production required file: {required}")
+        try: production_contract=verify_production_contract(root,errors)
+        except Exception as exc: errors.append(f"production strict contract failed: {exc}")
         scenarios=("cleanStatic","cleanDynamic","DS1","DS2","DS3","DS7","DS8")
         expected_plots={f"score_comparison_{name}.png" for name in scenarios} | {f"prn_orth_heatmap_{name}.png" for name in scenarios} | {"tangent_orth_energy.png","clean_distributions.png","roc.png","roc_low_fpr.png","second_peak_heatmap.png"}
         present={path.name for path in pngs}
@@ -414,14 +679,15 @@ def compute_summary(root: str | Path, *, verify_hashes: bool=True,
     return {"schema":"gnss-doppler-lab.nc-topi-stage0.verifier.v1","ok":not errors,
             "errors":errors,"inventory":inventory,"epochs":epochs,"thresholds":thresholds,
             "iq_causality":iq,"synthetic":physics,"bootstrap":bootstrap,"metrics":metrics,
-            "source":source,"fit_attack_free":not any("attack_fit" in x for x in errors)}
+            "source":source,"fit":fit,"production_contract":production_contract,
+            "decision_status":(_json(root/"decision.json").get("status") if (root/"decision.json").exists() else "unavailable"),"fit_attack_free":not any("attack_fit" in x for x in errors)}
 
 
 def render_readme(summary: Mapping[str,object]) -> str:
     """Deterministic numeric README rendered solely from independently checked evidence."""
     inv=summary.get("inventory",{}); epochs=summary.get("epochs",{}); th=summary.get("thresholds",{})
     iq=summary.get("iq_causality",{}); syn=summary.get("synthetic",{}); boot=summary.get("bootstrap",{})
-    metrics=summary.get("metrics",{})
+    metrics=summary.get("metrics",{});fit=summary.get("fit",{});fit_audit=fit.get("fit_audit.json",{});decision_status=summary.get("decision_status","unavailable")
     lines=[
       "# NC-TOPI Stage-0 verified report", "",
       "## Numeric inventory",
@@ -453,7 +719,8 @@ def render_readme(summary: Mapping[str,object]) -> str:
       "- The amplitude tangent is prompt-normalized shape-scale, not physical receiver global gain.",
       "- DS1 failures must be reported rather than removed; transition epochs are excluded under the frozen source-support principle.",
       "- Historical B0 training overlap can limit independence. Stage-0 can claim only hash-bound results on the frozen recordings/splits; it cannot claim universal spoofing detection or causal RF mechanism identification.", "",
-      "## Verification result",
+      "## Frozen decision", f"- Decision status: {decision_status}.", "- Decision evidence is rebuilt from metrics, bootstrap, and raw physics rather than trusted from decision.json.", "",
+       "## Verification result",
       f"- Independent verification passed: {str(bool(summary.get('ok',False))).lower()}.",
       f"- Verification error count: {len(summary.get('errors',[]))}.",
     ]

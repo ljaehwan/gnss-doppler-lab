@@ -1,12 +1,16 @@
 {
   "schema": "gnss-doppler-lab.nc-topi-stage0.v1",
-  "status": "preregistered-no-results",
+  "status": "production-executable-pre-campaign",
   "lineage": {
     "legacy_peak_availability": "exact legacy actual/predicted peaks unavailable for cleanStatic/DS1/DS2/DS3",
     "residual_only_tangent": "forbidden: non-identifiable",
     "primary_input": "regenerate every scenario from provenance-fixed canonical complex 9-tap NPZ with frozen B0 normalization/window/GRU",
     "retrain": false,
-    "DS7_DS8_legacy_residual_role": "positive-control diagnostic only"
+    "DS7_DS8_legacy_residual_role": "positive-control diagnostic only",
+    "primary_contract": "one canonical regenerated Stage-0 lineage across cleanStatic, DS1/2/3/7/8; frozen B0 with no retrain",
+    "comparator_mask": "exact same Stage-0 PeakPredictionPair identity/valid mask for B0 and every TOPI/NC-TOPI comparator",
+    "legacy_prediction_reuse": "diagnostic only when exact key set and stored float32 value positive-control match succeeds; otherwise unavailable",
+    "legacy_epoch_claim": "no byte-identical legacy epoch claim for regenerated canonical NPZ nodes"
   },
   "canonical_inputs": {
     "cleanStatic": {
@@ -495,5 +499,70 @@
       "valid"
     ],
     "diagnostic_intersection_only": "common_epoch_intersection_diagnostic"
+  },
+  "checkpoint_path": "/home/ubuntu/projects/gnss-doppler-nc-topi-stage0/artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt",
+  "raw_iq_inputs": {
+    "cleanStatic": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/data/external/texbat/raw/cleanStatic.bin",
+      "size_bytes": 48016392192,
+      "sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "first_1MiB_sha256": "f8f180bb23ccb3af727b3610f753e2f8cd6bf2969babdff79338915def8d2e7f",
+      "last_1MiB_sha256": "9427f82321a5f3cab147f2cedb54211f065ad5e044b048de6e5d2c580c71bc41",
+      "default_full_hash_status": "expected_not_recomputed"
+    },
+    "cleanDynamic": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/data/external/texbat/raw/cleanDynamic.bin",
+      "size_bytes": 44291850240,
+      "sha256": "9ca7029e625a34b8a3df64db69c422836885e5eb3cdcbe266d4f42983eba36a1",
+      "first_1MiB_sha256": "8ceae112325bd5282fe4783bf928cb15bf342f85e37eb4cc2af20b8bf9107578",
+      "last_1MiB_sha256": "a8efb15ee960fb1c30cfffd110f04d267be98cb913013108b29480df7ffc144b",
+      "default_full_hash_status": "expected_not_recomputed"
+    },
+    "DS1": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/data/external/texbat/raw/ds1.bin",
+      "size_bytes": 46170898432,
+      "sha256": "8c8f4caa41c8a2253688eef47818a445e3a06139b729cf587c03be33e6b6744c",
+      "first_1MiB_sha256": "72f3327ee53e5b270781adda8f3a488c18c3046858515ed56e396ca12907357f",
+      "last_1MiB_sha256": "3f295a8fb0fa59b1a9145083485cc64a917fe60270cbbe43f92a2831f3eece8a",
+      "default_full_hash_status": "expected_not_recomputed"
+    },
+    "DS2": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/data/external/texbat/raw/ds2.bin",
+      "size_bytes": 45717913600,
+      "sha256": "65bfba9bbb8643c1f6b8f1a48bdef8adfc0e787458f0c5b0cb54ca92977bed5e",
+      "first_1MiB_sha256": "49a5afe66f869b2a537e6c54f7a8268ff2419b0799a9711d1d775c500ed12b63",
+      "last_1MiB_sha256": "d91537da1bfba8036d04256f468708689837ff6e121aa435699a1274ee7a4dd8",
+      "default_full_hash_status": "expected_not_recomputed"
+    },
+    "DS3": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/data/external/texbat/raw/ds3.bin",
+      "size_bytes": 45785022464,
+      "sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "first_1MiB_sha256": "9cb41d4a098846d4c21e7230ee7f1a6f8f7aa38ad84bf6253e0bd899da0b7bf5",
+      "last_1MiB_sha256": "e3d3e1d1f356eec232999b16ce1a15ba0451ced3c10b4c34af6088cee236616c",
+      "default_full_hash_status": "expected_not_recomputed"
+    },
+    "DS7": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/data/external/texbat/raw/ds7.bin",
+      "size_bytes": 27059290112,
+      "sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "first_1MiB_sha256": "f8f180bb23ccb3af727b3610f753e2f8cd6bf2969babdff79338915def8d2e7f",
+      "last_1MiB_sha256": "6b7bda9394a6f79ead67cb9fec5b65ede15c4e79cd261e4141b0fb554722d359",
+      "default_full_hash_status": "expected_not_recomputed"
+    },
+    "DS8": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/data/external/texbat/raw/ds8.bin",
+      "size_bytes": 47000141168,
+      "sha256": "1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78",
+      "first_1MiB_sha256": "f8f180bb23ccb3af727b3610f753e2f8cd6bf2969babdff79338915def8d2e7f",
+      "last_1MiB_sha256": "1cf9502c2a3b1b74fa11d7287cf5502a84afeaa1e691829d759f55ce4681ed54",
+      "default_full_hash_status": "expected_not_recomputed"
+    }
+  },
+  "clean_dynamic_nodes": {
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/w1.0_s0.5/cleanDynamic/multi_prn_method_a_9tap_normalized_dmcpd_w1.0_s0.5/normal_prn_node_windows.csv",
+    "sha256": "48fc7d2e4f527917fa1f6c2286562a60c3fff2c09d4ffb54cd215a2a33f2bf49",
+    "evaluation_only": true,
+    "required": true
   }
 }
