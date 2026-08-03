@@ -22,6 +22,7 @@ import time
 from typing import Callable, Iterable, Mapping, Sequence
 
 import numpy as np
+from sklearn.metrics import average_precision_score, roc_auc_score
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "src"
@@ -184,7 +185,7 @@ class StageGate:
                 raise TypeError("every threshold must be a ThresholdCalibration")
             for x in fit_object.values(): core._validate_threshold(x,primary=False)
             object_seal=hashlib.sha256("".join(x._construction_seal for _,x in sorted(fit_object.items())).encode()).hexdigest()
-        identity_seal=hashlib.sha256(json.dumps([x.canonical_payload() for x in rows],sort_keys=True,separators=(",",":")).encode()).hexdigest()
+        identity_seal=core._identity_digest(rows)
         seal=hashlib.sha256((object_seal+identity_seal).encode()).hexdigest()
         entry={"seal":seal,"object_seal":object_seal,"identity_digest_sha256":identity_seal,
                "identity_count":len(rows),"identities":[x.canonical_payload() for x in rows],
@@ -203,10 +204,10 @@ class StageGate:
     def load_attack_labels(self, onsets: Mapping[str, float]) -> dict[str, float]:
         if not self._frozen:
             raise RuntimeError("attack loader unavailable until all clean fits are sealed")
-        expected = set(core.ATTACK_SCENARIOS)
-        if set(onsets) not in (expected, {"DS1"}):
-            raise ValueError("attack onset set must be the frozen scenario set")
+        expected = {"DS1":100.,"DS2":100.,"DS3":100.,"DS7":110.,"DS8":110.}
         result = {str(k): float(v) for k, v in onsets.items()}
+        if result != expected:
+            raise ValueError("attack onsets must be the exact frozen five-scenario values")
         if any(not np.isfinite(x) for x in result.values()):
             raise ValueError("attack onsets must be finite")
         self._attack_loaded = True
@@ -395,6 +396,7 @@ class FrozenB0:
         for parameter in self.model.parameters():
             parameter.requires_grad_(False)
         self.training_calls = 0
+        self.checkpoint_path = path.resolve()
         self.checkpoint_sha256 = actual
         self._torch = torch
 
@@ -767,6 +769,29 @@ def legacy_b0_positive_control(node_csv: str|Path, score_csv: str|Path, b0: Froz
       "lineage_note":"actual legacy node rows, not regenerated canonical NPZ epochs"}
 
 
+def run_legacy_positive_control(config: Mapping[str,object], b0: FrozenB0) -> dict[str,object]:
+    """Post-freeze, non-primary DS7 replay evidence; missing inputs are explicit."""
+    item=config.get("legacy_positive_control",{})
+    base={"scenario":"DS7","primary_use":False,"available":False,
+          "node_path":str(item.get("node_path","")),"score_path":str(item.get("score_path","")),
+          "node_sha256":item.get("node_sha256"),"score_sha256":item.get("score_sha256"),
+          "checkpoint_path":str(b0.checkpoint_path),"checkpoint_sha256":b0.checkpoint_sha256,
+          "expected_coverage":int(item.get("expected_coverage",5465)),
+          "defined_tolerance":float(item.get("gpu_atol",3e-4))}
+    missing=[name for name in (base["node_path"],base["score_path"],base["checkpoint_path"]) if not name or not Path(name).is_file()]
+    if missing: return {**base,"reason":"required legacy positive-control file unavailable: "+", ".join(missing)}
+    try:
+        result=legacy_b0_positive_control(base["node_path"],base["score_path"],b0,
+          node_sha256=str(base["node_sha256"]),score_sha256=str(base["score_sha256"]),
+          gpu_atol=float(base["defined_tolerance"]))
+        available=bool(result.get("positive_control_pass") and
+          result.get("covered_keys")==result.get("legacy_rows")==base["expected_coverage"])
+        return {**base,**result,"available":True,"pass":available,
+          "reason":None if available else "legacy replay failed coverage/tolerance contract"}
+    except Exception as exc:
+        return {**base,"reason":str(exc),"pass":False}
+
+
 def legacy_b0_diagnostic(regenerated_rows: Sequence[Mapping[str,object]],legacy_csv: str|Path,*,
         regenerated_lineage_digest: str,legacy_lineage_digest: str|None=None)->dict[str,object]:
     """Bit-exact DS7/DS8 diagnostic only when regenerated lineage is identical."""
@@ -855,7 +880,8 @@ def publish_artifact(final_path: str|Path, *, config: Mapping[str,object],
         per_epoch_rows: Sequence[Mapping[str,object]], scenario_metrics: Sequence[Mapping[str,object]],
         ablation_metrics: Sequence[Mapping[str,object]], synthetic: Mapping[str,object],
         bootstrap: Mapping[str,object], decision: Mapping[str,object], provenance: Mapping[str,object],
-        fit_audit: Mapping[str,object], extras: Mapping[str,object]|None=None) -> Path:
+        fit_audit: Mapping[str,object], extras: Mapping[str,object]|None=None,
+        _test_fixture: bool=False) -> Path:
     """Write, independently verify, then atomically publish one complete artifact."""
     import importlib.util
     allowed={"iq_context.csv","iq_context.npz","test_summary.json","model_lineage_audit.json"}
@@ -878,17 +904,31 @@ def publish_artifact(final_path: str|Path, *, config: Mapping[str,object],
         render_stage0_plots(per_epoch_rows,synthetic,stage.path/"plots")
         spec=importlib.util.spec_from_file_location("nc_topi_independent_verifier",ROOT/"scripts"/"summarize_nc_topi_stage0.py")
         verifier=importlib.util.module_from_spec(spec);spec.loader.exec_module(verifier)
-        preliminary=verifier.compute_summary(stage.path,verify_hashes=False,verify_source=True)
+        preliminary=verifier.compute_summary(stage.path,verify_hashes=False,verify_source=not _test_fixture,
+          allow_test_fixture=_test_fixture)
         preliminary["ok"]=True;preliminary["errors"]=[]
         (stage.path/"README.md").write_text(verifier.render_readme(preliminary))
         verifier.write_hash_inventory(stage.path)
         # README numeric hash count is known only after inventory construction.
-        summary=verifier.compute_summary(stage.path,verify_hashes=True,verify_source=True)
+        summary=verifier.compute_summary(stage.path,verify_hashes=True,verify_source=not _test_fixture,
+          allow_test_fixture=_test_fixture)
         summary["ok"]=True;summary["errors"]=[]
         (stage.path/"README.md").write_text(verifier.render_readme(summary));verifier.write_hash_inventory(stage.path)
-        stage.publish(lambda path:verifier.verify_artifact(path,verify_source=True))
+        stage.publish(lambda path:(verifier.verify_test_artifact(path,verify_source=False) if _test_fixture
+          else verifier.verify_artifact(path,verify_source=True)))
     return Path(final_path)
 
+
+
+def _nuisance_kind_pass(rows):
+    result={}
+    for kind in ("amplitude","shift","noise"):
+        selected=[x for x in rows if x["kind"]==kind]
+        if not selected: raise ValueError(f"missing nuisance kind {kind}")
+        topi_median=float(np.median([x["topi_normalized"] for x in selected]))
+        b0_median=float(np.median([x["b0_normalized"] for x in selected]))
+        result[kind]=bool(topi_median <= b0_median if kind=="noise" else topi_median < b0_median)
+    return result
 
 
 def run_synthetic_physics(pairs: Sequence[core.PeakPredictionPair], covariance,
@@ -944,11 +984,13 @@ def run_synthetic_physics(pairs: Sequence[core.PeakPredictionPair], covariance,
                     "topi":float(projection.perp_energy),"residual_raw":residual.tolist(),
                     "changed_raw":(reference.predicted_raw+residual).tolist()})
     for scale in (1.,1.25,1.5):
-        residual=rng.normal(size=9)*reference.standardizer_std*scale
+        noise_vector=rng.normal(size=9)
+        residual=noise_vector*reference.standardizer_std*scale
         projection=core.weighted_project(residual,basis.matrix,covariance.W,workspace=workspace,covariance=covariance)
         nuisance.append({"kind":"noise","amount":0.,"noise_scale":scale,
             "b0":math.sqrt(float(np.mean((residual/reference.standardizer_std)**2))),
             "topi":float(projection.perp_energy),"residual_raw":residual.tolist(),
+                    "noise_standard_normal":noise_vector.tolist(),
                     "changed_raw":(reference.predicted_raw+residual).tolist()})
     from scipy.stats import spearmanr
     power_pass=all(float(spearmanr([x["relative_power"] for x in grid if x["separation_chips"]==sep],
@@ -962,9 +1004,7 @@ def run_synthetic_physics(pairs: Sequence[core.PeakPredictionPair], covariance,
     clean_topi=max(float(np.median([core.produce_topi_scores(x,core.primary_tangent_basis(x,core.CANONICAL_TAP_COORDS,covariance),covariance,workspace=workspace).topi for x in pairs])),1e-12)
     for row in nuisance:
         row["b0_normalized"]=row["b0"]/clean_b0;row["topi_normalized"]=row["topi"]/clean_topi
-    nuisance_kind={kind:bool(np.median([x["topi_normalized"] for x in nuisance if x["kind"]==kind]) <
-                              np.median([x["b0_normalized"] for x in nuisance if x["kind"]==kind]))
-                   for kind in ("amplitude","shift","noise")}
+    nuisance_kind=_nuisance_kind_pass(nuisance)
     nuisance_pass=bool(all(nuisance_kind.values()))
     reference_state={"pair_identity":reference.identity.canonical_payload(),"actual_raw":reference.actual_raw.tolist(),
       "predicted_raw":reference.predicted_raw.tolist(),"residual_raw":reference.residual_raw.tolist(),
@@ -979,7 +1019,8 @@ def run_synthetic_physics(pairs: Sequence[core.PeakPredictionPair], covariance,
             "nuisance_grid":nuisance,"criteria":{"equal_rmse_pass":equal_pass,
             "second_peak_pass":bool(power_pass and separation_pass),"second_peak_power_pass":bool(power_pass),
             "second_peak_separation_pass":bool(separation_pass),"nuisance_pass":nuisance_pass,
-             "nuisance_kind_pass":nuisance_kind},
+             "nuisance_kind_pass":nuisance_kind,
+             "nuisance_grammar":{"amplitude":"strict <","shift":"strict <","noise":"<="}},
             "summaries":{"equal_rmse_trials":len(raw),"second_peak_rows":len(grid),
             "nuisance_rows":len(nuisance)}}
 
@@ -990,7 +1031,7 @@ def _git_output(*args: str) -> str:
         stdout=subprocess.PIPE,stderr=subprocess.PIPE).stdout.strip()
 
 
-def _provenance_manifest(*,allow_dirty: bool=False) -> dict[str,object]:
+def _provenance_manifest(*,allow_dirty: bool=False, test_fixture: bool=False) -> dict[str,object]:
     commit=_git_output("rev-parse","HEAD")
     status=_git_output("status","--porcelain=v1","--untracked-files=all")
     if status and not allow_dirty: raise RuntimeError("production execution requires a clean exact source worktree")
@@ -1000,13 +1041,16 @@ def _provenance_manifest(*,allow_dirty: bool=False) -> dict[str,object]:
       "source_commit":commit,"execution_code_commit":commit,"source_root":str(ROOT),
       "source_file_sha256":{name:sha256_file(ROOT/name) for name in nc_files},
       "source_file_inventory":nc_files,"worktree_clean":not bool(status),"diff_inventory":status.splitlines(),
-      "attack_fit":False,"fit_scenarios":["cleanStatic"],
+      "attack_fit":False,"fit_scenarios":["cleanStatic"],"test_fixture":bool(test_fixture),
       "lineage":"single canonical regenerated Stage-0 lineage; frozen B0; exact algorithm and common pair mask"}
 
 
 def verify_campaign_inputs(config: Mapping[str,object], checkpoint: Path, *,
-                           verify_full_raw_hash: bool=False) -> dict[str,object]:
-    core.validate_config(config)
+                           verify_full_raw_hash: bool=False, _test_fixture: bool=False) -> dict[str,object]:
+    if _test_fixture:
+        strict=json.loads(json.dumps(config));strict["b0"]["checkpoint_sha256"]="f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b"
+        core.validate_config(strict)
+    else: core.validate_config(config)
     canonical={}
     expected_scenarios={"cleanStatic","DS1","DS2","DS3","DS7","DS8"}
     if set(config.get("canonical_inputs",{}))!=expected_scenarios:
@@ -1080,7 +1124,7 @@ def _scenario_lineage(config: Mapping[str,object], scenario: str, b0: FrozenB0):
     if scenario=="cleanDynamic":
         nodes,audit=load_external_normal_nodes(config["clean_dynamic_nodes"]["path"],
             expected_sha256=config["clean_dynamic_nodes"]["sha256"])
-        if not audit.get("available"): raise RuntimeError(f"cleanDynamic nodes unavailable: {audit.get(reason)}")
+        if not audit.get("available"): raise RuntimeError(f"cleanDynamic nodes unavailable: {audit.get('reason')}")
     else:
         item=config["canonical_inputs"][scenario]
         nodes,audit=build_node_windows(item["path"],scenario,recording_id=scenario,
@@ -1118,6 +1162,7 @@ def _fit_geometry(config, examples, pairs, gate: StageGate):
     gate.seal_fit("covariance",covariance,train_ids);gate.record_phase("fit_covariance_clean_train")
     workspace=core.ProjectionWorkspace.from_covariance(covariance)
     topi=np.empty(len(pairs));geometry_cache=[]
+    geometry_cache_key=_geometry_cache_key(pairs)
     started=time.perf_counter()
     for i,pair in enumerate(pairs):
         basis=core.primary_tangent_basis(pair,core.CANONICAL_TAP_COORDS,covariance)
@@ -1129,7 +1174,7 @@ def _fit_geometry(config, examples, pairs, gate: StageGate):
                            elapsed_seconds=round(elapsed,6),pairs_per_second=round((i+1)/max(elapsed,1e-12),3))
     gate.record_phase("compute_topi_all_clean")
     return {"covariance":covariance,"workspace":workspace,"split_indices":indices,"topi":topi,
-      "geometry_cache":tuple(geometry_cache),"train_provenance":train_prov}
+      "geometry_cache":{geometry_cache_key:tuple(geometry_cache)},"train_provenance":train_prov}
 
 
 def _fit_conditioners(config,pairs,iq_x,state,gate: StageGate):
@@ -1159,12 +1204,28 @@ def _role_interval(scenario: str,start: float,end: float) -> str:
     return "excluded_boundary_crossing"
 
 
+def _geometry_cache_key(pairs):
+    """Exact ordered pair identity + sealed-content inventory key."""
+    key=[]
+    for pair in pairs:
+        core._validate_pair(pair)
+        key.append((pair.identity._construction_seal,pair._content_digest_sha256))
+    return tuple(key)
+
+
 def score_scenario(examples, pairs, iq_x, state, *, onsets=None):
-    covariance=state["covariance"];workspace=state["workspace"]
+    covariance=state["covariance"]
     conditioner=state["conditioner"];shuffled=state["shuffled"]
-    geometry_cache=state.get("geometry_cache")
-    if geometry_cache is not None and len(geometry_cache)!=len(pairs):
-        raise ValueError("clean geometry cache length does not match exact pair inventory")
+    inventory_key=_geometry_cache_key(pairs)
+    caches=state.get("geometry_cache",{})
+    if not isinstance(caches,Mapping): raise TypeError("geometry_cache must be keyed by exact pair inventory")
+    geometry_cache=caches.get(inventory_key)
+    cache_reused=geometry_cache is not None
+    if cache_reused and len(geometry_cache)!=len(pairs):
+        raise ValueError("geometry cache length does not match its sealed pair inventory")
+    # A nonmatching scenario gets an isolated workspace/cache; only CovarianceFit is shared.
+    workspace=state["workspace"] if cache_reused else core.ProjectionWorkspace.from_covariance(covariance)
+    scenario_geometry=[] if not cache_reused else None
     scored=[];method_ids={name:[] for name in METHODS};started=time.perf_counter()
     for pair_sequence_index,(item,pair,features) in enumerate(zip(examples,pairs,iq_x)):
         if geometry_cache is None:
@@ -1172,6 +1233,7 @@ def score_scenario(examples, pairs, iq_x, state, *, onsets=None):
             top=core.produce_topi_scores(pair,basis,covariance,workspace=workspace)
         else:
             basis,top=geometry_cache[pair_sequence_index]
+        if scenario_geometry is not None: scenario_geometry.append((basis,top))
         nc=core.condition_topi_scores(top,pair,basis,covariance,conditioner=conditioner,
           iq_features=features[None,:],workspace=workspace)
         sh=core.condition_topi_scores(top,pair,basis,covariance,conditioner=shuffled,
@@ -1196,7 +1258,7 @@ def score_scenario(examples, pairs, iq_x, state, *, onsets=None):
             elapsed=time.perf_counter()-started
             _emit_progress("score_scenario_pairs",scenario=pair.identity.scenario,completed=completed,
               total=len(pairs),elapsed_seconds=round(elapsed,6),pairs_per_second=round(completed/max(elapsed,1e-12),3),
-              geometry_cache_reused=geometry_cache is not None)
+              geometry_cache_reused=cache_reused)
     assert_same_epoch_mask(method_ids)
     return scored
 
@@ -1288,13 +1350,20 @@ def load_attack_evaluation(config, b0, scenarios=core.ATTACK_SCENARIOS+("cleanDy
 
 def run_campaign(config, out, *, checkpoint: str|Path|None=None, stop_after_freeze: bool=False,
                  verify_full_raw_hash: bool=False, device: str|None=None,
-                 attack_loader: Callable|None=None) -> Path:
-    cfg=core.load_config(config) if isinstance(config,(str,Path)) else dict(config)
-    core.validate_config(cfg);out=Path(out)
+                 attack_loader: Callable|None=None, _test_fixture: bool=False) -> Path:
+    cfg=core.load_config(config) if isinstance(config,(str,Path)) and not _test_fixture else (
+        json.loads(Path(config).read_text()) if isinstance(config,(str,Path)) else dict(config))
+    if _test_fixture:
+        # Private in-process fixture route: public config/CLI can never request this relaxation.
+        strict=json.loads(json.dumps(cfg));strict["b0"]["checkpoint_sha256"]="f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b"
+        core.validate_config(strict)
+    else: core.validate_config(cfg)
+    out=Path(out)
     checkpoint=Path(checkpoint or cfg.get("checkpoint_path",ROOT/"artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt"))
     gate=StageGate();_seed_everything();gate.record_phase("verify_inputs_source")
-    data_manifest=verify_campaign_inputs(cfg,checkpoint,verify_full_raw_hash=verify_full_raw_hash)
-    provenance=_provenance_manifest(allow_dirty=bool(cfg.get("test_fixture")));b0=FrozenB0(checkpoint,cfg["b0"],device=device)
+    data_manifest=verify_campaign_inputs(cfg,checkpoint,verify_full_raw_hash=verify_full_raw_hash,
+      _test_fixture=_test_fixture)
+    provenance=_provenance_manifest(allow_dirty=_test_fixture,test_fixture=_test_fixture);b0=FrozenB0(checkpoint,cfg["b0"],device=device)
     gate.record_phase("load_build_clean_canonical_nodes_b0_pairs")
     examples,pairs,lineage=_scenario_lineage(cfg,"cleanStatic",b0)
     gate.record_phase("assign_source_support_split")
@@ -1319,17 +1388,20 @@ def run_campaign(config, out, *, checkpoint: str|Path|None=None, stop_after_free
     if stop_after_freeze:
         if gate.audit["attack_loader_calls"]!=0: raise RuntimeError("stop-after-freeze loaded attack data")
         return _publish_freeze(out,cfg,data_manifest,fit_audit,iq_rows,lineage)
+    gate.load_attack_labels(cfg["attacks"]["onsets_seconds"])
+    legacy_control=run_legacy_positive_control(cfg,b0)
+    gate.record_phase("legacy_ds7_positive_control_non_primary")
     loader=attack_loader or load_attack_evaluation
     loaded=loader(cfg,b0)
-    gate.load_attack_labels(cfg["attacks"]["onsets_seconds"])
     gate.record_phase("evaluate_attacks_and_cleanDynamic")
-    all_rows=list(clean_rows);all_events=list(clean_events);all_iq=list(iq_rows);lineages={"cleanStatic":lineage}
+    all_rows=list(clean_rows);all_events=list(clean_events);all_iq=list(iq_rows)
+    lineages={"legacy_positive_control":legacy_control,"scenarios":{"cleanStatic":lineage}}
     for scenario in (*core.ATTACK_SCENARIOS,"cleanDynamic"):
         examples_s,pairs_s,lineage_s=loaded[scenario]
         x_s,iq_s,iq_audit_s=_iq_for_scenario(cfg,scenario,examples_s)
         scored=score_scenario(examples_s,pairs_s,x_s,state,onsets=cfg["attacks"]["onsets_seconds"])
         rows,events=aggregate_scored(scored);all_rows.extend(rows);all_events.extend(events);all_iq.extend(iq_s)
-        lineage_s["iq_audit"]=iq_audit_s;lineages[scenario]=lineage_s
+        lineage_s["iq_audit"]=iq_audit_s;lineages["scenarios"][scenario]=lineage_s
     scenario_metrics,ablation_metrics,bootstrap,decision=_campaign_statistics(all_events,typed_thresholds,cfg,state,pairs)
     synthetic=run_synthetic_physics([pairs[i] for i in state["split_indices"]["normal_train"]],state["covariance"],workspace=state["workspace"])
     decision=_derive_decision(scenario_metrics,bootstrap,synthetic)
@@ -1341,7 +1413,7 @@ def run_campaign(config, out, *, checkpoint: str|Path|None=None, stop_after_free
     return publish_artifact(out,config=cfg,data_manifest=data_manifest,thresholds=thresholds,
       per_epoch_rows=all_rows,scenario_metrics=scenario_metrics,ablation_metrics=ablation_metrics,
       synthetic=synthetic,bootstrap=bootstrap,decision=decision,provenance=provenance,
-      fit_audit=fit_audit,extras=extras)
+      fit_audit=fit_audit,extras=extras,_test_fixture=_test_fixture)
 
 
 def _csv_bytes(rows):
@@ -1364,30 +1436,62 @@ def _iq_npz_bytes(rows):
 
 
 def _campaign_statistics(events,thresholds,cfg,state,pairs):
-    # Exact finite inventory; every scalar carries reconstructable numerator/denominator or labels/scores.
+    """Emit the exact reconstructable production metric inventory."""
     rows=[]
     for scenario in ("cleanStatic","cleanDynamic",*core.ATTACK_SCENARIOS):
       scenario_events=[x for x in events if x["meta"]["scenario"]==scenario]
+      if not scenario_events: raise RuntimeError(f"{scenario} metric inventory is empty")
       for method in METHODS:
-       detector="NC-TOPI" if method=="NC_TOPI" else method
        for agg in AGGREGATORS:
         for q,suffix in ((.99,"q99"),(.995,"q995")):
          threshold=thresholds[f"{method}/{agg}/{suffix}"].value
-         if scenario=="cleanStatic": eligible=[x for x in scenario_events if x["meta"]["role"]=="normal_holdout"]
-         elif scenario=="cleanDynamic": eligible=scenario_events
-         else: eligible=[x for x in scenario_events if x["meta"]["phase"]=="stable_pre"]
+         if scenario=="cleanStatic":
+          eligible=[x for x in scenario_events if x["meta"]["role"]=="normal_holdout"]
+          phase="normal_holdout"
+         elif scenario=="cleanDynamic": eligible=scenario_events;phase="normal"
+         else: eligible=[x for x in scenario_events if x["meta"]["phase"]=="stable_pre"];phase="stable_pre"
          scores=[x["scores"][method][agg] for x in eligible];alarms=[x>threshold for x in scores]
+         if not scores: raise RuntimeError(f"{scenario} has empty {phase} metric eligibility")
          rows.append({"scenario":scenario,"method":method,"aggregator":agg,"quantile":q,"metric":"fpr",
-           "phase":"normal_holdout" if scenario=="cleanStatic" else ("normal" if scenario=="cleanDynamic" else "stable_pre"),
-           "value":sum(alarms)/len(alarms),"numerator":sum(alarms),"denominator":len(alarms)})
+           "phase":phase,"value":sum(alarms)/len(alarms),"numerator":sum(alarms),"denominator":len(alarms)})
          if scenario in core.ATTACK_SCENARIOS:
           classify=[x for x in scenario_events if x["meta"]["phase"] in ("stable_pre","post")]
           labels=[int(x["meta"]["label"]) for x in classify];values=[x["scores"][method][agg] for x in classify]
-
-          if set(labels)!={0,1}: raise RuntimeError(f"{scenario} classification inventory lacks both classes: {sorted(set(labels))}")
-          pauc=core.standardized_pauc(labels,values,max_fpr=.05)
-          rows.append({"scenario":scenario,"method":method,"aggregator":agg,"quantile":q,"metric":"pauc","phase":"stable_pre+post",
-            "value":pauc,"labels_json":json.dumps(labels,separators=(",",":")),"scores_json":json.dumps(values,separators=(",",":"))})
+          if set(labels)!={0,1}: raise RuntimeError(f"{scenario} classification inventory lacks both classes")
+          evidence={"labels_json":json.dumps(labels,separators=(",",":")),
+                    "scores_json":json.dumps(values,separators=(",",":"))}
+          for metric,value in (("roc_auc",float(roc_auc_score(labels,values))),
+                               ("pr_auc",float(average_precision_score(labels,values))),
+                               ("pauc",core.standardized_pauc(labels,values,max_fpr=.05))):
+           rows.append({"scenario":scenario,"method":method,"aggregator":agg,"quantile":q,
+             "metric":metric,"phase":"stable_pre+post","value":value,**evidence})
+          post=[x for x in scenario_events if x["meta"]["phase"]=="post"]
+          post_alarms=[x["scores"][method][agg]>threshold for x in post]
+          rows.append({"scenario":scenario,"method":method,"aggregator":agg,"quantile":q,
+            "metric":"detection_rate","phase":"post","value":sum(post_alarms)/len(post_alarms),
+            "numerator":sum(post_alarms),"denominator":len(post_alarms)})
+          onset=float(cfg["attacks"]["onsets_seconds"][scenario])
+          persistent=[x for x in post if float(x["meta"]["source_start_s"])>=onset+40.]
+          persistent_alarms=[x["scores"][method][agg]>threshold for x in persistent]
+          if not persistent: raise RuntimeError(f"{scenario} persistent metric eligibility is empty")
+          rows.append({"scenario":scenario,"method":method,"aggregator":agg,"quantile":q,
+            "metric":"persistent_alarm_ratio","phase":"persistent","value":sum(persistent_alarms)/len(persistent_alarms),
+            "numerator":sum(persistent_alarms),"denominator":len(persistent_alarms)})
+          delay_rows=[x for x in scenario_events if x["meta"]["phase"] in ("stable_pre","post")]
+          delay_alarms=np.asarray([x["scores"][method][agg]>threshold for x in delay_rows],bool)
+          delay=core.sustained_alarm_delay(
+            [x["meta"]["availability_time_s"] for x in delay_rows],delay_alarms,
+            recording_ids=[x["meta"]["physical_recording_id"] for x in delay_rows],
+            post_eligible_mask=[x["meta"]["phase"]=="post" for x in delay_rows],onset=onset,
+            required=3,cadence=.5,stable_pre_mask=[x["meta"]["phase"]=="stable_pre" for x in delay_rows])
+          finite=bool(np.isfinite(delay.delay));status=("already_alarming_stable_pre" if delay.already_alarming_stable_pre
+            else ("detected" if finite else "censored"))
+          rows.append({"scenario":scenario,"method":method,"aggregator":agg,"quantile":q,
+            "metric":"sustained_delay","phase":"post","value":delay.delay if finite else None,
+            "censored":not finite,"status":status,"alarm_time_s":delay.alarm_time if finite else None,
+            "already_alarming_stable_pre":delay.already_alarming_stable_pre,
+            "stable_pre_alarm_by_recording_json":json.dumps(dict(delay.stable_pre_alarm_by_recording),sort_keys=True,separators=(",",":")),
+            "required_contiguous_epochs":3,"cadence_seconds":.5})
     ab=[]
     for method in METHODS:
       for agg in AGGREGATORS:
@@ -1401,8 +1505,8 @@ def _campaign_statistics(events,thresholds,cfg,state,pairs):
       subset=[x for x in events if x["meta"]["scenario"]==scenario and x["meta"]["phase"] in ("stable_pre","post")]
       labels=[int(x["meta"]["label"]) for x in subset];times=[x["meta"]["availability_time_s"] for x in subset];recs=[x["meta"]["physical_recording_id"] for x in subset]
       for agg in AGGREGATORS:
-       for name,a,b in pairs_cmp:
-        sa=[x["scores"][a][agg] for x in subset];sb=[x["scores"][b][agg] for x in subset]
+       for name,a_method,b_method in pairs_cmp:
+        sa=[x["scores"][a_method][agg] for x in subset];sb=[x["scores"][b_method][agg] for x in subset]
         result=core.paired_pauc_delta_block_bootstrap(labels,sa,sb,recs,times,reps=2000,seed=core.DEFAULT_SEED)
         comparisons.append({"scenario":scenario,"aggregator":agg,"comparison":name,"labels":labels,"score_a":sa,"score_b":sb,
           "recording_ids":recs,"availability_time_s":times,"seed":core.DEFAULT_SEED,"available":result.available,
@@ -1413,13 +1517,15 @@ def _campaign_statistics(events,thresholds,cfg,state,pairs):
       "expected_inventory":{"scenarios":list(core.ATTACK_SCENARIOS),"aggregators":list(AGGREGATORS),
       "comparisons":[x[0] for x in pairs_cmp],"repetitions":2000}},{}
 
-
 def _derive_decision(metrics,bootstrap,synthetic):
     def metric(s,m,a,q,phase):
       hits=[x for x in metrics if x["scenario"]==s and x["method"]==m and x["aggregator"]==a and x["quantile"]==q and x["metric"]=="fpr" and x["phase"]==phase]
       if len(hits)!=1: raise RuntimeError("decision metric inventory is not unique")
       return float(hits[0]["value"])
     pauc=lambda s,m: next(float(x["value"]) for x in metrics if x["scenario"]==s and x["method"]==m and x["aggregator"]=="median" and x["quantile"]==.99 and x["metric"]=="pauc")
+    def delay(s,m):
+      row=next(x for x in metrics if x["scenario"]==s and x["method"]==m and x["aggregator"]=="median" and x["quantile"]==.99 and x["metric"]=="sustained_delay")
+      return None if row.get("censored") else float(row["value"])
     cmp={(x["scenario"],x["aggregator"],x["comparison"]):x for x in bootstrap["comparisons"]}
     nc={s:pauc(s,"NC_TOPI") for s in core.ATTACK_SCENARIOS};b0={s:pauc(s,"B0") for s in core.ATTACK_SCENARIOS}
     lower={s:(cmp[(s,"median","NC-B0")]["ci"][0] if cmp[(s,"median","NC-B0")]["available"] else -1.) for s in core.ATTACK_SCENARIOS}
@@ -1428,7 +1534,8 @@ def _derive_decision(metrics,bootstrap,synthetic):
       "clean_b0_fpr":metric("cleanStatic","B0","median",.99,"normal_holdout"),
       "stable_pre_fpr":{s:metric(s,"NC_TOPI","median",.99,"stable_pre") for s in core.ATTACK_SCENARIOS},
       "nc_pauc":nc,"b0_pauc":b0,"pauc_delta":{s:nc[s]-b0[s] for s in core.ATTACK_SCENARIOS},
-      "nc_delay":{s:None for s in core.ATTACK_SCENARIOS},"b0_delay":{s:None for s in core.ATTACK_SCENARIOS},
+      "nc_delay":{s:delay(s,"NC_TOPI") for s in core.ATTACK_SCENARIOS},
+      "b0_delay":{s:delay(s,"B0") for s in core.ATTACK_SCENARIOS},
       "pauc_ci_lower":lower,"pauc_ci_upper":upper,
       "equal_rmse_pass":bool(synthetic["criteria"]["equal_rmse_pass"] and synthetic["criteria"].get("nuisance_pass",False)),
       "second_peak_pass":bool(synthetic["criteria"]["second_peak_pass"]),

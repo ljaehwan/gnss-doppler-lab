@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 import hashlib
 import json
 import math
+import zlib
 from numbers import Real
 from pathlib import Path
 from types import MappingProxyType
@@ -165,6 +166,19 @@ def _identity_digest(identities):
     return digest.hexdigest()
 
 
+def _identity_primitive_payloads(identities):
+    """Deep-copy identities into immutable canonical primitive tuples and bytes.
+
+    Conditioner hot-path seal checks hash one compressed immutable bytes witness in
+    C instead of traversing thousands of caller-owned EpochIdentity instances.
+    """
+    payloads=tuple(("EpochIdentity.v1",identity.recording_id,identity.scenario,
+                    identity.prn,int(identity.target_index),float(identity.availability_time_s).hex())
+                   for identity in identities)
+    encoded=json.dumps(payloads,separators=(",",":"),ensure_ascii=True).encode("ascii")
+    return payloads,zlib.compress(encoded,level=9)
+
+
 def _array_digest(value):
     array = np.ascontiguousarray(np.asarray(value, dtype=np.float64))
     payload = str(array.shape).encode() + b"|float64|" + array.tobytes()
@@ -240,8 +254,9 @@ def validate_config(config: Mapping[str, object]) -> None:
         raise ValueError("tap coordinates must be the explicit canonical tap coordinates") from exc
     if "GNSS-SDR" not in str(taps.get("coordinate_provenance", "")):
         raise ValueError("tap coordinate provenance must name GNSS-SDR")
-    if (not config.get("test_fixture") and
-            b0.get("checkpoint_sha256") != "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b"):
+    if "test_fixture" in config:
+        raise ValueError("test_fixture is forbidden in the public Stage-0 config")
+    if b0.get("checkpoint_sha256") != "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b":
         raise ValueError("frozen B0 checkpoint hash changed")
     if b0.get("feature_order") != ["E4", "E3", "E2", "E", "P", "L", "L2", "L3", "L4"]:
         raise ValueError("frozen B0 feature order changed")
@@ -284,6 +299,11 @@ def validate_config(config: Mapping[str, object]) -> None:
             or "real scalar only" not in str(domains.get("scalar_type", ""))
             or "validation_errors" not in str(domains.get("invalid_evidence", ""))):
         raise ValueError("decision evidence validation contract changed")
+    attacks=config.get("attacks",{}).get("onsets_seconds",{})
+    if attacks != {"DS1":100,"DS2":100,"DS3":100,"DS7":110,"DS8":110}:
+        raise ValueError("attack onsets must be the exact frozen five-scenario values")
+    if config.get("physics_pass",{}).get("nuisance") != "median normalized TOPI increase < B0 increase for amplitude and small shift; noise reported and <=B0 required for pass":
+        raise ValueError("physics nuisance strict/non-strict grammar changed")
     conditioner = config.get("iq_conditioner", {})
     if (conditioner.get("features") != list(CONDITIONER_FEATURE_SCHEMA)
             or conditioner.get("feature_schema") != "exact ordered tuple; width 4; no padding/case aliases"):
@@ -1234,8 +1254,11 @@ class RobustConditioner:
           "cap_manifest_digest":None if self.cap_manifest_ is None else _digest_json(dict(self.cap_manifest_)),
           "fit_digest":self.fit_manifest_["fit_digest_sha256"],
           "fit_identity_digest":self.fit_manifest_["identity_digest_sha256"],
-          "current_fit_identities_digest":self._fit_identity_digest_sha256_,
+          "fit_identity_payload_digest":hashlib.sha256(self._fit_identity_payload_json_).hexdigest(),
+          "fit_identity_digest_token":self._fit_identities_,
           "cap_identity_digest":None if self.cap_manifest_ is None else self.cap_manifest_["identity_digest_sha256"],
+          "cap_identity_payload_digest":None if self.cap_manifest_ is None else
+             hashlib.sha256(self._cap_identity_payload_json_).hexdigest(),
           "cap_predictor_digest":None if self.cap_manifest_ is None else self.cap_manifest_["predictors_digest_sha256"],
           "cap_scenario":None if self.cap_manifest_ is None else self.cap_manifest_["scenario"],
           "cap_role":None if self.cap_manifest_ is None else self.cap_manifest_["role"],
@@ -1248,11 +1271,15 @@ class RobustConditioner:
         if (self.fit_manifest_.get("scenario") != "cleanStatic"
                 or self.fit_manifest_.get("roles") != ("normal_train",)
                 or self.fit_manifest_.get("feature_schema") != CONDITIONER_FEATURE_SCHEMA
-                or self.fit_manifest_.get("identity_digest_sha256") != self._fit_identity_digest_sha256_
-                or self._fit_identities_ is not self._sealed_fit_identities_):
+                or not isinstance(self._fit_identity_payload_json_,bytes)
+                or self.fit_manifest_.get("identity_payload_digest_sha256") !=
+                   hashlib.sha256(self._fit_identity_payload_json_).hexdigest()):
             raise ValueError("conditioner fit provenance audit is invalid")
         if self.cap_manifest_ is not None and (self.cap_manifest_.get("scenario") != "cleanStatic"
                 or self.cap_manifest_.get("role") != "normal_calibration"
+                or not isinstance(self._cap_identity_payload_json_,bytes)
+                or self.cap_manifest_.get("identity_payload_digest_sha256") !=
+                   hashlib.sha256(self._cap_identity_payload_json_).hexdigest()
                 or not np.isclose(self.cap_manifest_.get("quantile"),.995,rtol=0,atol=0)):
             raise ValueError("conditioner cap provenance audit is invalid")
         if self._seal_value() != self._state_seal: raise ValueError("conditioner sealed state is invalid")
@@ -1271,15 +1298,21 @@ class RobustConditioner:
         model=HuberRegressor(epsilon=1.35,alpha=1e-4,max_iter=1000).fit(transformed,target)
         model.coef_=_readonly_array(model.coef_,"conditioner coefficients",1)
         self.median_=_readonly_array(median,"conditioner median",1); self.iqr_=_readonly_array(iqr,"conditioner IQR",1)
-        self.model_=model; self.feature_names_=names; self._fit_identities_=fit.identities
-        # Preserve the exact immutable tuple by identity; replacement/reordering is O(1) tamper-detectable.
-        self._sealed_fit_identities_=self._fit_identities_
-        self._fit_identity_digest_sha256_=fit.identity_digest_sha256
-        fit_digest=_digest_json({"scenario":fit.scenario,"role":fit.role,"identity_digest_sha256":fit.identity_digest_sha256,
+        self.model_=model; self.feature_names_=names
+        _,identity_payload_json=_identity_primitive_payloads(fit.identities)
+        self._fit_identity_payload_json_=identity_payload_json
+        identity_digest=fit.identity_digest_sha256
+        payload_digest=hashlib.sha256(identity_payload_json).hexdigest()
+        # Compatibility audit token: a copied digest string, never caller identity references.
+        self._fit_identities_=payload_digest
+        fit_digest=_digest_json({"scenario":fit.scenario,"role":fit.role,"identity_digest_sha256":identity_digest,
+          "identity_payload_digest_sha256":payload_digest,
           "predictors_digest_sha256":_array_digest(predictors),"target_energy_digest_sha256":_array_digest(energy),
           "feature_schema":names})
         self.fit_manifest_=MappingProxyType({"scenario":fit.scenario,"roles":("normal_train",),"rows":len(target),
-          "identity_digest_sha256":fit.identity_digest_sha256,"fit_digest_sha256":fit_digest,
+          "identity_digest_sha256":identity_digest,"identity_payload_digest_sha256":payload_digest,
+          "identity_payload_schema":"compressed canonical type-tagged primitive tuples v1",
+          "fit_digest_sha256":fit_digest,
           "predictors_digest_sha256":_array_digest(predictors),"target":"log(max(S_perp, energy_epsilon))",
           "prediction":"exp(predicted_log_energy)","feature_schema":names,"PRN_feature":False,
           "scenario_feature":False,"onset_feature":False,"epsilon":1.35,"alpha":1e-4,"max_iter":1000})
@@ -1313,12 +1346,17 @@ class RobustConditioner:
         predictors=_array(X_calibration,"calibration IQ predictors",2)
         self._validate_schema(self.feature_names_,predictors.shape[1])
         fit=_require_provenance(provenance,len(predictors),role="normal_calibration")
-        if set(fit.identities).intersection(self._fit_identities_):
+        calibration_payloads,calibration_payload_json=_identity_primitive_payloads(fit.identities)
+        fitted_payloads={tuple(x) for x in json.loads(zlib.decompress(self._fit_identity_payload_json_))}
+        if set(calibration_payloads).intersection(fitted_payloads):
             raise ValueError("calibration identities must be disjoint from conditioner fit identities")
         if not np.isclose(q,.995,rtol=0,atol=0): raise ValueError("calibration cap is frozen at q995")
         values=self._uncapped_scale(predictors); self.cap_=higher_quantile(values,q)
+        self._cap_identity_payload_json_=calibration_payload_json
         self.cap_manifest_=MappingProxyType({"scenario":fit.scenario,"role":fit.role,
-          "identity_digest_sha256":fit.identity_digest_sha256,"predictors_digest_sha256":_array_digest(predictors),
+          "identity_digest_sha256":fit.identity_digest_sha256,
+          "identity_payload_digest_sha256":hashlib.sha256(calibration_payload_json).hexdigest(),
+          "predictors_digest_sha256":_array_digest(predictors),
           "rows":len(values),"quantile":float(q)})
         self._state_seal=self._seal_value(); return self.cap_
 

@@ -1,13 +1,15 @@
 # NC-TOPI Stage-0 preregistration
 
-**Status:** frozen before detector results. This stage implements contracts and
-mathematics only. It contains no full experiment runner and no attack scoring.
+**Status:** frozen before detector results. The sealed mathematics live in
+`src/gnss_doppler_lab/nc_topi.py`; the complete freeze-first campaign runner lives in
+`scripts/eval_texbat_nc_topi_stage0.py` and the independent verifier in
+`scripts/summarize_nc_topi_stage0.py`.
 
 ## Scientific lineage and admissible evidence
 
 Exact legacy actual/predicted peaks are unavailable for cleanStatic and
 DS1/DS2/DS3. A tangent recovered from residuals alone is **non-identifiable**
-and is forbidden. The later primary runner must regenerate every scenario from
+and is forbidden. The primary runner regenerates every scenario from
 the provenance-fixed canonical complex 9-tap NPZ, using exactly the B0 prompt
 normalization, windowing, and GRU below. It must **never retrain** B0. Exact
 legacy DS7/DS8 residuals are positive-control diagnostics only.
@@ -156,6 +158,10 @@ group time are rejected; cadence and gaps are audited, a valid history is
 contiguous, and blocks can never cross groups.
 There is no cross-recording default.
 The runner reads raw int16 IQ at 25 MHz and takes one 10 ms block every 0.5 s.
+Every `iq_context.csv` row joins one exact scenario/recording/event to all linked
+PRN rows. The verifier checks the linked PRN inventory and count, minimum target
+source start, four latest contiguous causal grid blocks, sample offset/count time
+geometry at 25 MHz, every context reduction, and deterministic raw rereads.
 The four frozen features are exactly `log_power`, `log_noise_floor_scale`,
 `spectral_flatness`, and `lag1_autocorr_magnitude` in that order. Predictor normalization is the
 clean-train median/IQR; PRN, scenario, and onset remain forbidden features.
@@ -176,7 +182,11 @@ Second-peak relative powers are `[.05,.1,.2,.4,.8]`; physical separations are
 synthetic grids cannot select a threshold. Equal-RMSE tangent versus
 W-orthogonal tests use 100 deterministic trials. Nuisance controls are signed
 amplitude `+/-[.02,.05,.1]`, signed shifts `+/-[.01,.025,.05]` chips, and noise
-scales `[1,1.25,1.5]`.
+scales `[1,1.25,1.5]`. Amplitude and shift controls pass only under strict
+`median normalized TOPI increase < B0 increase`; noise uses the deliberate equality-
+accepting boundary `<=`. Stored amount/scale and deterministic noise vectors let the
+verifier regenerate each perturbation from the reference peak, coordinates, standardizer,
+and `W` rather than trusting `changed_raw`.
 
 The exact physics pass grammar is:
 
@@ -365,11 +375,36 @@ square root, and the rank tolerance.  Every workspace-backed projection revalida
 workspace seals; callers cannot supply an unsealed raw whitening matrix.
 
 For each clean pair, the runner builds the pair-bound primary tangent basis and TOPI geometry once.
-The resulting sealed `ScoreBundle` is cached with pair, basis, covariance, and workspace provenance.
+The resulting sealed `ScoreBundle` is cached under the exact ordered tuple of
+(pair identity seal, pair content seal), with basis, covariance, and workspace provenance.
 Actual and shuffled NC-TOPI condition this same validated geometry, rather than projecting again.
-Attack pairs follow the same one-primary-projection rule without entering the clean cache. Width,
+Attack and cleanDynamic inventories never receive the clean cache blindly: a nonmatching exact
+inventory creates a fresh per-scenario workspace/cache while sharing only the sealed covariance.
+Width,
 amplitude-only, and shift-only diagnostics retain the frozen method inventory and reuse whitening.
 
 The production runner emits flushed secret-free JSON progress lines at phase boundaries and every
 1,000 scored pairs. IQ history selection uses recording-group indices and binary search, and its exact
 selected block indices remain in the evidence audit.
+
+## Conditioner provenance and production isolation
+
+A conditioner copies fit identities immediately into canonical type-tagged primitive tuples and
+an immutable compressed JSON witness. It retains no caller `EpochIdentity` references. Every
+transform/score revalidates the witness digest together with schema, median/IQR, Huber coefficients,
+intercept/scale, cap and manifests; this avoids re-walking 6,074 external identity objects per score.
+Later mutation of source `FitProvenance` or identities cannot alter the fit seal, while replacement of
+the conditioner witness or any fitted scalar/array fails closed.
+
+Production has no config or CLI `test_fixture` escape. It requires the frozen checkpoint, clean exact
+worktree provenance, and `test_fixture=false` in artifact provenance. The private in-process synthetic
+fixture route is verified only by `verify_test_artifact`; the production verifier rejects it. Attack
+access opens only after all clean fits are sealed. The DS7 legacy replay then runs as a non-primary
+positive control and records exact paths/hashes, 5,465-key coverage, tolerance, pass/unavailable reason,
+and `primary_use=false` in `model_lineage_audit.json`.
+
+For every scenario/method/aggregator/q, production stores clean or stable-pre FPR. Every attack also
+stores ROC-AUC, PR-AUC, standardized pAUC, post detection rate, persistent alarm ratio, and a sorted
+per-recording three-contiguous-alarm delay with censor/status and stable-pre already-alarming audit.
+The q99 median B0 and NC-TOPI finite delays feed the frozen decision directly; the verifier recomputes
+every value from event rows and typed thresholds.

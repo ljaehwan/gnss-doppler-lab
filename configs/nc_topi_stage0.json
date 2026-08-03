@@ -564,5 +564,15 @@
     "sha256": "48fc7d2e4f527917fa1f6c2286562a60c3fff2c09d4ffb54cd215a2a33f2bf49",
     "evaluation_only": true,
     "required": true
+  },
+  "legacy_positive_control": {
+    "scenario": "DS7",
+    "node_path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/texbat_ds7_9tap_eval_20260724/ds7/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+    "node_sha256": "d75a97433d5a4ff25fda7605de599054aed44db3ffa8fd4456baa5114fd771f7",
+    "score_path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds7/texbat_ds7_prn_local_scores.csv",
+    "score_sha256": "d6a3480485d557a5710750ff65c09c836673339a1f23d90d1a41365e9fa91c08",
+    "expected_coverage": 5465,
+    "gpu_atol": 0.0003,
+    "primary_use": false
   }
 }

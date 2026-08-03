@@ -65,7 +65,7 @@ def test_production_ast_wires_all_typed_apis_and_freeze_precedes_loader():
       "produce_width_ablation_scores","aggregate_prn_scores","shuffled_control_target",
       "calibrate_threshold","paired_pauc_delta_block_bootstrap","evaluate_stage0_decision"}<=calls
     source=inspect.getsource(r.run_campaign)
-    assert source.index("gate.freeze()") < source.index("loader(cfg,b0)") < source.index("gate.load_attack_labels")
+    assert source.index("gate.freeze()") < source.index("gate.load_attack_labels") < source.index("run_legacy_positive_control") < source.index("loader(cfg,b0)")
     assert "assert_same_epoch_mask" in Path(r.__file__).read_text()
 
 
@@ -252,7 +252,7 @@ def test_iq_event_evidence_reuses_core_selected_indices(monkeypatch):
 def test_runner_source_has_single_primary_geometry_and_clean_cache_reuse():
     import inspect
     fit=inspect.getsource(r._fit_geometry);score=inspect.getsource(r.score_scenario)
-    assert '"geometry_cache"' in fit and 'state.get("geometry_cache")' in score
+    assert '"geometry_cache"' in fit and '_geometry_cache_key(pairs)' in score and 'caches.get(inventory_key)' in score
     assert score.count("produce_topi_scores(")==1
     assert "condition_topi_scores(" in score
     assert "workspace=workspace" in score
@@ -280,9 +280,200 @@ def test_score_scenario_calls_primary_geometry_once_for_attack_and_zero_for_clea
     monkeypatch.setattr(r.core,"produce_width_ablation_scores",lambda *a,**k:SimpleNamespace(score=SimpleNamespace(tangent=.25)))
     monkeypatch.setattr(r.core,"weighted_project",lambda *a,**k:projection)
     monkeypatch.setattr(r,"assert_same_epoch_mask",lambda x:None)
+    monkeypatch.setattr(r.core.ProjectionWorkspace,"from_covariance",lambda x:object())
     state={"covariance":SimpleNamespace(W=np.eye(9)),"workspace":object(),"conditioner":object(),"shuffled":object()}
     r.score_scenario(examples,pairs,np.ones((2,4)),state,onsets={"DS1":0.})
     assert len(calls)==2
-    state["geometry_cache"]=tuple((SimpleNamespace(matrix=np.ones((9,2))),top) for _ in pairs)
+    # A differently sealed clean inventory of equal length is never reused.
+    clean=[]
+    for i,p in enumerate(pairs):
+        ident=r.identity("rec","cleanStatic","G01",i,10.+i)
+        clean.append(r.core.PeakPredictionPair(p.actual_raw,p.predicted_raw,p.residual_standardized,p.standardizer_std,ident,
+          r.core.RAW_SPACE,r.core.RAW_SPACE,r.core.STANDARDIZED_SPACE,r.core.CANONICAL_TAP_COORDS))
+    state["geometry_cache"]={r._geometry_cache_key(clean):tuple((SimpleNamespace(matrix=np.ones((9,2))),top) for _ in clean)}
     r.score_scenario(examples,pairs,np.ones((2,4)),state,onsets={"DS1":0.})
-    assert len(calls)==2
+    assert len(calls)==4
+    state["geometry_cache"][r._geometry_cache_key(pairs)]=tuple((SimpleNamespace(matrix=np.ones((9,2))),top) for _ in pairs)
+    r.score_scenario(examples,pairs,np.ones((2,4)),state,onsets={"DS1":0.})
+    assert len(calls)==4
+
+
+def _sealed_score_state():
+    peak=np.exp(-4*r.core.CANONICAL_TAP_COORDS**2);std=np.linspace(.8,1.2,9);clean=[]
+    for i in range(12):
+        residual=np.sin(np.arange(9)+i)*.02+np.linspace(-.03,.03,9)
+        ident=r.identity("clean","cleanStatic",f"G{i%3+1:02d}",i,10.+i)
+        clean.append(r.core.PeakPredictionPair(peak+residual,peak,residual/std,std,ident,
+          r.core.RAW_SPACE,r.core.RAW_SPACE,r.core.STANDARDIZED_SPACE,r.core.CANONICAL_TAP_COORDS))
+    train=r.core.FitProvenance("cleanStatic","normal_train",tuple(x.identity for x in clean[:8]))
+    cov=r.core.fit_shrinkage_covariance(clean[:8],provenance=train);workspace=r.core.ProjectionWorkspace.from_covariance(cov)
+    X=np.stack([np.array([i,.1+i/100,.5,.2]) for i in range(12)])
+    top=[];cache=[]
+    for pair in clean:
+        basis=r.core.primary_tangent_basis(pair,r.core.CANONICAL_TAP_COORDS,cov)
+        score=r.core.produce_topi_scores(pair,basis,cov,workspace=workspace);top.append(score.topi);cache.append((basis,score))
+    actual=r.core.RobustConditioner().fit(X[:8],top[:8],provenance=train)
+    shuffled=r.core.RobustConditioner().fit(X[:8],np.asarray(top[:8])[::-1],provenance=train)
+    cap=r.core.FitProvenance("cleanStatic","normal_calibration",tuple(x.identity for x in clean[8:]))
+    actual.calibrate_cap(X[8:],provenance=cap);shuffled.calibrate_cap(X[8:],provenance=cap)
+    return peak,std,cov,{"covariance":cov,"workspace":workspace,"conditioner":actual,"shuffled":shuffled,
+      "geometry_cache":{r._geometry_cache_key(clean):tuple(cache)}}
+
+
+def test_sealed_attack_and_dynamic_pair_inventories_never_reuse_clean_cache():
+    from types import SimpleNamespace
+    peak,std,cov,state=_sealed_score_state();clean_keys=set(state["geometry_cache"])
+    for scenario,count in (("DS1",2),("cleanDynamic",3)):
+        pairs=[];examples=[]
+        for i in range(count):
+            residual=np.cos(np.arange(9)+i)*.03
+            ident=r.identity(scenario,scenario,"G01",i,150.+i*.5)
+            pairs.append(r.core.PeakPredictionPair(peak+residual,peak,residual/std,std,ident,
+              r.core.RAW_SPACE,r.core.RAW_SPACE,r.core.STANDARDIZED_SPACE,r.core.CANONICAL_TAP_COORDS))
+            examples.append(SimpleNamespace(target=SimpleNamespace(source_start_s=150.+i*.5,source_end_s=151.+i*.5)))
+        scored=r.score_scenario(examples,pairs,np.ones((count,4)),state,
+          onsets={"DS1":100.,"DS2":100.,"DS3":100.,"DS7":110.,"DS8":110.} if scenario=="DS1" else None)
+        assert len(scored)==count and all(np.isfinite(list(x["scores"].values())).all() for x in scored)
+        assert set(state["geometry_cache"])==clean_keys
+
+
+def test_stage_gate_rejects_partial_or_wrong_five_attack_onsets():
+    gate=r.StageGate();gate._frozen=True
+    with pytest.raises(ValueError): gate.load_attack_labels({"DS1":100.})
+    with pytest.raises(ValueError): gate.load_attack_labels({"DS1":100,"DS2":100,"DS3":100,"DS7":110,"DS8":111})
+    assert gate.load_attack_labels({"DS1":100,"DS2":100,"DS3":100,"DS7":110,"DS8":110})["DS8"]==110
+
+
+def test_clean_dynamic_unavailable_reports_intended_runtime_error(monkeypatch):
+    monkeypatch.setattr(r,"load_external_normal_nodes",lambda *a,**k:([],{"available":False,"reason":"missing fixture"}))
+    with pytest.raises(RuntimeError,match="cleanDynamic nodes unavailable: missing fixture"):
+        r._scenario_lineage({"clean_dynamic_nodes":{"path":"x","sha256":"0"}},"cleanDynamic",object())
+
+
+def test_public_config_forbids_test_fixture_escape():
+    config=json.loads((ROOT/"configs/nc_topi_stage0.json").read_text());config["test_fixture"]=True
+    with pytest.raises(ValueError,match="test_fixture"):r.core.validate_config(config)
+    assert "test_fixture" not in r.parse_args([]).__dict__
+
+
+def test_iq_full_join_and_structural_tamper_probes(tmp_path):
+    root=tmp_path/"iq";root.mkdir();cfg={"iq_conditioner":{"sample_rate_hz":1000,"block_duration_seconds":.01,"block_stride_seconds":.5}}
+    (root/"config.json").write_text(json.dumps(cfg))
+    base={"scenario":"cleanStatic","physical_recording_id":"rec","event_id":"rec@2","target_index":"0","availability_time_s":"2.6",
+      "source_start_s":"1.6","source_end_s":"2.6","role":"normal_train","phase":"normal","label":"","valid":"1","tracked_prn_count":"2"}
+    epoch=[{**base,"row_level":"event","prn":""},{**base,"row_level":"prn","prn":"G01","source_start_s":"1.6"},
+           {**base,"row_level":"prn","prn":"G02","source_start_s":"1.7"}]
+    with (root/"per_epoch_scores.csv").open("w",newline="") as f:
+        w=csv.DictWriter(f,fieldnames=sorted(set().union(*(x.keys() for x in epoch))));w.writeheader();w.writerows(epoch)
+    features=np.arange(16,dtype=float).reshape(4,4);row={"scenario":"cleanStatic","physical_recording_id":"rec","event_id":"rec@2",
+      "window_bin_s":"2","target_source_start_s":"1.6","history_blocks":"4","cadence_seconds":"0.5",
+      "block_start_s":"0;0.5;1;1.5","block_end_s":"0.01;0.51;1.01;1.51","sample_offset":"0;500;1000;1500",
+      "sample_count":"10;10;10;10","block_features_json":json.dumps(features.tolist()),
+      "context_features_json":json.dumps(features.mean(axis=0).tolist()),"linked_prns":"G01;G02","linked_pair_count":"2",
+      "history_reducer":"arithmetic_mean_per_feature"}
+    fields=list(row)
+    def write(value):
+      with (root/"iq_context.csv").open("w",newline="") as f:w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerow(value)
+    write(row);errors=[];result=v.verify_iq_causality(root,errors);assert not errors and result["joined"]==1
+    for field,value in (("sample_offset","1;500;1000;1500"),("target_source_start_s","1.7"),("linked_prns","G01"),
+                        ("block_end_s","0.01;0.51;1.01;1.52")):
+      bad=dict(row);bad[field]=value;write(bad);errors=[];v.verify_iq_causality(root,errors);assert errors,field
+
+
+def test_full_sustained_metric_inventory_and_decision_uses_primary_finite_delays():
+    from types import SimpleNamespace
+    events=[]
+    def add(scenario,start,phase,label,value,role="evaluation"):
+      meta={"scenario":scenario,"physical_recording_id":scenario,"availability_time_s":start,
+        "source_start_s":start,"source_end_s":start,"phase":phase,"label":label,"role":role}
+      scores={m:{a:value for a in r.AGGREGATORS} for m in r.METHODS};events.append({"meta":meta,"scores":scores})
+    add("cleanStatic",430.,"normal","",.1,"normal_holdout");add("cleanDynamic",50.,"normal","",.1)
+    onsets={"DS1":100,"DS2":100,"DS3":100,"DS7":110,"DS8":110}
+    for scenario,onset in onsets.items():
+      for t in (40.,40.5,41.):add(scenario,t,"stable_pre",0,.1)
+      for t in (onset,onset+.5,onset+1.,onset+40.,onset+40.5,onset+41.):add(scenario,t,"post",1,1.)
+    thresholds={f"{m}/{a}/{q}":SimpleNamespace(value=.5) for m in r.METHODS for a in r.AGGREGATORS for q in ("q99","q995")}
+    metrics,ab,bootstrap,_=r._campaign_statistics(events,thresholds,{"attacks":{"onsets_seconds":onsets}},None,None)
+    assert len(metrics)==1480
+    expected={"fpr","roc_auc","pr_auc","pauc","detection_rate","persistent_alarm_ratio","sustained_delay"}
+    attack={x["metric"] for x in metrics if x["scenario"]=="DS1"};assert attack==expected
+    delays=[x for x in metrics if x["scenario"]=="DS1" and x["metric"]=="sustained_delay"]
+    assert delays and all(x["value"]==pytest.approx(1.) and x["censored"] is False and x["status"]=="detected" for x in delays)
+    synthetic={"criteria":{"equal_rmse_pass":True,"nuisance_pass":True,"second_peak_pass":True}}
+    decision=r._derive_decision(metrics,bootstrap,synthetic)
+    assert decision["evidence"]["nc_delay"]["DS1"]==pytest.approx(1.)
+    assert decision["evidence"]["b0_delay"]["DS1"]==pytest.approx(1.)
+
+
+def test_physics_noise_equality_boundary_only_is_nonstrict():
+    rows=[]
+    for kind in ("amplitude","shift","noise"):
+      rows.append({"kind":kind,"topi_normalized":1.,"b0_normalized":1.})
+    assert r._nuisance_kind_pass(rows)=={"amplitude":False,"shift":False,"noise":True}
+    assert v._nuisance_kind_pass_independent(rows)=={"amplitude":False,"shift":False,"noise":True}
+
+
+def test_private_tiny_full_campaign_executes_all_stages_and_separate_verifier(tmp_path):
+    import hashlib
+    import torch
+    config=json.loads((ROOT/"configs/nc_topi_stage0.json").read_text())
+    # Tiny synthetic frozen checkpoint (private fixture only).
+    model_cfg={"seq_len":12,"hidden_dim":8,"emb_dim":8,"dropout":0.0}
+    torch.manual_seed(4);model=r._FrozenGRUModel.construct(torch,9,model_cfg)
+    checkpoint=tmp_path/"synthetic_b0.pt"
+    torch.save({"config":model_cfg,"node_feature_columns":list(r.FrozenB0.EXPECTED_FEATURE_COLUMNS),
+      "standardizer":{"node_mean":np.exp(-4*r.core.CANONICAL_TAP_COORDS**2).astype(np.float32).tolist(),
+                      "node_std":np.linspace(.2,.4,9,dtype=np.float32).tolist()},
+      "model_state_dict":model.state_dict()},checkpoint)
+    config["b0"]["checkpoint_sha256"]=r.sha256_file(checkpoint);config["checkpoint_path"]=str(checkpoint)
+    config["iq_conditioner"]["sample_rate_hz"]=1000
+    config["iq_conditioner"]["block_duration_seconds"]=.01
+    config["iq_conditioner"]["block_stride_seconds"]=.5
+    def canonical(path,scenario,start,end,onset=None):
+      times=np.arange(start,end+.001,.25);coords=r.core.CANONICAL_TAP_COORDS
+      peaks=[]
+      for i,t in enumerate(times):
+       shape=np.exp(-4*(coords-.015*np.sin(t/13))**2)*(1+.03*np.cos(t/9))
+       if onset is not None and t>=onset: shape=shape+.12*np.exp(-18*(coords-.3)**2)
+       peaks.append(np.stack((shape,np.zeros(9)),axis=1))
+      np.savez(path,complex_iq=np.asarray(peaks,np.float32),time_s=times,prn=np.ones(len(times),int),
+       channel=np.zeros(len(times),int),segment_index=np.zeros(len(times),int),sample_count=np.arange(len(times),dtype=np.uint64))
+    canonical_inputs={}
+    for scenario in ("cleanStatic","DS1","DS2","DS3","DS7","DS8"):
+      path=tmp_path/f"{scenario}.npz";onset=config["attacks"]["onsets_seconds"].get(scenario)
+      canonical(path,scenario,0. if scenario=="cleanStatic" else 70.,436. if scenario=="cleanStatic" else 156.,onset)
+      canonical_inputs[scenario]={"path":str(path),"sha256":r.sha256_file(path)}
+    config["canonical_inputs"]=canonical_inputs
+    # Exact cleanDynamic node schema.
+    dynamic=tmp_path/"cleanDynamic.csv";columns=[f"tap_{x}_rel_prompt_mean" for x in r.TAP_NAMES]
+    fields=["run_id","source_fingerprint","prn","channel","segment_index","window_index","window_bin_s",
+      "window_start_s","window_end_s","window_mid_s","epoch_count","tap_count","tap_layout",*columns]
+    with dynamic.open("w",newline="") as f:
+      w=csv.DictWriter(f,fieldnames=fields);w.writeheader()
+      for i,start in enumerate(np.arange(0.,61.,.5)):
+       peak=np.exp(-4*(r.core.CANONICAL_TAP_COORDS-.01*np.sin(start/7))**2)
+       row={"run_id":"cleanDynamic","source_fingerprint":"synthetic","prn":"G01","channel":0,"segment_index":0,
+        "window_index":i,"window_bin_s":start+.5,"window_start_s":start,"window_end_s":start+1.,"window_mid_s":start+.5,
+        "epoch_count":5,"tap_count":9,"tap_layout":",".join(r.TAP_NAMES)};row.update(dict(zip(columns,peak)));w.writerow(row)
+    config["clean_dynamic_nodes"]={"path":str(dynamic),"sha256":r.sha256_file(dynamic),"evaluation_only":True,"required":True}
+    # Small deterministic raw IQ files, with exact witness/full hashes.
+    raw={}
+    for si,scenario in enumerate(("cleanStatic","cleanDynamic","DS1","DS2","DS3","DS7","DS8")):
+      seconds=438 if scenario=="cleanStatic" else (64 if scenario=="cleanDynamic" else 158)
+      n=seconds*1000;index=np.arange(n);values=np.stack((((index+si*3)%97)-48,((index*3+si)%89)-44),axis=1).astype("<i2")
+      path=tmp_path/f"{scenario}.bin";values.tofile(path);witness=r.raw_iq_witness(path)
+      raw[scenario]={"path":str(path),"size_bytes":path.stat().st_size,"sha256":r.sha256_file(path),
+       "first_1MiB_sha256":witness["first_1MiB_sha256"],"last_1MiB_sha256":witness["last_1MiB_sha256"],
+       "default_full_hash_status":"expected_not_recomputed"}
+    config["raw_iq_inputs"]=raw
+    config["legacy_positive_control"].update({"node_path":str(tmp_path/"missing_nodes.csv"),
+      "score_path":str(tmp_path/"missing_scores.csv")})
+    config_path=tmp_path/"config.json";config_path.write_text(json.dumps(config))
+    out=tmp_path/"campaign"
+    result=r.run_campaign(config_path,out,checkpoint=checkpoint,device="cpu",_test_fixture=True)
+    assert result==out and (out/"decision.json").is_file() and (out/"plots"/"roc.png").is_file()
+    private=v.verify_test_artifact(out,verify_source=False);assert private["ok"],private["errors"]
+    public=v.verify_artifact(out,verify_source=False);assert not public["ok"]
+    assert any("test_fixture" in x for x in public["errors"])
+    provenance=json.loads((out/"provenance.json").read_text());assert provenance["test_fixture"] is True
+    metrics=list(csv.DictReader((out/"scenario_metrics.csv").open()));assert any(x["metric"]=="sustained_delay" for x in metrics)

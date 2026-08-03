@@ -799,3 +799,17 @@ def test_workspace_projection_inventory_1000_pairs_under_15_seconds():
                            workspace=workspace, covariance=cov)
         assert np.isfinite(top.topi)
     assert time.perf_counter() - start < 15
+
+
+def test_conditioner_copies_identity_primitives_and_rejects_internal_payload_tamper():
+    conditioner,_=fitted_conditioner()
+    # Mutating a source identity after fit cannot alter the copied provenance witness.
+    source=canonical_identity(900)
+    ids=[source]+[canonical_identity(901+i) for i in range(7)]
+    X=np.arange(32,dtype=float).reshape(8,4);y=np.linspace(.1,.8,8)
+    fitted=n.RobustConditioner().fit(X,y,provenance=n.FitProvenance("cleanStatic","normal_train",tuple(ids)))
+    object.__setattr__(source,"prn","TAMPERED")
+    assert np.isfinite(fitted.predict_log_energy(X[:1])).all()
+    fitted._fit_identity_payload_json_=fitted._fit_identity_payload_json_+b"x"
+    with pytest.raises(ValueError,match="conditioner.*seal|provenance"):
+        fitted.predict_log_energy(X[:1])
