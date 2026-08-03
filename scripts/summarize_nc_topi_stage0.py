@@ -287,6 +287,8 @@ def verify_iq_causality(root: Path, errors: list[str]) -> dict[str,object]:
     for i,row in enumerate(rows):
       try:
         key=(row["scenario"],row["physical_recording_id"],row["event_id"])
+        if row.get("block_recording_id")!=row["physical_recording_id"]:
+            raise ValueError("target/block physical recording group mismatch")
         if key in seen: raise ValueError("duplicate scenario/recording/event IQ row")
         seen.add(key)
         expected_event=f"{row['physical_recording_id']}@{float(row['window_bin_s']):.10g}"
@@ -699,8 +701,38 @@ def verify_production_contract(root: Path, errors: list[str], *, allow_test_fixt
      if not item.get("full_sha256_recomputed") and item.get("full_hash_status")!="expected_not_recomputed": errors.append(f"raw full hash status invalid {s}")
     dynamic=manifest.get("cleanDynamic_nodes",{})
     if dynamic.get("available") is not True or dynamic.get("sha256_recomputed")!=cfg.get("clean_dynamic_nodes",{}).get("sha256"): errors.append("cleanDynamic availability/hash manifest invalid")
+    # Independently rebuild scenario -> physical recording -> raw source linkage and group equality.
+    iqrows=_csv(root/"iq_context.csv");linkage=manifest.get("scenario_recording_raw_linkage",{})
+    if set(linkage)!=set(PRODUCTION_SCENARIOS):
+     errors.append("scenario/recording/raw linkage inventory is not exact seven")
+    try:
+     dynamic_source=_csv(Path(cfg["clean_dynamic_nodes"]["path"]))
+     dynamic_recordings=sorted({row["run_id"] for row in dynamic_source})
+     if len(dynamic_recordings)!=1: raise ValueError(f"expected one cleanDynamic run_id, got {dynamic_recordings}")
+     expected_recording={scenario:scenario for scenario in PRODUCTION_SCENARIOS}
+     expected_recording["cleanDynamic"]=dynamic_recordings[0]
+     group_checks=0
+     for scenario in PRODUCTION_SCENARIOS:
+      item=linkage.get(scenario,{});rawcfg=cfg["raw_iq_inputs"][scenario]
+      expected={"scenario":scenario,"physical_recording_id":expected_recording[scenario],
+        "raw_path":str(Path(rawcfg["path"])),"expected_raw_sha256":rawcfg["sha256"],
+        "raw_size_bytes":int(rawcfg["size_bytes"]),"target_groups":[expected_recording[scenario]],
+        "block_groups":[expected_recording[scenario]],"groups_exact_match":True}
+      for key,value in expected.items():
+       if item.get(key)!=value: raise ValueError(f"{scenario}/{key} linkage mismatch")
+      if scenario=="cleanDynamic" and (item.get("node_path")!=str(Path(cfg["clean_dynamic_nodes"]["path"]))
+          or item.get("expected_node_sha256")!=cfg["clean_dynamic_nodes"]["sha256"]):
+       raise ValueError("cleanDynamic node path/hash linkage mismatch")
+      scenario_iq=[row for row in iqrows if row.get("scenario")==scenario]
+      target_groups=sorted({row.get("physical_recording_id","") for row in scenario_iq})
+      block_groups=sorted({row.get("block_recording_id","") for row in scenario_iq})
+      if not scenario_iq or target_groups!=block_groups or target_groups!=[expected_recording[scenario]]:
+       raise ValueError(f"{scenario} IQ target/block group equality mismatch")
+      group_checks+=1
+     result["iq_physical_group_linkages_recomputed"]=group_checks
+    except Exception as exc: errors.append(f"scenario/recording/raw linkage reconstruction: {exc}")
     # Deterministic independent raw IQ audit: first ten contexts in every scenario.
-    iqrows=_csv(root/"iq_context.csv");checked=0
+    checked=0
     for scenario in PRODUCTION_SCENARIOS:
      sample=sorted([x for x in iqrows if x.get("scenario")==scenario],key=lambda x:(x.get("event_id","")))[:10]
      if len(sample)<10: errors.append(f"IQ verifier has fewer than 10 contexts for {scenario}");continue

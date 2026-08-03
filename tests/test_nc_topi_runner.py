@@ -157,6 +157,49 @@ def test_iq_features_memmap_and_strict_history4_causality(tmp_path):
     with pytest.raises(ValueError,match="history"):r.causal_iq_context([.4],["rec"],blocks,history=4)
 
 
+def test_iq_for_scenario_binds_blocks_to_example_physical_recording(monkeypatch):
+    physical = "texbat-cleanDynamic-method-a-9tap-external-validation"
+    target = r.NodeWindow(physical, "cleanDynamic", "G01", 0, 0, 7, 2., 3., 2.5,
+                          2.5, 4, 0, 3, np.ones(9))
+    example = r.SequenceExample(tuple([target] * 12), target, 7)
+    extracted = []
+
+    def fake_extract(path, recording_id, **kwargs):
+        extracted.append((path, recording_id, kwargs))
+        return [r.IQBlock(recording_id, i * .5, i * .5 + .01, i * 10, 10,
+                          np.full(4, i, float)) for i in range(5)]
+
+    monkeypatch.setattr(r, "extract_iq_blocks", fake_extract)
+    config = {"raw_iq_inputs": {"cleanDynamic": {"path": "dynamic.bin"}},
+              "iq_conditioner": {"sample_rate_hz": 1000,
+                                   "block_duration_seconds": .01,
+                                   "block_stride_seconds": .5}}
+    pair_x, rows, audit = r._iq_for_scenario(config, "cleanDynamic", [example])
+    assert extracted[0][1] == physical
+    assert pair_x.shape == (1, 4)
+    assert rows[0]["scenario"] == "cleanDynamic"
+    assert rows[0]["physical_recording_id"] == physical
+    assert rows[0]["block_recording_id"] == physical
+    assert audit["target_groups"] == [physical]
+    assert audit["block_groups"] == [physical]
+
+
+def test_iq_for_scenario_rejects_multiple_physical_recordings_for_one_raw(monkeypatch):
+    def example(recording):
+        target = r.NodeWindow(recording, "cleanDynamic", "G01", 0, 0, 7, 2., 3., 2.5,
+                              2.5, 4, 0, 3, np.ones(9))
+        return r.SequenceExample(tuple([target] * 12), target, 7)
+
+    called = []
+    monkeypatch.setattr(r, "extract_iq_blocks", lambda *a, **k: called.append((a, k)))
+    config = {"raw_iq_inputs": {"cleanDynamic": {"path": "dynamic.bin"}},
+              "iq_conditioner": {"sample_rate_hz": 1000,
+                                   "block_duration_seconds": .01,
+                                   "block_stride_seconds": .5}}
+    with pytest.raises(ValueError, match="exactly one physical recording"):
+        r._iq_for_scenario(config, "cleanDynamic", [example("recording-a"), example("recording-b")])
+    assert called == []
+
 def test_variable_prn_aggregation_permutation_and_method_specific_thresholds():
     scores={"G03":3.,"G01":1.,"G02":2.,"G04":100.,"G05":4.}
     assert r.aggregate_event(scores,"median")==3
@@ -364,7 +407,8 @@ def test_iq_full_join_and_structural_tamper_probes(tmp_path):
            {**base,"row_level":"prn","prn":"G02","source_start_s":"1.7"}]
     with (root/"per_epoch_scores.csv").open("w",newline="") as f:
         w=csv.DictWriter(f,fieldnames=sorted(set().union(*(x.keys() for x in epoch))));w.writeheader();w.writerows(epoch)
-    features=np.arange(16,dtype=float).reshape(4,4);row={"scenario":"cleanStatic","physical_recording_id":"rec","event_id":"rec@2",
+    features=np.arange(16,dtype=float).reshape(4,4);row={"scenario":"cleanStatic","physical_recording_id":"rec",
+      "block_recording_id":"rec","event_id":"rec@2",
       "window_bin_s":"2","target_source_start_s":"1.6","history_blocks":"4","cadence_seconds":"0.5",
       "block_start_s":"0;0.5;1;1.5","block_end_s":"0.01;0.51;1.01;1.51","sample_offset":"0;500;1000;1500",
       "sample_count":"10;10;10;10","block_features_json":json.dumps(features.tolist()),
@@ -375,7 +419,7 @@ def test_iq_full_join_and_structural_tamper_probes(tmp_path):
       with (root/"iq_context.csv").open("w",newline="") as f:w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerow(value)
     write(row);errors=[];result=v.verify_iq_causality(root,errors);assert not errors and result["joined"]==1
     for field,value in (("sample_offset","1;500;1000;1500"),("target_source_start_s","1.7"),("linked_prns","G01"),
-                        ("block_end_s","0.01;0.51;1.01;1.52")):
+                        ("block_recording_id","other-recording"),("block_end_s","0.01;0.51;1.01;1.52")):
       bad=dict(row);bad[field]=value;write(bad);errors=[];v.verify_iq_causality(root,errors);assert errors,field
 
 
@@ -451,7 +495,7 @@ def test_private_tiny_full_campaign_executes_all_stages_and_separate_verifier(tm
       w=csv.DictWriter(f,fieldnames=fields);w.writeheader()
       for i,start in enumerate(np.arange(0.,61.,.5)):
        peak=np.exp(-4*(r.core.CANONICAL_TAP_COORDS-.01*np.sin(start/7))**2)
-       row={"run_id":"cleanDynamic","source_fingerprint":"synthetic","prn":"G01","channel":0,"segment_index":0,
+       row={"run_id":"fixture-cleanDynamic-physical-recording","source_fingerprint":"synthetic","prn":"G01","channel":0,"segment_index":0,
         "window_index":i,"window_bin_s":start+.5,"window_start_s":start,"window_end_s":start+1.,"window_mid_s":start+.5,
         "epoch_count":5,"tap_count":9,"tap_layout":",".join(r.TAP_NAMES)};row.update(dict(zip(columns,peak)));w.writerow(row)
     config["clean_dynamic_nodes"]={"path":str(dynamic),"sha256":r.sha256_file(dynamic),"evaluation_only":True,"required":True}
@@ -472,10 +516,19 @@ def test_private_tiny_full_campaign_executes_all_stages_and_separate_verifier(tm
     result=r.run_campaign(config_path,out,checkpoint=checkpoint,device="cpu",_test_fixture=True)
     assert result==out and (out/"decision.json").is_file() and (out/"plots"/"roc.png").is_file()
     private=v.verify_test_artifact(out,verify_source=False);assert private["ok"],private["errors"]
+    assert private["production_contract"]["iq_physical_group_linkages_recomputed"]==7
     public=v.verify_artifact(out,verify_source=False);assert not public["ok"]
     assert any("test_fixture" in x for x in public["errors"])
     provenance=json.loads((out/"provenance.json").read_text());assert provenance["test_fixture"] is True
     metrics=list(csv.DictReader((out/"scenario_metrics.csv").open()));assert any(x["metric"]=="sustained_delay" for x in metrics)
+    manifest=json.loads((out/"data_manifest.json").read_text())
+    link=manifest["scenario_recording_raw_linkage"]["cleanDynamic"]
+    assert link["physical_recording_id"]=="fixture-cleanDynamic-physical-recording"
+    assert link["target_groups"]==link["block_groups"]==[link["physical_recording_id"]]
+    iq_rows=list(csv.DictReader((out/"iq_context.csv").open()))
+    dynamic_iq=[x for x in iq_rows if x["scenario"]=="cleanDynamic"]
+    assert {x["physical_recording_id"] for x in dynamic_iq}=={link["physical_recording_id"]}
+    assert {x["block_recording_id"] for x in dynamic_iq}=={link["physical_recording_id"]}
 
 
 

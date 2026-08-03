@@ -544,6 +544,8 @@ def causal_iq_context(target_source_start: Sequence[float], target_groups: Seque
     predictors = np.mean(context.contexts, axis=1)
     audit = dict(context.audit)
     audit.update({"strict_causal": True, "asof_operator": "block_end <= min_target_source_start",
+                  "target_groups": sorted(set(map(str, target_groups))),
+                  "block_groups": sorted({x.recording_id for x in ordered}),
                   "history_blocks": history, "history_reducer": "arithmetic_mean_per_feature",
                   "selected_block_ends": selected_ends,
                   "selected_block_indices": [ix.astype(int).tolist() for ix in context.block_indices],
@@ -1081,8 +1083,25 @@ def verify_campaign_inputs(config: Mapping[str,object], checkpoint: Path, *,
     dynamic=config["clean_dynamic_nodes"];dynamic_path=Path(dynamic["path"])
     actual_dynamic=sha256_file(dynamic_path)
     if actual_dynamic!=dynamic["sha256"]: raise ValueError("cleanDynamic node hash mismatch")
-    return {"schema":"gnss-doppler-lab.nc-topi-stage0.data-manifest.v2",
-      "canonical_npz":canonical,"checkpoint":{"path":str(checkpoint),"size_bytes":checkpoint.stat().st_size,
+    dynamic_nodes,dynamic_audit=load_external_normal_nodes(dynamic_path,expected_sha256=dynamic["sha256"])
+    if not dynamic_audit.get("available"):
+        raise ValueError(f"cleanDynamic node recording linkage unavailable: {dynamic_audit.get('reason')}")
+    dynamic_recordings=sorted({node.recording_id for node in dynamic_nodes})
+    if len(dynamic_recordings)!=1:
+        raise ValueError(f"cleanDynamic nodes must identify exactly one physical recording; got {dynamic_recordings}")
+    linkage={}
+    for scenario in sorted(required_raw):
+        physical=dynamic_recordings[0] if scenario=="cleanDynamic" else scenario
+        raw_item=config["raw_iq_inputs"][scenario]
+        linkage[scenario]={"scenario":scenario,"physical_recording_id":physical,
+          "raw_path":str(Path(raw_item["path"])),"expected_raw_sha256":raw_item["sha256"],
+          "raw_size_bytes":int(raw_item["size_bytes"]),"target_groups":[physical],"block_groups":[physical],
+          "groups_exact_match":True,"recording_id_source":
+          ("cleanDynamic external node CSV run_id" if scenario=="cleanDynamic" else "canonical scenario-bound builder")}
+    linkage["cleanDynamic"].update({"node_path":str(dynamic_path),"expected_node_sha256":dynamic["sha256"]})
+    return {"schema":"gnss-doppler-lab.nc-topi-stage0.data-manifest.v3",
+      "canonical_npz":canonical,"scenario_recording_raw_linkage":linkage,
+      "checkpoint":{"path":str(checkpoint),"size_bytes":checkpoint.stat().st_size,
       "expected_sha256":config["b0"]["checkpoint_sha256"],"sha256_recomputed":checkpoint_hash},
       "raw_iq":raw,"cleanDynamic_nodes":{"path":str(dynamic_path),"size_bytes":dynamic_path.stat().st_size,
       "expected_sha256":dynamic["sha256"],"sha256_recomputed":actual_dynamic,"available":True},
@@ -1105,8 +1124,11 @@ def build_event_iq_context(examples: Sequence[SequenceExample], blocks: Sequence
         if len(chosen)!=4: raise RuntimeError("event lacks history4 IQ context")
         context=np.mean(np.stack([ordered[i].features for i in chosen]),axis=0)
         if not np.allclose(context,predictors[event_pos],rtol=0,atol=1e-15): raise RuntimeError("IQ history reduction mismatch")
+        block_recordings={ordered[i].recording_id for i in chosen}
+        if block_recordings!={key[0]}: raise RuntimeError("IQ event target/block physical recording mismatch")
         for pair_index in groups[key]: pair_x[pair_index]=context
-        rows.append({"scenario":scenario,"physical_recording_id":key[0],"event_id":f"{key[0]}@{key[1]:.10g}",
+        rows.append({"scenario":scenario,"physical_recording_id":key[0],
+          "block_recording_id":next(iter(block_recordings)),"event_id":f"{key[0]}@{key[1]:.10g}",
           "window_bin_s":key[1],"target_source_start_s":start,"history_blocks":4,"cadence_seconds":.5,
           "block_end_s":";".join(format(ordered[i].end_s,".17g") for i in chosen),
           "block_start_s":";".join(format(ordered[i].start_s,".17g") for i in chosen),
@@ -1141,9 +1163,14 @@ def _scenario_lineage(config: Mapping[str,object], scenario: str, b0: FrozenB0):
 
 def _iq_for_scenario(config: Mapping[str,object], scenario: str, examples: Sequence[SequenceExample]):
     raw=config["raw_iq_inputs"][scenario];iqcfg=config["iq_conditioner"]
+    physical_recordings=sorted({item.target.recording_id for item in examples})
+    if len(physical_recordings)!=1:
+        raise ValueError(f"{scenario} IQ extraction requires exactly one physical recording for one raw source; "
+                         f"got {physical_recordings}")
+    physical_recording_id=physical_recordings[0]
     max_end=max(min(item.target.source_start_s for item in examples if item.target.event_key==key)
                 for key in {x.target.event_key for x in examples})
-    blocks=extract_iq_blocks(raw["path"],scenario,sample_rate_hz=int(iqcfg["sample_rate_hz"]),
+    blocks=extract_iq_blocks(raw["path"],physical_recording_id,sample_rate_hz=int(iqcfg["sample_rate_hz"]),
       block_duration_s=float(iqcfg["block_duration_seconds"]),block_stride_s=float(iqcfg["block_stride_seconds"]),
       max_end_s=max_end+1e-9)
     return build_event_iq_context(examples,blocks,scenario)

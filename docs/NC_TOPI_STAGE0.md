@@ -340,12 +340,19 @@ flatness, and lag-1 autocorrelation magnitude.
 For each event, the as-of time is the minimum source start over all tracked PRNs.
 Exactly four contiguous 0.5 s-history blocks from the same physical recording, each
 ending no later than that minimum, are reduced by the arithmetic mean and the same
-four-vector is broadcast to every PRN in the event. `iq_context.csv/.npz` stores raw
-sample offsets/counts, block start/end times, all four block feature vectors, reduced
-context, linked event, and PRNs.  The verifier deterministically rereads at least ten
-contexts per scenario from raw int16 IQ and independently recomputes features,
-history, cadence, recording linkage, reduction, and causality.  Missing IQ in any
-primary scenario, including cleanDynamic, is fatal.
+four-vector is broadcast to every PRN in the event. The block extractor is bound to
+the unique physical recording ID carried by the scenario examples, not to the scenario
+label. A single configured raw source with zero or multiple target recording IDs fails
+closed. This matters for `cleanDynamic`, whose frozen external-node `run_id` is distinct
+from the scenario string; identities are not renamed and the scenario remains separate.
+`iq_context.csv/.npz` stores raw sample offsets/counts, block start/end times, all four
+block feature vectors, reduced context, linked event, and PRNs. The data manifest binds
+each scenario to its physical recording ID and configured raw path, size, and hash.
+The verifier rebuilds the `cleanDynamic` ID from the external node CSV, recomputes exact
+target/block group equality for all seven scenarios, rereads at least ten contexts per
+scenario from raw int16 IQ, and independently recomputes features, history, cadence,
+recording linkage, reduction, and causality. Missing IQ in any primary scenario,
+including cleanDynamic, is fatal.
 
 ## Exact score, metric, uncertainty, and plot inventory
 
