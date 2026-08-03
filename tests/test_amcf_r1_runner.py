@@ -111,3 +111,26 @@ def test_window_diagnostics_persist_invariance_duplicate_and_count_distributions
     assert qa['duplicate_epoch_prn_count']==0
     assert qa['prn_input_permutation_invariance_error_max']<1e-10
     assert qa['window_valid_sample_count']['count']==len(records)
+
+
+def test_summary_readme_contains_all_eight_required_interpretation_sections(tmp_path):
+    s=load('sreadme','scripts/summarize_amcf_r1.py')
+    (tmp_path/'metrics.csv').write_text('')
+    (tmp_path/'seed_metrics.csv').write_text('')
+    (tmp_path/'query_policy_metrics.csv').write_text('')
+    (tmp_path/'prompt_rejection_by_phase.csv').write_text('')
+    (tmp_path/'model_audit.json').write_text('{}')
+    (tmp_path/'window_qa.json').write_text('{"scenarios": []}')
+    s.summarize(tmp_path)
+    text=(tmp_path/'README.md').read_text()
+    for heading in (
+        '1. Temporal aggregation and clean FPR',
+        '2. Complex versus magnitude',
+        '3. Phase destruction',
+        '4. Sample-dependent active paths',
+        '5. Fixed/random policy comparison',
+        '6. B0 comparison',
+        '7. Failure attribution',
+        '8. WCL claims',
+    ):
+        assert heading in text
