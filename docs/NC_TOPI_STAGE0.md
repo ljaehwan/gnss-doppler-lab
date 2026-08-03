@@ -355,3 +355,21 @@ and physics evidence.  README and complete self-excluding SHA256 inventory are
 byte-deterministic.  PD-ML, correlator LASSO, and B0 remain distinct baselines; no
 result here identifies a universal detector or a causal RF mechanism, and historical
 B0 training overlap remains an explicit limitation.
+
+
+## Sealed projection and clean-geometry cache
+
+Stage-0 creates exactly one factory-only `ProjectionWorkspace` from the validated clean-training
+`CovarianceFit`.  The workspace seals the covariance content/construction digests, `W`, its symmetric
+square root, and the rank tolerance.  Every workspace-backed projection revalidates the covariance and
+workspace seals; callers cannot supply an unsealed raw whitening matrix.
+
+For each clean pair, the runner builds the pair-bound primary tangent basis and TOPI geometry once.
+The resulting sealed `ScoreBundle` is cached with pair, basis, covariance, and workspace provenance.
+Actual and shuffled NC-TOPI condition this same validated geometry, rather than projecting again.
+Attack pairs follow the same one-primary-projection rule without entering the clean cache. Width,
+amplitude-only, and shift-only diagnostics retain the frozen method inventory and reuse whitening.
+
+The production runner emits flushed secret-free JSON progress lines at phase boundaries and every
+1,000 scored pairs. IQ history selection uses recording-group indices and binary search, and its exact
+selected block indices remain in the evidence audit.

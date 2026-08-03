@@ -61,7 +61,7 @@ def test_production_ast_wires_all_typed_apis_and_freeze_precedes_loader():
         if isinstance(node,ast.Call) and isinstance(node.func,ast.Attribute) and isinstance(node.func.value,ast.Name) and node.func.value.id=="core":
             calls.add(node.func.attr)
     assert {"source_support_split","fit_shrinkage_covariance","primary_tangent_basis",
-      "produce_topi_scores","produce_nc_topi_scores","build_width_ablation_basis",
+      "produce_topi_scores","condition_topi_scores","build_width_ablation_basis",
       "produce_width_ablation_scores","aggregate_prn_scores","shuffled_control_target",
       "calibrate_threshold","paired_pauc_delta_block_bootstrap","evaluate_stage0_decision"}<=calls
     source=inspect.getsource(r.run_campaign)
@@ -230,3 +230,59 @@ def test_synthetic_physics_raw_trials_are_deterministic_and_threshold_free():
     assert len(a["raw_trials"])==100 and len(a["second_peak_grid"])==25
     assert a["attack_thresholds_used"] is False and a["raw_trials"]==b["raw_trials"]
     assert max(x["b0_relative_difference"] for x in a["raw_trials"])<=1e-8
+
+
+
+def test_iq_event_evidence_reuses_core_selected_indices(monkeypatch):
+    blocks=[r.IQBlock("rec", i*.5, i*.5+.01, i*10, 10, np.full(4, i, float)) for i in range(8)]
+    target=r.NodeWindow("rec","cleanStatic","G01",0,0,7,3.,3.,2.5,2.5,4,0,3,np.ones(9))
+    example=r.SequenceExample(tuple([target]*12),target,7)
+    calls=[]
+    original=r.causal_iq_context
+    def wrapped(*args,**kwargs):
+        predictors,audit=original(*args,**kwargs);calls.append(audit["selected_block_indices"]);return predictors,audit
+    monkeypatch.setattr(r,"causal_iq_context",wrapped)
+    pair_x,rows,audit=r.build_event_iq_context([example],blocks,"cleanStatic")
+    assert len(calls)==1 and calls[0]==[[2,3,4,5]]
+    assert rows[0]["sample_offset"]=="20;30;40;50"
+    assert np.array_equal(pair_x[0],np.full(4,3.5))
+    assert audit["selection_algorithm"]=="group_index_searchsorted"
+
+
+def test_runner_source_has_single_primary_geometry_and_clean_cache_reuse():
+    import inspect
+    fit=inspect.getsource(r._fit_geometry);score=inspect.getsource(r.score_scenario)
+    assert '"geometry_cache"' in fit and 'state.get("geometry_cache")' in score
+    assert score.count("produce_topi_scores(")==1
+    assert "condition_topi_scores(" in score
+    assert "workspace=workspace" in score
+
+
+
+def test_score_scenario_calls_primary_geometry_once_for_attack_and_zero_for_clean_cache(monkeypatch):
+    from types import SimpleNamespace
+    peak=np.exp(-4*r.core.CANONICAL_TAP_COORDS**2);std=np.ones(9);pairs=[];examples=[]
+    for i in range(2):
+        residual=np.linspace(-.1,.1,9)+i*.01
+        ident=r.identity("rec","DS1","G01",i,10.+i)
+        pairs.append(r.core.PeakPredictionPair(peak+residual,peak,residual,std,ident,
+          r.core.RAW_SPACE,r.core.RAW_SPACE,r.core.STANDARDIZED_SPACE,r.core.CANONICAL_TAP_COORDS))
+        target=SimpleNamespace(source_start_s=10.+i,source_end_s=11.+i)
+        examples.append(SimpleNamespace(target=target))
+    projection=SimpleNamespace(tangent_energy=.2)
+    top=SimpleNamespace(b0=.1,total=.3,tangent=.2,topi=.1)
+    calls=[]
+    monkeypatch.setattr(r.core,"primary_tangent_basis",lambda *a,**k:SimpleNamespace(matrix=np.ones((9,2))))
+    def produce(*a,**k): calls.append(a[0].identity);return top
+    monkeypatch.setattr(r.core,"produce_topi_scores",produce)
+    monkeypatch.setattr(r.core,"condition_topi_scores",lambda *a,**k:SimpleNamespace(nc_topi=.05))
+    monkeypatch.setattr(r.core,"build_width_ablation_basis",lambda *a,**k:object())
+    monkeypatch.setattr(r.core,"produce_width_ablation_scores",lambda *a,**k:SimpleNamespace(score=SimpleNamespace(tangent=.25)))
+    monkeypatch.setattr(r.core,"weighted_project",lambda *a,**k:projection)
+    monkeypatch.setattr(r,"assert_same_epoch_mask",lambda x:None)
+    state={"covariance":SimpleNamespace(W=np.eye(9)),"workspace":object(),"conditioner":object(),"shuffled":object()}
+    r.score_scenario(examples,pairs,np.ones((2,4)),state,onsets={"DS1":0.})
+    assert len(calls)==2
+    state["geometry_cache"]=tuple((SimpleNamespace(matrix=np.ones((9,2))),top) for _ in pairs)
+    r.score_scenario(examples,pairs,np.ones((2,4)),state,onsets={"DS1":0.})
+    assert len(calls)==2

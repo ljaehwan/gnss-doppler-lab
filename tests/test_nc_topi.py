@@ -729,3 +729,64 @@ def test_primary_alarm_checks_detector_aggregator_quantile_and_factory_seal():
     with pytest.raises(ValueError, match="calibrated"):
         n.produce_nc_topi_scores(p, basis, cov, conditioner=uncalibrated,
                                  iq_features=np.ones((1, 4)))
+
+
+# Projection workspace/performance contracts.
+def test_projection_workspace_reuses_whitening_preserves_scores_and_tamper_fails():
+    p = pair(delta=np.arange(9) / 13); cov = covariance()
+    basis = n.primary_tangent_basis(p, n.CANONICAL_TAP_COORDS, cov)
+    legacy = n.produce_topi_scores(p, basis, cov)
+    workspace = n.ProjectionWorkspace.from_covariance(cov)
+    cached = n.produce_topi_scores(p, basis, cov, workspace=workspace)
+    assert cached.topi == pytest.approx(legacy.topi, rel=1e-13, abs=1e-14)
+    assert np.allclose(cached.projection.r_perp, legacy.projection.r_perp, rtol=1e-13, atol=1e-14)
+    assert cached.projection.orthogonality_verified_full_span == legacy.projection.orthogonality_verified_full_span
+    object.__setattr__(workspace, "covariance_fit_digest_sha256", "0" * 64)
+    with pytest.raises(ValueError, match="workspace|covariance"):
+        n.produce_topi_scores(p, basis, cov, workspace=workspace)
+
+
+def test_condition_precomputed_geometry_matches_old_api_and_rejects_wrong_pair_basis():
+    p = pair(delta=np.arange(9) / 17); cov = covariance()
+    basis = n.primary_tangent_basis(p, n.CANONICAL_TAP_COORDS, cov)
+    workspace = n.ProjectionWorkspace.from_covariance(cov)
+    top = n.produce_topi_scores(p, basis, cov, workspace=workspace)
+    conditioner, _ = fitted_conditioner()
+    features = np.ones((1, 4))
+    old = n.produce_nc_topi_scores(p, basis, cov, conditioner=conditioner,
+                                    iq_features=features, workspace=workspace)
+    reused = n.condition_topi_scores(top, p, basis, cov, conditioner=conditioner,
+                                     iq_features=features, workspace=workspace)
+    assert reused.nc_topi == pytest.approx(old.nc_topi, rel=0, abs=0)
+    assert reused.topi == pytest.approx(top.topi, rel=0, abs=0)
+    other = pair(("other", "G01", 88), delta=np.arange(9) / 17)
+    other_basis = n.primary_tangent_basis(other, n.CANONICAL_TAP_COORDS, cov)
+    with pytest.raises(ValueError, match="identity|pair|geometry"):
+        n.condition_topi_scores(top, other, other_basis, cov, conditioner=conditioner,
+                                iq_features=features, workspace=workspace)
+
+
+def test_workspace_projection_inventory_1000_pairs_under_15_seconds():
+    import time
+    rng = np.random.default_rng(20260803); predicted = peak(); std = np.linspace(.5, 1.3, 9)
+    ps = []
+    for i in range(1030):
+        residual = rng.normal(0, .08, 9)
+        ident = n.EpochIdentity("perf", "cleanStatic", f"G{i % 24 + 1:02d}", i, 1000 + i * .5)
+        ps.append(n.PeakPredictionPair(predicted + residual, predicted, residual / std, std, ident,
+            n.RAW_SPACE, n.RAW_SPACE, n.STANDARDIZED_SPACE, n.CANONICAL_TAP_COORDS))
+    train = ps[:30]; cov = n.fit_shrinkage_covariance(train,
+        provenance=n.FitProvenance("cleanStatic", "normal_train", tuple(x.identity for x in train)))
+    workspace = n.ProjectionWorkspace.from_covariance(cov)
+    start = time.perf_counter()
+    for p in ps[30:]:
+        basis = n.primary_tangent_basis(p, n.CANONICAL_TAP_COORDS, cov)
+        top = n.produce_topi_scores(p, basis, cov, workspace=workspace)
+        width_basis = n.build_width_ablation_basis(p, n.CANONICAL_TAP_COORDS, cov)
+        n.produce_width_ablation_scores(p, width_basis, cov, workspace=workspace)
+        n.weighted_project(p.residual_raw, basis.matrix[:, [0]], cov.W,
+                           workspace=workspace, covariance=cov)
+        n.weighted_project(p.residual_raw, basis.matrix[:, [1]], cov.W,
+                           workspace=workspace, covariance=cov)
+        assert np.isfinite(top.topi)
+    assert time.perf_counter() - start < 15

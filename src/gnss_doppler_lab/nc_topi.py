@@ -52,10 +52,11 @@ def _array(value, name, ndim=None):
 
 
 def _epoch_identity_seal(recording_id,scenario,prn,target_index,availability_time_s):
-    payload={"type":"EpochIdentity.v1","recording_id":{"str":recording_id},
-      "scenario":{"str":scenario},"prn":{"str":prn},"target_index":{"int":str(int(target_index))},
-      "availability_time_s":{"float64":float(availability_time_s).hex()}}
-    return hashlib.sha256(json.dumps(payload,separators=(",",":"),sort_keys=True).encode()).hexdigest()
+    # Length-delimited primitive encoding is canonical and avoids JSON in hot seal checks.
+    digest=hashlib.sha256(b"EpochIdentity.v1\0")
+    for value in (recording_id,scenario,prn,str(int(target_index)),float(availability_time_s).hex()):
+        data=str(value).encode("utf-8");digest.update(len(data).to_bytes(8,"big"));digest.update(data)
+    return digest.hexdigest()
 
 
 @dataclass(frozen=True)
@@ -156,9 +157,12 @@ def _digest_json(value):
 
 
 def _identity_digest(identities):
-    values = tuple(identities)
-    for identity in values: _require_identity(identity)
-    return _digest_json({"type_tag": "ordered_epoch_identities.v1", "identities": values})
+    values=tuple(identities);digest=hashlib.sha256(b"ordered_epoch_identities.v1\0")
+    for identity in values:
+        _require_identity(identity)
+        data=identity._construction_seal.encode("ascii");digest.update(data)
+    digest.update(len(values).to_bytes(8,"big"))
+    return digest.hexdigest()
 
 
 def _array_digest(value):
@@ -403,8 +407,9 @@ class TangentBasis:
         for name,value in assignments: object.__setattr__(instance,name,value)
         return instance
 
-    def validate_for_pair(self, pair, covariance, *, primary):
-        _validate_pair(pair); _validate_covariance_fit(covariance)
+    def validate_for_pair(self, pair, covariance, *, primary, _covariance_content_only=False):
+        _validate_pair(pair)
+        (_validate_covariance_content_seal if _covariance_content_only else _validate_covariance_fit)(covariance)
         expected_kind="primary_amp_shift" if primary else "width_diagnostic"
         expected_names=("amplitude","shift") if primary else ("amplitude","shift","width")
         if self.basis_kind != expected_kind: raise ValueError(f"{self.basis_kind} basis cannot be used as {expected_kind}")
@@ -562,11 +567,13 @@ def _covariance_seal(sigma,weight,unfloored,audit,input_digest):
       "Sigma_unfloored":_array_digest(unfloored),"audit":dict(audit),"input_digest":input_digest})
 
 
-def _validate_covariance_fit(fit):
+def _validate_covariance_content_seal(fit):
+    """Validate immutable covariance content without repeating its eigensolve."""
     if not isinstance(fit,CovarianceFit): raise TypeError("primary geometry requires a sealed CovarianceFit, not raw W")
-    sigma=_array(fit.Sigma,"CovarianceFit Sigma",2); weight=_array(fit.W,"CovarianceFit W",2); _validate_weight(weight,sigma.shape[0])
+    sigma=_array(fit.Sigma,"CovarianceFit Sigma",2); weight=_array(fit.W,"CovarianceFit W",2)
     unfloored=_array(fit.Sigma_unfloored,"CovarianceFit Sigma_unfloored",2)
-    if sigma.shape != unfloored.shape or sigma.shape != (9,9): raise ValueError("CovarianceFit dimension is not canonical nine-tap")
+    if sigma.shape != unfloored.shape or sigma.shape != (9,9) or weight.shape != sigma.shape:
+        raise ValueError("CovarianceFit dimension is not canonical nine-tap")
     if not isinstance(fit.audit,Mapping): raise ValueError("CovarianceFit audit is invalid")
     audit=dict(fit.audit)
     if audit.get("scenario") != "cleanStatic" or audit.get("fit_role") != "normal_train residual_raw only" or audit.get("residual_space") != RAW_SPACE:
@@ -575,6 +582,12 @@ def _validate_covariance_fit(fit):
         raise ValueError("CovarianceFit input digest audit is invalid")
     expected=_covariance_seal(sigma,weight,unfloored,audit,fit.input_digest_sha256)
     if expected != fit._construction_seal: raise ValueError("CovarianceFit construction seal is invalid")
+    return fit
+
+
+def _validate_covariance_fit(fit):
+    fit=_validate_covariance_content_seal(fit)
+    sigma=np.asarray(fit.Sigma);weight=_validate_weight(fit.W,sigma.shape[0]);audit=dict(fit.audit)
     expected_weight=np.linalg.pinv(sigma,rcond=float(audit["pinv_rcond"]),hermitian=True)
     if not np.allclose(weight,expected_weight,rtol=1e-12,atol=1e-14):
         raise ValueError("CovarianceFit W does not match sealed Sigma/audit")
@@ -621,6 +634,65 @@ def fit_shrinkage_covariance(pairs_or_batch, *, provenance, floor_relative=1e-8,
     return _validate_covariance_fit(result)
 
 
+@dataclass(frozen=True, init=False)
+class ProjectionWorkspace:
+    """Factory-only whitening workspace sealed to one validated CovarianceFit."""
+    covariance_fit_digest_sha256: str
+    covariance_content_digest_sha256: str
+    weight_digest_sha256: str
+    sqrtW: np.ndarray
+    pinv_rcond: float
+    _construction_seal: str
+
+    def __new__(cls,*args,**kwargs):
+        raise TypeError("ProjectionWorkspace is factory-only; use from_covariance")
+
+    @classmethod
+    def from_covariance(cls,covariance,pinv_rcond=1e-10):
+        _validate_covariance_fit(covariance)
+        if not isinstance(pinv_rcond,Real) or isinstance(pinv_rcond,(bool,np.bool_)) or not 0 < pinv_rcond < 1:
+            raise ValueError("workspace pinv_rcond must be in (0,1)")
+        eigenvalues,eigenvectors=np.linalg.eigh(np.asarray(covariance.W))
+        eigenvalues=np.maximum(eigenvalues,0.)
+        sqrtW=(eigenvectors*np.sqrt(eigenvalues))@eigenvectors.T
+        covariance_content=_covariance_seal(covariance.Sigma,covariance.W,covariance.Sigma_unfloored,
+                                             dict(covariance.audit),covariance.input_digest_sha256)
+        values={"covariance_fit_digest_sha256":covariance._construction_seal,
+                "covariance_content_digest_sha256":covariance_content,
+                "weight_digest_sha256":_array_digest(covariance.W),
+                "sqrtW_digest_sha256":_array_digest(sqrtW),"pinv_rcond":float(pinv_rcond)}
+        seal=_digest_json({"type_tag":"ProjectionWorkspace.v1",**values})
+        instance=object.__new__(cls)
+        for name,value in (("covariance_fit_digest_sha256",values["covariance_fit_digest_sha256"]),
+          ("covariance_content_digest_sha256",covariance_content),("weight_digest_sha256",values["weight_digest_sha256"]),
+          ("sqrtW",_readonly_array(sqrtW,"sqrtW",2)),("pinv_rcond",float(pinv_rcond)),("_construction_seal",seal)):
+            object.__setattr__(instance,name,value)
+        return instance
+
+    def validate_for_covariance(self,covariance):
+        _validate_covariance_content_seal(covariance)
+        covariance_content=_covariance_seal(covariance.Sigma,covariance.W,covariance.Sigma_unfloored,
+                                             dict(covariance.audit),covariance.input_digest_sha256)
+        if self.covariance_fit_digest_sha256 != covariance._construction_seal or self.covariance_content_digest_sha256 != covariance_content:
+            raise ValueError("projection workspace covariance seal does not match")
+        if self.weight_digest_sha256 != _array_digest(covariance.W):
+            raise ValueError("projection workspace weight digest does not match covariance")
+        sqrtW=_array(self.sqrtW,"ProjectionWorkspace sqrtW",2)
+        if sqrtW.shape != covariance.W.shape or not 0 < self.pinv_rcond < 1:
+            raise ValueError("projection workspace dimensions/tolerance are invalid")
+        values={"covariance_fit_digest_sha256":self.covariance_fit_digest_sha256,
+                "covariance_content_digest_sha256":self.covariance_content_digest_sha256,
+                "weight_digest_sha256":self.weight_digest_sha256,
+                "sqrtW_digest_sha256":_array_digest(sqrtW),"pinv_rcond":float(self.pinv_rcond)}
+        if _digest_json({"type_tag":"ProjectionWorkspace.v1",**values}) != self._construction_seal:
+            raise ValueError("ProjectionWorkspace construction seal is invalid")
+        # The square-root identity catches replacement even if a caller also rewrites public digests.
+        scale=max(1.,float(np.linalg.norm(covariance.W,ord=2)))
+        if not np.allclose(sqrtW@sqrtW,covariance.W,rtol=1e-9,atol=1e-12*scale):
+            raise ValueError("ProjectionWorkspace sqrtW does not match covariance W")
+        return self
+
+
 @dataclass(frozen=True)
 class ProjectionResult:
     coefficients: np.ndarray
@@ -664,18 +736,22 @@ def _energy_audit(r, fitted, perp, weight):
     return total, tangent, perpendicular, cross
 
 
-def _project(residual, J, W, *, ridge_relative, pinv_rcond, projection_kind):
+def _project(residual, J, W, *, ridge_relative, pinv_rcond, projection_kind, sqrt_weight=None,
+             weight_prevalidated=False):
     r = _array(residual, "residual", 1)
     basis = _array(J, "J", 2)
     if basis.shape[0] != r.size:
         raise ValueError("residual and J dimensions do not match")
-    weight = _validate_weight(W, r.size)
-    if basis.shape[1] < 1 or not 0 < pinv_rcond < 1 or ridge_relative < 0:
+    weight = _array(W,"W",2) if weight_prevalidated else _validate_weight(W, r.size)
+    if weight.shape != (r.size,r.size) or basis.shape[1] < 1 or not 0 < pinv_rcond < 1 or ridge_relative < 0:
         raise ValueError("projection parameters invalid")
-
-    eigenvalues, eigenvectors = np.linalg.eigh(weight)
-    eigenvalues = np.maximum(eigenvalues, 0.)
-    sqrt_weight = (eigenvectors * np.sqrt(eigenvalues)) @ eigenvectors.T
+    if sqrt_weight is None:
+        eigenvalues, eigenvectors = np.linalg.eigh(weight)
+        eigenvalues = np.maximum(eigenvalues, 0.)
+        sqrt_weight = (eigenvectors * np.sqrt(eigenvalues)) @ eigenvectors.T
+    else:
+        sqrt_weight=_array(sqrt_weight,"sqrtW",2)
+        if sqrt_weight.shape != weight.shape: raise ValueError("sqrtW dimensions do not match W")
     whitened_basis = sqrt_weight @ basis
     whitened_residual = sqrt_weight @ r
     U, singular, Vt = np.linalg.svd(whitened_basis, full_matrices=False)
@@ -727,10 +803,21 @@ def _project(residual, J, W, *, ridge_relative, pinv_rcond, projection_kind):
         full_verified, scope)
 
 
-def weighted_project(residual, J, W, *, pinv_rcond=1e-10):
-    """Whitened-SVD Moore-Penrose W projector with explicit rank cutoff."""
-    return _project(residual, J, W, ridge_relative=0.0, pinv_rcond=pinv_rcond,
-                    projection_kind="orthogonal_whitened_svd")
+def weighted_project(residual, J, W, *, pinv_rcond=1e-10, workspace=None, covariance=None):
+    """Whitened-SVD Moore-Penrose W projector; optionally reuse sealed whitening."""
+    if workspace is None:
+        if covariance is not None: raise ValueError("covariance requires a ProjectionWorkspace")
+        return _project(residual,J,W,ridge_relative=0.0,pinv_rcond=pinv_rcond,
+                        projection_kind="orthogonal_whitened_svd")
+    if not isinstance(workspace,ProjectionWorkspace): raise TypeError("workspace must be a ProjectionWorkspace")
+    if covariance is None: raise TypeError("workspace projection requires its sealed CovarianceFit")
+    workspace.validate_for_covariance(covariance)
+    if _array_digest(W) != workspace.weight_digest_sha256: raise ValueError("W does not match workspace covariance")
+    if not np.isclose(pinv_rcond,workspace.pinv_rcond,rtol=0,atol=0):
+        raise ValueError("projection tolerance does not match workspace")
+    return _project(residual,J,W,ridge_relative=0.0,pinv_rcond=pinv_rcond,
+                    projection_kind="orthogonal_whitened_svd",sqrt_weight=workspace.sqrtW,
+                    weight_prevalidated=True)
 
 
 def weighted_project_ridge_diagnostic(residual, J, W, *, lambda_relative=1e-8,
@@ -764,51 +851,110 @@ class ScoreBundle:
     projection: ProjectionResult
     conditioner_transform: np.ndarray | None
     spaces: Mapping[str, str]
+    pair_content_digest_sha256: str
+    basis_construction_seal: str
+    covariance_fit_digest_sha256: str
+    workspace_construction_seal: str
+    _construction_seal: str
 
 
-def _produce_geometry(pair,basis,covariance,*,primary,energy_epsilon):
-    _validate_pair(pair); _validate_covariance_fit(covariance)
+def _projection_digest(projection):
+    if not isinstance(projection,ProjectionResult): raise TypeError("ScoreBundle projection is invalid")
+    return _digest_json({"type_tag":"ProjectionResult.v1","coefficients":_array_digest(projection.coefficients),
+      "fitted":_array_digest(projection.fitted),"r_perp":_array_digest(projection.r_perp),
+      "scalars":tuple(getattr(projection,name) for name in ("total_energy","tangent_energy","perp_energy",
+      "cross_energy","orthogonality_defect","rank","normal_rank","condition","ridge","projection_kind",
+      "effective_rank","rank_tolerance","orthogonality_tolerance","full_span_orthogonality_defect",
+      "orthogonality_verified_full_span","orthogonality_scope"))})
+
+
+def _score_seal(pair,basis,covariance,workspace,projection,b0,total,tangent,perp,cross,topi,scale,nc,transformed,spaces):
+    return _digest_json({"type_tag":"ScoreBundle.v2","identity":pair.identity,
+      "pair_content_digest":pair._content_digest_sha256,"basis_seal":basis._construction_seal,
+      "covariance_seal":covariance._construction_seal,"workspace_seal":workspace._construction_seal,
+      "projection_digest":_projection_digest(projection),"scores":(b0,total,tangent,perp,cross,topi,scale,nc),
+      "transform_digest":None if transformed is None else _array_digest(transformed),"spaces":dict(spaces)})
+
+
+def _produce_geometry(pair,basis,covariance,workspace,*,primary,energy_epsilon):
+    _validate_pair(pair)
+    if workspace is None: workspace=ProjectionWorkspace.from_covariance(covariance)
+    if not isinstance(workspace,ProjectionWorkspace): raise TypeError("workspace must be a ProjectionWorkspace")
+    workspace.validate_for_covariance(covariance)
     if not isinstance(basis,TangentBasis):
         raise TypeError("score construction requires a sealed TangentBasis, not a raw basis matrix")
-    basis.validate_for_pair(pair,covariance,primary=primary)
+    basis.validate_for_pair(pair,covariance,primary=primary,_covariance_content_only=True)
     if not isinstance(energy_epsilon,Real) or isinstance(energy_epsilon,(bool,np.bool_)) or energy_epsilon <= 0:
         raise ValueError("energy_epsilon must be positive")
-    projection=weighted_project(pair.residual_raw,basis.matrix,covariance.W)
-    return projection,float(projection.perp_energy)
+    projection=_project(pair.residual_raw,basis.matrix,covariance.W,ridge_relative=0.,
+      pinv_rcond=workspace.pinv_rcond,projection_kind="orthogonal_whitened_svd",
+      sqrt_weight=workspace.sqrtW,weight_prevalidated=True)
+    return projection,float(projection.perp_energy),workspace
 
 
-def _score_bundle(pair,projection,topi,scale,transformed):
-    return ScoreBundle(pair.identity,b0_rmse(pair.residual_standardized),projection.total_energy,
-      projection.tangent_energy,projection.perp_energy,projection.cross_energy,topi,scale,
-      topi/max(scale,1e-12),projection,transformed,
-      MappingProxyType({"geometry":RAW_SPACE,"b0":STANDARDIZED_SPACE,
-                        "conditioner_target":"log_raw_perp_energy"}))
+def _score_bundle(pair,basis,covariance,workspace,projection,topi,scale,transformed,*,energy_epsilon=1e-12):
+    spaces=MappingProxyType({"geometry":RAW_SPACE,"b0":STANDARDIZED_SPACE,
+                             "conditioner_target":"log_raw_perp_energy"})
+    b0=float(b0_rmse(pair.residual_standardized));scale=float(scale);nc=float(topi/max(scale,float(energy_epsilon)))
+    transformed=None if transformed is None else _readonly_array(transformed,"conditioner transform",2)
+    values=(b0,float(projection.total_energy),float(projection.tangent_energy),float(projection.perp_energy),
+            float(projection.cross_energy),float(topi),scale,nc)
+    seal=_score_seal(pair,basis,covariance,workspace,projection,*values,transformed,spaces)
+    return ScoreBundle(pair.identity,*values,projection,transformed,spaces,pair._content_digest_sha256,
+      basis._construction_seal,covariance._construction_seal,workspace._construction_seal,seal)
 
 
-def produce_topi_scores(pair: PeakPredictionPair,basis: TangentBasis,covariance: CovarianceFit,*,energy_epsilon=1e-12):
-    """Pure TOPI score from pair/basis/covariance sealed primary state."""
-    projection,topi=_produce_geometry(pair,basis,covariance,primary=True,energy_epsilon=energy_epsilon)
-    return _score_bundle(pair,projection,topi,1.0,None)
+def _validate_precomputed_geometry(score,pair,basis,covariance,workspace):
+    if not isinstance(score,ScoreBundle): raise TypeError("precomputed geometry must be a ScoreBundle")
+    _validate_pair(pair);workspace.validate_for_covariance(covariance);basis.validate_for_pair(pair,covariance,primary=True,_covariance_content_only=True)
+    expected=(pair.identity,pair._content_digest_sha256,basis._construction_seal,covariance._construction_seal,
+              workspace._construction_seal)
+    actual=(score.identity,score.pair_content_digest_sha256,score.basis_construction_seal,
+            score.covariance_fit_digest_sha256,score.workspace_construction_seal)
+    if actual != expected: raise ValueError("precomputed geometry identity/pair/basis/covariance/workspace provenance mismatch")
+    if score.predicted_scale != 1. or score.conditioner_transform is not None or score.nc_topi != score.topi:
+        raise ValueError("precomputed ScoreBundle is not unconditioned primary TOPI geometry")
+    seal=_score_seal(pair,basis,covariance,workspace,score.projection,score.b0,score.total,score.tangent,
+                     score.perp,score.cross,score.topi,score.predicted_scale,score.nc_topi,
+                     score.conditioner_transform,score.spaces)
+    if seal != score._construction_seal: raise ValueError("precomputed ScoreBundle geometry seal is invalid")
+    return score
 
 
-def produce_nc_topi_scores(pair: PeakPredictionPair,basis: TangentBasis,covariance: CovarianceFit,*,
-                           conditioner,iq_features,energy_epsilon=1e-12):
-    """Primary conditioned NC-TOPI; a fitted+calibrated sealed conditioner is mandatory."""
-    projection,topi=_produce_geometry(pair,basis,covariance,primary=True,energy_epsilon=energy_epsilon)
+def produce_topi_scores(pair: PeakPredictionPair,basis: TangentBasis,covariance: CovarianceFit,*,
+                        energy_epsilon=1e-12,workspace=None):
+    """Pure TOPI score, optionally using covariance-sealed reusable whitening."""
+    projection,topi,workspace=_produce_geometry(pair,basis,covariance,workspace,primary=True,
+                                                 energy_epsilon=energy_epsilon)
+    return _score_bundle(pair,basis,covariance,workspace,projection,topi,1.0,None,
+                         energy_epsilon=energy_epsilon)
+
+
+def condition_topi_scores(precomputed: ScoreBundle,pair: PeakPredictionPair,basis: TangentBasis,
+                          covariance: CovarianceFit,*,conditioner,iq_features,workspace,
+                          energy_epsilon=1e-12):
+    """Condition validated precomputed TOPI geometry without any projection bypass."""
+    if not isinstance(workspace,ProjectionWorkspace): raise TypeError("workspace must be a ProjectionWorkspace")
+    geometry=_validate_precomputed_geometry(precomputed,pair,basis,covariance,workspace)
     if not isinstance(conditioner,RobustConditioner):
         raise TypeError("primary NC-TOPI requires a RobustConditioner")
-    conditioner.validate_seal(require_calibrated=True)
     features=_array(iq_features,"iq_features",2)
     if features.shape != (1,len(CONDITIONER_FEATURE_SCHEMA)):
         raise ValueError("one PeakPredictionPair requires one row of four frozen IQ features")
-    transformed=_readonly_array(conditioner.conditioner_transform(features),"conditioner transform",2)
-    predicted=_array(conditioner.predict_scale(features),"predicted scale",1)
+    transformed,predicted=conditioner.conditioned_scale_transform(features)
+    predicted=_array(predicted,"predicted scale",1)
     if len(predicted)!=1 or predicted[0] <= 0: raise ValueError("conditioner must return one positive scale")
-    scale=float(predicted[0])
-    score=_score_bundle(pair,projection,topi,scale,transformed)
-    return ScoreBundle(score.identity,score.b0,score.total,score.tangent,score.perp,score.cross,
-      score.topi,score.predicted_scale,topi/max(scale,float(energy_epsilon)),score.projection,
-      score.conditioner_transform,score.spaces)
+    return _score_bundle(pair,basis,covariance,workspace,geometry.projection,geometry.topi,float(predicted[0]),
+                         transformed,energy_epsilon=energy_epsilon)
+
+
+def produce_nc_topi_scores(pair: PeakPredictionPair,basis: TangentBasis,covariance: CovarianceFit,*,
+                           conditioner,iq_features,energy_epsilon=1e-12,workspace=None):
+    """Primary conditioned NC-TOPI; computes geometry once then conditions it."""
+    if workspace is None: workspace=ProjectionWorkspace.from_covariance(covariance)
+    top=produce_topi_scores(pair,basis,covariance,energy_epsilon=energy_epsilon,workspace=workspace)
+    return condition_topi_scores(top,pair,basis,covariance,conditioner=conditioner,
+      iq_features=iq_features,workspace=workspace,energy_epsilon=energy_epsilon)
 
 
 @dataclass(frozen=True)
@@ -819,9 +965,10 @@ class WidthDiagnosticScore:
 
 
 def produce_width_ablation_scores(pair: PeakPredictionPair,basis: TangentBasis,
-                                   covariance: CovarianceFit,*,energy_epsilon=1e-12):
-    projection,topi=_produce_geometry(pair,basis,covariance,primary=False,energy_epsilon=energy_epsilon)
-    return WidthDiagnosticScore("width_diagnostic",False,_score_bundle(pair,projection,topi,1.0,None))
+                                   covariance: CovarianceFit,*,energy_epsilon=1e-12,workspace=None):
+    projection,topi,workspace=_produce_geometry(pair,basis,covariance,workspace,primary=False,energy_epsilon=energy_epsilon)
+    return WidthDiagnosticScore("width_diagnostic",False,
+      _score_bundle(pair,basis,covariance,workspace,projection,topi,1.0,None,energy_epsilon=energy_epsilon))
 
 
 @dataclass(frozen=True)
@@ -1029,16 +1176,20 @@ def build_causal_iq_context(target_source_start, block_end, block_features, *, h
             raise ValueError(f"targets must be sorted within group {group}")
     contexts = np.full((len(targets), history, features.shape[1]), np.nan)
     valid = np.zeros(len(targets), bool)
-    selected = []
-    for row, (target, group) in enumerate(zip(targets, target_group)):
-        eligible = np.flatnonzero((block_group == group) & (ends <= target))
-        chosen = eligible[-history:]
-        selected.append(chosen)
-        contiguous = len(chosen) == history and (
-            history == 1 or np.allclose(np.diff(ends[chosen]), cadence, rtol=0, atol=1e-8))
-        if contiguous:
-            contexts[row] = features[chosen]
-            valid[row] = True
+    selected = [None] * len(targets)
+    # O(events log blocks): each group is indexed once and queried by binary search.
+    group_index={group:np.flatnonzero(block_group==group) for group in sorted(set(block_group))}
+    for group,ix in group_index.items():
+        group_ends=ends[ix]
+        for row in np.flatnonzero(target_group==group):
+            right=int(np.searchsorted(group_ends,targets[row],side="right"))
+            chosen=ix[max(0,right-history):right]
+            selected[row]=chosen
+            contiguous = len(chosen) == history and (
+                history == 1 or np.allclose(np.diff(ends[chosen]), cadence, rtol=0, atol=1e-8))
+            if contiguous:
+                contexts[row] = features[chosen]
+                valid[row] = True
     audit = {
         "group_set": tuple(sorted(set(target_group))),
         "groups_exact_match": True,
@@ -1047,6 +1198,7 @@ def build_causal_iq_context(target_source_start, block_end, block_features, *, h
         "cadence_gap_count": gap_count,
         "cadence_ok": gap_count == 0,
         "cross_recording_default": False,
+        "selection_algorithm": "group_index_searchsorted",
     }
     return IQContext(contexts, valid, tuple(selected), audit)
 
@@ -1141,6 +1293,16 @@ class RobustConditioner:
 
     def _uncapped_scale(self,X):
         return np.exp(np.clip(self.predict_log_energy(X),-745,709))
+
+    def conditioned_scale_transform(self,X):
+        """Validate once and return the exact transform and capped scale together."""
+        self.validate_seal(require_calibrated=True)
+        predictors=_array(X,"IQ predictors",2)
+        self._validate_schema(self.feature_names_,predictors.shape[1])
+        transformed=(predictors-self.median_)/self.iqr_
+        logs=np.asarray(self.model_.predict(transformed),dtype=float)
+        scale=np.minimum(np.exp(np.clip(logs,-745,709)),self.cap_)
+        return transformed,scale
 
     def calibrate_cap(self,X_calibration,*,provenance,q=.995):
         self.validate_seal(require_calibrated=False)
@@ -1521,13 +1683,14 @@ def equal_w_norm(vector, reference, W):
     return value * math.sqrt(ref_norm / value_norm)
 
 
-def w_orthogonal_vector(J, W, *, seed=DEFAULT_SEED):
+def w_orthogonal_vector(J, W, *, seed=DEFAULT_SEED, workspace=None, covariance=None):
     basis = _array(J, "J", 2)
-    weight = _validate_weight(W, basis.shape[0])
+    weight = _array(W,"W",2) if workspace is not None else _validate_weight(W,basis.shape[0])
+    if weight.shape != (basis.shape[0],basis.shape[0]): raise ValueError("W dimensions must match basis")
     rng = np.random.default_rng(seed)
     for _ in range(100):
         candidate = rng.normal(size=basis.shape[0])
-        perpendicular = weighted_project(candidate, basis, weight).r_perp
+        perpendicular = weighted_project(candidate,basis,weight,workspace=workspace,covariance=covariance).r_perp
         if _energy(perpendicular, weight, "perpendicular") > 1e-18:
             return perpendicular
     raise ValueError("tangent span has no stable W-orthogonal complement")

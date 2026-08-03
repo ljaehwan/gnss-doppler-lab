@@ -137,6 +137,11 @@ class IQBlock:
         object.__setattr__(self, "features", values)
 
 
+def _emit_progress(phase: str, **fields) -> None:
+    payload={"schema":"gnss-doppler-lab.nc-topi-stage0.progress.v1","phase":phase,**fields}
+    print(json.dumps(payload,sort_keys=True,separators=(",",":")),file=sys.stderr,flush=True)
+
+
 class StageGate:
     """One-way clean-fit state machine; attack metadata cannot leak into fit."""
     REQUIRED_FITS = ("covariance", "conditioner", "conditioner_cap", "shuffled_conditioner",
@@ -147,10 +152,15 @@ class StageGate:
         self._frozen = False
         self._attack_loaded = False
         self._trace: list[str] = []
+        self._started_at=time.perf_counter();self._last_phase_at=self._started_at
+        self._phase_timings: list[dict[str,object]]=[]
 
     def record_phase(self, phase: str) -> None:
         if not isinstance(phase,str) or not phase.strip(): raise ValueError("invalid phase")
-        self._trace.append(phase)
+        now=time.perf_counter();entry={"phase":phase,"phase_seconds":now-self._last_phase_at,
+          "elapsed_seconds":now-self._started_at}
+        self._phase_timings.append(entry);self._last_phase_at=now;self._trace.append(phase)
+        _emit_progress(phase,**{k:round(v,6) for k,v in entry.items() if k!="phase"})
 
     def seal_fit(self, name: str, fit_object: object,
                  row_identities: Iterable[core.EpochIdentity]) -> str:
@@ -188,7 +198,7 @@ class StageGate:
         if missing:
             raise RuntimeError(f"all clean fit objects must be sealed before attack loading: {missing}")
         self._frozen = True
-        self._trace.append("freeze_sealed")
+        self.record_phase("freeze_sealed")
 
     def load_attack_labels(self, onsets: Mapping[str, float]) -> dict[str, float]:
         if not self._frozen:
@@ -208,7 +218,9 @@ class StageGate:
         return {"state": "attack_labels_loaded" if self._attack_loaded else
                 ("fit_frozen" if self._frozen else "clean_fit"),
                 "sealed_fits": dict(sorted(self._sealed.items())),
-                "phase_trace":list(self._trace), "attack_loader_calls":int(self._attack_loaded),
+                "phase_trace":list(self._trace), "phase_timings":list(self._phase_timings),
+                "elapsed_seconds":time.perf_counter()-self._started_at,
+                "attack_loader_calls":int(self._attack_loaded),
                 "attack_fit": False, "scenario_id_in_fit": False,
                 "onset_in_fit": False, "prn_id_in_conditioner": False}
 
@@ -531,7 +543,9 @@ def causal_iq_context(target_source_start: Sequence[float], target_groups: Seque
     audit = dict(context.audit)
     audit.update({"strict_causal": True, "asof_operator": "block_end <= min_target_source_start",
                   "history_blocks": history, "history_reducer": "arithmetic_mean_per_feature",
-                  "selected_block_ends": selected_ends, "feature_schema": list(IQ_FEATURE_NAMES)})
+                  "selected_block_ends": selected_ends,
+                  "selected_block_indices": [ix.astype(int).tolist() for ix in context.block_indices],
+                  "feature_schema": list(IQ_FEATURE_NAMES)})
     return predictors, audit
 
 
@@ -878,23 +892,25 @@ def publish_artifact(final_path: str|Path, *, config: Mapping[str,object],
 
 
 def run_synthetic_physics(pairs: Sequence[core.PeakPredictionPair], covariance,
-                          *, trials: int=100, seed: int=core.DEFAULT_SEED)->dict[str,object]:
+                          *, trials: int=100, seed: int=core.DEFAULT_SEED, workspace=None)->dict[str,object]:
     """Execute frozen threshold-free equal-RMSE, second-peak and nuisance physics grids."""
     if trials!=100: raise ValueError("Stage-0 equal-RMSE trial count is frozen at 100")
     if not pairs: raise ValueError("synthetic physics requires clean-train predicted peaks")
+    workspace=workspace or core.ProjectionWorkspace.from_covariance(covariance)
+    workspace.validate_for_covariance(covariance)
     rng=np.random.default_rng(seed);raw=[]
     for index in range(trials):
         pair=pairs[index%len(pairs)];basis=core.primary_tangent_basis(pair,core.CANONICAL_TAP_COORDS,covariance)
         tangent=basis.matrix@rng.normal(size=2)
-        orth=core.w_orthogonal_vector(basis.matrix,covariance.W,seed=seed+index)
+        orth=core.w_orthogonal_vector(basis.matrix,covariance.W,seed=seed+index,workspace=workspace,covariance=covariance)
         tangent_b0=math.sqrt(float(np.mean((tangent/pair.standardizer_std)**2)))
         orth_b0=math.sqrt(float(np.mean((orth/pair.standardizer_std)**2)))
         if tangent_b0<=0 or orth_b0<=0: raise RuntimeError("degenerate synthetic perturbation")
         tangent=tangent/tangent_b0;orth=orth/orth_b0
         tb=math.sqrt(float(np.mean((tangent/pair.standardizer_std)**2)))
         ob=math.sqrt(float(np.mean((orth/pair.standardizer_std)**2)))
-        tq=core.weighted_project(tangent,basis.matrix,covariance.W).perp_energy
-        oq=core.weighted_project(orth,basis.matrix,covariance.W).perp_energy
+        tq=core.weighted_project(tangent,basis.matrix,covariance.W,workspace=workspace,covariance=covariance).perp_energy
+        oq=core.weighted_project(orth,basis.matrix,covariance.W,workspace=workspace,covariance=covariance).perp_energy
         total=float(orth@covariance.W@orth)
         raw.append({"trial":index,"pair_identity":pair.identity.canonical_payload(),"b0_tangent":tb,
                     "b0_orthogonal":ob,"b0_relative_difference":abs(tb-ob)/max(tb,ob,1e-15),
@@ -910,7 +926,7 @@ def run_synthetic_physics(pairs: Sequence[core.PeakPredictionPair], covariance,
         for separation in core.SECOND_PEAK_SEPARATIONS:
             changed=core.second_peak_perturbation(reference.predicted_raw,core.CANONICAL_TAP_COORDS,power,separation)
             residual=changed-reference.predicted_raw
-            projection=core.weighted_project(residual,basis.matrix,covariance.W)
+            projection=core.weighted_project(residual,basis.matrix,covariance.W,workspace=workspace,covariance=covariance)
             grid.append({"relative_power":power,"separation_chips":separation,
                          "b0":math.sqrt(float(np.mean((residual/reference.standardizer_std)**2))),
                          "topi":float(projection.perp_energy),"residual_raw":residual.tolist(),
@@ -922,14 +938,14 @@ def run_synthetic_physics(pairs: Sequence[core.PeakPredictionPair], covariance,
                 amount=sign*signed
                 residual=(amount*reference.predicted_raw if kind=="amplitude" else
                     core.shift_peak(reference.predicted_raw,core.CANONICAL_TAP_COORDS,amount)-reference.predicted_raw)
-                projection=core.weighted_project(residual,basis.matrix,covariance.W)
+                projection=core.weighted_project(residual,basis.matrix,covariance.W,workspace=workspace,covariance=covariance)
                 nuisance.append({"kind":kind,"amount":amount,"noise_scale":1.,
                     "b0":math.sqrt(float(np.mean((residual/reference.standardizer_std)**2))),
                     "topi":float(projection.perp_energy),"residual_raw":residual.tolist(),
                     "changed_raw":(reference.predicted_raw+residual).tolist()})
     for scale in (1.,1.25,1.5):
         residual=rng.normal(size=9)*reference.standardizer_std*scale
-        projection=core.weighted_project(residual,basis.matrix,covariance.W)
+        projection=core.weighted_project(residual,basis.matrix,covariance.W,workspace=workspace,covariance=covariance)
         nuisance.append({"kind":"noise","amount":0.,"noise_scale":scale,
             "b0":math.sqrt(float(np.mean((residual/reference.standardizer_std)**2))),
             "topi":float(projection.perp_energy),"residual_raw":residual.tolist(),
@@ -943,7 +959,7 @@ def run_synthetic_physics(pairs: Sequence[core.PeakPredictionPair], covariance,
                     np.median([x["tangent_to_orthogonal_topi_ratio"] for x in raw])<=.05 and
                     np.median([x["orthogonal_preserved_fraction"] for x in raw])>=.95)
     clean_b0=max(float(np.median([core.b0_rmse(x.residual_standardized) for x in pairs])),1e-12)
-    clean_topi=max(float(np.median([core.produce_topi_scores(x,core.primary_tangent_basis(x,core.CANONICAL_TAP_COORDS,covariance),covariance).topi for x in pairs])),1e-12)
+    clean_topi=max(float(np.median([core.produce_topi_scores(x,core.primary_tangent_basis(x,core.CANONICAL_TAP_COORDS,covariance),covariance,workspace=workspace).topi for x in pairs])),1e-12)
     for row in nuisance:
         row["b0_normalized"]=row["b0"]/clean_b0;row["topi_normalized"]=row["topi"]/clean_topi
     nuisance_kind={kind:bool(np.median([x["topi_normalized"] for x in nuisance if x["kind"]==kind]) <
@@ -1038,11 +1054,10 @@ def build_event_iq_context(examples: Sequence[SequenceExample], blocks: Sequence
     recordings=[k[0] for k in event_keys]
     predictors,audit=causal_iq_context(starts,recordings,blocks,history=4,cadence=.5)
     ordered=sorted(blocks,key=lambda x:(x.recording_id,x.end_s));pair_x=np.empty((len(examples),4),float);rows=[]
-    selected=audit["selected_block_indices"] if "selected_block_indices" in audit else None
-    # Reconstruct selected indices exactly from the same strict as-of rule for stored raw evidence.
+    selected=audit["selected_block_indices"]
+    # Reuse the exact group-index/searchsorted choices emitted by the sealed core selector.
     for event_pos,(key,start) in enumerate(zip(event_keys,starts)):
-        eligible=[i for i,x in enumerate(ordered) if x.recording_id==key[0] and x.end_s<=start]
-        chosen=eligible[-4:]
+        chosen=selected[event_pos]
         if len(chosen)!=4: raise RuntimeError("event lacks history4 IQ context")
         context=np.mean(np.stack([ordered[i].features for i in chosen]),axis=0)
         if not np.allclose(context,predictors[event_pos],rtol=0,atol=1e-15): raise RuntimeError("IQ history reduction mismatch")
@@ -1101,12 +1116,20 @@ def _fit_geometry(config, examples, pairs, gate: StageGate):
     train_prov=core.FitProvenance("cleanStatic","normal_train",train_ids)
     covariance=core.fit_shrinkage_covariance(train_pairs,provenance=train_prov)
     gate.seal_fit("covariance",covariance,train_ids);gate.record_phase("fit_covariance_clean_train")
-    topi=np.empty(len(pairs))
+    workspace=core.ProjectionWorkspace.from_covariance(covariance)
+    topi=np.empty(len(pairs));geometry_cache=[]
+    started=time.perf_counter()
     for i,pair in enumerate(pairs):
         basis=core.primary_tangent_basis(pair,core.CANONICAL_TAP_COORDS,covariance)
-        topi[i]=core.produce_topi_scores(pair,basis,covariance).topi
+        top=core.produce_topi_scores(pair,basis,covariance,workspace=workspace)
+        topi[i]=top.topi;geometry_cache.append((basis,top))
+        if (i+1)%1000==0 or i+1==len(pairs):
+            elapsed=time.perf_counter()-started
+            _emit_progress("compute_topi_all_clean_pairs",completed=i+1,total=len(pairs),
+                           elapsed_seconds=round(elapsed,6),pairs_per_second=round((i+1)/max(elapsed,1e-12),3))
     gate.record_phase("compute_topi_all_clean")
-    return {"covariance":covariance,"split_indices":indices,"topi":topi,"train_provenance":train_prov}
+    return {"covariance":covariance,"workspace":workspace,"split_indices":indices,"topi":topi,
+      "geometry_cache":tuple(geometry_cache),"train_provenance":train_prov}
 
 
 def _fit_conditioners(config,pairs,iq_x,state,gate: StageGate):
@@ -1128,37 +1151,6 @@ def _fit_conditioners(config,pairs,iq_x,state,gate: StageGate):
     return state
 
 
-def _fit_state(config: Mapping[str,object], examples, pairs, iq_x, gate: StageGate):
-    starts=np.asarray([x.target.source_start_s for x in examples]);ends=np.asarray([x.target.source_end_s for x in examples])
-    masks=core.source_support_split(starts,ends,scenario="cleanStatic")
-    indices={"normal_train":np.flatnonzero(masks.train),"normal_calibration":np.flatnonzero(masks.calibration),
-             "normal_holdout":np.flatnonzero(masks.holdout),"excluded_boundary_crossing":np.flatnonzero(masks.unassigned)}
-    if any(len(indices[x])==0 for x in ("normal_train","normal_calibration","normal_holdout")):
-        raise RuntimeError("cleanStatic source-support split has an empty mandatory role")
-    train_pairs=[pairs[i] for i in indices["normal_train"]];train_ids=tuple(x.identity for x in train_pairs)
-    train_prov=core.FitProvenance("cleanStatic","normal_train",train_ids)
-    covariance=core.fit_shrinkage_covariance(train_pairs,provenance=train_prov)
-    gate.seal_fit("covariance",covariance,train_ids);gate.record_phase("compute_topi_all_clean")
-    topi=np.empty(len(pairs))
-    for i,pair in enumerate(pairs):
-        basis=core.primary_tangent_basis(pair,core.CANONICAL_TAP_COORDS,covariance)
-        topi[i]=core.produce_topi_scores(pair,basis,covariance).topi
-    conditioner=core.RobustConditioner().fit(iq_x[indices["normal_train"]],topi[indices["normal_train"]],provenance=train_prov)
-    gate.seal_fit("conditioner",conditioner,train_ids)
-    shuffled_target=core.shuffled_control_target(topi[indices["normal_train"]],provenance=train_prov,
-        feature_names=IQ_FEATURE_NAMES,seed=int(config["iq_conditioner"]["shuffle_control"]["seed"]))
-    shuffled=core.RobustConditioner().fit(iq_x[indices["normal_train"]],shuffled_target,provenance=train_prov)
-    gate.seal_fit("shuffled_conditioner",shuffled,train_ids);gate.record_phase("fit_conditioners_clean_train")
-    cal_ids=tuple(pairs[i].identity for i in indices["normal_calibration"])
-    cal_prov=core.FitProvenance("cleanStatic","normal_calibration",cal_ids)
-    conditioner.calibrate_cap(iq_x[indices["normal_calibration"]],provenance=cal_prov,q=.995)
-    shuffled.calibrate_cap(iq_x[indices["normal_calibration"]],provenance=cal_prov,q=.995)
-    gate.seal_fit("conditioner_cap",conditioner,cal_ids);gate.seal_fit("shuffled_cap",shuffled,cal_ids)
-    gate.record_phase("calibrate_conditioner_caps")
-    return {"covariance":covariance,"conditioner":conditioner,"shuffled":shuffled,
-      "split_indices":indices,"topi":topi,"train_provenance":train_prov,"calibration_provenance":cal_prov}
-
-
 def _role_interval(scenario: str,start: float,end: float) -> str:
     if scenario!="cleanStatic": return "evaluation"
     if end<=300: return "normal_train"
@@ -1168,17 +1160,28 @@ def _role_interval(scenario: str,start: float,end: float) -> str:
 
 
 def score_scenario(examples, pairs, iq_x, state, *, onsets=None):
-    covariance=state["covariance"];conditioner=state["conditioner"];shuffled=state["shuffled"]
-    scored=[];method_ids={name:[] for name in METHODS}
+    covariance=state["covariance"];workspace=state["workspace"]
+    conditioner=state["conditioner"];shuffled=state["shuffled"]
+    geometry_cache=state.get("geometry_cache")
+    if geometry_cache is not None and len(geometry_cache)!=len(pairs):
+        raise ValueError("clean geometry cache length does not match exact pair inventory")
+    scored=[];method_ids={name:[] for name in METHODS};started=time.perf_counter()
     for pair_sequence_index,(item,pair,features) in enumerate(zip(examples,pairs,iq_x)):
-        basis=core.primary_tangent_basis(pair,core.CANONICAL_TAP_COORDS,covariance)
-        top=core.produce_topi_scores(pair,basis,covariance)
-        nc=core.produce_nc_topi_scores(pair,basis,covariance,conditioner=conditioner,iq_features=features[None,:])
-        sh=core.produce_nc_topi_scores(pair,basis,covariance,conditioner=shuffled,iq_features=features[None,:])
+        if geometry_cache is None:
+            basis=core.primary_tangent_basis(pair,core.CANONICAL_TAP_COORDS,covariance)
+            top=core.produce_topi_scores(pair,basis,covariance,workspace=workspace)
+        else:
+            basis,top=geometry_cache[pair_sequence_index]
+        nc=core.condition_topi_scores(top,pair,basis,covariance,conditioner=conditioner,
+          iq_features=features[None,:],workspace=workspace)
+        sh=core.condition_topi_scores(top,pair,basis,covariance,conditioner=shuffled,
+          iq_features=features[None,:],workspace=workspace)
         width_basis=core.build_width_ablation_basis(pair,core.CANONICAL_TAP_COORDS,covariance)
-        width=core.produce_width_ablation_scores(pair,width_basis,covariance).score
-        amp=core.weighted_project(pair.residual_raw,basis.matrix[:,[0]],covariance.W)
-        shift=core.weighted_project(pair.residual_raw,basis.matrix[:,[1]],covariance.W)
+        width=core.produce_width_ablation_scores(pair,width_basis,covariance,workspace=workspace).score
+        amp=core.weighted_project(pair.residual_raw,basis.matrix[:,[0]],covariance.W,
+                                  workspace=workspace,covariance=covariance)
+        shift=core.weighted_project(pair.residual_raw,basis.matrix[:,[1]],covariance.W,
+                                    workspace=workspace,covariance=covariance)
         values={"B0":top.b0,"total":top.total,"amp_only":amp.tangent_energy,
           "shift_only":shift.tangent_energy,"amp_shift":top.tangent,
           "amp_shift_width":width.tangent,"TOPI":top.topi,"NC_TOPI":nc.nc_topi,
@@ -1188,6 +1191,12 @@ def score_scenario(examples, pairs, iq_x, state, *, onsets=None):
         phase,label=event_phase(pair.identity.scenario,item.target.source_start_s,item.target.source_end_s,onsets)
         scored.append({"example":item,"pair":pair,"scores":values,"phase":phase,"label":label,
                         "pair_sequence_index":pair_sequence_index})
+        completed=pair_sequence_index+1
+        if completed%1000==0 or completed==len(pairs):
+            elapsed=time.perf_counter()-started
+            _emit_progress("score_scenario_pairs",scenario=pair.identity.scenario,completed=completed,
+              total=len(pairs),elapsed_seconds=round(elapsed,6),pairs_per_second=round(completed/max(elapsed,1e-12),3),
+              geometry_cache_reused=geometry_cache is not None)
     assert_same_epoch_mask(method_ids)
     return scored
 
@@ -1299,7 +1308,9 @@ def run_campaign(config, out, *, checkpoint: str|Path|None=None, stop_after_free
     split_counts={k:len(v) for k,v in state["split_indices"].items()}
     fit_audit={**gate.audit,"schema":"gnss-doppler-lab.nc-topi-stage0.fit-audit.v2",
       "fit_scenarios":["cleanStatic"],"attack_fit":False,"pair_count":len(pairs),"split_counts":split_counts,
-      "covariance_audit":dict(state["covariance"].audit),"conditioner_fit":dict(state["conditioner"].fit_manifest_),
+      "covariance_audit":dict(state["covariance"].audit),
+      "projection_workspace_seal":state["workspace"]._construction_seal,
+      "conditioner_fit":dict(state["conditioner"].fit_manifest_),
       "conditioner_cap":dict(state["conditioner"].cap_manifest_),"shuffle_fit":dict(state["shuffled"].fit_manifest_),
       "shuffle_cap":dict(state["shuffled"].cap_manifest_),"threshold_identity_count":len(threshold_ids),
       "iq_audit":iq_audit}
@@ -1320,7 +1331,7 @@ def run_campaign(config, out, *, checkpoint: str|Path|None=None, stop_after_free
         rows,events=aggregate_scored(scored);all_rows.extend(rows);all_events.extend(events);all_iq.extend(iq_s)
         lineage_s["iq_audit"]=iq_audit_s;lineages[scenario]=lineage_s
     scenario_metrics,ablation_metrics,bootstrap,decision=_campaign_statistics(all_events,typed_thresholds,cfg,state,pairs)
-    synthetic=run_synthetic_physics([pairs[i] for i in state["split_indices"]["normal_train"]],state["covariance"])
+    synthetic=run_synthetic_physics([pairs[i] for i in state["split_indices"]["normal_train"]],state["covariance"],workspace=state["workspace"])
     decision=_derive_decision(scenario_metrics,bootstrap,synthetic)
     gate.record_phase("metrics_bootstrap_physics_decision")
     fit_audit.update(gate.audit)
