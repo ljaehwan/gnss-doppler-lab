@@ -100,6 +100,37 @@ def destroyed_feature_matrix(records,iq,gate,seed):
   good=r.source_indices[valid[r.source_indices]];features.append(complex_summary(out[good],len(good)/len(r.source_indices)))
  features=np.asarray(features,np.float32);return features,histories_from_feature_matrix(records,features)
 
+def _distribution(values):
+ vals=np.asarray(values,float)
+ if not len(vals):return {"count":0,"min":None,"median":None,"q90":None,"max":None}
+ return {"count":int(len(vals)),"min":float(np.min(vals)),"median":float(np.median(vals)),"q90":float(np.quantile(vals,.9)),"max":float(np.max(vals))}
+
+def window_diagnostics(iq,time_s,prn,gate,records,*,recording_id,cn0=None,max_invariance_rows=2048):
+ """Persist causal-window utilization and invariance diagnostics."""
+ iq=np.asarray(iq);time_s=np.asarray(time_s);prn=np.asarray(prn);n=len(time_s)
+ take=np.linspace(0,n-1,min(n,int(max_invariance_rows)),dtype=int) if n else np.asarray([],int)
+ sample=iq[take]
+ base,base_valid=normalize_prompt(sample,gate)
+ z=sample[...,0]+1j*sample[...,1]
+ def normalized_error(transformed):
+  tiq=np.stack([transformed.real,transformed.imag],-1)
+  got,valid=normalize_prompt(tiq,gate);mask=base_valid&valid
+  return float(np.max(np.abs(got[mask]-base[mask]))) if mask.any() else None
+ phase_error=normalized_error(z*np.exp(1j*.731))
+ sign_error=normalized_error(-z)
+ keys=[(str(r.prn),round(float(r.end_s),9),str(r.role)) for r in records]
+ duplicates=len(keys)-len(set(keys))
+ by_end=defaultdict(set)
+ for r in records:by_end[round(float(r.end_s),9)].add(str(r.prn))
+ reverse=np.arange(n-1,-1,-1)
+ permuted,_=build_causal_windows(iq[reverse],time_s[reverse],prn[reverse],recording_id=recording_id,gate=gate,representation="complex",cn0=np.asarray(cn0)[reverse] if cn0 is not None else None)
+ original={(str(r.prn),round(float(r.end_s),9),str(r.role)):r.features for r in records}
+ replay={(str(r.prn),round(float(r.end_s),9),str(r.role)):r.features for r in permuted}
+ if set(original)!=set(replay): permutation_error=None;permutation_key_match=False
+ else:
+  permutation_error=float(max([np.max(np.abs(original[k]-replay[k])) for k in original] or [0.]));permutation_key_match=True
+ return {"global_phase_invariance_error_max":phase_error,"navigation_bit_sign_invariance_error_max":sign_error,"duplicate_epoch_prn_count":int(duplicates),"window_valid_sample_count":_distribution([r.valid_count for r in records]),"window_raw_sample_count":_distribution([r.raw_count for r in records]),"tracked_prn_count":_distribution([len(x) for x in by_end.values()]),"prn_input_permutation_invariance_error_max":permutation_error,"prn_input_permutation_key_match":permutation_key_match}
+
 def _sync(model):
  if next(model.parameters()).is_cuda:torch.cuda.synchronize()
 def _nll_batch(model,h,p,v,m,t,chunk):
@@ -223,6 +254,7 @@ def run(args):
     mask=np.asarray([phase(name,t)==ph for t in d["time_s"]]);wr=[r for r in recs[name,"complex"] if phase(name,r.end_s)==ph];tracked=[sum(r.end_s==end for r in wr) for end in sorted(set(r.end_s for r in wr))]
     row={"scenario":name,"phase":ph,"raw_rows":int(mask.sum()),"valid_rows":int(np.sum(mask&valid)),"rejected_rows":int(np.sum(mask&~valid)),"valid_rate":float(np.mean(valid[mask])) if mask.any() else None,"rejection_rate":float(np.mean(~valid[mask])) if mask.any() else None,"rejected_prn_count":int(len(np.unique(d["prn"][mask&~valid]))),"valid_prn_count":int(len(np.unique(d["prn"][mask&valid]))),"valid_window_count":len(wr),"window_valid_samples":int(sum(r.valid_count for r in wr)),"window_rejected_samples":int(sum(r.rejected_count for r in wr)),"tracked_N_min":min(tracked) if tracked else 0,"tracked_N_median":float(np.median(tracked)) if tracked else 0,"tracked_N_max":max(tracked) if tracked else 0};phase_rows.append(row);rejection.append(row)
    q0={k:v for k,v in qa.items() if k!="unique_used_source_indices"};q0.update({"scenario":name,"full_history_windows":int(len(full_history_indices(recs[name,"complex"])))})
+   q0.update(window_diagnostics(d["complex_iq"],d["time_s"],d["prn"],gate,recs[name,"complex"],recording_id=name,cn0=d.get("cn0_db_hz")))
    if name=="DS1":
     vf=np.asarray([r.valid_count/max(1,r.raw_count) for r in recs[name,"complex"]]);scale=np.asarray([np.median(r.features[:,4]) for r in recs[name,"complex"]]);q0["scale_vs_missingness_diagnostic"]={"pearson_valid_fraction_vs_median_magnitude":float(np.corrcoef(vf,scale)[0,1]) if np.std(vf)>0 and np.std(scale)>0 else None,"interpretation":"diagnostic only; distinguishes amplitude scale from Prompt-gate missingness"}
    qa_scenarios.append({"summary":q0,"phase":phase_rows})

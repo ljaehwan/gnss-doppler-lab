@@ -89,3 +89,25 @@ def test_performance_rows_emit_primary_q99_and_diagnostic_q995_independently():
     q995=next(x for x in metrics if x['scenario']=='cleanStatic' and x['operating_point']=='q995')
     assert q99['threshold']==q99['calibration_q99']
     assert q995['threshold']==q995['calibration_q995']
+
+
+def test_window_diagnostics_persist_invariance_duplicate_and_count_distributions():
+    import numpy as np
+    r=load('rqa','scripts/run_amcf_r1_texbat.py')
+    from gnss_doppler_lab.amcf_r1 import PromptGate,build_causal_windows
+    rng=np.random.default_rng(72)
+    time=np.tile(np.arange(.05,8.,.05),2)
+    prn=np.repeat([3,7],len(time)//2)
+    z=(2+rng.random((len(time),9)))*np.exp(1j*rng.normal(size=(len(time),9)))
+    z[:,4]=5*np.exp(1j*rng.normal(size=len(time)))
+    iq=np.stack([z.real,z.imag],-1)
+    gate=PromptGate(.01)
+    records,_=build_causal_windows(iq,time,prn,recording_id='DS1',gate=gate)
+    qa=r.window_diagnostics(iq,time,prn,gate,records,recording_id='DS1')
+    required={'global_phase_invariance_error_max','navigation_bit_sign_invariance_error_max','duplicate_epoch_prn_count','window_valid_sample_count','window_raw_sample_count','tracked_prn_count','prn_input_permutation_invariance_error_max'}
+    assert required<=set(qa)
+    assert qa['global_phase_invariance_error_max']<1e-10
+    assert qa['navigation_bit_sign_invariance_error_max']<1e-10
+    assert qa['duplicate_epoch_prn_count']==0
+    assert qa['prn_input_permutation_invariance_error_max']<1e-10
+    assert qa['window_valid_sample_count']['count']==len(records)
