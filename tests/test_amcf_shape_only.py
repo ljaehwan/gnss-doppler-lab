@@ -5,6 +5,8 @@ import numpy as np
 import pytest
 import torch
 
+import gnss_doppler_lab.amcf_shape_only as shape_core
+
 from gnss_doppler_lab.amcf_shape_only import (
     SIDE_INDICES, TAP_NAMES, CleanTensorSplit, FeatureWindow, PromptGate,
     ScenarioEvidence, SeedCalibration,
@@ -160,6 +162,20 @@ def test_fixed_validation_bank_hash_and_real_target_tuple_minibatches():
     assert audit["finite"] and audit["best_checkpoint_restored"] and audit["best_optimizer_restored"]
     assert audit["converged"] is False and primary_status([audit]) == "INCOMPLETE: nonconverged seed"
     assert optimizer.state_dict()["state"]
+
+def test_fit_hard_fails_for_disconnected_trainable_parameter(monkeypatch):
+    class DisconnectedShapeOnlyModel(shape_core.ShapeOnlyModel):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.disconnected = torch.nn.Parameter(torch.ones(()))
+
+    monkeypatch.setattr(shape_core, "ShapeOnlyModel", DisconnectedShapeOnlyModel)
+    with pytest.raises(RuntimeError, match="every trainable parameter.*gradient"):
+        shape_core.fit_clean_model(
+            split(n=2), split(role="validation", n=2), seed=101,
+            primary=False, hidden=8, max_epochs=1,
+        )
+
 
 def test_conformal_hand_fixture_higher_strict_and_attack_rejected():
     cal = np.array([1., 2., 3., 4.])

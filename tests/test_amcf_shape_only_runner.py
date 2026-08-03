@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import importlib.util
+import inspect
 import json
+import os
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -167,6 +170,143 @@ def test_gpu_probe_requires_real_op():
         cuda = FakeCuda()
     with pytest.raises(RuntimeError, match="CUDA"):
         runner.gpu_probe(torch_module=FakeTorch(), required=True)
+
+
+def test_primary_determinism_contract_is_cpu_testable_and_fail_closed(monkeypatch):
+    class FakeCudnn:
+        deterministic = False
+        benchmark = True
+
+        @staticmethod
+        def version(): return 90100
+
+    class FakeCuda:
+        @staticmethod
+        def is_initialized(): return False
+
+    class FakeVersion:
+        cuda = "12.fake"
+
+    class FakeTorch:
+        __version__ = "2.fake"
+        version = FakeVersion()
+        cuda = FakeCuda()
+        backends = type("Backends", (), {"cudnn": FakeCudnn()})()
+        enabled = False
+
+        @classmethod
+        def use_deterministic_algorithms(cls, enabled): cls.enabled = enabled
+
+        @classmethod
+        def are_deterministic_algorithms_enabled(cls): return cls.enabled
+
+    monkeypatch.delenv("CUBLAS_WORKSPACE_CONFIG", raising=False)
+    evidence = runner.configure_primary_determinism(torch_module=FakeTorch)
+    assert os.environ["CUBLAS_WORKSPACE_CONFIG"] == ":4096:8"
+    assert evidence == {
+        "cublas_workspace_config": ":4096:8",
+        "deterministic_algorithms": True,
+        "cudnn_deterministic": True,
+        "cudnn_benchmark": False,
+        "torch_version": "2.fake",
+        "cuda_version": "12.fake",
+        "cudnn_version": "90100",
+    }
+    monkeypatch.setenv("CUBLAS_WORKSPACE_CONFIG", ":16:8")
+    with pytest.raises(RuntimeError, match="CUBLAS_WORKSPACE_CONFIG"):
+        runner.configure_primary_determinism(torch_module=FakeTorch)
+    assert os.environ["CUBLAS_WORKSPACE_CONFIG"] == ":16:8"
+
+    class InitializedCuda(FakeCuda):
+        @staticmethod
+        def is_initialized(): return True
+
+    class InitializedTorch(FakeTorch):
+        cuda = InitializedCuda()
+
+    monkeypatch.delenv("CUBLAS_WORKSPACE_CONFIG")
+    monkeypatch.setitem(sys.modules, "torch", InitializedTorch)
+    with pytest.raises(RuntimeError, match="initialized before"):
+        runner.configure_primary_determinism()
+    assert "CUBLAS_WORKSPACE_CONFIG" not in os.environ
+
+
+def test_primary_verifier_requires_persisted_determinism_evidence():
+    deterministic = {
+        "cublas_workspace_config": ":4096:8", "deterministic_algorithms": True,
+        "cudnn_deterministic": True, "cudnn_benchmark": False,
+        "torch_version": "2.test", "cuda_version": "12.test", "cudnn_version": "90100",
+    }
+    config = {
+        "base_sha": runner.PRIMARY_BASE_SHA, "minimum_valid_rows": runner.PRIMARY_MIN_VALID_ROWS,
+        "seeds": list(runner.SEEDS), "bootstrap_reps": runner.PRIMARY_BOOTSTRAP_MIN_REPS,
+        "bootstrap_block_seconds": runner.PRIMARY_BOOTSTRAP_BLOCK_SECONDS,
+        "bootstrap_seed_rule": runner.PRIMARY_BOOTSTRAP_SEED_RULE,
+        "DS4": {"status": "NA", "included_in_attack_go": False}, "scenarios": ["DS4:NA"],
+        "deterministic_execution": deterministic, **dict(runner.PRIMARY_FIT_CONFIG),
+    }
+    provenance = {
+        "source_commit": "a" * 40, "clean_tree": True, "execution_tree_clean": True,
+        "baseline": runner.PRIMARY_BASE_SHA, "fit_config": dict(runner.PRIMARY_FIT_CONFIG),
+        "threshold_protocol_limitation": "AMCF [340,410); B0 [300,330)",
+        "deterministic_execution": deterministic,
+        "gpu_execution": {"cuda_available": True, "real_tensor_op": True,
+                          "deterministic_execution": deterministic},
+    }
+    summary._verify_primary_config(config, provenance)
+    bad = json.loads(json.dumps(config))
+    bad["deterministic_execution"]["cudnn_benchmark"] = True
+    with pytest.raises(ValueError, match="determin"):
+        summary._verify_primary_config(bad, provenance)
+
+
+def test_primary_preverifier_cleanup_contract_releases_cuda_cache(monkeypatch):
+    calls = []
+
+    class FakeCuda:
+        @staticmethod
+        def empty_cache(): calls.append("empty_cache")
+
+    class FakeTorch:
+        cuda = FakeCuda()
+
+    monkeypatch.setattr(runner.gc, "collect", lambda: calls.append("gc_collect") or 17)
+    assert runner.cleanup_for_staging_verifier(torch_module=FakeTorch) == {
+        "gc_collected": 17, "cuda_empty_cache_called": True,
+    }
+    assert calls == ["gc_collect", "empty_cache"]
+    source = inspect.getsource(runner.run_primary)
+    assert source.index("del datasets, bundles, transformed, examples, models, epoch, evidence") < source.index("cleanup_for_staging_verifier")
+    assert source.index("cleanup_for_staging_verifier") < source.index("verify_and_publish_primary_stage")
+
+
+def test_late_primary_verifier_failure_preserves_stage_inventory(tmp_path):
+    stage = tmp_path / "artifact.tmp-4242"
+    final = tmp_path / "artifact"
+    checkpoint = stage / "models" / "complex_all9_seed101.pt"
+    checkpoint.parent.mkdir(parents=True)
+    checkpoint.write_bytes(b"real-checkpoint-sentinel")
+
+    class InjectedLateFailure(RuntimeError):
+        pass
+
+    def fail(_stage):
+        raise InjectedLateFailure("synthetic verifier failure")
+
+    with pytest.raises(InjectedLateFailure):
+        runner.verify_and_publish_primary_stage(
+            stage, final, expected_decision="NO-GO", source_commit="a" * 40,
+            verifier=fail,
+        )
+    failed = json.loads((stage / "FAILED.json").read_text())
+    assert stage.is_dir() and not final.exists()
+    assert failed["exception_type"] == "InjectedLateFailure"
+    assert failed["exception_message"] == "synthetic verifier failure"
+    assert failed["source_commit"] == "a" * 40
+    assert failed["stage_path"] == str(stage.resolve())
+    rel = "models/complex_all9_seed101.pt"
+    assert failed["completed_checkpoints"][rel]["sha256"] == runner.sha256(checkpoint)
+    assert failed["timestamp_utc"].endswith("Z")
 
 
 def test_dirty_tree_refusal_and_baseline_inventory(tmp_path):

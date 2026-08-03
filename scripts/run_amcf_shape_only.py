@@ -11,19 +11,20 @@ from __future__ import annotations
 
 import argparse
 import csv
+import gc
 import hashlib
 import importlib.util
 import json
 import math
 import os
-import shutil
 import subprocess
 import sys
+from datetime import datetime, timezone
 from typing import NamedTuple
 from dataclasses import dataclass
 from types import MappingProxyType
 from pathlib import Path
-from typing import Any, Iterable, Mapping
+from typing import Any, Callable, Iterable, Mapping
 
 import numpy as np
 
@@ -41,6 +42,7 @@ PRIMARY_BOOTSTRAP_BLOCK_SECONDS = 10.0
 PRIMARY_BOOTSTRAP_SEED_RULE = "101+sum(ord(scenario+comparator+metric))"
 INFERENCE_SCORE_RTOL = 1e-6
 INFERENCE_SCORE_ATOL = 1e-5
+PRIMARY_CUBLAS_WORKSPACE_CONFIG = ":4096:8"
 B0_FROZEN_Q99 = 1.7035537524611113
 B0_FROZEN_Q995 = 1.7035537524611113
 B0_FROZEN_INTERVAL = (300.0, 330.0)
@@ -475,6 +477,44 @@ def recompute_scenario_metrics(scenario: str, rows: Iterable[Mapping[str, Any]],
     return out
 
 
+def configure_primary_determinism(*, torch_module=None) -> dict[str, Any]:
+    """Configure fail-closed CUDA determinism before the first CUDA operation."""
+    existing = os.environ.get("CUBLAS_WORKSPACE_CONFIG")
+    if existing is not None and existing != PRIMARY_CUBLAS_WORKSPACE_CONFIG:
+        raise RuntimeError(
+            "incompatible CUBLAS_WORKSPACE_CONFIG for primary deterministic execution: "
+            f"{existing!r}"
+        )
+    loaded_torch = torch_module if torch_module is not None else sys.modules.get("torch")
+    if loaded_torch is not None:
+        initialized = bool(getattr(loaded_torch.cuda, "is_initialized", lambda: False)())
+        if initialized and existing is None:
+            raise RuntimeError("CUDA was initialized before CUBLAS_WORKSPACE_CONFIG was set")
+    os.environ["CUBLAS_WORKSPACE_CONFIG"] = PRIMARY_CUBLAS_WORKSPACE_CONFIG
+    if torch_module is None:
+        try:
+            import torch as torch_module
+        except ImportError as exc:
+            raise RuntimeError("CUDA PyTorch is required for a primary run") from exc
+    torch_module.use_deterministic_algorithms(True)
+    torch_module.backends.cudnn.deterministic = True
+    torch_module.backends.cudnn.benchmark = False
+    enabled = bool(torch_module.are_deterministic_algorithms_enabled())
+    cudnn_deterministic = bool(torch_module.backends.cudnn.deterministic)
+    cudnn_benchmark = bool(torch_module.backends.cudnn.benchmark)
+    if not enabled or not cudnn_deterministic or cudnn_benchmark:
+        raise RuntimeError("PyTorch deterministic execution configuration did not take effect")
+    return {
+        "cublas_workspace_config": os.environ["CUBLAS_WORKSPACE_CONFIG"],
+        "deterministic_algorithms": enabled,
+        "cudnn_deterministic": cudnn_deterministic,
+        "cudnn_benchmark": cudnn_benchmark,
+        "torch_version": str(torch_module.__version__),
+        "cuda_version": str(torch_module.version.cuda),
+        "cudnn_version": str(torch_module.backends.cudnn.version()),
+    }
+
+
 def gpu_probe(*, torch_module=None, required: bool = True) -> dict[str, Any]:
     if torch_module is None:
         try: import torch as torch_module
@@ -533,6 +573,66 @@ def verify_hashes(out: Path | str) -> bool:
     for rel,digest in expected.items():
         if sha256(out/rel) != digest: raise ValueError(f"hash mismatch: {rel}")
     return True
+
+
+def preserve_failed_stage(stage: Path | str, *, source_commit: str, error: BaseException) -> bool:
+    """Best-effort failure marker; never remove completed staging evidence."""
+    stage = Path(stage).resolve()
+    if not stage.is_dir():
+        return False
+    try:
+        completed = {}
+        models = stage / "models"
+        if models.is_dir():
+            for checkpoint in sorted(models.glob("*.pt")):
+                rel = str(checkpoint.relative_to(stage))
+                completed[rel] = {"sha256": sha256(checkpoint)}
+        payload = {
+            "schema": "gnss-doppler-lab.amcf-shape-only-failure.v1",
+            "exception_type": type(error).__name__,
+            "exception_message": str(error),
+            "source_commit": str(source_commit),
+            "stage_path": str(stage),
+            "completed_checkpoints": completed,
+            "completed_checkpoint_count": len(completed),
+            "timestamp_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "publish_status": "FAILED-STAGING-NOT-FINAL",
+        }
+        write_json(stage / "FAILED.json", payload)
+        return True
+    except Exception:
+        return False
+
+
+def cleanup_for_staging_verifier(*, torch_module=None) -> dict[str, Any]:
+    """Collect host garbage and release unused cached CUDA allocations."""
+    collected = int(gc.collect())
+    if torch_module is None:
+        import torch as torch_module
+    torch_module.cuda.empty_cache()
+    return {"gc_collected": collected, "cuda_empty_cache_called": True}
+
+
+def verify_and_publish_primary_stage(
+    stage: Path | str, out: Path | str, *, expected_decision: str,
+    source_commit: str, verifier: Callable[[Path], Mapping[str, Any]],
+    source_state_verifier: Callable[[], Any] | None = None,
+) -> Mapping[str, Any]:
+    """Verify staging and atomically publish; preserve staging on late failure."""
+    stage = Path(stage).resolve(); out = Path(out).resolve()
+    try:
+        report = verifier(stage)
+        if (report.get("primary_decision") != expected_decision or
+                report.get("mode") != "primary-full" or
+                not report.get("byte_identical")):
+            raise RuntimeError("staging summarizer/independent verifier disagrees with runner")
+        if source_state_verifier is not None:
+            source_state_verifier()
+        os.replace(stage, out)
+        return report
+    except Exception as exc:
+        preserve_failed_stage(stage, source_commit=source_commit, error=exc)
+        raise
 
 
 def _save_bundle(path: Path, part: Mapping[str,np.ndarray]) -> None:
@@ -677,8 +777,9 @@ def run_smoke(out: Path | str, *, fixture_seed: int = 7) -> dict[str,Any]:
         if missing: raise RuntimeError(f"missing required artifact inventory: {missing}")
         verify_hashes(stage); os.replace(stage,out)
         return {"status":"SMOKE-NO-GO","out":str(out),"files":len(json.loads((out/"hashes.json").read_text())["files"])}
-    except Exception:
-        shutil.rmtree(stage,ignore_errors=True); raise
+    except Exception as exc:
+        preserve_failed_stage(stage, source_commit=locals().get("source_commit", "UNKNOWN"), error=exc)
+        raise
 
 
 
@@ -1119,7 +1220,9 @@ def run_primary(out: Path | str = ROOT/FINAL_ARTIFACT, *, bootstrap_reps: int = 
     if out != (ROOT/FINAL_ARTIFACT).resolve(): raise ValueError(f"primary output must be exactly {FINAL_ARTIFACT}")
     if bootstrap_reps<PRIMARY_BOOTSTRAP_MIN_REPS: raise ValueError("primary paired bootstrap requires at least 2000 replicates")
     if out.exists(): raise FileExistsError(out)
-    source=verify_primary_source_state(ROOT,PRIMARY_BASE_SHA); gpu=gpu_probe(required=True)
+    source=verify_primary_source_state(ROOT,PRIMARY_BASE_SHA)
+    determinism=configure_primary_determinism()
+    gpu=gpu_probe(required=True); gpu["deterministic_execution"]=determinism
     stage=out.with_name(out.name+f".tmp-{os.getpid()}"); stage.mkdir(parents=True)
     try:
         for d in ("per_epoch","plots","models","feature_cache"): (stage/d).mkdir()
@@ -1312,28 +1415,37 @@ def run_primary(out: Path | str = ROOT/FINAL_ARTIFACT, *, bootstrap_reps: int = 
         criteria={"stable_pre_fpr_all_below_0.05":all(r["stable_pre_fpr"]<.05 for r in attacks),"complex_auc_gt_magnitude_4_of_5":sum(a["roc_auc"]>m["roc_auc"] for a,m in zip(attacks,mags))>=4,"auc_bootstrap_ci_lower_gt_zero_3_of_5":sum(v>0 for v in cis.values())>=3,"same_seed_direction_each_scenario":all(v>=2 for v in seed_dir.values()),"beats_b0_with_fpr_guard_3_of_5":sum(((a["roc_auc"]-b["roc_auc"]>=.02 or a["post_detection"]-b["post_detection"]>=.05) and a["stable_pre_fpr"]-b["stable_pre_fpr"]<=.01) for a,b in zip(attacks,bzeros))>=3,"all_required_seeds_converged":exact,"ds7_ds8_no_collapse":feature_audit["pass"]}
         final="GO" if all(criteria.values()) else "NO-GO"
         write_json(stage/"feature_schema.json",schema); write_json(stage/"input_hashes.json",inputs); write_json(stage/"window_qa.json",qas)
-        provenance={"schema":"gnss-doppler-lab.amcf-shape-only-provenance.v2",**source,"execution_tree_clean":True,"gpu_execution":gpu,
+        provenance={"schema":"gnss-doppler-lab.amcf-shape-only-provenance.v2",**source,"execution_tree_clean":True,"gpu_execution":gpu,"deterministic_execution":determinism,
           "inputs":inputs,"B0_inputs":b0_paths,"B0_frozen_contract":b0_contract,"threshold_protocol_limitation":"AMCF [340,410) and frozen B0 [300,330) differ; threshold-dependent comparisons are limited",
           "gate":dict(gate._asdict()),"scalers":scalers,"gate_hash":gate_hash,"gate_scaler_hash":_digest_value({"gate":dict(gate._asdict()),"scalers":scalers}),
           "feature_schema_hash":_digest_value(schema),"feature_provenance":feature_evidence,"feature_audit_digest":feature_audit["audit_digest"],
           "fit_config":dict(PRIMARY_FIT_CONFIG),"fit_audits":{k:{"fit_manifest_digest":v["fit_manifest_digest"],"upstream_digests":v["upstream_digests"]} for k,v in audits.items()},"attack_fit":False,"all_attack_results":"exploratory/developmental"}; write_json(stage/"provenance.json",provenance)
-        config={"schema":"gnss-doppler-lab.amcf-shape-only-config.v2","mode":"primary-full","base_sha":PRIMARY_BASE_SHA,"seeds":list(SEEDS),"objectives":["all9","EPL"],"representations":["complex","magnitude"],**dict(PRIMARY_FIT_CONFIG),"hidden":32,"history":12,"stride_s":.5,"source_window_s":1.,"minimum_valid_rows":PRIMARY_MIN_VALID_ROWS,"bootstrap_reps":bootstrap_reps,"bootstrap_block_seconds":PRIMARY_BOOTSTRAP_BLOCK_SECONDS,"bootstrap_seed_rule":PRIMARY_BOOTSTRAP_SEED_RULE,"onsets":ONSETS,"scenarios":[*ONSETS,"DS4:NA"],"DS4":{"status":"NA","included_in_attack_go":False},"q99_primary":True,"q995_diagnostic_only":True,"matched_clean":False}; write_json(stage/"config.json",config)
+        config={"schema":"gnss-doppler-lab.amcf-shape-only-config.v2","mode":"primary-full","base_sha":PRIMARY_BASE_SHA,"deterministic_execution":determinism,"seeds":list(SEEDS),"objectives":["all9","EPL"],"representations":["complex","magnitude"],**dict(PRIMARY_FIT_CONFIG),"hidden":32,"history":12,"stride_s":.5,"source_window_s":1.,"minimum_valid_rows":PRIMARY_MIN_VALID_ROWS,"bootstrap_reps":bootstrap_reps,"bootstrap_block_seconds":PRIMARY_BOOTSTRAP_BLOCK_SECONDS,"bootstrap_seed_rule":PRIMARY_BOOTSTRAP_SEED_RULE,"onsets":ONSETS,"scenarios":[*ONSETS,"DS4:NA"],"DS4":{"status":"NA","included_in_attack_go":False},"q99_primary":True,"q995_diagnostic_only":True,"matched_clean":False}; write_json(stage/"config.json",config)
         digest_paths={"thresholds":"thresholds.json","seed_metrics":"seed_metrics.csv","paired_comparisons":"paired_comparisons.csv","scenario_metrics":"scenario_metrics.csv","provenance":"provenance.json","feature_audit":"feature_audit.json","feature_schema":"feature_schema.json","fit_checkpoint_audits":"convergence_audit.json","training_history":"training_history.csv","calibration_evidence":"calibration_evidence.json"}
         source_digests={k:sha256(stage/v) for k,v in digest_paths.items()}; source_digests["per_epoch"]={str(p.relative_to(stage)):sha256(p) for p in sorted((stage/"per_epoch").glob("*.csv"))}; source_digests["checkpoints"]={str(p.relative_to(stage)):sha256(p) for p in sorted((stage/"models").glob("*.pt"))}
         decision={"primary_quantile":"q99","primary_decision":final,"amcf_wcl":"GO candidate" if final=="GO" else "AMCF WCL no-go","criteria":criteria,"source_digests":source_digests}; write_json(stage/"decision.json",decision)
         (stage/"README.md").write_text(render_readme(final,"PRIMARY COMPLETE",criteria),encoding="utf-8",newline="\n")
         write_hashes(stage); verify_hashes(stage); missing=[x for x in PRIMARY_REQUIRED_INVENTORY if not (stage/x).exists()]
         if missing: raise RuntimeError(f"missing inventory {missing}")
-        # Independent verifier runs against staging.  Publication is a single atomic rename only after agreement.
+        # Drop campaign-scale in-memory tensors/models before the independent
+        # verifier regenerates tensors and CPU re-infers all 12 checkpoints.
+        del datasets, bundles, transformed, examples, models, epoch, evidence
+        del train, val, ex, part, x, iq, rows, rows_for_name
+        del saved, saved_calibration_rows, calibration, metric_rows, seed_rows, paired, history
+        cleanup_for_staging_verifier(torch_module=torch)
+        # Independent verifier runs against staging. Publication remains a
+        # single atomic rename only after verifier and source-state agreement.
         spec=importlib.util.spec_from_file_location("amcf_shape_staging_summarizer",ROOT/"scripts/summarize_amcf_shape_only.py")
         assert spec and spec.loader; summarizer=importlib.util.module_from_spec(spec); spec.loader.exec_module(summarizer)
-        report=summarizer.verify_and_summarize(stage)
-        if report.get("primary_decision")!=final or report.get("mode")!="primary-full" or not report.get("byte_identical"):
-            raise RuntimeError("staging summarizer/independent verifier disagrees with runner")
-        verify_primary_source_state(ROOT,PRIMARY_BASE_SHA)
-        os.replace(stage,out); return {"status":final,"out":str(out),"source_commit":source["source_commit"],"summary":report}
-    except Exception:
-        shutil.rmtree(stage,ignore_errors=True); raise
+        report=verify_and_publish_primary_stage(
+            stage,out,expected_decision=final,source_commit=source["source_commit"],
+            verifier=summarizer.verify_and_summarize,
+            source_state_verifier=lambda:verify_primary_source_state(ROOT,PRIMARY_BASE_SHA),
+        )
+        return {"status":final,"out":str(out),"source_commit":source["source_commit"],"summary":report}
+    except Exception as exc:
+        preserve_failed_stage(stage,source_commit=source["source_commit"],error=exc)
+        raise
 
 
 def parser() -> argparse.ArgumentParser:

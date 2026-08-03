@@ -62,6 +62,11 @@ def _verify_primary_config(config:Mapping[str,Any],provenance:Mapping[str,Any])-
     if len(commit)!=40 or provenance.get("clean_tree") is not True or provenance.get("execution_tree_clean") is not True:raise ValueError("primary execution source clean-tree provenance missing")
     if provenance.get("baseline")!=runner.PRIMARY_BASE_SHA:raise ValueError("primary execution baseline mismatch")
     if provenance.get("fit_config")!=dict(runner.PRIMARY_FIT_CONFIG):raise ValueError("primary fit provenance mismatch")
+    deterministic=config.get("deterministic_execution",{});gpu=provenance.get("gpu_execution",{})
+    if deterministic!=provenance.get("deterministic_execution") or deterministic!=gpu.get("deterministic_execution"):raise ValueError("primary deterministic evidence mismatch across config/GPU/provenance")
+    required={"cublas_workspace_config":runner.PRIMARY_CUBLAS_WORKSPACE_CONFIG,"deterministic_algorithms":True,"cudnn_deterministic":True,"cudnn_benchmark":False}
+    if any(deterministic.get(k)!=v for k,v in required.items()) or any(not deterministic.get(k) or deterministic.get(k)=="None" for k in ("torch_version","cuda_version","cudnn_version")):raise ValueError("primary deterministic settings/version evidence missing")
+    if gpu.get("cuda_available") is not True or gpu.get("real_tensor_op") is not True:raise ValueError("primary deterministic GPU execution evidence missing")
     if "[340,410)" not in provenance.get("threshold_protocol_limitation","") or "[300,330)" not in provenance.get("threshold_protocol_limitation",""):raise ValueError("B0/AMCF protocol limitation missing")
 
 def _verify_calibration(out:Path,thresholds:Mapping[str,Any],provenance:Mapping[str,Any])->None:

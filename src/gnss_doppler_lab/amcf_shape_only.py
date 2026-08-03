@@ -292,6 +292,18 @@ def _primary_fit_guard(*, hidden, batch_size, learning_rate, max_epochs, patienc
         raise ValueError(f"primary frozen training configuration mismatch: required {frozen}")
 
 
+def require_finite_trainable_gradients(parameters):
+    """Fail closed when any trainable parameter is disconnected or nonfinite."""
+    for parameter in parameters:
+        if not parameter.requires_grad:
+            continue
+        gradient = parameter.grad
+        if gradient is None:
+            raise RuntimeError("every trainable parameter must have a gradient in every update")
+        if not bool(torch.isfinite(gradient).all().item()):
+            raise RuntimeError("every trainable parameter must have a finite gradient in every update")
+
+
 def fit_clean_model(train, validation, *, seed, hidden=32, batch_size=256,
                     learning_rate=1e-3, max_epochs=200, patience=20, primary=True):
     _validate_clean_split(train,"train"); _validate_clean_split(validation,"validation")
@@ -322,7 +334,7 @@ def fit_clean_model(train, validation, *, seed, hidden=32, batch_size=256,
             optimizer.zero_grad(set_to_none=True); loss=_loo_loss(model,th,tc,pairs)
             if not torch.isfinite(loss): finite=False; break
             loss.backward()
-            if any(p.grad is not None and not torch.isfinite(p.grad).all() for p in model.parameters()): finite=False; break
+            require_finite_trainable_gradients(model.parameters())
             optimizer.step(); updates+=1; epoch_updates+=1
         updates_per_epoch.append(epoch_updates); tuple_batch_sizes_per_epoch.append(epoch_batch_sizes); epochs_run=epoch+1
         if not finite: break
