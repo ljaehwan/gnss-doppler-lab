@@ -12,7 +12,7 @@ Tap order is `E4,E3,E2,E,P,L,L2,L3,L4`; Prompt is index 4 and side indices are `
 
 `z = C * conj(P) / (abs(P)^2 + eps)`
 
-The low-P threshold is the cleanStatic-train q0.005 quantile using method `higher`. Prompt is used only for this gate, normalization, and QA. Prompt index 4 is never present in a feature, target, query, score, or model tensor. The model API cannot receive C/N0, log absolute Prompt, Prompt magnitude, valid fraction, valid/rejected/raw counts, recording/scenario ID, PRN identity, or any ID/time. IDs and times are indexing metadata only.
+The low-P threshold is the cleanStatic-train q0.005 quantile using method `higher`; admission is the literal comparison `abs(P) >= minimum` (no tolerance easing). The primary epsilon is frozen at `1e-12`. Prompt is used only for this gate, normalization, and QA. Prompt index 4 is never present in a feature, target, query, score, or model tensor. The model API cannot receive C/N0, log absolute Prompt, Prompt magnitude, valid fraction, valid/rejected/raw counts, recording/scenario ID, PRN identity, or any ID/time. IDs and times are indexing metadata only.
 
 Each one-second source window is exactly `(T-1.0,T]`, with decisions every 0.5 s. Source rows must be wholly in one role. Complex side-tap features are exactly `median(real), median(imag), literal MAD(real), literal MAD(imag)`. Magnitude features are exactly `median(abs), literal MAD(abs)`. “Literal MAD” means median absolute deviation with no 1.4826 multiplier. There is no zero padding, duplicate feature, Prompt column, or QA column. Every target tap/dimension must have clean-train IQR strictly above tolerance or the run hard-fails.
 
@@ -32,9 +32,9 @@ The auxiliary diagnostic is labelled EPL for continuity, but P is normalization 
 
 ## Training freeze and convergence
 
-Only cleanStatic train is optimization data. Primary seeds are exactly `101,202,303`; optimizer AdamW, learning rate `1e-3`, real minibatch size `256`, maximum `200` epochs, and patience `20`. The validation sample/target bank is generated once, covers fixed target tuples, is hashed, and is reused unchanged every epoch so that the validation objective does not drift. The exact optimizer-update count is audited and must exceed one. Losses and gradients must remain finite.
+Only cleanStatic train is optimization data. Primary seeds are exactly `101,202,303`; optimizer AdamW, learning rate `1e-3`, real minibatch size `256` **flattened `(sample,target_side_index)` tuples**, maximum `200` epochs, and patience `20`. The all-side bank has eight tuples per sample; EPL has exactly the E/L two. An epoch has `ceil(train_target_tuples/256)` optimizer updates (the final remainder batch may be smaller), and the realized tuple batch sizes and update counts are audited. The validation sample/target bank is generated once, covers fixed target tuples, is hashed, and is reused unchanged every epoch so that the validation objective does not drift. The exact optimizer-update count is audited and must exceed one. Sampling 256 examples and expanding each to eight losses is forbidden. Primary fit accepts only immutable `AuditedCleanSplit` objects emitted by the causal history factory. Its manifest binds actual source intervals, same recording/segment/channel/PRN/role, strict previous-only order, 12-history length, 0.5 s cadence, and split boundary checks to the tensors; arbitrary tensor containers cannot enter fit. Losses and gradients must remain finite.
 
-Best model and best optimizer state are restored together. A seed is converged only when finite patience early stopping occurs at or before the cap. Reaching the cap without a patience stop is nonconverged. Any nonconverged seed is excluded and makes the primary result incomplete; it is never treated as a successful run.
+Best model and best optimizer state are restored together. A seed is converged only when finite patience early stopping occurs at or before the cap. Reaching the cap without a patience stop is nonconverged. Any nonconverged seed is excluded and makes the primary result incomplete; it is never treated as a successful run. The entire primary configuration is hard-frozen: Prompt q0.005, epsilon `1e-12`, H=32, tuple batch 256, lr `1e-3`, cap 200, patience 20, history 12, stride 0.5 s, source width 1.0 s, and seeds exactly `{101,202,303}`. Overrides require `primary=False`; a mismatch on a primary path hard-fails.
 
 ## Calibration, alarms, and phases
 
@@ -46,7 +46,7 @@ For clean calibration sample `i`, leave-one-out calibration is
 
 `p_i = (1 + count over j != i of cal_j >= cal_i) / n`.
 
-Evidence is averaged across the three seeds. q99 and q995 are `method="higher"` quantiles of the cleanStatic calibration LOO ensemble evidence. Alarms are always recomputed as strict `score > threshold`; saved alarm columns are not trusted. q99 is GO-primary and q995 is diagnostic.
+A primary threshold is generated only when the seed set is exactly `{101,202,303}`, all three convergence audits pass, and every seed has identical calibration timestamps and row indices. Missing/nonconverged/misaligned input hard-fails rather than producing a normal primary threshold. Evidence is averaged across the three seeds. q99 and q995 are `method="higher"` quantiles of the cleanStatic calibration LOO ensemble evidence. Alarms are always recomputed as strict `score > threshold`; saved alarm columns are not trusted. q99 is GO-primary and q995 is diagnostic.
 
 Phases use actual `source_start` and `source_end`, not nominal endpoint assumptions:
 
@@ -58,9 +58,9 @@ Sustained-three delay starts at the first wholly-post window and requires three 
 
 ## Paired inference and collapse audit
 
-Every Complex/comparator contrast is joined on common timestamps before analysis. Paired bootstrap uses the same resampled 10 s timestamp blocks, default at least 2000 replicates, and delta sign **Complex - comparator**. Frozen metrics are ROC-AUC, post detection, and stable-pre FPR. A positive delta always favors Complex for ROC-AUC/post detection; stable-pre FPR interpretation retains the signed definition.
+Every Complex/comparator contrast is joined on common timestamps before analysis. Paired bootstrap resamples labels, timestamps, Complex scores, and comparator scores with the **same row indices** from the same 10 s timestamp blocks. Fewer than 2000 replicates hard-fails. ROC-AUC resamples the aligned labelled rows; post detection and stable-pre FPR first select the declared phase using actual source-interval masks and then construct/resample blocks within that phase (phase-local resampling). Representation-specific thresholds are applied after each paired draw. Delta sign is **Complex - comparator**. Frozen metrics are ROC-AUC, post detection, and stable-pre FPR. A positive delta always favors Complex for ROC-AUC/post detection; stable-pre FPR interpretation retains the signed definition.
 
-DS7 and DS8 must pass a schema-collapse audit: fixed declared feature schemas with no C/N0 branch, finite and nonconstant features, median tracked PRN count greater than one, and stable-pre alarm rate not equal to 100%. Feature extraction must not branch by DS7/DS8 or by C/N0.
+DS7 and DS8 must both be present and pass a schema-collapse audit: the actual schema must exactly equal the declared Complex/Magnitude schemas and contain no C/N0 or context field; every tap/dimension in clean and in each scenario must be finite with IQR strictly above tolerance; median tracked PRN count must exceed one; stable-pre alarm rate must be below 100%. `no_cn0_branch=True` assertions without inspecting the actual schema are not evidence. Feature extraction must not branch by DS7/DS8 or by C/N0.
 
 ## Exact GO / NO-GO decision
 
@@ -74,7 +74,7 @@ All clauses are mandatory at q99:
 6. all three seeds converge under the frozen definition;
 7. neither DS7 nor DS8 collapses under the audit above.
 
-Any failure means **AMCF family final NO-GO WCL candidate**. q995 is diagnostic and cannot rescue q99. No attack retune is allowed after seeing any DS result.
+The machine decision emits criterion-level PASS/FAIL plus full-precision evidence. Exact scenarios `DS1,DS2,DS3,DS7,DS8` are mandatory; missing/duplicate scenarios hard-fail. Strict boundaries are used (`FPR < .05`, AUC/CI direction `> 0`, B0 gains `>=`, FPR degradation `<=`). Any criterion failure means final **NO-GO** and **AMCF WCL no-go**. q995 is diagnostic, is rejected by the primary decision API, and cannot rescue q99. No attack retune is allowed after seeing any DS result.
 
 ## Scope of this source commit
 
