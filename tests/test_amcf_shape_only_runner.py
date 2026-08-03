@@ -62,7 +62,7 @@ def test_red_contract_constants_and_exact_final_path():
             "thresholds.json", "scenario_metrics.csv", "seed_metrics.csv",
             "paired_comparisons.csv", "decision.json", "feature_audit.json", "window_qa.json",
             "feature_cache", "per_epoch", "plots", "models", "hashes.json"} == set(runner.REQUIRED_INVENTORY)
-    assert set(runner.PRIMARY_REQUIRED_INVENTORY) == set(runner.REQUIRED_INVENTORY) | {"calibration_evidence.json"}
+    assert set(runner.PRIMARY_REQUIRED_INVENTORY) == set(runner.REQUIRED_INVENTORY) | {"calibration_evidence.json", "numerical_parity.json"}
 
 
 def test_loader_hash_shape_tap_order_stable_sort_and_never_reads_cn0(tmp_path):
@@ -276,8 +276,11 @@ def test_primary_preverifier_cleanup_contract_releases_cuda_cache(monkeypatch):
     }
     assert calls == ["gc_collect", "empty_cache"]
     source = inspect.getsource(runner.run_primary)
-    assert source.index("del datasets, bundles, transformed, examples, models, epoch, evidence") < source.index("cleanup_for_staging_verifier")
-    assert source.index("cleanup_for_staging_verifier") < source.index("verify_and_publish_primary_stage")
+    first_cleanup = source.index("cleanup_for_staging_verifier")
+    parity = source.index("_compute_checkpoint_numerical_parity")
+    publish = source.index("verify_and_publish_primary_stage")
+    assert source.index("del models, epoch, evidence, datasets, bundles, transformed") < first_cleanup < parity
+    assert parity < source.index("del examples, saved") < publish
 
 
 def test_late_primary_verifier_failure_preserves_stage_inventory(tmp_path):
@@ -333,6 +336,8 @@ def test_atomic_no_overwrite_hash_inventory_and_deterministic_summary_tamper(tmp
     assert result["status"] == "SMOKE-NO-GO" and out.is_dir()
     assert set(runner.REQUIRED_INVENTORY) <= {p.name for p in out.iterdir()}
     assert runner.verify_hashes(out)
+    limited = summary.verify_and_summarize(out, hash_only=True)
+    assert limited["mode"] == "non-publication-hash-only" and limited["publication_eligible"] is False
     assert not list(out.parent.glob(out.name + ".tmp-*"))
     with pytest.raises(FileExistsError):
         runner.run_smoke(out, fixture_seed=19)
@@ -652,7 +657,7 @@ def _checkpoint_score_fixture(out: Path):
                 model=ShapeOnlyModel(obj["feature_dim"],hidden=32,df=4.0);model.load_state_dict(obj["state_dict"])
                 maps={}
                 for name in runner.CANONICAL:
-                    raw=runner._score_examples(model,examples[name,rep],objective,device="cpu");maps[name]=runner._epoch_scores(examples[name,rep],raw)
+                    raw=runner._score_examples(model,examples[name,rep],objective,device="cuda" if torch.cuda.is_available() else "cpu");maps[name]=runner._epoch_scores(examples[name,rep],raw)
                     row=scenario_rows[name][0];row[f"score_{variant}_seed{seed}"]=maps[name][row["decision_time_s"]]["score"]
                 first=maps["cleanStatic"][float(examples["cleanStatic",rep]["source_end"][0])]
                 seed_rows[seed]=[{**first}]
@@ -678,7 +683,9 @@ def _checkpoint_score_fixture(out: Path):
 
 
 def test_release_checkpoint_reinference_rejects_raw_tamper_with_regenerated_chains(tmp_path):
-    torch=pytest.importorskip("torch");convergence,examples,calibration=_checkpoint_score_fixture(tmp_path)
+    torch=pytest.importorskip("torch")
+    if not torch.cuda.is_available():pytest.skip("exact publication replay requires CUDA")
+    convergence,examples,calibration=_checkpoint_score_fixture(tmp_path)
     assert summary._verify_checkpoint_scores(tmp_path,examples,convergence,calibration)==12
     rows={name:summary._rows(tmp_path/"per_epoch"/f"{name}.csv") for name in runner.CANONICAL}
     rows["DS7"][0]["score_complex_all9_seed101"]=str(float(rows["DS7"][0]["score_complex_all9_seed101"])+.25)
@@ -697,3 +704,81 @@ def test_release_checkpoint_reinference_rejects_raw_tamper_with_regenerated_chai
     runner.write_json(tmp_path/"calibration_evidence.json",calibration);runner.write_json(tmp_path/"convergence_audit.json",convergence);runner.write_hashes(tmp_path)
     with pytest.raises(ValueError,match="checkpoint output raw NLL mismatch"):
         summary._verify_checkpoint_scores(tmp_path,examples,convergence,calibration)
+
+
+def _numerical_pairs(*, gpu_delta=0.0, cpu_delta=5e-4):
+    persisted = np.asarray([1.0, 2.0, 3.0], dtype=np.float64)
+    return ({"complex_all9_seed101/DS1": {
+                "persisted": persisted,
+                "replayed": persisted + gpu_delta,
+                "identity_exact": True, "source_exact": True}},
+            {"complex_all9_seed101/DS1": {
+                "persisted": persisted,
+                "replayed": persisted + cpu_delta,
+                "identity_exact": True, "source_exact": True}})
+
+
+def test_numerical_parity_accepts_characterized_cross_device_drift():
+    same, cross = _numerical_pairs(cpu_delta=5e-4)
+    audit = runner.evaluate_numerical_parity(
+        same, cross,
+        semantic_changes={"threshold": 0, "alarm": 0, "metric": 0},
+        backend_versions={"production_device": "cuda:0", "audit_device": "cpu"},
+    )
+    assert audit["pass"] is True
+    assert audit["same_device_raw_binding"]["exact_count"] == 3
+    assert audit["cross_device_numerical_audit"]["max_abs"] == pytest.approx(5e-4)
+    assert audit["cross_device_numerical_audit"]["raw_binding_gate"] is False
+    assert audit["tolerances"] == {"same_device_rtol": 0.0, "same_device_atol": 0.0,
+                                    "cross_device_engineering_max_abs": 2e-3}
+    assert audit["semantic_invariance"]["pass"] is True
+
+
+@pytest.mark.parametrize("failure", ["same_device", "threshold", "alarm", "metric", "guard"])
+def test_numerical_parity_hard_gates(failure):
+    same, cross = _numerical_pairs(
+        gpu_delta=1e-7 if failure == "same_device" else 0.0,
+        cpu_delta=2.1e-3 if failure == "guard" else 5e-4,
+    )
+    changes = {"threshold": 0, "alarm": 0, "metric": 0}
+    if failure in changes:
+        changes[failure] = 1
+    with pytest.raises(ValueError, match={
+        "same_device": "same-device", "threshold": "semantic",
+        "alarm": "semantic", "metric": "semantic", "guard": "engineering guard",
+    }[failure]):
+        runner.evaluate_numerical_parity(
+            same, cross, semantic_changes=changes,
+            backend_versions={"production_device": "cuda:0", "audit_device": "cpu"},
+        )
+
+
+def test_numerical_parity_rejects_identity_or_source_drift():
+    same, cross = _numerical_pairs()
+    cross["complex_all9_seed101/DS1"]["identity_exact"] = False
+    with pytest.raises(ValueError, match="identity/source"):
+        runner.evaluate_numerical_parity(same, cross,
+            semantic_changes={"threshold": 0, "alarm": 0, "metric": 0},
+            backend_versions={"production_device": "cuda:0", "audit_device": "cpu"})
+
+
+def test_saved_numerical_parity_is_recomputed_not_self_reported(tmp_path):
+    same, cross = _numerical_pairs()
+    actual = runner.evaluate_numerical_parity(same, cross,
+        semantic_changes={"threshold": 0, "alarm": 0, "metric": 0},
+        backend_versions={"production_device": "cuda:0", "audit_device": "cpu"})
+    runner.write_json(tmp_path / "numerical_parity.json", actual)
+    summary._verify_saved_numerical_parity(tmp_path, actual)
+    actual["semantic_invariance"]["alarm_flip_count"] = 1
+    with pytest.raises(ValueError, match="repeated replay audit"):
+        summary._verify_saved_numerical_parity(tmp_path, actual)
+
+
+def test_primary_publication_numerical_verifier_requires_cuda():
+    class NoCuda:
+        @staticmethod
+        def is_available(): return False
+    class FakeTorch:
+        cuda = NoCuda()
+    with pytest.raises(RuntimeError, match="CUDA.*publication"):
+        runner.require_primary_cuda_backend(torch_module=FakeTorch)

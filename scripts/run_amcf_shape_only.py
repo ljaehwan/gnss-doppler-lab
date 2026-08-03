@@ -40,9 +40,8 @@ PRIMARY_MIN_VALID_ROWS = 5
 PRIMARY_BOOTSTRAP_MIN_REPS = 2000
 PRIMARY_BOOTSTRAP_BLOCK_SECONDS = 10.0
 PRIMARY_BOOTSTRAP_SEED_RULE = "101+sum(ord(scenario+comparator+metric))"
-INFERENCE_SCORE_RTOL = 1e-6
-INFERENCE_SCORE_ATOL = 1e-5
 PRIMARY_CUBLAS_WORKSPACE_CONFIG = ":4096:8"
+CROSS_DEVICE_MAX_ABS = 2e-3
 B0_FROZEN_Q99 = 1.7035537524611113
 B0_FROZEN_Q995 = 1.7035537524611113
 B0_FROZEN_INTERVAL = (300.0, 330.0)
@@ -76,7 +75,7 @@ REQUIRED_INVENTORY = (
     "paired_comparisons.csv", "decision.json", "feature_audit.json", "window_qa.json",
     "feature_cache", "per_epoch", "plots", "models", "hashes.json",
 )
-PRIMARY_REQUIRED_INVENTORY = REQUIRED_INVENTORY + ("calibration_evidence.json",)
+PRIMARY_REQUIRED_INVENTORY = REQUIRED_INVENTORY + ("calibration_evidence.json", "numerical_parity.json")
 SHAPE_ONLY_ALLOWED_FILES = frozenset({
     "docs/AMCF_SHAPE_ONLY.md", "src/gnss_doppler_lab/amcf_shape_only.py",
     "tests/test_amcf_shape_only.py", "tests/test_amcf_shape_only_runner.py",
@@ -477,6 +476,83 @@ def recompute_scenario_metrics(scenario: str, rows: Iterable[Mapping[str, Any]],
     return out
 
 
+def require_primary_cuda_backend(*, torch_module=None) -> str:
+    """Fail closed unless publication replay can use the production CUDA backend."""
+    if torch_module is None:
+        import torch as torch_module
+    if not bool(torch_module.cuda.is_available()):
+        raise RuntimeError("CUDA is required for primary publication numerical verification")
+    return "cuda"
+
+
+def _difference_summary(persisted: np.ndarray, replayed: np.ndarray) -> dict[str, Any]:
+    a=np.asarray(persisted,dtype=np.float64);b=np.asarray(replayed,dtype=np.float64)
+    if a.shape!=b.shape:raise ValueError("numerical replay shape mismatch")
+    finite=bool(np.isfinite(a).all() and np.isfinite(b).all())
+    if not finite:raise ValueError("numerical replay contains non-finite values")
+    absolute=np.abs(a-b);relative=absolute/np.maximum(np.abs(a),np.finfo(np.float64).tiny)
+    def stats(x: np.ndarray) -> dict[str, float]:
+        if not len(x):return {"p50":0.0,"p95":0.0,"p99":0.0,"max":0.0}
+        return {"p50":float(np.percentile(x,50)),"p95":float(np.percentile(x,95)),
+                "p99":float(np.percentile(x,99)),"max":float(np.max(x))}
+    exact=np.ascontiguousarray(a).view(np.uint64)==np.ascontiguousarray(b).view(np.uint64)
+    return {"count":int(a.size),"finite":finite,"exact_count":int(np.count_nonzero(exact)),
+            "abs_diff":stats(absolute),"relative_diff":stats(relative)}
+
+
+def evaluate_numerical_parity(
+    same_device_pairs: Mapping[str, Mapping[str, Any]],
+    cross_device_pairs: Mapping[str, Mapping[str, Any]], *,
+    semantic_changes: Mapping[str, int], backend_versions: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Evaluate raw binding and cross-device semantic invariance as distinct gates.
+
+    The 2e-3 CPU guard was selected conservatively after CUDA/CPU FP32 backend
+    characterization.  It is an engineering fault detector only and is never
+    used to fit or tune a model, conformal threshold, or attack result.
+    """
+    if set(same_device_pairs)!=set(cross_device_pairs) or not same_device_pairs:
+        raise ValueError("same/cross-device numerical inventory mismatch")
+    details={"same_device":{},"cross_device":{}}
+    identity_exact=True;source_exact=True
+    for key in sorted(same_device_pairs):
+        same=same_device_pairs[key];cross=cross_device_pairs[key]
+        for row in (same,cross):
+            identity_exact &= row.get("identity_exact") is True
+            source_exact &= row.get("source_exact") is True
+        ss=_difference_summary(same["persisted"],same["replayed"])
+        cs=_difference_summary(cross["persisted"],cross["replayed"])
+        details["same_device"][key]=ss;details["cross_device"][key]=cs
+    persisted=np.concatenate([np.asarray(cross_device_pairs[k]["persisted"],float).ravel() for k in sorted(cross_device_pairs)])
+    replayed=np.concatenate([np.asarray(cross_device_pairs[k]["replayed"],float).ravel() for k in sorted(cross_device_pairs)])
+    cross_total=_difference_summary(persisted,replayed)
+    persisted_gpu=np.concatenate([np.asarray(same_device_pairs[k]["persisted"],float).ravel() for k in sorted(same_device_pairs)])
+    replayed_gpu=np.concatenate([np.asarray(same_device_pairs[k]["replayed"],float).ravel() for k in sorted(same_device_pairs)])
+    same_total=_difference_summary(persisted_gpu,replayed_gpu)
+    if not identity_exact or not source_exact:
+        raise ValueError("numerical replay identity/source mismatch")
+    if same_total["exact_count"]!=same_total["count"]:
+        raise ValueError("same-device raw binding mismatch")
+    if cross_total["abs_diff"]["max"]>CROSS_DEVICE_MAX_ABS:
+        raise ValueError("cross-device engineering guard exceeded")
+    changes={k:int(semantic_changes.get(k,0)) for k in ("threshold","alarm","metric")}
+    if any(changes.values()):raise ValueError("cross-device semantic invariance failure")
+    return {"schema":"gnss-doppler-lab.amcf-shape-only-numerical-parity.v1",
+            "publication_mode":"primary-full","backend_versions":dict(backend_versions),
+            "tolerances":{"same_device_rtol":0.0,"same_device_atol":0.0,
+                          "cross_device_engineering_max_abs":CROSS_DEVICE_MAX_ABS},
+            "same_device_raw_binding":{**same_total,"comparison":"bit-exact",
+                "identity_exact":identity_exact,"source_exact":source_exact,
+                "required_backend":"cuda","details":details["same_device"]},
+            "cross_device_numerical_audit":{**cross_total,"max_abs":cross_total["abs_diff"]["max"],"engineering_guard_max_abs":CROSS_DEVICE_MAX_ABS,
+                "guard_basis":"conservative post-characterization FP32 backend guard; not a model or threshold tolerance",
+                "raw_binding_gate":False,"identity_exact":identity_exact,"source_exact":source_exact,
+                "details":details["cross_device"]},
+            "semantic_invariance":{"threshold_flip_count":changes["threshold"],
+                "alarm_flip_count":changes["alarm"],"metric_change_count":changes["metric"],
+                "attack_data_role":"QA only; never fit or tune","pass":True},"pass":True}
+
+
 def configure_primary_determinism(*, torch_module=None) -> dict[str, Any]:
     """Configure fail-closed CUDA determinism before the first CUDA operation."""
     existing = os.environ.get("CUBLAS_WORKSPACE_CONFIG")
@@ -624,6 +700,7 @@ def verify_and_publish_primary_stage(
         report = verifier(stage)
         if (report.get("primary_decision") != expected_decision or
                 report.get("mode") != "primary-full" or
+                report.get("numerical_parity_verified") is not True or
                 not report.get("byte_identical")):
             raise RuntimeError("staging summarizer/independent verifier disagrees with runner")
         if source_state_verifier is not None:
@@ -688,7 +765,10 @@ def render_readme(decision: str, status: str, criteria: Mapping[str,Any]) -> str
            "q99 is the sole primary operating point; q995 is diagnostic and cannot affect GO.",
            "AMCF thresholds use cleanStatic [340,410); frozen B0 Exact uses its protected [300,330) calibration.",
            "Because those protocols differ, threshold-dependent AMCF/B0 comparison is limited; B0 ROC-AUC alone is recomputed on common timestamps.",
-           "DS4 is explicit NA metadata and is not one of the five attack GO scenarios.", "", "## Verified criteria"]
+           "DS4 is explicit NA metadata and is not one of the five attack GO scenarios.",
+           "Primary publication binds every persisted raw NLL by bit-exact replay on the production CUDA backend.",
+           "CPU replay is a cross-device numerical audit: raw drift is guarded at 2e-3, while thresholds, alarms, and reported metrics must have zero changes.",
+           "Attack data is QA-only for this audit and is never used to fit or tune a model or threshold.", "", "## Verified criteria"]
     for name in sorted(criteria): lines.append(f"- {name}: {'PASS' if bool(criteria[name]) else 'FAIL'}")
     lines += ["", "## Claims", "- Claimable: leakage controls, deterministic artifact recomputation, and the recorded smoke/campaign outcome.",
               "- Not claimable: confirmatory attack performance, independent-clean generalization, causality, or deployment benefit.",
@@ -1414,14 +1494,26 @@ def run_primary(out: Path | str = ROOT/FINAL_ARTIFACT, *, bootstrap_reps: int = 
         seed_dir={n:sum(next(x for x in seed_rows if x["scenario"]==n and x["model"]=="Complex all9" and x["seed"]==seed and x["operating_point"]=="q99")["roc_auc"]>next(x for x in seed_rows if x["scenario"]==n and x["model"]=="Magnitude all9" and x["seed"]==seed and x["operating_point"]=="q99")["roc_auc"] for seed in SEEDS) for n in ONSETS}
         criteria={"stable_pre_fpr_all_below_0.05":all(r["stable_pre_fpr"]<.05 for r in attacks),"complex_auc_gt_magnitude_4_of_5":sum(a["roc_auc"]>m["roc_auc"] for a,m in zip(attacks,mags))>=4,"auc_bootstrap_ci_lower_gt_zero_3_of_5":sum(v>0 for v in cis.values())>=3,"same_seed_direction_each_scenario":all(v>=2 for v in seed_dir.values()),"beats_b0_with_fpr_guard_3_of_5":sum(((a["roc_auc"]-b["roc_auc"]>=.02 or a["post_detection"]-b["post_detection"]>=.05) and a["stable_pre_fpr"]-b["stable_pre_fpr"]<=.01) for a,b in zip(attacks,bzeros))>=3,"all_required_seeds_converged":exact,"ds7_ds8_no_collapse":feature_audit["pass"]}
         final="GO" if all(criteria.values()) else "NO-GO"
+        # The failed publication gate exposed a backend FP32 difference, not a
+        # model/threshold issue. Generate the new same-CUDA binding plus CPU
+        # semantic audit before provenance and decision hashes are sealed.
+        del models, epoch, evidence, datasets, bundles, transformed
+        del train, val, ex, part, x, iq, rows, rows_for_name
+        cleanup_for_staging_verifier(torch_module=torch)
+        spec=importlib.util.spec_from_file_location("amcf_shape_staging_summarizer",ROOT/"scripts/summarize_amcf_shape_only.py")
+        assert spec and spec.loader; summarizer=importlib.util.module_from_spec(spec); spec.loader.exec_module(summarizer)
+        numerical_parity=summarizer._compute_checkpoint_numerical_parity(stage,examples,convergence,calibration)
+        write_json(stage/"numerical_parity.json",numerical_parity); numerical_parity_sha256=sha256(stage/"numerical_parity.json")
         write_json(stage/"feature_schema.json",schema); write_json(stage/"input_hashes.json",inputs); write_json(stage/"window_qa.json",qas)
         provenance={"schema":"gnss-doppler-lab.amcf-shape-only-provenance.v2",**source,"execution_tree_clean":True,"gpu_execution":gpu,"deterministic_execution":determinism,
           "inputs":inputs,"B0_inputs":b0_paths,"B0_frozen_contract":b0_contract,"threshold_protocol_limitation":"AMCF [340,410) and frozen B0 [300,330) differ; threshold-dependent comparisons are limited",
           "gate":dict(gate._asdict()),"scalers":scalers,"gate_hash":gate_hash,"gate_scaler_hash":_digest_value({"gate":dict(gate._asdict()),"scalers":scalers}),
           "feature_schema_hash":_digest_value(schema),"feature_provenance":feature_evidence,"feature_audit_digest":feature_audit["audit_digest"],
-          "fit_config":dict(PRIMARY_FIT_CONFIG),"fit_audits":{k:{"fit_manifest_digest":v["fit_manifest_digest"],"upstream_digests":v["upstream_digests"]} for k,v in audits.items()},"attack_fit":False,"all_attack_results":"exploratory/developmental"}; write_json(stage/"provenance.json",provenance)
+          "fit_config":dict(PRIMARY_FIT_CONFIG),"fit_audits":{k:{"fit_manifest_digest":v["fit_manifest_digest"],"upstream_digests":v["upstream_digests"]} for k,v in audits.items()},
+          "numerical_parity_sha256":numerical_parity_sha256,"attack_fit":False,"all_attack_results":"exploratory/developmental",
+          "numerical_correction_scope":"publication verifier correction after failed staging gate; no model, hyperparameter, conformal threshold, or attack tuning"}; write_json(stage/"provenance.json",provenance)
         config={"schema":"gnss-doppler-lab.amcf-shape-only-config.v2","mode":"primary-full","base_sha":PRIMARY_BASE_SHA,"deterministic_execution":determinism,"seeds":list(SEEDS),"objectives":["all9","EPL"],"representations":["complex","magnitude"],**dict(PRIMARY_FIT_CONFIG),"hidden":32,"history":12,"stride_s":.5,"source_window_s":1.,"minimum_valid_rows":PRIMARY_MIN_VALID_ROWS,"bootstrap_reps":bootstrap_reps,"bootstrap_block_seconds":PRIMARY_BOOTSTRAP_BLOCK_SECONDS,"bootstrap_seed_rule":PRIMARY_BOOTSTRAP_SEED_RULE,"onsets":ONSETS,"scenarios":[*ONSETS,"DS4:NA"],"DS4":{"status":"NA","included_in_attack_go":False},"q99_primary":True,"q995_diagnostic_only":True,"matched_clean":False}; write_json(stage/"config.json",config)
-        digest_paths={"thresholds":"thresholds.json","seed_metrics":"seed_metrics.csv","paired_comparisons":"paired_comparisons.csv","scenario_metrics":"scenario_metrics.csv","provenance":"provenance.json","feature_audit":"feature_audit.json","feature_schema":"feature_schema.json","fit_checkpoint_audits":"convergence_audit.json","training_history":"training_history.csv","calibration_evidence":"calibration_evidence.json"}
+        digest_paths={"thresholds":"thresholds.json","seed_metrics":"seed_metrics.csv","paired_comparisons":"paired_comparisons.csv","scenario_metrics":"scenario_metrics.csv","provenance":"provenance.json","feature_audit":"feature_audit.json","feature_schema":"feature_schema.json","fit_checkpoint_audits":"convergence_audit.json","training_history":"training_history.csv","calibration_evidence":"calibration_evidence.json","numerical_parity":"numerical_parity.json"}
         source_digests={k:sha256(stage/v) for k,v in digest_paths.items()}; source_digests["per_epoch"]={str(p.relative_to(stage)):sha256(p) for p in sorted((stage/"per_epoch").glob("*.csv"))}; source_digests["checkpoints"]={str(p.relative_to(stage)):sha256(p) for p in sorted((stage/"models").glob("*.pt"))}
         decision={"primary_quantile":"q99","primary_decision":final,"amcf_wcl":"GO candidate" if final=="GO" else "AMCF WCL no-go","criteria":criteria,"source_digests":source_digests}; write_json(stage/"decision.json",decision)
         (stage/"README.md").write_text(render_readme(final,"PRIMARY COMPLETE",criteria),encoding="utf-8",newline="\n")
@@ -1429,14 +1521,10 @@ def run_primary(out: Path | str = ROOT/FINAL_ARTIFACT, *, bootstrap_reps: int = 
         if missing: raise RuntimeError(f"missing inventory {missing}")
         # Drop campaign-scale in-memory tensors/models before the independent
         # verifier regenerates tensors and CPU re-infers all 12 checkpoints.
-        del datasets, bundles, transformed, examples, models, epoch, evidence
-        del train, val, ex, part, x, iq, rows, rows_for_name
-        del saved, saved_calibration_rows, calibration, metric_rows, seed_rows, paired, history
+        del examples, saved, saved_calibration_rows, calibration, metric_rows, seed_rows, paired, history
         cleanup_for_staging_verifier(torch_module=torch)
-        # Independent verifier runs against staging. Publication remains a
-        # single atomic rename only after verifier and source-state agreement.
-        spec=importlib.util.spec_from_file_location("amcf_shape_staging_summarizer",ROOT/"scripts/summarize_amcf_shape_only.py")
-        assert spec and spec.loader; summarizer=importlib.util.module_from_spec(spec); spec.loader.exec_module(summarizer)
+        # Independent verifier repeats both replays against staging. Publication
+        # remains a single atomic rename only after verifier/source agreement.
         report=verify_and_publish_primary_stage(
             stage,out,expected_decision=final,source_commit=source["source_commit"],
             verifier=summarizer.verify_and_summarize,

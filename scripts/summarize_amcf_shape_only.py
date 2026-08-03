@@ -43,7 +43,7 @@ def _verify_decision_digests(out:Path,decision:Mapping[str,Any],mode:str)->None:
         for k,v in paths.items():
             if got[k]!=runner.sha256(out/v):raise ValueError(f"GO source digest mismatch: {k}")
         return
-    paths={"thresholds":"thresholds.json","seed_metrics":"seed_metrics.csv","paired_comparisons":"paired_comparisons.csv","scenario_metrics":"scenario_metrics.csv","provenance":"provenance.json","feature_audit":"feature_audit.json","feature_schema":"feature_schema.json","fit_checkpoint_audits":"convergence_audit.json","training_history":"training_history.csv","calibration_evidence":"calibration_evidence.json"}
+    paths={"thresholds":"thresholds.json","seed_metrics":"seed_metrics.csv","paired_comparisons":"paired_comparisons.csv","scenario_metrics":"scenario_metrics.csv","provenance":"provenance.json","feature_audit":"feature_audit.json","feature_schema":"feature_schema.json","fit_checkpoint_audits":"convergence_audit.json","training_history":"training_history.csv","calibration_evidence":"calibration_evidence.json","numerical_parity":"numerical_parity.json"}
     if set(got)!=(set(paths)|{"per_epoch","checkpoints"}):raise ValueError("primary GO decision lacks exact full source digests")
     for k,v in paths.items():
         if got[k]!=runner.sha256(out/v):raise ValueError(f"GO source digest mismatch: {k}")
@@ -256,14 +256,123 @@ def _verify_convergence(out:Path,convergence:Mapping[str,Any],history:list[dict[
         if convergence_derived!=_bool(audit.get("converged")):raise ValueError("convergence boolean does not follow actual checkpoint/history fields")
     if not all(_bool(x.get("converged")) for x in audits.values()) or convergence.get("exact_three_converged_per_variant") is not True:raise ValueError("primary full has nonconverged checkpoint")
 
+def _compute_checkpoint_numerical_parity(out:Path,examples:Mapping[tuple[str,str],Mapping[str,np.ndarray]],
+                                         convergence:Mapping[str,Any],calibration:Mapping[str,Any])->dict[str,Any]:
+    """Replay on production CUDA for binding, then audit CPU semantic parity."""
+    import sys,torch
+    runner.require_primary_cuda_backend(torch_module=torch)
+    determinism=runner.configure_primary_determinism(torch_module=torch)
+    if str(ROOT/"src") not in sys.path:sys.path.insert(0,str(ROOT/"src"))
+    from gnss_doppler_lab.amcf_shape_only import ShapeOnlyModel
+    scenario_rows={name:_rows(out/"per_epoch"/f"{name}.csv") for name in runner.CANONICAL}
+    saved_metrics=runner.index_metric_rows([r for r in _rows(out/"scenario_metrics.csv") if r.get("scenario")!="DS4"])
+    same={};cross={};cpu_epoch={};threshold_details={};alarm_details={};metric_details={};calibration_semantic_details={}
+    variants=(("complex","all9","Complex all9"),("magnitude","all9","Magnitude all9"),
+              ("complex","EPL","Complex EPL"),("magnitude","EPL","Magnitude EPL"))
+
+    def collect_pair(key:str,inferred:Mapping[float,Mapping[str,Any]],rows:list[Mapping[str,Any]],column:str,
+                     target:dict[str,dict[str,Any]])->None:
+        persisted=[];replayed=[];identity_exact=True;source_exact=True
+        for row in rows:
+            actual=inferred.get(float(row["decision_time_s"]))
+            if actual is None:raise ValueError(f"checkpoint inference missing persisted interval: {key}")
+            identity=str(row.get("epoch_identity_hash",row.get("identity_hash","")))
+            identity_exact &= identity==actual["identity_hash"]
+            source_exact &= (float(row["source_start"])==float(actual["source_start"]) and
+                             float(row["source_end"])==float(actual["source_end"]))
+            persisted.append(float(row[column]));replayed.append(float(actual["score"]))
+        target[key]={"persisted":np.asarray(persisted),"replayed":np.asarray(replayed),
+                     "identity_exact":bool(identity_exact),"source_exact":bool(source_exact)}
+
+    for rep,objective,_label in variants:
+        variant=f"{rep}_{objective}";common=calibration[variant]["common_rows"]
+        cal_rows_by_seed={}
+        for seed in runner.SEEDS:
+            key=f"{variant}_seed{seed}";obj=torch.load(out/"models"/f"{key}.pt",map_location="cpu",weights_only=False)
+            model=ShapeOnlyModel(int(obj.get("feature_dim",-1)),hidden=32,df=4.0)
+            model.load_state_dict(obj["state_dict"],strict=True)
+            gpu_by_name={}
+            for name in runner.CANONICAL:
+                gpu=runner._epoch_scores(examples[name,rep],runner._score_examples(model,examples[name,rep],objective,device="cuda"))
+                cpu=runner._epoch_scores(examples[name,rep],runner._score_examples(model,examples[name,rep],objective,device="cpu"))
+                gpu_by_name[name]=gpu;cpu_epoch[variant,seed,name]=cpu
+                pair_key=f"{key}/{name}";column=f"score_{variant}_seed{seed}"
+                collect_pair(pair_key,gpu,scenario_rows[name],column,same)
+                collect_pair(pair_key,cpu,scenario_rows[name],column,cross)
+            persisted_cal=[{"decision_time_s":t,"source_start":a,"source_end":b,"identity_hash":i,"score":v}
+                for t,a,b,i,v in zip(common["decision_time_s"],common["source_start"],common["source_end"],
+                                     common["identity"],calibration[variant]["per_seed_raw_scores"][str(seed)])]
+            collect_pair(f"{key}/calibration",cpu_epoch[variant,seed,"cleanStatic"],persisted_cal,"score",cross)
+            # Calibration is a distinct persisted bank but reuses the exact
+            # same cleanStatic CUDA replay rather than running a second pass.
+            collect_pair(f"{key}/calibration",gpu_by_name["cleanStatic"],persisted_cal,"score",same)
+            cal_rows_by_seed[seed]=np.asarray([cpu_epoch[variant,seed,"cleanStatic"][float(t)]["score"]
+                                               for t in common["decision_time_s"]],float)
+        loo=[runner._loo_evidence(cal_rows_by_seed[s]) for s in runner.SEEDS]
+        ensemble=np.mean(loo,axis=0)
+        cpu_thresholds={"q99":runner._higher(ensemble,.99),"q995":runner._higher(ensemble,.995)}
+        calibration_semantic_details[variant]={"rows":int(len(ensemble)),
+            "cpu_ensemble_loo_evidence_digest":runner._digest_value(ensemble),
+            "gpu_ensemble_loo_evidence_digest":runner._digest_value(np.asarray(calibration[variant]["ensemble_loo_evidence"],float)),
+            "cpu_q99":cpu_thresholds["q99"],"cpu_q995":cpu_thresholds["q995"]}
+        for op in ("q99","q995"):
+            saved=float(calibration[variant][op]);actual=float(cpu_thresholds[op]);changed=saved!=actual
+            threshold_details[f"{variant}/{op}"]={"gpu":saved,"cpu":actual,"changed":changed}
+        for name,rows in scenario_rows.items():
+            seed_e=[]
+            for seed in runner.SEEDS:
+                vals=np.asarray([cpu_epoch[variant,seed,name][float(r["decision_time_s"])]["score"] for r in rows],float)
+                seed_e.append(runner._conformal(cal_rows_by_seed[seed],vals)[1])
+            cpu_score=np.mean(seed_e,axis=0)
+            for op in ("q99","q995"):
+                cpu_alarm=cpu_score>cpu_thresholds[op]
+                saved_alarm=np.asarray([_bool(r[f"alarm_{variant}_{op}"]) for r in rows],bool)
+                flips=int(np.count_nonzero(cpu_alarm!=saved_alarm))
+                alarm_details[f"{variant}/{name}/{op}"]={"comparisons":len(rows),"flip_count":flips}
+                generic=[{"decision_time_s":r["decision_time_s"],"source_start":r["source_start"],
+                          "source_end":r["source_end"],"score_ensemble":float(score),
+                          "alarm_q99":bool(alarm),"alarm_q995":bool(alarm)}
+                         for r,score,alarm in zip(rows,cpu_score,cpu_alarm)]
+                actual=runner.recompute_scenario_metrics(name,generic,cpu_thresholds[op],cpu_thresholds[op],
+                                                         onset_s=runner.ONSETS.get(name))
+                saved=saved_metrics[(name,_label,op)]
+                fields=("clean_test_fpr","stable_pre_fpr","post_detection","persistent_detection","roc_auc",
+                        "pr_auc","sustained3_delay_s","threshold","rows")
+                changed_fields=[field for field in fields if not _equal(saved.get(field),actual.get(field))]
+                metric_details[f"{variant}/{name}/{op}"]={"gpu":{f:saved.get(f) for f in fields},
+                    "cpu":{f:actual.get(f) for f in fields},"changed_fields":changed_fields,
+                    "changed":bool(changed_fields)}
+    changes={"threshold":sum(int(x["changed"]) for x in threshold_details.values()),
+             "alarm":sum(x["flip_count"] for x in alarm_details.values()),
+             "metric":sum(int(x["changed"]) for x in metric_details.values())}
+    versions={"production_device":"cuda:0","production_device_name":torch.cuda.get_device_name(0),
+              "audit_device":"cpu","torch_version":str(torch.__version__),"cuda_version":str(torch.version.cuda),
+              "cudnn_version":str(torch.backends.cudnn.version()),"numpy_version":str(np.__version__),
+              "deterministic_execution":determinism}
+    audit=runner.evaluate_numerical_parity(same,cross,semantic_changes=changes,backend_versions=versions)
+    if len(same)!=84 or len(cross)!=84:raise ValueError("exact 12 x (6 scenarios + calibration) replay inventory required")
+    audit["same_device_raw_binding"].update({"checkpoint_count":12,"scenario_replay_count":72,
+        "calibration_replay_count":12})
+    audit["cross_device_numerical_audit"].update({"checkpoint_count":12,"scenario_replay_count":72,
+        "calibration_replay_count":12})
+    audit["semantic_invariance"].update({"threshold_comparisons":len(threshold_details),
+        "alarm_comparisons":sum(x["comparisons"] for x in alarm_details.values()),
+        "metric_comparisons":len(metric_details),"calibration_evidence_details":calibration_semantic_details,
+        "threshold_details":threshold_details,"alarm_details":alarm_details,"metric_details":metric_details})
+    return audit
+
+
+def _verify_saved_numerical_parity(out:Path,actual:Mapping[str,Any])->None:
+    saved=json.loads((out/"numerical_parity.json").read_text())
+    if saved!=actual:raise ValueError("saved numerical_parity.json does not match repeated replay audit")
+    if saved.get("pass") is not True:raise ValueError("numerical parity publication gate failed")
+
+
 def _verify_checkpoint_scores(out:Path,examples:Mapping[tuple[str,str],Mapping[str,np.ndarray]],
                               convergence:Mapping[str,Any],calibration:Mapping[str,Any])->int:
-    """CPU re-infer all 12 checkpoints against exact regenerated tensors.
-
-    GPU-produced float32 scores are accepted only within rtol=1e-6/atol=1e-5;
-    identity and source intervals remain exact.  Inference always uses eval/no_grad.
-    """
+    """Compatibility helper: exact CUDA re-inference of all 12 checkpoints."""
     import sys,torch
+    runner.require_primary_cuda_backend(torch_module=torch)
     if str(ROOT/"src") not in sys.path:sys.path.insert(0,str(ROOT/"src"))
     from gnss_doppler_lab.amcf_shape_only import ShapeOnlyModel
     audits=convergence.get("audits",{});scenario_rows={name:_rows(out/"per_epoch"/f"{name}.csv") for name in runner.CANONICAL}
@@ -276,7 +385,7 @@ def _verify_checkpoint_scores(out:Path,examples:Mapping[tuple[str,str],Mapping[s
             identity=str(row.get("epoch_identity_hash",row.get("identity_hash","")))
             if (float(row["source_start"])!=float(actual["source_start"]) or float(row["source_end"])!=float(actual["source_end"]) or identity!=actual["identity_hash"]):raise ValueError(f"checkpoint inference identity/source interval mismatch: {where}")
             saved=float(row[score_column])
-            if not math.isfinite(saved) or not math.isclose(saved,float(actual["score"]),rel_tol=runner.INFERENCE_SCORE_RTOL,abs_tol=runner.INFERENCE_SCORE_ATOL):raise ValueError(f"checkpoint output raw NLL mismatch: {where}")
+            if not math.isfinite(saved) or saved!=float(actual["score"]):raise ValueError(f"checkpoint output raw NLL mismatch: {where}")
     for rep in ("complex","magnitude"):
         for objective in ("all9","EPL"):
             variant=f"{rep}_{objective}";cal=calibration[variant]
@@ -286,7 +395,7 @@ def _verify_checkpoint_scores(out:Path,examples:Mapping[tuple[str,str],Mapping[s
                 model=ShapeOnlyModel(int(obj.get("feature_dim",-1)),hidden=32,df=4.0);model.load_state_dict(obj["state_dict"],strict=True)
                 inferred={}
                 for name in runner.CANONICAL:
-                    raw=runner._score_examples(model,examples[name,rep],objective,device="cpu")
+                    raw=runner._score_examples(model,examples[name,rep],objective,device="cuda")
                     inferred[name]=runner._epoch_scores(examples[name,rep],raw)
                     compare_rows(inferred[name],scenario_rows[name],f"score_{variant}_seed{seed}",f"{key} {name}")
                 cal_rows=[{"decision_time_s":t,"source_start":a,"source_end":b,"identity_hash":i,"score":v}
@@ -373,12 +482,18 @@ def _primary_criteria(metrics,seeds,paired,feature_verified,convergence):
     beats=sum(((float(x["roc_auc"])-float(z["roc_auc"])>=.02 or float(x["post_detection"])-float(z["post_detection"])>=.05) and float(x["stable_pre_fpr"])-float(z["stable_pre_fpr"])<=.01) for x,z in zip(c,b))
     return {"stable_pre_fpr_all_below_0.05":all(float(x["stable_pre_fpr"])<.05 for x in c),"complex_auc_gt_magnitude_4_of_5":sum(float(x["roc_auc"])>float(y["roc_auc"]) for x,y in zip(c,m))>=4,"auc_bootstrap_ci_lower_gt_zero_3_of_5":sum(float(pindex[s,"Magnitude all9","roc_auc"]["ci_low"])>0 for s in names)>=3,"same_seed_direction_each_scenario":all(x>=2 for x in directions.values()),"beats_b0_with_fpr_guard_3_of_5":beats>=3,"all_required_seeds_converged":all(_bool(x.get("converged")) for x in convergence.get("audits",{}).values()),"ds7_ds8_no_collapse":feature_verified["pass"]}
 
-def verify_and_summarize(out:Path|str)->dict[str,Any]:
+def verify_and_summarize(out:Path|str, *, hash_only:bool=False)->dict[str,Any]:
     out=Path(out);runner.verify_hashes(out)
     missing=[x for x in runner.REQUIRED_INVENTORY if not (out/x).exists()]
     if missing:raise ValueError(f"required artifact inventory missing: {missing}")
     config=json.loads((out/"config.json").read_text());mode=config.get("mode")
     if mode not in {"synthetic-smoke","primary-full"}:raise ValueError("unknown artifact mode")
+    if mode=="primary-full":
+        missing=[x for x in runner.PRIMARY_REQUIRED_INVENTORY if not (out/x).exists()]
+        if missing:raise ValueError(f"primary required artifact inventory missing: {missing}")
+    if hash_only:
+        return {"schema":"gnss-doppler-lab.amcf-shape-only-hash-audit.v1","hashes_verified":True,
+                "mode":"non-publication-hash-only","artifact_mode":mode,"publication_eligible":False}
     if config.get("DS4")!={"status":"NA","included_in_attack_go":False} or "DS4:NA" not in config.get("scenarios",[]):raise ValueError("DS4 NA config contract missing")
     schema=_verify_schema(out);thresholds=json.loads((out/"thresholds.json").read_text());decision=json.loads((out/"decision.json").read_text());convergence=json.loads((out/"convergence_audit.json").read_text());provenance=json.loads((out/"provenance.json").read_text());feature_audit=json.loads((out/"feature_audit.json").read_text());history=_rows(out/"training_history.csv")
     _verify_decision_digests(out,decision,mode)
@@ -388,17 +503,27 @@ def verify_and_summarize(out:Path|str)->dict[str,Any]:
     if mode=="primary-full":_verify_primary_config(config,provenance);_verify_execution_source(provenance);_verify_calibration(out,thresholds,provenance);derived,examples=_derive_primary_fit_bindings(out,schema,provenance)
     checked=_verify_metrics(out,mode,thresholds,metrics);_verify_convergence(out,convergence,history,mode,derived)
     if mode=="primary-full":
-        assert examples is not None;checkpoint_scores_checked=_verify_checkpoint_scores(out,examples,convergence,json.loads((out/"calibration_evidence.json").read_text()))
+        assert examples is not None
+        if provenance.get("numerical_parity_sha256")!=runner.sha256(out/"numerical_parity.json"):raise ValueError("numerical parity provenance hash mismatch")
+        saved_parity=json.loads((out/"numerical_parity.json").read_text());backend=saved_parity.get("backend_versions",{});gpu=provenance.get("gpu_execution",{});det=provenance.get("deterministic_execution",{})
+        if (backend.get("production_device_name")!=gpu.get("device_name") or
+            backend.get("torch_version")!=det.get("torch_version") or
+            backend.get("cuda_version")!=det.get("cuda_version") or
+            backend.get("cudnn_version")!=det.get("cudnn_version")):
+            raise ValueError("numerical parity backend is not bound to production backend provenance")
+        numerical_parity=_compute_checkpoint_numerical_parity(out,examples,convergence,json.loads((out/"calibration_evidence.json").read_text()))
+        _verify_saved_numerical_parity(out,numerical_parity)
+        checkpoint_scores_checked=numerical_parity["same_device_raw_binding"]["exact_count"]
         _verify_conformal_and_phase_rows(out,thresholds);_verify_seed_metrics(out,seeds);_verify_paired(out,paired,thresholds,config);verified_feature=_verify_feature_audit(out,feature_audit,schema,provenance);criteria=_primary_criteria(metrics,seeds,paired,verified_feature,convergence);status="PRIMARY COMPLETE"
     else:_verify_smoke_feature_audit(out,feature_audit,schema);criteria=runner._smoke_criteria();status="SMOKE-NO-GO"
     final="GO" if all(criteria.values()) else "NO-GO"
     if decision.get("primary_quantile")!="q99" or decision.get("primary_decision")!=final or decision.get("criteria")!=criteria:raise ValueError("deterministic q99 GO recomputation mismatch")
     expected=runner.render_readme(final,status,criteria).encode();actual=(out/"README.md").read_bytes()
     if expected!=actual:raise ValueError("README is not byte-identical to deterministic regeneration")
-    return {"schema":"gnss-doppler-lab.amcf-shape-only-summary-audit.v2","hashes_verified":True,"byte_identical":True,"metrics_recomputed":checked,"alarms_recomputed":True,"thresholds_recomputed":mode=="primary-full","paired_recomputed":mode=="primary-full","checkpoints_loaded":mode=="primary-full","checkpoint_scores_reinferred":checkpoint_scores_checked,"primary_quantile":"q99","primary_decision":final,"amcf_wcl":"GO candidate" if final=="GO" else "AMCF WCL no-go","criteria":criteria,"mode":mode}
+    return {"schema":"gnss-doppler-lab.amcf-shape-only-summary-audit.v2","hashes_verified":True,"byte_identical":True,"metrics_recomputed":checked,"alarms_recomputed":True,"thresholds_recomputed":mode=="primary-full","paired_recomputed":mode=="primary-full","checkpoints_loaded":mode=="primary-full","checkpoint_scores_reinferred":checkpoint_scores_checked,"numerical_parity_verified":mode=="primary-full","primary_quantile":"q99","primary_decision":final,"amcf_wcl":"GO candidate" if final=="GO" else "AMCF WCL no-go","criteria":criteria,"mode":mode}
 
 def main(argv=None)->int:
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument("artifact",type=Path);p.add_argument("--audit-out",type=Path);a=p.parse_args(argv);report=verify_and_summarize(a.artifact);text=json.dumps(report,sort_keys=True,indent=2)+"\n";
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument("artifact",type=Path);p.add_argument("--audit-out",type=Path);p.add_argument("--hash-only",action="store_true",help="limited non-publication verification without CUDA replay");a=p.parse_args(argv);report=verify_and_summarize(a.artifact,hash_only=a.hash_only);text=json.dumps(report,sort_keys=True,indent=2)+"\n";
     if a.audit_out:a.audit_out.write_text(text,encoding="utf-8",newline="\n")
     print(json.dumps(report,sort_keys=True));return 0
 if __name__=="__main__":raise SystemExit(main())
