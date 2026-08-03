@@ -1,0 +1,163 @@
+{
+  "checkpoint_architecture_crosscheck": {
+    "checked_count": 12,
+    "checks": [
+      {
+        "checkpoint": "complex_EPL_seed101.pt",
+        "feature_dim": 4,
+        "parameter_count": 19208,
+        "pass": true,
+        "representation": "complex",
+        "sha256": "6fc3d118d55d093a2c4ba3bd635d8aff9db2ac542e09d9a4d3069c45d2d83658"
+      },
+      {
+        "checkpoint": "complex_EPL_seed202.pt",
+        "feature_dim": 4,
+        "parameter_count": 19208,
+        "pass": true,
+        "representation": "complex",
+        "sha256": "c3ce090ff041d054d0e3b62aaf40a70c897ae0a03f28f832525fdd954378a3f7"
+      },
+      {
+        "checkpoint": "complex_EPL_seed303.pt",
+        "feature_dim": 4,
+        "parameter_count": 19208,
+        "pass": true,
+        "representation": "complex",
+        "sha256": "6f141673f9f6d7463a362c34a417f99fff2c643c9b46690b9f3fa547c75cf718"
+      },
+      {
+        "checkpoint": "complex_all9_seed101.pt",
+        "feature_dim": 4,
+        "parameter_count": 19208,
+        "pass": true,
+        "representation": "complex",
+        "sha256": "dd3ac0fb67f3d4a366cb291cb91b321e1948157521bb6f9a2ed6e919ba097ef3"
+      },
+      {
+        "checkpoint": "complex_all9_seed202.pt",
+        "feature_dim": 4,
+        "parameter_count": 19208,
+        "pass": true,
+        "representation": "complex",
+        "sha256": "6b4fb5b169fbb25a75c1689d49da068108df51a8e6e61180641892d2c6df5eec"
+      },
+      {
+        "checkpoint": "complex_all9_seed303.pt",
+        "feature_dim": 4,
+        "parameter_count": 19208,
+        "pass": true,
+        "representation": "complex",
+        "sha256": "e4cb5d970207ff4dcb754185637a0a36a16e4a657493dd45a62f89bbc1fcac34"
+      },
+      {
+        "checkpoint": "magnitude_EPL_seed101.pt",
+        "feature_dim": 2,
+        "parameter_count": 19012,
+        "pass": true,
+        "representation": "magnitude",
+        "sha256": "f3ad061505b2c5720d6becc4992c8a7fdeca01316f88fd600c27a4573cd06d5d"
+      },
+      {
+        "checkpoint": "magnitude_EPL_seed202.pt",
+        "feature_dim": 2,
+        "parameter_count": 19012,
+        "pass": true,
+        "representation": "magnitude",
+        "sha256": "bfaaad237f74b360762d21c58e2b9940ad12f1455cbe2432d9e7157df28e1064"
+      },
+      {
+        "checkpoint": "magnitude_EPL_seed303.pt",
+        "feature_dim": 2,
+        "parameter_count": 19012,
+        "pass": true,
+        "representation": "magnitude",
+        "sha256": "38b5e4085c44a5be97602aa597ed8ee84dedba71ab22a0a04f2d8313ab2cedb5"
+      },
+      {
+        "checkpoint": "magnitude_all9_seed101.pt",
+        "feature_dim": 2,
+        "parameter_count": 19012,
+        "pass": true,
+        "representation": "magnitude",
+        "sha256": "2eaa38ed8db5e9fa7cf319f2309db69c8860d1fd380647ecc14531937083ed42"
+      },
+      {
+        "checkpoint": "magnitude_all9_seed202.pt",
+        "feature_dim": 2,
+        "parameter_count": 19012,
+        "pass": true,
+        "representation": "magnitude",
+        "sha256": "b931b201c6f2c26bc9e887e767340aeba703f5c1f1daf62d4d641acd199fee31"
+      },
+      {
+        "checkpoint": "magnitude_all9_seed303.pt",
+        "feature_dim": 2,
+        "parameter_count": 19012,
+        "pass": true,
+        "representation": "magnitude",
+        "sha256": "52a66dcf66d9428d62ce70a160e8aeb30467f3ab56f8aaa556af138ecf0335b2"
+      }
+    ],
+    "expected_count": 12,
+    "pass": true,
+    "performed": true
+  },
+  "comparison": {
+    "absolute_parameter_difference": 196,
+    "limit_percent": 5.0,
+    "pass_le_5_percent": true,
+    "percent_denominator": "minimum parameter count",
+    "percent_difference_min_denominator": 1.0309278350515463
+  },
+  "derivation": "instantiated actual gnss_doppler_lab.amcf_shape_only.ShapeOnlyModel",
+  "hidden": 32,
+  "no_zero_or_duplicate_features": true,
+  "pass": true,
+  "representations": {
+    "complex": {
+      "duplicate_feature_count": 0,
+      "feature_dimensions": [
+        "median_real",
+        "median_imag",
+        "mad_real",
+        "mad_imag"
+      ],
+      "feature_dimensions_per_tap": 4,
+      "hidden": 32,
+      "parameter_breakdown": {
+        "decoder": 12448,
+        "history_gru": 6336,
+        "input_adapter": 160,
+        "output_head": 264
+      },
+      "parameter_breakdown_sum": 19208,
+      "parameter_count": 19208,
+      "side_tap_count": 8,
+      "total_side_feature_count": 32,
+      "zero_filled_feature_count": 0
+    },
+    "magnitude": {
+      "duplicate_feature_count": 0,
+      "feature_dimensions": [
+        "median_abs",
+        "mad_abs"
+      ],
+      "feature_dimensions_per_tap": 2,
+      "hidden": 32,
+      "parameter_breakdown": {
+        "decoder": 12448,
+        "history_gru": 6336,
+        "input_adapter": 96,
+        "output_head": 132
+      },
+      "parameter_breakdown_sum": 19012,
+      "parameter_count": 19012,
+      "side_tap_count": 8,
+      "total_side_feature_count": 16,
+      "zero_filled_feature_count": 0
+    }
+  },
+  "schema": "gnss-doppler-lab.amcf-shape-only-model-audit.v1",
+  "side_tap_count": 8
+}

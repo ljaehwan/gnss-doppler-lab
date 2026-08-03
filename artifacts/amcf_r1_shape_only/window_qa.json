@@ -1,0 +1,74 @@
+{
+  "DS1": {
+    "gaps_excluded": true,
+    "low_prompt_rule": "finite and abs(P)>=max(clean-train q.005 higher, positive float64 floor) and abs(P)>0",
+    "minimum_valid_rows": 5,
+    "prompt_is_qa_only": true,
+    "raw_rows": 497577,
+    "rejected_rows": 96843,
+    "scenario": "DS1",
+    "valid_rows": 400734,
+    "windows": 9690,
+    "zero_prompt_rejected": 0
+  },
+  "DS2": {
+    "gaps_excluded": true,
+    "low_prompt_rule": "finite and abs(P)>=max(clean-train q.005 higher, positive float64 floor) and abs(P)>0",
+    "minimum_valid_rows": 5,
+    "prompt_is_qa_only": true,
+    "raw_rows": 474168,
+    "rejected_rows": 3620,
+    "scenario": "DS2",
+    "valid_rows": 470548,
+    "windows": 9751,
+    "zero_prompt_rejected": 0
+  },
+  "DS3": {
+    "gaps_excluded": true,
+    "low_prompt_rule": "finite and abs(P)>=max(clean-train q.005 higher, positive float64 floor) and abs(P)>0",
+    "minimum_valid_rows": 5,
+    "prompt_is_qa_only": true,
+    "raw_rows": 616599,
+    "rejected_rows": 9416,
+    "scenario": "DS3",
+    "valid_rows": 607183,
+    "windows": 9793,
+    "zero_prompt_rejected": 0
+  },
+  "DS7": {
+    "gaps_excluded": true,
+    "low_prompt_rule": "finite and abs(P)>=max(clean-train q.005 higher, positive float64 floor) and abs(P)>0",
+    "minimum_valid_rows": 5,
+    "prompt_is_qa_only": true,
+    "raw_rows": 351746,
+    "rejected_rows": 1418,
+    "scenario": "DS7",
+    "valid_rows": 350328,
+    "windows": 5617,
+    "zero_prompt_rejected": 0
+  },
+  "DS8": {
+    "gaps_excluded": true,
+    "low_prompt_rule": "finite and abs(P)>=max(clean-train q.005 higher, positive float64 floor) and abs(P)>0",
+    "minimum_valid_rows": 5,
+    "prompt_is_qa_only": true,
+    "raw_rows": 464692,
+    "rejected_rows": 626,
+    "scenario": "DS8",
+    "valid_rows": 464066,
+    "windows": 9973,
+    "zero_prompt_rejected": 0
+  },
+  "cleanStatic": {
+    "gaps_excluded": true,
+    "low_prompt_rule": "finite and abs(P)>=max(clean-train q.005 higher, positive float64 floor) and abs(P)>0",
+    "minimum_valid_rows": 5,
+    "prompt_is_qa_only": true,
+    "raw_rows": 553639,
+    "rejected_rows": 2593,
+    "scenario": "cleanStatic",
+    "valid_rows": 551046,
+    "windows": 9449,
+    "zero_prompt_rejected": 0
+  }
+}

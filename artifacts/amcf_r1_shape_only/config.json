@@ -1,0 +1,87 @@
+{
+  "DS4": {
+    "included_in_attack_go": false,
+    "status": "NA"
+  },
+  "base_sha": "ef36f265fca856914b7c79b77fd0a2f85f89b4d1",
+  "bootstrap_block_seconds": 10.0,
+  "bootstrap_reps": 2000,
+  "bootstrap_seed_rule": "101+sum(ord(scenario+comparator+metric))",
+  "deterministic_execution": {
+    "cublas_workspace_config": ":4096:8",
+    "cuda_version": "13.0",
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "cudnn_version": "92000",
+    "deterministic_algorithms": true,
+    "torch_version": "2.13.0+cu130"
+  },
+  "df": 4.0,
+  "early_stop_tolerance": 1e-12,
+  "gradient_rule": "every trainable parameter finite gradient every update",
+  "hidden": 32,
+  "history": 12,
+  "learning_rate": 0.001,
+  "matched_clean": false,
+  "max_epochs": 200,
+  "minimum_valid_rows": 5,
+  "mode": "primary-full",
+  "objectives": [
+    "all9",
+    "EPL"
+  ],
+  "onsets": {
+    "DS1": 100.0,
+    "DS2": 100.0,
+    "DS3": 100.0,
+    "DS7": 110.0,
+    "DS8": 110.0
+  },
+  "optimizer": "AdamW",
+  "patience": 20,
+  "q995_diagnostic_only": true,
+  "q99_primary": true,
+  "representations": [
+    "complex",
+    "magnitude"
+  ],
+  "scenarios": [
+    "DS1",
+    "DS2",
+    "DS3",
+    "DS7",
+    "DS8",
+    "DS4:NA"
+  ],
+  "schema": "gnss-doppler-lab.amcf-shape-only-config.v2",
+  "seeds": [
+    101,
+    202,
+    303
+  ],
+  "source_window_s": 1.0,
+  "stride_s": 0.5,
+  "targets_EPL": [
+    3,
+    4
+  ],
+  "targets_all9": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "tuple_batch_size": 256,
+  "validation_chunk_size": 4096,
+  "validation_weighting": "exact tuple sum/count",
+  "verifier_floating_tolerance": {
+    "atol": 1e-14,
+    "justification": "cross-NumPy arithmetic roundoff; far below every decision-threshold margin",
+    "purpose": "conformal p/e/ensemble recomputation only",
+    "rtol": 0.0
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "B0 Exact": {
+    "contract_digest": "d8fa740c100f3ec93c8730d007569c5551db69adaa8584257ce062d92eee4485",
+    "count": 46,
+    "q99": 1.7035537524611113,
+    "q995": 1.7035537524611113,
+    "scale": "frozen protected B0 Exact score",
+    "source_role": "cleanStatic [300,330)"
+  },
+  "amcf_calibration_interval": [
+    340.0,
+    410.0
+  ],
+  "comparison": "strict_greater",
+  "complex_EPL": {
+    "all_converged": true,
+    "count": 126,
+    "evidence_ref": "calibration_evidence.json",
+    "q99": 3.9120856662048844,
+    "q995": 3.956596130413059,
+    "required_seeds": [
+      101,
+      202,
+      303
+    ],
+    "threshold_digest": "3b72618ac313088280f5b23703bc75bd7021c2b6883ee0e4bf51e554d89f98e2"
+  },
+  "complex_all9": {
+    "all_converged": true,
+    "count": 126,
+    "evidence_ref": "calibration_evidence.json",
+    "q99": 4.007979690355477,
+    "q995": 4.836281906951478,
+    "required_seeds": [
+      101,
+      202,
+      303
+    ],
+    "threshold_digest": "b24a46e87351e3c0814451f84aa66752928ae1b05df0835d4cd6ef97f0b4d523"
+  },
+  "magnitude_EPL": {
+    "all_converged": true,
+    "count": 126,
+    "evidence_ref": "calibration_evidence.json",
+    "q99": 3.8377044824334807,
+    "q995": 4.836281906951478,
+    "required_seeds": [
+      101,
+      202,
+      303
+    ],
+    "threshold_digest": "2f9910311be0177be4f7b44bb41e4e277469cb2151e006e98ec2d8aad5648f0e"
+  },
+  "magnitude_all9": {
+    "all_converged": true,
+    "count": 126,
+    "evidence_ref": "calibration_evidence.json",
+    "q99": 4.143134726391533,
+    "q995": 4.836281906951478,
+    "required_seeds": [
+      101,
+      202,
+      303
+    ],
+    "threshold_digest": "80a7acc6d86eb446fe58a87be3f48fb5acfee72970b055c7e1c615e5432564a5"
+  },
+  "primary": "q99",
+  "q995_role": "diagnostic_only",
+  "quantile_method": "higher"
+}

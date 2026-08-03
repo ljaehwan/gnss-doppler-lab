@@ -1,0 +1,58 @@
+{
+  "endpoint_stride_s": 0.5,
+  "history": "strictly previous 12 at exact 0.5 s cadence within identity and role",
+  "literal_mad_multiplier": 1.0,
+  "minimum_valid_rows": 5,
+  "model_tensor_fields": [
+    "side_shape_features"
+  ],
+  "prompt_index": 4,
+  "representations": {
+    "complex": {
+      "dimensions": [
+        "median_real",
+        "median_imag",
+        "mad_real",
+        "mad_imag"
+      ],
+      "shape": [
+        8,
+        4
+      ]
+    },
+    "magnitude": {
+      "dimensions": [
+        "median_abs",
+        "mad_abs"
+      ],
+      "shape": [
+        8,
+        2
+      ]
+    }
+  },
+  "schema": "gnss-doppler-lab.amcf-shape-only-feature.v1",
+  "side_source_indices": [
+    0,
+    1,
+    2,
+    3,
+    5,
+    6,
+    7,
+    8
+  ],
+  "source_support": "(T-1.0,T]",
+  "tap_order": [
+    "E4",
+    "E3",
+    "E2",
+    "E",
+    "P",
+    "L",
+    "L2",
+    "L3",
+    "L4"
+  ],
+  "tensor_side_count": 8
+}

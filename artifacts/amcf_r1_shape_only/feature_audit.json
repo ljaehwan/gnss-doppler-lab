@@ -1,0 +1,432 @@
+{
+  "audit_digest": "c288695b550449de9de152466a73bcb1931a0818881c3992649fcc0517ff7d91",
+  "canonical_fields": [
+    "complex_iq",
+    "time_s",
+    "prn",
+    "channel",
+    "segment_index",
+    "sample_count"
+  ],
+  "forbidden_fields": [
+    "cn0_db_hz",
+    "context"
+  ],
+  "pass": true,
+  "scenarios": {
+    "DS7": {
+      "pass": true,
+      "representation_checks": {
+        "complex": {
+          "canonical_fields": [
+            "complex_iq",
+            "time_s",
+            "prn",
+            "channel",
+            "segment_index",
+            "sample_count"
+          ],
+          "element_count": 179744,
+          "feature_cache": "feature_cache/DS7_complex.npz",
+          "feature_tensor_digest": "98debced57d9540fa99cad9fd42339976d0377780ec26e256d80658988e46f77",
+          "finite_count": 179744,
+          "iqr": [
+            [
+              0.06258198618888855,
+              0.0345684178173542,
+              0.05064956843852997,
+              0.05068071186542511
+            ],
+            [
+              0.04957985877990723,
+              0.03144368901848793,
+              0.043007247149944305,
+              0.04348151013255119
+            ],
+            [
+              0.03370636701583862,
+              0.025282451882958412,
+              0.03485580533742905,
+              0.03446170687675476
+            ],
+            [
+              0.016780734062194824,
+              0.016559390351176262,
+              0.022724181413650513,
+              0.02273383177816868
+            ],
+            [
+              0.016086697578430176,
+              0.010669523850083351,
+              0.022650158032774925,
+              0.0225149504840374
+            ],
+            [
+              0.09394925832748413,
+              0.016549691557884216,
+              0.0347127690911293,
+              0.034706056118011475
+            ],
+            [
+              0.08949470520019531,
+              0.02097427286207676,
+              0.04456818476319313,
+              0.0452154241502285
+            ],
+            [
+              0.08621221780776978,
+              0.02295062690973282,
+              0.052437055855989456,
+              0.05248301103711128
+            ]
+          ],
+          "pass": true,
+          "scaler_hash": "1c3d53c2b2457f79fc5c4ad22d6deae253c4d92c0e13ae0bcebc14011160ef8c",
+          "schema_hash": "7b52682aa5cf7da9ddfce6ff23b4de7e9a8f228289e97172c7e71a5d0327a87e",
+          "shape": [
+            5617,
+            8,
+            4
+          ],
+          "source_feature_digest": "c4896acfe5e646e04e9f4fab10e4029f5c301a7d14e48e50705fc9846ff32298"
+        },
+        "magnitude": {
+          "canonical_fields": [
+            "complex_iq",
+            "time_s",
+            "prn",
+            "channel",
+            "segment_index",
+            "sample_count"
+          ],
+          "element_count": 89872,
+          "feature_cache": "feature_cache/DS7_magnitude.npz",
+          "feature_tensor_digest": "041694262a034ecfd57bab53d787f9910fb3140ec69f6e8698e444d0c4dc48be",
+          "finite_count": 89872,
+          "iqr": [
+            [
+              0.07190459966659546,
+              0.04843537136912346
+            ],
+            [
+              0.05549567937850952,
+              0.042000893503427505
+            ],
+            [
+              0.0366971492767334,
+              0.03455645591020584
+            ],
+            [
+              0.01715141534805298,
+              0.022715767845511436
+            ],
+            [
+              0.01698601245880127,
+              0.02238951437175274
+            ],
+            [
+              0.08967018127441406,
+              0.034511394798755646
+            ],
+            [
+              0.0826796293258667,
+              0.041574735194444656
+            ],
+            [
+              0.07388398051261902,
+              0.047395508736371994
+            ]
+          ],
+          "pass": true,
+          "scaler_hash": "61e4ef7c9afe3bdb03fcf32402298e03b01c3b00014ff534d05e2e0916f4af65",
+          "schema_hash": "7b52682aa5cf7da9ddfce6ff23b4de7e9a8f228289e97172c7e71a5d0327a87e",
+          "shape": [
+            5617,
+            8,
+            2
+          ],
+          "source_feature_digest": "f1e9944c9e507e053525382580cede49f8fb3f0426d57d1de3bc96fbe92719e4"
+        }
+      },
+      "stable_pre_alarm_rate": 0.05042016806722689,
+      "stable_pre_score_threshold_alarm_digest": "3c5cebb13f25003fbe24fb4705ae5f78d7e1c906b42ecc6b1b2513a91be81c6c",
+      "tracked_prn_median": 10.0
+    },
+    "DS8": {
+      "pass": true,
+      "representation_checks": {
+        "complex": {
+          "canonical_fields": [
+            "complex_iq",
+            "time_s",
+            "prn",
+            "channel",
+            "segment_index",
+            "sample_count"
+          ],
+          "element_count": 319136,
+          "feature_cache": "feature_cache/DS8_complex.npz",
+          "feature_tensor_digest": "041dd9d5f348499e2c47b5baf10bebeb87c72ec2289d52e57aae0b1ab09aeecb",
+          "finite_count": 319136,
+          "iqr": [
+            [
+              0.08345562219619751,
+              0.030743543058633804,
+              0.05376600846648216,
+              0.05351235345005989
+            ],
+            [
+              0.08682113885879517,
+              0.027567178010940552,
+              0.04653457924723625,
+              0.04521727189421654
+            ],
+            [
+              0.07240134477615356,
+              0.021791506558656693,
+              0.036972858011722565,
+              0.03595402091741562
+            ],
+            [
+              0.04137700796127319,
+              0.01401379145681858,
+              0.023627715185284615,
+              0.02321845293045044
+            ],
+            [
+              0.038773953914642334,
+              0.011501937173306942,
+              0.023757729679346085,
+              0.023583343252539635
+            ],
+            [
+              0.15045654773712158,
+              0.019111627712845802,
+              0.03649728000164032,
+              0.03677315637469292
+            ],
+            [
+              0.3033670485019684,
+              0.025613021105527878,
+              0.047801993787288666,
+              0.0474260076880455
+            ],
+            [
+              0.4465581774711609,
+              0.03067205473780632,
+              0.05618805065751076,
+              0.057006098330020905
+            ]
+          ],
+          "pass": true,
+          "scaler_hash": "1c3d53c2b2457f79fc5c4ad22d6deae253c4d92c0e13ae0bcebc14011160ef8c",
+          "schema_hash": "7b52682aa5cf7da9ddfce6ff23b4de7e9a8f228289e97172c7e71a5d0327a87e",
+          "shape": [
+            9973,
+            8,
+            4
+          ],
+          "source_feature_digest": "32066528c2c268f2df6aea1cf043c1e0ea47ac75e19a91d718042e70a79b587d"
+        },
+        "magnitude": {
+          "canonical_fields": [
+            "complex_iq",
+            "time_s",
+            "prn",
+            "channel",
+            "segment_index",
+            "sample_count"
+          ],
+          "element_count": 159568,
+          "feature_cache": "feature_cache/DS8_magnitude.npz",
+          "feature_tensor_digest": "2828cc4522c8c313163a876bdbbf61e955e493f7f31a7cac80efbbbd74bb9897",
+          "finite_count": 159568,
+          "iqr": [
+            [
+              0.09062212705612183,
+              0.051422830671072006
+            ],
+            [
+              0.08948427438735962,
+              0.04567885771393776
+            ],
+            [
+              0.07551032304763794,
+              0.03644702583551407
+            ],
+            [
+              0.0426979660987854,
+              0.023735791444778442
+            ],
+            [
+              0.03992098569869995,
+              0.023579590022563934
+            ],
+            [
+              0.14683246612548828,
+              0.03590712696313858
+            ],
+            [
+              0.28761059045791626,
+              0.04366166889667511
+            ],
+            [
+              0.3477495610713959,
+              0.04695553705096245
+            ]
+          ],
+          "pass": true,
+          "scaler_hash": "61e4ef7c9afe3bdb03fcf32402298e03b01c3b00014ff534d05e2e0916f4af65",
+          "schema_hash": "7b52682aa5cf7da9ddfce6ff23b4de7e9a8f228289e97172c7e71a5d0327a87e",
+          "shape": [
+            9973,
+            8,
+            2
+          ],
+          "source_feature_digest": "b40f792c15772cfbf7543c4785d18318fa968a68169977c3680363f68b8df1eb"
+        }
+      },
+      "stable_pre_alarm_rate": 0.01680672268907563,
+      "stable_pre_score_threshold_alarm_digest": "56254efbe36f3a18aec4d84b1f7a207fd22129260160790096f84a188868bc40",
+      "tracked_prn_median": 11.0
+    },
+    "cleanStatic": {
+      "pass": true,
+      "representation_checks": {
+        "complex": {
+          "canonical_fields": [
+            "complex_iq",
+            "time_s",
+            "prn",
+            "channel",
+            "segment_index",
+            "sample_count"
+          ],
+          "element_count": 302368,
+          "feature_cache": "feature_cache/cleanStatic_complex.npz",
+          "feature_tensor_digest": "f1ba2561d3cbca3645cfab391e283c10bf71f87c646aa1fe1b5addf2a860e07a",
+          "finite_count": 302368,
+          "iqr": [
+            [
+              0.030827850103378296,
+              0.03336459398269653,
+              0.0472739115357399,
+              0.04766938462853432
+            ],
+            [
+              0.026277542114257812,
+              0.030141465365886688,
+              0.04123528301715851,
+              0.040561091154813766
+            ],
+            [
+              0.018784523010253906,
+              0.02384234219789505,
+              0.032772161066532135,
+              0.03218896687030792
+            ],
+            [
+              0.00948566198348999,
+              0.014342574402689934,
+              0.021273665130138397,
+              0.021223193034529686
+            ],
+            [
+              0.00991809368133545,
+              0.008706215769052505,
+              0.02104773558676243,
+              0.02119654044508934
+            ],
+            [
+              0.014354586601257324,
+              0.013128623366355896,
+              0.03216550499200821,
+              0.03262604773044586
+            ],
+            [
+              0.018734753131866455,
+              0.01702219992876053,
+              0.04128878563642502,
+              0.04176045581698418
+            ],
+            [
+              0.021977156400680542,
+              0.01986628957092762,
+              0.04777117073535919,
+              0.04875674098730087
+            ]
+          ],
+          "pass": true,
+          "scaler_hash": "1c3d53c2b2457f79fc5c4ad22d6deae253c4d92c0e13ae0bcebc14011160ef8c",
+          "schema_hash": "7b52682aa5cf7da9ddfce6ff23b4de7e9a8f228289e97172c7e71a5d0327a87e",
+          "shape": [
+            9449,
+            8,
+            4
+          ],
+          "source_feature_digest": "7daf52627be0a39a0b8a9332c0ba3201bcc25db23032d1cee93ae8bee4c45ed4"
+        },
+        "magnitude": {
+          "canonical_fields": [
+            "complex_iq",
+            "time_s",
+            "prn",
+            "channel",
+            "segment_index",
+            "sample_count"
+          ],
+          "element_count": 151184,
+          "feature_cache": "feature_cache/cleanStatic_magnitude.npz",
+          "feature_tensor_digest": "2cf1848b4043b6a3808a4590f164d404302b4daca5cb3e66694d762dc00a910b",
+          "finite_count": 151184,
+          "iqr": [
+            [
+              0.03513449430465698,
+              0.04530060291290283
+            ],
+            [
+              0.027410507202148438,
+              0.04026912897825241
+            ],
+            [
+              0.019578874111175537,
+              0.03227272629737854
+            ],
+            [
+              0.009739518165588379,
+              0.021109741181135178
+            ],
+            [
+              0.010141193866729736,
+              0.020863544195890427
+            ],
+            [
+              0.015533745288848877,
+              0.0318567231297493
+            ],
+            [
+              0.02181774377822876,
+              0.04008088633418083
+            ],
+            [
+              0.028289079666137695,
+              0.04574763774871826
+            ]
+          ],
+          "pass": true,
+          "scaler_hash": "61e4ef7c9afe3bdb03fcf32402298e03b01c3b00014ff534d05e2e0916f4af65",
+          "schema_hash": "7b52682aa5cf7da9ddfce6ff23b4de7e9a8f228289e97172c7e71a5d0327a87e",
+          "shape": [
+            9449,
+            8,
+            2
+          ],
+          "source_feature_digest": "02d25add99a860c0794654186fa6a4b0d7549b0f058da4058ebbc665f0aeb218"
+        }
+      },
+      "stable_pre_alarm_rate": 0.205607476635514,
+      "stable_pre_score_threshold_alarm_digest": "60def0939b3b40458e617eb40c805a832edc301c94da4ca4d6d37b58289c284a",
+      "tracked_prn_median": 11.0
+    }
+  }
+}

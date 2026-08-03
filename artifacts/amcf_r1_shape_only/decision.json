@@ -1,0 +1,59 @@
+{
+  "amcf_wcl": "AMCF WCL no-go",
+  "criteria": {
+    "all_required_seeds_converged": true,
+    "auc_bootstrap_ci_lower_gt_zero_3_of_5": false,
+    "beats_b0_with_fpr_guard_3_of_5": false,
+    "complex_auc_gt_magnitude_4_of_5": false,
+    "ds7_ds8_no_collapse": true,
+    "same_seed_direction_each_scenario": false,
+    "stable_pre_fpr_all_below_0.05": false
+  },
+  "primary_decision": "NO-GO",
+  "primary_quantile": "q99",
+  "source_digests": {
+    "calibration_evidence": "90b60a2278e9464d64554fed8985ac12a12800bc36320345ea9b3826fd96baed",
+    "checkpoints": {
+      "models/complex_EPL_seed101.pt": "6fc3d118d55d093a2c4ba3bd635d8aff9db2ac542e09d9a4d3069c45d2d83658",
+      "models/complex_EPL_seed202.pt": "c3ce090ff041d054d0e3b62aaf40a70c897ae0a03f28f832525fdd954378a3f7",
+      "models/complex_EPL_seed303.pt": "6f141673f9f6d7463a362c34a417f99fff2c643c9b46690b9f3fa547c75cf718",
+      "models/complex_all9_seed101.pt": "dd3ac0fb67f3d4a366cb291cb91b321e1948157521bb6f9a2ed6e919ba097ef3",
+      "models/complex_all9_seed202.pt": "6b4fb5b169fbb25a75c1689d49da068108df51a8e6e61180641892d2c6df5eec",
+      "models/complex_all9_seed303.pt": "e4cb5d970207ff4dcb754185637a0a36a16e4a657493dd45a62f89bbc1fcac34",
+      "models/magnitude_EPL_seed101.pt": "f3ad061505b2c5720d6becc4992c8a7fdeca01316f88fd600c27a4573cd06d5d",
+      "models/magnitude_EPL_seed202.pt": "bfaaad237f74b360762d21c58e2b9940ad12f1455cbe2432d9e7157df28e1064",
+      "models/magnitude_EPL_seed303.pt": "38b5e4085c44a5be97602aa597ed8ee84dedba71ab22a0a04f2d8313ab2cedb5",
+      "models/magnitude_all9_seed101.pt": "2eaa38ed8db5e9fa7cf319f2309db69c8860d1fd380647ecc14531937083ed42",
+      "models/magnitude_all9_seed202.pt": "b931b201c6f2c26bc9e887e767340aeba703f5c1f1daf62d4d641acd199fee31",
+      "models/magnitude_all9_seed303.pt": "52a66dcf66d9428d62ce70a160e8aeb30467f3ab56f8aaa556af138ecf0335b2"
+    },
+    "feature_audit": "d0e54dcc824779bedac51cee25067b61cc17891a86b64eb2984987a80b30d0dc",
+    "feature_schema": "4a0e4df914900300779fa43cdb0e2175abcd097f7c503e655e11deb195b2d1cb",
+    "fit_checkpoint_audits": "495cb8caf328ec0225faed5621fdd3959ecc4cbe6dc78d3012be3e87f335382d",
+    "model_audit": "4d42670563b29e8e7c8a850432f7b0988cd5e428d3e576e60fb9bfb043460ebe",
+    "numerical_parity": "140e014d15444c8674a1a3ad4c7d1341062295f02cdc08e352fe74b51e88bd90",
+    "paired_comparisons": "a560818db25a589714d284da961746bdc44501fab0f840ec911a0f27a1e7fece",
+    "per_epoch": {
+      "per_epoch/DS1.csv": "05851e3d381848c11c5039f09b9a0fd179eff776a98b4166424d02bc0bf9393a",
+      "per_epoch/DS2.csv": "bb15475b71abe32b265e6c4310591d0221ff4e3891ea4f06917b22074f306427",
+      "per_epoch/DS3.csv": "35b1a0b69c25907231f64355c0d44ed411a233c535373380de66da84c46c450d",
+      "per_epoch/DS7.csv": "fc8fd6483adf1cbc2d4e01b5a04d684c2258a720abb40c16b926bbbd43f9ff38",
+      "per_epoch/DS8.csv": "e7c6fd88450b6cd09b083add3d79d106ea65f46ef8faa9bf85fcc1a0b881b7f8",
+      "per_epoch/cleanStatic.csv": "b719d0438f95f1ca1ab3d4e936673c754c94c3bd43456025583d0c1308b897a0",
+      "per_epoch/cleanStatic_calibration.csv": "3f948ab62f70d64c90cdf8a15eb7ac62b9c575bc304927744681cb324acc4319"
+    },
+    "plots": {
+      "plots/DS1.png": "4bbf4058097a03454d42991a559c81ad638d21bcab2379ea667a2c8296ccc9a6",
+      "plots/DS2.png": "86c382409aba702660a10627e28dbb745bac969f4ff890cbb317e1f0ad326aa3",
+      "plots/DS3.png": "27743a4ca1475a61f62a7dcf65885585f4ffe407fa5a9a52fcc114529a160a67",
+      "plots/DS7.png": "3030f26e0c32201062b4cb6da2522f214604572a52b0e6b37f34ae9703fe9cba",
+      "plots/DS8.png": "d5eacdcd7caa298698193b657d307127463138e585789d9ecbcb45109d7930a2",
+      "plots/cleanStatic.png": "a14c1d9ea305cbfd7d19a704dfb591178ba4c2336c634314e45ac809da36e022"
+    },
+    "provenance": "eba7482f3a3222f968d887ff406e18419bb7a323fc54260e3160282b676abc3b",
+    "scenario_metrics": "9b5e4f2d70f066a076a4cd9b039145a75216efdf2873730ef499794c3aac29e2",
+    "seed_metrics": "52cef9b1e5bafef05306392d0eb95662a0fb0cd7ad044e5eecec2f092d403194",
+    "thresholds": "6f5742ef27199aa63994ba55c4ffc8cbe3b062fcae793e4f2957948f2da2fd3e",
+    "training_history": "e4d708e012800beb67d98bfeea436d0d83f7f60630759343488c523ea9f356e4"
+  }
+}
