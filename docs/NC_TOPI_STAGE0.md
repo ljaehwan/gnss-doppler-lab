@@ -44,7 +44,7 @@ them from an assumed spacing.
 All fitting—standardization, covariance, regression, and thresholding—uses only
 cleanStatic roles. Attack rows and normal holdout rows can never fit anything.
 Every public fit/calibration path requires the immutable typed
-`FitProvenance(scenario, role, identities)`. Covariance and conditioner training
+`FitProvenance(scenario, role, tuple[EpochIdentity])`. Covariance and conditioner training
 require `cleanStatic normal_train` and derives a fit digest over provenance, predictors,
 and target; conditioner cap and detector threshold require
 `cleanStatic normal_calibration`, record an identity digest, and calibration
@@ -138,8 +138,8 @@ Low-FPR performance is sklearn standardized **McClish** partial AUC with
 
 The immutable `EpochRecord` requires physical recording ID, scenario,
 PRN-or-event ID, availability time, source start/end, valid true bool, and label.
-Its fixed full key is `(physical_recording_id, scenario, prn_or_event_id,
-availability_time_s)`, so event-level evaluation is supported without weakening
+Its fixed full key is the typed `EpochIdentity(physical_recording_id, scenario,
+prn_or_event_id, target_index, availability_time_s)`, so event-level evaluation is supported without weakening
 identity. The primary epoch join accepts records and exact score maps, requires
 full identity set equality, and makes source interval, label, and valid equality
 mandatory after alignment. It never silently intersects. A separately named
@@ -156,8 +156,8 @@ group time are rejected; cadence and gaps are audited, a valid history is
 contiguous, and blocks can never cross groups.
 There is no cross-recording default.
 The runner reads raw int16 IQ at 25 MHz and takes one 10 ms block every 0.5 s.
-The four frozen features remain log power, robust noise-floor scale, spectral
-flatness, and lag-1 autocorrelation magnitude. Predictor normalization is the
+The four frozen features are exactly `log_power`, `log_noise_floor_scale`,
+`spectral_flatness`, and `lag1_autocorr_magnitude` in that order. Predictor normalization is the
 clean-train median/IQR; PRN, scenario, and onset remain forbidden features.
 
 Primary uncertainty is paired pAUC-delta bootstrap, not a generic statistic
@@ -222,3 +222,42 @@ is **INCONCLUSIVE**. Only explicit `None` represents a censored delay; NaN,
 infinity, and negative delay are invalid evidence and produce `validation_errors`.
 Width, top25, q995, legacy residual controls, and all other
 diagnostics cannot alter or rescue this result.
+
+
+## Sealed primary-state and strict schema boundary
+
+Stage-0 primary code has no raw-`W` score entry point. Covariance fitting emits a
+factory-only `CovarianceFit` whose seal covers `Sigma`, `W`, unfloored covariance,
+the complete raw-space audit, and the `ResidualBatch` input digest. The batch
+digest covers `residual_raw`, ordered pair content digests, and the
+`prompt_relative_ratio_raw` tag. Every tangent/score consumer recomputes these
+content seals, so `object.__setattr__` mutation fails closed. `TangentBasis` also
+binds the exact pair content digest and covariance-fit seal. Pure TOPI uses
+`produce_topi_scores`; primary NC-TOPI uses `produce_nc_topi_scores` and requires
+a real fitted, q995-calibrated, seal-valid `RobustConditioner`—`None` and duck
+types are rejected.
+
+Every fit row and peak pair uses
+`EpochIdentity(recording_id, scenario, prn, target_index, availability_time_s)`.
+The first three fields are nonempty unpadded strings, target index is an integer
+excluding bool, and availability is a finite Python/NumPy real scalar excluding
+bool. Identity and basis digests are canonical and type-tagged. Primary pairs
+have exactly nine float64 taps and their coordinates must equal the frozen
+explicit GNSS-SDR vector with zero tolerance; merely increasing or nearly equal
+coordinates are invalid.
+
+The conditioner's only schema is exactly
+`('log_power','log_noise_floor_scale','spectral_flatness','lag1_autocorr_magnitude')`.
+Fit and transform width are exactly four. Reordered, missing, padded, case-aliased,
+and case/strip-normalized forbidden PRN/scenario/onset names fail closed. The
+shuffle helper validates and preserves the exact schema and typed clean-train
+provenance while permuting only the target.
+
+`ThresholdCalibration` is factory-only and sealed over value, score digest,
+detector, aggregator, quantile, and clean-calibration identity provenance. The
+public primary `strict_alarms` accepts only that typed object and requires q99
+NC-TOPI median; raw scalar comparison is private/diagnostic. Decision evidence
+is type-checked before conversion: only Python/NumPy real scalars are accepted
+for numeric evidence (never bool, string, list, ndarray, or arbitrary object),
+and physics flags accept only `bool`/`np.bool_`. Malformed evidence always yields
+**INCONCLUSIVE** with `validation_errors`.

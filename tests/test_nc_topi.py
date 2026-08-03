@@ -14,7 +14,12 @@ def peak():
     return np.exp(-4 * n.CANONICAL_TAP_COORDS**2)
 
 
-def pair(identity=("rec", "G01", 7), delta=None):
+def pair(identity=None, delta=None):
+    if identity is None:
+        identity = n.EpochIdentity("rec", "cleanStatic", "G01", 7, 107.)
+    elif not isinstance(identity, n.EpochIdentity) and len(identity) == 3:
+        recording, prn, index = identity
+        identity = n.EpochIdentity(str(recording), "cleanStatic", str(prn), int(index), 100. + int(index))
     predicted = peak()
     residual = np.linspace(-0.2, 0.2, 9) if delta is None else np.asarray(delta, float)
     std = np.linspace(0.5, 1.3, 9)
@@ -32,7 +37,15 @@ def pair(identity=("rec", "G01", 7), delta=None):
 
 
 def provenance(role, identities, scenario="cleanStatic"):
-    return n.FitProvenance(scenario=scenario, role=role, identities=tuple(identities))
+    converted = []
+    for pos, identity in enumerate(identities):
+        if isinstance(identity, n.EpochIdentity):
+            converted.append(identity)
+        else:
+            recording = str(identity[0]) if isinstance(identity, (tuple, list)) else str(identity)
+            index = int(identity[-1]) if isinstance(identity, (tuple, list)) else pos
+            converted.append(n.EpochIdentity(recording, scenario, "G01", index, 1000. + index))
+    return n.FitProvenance(scenario=scenario, role=role, identities=tuple(converted))
 
 
 def pairs(count=4):
@@ -40,60 +53,58 @@ def pairs(count=4):
             for i in range(count)]
 
 
+def covariance():
+    ps = pairs(30)
+    return n.fit_shrinkage_covariance(
+        ps, provenance=provenance("normal_train", [p.identity for p in ps]))
+
+
 def records(order=(0, 1)):
-    return [n.EpochRecord("rec", "DS1", f"event-{i}", 100.5 + i,
+    return [n.EpochRecord("rec", "DS1", f"event-{i}", i, 100.5 + i,
                           99.5 + i, 100.5 + i, True, i % 2) for i in order]
 
 
 # Blocker 1: frozen score coordinate and energy/conditioner contract.
 def test_peak_prediction_pair_requires_both_raw_peaks_and_validates_coordinates():
-    p = pair()
+    p = pair(); identity = n.EpochIdentity("r", "cleanStatic", "G1", 1, 101.)
     assert np.allclose(p.residual_raw, p.actual_raw - p.predicted_raw)
     with pytest.raises((TypeError, ValueError), match="actual|predicted|residual-only"):
-        n.PeakPredictionPair(
-            residual_standardized=np.zeros(9), standardizer_std=np.ones(9),
-            identity=("r", "G1", 1), actual_space="prompt_relative_ratio_raw",
-            predicted_space="prompt_relative_ratio_raw", residual_space="b0_standardized",
-            coordinates=n.CANONICAL_TAP_COORDS)
+        n.PeakPredictionPair(residual_standardized=np.zeros(9), standardizer_std=np.ones(9),
+            identity=identity, actual_space=n.RAW_SPACE, predicted_space=n.RAW_SPACE,
+            residual_space=n.STANDARDIZED_SPACE, coordinates=n.CANONICAL_TAP_COORDS)
     with pytest.raises(ValueError, match="standardized"):
-        n.PeakPredictionPair(
-            actual_raw=np.ones(9), predicted_raw=np.zeros(9),
-            residual_standardized=np.zeros(9), standardizer_std=np.ones(9),
-            identity=("r", "G1", 1), actual_space="prompt_relative_ratio_raw",
-            predicted_space="prompt_relative_ratio_raw", residual_space="b0_standardized",
-            coordinates=n.CANONICAL_TAP_COORDS)
+        n.PeakPredictionPair(actual_raw=np.ones(9), predicted_raw=np.zeros(9),
+            residual_standardized=np.zeros(9), standardizer_std=np.ones(9), identity=identity,
+            actual_space=n.RAW_SPACE, predicted_space=n.RAW_SPACE,
+            residual_space=n.STANDARDIZED_SPACE, coordinates=n.CANONICAL_TAP_COORDS)
     with pytest.raises(ValueError, match="space"):
-        n.PeakPredictionPair(
-            actual_raw=np.ones(9), predicted_raw=np.zeros(9),
-            residual_standardized=np.ones(9), standardizer_std=np.ones(9),
-            identity=("r", "G1", 1), actual_space="standardized",
-            predicted_space="prompt_relative_ratio_raw", residual_space="b0_standardized",
-            coordinates=n.CANONICAL_TAP_COORDS)
+        n.PeakPredictionPair(actual_raw=np.ones(9), predicted_raw=np.zeros(9),
+            residual_standardized=np.ones(9), standardizer_std=np.ones(9), identity=identity,
+            actual_space="standardized", predicted_space=n.RAW_SPACE,
+            residual_space=n.STANDARDIZED_SPACE, coordinates=n.CANONICAL_TAP_COORDS)
 
 
 def test_score_bundle_uses_raw_quadratic_energy_b0_and_scale_not_scale_squared():
-    p = pair(delta=np.arange(9) / 10)
-    basis = n.primary_tangent_basis(p, n.CANONICAL_TAP_COORDS, W=W())
-    class Fixed:
-        def conditioner_transform(self, X): return np.asarray(X, float) + 10
-        def predict_scale(self, X): return np.full(len(X), 4.0)
-    out = n.produce_nc_topi_scores(p, basis, W(), conditioner=Fixed(), iq_features=[[1, 2]])
-    expected_b0 = np.sqrt(np.mean(p.residual_standardized**2))
-    assert out.b0 == pytest.approx(expected_b0)
-    assert out.topi == pytest.approx(out.projection.r_perp @ W() @ out.projection.r_perp)
-    assert out.nc_topi == pytest.approx(out.topi / 4.0)
-    assert out.conditioner_transform.tolist() == [[11.0, 12.0]]
+    p = pair(delta=np.arange(9) / 10); cov = covariance()
+    basis = n.primary_tangent_basis(p, n.CANONICAL_TAP_COORDS, cov)
+    conditioner, _ = fitted_conditioner()
+    out = n.produce_nc_topi_scores(p, basis, cov, conditioner=conditioner,
+                                    iq_features=np.ones((1, 4)))
+    assert out.b0 == pytest.approx(np.sqrt(np.mean(p.residual_standardized**2)))
+    assert out.topi == pytest.approx(out.projection.r_perp @ cov.W @ out.projection.r_perp)
+    assert out.nc_topi == pytest.approx(out.topi / out.predicted_scale)
+    assert out.conditioner_transform.shape == (1, 4)
     assert out.total == pytest.approx(out.tangent + out.perp + out.cross)
 
 
 def test_conditioner_fits_log_energy_and_caps_exp_scale_at_clean_q995():
-    X = np.arange(80.0).reshape(40, 2)
+    X = np.arange(160.0).reshape(40, 4)
     energy = np.exp(0.02 * X[:, 0] + 0.2)
     train_ids = [("train", i) for i in range(30)]
     cal_ids = [("cal", i) for i in range(10)]
     c = n.RobustConditioner().fit(
         X[:30], energy[:30], provenance=provenance("normal_train", train_ids),
-        feature_names=["log_power", "flatness"])
+        feature_names=n.CONDITIONER_FEATURE_SCHEMA)
     assert c.fit_manifest_["target"] == "log(max(S_perp, energy_epsilon))"
     uncapped = np.exp(c.predict_log_energy(X[30:]))
     cap = c.calibrate_cap(X[30:], provenance=provenance("normal_calibration", cal_ids))
@@ -105,13 +116,13 @@ def test_conditioner_fits_log_energy_and_caps_exp_scale_at_clean_q995():
 
 # Blocker 2: width cannot leak into the primary tangent basis.
 def test_primary_basis_defaults_to_amplitude_shift_and_rejects_width():
-    p = pair(); b = n.primary_tangent_basis(p, n.CANONICAL_TAP_COORDS, W=W())
-    assert b.names == ("amplitude", "shift")
-    assert "width" not in b.names
+    p = pair(); cov = covariance(); b = n.primary_tangent_basis(p, n.CANONICAL_TAP_COORDS, cov)
+    assert b.names == ("amplitude", "shift") and "width" not in b.names
     with pytest.raises(ValueError, match="width.*diagnostic"):
-        n.normalize_tangents(p, n.CANONICAL_TAP_COORDS, W=W(), include_width=True)
-    width = n.build_width_ablation_basis(p, n.CANONICAL_TAP_COORDS, W=W())
+        n.normalize_tangents(p, n.CANONICAL_TAP_COORDS, cov, include_width=True)
+    width = n.build_width_ablation_basis(p, n.CANONICAL_TAP_COORDS, cov)
     assert width.names == ("amplitude", "shift", "width")
+
 
 
 # Blocker 3: covariance provenance is complete and fit is train-only.
@@ -132,7 +143,7 @@ def test_covariance_requires_exact_role_scenario_identity_provenance_and_audits_
 
 # Blocker 4: exact W geometry, decomposition and diagnostics.
 def test_primary_projection_is_unregularized_w_orthogonal_and_decomposes():
-    w = W(); J = n.primary_tangent_basis(pair(), n.CANONICAL_TAP_COORDS, W=w).matrix
+    cov = covariance(); w = cov.W; J = n.primary_tangent_basis(pair(), n.CANONICAL_TAP_COORDS, cov).matrix
     r = np.linspace(-1, 1, 9)
     q = n.weighted_project(r, J, w)
     assert q.projection_kind == "orthogonal_whitened_svd"
@@ -308,8 +319,11 @@ def test_config_and_docs_encode_machine_boolean_grammar_and_physical_caveat():
     assert c["geometry"]["primary_include_width"] is False
     assert c["geometry"]["primary_tangents"] == ["amplitude", "shift"]
     assert c["geometry"]["basis_provenance"]["primary_kind"] == "primary_amp_shift"
-    assert c["fit_policy"]["typed_provenance"] == "FitProvenance(scenario, role, identities)"
+    assert c["fit_policy"]["typed_provenance"] == "FitProvenance(scenario, role, tuple[EpochIdentity])"
     assert c["decision"]["evidence_domains"]["fpr"] == "finite [0,1]"
+    assert "real scalar only" in c["decision"]["evidence_domains"]["scalar_type"]
+    assert tuple(c["iq_conditioner"]["features"]) == n.CONDITIONER_FEATURE_SCHEMA
+    assert c["geometry"]["basis_provenance"]["raw_weight_primary_input"] is False
     assert c["epoch_schema"]["primary_join"] == "exact full identity and metadata equality"
     assert c["decision"]["boolean_grammar"]["GO"] == "c1 && c2 && c3 && c4 && c5 && c6 && c7 && c8"
     assert c["decision"]["machine_grammar"]["criteria"]["c6"]["rhs"] is True
@@ -320,8 +334,9 @@ def test_config_and_docs_encode_machine_boolean_grammar_and_physical_caveat():
     for phrase in ["normalized-shape scale direction", "not physical receiver global gain",
                    "S_perp = r_perp.T W r_perp", "scale, not scale squared",
                    "full identity set equality", "q99 NC-TOPI median only",
-                   "FitProvenance(scenario, role, identities)", "primary_amp_shift",
-                   "validation_errors"]:
+                   "FitProvenance(scenario, role, tuple[EpochIdentity])", "primary_amp_shift",
+                   "produce_topi_scores", "`ThresholdCalibration` is factory-only",
+                   "log_noise_floor_scale", "validation_errors"]:
         assert phrase in text
 
 
@@ -330,9 +345,11 @@ def test_aggregation_quantile_split_and_synthetic_contracts():
     ids = np.array(["G04", "G01", "G03", "G02", "G05"]); s = np.array([4., 1, 3, 2, 100])
     assert n.aggregate_prn_scores(ids, s).score == 3
     assert n.aggregate_prn_scores(ids, s, "top25_mean").score == 52
-    threshold = n.calibrate_threshold([1, 2, 3, 4], .5, provenance=provenance(
-        "normal_calibration", [("cal", i) for i in range(4)])).value
-    assert threshold == 3 and n.strict_alarms([3, np.nextafter(3., 4.)], threshold).tolist() == [False, True]
+    threshold = n.calibrate_threshold([1, 2, 3, 4], .99, provenance=provenance(
+        "normal_calibration", [("cal", i) for i in range(4)]),
+        detector="NC-TOPI", aggregator="median")
+    assert threshold.value == 4 and n.strict_alarms(
+        [4, np.nextafter(4., 5.)], threshold).tolist() == [False, True]
     m = n.source_support_split([0, 320, 420], [300, 400, 421], scenario="cleanStatic")
     assert m.train.tolist() == [1, 0, 0] and m.calibration.tolist() == [0, 1, 0] and m.holdout.tolist() == [0, 0, 1]
     x = n.CANONICAL_TAP_COORDS; p = peak()
@@ -343,8 +360,8 @@ def test_aggregation_quantile_split_and_synthetic_contracts():
 
 # Release-blocker regression: every primary and fit path is typed and fail-closed.
 def test_primary_basis_is_immutable_pair_bound_and_width_has_diagnostic_score_only():
-    p = pair()
-    basis = n.primary_tangent_basis(p, n.CANONICAL_TAP_COORDS, W=W())
+    p = pair(); cov = covariance()
+    basis = n.primary_tangent_basis(p, n.CANONICAL_TAP_COORDS, cov)
     assert basis.basis_kind == "primary_amp_shift"
     assert basis.names == ("amplitude", "shift")
     assert not basis.matrix.flags.writeable
@@ -355,25 +372,25 @@ def test_primary_basis_is_immutable_pair_bound_and_width_has_diagnostic_score_on
     with pytest.raises(ValueError):
         basis.matrix.flags.writeable = True
     assert not p.predicted_raw.flags.writeable
-    out = n.produce_nc_topi_scores(p, basis, W())
+    out = n.produce_topi_scores(p, basis, cov)
     assert out.identity == p.identity
     with pytest.raises((TypeError, ValueError), match="TangentBasis|basis"):
-        n.produce_nc_topi_scores(p, basis.matrix, W())
+        n.produce_topi_scores(p, basis.matrix, cov)
     with pytest.raises((TypeError, ValueError), match="predicted|identity|coordinate"):
-        n.produce_nc_topi_scores(pair(("other", "G01", 7)), basis, W())
+        n.produce_topi_scores(pair(("other", "G01", 7)), basis, cov)
     with pytest.raises((TypeError, ValueError), match="PeakPredictionPair"):
-        n.primary_tangent_basis(p.residual_raw, n.CANONICAL_TAP_COORDS, W=W())
-    width = n.build_width_ablation_basis(p, n.CANONICAL_TAP_COORDS, W=W())
+        n.primary_tangent_basis(p.residual_raw, n.CANONICAL_TAP_COORDS, cov)
+    width = n.build_width_ablation_basis(p, n.CANONICAL_TAP_COORDS, cov)
     assert width.basis_kind == "width_diagnostic"
     with pytest.raises(ValueError, match="diagnostic|primary"):
-        n.produce_nc_topi_scores(p, width, W())
-    diagnostic = n.produce_width_ablation_scores(p, width, W())
+        n.produce_topi_scores(p, width, cov)
+    diagnostic = n.produce_width_ablation_scores(p, width, cov)
     assert diagnostic.label == "width_diagnostic" and diagnostic.primary is False
     fake = n.TangentBasis._create(
-        p, p.coordinates, np.ones_like(basis.matrix), np.ones_like(basis.raw),
+        p, cov, np.ones_like(basis.matrix), np.ones_like(basis.raw),
         ("amplitude", "shift"), "primary_amp_shift", {})
     with pytest.raises(ValueError, match="arbitrary basis"):
-        n.produce_nc_topi_scores(p, fake, W())
+        n.produce_topi_scores(p, fake, cov)
 
 
 def test_covariance_derives_raw_residuals_from_typed_pairs_and_fit_provenance():
@@ -435,7 +452,7 @@ def test_epoch_record_primary_join_has_fixed_identity_and_mandatory_equal_metada
     assert identity == tuple(record.identity_key for record in left)
     assert a.tolist() == [1, 2] and b.tolist() == [10, 20]
     changed = list(right)
-    changed[0] = n.EpochRecord("rec", "DS1", "event-1", 101.5, 100.5, 101.5, True, 0)
+    changed[0] = n.EpochRecord("rec", "DS1", "event-1", 1, 101.5, 100.5, 101.5, True, 0)
     with pytest.raises(ValueError, match="label"):
         n.exact_primary_epoch_join(left, score_a, changed, score_b)
     with pytest.raises(ValueError, match="score map"):
@@ -472,7 +489,7 @@ def test_decision_invalid_domains_and_scenario_sets_are_always_inconclusive():
 
 
 def test_all_fit_and_calibration_apis_require_disjoint_typed_clean_provenance():
-    X = np.arange(80.).reshape(40, 2); y = np.linspace(1, 2, 40)
+    X = np.arange(160.).reshape(40, 4); y = np.linspace(1, 2, 40)
     train_ids = [("train", i) for i in range(30)]
     cal_ids = [("cal", i) for i in range(10)]
     c = n.RobustConditioner().fit(X[:30], y[:30],
@@ -510,3 +527,205 @@ def test_all_fit_and_calibration_apis_require_disjoint_typed_clean_provenance():
         n.shuffled_control_target(y[:30], provenance=provenance("normal_calibration", train_ids))
     with pytest.raises(TypeError, match="provenance"):
         n.shuffled_control_target(y[:30], provenance=None)
+
+
+# Final Stage-0 primary-boundary adversarial probes.
+def canonical_identity(index=0, *, prn="G01"):
+    return n.EpochIdentity("rec", "cleanStatic", prn, index, 100.0 + index)
+
+
+def sealed_geometry(count=30):
+    ps = [pair(canonical_identity(i), np.linspace(-.2, .2, 9) + i / 100)
+          for i in range(count)]
+    fit = n.fit_shrinkage_covariance(
+        ps, provenance=provenance("normal_train", [p.identity for p in ps]))
+    return ps, fit
+
+
+def fitted_conditioner():
+    X = np.arange(160., dtype=float).reshape(40, 4)
+    y = np.linspace(1., 2., 40)
+    train = [canonical_identity(i) for i in range(30)]
+    cal = [n.EpochIdentity("rec", "cleanStatic", "G01", 100 + i, 500. + i)
+           for i in range(10)]
+    c = n.RobustConditioner().fit(
+        X[:30], y[:30], provenance=provenance("normal_train", train),
+        feature_names=n.CONDITIONER_FEATURE_SCHEMA)
+    c.calibrate_cap(X[30:], provenance=provenance("normal_calibration", cal))
+    return c, X
+
+
+def test_primary_score_and_alarm_boundaries_require_sealed_typed_state():
+    ps, covariance = sealed_geometry()
+    p = ps[0]
+    basis = n.primary_tangent_basis(p, n.CANONICAL_TAP_COORDS, covariance)
+    topi = n.produce_topi_scores(p, basis, covariance)
+    assert topi.topi == pytest.approx(topi.projection.perp_energy)
+    with pytest.raises(TypeError, match="CovarianceFit"):
+        n.produce_topi_scores(p, basis, covariance.W)
+    with pytest.raises((TypeError, ValueError), match="RobustConditioner|calibrated|sealed"):
+        n.produce_nc_topi_scores(p, basis, covariance, conditioner=None,
+                                 iq_features=np.ones((1, 4)))
+    class Duck:
+        def conditioner_transform(self, X): return X
+        def predict_scale(self, X): return np.ones(len(X))
+    with pytest.raises(TypeError, match="RobustConditioner"):
+        n.produce_nc_topi_scores(p, basis, covariance, conditioner=Duck(),
+                                 iq_features=np.ones((1, 4)))
+    conditioner, _ = fitted_conditioner()
+    nc = n.produce_nc_topi_scores(
+        p, basis, covariance, conditioner=conditioner, iq_features=np.ones((1, 4)))
+    assert nc.nc_topi == pytest.approx(nc.topi / nc.predicted_scale)
+
+    ids = [canonical_identity(200 + i) for i in range(4)]
+    threshold = n.calibrate_threshold(
+        [1, 2, 3, 4], .99, provenance=provenance("normal_calibration", ids),
+        detector="NC-TOPI", aggregator="median")
+    assert n.strict_alarms([threshold.value, np.nextafter(threshold.value, np.inf)],
+                           threshold).tolist() == [False, True]
+    with pytest.raises(TypeError, match="ThresholdCalibration"):
+        n.strict_alarms([3., 4.], threshold.value)
+
+
+def test_every_sealed_boundary_revalidates_content_after_object_setattr_tamper():
+    ps, covariance = sealed_geometry()
+    batch = n.ResidualBatch.from_pairs(ps)
+    object.__setattr__(batch, "residual_space", "b0_standardized")
+    with pytest.raises(ValueError, match="ResidualBatch|seal|raw"):
+        n.fit_shrinkage_covariance(
+            batch, provenance=provenance("normal_train", [p.identity for p in ps]))
+
+    p = ps[0]
+    basis = n.primary_tangent_basis(p, n.CANONICAL_TAP_COORDS, covariance)
+    object.__setattr__(covariance, "W", np.eye(9))
+    with pytest.raises(ValueError, match="CovarianceFit|seal"):
+        n.produce_topi_scores(p, basis, covariance)
+
+    conditioner, _ = fitted_conditioner()
+    object.__setattr__(conditioner, "cap_", conditioner.cap_ + 1.)
+    with pytest.raises(ValueError, match="conditioner.*seal|sealed"):
+        n.produce_nc_topi_scores(p, basis, sealed_geometry()[1], conditioner=conditioner,
+                                 iq_features=np.ones((1, 4)))
+
+    ids = [canonical_identity(300 + i) for i in range(4)]
+    threshold = n.calibrate_threshold(
+        [1, 2, 3, 4], .99, provenance=provenance("normal_calibration", ids),
+        detector="NC-TOPI", aggregator="median")
+    object.__setattr__(threshold, "quantile", .995)
+    with pytest.raises(ValueError, match="ThresholdCalibration|seal|quantile"):
+        n.strict_alarms([4.], threshold)
+
+
+def test_identity_digest_and_primary_coordinates_are_canonical_and_exact():
+    identity = canonical_identity()
+    p = pair(identity)
+    with pytest.raises((TypeError, ValueError), match="EpochIdentity|identity"):
+        pair(("rec", "cleanStatic", "G01", 0, 100.))
+    for args in [(" rec", "cleanStatic", "G01", 0, 100.),
+                 ("rec", "cleanStatic", "G01 ", 0, 100.)]:
+        with pytest.raises(ValueError, match="nonempty|whitespace|canonical"):
+            n.EpochIdentity(*args)
+    with pytest.raises(ValueError, match="coordinates.*canonical"):
+        n.PeakPredictionPair(
+            actual_raw=p.actual_raw, predicted_raw=p.predicted_raw,
+            residual_standardized=p.residual_standardized,
+            standardizer_std=p.standardizer_std, identity=identity,
+            actual_space=n.RAW_SPACE, predicted_space=n.RAW_SPACE,
+            residual_space=n.STANDARDIZED_SPACE,
+            coordinates=np.nextafter(n.CANONICAL_TAP_COORDS, np.inf))
+    with pytest.raises(ValueError, match="availability"):
+        n.EpochIdentity("rec", "cleanStatic", "G01", 0, np.inf)
+    with pytest.raises(ValueError, match="target_index"):
+        n.EpochIdentity("rec", "cleanStatic", "G01", True, 100.)
+
+
+def test_decision_evidence_rejects_strings_arrays_objects_and_accepts_numpy_bool():
+    for bad in ["0.02", [0.02], np.array([0.02]), object()]:
+        out = n.evaluate_stage0_decision(**decision_inputs(clean_nc_fpr=bad))
+        assert out.status == "INCONCLUSIVE" and out.validation_errors
+    for bad in ["true", [True], np.array([True]), 1]:
+        out = n.evaluate_stage0_decision(**decision_inputs(equal_rmse_pass=bad))
+        assert out.status == "INCONCLUSIVE" and out.validation_errors
+    assert n.evaluate_stage0_decision(**decision_inputs(
+        equal_rmse_pass=np.bool_(True), second_peak_pass=np.bool_(True))).status == "GO"
+
+
+def test_conditioner_schema_is_exact_frozen_width_and_tamper_checked_on_transform():
+    X = np.arange(160., dtype=float).reshape(40, 4)
+    y = np.linspace(1., 2., 40)
+    ids = [canonical_identity(i) for i in range(30)]
+    good = n.CONDITIONER_FEATURE_SCHEMA
+    for names in [good[::-1], good[:-1], ("log_power ",) + good[1:],
+                  ("LOG_POWER",) + good[1:], ("PRN ",) + good[1:]]:
+        with pytest.raises(ValueError, match="feature|schema|forbidden"):
+            n.RobustConditioner().fit(
+                X[:30], y[:30], provenance=provenance("normal_train", ids),
+                feature_names=names)
+    with pytest.raises(ValueError, match="width|four|4"):
+        n.RobustConditioner().fit(
+            X[:30, :3], y[:30], provenance=provenance("normal_train", ids),
+            feature_names=good)
+    c = n.RobustConditioner().fit(
+        X[:30], y[:30], provenance=provenance("normal_train", ids), feature_names=good)
+    with pytest.raises(ValueError, match="dimension|width|four|4"):
+        c.conditioner_transform(X[:2, :3])
+    shuffled = n.shuffled_control_target(
+        y[:30], provenance=provenance("normal_train", ids), feature_names=good)
+    assert shuffled.shape == (30,)
+    with pytest.raises(ValueError, match="feature|schema"):
+        n.shuffled_control_target(
+            y[:30], provenance=provenance("normal_train", ids),
+            feature_names=good[::-1])
+
+
+
+def test_pair_basis_identity_provenance_and_conditioner_valid_value_tamper_fail_closed():
+    ps, cov = sealed_geometry(); p = ps[0]
+    basis = n.primary_tangent_basis(p, n.CANONICAL_TAP_COORDS, cov)
+    object.__setattr__(p.identity, "prn", "G02")
+    with pytest.raises(ValueError, match="EpochIdentity|seal"):
+        n.produce_topi_scores(p, basis, cov)
+
+    p = ps[1]; basis = n.primary_tangent_basis(p, n.CANONICAL_TAP_COORDS, cov)
+    object.__setattr__(basis, "names", ("shift", "amplitude"))
+    with pytest.raises(ValueError, match="basis names|seal"):
+        n.produce_topi_scores(p, basis, cov)
+
+    ids = [canonical_identity(400 + i) for i in range(4)]
+    fit = provenance("normal_calibration", ids)
+    object.__setattr__(fit, "role", "normal_train")
+    with pytest.raises(ValueError, match="normal_calibration|FitProvenance|provenance"):
+        n.calibrate_threshold([1, 2, 3, 4], .99, provenance=fit)
+
+    conditioner, _ = fitted_conditioner()
+    replacement = tuple(reversed(conditioner._fit_identities_))
+    object.__setattr__(conditioner, "_fit_identities_", replacement)
+    with pytest.raises(ValueError, match="conditioner.*seal|provenance"):
+        conditioner.predict_scale(np.ones((1, 4)))
+
+
+def test_primary_alarm_checks_detector_aggregator_quantile_and_factory_seal():
+    ids = [canonical_identity(500 + i) for i in range(4)]
+    fit = provenance("normal_calibration", ids)
+    bad_calibrations = [
+        n.calibrate_threshold([1, 2, 3, 4], .99, provenance=fit,
+                              detector="TOPI", aggregator="median"),
+        n.calibrate_threshold([1, 2, 3, 4], .99, provenance=fit,
+                              detector="NC-TOPI", aggregator="top25_mean"),
+        n.calibrate_threshold([1, 2, 3, 4], .995, provenance=fit,
+                              detector="NC-TOPI", aggregator="median"),
+    ]
+    for threshold in bad_calibrations:
+        with pytest.raises(ValueError, match="q99 NC-TOPI median"):
+            n.strict_alarms([4.], threshold)
+    with pytest.raises(TypeError, match="factory-only"):
+        n.ThresholdCalibration()
+    uncalibrated = n.RobustConditioner().fit(
+        np.arange(120.).reshape(30, 4), np.linspace(1, 2, 30),
+        provenance=provenance("normal_train", [canonical_identity(600 + i) for i in range(30)]),
+        feature_names=n.CONDITIONER_FEATURE_SCHEMA)
+    ps, cov = sealed_geometry(); p = ps[0]
+    basis = n.primary_tangent_basis(p, n.CANONICAL_TAP_COORDS, cov)
+    with pytest.raises(ValueError, match="calibrated"):
+        n.produce_nc_topi_scores(p, basis, cov, conditioner=uncalibrated,
+                                 iq_features=np.ones((1, 4)))

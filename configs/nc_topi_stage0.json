@@ -103,12 +103,20 @@
       "pair_identity_digest_sha256",
       "residual_space"
     ],
-    "typed_provenance": "FitProvenance(scenario, role, identities)",
+    "typed_provenance": "FitProvenance(scenario, role, tuple[EpochIdentity])",
     "covariance_input": "PeakPredictionPair sequence or ResidualBatch.from_pairs only",
     "conditioner_fit": "cleanStatic normal_train with identity and full fit digests",
     "conditioner_cap": "cleanStatic normal_calibration identities disjoint from train",
-    "threshold_calibration": "typed cleanStatic normal_calibration with identity digest",
-    "shuffle_control": "deterministic within cleanStatic normal_train only"
+    "threshold_calibration": "factory-only sealed ThresholdCalibration with detector/aggregator/q/clean calibration provenance and score digest",
+    "shuffle_control": "deterministic within cleanStatic normal_train only",
+    "canonical_identity": {
+      "type": "EpochIdentity(recording_id, scenario, prn, target_index, availability_time_s)",
+      "strings": "nonempty canonical strings without padding",
+      "target_index": "integer excluding bool",
+      "availability_time_s": "finite real scalar excluding bool"
+    },
+    "covariance_input_seal": "ResidualBatch digest over residual_raw + ordered pair content digests + raw-space tag",
+    "conditioner_state": "fitted and clean-calibrated sealed RobustConditioner with exact four-feature schema"
   },
   "split": {
     "train": {
@@ -183,7 +191,9 @@
     },
     "threshold": {
       "quantile_method": "higher",
-      "comparison": "strict >"
+      "comparison": "strict >",
+      "primary_api": "strict_alarms(scores, sealed ThresholdCalibration); q99 NC-TOPI median only",
+      "raw_scalar_helper": "private diagnostic only"
     },
     "sustained_alarm": {
       "required_contiguous_epochs": 3,
@@ -222,7 +232,8 @@
       "fit": "cleanStatic normal_train residual_raw only",
       "eigenvalue_floor": "1e-8*trace/dim",
       "input": "validated PeakPredictionPair sequence or ResidualBatch.from_pairs",
-      "audit_binding": "pair identity digest + prompt_relative_ratio_raw tag"
+      "audit_binding": "pair identity digest + prompt_relative_ratio_raw tag",
+      "score_input": "factory-only sealed CovarianceFit; raw W rejected"
     },
     "precision": {
       "method": "pseudoinverse"
@@ -243,7 +254,7 @@
       "width only via diagnostic builder"
     ],
     "score_space": "raw prompt-relative-ratio",
-    "pair_contract": "actual_raw and predicted_raw required; residual_raw=actual_raw-predicted_raw; residual_standardized=residual_raw/standardizer_std; explicit physical coordinates required and immutable",
+    "pair_contract": "actual_raw and predicted_raw required; residual_raw=actual_raw-predicted_raw; residual_standardized=residual_raw/standardizer_std; explicit physical coordinates required and immutable; identity is typed EpochIdentity; coordinates equal frozen float64 nine-tap vector at zero tolerance",
     "primary_include_width": false,
     "primary_tangents": [
       "amplitude",
@@ -267,8 +278,10 @@
         "coordinates",
         "predicted_raw"
       ],
-      "primary_score_input": "PeakPredictionPair + TangentBasis",
-      "raw_matrix_primary_input": false
+      "primary_score_input": "PeakPredictionPair + TangentBasis + sealed CovarianceFit",
+      "raw_matrix_primary_input": false,
+      "raw_weight_primary_input": false,
+      "seal_revalidation": "pair, basis, covariance content recomputed at every primary score boundary"
     }
   },
   "iq_conditioner": {
@@ -278,9 +291,9 @@
     "block_stride_seconds": 0.5,
     "features": [
       "log_power",
-      "robust_noise_floor_scale",
+      "log_noise_floor_scale",
       "spectral_flatness",
-      "lag1_autocorrelation_magnitude"
+      "lag1_autocorr_magnitude"
     ],
     "asof": "block_end <= min target source_start",
     "history_blocks": 4,
@@ -303,9 +316,11 @@
     "shuffle_control": {
       "seed": 20260803,
       "scope": "within clean train before regression",
-      "attack_shuffle": false
+      "attack_shuffle": false,
+      "schema_provenance": "preserve exact feature schema and typed clean-train provenance; permute target only"
     },
-    "target_group_contract": "target_groups and block_groups are nonempty strings with exact set equality; unique sorted block end per recording; cadence audited; no cross-group history"
+    "target_group_contract": "target_groups and block_groups are nonempty strings with exact set equality; unique sorted block end per recording; cadence audited; no cross-group history",
+    "feature_schema": "exact ordered tuple; width 4; no padding/case aliases"
   },
   "synthetic": {
     "second_peak_relative_powers": [
@@ -447,8 +462,9 @@
       "pauc_delta_and_ci": "finite [-1,1], CI lower <= upper",
       "delays": "finite >=0 or explicit censored null",
       "scenario_sets": "exactly DS1,DS2,DS3,DS7,DS8",
-      "physics_flags": "true JSON/Python booleans only",
-      "invalid_evidence": "INCONCLUSIVE with validation_errors; cannot trigger GO or NO-GO"
+      "physics_flags": "Python bool or NumPy bool only",
+      "invalid_evidence": "INCONCLUSIVE with validation_errors; cannot trigger GO or NO-GO",
+      "scalar_type": "Python/NumPy real scalar only; bool/string/list/array/object rejected before conversion"
     }
   },
   "epoch_schema": {
@@ -456,6 +472,7 @@
       "physical_recording_id",
       "scenario",
       "prn_or_event_id",
+      "target_index",
       "availability_time_s",
       "source_start_s",
       "source_end_s",
@@ -466,6 +483,7 @@
       "physical_recording_id",
       "scenario",
       "prn_or_event_id",
+      "target_index",
       "availability_time_s"
     ],
     "event_ids_supported": true,

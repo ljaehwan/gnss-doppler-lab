@@ -6,10 +6,11 @@ contracts are incomplete.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import hashlib
 import json
 import math
+from numbers import Real
 from pathlib import Path
 from types import MappingProxyType
 from typing import Mapping
@@ -19,7 +20,10 @@ from sklearn.covariance import LedoitWolf
 from sklearn.linear_model import HuberRegressor
 from sklearn.metrics import roc_auc_score
 
-CANONICAL_TAP_COORDS = np.array([-.5, -.375, -.25, -.125, 0., .125, .25, .375, .5])
+CANONICAL_TAP_COORDS = np.frombuffer(
+    np.array([-.5, -.375, -.25, -.125, 0., .125, .25, .375, .5], dtype=np.float64).tobytes(),
+    dtype=np.float64)
+CANONICAL_TAP_COORDS.setflags(write=False)
 SECOND_PEAK_POWERS = (.05, .1, .2, .4, .8)
 SECOND_PEAK_SEPARATIONS = (.0625, .125, .25, .375, .5)
 ATTACK_SCENARIOS = ("DS1", "DS2", "DS3", "DS7", "DS8")
@@ -29,6 +33,10 @@ NONIDENTIFIABILITY_MARKER = (
 DEFAULT_SEED = 20260803
 RAW_SPACE = "prompt_relative_ratio_raw"
 STANDARDIZED_SPACE = "b0_standardized"
+CONDITIONER_FEATURE_SCHEMA = (
+    "log_power", "log_noise_floor_scale", "spectral_flatness",
+    "lag1_autocorr_magnitude",
+)
 
 
 def _array(value, name, ndim=None):
@@ -43,28 +51,114 @@ def _array(value, name, ndim=None):
     return out
 
 
+def _epoch_identity_seal(recording_id,scenario,prn,target_index,availability_time_s):
+    payload={"type":"EpochIdentity.v1","recording_id":{"str":recording_id},
+      "scenario":{"str":scenario},"prn":{"str":prn},"target_index":{"int":str(int(target_index))},
+      "availability_time_s":{"float64":float(availability_time_s).hex()}}
+    return hashlib.sha256(json.dumps(payload,separators=(",",":"),sort_keys=True).encode()).hexdigest()
+
+
+@dataclass(frozen=True)
+class EpochIdentity:
+    """Canonical Stage-0 row identity with a strict primitive-only schema."""
+    recording_id: str
+    scenario: str
+    prn: str
+    target_index: int
+    availability_time_s: float
+    _construction_seal: str = field(init=False, repr=False, compare=False)
+
+    def __post_init__(self):
+        self.validate()
+        object.__setattr__(self, "target_index", int(self.target_index))
+        object.__setattr__(self, "availability_time_s", float(self.availability_time_s))
+        object.__setattr__(self, "_construction_seal", _epoch_identity_seal(
+            self.recording_id,self.scenario,self.prn,self.target_index,self.availability_time_s))
+
+    def validate(self):
+        for name in ("recording_id", "scenario", "prn"):
+            value = getattr(self, name)
+            if not isinstance(value, str) or not value or value != value.strip():
+                raise ValueError(f"identity {name} must be a nonempty canonical string without whitespace padding")
+        if isinstance(self.target_index, (bool, np.bool_)) or not isinstance(self.target_index, (int, np.integer)):
+            raise ValueError("identity target_index must be an integer excluding bool")
+        value = self.availability_time_s
+        if isinstance(value, (bool, np.bool_)) or not isinstance(value, Real) or not np.isfinite(value):
+            raise ValueError("identity availability_time_s must be a finite real scalar")
+        if hasattr(self,"_construction_seal") and self._construction_seal != _epoch_identity_seal(
+                self.recording_id,self.scenario,self.prn,self.target_index,self.availability_time_s):
+            raise ValueError("EpochIdentity construction seal is invalid")
+        return self
+
+    def canonical_payload(self):
+        self.validate()
+        return {"type": "EpochIdentity.v1", "recording_id": self.recording_id,
+                "scenario": self.scenario, "prn": self.prn,
+                "target_index": int(self.target_index),
+                "availability_time_s": float(self.availability_time_s)}
+
+
+def _require_identity(value, *, name="identity"):
+    if not isinstance(value, EpochIdentity):
+        raise TypeError(f"{name} must be an EpochIdentity")
+    value.validate()
+    return value
+
+
+def _canonical_coordinates(value,name="coordinates"):
+    raw=np.asarray(value,dtype=object)
+    if raw.ndim != 1 or raw.shape != CANONICAL_TAP_COORDS.shape:
+        raise ValueError(f"{name} must contain exactly the frozen nine coordinates")
+    if any(isinstance(item,(bool,np.bool_)) or not isinstance(item,Real) for item in raw):
+        raise ValueError(f"{name} must use real numeric primitives excluding bool")
+    coordinates=_array(value,name,1)
+    if not np.array_equal(np.asarray(coordinates,dtype=np.float64),CANONICAL_TAP_COORDS):
+        raise ValueError(f"{name} must equal the frozen canonical coordinates at zero tolerance")
+    return coordinates
+
+
 def _identity_list(values, n, *, name="identities"):
     if values is None:
         raise ValueError(f"{name} provenance is mandatory")
-    result = [tuple(x) if isinstance(x, (tuple, list, np.ndarray)) else (x,) for x in values]
+    result = tuple(values)
     if len(result) != n:
         raise ValueError(f"{name} length must match rows")
-    if any(len(x) == 0 or any(str(v).strip() == "" for v in x) for x in result):
-        raise ValueError(f"{name} must be complete")
+    for value in result:
+        _require_identity(value, name=name)
     if len(set(result)) != len(result):
         raise ValueError(f"{name} contains duplicate identities; identities must be unique")
-    return result
+    return list(result)
 
+
+def _canonical_json_value(value):
+    if value is None: return {"type": "none"}
+    if isinstance(value, (bool, np.bool_)): return {"type": "bool", "value": bool(value)}
+    if isinstance(value, (int, np.integer)) and not isinstance(value, (bool, np.bool_)):
+        return {"type": "int", "value": str(int(value))}
+    if isinstance(value, (float, np.floating)):
+        number = float(value)
+        if not np.isfinite(number): raise ValueError("digest values must be finite")
+        return {"type": "float64", "value": number.hex()}
+    if isinstance(value, str): return {"type": "str", "value": value}
+    if isinstance(value, EpochIdentity): return _canonical_json_value(value.canonical_payload())
+    if isinstance(value, Mapping):
+        if any(not isinstance(key, str) for key in value): raise TypeError("digest mapping keys must be strings")
+        return {"type": "map", "items": [[key, _canonical_json_value(value[key])] for key in sorted(value)]}
+    if isinstance(value, (tuple, list)):
+        return {"type": "sequence", "items": [_canonical_json_value(item) for item in value]}
+    raise TypeError(f"unsupported digest value type: {type(value).__name__}")
 
 
 def _digest_json(value):
-    encoded = json.dumps(value, separators=(",", ":"), ensure_ascii=True,
-                         default=str).encode()
+    encoded = json.dumps(_canonical_json_value(value), separators=(",", ":"), ensure_ascii=True,
+                         sort_keys=True).encode()
     return hashlib.sha256(encoded).hexdigest()
 
 
 def _identity_digest(identities):
-    return _digest_json([list(identity) for identity in identities])
+    values = tuple(identities)
+    for identity in values: _require_identity(identity)
+    return _digest_json({"type_tag": "ordered_epoch_identities.v1", "identities": values})
 
 
 def _array_digest(value):
@@ -84,21 +178,22 @@ def _readonly_array(value, name, ndim=None):
 @dataclass(frozen=True)
 class FitProvenance:
     """Exact immutable row provenance required by every fit/calibration API."""
-
     scenario: str
     role: str
-    identities: tuple[tuple[object, ...], ...]
+    identities: tuple[EpochIdentity, ...]
+    _construction_seal: str = field(init=False, repr=False, compare=False)
 
     def __post_init__(self):
-        if not isinstance(self.scenario, str) or not self.scenario.strip():
-            raise ValueError("fit provenance scenario must be a nonempty string")
-        if not isinstance(self.role, str) or not self.role.strip():
-            raise ValueError("fit provenance role must be a nonempty string")
-        identities = tuple(_identity_list(self.identities, len(self.identities),
-                                          name="fit provenance identities"))
-        if not identities:
-            raise ValueError("fit provenance identities cannot be empty")
+        if not isinstance(self.scenario, str) or not self.scenario or self.scenario != self.scenario.strip():
+            raise ValueError("fit provenance scenario must be a nonempty canonical string")
+        if not isinstance(self.role, str) or not self.role or self.role != self.role.strip():
+            raise ValueError("fit provenance role must be a nonempty canonical string")
+        identities = tuple(_identity_list(self.identities, len(self.identities), name="fit provenance identities"))
+        if not identities: raise ValueError("fit provenance identities cannot be empty")
         object.__setattr__(self, "identities", identities)
+        object.__setattr__(self, "_construction_seal", _digest_json({
+            "type_tag":"FitProvenance.v2","scenario":self.scenario,"role":self.role,
+            "identity_digest":_identity_digest(identities)}))
 
     @property
     def identity_digest_sha256(self):
@@ -108,10 +203,14 @@ class FitProvenance:
 def _require_provenance(provenance, rows, *, role):
     if not isinstance(provenance, FitProvenance):
         raise TypeError("typed fit provenance (FitProvenance) is mandatory")
-    if provenance.scenario != "cleanStatic" or provenance.role != role:
+    if (not isinstance(provenance.scenario, str) or provenance.scenario != "cleanStatic"
+            or not isinstance(provenance.role, str) or provenance.role != role):
         raise ValueError(f"fit requires cleanStatic {role} provenance")
-    if len(provenance.identities) != rows:
-        raise ValueError("fit provenance identities length must match rows")
+    _identity_list(provenance.identities, rows, name="fit provenance identities")
+    expected=_digest_json({"type_tag":"FitProvenance.v2","scenario":provenance.scenario,
+                           "role":provenance.role,"identity_digest":_identity_digest(provenance.identities)})
+    if provenance._construction_seal != expected:
+        raise ValueError("FitProvenance construction seal is invalid")
     return provenance
 
 
@@ -131,8 +230,10 @@ def validate_config(config: Mapping[str, object]) -> None:
         geometry = config["geometry"]
     except (KeyError, TypeError) as exc:
         raise ValueError("incomplete NC-TOPI Stage-0 config") from exc
-    if list(coords) != CANONICAL_TAP_COORDS.tolist():
-        raise ValueError("tap coordinates must be the explicit canonical tap coordinates")
+    try:
+        _canonical_coordinates(coords,"config tap coordinates")
+    except (TypeError, ValueError) as exc:
+        raise ValueError("tap coordinates must be the explicit canonical tap coordinates") from exc
     if "GNSS-SDR" not in str(taps.get("coordinate_provenance", "")):
         raise ValueError("tap coordinate provenance must name GNSS-SDR")
     if b0.get("checkpoint_sha256") != "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b":
@@ -162,20 +263,29 @@ def validate_config(config: Mapping[str, object]) -> None:
     if criteria.get("c6", {}).get("rhs") is not True or criteria.get("c7", {}).get("rhs") is not True:
         raise ValueError("physics criteria must use JSON boolean true")
     provenance = config.get("fit_policy", {}).get("typed_provenance")
-    if provenance != "FitProvenance(scenario, role, identities)":
+    if provenance != "FitProvenance(scenario, role, tuple[EpochIdentity])":
         raise ValueError("typed fit provenance contract changed")
     basis = geometry.get("basis_provenance", {})
     if (basis.get("primary_kind") != "primary_amp_shift"
             or basis.get("width_kind") != "width_diagnostic"
-            or basis.get("raw_matrix_primary_input") is not False):
+            or basis.get("raw_matrix_primary_input") is not False
+            or basis.get("raw_weight_primary_input") is not False):
         raise ValueError("sealed tangent basis provenance contract changed")
     epoch = config.get("epoch_schema", {})
     if epoch.get("primary_join") != "exact full identity and metadata equality":
         raise ValueError("EpochRecord primary join contract changed")
     domains = decision.get("evidence_domains", {})
     if (domains.get("fpr") != "finite [0,1]"
+            or "real scalar only" not in str(domains.get("scalar_type", ""))
             or "validation_errors" not in str(domains.get("invalid_evidence", ""))):
         raise ValueError("decision evidence validation contract changed")
+    conditioner = config.get("iq_conditioner", {})
+    if (conditioner.get("features") != list(CONDITIONER_FEATURE_SCHEMA)
+            or conditioner.get("feature_schema") != "exact ordered tuple; width 4; no padding/case aliases"):
+        raise ValueError("frozen conditioner feature schema changed")
+    identity = config.get("fit_policy", {}).get("canonical_identity", {})
+    if "EpochIdentity" not in str(identity.get("type", "")):
+        raise ValueError("canonical typed identity contract changed")
 
 
 def load_config(path=None):
@@ -187,64 +297,81 @@ def load_config(path=None):
 
 @dataclass(frozen=True)
 class PeakPredictionPair:
-    """One exact B0 target/prediction pair bound to physical coordinates."""
-
+    """One sealed B0 target/prediction pair on the frozen nine coordinates."""
     actual_raw: np.ndarray
     predicted_raw: np.ndarray
     residual_standardized: np.ndarray
     standardizer_std: np.ndarray
-    identity: tuple[object, ...]
+    identity: EpochIdentity
     actual_space: str
     predicted_space: str
     residual_space: str
     coordinates: np.ndarray
+    _content_digest_sha256: str = field(init=False, repr=False)
 
     def __post_init__(self):
-        actual = _array(self.actual_raw, "actual_raw", 1)
-        predicted = _array(self.predicted_raw, "predicted_raw", 1)
+        actual = _array(self.actual_raw, "actual_raw", 1); predicted = _array(self.predicted_raw, "predicted_raw", 1)
         standardized = _array(self.residual_standardized, "residual_standardized", 1)
-        std = _array(self.standardizer_std, "standardizer_std")
-        coordinates = _array(self.coordinates, "coordinates", 1)
+        std = _array(self.standardizer_std, "standardizer_std"); coordinates = _canonical_coordinates(self.coordinates, "coordinates")
+        identity = _require_identity(self.identity)
         if actual.shape != predicted.shape or actual.shape != standardized.shape:
             raise ValueError("actual, predicted, and standardized residual shapes must match")
-        if coordinates.shape != actual.shape or np.any(np.diff(coordinates) <= 0):
-            raise ValueError("coordinates must match peaks and be strictly increasing")
-        if std.ndim == 0:
-            std = np.full(actual.shape, float(std))
+        if coordinates.shape != CANONICAL_TAP_COORDS.shape or not np.array_equal(np.asarray(coordinates, dtype=np.float64), CANONICAL_TAP_COORDS):
+            raise ValueError("primary pair coordinates must equal the frozen canonical nine taps exactly")
+        if actual.shape != CANONICAL_TAP_COORDS.shape: raise ValueError("primary peaks must have exactly nine canonical taps")
+        if std.ndim == 0: std = np.full(actual.shape, float(std))
         if std.ndim != 1 or std.shape != actual.shape or np.any(std <= 0):
             raise ValueError("standardizer_std must be positive scalar or matching vector")
         if self.actual_space != RAW_SPACE or self.predicted_space != RAW_SPACE:
             raise ValueError("actual/predicted space must be prompt_relative_ratio_raw")
-        if self.residual_space != STANDARDIZED_SPACE:
-            raise ValueError("residual space must be b0_standardized")
-        identity = tuple(self.identity)
-        if not identity or any(not str(x).strip() for x in identity):
-            raise ValueError("identity must be complete")
-        expected = (actual - predicted) / std
-        if not np.allclose(standardized, expected, rtol=1e-6, atol=1e-9):
+        if self.residual_space != STANDARDIZED_SPACE: raise ValueError("residual space must be b0_standardized")
+        if not np.allclose(standardized, (actual-predicted)/std, rtol=1e-6, atol=1e-9):
             raise ValueError("residual_standardized must equal (actual_raw-predicted_raw)/standardizer_std")
-        for name, value in (("actual_raw", actual), ("predicted_raw", predicted),
-                            ("residual_standardized", standardized), ("standardizer_std", std),
-                            ("coordinates", coordinates), ("identity", identity)):
-            if isinstance(value, np.ndarray):
-                value = _readonly_array(value, name, value.ndim)
-            object.__setattr__(self, name, value)
+        for name, value in (("actual_raw",actual),("predicted_raw",predicted),("residual_standardized",standardized),("standardizer_std",std),("coordinates",coordinates)):
+            object.__setattr__(self, name, _readonly_array(value, name, value.ndim))
+        object.__setattr__(self, "identity", identity)
+        object.__setattr__(self, "_content_digest_sha256", _pair_content_digest(self))
 
     @property
     def residual_raw(self):
-        result = self.actual_raw - self.predicted_raw
-        result.setflags(write=False)
-        return result
+        result=np.frombuffer((self.actual_raw-self.predicted_raw).tobytes(), dtype=np.float64).reshape(self.actual_raw.shape)
+        result.setflags(write=False); return result
+
+
+def _pair_content_digest(pair):
+    _require_identity(pair.identity)
+    return _digest_json({"type_tag":"PeakPredictionPair.v1","identity_digest":_identity_digest((pair.identity,)),
+        "actual_raw_digest":_array_digest(pair.actual_raw),"predicted_raw_digest":_array_digest(pair.predicted_raw),
+        "residual_standardized_digest":_array_digest(pair.residual_standardized),"standardizer_std_digest":_array_digest(pair.standardizer_std),
+        "coordinates_digest":_array_digest(pair.coordinates),"actual_space":pair.actual_space,
+        "predicted_space":pair.predicted_space,"residual_space":pair.residual_space})
+
+
+def _validate_pair(pair):
+    if not isinstance(pair, PeakPredictionPair): raise TypeError("score construction requires PeakPredictionPair; residual-only is forbidden")
+    _require_identity(pair.identity)
+    for name in ("actual_raw","predicted_raw","residual_standardized","standardizer_std"):
+        _array(getattr(pair,name),name,1)
+    _canonical_coordinates(pair.coordinates,"PeakPredictionPair coordinates")
+    if pair.actual_space != RAW_SPACE or pair.predicted_space != RAW_SPACE or pair.residual_space != STANDARDIZED_SPACE:
+        raise ValueError("PeakPredictionPair spaces were tampered")
+    if pair.actual_raw.shape != CANONICAL_TAP_COORDS.shape or pair.predicted_raw.shape != CANONICAL_TAP_COORDS.shape or not np.array_equal(np.asarray(pair.coordinates,dtype=np.float64),CANONICAL_TAP_COORDS):
+        raise ValueError("PeakPredictionPair coordinates are not exactly canonical")
+    if not np.allclose(pair.residual_standardized,(pair.actual_raw-pair.predicted_raw)/pair.standardizer_std,rtol=1e-6,atol=1e-9):
+        raise ValueError("PeakPredictionPair raw-space residual audit failed")
+    if _pair_content_digest(pair) != pair._content_digest_sha256: raise ValueError("PeakPredictionPair content seal is invalid")
+    return pair
 
 
 @dataclass(frozen=True, init=False)
 class TangentBasis:
-    """Factory-only immutable tangent object sealed to one prediction pair."""
-
+    """Factory-only tangent object sealed to a pair and covariance fit."""
     basis_kind: str
     peak_identity_digest: str
+    pair_content_digest_sha256: str
     coordinates_digest: str
     predicted_raw_digest: str
+    covariance_fit_digest_sha256: str
     matrix: np.ndarray
     raw: np.ndarray
     names: tuple[str, ...]
@@ -255,165 +382,202 @@ class TangentBasis:
         raise TypeError("TangentBasis is factory-only; use a pair-bound basis builder")
 
     @classmethod
-    def _create(cls, pair, coords, matrix, raw, names, basis_kind, metadata):
-        instance = object.__new__(cls)
-        identity_digest = _identity_digest((pair.identity,))
-        coords_digest = _array_digest(coords)
-        predicted_digest = _array_digest(pair.predicted_raw)
-        names = tuple(names)
-        seal = _digest_json([basis_kind, identity_digest, coords_digest,
-                             predicted_digest, names, _array_digest(matrix)])
-        values = (
-            ("basis_kind", basis_kind), ("peak_identity_digest", identity_digest),
-            ("coordinates_digest", coords_digest), ("predicted_raw_digest", predicted_digest),
-            ("matrix", _readonly_array(matrix, "matrix", 2)),
-            ("raw", _readonly_array(raw, "raw", 2)), ("names", names),
-            ("metadata", MappingProxyType(dict(metadata))), ("_construction_seal", seal))
-        for name, value in values:
-            object.__setattr__(instance, name, value)
+    def _create(cls, pair, covariance, matrix, raw, names, basis_kind, metadata):
+        _validate_pair(pair); _validate_covariance_fit(covariance)
+        instance=object.__new__(cls)
+        identity_digest=_identity_digest((pair.identity,)); coords_digest=_array_digest(pair.coordinates)
+        predicted_digest=_array_digest(pair.predicted_raw); names=tuple(names)
+        values={"basis_kind":basis_kind,"peak_identity_digest":identity_digest,
+                "pair_content_digest_sha256":pair._content_digest_sha256,
+                "coordinates_digest":coords_digest,"predicted_raw_digest":predicted_digest,
+                "covariance_fit_digest_sha256":covariance._construction_seal,
+                "matrix_digest":_array_digest(matrix),"raw_digest":_array_digest(raw),"names":names,
+                "metadata":dict(metadata)}
+        seal=_digest_json({"type_tag":"TangentBasis.v2",**values})
+        assignments=(("basis_kind",basis_kind),("peak_identity_digest",identity_digest),
+            ("pair_content_digest_sha256",pair._content_digest_sha256),("coordinates_digest",coords_digest),
+            ("predicted_raw_digest",predicted_digest),("covariance_fit_digest_sha256",covariance._construction_seal),
+            ("matrix",_readonly_array(matrix,"matrix",2)),("raw",_readonly_array(raw,"raw",2)),
+            ("names",names),("metadata",MappingProxyType(dict(metadata))),("_construction_seal",seal))
+        for name,value in assignments: object.__setattr__(instance,name,value)
         return instance
 
-    def validate_for_pair(self, pair, W, *, primary):
-        if not isinstance(pair, PeakPredictionPair):
-            raise TypeError("TangentBasis validation requires PeakPredictionPair")
-        expected_kind = "primary_amp_shift" if primary else "width_diagnostic"
-        if self.basis_kind != expected_kind:
-            raise ValueError(f"{self.basis_kind} basis cannot be used as {expected_kind}")
-        expected_names = ("amplitude", "shift") if primary else ("amplitude", "shift", "width")
-        if self.names != expected_names:
-            raise ValueError("basis names do not match its sealed basis kind")
-        expected = (_identity_digest((pair.identity,)), _array_digest(pair.coordinates),
-                    _array_digest(pair.predicted_raw))
-        actual = (self.peak_identity_digest, self.coordinates_digest, self.predicted_raw_digest)
-        for label, left, right in zip(("identity", "coordinate", "predicted"), actual, expected):
-            if left != right:
-                raise ValueError(f"basis {label} provenance does not match PeakPredictionPair")
-        seal = _digest_json([self.basis_kind, *actual, self.names, _array_digest(self.matrix)])
-        if seal != self._construction_seal:
-            raise ValueError("TangentBasis construction seal is invalid; arbitrary basis rejected")
-        weight = _validate_weight(W, len(pair.predicted_raw))
-        first = np.gradient(pair.predicted_raw, pair.coordinates, edge_order=2)
-        columns = [pair.predicted_raw, first]
-        if not primary:
-            columns.append(np.gradient(first, pair.coordinates, edge_order=2))
-        expected_matrix = np.column_stack(columns)
+    def validate_for_pair(self, pair, covariance, *, primary):
+        _validate_pair(pair); _validate_covariance_fit(covariance)
+        expected_kind="primary_amp_shift" if primary else "width_diagnostic"
+        expected_names=("amplitude","shift") if primary else ("amplitude","shift","width")
+        if self.basis_kind != expected_kind: raise ValueError(f"{self.basis_kind} basis cannot be used as {expected_kind}")
+        if self.names != expected_names: raise ValueError("basis names do not match its sealed basis kind")
+        actual=(self.peak_identity_digest,self.pair_content_digest_sha256,self.coordinates_digest,
+                self.predicted_raw_digest,self.covariance_fit_digest_sha256)
+        expected=(_identity_digest((pair.identity,)),pair._content_digest_sha256,_array_digest(pair.coordinates),
+                  _array_digest(pair.predicted_raw),covariance._construction_seal)
+        for label,left,right in zip(("identity","pair","coordinate","predicted","covariance"),actual,expected):
+            if left != right: raise ValueError(f"basis {label} provenance does not match sealed inputs")
+        seal=_digest_json({"type_tag":"TangentBasis.v2","basis_kind":self.basis_kind,
+            "peak_identity_digest":actual[0],"pair_content_digest_sha256":actual[1],
+            "coordinates_digest":actual[2],"predicted_raw_digest":actual[3],
+            "covariance_fit_digest_sha256":actual[4],"matrix_digest":_array_digest(self.matrix),
+            "raw_digest":_array_digest(self.raw),"names":self.names,"metadata":dict(self.metadata)})
+        if seal != self._construction_seal: raise ValueError("TangentBasis construction seal is invalid; arbitrary basis rejected")
+        first=np.gradient(pair.predicted_raw,pair.coordinates,edge_order=2)
+        columns=[pair.predicted_raw,first]
+        if not primary: columns.append(np.gradient(first,pair.coordinates,edge_order=2))
+        expected_raw=np.column_stack(columns); expected_matrix=expected_raw.copy()
         for column in range(expected_matrix.shape[1]):
-            norm2 = float(expected_matrix[:, column] @ weight @ expected_matrix[:, column])
-            if norm2 <= 0:
-                raise ValueError("basis tangent has zero W norm")
-            expected_matrix[:, column] /= math.sqrt(norm2)
-        if not np.allclose(self.matrix, expected_matrix, rtol=1e-12, atol=1e-14):
+            norm2=float(expected_matrix[:,column]@covariance.W@expected_matrix[:,column])
+            if norm2 <= 0: raise ValueError("basis tangent has zero W norm")
+            expected_matrix[:,column]/=math.sqrt(norm2)
+        if not np.array_equal(self.raw,expected_raw):
+            raise ValueError("arbitrary basis raw tangents rejected")
+        if not np.allclose(self.matrix,expected_matrix,rtol=1e-12,atol=1e-14):
             raise ValueError("arbitrary basis matrix rejected; tangents must derive from predicted_raw")
 
 
 def _validate_weight(W, dimension, *, symmetry_atol=1e-12, psd_atol=1e-12):
-    weight = _array(W, "W", 2)
-    if weight.shape != (dimension, dimension):
-        raise ValueError("W dimensions must match vectors")
-    scale = max(1.0, float(np.linalg.norm(weight, ord=2)))
-    if not np.allclose(weight, weight.T, rtol=0, atol=symmetry_atol * scale):
-        raise ValueError("W must be symmetric")
-    weight = (weight + weight.T) / 2
-    minimum = float(np.linalg.eigvalsh(weight).min())
-    if minimum < -psd_atol * scale:
-        raise ValueError("W must be positive semidefinite")
+    weight=_array(W,"W",2)
+    if weight.shape != (dimension,dimension): raise ValueError("W dimensions must match vectors")
+    scale=max(1.0,float(np.linalg.norm(weight,ord=2)))
+    if not np.allclose(weight,weight.T,rtol=0,atol=symmetry_atol*scale): raise ValueError("W must be symmetric")
+    weight=(weight+weight.T)/2
+    if float(np.linalg.eigvalsh(weight).min()) < -psd_atol*scale: raise ValueError("W must be positive semidefinite")
     return weight
 
 
-def _build_tangents(pair, coords, W, *, include_width, low_signal_epsilon):
-    if not isinstance(pair, PeakPredictionPair):
-        raise TypeError("tangent construction requires PeakPredictionPair")
-    p = pair.predicted_raw
-    x = _array(coords, "coords", 1)
-    if p.shape != x.shape or p.size < 3 or np.any(np.diff(x) <= 0):
-        raise ValueError("predicted peak and strictly increasing physical coords must match")
-    if not np.array_equal(x, pair.coordinates):
-        raise ValueError("explicit coordinates do not match PeakPredictionPair coordinates")
-    if np.linalg.norm(p) <= low_signal_epsilon:
-        raise ValueError("low-signal predicted peak cannot define tangents")
-    first = np.gradient(p, x, edge_order=2)
-    cols = [p, first]
-    names = ["amplitude", "shift"]
-    if include_width:
-        cols.append(np.gradient(first, x, edge_order=2))
-        names.append("width")
-    raw = np.column_stack(cols)
-    weight = np.eye(p.size) if W is None else _validate_weight(W, p.size)
-    normalized = raw.copy()
-    for column, name in enumerate(names):
-        norm2 = float(raw[:, column] @ weight @ raw[:, column])
-        if not np.isfinite(norm2) or norm2 <= low_signal_epsilon**2:
-            raise ValueError(f"low-signal {name} tangent")
-        normalized[:, column] /= math.sqrt(norm2)
-    metadata = {
-        "derivative_coordinates": "explicit physical chip coordinates",
-        "normalization": "each column has unit W norm",
-        "primary": not include_width,
-        "width": "diagnostic ablation only" if include_width else "excluded from primary",
-        "amplitude_semantics": (
-            "normalized-shape scale direction in prompt-relative-ratio space; "
-            "not physical receiver global gain"),
-        "residual_only_allowed": False,
-        "nonidentifiability_marker": NONIDENTIFIABILITY_MARKER,
-    }
-    kind = "width_diagnostic" if include_width else "primary_amp_shift"
-    return TangentBasis._create(pair, x, normalized, raw, tuple(names), kind, metadata)
+def _build_tangents(pair, coords, covariance, *, include_width, low_signal_epsilon):
+    _validate_pair(pair); _validate_covariance_fit(covariance)
+    x=_canonical_coordinates(coords,"coords")
+    if not np.array_equal(x,pair.coordinates):
+        raise ValueError("explicit coordinates must exactly equal pair and frozen canonical coordinates")
+    p=pair.predicted_raw
+    if np.linalg.norm(p) <= low_signal_epsilon: raise ValueError("low-signal predicted peak cannot define tangents")
+    first=np.gradient(p,x,edge_order=2); cols=[p,first]; names=["amplitude","shift"]
+    if include_width: cols.append(np.gradient(first,x,edge_order=2)); names.append("width")
+    raw=np.column_stack(cols); normalized=raw.copy()
+    for column,name in enumerate(names):
+        norm2=float(raw[:,column]@covariance.W@raw[:,column])
+        if not np.isfinite(norm2) or norm2 <= low_signal_epsilon**2: raise ValueError(f"low-signal {name} tangent")
+        normalized[:,column]/=math.sqrt(norm2)
+    metadata={"derivative_coordinates":"explicit physical chip coordinates",
+      "normalization":"each column has unit sealed-CovarianceFit W norm","primary":not include_width,
+      "width":"diagnostic ablation only" if include_width else "excluded from primary",
+      "amplitude_semantics":"normalized-shape scale direction in prompt-relative-ratio space; not physical receiver global gain",
+      "residual_only_allowed":False,"nonidentifiability_marker":NONIDENTIFIABILITY_MARKER}
+    kind="width_diagnostic" if include_width else "primary_amp_shift"
+    return TangentBasis._create(pair,covariance,normalized,raw,tuple(names),kind,metadata)
 
 
-def normalize_tangents(pair, coords, W=None, *, include_width=False,
-                       low_signal_epsilon=1e-12):
-    """Build the primary pair-bound basis; width requests fail closed."""
-    if include_width:
-        raise ValueError("width is diagnostic-only; use build_width_ablation_basis")
-    return _build_tangents(pair, coords, W, include_width=False,
-                           low_signal_epsilon=low_signal_epsilon)
+def normalize_tangents(pair, coords, covariance: CovarianceFit, *, include_width=False, low_signal_epsilon=1e-12):
+    if include_width: raise ValueError("width is diagnostic-only; use build_width_ablation_basis")
+    return _build_tangents(pair,coords,covariance,include_width=False,low_signal_epsilon=low_signal_epsilon)
 
 
-def primary_tangent_basis(pair, coords, W=None, *, low_signal_epsilon=1e-12):
-    return normalize_tangents(pair, coords, W=W, include_width=False,
-                              low_signal_epsilon=low_signal_epsilon)
+def primary_tangent_basis(pair, coords, covariance: CovarianceFit, *, low_signal_epsilon=1e-12):
+    return normalize_tangents(pair,coords,covariance,include_width=False,low_signal_epsilon=low_signal_epsilon)
 
 
-def build_width_ablation_basis(pair, coords, W=None, *, low_signal_epsilon=1e-12):
-    return _build_tangents(pair, coords, W, include_width=True,
-                           low_signal_epsilon=low_signal_epsilon)
+def build_width_ablation_basis(pair, coords, covariance: CovarianceFit, *, low_signal_epsilon=1e-12):
+    return _build_tangents(pair,coords,covariance,include_width=True,low_signal_epsilon=low_signal_epsilon)
 
 
 @dataclass(frozen=True, init=False)
 class ResidualBatch:
     residual_raw: np.ndarray
-    identities: tuple[tuple[object, ...], ...]
+    identities: tuple[EpochIdentity, ...]
     pair_identity_digest_sha256: str
+    pair_content_digests_sha256: tuple[str, ...]
     residual_space: str
+    content_digest_sha256: str
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls,*args,**kwargs):
         raise TypeError("ResidualBatch is factory-only; use ResidualBatch.from_pairs")
 
     @classmethod
-    def from_pairs(cls, pairs):
-        values = tuple(pairs)
-        if not values or any(not isinstance(pair, PeakPredictionPair) for pair in values):
+    def from_pairs(cls,pairs):
+        values=tuple(pairs)
+        if not values or any(not isinstance(pair,PeakPredictionPair) for pair in values):
             raise TypeError("ResidualBatch can be created only from PeakPredictionPair values")
-        identities = tuple(pair.identity for pair in values)
-        _identity_list(identities, len(values), name="pair identities")
-        if len({pair.residual_raw.shape for pair in values}) != 1:
-            raise ValueError("PeakPredictionPair dimensions must match")
-        instance = object.__new__(cls)
-        data = _readonly_array(np.stack([pair.residual_raw for pair in values]),
-                               "residual_raw", 2)
-        for name, value in (("residual_raw", data), ("identities", identities),
-                            ("pair_identity_digest_sha256", _identity_digest(identities)),
-                            ("residual_space", RAW_SPACE)):
-            object.__setattr__(instance, name, value)
+        for pair in values: _validate_pair(pair)
+        identities=tuple(pair.identity for pair in values)
+        _identity_list(identities,len(values),name="pair identities")
+        data=_readonly_array(np.stack([pair.residual_raw for pair in values]),"residual_raw",2)
+        pair_digests=tuple(pair._content_digest_sha256 for pair in values)
+        identity_digest=_identity_digest(identities)
+        digest=_residual_batch_digest(data,identities,pair_digests,RAW_SPACE)
+        instance=object.__new__(cls)
+        for name,value in (("residual_raw",data),("identities",identities),
+          ("pair_identity_digest_sha256",identity_digest),("pair_content_digests_sha256",pair_digests),
+          ("residual_space",RAW_SPACE),("content_digest_sha256",digest)):
+            object.__setattr__(instance,name,value)
         return instance
 
 
-@dataclass(frozen=True)
+def _residual_batch_digest(residual,identities,pair_digests,residual_space):
+    return _digest_json({"type_tag":"ResidualBatch.v2","residual_raw_digest":_array_digest(residual),
+      "identity_digest":_identity_digest(identities),"pair_content_digests":tuple(pair_digests),
+      "residual_space":residual_space})
+
+
+def _validate_residual_batch(batch):
+    if not isinstance(batch,ResidualBatch): raise TypeError("covariance requires a ResidualBatch")
+    residual=_array(batch.residual_raw,"ResidualBatch residual_raw",2)
+    identities=tuple(_identity_list(batch.identities,len(residual),name="ResidualBatch identities"))
+    if batch.residual_space != RAW_SPACE: raise ValueError("ResidualBatch raw-space tag is invalid")
+    if len(batch.pair_content_digests_sha256) != len(residual) or any(not isinstance(x,str) or len(x)!=64 for x in batch.pair_content_digests_sha256):
+        raise ValueError("ResidualBatch ordered pair digests are invalid")
+    if batch.pair_identity_digest_sha256 != _identity_digest(identities):
+        raise ValueError("ResidualBatch identity digest is invalid")
+    expected=_residual_batch_digest(residual,identities,batch.pair_content_digests_sha256,batch.residual_space)
+    if expected != batch.content_digest_sha256: raise ValueError("ResidualBatch content seal is invalid")
+    return batch
+
+
+@dataclass(frozen=True, init=False)
 class CovarianceFit:
     Sigma: np.ndarray
     W: np.ndarray
     Sigma_unfloored: np.ndarray
-    audit: dict[str, object]
+    audit: Mapping[str, object]
+    input_digest_sha256: str
+    _construction_seal: str
+
+    def __new__(cls,*args,**kwargs):
+        raise TypeError("CovarianceFit is factory-only; use fit_shrinkage_covariance")
+
+    @classmethod
+    def _create(cls,sigma,weight,unfloored,audit,input_digest):
+        instance=object.__new__(cls)
+        sigma=_readonly_array(sigma,"Sigma",2); weight=_readonly_array(weight,"W",2)
+        unfloored=_readonly_array(unfloored,"Sigma_unfloored",2); audit=MappingProxyType(dict(audit))
+        seal=_covariance_seal(sigma,weight,unfloored,audit,input_digest)
+        for name,value in (("Sigma",sigma),("W",weight),("Sigma_unfloored",unfloored),("audit",audit),
+                           ("input_digest_sha256",input_digest),("_construction_seal",seal)):
+            object.__setattr__(instance,name,value)
+        return instance
+
+
+def _covariance_seal(sigma,weight,unfloored,audit,input_digest):
+    return _digest_json({"type_tag":"CovarianceFit.v2","Sigma":_array_digest(sigma),"W":_array_digest(weight),
+      "Sigma_unfloored":_array_digest(unfloored),"audit":dict(audit),"input_digest":input_digest})
+
+
+def _validate_covariance_fit(fit):
+    if not isinstance(fit,CovarianceFit): raise TypeError("primary geometry requires a sealed CovarianceFit, not raw W")
+    sigma=_array(fit.Sigma,"CovarianceFit Sigma",2); weight=_array(fit.W,"CovarianceFit W",2); _validate_weight(weight,sigma.shape[0])
+    unfloored=_array(fit.Sigma_unfloored,"CovarianceFit Sigma_unfloored",2)
+    if sigma.shape != unfloored.shape or sigma.shape != (9,9): raise ValueError("CovarianceFit dimension is not canonical nine-tap")
+    if not isinstance(fit.audit,Mapping): raise ValueError("CovarianceFit audit is invalid")
+    audit=dict(fit.audit)
+    if audit.get("scenario") != "cleanStatic" or audit.get("fit_role") != "normal_train residual_raw only" or audit.get("residual_space") != RAW_SPACE:
+        raise ValueError("CovarianceFit raw-space fit audit is invalid")
+    if audit.get("input_digest_sha256") != fit.input_digest_sha256 or not isinstance(fit.input_digest_sha256,str) or len(fit.input_digest_sha256)!=64:
+        raise ValueError("CovarianceFit input digest audit is invalid")
+    expected=_covariance_seal(sigma,weight,unfloored,audit,fit.input_digest_sha256)
+    if expected != fit._construction_seal: raise ValueError("CovarianceFit construction seal is invalid")
+    expected_weight=np.linalg.pinv(sigma,rcond=float(audit["pinv_rcond"]),hermitian=True)
+    if not np.allclose(weight,expected_weight,rtol=1e-12,atol=1e-14):
+        raise ValueError("CovarianceFit W does not match sealed Sigma/audit")
+    return fit
 
 
 def _fit_shrinkage_covariance_array(r, *, floor_relative, pinv_rcond):
@@ -434,36 +598,26 @@ def _fit_shrinkage_covariance_array(r, *, floor_relative, pinv_rcond):
     return sigma, weight, unfloored, floor, nominal
 
 
-def fit_shrinkage_covariance(pairs_or_batch, *, provenance,
-                             floor_relative=1e-8, pinv_rcond=1e-10):
-    if isinstance(pairs_or_batch, ResidualBatch):
-        batch = pairs_or_batch
+def fit_shrinkage_covariance(pairs_or_batch, *, provenance, floor_relative=1e-8, pinv_rcond=1e-10):
+    if isinstance(pairs_or_batch,ResidualBatch): batch=_validate_residual_batch(pairs_or_batch)
     else:
-        if isinstance(pairs_or_batch, np.ndarray):
+        if isinstance(pairs_or_batch,np.ndarray):
             raise TypeError("covariance requires PeakPredictionPair sequence or ResidualBatch, not ndarray")
-        batch = ResidualBatch.from_pairs(pairs_or_batch)
-    fit = _require_provenance(provenance, len(batch.residual_raw), role="normal_train")
+        batch=ResidualBatch.from_pairs(pairs_or_batch)
+    fit=_require_provenance(provenance,len(batch.residual_raw),role="normal_train")
     if fit.identities != batch.identities:
         raise ValueError("fit provenance identities must exactly match pair identities and order")
-    r = batch.residual_raw
-    sigma, weight, unfloored, floor, nominal = _fit_shrinkage_covariance_array(
-        r, floor_relative=floor_relative, pinv_rcond=pinv_rcond)
-    audit = {
-        "estimator": "sklearn.covariance.LedoitWolf",
-        "fit_role": "normal_train residual_raw only",
-        "scenario": "cleanStatic",
-        "residual_space": RAW_SPACE,
-        "rows": len(r),
-        "dimension": r.shape[1],
-        "identity_count": len(batch.identities),
-        "identity_digest_sha256": fit.identity_digest_sha256,
-        "pair_identity_digest_sha256": batch.pair_identity_digest_sha256,
-        "floor_relative": floor_relative,
-        "floor_epsilon": floor,
-        "nominal_floor_epsilon": nominal,
-        "pinv_rcond": pinv_rcond,
-    }
-    return CovarianceFit(sigma, weight, unfloored, audit)
+    r=batch.residual_raw
+    sigma,weight,unfloored,floor,nominal=_fit_shrinkage_covariance_array(r,floor_relative=floor_relative,pinv_rcond=pinv_rcond)
+    audit={"estimator":"sklearn.covariance.LedoitWolf","fit_role":"normal_train residual_raw only",
+      "scenario":"cleanStatic","residual_space":RAW_SPACE,"rows":len(r),"dimension":r.shape[1],
+      "identity_count":len(batch.identities),"identity_digest_sha256":fit.identity_digest_sha256,
+      "pair_identity_digest_sha256":batch.pair_identity_digest_sha256,
+      "pair_content_digest_sha256":_digest_json(batch.pair_content_digests_sha256),
+      "input_digest_sha256":batch.content_digest_sha256,"floor_relative":float(floor_relative),
+      "floor_epsilon":floor,"nominal_floor_epsilon":nominal,"pinv_rcond":float(pinv_rcond)}
+    result=CovarianceFit._create(sigma,weight,unfloored,audit,batch.content_digest_sha256)
+    return _validate_covariance_fit(result)
 
 
 @dataclass(frozen=True)
@@ -597,7 +751,7 @@ def b0_rmse(standardized_residual):
 
 @dataclass(frozen=True)
 class ScoreBundle:
-    identity: tuple[object, ...]
+    identity: EpochIdentity
     b0: float
     total: float
     tangent: float
@@ -608,47 +762,52 @@ class ScoreBundle:
     nc_topi: float
     projection: ProjectionResult
     conditioner_transform: np.ndarray | None
-    spaces: dict[str, str]
+    spaces: Mapping[str, str]
 
 
-def _produce_scores(pair, basis, W, *, primary, conditioner=None,
-                    iq_features=None, energy_epsilon=1e-12):
-    if not isinstance(pair, PeakPredictionPair):
-        raise TypeError("score construction requires PeakPredictionPair; residual-only is forbidden")
-    if not isinstance(basis, TangentBasis):
+def _produce_geometry(pair,basis,covariance,*,primary,energy_epsilon):
+    _validate_pair(pair); _validate_covariance_fit(covariance)
+    if not isinstance(basis,TangentBasis):
         raise TypeError("score construction requires a sealed TangentBasis, not a raw basis matrix")
-    basis.validate_for_pair(pair, W, primary=primary)
-    if energy_epsilon <= 0:
+    basis.validate_for_pair(pair,covariance,primary=primary)
+    if not isinstance(energy_epsilon,Real) or isinstance(energy_epsilon,(bool,np.bool_)) or energy_epsilon <= 0:
         raise ValueError("energy_epsilon must be positive")
-    projection = weighted_project(pair.residual_raw, basis.matrix, W)
-    topi = float(projection.perp_energy)
-    transformed = None
-    scale = 1.0
-    if conditioner is not None:
-        if iq_features is None:
-            raise ValueError("IQ features are required when conditioning")
-        features = _array(iq_features, "iq_features", 2)
-        if len(features) != 1:
-            raise ValueError("one PeakPredictionPair requires one IQ feature row")
-        transformed = np.asarray(conditioner.conditioner_transform(features), dtype=float)
-        predicted = _array(conditioner.predict_scale(features), "predicted scale", 1)
-        if len(predicted) != 1 or predicted[0] <= 0:
-            raise ValueError("conditioner must return one positive scale")
-        scale = float(predicted[0])
-    nc = topi / max(scale, energy_epsilon)
-    return ScoreBundle(
-        pair.identity, b0_rmse(pair.residual_standardized), projection.total_energy,
-        projection.tangent_energy, projection.perp_energy, projection.cross_energy,
-        topi, scale, nc, projection, transformed,
-        {"geometry": RAW_SPACE, "b0": STANDARDIZED_SPACE,
-         "conditioner_target": "log_raw_perp_energy"})
+    projection=weighted_project(pair.residual_raw,basis.matrix,covariance.W)
+    return projection,float(projection.perp_energy)
 
 
-def produce_nc_topi_scores(pair: PeakPredictionPair, basis: TangentBasis, W, *,
-                           conditioner=None, iq_features=None, energy_epsilon=1e-12):
-    """Primary amplitude+shift score; raw/arbitrary/diagnostic bases fail closed."""
-    return _produce_scores(pair, basis, W, primary=True, conditioner=conditioner,
-                           iq_features=iq_features, energy_epsilon=energy_epsilon)
+def _score_bundle(pair,projection,topi,scale,transformed):
+    return ScoreBundle(pair.identity,b0_rmse(pair.residual_standardized),projection.total_energy,
+      projection.tangent_energy,projection.perp_energy,projection.cross_energy,topi,scale,
+      topi/max(scale,1e-12),projection,transformed,
+      MappingProxyType({"geometry":RAW_SPACE,"b0":STANDARDIZED_SPACE,
+                        "conditioner_target":"log_raw_perp_energy"}))
+
+
+def produce_topi_scores(pair: PeakPredictionPair,basis: TangentBasis,covariance: CovarianceFit,*,energy_epsilon=1e-12):
+    """Pure TOPI score from pair/basis/covariance sealed primary state."""
+    projection,topi=_produce_geometry(pair,basis,covariance,primary=True,energy_epsilon=energy_epsilon)
+    return _score_bundle(pair,projection,topi,1.0,None)
+
+
+def produce_nc_topi_scores(pair: PeakPredictionPair,basis: TangentBasis,covariance: CovarianceFit,*,
+                           conditioner,iq_features,energy_epsilon=1e-12):
+    """Primary conditioned NC-TOPI; a fitted+calibrated sealed conditioner is mandatory."""
+    projection,topi=_produce_geometry(pair,basis,covariance,primary=True,energy_epsilon=energy_epsilon)
+    if not isinstance(conditioner,RobustConditioner):
+        raise TypeError("primary NC-TOPI requires a RobustConditioner")
+    conditioner.validate_seal(require_calibrated=True)
+    features=_array(iq_features,"iq_features",2)
+    if features.shape != (1,len(CONDITIONER_FEATURE_SCHEMA)):
+        raise ValueError("one PeakPredictionPair requires one row of four frozen IQ features")
+    transformed=_readonly_array(conditioner.conditioner_transform(features),"conditioner transform",2)
+    predicted=_array(conditioner.predict_scale(features),"predicted scale",1)
+    if len(predicted)!=1 or predicted[0] <= 0: raise ValueError("conditioner must return one positive scale")
+    scale=float(predicted[0])
+    score=_score_bundle(pair,projection,topi,scale,transformed)
+    return ScoreBundle(score.identity,score.b0,score.total,score.tangent,score.perp,score.cross,
+      score.topi,score.predicted_scale,topi/max(scale,float(energy_epsilon)),score.projection,
+      score.conditioner_transform,score.spaces)
 
 
 @dataclass(frozen=True)
@@ -658,12 +817,10 @@ class WidthDiagnosticScore:
     score: ScoreBundle
 
 
-def produce_width_ablation_scores(pair: PeakPredictionPair, basis: TangentBasis, W, *,
-                                   conditioner=None, iq_features=None,
-                                   energy_epsilon=1e-12):
-    score = _produce_scores(pair, basis, W, primary=False, conditioner=conditioner,
-                            iq_features=iq_features, energy_epsilon=energy_epsilon)
-    return WidthDiagnosticScore("width_diagnostic", False, score)
+def produce_width_ablation_scores(pair: PeakPredictionPair,basis: TangentBasis,
+                                   covariance: CovarianceFit,*,energy_epsilon=1e-12):
+    projection,topi=_produce_geometry(pair,basis,covariance,primary=False,energy_epsilon=energy_epsilon)
+    return WidthDiagnosticScore("width_diagnostic",False,_score_bundle(pair,projection,topi,1.0,None))
 
 
 @dataclass(frozen=True)
@@ -706,27 +863,80 @@ def higher_quantile(scores, q):
     return float(np.quantile(values, q, method="higher"))
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, init=False)
 class ThresholdCalibration:
     value: float
     quantile: float
+    detector: str
+    aggregator: str
     scenario: str
     role: str
     identity_digest_sha256: str
+    score_digest_sha256: str
+    _construction_seal: str
+
+    def __new__(cls,*args,**kwargs):
+        raise TypeError("ThresholdCalibration is factory-only; use calibrate_threshold")
+
+    @classmethod
+    def _create(cls,value,q,detector,aggregator,fit,score_digest):
+        instance=object.__new__(cls)
+        fields=(float(value),float(q),detector,aggregator,fit.scenario,fit.role,
+                fit.identity_digest_sha256,score_digest)
+        seal=_threshold_seal(*fields)
+        for name,item in zip(("value","quantile","detector","aggregator","scenario","role",
+                              "identity_digest_sha256","score_digest_sha256"),fields):
+            object.__setattr__(instance,name,item)
+        object.__setattr__(instance,"_construction_seal",seal)
+        return instance
 
 
-def calibrate_threshold(scores, q, *, provenance):
-    values = _array(scores, "calibration scores", 1)
-    fit = _require_provenance(provenance, len(values), role="normal_calibration")
-    return ThresholdCalibration(higher_quantile(values, q), float(q), fit.scenario,
-                                fit.role, fit.identity_digest_sha256)
+def _threshold_seal(value,q,detector,aggregator,scenario,role,identity_digest,score_digest):
+    return _digest_json({"type_tag":"ThresholdCalibration.v2","value":value,"quantile":q,
+      "detector":detector,"aggregator":aggregator,"scenario":scenario,"role":role,
+      "identity_digest":identity_digest,"score_digest":score_digest})
 
 
-def strict_alarms(scores, threshold):
-    values = _array(scores, "scores", 1)
-    if not np.isfinite(threshold):
-        raise ValueError("threshold must be finite")
-    return values > threshold
+def _validate_threshold(threshold,*,primary):
+    if not isinstance(threshold,ThresholdCalibration):
+        raise TypeError("alarms require a typed sealed ThresholdCalibration")
+    if not isinstance(threshold.value,Real) or isinstance(threshold.value,(bool,np.bool_)) or not np.isfinite(threshold.value):
+        raise ValueError("ThresholdCalibration value is invalid")
+    expected=_threshold_seal(threshold.value,threshold.quantile,threshold.detector,threshold.aggregator,
+      threshold.scenario,threshold.role,threshold.identity_digest_sha256,threshold.score_digest_sha256)
+    if expected != threshold._construction_seal: raise ValueError("ThresholdCalibration seal is invalid")
+    if threshold.scenario != "cleanStatic" or threshold.role != "normal_calibration":
+        raise ValueError("ThresholdCalibration fit provenance is invalid")
+    if not isinstance(threshold.identity_digest_sha256,str) or len(threshold.identity_digest_sha256)!=64:
+        raise ValueError("ThresholdCalibration identity provenance is invalid")
+    if primary and (threshold.detector != "NC-TOPI" or threshold.aggregator != "median"
+                    or not np.isclose(threshold.quantile,.99,rtol=0,atol=0)):
+        raise ValueError("primary alarm requires q99 NC-TOPI median ThresholdCalibration")
+    return threshold
+
+
+def calibrate_threshold(scores,q,*,provenance,detector="NC-TOPI",aggregator="median"):
+    values=_array(scores,"calibration scores",1)
+    fit=_require_provenance(provenance,len(values),role="normal_calibration")
+    if detector not in ("NC-TOPI","TOPI"): raise ValueError("threshold detector must be NC-TOPI or TOPI")
+    if aggregator not in ("median","top25_mean"): raise ValueError("threshold aggregator is invalid")
+    if not isinstance(q,Real) or isinstance(q,(bool,np.bool_)) or not 0 < q < 1:
+        raise ValueError("threshold quantile is invalid")
+    result=ThresholdCalibration._create(higher_quantile(values,q),q,detector,aggregator,fit,_array_digest(values))
+    return _validate_threshold(result,primary=False)
+
+
+def _strict_scalar_alarms(scores,threshold):
+    values=_array(scores,"scores",1)
+    if not isinstance(threshold,Real) or isinstance(threshold,(bool,np.bool_)) or not np.isfinite(threshold):
+        raise ValueError("diagnostic scalar threshold must be finite")
+    return values > float(threshold)
+
+
+def strict_alarms(scores,threshold: ThresholdCalibration):
+    """Primary strict alarm boundary; raw scalar thresholds are diagnostic-private."""
+    calibration=_validate_threshold(threshold,primary=True)
+    return _strict_scalar_alarms(scores,calibration.value)
 
 
 @dataclass(frozen=True)
@@ -838,101 +1048,123 @@ def build_causal_iq_context(target_source_start, block_end, block_features, *, h
 
 
 class RobustConditioner:
-    """Clean-only robust-standardized Huber model of log perpendicular energy."""
+    """Sealed clean-only four-feature Huber model of log perpendicular energy."""
+    def __init__(self,*,energy_epsilon=1e-12,lower_epsilon=1e-8):
+        if energy_epsilon <= 0 or lower_epsilon <= 0: raise ValueError("conditioner epsilons must be positive")
+        self.energy_epsilon=float(energy_epsilon); self.lower_epsilon=float(lower_epsilon)
+        self._state_seal=None
 
-    def __init__(self, *, energy_epsilon=1e-12, lower_epsilon=1e-8):
-        if energy_epsilon <= 0 or lower_epsilon <= 0:
-            raise ValueError("conditioner epsilons must be positive")
-        self.energy_epsilon = float(energy_epsilon)
-        self.lower_epsilon = float(lower_epsilon)
+    @staticmethod
+    def _validate_schema(feature_names,width):
+        names=tuple(CONDITIONER_FEATURE_SCHEMA if feature_names is None else feature_names)
+        if any(not isinstance(name,str) for name in names): raise ValueError("conditioner feature names must be strings")
+        forbidden={"prn","prn_id","scenario","scenario_id","onset","onset_s"}
+        normalized={name.strip().lower() for name in names}
+        if forbidden.intersection(normalized): raise ValueError("forbidden PRN/scenario/onset identity feature")
+        if any(name != name.strip() for name in names): raise ValueError("conditioner feature schema forbids whitespace padding")
+        if names != CONDITIONER_FEATURE_SCHEMA: raise ValueError(f"conditioner feature schema must be exactly {CONDITIONER_FEATURE_SCHEMA}")
+        if width != len(CONDITIONER_FEATURE_SCHEMA): raise ValueError("conditioner predictor width must be exactly 4")
+        return names
 
-    def fit(self, X, y, *, provenance, feature_names=None):
-        predictors = _array(X, "IQ predictors", 2)
-        energy = _array(y, "S_perp target", 1)
-        if len(predictors) != len(energy) or np.any(energy < 0):
-            raise ValueError("conditioner fit dimensions/nonnegative energy invalid")
-        fit = _require_provenance(provenance, len(energy), role="normal_train")
-        names = [str(x).lower() for x in (feature_names or [f"x{i}" for i in range(predictors.shape[1])])]
-        forbidden = {"prn", "prn_id", "scenario", "scenario_id", "onset", "onset_s"}
-        if forbidden.intersection(names):
-            raise ValueError("forbidden PRN/scenario/onset identity feature")
-        self.median_ = np.median(predictors, axis=0)
-        q75, q25 = np.percentile(predictors, [75, 25], axis=0)
-        self.iqr_ = q75 - q25
-        self.iqr_[self.iqr_ <= self.lower_epsilon] = 1.0
-        target = np.log(np.maximum(energy, self.energy_epsilon))
-        self.model_ = HuberRegressor(epsilon=1.35, alpha=1e-4, max_iter=1000).fit(
-            self.conditioner_transform(predictors), target)
-        self.feature_names_ = tuple(feature_names or [f"x{i}" for i in range(predictors.shape[1])])
-        self._fit_identities_ = fit.identities
-        fit_digest = _digest_json({
-            "scenario": fit.scenario, "role": fit.role,
-            "identity_digest_sha256": fit.identity_digest_sha256,
-            "predictors_digest_sha256": _array_digest(predictors),
-            "target_energy_digest_sha256": _array_digest(energy)})
-        self.fit_manifest_ = {
-            "scenario": fit.scenario,
-            "roles": [fit.role],
-            "rows": len(target),
-            "identity_digest_sha256": fit.identity_digest_sha256,
-            "fit_digest_sha256": fit_digest,
-            "target": "log(max(S_perp, energy_epsilon))",
-            "prediction": "exp(predicted_log_energy)",
-            "PRN_feature": False,
-            "scenario_feature": False,
-            "onset_feature": False,
-            "epsilon": 1.35,
-            "alpha": 1e-4,
-            "max_iter": 1000,
-        }
-        self.cap_ = None
-        self.cap_manifest_ = None
+    def _seal_value(self):
+        if not hasattr(self,"model_"): return None
+        cap=None if self.cap_ is None else float(self.cap_)
+        return _digest_json({"type_tag":"RobustConditioner.v2","energy_epsilon":self.energy_epsilon,
+          "lower_epsilon":self.lower_epsilon,"feature_schema":self.feature_names_,
+          "median":_array_digest(self.median_),"iqr":_array_digest(self.iqr_),
+          "coef":_array_digest(self.model_.coef_),"intercept":float(self.model_.intercept_),
+          "model_scale":float(self.model_.scale_),"cap":cap,
+          "fit_manifest_digest":_digest_json(dict(self.fit_manifest_)),
+          "cap_manifest_digest":None if self.cap_manifest_ is None else _digest_json(dict(self.cap_manifest_)),
+          "fit_digest":self.fit_manifest_["fit_digest_sha256"],
+          "fit_identity_digest":self.fit_manifest_["identity_digest_sha256"],
+          "current_fit_identities_digest":_identity_digest(self._fit_identities_),
+          "cap_identity_digest":None if self.cap_manifest_ is None else self.cap_manifest_["identity_digest_sha256"],
+          "cap_predictor_digest":None if self.cap_manifest_ is None else self.cap_manifest_["predictors_digest_sha256"],
+          "cap_scenario":None if self.cap_manifest_ is None else self.cap_manifest_["scenario"],
+          "cap_role":None if self.cap_manifest_ is None else self.cap_manifest_["role"],
+          "cap_quantile":None if self.cap_manifest_ is None else self.cap_manifest_["quantile"]})
+
+    def validate_seal(self,*,require_calibrated=False):
+        if not hasattr(self,"model_") or self._state_seal is None: raise ValueError("conditioner is not fitted/sealed")
+        self._validate_schema(self.feature_names_,len(self.median_))
+        if not isinstance(self.model_,HuberRegressor): raise ValueError("conditioner fitted model type is invalid")
+        if (self.fit_manifest_.get("scenario") != "cleanStatic"
+                or self.fit_manifest_.get("roles") != ("normal_train",)
+                or self.fit_manifest_.get("feature_schema") != CONDITIONER_FEATURE_SCHEMA
+                or self.fit_manifest_.get("identity_digest_sha256") != _identity_digest(self._fit_identities_)):
+            raise ValueError("conditioner fit provenance audit is invalid")
+        if self.cap_manifest_ is not None and (self.cap_manifest_.get("scenario") != "cleanStatic"
+                or self.cap_manifest_.get("role") != "normal_calibration"
+                or not np.isclose(self.cap_manifest_.get("quantile"),.995,rtol=0,atol=0)):
+            raise ValueError("conditioner cap provenance audit is invalid")
+        if self._seal_value() != self._state_seal: raise ValueError("conditioner sealed state is invalid")
+        if require_calibrated and (self.cap_ is None or self.cap_manifest_ is None):
+            raise ValueError("conditioner must be fitted and calibrated")
         return self
 
-    def conditioner_transform(self, X):
-        if not hasattr(self, "median_"):
-            raise RuntimeError("conditioner is not fit")
-        predictors = _array(X, "IQ predictors", 2)
-        if predictors.shape[1] != len(self.median_):
-            raise ValueError("IQ predictor dimension changed")
-        return (predictors - self.median_) / self.iqr_
+    def fit(self,X,y,*,provenance,feature_names=CONDITIONER_FEATURE_SCHEMA):
+        predictors=_array(X,"IQ predictors",2); energy=_array(y,"S_perp target",1)
+        names=self._validate_schema(feature_names,predictors.shape[1])
+        if len(predictors)!=len(energy) or np.any(energy<0): raise ValueError("conditioner fit dimensions/nonnegative energy invalid")
+        fit=_require_provenance(provenance,len(energy),role="normal_train")
+        median=np.median(predictors,axis=0); q75,q25=np.percentile(predictors,[75,25],axis=0)
+        iqr=q75-q25; iqr[iqr<=self.lower_epsilon]=1.0
+        transformed=(predictors-median)/iqr; target=np.log(np.maximum(energy,self.energy_epsilon))
+        model=HuberRegressor(epsilon=1.35,alpha=1e-4,max_iter=1000).fit(transformed,target)
+        model.coef_=_readonly_array(model.coef_,"conditioner coefficients",1)
+        self.median_=_readonly_array(median,"conditioner median",1); self.iqr_=_readonly_array(iqr,"conditioner IQR",1)
+        self.model_=model; self.feature_names_=names; self._fit_identities_=fit.identities
+        fit_digest=_digest_json({"scenario":fit.scenario,"role":fit.role,"identity_digest_sha256":fit.identity_digest_sha256,
+          "predictors_digest_sha256":_array_digest(predictors),"target_energy_digest_sha256":_array_digest(energy),
+          "feature_schema":names})
+        self.fit_manifest_=MappingProxyType({"scenario":fit.scenario,"roles":("normal_train",),"rows":len(target),
+          "identity_digest_sha256":fit.identity_digest_sha256,"fit_digest_sha256":fit_digest,
+          "predictors_digest_sha256":_array_digest(predictors),"target":"log(max(S_perp, energy_epsilon))",
+          "prediction":"exp(predicted_log_energy)","feature_schema":names,"PRN_feature":False,
+          "scenario_feature":False,"onset_feature":False,"epsilon":1.35,"alpha":1e-4,"max_iter":1000})
+        self.cap_=None; self.cap_manifest_=None; self._state_seal=self._seal_value(); return self
 
-    def predict_log_energy(self, X):
-        if not hasattr(self, "model_"):
-            raise RuntimeError("conditioner is not fit")
-        return np.asarray(self.model_.predict(self.conditioner_transform(X)), dtype=float)
+    def conditioner_transform(self,X):
+        self.validate_seal(require_calibrated=False)
+        predictors=_array(X,"IQ predictors",2)
+        self._validate_schema(self.feature_names_,predictors.shape[1])
+        return (predictors-self.median_)/self.iqr_
 
-    def _uncapped_scale(self, X):
-        # The model output is log energy, so scale is exactly exp(log energy).
-        # Clipping only prevents IEEE overflow/underflow; the NC denominator,
-        # not this transform, applies energy_epsilon.
-        return np.exp(np.clip(self.predict_log_energy(X), -745, 709))
+    def predict_log_energy(self,X):
+        self.validate_seal(require_calibrated=False)
+        return np.asarray(self.model_.predict(self.conditioner_transform(X)),dtype=float)
 
-    def calibrate_cap(self, X_calibration, *, provenance, q=.995):
-        predictors = _array(X_calibration, "calibration IQ predictors", 2)
-        fit = _require_provenance(provenance, len(predictors), role="normal_calibration")
+    def _uncapped_scale(self,X):
+        return np.exp(np.clip(self.predict_log_energy(X),-745,709))
+
+    def calibrate_cap(self,X_calibration,*,provenance,q=.995):
+        self.validate_seal(require_calibrated=False)
+        predictors=_array(X_calibration,"calibration IQ predictors",2)
+        self._validate_schema(self.feature_names_,predictors.shape[1])
+        fit=_require_provenance(provenance,len(predictors),role="normal_calibration")
         if set(fit.identities).intersection(self._fit_identities_):
             raise ValueError("calibration identities must be disjoint from conditioner fit identities")
-        if not np.isclose(q, .995, rtol=0, atol=0):
-            raise ValueError("calibration cap is frozen at q995")
-        values = self._uncapped_scale(predictors)
-        self.cap_ = higher_quantile(values, q)
-        self.cap_manifest_ = {"scenario": fit.scenario, "role": fit.role,
-                              "identity_digest_sha256": fit.identity_digest_sha256,
-                              "rows": len(values), "quantile": q}
-        return self.cap_
+        if not np.isclose(q,.995,rtol=0,atol=0): raise ValueError("calibration cap is frozen at q995")
+        values=self._uncapped_scale(predictors); self.cap_=higher_quantile(values,q)
+        self.cap_manifest_=MappingProxyType({"scenario":fit.scenario,"role":fit.role,
+          "identity_digest_sha256":fit.identity_digest_sha256,"predictors_digest_sha256":_array_digest(predictors),
+          "rows":len(values),"quantile":float(q)})
+        self._state_seal=self._seal_value(); return self.cap_
 
-    def predict_scale(self, X):
-        if self.cap_ is None:
-            raise RuntimeError("clean calibration cap is not set")
-        return np.minimum(self._uncapped_scale(X), self.cap_)
+    def predict_scale(self,X):
+        self.validate_seal(require_calibrated=True)
+        return np.minimum(self._uncapped_scale(X),self.cap_)
 
 
-def shuffled_control_target(target, *, provenance, seed=DEFAULT_SEED):
-    values = _array(target, "shuffle target", 1)
-    _require_provenance(provenance, len(values), role="normal_train")
-    if not isinstance(seed, (int, np.integer)):
+def shuffled_control_target(target,*,provenance,feature_names=CONDITIONER_FEATURE_SCHEMA,seed=DEFAULT_SEED):
+    values=_array(target,"shuffle target",1)
+    fit=_require_provenance(provenance,len(values),role="normal_train")
+    RobustConditioner._validate_schema(feature_names,len(CONDITIONER_FEATURE_SCHEMA))
+    if not isinstance(seed,(int,np.integer)) or isinstance(seed,(bool,np.bool_)):
         raise ValueError("shuffle seed must be an integer")
+    # Identity order and frozen feature schema are validated and preserved; only y is permuted.
+    _identity_digest(fit.identities)
     return values[np.random.default_rng(int(seed)).permutation(len(values))]
 
 
@@ -1025,17 +1257,23 @@ class EpochRecord:
     physical_recording_id: str
     scenario: str
     prn_or_event_id: str
+    target_index: int
     availability_time_s: float
     source_start_s: float
     source_end_s: float
     valid: bool
     label: object
+    _content_digest_sha256: str = field(init=False, repr=False, compare=False)
 
     def __post_init__(self):
         for name in ("physical_recording_id", "scenario", "prn_or_event_id"):
             value = getattr(self, name)
             if not isinstance(value, str) or not value.strip():
                 raise ValueError(f"{name} must be a nonempty string")
+        if (isinstance(self.target_index, (bool, np.bool_))
+                or not isinstance(self.target_index, (int, np.integer))):
+            raise ValueError("epoch target_index must be an integer excluding bool")
+        object.__setattr__(self, "target_index", int(self.target_index))
         times = (self.availability_time_s, self.source_start_s, self.source_end_s)
         numeric = (int, float, np.integer, np.floating)
         if any(isinstance(value, (bool, np.bool_)) or not isinstance(value, numeric)
@@ -1057,11 +1295,37 @@ class EpochRecord:
             hash(self.label)
         except TypeError as exc:
             raise ValueError("epoch label must be immutable/hashable") from exc
+        object.__setattr__(self,"_content_digest_sha256",_epoch_record_digest(self))
 
     @property
     def identity_key(self):
-        return (self.physical_recording_id, self.scenario, self.prn_or_event_id,
-                float(self.availability_time_s))
+        return EpochIdentity(self.physical_recording_id, self.scenario, self.prn_or_event_id,
+                             self.target_index, float(self.availability_time_s))
+
+
+def _epoch_record_digest(record):
+    return _digest_json({"type_tag":"EpochRecord.v2","recording":record.physical_recording_id,
+      "scenario":record.scenario,"prn_or_event":record.prn_or_event_id,"target_index":record.target_index,
+      "availability":record.availability_time_s,"source_start":record.source_start_s,
+      "source_end":record.source_end_s,"valid":record.valid,
+      "label_type":f"{type(record.label).__module__}.{type(record.label).__qualname__}",
+      "label_repr":repr(record.label)})
+
+
+def _validate_epoch_record(record):
+    if not isinstance(record,EpochRecord): raise TypeError("primary records require EpochRecord")
+    # Recheck schema without mutating and then compare the complete construction digest.
+    EpochIdentity(record.physical_recording_id,record.scenario,record.prn_or_event_id,
+                  record.target_index,record.availability_time_s)
+    for value in (record.source_start_s,record.source_end_s):
+        if isinstance(value,(bool,np.bool_)) or not isinstance(value,Real) or not np.isfinite(value):
+            raise ValueError("EpochRecord source times are invalid")
+    if record.source_end_s < record.source_start_s or record.availability_time_s < record.source_end_s:
+        raise ValueError("EpochRecord timing is invalid")
+    if type(record.valid) is not bool: raise ValueError("EpochRecord valid must be a true bool")
+    if _epoch_record_digest(record) != record._content_digest_sha256:
+        raise ValueError("EpochRecord content seal is invalid")
+    return record
 
 
 def _record_map(records, name):
@@ -1070,6 +1334,7 @@ def _record_map(records, name):
         raise TypeError(f"{name} must be a nonempty EpochRecord sequence")
     result = {}
     for record in values:
+        _validate_epoch_record(record)
         if record.identity_key in result:
             raise ValueError(f"{name} contains duplicate full identity keys")
         result[record.identity_key] = record
@@ -1274,15 +1539,11 @@ class DecisionResult:
     validation_errors: tuple[str, ...]
 
 
-def _domain_value(value, name, lower, upper, errors):
-    if isinstance(value, (bool, np.bool_)):
-        errors.append(f"{name}: expected finite number in [{lower},{upper}]")
+def _domain_value(value,name,lower,upper,errors):
+    if isinstance(value,(bool,np.bool_)) or not isinstance(value,Real):
+        errors.append(f"{name}: expected a Python/NumPy real scalar in [{lower},{upper}]")
         return None
-    try:
-        number = float(value)
-    except (TypeError, ValueError):
-        errors.append(f"{name}: expected finite number in [{lower},{upper}]")
-        return None
+    number=float(value)
     if not np.isfinite(number) or not lower <= number <= upper:
         errors.append(f"{name}: outside finite domain [{lower},{upper}]")
         return None
@@ -1354,12 +1615,16 @@ def evaluate_stage0_decision(*, clean_nc_fpr=None, clean_b0_fpr=None,
     actual_mean = _domain_value(actual_nc_mean_pauc, "actual_nc_mean_pauc", 0., 1., errors)
     topi_mean = _domain_value(topi_mean_pauc, "topi_mean_pauc", 0., 1., errors)
     shuffled_mean = _domain_value(shuffled_nc_mean_pauc, "shuffled_nc_mean_pauc", 0., 1., errors)
-    equal_known = type(equal_rmse_pass) is bool
-    second_known = type(second_peak_pass) is bool
+    equal_known = isinstance(equal_rmse_pass, (bool, np.bool_))
+    second_known = isinstance(second_peak_pass, (bool, np.bool_))
     if not equal_known:
-        errors.append("equal_rmse_pass: true bool is mandatory")
+        errors.append("equal_rmse_pass: bool/np.bool is mandatory")
     if not second_known:
-        errors.append("second_peak_pass: true bool is mandatory")
+        errors.append("second_peak_pass: bool/np.bool is mandatory")
+    if equal_known:
+        equal_rmse_pass = bool(equal_rmse_pass)
+    if second_known:
+        second_peak_pass = bool(second_peak_pass)
 
     if errors:
         return DecisionResult("INCONCLUSIVE", {f"c{i}": False for i in range(1, 9)},
