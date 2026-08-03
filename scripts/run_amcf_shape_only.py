@@ -36,6 +36,11 @@ MAGNITUDE_SCHEMA = ("median_abs", "mad_abs")
 SEEDS = (101, 202, 303)
 PRIMARY_BASE_SHA = "ef36f265fca856914b7c79b77fd0a2f85f89b4d1"
 PRIMARY_MIN_VALID_ROWS = 5
+PRIMARY_BOOTSTRAP_MIN_REPS = 2000
+PRIMARY_BOOTSTRAP_BLOCK_SECONDS = 10.0
+PRIMARY_BOOTSTRAP_SEED_RULE = "101+sum(ord(scenario+comparator+metric))"
+INFERENCE_SCORE_RTOL = 1e-6
+INFERENCE_SCORE_ATOL = 1e-5
 B0_FROZEN_Q99 = 1.7035537524611113
 B0_FROZEN_Q995 = 1.7035537524611113
 B0_FROZEN_INTERVAL = (300.0, 330.0)
@@ -732,6 +737,22 @@ def build_calibration_evidence(variant: str, seed_rows: Mapping[Any,Iterable[Map
     return result
 
 
+def build_inference_result_binding(checkpoint_key: str, variant: str, seed: int,
+                                   calibration: Mapping[str,Any],
+                                   scenario_rows: Mapping[str,Iterable[Mapping[str,Any]]]) -> dict[str,Any]:
+    """Canonical digest input for persisted checkpoint-derived raw NLL evidence."""
+    common=calibration["common_rows"];raw=calibration["per_seed_raw_scores"][_seed_key(calibration["per_seed_raw_scores"],seed)]
+    cal=[{"decision_time_s":float(t),"source_start":float(a),"source_end":float(b),"identity_hash":str(i),"score":float(v)}
+         for t,a,b,i,v in zip(common["decision_time_s"],common["source_start"],common["source_end"],common["identity"],raw)]
+    scenarios={}
+    column=f"score_{variant}_seed{seed}"
+    for name in CANONICAL:
+        scenarios[name]=[{"decision_time_s":float(r["decision_time_s"]),"source_start":float(r["source_start"]),
+                          "source_end":float(r["source_end"]),"identity_hash":str(r["epoch_identity_hash"]),
+                          "score":float(r[column])} for r in scenario_rows[name]]
+    return {"checkpoint_key":checkpoint_key,"variant":variant,"seed":int(seed),"calibration":cal,"scenarios":scenarios}
+
+
 def recompute_calibration_evidence(evidence: Mapping[str,Any]) -> dict[str,Any]:
     required={"variant","source_commit","score_bank_hash","index_hash","common_rows","common_identity",
               "per_seed_raw_scores","per_seed_loo_p","per_seed_loo_evidence","ensemble_loo_evidence","q99","q995","threshold_digest"}
@@ -744,7 +765,12 @@ def recompute_calibration_evidence(evidence: Mapping[str,Any]) -> dict[str,Any]:
         raise ValueError("exact three seed calibration row mismatch")
     loo={str(s):_loo_evidence(np.asarray(raw[_seed_key(raw,s)],float)).tolist() for s in SEEDS}
     ensemble=np.mean(np.asarray([loo[str(s)] for s in SEEDS],float),axis=0)
-    binding={k:evidence[k] for k in ("variant","source_commit","score_bank_hash","index_hash","common_rows","per_seed_raw_scores")}
+    binding_keys=["variant","source_commit","score_bank_hash","index_hash","common_rows","per_seed_raw_scores"]
+    if "checkpoint_inference_digests" in evidence:
+        digests=evidence["checkpoint_inference_digests"]
+        if {int(k) for k in digests}!=set(SEEDS):raise ValueError("calibration checkpoint inference digest inventory mismatch")
+        binding_keys.append("checkpoint_inference_digests")
+    binding={k:evidence[k] for k in binding_keys}
     actual={"q99":_higher(ensemble,.99),"q995":_higher(ensemble,.995),"threshold_digest":_digest_value(binding)}
     loo_p={str(seed):np.exp(-np.asarray(loo[str(seed)],float)).tolist() for seed in SEEDS}
     if loo != evidence["per_seed_loo_evidence"] or loo_p != evidence["per_seed_loo_p"] or not np.array_equal(ensemble,np.asarray(evidence["ensemble_loo_evidence"],float)):
@@ -965,23 +991,23 @@ def _train_primary_model(fit_input: AuditedFitInput, rep: str, objective: str, s
     audit["checkpoint_sha256"]=sha256(model_path)
     return model,audit,history_rows
 
-def _score_examples(model, examples: Mapping[str,np.ndarray], objective: str) -> np.ndarray:
+def _score_examples(model, examples: Mapping[str,np.ndarray], objective: str, *, device: str = "cuda", chunk_size: int = 512) -> np.ndarray:
+    """Deterministic eval/no-grad inference shared by the runner and final verifier."""
     import torch
     from gnss_doppler_lab import amcf_shape_only as core
-    h=torch.as_tensor(examples["history"],device="cuda"); c=torch.as_tensor(examples["current"],device="cuda"); targets=list(range(8)) if objective=="all9" else [3,4]; out=[]
+    target_device=torch.device(device);model=model.to(target_device);h=torch.as_tensor(examples["history"],device=target_device);c=torch.as_tensor(examples["current"],device=target_device);targets=list(range(8)) if objective=="all9" else [3,4];out=[]
     model.eval()
     with torch.no_grad():
-        for a in range(0,len(c),512):
-            cc=c[a:a+512]; hh=h[a:a+512]; n=len(cc); vals=[]
+        for a in range(0,len(c),chunk_size):
+            cc=c[a:a+chunk_size];hh=h[a:a+chunk_size];n=len(cc);vals=[]
             for target in targets:
-                mask=torch.ones((n,8),dtype=torch.bool,device="cuda")
-                if objective=="all9": mask[:,target]=False
+                mask=torch.ones((n,8),dtype=torch.bool,device=target_device)
+                if objective=="all9":mask[:,target]=False
                 else:
-                    mask.zero_(); mask[:,4 if target==3 else 3]=True
-                loc,scale=model(hh,cc,mask); y=cc[:,target]; vals.append(core.student_t_nll(y,loc,scale,model.df).mean(dim=1))
+                    mask.zero_();mask[:,4 if target==3 else 3]=True
+                loc,scale=model(hh,cc,mask);y=cc[:,target];vals.append(core.student_t_nll(y,loc,scale,model.df).mean(dim=1))
             score=torch.stack(vals,dim=1)
-            if objective=="all9": score=torch.topk(score,2,dim=1).values.mean(dim=1)
-            else: score=score.mean(dim=1)
+            score=torch.topk(score,2,dim=1).values.mean(dim=1) if objective=="all9" else score.mean(dim=1)
             out.append(score.cpu().numpy())
     return np.concatenate(out) if out else np.empty(0)
 
@@ -1020,11 +1046,15 @@ def _loo_evidence(cal: np.ndarray) -> np.ndarray:
 def _higher(x: np.ndarray,q: float) -> float: return float(np.quantile(np.asarray(x,float),q,method="higher"))
 
 
+def primary_bootstrap_seed(scenario: str, comparator: str, metric: str) -> int:
+    return 101+sum(map(ord,scenario+comparator+metric))
+
+
 def _bootstrap_delta(t,y,a,b,metric,ath,bth,mask,reps=2000,seed=0):
     t=np.asarray(t,float); y=np.asarray(y,bool); a=np.asarray(a,float); b=np.asarray(b,float); use=np.asarray(mask,bool)
     t,y,a,b=t[use],y[use],a[use],b[use]
     population_hash=_digest_value({"t":t,"y":y})
-    order=np.argsort(t,kind="mergesort"); t,y,a,b=t[order],y[order],a[order],b[order]; block=np.floor((t-t.min())/10.).astype(int); groups=[np.flatnonzero(block==x) for x in np.unique(block)]
+    order=np.argsort(t,kind="mergesort"); t,y,a,b=t[order],y[order],a[order],b[order]; block=np.floor((t-t.min())/PRIMARY_BOOTSTRAP_BLOCK_SECONDS).astype(int); groups=[np.flatnonzero(block==x) for x in np.unique(block)]
     def stat(v,yy,th):
         return _roc_auc(yy,v) if metric=="roc_auc" else float(np.mean(v>th))
     estimate=stat(a,y,ath)-stat(b,y,bth); rng=np.random.default_rng(seed); draws=[]
@@ -1032,7 +1062,7 @@ def _bootstrap_delta(t,y,a,b,metric,ath,bth,mask,reps=2000,seed=0):
         ids=np.concatenate([groups[j] for j in rng.integers(0,len(groups),len(groups))])[:len(t)]
         x=stat(a[ids],y[ids],ath); z=stat(b[ids],y[ids],bth)
         if x is not None and z is not None: draws.append(x-z)
-    return {"estimate":float(estimate),"ci_low":float(np.quantile(draws,.025)),"ci_high":float(np.quantile(draws,.975)),"reps":reps,"block_s":10.,"bootstrap_seed":int(seed),"phase_population_hash":population_hash,"delta_definition":"Complex-comparator","paired_on":"same timestamp/label/block"}
+    return {"estimate":float(estimate),"ci_low":float(np.quantile(draws,.025)),"ci_high":float(np.quantile(draws,.975)),"reps":reps,"block_s":PRIMARY_BOOTSTRAP_BLOCK_SECONDS,"bootstrap_seed":int(seed),"phase_population_hash":population_hash,"delta_definition":"Complex-comparator","paired_on":"same timestamp/label/block"}
 
 
 def _read_csv(path: Path) -> list[dict[str,str]]:
@@ -1087,7 +1117,7 @@ def _write_primary_plots(stage: Path, metric_rows: list[dict[str,Any]]) -> None:
 def run_primary(out: Path | str = ROOT/FINAL_ARTIFACT, *, bootstrap_reps: int = 2000) -> dict[str,Any]:
     out=Path(out).resolve()
     if out != (ROOT/FINAL_ARTIFACT).resolve(): raise ValueError(f"primary output must be exactly {FINAL_ARTIFACT}")
-    if bootstrap_reps<2000: raise ValueError("primary paired bootstrap requires at least 2000 replicates")
+    if bootstrap_reps<PRIMARY_BOOTSTRAP_MIN_REPS: raise ValueError("primary paired bootstrap requires at least 2000 replicates")
     if out.exists(): raise FileExistsError(out)
     source=verify_primary_source_state(ROOT,PRIMARY_BASE_SHA); gpu=gpu_probe(required=True)
     stage=out.with_name(out.name+f".tmp-{os.getpid()}"); stage.mkdir(parents=True)
@@ -1148,7 +1178,7 @@ def run_primary(out: Path | str = ROOT/FINAL_ARTIFACT, *, bootstrap_reps: int = 
             cal=build_calibration_evidence(variant,cal_banks,source_commit=source["source_commit"],
                  score_bank_hash=_digest_value({s:[r["score"] for r in clean_banks[s]] for s in SEEDS}),
                  index_hash=_digest_value({s:[(r["decision_time_s"],r["identity_hash"]) for r in clean_banks[s]] for s in SEEDS}))
-            recompute_calibration_evidence(cal); calibration[variant]=cal
+            calibration[variant]=cal
             thresholds[variant]={"q99":cal["q99"],"q995":cal["q995"],"count":len(cal["common_identity"]),
                                  "required_seeds":list(SEEDS),"all_converged":True,"threshold_digest":cal["threshold_digest"],
                                  "evidence_ref":"calibration_evidence.json"}
@@ -1172,7 +1202,7 @@ def run_primary(out: Path | str = ROOT/FINAL_ARTIFACT, *, bootstrap_reps: int = 
             path=B0_DIR/("cleanStatic_test.csv" if name=="cleanStatic" else f"{name}.csv")
             b0[name]=load_b0_exact(path,name); b0_paths[name]={"path":str(path),"sha256":sha256(path),"read_columns":["decision_time_s","score_B0_Exact"]}
         write_json(stage/"thresholds.json",thresholds)
-        metric_rows=[]; seed_rows=[]; paired=[]; saved={}
+        metric_rows=[]; seed_rows=[]; paired=[]; saved={}; saved_calibration_rows=[]
         model_labels={"complex_all9":"Complex all9","magnitude_all9":"Magnitude all9",
                       "complex_EPL":"Complex EPL","magnitude_EPL":"Magnitude EPL"}
         for name in CANONICAL:
@@ -1204,7 +1234,8 @@ def run_primary(out: Path | str = ROOT/FINAL_ARTIFACT, *, bootstrap_reps: int = 
                 rows.append(row)
             test_rows=[r for r in rows if r["phase"]!="calibration"]; cal_rows=[r for r in rows if r["phase"]=="calibration"]
             write_csv(stage/"per_epoch"/("cleanStatic.csv" if name=="cleanStatic" else f"{name}.csv"),test_rows); saved[name]=test_rows
-            if cal_rows: write_csv(stage/"per_epoch"/"cleanStatic_calibration.csv",cal_rows)
+            if cal_rows:
+                saved_calibration_rows=cal_rows;write_csv(stage/"per_epoch"/"cleanStatic_calibration.csv",cal_rows)
             for variant,label in model_labels.items(): metric_rows.extend(_metric_rows_for_model(name,test_rows,variant,label,thresholds[variant]))
             b_rows=[]
             for r in test_rows:
@@ -1223,13 +1254,38 @@ def run_primary(out: Path | str = ROOT/FINAL_ARTIFACT, *, bootstrap_reps: int = 
                           "post_detection":float(alarm[masks["post"]].mean()) if masks is not None and masks["post"].any() else None,
                           "converged":True,"source_checkpoint":f"models/{variant}_seed{seed}.pt","source_file":f"per_epoch/{name}.csv"})
         metric_rows.append(ds4_na_row())
+        # Bind every persisted raw NLL bank to its real checkpoint before the
+        # outer decision/hash chain is written.
+        import torch
+        for variant in variants:
+            calibration[variant]["checkpoint_inference_digests"]={}
+            for seed in SEEDS:
+                key=f"{variant}_seed{seed}"
+                binding=build_inference_result_binding(key,variant,seed,calibration[variant],saved)
+                digest=_digest_value(binding);calibration[variant]["checkpoint_inference_digests"][str(seed)]=digest
+                audits[key]["inference_result_digest"]=digest
+                checkpoint=stage/"models"/f"{key}.pt";obj=torch.load(checkpoint,map_location="cpu",weights_only=False)
+                obj["inference_result_digest"]=digest;obj.setdefault("audit",{})["inference_result_digest"]=digest;torch.save(obj,checkpoint)
+                audits[key]["checkpoint_sha256"]=sha256(checkpoint)
+                column=f"inference_result_digest_{variant}_seed{seed}"
+                for rows_for_name in saved.values():
+                    for row in rows_for_name:row[column]=digest
+                for row in saved_calibration_rows:row[column]=digest
+            digest_binding={k:calibration[variant][k] for k in ("variant","source_commit","score_bank_hash","index_hash","common_rows","per_seed_raw_scores","checkpoint_inference_digests")}
+            calibration[variant]["threshold_digest"]=_digest_value(digest_binding)
+            thresholds[variant]["threshold_digest"]=calibration[variant]["threshold_digest"]
+            recompute_calibration_evidence(calibration[variant])
+        for name,rows_for_name in saved.items():write_csv(stage/"per_epoch"/f"{name}.csv",rows_for_name)
+        if saved_calibration_rows:write_csv(stage/"per_epoch"/"cleanStatic_calibration.csv",saved_calibration_rows)
+        write_json(stage/"calibration_evidence.json",calibration);write_json(stage/"thresholds.json",thresholds)
+        write_json(stage/"convergence_audit.json",convergence)
         index=index_metric_rows([r for r in metric_rows if r.get("scenario")!="DS4"])
         for name in ONSETS:
             rows=saved[name]; t=np.asarray([r["decision_time_s"] for r in rows]); starts=np.asarray([r["source_start"] for r in rows]); ends=np.asarray([r["source_end"] for r in rows]); masks=phase_labels(starts,ends,ONSETS[name]); y=masks["post"]; c=np.asarray([r["score_complex_all9_ensemble"] for r in rows])
             for comparator,col,thkey in (("Magnitude all9","score_magnitude_all9_ensemble","magnitude_all9"),("B0 Exact","score_B0_Exact","B0 Exact")):
                 b=np.asarray([r[col] for r in rows]); ath=thresholds["complex_all9"]["q99"]; bth=thresholds[thkey]["q99"]
                 for metric,mask in (("roc_auc",masks["stable_pre"]|masks["post"]),("post_detection",masks["post"]),("stable_pre_fpr",masks["stable_pre"])):
-                    seed=101+sum(map(ord,name+comparator+metric)); paired.append({"scenario":name,"comparator":comparator,"metric":metric,"operating_point":"q99",**_bootstrap_delta(t,y,c,b,metric,ath,bth,mask,bootstrap_reps,seed)})
+                    seed=primary_bootstrap_seed(name,comparator,metric); paired.append({"scenario":name,"comparator":comparator,"metric":metric,"operating_point":"q99",**_bootstrap_delta(t,y,c,b,metric,ath,bth,mask,bootstrap_reps,seed)})
         write_csv(stage/"scenario_metrics.csv",metric_rows); write_csv(stage/"seed_metrics.csv",_append_seed_mean_std(seed_rows)); write_csv(stage/"paired_comparisons.csv",paired); _write_primary_plots(stage,metric_rows)
         collapse={}
         for name in ("cleanStatic","DS7","DS8"):
@@ -1245,7 +1301,7 @@ def run_primary(out: Path | str = ROOT/FINAL_ARTIFACT, *, bootstrap_reps: int = 
             stable=[r for r in rows if r["phase"]=="stable_pre"] if name!="cleanStatic" else rows
             alarm_evidence=[(r["decision_time_s"],r["source_start"],r["source_end"],r["score_complex_all9_ensemble"],thresholds["complex_all9"]["q99"],r["alarm_complex_all9_q99"]) for r in stable]
             rate=float(np.mean([x[-1] for x in alarm_evidence])) if alarm_evidence else 0.; tracked=float(np.median([r["tracked_prn_count"] for r in rows])) if rows else 0.
-            ok &= bool(name=="cleanStatic" or (tracked>1 and rate<1))
+            ok &= bool(name=="cleanStatic" or (tracked>1 and bool(alarm_evidence) and rate<1))
             collapse[name]={"representation_checks":checks,"tracked_prn_median":tracked,"stable_pre_alarm_rate":rate,
                             "stable_pre_score_threshold_alarm_digest":_digest_value(alarm_evidence),"pass":bool(ok)}
         feature_binding={"canonical_fields":list(ALLOWED_NPZ_FIELDS),"forbidden_fields":["cn0_db_hz","context"],"scenarios":collapse}
@@ -1261,7 +1317,7 @@ def run_primary(out: Path | str = ROOT/FINAL_ARTIFACT, *, bootstrap_reps: int = 
           "gate":dict(gate._asdict()),"scalers":scalers,"gate_hash":gate_hash,"gate_scaler_hash":_digest_value({"gate":dict(gate._asdict()),"scalers":scalers}),
           "feature_schema_hash":_digest_value(schema),"feature_provenance":feature_evidence,"feature_audit_digest":feature_audit["audit_digest"],
           "fit_config":dict(PRIMARY_FIT_CONFIG),"fit_audits":{k:{"fit_manifest_digest":v["fit_manifest_digest"],"upstream_digests":v["upstream_digests"]} for k,v in audits.items()},"attack_fit":False,"all_attack_results":"exploratory/developmental"}; write_json(stage/"provenance.json",provenance)
-        config={"schema":"gnss-doppler-lab.amcf-shape-only-config.v2","mode":"primary-full","base_sha":PRIMARY_BASE_SHA,"seeds":list(SEEDS),"objectives":["all9","EPL"],"representations":["complex","magnitude"],**dict(PRIMARY_FIT_CONFIG),"hidden":32,"history":12,"stride_s":.5,"source_window_s":1.,"minimum_valid_rows":PRIMARY_MIN_VALID_ROWS,"bootstrap_reps":bootstrap_reps,"onsets":ONSETS,"scenarios":[*ONSETS,"DS4:NA"],"DS4":{"status":"NA","included_in_attack_go":False},"q99_primary":True,"q995_diagnostic_only":True,"matched_clean":False}; write_json(stage/"config.json",config)
+        config={"schema":"gnss-doppler-lab.amcf-shape-only-config.v2","mode":"primary-full","base_sha":PRIMARY_BASE_SHA,"seeds":list(SEEDS),"objectives":["all9","EPL"],"representations":["complex","magnitude"],**dict(PRIMARY_FIT_CONFIG),"hidden":32,"history":12,"stride_s":.5,"source_window_s":1.,"minimum_valid_rows":PRIMARY_MIN_VALID_ROWS,"bootstrap_reps":bootstrap_reps,"bootstrap_block_seconds":PRIMARY_BOOTSTRAP_BLOCK_SECONDS,"bootstrap_seed_rule":PRIMARY_BOOTSTRAP_SEED_RULE,"onsets":ONSETS,"scenarios":[*ONSETS,"DS4:NA"],"DS4":{"status":"NA","included_in_attack_go":False},"q99_primary":True,"q995_diagnostic_only":True,"matched_clean":False}; write_json(stage/"config.json",config)
         digest_paths={"thresholds":"thresholds.json","seed_metrics":"seed_metrics.csv","paired_comparisons":"paired_comparisons.csv","scenario_metrics":"scenario_metrics.csv","provenance":"provenance.json","feature_audit":"feature_audit.json","feature_schema":"feature_schema.json","fit_checkpoint_audits":"convergence_audit.json","training_history":"training_history.csv","calibration_evidence":"calibration_evidence.json"}
         source_digests={k:sha256(stage/v) for k,v in digest_paths.items()}; source_digests["per_epoch"]={str(p.relative_to(stage)):sha256(p) for p in sorted((stage/"per_epoch").glob("*.csv"))}; source_digests["checkpoints"]={str(p.relative_to(stage)):sha256(p) for p in sorted((stage/"models").glob("*.pt"))}
         decision={"primary_quantile":"q99","primary_decision":final,"amcf_wcl":"GO candidate" if final=="GO" else "AMCF WCL no-go","criteria":criteria,"source_digests":source_digests}; write_json(stage/"decision.json",decision)

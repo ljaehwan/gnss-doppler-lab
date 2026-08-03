@@ -53,7 +53,8 @@ def _verify_decision_digests(out:Path,decision:Mapping[str,Any],mode:str)->None:
 
 def _verify_primary_config(config:Mapping[str,Any],provenance:Mapping[str,Any])->None:
     if config.get("base_sha")!=runner.PRIMARY_BASE_SHA or config.get("minimum_valid_rows")!=runner.PRIMARY_MIN_VALID_ROWS:raise ValueError("primary hard-freeze config mismatch")
-    if config.get("seeds")!=list(runner.SEEDS) or int(config.get("bootstrap_reps",0))<2000:raise ValueError("primary seeds/bootstrap freeze mismatch")
+    if config.get("seeds")!=list(runner.SEEDS) or int(config.get("bootstrap_reps",0))<runner.PRIMARY_BOOTSTRAP_MIN_REPS:raise ValueError("primary seeds/bootstrap freeze mismatch")
+    if float(config.get("bootstrap_block_seconds",math.nan))!=runner.PRIMARY_BOOTSTRAP_BLOCK_SECONDS or config.get("bootstrap_seed_rule")!=runner.PRIMARY_BOOTSTRAP_SEED_RULE:raise ValueError("primary bootstrap block/seed freeze mismatch")
     for k,v in runner.PRIMARY_FIT_CONFIG.items():
         if config.get(k)!=v:raise ValueError(f"primary fit config mismatch: {k}")
     if config.get("DS4")!={"status":"NA","included_in_attack_go":False} or "DS4:NA" not in config.get("scenarios",[]):raise ValueError("DS4 NA contract missing")
@@ -67,6 +68,7 @@ def _verify_calibration(out:Path,thresholds:Mapping[str,Any],provenance:Mapping[
     evidence=json.loads((out/"calibration_evidence.json").read_text())
     if set(evidence)!={"complex_all9","magnitude_all9","complex_EPL","magnitude_EPL"}:raise ValueError("calibration variant inventory mismatch")
     for variant,row in evidence.items():
+        if {int(k) for k in row.get("checkpoint_inference_digests",{})}!=set(runner.SEEDS):raise ValueError("calibration checkpoint inference digest inventory mismatch")
         checked=runner.recompute_calibration_evidence(row); th=thresholds.get(variant,{})
         if checked["q99"]!=float(th.get("q99",math.nan)) or checked["q995"]!=float(th.get("q995",math.nan)) or checked["threshold_digest"]!=th.get("threshold_digest"):raise ValueError("calibration threshold binding mismatch")
         if row.get("source_commit")!=provenance.get("source_commit"):raise ValueError("calibration source commit mismatch")
@@ -144,16 +146,25 @@ def _verify_seed_metrics(out:Path,seeds:list[dict[str,str]])->None:
         else:auc=None
         if not _equal(saved.get("roc_auc"),auc):raise ValueError("per-seed AUC recomputation mismatch")
 
-def _verify_paired(out:Path,paired:list[dict[str,str]],thresholds:Mapping[str,Any])->None:
+def _verify_paired(out:Path,paired:list[dict[str,str]],thresholds:Mapping[str,Any],config:Mapping[str,Any])->None:
     expected={(s,c,m) for s in runner.ONSETS for c in ("Magnitude all9","B0 Exact") for m in ("roc_auc","post_detection","stable_pre_fpr")}
     index={(r["scenario"],r["comparator"],r["metric"]):r for r in paired}
     if set(index)!=expected:raise ValueError("paired comparison exact inventory mismatch")
+    configured_reps=int(config.get("bootstrap_reps",0))
+    if configured_reps<runner.PRIMARY_BOOTSTRAP_MIN_REPS:raise ValueError("paired bootstrap config requires at least 2000 reps")
+    if float(config.get("bootstrap_block_seconds",math.nan))!=runner.PRIMARY_BOOTSTRAP_BLOCK_SECONDS or config.get("bootstrap_seed_rule")!=runner.PRIMARY_BOOTSTRAP_SEED_RULE:raise ValueError("paired bootstrap block/seed config mismatch")
     for key,saved in index.items():
-        scenario,comparator,metric=key;rows=_rows(out/"per_epoch"/f"{scenario}.csv");t=np.asarray([float(r["decision_time_s"]) for r in rows]);start=np.asarray([float(r["source_start"]) for r in rows]);end=np.asarray([float(r["source_end"]) for r in rows]);m=runner.phase_labels(start,end,runner.ONSETS[scenario]);y=m["post"]
+        scenario,comparator,metric=key
+        expected_seed=runner.primary_bootstrap_seed(scenario,comparator,metric)
+        if int(saved.get("reps",0))<runner.PRIMARY_BOOTSTRAP_MIN_REPS or int(saved.get("reps",0))!=configured_reps:raise ValueError(f"paired bootstrap reps mismatch: {key}")
+        if float(saved.get("block_s",math.nan))!=runner.PRIMARY_BOOTSTRAP_BLOCK_SECONDS:raise ValueError(f"paired bootstrap block_seconds mismatch: {key}")
+        if int(saved.get("bootstrap_seed",-1))!=expected_seed or saved.get("operating_point")!="q99":raise ValueError(f"paired bootstrap seed/config mismatch: {key}")
+        rows=_rows(out/"per_epoch"/f"{scenario}.csv");t=np.asarray([float(r["decision_time_s"]) for r in rows]);start=np.asarray([float(r["source_start"]) for r in rows]);end=np.asarray([float(r["source_end"]) for r in rows]);m=runner.phase_labels(start,end,runner.ONSETS[scenario]);y=m["post"]
         a=np.asarray([float(r["score_complex_all9_ensemble"]) for r in rows]);col="score_magnitude_all9_ensemble" if comparator=="Magnitude all9" else "score_B0_Exact";b=np.asarray([float(r[col]) for r in rows]);thkey="magnitude_all9" if comparator=="Magnitude all9" else "B0 Exact";mask={"roc_auc":m["stable_pre"]|m["post"],"post_detection":m["post"],"stable_pre_fpr":m["stable_pre"]}[metric]
-        actual=runner._bootstrap_delta(t,y,a,b,metric,float(thresholds["complex_all9"]["q99"]),float(thresholds[thkey]["q99"]),mask,int(saved["reps"]),int(saved["bootstrap_seed"]))
+        actual=runner._bootstrap_delta(t,y,a,b,metric,float(thresholds["complex_all9"]["q99"]),float(thresholds[thkey]["q99"]),mask,configured_reps,expected_seed)
         for field in ("estimate","ci_low","ci_high","reps","block_s","bootstrap_seed","phase_population_hash"):
             if not _equal(saved.get(field),actual.get(field)):raise ValueError(f"paired bootstrap recomputation mismatch: {key} {field}")
+
 
 def _verify_execution_source(provenance:Mapping[str,Any])->None:
     commit=str(provenance["source_commit"])
@@ -170,7 +181,7 @@ def _verify_execution_source(provenance:Mapping[str,Any])->None:
         if hashlib.sha256(data).hexdigest()!=digest:raise ValueError("execution source commit/file hash mismatch")
 
 
-def _derive_primary_fit_bindings(out:Path,schema:Mapping[str,Any],provenance:Mapping[str,Any])->dict[str,dict[str,Any]]:
+def _derive_primary_fit_bindings(out:Path,schema:Mapping[str,Any],provenance:Mapping[str,Any])->tuple[dict[str,dict[str,Any]],dict[tuple[str,str],dict[str,np.ndarray]]]:
     """Rebuild canonical features/examples, preventing regenerated outer hashes from blessing edits."""
     inputs=json.loads((out/"input_hashes.json").read_text());qas=json.loads((out/"window_qa.json").read_text())
     if set(inputs)!=set(runner.CANONICAL) or set(qas)!=set(runner.CANONICAL):raise ValueError("canonical input/QA inventory mismatch")
@@ -207,7 +218,7 @@ def _derive_primary_fit_bindings(out:Path,schema:Mapping[str,Any],provenance:Map
                 key=f"{rep}_{objective}_seed{seed}";fit=runner.make_audited_fit_input(train,validation,canonical_input_hash=inputs["cleanStatic"]["sha256"],prompt_gate_hash=runner._digest_value(dict(gate._asdict())),scaler_hash=scalers[rep]["hash"],transformed_feature_tensor_hash=tensor_hash,objective=objective,seed=seed)
                 expected[key]={"fit_manifest_digest":fit.fit_manifest_digest,"upstream_digests":{"train_manifest":fit.train_manifest.manifest_digest,"validation_manifest":fit.validation_manifest.manifest_digest,**dict(fit.train_manifest.upstream_digests)}}
     if provenance.get("fit_audits")!=expected:raise ValueError("fit audit differs from independently derived examples/features")
-    return expected
+    return expected,examples
 
 
 def _verify_convergence(out:Path,convergence:Mapping[str,Any],history:list[dict[str,str]],mode:str,derived:Mapping[str,Any]|None=None)->None:
@@ -236,34 +247,95 @@ def _verify_convergence(out:Path,convergence:Mapping[str,Any],history:list[dict[
         part=[r for r in history if f"{r['representation']}_{r['objective']}_seed{r['seed']}"==key]
         if len(part)!=int(audit.get("epochs_run",-1)) or not part:raise ValueError("training history/convergence actual-field mismatch")
         updates=sum(int(r["optimizer_updates"]) for r in part)
-        derived=(_bool(audit.get("finite")) and _bool(audit.get("patience_early_stop")) and updates==int(audit.get("optimizer_updates",-1)) and int(audit.get("gradient_audited_updates",-2))==updates and _bool(audit.get("every_trainable_parameter_finite_gradient_each_update")))
-        if derived!=_bool(audit.get("converged")):raise ValueError("convergence boolean does not follow actual checkpoint/history fields")
+        convergence_derived=(_bool(audit.get("finite")) and _bool(audit.get("patience_early_stop")) and updates==int(audit.get("optimizer_updates",-1)) and int(audit.get("gradient_audited_updates",-2))==updates and _bool(audit.get("every_trainable_parameter_finite_gradient_each_update")))
+        if convergence_derived!=_bool(audit.get("converged")):raise ValueError("convergence boolean does not follow actual checkpoint/history fields")
     if not all(_bool(x.get("converged")) for x in audits.values()) or convergence.get("exact_three_converged_per_variant") is not True:raise ValueError("primary full has nonconverged checkpoint")
+
+def _verify_checkpoint_scores(out:Path,examples:Mapping[tuple[str,str],Mapping[str,np.ndarray]],
+                              convergence:Mapping[str,Any],calibration:Mapping[str,Any])->int:
+    """CPU re-infer all 12 checkpoints against exact regenerated tensors.
+
+    GPU-produced float32 scores are accepted only within rtol=1e-6/atol=1e-5;
+    identity and source intervals remain exact.  Inference always uses eval/no_grad.
+    """
+    import sys,torch
+    if str(ROOT/"src") not in sys.path:sys.path.insert(0,str(ROOT/"src"))
+    from gnss_doppler_lab.amcf_shape_only import ShapeOnlyModel
+    audits=convergence.get("audits",{});scenario_rows={name:_rows(out/"per_epoch"/f"{name}.csv") for name in runner.CANONICAL}
+    calibration_rows=_rows(out/"per_epoch"/"cleanStatic_calibration.csv")
+    checked=0
+    def compare_rows(inferred:Mapping[float,Mapping[str,Any]],rows:list[Mapping[str,Any]],score_column:str,where:str)->None:
+        for row in rows:
+            end=float(row["decision_time_s"]);actual=inferred.get(end)
+            if actual is None:raise ValueError(f"checkpoint inference missing persisted interval: {where}")
+            identity=str(row.get("epoch_identity_hash",row.get("identity_hash","")))
+            if (float(row["source_start"])!=float(actual["source_start"]) or float(row["source_end"])!=float(actual["source_end"]) or identity!=actual["identity_hash"]):raise ValueError(f"checkpoint inference identity/source interval mismatch: {where}")
+            saved=float(row[score_column])
+            if not math.isfinite(saved) or not math.isclose(saved,float(actual["score"]),rel_tol=runner.INFERENCE_SCORE_RTOL,abs_tol=runner.INFERENCE_SCORE_ATOL):raise ValueError(f"checkpoint output raw NLL mismatch: {where}")
+    for rep in ("complex","magnitude"):
+        for objective in ("all9","EPL"):
+            variant=f"{rep}_{objective}";cal=calibration[variant]
+            common=cal["common_rows"]
+            for seed in runner.SEEDS:
+                key=f"{variant}_seed{seed}";path=out/"models"/f"{key}.pt";obj=torch.load(path,map_location="cpu",weights_only=False)
+                model=ShapeOnlyModel(int(obj.get("feature_dim",-1)),hidden=32,df=4.0);model.load_state_dict(obj["state_dict"],strict=True)
+                inferred={}
+                for name in runner.CANONICAL:
+                    raw=runner._score_examples(model,examples[name,rep],objective,device="cpu")
+                    inferred[name]=runner._epoch_scores(examples[name,rep],raw)
+                    compare_rows(inferred[name],scenario_rows[name],f"score_{variant}_seed{seed}",f"{key} {name}")
+                cal_rows=[{"decision_time_s":t,"source_start":a,"source_end":b,"identity_hash":i,"score":v}
+                          for t,a,b,i,v in zip(common["decision_time_s"],common["source_start"],common["source_end"],common["identity"],cal["per_seed_raw_scores"][str(seed)])]
+                compare_rows(inferred["cleanStatic"],cal_rows,"score",f"{key} clean calibration")
+                if calibration_rows:compare_rows(inferred["cleanStatic"],calibration_rows,f"score_{variant}_seed{seed}",f"{key} clean calibration CSV")
+                binding=runner.build_inference_result_binding(key,variant,seed,cal,scenario_rows);digest=runner._digest_value(binding)
+                if digest!=audits[key].get("inference_result_digest") or digest!=obj.get("inference_result_digest") or digest!=obj.get("audit",{}).get("inference_result_digest") or digest!=cal.get("checkpoint_inference_digests",{}).get(str(seed)):raise ValueError(f"checkpoint inference result digest mismatch: {key}")
+                column=f"inference_result_digest_{variant}_seed{seed}"
+                for rows in [*scenario_rows.values(),calibration_rows]:
+                    if any(r.get(column)!=digest for r in rows):raise ValueError(f"per_epoch inference result digest mismatch: {key}")
+                checked+=1
+    if checked!=12:raise ValueError(f"exact 12 checkpoint inference inventory required: {checked}")
+    return checked
+
 
 def _verify_feature_audit(out:Path,audit:Mapping[str,Any],schema:Mapping[str,Any],provenance:Mapping[str,Any])->dict[str,Any]:
     if audit.get("canonical_fields")!=list(runner.ALLOWED_NPZ_FIELDS) or any(x in audit.get("canonical_fields",[]) for x in ("cn0_db_hz","context")):raise ValueError("feature audit canonical fields mismatch")
-    scenarios=audit.get("scenarios",{});
+    scenarios=audit.get("scenarios",{})
     if set(scenarios)!={"cleanStatic","DS7","DS8"}:raise ValueError("clean/DS7/DS8 feature audit inventory mismatch")
-    recomputed={}
-    for name,row in scenarios.items():
-        checks={}
+    recomputed={};threshold=float(json.loads((out/"thresholds.json").read_text())["complex_all9"]["q99"])
+    for name,saved_scenario in scenarios.items():
+        checks={};representation_pass=True
         for rep,d in (("complex",4),("magnitude",2)):
-            saved=row["representation_checks"][rep];path=out/saved["feature_cache"]
+            saved=saved_scenario["representation_checks"][rep];path=out/saved["feature_cache"]
             with np.load(path,allow_pickle=False) as f:bundle={k:np.array(f[k],copy=True) for k in f.files}
-            x=bundle["features"];iq=np.quantile(x,.75,axis=0)-np.quantile(x,.25,axis=0);passed=x.shape[1:]==(8,d) and np.isfinite(x).all() and np.all(iq>1e-8)
-            if saved.get("source_feature_digest")!=runner._digest_value(bundle) or saved.get("feature_tensor_digest")!=runner._digest_value(x) or saved.get("schema_hash")!=runner._digest_value(schema) or saved.get("scaler_hash")!=provenance["scalers"][rep]["hash"] or saved.get("iqr")!=iq.tolist() or saved.get("pass") is not bool(passed):raise ValueError("feature sufficient-stat/source digest audit mismatch")
-            checks[rep]=saved
-        rows=_rows(out/"per_epoch"/f"{name}.csv");stable=rows if name=="cleanStatic" else [r for r in rows if r["phase"]=="stable_pre"]
-        threshold=json.loads((out/"thresholds.json").read_text())["complex_all9"]["q99"]
-        evidence=[(float(r["decision_time_s"]),float(r["source_start"]),float(r["source_end"]),float(r["score_complex_all9_ensemble"]),threshold,_bool(r["alarm_complex_all9_q99"])) for r in stable]
-        rate=float(np.mean([x[-1] for x in evidence])) if evidence else 0.
-        if row.get("stable_pre_score_threshold_alarm_digest")!=runner._digest_value(evidence) or not _equal(row.get("stable_pre_alarm_rate"),rate):raise ValueError("feature audit per-epoch alarm binding mismatch")
-        recomputed[name]={**row,"representation_checks":checks}
+            x=bundle["features"];iq=np.quantile(x,.75,axis=0)-np.quantile(x,.25,axis=0);nonconstant=np.ptp(x,axis=0)>0
+            passed=bool(x.shape[1:]==(8,d) and np.isfinite(x).all() and np.all(nonconstant) and np.all(iq>1e-8))
+            actual={"canonical_fields":list(runner.ALLOWED_NPZ_FIELDS),"feature_cache":saved["feature_cache"],
+                    "source_feature_digest":runner._digest_value(bundle),"feature_tensor_digest":runner._digest_value(x),
+                    "schema_hash":runner._digest_value(schema),"scaler_hash":provenance["scalers"][rep]["hash"],
+                    "shape":list(x.shape),"finite_count":int(np.isfinite(x).sum()),"element_count":int(x.size),
+                    "iqr":iq.tolist(),"pass":passed}
+            if saved!=actual:raise ValueError(f"feature finite/nonconstant/IQR/source audit mismatch: {name} {rep}")
+            checks[rep]=actual;representation_pass &= passed
+        rows=_rows(out/"per_epoch"/f"{name}.csv")
+        stable=rows if name=="cleanStatic" else [r for r in rows if float(r["source_start"])>=30.0 and float(r["source_end"])<=runner.ONSETS[name]-20.0]
+        evidence=[]
+        for r in stable:
+            score=float(r["score_complex_all9_ensemble"]);derived_alarm=score>threshold
+            if _bool(r["alarm_complex_all9_q99"])!=derived_alarm:raise ValueError(f"collapse q99 alarm is not derived from actual score/threshold: {name}")
+            evidence.append((float(r["decision_time_s"]),float(r["source_start"]),float(r["source_end"]),score,threshold,derived_alarm))
+        rate=float(np.mean([x[-1] for x in evidence])) if evidence else 0.;tracked=float(np.median([float(r["tracked_prn_count"]) for r in rows])) if rows else 0.
+        scenario_pass=bool(representation_pass and (name=="cleanStatic" or (tracked>1 and bool(evidence) and rate<1.0)))
+        actual_scenario={"representation_checks":checks,"tracked_prn_median":tracked,"stable_pre_alarm_rate":rate,
+                         "stable_pre_score_threshold_alarm_digest":runner._digest_value(evidence),"pass":scenario_pass}
+        if saved_scenario!=actual_scenario:raise ValueError(f"tracked PRN/collapse scenario pass mismatch: {name}")
+        recomputed[name]=actual_scenario
     binding={"canonical_fields":list(runner.ALLOWED_NPZ_FIELDS),"forbidden_fields":["cn0_db_hz","context"],"scenarios":recomputed}
     if audit.get("audit_digest")!=runner._digest_value(binding):raise ValueError("feature audit digest mismatch")
-    passed=all(_bool(recomputed[n]["pass"]) for n in ("DS7","DS8"))
-    if audit.get("pass") is not passed:raise ValueError("feature audit pass must be derived")
+    passed=all(recomputed[n]["pass"] for n in ("DS7","DS8"))
+    if audit.get("pass") is not passed:raise ValueError("feature audit pass must be independently derived")
     return {"pass":passed,"scenarios":recomputed}
+
 
 def _verify_smoke_feature_audit(out:Path,audit:Mapping[str,Any],schema:Mapping[str,Any])->None:
     if audit.get("canonical_fields")!=list(runner.ALLOWED_NPZ_FIELDS) or audit.get("schema_hash")!=runner._digest_value(schema):raise ValueError("smoke feature audit schema mismatch")
@@ -307,17 +379,18 @@ def verify_and_summarize(out:Path|str)->dict[str,Any]:
     _verify_decision_digests(out,decision,mode)
     if thresholds.get("primary")!="q99" or thresholds.get("q995_role")!="diagnostic_only" or thresholds.get("comparison")!="strict_greater":raise ValueError("threshold primary/diagnostic contract mismatch")
     metrics=_rows(out/"scenario_metrics.csv");seeds=_rows(out/"seed_metrics.csv");paired=_rows(out/"paired_comparisons.csv")
-    derived=None
-    if mode=="primary-full":_verify_primary_config(config,provenance);_verify_execution_source(provenance);_verify_calibration(out,thresholds,provenance);derived=_derive_primary_fit_bindings(out,schema,provenance)
+    derived=None;examples=None;checkpoint_scores_checked=0
+    if mode=="primary-full":_verify_primary_config(config,provenance);_verify_execution_source(provenance);_verify_calibration(out,thresholds,provenance);derived,examples=_derive_primary_fit_bindings(out,schema,provenance)
     checked=_verify_metrics(out,mode,thresholds,metrics);_verify_convergence(out,convergence,history,mode,derived)
     if mode=="primary-full":
-        _verify_conformal_and_phase_rows(out,thresholds);_verify_seed_metrics(out,seeds);_verify_paired(out,paired,thresholds);verified_feature=_verify_feature_audit(out,feature_audit,schema,provenance);criteria=_primary_criteria(metrics,seeds,paired,verified_feature,convergence);status="PRIMARY COMPLETE"
+        assert examples is not None;checkpoint_scores_checked=_verify_checkpoint_scores(out,examples,convergence,json.loads((out/"calibration_evidence.json").read_text()))
+        _verify_conformal_and_phase_rows(out,thresholds);_verify_seed_metrics(out,seeds);_verify_paired(out,paired,thresholds,config);verified_feature=_verify_feature_audit(out,feature_audit,schema,provenance);criteria=_primary_criteria(metrics,seeds,paired,verified_feature,convergence);status="PRIMARY COMPLETE"
     else:_verify_smoke_feature_audit(out,feature_audit,schema);criteria=runner._smoke_criteria();status="SMOKE-NO-GO"
     final="GO" if all(criteria.values()) else "NO-GO"
     if decision.get("primary_quantile")!="q99" or decision.get("primary_decision")!=final or decision.get("criteria")!=criteria:raise ValueError("deterministic q99 GO recomputation mismatch")
     expected=runner.render_readme(final,status,criteria).encode();actual=(out/"README.md").read_bytes()
     if expected!=actual:raise ValueError("README is not byte-identical to deterministic regeneration")
-    return {"schema":"gnss-doppler-lab.amcf-shape-only-summary-audit.v2","hashes_verified":True,"byte_identical":True,"metrics_recomputed":checked,"alarms_recomputed":True,"thresholds_recomputed":mode=="primary-full","paired_recomputed":mode=="primary-full","checkpoints_loaded":mode=="primary-full","primary_quantile":"q99","primary_decision":final,"amcf_wcl":"GO candidate" if final=="GO" else "AMCF WCL no-go","criteria":criteria,"mode":mode}
+    return {"schema":"gnss-doppler-lab.amcf-shape-only-summary-audit.v2","hashes_verified":True,"byte_identical":True,"metrics_recomputed":checked,"alarms_recomputed":True,"thresholds_recomputed":mode=="primary-full","paired_recomputed":mode=="primary-full","checkpoints_loaded":mode=="primary-full","checkpoint_scores_reinferred":checkpoint_scores_checked,"primary_quantile":"q99","primary_decision":final,"amcf_wcl":"GO candidate" if final=="GO" else "AMCF WCL no-go","criteria":criteria,"mode":mode}
 
 def main(argv=None)->int:
     p=argparse.ArgumentParser(description=__doc__);p.add_argument("artifact",type=Path);p.add_argument("--audit-out",type=Path);a=p.parse_args(argv);report=verify_and_summarize(a.artifact);text=json.dumps(report,sort_keys=True,indent=2)+"\n";

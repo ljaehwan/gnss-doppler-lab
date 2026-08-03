@@ -386,3 +386,174 @@ def test_release_fit_manifest_is_immutable_and_direct_dict_fit_rejected():
     with pytest.raises(TypeError): m.upstream_digests["scaler_hash"]="e"*64
     with pytest.raises(TypeError,match="arbitrary dict"):
         runner.verify_audited_fit_input({"train":ex},"all9",101)
+
+
+
+def _write_real_checkpoint_inventory(out: Path):
+    torch=pytest.importorskip("torch")
+    import sys
+    sys.path.insert(0,str(ROOT/"src"))
+    from gnss_doppler_lab import amcf_shape_only as core
+    (out/"models").mkdir(parents=True)
+    audits={}; derived={}; history=[]
+    for rep,dim in (("complex",4),("magnitude",2)):
+        for objective in ("all9","EPL"):
+            for seed in runner.SEEDS:
+                key=f"{rep}_{objective}_seed{seed}"
+                model=core.ShapeOnlyModel(dim,hidden=32,df=4.0)
+                fit_digest=runner._digest_value({"fit":key})
+                upstream={"fixture":runner._digest_value({"upstream":key})}
+                audit={"seed":seed,"representation":rep,"objective":objective,"finite":True,
+                       "epochs_run":1,"optimizer_updates":1,"gradient_audited_updates":1,
+                       "every_trainable_parameter_finite_gradient_each_update":True,
+                       "patience_early_stop":True,"converged":True,
+                       "fit_manifest_digest":fit_digest,"upstream_digests":upstream}
+                path=out/"models"/f"{key}.pt"
+                torch.save({"checkpoint_role":"amcf-shape-only-primary-real-torch",
+                            "state_dict":model.state_dict(),"optimizer":{"state":{"fixture":1}},
+                            "audit":audit,"feature_dim":dim,"fit_manifest_digest":fit_digest,
+                            "upstream_digests":upstream,"fit_config":dict(runner.PRIMARY_FIT_CONFIG)},path)
+                audit["checkpoint_sha256"]=runner.sha256(path);audits[key]=audit
+                derived[key]={"fit_manifest_digest":fit_digest,"upstream_digests":upstream}
+                history.append({"representation":rep,"objective":objective,"seed":str(seed),"optimizer_updates":"1"})
+    return {"audits":audits,"exact_three_converged_per_variant":True},derived,history
+
+
+def test_release_convergence_loads_all_twelve_real_checkpoints_without_mapping_shadow(tmp_path):
+    convergence,derived,history=_write_real_checkpoint_inventory(tmp_path)
+    summary._verify_convergence(tmp_path,convergence,history,"primary-full",derived)
+    assert len(convergence["audits"])==12
+
+
+def _primary_feature_audit_fixture(out: Path):
+    schema={"fixture":"shape"}; provenance={"scalers":{"complex":{"hash":"c"*64},"magnitude":{"hash":"m"*64}}}
+    scenarios={}
+    (out/"feature_cache").mkdir();(out/"per_epoch").mkdir()
+    for si,name in enumerate(("cleanStatic","DS7","DS8")):
+        checks={}
+        for rep,d in (("complex",4),("magnitude",2)):
+            x=(np.arange(12*8*d,dtype=float).reshape(12,8,d)+si).astype("f4")
+            bundle={"features":x,"role":np.array(["test"]*len(x))}
+            rel=f"feature_cache/{name}_{rep}.npz";np.savez(out/rel,**bundle)
+            iq=np.quantile(x,.75,axis=0)-np.quantile(x,.25,axis=0)
+            checks[rep]={"canonical_fields":list(runner.ALLOWED_NPZ_FIELDS),"feature_cache":rel,
+                "source_feature_digest":runner._digest_value(bundle),"feature_tensor_digest":runner._digest_value(x),
+                "schema_hash":runner._digest_value(schema),"scaler_hash":provenance["scalers"][rep]["hash"],
+                "shape":list(x.shape),"finite_count":int(np.isfinite(x).sum()),"element_count":int(x.size),
+                "iqr":iq.tolist(),"pass":True}
+        rows=[]
+        for j,alarm in enumerate((False,False)):
+            end=(j+1) if name=="cleanStatic" else (41+j)
+            rows.append({"decision_time_s":end,"source_start":end-.9,"source_end":end,
+                         "phase":"clean_test" if name=="cleanStatic" else "stable_pre",
+                         "tracked_prn_count":2+j,"score_complex_all9_ensemble":.2+.1*j,
+                         "alarm_complex_all9_q99":alarm})
+        runner.write_csv(out/"per_epoch"/f"{name}.csv",rows)
+        evidence=[(float(r["decision_time_s"]),float(r["source_start"]),float(r["source_end"]),
+                   float(r["score_complex_all9_ensemble"]),1.0,bool(r["alarm_complex_all9_q99"])) for r in rows]
+        scenarios[name]={"representation_checks":checks,"tracked_prn_median":2.5,
+                         "stable_pre_alarm_rate":0.0,
+                         "stable_pre_score_threshold_alarm_digest":runner._digest_value(evidence),"pass":True}
+    binding={"canonical_fields":list(runner.ALLOWED_NPZ_FIELDS),"forbidden_fields":["cn0_db_hz","context"],"scenarios":scenarios}
+    audit={**binding,"pass":True,"audit_digest":runner._digest_value(binding)}
+    (out/"thresholds.json").write_text(json.dumps({"complex_all9":{"q99":1.0}}))
+    return audit,schema,provenance
+
+
+def test_release_ds78_collapse_rederives_tracked_median_and_scenario_pass(tmp_path):
+    audit,schema,provenance=_primary_feature_audit_fixture(tmp_path)
+    assert summary._verify_feature_audit(tmp_path,audit,schema,provenance)["pass"]
+    audit["scenarios"]["DS7"]["tracked_prn_median"]=1.0
+    audit["scenarios"]["DS7"]["pass"]=True
+    binding={k:audit[k] for k in ("canonical_fields","forbidden_fields","scenarios")}
+    audit["audit_digest"]=runner._digest_value(binding)
+    runner.write_json(tmp_path/"feature_audit.json",audit);runner.write_hashes(tmp_path)
+    with pytest.raises(ValueError,match="tracked|collapse|scenario pass"):
+        summary._verify_feature_audit(tmp_path,audit,schema,provenance)
+
+
+def test_release_paired_rejects_1999_reps_before_recompute(monkeypatch,tmp_path):
+    monkeypatch.setattr(summary.runner,"ONSETS",{"DS7":100.0})
+    paired=[]
+    for comparator in ("Magnitude all9","B0 Exact"):
+        for metric in ("roc_auc","post_detection","stable_pre_fpr"):
+            paired.append({"scenario":"DS7","comparator":comparator,"metric":metric,
+                "operating_point":"q99","reps":"1999","block_s":"10.0",
+                "bootstrap_seed":str(101+sum(map(ord,"DS7"+comparator+metric)))})
+    config={"bootstrap_reps":2000,"bootstrap_block_seconds":10.0,
+            "bootstrap_seed_rule":"101+sum(ord(scenario+comparator+metric))"}
+    runner.write_csv(tmp_path/"paired_comparisons.csv",paired);runner.write_json(tmp_path/"config.json",config);runner.write_hashes(tmp_path)
+    with pytest.raises(ValueError,match="2000|reps"):
+        summary._verify_paired(tmp_path,summary._rows(tmp_path/"paired_comparisons.csv"),{},config)
+
+
+def _checkpoint_score_fixture(out: Path):
+    torch=pytest.importorskip("torch")
+    convergence,_,_=_write_real_checkpoint_inventory(out)
+    rng=np.random.default_rng(881);examples={}
+    for ni,name in enumerate(runner.CANONICAL):
+        for rep,d in (("complex",4),("magnitude",2)):
+            current=rng.normal(size=(2,8,d)).astype("f4");history=rng.normal(size=(2,12,8,d)).astype("f4")
+            examples[name,rep]={"current":current,"history":history,"source_start":np.array([ni*10+.1,ni*10+1.1]),
+                "source_end":np.array([ni*10+1.,ni*10+2.]),"prn":np.array([3,7]),
+                "segment_index":np.array([ni,ni]),"channel":np.array([0,0])}
+    scenario_rows={}
+    for name in runner.CANONICAL:
+        ex=examples[name,"complex"];scenario_rows[name]=[{"decision_time_s":float(ex["source_end"][1]),
+            "source_start":float(ex["source_start"][1]),"source_end":float(ex["source_end"][1]),
+            "epoch_identity_hash":runner._epoch_scores(ex,np.array([0.,0.]))[float(ex["source_end"][1])]["identity_hash"]}]
+    calibration={};calibration_csv=None
+    for rep in ("complex","magnitude"):
+        for objective in ("all9","EPL"):
+            variant=f"{rep}_{objective}";seed_rows={}
+            for seed in runner.SEEDS:
+                key=f"{variant}_seed{seed}";obj=torch.load(out/"models"/f"{key}.pt",weights_only=False)
+                import sys;sys.path.insert(0,str(ROOT/"src"));from gnss_doppler_lab.amcf_shape_only import ShapeOnlyModel
+                model=ShapeOnlyModel(obj["feature_dim"],hidden=32,df=4.0);model.load_state_dict(obj["state_dict"])
+                maps={}
+                for name in runner.CANONICAL:
+                    raw=runner._score_examples(model,examples[name,rep],objective,device="cpu");maps[name]=runner._epoch_scores(examples[name,rep],raw)
+                    row=scenario_rows[name][0];row[f"score_{variant}_seed{seed}"]=maps[name][row["decision_time_s"]]["score"]
+                first=maps["cleanStatic"][float(examples["cleanStatic",rep]["source_end"][0])]
+                seed_rows[seed]=[{**first}]
+            calibration[variant]=runner.build_calibration_evidence(variant,seed_rows,source_commit="a"*40,score_bank_hash="b"*64,index_hash="c"*64)
+    (out/"per_epoch").mkdir()
+    for name,rows in scenario_rows.items():runner.write_csv(out/"per_epoch"/f"{name}.csv",rows)
+    common=calibration["complex_all9"]["common_rows"]
+    calibration_csv=[{"decision_time_s":common["decision_time_s"][0],"source_start":common["source_start"][0],
+        "source_end":common["source_end"][0],"epoch_identity_hash":common["identity"][0]}]
+    for variant,cal in calibration.items():
+        cal["checkpoint_inference_digests"]={}
+        for seed in runner.SEEDS:
+            calibration_csv[0][f"score_{variant}_seed{seed}"]=cal["per_seed_raw_scores"][str(seed)][0]
+            key=f"{variant}_seed{seed}";digest=runner._digest_value(runner.build_inference_result_binding(key,variant,seed,cal,scenario_rows))
+            cal["checkpoint_inference_digests"][str(seed)]=digest;convergence["audits"][key]["inference_result_digest"]=digest
+            obj=torch.load(out/"models"/f"{key}.pt",weights_only=False);obj["inference_result_digest"]=digest;obj["audit"]["inference_result_digest"]=digest;torch.save(obj,out/"models"/f"{key}.pt")
+            column=f"inference_result_digest_{variant}_seed{seed}";calibration_csv[0][column]=digest
+            for rows in scenario_rows.values():rows[0][column]=digest
+        binding={k:cal[k] for k in ("variant","source_commit","score_bank_hash","index_hash","common_rows","per_seed_raw_scores","checkpoint_inference_digests")};cal["threshold_digest"]=runner._digest_value(binding)
+    for name,rows in scenario_rows.items():runner.write_csv(out/"per_epoch"/f"{name}.csv",rows)
+    runner.write_csv(out/"per_epoch/cleanStatic_calibration.csv",calibration_csv)
+    return convergence,examples,calibration
+
+
+def test_release_checkpoint_reinference_rejects_raw_tamper_with_regenerated_chains(tmp_path):
+    torch=pytest.importorskip("torch");convergence,examples,calibration=_checkpoint_score_fixture(tmp_path)
+    assert summary._verify_checkpoint_scores(tmp_path,examples,convergence,calibration)==12
+    rows={name:summary._rows(tmp_path/"per_epoch"/f"{name}.csv") for name in runner.CANONICAL}
+    rows["DS7"][0]["score_complex_all9_seed101"]=str(float(rows["DS7"][0]["score_complex_all9_seed101"])+.25)
+    cal=calibration["complex_all9"];key="complex_all9_seed101";digest=runner._digest_value(runner.build_inference_result_binding(key,"complex_all9",101,cal,rows))
+    cal["checkpoint_inference_digests"]["101"]=digest;convergence["audits"][key]["inference_result_digest"]=digest
+    checkpoint=tmp_path/"models"/f"{key}.pt";obj=torch.load(checkpoint,weights_only=False);obj["inference_result_digest"]=digest;obj["audit"]["inference_result_digest"]=digest;torch.save(obj,checkpoint)
+    convergence["audits"][key]["checkpoint_sha256"]=runner.sha256(checkpoint)
+    digest_binding={k:cal[k] for k in ("variant","source_commit","score_bank_hash","index_hash","common_rows","per_seed_raw_scores","checkpoint_inference_digests")};cal["threshold_digest"]=runner._digest_value(digest_binding)
+    column="inference_result_digest_complex_all9_seed101"
+    for name,part in rows.items():
+        for row in part:row[column]=digest
+        runner.write_csv(tmp_path/"per_epoch"/f"{name}.csv",part)
+    cal_rows=summary._rows(tmp_path/"per_epoch/cleanStatic_calibration.csv")
+    for row in cal_rows:row[column]=digest
+    runner.write_csv(tmp_path/"per_epoch/cleanStatic_calibration.csv",cal_rows)
+    runner.write_json(tmp_path/"calibration_evidence.json",calibration);runner.write_json(tmp_path/"convergence_audit.json",convergence);runner.write_hashes(tmp_path)
+    with pytest.raises(ValueError,match="checkpoint output raw NLL mismatch"):
+        summary._verify_checkpoint_scores(tmp_path,examples,convergence,calibration)
