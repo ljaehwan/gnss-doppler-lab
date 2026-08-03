@@ -57,7 +57,9 @@ def test_red_contract_constants_and_exact_final_path():
     assert {"README.md", "config.json", "feature_schema.json", "provenance.json",
             "input_hashes.json", "training_history.csv", "convergence_audit.json",
             "thresholds.json", "scenario_metrics.csv", "seed_metrics.csv",
-            "paired_comparisons.csv", "per_epoch", "plots", "models", "hashes.json"} == set(runner.REQUIRED_INVENTORY)
+            "paired_comparisons.csv", "decision.json", "feature_audit.json", "window_qa.json",
+            "feature_cache", "per_epoch", "plots", "models", "hashes.json"} == set(runner.REQUIRED_INVENTORY)
+    assert set(runner.PRIMARY_REQUIRED_INVENTORY) == set(runner.REQUIRED_INVENTORY) | {"calibration_evidence.json"}
 
 
 def test_loader_hash_shape_tap_order_stable_sort_and_never_reads_cn0(tmp_path):
@@ -215,3 +217,172 @@ def test_smoke_is_outside_final_and_readme_claim_limits(tmp_path):
     text = (out / "README.md").read_text()
     assert "exploratory/developmental" in text
     assert "Not claimable" in text and "q995" in text and "NO-GO" in text
+
+
+# Release-blocker regressions: these are intentionally end-to-end contract tests,
+# not self-reported boolean checks.
+def test_release_primary_cli_and_frozen_constants():
+    assert runner.PRIMARY_BASE_SHA == "ef36f265fca856914b7c79b77fd0a2f85f89b4d1"
+    assert runner.PRIMARY_MIN_VALID_ROWS == 5
+    assert runner.B0_FROZEN_Q99 == pytest.approx(1.7035537524611113, rel=0, abs=0)
+    assert runner.B0_FROZEN_INTERVAL == (300.0, 330.0)
+    opts = {a.dest for a in runner.parser()._actions}
+    assert "baseline" not in opts and "min_valid_rows" not in opts
+
+
+def test_release_metric_key_q995_cannot_overwrite_primary():
+    rows = [
+        {"scenario":"DS1","model":"Complex all9","operating_point":"q99","roc_auc":.9},
+        {"scenario":"DS1","model":"Complex all9","operating_point":"q995","roc_auc":0.,"diagnostic_only":True},
+    ]
+    index = runner.index_metric_rows(rows)
+    assert len(index) == 2
+    assert runner.select_primary_metric(index, "DS1", "Complex all9")["roc_auc"] == .9
+    with pytest.raises(ValueError, match="duplicate"):
+        runner.index_metric_rows(rows + [dict(rows[0])])
+
+
+def _score_rows(offset=0.0):
+    return [
+        {"decision_time_s":340.0+i*.5,"source_start":339.0+i*.5,
+         "source_end":340.0+i*.5,"identity_hash":f"id{i}","score":offset+i}
+        for i in range(6)
+    ]
+
+
+def test_release_exact_seed_calibration_alignment_and_recomputation():
+    banks = {101:_score_rows(0), 202:_score_rows(.1), 303:_score_rows(.2)}
+    result = runner.build_calibration_evidence(
+        "complex_all9", banks, source_commit="a"*40,
+        score_bank_hash="b"*64, index_hash="c"*64)
+    assert result["common_identity"] == [f"id{i}" for i in range(6)]
+    assert len(result["per_seed_raw_scores"]) == 3
+    checked = runner.recompute_calibration_evidence(result)
+    assert checked["q99"] == result["q99"] and checked["q995"] == result["q995"]
+    assert result["threshold_digest"] == checked["threshold_digest"]
+    for mut in (lambda x: x[202].pop(),
+                lambda x: x[303].__setitem__(1, {**x[303][1], "identity_hash":"other"}),
+                lambda x: x[101].reverse()):
+        bad={k:[dict(r) for r in v] for k,v in banks.items()}; mut(bad)
+        with pytest.raises(ValueError, match="exact.*seed|identity|order"):
+            runner.build_calibration_evidence("v",bad,source_commit="a"*40,
+                                              score_bank_hash="b"*64,index_hash="c"*64)
+    edited=json.loads(json.dumps(result)); edited["per_seed_raw_scores"]["101"][0] += .5
+    with pytest.raises(ValueError, match="calibration|threshold"):
+        runner.recompute_calibration_evidence(edited)
+
+
+def test_release_b0_frozen_contract_from_protected_artifact(tmp_path):
+    d=tmp_path/"b0"; d.mkdir()
+    thresholds={"primary":{"B0-Exact":{"q99":runner.B0_FROZEN_Q99,
+                                          "q995":runner.B0_FROZEN_Q99}}}
+    config={"threshold_fit":"cleanStatic [300,330) only"}
+    provenance={"source_commit":"1fc5f710c27bd1c179df565132cdcda4df62c7f5"}
+    for name,obj in (("thresholds.json",thresholds),("config.json",config),("provenance.json",provenance)):
+        (d/name).write_text(json.dumps(obj,sort_keys=True)+"\n")
+    c=runner.load_frozen_b0_contract(d, expected_hashes={n:runner.sha256(d/n) for n in
+                                         ("thresholds.json","config.json","provenance.json")})
+    assert c["q99"] == runner.B0_FROZEN_Q99 and c["fit_interval"] == [300.0,330.0]
+    thresholds["primary"]["B0-Exact"]["q99"] = 1.0
+    (d/"thresholds.json").write_text(json.dumps(thresholds)+"\n")
+    with pytest.raises(ValueError, match="B0|hash"):
+        runner.load_frozen_b0_contract(d, expected_hashes={"thresholds.json":runner.sha256(d/"thresholds.json"),
+          "config.json":runner.sha256(d/"config.json"),"provenance.json":runner.sha256(d/"provenance.json")})
+
+
+def test_release_epoch_scores_preserve_actual_intervals_and_alignment():
+    ex={"source_start":np.array([1.1,1.1,2.1]),"source_end":np.array([2.,2.,3.]),
+        "prn":np.array([3,7,3]),"segment_index":np.array([0,0,0]),"channel":np.array([1,1,1])}
+    rows=runner._epoch_scores(ex,np.array([1.,3.,5.]))
+    assert rows[2.0]["source_start"] == 1.1 and rows[2.0]["source_end"] == 2.0
+    assert rows[2.0]["score"] == 2.0
+    bad={k:np.array(v,copy=True) for k,v in ex.items()}; bad["source_start"][1]=1.0
+    with pytest.raises(ValueError,match="source interval"):
+        runner._epoch_scores(bad,np.array([1.,3.,5.]))
+    a=[{"decision_time_s":2.,"source_start":1.1,"source_end":2.,"phase":"stable_pre","x":1}]
+    b=[{"decision_time_s":2.,"source_start":1.,"source_end":2.,"phase":"stable_pre","y":2}]
+    with pytest.raises(ValueError,match="interval"):
+        runner.common_timestamp_join(a,b,"x","y")
+
+
+def test_release_bootstrap_roc_honors_phase_mask():
+    t=np.arange(6.); y=np.array([0,0,1,1,1,1],bool)
+    a=np.array([0.,1.,100.,3.,4.,5.]); b=np.array([1.,0.,-100.,2.,3.,4.])
+    use=np.array([1,1,0,1,1,1],bool)
+    got=runner._bootstrap_delta(t,y,a,b,"roc_auc",0,0,use,reps=20,seed=3)
+    expected=runner._roc_auc(y[use],a[use])-runner._roc_auc(y[use],b[use])
+    assert got["estimate"] == expected
+    assert got["phase_population_hash"] == runner._digest_value({"t":t[use],"y":y[use]})
+
+
+def test_release_fit_manifest_chain_and_checkpoint_metadata(tmp_path):
+    torch=pytest.importorskip("torch")
+    arr=np.arange(24,dtype="f4").reshape(3,8,1)
+    ex={"current":arr,"history":np.repeat(arr[:,None],12,axis=1),"source_start":np.arange(3.),
+        "source_end":np.arange(3.)+1,"prn":np.arange(3),"segment_index":np.zeros(3),
+        "channel":np.zeros(3),"role":np.array(["train"]*3)}
+    manifest=runner.make_fit_manifest(ex, canonical_input_hash="a"*64,prompt_gate_hash="b"*64,
+        scaler_hash="c"*64,feature_tensor_hash=runner._digest_value(arr),validation_bank_hash="d"*64,
+        fit_config=runner.PRIMARY_FIT_CONFIG,source_interval_hash=runner._digest_value({"s":ex["source_start"],"e":ex["source_end"]}))
+    runner.verify_fit_manifest(manifest,ex)
+    for key in ("current","history","source_start"):
+        bad={k:np.array(v,copy=True) for k,v in ex.items()}; bad[key].flat[0]+=1
+        with pytest.raises(ValueError,match="fit manifest"):
+            runner.verify_fit_manifest(manifest,bad)
+    p=tmp_path/"m.pt"; torch.save({"state_dict":{},"upstream_digests":dict(manifest.upstream_digests),
+                                   "fit_manifest_digest":manifest.manifest_digest},p)
+    runner.verify_checkpoint_metadata(p,manifest)
+    obj=torch.load(p,weights_only=False); obj["upstream_digests"]["scaler_hash"]="f"*64; torch.save(obj,p)
+    with pytest.raises(ValueError,match="checkpoint metadata"):
+        runner.verify_checkpoint_metadata(p,manifest)
+
+
+def test_release_weighted_validation_and_all_gradient_audit():
+    assert runner.weighted_validation_loss([(2.,3),(8.,1)]) == pytest.approx(3.5)
+    class P:
+        requires_grad=True
+        grad=None
+    with pytest.raises(RuntimeError,match="every trainable"):
+        runner.require_finite_trainable_gradients([P()])
+
+
+def test_release_ds4_na_and_readme_protocol_limit():
+    row=runner.ds4_na_row()
+    assert row["scenario"]=="DS4" and row["status"]=="NA" and row["included_in_attack_go"] is False
+    text=runner.render_readme("NO-GO","PRIMARY COMPLETE",runner._smoke_criteria())
+    assert "[300,330)" in text and "[340,410)" in text
+    assert "threshold-dependent" in text and "DS4" in text
+
+
+
+def test_release_regenerated_outer_hashes_do_not_rescue_feature_tamper(tmp_path):
+    out=tmp_path/"smoke-bound"; runner.run_smoke(out,fixture_seed=31)
+    q=out/"feature_cache"/"DS7_complex.npz"
+    with np.load(q,allow_pickle=False) as f: part={k:np.array(f[k],copy=True) for k in f.files}
+    part["features"][0,0,0]+=10
+    np.savez(q,**part)
+    runner.write_hashes(out)
+    with pytest.raises(ValueError,match="feature|sufficient-stat"):
+        summary.verify_and_summarize(out)
+
+
+def test_release_smoke_cannot_be_relabelled_primary_even_with_new_hashes(tmp_path):
+    out=tmp_path/"fake-primary"; runner.run_smoke(out,fixture_seed=32)
+    config=json.loads((out/"config.json").read_text());config["mode"]="primary-full"
+    (out/"config.json").write_text(json.dumps(config,sort_keys=True,indent=2)+"\n")
+    runner.write_hashes(out)
+    with pytest.raises(ValueError,match="primary|source|config|digest"):
+        summary.verify_and_summarize(out)
+
+
+def test_release_fit_manifest_is_immutable_and_direct_dict_fit_rejected():
+    arr=np.ones((2,8,1),dtype="f4")
+    ex={"current":arr,"history":np.repeat(arr[:,None],12,axis=1),"source_start":np.arange(2.),
+        "source_end":np.arange(2.)+1,"prn":np.arange(2),"segment_index":np.zeros(2),
+        "channel":np.zeros(2),"role":np.array(["train"]*2)}
+    m=runner.make_fit_manifest(ex,canonical_input_hash="a"*64,prompt_gate_hash="b"*64,
+        scaler_hash="c"*64,feature_tensor_hash=runner._digest_value(arr),validation_bank_hash="d"*64,
+        fit_config=runner.PRIMARY_FIT_CONFIG,source_interval_hash=runner._example_component_digests(ex)["examples_source_interval_hash"])
+    with pytest.raises(TypeError): m.upstream_digests["scaler_hash"]="e"*64
+    with pytest.raises(TypeError,match="arbitrary dict"):
+        runner.verify_audited_fit_input({"train":ex},"all9",101)
