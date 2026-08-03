@@ -778,10 +778,19 @@ def test_workspace_projection_inventory_1000_pairs_under_15_seconds():
     train = ps[:30]; cov = n.fit_shrinkage_covariance(train,
         provenance=n.FitProvenance("cleanStatic", "normal_train", tuple(x.identity for x in train)))
     workspace = n.ProjectionWorkspace.from_covariance(cov)
+    X=rng.normal(size=(1030,4)); target=np.linspace(.1,2.,30)
+    actual=n.RobustConditioner().fit(X[:30],target,
+        provenance=n.FitProvenance("cleanStatic","normal_train",tuple(x.identity for x in train)))
+    shuffled=n.RobustConditioner().fit(X[:30],target[::-1],
+        provenance=n.FitProvenance("cleanStatic","normal_train",tuple(x.identity for x in train)))
+    calibration=n.FitProvenance("cleanStatic","normal_calibration",tuple(x.identity for x in ps[30:60]))
+    actual.calibrate_cap(X[30:60],provenance=calibration);shuffled.calibrate_cap(X[30:60],provenance=calibration)
     start = time.perf_counter()
-    for p in ps[30:]:
+    for i,p in enumerate(ps[30:]):
         basis = n.primary_tangent_basis(p, n.CANONICAL_TAP_COORDS, cov)
         top = n.produce_topi_scores(p, basis, cov, workspace=workspace)
+        n.condition_topi_scores(top,p,basis,cov,conditioner=actual,iq_features=X[i:i+1],workspace=workspace)
+        n.condition_topi_scores(top,p,basis,cov,conditioner=shuffled,iq_features=X[i:i+1],workspace=workspace)
         width_basis = n.build_width_ablation_basis(p, n.CANONICAL_TAP_COORDS, cov)
         n.produce_width_ablation_scores(p, width_basis, cov, workspace=workspace)
         n.weighted_project(p.residual_raw, basis.matrix[:, [0]], cov.W,

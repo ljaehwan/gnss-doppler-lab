@@ -1234,7 +1234,7 @@ class RobustConditioner:
           "cap_manifest_digest":None if self.cap_manifest_ is None else _digest_json(dict(self.cap_manifest_)),
           "fit_digest":self.fit_manifest_["fit_digest_sha256"],
           "fit_identity_digest":self.fit_manifest_["identity_digest_sha256"],
-          "current_fit_identities_digest":_identity_digest(self._fit_identities_),
+          "current_fit_identities_digest":self._fit_identity_digest_sha256_,
           "cap_identity_digest":None if self.cap_manifest_ is None else self.cap_manifest_["identity_digest_sha256"],
           "cap_predictor_digest":None if self.cap_manifest_ is None else self.cap_manifest_["predictors_digest_sha256"],
           "cap_scenario":None if self.cap_manifest_ is None else self.cap_manifest_["scenario"],
@@ -1248,7 +1248,8 @@ class RobustConditioner:
         if (self.fit_manifest_.get("scenario") != "cleanStatic"
                 or self.fit_manifest_.get("roles") != ("normal_train",)
                 or self.fit_manifest_.get("feature_schema") != CONDITIONER_FEATURE_SCHEMA
-                or self.fit_manifest_.get("identity_digest_sha256") != _identity_digest(self._fit_identities_)):
+                or self.fit_manifest_.get("identity_digest_sha256") != self._fit_identity_digest_sha256_
+                or self._fit_identities_ is not self._sealed_fit_identities_):
             raise ValueError("conditioner fit provenance audit is invalid")
         if self.cap_manifest_ is not None and (self.cap_manifest_.get("scenario") != "cleanStatic"
                 or self.cap_manifest_.get("role") != "normal_calibration"
@@ -1271,6 +1272,9 @@ class RobustConditioner:
         model.coef_=_readonly_array(model.coef_,"conditioner coefficients",1)
         self.median_=_readonly_array(median,"conditioner median",1); self.iqr_=_readonly_array(iqr,"conditioner IQR",1)
         self.model_=model; self.feature_names_=names; self._fit_identities_=fit.identities
+        # Preserve the exact immutable tuple by identity; replacement/reordering is O(1) tamper-detectable.
+        self._sealed_fit_identities_=self._fit_identities_
+        self._fit_identity_digest_sha256_=fit.identity_digest_sha256
         fit_digest=_digest_json({"scenario":fit.scenario,"role":fit.role,"identity_digest_sha256":fit.identity_digest_sha256,
           "predictors_digest_sha256":_array_digest(predictors),"target_energy_digest_sha256":_array_digest(energy),
           "feature_schema":names})
