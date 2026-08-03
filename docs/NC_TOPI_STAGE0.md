@@ -62,45 +62,84 @@ reported alarm time is the availability time of the third epoch.
 
 ## Geometry and scores
 
-`Sigma` is sklearn Ledoit-Wolf fit on clean-train `residual_raw` only. Its
-floor is `epsilon = 1e-8*trace(Sigma)/dim`; `W` is a pseudoinverse. Projection
-uses relative ridge `1e-8` and pseudoinverse `rcond=1e-10`, and reports
-coefficients, fit, orthogonal residual, all W-energies, ranks and condition.
-Tangents come from the regenerated predicted peak: amplitude, numerical first
-derivative on the physical coordinates, and optional second-derivative width.
-Prompt-relative normalization attenuates global amplitude, so that tangent is
-a declared nuisance/ablation direction, never residual-derived evidence.
+### Coordinate and identity contract
 
-B0 is standardized residual RMSE. NC-TOPI is orthogonal residual energy; TOPI,
-width tangent, alternate aggregator, and quantile are diagnostics/ablations.
-The primary is **q99 NC-TOPI median only**. Median is the primary aggregator.
-Top25 mean is the mean of the largest `ceil(.25*n)` valid PRN scores; it is
-permutation invariant, supports variable `n`, and records tracked count.
-Diagnostics **cannot rescue the primary**.
+Every score starts from a validated `PeakPredictionPair`. It requires both the
+actual and predicted raw prompt-relative magnitude-ratio peaks, their full epoch
+identity, the frozen standardizer standard deviation, and the B0-standardized
+residual. Residual-only construction is forbidden. Runtime validation enforces
+`residual_raw = actual_raw - predicted_raw` and
+`residual_standardized ~= residual_raw / standardizer_std`; there is no default
+`input_kind` that can weaken this rule.
+
+B0 is exactly `sqrt(mean(residual_standardized^2))`. Geometry never uses that
+standardized coordinate: covariance, tangent projection, and all TOPI energies
+use raw prompt-relative-ratio space. The primary per-PRN formula is exactly
+`S_perp = r_perp.T W r_perp`. Total, tangent, perpendicular, and cross energy
+are always returned, and `total ~= tangent + perpendicular + cross` is checked.
+Negative quadratic energy is not blindly clamped: only tiny floating-point
+negative values are tolerated; a material negative value fails closed.
+
+Covariance is Ledoit-Wolf fit only on `cleanStatic` `normal_train`
+`residual_raw`. Role, scenario, and unique full identities are mandatory.
+The fit audit returns identity count and a SHA-256 identity digest. Calibration,
+holdout, mixed, missing-provenance, or attack rows are rejected. `W` must be
+symmetric positive semidefinite.
+
+The primary projection is the unregularized Moore-Penrose solution on
+`J.T W J`, including rank-deficient bases, and checks `J.T W r_perp ~= 0`.
+Ridge exists only in the separately named diagnostic path and is marked
+`ridge_diagnostic_not_orthogonal`; it cannot be represented as primary.
+
+The frozen primary basis is amplitude plus shift, with width defaulting to
+JSON boolean `false`. The primary builder rejects width; a separate width
+ablation builder is diagnostic only. Because inputs are prompt normalized,
+the requested amplitude column is a **normalized-shape scale direction**, not
+physical receiver global gain. It is not physical receiver global gain. Physical receiver global gain was removed by
+prompt normalization and cannot be claimed as an identified nuisance. The
+user-requested amplitude ablation remains reported under that caveat.
+
+The IQ Huber target is `log(max(S_perp, energy_epsilon))`. Huber predicts log
+energy; detector scale is `exp(predicted_log_energy)`, capped at the
+clean-calibration higher q995 predicted scale. NC-TOPI is
+`S_perp/max(capped_scale, energy_epsilon)`: scale, not scale squared, and no
+square root. PRN scores are aggregated to median (primary) or top25 mean per
+epoch, and every detector/aggregator has its own clean-calibration threshold.
+The primary remains **q99 NC-TOPI median only** and diagnostics cannot rescue it.
 
 Threshold quantiles use NumPy's `higher` rule and alarms use strict `>`.
 Low-FPR performance is sklearn standardized **McClish** partial AUC with
 `max_fpr=.05`.
 
-Uncertainty uses paired, gap-safe, nonoverlapping, complete 10 s physical
-blocks, 2000 repetitions, fixed seed 20260803, and percentile95 intervals.
-There is **no IID fallback**. Point estimates use every eligible common epoch,
-including eligible epochs outside complete resampling blocks.
+### Identity, timing, IQ, and uncertainty
 
-## Causal IQ conditioner
+The primary epoch join requires full identity set equality and rejects duplicate
+identities. When supplied, source interval, label, and valid mask must also be
+identical after exact identity alignment. It never silently intersects. A
+separately named common-mask diagnostic reports all exclusions.
 
-The later runner reads raw int16 IQ at 25 MHz and takes one 10 ms block every
-0.5 s. Features are log power, robust noise-floor scale, spectral flatness,
-and lag-1 autocorrelation magnitude. For a target, strict as-of context uses
-only blocks with `block_end <= min(target source_start)` and the latest four
-past blocks; no current overlap or future block is legal.
+Sustained alarm evaluation requires recording IDs and a post-eligible mask.
+Runs reset at recording changes, cadence gaps, and transition/non-post rows.
+Delay is the third alarm's availability `source_end` minus onset; a stable-pre
+mask reports already-alarming status separately.
 
-Predictors are standardized by clean-train median/IQR. Fixed Huber regression
-uses `epsilon=1.35`, `alpha=1e-4`, and `max_iter=1000` on clean-train PRN rows.
-PRN, scenario, and onset are forbidden features. Predicted scale has an epsilon
-lower bound only and is capped at the clean-calibration predicted-scale higher
-q995. The time-shuffle control uses seed 20260803 within clean train before
-regression and is never constructed on attacks.
+IQ `target_groups` and `block_groups` are mandatory and their group sets must
+match exactly. Duplicate block ends within a group and unsorted group time are
+rejected; cadence and gaps are audited, and a valid history is contiguous.
+There is no cross-recording default.
+The runner reads raw int16 IQ at 25 MHz and takes one 10 ms block every 0.5 s.
+The four frozen features remain log power, robust noise-floor scale, spectral
+flatness, and lag-1 autocorrelation magnitude. Predictor normalization is the
+clean-train median/IQR; PRN, scenario, and onset remain forbidden features.
+
+Primary uncertainty is paired pAUC-delta bootstrap, not a generic statistic
+bootstrap. It requires labels, paired scores, recording IDs, times, and
+`max_fpr`. Complete nonoverlapping 10 s blocks are formed only within a
+recording, label stratum, and contiguous cadence run. Negative and positive
+block pools are resampled separately while retaining paired scores and labels
+at the same indices. The point estimate uses all eligible epochs. Class-deficient
+input or fewer than two blocks in either stratum returns an explicit unavailable
+result and reason. There is **no IID fallback**; valid replicate count is returned.
 
 ## Synthetic physics preregistration
 
@@ -123,20 +162,28 @@ The exact physics pass grammar is:
 
 ## Frozen decision grammar
 
-Attack scenario improvement passes iff standardized pAUC point delta is `>0`,
-**OR** both sustained delays are finite and NC is at least 0.5 s earlier. The
-CI criterion passes iff paired pAUC-delta percentile95 CI lower bound is `>0`.
-The shuffle criterion passes iff actual NC mean pAUC gain over TOPI is greater
-than shuffled gain and actual gain is `>0`.
+The machine evaluator accepts only q99 NC-TOPI median primary evidence. Its
+criteria use these exact operators:
 
-- **GO:** all frozen criteria pass, evaluated on q99 NC-TOPI median only.
-- **NO-GO:** any physics criterion fails, **or** clean holdout FPR is `>5%`,
-  **or** stable-pre fails in at least three scenarios, **or** attack improvement
-  passes in at most one scenario, **or** no scenario has a positive CI lower
-  bound.
-- **INCONCLUSIVE:** every outcome not classified GO or NO-GO by the exact rules
-  above.
+1. `c1`: clean-holdout NC FPR `<= .02`.
+2. `c2`: NC clean-holdout FPR minus B0 clean-holdout FPR `<= .01`.
+3. `c3`: all five scenario stable-pre FPR values are strictly `< .05`.
+4. `c4`: at least three scenarios have pAUC delta strictly `> 0`, **or** both
+   delays finite and `B0_delay - NC_delay >= .5`.
+5. `c5`: at least two paired pAUC CI lower bounds are strictly `> 0`.
+6. `c6`: equal-RMSE physics passes.
+7. `c7`: second-peak physics passes.
+8. `c8`: actual NC mean pAUC gain over TOPI is strictly greater than shuffled
+   gain and actual gain is strictly `> 0`.
 
-This grammar is frozen now. TOPI, top25 mean, q995, width tangent, DS7/DS8
-legacy residual positive controls, and any diagnostic cannot alter or rescue
-the primary GO result.
+`GO = c1 && c2 && c3 && c4 && c5 && c6 && c7 && c8`.
+
+**NO-GO** applies iff equal-RMSE is explicitly false, second-peak is explicitly
+false, clean NC FPR is strictly `> .05`, observed stable-pre failures are at
+least three, all five improvement outcomes are known and the pass count is at
+most one, or all five CI outcomes are known and the positive count is zero.
+NO-GO triggers have precedence. Missing or censored mandatory evidence prevents
+GO but is not invented as a failure; absent an explicit NO-GO trigger the result
+is **INCONCLUSIVE**. Infinite delay is censored/non-finite and cannot satisfy the
+delay alternative. Width, top25, q995, legacy residual controls, and all other
+diagnostics cannot alter or rescue this result.
