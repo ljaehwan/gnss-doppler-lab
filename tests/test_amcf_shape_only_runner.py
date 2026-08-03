@@ -326,7 +326,16 @@ def test_dirty_tree_refusal_and_baseline_inventory(tmp_path):
     with pytest.raises(RuntimeError, match="dirty"):
         runner.verify_primary_source_state(repo, "HEAD", allowed_files={"a"})
     actual = runner.diff_inventory(ROOT, "ef36f26")
-    assert actual <= runner.SHAPE_ONLY_ALLOWED_FILES
+    published_prefix = "artifacts/amcf_r1_shape_only/"
+    published = {path for path in actual if path.startswith(published_prefix)}
+    assert actual - published <= runner.SHAPE_ONLY_ALLOWED_FILES
+    if published:
+        artifact = ROOT / "artifacts" / "amcf_r1_shape_only"
+        assert runner.verify_hashes(artifact)
+        manifest = json.loads((artifact / "hashes.json").read_text())
+        expected = {published_prefix + relative for relative in manifest["files"]}
+        expected.add(published_prefix + "hashes.json")
+        assert published == expected
     assert not any(x.startswith("artifacts/amcf_r1_texbat/") or x.startswith("artifacts/cmte_a2_texbat_epochfix/") for x in actual)
 
 
