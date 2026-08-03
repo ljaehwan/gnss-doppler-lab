@@ -109,8 +109,24 @@ def _png(path: Path) -> tuple[int,int]:
 
 
 def _event_key(row: Mapping[str,str]) -> tuple[str,...]:
+    # PRN availability is its own source_end while event availability is max end.
     return (row.get("scenario",""),row.get("physical_recording_id",""),row.get("event_id",""),
-            row.get("target_index",""),row.get("availability_time_s",""))
+            row.get("target_index",""))
+
+
+def _event_phase(scenario: str, source_start: float, source_end: float,
+                 onsets: Mapping[str,object]) -> tuple[str,str]:
+    # Independent copy of the frozen event-support phase grammar.
+    if scenario in ("cleanStatic","cleanDynamic"):
+        return "normal",""
+    if scenario not in onsets:
+        raise ValueError(f"missing attack onset for {scenario}")
+    onset=_number(onsets[scenario],f"{scenario} onset")
+    if source_start>=onset:
+        return "post","1"
+    if source_start>=30 and source_end<=onset-20:
+        return "stable_pre","0"
+    return "transition_excluded",""
 
 
 def verify_epoch_rows(root: Path, errors: list[str]) -> dict[str,object]:
@@ -142,6 +158,12 @@ def verify_epoch_rows(root: Path, errors: list[str]) -> dict[str,object]:
     if len(event_map)!=len(events): errors.append("duplicate event row identity")
     grouped: dict[tuple[str,...],list[dict[str,str]]]={}
     for row in prn: grouped.setdefault(_event_key(row),[]).append(row)
+    try:
+        config=_json(root/"config.json")
+        onsets=config.get("attacks",{}).get("onsets_seconds",{})
+        if not isinstance(onsets,Mapping): raise ValueError("attack onsets are not a mapping")
+    except Exception as exc:
+        errors.append(f"phase config unreadable: {exc}");onsets={}
     checked=0
     for key,group in grouped.items():
         event=event_map.get(key)
@@ -153,10 +175,28 @@ def verify_epoch_rows(root: Path, errors: list[str]) -> dict[str,object]:
                 errors.append(f"tracked_prn_count mismatch: {key}")
             starts=[_number(x["source_start_s"],"source_start_s") for x in group]
             ends=[_number(x["source_end_s"],"source_end_s") for x in group]
-            if not math.isclose(_number(event["source_start_s"],"event source_start"),min(starts),abs_tol=1e-12):
+            event_start=min(starts);event_end=max(ends)
+            if not math.isclose(_number(event["source_start_s"],"event source_start"),event_start,abs_tol=1e-12):
                 errors.append(f"event source_start is not min PRN support: {key}")
-            if not math.isclose(_number(event["source_end_s"],"event source_end"),max(ends),abs_tol=1e-12):
+            if not math.isclose(_number(event["source_end_s"],"event source_end"),event_end,abs_tol=1e-12):
                 errors.append(f"event source_end is not max PRN support: {key}")
+            if not math.isclose(_number(event["availability_time_s"],"event availability"),event_end,abs_tol=1e-12):
+                errors.append(f"event availability is not max PRN source_end: {key}")
+            for row,row_end in zip(group,ends):
+                if not math.isclose(_number(row["availability_time_s"],"PRN availability"),row_end,abs_tol=1e-12):
+                    errors.append(f"PRN availability is not its source_end: {key}/{row.get('prn','')}")
+            expected_phase,expected_label=_event_phase(event["scenario"],event_start,event_end,onsets)
+            expected_valid=expected_phase!="transition_excluded"
+            for row in [event,*group]:
+                if row.get("phase","")!=expected_phase:
+                    errors.append(f"event-support phase mismatch: {key}/{row.get('row_level','')}/{row.get('prn','')}")
+                if row.get("label","")!=expected_label:
+                    errors.append(f"event-support label mismatch: {key}/{row.get('row_level','')}/{row.get('prn','')}")
+                if _bool(row.get("valid",""),"valid")!=expected_valid:
+                    errors.append(f"event-support valid mismatch: {key}/{row.get('row_level','')}/{row.get('prn','')}")
+            expected_event_role=_source_role(event["scenario"],event_start,event_end)
+            if event.get("role")!=expected_event_role:
+                errors.append(f"event source-support role mismatch: {key}; expected {expected_event_role}")
             for method in methods:
                 values=[_number(x[method],method) for x in group]
                 for agg in AGGREGATORS:

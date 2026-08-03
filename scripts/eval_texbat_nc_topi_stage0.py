@@ -1213,7 +1213,7 @@ def _geometry_cache_key(pairs):
     return tuple(key)
 
 
-def score_scenario(examples, pairs, iq_x, state, *, onsets=None):
+def score_scenario(examples, pairs, iq_x, state):
     covariance=state["covariance"]
     conditioner=state["conditioner"];shuffled=state["shuffled"]
     inventory_key=_geometry_cache_key(pairs)
@@ -1250,8 +1250,11 @@ def score_scenario(examples, pairs, iq_x, state, *, onsets=None):
           "NC_TOPI_time_shuffle":sh.nc_topi,"NC_TOPI_conditioning_removed":top.topi}
         if set(values)!=set(METHODS) or not np.isfinite(list(values.values())).all(): raise RuntimeError("method score inventory invalid")
         for name in METHODS: method_ids[name].append(pair.identity)
-        phase,label=event_phase(pair.identity.scenario,item.target.source_start_s,item.target.source_end_s,onsets)
-        scored.append({"example":item,"pair":pair,"scores":values,"phase":phase,"label":label,
+        # Classification is an event-level property. A PRN score carries only its
+        # own source support until all linked PRNs have been assembled.
+        scored.append({"example":item,"pair":pair,"scores":values,
+                        "source_start_s":float(item.target.source_start_s),
+                        "source_end_s":float(item.target.source_end_s),
                         "pair_sequence_index":pair_sequence_index})
         completed=pair_sequence_index+1
         if completed%1000==0 or completed==len(pairs):
@@ -1263,17 +1266,20 @@ def score_scenario(examples, pairs, iq_x, state, *, onsets=None):
     return scored
 
 
-def aggregate_scored(scored):
+def aggregate_scored(scored, *, onsets=None):
     groups={}
     for row in scored: groups.setdefault(row["example"].target.event_key,[]).append(row)
     prn_rows=[];event_rows=[];event_internal=[]
     for event_pos,key in enumerate(sorted(groups)):
         group=groups[key];scenario=group[0]["pair"].identity.scenario
-        start=min(x["example"].target.source_start_s for x in group);end=max(x["example"].target.source_end_s for x in group)
+        if any(x["pair"].identity.scenario!=scenario for x in group):
+            raise RuntimeError("event PRNs disagree on scenario")
+        # Event support is the union of linked PRN target supports. Phase and
+        # label become authoritative only after this reduction.
+        start=min(float(x["source_start_s"]) for x in group)
+        end=max(float(x["source_end_s"]) for x in group)
+        phase,label=event_phase(scenario,start,end,onsets)
         event_id=f"{key[0]}@{key[1]:.10g}";role=_role_interval(scenario,start,end)
-        phases={x["phase"] for x in group};labels={str(x["label"]) for x in group}
-        if len(phases)!=1 or len(labels)!=1: raise RuntimeError("event PRNs disagree on phase/label")
-        phase=next(iter(phases));label=group[0]["label"]
         base={"scenario":scenario,"physical_recording_id":key[0],"event_id":event_id,
           "target_index":event_pos,"availability_time_s":end,"source_start_s":start,"source_end_s":end,
           "role":role,"phase":phase,"label":label,"valid":phase!="transition_excluded","tracked_prn_count":len(group)}
@@ -1284,11 +1290,12 @@ def aggregate_scored(scored):
                 event[f"{method}_{agg}"]=core.aggregate_prn_scores(ids,values,method=agg).score
         event_rows.append(event);event_internal.append({"meta":base,"scores":{m:{a:event[f"{m}_{a}"] for a in AGGREGATORS} for m in METHODS}})
         for x in group:
+            prn_start=float(x["source_start_s"]);prn_end=float(x["source_end_s"])
             row=dict(base,row_level="prn",prn=x["pair"].identity.prn,prn_target_index=x["pair"].identity.target_index,
                       pair_sequence_index=x["pair_sequence_index"],
                      availability_time_s=x["pair"].identity.availability_time_s,
-                     source_start_s=x["example"].target.source_start_s,source_end_s=x["example"].target.source_end_s,
-                     role=_role_interval(scenario,x["example"].target.source_start_s,x["example"].target.source_end_s))
+                     source_start_s=prn_start,source_end_s=prn_end,
+                     role=_role_interval(scenario,prn_start,prn_end))
             row.update(x["scores"]);prn_rows.append(row)
     return prn_rows+event_rows,event_internal
 
@@ -1370,7 +1377,7 @@ def run_campaign(config, out, *, checkpoint: str|Path|None=None, stop_after_free
     state=_fit_geometry(cfg,examples,pairs,gate)
     iq_x,iq_rows,iq_audit=_iq_for_scenario(cfg,"cleanStatic",examples);gate.record_phase("extract_all_clean_iq")
     state=_fit_conditioners(cfg,pairs,iq_x,state,gate)
-    clean_scored=score_scenario(examples,pairs,iq_x,state,onsets=None);gate.record_phase("score_all_clean_methods")
+    clean_scored=score_scenario(examples,pairs,iq_x,state);gate.record_phase("score_all_clean_methods")
     clean_rows,clean_events=aggregate_scored(clean_scored);gate.record_phase("aggregate_clean_events")
     typed_thresholds,thresholds,threshold_ids=calibrate_typed_thresholds(clean_events,pairs,state,gate)
     gate.freeze()
@@ -1399,8 +1406,8 @@ def run_campaign(config, out, *, checkpoint: str|Path|None=None, stop_after_free
     for scenario in (*core.ATTACK_SCENARIOS,"cleanDynamic"):
         examples_s,pairs_s,lineage_s=loaded[scenario]
         x_s,iq_s,iq_audit_s=_iq_for_scenario(cfg,scenario,examples_s)
-        scored=score_scenario(examples_s,pairs_s,x_s,state,onsets=cfg["attacks"]["onsets_seconds"])
-        rows,events=aggregate_scored(scored);all_rows.extend(rows);all_events.extend(events);all_iq.extend(iq_s)
+        scored=score_scenario(examples_s,pairs_s,x_s,state)
+        rows,events=aggregate_scored(scored,onsets=cfg["attacks"]["onsets_seconds"]);all_rows.extend(rows);all_events.extend(events);all_iq.extend(iq_s)
         lineage_s["iq_audit"]=iq_audit_s;lineages["scenarios"][scenario]=lineage_s
     scenario_metrics,ablation_metrics,bootstrap,decision=_campaign_statistics(all_events,typed_thresholds,cfg,state,pairs)
     synthetic=run_synthetic_physics([pairs[i] for i in state["split_indices"]["normal_train"]],state["covariance"],workspace=state["workspace"])

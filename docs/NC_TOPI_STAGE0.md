@@ -63,7 +63,13 @@ The 20 s gaps guarantee no support overlap. Attack onsets are 100 s for
 DS1/DS2/DS3 and 110 s for DS7/DS8. Stable-pre requires
 `source_start >= 30 AND source_end <= onset-20`; transition is every otherwise
 pre-post epoch; post requires `source_start >= onset`; persistent requires
-`source_start >= onset+40`. Delay uses availability `source_end` and onset.
+`source_start >= onset+40`. An event first unions all linked PRN support as
+`event_source_start = min(PRN source_start)` and
+`event_source_end = event_availability = max(PRN source_end)`, then applies this
+phase grammar exactly once. The resulting phase, label, and transition validity
+are broadcast to the event and all linked PRN diagnostic rows; each PRN row still
+retains its own source interval and availability. Thus any PRN crossing a phase
+boundary excludes the whole event. Delay uses event availability and onset.
 Already-alarming stable-pre status is always reported.
 
 A sustained alarm is three contiguous 0.5 s epochs within the same physical
@@ -159,9 +165,12 @@ contiguous, and blocks can never cross groups.
 There is no cross-recording default.
 The runner reads raw int16 IQ at 25 MHz and takes one 10 ms block every 0.5 s.
 Every `iq_context.csv` row joins one exact scenario/recording/event to all linked
-PRN rows. The verifier checks the linked PRN inventory and count, minimum target
-source start, four latest contiguous causal grid blocks, sample offset/count time
-geometry at 25 MHz, every context reduction, and deterministic raw rereads.
+PRN rows. The verifier independently reconstructs event support from those PRN
+rows, recomputes phase/label/valid from frozen attack onsets, rejects disagreement
+or support/phase tampering, and checks event availability is maximum PRN support.
+It also checks linked PRN inventory and count, minimum target source start, four
+latest contiguous causal grid blocks, sample offset/count time geometry at 25 MHz,
+every context reduction, and deterministic raw rereads.
 The four frozen features are exactly `log_power`, `log_noise_floor_scale`,
 `spectral_flatness`, and `lag1_autocorr_magnitude` in that order. Predictor normalization is the
 clean-train median/IQR; PRN, scenario, and onset remain forbidden features.

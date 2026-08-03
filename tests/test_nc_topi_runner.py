@@ -282,7 +282,7 @@ def test_score_scenario_calls_primary_geometry_once_for_attack_and_zero_for_clea
     monkeypatch.setattr(r,"assert_same_epoch_mask",lambda x:None)
     monkeypatch.setattr(r.core.ProjectionWorkspace,"from_covariance",lambda x:object())
     state={"covariance":SimpleNamespace(W=np.eye(9)),"workspace":object(),"conditioner":object(),"shuffled":object()}
-    r.score_scenario(examples,pairs,np.ones((2,4)),state,onsets={"DS1":0.})
+    r.score_scenario(examples,pairs,np.ones((2,4)),state)
     assert len(calls)==2
     # A differently sealed clean inventory of equal length is never reused.
     clean=[]
@@ -291,10 +291,10 @@ def test_score_scenario_calls_primary_geometry_once_for_attack_and_zero_for_clea
         clean.append(r.core.PeakPredictionPair(p.actual_raw,p.predicted_raw,p.residual_standardized,p.standardizer_std,ident,
           r.core.RAW_SPACE,r.core.RAW_SPACE,r.core.STANDARDIZED_SPACE,r.core.CANONICAL_TAP_COORDS))
     state["geometry_cache"]={r._geometry_cache_key(clean):tuple((SimpleNamespace(matrix=np.ones((9,2))),top) for _ in clean)}
-    r.score_scenario(examples,pairs,np.ones((2,4)),state,onsets={"DS1":0.})
+    r.score_scenario(examples,pairs,np.ones((2,4)),state)
     assert len(calls)==4
     state["geometry_cache"][r._geometry_cache_key(pairs)]=tuple((SimpleNamespace(matrix=np.ones((9,2))),top) for _ in pairs)
-    r.score_scenario(examples,pairs,np.ones((2,4)),state,onsets={"DS1":0.})
+    r.score_scenario(examples,pairs,np.ones((2,4)),state)
     assert len(calls)==4
 
 
@@ -331,8 +331,7 @@ def test_sealed_attack_and_dynamic_pair_inventories_never_reuse_clean_cache():
             pairs.append(r.core.PeakPredictionPair(peak+residual,peak,residual/std,std,ident,
               r.core.RAW_SPACE,r.core.RAW_SPACE,r.core.STANDARDIZED_SPACE,r.core.CANONICAL_TAP_COORDS))
             examples.append(SimpleNamespace(target=SimpleNamespace(source_start_s=150.+i*.5,source_end_s=151.+i*.5)))
-        scored=r.score_scenario(examples,pairs,np.ones((count,4)),state,
-          onsets={"DS1":100.,"DS2":100.,"DS3":100.,"DS7":110.,"DS8":110.} if scenario=="DS1" else None)
+        scored=r.score_scenario(examples,pairs,np.ones((count,4)),state)
         assert len(scored)==count and all(np.isfinite(list(x["scores"].values())).all() for x in scored)
         assert set(state["geometry_cache"])==clean_keys
 
@@ -477,3 +476,80 @@ def test_private_tiny_full_campaign_executes_all_stages_and_separate_verifier(tm
     assert any("test_fixture" in x for x in public["errors"])
     provenance=json.loads((out/"provenance.json").read_text());assert provenance["test_fixture"] is True
     metrics=list(csv.DictReader((out/"scenario_metrics.csv").open()));assert any(x["metric"]=="sustained_delay" for x in metrics)
+
+
+
+def _phase_scored_row(prn, start, end, *, scenario="DS1", score=1.0):
+    from types import SimpleNamespace
+    target=SimpleNamespace(event_key=(scenario, 79.5), source_start_s=start, source_end_s=end)
+    pair=SimpleNamespace(identity=SimpleNamespace(
+        scenario=scenario, prn=prn, target_index=0, availability_time_s=end))
+    return {"example":SimpleNamespace(target=target), "pair":pair,
+            "scores":{method:score for method in r.METHODS},
+            "source_start_s":start, "source_end_s":end, "pair_sequence_index":0}
+
+
+def test_event_phase_is_classified_once_from_aggregate_prn_support(monkeypatch):
+    """An event is excluded when any linked PRN extends across a phase boundary."""
+    scored=[_phase_scored_row("G01",79.0,80.0),
+            _phase_scored_row("G02",79.1,80.1,score=2.0)]
+    calls=[]
+    original=r.event_phase
+    def observed(*args,**kwargs):
+        calls.append((args,kwargs));return original(*args,**kwargs)
+    monkeypatch.setattr(r,"event_phase",observed)
+    rows,events=r.aggregate_scored(scored,onsets={"DS1":100.})
+    assert calls==[(("DS1",79.0,80.1,{"DS1":100.}),{})]
+    assert events[0]["meta"]["phase"]=="transition_excluded"
+    assert events[0]["meta"]["label"]==""
+    assert events[0]["meta"]["valid"] is False
+    event=next(x for x in rows if x["row_level"]=="event")
+    prns=[x for x in rows if x["row_level"]=="prn"]
+    assert (event["source_start_s"],event["source_end_s"],event["availability_time_s"])==(79.0,80.1,80.1)
+    assert {(x["prn"],x["source_start_s"],x["source_end_s"]) for x in prns}=={
+        ("G01",79.0,80.0),("G02",79.1,80.1)}
+    assert {(x["phase"],x["label"],x["valid"]) for x in rows}=={
+        ("transition_excluded","",False)}
+
+
+def test_score_scenario_carries_support_but_no_authoritative_phase():
+    from types import SimpleNamespace
+    peak,std,cov,state=_sealed_score_state()
+    residual=np.cos(np.arange(9))*.03
+    ident=r.identity("DS1","DS1","G01",0,101.)
+    pair=r.core.PeakPredictionPair(peak+residual,peak,residual/std,std,ident,
+      r.core.RAW_SPACE,r.core.RAW_SPACE,r.core.STANDARDIZED_SPACE,r.core.CANONICAL_TAP_COORDS)
+    target=SimpleNamespace(source_start_s=100.,source_end_s=101.)
+    scored=r.score_scenario([SimpleNamespace(target=target)],[pair],np.ones((1,4)),state)
+    assert "phase" not in scored[0] and "label" not in scored[0]
+    assert (scored[0]["source_start_s"],scored[0]["source_end_s"])==(100.,101.)
+
+
+def _write_phase_rows(root, rows, onsets={"DS1":100.}):
+    root.mkdir()
+    (root/"config.json").write_text(json.dumps({"attacks":{"onsets_seconds":onsets}}))
+    with (root/"per_epoch_scores.csv").open("w",newline="") as f:
+        w=csv.DictWriter(f,fieldnames=sorted(set().union(*(x.keys() for x in rows))))
+        w.writeheader();w.writerows(rows)
+
+
+def test_independent_verifier_recomputes_event_phase_and_rejects_prn_tamper(tmp_path):
+    base={"scenario":"DS1","physical_recording_id":"DS1","event_id":"DS1@79.5","target_index":"0",
+      "role":"evaluation","phase":"transition_excluded","label":"","valid":"false","tracked_prn_count":"2"}
+    rows=[
+      {**base,"row_level":"prn","prn":"G01","availability_time_s":"80.0","source_start_s":"79.0","source_end_s":"80.0","B0":"1"},
+      {**base,"row_level":"prn","prn":"G02","availability_time_s":"80.1","source_start_s":"79.1","source_end_s":"80.1","B0":"2"},
+      {**base,"row_level":"event","prn":"","availability_time_s":"80.1","source_start_s":"79.0","source_end_s":"80.1",
+       "B0_median":"1.5","B0_top25_mean":"2"},
+    ]
+    good=tmp_path/"good";_write_phase_rows(good,rows)
+    errors=[];result=v.verify_epoch_rows(good,errors)
+    assert not errors and result["events_reaggregated"]==1
+    mutations=[]
+    tampered=[dict(x) for x in rows];tampered[0].update(phase="stable_pre",label="0",valid="true");mutations.append(tampered)
+    tampered=[dict(x) for x in rows];tampered[2].update(phase="post",label="1",valid="true");mutations.append(tampered)
+    tampered=[dict(x) for x in rows];tampered[2]["source_end_s"]="80.0";mutations.append(tampered)
+    for i,tampered in enumerate(mutations):
+        bad=tmp_path/f"bad{i}";_write_phase_rows(bad,tampered)
+        errors=[];v.verify_epoch_rows(bad,errors)
+        assert errors,i
