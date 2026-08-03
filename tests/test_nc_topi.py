@@ -27,7 +27,22 @@ def pair(identity=("rec", "G01", 7), delta=None):
         actual_space="prompt_relative_ratio_raw",
         predicted_space="prompt_relative_ratio_raw",
         residual_space="b0_standardized",
+        coordinates=n.CANONICAL_TAP_COORDS,
     )
+
+
+def provenance(role, identities, scenario="cleanStatic"):
+    return n.FitProvenance(scenario=scenario, role=role, identities=tuple(identities))
+
+
+def pairs(count=4):
+    return [pair(("clean", "G01", i), np.linspace(-.2, .2, 9) + i / 100)
+            for i in range(count)]
+
+
+def records(order=(0, 1)):
+    return [n.EpochRecord("rec", "DS1", f"event-{i}", 100.5 + i,
+                          99.5 + i, 100.5 + i, True, i % 2) for i in order]
 
 
 # Blocker 1: frozen score coordinate and energy/conditioner contract.
@@ -38,28 +53,31 @@ def test_peak_prediction_pair_requires_both_raw_peaks_and_validates_coordinates(
         n.PeakPredictionPair(
             residual_standardized=np.zeros(9), standardizer_std=np.ones(9),
             identity=("r", "G1", 1), actual_space="prompt_relative_ratio_raw",
-            predicted_space="prompt_relative_ratio_raw", residual_space="b0_standardized")
+            predicted_space="prompt_relative_ratio_raw", residual_space="b0_standardized",
+            coordinates=n.CANONICAL_TAP_COORDS)
     with pytest.raises(ValueError, match="standardized"):
         n.PeakPredictionPair(
             actual_raw=np.ones(9), predicted_raw=np.zeros(9),
             residual_standardized=np.zeros(9), standardizer_std=np.ones(9),
             identity=("r", "G1", 1), actual_space="prompt_relative_ratio_raw",
-            predicted_space="prompt_relative_ratio_raw", residual_space="b0_standardized")
+            predicted_space="prompt_relative_ratio_raw", residual_space="b0_standardized",
+            coordinates=n.CANONICAL_TAP_COORDS)
     with pytest.raises(ValueError, match="space"):
         n.PeakPredictionPair(
             actual_raw=np.ones(9), predicted_raw=np.zeros(9),
             residual_standardized=np.ones(9), standardizer_std=np.ones(9),
             identity=("r", "G1", 1), actual_space="standardized",
-            predicted_space="prompt_relative_ratio_raw", residual_space="b0_standardized")
+            predicted_space="prompt_relative_ratio_raw", residual_space="b0_standardized",
+            coordinates=n.CANONICAL_TAP_COORDS)
 
 
 def test_score_bundle_uses_raw_quadratic_energy_b0_and_scale_not_scale_squared():
     p = pair(delta=np.arange(9) / 10)
-    basis = n.primary_tangent_basis(p.predicted_raw, n.CANONICAL_TAP_COORDS, W=W())
+    basis = n.primary_tangent_basis(p, n.CANONICAL_TAP_COORDS, W=W())
     class Fixed:
         def conditioner_transform(self, X): return np.asarray(X, float) + 10
         def predict_scale(self, X): return np.full(len(X), 4.0)
-    out = n.produce_nc_topi_scores(p, basis.matrix, W(), conditioner=Fixed(), iq_features=[[1, 2]])
+    out = n.produce_nc_topi_scores(p, basis, W(), conditioner=Fixed(), iq_features=[[1, 2]])
     expected_b0 = np.sqrt(np.mean(p.residual_standardized**2))
     assert out.b0 == pytest.approx(expected_b0)
     assert out.topi == pytest.approx(out.projection.r_perp @ W() @ out.projection.r_perp)
@@ -71,59 +89,53 @@ def test_score_bundle_uses_raw_quadratic_energy_b0_and_scale_not_scale_squared()
 def test_conditioner_fits_log_energy_and_caps_exp_scale_at_clean_q995():
     X = np.arange(80.0).reshape(40, 2)
     energy = np.exp(0.02 * X[:, 0] + 0.2)
+    train_ids = [("train", i) for i in range(30)]
+    cal_ids = [("cal", i) for i in range(10)]
     c = n.RobustConditioner().fit(
-        X[:30], energy[:30], roles=["normal_train"] * 30,
+        X[:30], energy[:30], provenance=provenance("normal_train", train_ids),
         feature_names=["log_power", "flatness"])
     assert c.fit_manifest_["target"] == "log(max(S_perp, energy_epsilon))"
     uncapped = np.exp(c.predict_log_energy(X[30:]))
-    cap = c.calibrate_cap(X[30:], roles=["normal_calibration"] * 10)
+    cap = c.calibrate_cap(X[30:], provenance=provenance("normal_calibration", cal_ids))
     assert cap == pytest.approx(np.quantile(uncapped, .995, method="higher"))
     assert np.all(c.predict_scale(X) <= cap)
     with pytest.raises(ValueError, match="frozen at q995"):
-        c.calibrate_cap(X[30:], roles=["normal_calibration"] * 10, q=.99)
+        c.calibrate_cap(X[30:], provenance=provenance("normal_calibration", cal_ids), q=.99)
 
 
 # Blocker 2: width cannot leak into the primary tangent basis.
 def test_primary_basis_defaults_to_amplitude_shift_and_rejects_width():
-    b = n.primary_tangent_basis(peak(), n.CANONICAL_TAP_COORDS, W=W())
+    p = pair(); b = n.primary_tangent_basis(p, n.CANONICAL_TAP_COORDS, W=W())
     assert b.names == ("amplitude", "shift")
     assert "width" not in b.names
     with pytest.raises(ValueError, match="width.*diagnostic"):
-        n.normalize_tangents(peak(), n.CANONICAL_TAP_COORDS, W=W(), include_width=True)
-    width = n.build_width_ablation_basis(peak(), n.CANONICAL_TAP_COORDS, W=W())
+        n.normalize_tangents(p, n.CANONICAL_TAP_COORDS, W=W(), include_width=True)
+    width = n.build_width_ablation_basis(p, n.CANONICAL_TAP_COORDS, W=W())
     assert width.names == ("amplitude", "shift", "width")
 
 
 # Blocker 3: covariance provenance is complete and fit is train-only.
 def test_covariance_requires_exact_role_scenario_identity_provenance_and_audits_digest():
-    r = np.arange(270.0).reshape(30, 9)
-    ids = [("cleanStatic", "G01", i) for i in range(30)]
-    c = n.fit_shrinkage_covariance(
-        r, fit_roles=["normal_train"] * 30,
-        scenarios=["cleanStatic"] * 30, identities=ids)
+    ps = pairs(30); ids = [p.identity for p in ps]
+    c = n.fit_shrinkage_covariance(ps, provenance=provenance("normal_train", ids))
     assert c.audit["identity_count"] == 30
     assert len(c.audit["identity_digest_sha256"]) == 64
-    for kw in ({}, {"fit_roles": ["normal_train"] * 30},
-               {"fit_roles": ["normal_train"] * 30, "scenarios": ["cleanStatic"] * 30}):
-        with pytest.raises((TypeError, ValueError), match="mandatory|identit|scenario|role"):
-            n.fit_shrinkage_covariance(r, **kw)
+    with pytest.raises(TypeError, match="provenance"):
+        n.fit_shrinkage_covariance(ps)
     with pytest.raises(ValueError, match="normal_train"):
-        n.fit_shrinkage_covariance(r, fit_roles=["normal_calibration"] * 30,
-                                   scenarios=["cleanStatic"] * 30, identities=ids)
+        n.fit_shrinkage_covariance(ps, provenance=provenance("normal_calibration", ids))
     with pytest.raises(ValueError, match="cleanStatic"):
-        n.fit_shrinkage_covariance(r, fit_roles=["normal_train"] * 29 + ["normal_holdout"],
-                                   scenarios=["cleanStatic"] * 29 + ["DS1"], identities=ids)
-    with pytest.raises(ValueError, match="unique"):
-        n.fit_shrinkage_covariance(r, fit_roles=["normal_train"] * 30,
-                                   scenarios=["cleanStatic"] * 30, identities=[ids[0]] * 30)
+        n.fit_shrinkage_covariance(ps, provenance=provenance("normal_train", ids, "DS1"))
+    with pytest.raises(ValueError, match="exactly match"):
+        n.fit_shrinkage_covariance(ps, provenance=provenance("normal_train", ids[::-1]))
 
 
 # Blocker 4: exact W geometry, decomposition and diagnostics.
 def test_primary_projection_is_unregularized_w_orthogonal_and_decomposes():
-    w = W(); J = n.primary_tangent_basis(peak(), n.CANONICAL_TAP_COORDS, W=w).matrix
+    w = W(); J = n.primary_tangent_basis(pair(), n.CANONICAL_TAP_COORDS, W=w).matrix
     r = np.linspace(-1, 1, 9)
     q = n.weighted_project(r, J, w)
-    assert q.projection_kind == "orthogonal_pinv"
+    assert q.projection_kind == "orthogonal_whitened_svd"
     assert q.ridge == 0
     assert np.linalg.norm(J.T @ w @ q.r_perp) <= 1e-9
     assert q.orthogonality_defect <= 1e-9
@@ -211,20 +223,19 @@ def test_causal_iq_groups_exact_unique_sorted_and_cadence_audited():
 
 # Blocker 8: primary joins cannot silently intersect or mismatch epoch metadata.
 def test_primary_epoch_join_requires_full_identity_and_metadata_equality():
-    ids = [("r", "G1", 1), ("r", "G2", 1)]
-    got, a, b = n.exact_primary_epoch_join(
-        ids, [1, 2], ids[::-1], [20, 10],
-        source_intervals_a=[(0, 1), (0, 1)], source_intervals_b=[(0, 1), (0, 1)],
-        labels_a=[0, 1], labels_b=[1, 0], valid_mask_a=[1, 1], valid_mask_b=[1, 1])
-    assert got == ids and a.tolist() == [1, 2] and b.tolist() == [10, 20]
+    left = records(); right = records((1, 0))
+    a_map = {record.identity_key: score for record, score in zip(left, [1., 2.])}
+    b_map = {record.identity_key: score for record, score in zip(right, [20., 10.])}
+    got, a, b = n.exact_primary_epoch_join(left, a_map, right, b_map)
+    assert got == tuple(record.identity_key for record in left)
+    assert a.tolist() == [1, 2] and b.tolist() == [10, 20]
     with pytest.raises(ValueError, match="full identity set"):
-        n.exact_primary_epoch_join(ids, [1, 2], ids[:1], [1])
+        n.exact_primary_epoch_join(left, a_map, right[:1], {right[0].identity_key: 20.})
     with pytest.raises(ValueError, match="duplicate"):
-        n.exact_primary_epoch_join([ids[0], ids[0]], [1, 2], ids, [1, 2])
-    with pytest.raises(ValueError, match="label"):
-        n.exact_primary_epoch_join(ids, [1, 2], ids, [1, 2], labels_a=[0, 1], labels_b=[0, 0])
-    diag = n.common_epoch_intersection_diagnostic(ids, [1, 2], ids[:1], [3])
-    assert diag.audit["excluded_from_a"] == 1 and diag.identities == (ids[0],)
+        n.exact_primary_epoch_join([left[0], left[0]], a_map, right, b_map)
+    diag_ids = [record.identity_key for record in left]
+    diag = n.common_epoch_intersection_diagnostic(diag_ids, [1, 2], diag_ids[:1], [3])
+    assert diag.audit["excluded_from_a"] == 1 and diag.identities == (diag_ids[0],)
 
 
 # Blocker 9: executable frozen decision grammar and boundaries.
@@ -232,13 +243,18 @@ def decision_inputs(**overrides):
     values = dict(
         clean_nc_fpr=.02, clean_b0_fpr=.01,
         stable_pre_fpr={s: .049 for s in n.ATTACK_SCENARIOS},
+        nc_pauc={s: .7 for s in n.ATTACK_SCENARIOS},
+        b0_pauc={s: .6 for s in n.ATTACK_SCENARIOS},
         pauc_delta={s: .1 for s in n.ATTACK_SCENARIOS},
         nc_delay={s: 1.0 for s in n.ATTACK_SCENARIOS},
         b0_delay={s: 2.0 for s in n.ATTACK_SCENARIOS},
         pauc_ci_lower={s: .01 for s in n.ATTACK_SCENARIOS},
+        pauc_ci_upper={s: .2 for s in n.ATTACK_SCENARIOS},
         equal_rmse_pass=True, second_peak_pass=True,
-        actual_nc_mean_pauc_gain=.01, shuffled_nc_mean_pauc_gain=0.0)
+        actual_nc_mean_pauc=.7, topi_mean_pauc=.6, shuffled_nc_mean_pauc=.61)
     values.update(overrides)
+    if "pauc_delta" in overrides and "nc_pauc" not in overrides and "b0_pauc" not in overrides:
+        values["nc_pauc"] = {scenario: .6 + delta for scenario, delta in values["pauc_delta"].items()}
     return values
 
 
@@ -262,7 +278,8 @@ def test_decision_counts_delay_finiteness_missing_and_no_go_truth_table():
     inf = {s: np.inf for s in n.ATTACK_SCENARIOS}
     assert n.evaluate_stage0_decision(**decision_inputs(pauc_delta=low, nc_delay=inf, b0_delay=inf)).status == "INCONCLUSIVE"
     low["DS2"] = 0
-    assert n.evaluate_stage0_decision(**decision_inputs(pauc_delta=low, nc_delay=inf, b0_delay=inf)).status == "NO-GO"
+    invalid = n.evaluate_stage0_decision(**decision_inputs(pauc_delta=low, nc_delay=inf, b0_delay=inf))
+    assert invalid.status == "INCONCLUSIVE" and invalid.validation_errors
     missing_ci = {s: None for s in n.ATTACK_SCENARIOS}
     assert n.evaluate_stage0_decision(**decision_inputs(pauc_ci_lower=missing_ci)).status == "INCONCLUSIVE"
     no_ci = {s: 0.0 for s in n.ATTACK_SCENARIOS}
@@ -281,8 +298,8 @@ def test_decision_remaining_operator_boundaries_and_missing_evidence():
     assert n.evaluate_stage0_decision(**decision_inputs(pauc_ci_lower=one_ci)).status == "INCONCLUSIVE"
     two_ci = dict(one_ci); two_ci["DS2"] = np.nextafter(0.0, 1)
     assert n.evaluate_stage0_decision(**decision_inputs(pauc_ci_lower=two_ci)).status == "GO"
-    assert n.evaluate_stage0_decision(**decision_inputs(actual_nc_mean_pauc_gain=.01, shuffled_nc_mean_pauc_gain=.01)).status == "INCONCLUSIVE"
-    assert n.evaluate_stage0_decision(**decision_inputs(actual_nc_mean_pauc_gain=0.0, shuffled_nc_mean_pauc_gain=-1.0)).status == "INCONCLUSIVE"
+    assert n.evaluate_stage0_decision(**decision_inputs(actual_nc_mean_pauc=.61, topi_mean_pauc=.6, shuffled_nc_mean_pauc=.61)).status == "INCONCLUSIVE"
+    assert n.evaluate_stage0_decision(**decision_inputs(actual_nc_mean_pauc=.6, topi_mean_pauc=.6, shuffled_nc_mean_pauc=.5)).status == "INCONCLUSIVE"
     assert n.evaluate_stage0_decision(**decision_inputs(clean_b0_fpr=None)).status == "INCONCLUSIVE"
     assert n.evaluate_stage0_decision(**decision_inputs(equal_rmse_pass="true")).status == "INCONCLUSIVE"
 
@@ -290,6 +307,10 @@ def test_config_and_docs_encode_machine_boolean_grammar_and_physical_caveat():
     c = n.load_config()
     assert c["geometry"]["primary_include_width"] is False
     assert c["geometry"]["primary_tangents"] == ["amplitude", "shift"]
+    assert c["geometry"]["basis_provenance"]["primary_kind"] == "primary_amp_shift"
+    assert c["fit_policy"]["typed_provenance"] == "FitProvenance(scenario, role, identities)"
+    assert c["decision"]["evidence_domains"]["fpr"] == "finite [0,1]"
+    assert c["epoch_schema"]["primary_join"] == "exact full identity and metadata equality"
     assert c["decision"]["boolean_grammar"]["GO"] == "c1 && c2 && c3 && c4 && c5 && c6 && c7 && c8"
     assert c["decision"]["machine_grammar"]["criteria"]["c6"]["rhs"] is True
     bad = json.loads(json.dumps(c)); bad["geometry"]["primary_include_width"] = "false"
@@ -298,7 +319,9 @@ def test_config_and_docs_encode_machine_boolean_grammar_and_physical_caveat():
     text = (Path(__file__).parents[1] / "docs" / "NC_TOPI_STAGE0.md").read_text()
     for phrase in ["normalized-shape scale direction", "not physical receiver global gain",
                    "S_perp = r_perp.T W r_perp", "scale, not scale squared",
-                   "full identity set equality", "q99 NC-TOPI median only"]:
+                   "full identity set equality", "q99 NC-TOPI median only",
+                   "FitProvenance(scenario, role, identities)", "primary_amp_shift",
+                   "validation_errors"]:
         assert phrase in text
 
 
@@ -307,7 +330,8 @@ def test_aggregation_quantile_split_and_synthetic_contracts():
     ids = np.array(["G04", "G01", "G03", "G02", "G05"]); s = np.array([4., 1, 3, 2, 100])
     assert n.aggregate_prn_scores(ids, s).score == 3
     assert n.aggregate_prn_scores(ids, s, "top25_mean").score == 52
-    threshold = n.higher_quantile([1, 2, 3, 4], .5, fit_roles=["normal_calibration"] * 4)
+    threshold = n.calibrate_threshold([1, 2, 3, 4], .5, provenance=provenance(
+        "normal_calibration", [("cal", i) for i in range(4)])).value
     assert threshold == 3 and n.strict_alarms([3, np.nextafter(3., 4.)], threshold).tolist() == [False, True]
     m = n.source_support_split([0, 320, 420], [300, 400, 421], scenario="cleanStatic")
     assert m.train.tolist() == [1, 0, 0] and m.calibration.tolist() == [0, 1, 0] and m.holdout.tolist() == [0, 0, 1]
@@ -315,3 +339,174 @@ def test_aggregation_quantile_split_and_synthetic_contracts():
     assert np.allclose(n.second_peak_perturbation(p, x, .2, .25) - p, np.sqrt(.2) * n.shift_peak(p, x, .25))
     assert n.standardized_pauc([0, 0, 1, 1], [.1, .2, .8, .9]) == pytest.approx(
         roc_auc_score([0, 0, 1, 1], [.1, .2, .8, .9], max_fpr=.05))
+
+
+# Release-blocker regression: every primary and fit path is typed and fail-closed.
+def test_primary_basis_is_immutable_pair_bound_and_width_has_diagnostic_score_only():
+    p = pair()
+    basis = n.primary_tangent_basis(p, n.CANONICAL_TAP_COORDS, W=W())
+    assert basis.basis_kind == "primary_amp_shift"
+    assert basis.names == ("amplitude", "shift")
+    assert not basis.matrix.flags.writeable
+    with pytest.raises(ValueError):
+        basis.matrix[0, 0] = 123
+    with pytest.raises(TypeError, match="factory-only"):
+        n.TangentBasis()
+    with pytest.raises(ValueError):
+        basis.matrix.flags.writeable = True
+    assert not p.predicted_raw.flags.writeable
+    out = n.produce_nc_topi_scores(p, basis, W())
+    assert out.identity == p.identity
+    with pytest.raises((TypeError, ValueError), match="TangentBasis|basis"):
+        n.produce_nc_topi_scores(p, basis.matrix, W())
+    with pytest.raises((TypeError, ValueError), match="predicted|identity|coordinate"):
+        n.produce_nc_topi_scores(pair(("other", "G01", 7)), basis, W())
+    with pytest.raises((TypeError, ValueError), match="PeakPredictionPair"):
+        n.primary_tangent_basis(p.residual_raw, n.CANONICAL_TAP_COORDS, W=W())
+    width = n.build_width_ablation_basis(p, n.CANONICAL_TAP_COORDS, W=W())
+    assert width.basis_kind == "width_diagnostic"
+    with pytest.raises(ValueError, match="diagnostic|primary"):
+        n.produce_nc_topi_scores(p, width, W())
+    diagnostic = n.produce_width_ablation_scores(p, width, W())
+    assert diagnostic.label == "width_diagnostic" and diagnostic.primary is False
+    fake = n.TangentBasis._create(
+        p, p.coordinates, np.ones_like(basis.matrix), np.ones_like(basis.raw),
+        ("amplitude", "shift"), "primary_amp_shift", {})
+    with pytest.raises(ValueError, match="arbitrary basis"):
+        n.produce_nc_topi_scores(p, fake, W())
+
+
+def test_covariance_derives_raw_residuals_from_typed_pairs_and_fit_provenance():
+    ps = pairs(30); ids = [p.identity for p in ps]
+    fit = n.fit_shrinkage_covariance(ps, provenance=provenance("normal_train", ids))
+    assert fit.audit["residual_space"] == n.RAW_SPACE
+    assert fit.audit["pair_identity_digest_sha256"]
+    with pytest.raises((TypeError, ValueError), match="PeakPredictionPair|ResidualBatch"):
+        n.fit_shrinkage_covariance(np.stack([p.residual_standardized for p in ps]),
+                                   provenance=provenance("normal_train", ids))
+    batch = n.ResidualBatch.from_pairs(ps)
+    assert not batch.residual_raw.flags.writeable
+    with pytest.raises(TypeError, match="factory-only"):
+        n.ResidualBatch()
+    n.fit_shrinkage_covariance(batch, provenance=provenance("normal_train", ids))
+
+
+def test_primary_whitened_svd_projection_reports_effective_rank_and_tolerance():
+    J = np.diag([1., 1e-6]); r = np.array([1., 1.]); w = np.eye(2)
+    q = n.weighted_project(r, J, w, pinv_rcond=1e-10)
+    assert q.effective_rank == 2 and q.rank == 2
+    assert q.rank_tolerance == pytest.approx(1e-10)
+    assert q.orthogonality_defect <= q.orthogonality_tolerance
+    assert q.orthogonality_verified_full_span
+    dropped = n.weighted_project(r, J, w, pinv_rcond=1e-5)
+    assert dropped.effective_rank == 1
+    assert not dropped.orthogonality_verified_full_span
+    assert dropped.orthogonality_scope == "retained_effective_tangent_span"
+
+
+def test_sustained_alarm_sorts_per_recording_rejects_duplicates_and_audits_each_recording():
+    out = n.sustained_alarm_delay(
+        [11., 10., 10.5, 21., 20., 20.5], [1] * 6,
+        recording_ids=["a", "a", "a", "b", "b", "b"],
+        post_eligible_mask=[1] * 6, onset=10.,
+        stable_pre_mask=[0, 0, 0, 1, 0, 0])
+    assert out.alarm_time == 11. and out.delay == 1.
+    assert out.stable_pre_alarm_by_recording == {"a": False, "b": True}
+    with pytest.raises(ValueError, match="duplicate"):
+        n.sustained_alarm_delay([10, 10], [1, 1], recording_ids=["a", "a"],
+                                post_eligible_mask=[1, 1], onset=10)
+
+
+@pytest.mark.parametrize("bad", ["", "   ", None, 3])
+def test_iq_group_ids_are_nonempty_strings_and_cannot_cross_groups(bad):
+    with pytest.raises(ValueError, match="group.*nonempty string"):
+        n.build_causal_iq_context([2], [1], np.ones((1, 1)), history=1,
+                                  target_groups=[bad], block_groups=[bad])
+    with pytest.raises(ValueError, match="exactly match"):
+        n.build_causal_iq_context([2], [1], np.ones((1, 1)), history=1,
+                                  target_groups=["recording-a"], block_groups=["recording-b"])
+
+
+def test_epoch_record_primary_join_has_fixed_identity_and_mandatory_equal_metadata():
+    left = records(); right = records((1, 0))
+    score_a = {record.identity_key: float(i + 1) for i, record in enumerate(left)}
+    score_b = {right[0].identity_key: 20., right[1].identity_key: 10.}
+    identity, a, b = n.exact_primary_epoch_join(left, score_a, right, score_b)
+    assert identity == tuple(record.identity_key for record in left)
+    assert a.tolist() == [1, 2] and b.tolist() == [10, 20]
+    changed = list(right)
+    changed[0] = n.EpochRecord("rec", "DS1", "event-1", 101.5, 100.5, 101.5, True, 0)
+    with pytest.raises(ValueError, match="label"):
+        n.exact_primary_epoch_join(left, score_a, changed, score_b)
+    with pytest.raises(ValueError, match="score map"):
+        n.exact_primary_epoch_join(left, {left[0].identity_key: 1.}, right, score_b)
+
+
+def test_decision_invalid_domains_and_scenario_sets_are_always_inconclusive():
+    base = decision_inputs()
+    base.update(
+        nc_pauc={s: .7 for s in n.ATTACK_SCENARIOS},
+        b0_pauc={s: .6 for s in n.ATTACK_SCENARIOS},
+        pauc_ci_upper={s: .2 for s in n.ATTACK_SCENARIOS},
+        actual_nc_mean_pauc=.7, topi_mean_pauc=.6, shuffled_nc_mean_pauc=.61)
+    assert n.evaluate_stage0_decision(**base).status == "GO"
+    malformed = [
+        ("clean_nc_fpr", -1), ("clean_b0_fpr", 1.1),
+        ("actual_nc_mean_pauc", np.nan), ("topi_mean_pauc", np.inf),
+        ("equal_rmse_pass", 1),
+    ]
+    for key, value in malformed:
+        bad = dict(base); bad[key] = value
+        out = n.evaluate_stage0_decision(**bad)
+        assert out.status == "INCONCLUSIVE" and out.validation_errors
+    bad = dict(base); bad["pauc_ci_lower"] = {s: .3 for s in n.ATTACK_SCENARIOS}
+    assert n.evaluate_stage0_decision(**bad).validation_errors
+    for mapping_name in ("stable_pre_fpr", "pauc_delta", "nc_delay", "b0_delay",
+                         "pauc_ci_lower", "pauc_ci_upper", "nc_pauc", "b0_pauc"):
+        bad = dict(base); values = dict(bad[mapping_name]); values.pop("DS8"); values["DS9"] = 0
+        bad[mapping_name] = values
+        out = n.evaluate_stage0_decision(**bad)
+        assert out.status == "INCONCLUSIVE" and out.validation_errors
+    bad = dict(base); bad["nc_delay"] = {s: (-1 if s == "DS1" else None) for s in n.ATTACK_SCENARIOS}
+    assert n.evaluate_stage0_decision(**bad).validation_errors
+
+
+def test_all_fit_and_calibration_apis_require_disjoint_typed_clean_provenance():
+    X = np.arange(80.).reshape(40, 2); y = np.linspace(1, 2, 40)
+    train_ids = [("train", i) for i in range(30)]
+    cal_ids = [("cal", i) for i in range(10)]
+    c = n.RobustConditioner().fit(X[:30], y[:30],
+                                  provenance=provenance("normal_train", train_ids))
+    assert c.fit_manifest_["identity_digest_sha256"]
+    assert len(c.fit_manifest_["fit_digest_sha256"]) == 64
+    c.calibrate_cap(X[30:], provenance=provenance("normal_calibration", cal_ids))
+    with pytest.raises((TypeError, ValueError), match="provenance"):
+        n.RobustConditioner().fit(X[:30], y[:30])
+    for scenario, role in (("DS1", "normal_train"), ("cleanStatic", "normal_calibration")):
+        with pytest.raises(ValueError, match="cleanStatic|normal_train"):
+            n.RobustConditioner().fit(X[:30], y[:30],
+                                      provenance=provenance(role, train_ids, scenario))
+    with pytest.raises(ValueError, match="disjoint"):
+        c.calibrate_cap(X[:10], provenance=provenance("normal_calibration", train_ids[:10]))
+    with pytest.raises(ValueError, match="normal_calibration"):
+        c.calibrate_cap(X[30:], provenance=provenance("normal_train", cal_ids))
+    with pytest.raises(ValueError, match="cleanStatic"):
+        c.calibrate_cap(X[30:], provenance=provenance("normal_calibration", cal_ids, "DS1"))
+    with pytest.raises(ValueError, match="length"):
+        c.calibrate_cap(X[30:], provenance=provenance("normal_calibration", cal_ids[:-1]))
+    with pytest.raises(TypeError, match="provenance"):
+        n.calibrate_threshold(y[30:], .99, provenance=None)
+    with pytest.raises(ValueError, match="normal_calibration"):
+        n.calibrate_threshold(y[30:], .99, provenance=provenance("normal_train", cal_ids))
+    threshold = n.calibrate_threshold(y[30:], .99,
+                                      provenance=provenance("normal_calibration", cal_ids))
+    assert threshold.identity_digest_sha256 and threshold.value == pytest.approx(y[-1])
+    shuffled = n.shuffled_control_target(y[:30], provenance=provenance("normal_train", train_ids))
+    assert np.array_equal(shuffled, n.shuffled_control_target(
+        y[:30], provenance=provenance("normal_train", train_ids)))
+    with pytest.raises(ValueError, match="cleanStatic"):
+        n.shuffled_control_target(y[:30], provenance=provenance("normal_train", train_ids, "DS1"))
+    with pytest.raises(ValueError, match="normal_train"):
+        n.shuffled_control_target(y[:30], provenance=provenance("normal_calibration", train_ids))
+    with pytest.raises(TypeError, match="provenance"):
+        n.shuffled_control_target(y[:30], provenance=None)

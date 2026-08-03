@@ -99,8 +99,16 @@
     "covariance_required_identity_provenance": true,
     "covariance_fit_audit": [
       "identity_count",
-      "identity_digest_sha256"
-    ]
+      "identity_digest_sha256",
+      "pair_identity_digest_sha256",
+      "residual_space"
+    ],
+    "typed_provenance": "FitProvenance(scenario, role, identities)",
+    "covariance_input": "PeakPredictionPair sequence or ResidualBatch.from_pairs only",
+    "conditioner_fit": "cleanStatic normal_train with identity and full fit digests",
+    "conditioner_cap": "cleanStatic normal_calibration identities disjoint from train",
+    "threshold_calibration": "typed cleanStatic normal_calibration with identity digest",
+    "shuffle_control": "deterministic within cleanStatic normal_train only"
   },
   "split": {
     "train": {
@@ -180,7 +188,11 @@
     "sustained_alarm": {
       "required_contiguous_epochs": 3,
       "cadence_seconds": 0.5,
-      "reset_on_recording_or_time_gap": true
+      "reset_on_recording_or_time_gap": true,
+      "input_order": "sort within physical recording",
+      "duplicate_recording_time": "reject",
+      "result": "globally earliest alarm availability and delay",
+      "stable_pre_audit": "per physical recording"
     },
     "bootstrap": {
       "paired": true,
@@ -208,17 +220,22 @@
     "covariance": {
       "estimator": "Ledoit-Wolf",
       "fit": "cleanStatic normal_train residual_raw only",
-      "eigenvalue_floor": "1e-8*trace/dim"
+      "eigenvalue_floor": "1e-8*trace/dim",
+      "input": "validated PeakPredictionPair sequence or ResidualBatch.from_pairs",
+      "audit_binding": "pair identity digest + prompt_relative_ratio_raw tag"
     },
     "precision": {
       "method": "pseudoinverse"
     },
     "projection": {
-      "primary": "unregularized Moore-Penrose of J.T W J",
+      "primary": "whitened SVD W-metric projector",
       "pinv_rcond": 1e-10,
       "ridge": "explicit diagnostic only: ridge_diagnostic_not_orthogonal",
       "decomposition": "total = tangent + perpendicular + cross",
-      "orthogonality": "report norm(J.T W r_perp)"
+      "orthogonality": "report norm(J.T W r_perp)",
+      "rank": "effective rank uses the same explicit SVD cutoff as projection",
+      "fail_closed": "retained-span orthogonality and energy decomposition checked at machine-epsilon-scaled tolerance",
+      "dropped_direction_contract": "report retained_effective_tangent_span; never claim full-span orthogonality"
     },
     "tangents": [
       "amplitude (normalized-shape scale direction)",
@@ -226,13 +243,13 @@
       "width only via diagnostic builder"
     ],
     "score_space": "raw prompt-relative-ratio",
-    "pair_contract": "actual_raw and predicted_raw required; residual_raw=actual_raw-predicted_raw; residual_standardized=residual_raw/standardizer_std",
+    "pair_contract": "actual_raw and predicted_raw required; residual_raw=actual_raw-predicted_raw; residual_standardized=residual_raw/standardizer_std; explicit physical coordinates required and immutable",
     "primary_include_width": false,
     "primary_tangents": [
       "amplitude",
       "shift"
     ],
-    "width_builder": "build_width_ablation_basis diagnostic only",
+    "width_builder": "build_width_ablation_basis + produce_width_ablation_scores; diagnostic label required",
     "amplitude_semantics": "normalized-shape scale direction, not physical receiver global gain",
     "prn_score": {
       "TOPI": "S_perp = r_perp.T W r_perp",
@@ -240,6 +257,18 @@
       "conditioner_target": "log(max(S_perp, energy_epsilon))",
       "predicted_scale": "exp(predicted_log_energy), capped at clean-calibration higher q995",
       "NC_TOPI": "S_perp/max(capped_scale, energy_epsilon)"
+    },
+    "basis_provenance": {
+      "object": "immutable factory-only TangentBasis",
+      "primary_kind": "primary_amp_shift",
+      "width_kind": "width_diagnostic",
+      "bound_digests": [
+        "peak identity",
+        "coordinates",
+        "predicted_raw"
+      ],
+      "primary_score_input": "PeakPredictionPair + TangentBasis",
+      "raw_matrix_primary_input": false
     }
   },
   "iq_conditioner": {
@@ -276,7 +305,7 @@
       "scope": "within clean train before regression",
       "attack_shuffle": false
     },
-    "target_group_contract": "target_groups and block_groups mandatory with exact set equality; unique sorted block end per recording; cadence audited"
+    "target_group_contract": "target_groups and block_groups are nonempty strings with exact set equality; unique sorted block end per recording; cadence audited; no cross-group history"
   },
   "synthetic": {
     "second_peak_relative_powers": [
@@ -411,6 +440,42 @@
         ]
       },
       "missing_mandatory": "blocks GO; does not itself trigger NO-GO"
+    },
+    "evidence_domains": {
+      "fpr": "finite [0,1]",
+      "pauc_points_and_means": "finite [0,1]",
+      "pauc_delta_and_ci": "finite [-1,1], CI lower <= upper",
+      "delays": "finite >=0 or explicit censored null",
+      "scenario_sets": "exactly DS1,DS2,DS3,DS7,DS8",
+      "physics_flags": "true JSON/Python booleans only",
+      "invalid_evidence": "INCONCLUSIVE with validation_errors; cannot trigger GO or NO-GO"
     }
+  },
+  "epoch_schema": {
+    "required_fields": [
+      "physical_recording_id",
+      "scenario",
+      "prn_or_event_id",
+      "availability_time_s",
+      "source_start_s",
+      "source_end_s",
+      "valid",
+      "label"
+    ],
+    "identity_key": [
+      "physical_recording_id",
+      "scenario",
+      "prn_or_event_id",
+      "availability_time_s"
+    ],
+    "event_ids_supported": true,
+    "primary_join": "exact full identity and metadata equality",
+    "mandatory_metadata_equality": [
+      "source_start_s",
+      "source_end_s",
+      "label",
+      "valid"
+    ],
+    "diagnostic_intersection_only": "common_epoch_intersection_diagnostic"
   }
 }

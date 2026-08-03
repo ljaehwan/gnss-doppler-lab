@@ -43,6 +43,14 @@ them from an assumed spacing.
 
 All fitting—standardization, covariance, regression, and thresholding—uses only
 cleanStatic roles. Attack rows and normal holdout rows can never fit anything.
+Every public fit/calibration path requires the immutable typed
+`FitProvenance(scenario, role, identities)`. Covariance and conditioner training
+require `cleanStatic normal_train` and derives a fit digest over provenance, predictors,
+and target; conditioner cap and detector threshold require
+`cleanStatic normal_calibration`, record an identity digest, and calibration
+identities must be disjoint from conditioner-fit identities. The shuffled control
+is a deterministic permutation strictly within typed clean train. Array-only
+quantile/covariance math helpers are low-level and are not primary fit entry points.
 Split by complete source support:
 
 - train: `source_end <= 300`;
@@ -57,8 +65,11 @@ pre-post epoch; post requires `source_start >= onset`; persistent requires
 Already-alarming stable-pre status is always reported.
 
 A sustained alarm is three contiguous 0.5 s epochs within the same physical
-recording and without a time gap. A recording/time gap resets the run. The
-reported alarm time is the availability time of the third epoch.
+recording and without a time gap. Recording IDs are nonempty, duplicate
+`(recording,time)` rows are rejected, and input is sorted within each recording
+before independent run evaluation. A recording/time gap resets the run. The
+reported result is the globally earliest third-alarm availability and delay;
+already-alarming stable-pre status is audited separately for every recording.
 
 ## Geometry and scores
 
@@ -66,8 +77,9 @@ reported alarm time is the availability time of the third epoch.
 
 Every score starts from a validated `PeakPredictionPair`. It requires both the
 actual and predicted raw prompt-relative magnitude-ratio peaks, their full epoch
-identity, the frozen standardizer standard deviation, and the B0-standardized
-residual. Residual-only construction is forbidden. Runtime validation enforces
+identity, explicit immutable physical coordinates, the frozen standardizer
+standard deviation, and the B0-standardized residual. Residual-only construction
+is forbidden. Runtime validation enforces
 `residual_raw = actual_raw - predicted_raw` and
 `residual_standardized ~= residual_raw / standardizer_std`; there is no default
 `input_kind` that can weaken this rule.
@@ -81,19 +93,30 @@ Negative quadratic energy is not blindly clamped: only tiny floating-point
 negative values are tolerated; a material negative value fails closed.
 
 Covariance is Ledoit-Wolf fit only on `cleanStatic` `normal_train`
-`residual_raw`. Role, scenario, and unique full identities are mandatory.
-The fit audit returns identity count and a SHA-256 identity digest. Calibration,
+`residual_raw`, derived internally from a validated `PeakPredictionPair` sequence
+or `ResidualBatch.from_pairs`. Public primary fit never accepts a raw ndarray, so
+standardized residuals cannot be mislabeled. Its audit binds the raw-space tag,
+pair identity count, provenance digest, and pair identity digest. Calibration,
 holdout, mixed, missing-provenance, or attack rows are rejected. `W` must be
 symmetric positive semidefinite.
 
-The primary projection is the unregularized Moore-Penrose solution on
-`J.T W J`, including rank-deficient bases, and checks `J.T W r_perp ~= 0`.
+The primary projection is a whitening/SVD W-metric projector. Effective rank uses
+the exact same explicit singular-value cutoff as projection. It returns that rank,
+cutoff, machine-epsilon-scaled orthogonality tolerance, retained-span and full-span
+defects, and verifies energy decomposition. If a small direction is dropped, the
+result is labeled `retained_effective_tangent_span` and never falsely claims
+full-span orthogonality. A retained-span defect beyond tolerance fails closed.
 Ridge exists only in the separately named diagnostic path and is marked
 `ridge_diagnostic_not_orthogonal`; it cannot be represented as primary.
 
 The frozen primary basis is amplitude plus shift, with width defaulting to
-JSON boolean `false`. The primary builder rejects width; a separate width
-ablation builder is diagnostic only. Because inputs are prompt normalized,
+JSON boolean `false`. `TangentBasis` is a factory-only immutable provenance
+object: `primary_amp_shift` binds peak identity, coordinates, and `predicted_raw`
+digests plus exact names/matrix. Primary score accepts only the matching
+`PeakPredictionPair + TangentBasis`; raw, arbitrary, residual-generated, width,
+or mismatched bases fail closed. The separate `width_diagnostic` builder and
+score result are explicitly labeled diagnostic and cannot enter primary. Because
+inputs are prompt normalized,
 the requested amplitude column is a **normalized-shape scale direction**, not
 physical receiver global gain. It is not physical receiver global gain. Physical receiver global gain was removed by
 prompt normalization and cannot be claimed as an identified nuisance. The
@@ -113,19 +136,24 @@ Low-FPR performance is sklearn standardized **McClish** partial AUC with
 
 ### Identity, timing, IQ, and uncertainty
 
-The primary epoch join requires full identity set equality and rejects duplicate
-identities. When supplied, source interval, label, and valid mask must also be
-identical after exact identity alignment. It never silently intersects. A
-separately named common-mask diagnostic reports all exclusions.
+The immutable `EpochRecord` requires physical recording ID, scenario,
+PRN-or-event ID, availability time, source start/end, valid true bool, and label.
+Its fixed full key is `(physical_recording_id, scenario, prn_or_event_id,
+availability_time_s)`, so event-level evaluation is supported without weakening
+identity. The primary epoch join accepts records and exact score maps, requires
+full identity set equality, and makes source interval, label, and valid equality
+mandatory after alignment. It never silently intersects. A separately named
+common-mask diagnostic reports all exclusions.
 
 Sustained alarm evaluation requires recording IDs and a post-eligible mask.
 Runs reset at recording changes, cadence gaps, and transition/non-post rows.
 Delay is the third alarm's availability `source_end` minus onset; a stable-pre
 mask reports already-alarming status separately.
 
-IQ `target_groups` and `block_groups` are mandatory and their group sets must
-match exactly. Duplicate block ends within a group and unsorted group time are
-rejected; cadence and gaps are audited, and a valid history is contiguous.
+IQ `target_groups` and `block_groups` are mandatory nonempty strings and their
+group sets must match exactly. Duplicate block ends within a group and unsorted
+group time are rejected; cadence and gaps are audited, a valid history is
+contiguous, and blocks can never cross groups.
 There is no cross-recording default.
 The runner reads raw int16 IQ at 25 MHz and takes one 10 ms block every 0.5 s.
 The four frozen features remain log power, robust noise-floor scale, spectral
@@ -162,8 +190,14 @@ The exact physics pass grammar is:
 
 ## Frozen decision grammar
 
-The machine evaluator accepts only q99 NC-TOPI median primary evidence. Its
-criteria use these exact operators:
+The machine evaluator accepts only q99 NC-TOPI median primary evidence. Before
+applying any criterion it validates evidence domains: FPRs and pAUC points/means
+must be finite in `[0,1]`; pAUC deltas and both CI endpoints must be finite in
+`[-1,1]` with lower `<=` upper; delays must be finite and nonnegative or explicit
+censored `None`; every scenario mapping must have exactly DS1/DS2/DS3/DS7/DS8;
+and physics flags must be true booleans. Malformed or missing evidence always
+returns **INCONCLUSIVE** with `validation_errors`, never GO or NO-GO. Its criteria
+use these exact operators:
 
 1. `c1`: clean-holdout NC FPR `<= .02`.
 2. `c2`: NC clean-holdout FPR minus B0 clean-holdout FPR `<= .01`.
@@ -184,6 +218,7 @@ least three, all five improvement outcomes are known and the pass count is at
 most one, or all five CI outcomes are known and the positive count is zero.
 NO-GO triggers have precedence. Missing or censored mandatory evidence prevents
 GO but is not invented as a failure; absent an explicit NO-GO trigger the result
-is **INCONCLUSIVE**. Infinite delay is censored/non-finite and cannot satisfy the
-delay alternative. Width, top25, q995, legacy residual controls, and all other
+is **INCONCLUSIVE**. Only explicit `None` represents a censored delay; NaN,
+infinity, and negative delay are invalid evidence and produce `validation_errors`.
+Width, top25, q995, legacy residual controls, and all other
 diagnostics cannot alter or rescue this result.

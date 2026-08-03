@@ -11,7 +11,8 @@ import hashlib
 import json
 import math
 from pathlib import Path
-from typing import Callable, Mapping, Sequence
+from types import MappingProxyType
+from typing import Mapping
 
 import numpy as np
 from sklearn.covariance import LedoitWolf
@@ -53,6 +54,65 @@ def _identity_list(values, n, *, name="identities"):
     if len(set(result)) != len(result):
         raise ValueError(f"{name} contains duplicate identities; identities must be unique")
     return result
+
+
+
+def _digest_json(value):
+    encoded = json.dumps(value, separators=(",", ":"), ensure_ascii=True,
+                         default=str).encode()
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def _identity_digest(identities):
+    return _digest_json([list(identity) for identity in identities])
+
+
+def _array_digest(value):
+    array = np.ascontiguousarray(np.asarray(value, dtype=np.float64))
+    payload = str(array.shape).encode() + b"|float64|" + array.tobytes()
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _readonly_array(value, name, ndim=None):
+    source = np.ascontiguousarray(_array(value, name, ndim), dtype=np.float64)
+    # A bytes-backed view cannot have WRITEABLE re-enabled by a caller.
+    array = np.frombuffer(source.tobytes(), dtype=np.float64).reshape(source.shape)
+    array.setflags(write=False)
+    return array
+
+
+@dataclass(frozen=True)
+class FitProvenance:
+    """Exact immutable row provenance required by every fit/calibration API."""
+
+    scenario: str
+    role: str
+    identities: tuple[tuple[object, ...], ...]
+
+    def __post_init__(self):
+        if not isinstance(self.scenario, str) or not self.scenario.strip():
+            raise ValueError("fit provenance scenario must be a nonempty string")
+        if not isinstance(self.role, str) or not self.role.strip():
+            raise ValueError("fit provenance role must be a nonempty string")
+        identities = tuple(_identity_list(self.identities, len(self.identities),
+                                          name="fit provenance identities"))
+        if not identities:
+            raise ValueError("fit provenance identities cannot be empty")
+        object.__setattr__(self, "identities", identities)
+
+    @property
+    def identity_digest_sha256(self):
+        return _identity_digest(self.identities)
+
+
+def _require_provenance(provenance, rows, *, role):
+    if not isinstance(provenance, FitProvenance):
+        raise TypeError("typed fit provenance (FitProvenance) is mandatory")
+    if provenance.scenario != "cleanStatic" or provenance.role != role:
+        raise ValueError(f"fit requires cleanStatic {role} provenance")
+    if len(provenance.identities) != rows:
+        raise ValueError("fit provenance identities length must match rows")
+    return provenance
 
 
 def _default_config_path():
@@ -101,6 +161,21 @@ def validate_config(config: Mapping[str, object]) -> None:
     criteria = machine.get("criteria", {})
     if criteria.get("c6", {}).get("rhs") is not True or criteria.get("c7", {}).get("rhs") is not True:
         raise ValueError("physics criteria must use JSON boolean true")
+    provenance = config.get("fit_policy", {}).get("typed_provenance")
+    if provenance != "FitProvenance(scenario, role, identities)":
+        raise ValueError("typed fit provenance contract changed")
+    basis = geometry.get("basis_provenance", {})
+    if (basis.get("primary_kind") != "primary_amp_shift"
+            or basis.get("width_kind") != "width_diagnostic"
+            or basis.get("raw_matrix_primary_input") is not False):
+        raise ValueError("sealed tangent basis provenance contract changed")
+    epoch = config.get("epoch_schema", {})
+    if epoch.get("primary_join") != "exact full identity and metadata equality":
+        raise ValueError("EpochRecord primary join contract changed")
+    domains = decision.get("evidence_domains", {})
+    if (domains.get("fpr") != "finite [0,1]"
+            or "validation_errors" not in str(domains.get("invalid_evidence", ""))):
+        raise ValueError("decision evidence validation contract changed")
 
 
 def load_config(path=None):
@@ -112,7 +187,7 @@ def load_config(path=None):
 
 @dataclass(frozen=True)
 class PeakPredictionPair:
-    """One exact B0 target/prediction pair with explicit coordinate spaces."""
+    """One exact B0 target/prediction pair bound to physical coordinates."""
 
     actual_raw: np.ndarray
     predicted_raw: np.ndarray
@@ -122,14 +197,18 @@ class PeakPredictionPair:
     actual_space: str
     predicted_space: str
     residual_space: str
+    coordinates: np.ndarray
 
     def __post_init__(self):
         actual = _array(self.actual_raw, "actual_raw", 1)
         predicted = _array(self.predicted_raw, "predicted_raw", 1)
         standardized = _array(self.residual_standardized, "residual_standardized", 1)
         std = _array(self.standardizer_std, "standardizer_std")
+        coordinates = _array(self.coordinates, "coordinates", 1)
         if actual.shape != predicted.shape or actual.shape != standardized.shape:
             raise ValueError("actual, predicted, and standardized residual shapes must match")
+        if coordinates.shape != actual.shape or np.any(np.diff(coordinates) <= 0):
+            raise ValueError("coordinates must match peaks and be strictly increasing")
         if std.ndim == 0:
             std = np.full(actual.shape, float(std))
         if std.ndim != 1 or std.shape != actual.shape or np.any(std <= 0):
@@ -146,20 +225,85 @@ class PeakPredictionPair:
             raise ValueError("residual_standardized must equal (actual_raw-predicted_raw)/standardizer_std")
         for name, value in (("actual_raw", actual), ("predicted_raw", predicted),
                             ("residual_standardized", standardized), ("standardizer_std", std),
-                            ("identity", identity)):
+                            ("coordinates", coordinates), ("identity", identity)):
+            if isinstance(value, np.ndarray):
+                value = _readonly_array(value, name, value.ndim)
             object.__setattr__(self, name, value)
 
     @property
     def residual_raw(self):
-        return self.actual_raw - self.predicted_raw
+        result = self.actual_raw - self.predicted_raw
+        result.setflags(write=False)
+        return result
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, init=False)
 class TangentBasis:
+    """Factory-only immutable tangent object sealed to one prediction pair."""
+
+    basis_kind: str
+    peak_identity_digest: str
+    coordinates_digest: str
+    predicted_raw_digest: str
     matrix: np.ndarray
     raw: np.ndarray
     names: tuple[str, ...]
-    metadata: dict[str, object]
+    metadata: Mapping[str, object]
+    _construction_seal: str
+
+    def __new__(cls, *args, **kwargs):
+        raise TypeError("TangentBasis is factory-only; use a pair-bound basis builder")
+
+    @classmethod
+    def _create(cls, pair, coords, matrix, raw, names, basis_kind, metadata):
+        instance = object.__new__(cls)
+        identity_digest = _identity_digest((pair.identity,))
+        coords_digest = _array_digest(coords)
+        predicted_digest = _array_digest(pair.predicted_raw)
+        names = tuple(names)
+        seal = _digest_json([basis_kind, identity_digest, coords_digest,
+                             predicted_digest, names, _array_digest(matrix)])
+        values = (
+            ("basis_kind", basis_kind), ("peak_identity_digest", identity_digest),
+            ("coordinates_digest", coords_digest), ("predicted_raw_digest", predicted_digest),
+            ("matrix", _readonly_array(matrix, "matrix", 2)),
+            ("raw", _readonly_array(raw, "raw", 2)), ("names", names),
+            ("metadata", MappingProxyType(dict(metadata))), ("_construction_seal", seal))
+        for name, value in values:
+            object.__setattr__(instance, name, value)
+        return instance
+
+    def validate_for_pair(self, pair, W, *, primary):
+        if not isinstance(pair, PeakPredictionPair):
+            raise TypeError("TangentBasis validation requires PeakPredictionPair")
+        expected_kind = "primary_amp_shift" if primary else "width_diagnostic"
+        if self.basis_kind != expected_kind:
+            raise ValueError(f"{self.basis_kind} basis cannot be used as {expected_kind}")
+        expected_names = ("amplitude", "shift") if primary else ("amplitude", "shift", "width")
+        if self.names != expected_names:
+            raise ValueError("basis names do not match its sealed basis kind")
+        expected = (_identity_digest((pair.identity,)), _array_digest(pair.coordinates),
+                    _array_digest(pair.predicted_raw))
+        actual = (self.peak_identity_digest, self.coordinates_digest, self.predicted_raw_digest)
+        for label, left, right in zip(("identity", "coordinate", "predicted"), actual, expected):
+            if left != right:
+                raise ValueError(f"basis {label} provenance does not match PeakPredictionPair")
+        seal = _digest_json([self.basis_kind, *actual, self.names, _array_digest(self.matrix)])
+        if seal != self._construction_seal:
+            raise ValueError("TangentBasis construction seal is invalid; arbitrary basis rejected")
+        weight = _validate_weight(W, len(pair.predicted_raw))
+        first = np.gradient(pair.predicted_raw, pair.coordinates, edge_order=2)
+        columns = [pair.predicted_raw, first]
+        if not primary:
+            columns.append(np.gradient(first, pair.coordinates, edge_order=2))
+        expected_matrix = np.column_stack(columns)
+        for column in range(expected_matrix.shape[1]):
+            norm2 = float(expected_matrix[:, column] @ weight @ expected_matrix[:, column])
+            if norm2 <= 0:
+                raise ValueError("basis tangent has zero W norm")
+            expected_matrix[:, column] /= math.sqrt(norm2)
+        if not np.allclose(self.matrix, expected_matrix, rtol=1e-12, atol=1e-14):
+            raise ValueError("arbitrary basis matrix rejected; tangents must derive from predicted_raw")
 
 
 def _validate_weight(W, dimension, *, symmetry_atol=1e-12, psd_atol=1e-12):
@@ -176,11 +320,15 @@ def _validate_weight(W, dimension, *, symmetry_atol=1e-12, psd_atol=1e-12):
     return weight
 
 
-def _build_tangents(predicted_peak, coords, W, *, include_width, low_signal_epsilon):
-    p = _array(predicted_peak, "predicted_peak", 1)
+def _build_tangents(pair, coords, W, *, include_width, low_signal_epsilon):
+    if not isinstance(pair, PeakPredictionPair):
+        raise TypeError("tangent construction requires PeakPredictionPair")
+    p = pair.predicted_raw
     x = _array(coords, "coords", 1)
     if p.shape != x.shape or p.size < 3 or np.any(np.diff(x) <= 0):
-        raise ValueError("predicted_peak and strictly increasing physical coords must match")
+        raise ValueError("predicted peak and strictly increasing physical coords must match")
+    if not np.array_equal(x, pair.coordinates):
+        raise ValueError("explicit coordinates do not match PeakPredictionPair coordinates")
     if np.linalg.norm(p) <= low_signal_epsilon:
         raise ValueError("low-signal predicted peak cannot define tangents")
     first = np.gradient(p, x, edge_order=2)
@@ -204,34 +352,60 @@ def _build_tangents(predicted_peak, coords, W, *, include_width, low_signal_epsi
         "width": "diagnostic ablation only" if include_width else "excluded from primary",
         "amplitude_semantics": (
             "normalized-shape scale direction in prompt-relative-ratio space; "
-            "not physical receiver global gain"
-        ),
+            "not physical receiver global gain"),
         "residual_only_allowed": False,
         "nonidentifiability_marker": NONIDENTIFIABILITY_MARKER,
     }
-    return TangentBasis(normalized, raw, tuple(names), metadata)
+    kind = "width_diagnostic" if include_width else "primary_amp_shift"
+    return TangentBasis._create(pair, x, normalized, raw, tuple(names), kind, metadata)
 
 
-def normalize_tangents(predicted_peak, coords, W=None, *, include_width=False,
+def normalize_tangents(pair, coords, W=None, *, include_width=False,
                        low_signal_epsilon=1e-12):
-    """Build the primary basis; width requests fail closed.
-
-    There is intentionally no ``input_kind`` default or residual-only mode.
-    """
+    """Build the primary pair-bound basis; width requests fail closed."""
     if include_width:
         raise ValueError("width is diagnostic-only; use build_width_ablation_basis")
-    return _build_tangents(predicted_peak, coords, W, include_width=False,
+    return _build_tangents(pair, coords, W, include_width=False,
                            low_signal_epsilon=low_signal_epsilon)
 
 
-def primary_tangent_basis(predicted_peak, coords, W=None, *, low_signal_epsilon=1e-12):
-    return normalize_tangents(predicted_peak, coords, W=W, include_width=False,
+def primary_tangent_basis(pair, coords, W=None, *, low_signal_epsilon=1e-12):
+    return normalize_tangents(pair, coords, W=W, include_width=False,
                               low_signal_epsilon=low_signal_epsilon)
 
 
-def build_width_ablation_basis(predicted_peak, coords, W=None, *, low_signal_epsilon=1e-12):
-    return _build_tangents(predicted_peak, coords, W, include_width=True,
+def build_width_ablation_basis(pair, coords, W=None, *, low_signal_epsilon=1e-12):
+    return _build_tangents(pair, coords, W, include_width=True,
                            low_signal_epsilon=low_signal_epsilon)
+
+
+@dataclass(frozen=True, init=False)
+class ResidualBatch:
+    residual_raw: np.ndarray
+    identities: tuple[tuple[object, ...], ...]
+    pair_identity_digest_sha256: str
+    residual_space: str
+
+    def __new__(cls, *args, **kwargs):
+        raise TypeError("ResidualBatch is factory-only; use ResidualBatch.from_pairs")
+
+    @classmethod
+    def from_pairs(cls, pairs):
+        values = tuple(pairs)
+        if not values or any(not isinstance(pair, PeakPredictionPair) for pair in values):
+            raise TypeError("ResidualBatch can be created only from PeakPredictionPair values")
+        identities = tuple(pair.identity for pair in values)
+        _identity_list(identities, len(values), name="pair identities")
+        if len({pair.residual_raw.shape for pair in values}) != 1:
+            raise ValueError("PeakPredictionPair dimensions must match")
+        instance = object.__new__(cls)
+        data = _readonly_array(np.stack([pair.residual_raw for pair in values]),
+                               "residual_raw", 2)
+        for name, value in (("residual_raw", data), ("identities", identities),
+                            ("pair_identity_digest_sha256", _identity_digest(identities)),
+                            ("residual_space", RAW_SPACE)):
+            object.__setattr__(instance, name, value)
+        return instance
 
 
 @dataclass(frozen=True)
@@ -242,29 +416,11 @@ class CovarianceFit:
     audit: dict[str, object]
 
 
-def assert_fit_is_clean_only(roles, *, allowed=("normal_train", "normal_calibration")):
-    role_list = [str(x) for x in roles]
-    if not role_list:
-        raise ValueError("normal-only fit roles cannot be empty")
-    bad = sorted(set(role_list) - set(allowed))
-    if bad:
-        raise ValueError(f"attack/holdout data cannot fit; allowed normal roles are {allowed}, got {bad}")
-
-
-def fit_shrinkage_covariance(residuals, *, fit_roles=None, scenarios=None, identities=None,
-                             floor_relative=1e-8, pinv_rcond=1e-10):
-    r = _array(residuals, "residuals", 2)
+def _fit_shrinkage_covariance_array(r, *, floor_relative, pinv_rcond):
+    """Private array-only numerical helper; never a primary fit entry point."""
+    r = _array(r, "residual_raw", 2)
     if r.shape[0] < 2 or r.shape[1] < 1:
         raise ValueError("covariance requires at least two rows and one dimension")
-    if fit_roles is None or scenarios is None or identities is None:
-        raise ValueError("covariance role, scenario, and identity provenance are mandatory")
-    roles = [str(x) for x in fit_roles]
-    scenario_values = [str(x) for x in scenarios]
-    identity_values = _identity_list(identities, len(r))
-    if len(roles) != len(r) or len(scenario_values) != len(r):
-        raise ValueError("covariance roles/scenarios must match residual rows")
-    if set(roles) != {"normal_train"} or set(scenario_values) != {"cleanStatic"}:
-        raise ValueError("covariance fit allows only cleanStatic + normal_train")
     if floor_relative <= 0 or pinv_rcond <= 0:
         raise ValueError("covariance numerical parameters must be positive")
     unfloored = np.asarray(LedoitWolf().fit(r).covariance_)
@@ -275,16 +431,33 @@ def fit_shrinkage_covariance(residuals, *, fit_roles=None, scenarios=None, ident
     sigma = (vectors * np.maximum(values, floor)) @ vectors.T
     sigma = (sigma + sigma.T) / 2
     weight = np.linalg.pinv(sigma, rcond=pinv_rcond, hermitian=True)
-    encoded = json.dumps([[str(v) for v in identity] for identity in identity_values],
-                         separators=(",", ":"), ensure_ascii=True).encode()
+    return sigma, weight, unfloored, floor, nominal
+
+
+def fit_shrinkage_covariance(pairs_or_batch, *, provenance,
+                             floor_relative=1e-8, pinv_rcond=1e-10):
+    if isinstance(pairs_or_batch, ResidualBatch):
+        batch = pairs_or_batch
+    else:
+        if isinstance(pairs_or_batch, np.ndarray):
+            raise TypeError("covariance requires PeakPredictionPair sequence or ResidualBatch, not ndarray")
+        batch = ResidualBatch.from_pairs(pairs_or_batch)
+    fit = _require_provenance(provenance, len(batch.residual_raw), role="normal_train")
+    if fit.identities != batch.identities:
+        raise ValueError("fit provenance identities must exactly match pair identities and order")
+    r = batch.residual_raw
+    sigma, weight, unfloored, floor, nominal = _fit_shrinkage_covariance_array(
+        r, floor_relative=floor_relative, pinv_rcond=pinv_rcond)
     audit = {
         "estimator": "sklearn.covariance.LedoitWolf",
         "fit_role": "normal_train residual_raw only",
         "scenario": "cleanStatic",
+        "residual_space": RAW_SPACE,
         "rows": len(r),
         "dimension": r.shape[1],
-        "identity_count": len(identity_values),
-        "identity_digest_sha256": hashlib.sha256(encoded).hexdigest(),
+        "identity_count": len(batch.identities),
+        "identity_digest_sha256": fit.identity_digest_sha256,
+        "pair_identity_digest_sha256": batch.pair_identity_digest_sha256,
         "floor_relative": floor_relative,
         "floor_epsilon": floor,
         "nominal_floor_epsilon": nominal,
@@ -308,6 +481,12 @@ class ProjectionResult:
     condition: float
     ridge: float
     projection_kind: str
+    effective_rank: int
+    rank_tolerance: float
+    orthogonality_tolerance: float
+    full_span_orthogonality_defect: float
+    orthogonality_verified_full_span: bool
+    orthogonality_scope: str
 
 
 def _energy(vector, weight, name):
@@ -318,42 +497,85 @@ def _energy(vector, weight, name):
     return value
 
 
+def _energy_audit(r, fitted, perp, weight):
+    total = _energy(r, weight, "total")
+    tangent = _energy(fitted, weight, "tangent")
+    perpendicular = _energy(perp, weight, "perpendicular")
+    cross = float(2 * fitted @ weight @ perp)
+    tolerance = 64 * np.finfo(float).eps * max(
+        np.finfo(float).tiny, abs(total), abs(tangent), abs(perpendicular), abs(cross))
+    if abs(total - tangent - perpendicular - cross) > tolerance:
+        raise ArithmeticError("W-energy decomposition failed")
+    return total, tangent, perpendicular, cross
+
+
 def _project(residual, J, W, *, ridge_relative, pinv_rcond, projection_kind):
     r = _array(residual, "residual", 1)
     basis = _array(J, "J", 2)
     if basis.shape[0] != r.size:
         raise ValueError("residual and J dimensions do not match")
     weight = _validate_weight(W, r.size)
-    if basis.shape[1] < 1 or pinv_rcond <= 0 or ridge_relative < 0:
+    if basis.shape[1] < 1 or not 0 < pinv_rcond < 1 or ridge_relative < 0:
         raise ValueError("projection parameters invalid")
-    normal = basis.T @ weight @ basis
-    normal = (normal + normal.T) / 2
-    scale = float(np.trace(normal) / max(1, normal.shape[0]))
-    ridge = float(ridge_relative * scale) if scale > 0 else float(ridge_relative)
-    operator = normal if ridge == 0 else normal + ridge * np.eye(normal.shape[0])
-    coefficients = np.linalg.pinv(operator, rcond=pinv_rcond, hermitian=True) @ basis.T @ weight @ r
+
+    eigenvalues, eigenvectors = np.linalg.eigh(weight)
+    eigenvalues = np.maximum(eigenvalues, 0.)
+    sqrt_weight = (eigenvectors * np.sqrt(eigenvalues)) @ eigenvectors.T
+    whitened_basis = sqrt_weight @ basis
+    whitened_residual = sqrt_weight @ r
+    U, singular, Vt = np.linalg.svd(whitened_basis, full_matrices=False)
+    largest = float(singular[0]) if singular.size else 0.
+    rank_tolerance = float(pinv_rcond * largest)
+    effective_rank = int(np.count_nonzero(singular > rank_tolerance))
+    algebraic_tolerance = np.finfo(float).eps * max(whitened_basis.shape) * largest
+    algebraic_rank = int(np.count_nonzero(singular > algebraic_tolerance))
+
+    if ridge_relative == 0:
+        if effective_rank:
+            coefficients = Vt[:effective_rank].T @ (
+                (U[:, :effective_rank].T @ whitened_residual) / singular[:effective_rank])
+        else:
+            coefficients = np.zeros(basis.shape[1])
+        ridge = 0.
+    else:
+        normal_scale = float(np.sum(singular**2) / max(1, basis.shape[1]))
+        ridge = float(ridge_relative * normal_scale) if normal_scale > 0 else float(ridge_relative)
+        coefficients = Vt.T @ ((singular / (singular**2 + ridge)) * (U.T @ whitened_residual))
+
     fitted = basis @ coefficients
     perp = r - fitted
-    total = _energy(r, weight, "total")
-    tangent = _energy(fitted, weight, "tangent")
-    perpendicular = _energy(perp, weight, "perpendicular")
-    cross = float(2 * fitted @ weight @ perp)
-    defect = float(np.linalg.norm(basis.T @ weight @ perp))
-    tolerance = 1e-9 * max(1.0, abs(total), abs(tangent), abs(perpendicular), abs(cross))
-    if not math.isclose(total, tangent + perpendicular + cross, rel_tol=1e-9, abs_tol=tolerance):
-        raise ArithmeticError("W-energy decomposition failed")
-    singular = np.linalg.svd(normal, compute_uv=False)
-    condition = float(np.inf if singular.size == 0 or singular[-1] <= 0 else singular[0] / singular[-1])
+    total, tangent, perpendicular, cross = _energy_audit(r, fitted, perp, weight)
+    gradient = whitened_basis.T @ (sqrt_weight @ perp)
+    retained_gradient = Vt[:effective_rank] @ gradient if effective_rank else np.empty(0)
+    defect = float(np.linalg.norm(retained_gradient))
+    full_defect = float(np.linalg.norm(gradient))
+    rhs_norm = float(np.linalg.norm(whitened_basis.T @ whitened_residual))
+    scale = max(np.finfo(float).tiny, rhs_norm,
+                float(np.linalg.norm(whitened_basis, 2) * np.linalg.norm(whitened_residual)))
+    orthogonality_tolerance = float(64 * np.finfo(float).eps
+                                    * max(1, sum(whitened_basis.shape)) * scale)
+    full_verified = effective_rank == algebraic_rank
+    if ridge_relative == 0:
+        if defect > orthogonality_tolerance:
+            raise ArithmeticError(
+                "primary W-orthogonality defect exceeds machine-epsilon-scaled tolerance")
+        if abs(cross) > 2 * orthogonality_tolerance * max(1., np.linalg.norm(coefficients)):
+            raise ArithmeticError("primary W-energy orthogonality check failed")
+    retained = singular[:effective_rank]
+    condition = float(np.inf if not len(retained) or retained[-1] <= 0
+                      else retained[0] / retained[-1])
+    scope = "full_tangent_span" if full_verified else "retained_effective_tangent_span"
     return ProjectionResult(
         coefficients, fitted, perp, total, tangent, perpendicular, cross, defect,
-        int(np.linalg.matrix_rank(basis)), int(np.linalg.matrix_rank(normal)), condition,
-        ridge, projection_kind)
+        effective_rank, effective_rank, condition, ridge, projection_kind,
+        effective_rank, rank_tolerance, orthogonality_tolerance, full_defect,
+        full_verified, scope)
 
 
 def weighted_project(residual, J, W, *, pinv_rcond=1e-10):
-    """Primary unregularized Moore-Penrose W-orthogonal projection."""
+    """Whitened-SVD Moore-Penrose W projector with explicit rank cutoff."""
     return _project(residual, J, W, ridge_relative=0.0, pinv_rcond=pinv_rcond,
-                    projection_kind="orthogonal_pinv")
+                    projection_kind="orthogonal_whitened_svd")
 
 
 def weighted_project_ridge_diagnostic(residual, J, W, *, lambda_relative=1e-8,
@@ -389,14 +611,17 @@ class ScoreBundle:
     spaces: dict[str, str]
 
 
-def produce_nc_topi_scores(pair: PeakPredictionPair, J, W, *, conditioner=None,
-                            iq_features=None, energy_epsilon=1e-12):
+def _produce_scores(pair, basis, W, *, primary, conditioner=None,
+                    iq_features=None, energy_epsilon=1e-12):
     if not isinstance(pair, PeakPredictionPair):
         raise TypeError("score construction requires PeakPredictionPair; residual-only is forbidden")
+    if not isinstance(basis, TangentBasis):
+        raise TypeError("score construction requires a sealed TangentBasis, not a raw basis matrix")
+    basis.validate_for_pair(pair, W, primary=primary)
     if energy_epsilon <= 0:
         raise ValueError("energy_epsilon must be positive")
-    projection = weighted_project(pair.residual_raw, J, W)
-    topi = float(projection.r_perp.T @ _validate_weight(W, len(pair.residual_raw)) @ projection.r_perp)
+    projection = weighted_project(pair.residual_raw, basis.matrix, W)
+    topi = float(projection.perp_energy)
     transformed = None
     scale = 1.0
     if conditioner is not None:
@@ -415,7 +640,30 @@ def produce_nc_topi_scores(pair: PeakPredictionPair, J, W, *, conditioner=None,
         pair.identity, b0_rmse(pair.residual_standardized), projection.total_energy,
         projection.tangent_energy, projection.perp_energy, projection.cross_energy,
         topi, scale, nc, projection, transformed,
-        {"geometry": RAW_SPACE, "b0": STANDARDIZED_SPACE, "conditioner_target": "log_raw_perp_energy"})
+        {"geometry": RAW_SPACE, "b0": STANDARDIZED_SPACE,
+         "conditioner_target": "log_raw_perp_energy"})
+
+
+def produce_nc_topi_scores(pair: PeakPredictionPair, basis: TangentBasis, W, *,
+                           conditioner=None, iq_features=None, energy_epsilon=1e-12):
+    """Primary amplitude+shift score; raw/arbitrary/diagnostic bases fail closed."""
+    return _produce_scores(pair, basis, W, primary=True, conditioner=conditioner,
+                           iq_features=iq_features, energy_epsilon=energy_epsilon)
+
+
+@dataclass(frozen=True)
+class WidthDiagnosticScore:
+    label: str
+    primary: bool
+    score: ScoreBundle
+
+
+def produce_width_ablation_scores(pair: PeakPredictionPair, basis: TangentBasis, W, *,
+                                   conditioner=None, iq_features=None,
+                                   energy_epsilon=1e-12):
+    score = _produce_scores(pair, basis, W, primary=False, conditioner=conditioner,
+                            iq_features=iq_features, energy_epsilon=energy_epsilon)
+    return WidthDiagnosticScore("width_diagnostic", False, score)
 
 
 @dataclass(frozen=True)
@@ -450,12 +698,28 @@ def aggregate_prn_scores(prn_ids, scores, method="median", *, valid_mask=None):
     return AggregateResult(score, len(active), selected, tuple(sorted(ids[mask].tolist())), method)
 
 
-def higher_quantile(scores, q, *, fit_roles):
-    values = _array(scores, "calibration scores", 1)
-    if len(values) != len(fit_roles) or not 0 < q < 1:
+def higher_quantile(scores, q):
+    """Low-level higher-quantile math helper; not a provenance-bearing fit API."""
+    values = _array(scores, "scores", 1)
+    if len(values) == 0 or not 0 < q < 1:
         raise ValueError("quantile inputs invalid")
-    assert_fit_is_clean_only(fit_roles, allowed=("normal_calibration",))
     return float(np.quantile(values, q, method="higher"))
+
+
+@dataclass(frozen=True)
+class ThresholdCalibration:
+    value: float
+    quantile: float
+    scenario: str
+    role: str
+    identity_digest_sha256: str
+
+
+def calibrate_threshold(scores, q, *, provenance):
+    values = _array(scores, "calibration scores", 1)
+    fit = _require_provenance(provenance, len(values), role="normal_calibration")
+    return ThresholdCalibration(higher_quantile(values, q), float(q), fit.scenario,
+                                fit.role, fit.identity_digest_sha256)
 
 
 def strict_alarms(scores, threshold):
@@ -517,6 +781,15 @@ class IQContext:
     audit: dict[str, object]
 
 
+def _validated_group_vector(values, rows, name):
+    array = np.asarray(values, dtype=object)
+    if array.ndim != 1 or len(array) != rows:
+        raise ValueError(f"{name} must match rows")
+    if any(not isinstance(value, str) or not value.strip() for value in array):
+        raise ValueError(f"{name} group IDs must be nonempty strings")
+    return np.asarray(array.tolist(), dtype=str)
+
+
 def build_causal_iq_context(target_source_start, block_end, block_features, *, history=4,
                             target_groups, block_groups, cadence=.5):
     targets = _array(target_source_start, "target_source_start", 1)
@@ -524,10 +797,8 @@ def build_causal_iq_context(target_source_start, block_end, block_features, *, h
     features = _array(block_features, "block_features", 2)
     if len(ends) != len(features) or history < 1 or cadence <= 0:
         raise ValueError("IQ blocks/history dimensions invalid")
-    target_group = np.asarray(target_groups, dtype=str)
-    block_group = np.asarray(block_groups, dtype=str)
-    if len(target_group) != len(targets) or len(block_group) != len(ends):
-        raise ValueError("IQ group vectors must match rows")
+    target_group = _validated_group_vector(target_groups, len(targets), "target_groups")
+    block_group = _validated_group_vector(block_groups, len(ends), "block_groups")
     if set(target_group) != set(block_group):
         raise ValueError("target_groups and block_groups must exactly match")
     gap_count = 0
@@ -575,12 +846,12 @@ class RobustConditioner:
         self.energy_epsilon = float(energy_epsilon)
         self.lower_epsilon = float(lower_epsilon)
 
-    def fit(self, X, y, *, roles, feature_names=None):
+    def fit(self, X, y, *, provenance, feature_names=None):
         predictors = _array(X, "IQ predictors", 2)
         energy = _array(y, "S_perp target", 1)
-        if len(predictors) != len(energy) or len(roles) != len(energy) or np.any(energy < 0):
+        if len(predictors) != len(energy) or np.any(energy < 0):
             raise ValueError("conditioner fit dimensions/nonnegative energy invalid")
-        assert_fit_is_clean_only(roles, allowed=("normal_train",))
+        fit = _require_provenance(provenance, len(energy), role="normal_train")
         names = [str(x).lower() for x in (feature_names or [f"x{i}" for i in range(predictors.shape[1])])]
         forbidden = {"prn", "prn_id", "scenario", "scenario_id", "onset", "onset_s"}
         if forbidden.intersection(names):
@@ -593,9 +864,18 @@ class RobustConditioner:
         self.model_ = HuberRegressor(epsilon=1.35, alpha=1e-4, max_iter=1000).fit(
             self.conditioner_transform(predictors), target)
         self.feature_names_ = tuple(feature_names or [f"x{i}" for i in range(predictors.shape[1])])
+        self._fit_identities_ = fit.identities
+        fit_digest = _digest_json({
+            "scenario": fit.scenario, "role": fit.role,
+            "identity_digest_sha256": fit.identity_digest_sha256,
+            "predictors_digest_sha256": _array_digest(predictors),
+            "target_energy_digest_sha256": _array_digest(energy)})
         self.fit_manifest_ = {
-            "roles": ["normal_train"],
+            "scenario": fit.scenario,
+            "roles": [fit.role],
             "rows": len(target),
+            "identity_digest_sha256": fit.identity_digest_sha256,
+            "fit_digest_sha256": fit_digest,
             "target": "log(max(S_perp, energy_epsilon))",
             "prediction": "exp(predicted_log_energy)",
             "PRN_feature": False,
@@ -606,6 +886,7 @@ class RobustConditioner:
             "max_iter": 1000,
         }
         self.cap_ = None
+        self.cap_manifest_ = None
         return self
 
     def conditioner_transform(self, X):
@@ -627,12 +908,18 @@ class RobustConditioner:
         # not this transform, applies energy_epsilon.
         return np.exp(np.clip(self.predict_log_energy(X), -745, 709))
 
-    def calibrate_cap(self, X_calibration, *, roles, q=.995):
-        values = self._uncapped_scale(X_calibration)
-        if len(values) != len(roles) or not np.isclose(q, .995, rtol=0, atol=0):
+    def calibrate_cap(self, X_calibration, *, provenance, q=.995):
+        predictors = _array(X_calibration, "calibration IQ predictors", 2)
+        fit = _require_provenance(provenance, len(predictors), role="normal_calibration")
+        if set(fit.identities).intersection(self._fit_identities_):
+            raise ValueError("calibration identities must be disjoint from conditioner fit identities")
+        if not np.isclose(q, .995, rtol=0, atol=0):
             raise ValueError("calibration cap is frozen at q995")
-        assert_fit_is_clean_only(roles, allowed=("normal_calibration",))
-        self.cap_ = float(np.quantile(values, q, method="higher"))
+        values = self._uncapped_scale(predictors)
+        self.cap_ = higher_quantile(values, q)
+        self.cap_manifest_ = {"scenario": fit.scenario, "role": fit.role,
+                              "identity_digest_sha256": fit.identity_digest_sha256,
+                              "rows": len(values), "quantile": q}
         return self.cap_
 
     def predict_scale(self, X):
@@ -641,12 +928,12 @@ class RobustConditioner:
         return np.minimum(self._uncapped_scale(X), self.cap_)
 
 
-def shuffled_control_target(target, *, roles, seed=DEFAULT_SEED):
+def shuffled_control_target(target, *, provenance, seed=DEFAULT_SEED):
     values = _array(target, "shuffle target", 1)
-    if len(values) != len(roles):
-        raise ValueError("shuffle roles length mismatch")
-    assert_fit_is_clean_only(roles, allowed=("normal_train",))
-    return values[np.random.default_rng(seed).permutation(len(values))]
+    _require_provenance(provenance, len(values), role="normal_train")
+    if not isinstance(seed, (int, np.integer)):
+        raise ValueError("shuffle seed must be an integer")
+    return values[np.random.default_rng(int(seed)).permutation(len(values))]
 
 
 def standardized_pauc(labels, scores, *, max_fpr=.05):
@@ -664,43 +951,65 @@ class SustainedAlarm:
     delay: float
     alarm_time: float
     already_alarming_stable_pre: bool
+    stable_pre_alarm_by_recording: Mapping[str, bool]
 
 
 def sustained_alarm_delay(availability_source_end, alarms, *, recording_ids,
                            post_eligible_mask, onset, required=3, cadence=.5,
                            stable_pre_mask=None):
     times = _array(availability_source_end, "availability source_end", 1)
-    flags = np.asarray(alarms, bool)
-    recordings = np.asarray(recording_ids, dtype=str)
-    post = np.asarray(post_eligible_mask, bool)
-    if (flags.shape != times.shape or recordings.shape != times.shape or post.shape != times.shape
-            or required < 1 or cadence <= 0 or not np.isfinite(onset)):
+    raw_flags = np.asarray(alarms)
+    raw_post = np.asarray(post_eligible_mask)
+    if raw_flags.dtype.kind != "b" and not np.isin(raw_flags, [0, 1]).all():
+        raise ValueError("alarms must be boolean")
+    if raw_post.dtype.kind != "b" and not np.isin(raw_post, [0, 1]).all():
+        raise ValueError("post_eligible_mask must be boolean")
+    flags = raw_flags.astype(bool)
+    post = raw_post.astype(bool)
+    recordings = _validated_group_vector(recording_ids, len(times), "recording_ids")
+    if (flags.shape != times.shape or post.shape != times.shape or required < 1
+            or cadence <= 0 or not np.isfinite(onset)):
         raise ValueError("sustained alarm inputs invalid")
-    if any(not value.strip() for value in recordings):
-        raise ValueError("recording_ids must be nonempty")
-    pre = np.zeros(len(flags), bool) if stable_pre_mask is None else np.asarray(stable_pre_mask, bool)
+    if stable_pre_mask is None:
+        pre = np.zeros(len(flags), bool)
+    else:
+        raw_pre = np.asarray(stable_pre_mask)
+        if raw_pre.dtype.kind != "b" and not np.isin(raw_pre, [0, 1]).all():
+            raise ValueError("stable_pre_mask must be boolean")
+        pre = raw_pre.astype(bool)
     if pre.shape != flags.shape:
         raise ValueError("stable_pre_mask length mismatch")
-    already = bool(np.any(flags & pre))
-    run = 0
-    alarm_time = math.inf
-    previous_time = None
-    previous_recording = None
-    for time, flag, recording, eligible in zip(times, flags, recordings, post):
-        contiguous = (previous_time is not None and recording == previous_recording
-                      and math.isclose(time - previous_time, cadence, rel_tol=0, abs_tol=1e-8))
-        if not eligible:
-            run = 0
-        elif flag:
-            run = run + 1 if contiguous else 1
-        else:
-            run = 0
-        previous_time, previous_recording = float(time), recording
-        if eligible and run >= required:
-            alarm_time = float(time)
-            break
-    delay = float(alarm_time - onset) if np.isfinite(alarm_time) else math.inf
-    return SustainedAlarm(delay, alarm_time, already)
+    if np.any(post & (times < onset)):
+        raise ValueError("post-eligible availability cannot precede onset")
+
+    earliest = math.inf
+    stable_audit = {}
+    for recording in sorted(set(recordings)):
+        indices = np.flatnonzero(recordings == recording)
+        order = indices[np.argsort(times[indices], kind="mergesort")]
+        ordered_times = times[order]
+        if len(np.unique(ordered_times)) != len(ordered_times):
+            raise ValueError(f"duplicate (recording,time) rows for {recording}")
+        stable_audit[recording] = bool(np.any(flags[order] & pre[order]))
+        run = 0
+        previous_time = None
+        for index, time in zip(order, ordered_times):
+            contiguous = (previous_time is not None and
+                          math.isclose(float(time - previous_time), cadence,
+                                       rel_tol=0, abs_tol=1e-8))
+            if not post[index]:
+                run = 0
+            elif flags[index]:
+                run = run + 1 if contiguous else 1
+            else:
+                run = 0
+            previous_time = float(time)
+            if post[index] and run >= required:
+                earliest = min(earliest, float(time))
+                break
+    delay = float(earliest - onset) if np.isfinite(earliest) else math.inf
+    audit = MappingProxyType(stable_audit)
+    return SustainedAlarm(delay, earliest, any(stable_audit.values()), audit)
 
 
 @dataclass(frozen=True)
@@ -711,47 +1020,92 @@ class IntersectionDiagnostic:
     audit: dict[str, int]
 
 
-def _metadata_map(name, values, identities):
-    if values is None:
-        return None
-    array = np.asarray(values, dtype=object)
-    if len(array) != len(identities):
-        raise ValueError(f"{name} must match epoch rows")
-    return dict(zip(identities, array.tolist()))
+@dataclass(frozen=True)
+class EpochRecord:
+    physical_recording_id: str
+    scenario: str
+    prn_or_event_id: str
+    availability_time_s: float
+    source_start_s: float
+    source_end_s: float
+    valid: bool
+    label: object
+
+    def __post_init__(self):
+        for name in ("physical_recording_id", "scenario", "prn_or_event_id"):
+            value = getattr(self, name)
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError(f"{name} must be a nonempty string")
+        times = (self.availability_time_s, self.source_start_s, self.source_end_s)
+        numeric = (int, float, np.integer, np.floating)
+        if any(isinstance(value, (bool, np.bool_)) or not isinstance(value, numeric)
+               or not np.isfinite(value) for value in times):
+            raise ValueError("epoch times must be finite numbers")
+        availability, source_start, source_end = (float(value) for value in times)
+        if source_end < source_start:
+            raise ValueError("epoch source interval is reversed")
+        if availability < source_end:
+            raise ValueError("epoch availability cannot precede source_end")
+        object.__setattr__(self, "availability_time_s", availability)
+        object.__setattr__(self, "source_start_s", source_start)
+        object.__setattr__(self, "source_end_s", source_end)
+        if type(self.valid) is not bool:
+            raise ValueError("epoch valid must be a true bool")
+        if self.label is None or (isinstance(self.label, str) and not self.label.strip()):
+            raise ValueError("epoch label is mandatory")
+        try:
+            hash(self.label)
+        except TypeError as exc:
+            raise ValueError("epoch label must be immutable/hashable") from exc
+
+    @property
+    def identity_key(self):
+        return (self.physical_recording_id, self.scenario, self.prn_or_event_id,
+                float(self.availability_time_s))
 
 
-def exact_primary_epoch_join(identity_a, scores_a, identity_b, scores_b, *,
-                             source_intervals_a=None, source_intervals_b=None,
-                             labels_a=None, labels_b=None, valid_mask_a=None, valid_mask_b=None):
-    a = _array(scores_a, "scores_a", 1)
-    b = _array(scores_b, "scores_b", 1)
-    ids_a = _identity_list(identity_a, len(a), name="identity_a")
-    ids_b = _identity_list(identity_b, len(b), name="identity_b")
-    if set(ids_a) != set(ids_b):
+def _record_map(records, name):
+    values = tuple(records)
+    if not values or any(not isinstance(record, EpochRecord) for record in values):
+        raise TypeError(f"{name} must be a nonempty EpochRecord sequence")
+    result = {}
+    for record in values:
+        if record.identity_key in result:
+            raise ValueError(f"{name} contains duplicate full identity keys")
+        result[record.identity_key] = record
+    return values, result
+
+
+def _score_map(scores, identities, name):
+    if not isinstance(scores, Mapping):
+        raise TypeError(f"{name} must be a score map keyed by full identity")
+    if set(scores) != set(identities):
+        raise ValueError(f"{name} score map keys must exactly equal EpochRecord identities")
+    result = {}
+    for identity, value in scores.items():
+        number = _array([value], name, 1)[0]
+        result[identity] = float(number)
+    return result
+
+
+def exact_primary_epoch_join(records_a, score_map_a, records_b, score_map_b):
+    """Exact primary join with fixed identity and mandatory record metadata."""
+    left, left_records = _record_map(records_a, "records_a")
+    _, right_records = _record_map(records_b, "records_b")
+    if set(left_records) != set(right_records):
         raise ValueError("primary join requires full identity set equality")
-    map_a = dict(zip(ids_a, a))
-    map_b = dict(zip(ids_b, b))
-    metadata = (
-        ("source interval", source_intervals_a, source_intervals_b),
-        ("label", labels_a, labels_b),
-        ("valid mask", valid_mask_a, valid_mask_b),
-    )
-    for name, left, right in metadata:
-        if (left is None) != (right is None):
-            raise ValueError(f"{name} metadata must be supplied for both detectors")
-        left_map = _metadata_map(name, left, ids_a)
-        right_map = _metadata_map(name, right, ids_b)
-        if left_map is not None:
-            for identity in ids_a:
-                left_value, right_value = left_map[identity], right_map[identity]
-                if isinstance(left_value, (list, tuple, np.ndarray)) or isinstance(right_value, (list, tuple, np.ndarray)):
-                    equal = np.array_equal(np.asarray(left_value), np.asarray(right_value))
-                else:
-                    equal = left_value == right_value
-                if not equal:
-                    raise ValueError(f"{name} differs at identity {identity}")
-    ordered = ids_a
-    return ordered, np.asarray([map_a[x] for x in ordered]), np.asarray([map_b[x] for x in ordered])
+    left_scores = _score_map(score_map_a, left_records, "score_map_a")
+    right_scores = _score_map(score_map_b, right_records, "score_map_b")
+    for identity, left_record in left_records.items():
+        right_record = right_records[identity]
+        for field, label in (("source_start_s", "source interval"),
+                             ("source_end_s", "source interval"),
+                             ("label", "label"), ("valid", "valid")):
+            if getattr(left_record, field) != getattr(right_record, field):
+                raise ValueError(f"{label} differs at identity {identity}")
+    ordered = tuple(record.identity_key for record in left)
+    return ordered, np.asarray([left_scores[key] for key in ordered]), np.asarray(
+        [right_scores[key] for key in ordered])
 
 
 def common_epoch_intersection_diagnostic(identity_a, scores_a, identity_b, scores_b):
@@ -917,105 +1271,135 @@ class DecisionResult:
     counts: dict[str, int]
     missing_evidence: tuple[str, ...]
     no_go_triggers: tuple[str, ...]
+    validation_errors: tuple[str, ...]
 
 
-def _optional_finite(value):
-    if value is None or isinstance(value, (bool, np.bool_)):
+def _domain_value(value, name, lower, upper, errors):
+    if isinstance(value, (bool, np.bool_)):
+        errors.append(f"{name}: expected finite number in [{lower},{upper}]")
         return None
     try:
         number = float(value)
     except (TypeError, ValueError):
+        errors.append(f"{name}: expected finite number in [{lower},{upper}]")
         return None
-    return number if np.isfinite(number) else None
+    if not np.isfinite(number) or not lower <= number <= upper:
+        errors.append(f"{name}: outside finite domain [{lower},{upper}]")
+        return None
+    return number
 
 
-def _mapping_value(mapping, key):
-    return mapping.get(key) if isinstance(mapping, Mapping) else None
+def _scenario_evidence(value, name, errors):
+    if not isinstance(value, Mapping):
+        errors.append(f"{name}: mapping is mandatory")
+        return {scenario: None for scenario in ATTACK_SCENARIOS}
+    keys = set(value)
+    expected = set(ATTACK_SCENARIOS)
+    if keys != expected:
+        errors.append(f"{name}: scenario set must be exactly {ATTACK_SCENARIOS}; "
+                      f"missing={sorted(expected-keys)}, "
+                      f"unknown={sorted(map(str, keys-expected))}")
+    return {scenario: value.get(scenario) for scenario in ATTACK_SCENARIOS}
 
 
-def evaluate_stage0_decision(*, clean_nc_fpr, clean_b0_fpr, stable_pre_fpr,
-                             pauc_delta, nc_delay, b0_delay, pauc_ci_lower,
-                             equal_rmse_pass, second_peak_pass,
-                             actual_nc_mean_pauc_gain, shuffled_nc_mean_pauc_gain):
-    missing = []
-    nc_fpr = _optional_finite(clean_nc_fpr)
-    b0_fpr = _optional_finite(clean_b0_fpr)
-    if nc_fpr is None: missing.append("clean_nc_fpr")
-    if b0_fpr is None: missing.append("clean_b0_fpr")
-    c1 = nc_fpr is not None and nc_fpr <= .02
-    c2 = nc_fpr is not None and b0_fpr is not None and nc_fpr - b0_fpr <= .01
+def evaluate_stage0_decision(*, clean_nc_fpr=None, clean_b0_fpr=None,
+                             stable_pre_fpr=None, nc_pauc=None, b0_pauc=None,
+                             pauc_delta=None, nc_delay=None, b0_delay=None,
+                             pauc_ci_lower=None, pauc_ci_upper=None,
+                             equal_rmse_pass=None, second_peak_pass=None,
+                             actual_nc_mean_pauc=None, topi_mean_pauc=None,
+                             shuffled_nc_mean_pauc=None,
+                             actual_nc_mean_pauc_gain=None,
+                             shuffled_nc_mean_pauc_gain=None):
+    errors = []
+    if actual_nc_mean_pauc_gain is not None or shuffled_nc_mean_pauc_gain is not None:
+        errors.append("legacy mean-gain evidence is unsupported; supply bounded pAUC means")
+    nc_fpr = _domain_value(clean_nc_fpr, "clean_nc_fpr", 0., 1., errors)
+    b0_fpr = _domain_value(clean_b0_fpr, "clean_b0_fpr", 0., 1., errors)
+    mappings = {name: _scenario_evidence(value, name, errors) for name, value in (
+        ("stable_pre_fpr", stable_pre_fpr), ("nc_pauc", nc_pauc), ("b0_pauc", b0_pauc),
+        ("pauc_delta", pauc_delta), ("nc_delay", nc_delay), ("b0_delay", b0_delay),
+        ("pauc_ci_lower", pauc_ci_lower), ("pauc_ci_upper", pauc_ci_upper))}
 
-    stable_known = 0
-    stable_failures = 0
+    stable = {}; nc_points = {}; b0_points = {}; deltas = {}; nc_delays = {}; b0_delays = {}
+    lowers = {}; uppers = {}
     for scenario in ATTACK_SCENARIOS:
-        value = _optional_finite(_mapping_value(stable_pre_fpr, scenario))
-        if value is None:
-            missing.append(f"stable_pre_fpr:{scenario}")
-        else:
-            stable_known += 1
-            stable_failures += int(value >= .05)
-    c3 = stable_known == len(ATTACK_SCENARIOS) and stable_failures == 0
+        stable[scenario] = _domain_value(mappings["stable_pre_fpr"][scenario],
+                                         f"stable_pre_fpr:{scenario}", 0., 1., errors)
+        nc_points[scenario] = _domain_value(mappings["nc_pauc"][scenario],
+                                             f"nc_pauc:{scenario}", 0., 1., errors)
+        b0_points[scenario] = _domain_value(mappings["b0_pauc"][scenario],
+                                             f"b0_pauc:{scenario}", 0., 1., errors)
+        deltas[scenario] = _domain_value(mappings["pauc_delta"][scenario],
+                                          f"pauc_delta:{scenario}", -1., 1., errors)
+        lowers[scenario] = _domain_value(mappings["pauc_ci_lower"][scenario],
+                                          f"pauc_ci_lower:{scenario}", -1., 1., errors)
+        uppers[scenario] = _domain_value(mappings["pauc_ci_upper"][scenario],
+                                          f"pauc_ci_upper:{scenario}", -1., 1., errors)
+        for name, destination in (("nc_delay", nc_delays), ("b0_delay", b0_delays)):
+            raw = mappings[name][scenario]
+            if raw is None:
+                destination[scenario] = None
+            else:
+                destination[scenario] = _domain_value(raw, f"{name}:{scenario}", 0., math.inf, errors)
+        if lowers[scenario] is not None and uppers[scenario] is not None:
+            if lowers[scenario] > uppers[scenario]:
+                errors.append(f"pauc_ci:{scenario}: lower exceeds upper")
+        if (nc_points[scenario] is not None and b0_points[scenario] is not None
+                and deltas[scenario] is not None
+                and not math.isclose(deltas[scenario], nc_points[scenario] - b0_points[scenario],
+                                     rel_tol=1e-9, abs_tol=1e-12)):
+            errors.append(f"pauc_delta:{scenario}: inconsistent with NC-B0 pAUC points")
 
+    actual_mean = _domain_value(actual_nc_mean_pauc, "actual_nc_mean_pauc", 0., 1., errors)
+    topi_mean = _domain_value(topi_mean_pauc, "topi_mean_pauc", 0., 1., errors)
+    shuffled_mean = _domain_value(shuffled_nc_mean_pauc, "shuffled_nc_mean_pauc", 0., 1., errors)
+    equal_known = type(equal_rmse_pass) is bool
+    second_known = type(second_peak_pass) is bool
+    if not equal_known:
+        errors.append("equal_rmse_pass: true bool is mandatory")
+    if not second_known:
+        errors.append("second_peak_pass: true bool is mandatory")
+
+    if errors:
+        return DecisionResult("INCONCLUSIVE", {f"c{i}": False for i in range(1, 9)},
+                              {"stable_pre_failures": 0, "improvement_count": 0,
+                               "positive_ci_count": 0}, (), (), tuple(sorted(set(errors))))
+
+    c1 = nc_fpr <= .02
+    c2 = nc_fpr - b0_fpr <= .01
+    stable_failures = sum(value >= .05 for value in stable.values())
+    c3 = stable_failures == 0
+    missing = []
     improvement_count = 0
     improvement_known = 0
     for scenario in ATTACK_SCENARIOS:
-        delta = _optional_finite(_mapping_value(pauc_delta, scenario))
-        nc_raw = _mapping_value(nc_delay, scenario)
-        b0_raw = _mapping_value(b0_delay, scenario)
-        delay_supplied = nc_raw is not None and b0_raw is not None
-        delay_pass = False
-        if delay_supplied:
-            try:
-                nc_number, b0_number = float(nc_raw), float(b0_raw)
-                delay_pass = np.isfinite(nc_number) and np.isfinite(b0_number) and b0_number - nc_number >= .5
-            except (TypeError, ValueError):
-                delay_supplied = False
-        if delta is not None and delta > 0:
+        if deltas[scenario] > 0:
             improvement_count += 1
             improvement_known += 1
-        elif delta is not None and delay_supplied:
-            improvement_count += int(delay_pass)
-            improvement_known += 1
-        elif delta is None and delay_supplied and delay_pass:
-            improvement_count += 1
+        elif nc_delays[scenario] is not None and b0_delays[scenario] is not None:
+            improvement_count += int(b0_delays[scenario] - nc_delays[scenario] >= .5)
             improvement_known += 1
         else:
-            missing.append(f"scenario_improvement:{scenario}")
+            missing.append(f"scenario_improvement:{scenario}:censored_delay")
     c4 = improvement_known == len(ATTACK_SCENARIOS) and improvement_count >= 3
-
-    positive_ci_count = 0
-    ci_known = 0
-    for scenario in ATTACK_SCENARIOS:
-        lower = _optional_finite(_mapping_value(pauc_ci_lower, scenario))
-        if lower is None:
-            missing.append(f"pauc_ci_lower:{scenario}")
-        else:
-            ci_known += 1
-            positive_ci_count += int(lower > 0)
-    c5 = ci_known == len(ATTACK_SCENARIOS) and positive_ci_count >= 2
-
-    equal_known = isinstance(equal_rmse_pass, (bool, np.bool_))
-    second_known = isinstance(second_peak_pass, (bool, np.bool_))
-    c6 = equal_known and bool(equal_rmse_pass)
-    c7 = second_known and bool(second_peak_pass)
-    if not equal_known: missing.append("equal_rmse_pass")
-    if not second_known: missing.append("second_peak_pass")
-    actual = _optional_finite(actual_nc_mean_pauc_gain)
-    shuffled = _optional_finite(shuffled_nc_mean_pauc_gain)
-    if actual is None: missing.append("actual_nc_mean_pauc_gain")
-    if shuffled is None: missing.append("shuffled_nc_mean_pauc_gain")
-    c8 = actual is not None and shuffled is not None and actual > shuffled and actual > 0
-
+    positive_ci_count = sum(value > 0 for value in lowers.values())
+    c5 = positive_ci_count >= 2
+    c6 = equal_rmse_pass
+    c7 = second_peak_pass
+    actual_gain = actual_mean - topi_mean
+    shuffled_gain = shuffled_mean - topi_mean
+    c8 = actual_gain > shuffled_gain and actual_gain > 0
     criteria = {f"c{index}": value for index, value in enumerate(
         (c1, c2, c3, c4, c5, c6, c7, c8), start=1)}
     triggers = []
-    if equal_known and not bool(equal_rmse_pass): triggers.append("c6_equal_rmse_false")
-    if second_known and not bool(second_peak_pass): triggers.append("c7_second_peak_false")
-    if nc_fpr is not None and nc_fpr > .05: triggers.append("clean_nc_fpr_gt_0.05")
+    if not equal_rmse_pass: triggers.append("c6_equal_rmse_false")
+    if not second_peak_pass: triggers.append("c7_second_peak_false")
+    if nc_fpr > .05: triggers.append("clean_nc_fpr_gt_0.05")
     if stable_failures >= 3: triggers.append("stable_pre_failures_gte_3")
     if improvement_known == len(ATTACK_SCENARIOS) and improvement_count <= 1:
         triggers.append("improvement_count_lte_1")
-    if ci_known == len(ATTACK_SCENARIOS) and positive_ci_count == 0:
+    if positive_ci_count == 0:
         triggers.append("positive_ci_count_eq_0")
     if triggers:
         status = "NO-GO"
@@ -1027,4 +1411,4 @@ def evaluate_stage0_decision(*, clean_nc_fpr, clean_b0_fpr, stable_pre_fpr,
                           {"stable_pre_failures": stable_failures,
                            "improvement_count": improvement_count,
                            "positive_ci_count": positive_ci_count},
-                          tuple(sorted(set(missing))), tuple(triggers))
+                          tuple(sorted(set(missing))), tuple(triggers), ())
