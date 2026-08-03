@@ -1,0 +1,115 @@
+{
+  "schema": "gnss-doppler-lab.nc-topi-stage0.v1",
+  "status": "preregistered-no-results",
+  "lineage": {
+    "legacy_peak_availability": "exact legacy actual/predicted peaks unavailable for cleanStatic/DS1/DS2/DS3",
+    "residual_only_tangent": "forbidden: non-identifiable",
+    "primary_input": "regenerate every scenario from provenance-fixed canonical complex 9-tap NPZ with frozen B0 normalization/window/GRU",
+    "retrain": false,
+    "DS7_DS8_legacy_residual_role": "positive-control diagnostic only"
+  },
+  "canonical_inputs": {
+    "cleanStatic": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.npz", "sha256": "fcd1d378c28e79fe4a550b65fc1208cde3c8fb334db11406a07fed4d90fba237"},
+    "DS1": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds1.npz", "sha256": "b24d947c83890dbfa1c801bfbcb72e1fd192dd66509e927eb5afb8118902b072"},
+    "DS2": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds2.npz", "sha256": "dae0f245cbb107febd220c6de33b9a279a2bad356cb0ba772daf9418bc75d7c9"},
+    "DS3": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds3.npz", "sha256": "38eb5842dfec306d99bf0c5d61df6cffcb6faa25ed63721cafa8e3c3776f9b3e"},
+    "DS7": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/exports/ds7.npz", "sha256": "d0e6da4e27d51e3e96abf2ef7786501124072f28667671e4e40da756eb35f3c8"},
+    "DS8": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/exports/ds8.npz", "sha256": "d1973fa150b7b4e7359df4827f36ce60289f206e9db11c1ac2bc1fd33a0df533"}
+  },
+  "taps": {
+    "feature_order": ["E4", "E3", "E2", "E", "P", "L", "L2", "L3", "L4"],
+    "coordinates_chips": [-0.5, -0.375, -0.25, -0.125, 0, 0.125, 0.25, 0.375, 0.5],
+    "coordinate_provenance": "verified directly from GNSS-SDR source; explicit values, never generated from assumed spacing"
+  },
+  "b0": {
+    "checkpoint_sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
+    "retrain": false,
+    "feature_order": ["E4", "E3", "E2", "E", "P", "L", "L2", "L3", "L4"],
+    "prompt_relative_magnitude_ratio_epsilon": 0.000001,
+    "window_seconds": 1.0,
+    "stride_seconds": 0.5,
+    "minimum_raw_epochs": 4,
+    "standardizer_dtype": "float32",
+    "sequence_length": 12,
+    "forbidden_features": ["PRN_ID"],
+    "prediction_availability_field": "target_source_end",
+    "historical_training_overlap_limitation": "disclosed: frozen B0 historical training may overlap Stage-0 source support; B0 is never retrained or selected here"
+  },
+  "fit_policy": {
+    "allowed_scenario": "cleanStatic",
+    "fit_objects": ["standardizers", "covariance", "regression", "thresholds"],
+    "attack_fit": false,
+    "normal_holdout_fit": false
+  },
+  "split": {
+    "train": {"source_end_lte": 300},
+    "calibration": {"source_start_gte": 320, "source_end_lte": 400},
+    "holdout": {"source_start_gte": 420}
+  },
+  "attacks": {
+    "onsets_seconds": {"DS1": 100, "DS2": 100, "DS3": 100, "DS7": 110, "DS8": 110},
+    "stable_pre": {"source_start_gte": 30, "source_end_lte_onset_minus": 20},
+    "transition": "all otherwise-before-post epochs",
+    "post": {"source_start_gte_onset": 0},
+    "persistent": {"source_start_gte_onset_plus": 40},
+    "delay_time_field": "availability source_end",
+    "already_alarming_stable_pre": "report"
+  },
+  "detectors": {
+    "primary": {"name": "NC-TOPI", "aggregator": "median", "threshold_quantile": 0.99},
+    "diagnostic_ablations": [
+      {"name": "TOPI", "aggregator": "median", "threshold_quantile": 0.99},
+      {"name": "NC-TOPI", "aggregator": "top25_mean", "threshold_quantile": 0.995},
+      {"name": "TOPI", "aggregator": "top25_mean", "threshold_quantile": 0.995},
+      {"name": "width_tangent", "role": "diagnostic ablation"}
+    ],
+    "ablation_rescue_primary": false,
+    "common_epoch_contract": "same Stage-0 epoch identity and valid mask; each detector/aggregator/q gets its own clean-calibration threshold",
+    "top25_mean": "mean largest ceil(0.25*n), permutation-invariant, variable n, tracked count"
+  },
+  "metrics": {
+    "partial_auc": {"library": "sklearn", "definition": "standardized McClish partial AUC", "max_fpr": 0.05},
+    "threshold": {"quantile_method": "higher", "comparison": "strict >"},
+    "sustained_alarm": {"required_contiguous_epochs": 3, "cadence_seconds": 0.5, "reset_on_recording_or_time_gap": true},
+    "bootstrap": {"paired": true, "gap_safe": true, "nonoverlapping": true, "complete_block_seconds": 10, "repetitions": 2000, "interval": "percentile95", "seed": 20260803, "iid_fallback": false, "point_estimate": "all eligible epochs"}
+  },
+  "geometry": {
+    "covariance": {"estimator": "Ledoit-Wolf", "fit": "clean train residual_raw only", "eigenvalue_floor": "1e-8*trace/dim"},
+    "precision": {"method": "pseudoinverse"},
+    "projection": {"lambda_relative": 1e-8, "pinv_rcond": 1e-10},
+    "tangents": ["amplitude", "first derivative on physical coords", "optional width second derivative"]
+  },
+  "iq_conditioner": {
+    "raw": "int16 IQ", "sample_rate_hz": 25000000, "block_duration_seconds": 0.01, "block_stride_seconds": 0.5,
+    "features": ["log_power", "robust_noise_floor_scale", "spectral_flatness", "lag1_autocorrelation_magnitude"],
+    "asof": "block_end <= min target source_start", "history_blocks": 4,
+    "regression": {"type": "HuberRegressor", "epsilon": 1.35, "alpha": 0.0001, "max_iter": 1000, "fit_rows": "clean train PRN rows"},
+    "forbidden_features": ["PRN", "scenario", "onset"],
+    "predictor_standardization": "clean train robust median/IQR",
+    "predicted_scale_cap": "clean calibration predicted-scale higher q995",
+    "lower_bound": "epsilon only",
+    "shuffle_control": {"seed": 20260803, "scope": "within clean train before regression", "attack_shuffle": false}
+  },
+  "synthetic": {
+    "second_peak_relative_powers": [0.05, 0.1, 0.2, 0.4, 0.8],
+    "second_peak_separations_chips": [0.0625, 0.125, 0.25, 0.375, 0.5],
+    "interpolation": "physical coordinates; no threshold selection",
+    "equal_rmse_trials": 100,
+    "equal_rmse_trials_deterministic": true,
+    "nuisance": {"amplitude_signed": [0.02, 0.05, 0.1], "shift_signed_chips": [0.01, 0.025, 0.05], "noise_scales": [1, 1.25, 1.5]}
+  },
+  "physics_pass": {
+    "equal_rmse": "B0 relative difference <=1e-8; median tangent/orthogonal TOPI ratio <=.05; orthogonal preserved >=.95",
+    "second_peak": "for separations >=.25, Spearman power rho >=.8 each; for power >=.2, separation rho >=.8 each",
+    "nuisance": "median normalized TOPI increase < B0 increase for amplitude and small shift; noise reported and <=B0 required for pass"
+  },
+  "decision": {
+    "go_primary": "q99 NC-TOPI median only",
+    "attack_scenario_pass": "standardized pAUC point delta >0 OR both sustained delays finite and NC at least 0.5s earlier",
+    "ci_criterion": "paired pAUC delta percentile95 CI lower >0",
+    "shuffle_criterion": "actual NC mean pAUC gain over TOPI > shuffled gain AND actual gain >0",
+    "GO": "all frozen criteria pass",
+    "NO-GO": "any physics criterion fails OR clean holdout FPR >5% OR stable-pre fails >=3 scenarios OR attack improvement <=1 scenario OR zero positive CI",
+    "INCONCLUSIVE": "all outcomes not classified GO or NO-GO by the frozen grammar"
+  }
+}
