@@ -38,16 +38,18 @@ def _verify_schema(out:Path)->dict[str,Any]:
 def _verify_decision_digests(out:Path,decision:Mapping[str,Any],mode:str)->None:
     got=decision.get("source_digests",{})
     if mode=="synthetic-smoke":
-        paths={"metrics":"scenario_metrics.csv","paired":"paired_comparisons.csv","convergence":"convergence_audit.json","schema":"feature_schema.json","feature_audit":"feature_audit.json"}
-        if set(got)!=set(paths):raise ValueError("GO decision lacks exact source digests")
+        paths={"metrics":"scenario_metrics.csv","paired":"paired_comparisons.csv","convergence":"convergence_audit.json","schema":"feature_schema.json","feature_audit":"feature_audit.json","model_audit":"model_audit.json"}
+        if set(got)!=(set(paths)|{"plots"}):raise ValueError("GO decision lacks exact source digests")
         for k,v in paths.items():
             if got[k]!=runner.sha256(out/v):raise ValueError(f"GO source digest mismatch: {k}")
+        actual={str(p.relative_to(out)):runner.sha256(p) for p in sorted((out/"plots").glob("*.png"))}
+        if got["plots"]!=actual:raise ValueError("GO source digest mismatch: plots")
         return
-    paths={"thresholds":"thresholds.json","seed_metrics":"seed_metrics.csv","paired_comparisons":"paired_comparisons.csv","scenario_metrics":"scenario_metrics.csv","provenance":"provenance.json","feature_audit":"feature_audit.json","feature_schema":"feature_schema.json","fit_checkpoint_audits":"convergence_audit.json","training_history":"training_history.csv","calibration_evidence":"calibration_evidence.json","numerical_parity":"numerical_parity.json"}
-    if set(got)!=(set(paths)|{"per_epoch","checkpoints"}):raise ValueError("primary GO decision lacks exact full source digests")
+    paths={"thresholds":"thresholds.json","seed_metrics":"seed_metrics.csv","paired_comparisons":"paired_comparisons.csv","scenario_metrics":"scenario_metrics.csv","provenance":"provenance.json","feature_audit":"feature_audit.json","feature_schema":"feature_schema.json","fit_checkpoint_audits":"convergence_audit.json","training_history":"training_history.csv","calibration_evidence":"calibration_evidence.json","numerical_parity":"numerical_parity.json","model_audit":"model_audit.json"}
+    if set(got)!=(set(paths)|{"per_epoch","checkpoints","plots"}):raise ValueError("primary GO decision lacks exact full source digests")
     for k,v in paths.items():
         if got[k]!=runner.sha256(out/v):raise ValueError(f"GO source digest mismatch: {k}")
-    for key,folder,pattern in (("per_epoch","per_epoch","*.csv"),("checkpoints","models","*.pt")):
+    for key,folder,pattern in (("per_epoch","per_epoch","*.csv"),("checkpoints","models","*.pt"),("plots","plots","*.png")):
         actual={str(p.relative_to(out)):runner.sha256(p) for p in sorted((out/folder).glob(pattern))}
         if got[key]!=actual:raise ValueError(f"GO source digest mismatch: {key}")
 
@@ -68,6 +70,8 @@ def _verify_primary_config(config:Mapping[str,Any],provenance:Mapping[str,Any])-
     if any(deterministic.get(k)!=v for k,v in required.items()) or any(not deterministic.get(k) or deterministic.get(k)=="None" for k in ("torch_version","cuda_version","cudnn_version")):raise ValueError("primary deterministic settings/version evidence missing")
     if gpu.get("cuda_available") is not True or gpu.get("real_tensor_op") is not True:raise ValueError("primary deterministic GPU execution evidence missing")
     if "[340,410)" not in provenance.get("threshold_protocol_limitation","") or "[300,330)" not in provenance.get("threshold_protocol_limitation",""):raise ValueError("B0/AMCF protocol limitation missing")
+    tolerance=dict(runner.VERIFIER_FLOATING_TOLERANCE)
+    if config.get("verifier_floating_tolerance")!=tolerance or provenance.get("verifier_floating_tolerance")!=tolerance:raise ValueError("verifier floating tolerance provenance mismatch")
 
 def _verify_calibration(out:Path,thresholds:Mapping[str,Any],provenance:Mapping[str,Any])->None:
     evidence=json.loads((out/"calibration_evidence.json").read_text())
@@ -130,10 +134,11 @@ def _verify_conformal_and_phase_rows(out:Path,thresholds:Mapping[str,Any])->None
             for seed in runner.SEEDS:
                 cal=np.asarray(calibration[variant]["per_seed_raw_scores"][str(seed)],float);raw=np.asarray([float(r[f"score_{variant}_seed{seed}"]) for r in rows]);p,e=runner._conformal(cal,raw)
                 saved_p=np.asarray([float(r[f"p_{variant}_seed{seed}"]) for r in rows]);saved_e=np.asarray([float(r[f"e_{variant}_seed{seed}"]) for r in rows])
-                if not np.array_equal(p,saved_p) or not np.array_equal(e,saved_e):raise ValueError("per_epoch conformal p/e recomputation mismatch")
+                if (not np.allclose(p,saved_p,rtol=runner.CONFORMAL_VERIFY_RTOL,atol=runner.CONFORMAL_VERIFY_ATOL) or
+                    not np.allclose(e,saved_e,rtol=runner.CONFORMAL_VERIFY_RTOL,atol=runner.CONFORMAL_VERIFY_ATOL)):raise ValueError("per_epoch conformal p/e recomputation mismatch")
                 member.append(e)
             ensemble=np.mean(member,axis=0);saved=np.asarray([float(r[f"score_{variant}_ensemble"]) for r in rows])
-            if not np.array_equal(ensemble,saved):raise ValueError("per_epoch conformal ensemble recomputation mismatch")
+            if not np.allclose(ensemble,saved,rtol=runner.CONFORMAL_VERIFY_RTOL,atol=runner.CONFORMAL_VERIFY_ATOL):raise ValueError("per_epoch conformal ensemble recomputation mismatch")
             for op in ("q99","q995"):
                 alarms=ensemble>float(thresholds[variant][op]);stored=np.asarray([_bool(r[f"alarm_{variant}_{op}"]) for r in rows])
                 if not np.array_equal(alarms,stored):raise ValueError("per_epoch full-precision threshold/alarm mismatch")
@@ -472,6 +477,15 @@ def _verify_smoke_feature_audit(out:Path,audit:Mapping[str,Any],schema:Mapping[s
     if audit.get("audit_digest")!=runner._digest_value(binding) or audit.get("pass") is not all(recomputed[n]["pass"] for n in ("DS7","DS8")):raise ValueError("smoke feature audit digest/pass mismatch")
 
 
+def _verify_model_audit(out:Path,mode:str,provenance:Mapping[str,Any])->dict[str,Any]:
+    saved=json.loads((out/"model_audit.json").read_text())
+    actual=runner.build_model_audit(out/"models" if mode=="primary-full" else None)
+    if saved!=actual or saved.get("pass") is not True:raise ValueError("model audit differs from actual ShapeOnlyModel/checkpoints")
+    if mode=="primary-full" and provenance.get("model_audit_sha256")!=runner.sha256(out/"model_audit.json"):raise ValueError("model audit provenance hash mismatch")
+    if mode=="synthetic-smoke" and provenance.get("model_audit_sha256")!=runner.sha256(out/"model_audit.json"):raise ValueError("smoke model audit provenance hash mismatch")
+    return actual
+
+
 def _primary_criteria(metrics,seeds,paired,feature_verified,convergence):
     index=runner.index_metric_rows([r for r in metrics if r.get("scenario")!="DS4"]);names=tuple(runner.ONSETS)
     c=[runner.select_primary_metric(index,s,"Complex all9") for s in names];m=[runner.select_primary_metric(index,s,"Magnitude all9") for s in names];b=[runner.select_primary_metric(index,s,"B0 Exact") for s in names]
@@ -496,7 +510,7 @@ def verify_and_summarize(out:Path|str, *, hash_only:bool=False)->dict[str,Any]:
                 "mode":"non-publication-hash-only","artifact_mode":mode,"publication_eligible":False}
     if config.get("DS4")!={"status":"NA","included_in_attack_go":False} or "DS4:NA" not in config.get("scenarios",[]):raise ValueError("DS4 NA config contract missing")
     schema=_verify_schema(out);thresholds=json.loads((out/"thresholds.json").read_text());decision=json.loads((out/"decision.json").read_text());convergence=json.loads((out/"convergence_audit.json").read_text());provenance=json.loads((out/"provenance.json").read_text());feature_audit=json.loads((out/"feature_audit.json").read_text());history=_rows(out/"training_history.csv")
-    _verify_decision_digests(out,decision,mode)
+    _verify_decision_digests(out,decision,mode); runner.verify_plot_inventory(out); _verify_model_audit(out,mode,provenance)
     if thresholds.get("primary")!="q99" or thresholds.get("q995_role")!="diagnostic_only" or thresholds.get("comparison")!="strict_greater":raise ValueError("threshold primary/diagnostic contract mismatch")
     metrics=_rows(out/"scenario_metrics.csv");seeds=_rows(out/"seed_metrics.csv");paired=_rows(out/"paired_comparisons.csv")
     derived=None;examples=None;checkpoint_scores_checked=0
@@ -518,7 +532,7 @@ def verify_and_summarize(out:Path|str, *, hash_only:bool=False)->dict[str,Any]:
     else:_verify_smoke_feature_audit(out,feature_audit,schema);criteria=runner._smoke_criteria();status="SMOKE-NO-GO"
     final="GO" if all(criteria.values()) else "NO-GO"
     if decision.get("primary_quantile")!="q99" or decision.get("primary_decision")!=final or decision.get("criteria")!=criteria:raise ValueError("deterministic q99 GO recomputation mismatch")
-    expected=runner.render_readme(final,status,criteria).encode();actual=(out/"README.md").read_bytes()
+    expected=runner.render_readme(final,status,criteria,out).encode();actual=(out/"README.md").read_bytes()
     if expected!=actual:raise ValueError("README is not byte-identical to deterministic regeneration")
     return {"schema":"gnss-doppler-lab.amcf-shape-only-summary-audit.v2","hashes_verified":True,"byte_identical":True,"metrics_recomputed":checked,"alarms_recomputed":True,"thresholds_recomputed":mode=="primary-full","paired_recomputed":mode=="primary-full","checkpoints_loaded":mode=="primary-full","checkpoint_scores_reinferred":checkpoint_scores_checked,"numerical_parity_verified":mode=="primary-full","primary_quantile":"q99","primary_decision":final,"amcf_wcl":"GO candidate" if final=="GO" else "AMCF WCL no-go","criteria":criteria,"mode":mode}
 

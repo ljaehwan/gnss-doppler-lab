@@ -42,6 +42,13 @@ PRIMARY_BOOTSTRAP_BLOCK_SECONDS = 10.0
 PRIMARY_BOOTSTRAP_SEED_RULE = "101+sum(ord(scenario+comparator+metric))"
 PRIMARY_CUBLAS_WORKSPACE_CONFIG = ":4096:8"
 CROSS_DEVICE_MAX_ABS = 2e-3
+CONFORMAL_VERIFY_RTOL = 0.0
+CONFORMAL_VERIFY_ATOL = 1e-14
+VERIFIER_FLOATING_TOLERANCE = MappingProxyType({
+    "rtol": CONFORMAL_VERIFY_RTOL, "atol": CONFORMAL_VERIFY_ATOL,
+    "purpose": "conformal p/e/ensemble recomputation only",
+    "justification": "cross-NumPy arithmetic roundoff; far below every decision-threshold margin",
+})
 B0_FROZEN_Q99 = 1.7035537524611113
 B0_FROZEN_Q995 = 1.7035537524611113
 B0_FROZEN_INTERVAL = (300.0, 330.0)
@@ -73,7 +80,7 @@ REQUIRED_INVENTORY = (
     "input_hashes.json", "training_history.csv", "convergence_audit.json",
     "thresholds.json", "scenario_metrics.csv", "seed_metrics.csv",
     "paired_comparisons.csv", "decision.json", "feature_audit.json", "window_qa.json",
-    "feature_cache", "per_epoch", "plots", "models", "hashes.json",
+    "feature_cache", "per_epoch", "plots", "models", "model_audit.json", "hashes.json",
 )
 PRIMARY_REQUIRED_INVENTORY = REQUIRED_INVENTORY + ("calibration_evidence.json", "numerical_parity.json")
 SHAPE_ONLY_ALLOWED_FILES = frozenset({
@@ -540,6 +547,10 @@ def evaluate_numerical_parity(
     return {"schema":"gnss-doppler-lab.amcf-shape-only-numerical-parity.v1",
             "publication_mode":"primary-full","backend_versions":dict(backend_versions),
             "tolerances":{"same_device_rtol":0.0,"same_device_atol":0.0,
+                          "conformal_recompute_rtol":CONFORMAL_VERIFY_RTOL,
+                          "conformal_recompute_atol":CONFORMAL_VERIFY_ATOL,
+                          "conformal_recompute_purpose":VERIFIER_FLOATING_TOLERANCE["purpose"],
+                          "conformal_recompute_justification":VERIFIER_FLOATING_TOLERANCE["justification"],
                           "cross_device_engineering_max_abs":CROSS_DEVICE_MAX_ABS},
             "same_device_raw_binding":{**same_total,"comparison":"bit-exact",
                 "identity_exact":identity_exact,"source_exact":source_exact,
@@ -759,20 +770,268 @@ def _smoke_epoch_rows(scenario: str) -> list[dict[str,Any]]:
     return rows
 
 
-def render_readme(decision: str, status: str, criteria: Mapping[str,Any]) -> str:
-    lines=["# AMCF-R1 Shape-Only campaign", "", f"**Primary q99 decision: {decision}**", f"Status: {status}.", "",
-           "All DS1/DS2/DS3/DS7/DS8 attack results are exploratory/developmental and post-exposure.",
-           "q99 is the sole primary operating point; q995 is diagnostic and cannot affect GO.",
-           "AMCF thresholds use cleanStatic [340,410); frozen B0 Exact uses its protected [300,330) calibration.",
-           "Because those protocols differ, threshold-dependent AMCF/B0 comparison is limited; B0 ROC-AUC alone is recomputed on common timestamps.",
-           "DS4 is explicit NA metadata and is not one of the five attack GO scenarios.",
-           "Primary publication binds every persisted raw NLL by bit-exact replay on the production CUDA backend.",
-           "CPU replay is a cross-device numerical audit: raw drift is guarded at 2e-3, while thresholds, alarms, and reported metrics must have zero changes.",
-           "Attack data is QA-only for this audit and is never used to fit or tune a model or threshold.", "", "## Verified criteria"]
-    for name in sorted(criteria): lines.append(f"- {name}: {'PASS' if bool(criteria[name]) else 'FAIL'}")
-    lines += ["", "## Claims", "- Claimable: leakage controls, deterministic artifact recomputation, and the recorded smoke/campaign outcome.",
-              "- Not claimable: confirmatory attack performance, independent-clean generalization, causality, or deployment benefit.",
-              "- Any core criterion failure means NO-GO and AMCF WCL no-go.", ""]
+def _artifact_csv(path: Path) -> list[dict[str, str]]:
+    if not path.is_file() or not path.read_text(encoding="utf-8").strip():
+        return []
+    with path.open(newline="", encoding="utf-8") as f:
+        return list(csv.DictReader(f))
+
+
+def build_model_audit(checkpoint_dir: Path | str | None = None) -> dict[str, Any]:
+    """Derive feature/parameter fairness from the production model class."""
+    import sys
+    if str(ROOT / "src") not in sys.path:
+        sys.path.insert(0, str(ROOT / "src"))
+    from gnss_doppler_lab.amcf_shape_only import ShapeOnlyModel
+
+    reps = {}
+    schemas = {"complex": COMPLEX_SCHEMA, "magnitude": MAGNITUDE_SCHEMA}
+    for rep, dim in (("complex", 4), ("magnitude", 2)):
+        model = ShapeOnlyModel(dim, hidden=32, df=4.0)
+        breakdown = {
+            "input_adapter": sum(p.numel() for p in model.input_adapter.parameters()),
+            "history_gru": sum(p.numel() for p in model.history_gru.parameters()),
+            "decoder": sum(p.numel() for p in model.decoder.parameters()),
+            "output_head": sum(p.numel() for p in model.output_head.parameters()),
+        }
+        dimensions = list(schemas[rep])
+        reps[rep] = {
+            "feature_dimensions": dimensions,
+            "feature_dimensions_per_tap": dim,
+            "side_tap_count": len(SIDE_INDICES),
+            "total_side_feature_count": len(SIDE_INDICES) * dim,
+            "zero_filled_feature_count": 0,
+            "duplicate_feature_count": len(dimensions) - len(set(dimensions)),
+            "hidden": model.hidden,
+            "parameter_count": sum(p.numel() for p in model.parameters()),
+            "parameter_breakdown": breakdown,
+            "parameter_breakdown_sum": sum(breakdown.values()),
+        }
+    counts = [reps[x]["parameter_count"] for x in ("complex", "magnitude")]
+    difference = abs(counts[0] - counts[1])
+    percent = 100.0 * difference / min(counts)
+    checkpoint_checks = []
+    if checkpoint_dir is not None:
+        import torch
+        root = Path(checkpoint_dir)
+        expected = {f"{rep}_{objective}_seed{seed}": (rep, dim)
+                    for rep, dim in (("complex", 4), ("magnitude", 2))
+                    for objective in ("all9", "EPL") for seed in SEEDS}
+        for key, (rep, dim) in sorted(expected.items()):
+            path = root / f"{key}.pt"
+            obj = torch.load(path, map_location="cpu", weights_only=False)
+            model = ShapeOnlyModel(dim, hidden=32, df=4.0)
+            state = obj.get("state_dict", {})
+            model.load_state_dict(state, strict=True)
+            passed = (int(obj.get("feature_dim", -1)) == dim and
+                      sum(v.numel() for v in state.values()) == reps[rep]["parameter_count"])
+            if not passed:
+                raise ValueError(f"checkpoint architecture mismatch: {key}")
+            checkpoint_checks.append({"checkpoint": path.name, "representation": rep,
+                                      "feature_dim": dim, "parameter_count": reps[rep]["parameter_count"],
+                                      "sha256": sha256(path), "pass": True})
+    no_zero_duplicates = all(r["zero_filled_feature_count"] == 0 and
+                             r["duplicate_feature_count"] == 0 for r in reps.values())
+    return {
+        "schema": "gnss-doppler-lab.amcf-shape-only-model-audit.v1",
+        "derivation": "instantiated actual gnss_doppler_lab.amcf_shape_only.ShapeOnlyModel",
+        "hidden": 32, "side_tap_count": len(SIDE_INDICES),
+        "representations": reps, "no_zero_or_duplicate_features": no_zero_duplicates,
+        "comparison": {"absolute_parameter_difference": difference,
+            "percent_denominator": "minimum parameter count",
+            "percent_difference_min_denominator": percent,
+            "limit_percent": 5.0, "pass_le_5_percent": percent <= 5.0},
+        "checkpoint_architecture_crosscheck": {"performed": checkpoint_dir is not None,
+            "expected_count": 12 if checkpoint_dir is not None else 0,
+            "checked_count": len(checkpoint_checks),
+            "checks": checkpoint_checks,
+            "pass": all(x["pass"] for x in checkpoint_checks) if checkpoint_dir is not None else True},
+        "pass": no_zero_duplicates and percent <= 5.0 and
+                (checkpoint_dir is None or len(checkpoint_checks) == 12),
+    }
+
+
+def write_scenario_plots(stage: Path | str, thresholds: Mapping[str, Any]) -> None:
+    """Render the exact six deterministic, non-misleading score-panel PNGs."""
+    stage = Path(stage)
+    os.environ.setdefault("MPLCONFIGDIR", str(stage / ".mplconfig"))
+    import matplotlib
+    matplotlib.use("Agg", force=True)
+    import matplotlib.pyplot as plt
+    plt.style.use("seaborn-v0_8-whitegrid")
+    specs = (("Complex all9", "score_complex_all9_ensemble", "complex_all9", "#225ea8"),
+             ("Magnitude all9", "score_magnitude_all9_ensemble", "magnitude_all9", "#d95f02"),
+             ("B0 Exact", "score_B0_Exact", "B0 Exact", "#238b45"))
+    for scenario in CANONICAL:
+        rows = _artifact_csv(stage / "per_epoch" / f"{scenario}.csv")
+        if not rows:
+            raise ValueError(f"{scenario}: plot requires per_epoch rows")
+        t = np.asarray([float(r["decision_time_s"]) for r in rows])
+        fig, axes = plt.subplots(3, 1, sharex=True, figsize=(11.0, 7.5), dpi=120,
+                                 constrained_layout=True)
+        for ax, (label, column, threshold_key, color) in zip(axes, specs):
+            y = np.asarray([float(r[column]) for r in rows])
+            q99 = float(thresholds[threshold_key]["q99"])
+            ax.plot(t, y, color=color, linewidth=1.15, label=label)
+            ax.axhline(q99, color="#b2182b", linestyle="--", linewidth=1.0,
+                       label=f"q99={q99:.6g}")
+            ax.set_ylabel("score")
+            onset = ONSETS.get(scenario)
+            if onset is not None:
+                stable_end = onset - 20.0
+                wholly_post = onset + 1.0
+                ax.axvspan(30.0, stable_end, color="#2166ac", alpha=.07, label="stable-pre")
+                ax.axvspan(wholly_post, max(float(t.max()), wholly_post), color="#b2182b", alpha=.06, label="wholly-post")
+                ax.axvline(onset, color="#6a3d9a", linestyle=":", linewidth=1.25, label="attack onset")
+                ax.axvline(wholly_post, color="#333333", linestyle="-.", linewidth=.9, label="first wholly-post")
+            ax.legend(loc="upper left", fontsize=7, frameon=True, ncol=2)
+        axes[-1].set_xlabel("common decision timestamp (s)")
+        marker = "; markers = attack onset and first wholly-post window" if scenario in ONSETS else ""
+        fig.suptitle(f"AMCF-R1 Shape-Only {scenario} — exploratory/developmental{marker}", fontsize=12)
+        fig.savefig(stage / "plots" / f"{scenario}.png", dpi=120,
+                    metadata={"Software": "AMCF Shape-Only deterministic Agg renderer"})
+        plt.close(fig)
+    config_dir = stage / ".mplconfig"
+    if config_dir.exists():
+        import shutil
+        shutil.rmtree(config_dir)
+
+
+def verify_plot_inventory(stage: Path | str) -> None:
+    root = Path(stage) / "plots"
+    expected = {f"{name}.png" for name in CANONICAL}
+    actual = {p.name for p in root.glob("*.png")}
+    if actual != expected:
+        raise ValueError(f"PNG inventory mismatch: {sorted(actual)}")
+    magic = bytes.fromhex("89504e470d0a1a0a")
+    for name in sorted(expected):
+        path = root / name
+        if not path.read_bytes().startswith(magic) or path.stat().st_size <= 10_000:
+            raise ValueError(f"invalid or trivial PNG: {name}")
+
+
+def _display(value: Any) -> str:
+    if value in (None, ""):
+        return "NA"
+    try:
+        return f"{float(value):.6g}"
+    except (TypeError, ValueError):
+        return str(value)
+
+
+def _criterion_reporting(criteria: Mapping[str, Any], metrics: list[Mapping[str, Any]],
+                         seeds: list[Mapping[str, Any]], paired: list[Mapping[str, Any]],
+                         feature_audit: Mapping[str, Any]) -> dict[str, str]:
+    attacks = [r for r in metrics if r.get("scenario") in ONSETS and
+               r.get("model") == "Complex all9" and r.get("operating_point") == "q99"]
+    metric_index = {(r.get("scenario"), r.get("model")): r for r in metrics
+                    if r.get("operating_point") == "q99"}
+    fpr = sum(float(r["stable_pre_fpr"]) < .05 for r in attacks if r.get("stable_pre_fpr") not in (None, ""))
+    auc = sum(float(metric_index[s, "Complex all9"]["roc_auc"]) >
+              float(metric_index[s, "Magnitude all9"]["roc_auc"]) for s in ONSETS
+              if (s, "Complex all9") in metric_index and (s, "Magnitude all9") in metric_index)
+    ci = sum(float(r["ci_low"]) > 0 for r in paired if r.get("comparator") == "Magnitude all9"
+             and r.get("metric") == "roc_auc" and r.get("scenario") in ONSETS)
+    directions=[]
+    for scenario in ONSETS:
+        n=0
+        for seed in SEEDS:
+            c=next((r for r in seeds if r.get("scenario")==scenario and r.get("model")=="Complex all9" and str(r.get("seed"))==str(seed) and r.get("operating_point")=="q99"),None)
+            m=next((r for r in seeds if r.get("scenario")==scenario and r.get("model")=="Magnitude all9" and str(r.get("seed"))==str(seed) and r.get("operating_point")=="q99"),None)
+            n += int(c is not None and m is not None and float(c["roc_auc"])>float(m["roc_auc"]))
+        directions.append(n)
+    b0=0
+    for scenario in ONSETS:
+        c=metric_index.get((scenario,"Complex all9")); b=metric_index.get((scenario,"B0 Exact"))
+        if c and b:
+            b0 += int(((float(c["roc_auc"])-float(b["roc_auc"])>=.02 or float(c["post_detection"])-float(b["post_detection"])>=.05) and float(c["stable_pre_fpr"])-float(b["stable_pre_fpr"])<=.01))
+    return {
+      "stable_pre_fpr_all_below_0.05": f"{fpr}/5 scenarios below 0.05",
+      "complex_auc_gt_magnitude_4_of_5": f"{auc}/5 scenarios Complex > Magnitude",
+      "auc_bootstrap_ci_lower_gt_zero_3_of_5": f"{ci}/5 AUC CIs with lower bound > 0",
+      "same_seed_direction_each_scenario": "seed-direction counts DS1/DS2/DS3/DS7/DS8 = "+"/".join(map(str,directions)),
+      "beats_b0_with_fpr_guard_3_of_5": f"{b0}/5 scenarios meet B0 gain and FPR guard",
+      "all_required_seeds_converged": "12/12 variant/objective/seed checkpoints converged" if criteria.get("all_required_seeds_converged") else "not all 12 checkpoints converged",
+      "ds7_ds8_no_collapse": f"DS7/DS8 collapse audit pass={bool(feature_audit.get("pass", criteria.get("ds7_ds8_no_collapse",False)))}",
+    }
+
+
+def render_readme(decision: str, status: str, criteria: Mapping[str, Any],
+                  artifact: Path | str | None = None) -> str:
+    """Deterministically render all reporting from full-precision artifact inputs."""
+    root = Path(artifact) if artifact is not None else None
+    def load_json(name: str, default: Any) -> Any:
+        path = root / name if root is not None else None
+        return json.loads(path.read_text()) if path is not None and path.is_file() else default
+    metrics = _artifact_csv(root / "scenario_metrics.csv") if root is not None else []
+    seeds = _artifact_csv(root / "seed_metrics.csv") if root is not None else []
+    paired = _artifact_csv(root / "paired_comparisons.csv") if root is not None else []
+    convergence = load_json("convergence_audit.json", {"audits": {}})
+    model_audit = load_json("model_audit.json", build_model_audit())
+    feature_audit = load_json("feature_audit.json", {})
+    config = load_json("config.json", {})
+    tol = config.get("verifier_floating_tolerance", dict(VERIFIER_FLOATING_TOLERANCE))
+    reps = model_audit["representations"]
+    lines = ["# AMCF-R1 Shape-Only campaign", "", f"**Primary q99 decision: {decision}**",
+      f"Status: {status}. Any failed mandatory criterion yields **NO-GO** and **AMCF WCL no-go**.", "",
+      "## Single hypothesis", "",
+      "**Is Prompt-normalized correlator complex shape more useful for detection than magnitude shape?** This is the only hypothesis.", "",
+      "## Context and leakage controls", "",
+      "This Shape-Only study removes the prior AMCF-R1 error/context and active-query branches. C/N0 is excluded. Prompt is used only for the low-P QA gate and complex normalization; Prompt itself is never a model feature, target, score, or context input. No attack data fits a model, scaler, conformal calibration, threshold, or hyperparameter.", "",
+      "## Fair model comparison", "",
+      f"- Complex: 4 features/tap, 32 total side features, hidden 32, {reps["complex"]["parameter_count"]} trainable parameters.",
+      f"- Magnitude: 2 features/tap, 16 total side features, hidden 32, {reps["magnitude"]["parameter_count"]} trainable parameters.",
+      f"- Absolute difference: {model_audit["comparison"]["absolute_parameter_difference"]}; min-denominator difference: {model_audit["comparison"]["percent_difference_min_denominator"]:.6f}% (limit <=5%; {"PASS" if model_audit["comparison"]["pass_le_5_percent"] else "FAIL"}).",
+      f"- No zero/duplicate features: {model_audit["no_zero_or_duplicate_features"]}. Shared GRU/decoder trunk; representation-specific adapter/head only. B0 Exact is the frozen comparator.", "",
+      "## All 12 seed convergence", "",
+      "| Variant | Seed | Best epoch | Epochs | Updates | Early stop | Converged | Checkpoint SHA-256 |",
+      "|---|---:|---:|---:|---:|---|---|---|"]
+    audits = convergence.get("audits", {})
+    for key in sorted(audits):
+        a = audits[key]
+        lines.append(f"| {key} | {a.get("seed","NA")} | {a.get("best_epoch","NA")} | {a.get("epochs_run","NA")} | {a.get("optimizer_updates","NA")} | {a.get("patience_early_stop",False)} | {a.get("converged",False)} | {a.get("checkpoint_sha256","NA")} |")
+    if not audits: lines.append("| no persisted convergence rows | NA | NA | NA | NA | False | False | NA |")
+    lines += ["", "## q99 scenario results", "",
+      "Full-precision values remain in scenario_metrics.csv; rounded values below are display only. Sustained3 status is shown verbatim when already alarming.",
+      "", "### cleanStatic (reported separately)", "",
+      "| Model | q99 threshold | clean-test FPR |", "|---|---:|---:|"]
+    q99 = [r for r in metrics if r.get("operating_point") == "q99"]
+    for r in q99:
+        if r.get("scenario") == "cleanStatic" and r.get("model") in ("Complex all9","Magnitude all9","B0 Exact"):
+            lines.append(f"| {r["model"]} | {_display(r.get("threshold"))} | {_display(r.get("clean_test_fpr"))} |")
+    lines += ["", "### Attack scenarios (exploratory/developmental)", "",
+      "| Scenario | Model | ROC-AUC | PR-AUC | stable-pre FPR | post detection | persistent detection | sustained3 delay/status |",
+      "|---|---|---:|---:|---:|---:|---:|---|"]
+    for scenario in ONSETS:
+        for model in ("Complex all9","Magnitude all9","B0 Exact"):
+            r=next((x for x in q99 if x.get("scenario")==scenario and x.get("model")==model),None)
+            if r: lines.append(f"| {scenario} | {model} | {_display(r.get("roc_auc"))} | {_display(r.get("pr_auc"))} | {_display(r.get("stable_pre_fpr"))} | {_display(r.get("post_detection"))} | {_display(r.get("persistent_detection"))} | {_display(r.get("sustained3_delay_s"))} |")
+            elif status.startswith("SMOKE"): lines.append(f"| {scenario} | {model} | NA | NA | NA | NA | NA | NA |")
+    lines += ["", "## EPL auxiliary summary", "",
+      "EPL is auxiliary only (E/L side targets; Prompt remains normalization-only) and cannot affect GO.",
+      "", "| Scenario | Model | ROC-AUC | stable-pre/clean FPR | post detection |", "|---|---|---:|---:|---:|"]
+    for r in q99:
+        if r.get("model") in ("Complex EPL","Magnitude EPL"):
+            lines.append(f"| {r.get("scenario")} | {r.get("model")} | {_display(r.get("roc_auc"))} | {_display(r.get("stable_pre_fpr") or r.get("clean_test_fpr"))} | {_display(r.get("post_detection"))} |")
+    if not any(r.get("model") in ("Complex EPL","Magnitude EPL") for r in q99): lines.append("| smoke only | Complex/Magnitude EPL | NA | NA | NA |")
+    lines += ["", "## Paired comparisons", "",
+      "All deltas are Complex minus comparator with paired 95% CI, same timestamps, 10 s blocks, and the persisted replicate count.",
+      "", "| Scenario | Comparator | Metric | Delta | 95% CI | Reps | Block s |", "|---|---|---|---:|---|---:|---:|"]
+    for r in paired:
+        if r.get("scenario") in ONSETS:
+            lines.append(f"| {r.get("scenario")} | {r.get("comparator")} | {r.get("metric")} | {_display(r.get("estimate"))} | [{_display(r.get("ci_low"))}, {_display(r.get("ci_high"))}] | {r.get("reps","NA")} | {r.get("block_s","NA")} |")
+    evidence = _criterion_reporting(criteria, metrics, seeds, paired, feature_audit)
+    lines += ["", "## Criterion evidence", ""]
+    for key in sorted(criteria):
+        lines.append(f"- {key}: {"PASS" if bool(criteria[key]) else "FAIL"} — {evidence.get(key,"derived from bound artifacts")}")
+    lines += ["", "## Claims and limitations", "",
+      "- Claimable: this leakage-safe developmental representation comparison, deterministic artifact recomputation, model fairness audit, and recorded NO-GO/GO outcome.",
+      "- Not claimable: confirmatory attack performance, independent-clean generalization, causality, deployment benefit, or a matched-threshold superiority claim over B0.",
+      "- All DS1/DS2/DS3/DS7/DS8 findings and rendered plots are exploratory/developmental. DS4 is explicit NA and excluded from GO.",
+      "- B0 calibration limitation: AMCF uses cleanStatic [340,410), while frozen protected B0 Exact uses [300,330); threshold-dependent comparisons are not matched-operating-point evidence.",
+      "- q99 alone is primary; q995 is diagnostic and cannot rescue a failed criterion.", "",
+      "## Numerical verifier QA correction", "",
+      f"Identity, order, and source intervals remain exact. Conformal p/e/ensemble recomputation alone uses rtol={tol.get("rtol",0)} and atol={tol.get("atol",1e-14):.0e} for cross-NumPy arithmetic roundoff, far below every threshold margin. q99/q995, strict alarms, metrics, and GO decisions are still recomputed and must be exactly/semantically identical. This is verifier QA, not model, threshold, attack-selection, or hyperparameter retuning.", ""]
     return "\n".join(lines)
 
 
@@ -791,6 +1050,7 @@ def run_smoke(out: Path | str, *, fixture_seed: int = 7) -> dict[str,Any]:
     try:
         for d in ("per_epoch","plots","models","feature_cache"): (stage/d).mkdir()
         schema=feature_schema_document(5); write_json(stage/"feature_schema.json",schema)
+        model_audit=build_model_audit(); write_json(stage/"model_audit.json",model_audit)
         features={}; input_hashes={}
         for scenario in ("cleanStatic",*ONSETS):
             input_hashes[scenario]={"synthetic":True,"fixture_seed":fixture_seed,"sha256":hashlib.sha256(f"{scenario}:{fixture_seed}".encode()).hexdigest(),"tap_order":list(TAP_NAMES)}
@@ -803,13 +1063,16 @@ def run_smoke(out: Path | str, *, fixture_seed: int = 7) -> dict[str,Any]:
                     "clean_tree_required":False,"execution_source_hashes":{p:sha256(ROOT/p) for p in SOURCE_FILES if (ROOT/p).is_file()},
                     "input_hashes_digest":_digest_value(input_hashes),"gate":dict(gate._asdict()),"gate_scaler_hash":"smoke-"+_digest_value(dict(gate._asdict())),
                     "feature_schema_hash":_digest_value(schema),"features":features,"roles":{"train":[0,240],"validation":[250,330],"calibration":[340,410],"clean_test":[420,None]},
-                    "causal_qa":{"history":12,"cadence_s":.5,"source_support":"(T-1,T]","pass":True},"attack_fit":False}
+                    "causal_qa":{"history":12,"cadence_s":.5,"source_support":"(T-1,T]","pass":True},"attack_fit":False,
+                    "model_audit_sha256":sha256(stage/"model_audit.json"),
+                    "verifier_floating_tolerance":dict(VERIFIER_FLOATING_TOLERANCE)}
         write_json(stage/"provenance.json",provenance)
         config={"schema":"gnss-doppler-lab.amcf-shape-only-config.v1","mode":"synthetic-smoke","primary":False,"seeds":list(SEEDS),
                 "representations":["Complex all9","Magnitude all9","Complex EPL","Magnitude EPL"],"history":12,"stride_s":.5,"source_window_s":1.,
                 "minimum_valid_rows":5,"prompt_quantile":.005,"prompt_epsilon":1e-12,"hidden":32,"batch_size":256,"learning_rate":1e-3,
                 "max_epochs":200,"patience":20,"bootstrap_reps":2000,"final_artifact":str(FINAL_ARTIFACT),"no_attack_retune":True,
-                "scenarios":[*ONSETS,"DS4:NA"],"DS4":{"status":"NA","included_in_attack_go":False}}
+                "scenarios":[*ONSETS,"DS4:NA"],"DS4":{"status":"NA","included_in_attack_go":False},
+                "verifier_floating_tolerance":dict(VERIFIER_FLOATING_TOLERANCE)}
         write_json(stage/"config.json",config)
         histories=[]; audits={}
         validation_hash=hashlib.sha256(b"fixed-smoke-validation-sample-target-identities").hexdigest()
@@ -821,10 +1084,15 @@ def run_smoke(out: Path | str, *, fixture_seed: int = 7) -> dict[str,Any]:
                     audits[key]={"seed":seed,"representation":rep,"objective":objective,"finite":True,"optimizer_updates":2,"best_epoch":0,"patience_early_stop":False,"converged":False,"excluded_from_ensemble":True,"checkpoint_sha256":sha256(model),"validation_bank_hash":validation_hash}
         write_csv(stage/"training_history.csv",histories); write_json(stage/"convergence_audit.json",{"primary_status":"INCOMPLETE: nonconverged smoke models","audits":audits,"exact_three_converged_required":True})
         thresholds={"comparison":"strict_greater","primary":"q99","q995_role":"diagnostic_only","Complex all9":{"q99":1.,"q995":4.5},"Magnitude all9":{"q99":1.2,"q995":3.8},"B0 Exact":{"q99":.8,"q995":2.5},"calibration":"cleanStatic only; synthetic smoke"}
+        thresholds["complex_all9"]=thresholds["Complex all9"]; thresholds["magnitude_all9"]=thresholds["Magnitude all9"]
         write_json(stage/"thresholds.json",thresholds)
         metric_rows=[]; seed_rows=[]
         for scenario in ("cleanStatic",*ONSETS):
-            rows=_smoke_epoch_rows(scenario); write_csv(stage/"per_epoch"/f"{scenario}.csv",rows)
+            rows=_smoke_epoch_rows(scenario)
+            for row in rows:
+                row["score_complex_all9_ensemble"]=row["score_complex_ensemble"]
+                row["score_magnitude_all9_ensemble"]=row["score_magnitude_ensemble"]
+            write_csv(stage/"per_epoch"/f"{scenario}.csv",rows)
             generic=[{"decision_time_s":r["decision_time_s"],"source_start":r["source_start"],"source_end":r["source_end"],"score_ensemble":r["score_complex_ensemble"],"alarm_q99":r["alarm_complex_q99"],"alarm_q995":r["alarm_complex_q995"]} for r in rows]
             primary_metric={"model":"Complex all9",**recompute_scenario_metrics(scenario,generic,1.,4.5,onset_s=ONSETS.get(scenario)),"source_file":f"per_epoch/{scenario}.csv"}; metric_rows.append(primary_metric)
             diagnostic=[dict(x,alarm_q99=x["alarm_q995"]) for x in generic]
@@ -849,9 +1117,9 @@ def run_smoke(out: Path | str, *, fixture_seed: int = 7) -> dict[str,Any]:
             smoke_checks[scenario]={"representations":reps,"stable_alarm_evidence_digest":_digest_value(alarms),"stable_pre_alarm_rate":float(np.mean([x[-1] for x in alarms])) if alarms else 0.,"pass":all(x["pass"] for x in reps.values())}
         smoke_binding={"canonical_fields":list(ALLOWED_NPZ_FIELDS),"schema_hash":_digest_value(schema),"scenarios":smoke_checks}
         write_json(stage/"feature_audit.json",{**smoke_binding,"pass":all(smoke_checks[n]["pass"] for n in ("DS7","DS8")),"audit_digest":_digest_value(smoke_binding)})
-        criteria=_smoke_criteria(); decision={"primary_quantile":"q99","primary_decision":"NO-GO","amcf_wcl":"AMCF WCL no-go","criteria":criteria,"source_digests":{"metrics":sha256(stage/"scenario_metrics.csv"),"paired":sha256(stage/"paired_comparisons.csv"),"convergence":sha256(stage/"convergence_audit.json"),"schema":sha256(stage/"feature_schema.json"),"feature_audit":sha256(stage/"feature_audit.json")}}
-        write_json(stage/"decision.json",decision); (stage/"README.md").write_text(render_readme("NO-GO","SMOKE-NO-GO",criteria),encoding="utf-8",newline="\n")
-        (stage/"plots"/"SMOKE_ONLY.txt").write_text("Synthetic smoke only; no attack campaign executed.\n")
+        write_scenario_plots(stage,thresholds); verify_plot_inventory(stage)
+        criteria=_smoke_criteria(); decision={"primary_quantile":"q99","primary_decision":"NO-GO","amcf_wcl":"AMCF WCL no-go","criteria":criteria,"source_digests":{"metrics":sha256(stage/"scenario_metrics.csv"),"paired":sha256(stage/"paired_comparisons.csv"),"convergence":sha256(stage/"convergence_audit.json"),"schema":sha256(stage/"feature_schema.json"),"feature_audit":sha256(stage/"feature_audit.json"),"model_audit":sha256(stage/"model_audit.json"),"plots":{str(p.relative_to(stage)):sha256(p) for p in sorted((stage/"plots").glob("*.png"))}}}
+        write_json(stage/"decision.json",decision); (stage/"README.md").write_text(render_readme("NO-GO","SMOKE-NO-GO",criteria,stage),encoding="utf-8",newline="\n")
         write_hashes(stage)
         missing=[x for x in REQUIRED_INVENTORY if not (stage/x).exists()]
         if missing: raise RuntimeError(f"missing required artifact inventory: {missing}")
@@ -954,8 +1222,15 @@ def recompute_calibration_evidence(evidence: Mapping[str,Any]) -> dict[str,Any]:
     binding={k:evidence[k] for k in binding_keys}
     actual={"q99":_higher(ensemble,.99),"q995":_higher(ensemble,.995),"threshold_digest":_digest_value(binding)}
     loo_p={str(seed):np.exp(-np.asarray(loo[str(seed)],float)).tolist() for seed in SEEDS}
-    if loo != evidence["per_seed_loo_evidence"] or loo_p != evidence["per_seed_loo_p"] or not np.array_equal(ensemble,np.asarray(evidence["ensemble_loo_evidence"],float)):
-        raise ValueError("calibration LOO p/e evidence mismatch")
+    def conformal_close(actual_map: Mapping[str, Any], saved_map: Mapping[str, Any]) -> bool:
+        return set(actual_map) == set(saved_map) and all(np.allclose(
+            np.asarray(actual_map[k], float), np.asarray(saved_map[k], float),
+            rtol=CONFORMAL_VERIFY_RTOL, atol=CONFORMAL_VERIFY_ATOL) for k in actual_map)
+    if (not conformal_close(loo, evidence["per_seed_loo_evidence"]) or
+        not conformal_close(loo_p, evidence["per_seed_loo_p"]) or
+        not np.allclose(ensemble, np.asarray(evidence["ensemble_loo_evidence"], float),
+                        rtol=CONFORMAL_VERIFY_RTOL, atol=CONFORMAL_VERIFY_ATOL)):
+        raise ValueError("calibration conformal LOO p/e/ensemble evidence mismatch")
     if actual["q99"]!=float(evidence["q99"]) or actual["q995"]!=float(evidence["q995"]) or actual["threshold_digest"]!=evidence["threshold_digest"]:
         raise ValueError("calibration threshold digest/scalar mismatch")
     return actual
@@ -1286,13 +1561,13 @@ def _exact_epoch_rows(epoch: Mapping[tuple[str,str],dict[float,dict[str,Any]]], 
     return [x[0] for x in ref],banks
 
 
-def _write_primary_plots(stage: Path, metric_rows: list[dict[str,Any]]) -> None:
-    # Deterministic plot-ready evidence for every representation/objective/op.
+def _write_primary_plots(stage: Path, metric_rows: list[dict[str,Any]],
+                         thresholds: Mapping[str,Any]) -> None:
+    # Keep plot-ready metrics and render exact per-scenario PNG evidence.
     rows=[r for r in metric_rows if r.get("scenario")!="DS4"]
     write_csv(stage/"plots"/"scenario_plot_data.csv",rows)
-    (stage/"plots"/"README.txt").write_text(
-        "Deterministic plot-ready rows include Complex/Magnitude all9/EPL and B0 Exact at q99/q995.\n",
-        encoding="utf-8",newline="\n")
+    write_scenario_plots(stage,thresholds)
+    verify_plot_inventory(stage)
 
 
 def run_primary(out: Path | str = ROOT/FINAL_ARTIFACT, *, bootstrap_reps: int = 2000) -> dict[str,Any]:
@@ -1462,6 +1737,7 @@ def run_primary(out: Path | str = ROOT/FINAL_ARTIFACT, *, bootstrap_reps: int = 
         if saved_calibration_rows:write_csv(stage/"per_epoch"/"cleanStatic_calibration.csv",saved_calibration_rows)
         write_json(stage/"calibration_evidence.json",calibration);write_json(stage/"thresholds.json",thresholds)
         write_json(stage/"convergence_audit.json",convergence)
+        model_audit=build_model_audit(stage/"models"); write_json(stage/"model_audit.json",model_audit)
         index=index_metric_rows([r for r in metric_rows if r.get("scenario")!="DS4"])
         for name in ONSETS:
             rows=saved[name]; t=np.asarray([r["decision_time_s"] for r in rows]); starts=np.asarray([r["source_start"] for r in rows]); ends=np.asarray([r["source_end"] for r in rows]); masks=phase_labels(starts,ends,ONSETS[name]); y=masks["post"]; c=np.asarray([r["score_complex_all9_ensemble"] for r in rows])
@@ -1469,7 +1745,7 @@ def run_primary(out: Path | str = ROOT/FINAL_ARTIFACT, *, bootstrap_reps: int = 
                 b=np.asarray([r[col] for r in rows]); ath=thresholds["complex_all9"]["q99"]; bth=thresholds[thkey]["q99"]
                 for metric,mask in (("roc_auc",masks["stable_pre"]|masks["post"]),("post_detection",masks["post"]),("stable_pre_fpr",masks["stable_pre"])):
                     seed=primary_bootstrap_seed(name,comparator,metric); paired.append({"scenario":name,"comparator":comparator,"metric":metric,"operating_point":"q99",**_bootstrap_delta(t,y,c,b,metric,ath,bth,mask,bootstrap_reps,seed)})
-        write_csv(stage/"scenario_metrics.csv",metric_rows); write_csv(stage/"seed_metrics.csv",_append_seed_mean_std(seed_rows)); write_csv(stage/"paired_comparisons.csv",paired); _write_primary_plots(stage,metric_rows)
+        write_csv(stage/"scenario_metrics.csv",metric_rows); write_csv(stage/"seed_metrics.csv",_append_seed_mean_std(seed_rows)); write_csv(stage/"paired_comparisons.csv",paired); _write_primary_plots(stage,metric_rows,thresholds)
         collapse={}
         for name in ("cleanStatic","DS7","DS8"):
             checks={}; ok=True
@@ -1510,13 +1786,14 @@ def run_primary(out: Path | str = ROOT/FINAL_ARTIFACT, *, bootstrap_reps: int = 
           "gate":dict(gate._asdict()),"scalers":scalers,"gate_hash":gate_hash,"gate_scaler_hash":_digest_value({"gate":dict(gate._asdict()),"scalers":scalers}),
           "feature_schema_hash":_digest_value(schema),"feature_provenance":feature_evidence,"feature_audit_digest":feature_audit["audit_digest"],
           "fit_config":dict(PRIMARY_FIT_CONFIG),"fit_audits":{k:{"fit_manifest_digest":v["fit_manifest_digest"],"upstream_digests":v["upstream_digests"]} for k,v in audits.items()},
-          "numerical_parity_sha256":numerical_parity_sha256,"attack_fit":False,"all_attack_results":"exploratory/developmental",
+          "numerical_parity_sha256":numerical_parity_sha256,"model_audit_sha256":sha256(stage/"model_audit.json"),
+          "verifier_floating_tolerance":dict(VERIFIER_FLOATING_TOLERANCE),"attack_fit":False,"all_attack_results":"exploratory/developmental",
           "numerical_correction_scope":"publication verifier correction after failed staging gate; no model, hyperparameter, conformal threshold, or attack tuning"}; write_json(stage/"provenance.json",provenance)
-        config={"schema":"gnss-doppler-lab.amcf-shape-only-config.v2","mode":"primary-full","base_sha":PRIMARY_BASE_SHA,"deterministic_execution":determinism,"seeds":list(SEEDS),"objectives":["all9","EPL"],"representations":["complex","magnitude"],**dict(PRIMARY_FIT_CONFIG),"hidden":32,"history":12,"stride_s":.5,"source_window_s":1.,"minimum_valid_rows":PRIMARY_MIN_VALID_ROWS,"bootstrap_reps":bootstrap_reps,"bootstrap_block_seconds":PRIMARY_BOOTSTRAP_BLOCK_SECONDS,"bootstrap_seed_rule":PRIMARY_BOOTSTRAP_SEED_RULE,"onsets":ONSETS,"scenarios":[*ONSETS,"DS4:NA"],"DS4":{"status":"NA","included_in_attack_go":False},"q99_primary":True,"q995_diagnostic_only":True,"matched_clean":False}; write_json(stage/"config.json",config)
-        digest_paths={"thresholds":"thresholds.json","seed_metrics":"seed_metrics.csv","paired_comparisons":"paired_comparisons.csv","scenario_metrics":"scenario_metrics.csv","provenance":"provenance.json","feature_audit":"feature_audit.json","feature_schema":"feature_schema.json","fit_checkpoint_audits":"convergence_audit.json","training_history":"training_history.csv","calibration_evidence":"calibration_evidence.json","numerical_parity":"numerical_parity.json"}
-        source_digests={k:sha256(stage/v) for k,v in digest_paths.items()}; source_digests["per_epoch"]={str(p.relative_to(stage)):sha256(p) for p in sorted((stage/"per_epoch").glob("*.csv"))}; source_digests["checkpoints"]={str(p.relative_to(stage)):sha256(p) for p in sorted((stage/"models").glob("*.pt"))}
+        config={"schema":"gnss-doppler-lab.amcf-shape-only-config.v2","mode":"primary-full","base_sha":PRIMARY_BASE_SHA,"deterministic_execution":determinism,"seeds":list(SEEDS),"objectives":["all9","EPL"],"representations":["complex","magnitude"],**dict(PRIMARY_FIT_CONFIG),"hidden":32,"history":12,"stride_s":.5,"source_window_s":1.,"minimum_valid_rows":PRIMARY_MIN_VALID_ROWS,"bootstrap_reps":bootstrap_reps,"bootstrap_block_seconds":PRIMARY_BOOTSTRAP_BLOCK_SECONDS,"bootstrap_seed_rule":PRIMARY_BOOTSTRAP_SEED_RULE,"onsets":ONSETS,"scenarios":[*ONSETS,"DS4:NA"],"DS4":{"status":"NA","included_in_attack_go":False},"q99_primary":True,"q995_diagnostic_only":True,"matched_clean":False,"verifier_floating_tolerance":dict(VERIFIER_FLOATING_TOLERANCE)}; write_json(stage/"config.json",config)
+        digest_paths={"thresholds":"thresholds.json","seed_metrics":"seed_metrics.csv","paired_comparisons":"paired_comparisons.csv","scenario_metrics":"scenario_metrics.csv","provenance":"provenance.json","feature_audit":"feature_audit.json","feature_schema":"feature_schema.json","fit_checkpoint_audits":"convergence_audit.json","training_history":"training_history.csv","calibration_evidence":"calibration_evidence.json","numerical_parity":"numerical_parity.json","model_audit":"model_audit.json"}
+        source_digests={k:sha256(stage/v) for k,v in digest_paths.items()}; source_digests["per_epoch"]={str(p.relative_to(stage)):sha256(p) for p in sorted((stage/"per_epoch").glob("*.csv"))}; source_digests["checkpoints"]={str(p.relative_to(stage)):sha256(p) for p in sorted((stage/"models").glob("*.pt"))}; source_digests["plots"]={str(p.relative_to(stage)):sha256(p) for p in sorted((stage/"plots").glob("*.png"))}
         decision={"primary_quantile":"q99","primary_decision":final,"amcf_wcl":"GO candidate" if final=="GO" else "AMCF WCL no-go","criteria":criteria,"source_digests":source_digests}; write_json(stage/"decision.json",decision)
-        (stage/"README.md").write_text(render_readme(final,"PRIMARY COMPLETE",criteria),encoding="utf-8",newline="\n")
+        (stage/"README.md").write_text(render_readme(final,"PRIMARY COMPLETE",criteria,stage),encoding="utf-8",newline="\n")
         write_hashes(stage); verify_hashes(stage); missing=[x for x in PRIMARY_REQUIRED_INVENTORY if not (stage/x).exists()]
         if missing: raise RuntimeError(f"missing inventory {missing}")
         # Drop campaign-scale in-memory tensors/models before the independent

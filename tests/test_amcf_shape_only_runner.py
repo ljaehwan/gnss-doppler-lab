@@ -61,7 +61,7 @@ def test_red_contract_constants_and_exact_final_path():
             "input_hashes.json", "training_history.csv", "convergence_audit.json",
             "thresholds.json", "scenario_metrics.csv", "seed_metrics.csv",
             "paired_comparisons.csv", "decision.json", "feature_audit.json", "window_qa.json",
-            "feature_cache", "per_epoch", "plots", "models", "hashes.json"} == set(runner.REQUIRED_INVENTORY)
+            "feature_cache", "per_epoch", "plots", "models", "model_audit.json", "hashes.json"} == set(runner.REQUIRED_INVENTORY)
     assert set(runner.PRIMARY_REQUIRED_INVENTORY) == set(runner.REQUIRED_INVENTORY) | {"calibration_evidence.json", "numerical_parity.json"}
 
 
@@ -243,13 +243,13 @@ def test_primary_verifier_requires_persisted_determinism_evidence():
         "bootstrap_block_seconds": runner.PRIMARY_BOOTSTRAP_BLOCK_SECONDS,
         "bootstrap_seed_rule": runner.PRIMARY_BOOTSTRAP_SEED_RULE,
         "DS4": {"status": "NA", "included_in_attack_go": False}, "scenarios": ["DS4:NA"],
-        "deterministic_execution": deterministic, **dict(runner.PRIMARY_FIT_CONFIG),
+        "deterministic_execution": deterministic, "verifier_floating_tolerance":dict(runner.VERIFIER_FLOATING_TOLERANCE), **dict(runner.PRIMARY_FIT_CONFIG),
     }
     provenance = {
         "source_commit": "a" * 40, "clean_tree": True, "execution_tree_clean": True,
         "baseline": runner.PRIMARY_BASE_SHA, "fit_config": dict(runner.PRIMARY_FIT_CONFIG),
         "threshold_protocol_limitation": "AMCF [340,410); B0 [300,330)",
-        "deterministic_execution": deterministic,
+        "deterministic_execution": deterministic, "verifier_floating_tolerance":dict(runner.VERIFIER_FLOATING_TOLERANCE),
         "gpu_execution": {"cuda_available": True, "real_tensor_op": True,
                           "deterministic_execution": deterministic},
     }
@@ -730,7 +730,10 @@ def test_numerical_parity_accepts_characterized_cross_device_drift():
     assert audit["cross_device_numerical_audit"]["max_abs"] == pytest.approx(5e-4)
     assert audit["cross_device_numerical_audit"]["raw_binding_gate"] is False
     assert audit["tolerances"] == {"same_device_rtol": 0.0, "same_device_atol": 0.0,
-                                    "cross_device_engineering_max_abs": 2e-3}
+        "conformal_recompute_rtol": 0.0, "conformal_recompute_atol": 1e-14,
+        "conformal_recompute_purpose": "conformal p/e/ensemble recomputation only",
+        "conformal_recompute_justification": "cross-NumPy arithmetic roundoff; far below every decision-threshold margin",
+        "cross_device_engineering_max_abs": 2e-3}
     assert audit["semantic_invariance"]["pass"] is True
 
 
@@ -782,3 +785,140 @@ def test_primary_publication_numerical_verifier_requires_cuda():
         cuda = NoCuda()
     with pytest.raises(RuntimeError, match="CUDA.*publication"):
         runner.require_primary_cuda_backend(torch_module=FakeTorch)
+
+
+# Reporting/portability completion regressions.
+def test_conformal_verifier_tolerance_accepts_roundoff_but_rejects_material_drift():
+    banks = {101:_score_rows(0), 202:_score_rows(.1), 303:_score_rows(.2)}
+    result = runner.build_calibration_evidence(
+        "complex_all9", banks, source_commit="a"*40,
+        score_bank_hash="b"*64, index_hash="c"*64)
+    roundoff = json.loads(json.dumps(result))
+    roundoff["per_seed_loo_p"]["101"][0] += 8.88e-16
+    roundoff["per_seed_loo_evidence"]["202"][1] -= 8.88e-16
+    roundoff["ensemble_loo_evidence"][2] += 8.88e-16
+    assert runner.recompute_calibration_evidence(roundoff)["q99"] == result["q99"]
+    material = json.loads(json.dumps(result))
+    material["ensemble_loo_evidence"][2] += 1e-10
+    with pytest.raises(ValueError, match="calibration conformal"):
+        runner.recompute_calibration_evidence(material)
+    assert runner.CONFORMAL_VERIFY_RTOL == 0
+    assert runner.CONFORMAL_VERIFY_ATOL == 1e-14
+
+
+def test_model_audit_is_derived_from_actual_shape_only_model(tmp_path):
+    audit = runner.build_model_audit()
+    assert audit["representations"]["complex"]["feature_dimensions_per_tap"] == 4
+    assert audit["representations"]["complex"]["total_side_feature_count"] == 32
+    assert audit["representations"]["complex"]["parameter_count"] == 19208
+    assert audit["representations"]["magnitude"]["feature_dimensions_per_tap"] == 2
+    assert audit["representations"]["magnitude"]["total_side_feature_count"] == 16
+    assert audit["representations"]["magnitude"]["parameter_count"] == 19012
+    assert audit["comparison"]["absolute_parameter_difference"] == 196
+    assert audit["comparison"]["percent_difference_min_denominator"] == pytest.approx(1.0309278350515463)
+    assert audit["comparison"]["pass_le_5_percent"] is True
+    assert audit["no_zero_or_duplicate_features"] is True
+    _write_real_checkpoint_inventory(tmp_path)
+    checked=runner.build_model_audit(tmp_path/"models")
+    assert checked["checkpoint_architecture_crosscheck"]["checked_count"] == 12
+    assert checked["checkpoint_architecture_crosscheck"]["pass"] is True
+
+
+def test_deterministic_png_inventory_magic_and_nontrivial_size(tmp_path):
+    (tmp_path/"per_epoch").mkdir(); (tmp_path/"plots").mkdir()
+    thresholds={"complex_all9":{"q99":1.0},"magnitude_all9":{"q99":1.2},
+                "B0 Exact":{"q99":1.7}}
+    for scenario in runner.CANONICAL:
+        rows=[]
+        onset=runner.ONSETS.get(scenario)
+        for i,t in enumerate(np.arange(20.0,180.0,.5)):
+            rows.append({"decision_time_s":t,"source_start":t-1,"source_end":t,
+                "score_complex_all9_ensemble":.7+.4*np.sin(i/13),
+                "score_magnitude_all9_ensemble":.8+.35*np.cos(i/17),
+                "score_B0_Exact":1.4+.5*np.sin(i/19),
+                "phase":"clean_test" if onset is None else ("post" if t-1>=onset else "stable_pre")})
+        runner.write_csv(tmp_path/"per_epoch"/f"{scenario}.csv",rows)
+    runner.write_scenario_plots(tmp_path,thresholds)
+    assert {p.name for p in (tmp_path/"plots").glob("*.png")} == {f"{s}.png" for s in runner.CANONICAL}
+    runner.verify_plot_inventory(tmp_path)
+    first={p.name:runner.sha256(p) for p in (tmp_path/"plots").glob("*.png")}
+    for p in (tmp_path/"plots").glob("*.png"):
+        assert p.read_bytes().startswith(bytes.fromhex("89504e470d0a1a0a")) and p.stat().st_size > 10_000
+        p.unlink()
+    runner.write_scenario_plots(tmp_path,thresholds)
+    assert first == {p.name:runner.sha256(p) for p in (tmp_path/"plots").glob("*.png")}
+
+
+def test_smoke_required_readme_sections_and_bound_reporting_artifacts(tmp_path):
+    out=tmp_path/"reporting-smoke"; runner.run_smoke(out,fixture_seed=45)
+    text=(out/"README.md").read_text()
+    for heading in ("## Single hypothesis","## Fair model comparison","## All 12 seed convergence",
+                    "## q99 scenario results","## EPL auxiliary summary","## Paired comparisons",
+                    "## Criterion evidence","## Claims and limitations","## Numerical verifier QA correction"):
+        assert heading in text
+    for scenario in ("cleanStatic","DS1","DS2","DS3","DS7","DS8"):
+        assert scenario in text
+    assert "19208" in text and "19012" in text and "1.030928%" in text
+    assert json.loads((out/"model_audit.json").read_text())["comparison"]["pass_le_5_percent"] is True
+    assert json.loads((out/"config.json").read_text())["verifier_floating_tolerance"]["atol"] == 1e-14
+    assert json.loads((out/"provenance.json").read_text())["verifier_floating_tolerance"]["purpose"] == "conformal p/e/ensemble recomputation only"
+    assert summary.verify_and_summarize(out)["byte_identical"] is True
+
+
+
+def test_primary_readme_renderer_derives_required_numeric_criterion_evidence(tmp_path):
+    metrics=[]; seed_rows=[]; paired=[]
+    scenarios=list(runner.ONSETS)
+    c_auc=[.4,.4,.4,.8,.8]; m_auc=[.5]*5
+    c_fpr=[.01,.10,.10,.10,.10]
+    for i,scenario in enumerate(scenarios):
+        for model,auc,fpr in (("Complex all9",c_auc[i],c_fpr[i]),
+                              ("Magnitude all9",m_auc[i],.10),
+                              ("B0 Exact",c_auc[i]-(.03 if scenario=="DS7" else 0),c_fpr[i])):
+            metrics.append({"scenario":scenario,"model":model,"operating_point":"q99",
+                "threshold":1.0,"roc_auc":auc,"pr_auc":auc-.05,"stable_pre_fpr":fpr,
+                "post_detection":.5+(model=="Complex all9" and scenario=="DS7")*.1,
+                "persistent_detection":.6,"sustained3_delay_s":None,"clean_test_fpr":None})
+        for model in ("Complex EPL","Magnitude EPL"):
+            metrics.append({"scenario":scenario,"model":model,"operating_point":"q99",
+                "threshold":1.0,"roc_auc":.55,"pr_auc":.5,"stable_pre_fpr":.1,
+                "post_detection":.4,"persistent_detection":.5,"sustained3_delay_s":2.0})
+        for seed in runner.SEEDS:
+            direction = scenario in ("DS7","DS8")
+            seed_rows += [
+                {"scenario":scenario,"model":"Complex all9","operating_point":"q99","seed":seed,
+                 "roc_auc":.6 + (.1 if direction else 0)},
+                {"scenario":scenario,"model":"Magnitude all9","operating_point":"q99","seed":seed,
+                 "roc_auc":.65},]
+        for comparator in ("Magnitude all9","B0 Exact"):
+            for metric in ("roc_auc","post_detection","stable_pre_fpr"):
+                paired.append({"scenario":scenario,"comparator":comparator,"metric":metric,
+                    "estimate":0.0,"ci_low":-0.1,"ci_high":0.1,"reps":2000,"block_s":10.0})
+    for model in ("Complex all9","Magnitude all9","B0 Exact","Complex EPL","Magnitude EPL"):
+        metrics.append({"scenario":"cleanStatic","model":model,"operating_point":"q99",
+            "threshold":1.0,"clean_test_fpr":.01,"roc_auc":None,"pr_auc":None})
+    runner.write_csv(tmp_path/"scenario_metrics.csv",metrics)
+    runner.write_csv(tmp_path/"seed_metrics.csv",seed_rows)
+    runner.write_csv(tmp_path/"paired_comparisons.csv",paired)
+    audits={}
+    for rep in ("complex","magnitude"):
+        for objective in ("all9","EPL"):
+            for seed in runner.SEEDS:
+                key=f"{rep}_{objective}_seed{seed}"
+                audits[key]={"seed":seed,"best_epoch":7,"epochs_run":28,"optimizer_updates":56,
+                    "patience_early_stop":True,"converged":True,"checkpoint_sha256":key.encode().hex().ljust(64,"0")[:64]}
+    runner.write_json(tmp_path/"convergence_audit.json",{"audits":audits})
+    runner.write_json(tmp_path/"model_audit.json",runner.build_model_audit())
+    runner.write_json(tmp_path/"feature_audit.json",{"pass":True})
+    runner.write_json(tmp_path/"config.json",{"verifier_floating_tolerance":dict(runner.VERIFIER_FLOATING_TOLERANCE)})
+    criteria={"stable_pre_fpr_all_below_0.05":False,"complex_auc_gt_magnitude_4_of_5":False,
+      "auc_bootstrap_ci_lower_gt_zero_3_of_5":False,"same_seed_direction_each_scenario":False,
+      "beats_b0_with_fpr_guard_3_of_5":False,"all_required_seeds_converged":True,
+      "ds7_ds8_no_collapse":True}
+    text=runner.render_readme("NO-GO","PRIMARY COMPLETE",criteria,tmp_path)
+    for snippet in ("1/5 scenarios below 0.05","2/5 scenarios Complex > Magnitude",
+                    "0/5 AUC CIs with lower bound > 0",
+                    "seed-direction counts DS1/DS2/DS3/DS7/DS8 = 0/0/0/3/3",
+                    "1/5 scenarios meet B0 gain and FPR guard","12/12 variant/objective/seed checkpoints converged"):
+        assert snippet in text
+    assert text.count("| complex_")+text.count("| magnitude_") >= 12
