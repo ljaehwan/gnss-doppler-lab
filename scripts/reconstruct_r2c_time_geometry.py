@@ -74,26 +74,29 @@ def raw_observables(directory):
         rel=float(t-start)
         if rel>=0:bins.setdefault(int(np.floor(rel/.5)),set()).add(int(p))
     return start,bins,{"path":str(path),"sha256":sha(path),"valid_rows":int(valid.sum()),"tow_outlier_rows":int((base&~consistent).sum()),"rinex_clock_nearest_delta_s":None},rx[valid]
-def selected_bins(path,directory):
+def manifest_iq_hash(doc):
+    return (doc.get("source",{}).get("iq_sha256") or doc.get("source",{}).get("sha256") or doc.get("authenticated_inputs",{}).get("iq_after_receiver",{}).get("sha256"))
+def selected_bins(path,directory,scenario):
     with np.load(path,allow_pickle=False) as z:times=np.asarray(z["time_s"],float)
     digest=sha(path);manifest=path.with_suffix(".manifest.json")
     if not manifest.is_file():raise ValueError("selected NPZ export manifest missing")
     doc=json.loads(manifest.read_text());output=doc.get("output",{})
+    declared_output=Path(output.get("path",""));declared_output=(manifest.parent/declared_output).resolve() if not declared_output.is_absolute() else declared_output.resolve()
+    identity=doc.get("recording_id") or doc.get("scenario")
     if output.get("sha256")!=digest or int(output.get("row_count",-1))!=len(times):raise ValueError("selected NPZ/export manifest mismatch")
-    receiver_iq=source_iq_hash(directory);export_iq=doc.get("source_iq_sha256")
-    if not export_iq:
-        historical=path.parents[1]/"receiver/manifest.json";declared=doc.get("receiver_manifest",{}).get("sha256")
-        if historical.is_file() and declared==sha(historical):export_iq=source_iq_hash(historical.parent)
-    if receiver_iq and receiver_iq!=export_iq:raise ValueError("selected NPZ/receiver source-IQ lineage mismatch")
-    lineage_status="HASH_BOUND" if valid_sha(receiver_iq) and valid_sha(export_iq) and receiver_iq==export_iq else "LINEAGE_GAP"
-    return sorted(set(np.floor(times/.5).astype(int))),{"path":str(path),"sha256":digest,"rows":len(times),"manifest_path":str(manifest),"manifest_sha256":sha(manifest),"source_iq_sha256":export_iq,"receiver_source_iq_sha256":receiver_iq,"lineage_status":lineage_status}
+    export_identity_ok=declared_output==path.resolve() and (identity is None or identity.lower()==scenario.lower())
+    receiver_record=doc.get("receiver_manifest",{});receiver_path=Path(receiver_record.get("path",""));receiver_path=(manifest.parent/receiver_path).resolve() if not receiver_path.is_absolute() else receiver_path.resolve()
+    receiver_doc=json.loads(receiver_path.read_text()) if receiver_path.is_file() and sha(receiver_path)==receiver_record.get("sha256") else {}
+    receiver_iq=manifest_iq_hash(receiver_doc);export_iq=doc.get("source_iq_sha256")
+    lineage_status="HASH_BOUND" if export_identity_ok and valid_sha(receiver_iq) and valid_sha(export_iq) and receiver_iq==export_iq else "LINEAGE_GAP"
+    return sorted(set(np.floor(times/.5).astype(int))),{"path":str(path.resolve()),"sha256":digest,"rows":len(times),"manifest_path":str(manifest.resolve()),"manifest_sha256":sha(manifest),"source_iq_sha256":export_iq,"receiver_source_iq_sha256":receiver_iq,"receiver_manifest_path":str(receiver_path),"receiver_manifest_sha256":receiver_record.get("sha256"),"recording_id":identity,"export_identity_status":"PASS" if export_identity_ok else "LINEAGE_GAP","lineage_status":lineage_status}
 def source_iq_hash(directory):
     path=directory/"manifest.json"
     if not path.is_file():return None
-    doc=json.loads(path.read_text());return (doc.get("source",{}).get("iq_sha256") or doc.get("source",{}).get("sha256") or doc.get("authenticated_inputs",{}).get("iq_after_receiver",{}).get("sha256"))
+    return manifest_iq_hash(json.loads(path.read_text()))
 def reconstruct(name,directory,selected,config,expected_week=None,expected_tow=None):
     binding=rinex(directory);start,raw,lineage,valid_rx=raw_observables(directory);pvt,pvt_report=nmea_pvt(directory,start,binding["recording_utc_date"])
-    eph=parse_gnss_sdr_gps_ephemeris_xml(directory/"gps_ephemeris.xml");eligible,selected_report=selected_bins(selected,directory)
+    eph=parse_gnss_sdr_gps_ephemeris_xml(directory/"gps_ephemeris.xml");eligible,selected_report=selected_bins(selected,directory,name)
     modulo={x.WN for x in eph.values()};week_ok=all(binding["gps_week"]%1024==x for x in modulo)
     rinex_rx_delta=float(np.min(np.abs(valid_rx-binding["first_epoch_tow_s"])));lineage["rinex_clock_nearest_delta_s"]=rinex_rx_delta
     assertions={"week":{"expected":expected_week,"derived":binding["gps_week"],"status":"NOT_PROVIDED" if expected_week is None else "PASS" if expected_week==binding["gps_week"] else "FAIL"},
@@ -129,8 +132,8 @@ def reconstruct(name,directory,selected,config,expected_week=None,expected_tow=N
     decoded=[x.decoded_tow for x in eph.values() if x.decoded_tow is not None]
     causal=False
     return {"scenario":name,"derived_time":{"status":"PASS" if week_ok and abs(rinex_rx_delta)<=1 else "FAIL","gps_week":binding["gps_week"],"start_tow_s":start,"rinex_rx_delta_s":rinex_rx_delta,"ephemeris_week_modulo":sorted(modulo),"assertions":assertions},
-      "lineage":{"rinex":binding,"observables":lineage,"selected":selected_report,"receiver_manifest":{"path":str((directory/"manifest.json").resolve()),"sha256":sha(directory/"manifest.json")} if (directory/"manifest.json").is_file() else {"status":"LINEAGE_GAP"},"receiver_source_iq_sha256":source_iq_hash(directory),"export_source_iq_sha256":selected_report.get("source_iq_sha256"),"source_iq_binding_status":selected_report.get("lineage_status"),"ephemeris":{"path":str((directory/"gps_ephemeris.xml").resolve()),"sha256":sha(directory/"gps_ephemeris.xml")},"nmea":{"path":str((directory/"nmea_pvt.nmea").resolve()),"sha256":sha(directory/"nmea_pvt.nmea")}},
-      "nmea":pvt_report,"event_time_causal_ephemeris_availability":{"status":"PASS" if causal else "OFFLINE_ORACLE_ONLY","decoded_history_authenticated":causal},
+      "lineage":{"rinex":binding,"observables":lineage,"selected":selected_report,"receiver_manifest":{"path":selected_report.get("receiver_manifest_path"),"sha256":selected_report.get("receiver_manifest_sha256")} if selected_report.get("receiver_manifest_path") else {"status":"LINEAGE_GAP"},"geometry_receiver_manifest":{"path":str((directory/"manifest.json").resolve()),"sha256":sha(directory/"manifest.json")} if (directory/"manifest.json").is_file() else {"status":"LINEAGE_GAP"},"receiver_source_iq_sha256":selected_report.get("receiver_source_iq_sha256"),"export_source_iq_sha256":selected_report.get("source_iq_sha256"),"selected_source_iq_sha256":selected_report.get("source_iq_sha256"),"source_iq_binding_status":selected_report.get("lineage_status"),"ephemeris":{"path":str((directory/"gps_ephemeris.xml").resolve()),"sha256":sha(directory/"gps_ephemeris.xml")},"nmea":{"path":str((directory/"nmea_pvt.nmea").resolve()),"sha256":sha(directory/"nmea_pvt.nmea")}},
+      "nmea":pvt_report,"event_time_causal_ephemeris_availability":{"status":"OFFLINE_ORACLE_ONLY","decoded_history_authenticated":False,"causal_decode_history_verified_by":"UNIMPLEMENTED_STAGE0"},
       "offline_geometry_coverage":{"status":"PASS" if coverage_pass else "FAIL","valid_events":valid,"eligible_events":len(eligible),"coverage":coverage,"complete_10s_blocks":len(blocks),"rejection_reasons":reasons,"maximum_condition":max(conditions) if conditions else None},"los_by_bin":los_by_bin}
 def main():
     ap=argparse.ArgumentParser();ap.add_argument("--receiver",action="append",required=True,help="NAME=DIR");ap.add_argument("--selected",action="append",required=True,help="NAME=NPZ");ap.add_argument("--assert-week",action="append",default=[]);ap.add_argument("--assert-tow",action="append",default=[]);ap.add_argument("--config",type=Path,default=ROOT/"configs/r2c_gnss_stage0_fix.json");ap.add_argument("--report",type=Path,required=True);args=ap.parse_args()

@@ -76,14 +76,17 @@ def load_b0_validation(path:Path,config):
     if set(doc.get("scenarios",{}))!=set(SCENARIOS):raise ValueError("B0 validation scenario roster mismatch")
     checkpoint=doc.get("checkpoint",{});checkpoint_path=Path(checkpoint.get("path",""))
     if not checkpoint_path.is_file() or sha(checkpoint_path)!=checkpoint.get("sha256") or checkpoint.get("sha256")!=config["b0"]["checkpoint_sha256"]:raise ValueError("B0 checkpoint provenance mismatch")
+    canonical=set(config["b0"]["saved_score_sha256"])
     for name,item in doc["scenarios"].items():
+        if name not in canonical:
+            item.update({"status":"UNAVAILABLE_AUTHENTIC_INTERFACE","event_rows":[],"reason":"scenario has no canonical saved-score hash"});continue
         for prefix in ("saved_score","node_csv"):
             if item.get(f"{prefix}_path"):
                 source=Path(item[f"{prefix}_path"]);expected=item.get(f"{prefix}_sha256")
                 if not source.is_file() or sha(source)!=expected:item.update({"status":"UNAVAILABLE_AUTHENTIC_INTERFACE","event_rows":[],"reason":f"{prefix} hash invalid"})
         if name in config["b0"]["saved_score_sha256"]:
-            source=Path(item.get("saved_score_path",""));canonical=config["b0"]["saved_score_sha256"][name]
-            if not source.is_file() or sha(source)!=canonical:
+            source=Path(item.get("saved_score_path",""));canonical_hash=config["b0"]["saved_score_sha256"][name]
+            if not source.is_file() or sha(source)!=canonical_hash:
                 item.update({"status":"UNAVAILABLE_AUTHENTIC_INTERFACE","event_rows":[],"reason":"canonical saved-score hash mismatch"});continue
             try:
                 import pandas as pd
@@ -95,6 +98,9 @@ def load_b0_validation(path:Path,config):
                 regenerated_digest=hashlib.sha256(json.dumps(regenerated_rows,sort_keys=True,separators=(",",":"),default=str).encode()).hexdigest()
                 if regenerated_digest!=item.get("event_rows_sha256") or regenerated_rows!=item.get("event_rows"):
                     raise ValueError("validated B0 events differ from canonical replay")
+                # This runner independently authenticates saved-score -> event replay only.
+                # Node -> checkpoint -> saved parity remains a lineage gap here.
+                item["status"]="AVAILABLE_SAVED_NATIVE_SCORE_REPLAY_WITH_NODE_LINEAGE_GAP"
             except Exception as exc:
                 item.update({"status":"UNAVAILABLE_AUTHENTIC_INTERFACE","event_rows":[],"reason":str(exc)});continue
         rows=item.get("event_rows",[])
@@ -102,8 +108,8 @@ def load_b0_validation(path:Path,config):
             digest=hashlib.sha256(json.dumps(rows,sort_keys=True,separators=(",",":"),default=str).encode()).hexdigest()
             if digest!=item.get("event_rows_sha256"):item.update({"status":"UNAVAILABLE_AUTHENTIC_INTERFACE","event_rows":[],"reason":"event rows hash invalid"})
     valid_files=[x for x in doc["scenarios"].values() if x.get("event_rows")]
-    if not valid_files:doc["aggregate_status"]="UNAVAILABLE_AUTHENTIC_INTERFACE"
-    doc["paper_comparison_eligible"]=bool(doc.get("paper_comparison_eligible") and all(x.get("status")=="AVAILABLE_AUTHENTIC_NODE_TO_SCORE_REPLAY" for x in doc["scenarios"].values() if x.get("event_rows")))
+    doc["aggregate_status"]="RECONSTRUCTABLE_WITH_LINEAGE_GAPS" if valid_files else "UNAVAILABLE_AUTHENTIC_INTERFACE"
+    doc["paper_comparison_eligible"]=False
     return doc
 
 def validate_source(source_commit: str, *, test_mode=False):
@@ -136,25 +142,50 @@ def verify_path_hash(record,role):
     if not target.is_file() or sha(target)!=record["sha256"]:raise ValueError(f"geometry {role} path/hash mismatch")
     return target
 
-def validate_geometry_lineage(item,input_path,input_sha):
+def manifest_iq_hash(doc):
+    return (doc.get("source",{}).get("iq_sha256") or doc.get("source",{}).get("sha256") or doc.get("authenticated_inputs",{}).get("iq_after_receiver",{}).get("sha256"))
+
+def validate_geometry_lineage(item,input_path,input_sha,scenario,row_count):
     lineage=item["lineage"];selected=verify_path_hash(lineage.get("selected"),"selected")
     if selected.resolve()!=input_path.resolve() or lineage["selected"].get("sha256")!=input_sha:raise ValueError("geometry selected NPZ mismatch")
     for role in ("rinex","observables","ephemeris","nmea"):
         verify_path_hash(lineage.get(role),role)
     manifest=verify_path_hash({"path":lineage["selected"].get("manifest_path"),"sha256":lineage["selected"].get("manifest_sha256")},"selected manifest")
-    receiver_iq=lineage.get("receiver_source_iq_sha256");export_iq=lineage.get("export_source_iq_sha256")
+    export_doc=load(manifest);output=export_doc.get("output",{});declared=Path(output.get("path",""));declared=(manifest.parent/declared).resolve() if not declared.is_absolute() else declared.resolve()
+    identity=export_doc.get("recording_id") or export_doc.get("scenario")
+    if output.get("sha256")!=input_sha or int(output.get("row_count",-1))!=row_count:raise ValueError("selected manifest export content mismatch")
+    export_identity_ok=declared==input_path.resolve() and (identity is None or identity.lower()==scenario.lower())
+    receiver_record=lineage.get("receiver_manifest",{});receiver_manifest=Path(receiver_record.get("path",""));receiver_valid=receiver_manifest.is_file() and sha(receiver_manifest)==receiver_record.get("sha256");receiver_doc=load(receiver_manifest) if receiver_valid else {}
+    receiver_ref=export_doc.get("receiver_manifest",{});receiver_declared=Path(receiver_ref.get("path",""));receiver_declared=(manifest.parent/receiver_declared).resolve() if not receiver_declared.is_absolute() else receiver_declared.resolve()
+    receiver_reference_ok=receiver_declared==receiver_manifest.resolve() and receiver_ref.get("sha256")==receiver_record.get("sha256") and receiver_valid
+    manifest_export_iq=export_doc.get("source_iq_sha256");manifest_receiver_iq=manifest_iq_hash(receiver_doc)
+    receiver_iq=lineage.get("receiver_source_iq_sha256");export_iq=lineage.get("export_source_iq_sha256");selected_iq=lineage.get("selected_source_iq_sha256");selected_record_iq=lineage["selected"].get("source_iq_sha256")
     hash_ok=lambda value:isinstance(value,str) and len(value)==64 and all(c in "0123456789abcdef" for c in value)
     binding=lineage.get("source_iq_binding_status")
     if binding=="HASH_BOUND":
-        if not hash_ok(receiver_iq) or not hash_ok(export_iq) or receiver_iq!=export_iq:raise ValueError("geometry source-IQ HASH_BOUND claim invalid")
-        verify_path_hash(lineage.get("receiver_manifest"),"receiver manifest")
-    elif binding!="LINEAGE_GAP" or receiver_iq is not None or export_iq is not None:raise ValueError("geometry source-IQ lineage mismatch")
-    causal=item["event_time_causal_ephemeris_availability"]
-    if causal.get("status")=="PASS":
-        history=verify_path_hash(causal.get("decode_history"),"decode history")
-        coverage=causal.get("event_time_coverage",{})
-        if not causal.get("decoded_history_authenticated") or not coverage.get("all_events_covered"):raise ValueError("causal ephemeris coverage unauthenticated")
+        values=(receiver_iq,export_iq,selected_iq,selected_record_iq,manifest_export_iq,manifest_receiver_iq)
+        if not receiver_reference_ok or not export_identity_ok or lineage["selected"].get("export_identity_status")!="PASS" or not all(hash_ok(x) for x in values) or len(set(values))!=1:raise ValueError("geometry source-IQ HASH_BOUND claim invalid")
+    elif binding!="LINEAGE_GAP":raise ValueError("geometry source-IQ lineage status invalid")
+    if lineage.get("geometry_receiver_manifest",{}).get("path"):verify_path_hash(lineage["geometry_receiver_manifest"],"geometry receiver manifest")
+    validate_causal_capability(item["event_time_causal_ephemeris_availability"])
     return manifest
+
+def validate_causal_capability(causal):
+    if causal.get("causal_decode_history_verified_by")!="UNIMPLEMENTED_STAGE0":raise ValueError("unknown causal decode-history provider capability")
+    if causal.get("status")!="OFFLINE_ORACLE_ONLY" or causal.get("decoded_history_authenticated") is not False:raise ValueError("Stage-0 cannot authenticate causal ephemeris PASS")
+
+def causal_core_los(item):
+    """Offline LOS is diagnostic only until Stage-0 has a decode-history parser."""
+    causal=item.get("event_time_causal_ephemeris_availability",{})
+    ready=(item.get("derived_time",{}).get("status")=="PASS" and
+           item.get("offline_geometry_coverage",{}).get("status")=="PASS" and
+           causal.get("status")=="PASS" and
+           causal.get("causal_decode_history_verified_by")!="UNIMPLEMENTED_STAGE0")
+    return item.get("los_by_bin",{}) if ready else {}
+
+def eligible_full_control_candidate(los,fits):
+    fit=fits.get("Full")
+    return bool(los and fits.get("FullScorer") is not None and fit is not None and fit.valid)
 
 def h0_residuals(y,provider,taps,grid,*,chunk_rows=4096):
     """Profile every row in deterministic bounded chunks; no support subsampling."""
@@ -321,16 +352,17 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
     wrapper_doc=load(geometry_wrapper);expected_geometry_hash=hashlib.sha256(json.dumps(config["geometry"],sort_keys=True,separators=(",",":")).encode()).hexdigest()
     if wrapper_doc.get("geometry_config",{}).get("sha256")!=expected_geometry_hash or wrapper_doc.get("geometry_config",{}).get("values")!=config["geometry"]:raise ValueError("geometry config binding mismatch")
     for name,item in geometry.items():
-        validate_geometry_lineage(item,inputs[name],data[name]["source_sha256"])
+        validate_geometry_lineage(item,inputs[name],data[name]["source_sha256"],name,data[name]["row_count"])
     b0=load_b0_validation(Path(b0_validation_path),config);b0_events={}
     import pandas as pd
+    canonical_b0=set(config["b0"]["saved_score_sha256"])
     for name,item in b0["scenarios"].items():
-        if item.get("event_rows") and item.get("status")!="UNAVAILABLE_AUTHENTIC_INTERFACE":b0_events[name]=pd.DataFrame(item["event_rows"])
+        if name in canonical_b0 and item.get("event_rows") and item.get("status")=="AVAILABLE_SAVED_NATIVE_SCORE_REPLAY_WITH_NODE_LINEAGE_GAP":b0_events[name]=pd.DataFrame(item["event_rows"])
     score_rows=[];event_rows=[];control_candidates=[]
     for scenario,dataset in data.items():
         raw=h0_residuals(dataset["y"],provider,taps,grid)
         x=inference_conditions(dataset,raw,models["cn0_imputation"],False);xe=inference_conditions(dataset,raw,models["cn0_imputation"],True)
-        los_bins=geometry.get(scenario,{}).get("los_by_bin",{})
+        los_bins=causal_core_los(geometry.get(scenario,{}))
         for bin_id in np.unique(dataset["bin"]):
             indices=np.flatnonzero(dataset["bin"]==bin_id);observations={};condition_map={};los={}
             for p in sorted(np.unique(dataset["prn"][indices])):
@@ -355,7 +387,7 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
             noise=dataset["noise_floor"]
             if noise is not None:scores["Noise-floor-only"]=float(np.mean(noise[indices]));fits["statuses"]["Noise-floor-only"]="AVAILABLE"
             else:scores["Noise-floor-only"]=None;fits["statuses"]["Noise-floor-only"]="UNAVAILABLE_SOURCE_NOT_PRESENT"
-            if fits.get("FullScorer") is not None:control_candidates.append((scenario,int(bin_id),observations,los,fits["FullScorer"],fits.get("Full")))
+            if eligible_full_control_candidate(los,fits):control_candidates.append((scenario,int(bin_id),observations,los,fits["FullScorer"],fits.get("Full")))
             for detector,score in scores.items():
                 fit=fits.get(detector);valid_fit=fit is not None and fit.valid;score_rows.append({"scenario":scenario,"time_bin":int(bin_id),"availability_time_s":availability_overrides.get(detector,availability),
                   "detector":detector,"status":fits.get("statuses",{}).get(detector,"AVAILABLE" if score is not None else "UNAVAILABLE"),"reason":fit.reason if fit and not fit.valid else "","score":"" if score is None else score,"ll0":fit.null_log_likelihood if valid_fit else "",

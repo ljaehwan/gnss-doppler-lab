@@ -26,6 +26,7 @@ def verify_file_record(record,label,errors):
     try:path=Path(record["path"])
     except (KeyError,TypeError):errors.append(f"{label} path/hash missing");return
     if not path.is_file() or sha(path)!=record.get("sha256"):errors.append(f"{label} path/hash mismatch")
+def manifest_iq_hash(doc):return (doc.get("source",{}).get("iq_sha256") or doc.get("source",{}).get("sha256") or doc.get("authenticated_inputs",{}).get("iq_after_receiver",{}).get("sha256"))
 
 def external_recompute(artifact,provenance,source,repo):
     """Regenerate using the frozen source and external provenance, never artifact evidence."""
@@ -135,17 +136,32 @@ def verify(artifact:Path,*,repo=ROOT,require_committed=True,allow_synthetic_test
             valid=lambda x:isinstance(x,str) and len(x)==64 and all(c in "0123456789abcdef" for c in x)
             binding=lineage.get("source_iq_binding_status")
             if binding=="HASH_BOUND" and (not valid(receiver_iq) or not valid(export_iq) or receiver_iq!=export_iq):errors.append("geometry source-IQ binding invalid")
-            elif binding!="HASH_BOUND" and (binding!="LINEAGE_GAP" or receiver_iq is not None or export_iq is not None):errors.append("geometry source-IQ lineage status invalid")
+            elif binding!="HASH_BOUND" and binding!="LINEAGE_GAP":errors.append("geometry source-IQ lineage status invalid")
             for role in ("rinex","observables","ephemeris","nmea","selected"):
                 verify_file_record(lineage.get(role),f"geometry {name} {role}",errors)
             if binding=="HASH_BOUND":verify_file_record(lineage.get("receiver_manifest"),f"geometry {name} receiver_manifest",errors)
             verify_file_record({"path":lineage.get("selected",{}).get("manifest_path"),"sha256":lineage.get("selected",{}).get("manifest_sha256")},f"geometry {name} selected manifest",errors)
+            try:
+                export_manifest=Path(lineage["selected"]["manifest_path"]);export_doc=load(export_manifest);receiver_manifest=Path(lineage["receiver_manifest"]["path"]);receiver_valid=receiver_manifest.is_file() and sha(receiver_manifest)==lineage["receiver_manifest"].get("sha256");receiver_doc=load(receiver_manifest) if receiver_valid else {}
+                output=export_doc.get("output",{});declared=Path(output.get("path",""));declared=(export_manifest.parent/declared).resolve() if not declared.is_absolute() else declared.resolve()
+                receiver_ref=export_doc.get("receiver_manifest",{});receiver_declared=Path(receiver_ref.get("path",""));receiver_declared=(export_manifest.parent/receiver_declared).resolve() if not receiver_declared.is_absolute() else receiver_declared.resolve()
+                identity=export_doc.get("recording_id") or export_doc.get("scenario");manifest_export=export_doc.get("source_iq_sha256");manifest_receiver=manifest_iq_hash(receiver_doc)
+                values=(receiver_iq,export_iq,lineage.get("selected_source_iq_sha256"),lineage["selected"].get("source_iq_sha256"),manifest_export,manifest_receiver)
+                export_identity_ok=declared==Path(selected.get("path","")).resolve() and (identity is None or identity.lower()==name.lower())
+                if output.get("sha256")!=selected.get("sha256") or int(output.get("row_count",-1))!=int(lineage["selected"].get("rows",-2)):errors.append("selected manifest export content mismatch")
+                receiver_reference_ok=receiver_declared==receiver_manifest.resolve() and receiver_ref.get("sha256")==lineage["receiver_manifest"].get("sha256") and receiver_valid
+                if binding=="HASH_BOUND" and (not receiver_reference_ok or not export_identity_ok or lineage["selected"].get("export_identity_status")!="PASS" or not all(valid(x) for x in values) or len(set(values))!=1):errors.append("manifest-derived source-IQ binding mismatch")
+            except (KeyError,TypeError,ValueError,OSError,json.JSONDecodeError):errors.append("selected/receiver manifest parse failure")
             causal=item.get("event_time_causal_ephemeris_availability",{})
-            if causal.get("status")=="PASS":
-                verify_file_record(causal.get("decode_history"),f"geometry {name} decode history",errors)
-                if not causal.get("decoded_history_authenticated") or not causal.get("event_time_coverage",{}).get("all_events_covered"):errors.append("unauthenticated causal ephemeris PASS")
+            if causal.get("causal_decode_history_verified_by")!="UNIMPLEMENTED_STAGE0" or causal.get("status")!="OFFLINE_ORACLE_ONLY" or causal.get("decoded_history_authenticated") is not False:errors.append("Stage-0 cannot authenticate causal ephemeris PASS")
         b0=load(artifact/"b0_interface_validation.json")
         if b0.get("schema")!="gnss-doppler-lab.r2c-b0-validation.v2" or set(b0.get("scenarios",{}))!=SCENARIOS:errors.append("B0 validation schema/roster mismatch")
+        canonical_b0=set(load(config_path)["b0"]["saved_score_sha256"])
+        for name,item in b0.get("scenarios",{}).items():
+            if name not in canonical_b0 and (item.get("status")!="UNAVAILABLE_AUTHENTIC_INTERFACE" or item.get("event_rows")):errors.append("noncanonical B0 scenario exposed scores")
+            if item.get("status")=="AVAILABLE_AUTHENTIC_NODE_TO_SCORE_REPLAY":errors.append("runner cannot assert authenticated node replay")
+        if b0.get("paper_comparison_eligible"):errors.append("saved-only B0 replay cannot be paper eligible")
+        if b0.get("aggregate_status") not in {"RECONSTRUCTABLE_WITH_LINEAGE_GAPS","UNAVAILABLE_AUTHENTIC_INTERFACE"}:errors.append("B0 aggregate status overclaims authentication")
         b0_provenance=provenance.get("b0_validation",{});b0_path=Path(b0_provenance.get("path",""))
         if not b0_path.is_file() or sha(b0_path)!=b0_provenance.get("sha256"):errors.append("B0 validation wrapper hash mismatch")
     with (artifact/"per_epoch_scores.csv").open() as handle:
