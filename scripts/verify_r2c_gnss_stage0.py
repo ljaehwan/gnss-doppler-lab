@@ -201,6 +201,17 @@ def verify(artifact, check_external=True, full_recompute=False):
             errors.append("B0 interface/checkpoint/dependency gate mismatch")
         if freeze.get("attack_scores_computed") is not False:
             errors.append("unavailable artifact falsely claims attack scoring")
+        unavailable_rows = list(csv.DictReader((artifact / "per_epoch_scores.csv").open()))
+        if (len(unavailable_rows) != 1 or unavailable_rows[0].get("status") != "UNAVAILABLE_NO_ATTACK_SCORING"
+                or unavailable_rows[0].get("reason") != gate.get("reason")):
+            errors.append("unavailable per-epoch table is inconsistent with the B0 stop gate")
+        scenario_rows = list(csv.DictReader((artifact / "scenario_metrics.csv").open()))
+        expected_pairs = {(name, detector) for name in NAMES for detector in
+                          ("B0","A1","A2","A3","A4","Full R2C-GNSS","Power-only","Noise-floor-only")}
+        if ({(row.get("scenario"), row.get("detector")) for row in scenario_rows} != expected_pairs
+                or any(row.get("status") != "UNAVAILABLE_REQUIRED_B0_INTERFACE" or
+                       row.get("reason") != gate.get("reason") for row in scenario_rows)):
+            errors.append("unavailable scenario table is inconsistent with exact roster/stop gate")
         if check_external:
             if set(validity.get("datasets", {})) != set(NAMES):
                 errors.append("exact scenario roster mismatch")
