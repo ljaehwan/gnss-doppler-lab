@@ -91,9 +91,12 @@
   "external_input_policy": "required CLI NAME=NPZ overrides; resolved absolute paths and hashes are artifact provenance only",
   "geometry": {
     "maximum_condition_number": 1000000.0,
+    "maximum_ephemeris_toe_age_s": 7200.0,
+    "maximum_receiver_pvt_age_s": 1.0,
     "minimum_prns": 5,
     "minimum_rank": 4,
-    "minimum_residual_dof": 1
+    "minimum_residual_dof": 1,
+    "time_binding_filename": "geometry_time_binding.json"
   },
   "input_paths": {},
   "runtime": {

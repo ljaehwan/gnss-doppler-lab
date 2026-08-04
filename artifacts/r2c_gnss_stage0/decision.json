@@ -25,12 +25,44 @@
       "training_summary_sha256": "39939e6a4ff76c2ab6f1bab15f8658c7b6d3b7d4e3b33f07d96bc02d50a012d2",
       "window_s": 1.0
     },
+    "clean_dynamic_fpr": {
+      "reason": "required B0 gate failed before attack evaluation",
+      "status": "NOT_EVALUATED"
+    },
     "complex_provenance": {
       "source": "original preregistration section 11",
       "status": "PASS"
     },
+    "full_b0_ci": {
+      "reason": "required B0 gate failed before attack evaluation",
+      "status": "NOT_EVALUATED"
+    },
+    "full_exceeds_b0": {
+      "reason": "required B0 gate failed before attack evaluation",
+      "status": "NOT_EVALUATED"
+    },
+    "gain_invariance": {
+      "reason": "required B0 gate failed before attack evaluation",
+      "status": "NOT_EVALUATED"
+    },
+    "geometry_improvement": {
+      "reason": "required B0 gate failed before attack evaluation",
+      "status": "NOT_EVALUATED"
+    },
     "los_geometry": {
       "reason": "scoring stopped before geometry fitting",
+      "status": "NOT_EVALUATED"
+    },
+    "phase_invariance": {
+      "reason": "required B0 gate failed before attack evaluation",
+      "status": "NOT_EVALUATED"
+    },
+    "relation_destruction": {
+      "reason": "required B0 gate failed before attack evaluation",
+      "status": "NOT_EVALUATED"
+    },
+    "shortcut_controls": {
+      "reason": "required B0 gate failed before attack evaluation",
       "status": "NOT_EVALUATED"
     },
     "time_alignment": {
@@ -41,7 +73,7 @@
   "later_raw_iq_2d_model_justified": false,
   "physics_supported": false,
   "real_attack_performance_evaluated": false,
-  "reason": "required authenticated input/interface unavailable: time_alignment, los_geometry, b0_interface",
+  "reason": "complex_provenance=PASS, time_alignment=NOT_EVALUATED, los_geometry=NOT_EVALUATED, b0_interface=FAIL, clean_dynamic_fpr=NOT_EVALUATED, gain_invariance=NOT_EVALUATED, phase_invariance=NOT_EVALUATED, full_exceeds_b0=NOT_EVALUATED, full_b0_ci=NOT_EVALUATED, geometry_improvement=NOT_EVALUATED, relation_destruction=NOT_EVALUATED, shortcut_controls=NOT_EVALUATED",
   "scope": "Full R2C-GNSS preregistered physics decision",
   "verdict": "DATA_INVALID"
 }

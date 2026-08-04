@@ -1,3 +1,3 @@
 # R2C-GNSS Stage-0 corrected review artifact
 
-Verdict: `DATA_INVALID`, derived from the frozen gate record. The frozen B0 checkpoint requires aggregated one-second node windows; raw first-row substitution is prohibited. No attack metrics were recomputed or reported.
+Verdict: `DATA_INVALID`. Gate reason: `complex_provenance=PASS, time_alignment=NOT_EVALUATED, los_geometry=NOT_EVALUATED, b0_interface=FAIL, clean_dynamic_fpr=NOT_EVALUATED, gain_invariance=NOT_EVALUATED, phase_invariance=NOT_EVALUATED, full_exceeds_b0=NOT_EVALUATED, full_b0_ci=NOT_EVALUATED, geometry_improvement=NOT_EVALUATED, relation_destruction=NOT_EVALUATED, shortcut_controls=NOT_EVALUATED`. The frozen B0 checkpoint requires aggregated one-second node windows; raw first-row substitution is prohibited. No attack metrics were recomputed or reported.
