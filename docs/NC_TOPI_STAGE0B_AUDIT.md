@@ -411,3 +411,13 @@ This commit freezes only the config and documentation. Production code, tests,
 and artifacts must come later in separate commits. No raw-IQ campaign, attack
 metric, bootstrap result, clamp comparison, or decision has been observed or
 computed to create this contract.
+
+## Contract correction: reconstruction roles, Profile D support, and exact inventory
+
+This correction is frozen before any Stage-0B attack result is viewed. The phrase *existing split / same conditioner structure* means the exact preserved Stage-0 PRN roles: 6,074 valid `cleanStatic/normal_train` PRN rows fit every original or target-matched conditioner, and 1,628 valid `cleanStatic/normal_calibration` PRN rows select original/target clamp bounds. The preserved PRN inventory is 6,074 train, 1,628 calibration, 1,306 holdout, and 891 boundary-crossing exclusions. No event-derived split may replace these fit rows.
+
+Thresholds and metrics are event-level and use the preserved aggregate event roles on the common valid event mask: 586 train, 157 calibration, 118 holdout, and 86 boundary-crossing exclusions. Thus reconstruction/clamp fitting uses PRN roles while thresholding/evaluation uses event roles; this boundary is intentional and audited byte-for-byte against the parent.
+
+Profile D effective support is the union minimum/maximum of (1) parent event and linked-PRN target support, (2) B0 12-window history at 0.5 s cadence, whose earliest support is exactly `target source_start_s - 6.0 s` in this frozen lineage after cadence/sequence validation, and (3) every IQ block interval parsed from `iq_context.block_start_s` and `block_end_s`. The exhaustive chronological rule is `max(previous role end)+10 <= min(next role start)` with minima 50/101/50. Frozen actual support remains insufficient, with best balanced split 33/33/33; therefore no Profile-D fit or performance metric is permitted. A synthetic available path must invoke its callback and return fit, clamp, threshold, and holdout evidence.
+
+The JSON contract now lists exact regular-file inventories independently for the artifact root, `diagnostics/`, and `plots/`. Compatibility names required by the user are canonical names, not aliases. Unknown, missing, or duplicate semantic files fail closed. Verification is prepared in staging by the standalone verifier, hashed excluding only `hashes.json`, confirmed in a final read-only verifier pass, and only then atomically published with no-replace semantics.

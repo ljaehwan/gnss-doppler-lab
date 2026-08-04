@@ -89,7 +89,26 @@
       "fit_allowed": false,
       "threshold_allowed": false,
       "is_profile_d": false
-    }
+    },
+    "conditioner_reconstruction_role_level": "exact frozen PRN role split",
+    "conditioner_fit_prn_counts": {
+      "normal_train": 6074,
+      "normal_calibration": 1628
+    },
+    "event_metric_role_level": "frozen aggregate event roles on the common valid event mask",
+    "event_role_counts": {
+      "normal_train": 586,
+      "normal_calibration": 157,
+      "normal_holdout": 118,
+      "excluded_boundary_crossing": 86
+    },
+    "prn_role_counts": {
+      "normal_train": 6074,
+      "normal_calibration": 1628,
+      "normal_holdout": 1306,
+      "excluded_boundary_crossing": 891
+    },
+    "role_boundary": "conditioner/refit and target-matched clamp fits use preserved PRN roles; thresholds and metrics use preserved aggregate event roles. Neither may derive or substitute the other split."
   },
   "identity_and_mask": {
     "source": "frozen Stage-0 PeakPredictionPair/event inventory",
@@ -397,12 +416,17 @@
     "source_dataset": "cleanDynamic",
     "availability_evaluated_before_fit": true,
     "effective_source_support": {
+      "parent_target_support": "event source_start_s/source_end_s and linked PRN target support",
       "includes_b0_history": true,
       "b0_history_windows": 12,
+      "b0_cadence_seconds": 0.5,
+      "b0_earliest_support": "target source_start_s - 6.0 seconds",
+      "b0_validation": "exactly 12 preceding 0.5-second windows under frozen sequence/cadence contract",
       "includes_iq_history": true,
-      "role_support_definition": "union each candidate event's target source support with all causal source support needed by its frozen B0 12-window history and frozen IQ history"
+      "iq_support": "parse every iq_context block_start_s and block_end_s entry",
+      "role_support_definition": "union min/max across parent event/PRN target support, B0 history support, and parsed IQ block support"
     },
-    "assignment": "three chronological, nonoverlapping contiguous roles in train then calibration then holdout order",
+    "assignment": "exhaustive chronological contiguous roles with max(previous role effective_end_s)+10 <= min(next role effective_start_s)",
     "minimum_source_gap_seconds_between_roles": 10.0,
     "minimum_event_counts": {
       "normal_train": 50,
@@ -902,11 +926,11 @@
     "append_only": true,
     "refuse_overwrite": true,
     "atomic_publish": true,
-    "required_files_exact": [
+    "inventory_semantics": "exact regular-file sets; directories are structural only; missing or additional regular files fail verification",
+    "required_root_regular_files_exact": [
       "README.md",
       "config.json",
       "provenance.json",
-      "data_manifest.json",
       "parent_inventory.json",
       "profile_support.json",
       "fit_audit.json",
@@ -915,32 +939,67 @@
       "thresholds.json",
       "per_prn_scores.csv",
       "event_scores.csv",
-      "scenario_metrics.csv",
-      "bootstrap_results.json",
+      "model_metrics.csv",
+      "paired_comparisons.json",
       "decision.json",
       "verification.json",
+      "scale_diagnostics.csv",
+      "plot_data.json",
       "hashes.json"
     ],
-    "required_diagnostic_files_exact": [
-      "diagnostics/clamp_variant_metrics.csv",
-      "diagnostics/time_shuffle_metrics.csv",
-      "diagnostics/time_shuffle_fit_audit.json",
-      "diagnostics/iq_scale_checks.json",
-      "diagnostics/second_peak_limitations.json"
+    "required_diagnostics_regular_files_exact": [
+      "clamp_variant_metrics.csv",
+      "time_shuffle_metrics.csv",
+      "time_shuffle_fit_audit.json",
+      "time_shuffle_scale_diagnostics.csv",
+      "iq_scale_checks.json",
+      "second_peak_limitations.json"
     ],
-    "optional_only_if_parent_data_present": [
-      "diagnostics/top25_q995_metrics.csv"
+    "required_plots_regular_files_exact": [
+      "predicted_scale_distribution.png",
+      "stable_pre_post_scale.png",
+      "original_vs_clamped_nc_topi.png",
+      "roc_methods.png",
+      "clean_normal_scores.png",
+      "clamp_hit_ratio.png",
+      "shortcut_scale_timeline.png"
     ],
-    "config_copy_requirement": "config.json must be byte-identical to configs/nc_topi_stage0b_audit.json at the contract commit",
+    "canonical_names": {
+      "model_metrics": "model_metrics.csv",
+      "paired_comparisons": "paired_comparisons.json",
+      "profile_support": "profile_support.json",
+      "prn_scores": "per_prn_scores.csv",
+      "event_scores": "event_scores.csv",
+      "scale_diagnostics": "scale_diagnostics.csv",
+      "plot_numeric_sidecar": "plot_data.json"
+    },
+    "forbidden_duplicate_aliases": [
+      "scenario_metrics.csv",
+      "bootstrap_results.json",
+      "profile_d_support.json",
+      "per_epoch_audit_scores.csv",
+      "plot_provenance.json"
+    ],
+    "config_copy_requirement": "config.json is byte-identical to the committed contract config",
+    "verification_publication_order": [
+      "standalone verifier prepare writes semantic verification.json in staging",
+      "hashes.json is computed over all regular files except itself",
+      "standalone verifier final read-only pass confirms verification.json and hashes",
+      "atomic no-replace publication"
+    ],
     "provenance_fields_required": [
       "contract_commit_sha",
+      "execution_source_commit",
       "parent_artifact_commit",
       "parent_generation_source_commit",
-      "worktree_status",
+      "source_file_hashes",
+      "clean_worktree_at_execution",
       "command",
       "library_versions",
-      "attack_loader_opened_after_freeze",
-      "post_result_tuning"
+      "attack_fit",
+      "raw_iq_opened",
+      "post_result_tuning",
+      "stage0_decision_preserved"
     ]
   },
   "independent_verifier": {
@@ -972,7 +1031,14 @@
       "preserved Stage-0 c7 failure and exact limitation list",
       "forbidden-operation attestations"
     ],
-    "failure_policy": "nonzero exit and no verified publication"
+    "failure_policy": "nonzero exit and no verified publication",
+    "forbidden_imports": [
+      "scripts.audit_nc_topi_shortcut",
+      "gnss_doppler_lab.nc_topi_stage0b"
+    ],
+    "subprocess_boundary_required": true,
+    "prepare_and_final_modes": true,
+    "strict_finite_json": true
   },
   "checksums": {
     "algorithm": "SHA-256",
