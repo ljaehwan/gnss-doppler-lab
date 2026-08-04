@@ -25,9 +25,11 @@ from gnss_doppler_lab.r2c_gnss import (  # noqa: E402
     build_empirical_template, empirical_template_hash, fit_second_source,
     inject_second_source, quantile_threshold, sha256_file, sustained_alarms, write_json,
     AnalyticResidualWhitener, SmallNeuralNuisanceModel, fit_shared_constellation, full_score,
+    derive_stage0_verdict,
 )
 from gnss_doppler_lab.gcmr_geometry import (parse_gnss_sdr_gps_ephemeris_xml,
-    satellite_position_ecef, look_angles, ephemeris_health_selection)
+    satellite_position_ecef, look_angles, ephemeris_health_selection,
+    validate_ephemeris_time_alignment)
 from gnss_doppler_lab.trajectory import llh_to_ecef
 
 NAMES = ("cleanStatic", "cleanDynamic", "DS1", "DS2", "DS3", "DS7", "DS8")
@@ -36,12 +38,16 @@ TAPS = np.arange(-0.5, 0.5001, 0.125)
 GRID = np.arange(-0.5, 0.5001, 0.125)
 SOURCE_FILES = (
     "src/gnss_doppler_lab/r2c_gnss.py",
+    "src/gnss_doppler_lab/gcmr_geometry.py",
+    "src/gnss_doppler_lab/trajectory.py",
     "scripts/run_r2c_gnss_stage0.py",
     "scripts/verify_r2c_gnss_stage0.py",
+    "scripts/train_prn_node_gru.py",
+    "scripts/score_texbat_prn_node_gru.py",
     "configs/r2c_gnss_stage0.json",
     "configs/r2c_clean_dynamic_geometry_receiver.conf",
 )
-MIN_EVENT_PRNS = 4
+MIN_EVENT_PRNS = 5
 
 
 def row_identity(time_s, prn, value):
@@ -117,10 +123,7 @@ def build_geometry(directory, dataset, scenario):
         tow0 = float(np.min(rx[np.isfinite(rx) & (rx > 0)]))
         time_source = "observables.mat minimum finite positive RX_time"
     else:
-        # TEXBAT static recordings share the receiver-authenticated 12:45 GPS TOW.
-        decoded = [e.decoded_tow for e in ephemerides.values() if e.decoded_tow is not None]
-        tow0 = float(round(min(decoded) / 100.0) * 100.0)
-        time_source = "ephemeris decoded TOW rounded to recording NMEA second; no observables"
+        raise ValueError("authenticated observables RX_time is required; decoded ephemeris TOW is not a recording-start binding")
     positions = _nmea_positions(nmea_path, tow0)
     if scenario.startswith("DS"):
         trusted = [position for relative, position in positions if 30.0 <= relative <= ONSET[scenario] - 20.0]
@@ -134,8 +137,11 @@ def build_geometry(directory, dataset, scenario):
         key = (float(t), int(p))
         if int(p) not in healthy:
             mismatch[key] = "missing_or_unhealthy_ephemeris"; continue
-        nearest_t, receiver = min(positions, key=lambda item: abs(item[0] - float(t)))
-        if abs(nearest_t - float(t)) > 1.0:
+        causal = [item for item in positions if item[0] <= float(t)]
+        if not causal:
+            mismatch[key] = "no_causally_available_receiver_pvt"; continue
+        nearest_t, receiver = max(causal, key=lambda item: item[0])
+        if float(t) - nearest_t > 1.0:
             mismatch[key] = "receiver_pvt_tolerance_exceeded"; continue
         sat = satellite_position_ecef(healthy[int(p)], (tow0 + float(t)) % 604800.0)
         vector = np.asarray(look_angles(receiver, sat).los_ecef)
@@ -196,15 +202,65 @@ def _receiver_config(manifest_file, manifest):
     return path, spacing, sha256_file(path) if path.is_file() else None, entry.get("sha256")
 
 
+def authoritative_recording_identity(manifest_file, manifest, expected_name):
+    """Resolve, hash, and bind an existing receiver/upstream recording identity."""
+    direct_id = manifest.get("recording_id") or manifest.get("scenario_id") or manifest.get("campaign_run_id")
+    direct_hash = manifest.get("source_iq_sha256")
+    chain = []
+    receiver_entry = manifest.get("receiver_manifest", {})
+    declared = receiver_entry.get("path") if isinstance(receiver_entry, dict) else None
+    receiver_path = ((manifest_file.parent / declared).resolve() if declared and not Path(declared).is_absolute()
+                     else Path(declared).resolve() if declared else None)
+    if receiver_path and not receiver_path.is_file():
+        receiver_path = manifest_file.parent.parent / "receiver" / receiver_path.name
+    if receiver_path and receiver_path.is_file():
+        if receiver_entry.get("sha256") and sha256_file(receiver_path) != receiver_entry["sha256"]:
+            raise ValueError("receiver manifest declared hash mismatch")
+        receiver = json.loads(receiver_path.read_text())
+        source = receiver.get("source", {})
+        direct_id = direct_id or source.get("scenario_id") or receiver.get("scenario")
+        direct_hash = direct_hash or source.get("iq_sha256") or source.get("sha256")
+        chain.append({"path": str(receiver_path.resolve()), "sha256": sha256_file(receiver_path)})
+    parent = manifest_file.parent.parent / "manifest.json"
+    if (not direct_id or not direct_hash) and parent.is_file():
+        outer = json.loads(parent.read_text())
+        direct_id = direct_id or outer.get("scenario")
+        direct_hash = direct_hash or outer.get("raw_sha256")
+        chain.append({"path": str(parent.resolve()), "sha256": sha256_file(parent)})
+    if str(direct_id).lower() != expected_name.lower() or not isinstance(direct_hash, str) or len(direct_hash) != 64:
+        raise ValueError(f"missing authoritative recording identity/hash for {expected_name}")
+    int(direct_hash, 16)
+    return str(direct_id), direct_hash.lower(), chain
+
+
 def load_sample(path, cadence=0.5):
     with np.load(path) as z:
+        required = {"complex_iq", "time_s", "prn", "channel", "segment_index", "sample_count"}
+        missing = required.difference(z.files)
+        if missing:
+            raise ValueError(f"NPZ missing required arrays: {sorted(missing)}")
         times = np.asarray(z["time_s"], dtype=float)
+        iq_all = np.asarray(z["complex_iq"])
         bins = np.floor(times / cadence).astype(np.int64)
         prns = np.asarray(z["prn"], dtype=np.int64)
+        sample_all = np.asarray(z["sample_count"])
+        channel = np.asarray(z["channel"])
+        segment = np.asarray(z["segment_index"])
+        n = len(times)
+        if (iq_all.shape != (n, 9, 2) or any(len(v) != n for v in (prns, sample_all, channel, segment))
+                or n == 0 or not np.isfinite(iq_all).all() or not np.isfinite(times).all()
+                or not np.isfinite(sample_all).all() or np.any((prns < 1) | (prns > 32))):
+            raise ValueError("NPZ shape, finite-value, PRN, or monotonic-time/sample contract failed")
+        for key_value in np.unique(np.column_stack((channel, segment)), axis=0):
+            group = (channel == key_value[0]) & (segment == key_value[1])
+            if np.any(np.diff(times[group]) < 0) or np.any(np.diff(sample_all[group]) < 0):
+                raise ValueError("NPZ time/sample arrays are not causal within channel/segment")
+        if np.all(iq_all[..., 1] == 0) or np.nanstd(iq_all[..., 1]) <= 0:
+            raise ValueError("NPZ Q component is absent or degenerate")
         key = bins * 64 + prns
         _, indices = np.unique(key, return_index=True)
         indices = np.sort(indices)
-        iq = z["complex_iq"][indices]
+        iq = iq_all[indices]
         values = iq[:, :, 0].astype(float) + 1j * iq[:, :, 1].astype(float)
         cn0 = z["cn0_db_hz"][indices] if "cn0_db_hz" in z.files else np.full(len(indices), np.nan)
         sample_count = np.asarray(z["sample_count"])[indices]
@@ -228,13 +284,29 @@ def score_rows(dataset, template):
     dataset["power"] = np.mean(np.abs(dataset["y"]) ** 2, axis=1)
 
 
-def _conditions(dataset):
+def fit_condition_scaler(dataset, train):
+    """Freeze all condition imputation and scaling on cleanStatic train only."""
     power = np.log1p(np.mean(np.abs(dataset["y"]) ** 2, axis=1))
     cn0 = np.asarray(dataset["cn0"], float)
-    finite = np.isfinite(cn0)
-    cn0 = np.where(finite, cn0, np.nanmedian(cn0[finite]) if finite.any() else 0.0)
+    selected = np.asarray(train, bool)
+    if selected.shape != power.shape or not selected.any():
+        raise ValueError("condition scaler requires cleanStatic normal_train support")
+    finite_train = selected & np.isfinite(cn0)
+    impute = float(np.median(cn0[finite_train])) if finite_train.any() else 0.0
+    raw = np.column_stack((power, np.where(np.isfinite(cn0), cn0, impute)))
+    mean, scale = raw[selected].mean(0), np.maximum(raw[selected].std(0), 1e-8)
+    packed = np.concatenate((np.asarray([impute]), mean, scale)).astype("<f8")
+    return {"cn0_imputation": impute, "mean": mean, "scale": scale,
+            "fit_role": "cleanStatic normal_train",
+            "sha256": hashlib.sha256(packed.tobytes()).hexdigest()}
+
+
+def _conditions(dataset, scaler):
+    power = np.log1p(np.mean(np.abs(dataset["y"]) ** 2, axis=1))
+    cn0 = np.asarray(dataset["cn0"], float)
+    cn0 = np.where(np.isfinite(cn0), cn0, scaler["cn0_imputation"])
     x = np.column_stack((power, cn0))
-    return (x - x.mean(0)) / np.maximum(x.std(0), 1e-8)
+    return (x - scaler["mean"]) / scaler["scale"]
 
 
 def fit_and_score_nuisance(data, template):
@@ -246,11 +318,12 @@ def fit_and_score_nuisance(data, template):
     residuals = np.asarray(residuals)
     roles = ["normal_train"] * len(residuals)
     analytic = AnalyticResidualWhitener(shrinkage=.2, epsilon=1e-8).fit(residuals, roles)
-    clean_conditions = _conditions(data["cleanStatic"])
+    scaler = fit_condition_scaler(data["cleanStatic"], train)
+    clean_conditions = _conditions(data["cleanStatic"], scaler)
     neural = SmallNeuralNuisanceModel(hidden=8, seed=20260803).fit(
         clean_conditions[train], residuals, roles, epochs=100, learning_rate=.01)
     for name, dataset in data.items():
-        conditions = _conditions(dataset)
+        conditions = _conditions(dataset, scaler)
         means, variances = neural.predict(conditions)
         a3, a4, delays_a3, delays_full = [], [], [], []
         for index, value in enumerate(dataset["y"]):
@@ -267,7 +340,10 @@ def fit_and_score_nuisance(data, template):
         dataset["a3_delay"], dataset["full_delay"] = np.asarray(delays_a3), np.asarray(delays_full)
     params = neural.parameters_
     model_hash = hashlib.sha256(b"".join(np.asarray(x, dtype="<f8").tobytes() for x in params)).hexdigest()
-    return {"analytic": {"shrinkage": .2, "epsilon": 1e-8, "fit_rows": len(residuals),
+    return {"condition_scaler": {"cn0_imputation": scaler["cn0_imputation"],
+        "mean": scaler["mean"].tolist(), "scale": scaler["scale"].tolist(),
+        "fit_role": scaler["fit_role"], "sha256": scaler["sha256"]},
+        "analytic": {"shrinkage": .2, "epsilon": 1e-8, "fit_rows": len(residuals),
         "covariance_sha256": hashlib.sha256(np.asarray(analytic.covariance_, dtype="<c16").tobytes()).hexdigest(),
         "eigenvalues": np.linalg.eigvalsh(analytic.covariance_).real.tolist()},
         "neural": {"architecture": "shared numeric 2-8-18 MLP; mean plus diagonal error variance",
@@ -301,6 +377,27 @@ def score_frozen_b0(data, checkpoint_path):
                     scores[current] = float(np.sqrt(np.mean((prediction - features[current]) ** 2)))
         dataset["b0_prn"] = scores
         dataset["b0_thresholds"] = thresholds
+
+
+def b0_interface_gate(checkpoint_path):
+    """Reject raw-row substitution for the frozen aggregated node-window B0."""
+    summary_path = checkpoint_path.with_name("training_summary.json")
+    summary = json.loads(summary_path.read_text())
+    columns = summary.get("features", {}).get("node_feature_columns", [])
+    expected = [f"tap_{name}_rel_prompt_mean" for name in
+                ("E4", "E3", "E2", "E", "P", "L", "L2", "L3", "L4")]
+    if columns != expected or not summary.get("data", {}).get("node_csv"):
+        raise ValueError("frozen B0 checkpoint summary does not match its historical interface")
+    return {"status": "FAIL",
+            "reason": ("frozen B0 requires historical aggregated 1.0-s node windows at 0.5-s stride; "
+                       "the selected complex-epoch support has no authenticated reproduction of those windows"),
+            "checkpoint_sha256": sha256_file(checkpoint_path),
+            "training_summary_sha256": sha256_file(summary_path),
+            "training_dependency_sha256": sha256_file(ROOT / "scripts/train_prn_node_gru.py"),
+            "evaluation_dependency_sha256": sha256_file(ROOT / "scripts/score_texbat_prn_node_gru.py"),
+            "feature_columns": columns, "sequence_length": 12,
+            "window_s": 1.0, "stride_s": 0.5, "availability_offset_s": 1.0,
+            "raw_first_row_substitution_permitted": False}
 
 
 def _binomial_tail(n, k, probability):
@@ -369,10 +466,12 @@ def make_epochs(name, dataset, *, gain=1.0, template=None):
                     item[detector] = full_score(geometry_scores, geometry)
                     item[detector + "_geometry_valid"] = geometry.valid
                     item[detector + "_geometry_rank"] = geometry.rank
+                    item[detector + "_geometry_residual_dof"] = geometry.residual_dof
                     item[detector + "_geometry_condition"] = geometry.condition_number
                 else:
                     item[detector] = 0.0; item[detector + "_geometry_valid"] = False
                     item[detector + "_geometry_rank"] = 0; item[detector + "_geometry_condition"] = "UNAVAILABLE"
+                    item[detector + "_geometry_residual_dof"] = 0
             item["event_valid"] = len(selected) >= MIN_EVENT_PRNS
         output.append(item)
     return output
@@ -459,6 +558,70 @@ def bootstrap_comparison(rows, left, right, repetitions=2000, seed=20260803):
             "draws_sha256": hashlib.sha256(draw_array.tobytes()).hexdigest()}
 
 
+def write_fail_closed_artifact(output, config, args, paths, geometry_dirs, inventories, bundle, gate):
+    """Write a complete non-metric artifact when a required frozen input is unavailable."""
+    criteria = {
+        "complex_provenance": {"status": "PASS", "source": "original preregistration section 11"},
+        "time_alignment": {"status": "NOT_EVALUATED", "reason": "scoring stopped before geometry fitting"},
+        "los_geometry": {"status": "NOT_EVALUATED", "reason": "scoring stopped before geometry fitting"},
+        "b0_interface": gate,
+    }
+    decision = derive_stage0_verdict(criteria)
+    decision.update({"scope": "Full R2C-GNSS preregistered physics decision",
+        "criteria_provenance": "original preregistration r2c-gnss-stage0-20260804-bypass, section 11",
+        "real_attack_performance_evaluated": False, "later_raw_iq_2d_model_justified": False})
+    freeze = {"schema": "gnss-doppler-lab.r2c-freeze.v3", "written_before_attack_score_computation": True,
+        "no_attack_label_tuning": True, "config_sha256": sha256_file(args.config),
+        "source_bundle": bundle, "decision_criteria": criteria,
+        "stop_gate": "b0_interface", "attack_scores_computed": False}
+    write_json(output / "freeze.json", freeze)
+    write_json(output / "config.json", {**config, "runtime": {"inputs": {k: str(v) for k,v in paths.items()},
+        "geometry": {k: str(v) for k,v in geometry_dirs.items()}, "cpu_only": True}})
+    write_json(output / "input_validity.json", {"decision": "REQUIRED_B0_INTERFACE_UNAVAILABLE",
+        "frozen_before_attack_evaluation": True, "attack_outcomes_inspected_for_tuning": False,
+        "scenario_roster": list(NAMES), "datasets": inventories,
+        "B0": gate, "geometry": {"status": "NOT_EVALUATED_AFTER_REQUIRED_GATE_FAILURE"}})
+    write_json(output / "training_summary.json", {"status": "NOT_RUN_REQUIRED_INPUT_GATE_FAILED",
+        "fit_rows": 0, "B0": gate})
+    write_json(output / "thresholds.json", {"status": "UNAVAILABLE_NO_SCORING", "values": {}})
+    fields = ["scenario", "detector", "status", "reason"]
+    rows = [{"scenario": n, "detector": d, "status": "UNAVAILABLE_REQUIRED_B0_INTERFACE",
+             "reason": gate["reason"]} for n in NAMES for d in
+            ("B0","A1","A2","A3","A4","Full R2C-GNSS","Power-only","Noise-floor-only")]
+    dump_csv(output / "scenario_metrics.csv", fields, rows)
+    dump_csv(output / "ablation_metrics.csv", ["detector","status","reason"],
+             [{"detector": d, "status": "UNAVAILABLE_REQUIRED_B0_INTERFACE", "reason": gate["reason"]}
+              for d in ("B0","A1","A2","A3","A4","Full R2C-GNSS","Power-only","Noise-floor-only")])
+    dump_csv(output / "per_epoch_scores.csv", ["status","reason"],
+             [{"status": "UNAVAILABLE_NO_ATTACK_SCORING", "reason": gate["reason"]}])
+    unavailable = {"status": "UNAVAILABLE_NO_ATTACK_SCORING", "reason": gate["reason"]}
+    for name in ("gain_invariance.json", "phase_invariance.json", "noise_control.json",
+                 "multipath_control.json", "second_source_injection.json", "relation_destruction.json"):
+        write_json(output / name, unavailable)
+    write_json(output / "bootstrap_comparisons.json", {**unavailable, "repetitions": 0,
+        "seed": 20260803, "iid_fallback": False, "comparisons": {}})
+    write_json(output / "decision.json", decision)
+    dump_csv(output / "plots/relation_control_source.csv", ["status","reason"], [unavailable])
+    # Preserve the required plot filename as an explicit non-result notice.
+    (output / "plots/relation_control.png").write_bytes(b"UNAVAILABLE: no attack scoring\n")
+    provenance = {"task_id": config["task_id"], "branch": git("branch", "--show-current"),
+        "frozen_base_commit": "461eb4dc7bb794e719295daf028f6811658ba37f",
+        "source_commit_at_generation": git("rev-parse", "HEAD"),
+        "generation_policy": "clean-source-commit-v1: exact executable source bundle and immediate artifact-only child commit",
+        "executable_source_clean": not bool(git("diff", "--name-only", "--", *SOURCE_FILES)),
+        "source_bundle": bundle, "config_sha256": sha256_file(args.config),
+        "freeze_sha256": sha256_file(output / "freeze.json"), "python": sys.version,
+        "platform": platform.platform(), "numpy": np.__version__, "h5py": h5py.__version__,
+        "cpu_count": os.cpu_count(), "cuda_used": False}
+    write_json(output / "provenance.json", provenance)
+    (output / "README.md").write_text("# R2C-GNSS Stage-0 corrected review artifact\n\n"
+        "Verdict: `DATA_INVALID`, derived from the frozen gate record. The frozen B0 checkpoint requires "
+        "aggregated one-second node windows; raw first-row substitution is prohibited. No attack metrics were recomputed or reported.\n")
+    write_json(output / "verification.json", {"status": "PENDING"})
+    write_json(output / "hashes.json", {"algorithm": "sha256", "files": artifact_hashes(output)})
+    return decision
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, default=ROOT / "configs/r2c_gnss_stage0.json")
@@ -487,6 +650,7 @@ def main():
         schema = manifest.get("schema")
         feature = manifest.get("feature_schema", {})
         receiver_path, spacing, receiver_hash, declared_receiver_hash = _receiver_config(mpath, manifest)
+        recording_id, source_iq_hash, identity_chain = authoritative_recording_identity(mpath, manifest, name)
         valid = (schema == "gnss-doppler-lab.complex-9tap-epochs" and
                  feature.get("component_order") == ["I", "Q"] and
                  feature.get("tap_order") == ["E4", "E3", "E2", "E", "P", "L", "L2", "L3", "L4"] and
@@ -497,17 +661,27 @@ def main():
             "manifest_output_sha256": manifest.get("output", {}).get("sha256"),
             "receiver_config_path": str(receiver_path), "receiver_config_sha256": receiver_hash,
             "manifest_receiver_config_sha256": declared_receiver_hash,
-            "source_iq_sha256": manifest.get("source_iq_sha256"), "schema": schema,
+            "source_iq_sha256": source_iq_hash, "authoritative_identity_chain": identity_chain,
+            "schema": schema,
             "shape": manifest.get("output", {}).get("shape"), "tap_order": feature.get("tap_order"),
             "component_order": feature.get("component_order"), "tap_spacing_chips": spacing,
             "genuinely_complex": valid, "row_count": dataset["rows"],
             "time_min_s": dataset["min"], "time_max_s": dataset["max"],
             "prns": dataset["prns"], "sampled_rows": len(dataset["y"]),
-            "recording_id": (manifest.get("recording_id") or manifest.get("scenario_id") or
-                             manifest.get("campaign_run_id") or name),
+            "recording_id": recording_id,
         }
         if not valid or npz_hash != manifest.get("output", {}).get("sha256"):
             raise SystemExit(f"invalid provenance or tap spacing: {name}")
+
+    bundle = source_bundle()
+    checkpoint = ROOT / "artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt"
+    b0_gate = b0_interface_gate(checkpoint)
+    if b0_gate["status"] != "PASS":
+        decision = write_fail_closed_artifact(output, config, args, paths, geometry_dirs,
+                                               inventories, bundle, b0_gate)
+        print(json.dumps({"artifact": str(output), "verdict": decision["verdict"],
+                          "attack_scores_computed": False}, indent=2))
+        return
 
     deduplication = apply_global_dedup(data)
 
@@ -522,7 +696,6 @@ def main():
             np.asarray(data["cleanStatic"]["idx"][normal_train], dtype="<i8").tobytes()).hexdigest(),
         "forbidden_fit_sources": ["cleanDynamic", "DS1", "DS2", "DS3", "DS7", "DS8"],
     })
-    bundle = source_bundle()
     freeze = {
         "schema": "gnss-doppler-lab.r2c-freeze.v2", "written_before_attack_score_computation": True,
         "config_sha256": sha256_file(args.config), "source_bundle": bundle,

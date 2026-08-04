@@ -12,7 +12,7 @@ from gnss_doppler_lab.r2c_gnss import (
     C_M_S, AnalyticResidualWhitener, ComplexTapProvenance, SmallNeuralNuisanceModel,
     SourceSupport, aggregate_a2, assign_attack_phase, assign_normal_split, availability_time,
     artifact_hashes, build_empirical_template, fit_second_source as _fit_second_source,
-    fit_shared_constellation, full_score, inject_second_source,
+    fit_shared_constellation, full_score, inject_second_source, derive_stage0_verdict,
     quantile_threshold, strict_alarm, sustained_alarms, validate_complex_taps,
 )
 
@@ -104,14 +104,16 @@ def test_shared_geometry_consistency_permutation_and_variable_count():
     permuted = fit_shared_constellation(delays[order], los[order])
     assert permuted.beta_m == pytest.approx(fit.beta_m)
     assert full_score(np.arange(1, 6), permuted) == pytest.approx(full_score(np.arange(1, 6)[order], fit))
-    assert fit_shared_constellation(delays[:4], los[:4]).valid
+    four = fit_shared_constellation(delays[:4], los[:4], minimum_prns=4)
+    assert not four.valid and four.rank == 4 and four.residual_dof == 0
+    assert four.reason == "zero_residual_degrees_of_freedom"
 
 
 def test_geometry_rank_and_minimum_prn_fail_closed():
     delays = np.arange(3) * 1e-8; los = np.eye(3)
     fit = fit_shared_constellation(delays, los)
     assert not fit.valid and fit.reason == "insufficient_prns" and full_score([1, 2, 3], fit) == 0
-    bad = fit_shared_constellation(np.arange(4) * 1e-8, np.tile([1., 0, 0], (4, 1)))
+    bad = fit_shared_constellation(np.arange(5) * 1e-8, np.tile([1., 0, 0], (5, 1)))
     assert not bad.valid and bad.reason == "rank_deficient"
 
 
@@ -139,6 +141,22 @@ def test_nuisance_and_threshold_roles_are_normal_only():
     assert not strict_alarm(3, 3) and strict_alarm(3.01, 3)
 
 
+def test_proper_complex_covariance_orientation_and_whitening():
+    rng = np.random.default_rng(23)
+    # Deliberately non-real Hermitian covariance with imaginary cross terms.
+    mixing = np.eye(9, dtype=complex)
+    mixing[0, 1] = 0.7j
+    mixing[2, 0] = 0.35 - 0.2j
+    z = (rng.normal(size=(20000, 9)) + 1j * rng.normal(size=(20000, 9))) / np.sqrt(2)
+    samples = z @ mixing.T
+    model = AnalyticResidualWhitener(shrinkage=0, epsilon=1e-12).fit(
+        samples, ["normal_train"] * len(samples))
+    expected = (samples - samples.mean(0)).T @ (samples - samples.mean(0)).conj() / (len(samples)-1)
+    assert model.covariance_ == pytest.approx(expected, abs=1e-10)
+    assert model.covariance_ == pytest.approx(model.covariance_.conj().T, abs=1e-12)
+    assert np.linalg.eigvalsh(model.covariance_).min() >= 0
+
+
 def test_aggregation_permutation_and_sustained_boundary_reset():
     assert aggregate_a2([1, 5, 2, 4], 2) == aggregate_a2([4, 2, 5, 1], 2) == 4.5
     alarms = sustained_alarms([1, 1, 1, 1, 1, 1], ["a", "a", "a", "a", "b", "b"],
@@ -150,6 +168,8 @@ def test_synthetic_noise_multipath_and_injection_controls():
     rng = np.random.default_rng(4); authentic = np.maximum(1 - np.abs(TAPS), 0).astype(complex)
     noisy = authentic + .01 * (rng.normal(size=9) + 1j * rng.normal(size=9))
     injected = inject_second_source(noisy, TAPS, -.5, .5, .9)
+    component = injected - noisy
+    assert np.vdot(component, component).real / np.vdot(noisy, noisy).real == pytest.approx(.5, abs=1e-12)
     assert fit_second_source(injected, TAPS, GRID).score > fit_second_source(noisy, TAPS, GRID).score
     delays, los, _ = geometry_case()
     independent = np.asarray([-.7, .55, -.25, .8, .32]) / 1_023_000
@@ -203,6 +223,40 @@ def test_selected_real_source_time_controls_bin_boundaries():
     assert runner.make_epochs("DS3", attack)[0]["phase"] == "transition_excluded"
     exact = {**common, "time": np.array([100., 100.001]), "bin": np.array([200, 200])}
     assert runner.make_epochs("DS3", exact)[0]["phase"] == "post"
+
+
+def test_condition_scaler_is_train_only_and_future_attack_cannot_change_score(monkeypatch):
+    runner = load_runner()
+    base = {"y": np.ones((3, 9), complex), "cn0": np.array([40., 41., np.nan])}
+    train = np.array([True, True, False])
+    scaler = runner.fit_condition_scaler(base, train)
+    before = runner._conditions(base, scaler)[0].copy()
+    changed = {"y": base["y"].copy(), "cn0": base["cn0"].copy()}
+    changed["y"][2] *= 1e9; changed["cn0"][2] = -1e9
+    after = runner._conditions(changed, scaler)[0]
+    assert after == pytest.approx(before)
+    assert scaler["fit_role"] == "cleanStatic normal_train"
+    assert len(scaler["sha256"]) == 64
+
+
+def test_npz_validation_rejects_degenerate_q_and_bad_prn(tmp_path):
+    runner = load_runner()
+    common = {"time_s": np.array([0., .1]), "channel": np.array([0, 0]),
+              "segment_index": np.array([0, 0]), "sample_count": np.array([0, 1])}
+    for name, prn, q in (("bad_q", [1, 1], 0.), ("bad_prn", [0, 1], 1.)):
+        iq = np.ones((2, 9, 2), np.float32); iq[..., 1] *= q
+        path = tmp_path / f"{name}.npz"
+        np.savez(path, complex_iq=iq, prn=np.array(prn), **common)
+        with pytest.raises(ValueError):
+            runner.load_sample(path)
+
+
+def test_decision_is_derived_fail_closed_from_required_interface():
+    gates = {name: {"status": "PASS"} for name in
+             ("complex_provenance", "time_alignment", "los_geometry", "b0_interface")}
+    gates["b0_interface"] = {"status": "FAIL"}
+    result = derive_stage0_verdict(gates)
+    assert result["verdict"] == "DATA_INVALID" and "b0_interface" in result["reason"]
 
 
 def test_empirical_template_is_normal_train_only_and_real_fit_requires_it():

@@ -31,14 +31,20 @@
     "phases_rad": [0.0, 0.7853981633974483, 1.5707963267948966, 3.141592653589793],
     "synthetic_use": "mechanics-only"
   },
-  "geometry": {"minimum_prns": 4, "minimum_rank": 4, "maximum_condition_number": 1000000.0},
+  "geometry": {"minimum_prns": 5, "minimum_rank": 4, "minimum_residual_dof": 1, "maximum_condition_number": 1000000.0},
   "b0": {
     "checkpoint_sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
     "retrain": false,
     "historical_limitation": "PRN-holdout with time overlap and cleanStatic+cleanDynamic calibration differs from this chronological cleanStatic-only contract"
   },
   "ablation_order": ["B0", "A1", "A2", "A3", "A4", "Full R2C-GNSS", "Power-only", "Noise-floor-only"],
-  "decision_criteria_frozen": true,
+  "decision_criteria": {
+    "provenance": "original preregistration section 11",
+    "required_inputs": ["complex_provenance", "time_alignment", "los_geometry", "b0_interface"],
+    "physics_supported_requires_all": ["clean_dynamic_fpr", "gain_invariance", "phase_invariance", "full_exceeds_b0", "full_b0_ci", "geometry_improvement", "relation_destruction", "shortcut_controls"],
+    "unavailable_required_input_verdict": "DATA_INVALID",
+    "failed_evidence_verdict": "NOT_SUPPORTED"
+  },
   "input_paths": {},
   "external_input_policy": "required CLI NAME=NPZ overrides; resolved absolute paths and hashes are artifact provenance only",
   "bounded_sampling": "first receiver row per floor(time/0.5s), PRN, frozen before attack scoring"

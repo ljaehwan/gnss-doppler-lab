@@ -65,6 +65,7 @@ class GeometryFit:
     robust_weights: np.ndarray
     leverage: np.ndarray
     rank: int
+    residual_dof: int
     singular_values: np.ndarray
     condition_number: float
     valid: bool
@@ -298,7 +299,10 @@ class AnalyticResidualWhitener:
             raise ValueError("at least two nine-tap residuals are required")
         self.mean_ = data.mean(axis=0)
         centered = data - self.mean_
-        empirical = centered.conj().T @ centered / max(data.shape[0] - 1, 1)
+        # Rows are observations and columns are complex variables.  The proper
+        # complex covariance is E[(z-mu)(z-mu)^H].  Using z^H z conjugates the
+        # imaginary cross-covariance and whitens the wrong orientation.
+        empirical = centered.T @ centered.conj() / max(data.shape[0] - 1, 1)
         diagonal = np.diag(np.diag(empirical))
         self.covariance_ = ((1 - self.shrinkage) * empirical + self.shrinkage * diagonal +
                             self.epsilon * np.eye(9))
@@ -356,7 +360,7 @@ class SmallNeuralNuisanceModel:
 
 
 def fit_shared_constellation(delay_offsets_s: Sequence[float], los_vectors: np.ndarray,
-                             evidence_weights: Sequence[float] | None = None, *, minimum_prns: int = 4,
+                             evidence_weights: Sequence[float] | None = None, *, minimum_prns: int = 5,
                              maximum_condition_number: float = 1e6, huber_delta_m: float = 10.0) -> GeometryFit:
     delays = np.asarray(delay_offsets_s, dtype=np.float64)
     los = np.asarray(los_vectors, dtype=np.float64)
@@ -368,12 +372,15 @@ def fit_shared_constellation(delay_offsets_s: Sequence[float], los_vectors: np.n
     if base.shape != delays.shape or np.any(base <= 0):
         raise ValueError("evidence weights must be positive and aligned")
     rank = int(np.linalg.matrix_rank(design))
+    residual_dof = int(delays.size - rank)
     singular = np.linalg.svd(design, compute_uv=False)
     condition = float(np.inf if singular[-1] == 0 else singular[0] / singular[-1])
-    valid = delays.size >= minimum_prns and rank == 4 and condition <= maximum_condition_number
+    valid = (delays.size >= minimum_prns and rank == 4 and residual_dof >= 1 and
+             condition <= maximum_condition_number)
     reason = None
     if delays.size < minimum_prns: reason = "insufficient_prns"
     elif rank < 4: reason = "rank_deficient"
+    elif residual_dof < 1: reason = "zero_residual_degrees_of_freedom"
     elif condition > maximum_condition_number: reason = "ill_conditioned"
     weights = base.copy(); beta = np.zeros(4)
     if valid:
@@ -395,7 +402,7 @@ def fit_shared_constellation(delay_offsets_s: Sequence[float], los_vectors: np.n
         improvement = max(0.0, null_rss - shared_rss)
     else:
         leverage = np.zeros(delays.size); improvement = 0.0
-    return GeometryFit(beta, prediction, residual, weights, leverage, rank, singular,
+    return GeometryFit(beta, prediction, residual, weights, leverage, rank, residual_dof, singular,
                        condition, valid, reason, improvement)
 
 
@@ -431,6 +438,25 @@ def strict_alarm(score: float, threshold: float) -> bool:
     return bool(score > threshold)
 
 
+def derive_stage0_verdict(gates: Mapping[str, Mapping[str, object]]) -> dict:
+    """Derive the frozen task taxonomy from explicit machine-readable gates."""
+    required_inputs = ("complex_provenance", "time_alignment", "los_geometry", "b0_interface")
+    missing = [name for name in required_inputs if gates.get(name, {}).get("status") != "PASS"]
+    if missing:
+        verdict = "DATA_INVALID"
+        reason = "required authenticated input/interface unavailable: " + ", ".join(missing)
+    else:
+        evidence = ("clean_dynamic_fpr", "gain_invariance", "phase_invariance",
+                    "full_exceeds_b0", "full_b0_ci", "geometry_improvement",
+                    "relation_destruction", "shortcut_controls")
+        failed = [name for name in evidence if gates.get(name, {}).get("status") != "PASS"]
+        verdict = "PHYSICS_SUPPORTED" if not failed else "NOT_SUPPORTED"
+        reason = ("all preregistered physics gates pass" if not failed else
+                  "preregistered physics gates failed: " + ", ".join(failed))
+    return {"verdict": verdict, "reason": reason, "gates": dict(gates),
+            "physics_supported": verdict == "PHYSICS_SUPPORTED"}
+
+
 def sustained_alarms(alarms: Sequence[bool], recording_ids: Sequence[str], times_s: Sequence[float],
                      phases: Sequence[str], cadence_s: float = 0.5) -> np.ndarray:
     n = len(alarms)
@@ -449,10 +475,22 @@ def sustained_alarms(alarms: Sequence[bool], recording_ids: Sequence[str], times
 
 def inject_second_source(y: Sequence[complex], tap_offsets_chips: Sequence[float], delay_chips: float,
                          power_ratio: float, phase_rad: float) -> np.ndarray:
+    """Add an ideal component with energy relative to the authentic tap vector.
+
+    ``power_ratio`` is ||injected||^2 / ||authentic||^2 over the nine measured
+    taps.  The template is energy-normalized after applying the requested delay,
+    so the convention remains truthful for every supported delay.
+    """
     if power_ratio < 0:
         raise ValueError("power ratio must be non-negative")
-    return (np.asarray(y, dtype=np.complex128) + np.sqrt(power_ratio) * np.exp(1j * phase_rad) *
-            correlation_template(tap_offsets_chips, delay_chips))
+    authentic = np.asarray(y, dtype=np.complex128)
+    template = correlation_template(tap_offsets_chips, delay_chips).astype(np.complex128)
+    authentic_energy = float(np.vdot(authentic, authentic).real)
+    template_energy = float(np.vdot(template, template).real)
+    if authentic_energy <= 0 or template_energy <= 0:
+        raise ValueError("authentic vector and delayed template must have positive energy")
+    amplitude = np.sqrt(power_ratio * authentic_energy / template_energy)
+    return authentic + amplitude * np.exp(1j * phase_rad) * template
 
 
 def artifact_hashes(root: str | Path, *, exclude: Sequence[str] = ("hashes.json", "verification.json")) -> dict[str, str]:

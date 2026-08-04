@@ -18,13 +18,16 @@ sys.path.insert(0, str(ROOT / "src"))
 from gnss_doppler_lab.r2c_gnss import (  # noqa: E402
     SourceSupport, artifact_hashes, assign_attack_phase, assign_normal_split,
     build_empirical_template, empirical_template_hash, sha256_file, sustained_alarms, write_json,
+    derive_stage0_verdict,
 )
 
 NAMES = ("cleanStatic", "cleanDynamic", "DS1", "DS2", "DS3", "DS7", "DS8")
 ONSET = {"DS1": 100.0, "DS2": 100.0, "DS3": 100.0, "DS7": 110.0, "DS8": 110.0}
 DETECTORS = ("B0", "A1", "A2", "A3", "A4", "Full R2C-GNSS", "Power-only")
-SOURCE_FILES = ("src/gnss_doppler_lab/r2c_gnss.py", "scripts/run_r2c_gnss_stage0.py",
-                "scripts/verify_r2c_gnss_stage0.py", "configs/r2c_gnss_stage0.json",
+SOURCE_FILES = ("src/gnss_doppler_lab/r2c_gnss.py", "src/gnss_doppler_lab/gcmr_geometry.py",
+                "src/gnss_doppler_lab/trajectory.py", "scripts/run_r2c_gnss_stage0.py",
+                "scripts/verify_r2c_gnss_stage0.py", "scripts/train_prn_node_gru.py",
+                "scripts/score_texbat_prn_node_gru.py", "configs/r2c_gnss_stage0.json",
                 "configs/r2c_clean_dynamic_geometry_receiver.conf")
 REQUIRED = {"README.md", "config.json", "freeze.json", "provenance.json", "input_validity.json",
     "training_summary.json", "thresholds.json", "scenario_metrics.csv", "ablation_metrics.csv",
@@ -185,6 +188,50 @@ def verify(artifact, check_external=True, full_recompute=False):
     parent = subprocess.check_output(["git", "rev-parse", "HEAD^"], cwd=ROOT, text=True).strip()
     if provenance.get("source_commit_at_generation") not in (current, parent):
         errors.append("generation commit must be current HEAD or its immediate artifact-only parent")
+
+    if validity.get("decision") == "REQUIRED_B0_INTERFACE_UNAVAILABLE":
+        recomputed = derive_stage0_verdict(decision.get("gates", {}))
+        if decision.get("verdict") != recomputed["verdict"] or decision.get("reason") != recomputed["reason"]:
+            errors.append("decision verdict/reason is inconsistent with independently recomputed gates")
+        gate = validity.get("B0", {})
+        if (gate.get("status") != "FAIL" or gate.get("raw_first_row_substitution_permitted") is not False
+                or gate.get("checkpoint_sha256") != sha256_file(ROOT / "artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt")
+                or gate.get("training_dependency_sha256") != sha256_file(ROOT / "scripts/train_prn_node_gru.py")
+                or gate.get("evaluation_dependency_sha256") != sha256_file(ROOT / "scripts/score_texbat_prn_node_gru.py")):
+            errors.append("B0 interface/checkpoint/dependency gate mismatch")
+        if freeze.get("attack_scores_computed") is not False:
+            errors.append("unavailable artifact falsely claims attack scoring")
+        if check_external:
+            if set(validity.get("datasets", {})) != set(NAMES):
+                errors.append("exact scenario roster mismatch")
+            for name, dataset in validity.get("datasets", {}).items():
+                path, manifest_path = Path(dataset["resolved_path"]), Path(dataset["manifest_path"])
+                if not path.is_file() or sha256_file(path) != dataset.get("npz_sha256"):
+                    errors.append(f"external NPZ hash mismatch: {name}")
+                if not manifest_path.is_file() or sha256_file(manifest_path) != dataset.get("manifest_sha256"):
+                    errors.append(f"external manifest hash mismatch: {name}")
+                if str(dataset.get("recording_id", "")).lower() != name.lower() or len(dataset.get("source_iq_sha256", "")) != 64:
+                    errors.append(f"authoritative recording identity mismatch: {name}")
+                for entry in dataset.get("authoritative_identity_chain", []):
+                    chain_path = Path(entry["path"])
+                    if not chain_path.is_file() or sha256_file(chain_path) != entry.get("sha256"):
+                        errors.append(f"authoritative identity chain mismatch: {name}")
+        if full_recompute and not errors:
+            runtime = config.get("runtime", {})
+            command = [sys.executable, str(ROOT / "scripts/run_r2c_gnss_stage0.py"),
+                       "--config", str(ROOT / "configs/r2c_gnss_stage0.json")]
+            with tempfile.TemporaryDirectory(prefix="r2c-independent-") as temporary:
+                reproduced = Path(temporary) / "artifact"; command += ["--output", str(reproduced)]
+                for name in NAMES:
+                    command += ["--input", f"{name}={runtime.get('inputs', {}).get(name, '')}"]
+                    if runtime.get("geometry", {}).get(name):
+                        command += ["--geometry", f"{name}={runtime['geometry'][name]}"]
+                completed = subprocess.run(command, cwd=ROOT, text=True, capture_output=True)
+                if completed.returncode:
+                    errors.append("independent full recomputation failed: " + completed.stderr[-1000:])
+                else:
+                    errors.extend(compare_recomputed_artifact(artifact, reproduced))
+        return errors
 
     template = freeze.get("template", {})
     try:
