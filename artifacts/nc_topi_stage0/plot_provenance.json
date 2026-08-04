@@ -1,0 +1,100 @@
+{
+  "plots": {
+    "clean_distributions.png": {
+      "data_points": 3342,
+      "data_series": 3,
+      "source": "stored scores/labels or stored raw physics"
+    },
+    "prn_orth_heatmap_DS1.png": {
+      "data_points": 9604,
+      "data_series": 1,
+      "source": "stored scores/labels or stored raw physics"
+    },
+    "prn_orth_heatmap_DS2.png": {
+      "data_points": 9578,
+      "data_series": 1,
+      "source": "stored scores/labels or stored raw physics"
+    },
+    "prn_orth_heatmap_DS3.png": {
+      "data_points": 9591,
+      "data_series": 1,
+      "source": "stored scores/labels or stored raw physics"
+    },
+    "prn_orth_heatmap_DS7.png": {
+      "data_points": 5439,
+      "data_series": 1,
+      "source": "stored scores/labels or stored raw physics"
+    },
+    "prn_orth_heatmap_DS8.png": {
+      "data_points": 9806,
+      "data_series": 1,
+      "source": "stored scores/labels or stored raw physics"
+    },
+    "prn_orth_heatmap_cleanDynamic.png": {
+      "data_points": 1674,
+      "data_series": 1,
+      "source": "stored scores/labels or stored raw physics"
+    },
+    "prn_orth_heatmap_cleanStatic.png": {
+      "data_points": 9899,
+      "data_series": 1,
+      "source": "stored scores/labels or stored raw physics"
+    },
+    "roc.png": {
+      "data_points": 890,
+      "data_series": 3,
+      "source": "stored scores/labels or stored raw physics"
+    },
+    "roc_low_fpr.png": {
+      "data_points": 890,
+      "data_series": 3,
+      "source": "stored scores/labels or stored raw physics"
+    },
+    "score_comparison_DS1.png": {
+      "data_points": 2730,
+      "data_series": 3,
+      "source": "stored scores/labels or stored raw physics"
+    },
+    "score_comparison_DS2.png": {
+      "data_points": 2703,
+      "data_series": 3,
+      "source": "stored scores/labels or stored raw physics"
+    },
+    "score_comparison_DS3.png": {
+      "data_points": 2709,
+      "data_series": 3,
+      "source": "stored scores/labels or stored raw physics"
+    },
+    "score_comparison_DS7.png": {
+      "data_points": 1584,
+      "data_series": 3,
+      "source": "stored scores/labels or stored raw physics"
+    },
+    "score_comparison_DS8.png": {
+      "data_points": 2781,
+      "data_series": 3,
+      "source": "stored scores/labels or stored raw physics"
+    },
+    "score_comparison_cleanDynamic.png": {
+      "data_points": 501,
+      "data_series": 3,
+      "source": "stored scores/labels or stored raw physics"
+    },
+    "score_comparison_cleanStatic.png": {
+      "data_points": 2841,
+      "data_series": 3,
+      "source": "stored scores/labels or stored raw physics"
+    },
+    "second_peak_heatmap.png": {
+      "data_points": 25,
+      "data_series": 1,
+      "source": "stored scores/labels or stored raw physics"
+    },
+    "tangent_orth_energy.png": {
+      "data_points": 55591,
+      "data_series": 1,
+      "source": "stored scores/labels or stored raw physics"
+    }
+  },
+  "schema": "gnss-doppler-lab.nc-topi-stage0.plot-provenance.v1"
+}

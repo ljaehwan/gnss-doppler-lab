@@ -1,0 +1,32 @@
+{
+  "attack_fit": false,
+  "diff_inventory": [],
+  "execution_code_commit": "c94af28795d03a91e2f4c0faa74eb19a983ed82e",
+  "fit_scenarios": [
+    "cleanStatic"
+  ],
+  "lineage": "single canonical regenerated Stage-0 lineage; frozen B0; exact algorithm and common pair mask",
+  "schema": "gnss-doppler-lab.nc-topi-stage0.provenance.v2",
+  "source_commit": "c94af28795d03a91e2f4c0faa74eb19a983ed82e",
+  "source_file_inventory": [
+    "configs/nc_topi_stage0.json",
+    "docs/NC_TOPI_STAGE0.md",
+    "scripts/eval_texbat_nc_topi_stage0.py",
+    "scripts/summarize_nc_topi_stage0.py",
+    "src/gnss_doppler_lab/nc_topi.py",
+    "tests/test_nc_topi.py",
+    "tests/test_nc_topi_runner.py"
+  ],
+  "source_file_sha256": {
+    "configs/nc_topi_stage0.json": "bce8f0e4da4ca0bfba4406da5c2441891ac36ed7acb838c2c583e28119a499b5",
+    "docs/NC_TOPI_STAGE0.md": "892dafdccbd82bcaeaf4de701153b9b481d6a5daaf90c38aa4c3219e4d881136",
+    "scripts/eval_texbat_nc_topi_stage0.py": "4b59b2981493c621cceb087b60310f0f662d8a60c8de99b33de92523102a89ee",
+    "scripts/summarize_nc_topi_stage0.py": "f633a2f27dbf61507d7970a5bee5a5ca30d0449474ad3cf71aadfeb4f5002c1b",
+    "src/gnss_doppler_lab/nc_topi.py": "d86bce95f75a00ba8e597caa7a502c012fe53a8ab12d159d4a05684363400687",
+    "tests/test_nc_topi.py": "dcf72d3e195489dde8bed3ea88ce7941fcf5576646a00ad3f5f65b966fd06e75",
+    "tests/test_nc_topi_runner.py": "dec83d5a86ffd42dd826ef0d2785ba43b990604807e637ef1706e4be976f4cad"
+  },
+  "source_root": "/home/ubuntu/projects/gnss-doppler-nc-topi-stage0",
+  "test_fixture": false,
+  "worktree_clean": true
+}

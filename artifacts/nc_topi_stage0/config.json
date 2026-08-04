@@ -1,0 +1,578 @@
+{
+  "attacks": {
+    "already_alarming_stable_pre": "report",
+    "delay_time_field": "availability source_end",
+    "onsets_seconds": {
+      "DS1": 100,
+      "DS2": 100,
+      "DS3": 100,
+      "DS7": 110,
+      "DS8": 110
+    },
+    "persistent": {
+      "source_start_gte_onset_plus": 40
+    },
+    "post": {
+      "source_start_gte_onset": 0
+    },
+    "stable_pre": {
+      "source_end_lte_onset_minus": 20,
+      "source_start_gte": 30
+    },
+    "transition": "all otherwise-before-post epochs"
+  },
+  "b0": {
+    "checkpoint_sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
+    "feature_order": [
+      "E4",
+      "E3",
+      "E2",
+      "E",
+      "P",
+      "L",
+      "L2",
+      "L3",
+      "L4"
+    ],
+    "forbidden_features": [
+      "PRN_ID"
+    ],
+    "historical_training_overlap_limitation": "disclosed: frozen B0 historical training may overlap Stage-0 source support; B0 is never retrained or selected here",
+    "minimum_raw_epochs": 4,
+    "prediction_availability_field": "target_source_end",
+    "prompt_relative_magnitude_ratio_epsilon": 1e-06,
+    "retrain": false,
+    "sequence_length": 12,
+    "standardizer_dtype": "float32",
+    "stride_seconds": 0.5,
+    "window_seconds": 1.0
+  },
+  "canonical_inputs": {
+    "DS1": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds1.npz",
+      "sha256": "b24d947c83890dbfa1c801bfbcb72e1fd192dd66509e927eb5afb8118902b072"
+    },
+    "DS2": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds2.npz",
+      "sha256": "dae0f245cbb107febd220c6de33b9a279a2bad356cb0ba772daf9418bc75d7c9"
+    },
+    "DS3": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds3.npz",
+      "sha256": "38eb5842dfec306d99bf0c5d61df6cffcb6faa25ed63721cafa8e3c3776f9b3e"
+    },
+    "DS7": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/exports/ds7.npz",
+      "sha256": "d0e6da4e27d51e3e96abf2ef7786501124072f28667671e4e40da756eb35f3c8"
+    },
+    "DS8": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/exports/ds8.npz",
+      "sha256": "d1973fa150b7b4e7359df4827f36ce60289f206e9db11c1ac2bc1fd33a0df533"
+    },
+    "cleanStatic": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.npz",
+      "sha256": "fcd1d378c28e79fe4a550b65fc1208cde3c8fb334db11406a07fed4d90fba237"
+    }
+  },
+  "checkpoint_path": "/home/ubuntu/projects/gnss-doppler-nc-topi-stage0/artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt",
+  "clean_dynamic_nodes": {
+    "evaluation_only": true,
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/w1.0_s0.5/cleanDynamic/multi_prn_method_a_9tap_normalized_dmcpd_w1.0_s0.5/normal_prn_node_windows.csv",
+    "required": true,
+    "sha256": "48fc7d2e4f527917fa1f6c2286562a60c3fff2c09d4ffb54cd215a2a33f2bf49"
+  },
+  "decision": {
+    "GO": "all frozen criteria pass",
+    "INCONCLUSIVE": "all outcomes not classified GO or NO-GO by the frozen grammar",
+    "NO-GO": "c6 false OR c7 false OR clean NC FPR >0.05 OR stable-pre failures >=3 OR known improvement count <=1 OR known positive CI count ==0",
+    "attack_scenario_pass": "standardized pAUC point delta >0 OR both sustained delays finite and NC at least 0.5s earlier",
+    "boolean_grammar": {
+      "GO": "c1 && c2 && c3 && c4 && c5 && c6 && c7 && c8",
+      "NO_GO": "(!c6) || (!c7) || (clean_nc_fpr > 0.05) || (stable_pre_failures >= 3) || (improvement_count <= 1) || (positive_ci_count == 0)",
+      "missing": "missing mandatory evidence prevents GO and is not itself a NO-GO trigger",
+      "precedence": "NO-GO triggers first; then GO; otherwise INCONCLUSIVE"
+    },
+    "ci_criterion": "paired pAUC delta percentile95 CI lower >0",
+    "criteria": {
+      "c1": "clean_holdout_nc_fpr <= 0.02",
+      "c2": "clean_holdout_nc_fpr - clean_holdout_b0_fpr <= 0.01",
+      "c3": "all five scenario stable_pre_fpr < 0.05",
+      "c4": "count(pauc_delta > 0 OR (finite delays AND b0_delay-nc_delay >= 0.5)) >= 3",
+      "c5": "count(paired_pauc_ci_lower > 0) >= 2",
+      "c6": "equal_rmse_pass == true",
+      "c7": "second_peak_pass == true",
+      "c8": "actual_mean_pauc_gain > shuffled_gain AND actual_mean_pauc_gain > 0"
+    },
+    "evidence_domains": {
+      "delays": "finite >=0 or explicit censored null",
+      "fpr": "finite [0,1]",
+      "invalid_evidence": "INCONCLUSIVE with validation_errors; cannot trigger GO or NO-GO",
+      "pauc_delta_and_ci": "finite [-1,1], CI lower <= upper",
+      "pauc_points_and_means": "finite [0,1]",
+      "physics_flags": "Python bool or NumPy bool only",
+      "scalar_type": "Python/NumPy real scalar only; bool/string/list/array/object rejected before conversion",
+      "scenario_sets": "exactly DS1,DS2,DS3,DS7,DS8"
+    },
+    "go_primary": "q99 NC-TOPI median only",
+    "machine_grammar": {
+      "criteria": {
+        "c1": {
+          "lhs": "clean_nc_fpr",
+          "op": "<=",
+          "rhs": 0.02
+        },
+        "c2": {
+          "lhs": "clean_nc_fpr-clean_b0_fpr",
+          "op": "<=",
+          "rhs": 0.01
+        },
+        "c3": {
+          "lhs": "stable_pre_fpr",
+          "op": "<",
+          "quantifier": "all_5",
+          "rhs": 0.05
+        },
+        "c4": {
+          "lhs": "scenario_improvement_pass_count",
+          "op": ">=",
+          "rhs": 3
+        },
+        "c5": {
+          "lhs": "positive_paired_ci_count",
+          "op": ">=",
+          "rhs": 2
+        },
+        "c6": {
+          "lhs": "equal_rmse_pass",
+          "op": "is",
+          "rhs": true
+        },
+        "c7": {
+          "lhs": "second_peak_pass",
+          "op": "is",
+          "rhs": true
+        },
+        "c8": {
+          "all": [
+            "actual_gain > shuffled_gain",
+            "actual_gain > 0"
+          ]
+        }
+      },
+      "go": {
+        "all": [
+          "c1",
+          "c2",
+          "c3",
+          "c4",
+          "c5",
+          "c6",
+          "c7",
+          "c8"
+        ]
+      },
+      "missing_mandatory": "blocks GO; does not itself trigger NO-GO",
+      "no_go": {
+        "any": [
+          "c6 is false",
+          "c7 is false",
+          "clean_nc_fpr > 0.05",
+          "stable_pre_failures >= 3",
+          "known_improvement_count <= 1",
+          "known_positive_ci_count == 0"
+        ]
+      }
+    },
+    "shuffle_criterion": "actual NC mean pAUC gain over TOPI > shuffled gain AND actual gain >0"
+  },
+  "detectors": {
+    "ablation_rescue_primary": false,
+    "common_epoch_contract": "primary requires full identity set equality, unique identities, and equal source interval/label/valid mask; no intersection",
+    "diagnostic_ablations": [
+      {
+        "aggregator": "median",
+        "name": "TOPI",
+        "threshold_quantile": 0.99
+      },
+      {
+        "aggregator": "top25_mean",
+        "name": "NC-TOPI",
+        "threshold_quantile": 0.995
+      },
+      {
+        "aggregator": "top25_mean",
+        "name": "TOPI",
+        "threshold_quantile": 0.995
+      },
+      {
+        "name": "width_tangent",
+        "role": "diagnostic ablation"
+      }
+    ],
+    "primary": {
+      "aggregator": "median",
+      "name": "NC-TOPI",
+      "threshold_quantile": 0.99
+    },
+    "top25_mean": "mean largest ceil(0.25*n), permutation-invariant, variable n, tracked count"
+  },
+  "epoch_schema": {
+    "diagnostic_intersection_only": "common_epoch_intersection_diagnostic",
+    "event_ids_supported": true,
+    "identity_key": [
+      "physical_recording_id",
+      "scenario",
+      "prn_or_event_id",
+      "target_index",
+      "availability_time_s"
+    ],
+    "mandatory_metadata_equality": [
+      "source_start_s",
+      "source_end_s",
+      "label",
+      "valid"
+    ],
+    "primary_join": "exact full identity and metadata equality",
+    "required_fields": [
+      "physical_recording_id",
+      "scenario",
+      "prn_or_event_id",
+      "target_index",
+      "availability_time_s",
+      "source_start_s",
+      "source_end_s",
+      "valid",
+      "label"
+    ]
+  },
+  "fit_policy": {
+    "allowed_scenario": "cleanStatic",
+    "attack_fit": false,
+    "canonical_identity": {
+      "availability_time_s": "finite real scalar excluding bool",
+      "strings": "nonempty canonical strings without padding",
+      "target_index": "integer excluding bool",
+      "type": "EpochIdentity(recording_id, scenario, prn, target_index, availability_time_s)"
+    },
+    "conditioner_cap": "cleanStatic normal_calibration identities disjoint from train",
+    "conditioner_fit": "cleanStatic normal_train with identity and full fit digests",
+    "conditioner_state": "fitted and clean-calibrated sealed RobustConditioner with exact four-feature schema",
+    "covariance_allowed_role": "normal_train",
+    "covariance_fit_audit": [
+      "identity_count",
+      "identity_digest_sha256",
+      "pair_identity_digest_sha256",
+      "residual_space"
+    ],
+    "covariance_input": "PeakPredictionPair sequence or ResidualBatch.from_pairs only",
+    "covariance_input_seal": "ResidualBatch digest over residual_raw + ordered pair content digests + raw-space tag",
+    "covariance_required_identity_provenance": true,
+    "fit_objects": [
+      "standardizers",
+      "covariance",
+      "regression",
+      "thresholds"
+    ],
+    "normal_holdout_fit": false,
+    "shuffle_control": "deterministic within cleanStatic normal_train only",
+    "threshold_calibration": "factory-only sealed ThresholdCalibration with detector/aggregator/q/clean calibration provenance and score digest",
+    "typed_provenance": "FitProvenance(scenario, role, tuple[EpochIdentity])"
+  },
+  "geometry": {
+    "amplitude_semantics": "normalized-shape scale direction, not physical receiver global gain",
+    "basis_provenance": {
+      "bound_digests": [
+        "peak identity",
+        "coordinates",
+        "predicted_raw"
+      ],
+      "object": "immutable factory-only TangentBasis",
+      "primary_kind": "primary_amp_shift",
+      "primary_score_input": "PeakPredictionPair + TangentBasis + sealed CovarianceFit",
+      "raw_matrix_primary_input": false,
+      "raw_weight_primary_input": false,
+      "seal_revalidation": "pair, basis, covariance content recomputed at every primary score boundary",
+      "width_kind": "width_diagnostic"
+    },
+    "covariance": {
+      "audit_binding": "pair identity digest + prompt_relative_ratio_raw tag",
+      "eigenvalue_floor": "1e-8*trace/dim",
+      "estimator": "Ledoit-Wolf",
+      "fit": "cleanStatic normal_train residual_raw only",
+      "input": "validated PeakPredictionPair sequence or ResidualBatch.from_pairs",
+      "score_input": "factory-only sealed CovarianceFit; raw W rejected"
+    },
+    "pair_contract": "actual_raw and predicted_raw required; residual_raw=actual_raw-predicted_raw; residual_standardized=residual_raw/standardizer_std; explicit physical coordinates required and immutable; identity is typed EpochIdentity; coordinates equal frozen float64 nine-tap vector at zero tolerance",
+    "precision": {
+      "method": "pseudoinverse"
+    },
+    "primary_include_width": false,
+    "primary_tangents": [
+      "amplitude",
+      "shift"
+    ],
+    "prn_score": {
+      "B0": "sqrt(mean(residual_standardized^2))",
+      "NC_TOPI": "S_perp/max(capped_scale, energy_epsilon)",
+      "TOPI": "S_perp = r_perp.T W r_perp",
+      "conditioner_target": "log(max(S_perp, energy_epsilon))",
+      "predicted_scale": "exp(predicted_log_energy), capped at clean-calibration higher q995"
+    },
+    "projection": {
+      "decomposition": "total = tangent + perpendicular + cross",
+      "dropped_direction_contract": "report retained_effective_tangent_span; never claim full-span orthogonality",
+      "fail_closed": "retained-span orthogonality and energy decomposition checked at machine-epsilon-scaled tolerance",
+      "orthogonality": "report norm(J.T W r_perp)",
+      "pinv_rcond": 1e-10,
+      "primary": "whitened SVD W-metric projector",
+      "rank": "effective rank uses the same explicit SVD cutoff as projection",
+      "ridge": "explicit diagnostic only: ridge_diagnostic_not_orthogonal"
+    },
+    "score_space": "raw prompt-relative-ratio",
+    "tangents": [
+      "amplitude (normalized-shape scale direction)",
+      "first derivative shift on physical coords",
+      "width only via diagnostic builder"
+    ],
+    "width_builder": "build_width_ablation_basis + produce_width_ablation_scores; diagnostic label required"
+  },
+  "iq_conditioner": {
+    "asof": "block_end <= min target source_start",
+    "block_duration_seconds": 0.01,
+    "block_stride_seconds": 0.5,
+    "feature_schema": "exact ordered tuple; width 4; no padding/case aliases",
+    "features": [
+      "log_power",
+      "log_noise_floor_scale",
+      "spectral_flatness",
+      "lag1_autocorr_magnitude"
+    ],
+    "forbidden_features": [
+      "PRN",
+      "scenario",
+      "onset"
+    ],
+    "history_blocks": 4,
+    "lower_bound": "epsilon only",
+    "predicted_scale_cap": "exp(predicted log energy), capped at clean calibration predicted-scale higher q995",
+    "predictor_standardization": "clean train robust median/IQR",
+    "raw": "int16 IQ",
+    "regression": {
+      "alpha": 0.0001,
+      "epsilon": 1.35,
+      "fit_rows": "clean train PRN rows",
+      "max_iter": 1000,
+      "target": "log(max(S_perp, energy_epsilon))",
+      "type": "HuberRegressor"
+    },
+    "sample_rate_hz": 25000000,
+    "shuffle_control": {
+      "attack_shuffle": false,
+      "schema_provenance": "preserve exact feature schema and typed clean-train provenance; permute target only",
+      "scope": "within clean train before regression",
+      "seed": 20260803
+    },
+    "target_group_contract": "target_groups and block_groups are nonempty strings with exact set equality; unique sorted block end per recording; cadence audited; no cross-group history"
+  },
+  "legacy_positive_control": {
+    "expected_coverage": 5465,
+    "gpu_atol": 0.0003,
+    "node_path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/texbat_ds7_9tap_eval_20260724/ds7/multi_prn_method_a_9tap_w1.0_s0.5_normalized_dmcpd/normal_prn_node_windows.csv",
+    "node_sha256": "d75a97433d5a4ff25fda7605de599054aed44db3ffa8fd4456baa5114fd771f7",
+    "primary_use": false,
+    "scenario": "DS7",
+    "score_path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds7/texbat_ds7_prn_local_scores.csv",
+    "score_sha256": "d6a3480485d557a5710750ff65c09c836673339a1f23d90d1a41365e9fa91c08"
+  },
+  "lineage": {
+    "DS7_DS8_legacy_residual_role": "positive-control diagnostic only",
+    "comparator_mask": "exact same Stage-0 PeakPredictionPair identity/valid mask for B0 and every TOPI/NC-TOPI comparator",
+    "legacy_epoch_claim": "no byte-identical legacy epoch claim for regenerated canonical NPZ nodes",
+    "legacy_peak_availability": "exact legacy actual/predicted peaks unavailable for cleanStatic/DS1/DS2/DS3",
+    "legacy_prediction_reuse": "diagnostic only when exact key set and stored float32 value positive-control match succeeds; otherwise unavailable",
+    "primary_contract": "one canonical regenerated Stage-0 lineage across cleanStatic, DS1/2/3/7/8; frozen B0 with no retrain",
+    "primary_input": "regenerate every scenario from provenance-fixed canonical complex 9-tap NPZ with frozen B0 normalization/window/GRU",
+    "residual_only_tangent": "forbidden: non-identifiable",
+    "retrain": false
+  },
+  "metrics": {
+    "bootstrap": {
+      "complete_block_seconds": 10,
+      "gap_safe": true,
+      "iid_fallback": false,
+      "interval": "percentile95",
+      "nonoverlapping": true,
+      "paired": true,
+      "point_estimate": "all eligible epochs",
+      "primary_api": "paired_pauc_delta_block_bootstrap",
+      "repetitions": 2000,
+      "requires": [
+        "binary labels",
+        "paired score_a/score_b",
+        "recording_ids",
+        "availability times",
+        "max_fpr"
+      ],
+      "seed": 20260803,
+      "stratified_by_label": true,
+      "unavailable_not_iid": "class-deficient or fewer than two complete blocks in either stratum"
+    },
+    "partial_auc": {
+      "definition": "standardized McClish partial AUC",
+      "library": "sklearn",
+      "max_fpr": 0.05
+    },
+    "sustained_alarm": {
+      "cadence_seconds": 0.5,
+      "duplicate_recording_time": "reject",
+      "input_order": "sort within physical recording",
+      "required_contiguous_epochs": 3,
+      "reset_on_recording_or_time_gap": true,
+      "result": "globally earliest alarm availability and delay",
+      "stable_pre_audit": "per physical recording"
+    },
+    "threshold": {
+      "comparison": "strict >",
+      "primary_api": "strict_alarms(scores, sealed ThresholdCalibration); q99 NC-TOPI median only",
+      "quantile_method": "higher",
+      "raw_scalar_helper": "private diagnostic only"
+    }
+  },
+  "physics_pass": {
+    "equal_rmse": "B0 relative difference <=1e-8; median tangent/orthogonal TOPI ratio <=.05; orthogonal preserved >=.95",
+    "nuisance": "median normalized TOPI increase < B0 increase for amplitude and small shift; noise reported and <=B0 required for pass",
+    "second_peak": "for separations >=.25, Spearman power rho >=.8 each; for power >=.2, separation rho >=.8 each"
+  },
+  "raw_iq_inputs": {
+    "DS1": {
+      "default_full_hash_status": "expected_not_recomputed",
+      "first_1MiB_sha256": "72f3327ee53e5b270781adda8f3a488c18c3046858515ed56e396ca12907357f",
+      "last_1MiB_sha256": "3f295a8fb0fa59b1a9145083485cc64a917fe60270cbbe43f92a2831f3eece8a",
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/data/external/texbat/raw/ds1.bin",
+      "sha256": "8c8f4caa41c8a2253688eef47818a445e3a06139b729cf587c03be33e6b6744c",
+      "size_bytes": 46170898432
+    },
+    "DS2": {
+      "default_full_hash_status": "expected_not_recomputed",
+      "first_1MiB_sha256": "49a5afe66f869b2a537e6c54f7a8268ff2419b0799a9711d1d775c500ed12b63",
+      "last_1MiB_sha256": "d91537da1bfba8036d04256f468708689837ff6e121aa435699a1274ee7a4dd8",
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/data/external/texbat/raw/ds2.bin",
+      "sha256": "65bfba9bbb8643c1f6b8f1a48bdef8adfc0e787458f0c5b0cb54ca92977bed5e",
+      "size_bytes": 45717913600
+    },
+    "DS3": {
+      "default_full_hash_status": "expected_not_recomputed",
+      "first_1MiB_sha256": "9cb41d4a098846d4c21e7230ee7f1a6f8f7aa38ad84bf6253e0bd899da0b7bf5",
+      "last_1MiB_sha256": "e3d3e1d1f356eec232999b16ce1a15ba0451ced3c10b4c34af6088cee236616c",
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/data/external/texbat/raw/ds3.bin",
+      "sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "size_bytes": 45785022464
+    },
+    "DS7": {
+      "default_full_hash_status": "expected_not_recomputed",
+      "first_1MiB_sha256": "f8f180bb23ccb3af727b3610f753e2f8cd6bf2969babdff79338915def8d2e7f",
+      "last_1MiB_sha256": "6b7bda9394a6f79ead67cb9fec5b65ede15c4e79cd261e4141b0fb554722d359",
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/data/external/texbat/raw/ds7.bin",
+      "sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "size_bytes": 27059290112
+    },
+    "DS8": {
+      "default_full_hash_status": "expected_not_recomputed",
+      "first_1MiB_sha256": "f8f180bb23ccb3af727b3610f753e2f8cd6bf2969babdff79338915def8d2e7f",
+      "last_1MiB_sha256": "1cf9502c2a3b1b74fa11d7287cf5502a84afeaa1e691829d759f55ce4681ed54",
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/data/external/texbat/raw/ds8.bin",
+      "sha256": "1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78",
+      "size_bytes": 47000141168
+    },
+    "cleanDynamic": {
+      "default_full_hash_status": "expected_not_recomputed",
+      "first_1MiB_sha256": "8ceae112325bd5282fe4783bf928cb15bf342f85e37eb4cc2af20b8bf9107578",
+      "last_1MiB_sha256": "a8efb15ee960fb1c30cfffd110f04d267be98cb913013108b29480df7ffc144b",
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/data/external/texbat/raw/cleanDynamic.bin",
+      "sha256": "9ca7029e625a34b8a3df64db69c422836885e5eb3cdcbe266d4f42983eba36a1",
+      "size_bytes": 44291850240
+    },
+    "cleanStatic": {
+      "default_full_hash_status": "expected_not_recomputed",
+      "first_1MiB_sha256": "f8f180bb23ccb3af727b3610f753e2f8cd6bf2969babdff79338915def8d2e7f",
+      "last_1MiB_sha256": "9427f82321a5f3cab147f2cedb54211f065ad5e044b048de6e5d2c580c71bc41",
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/data/external/texbat/raw/cleanStatic.bin",
+      "sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "size_bytes": 48016392192
+    }
+  },
+  "schema": "gnss-doppler-lab.nc-topi-stage0.v1",
+  "split": {
+    "calibration": {
+      "source_end_lte": 400,
+      "source_start_gte": 320
+    },
+    "holdout": {
+      "source_start_gte": 420
+    },
+    "train": {
+      "source_end_lte": 300
+    }
+  },
+  "status": "production-executable-pre-campaign",
+  "synthetic": {
+    "equal_rmse_trials": 100,
+    "equal_rmse_trials_deterministic": true,
+    "interpolation": "physical coordinates; no threshold selection",
+    "nuisance": {
+      "amplitude_signed": [
+        0.02,
+        0.05,
+        0.1
+      ],
+      "noise_scales": [
+        1,
+        1.25,
+        1.5
+      ],
+      "shift_signed_chips": [
+        0.01,
+        0.025,
+        0.05
+      ]
+    },
+    "second_peak_relative_powers": [
+      0.05,
+      0.1,
+      0.2,
+      0.4,
+      0.8
+    ],
+    "second_peak_separations_chips": [
+      0.0625,
+      0.125,
+      0.25,
+      0.375,
+      0.5
+    ]
+  },
+  "taps": {
+    "coordinate_provenance": "verified directly from GNSS-SDR source; explicit values, never generated from assumed spacing",
+    "coordinates_chips": [
+      -0.5,
+      -0.375,
+      -0.25,
+      -0.125,
+      0,
+      0.125,
+      0.25,
+      0.375,
+      0.5
+    ],
+    "feature_order": [
+      "E4",
+      "E3",
+      "E2",
+      "E",
+      "P",
+      "L",
+      "L2",
+      "L3",
+      "L4"
+    ]
+  }
+}
