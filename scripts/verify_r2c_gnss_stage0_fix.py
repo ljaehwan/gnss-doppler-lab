@@ -9,12 +9,16 @@ ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/"src"))
 from gnss_doppler_lab.r2c_stage0_artifact import (FIX_SOURCE_FILES,PRESERVED_TREE,TOP_LEVEL_DIRECTORIES,
  TOP_LEVEL_FILES,expected_hash_keys)
 REQUIRED_DETECTORS={"A1","A2","A3","A4","Full","Neural-with-energy","Power-only"}
+ALL_DETECTORS={"B0-native","A1","A2","A3","A4","Full","Neural-with-energy","Power-only","Noise-floor-only"}
+SCENARIOS={"cleanStatic","cleanDynamic","DS1","DS2","DS3","DS7","DS8"}
 CONTROL_FILES={"gain_invariance.json":{"gain","slow_agc"},"phase_invariance.json":{"global_phase"},
  "noise_control.json":{"awgn","cn0_degradation","matched_power_noise","quantization"},
  "multipath_control.json":{"non_shared_multipath"},"second_source_injection.json":{"second_source_injection"},
  "relation_destruction.json":{"relation_destruction"}}
 
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+def git_blob_sha1(path):
+    data=path.read_bytes();return hashlib.sha1(f"blob {len(data)}\0".encode()+data).hexdigest()
 def load(path):return json.loads(path.read_text())
 def git(repo,*args):return subprocess.check_output(["git",*args],cwd=repo,text=True).strip()
 def independent_decision(gates):
@@ -50,23 +54,43 @@ def verify(artifact:Path,*,repo=ROOT,require_committed=True):
     provenance=load(artifact/"provenance.json");source=provenance.get("source_commit")
     if not isinstance(source,str) or len(source)!=40:errors.append("frozen source commit missing")
     bundle=provenance.get("source_bundle",{}).get("files",{})
+    synthetic=bool(provenance.get("synthetic_test_mode"))
     if set(bundle)!=set(FIX_SOURCE_FILES):errors.append("source bundle file set mismatch")
     else:
         for name,value in bundle.items():
-            if not (repo/name).is_file() or sha(repo/name)!=value:errors.append(f"source bundle hash mismatch: {name}")
+            if synthetic:blob=(repo/name).read_bytes() if (repo/name).is_file() else b""
+            else:
+                try:blob=subprocess.check_output(["git","show",f"{source}:{name}"],cwd=repo)
+                except subprocess.CalledProcessError:errors.append(f"source bundle blob missing: {name}");continue
+            if hashlib.sha256(blob).hexdigest()!=value:errors.append(f"source bundle hash mismatch: {name}")
+        expected_bundle_hash=hashlib.sha256(json.dumps(bundle,sort_keys=True,separators=(",",":")).encode()).hexdigest()
+        if provenance.get("source_bundle",{}).get("bundle_sha256")!=expected_bundle_hash:errors.append("source bundle aggregate hash mismatch")
     if provenance.get("preserved_artifact_tree")!=PRESERVED_TREE:errors.append("preserved tree source constant mismatch")
     try:
         if git(repo,"rev-parse","HEAD:artifacts/r2c_gnss_stage0")!=PRESERVED_TREE:errors.append("old artifact tree changed")
         if source and subprocess.run(["git","merge-base","--is-ancestor",source,"HEAD"],cwd=repo).returncode:errors.append("source commit not ancestor")
         if require_committed:
+            if git(repo,"status","--porcelain=v1"):errors.append("repository/worktree dirty")
             parents=git(repo,"show","-s","--format=%P","HEAD").split()
             if parents!=[source]:errors.append("artifact HEAD parent is not frozen source commit")
             changed=git(repo,"diff-tree","--no-commit-id","--name-only","-r","HEAD").splitlines()
             if any(not p.startswith("artifacts/r2c_gnss_stage0_fix/") for p in changed):errors.append("artifact commit diff is not artifact-only")
+            tree_lines=git(repo,"ls-tree","-r","HEAD","artifacts/r2c_gnss_stage0_fix").splitlines();committed={line.split("\t",1)[1].split("artifacts/r2c_gnss_stage0_fix/",1)[1]:line.split()[2] for line in tree_lines}
+            disk={str(p.relative_to(artifact)):git_blob_sha1(p) for p in artifact.rglob("*") if p.is_file()}
+            if committed!=disk:errors.append("on-disk artifact differs from committed tree")
     except subprocess.CalledProcessError:errors.append("git ancestry verification failed")
-    for item in provenance.get("external_inputs",[]):
-        path=Path(item.get("path",""))
-        if not path.is_file() or sha(path)!=item.get("sha256"):errors.append("external input/checkpoint hash mismatch")
+    external=provenance.get("external_inputs",[])
+    if synthetic and external:errors.append("synthetic artifact must not carry production external inputs")
+    if not synthetic:
+        if len(external)!=7 or {x.get("scenario") for x in external}!=SCENARIOS:errors.append("external input roster mismatch")
+        for item in external:
+            for role in ("selected","geometry"):
+                value=item.get(role,{});path=Path(value.get("path",""))
+                if not path.is_file() or sha(path)!=value.get("sha256"):errors.append("external input/checkpoint hash mismatch")
+            value=item.get("b0",{})
+            if "path" in value and (not Path(value["path"]).is_file() or sha(Path(value["path"]))!=value.get("sha256")):errors.append("B0 lineage hash mismatch")
+        canonical=provenance.get("canonical_config",{});config_path=repo/"configs/r2c_gnss_stage0_fix.json"
+        if canonical.get("path")!="configs/r2c_gnss_stage0_fix.json" or canonical.get("sha256")!=sha(config_path):errors.append("canonical config provenance mismatch")
     rows=list(csv.DictReader((artifact/"per_epoch_scores.csv").open()))
     detectors={r.get("detector") for r in rows}
     if not REQUIRED_DETECTORS<=detectors:errors.append("required detector paths missing")
@@ -85,7 +109,11 @@ def verify(artifact:Path,*,repo=ROOT,require_committed=True):
         if by_detector[a] and len(by_detector[a])==len(by_detector[b]) and np.array_equal(by_detector[a],by_detector[b]):errors.append(f"detector alias: {a}={b}")
     thresholds=load(artifact/"thresholds.json")
     if not {"q99","q99.5","target_fpr_1pct"}<=set(thresholds):errors.append("threshold artifact incomplete")
-    synthetic=bool(provenance.get("synthetic_test_mode"))
+    if not synthetic:
+        if {r.get("scenario") for r in rows}!=SCENARIOS:errors.append("scenario row roster mismatch")
+        for scenario in SCENARIOS:
+            if {r.get("detector") for r in rows if r.get("scenario")==scenario}!=ALL_DETECTORS:errors.append(f"detector row roster mismatch: {scenario}")
+        if load(artifact/"verification.json").get("status") in {None,"PENDING_EXTERNAL_VERIFIER"}:errors.append("pending production verification")
     if not synthetic:
         per_detector=thresholds.get("detectors",{})
         for detector in REQUIRED_DETECTORS:
@@ -102,9 +130,12 @@ def verify(artifact:Path,*,repo=ROOT,require_committed=True):
         present={r.get("kind") for r in control_rows}
         if not kinds<=present:errors.append(f"missing perturbation: {filename}")
         for row in control_rows:
-            if not all(k in row for k in ("pre_score","post_score","pre_alarm","post_alarm","effect_size","parameters","seed","support_count")):errors.append("empty control evidence");continue
+            if not all(k in row for k in ("pre_score","post_score","pre_alarm","post_alarm","effect_size","parameters","seed","support_count","baseline_status","perturbed_status","threshold")):errors.append("empty control evidence");continue
             threshold=float(control.get("threshold",np.nan))
-            if row["pre_alarm"]!=(float(row["pre_score"])>threshold) or row["post_alarm"]!=(float(row["post_score"])>threshold):errors.append("constant/fabricated control alarm")
+            if float(row["threshold"])!=threshold:errors.append("control threshold mismatch")
+            both=row["baseline_status"]=="AVAILABLE" and row["perturbed_status"]=="AVAILABLE"
+            if both and (row["pre_alarm"]!=(float(row["pre_score"])>threshold) or row["post_alarm"]!=(float(row["post_score"])>threshold)):errors.append("constant/fabricated control alarm")
+            if not both and any(row.get(x) is not None for x in ("pre_alarm","post_alarm")):errors.append("unavailable control produced alarm")
         if not synthetic and control_rows and len({r["post_score"] for r in control_rows})==1:errors.append("constant control scores")
     bootstrap=load(artifact/"bootstrap_comparisons.json")
     comparison_hashes=[x.get("draw_index_sha256") for x in bootstrap.get("comparisons",[]) if x.get("draw_index_sha256")]

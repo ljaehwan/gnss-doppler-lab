@@ -87,8 +87,12 @@ def validate_b0_nodes(frame, *, seq_len: int = 12) -> dict:
     if [c for c in frame.columns if c in B0_FEATURES] != list(B0_FEATURES):
         raise ValueError("B0 node feature order mismatch")
     numeric = frame[[c for c in required if c not in ("run_id","prn")]].apply(lambda x: np.asarray(x, float))
-    if frame.empty or not np.isfinite(numeric.to_numpy()).all() or np.any(frame.epoch_count <= 0):
+    if frame.empty or not np.isfinite(numeric.to_numpy()).all() or np.any(frame.epoch_count < 4):
         raise ValueError("B0 nodes must be nonempty, finite, and supported")
+    timing=(np.isclose(frame.window_end_s,frame.window_start_s+1.,atol=1e-9)&
+            np.isclose(frame.window_mid_s,frame.window_start_s+.5,atol=1e-9)&
+            np.isclose(frame.window_bin_s,np.round(frame.window_mid_s*2.)/2.,atol=1e-9))
+    if not bool(np.all(timing)):raise ValueError("B0 node timing/window/stride mismatch")
     if frame.duplicated(["run_id", "prn","channel","segment_index", "window_bin_s"]).any():
         raise ValueError("duplicate B0 node")
     for _, group in frame.groupby(["run_id", "prn","channel","segment_index"], sort=False):
@@ -101,11 +105,14 @@ def validate_b0_nodes(frame, *, seq_len: int = 12) -> dict:
             "availability": "target_window_end"}
 
 
-def score_b0_nodes(frame, checkpoint: Mapping, *, device="cpu"):
+def score_b0_nodes(frame, checkpoint: Mapping, *, device="cpu", checkpoint_path: Path | None=None,
+                   expected_checkpoint_sha256: str | None=None):
     """Authentic checkpoint/scaler inference over contiguous native node sequences."""
     import pandas as pd
     import torch
-    validate_b0_nodes(frame); validate_b0_checkpoint(checkpoint)
+    validate_b0_nodes(frame); identity=validate_b0_checkpoint(checkpoint,checkpoint_path)
+    if expected_checkpoint_sha256 is not None and identity["checkpoint_sha256"]!=expected_checkpoint_sha256:
+        raise ValueError("canonical B0 checkpoint hash mismatch")
     # Architecture is the tracked native producer's exact serialized config.
     import importlib.util
     producer=Path(__file__).resolve().parents[2]/"scripts/train_prn_node_gru.py"
@@ -155,6 +162,12 @@ def replay_b0_events(scores):
     required = {"run_id", "prn", "window_bin_s", "window_start_s", "window_mid_s", "prn_node_rmse"}
     if missing := sorted(required - set(scores.columns)): raise ValueError(f"native score columns missing: {missing}")
     if scores.duplicated(["run_id", "window_bin_s", "prn"]).any(): raise ValueError("duplicate native B0 score")
+    for _,group in scores.groupby(["run_id","window_bin_s"],sort=False):
+        for field in ("window_start_s","window_mid_s"):
+            if group[field].nunique(dropna=False)!=1:raise ValueError("inconsistent event PRN timing")
+        if "window_end_s" in group and group.window_end_s.nunique(dropna=False)!=1:raise ValueError("inconsistent event PRN timing")
+        if "availability_time_s" in group and (group.availability_time_s.nunique(dropna=False)!=1 or not np.isclose(group.availability_time_s.iloc[0],group.window_start_s.iloc[0]+1.)):
+            raise ValueError("B0 score availability must equal target window end")
     rows = []
     for (run, bin_s), group in scores.groupby(["run_id", "window_bin_s"], sort=True):
         vals = group.prn_node_rmse.to_numpy(float); n = len(vals)
@@ -180,20 +193,20 @@ def historical_b0_status(paths: Mapping[str, Path], expected_hashes: Mapping[str
     import pandas as pd
     reports = {}
     for scenario, path in paths.items():
+        digest=None
         try:
             digest = _sha256(path)
             if expected_hashes and scenario in expected_hashes and digest != expected_hashes[scenario]:
                 raise ValueError("source score hash mismatch")
             source = pd.read_csv(path)
             replay = replay_b0_events(source)
-            reports[scenario] = {"status": "AVAILABLE_HISTORICAL_NATIVE_REPLAY", "sha256": digest,
+            reports[scenario] = {"status": "AVAILABLE_SAVED_NATIVE_SCORE_REPLAY_WITH_NODE_LINEAGE_GAP", "sha256": digest,
                                  "node_scores": len(source), "event_scores": len(replay),
                                  "availability": "target_window_end"}
         except (OSError, ValueError) as exc:
-            reports[scenario] = {"status": "UNAVAILABLE_AUTHENTIC_INTERFACE", "reason": str(exc)}
-    status = ("AVAILABLE_HISTORICAL_NATIVE_REPLAY" if reports and all(
-              x["status"] == "AVAILABLE_HISTORICAL_NATIVE_REPLAY" for x in reports.values())
-              else "RECONSTRUCTABLE_WITH_LINEAGE_GAPS" if any(Path(p).exists() for p in paths.values())
+            reports[scenario] = {"status": "UNAVAILABLE_AUTHENTIC_INTERFACE", "reason": str(exc),
+                                 "sha256":digest,"saved_score_hash_valid":bool(digest and (not expected_hashes or expected_hashes.get(scenario)==digest))}
+    status = ("RECONSTRUCTABLE_WITH_LINEAGE_GAPS" if any(Path(p).exists() for p in paths.values())
               else "UNAVAILABLE_AUTHENTIC_INTERFACE")
     return {"status": status, "paper_comparison_eligible": False, "scenarios": reports}
 
@@ -359,6 +372,18 @@ class JointFit:
     null_log_likelihood: float | None = None; null_k: int | None = None
 
 
+@dataclass(frozen=True)
+class ScoreResult:
+    status: str
+    score: float | None
+    reason: str | None = None
+    fit: JointFit | None = None
+
+    @property
+    def valid(self):
+        return self.status == "AVAILABLE" and self.score is not None and np.isfinite(self.score)
+
+
 def _profile_epoch(y, columns):
     d=np.column_stack(columns); amp, _, rank, _=np.linalg.lstsq(d,y,rcond=None)
     residual=y-d@amp
@@ -414,6 +439,10 @@ def joint_profile_glrt(observations: Mapping[int, np.ndarray], los: Mapping[int,
             boundary|=da in (grid[0],grid[-1]) or d in (grid[0],grid[-1])
         k=4*epochs+2*len(prns); delays=tuple(second[p] for p in prns); beta=None; converged=not boundary
     elif hypothesis=="H1-shared":
+        missing=sorted(set(prns)-set(los))
+        if missing:
+            return JointFit(hypothesis,np.nan,np.nan,n,4*epochs+len(prns)+4,np.nan,np.nan,(),None,False,False,False,
+                            "missing_los",epochs,len(prns))
         u=np.asarray([los[p] for p in prns],float); design=np.column_stack([-u,np.ones(len(u))])
         rank=np.linalg.matrix_rank(design); cond=np.linalg.cond(design)
         if len(prns)<5 or rank<4 or len(prns)-rank<1 or cond>maximum_condition_number:
@@ -446,14 +475,15 @@ def joint_profile_glrt(observations: Mapping[int, np.ndarray], los: Mapping[int,
 
 def detector_scores(individual_scores: Mapping[int,float], analytic_shared: JointFit | None,
                     neural_independent: JointFit, neural_shared: JointFit | None,
-                    neural_energy_score: float, power_score: float) -> dict:
+                    neural_energy: JointFit | None, power_score: float) -> dict:
     values=np.asarray(list(individual_scores.values()),float)
     if not len(values): raise ValueError("A1 requires per-PRN scores")
     return {"A1":float(np.max(values)), "A2":float(np.median(values)+np.mean(np.sort(values)[-min(4,len(values)):])),
             "A3":None if analytic_shared is None or not analytic_shared.valid else analytic_shared.score,
             "A4":neural_independent.score,
             "Full":None if neural_shared is None or not neural_shared.valid else neural_shared.score,
-            "Neural-with-energy":float(neural_energy_score), "Power-only":float(power_score)}
+            "Neural-with-energy":None if neural_energy is None else float(neural_energy) if np.isscalar(neural_energy) else None if not neural_energy.valid else float(neural_energy.score),
+            "Power-only":float(power_score)}
 
 
 def normalized_pauc(labels, scores, maximum_fpr=.05):
@@ -509,12 +539,13 @@ def paired_block_bootstrap(times, recording_ids, labels, left, right, *, repetit
     t=np.asarray(times,float); rec=np.asarray(recording_ids); y=np.asarray(labels,bool); a=np.asarray(left,float); b=np.asarray(right,float)
     common=np.isfinite(t)&np.isfinite(a)&np.isfinite(b)
     t,rec,y,a,b=t[common],rec[common],y[common],a[common],b[common]
-    blocks=[]
+    blocks=[];block_ids=[]
     for recording in np.unique(rec):
         idx=np.flatnonzero(rec==recording); origin=t[idx].min(); keys=np.floor((t[idx]-origin)/block_s).astype(int)
         for key in np.unique(keys):
             block=idx[keys==key]
-            if t[block].max()-t[block].min()>=block_s-.5-1e-9: blocks.append(block)
+            if t[block].max()-t[block].min()>=block_s-.5-1e-9:
+                blocks.append(block);block_ids.append(f"{recording}:{int(key)}")
     if not blocks: raise ValueError("no common paired blocks")
     estimate=normalized_pauc(y,a)-normalized_pauc(y,b); rng=np.random.default_rng(seed); values=[]; draws=[]; attempts=0
     while len(values)<repetitions:
@@ -525,7 +556,9 @@ def paired_block_bootstrap(times, recording_ids, labels, left, right, *, repetit
             values.append(normalized_pauc(y[idx],a[idx])-normalized_pauc(y[idx],b[idx])); draws.append(chosen.astype("<i8"))
     low,high=np.quantile(values,[.025,.975])
     draw_hash=hashlib.sha256(np.concatenate(draws).tobytes()).hexdigest()
+    block_hash=hashlib.sha256("\n".join(block_ids).encode()).hexdigest()
     return {"repetitions":2000,"valid_draw_count":len(values),"attempt_count":attempts,"draw_index_sha256":draw_hash,"seed":seed,"block_s":10.,"common_events":int(common.sum()),
+      "eligible_block_ids":block_ids,"eligible_block_ids_sha256":block_hash,"draw_representation":{"rng":"numpy.default_rng.PCG64","sample":"integers(0,n_blocks,n_blocks)","reject_single_class":True},
       "excluded_events":int((~common).sum()),"estimate":estimate,"ci95":[float(low),float(high)],
       "interpretation":"improvement demonstrated" if low>0 else "significant improvement not demonstrated"}
 
@@ -620,18 +653,33 @@ def run_full_controls(score_fn: Callable, observations: Mapping[int,np.ndarray],
     rng=np.random.default_rng(seed); original={p:np.asarray(y,complex).copy() for p,y in observations.items()}
     if not original: raise ValueError("Full controls require observations")
     provider=provider or TemplateProvider.analytic(); taps=np.asarray(taps if taps is not None else np.arange(-.5,.5001,.125),float)
-    base=float(score_fn(original,los)); rows=[]
+    def evaluate(value,pairing,*,cn0_degradation_db=0.):
+        try:
+            result=score_fn(value,pairing,cn0_degradation_db=cn0_degradation_db)
+        except TypeError:
+            result=score_fn(value,pairing)
+        if isinstance(result,ScoreResult): return result
+        if isinstance(result,JointFit):
+            return ScoreResult("AVAILABLE",float(result.score),fit=result) if result.valid else ScoreResult("UNAVAILABLE_INVALID_SHARED_FIT",None,result.reason,result)
+        value=float(result)
+        return ScoreResult("AVAILABLE",value) if np.isfinite(value) else ScoreResult("UNAVAILABLE_INVALID_SCORE",None,"nonfinite")
+    baseline=evaluate(original,los); rows=[]
     def transform(fn): return {p:fn(p,y.copy()) for p,y in original.items()}
-    def add(kind,params,changed,changed_los=los):
-        post=float(score_fn(changed,changed_los)); rows.append({"kind":kind,"parameters":params,"seed":seed,
-          "support_count":sum(len(x) for x in changed.values()),"pre_score":base,"post_score":post,
-          "effect_size":post-base,"pre_alarm":bool(base>threshold),"post_alarm":bool(post>threshold)})
+    def add(kind,params,changed,changed_los=los,*,cn0_degradation_db=0.):
+        post=evaluate(changed,changed_los,cn0_degradation_db=cn0_degradation_db)
+        both=baseline.valid and post.valid
+        rows.append({"kind":kind,"parameters":params,"seed":seed,"threshold":float(threshold),
+          "support_count":sum(len(x) for x in changed.values()),"baseline_status":baseline.status,"perturbed_status":post.status,
+          "baseline_reason":baseline.reason,"perturbed_reason":post.reason,
+          "pre_score":baseline.score,"post_score":post.score,
+          "effect_size":post.score-baseline.score if both else None,
+          "pre_alarm":bool(baseline.score>threshold) if both else None,"post_alarm":bool(post.score>threshold) if both else None})
     for gain in (.5,.75,1.,1.5,2.): add("gain",{"gain":gain},transform(lambda p,y:y*gain))
     add("slow_agc",{"minimum":.75,"maximum":1.25},transform(lambda p,y:y*np.linspace(.75,1.25,len(y))[:,None]))
     for phase in (0.,math.pi/4,math.pi/2,math.pi): add("global_phase",{"radians":phase},transform(lambda p,y:y*np.exp(1j*phase)))
     power=np.mean([np.mean(np.abs(y)**2) for y in original.values()])
     def noisy(scale): return transform(lambda p,y:y+scale*np.sqrt(power/2)*(rng.normal(size=y.shape)+1j*rng.normal(size=y.shape)))
-    add("awgn",{"relative_sigma":.05},noisy(.05)); add("cn0_degradation",{"db":6.0},noisy(math.sqrt(10**(.6)-1)))
+    add("awgn",{"relative_sigma":.05},noisy(.05)); add("cn0_degradation",{"db":6.0},noisy(math.sqrt(10**(.6)-1)),cn0_degradation_db=6.)
     add("matched_power_noise",{"relative_power":1.0},transform(lambda p,y:np.sqrt(power/2)*(rng.normal(size=y.shape)+1j*rng.normal(size=y.shape))))
     def quant(p,y):
         scale=max(np.max(np.abs(y.real)),np.max(np.abs(y.imag)),1e-12)
@@ -653,7 +701,8 @@ def run_full_controls(score_fn: Callable, observations: Mapping[int,np.ndarray],
     keys=sorted(los); perm=keys[1:]+keys[:1]
     add("relation_destruction",{"permutation":perm},original,{p:los[q] for p,q in zip(keys,perm)})
     invariance=[r for r in rows if r["kind"] in {"gain","slow_agc","global_phase"}]
-    status="PASS" if all(r["pre_alarm"]==r["post_alarm"] for r in invariance) else "FAIL"
+    status="PASS" if invariance and all(r["pre_alarm"] is not None and r["pre_alarm"]==r["post_alarm"] for r in invariance) else "FAIL"
     return {"seed":seed,"threshold":float(threshold),"support_count":sum(len(x) for x in original.values()),
             "rows":rows,"computed_rows":len(rows),"status":status,
-            "criteria":{"invariance_alarm_agreement":sum(r["pre_alarm"]==r["post_alarm"] for r in invariance)/len(invariance)}}
+            "baseline_status":baseline.status,"baseline_score":baseline.score,"baseline_reason":baseline.reason,
+            "criteria":{"invariance_alarm_agreement":sum(r["pre_alarm"] is not None and r["pre_alarm"]==r["post_alarm"] for r in invariance)/len(invariance)}}

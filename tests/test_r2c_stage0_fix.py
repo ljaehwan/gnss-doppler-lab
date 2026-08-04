@@ -35,7 +35,7 @@ def test_b0_sequence_rejects_gap_duplicate_and_schema_order():
     base={"run_id":"r","prn":1,"channel":0,"segment_index":0,"window_start_s":0.,"window_end_s":1.,"window_mid_s":.5,"epoch_count":4,
           **{f:1. for f in B0_FEATURES}}
     required=["run_id","prn","channel","segment_index","window_bin_s","window_start_s","window_end_s","window_mid_s","epoch_count",*B0_FEATURES]
-    frame=pd.DataFrame([{**base,"window_bin_s":0.},{**base,"window_bin_s":2.,"window_start_s":1.}])[required]
+    frame=pd.DataFrame([{**base,"window_bin_s":.5},{**base,"window_bin_s":1.5,"window_start_s":1.,"window_end_s":2.,"window_mid_s":1.5}])[required]
     with pytest.raises(ValueError,match="gap"): validate_b0_nodes(frame)
     duplicate=pd.concat([frame.iloc[:1],frame.iloc[:1]])
     with pytest.raises(ValueError,match="duplicate"): validate_b0_nodes(duplicate)

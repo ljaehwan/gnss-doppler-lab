@@ -150,3 +150,14 @@ def test_verifier_tamper_negative_suite(tmp_path):
     def external_hash(p):
         d=json.loads((p/"provenance.json").read_text());d["external_inputs"]=[{"path":str(external),"sha256":"0"*64}];(p/"provenance.json").write_text(json.dumps(d))
     case("external",external_hash)
+    def relabel(p):
+        d=json.loads((p/"provenance.json").read_text());d["synthetic_test_mode"]=False;d["external_inputs"]=[];(p/"provenance.json").write_text(json.dumps(d))
+    case("synthetic_relabelled_production",relabel)
+    def perfect_fake(p):
+        (p/"scenario_metrics.csv").write_text("scenario,detector,status,auroc\nDS3,Full,EVALUATED,1.0\n")
+        d=json.loads((p/"decision.json").read_text());d.update({"core_physics_verdict":"R2C_CORE_SUPPORTED","paper_comparison_ready":True,"verdict":"PHYSICS_SUPPORTED"});(p/"decision.json").write_text(json.dumps(d))
+    case("perfect_fake_metrics",perfect_fake)
+    def missing_detector(p):
+        rows=list(csv.DictReader((p/"per_epoch_scores.csv").open()));rows=[r for r in rows if r["detector"]!="A4"]
+        with (p/"per_epoch_scores.csv").open("w",newline="") as f:w=csv.DictWriter(f,fieldnames=rows[0]);w.writeheader();w.writerows(rows)
+    case("missing_detector",missing_detector)
