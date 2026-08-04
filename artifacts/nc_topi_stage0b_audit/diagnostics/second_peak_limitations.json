@@ -1,0 +1,13 @@
+{
+  "complex_synthesis_performed": false,
+  "limitations": [
+    "prompt-normalized magnitude direct sum",
+    "missing complex carrier phase",
+    "no Prompt renormalization after synthesis",
+    "finite 9-tap zero padding",
+    "strict separation monotonicity",
+    "single reference"
+  ],
+  "preserved_status": "failure",
+  "stage0_c7": false
+}

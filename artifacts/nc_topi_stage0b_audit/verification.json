@@ -1,0 +1,20 @@
+{
+  "checks": [
+    "standalone_parent_binding",
+    "independent_huber_refit",
+    "exact_identity_and_metrics",
+    "exact_bootstrap_and_diagnostics",
+    "decision_readme_plots_provenance"
+  ],
+  "errors": [],
+  "ok": true,
+  "schema": "gnss-doppler-lab.nc-topi-stage0b.verification.v1",
+  "source_digests": {
+    "config": "fbb148503079366ce785909ab92d00b185f7ab8231be8c84efd07cc365dd72a2",
+    "core": "fe8ba503bd5a9231b61ba146211913b58a842254652eedb4f5fb7b7d702dff70",
+    "runner": "57b6a3b5eb070a4d560e16648a3ee4d9b6524e4f578d410d77a7d75cfacaa154",
+    "verifier": "92aa1fe0db1783171e2eb595873df8fcc706f29245197879894d187bc2f0412c"
+  },
+  "status": "VERIFIED",
+  "verifier_independent": true
+}

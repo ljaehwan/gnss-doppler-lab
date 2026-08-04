@@ -1,0 +1,17 @@
+{
+  "absolute_tolerance": 1e-12,
+  "all_rows_within_rel_abs_1e12": true,
+  "calibration_rows": 1628,
+  "effective_scale": {
+    "both_zero_rows": 0,
+    "implementation_refit_match": true,
+    "ordinary_rows": 55591
+  },
+  "max_absolute_error": 0.0003986358642578125,
+  "max_relative_error": 3.745528836138847e-14,
+  "ok": true,
+  "q995_upper_cap": 1.4220200618224565,
+  "relative_tolerance": 1e-12,
+  "rows": 55591,
+  "train_rows": 6074
+}

@@ -1,0 +1,12 @@
+{
+  "consumed_file_hashes": {
+    "iq_context.csv": "6ba7a89be29e20ff85255726a74f4039d02cf9cbee49a9aad47e8d00d7bcfaba",
+    "per_epoch_scores.csv": "4e42ace095c21b964619069a80720467b0084d9f44d31f0adaa36e98c775fbc4"
+  },
+  "current_head_not_required": true,
+  "inventory_count": 36,
+  "manifest_sha256": "3dec2cee1f5cc92cd770737204142d47a93fc446db8fad9f2b2e174606464258",
+  "ok": true,
+  "parent_artifact_commit": "6fe5315ca0d71689609895cd3b1366bcfa1b93c1",
+  "parent_generation_source_commit": "c94af28795d03a91e2f4c0faa74eb19a983ed82e"
+}

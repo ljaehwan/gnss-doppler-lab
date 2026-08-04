@@ -1,0 +1,43 @@
+{
+  "b0_history_seconds": 6.0,
+  "b0_history_windows": 12,
+  "best_counts": {
+    "normal_calibration": 33,
+    "normal_holdout": 33,
+    "normal_train": 33
+  },
+  "best_support_evidence": {
+    "calibration_effective_end_s": 56.66956984,
+    "calibration_effective_start_s": 33.39136592,
+    "calibration_indices": [
+      67,
+      100
+    ],
+    "holdout_effective_start_s": 66.89136592,
+    "holdout_indices": [
+      134,
+      167
+    ],
+    "train_effective_end_s": 23.16956984,
+    "train_indices": [
+      0,
+      33
+    ]
+  },
+  "calibrate_profile_d": false,
+  "candidate_events": 167,
+  "chronological": true,
+  "fit_profile_d": false,
+  "includes_iq_history": true,
+  "minimum_counts": {
+    "normal_calibration": 101,
+    "normal_holdout": 50,
+    "normal_train": 50
+  },
+  "minimum_gap_seconds": 10.0,
+  "random_split": false,
+  "reason": "best chronological effective-support split 33/33/33 is below 50/101/50",
+  "report_performance": false,
+  "schema": "gnss-doppler-lab.nc-topi-stage0b.profile-d-support.v1",
+  "status": "INSUFFICIENT_NORMAL_SUPPORT"
+}

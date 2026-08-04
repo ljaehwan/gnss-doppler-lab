@@ -1,0 +1,85 @@
+variant,scenario,method,threshold_q99_higher,stable_or_normal_fpr,standardized_pauc_max_fpr_0.05,pauc_reason,primary,decision_eligible
+two_sided_q005_q995,cleanStatic,NC_TOPI_clamped,2.531660717784112,0.0,,single-class normal diagnostic,False,False
+two_sided_q005_q995,cleanStatic,NC_B0_clamped,1.5045246129176055,0.01694915254237288,,single-class normal diagnostic,False,False
+two_sided_q005_q995,cleanStatic,NC_total_clamped,2.3309088147507384,0.0,,single-class normal diagnostic,False,False
+two_sided_q005_q995,cleanDynamic,NC_TOPI_clamped,2.531660717784112,0.8143712574850299,,single-class normal diagnostic,False,False
+two_sided_q005_q995,cleanDynamic,NC_B0_clamped,1.5045246129176055,0.7904191616766467,,single-class normal diagnostic,False,False
+two_sided_q005_q995,cleanDynamic,NC_total_clamped,2.3309088147507384,0.8622754491017964,,single-class normal diagnostic,False,False
+two_sided_q005_q995,DS1,NC_TOPI_clamped,2.531660717784112,0.0,0.9676998676097865,,False,False
+two_sided_q005_q995,DS1,NC_B0_clamped,1.5045246129176055,0.0,0.9668199548091452,,False,False
+two_sided_q005_q995,DS1,NC_total_clamped,2.3309088147507384,0.0,0.9663580005888084,,False,False
+two_sided_q005_q995,DS2,NC_TOPI_clamped,2.531660717784112,0.0,0.9888769094143819,,False,False
+two_sided_q005_q995,DS2,NC_B0_clamped,1.5045246129176055,0.0,0.987607184120563,,False,False
+two_sided_q005_q995,DS2,NC_total_clamped,2.3309088147507384,0.0,0.9880081500028217,,False,False
+two_sided_q005_q995,DS3,NC_TOPI_clamped,2.531660717784112,0.0,0.977645829677364,,False,False
+two_sided_q005_q995,DS3,NC_B0_clamped,1.5045246129176055,0.0,0.9779420094762727,,False,False
+two_sided_q005_q995,DS3,NC_total_clamped,2.3309088147507384,0.0,0.9780086499310272,,False,False
+two_sided_q005_q995,DS7,NC_TOPI_clamped,2.531660717784112,0.0,0.943198563888219,,False,False
+two_sided_q005_q995,DS7,NC_B0_clamped,1.5045246129176055,0.0,0.9133139186189585,,False,False
+two_sided_q005_q995,DS7,NC_total_clamped,2.3309088147507384,0.0,0.9657597535581621,,False,False
+two_sided_q005_q995,DS8,NC_TOPI_clamped,2.531660717784112,0.0,0.9830109815110887,,False,False
+two_sided_q005_q995,DS8,NC_B0_clamped,1.5045246129176055,0.0,0.9740861000771007,,False,False
+two_sided_q005_q995,DS8,NC_total_clamped,2.3309088147507384,0.0,0.9909408180245978,,False,False
+lower_only_q1,cleanStatic,NC_TOPI_clamped,2.531660717784112,0.0,,single-class normal diagnostic,False,False
+lower_only_q1,cleanStatic,NC_B0_clamped,1.5045246129176055,0.01694915254237288,,single-class normal diagnostic,False,False
+lower_only_q1,cleanStatic,NC_total_clamped,2.3309088147507384,0.0,,single-class normal diagnostic,False,False
+lower_only_q1,cleanDynamic,NC_TOPI_clamped,2.531660717784112,0.8083832335329342,,single-class normal diagnostic,False,False
+lower_only_q1,cleanDynamic,NC_B0_clamped,1.5045246129176055,0.7844311377245509,,single-class normal diagnostic,False,False
+lower_only_q1,cleanDynamic,NC_total_clamped,2.3309088147507384,0.8622754491017964,,single-class normal diagnostic,False,False
+lower_only_q1,DS1,NC_TOPI_clamped,2.531660717784112,0.0,0.4929942442703928,,False,False
+lower_only_q1,DS1,NC_B0_clamped,1.5045246129176055,0.0,0.4916523772494146,,False,False
+lower_only_q1,DS1,NC_total_clamped,2.3309088147507384,0.0,0.49213632928976736,,False,False
+lower_only_q1,DS2,NC_TOPI_clamped,2.531660717784112,0.0,0.9920549352959871,,False,False
+lower_only_q1,DS2,NC_B0_clamped,1.5045246129176055,0.0,0.9878819200028514,,False,False
+lower_only_q1,DS2,NC_total_clamped,2.3309088147507384,0.0,0.9923073952959277,,False,False
+lower_only_q1,DS3,NC_TOPI_clamped,2.531660717784112,0.0,0.9782381892751815,,False,False
+lower_only_q1,DS3,NC_B0_clamped,1.5045246129176055,0.0,0.9779420094762725,,False,False
+lower_only_q1,DS3,NC_total_clamped,2.3309088147507384,0.0,0.9771423240192192,,False,False
+lower_only_q1,DS7,NC_TOPI_clamped,2.531660717784112,0.0,0.9464961799179306,,False,False
+lower_only_q1,DS7,NC_B0_clamped,1.5045246129176055,0.0,0.911706330804474,,False,False
+lower_only_q1,DS7,NC_total_clamped,2.3309088147507384,0.0,0.9676833629088271,,False,False
+lower_only_q1,DS8,NC_TOPI_clamped,2.531660717784112,0.0,0.9836885887882245,,False,False
+lower_only_q1,DS8,NC_B0_clamped,1.5045246129176055,0.0,0.9736160481821506,,False,False
+lower_only_q1,DS8,NC_total_clamped,2.3309088147507384,0.0,0.9914291836297408,,False,False
+upper_only_q99,cleanStatic,NC_TOPI_clamped,2.531660717784112,0.0,,single-class normal diagnostic,False,False
+upper_only_q99,cleanStatic,NC_B0_clamped,1.5045246129176055,0.025423728813559324,,single-class normal diagnostic,False,False
+upper_only_q99,cleanStatic,NC_total_clamped,2.3309088147507384,0.0,,single-class normal diagnostic,False,False
+upper_only_q99,cleanDynamic,NC_TOPI_clamped,2.531660717784112,1.0,,single-class normal diagnostic,False,False
+upper_only_q99,cleanDynamic,NC_B0_clamped,1.5045246129176055,0.9281437125748503,,single-class normal diagnostic,False,False
+upper_only_q99,cleanDynamic,NC_total_clamped,2.3309088147507384,1.0,,single-class normal diagnostic,False,False
+upper_only_q99,DS1,NC_TOPI_clamped,2.531660717784112,0.0,0.9676998676097865,,False,False
+upper_only_q99,DS1,NC_B0_clamped,1.5045246129176055,0.0,0.9668199548091452,,False,False
+upper_only_q99,DS1,NC_total_clamped,2.3309088147507384,0.0,0.9663580005888084,,False,False
+upper_only_q99,DS2,NC_TOPI_clamped,2.531660717784112,0.0,0.9888769094143819,,False,False
+upper_only_q99,DS2,NC_B0_clamped,1.5045246129176055,0.0,0.987607184120563,,False,False
+upper_only_q99,DS2,NC_total_clamped,2.3309088147507384,0.0,0.9880081500028217,,False,False
+upper_only_q99,DS3,NC_TOPI_clamped,2.531660717784112,0.0,0.977645829677364,,False,False
+upper_only_q99,DS3,NC_B0_clamped,1.5045246129176055,0.0,0.9779420094762727,,False,False
+upper_only_q99,DS3,NC_total_clamped,2.3309088147507384,0.0,0.9780086499310272,,False,False
+upper_only_q99,DS7,NC_TOPI_clamped,2.531660717784112,0.0,0.9721488846157281,,False,False
+upper_only_q99,DS7,NC_B0_clamped,1.5045246129176055,0.0,0.9600713659069097,,False,False
+upper_only_q99,DS7,NC_total_clamped,2.3309088147507384,0.0,0.9771365288606668,,False,False
+upper_only_q99,DS8,NC_TOPI_clamped,2.531660717784112,0.0,0.9910445957156906,,False,False
+upper_only_q99,DS8,NC_B0_clamped,1.5045246129176055,0.0,0.9874734222280827,,False,False
+upper_only_q99,DS8,NC_total_clamped,2.3309088147507384,0.0,0.9916550527221193,,False,False
+no_clamp,cleanStatic,NC_TOPI_clamped,2.531660717784112,0.0,,single-class normal diagnostic,False,False
+no_clamp,cleanStatic,NC_B0_clamped,1.5045246129176055,0.01694915254237288,,single-class normal diagnostic,False,False
+no_clamp,cleanStatic,NC_total_clamped,2.3309088147507384,0.0,,single-class normal diagnostic,False,False
+no_clamp,cleanDynamic,NC_TOPI_clamped,2.531660717784112,1.0,,single-class normal diagnostic,False,False
+no_clamp,cleanDynamic,NC_B0_clamped,1.5045246129176055,0.9281437125748503,,single-class normal diagnostic,False,False
+no_clamp,cleanDynamic,NC_total_clamped,2.3309088147507384,1.0,,single-class normal diagnostic,False,False
+no_clamp,DS1,NC_TOPI_clamped,2.531660717784112,0.0,0.4929942442703928,,False,False
+no_clamp,DS1,NC_B0_clamped,1.5045246129176055,0.0,0.4916523772494146,,False,False
+no_clamp,DS1,NC_total_clamped,2.3309088147507384,0.0,0.49213632928976736,,False,False
+no_clamp,DS2,NC_TOPI_clamped,2.531660717784112,0.0,0.9920549352959871,,False,False
+no_clamp,DS2,NC_B0_clamped,1.5045246129176055,0.0,0.9878819200028514,,False,False
+no_clamp,DS2,NC_total_clamped,2.3309088147507384,0.0,0.9923073952959277,,False,False
+no_clamp,DS3,NC_TOPI_clamped,2.531660717784112,0.0,0.9782381892751815,,False,False
+no_clamp,DS3,NC_B0_clamped,1.5045246129176055,0.0,0.9779420094762725,,False,False
+no_clamp,DS3,NC_total_clamped,2.3309088147507384,0.0,0.9771423240192192,,False,False
+no_clamp,DS7,NC_TOPI_clamped,2.531660717784112,0.0,0.9746220966380118,,False,False
+no_clamp,DS7,NC_B0_clamped,1.5045246129176055,0.0,0.9600713659069097,,False,False
+no_clamp,DS7,NC_total_clamped,2.3309088147507384,0.0,0.9785517557400847,,False,False
+no_clamp,DS8,NC_TOPI_clamped,2.531660717784112,0.0,0.9911666871169764,,False,False
+no_clamp,DS8,NC_B0_clamped,1.5045246129176055,0.0,0.9874734222280827,,False,False
+no_clamp,DS8,NC_total_clamped,2.3309088147507384,0.0,0.9921434183272624,,False,False

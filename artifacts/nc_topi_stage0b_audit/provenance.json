@@ -1,0 +1,27 @@
+{
+  "attack_fit": false,
+  "attack_loader_opened_after_freeze": true,
+  "clean_worktree_at_execution": true,
+  "command": "scripts/audit_nc_topi_shortcut.py --out artifacts/nc_topi_stage0b_audit --execution-source-commit 06ed57524861d1e0a7746c1a5c073b8d50f30358 --verify-after-run",
+  "contract_commit_sha": "10a9be4b0c278e53278b914a7cd368175d0b4c41",
+  "execution_source_commit": "06ed57524861d1e0a7746c1a5c073b8d50f30358",
+  "library_versions": {
+    "numpy": "2.5.1",
+    "python": "3.12.3",
+    "sklearn": "1.9.0"
+  },
+  "parent_artifact_commit": "6fe5315ca0d71689609895cd3b1366bcfa1b93c1",
+  "parent_generation_source_commit": "c94af28795d03a91e2f4c0faa74eb19a983ed82e",
+  "post_result_tuning": false,
+  "raw_iq_opened": false,
+  "source_file_hashes": {
+    "config": "fbb148503079366ce785909ab92d00b185f7ab8231be8c84efd07cc365dd72a2",
+    "core": "fe8ba503bd5a9231b61ba146211913b58a842254652eedb4f5fb7b7d702dff70",
+    "runner": "57b6a3b5eb070a4d560e16648a3ee4d9b6524e4f578d410d77a7d75cfacaa154",
+    "verifier": "92aa1fe0db1783171e2eb595873df8fcc706f29245197879894d187bc2f0412c"
+  },
+  "stage0_decision": "NO-GO",
+  "stage0_decision_preserved": true,
+  "synthetic_fixture_mode": false,
+  "worktree_status": "clean"
+}

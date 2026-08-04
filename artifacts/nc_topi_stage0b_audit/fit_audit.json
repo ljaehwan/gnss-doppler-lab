@@ -1,0 +1,177 @@
+{
+  "attack_fit": false,
+  "calibration_rows": 1628,
+  "clean_state_digest_before_attack_transform": "570a874918099782f92ad25bcba928f4e337d3e9c2b80fa816453d41779224bf",
+  "holdout_rows": 1306,
+  "iq_inventory_digest_sha256": "a95e6118416a73f826509b57aafdf3f755e9d2d593f97d925c16d9f7523a965f",
+  "models": {
+    "B0": {
+      "alpha": 0.0001,
+      "attack_fit": false,
+      "coef": [
+        -0.04590406704516758,
+        0.015770744412423203,
+        0.016206334853961717,
+        -0.013208244861142568
+      ],
+      "content_digest_sha256": "2c34c9804e40dfcc1c82780cfc747ebd29f558b011c6abb37d8d2f11dd52ce65",
+      "epsilon": 1.35,
+      "feature_digest_sha256": "2ac95b8a39be93ab091b2edb060074916a06a25ae02f7b8c57611287f244b0de",
+      "feature_schema": [
+        "log_power",
+        "log_noise_floor_scale",
+        "spectral_flatness",
+        "lag1_autocorr_magnitude"
+      ],
+      "fit_predicate": "cleanStatic/normal_train/normal/label0/valid",
+      "identity_digest_sha256": "f7b175530b2124e171bf4e797b7d2ebb5984ec45859ec90632789c0f037851c7",
+      "intercept": -2.5579529307621613,
+      "iqr": [
+        0.010470305253431178,
+        0.005472299319192686,
+        0.0012091206470248306,
+        0.0024808793758824554
+      ],
+      "iqr_fallback": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "max_iter": 1000,
+      "median": [
+        15.524588680582728,
+        7.23137339077733,
+        0.3882131309818761,
+        0.22136498059728982
+      ],
+      "model_scale": 0.43907094752742576,
+      "prediction_clip": [
+        -745.0,
+        709.0
+      ],
+      "row_provenance_digest_sha256": "a3881fd6d8e1a108f781616697b183ceba88c3672ec2f73fac38047818b5d64d",
+      "rows": 6074,
+      "schema": "TargetConditioner.v2",
+      "seal": "2c34c9804e40dfcc1c82780cfc747ebd29f558b011c6abb37d8d2f11dd52ce65",
+      "target": "B0",
+      "target_digest_sha256": "40cd405a243f3e008d07c7c4b244598926cab70e30eeac2392e245f7269a93ca",
+      "target_transform": "log(max(target, 1e-12))"
+    },
+    "TOPI": {
+      "alpha": 0.0001,
+      "attack_fit": false,
+      "coef": [
+        -0.08477697651572637,
+        0.0036829594003493305,
+        0.03084160166437573,
+        -0.08259937253551304
+      ],
+      "content_digest_sha256": "1f6216d0a827947ff307f7c8d256b89c50446a47044ce86d8756085a78094d66",
+      "epsilon": 1.35,
+      "feature_digest_sha256": "2ac95b8a39be93ab091b2edb060074916a06a25ae02f7b8c57611287f244b0de",
+      "feature_schema": [
+        "log_power",
+        "log_noise_floor_scale",
+        "spectral_flatness",
+        "lag1_autocorr_magnitude"
+      ],
+      "fit_predicate": "cleanStatic/normal_train/normal/label0/valid",
+      "identity_digest_sha256": "f7b175530b2124e171bf4e797b7d2ebb5984ec45859ec90632789c0f037851c7",
+      "intercept": 0.33599381216090296,
+      "iqr": [
+        0.010470305253431178,
+        0.005472299319192686,
+        0.0012091206470248306,
+        0.0024808793758824554
+      ],
+      "iqr_fallback": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "max_iter": 1000,
+      "median": [
+        15.524588680582728,
+        7.23137339077733,
+        0.3882131309818761,
+        0.22136498059728982
+      ],
+      "model_scale": 0.7670685909650843,
+      "prediction_clip": [
+        -745.0,
+        709.0
+      ],
+      "row_provenance_digest_sha256": "a3881fd6d8e1a108f781616697b183ceba88c3672ec2f73fac38047818b5d64d",
+      "rows": 6074,
+      "schema": "TargetConditioner.v2",
+      "seal": "1f6216d0a827947ff307f7c8d256b89c50446a47044ce86d8756085a78094d66",
+      "target": "TOPI",
+      "target_digest_sha256": "5fca74eacf48eb8f106ebee04f83d59339b8793146198bbbf65850dd1a44a41d",
+      "target_transform": "log(max(target, 1e-12))"
+    },
+    "total": {
+      "alpha": 0.0001,
+      "attack_fit": false,
+      "coef": [
+        -0.11404673204106455,
+        0.03270208177216234,
+        0.036249531326364624,
+        -0.07187618698846879
+      ],
+      "content_digest_sha256": "6cc6b345e351197d1b2c93559b73431e1e2257b918dc794d3bf903dc3aa8c9c0",
+      "epsilon": 1.35,
+      "feature_digest_sha256": "2ac95b8a39be93ab091b2edb060074916a06a25ae02f7b8c57611287f244b0de",
+      "feature_schema": [
+        "log_power",
+        "log_noise_floor_scale",
+        "spectral_flatness",
+        "lag1_autocorr_magnitude"
+      ],
+      "fit_predicate": "cleanStatic/normal_train/normal/label0/valid",
+      "identity_digest_sha256": "f7b175530b2124e171bf4e797b7d2ebb5984ec45859ec90632789c0f037851c7",
+      "intercept": 0.6664469749484562,
+      "iqr": [
+        0.010470305253431178,
+        0.005472299319192686,
+        0.0012091206470248306,
+        0.0024808793758824554
+      ],
+      "iqr_fallback": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "max_iter": 1000,
+      "median": [
+        15.524588680582728,
+        7.23137339077733,
+        0.3882131309818761,
+        0.22136498059728982
+      ],
+      "model_scale": 0.7479048099796238,
+      "prediction_clip": [
+        -745.0,
+        709.0
+      ],
+      "row_provenance_digest_sha256": "a3881fd6d8e1a108f781616697b183ceba88c3672ec2f73fac38047818b5d64d",
+      "rows": 6074,
+      "schema": "TargetConditioner.v2",
+      "seal": "6cc6b345e351197d1b2c93559b73431e1e2257b918dc794d3bf903dc3aa8c9c0",
+      "target": "total",
+      "target_digest_sha256": "4332bc176bd863900cfb2f7b9db72fc6e5c81f9e97bf643fcdf41f87f05e5c25",
+      "target_transform": "log(max(target, 1e-12))"
+    }
+  },
+  "role_identity_digests": {
+    "normal_calibration": "405e3765ea37e74288547113fe6a3c20a788440028bf87a37c213340f64ade03",
+    "normal_holdout": "065b0db15d91d82b3571117ff5adc15d297ef4f3c732776d33fc702a98e252de",
+    "normal_train": "f7b175530b2124e171bf4e797b7d2ebb5984ec45859ec90632789c0f037851c7"
+  },
+  "schema": "gnss-doppler-lab.nc-topi-stage0b.fit-audit.v2",
+  "time_shuffle_permutation_digest_sha256": "203c1edff39190eb0ed889f2119ae7d6d1f38459aa5dec0534fcdadd45430c7c",
+  "train_calibration_holdout_disjoint": true,
+  "train_rows": 6074
+}

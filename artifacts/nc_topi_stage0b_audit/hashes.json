@@ -1,0 +1,157 @@
+{
+  "algorithm": "SHA-256",
+  "files": [
+    {
+      "relative_path": "README.md",
+      "sha256": "89ef9098d5d975cb8a2b16705a9e7fbdbbf64b94b2d412162290d60345e780b9",
+      "size_bytes": 719
+    },
+    {
+      "relative_path": "config.json",
+      "sha256": "fbb148503079366ce785909ab92d00b185f7ab8231be8c84efd07cc365dd72a2",
+      "size_bytes": 37554
+    },
+    {
+      "relative_path": "decision.json",
+      "sha256": "4760814253aad338e50467ec63b6e60a9da57bc3bac2fdc0541506aba004fb9e",
+      "size_bytes": 17038
+    },
+    {
+      "relative_path": "diagnostics/clamp_variant_metrics.csv",
+      "sha256": "44f2893a6d9b3fd1e22f2f69811032247a18c6f8bf2ef2a3d75d7162548e9352",
+      "size_bytes": 8355
+    },
+    {
+      "relative_path": "diagnostics/iq_scale_checks.json",
+      "sha256": "16dde57674e5ab67636eff425124671c923eee3072e04ed3719fe0f17de2b7e2",
+      "size_bytes": 211
+    },
+    {
+      "relative_path": "diagnostics/second_peak_limitations.json",
+      "sha256": "c3a3a6b9cc749440d5209822dea982eae5b08fe7c569a45b6c947c2e260aa1d0",
+      "size_bytes": 348
+    },
+    {
+      "relative_path": "diagnostics/time_shuffle_fit_audit.json",
+      "sha256": "54c65302057a7ca79ffdb7c1a017947abb9d090b7c674ea6380eef8bff06ba5a",
+      "size_bytes": 5386
+    },
+    {
+      "relative_path": "diagnostics/time_shuffle_metrics.csv",
+      "sha256": "85eb7c4b91673d3788666ab1ff6b008d0c1e9f824605b9583205ba41e476cd56",
+      "size_bytes": 9955
+    },
+    {
+      "relative_path": "diagnostics/time_shuffle_scale_diagnostics.csv",
+      "sha256": "c2d754541f92dfda236605a3b3c5397aa1590a8f4ebcad1d4e237bcf904585b9",
+      "size_bytes": 3296
+    },
+    {
+      "relative_path": "event_scores.csv",
+      "sha256": "f1351913a545908951127b6c563182e0e5870aec97309e4ac5d96a47ccb0a5a1",
+      "size_bytes": 2037293
+    },
+    {
+      "relative_path": "fit_audit.json",
+      "sha256": "0c41f0c7a03f91a764db79dcd60f078b7b140d5cca1213b9746c75ffc17f125c",
+      "size_bytes": 6034
+    },
+    {
+      "relative_path": "model_metrics.csv",
+      "sha256": "8657ecd06081970be8e4376f56732697048e84b38f2560c85ae75eb5164c9c11",
+      "size_bytes": 9778
+    },
+    {
+      "relative_path": "paired_comparisons.json",
+      "sha256": "ea5cd03857eea6f31e17cd7b59fe22b48d605b1d949235a294d46820578d0b4a",
+      "size_bytes": 12466
+    },
+    {
+      "relative_path": "parent_inventory.json",
+      "sha256": "3ebe00b9b8b0030d931c55dbc01c954f88b8a9c244fcba4ab782afdd2fafd11b",
+      "size_bytes": 539
+    },
+    {
+      "relative_path": "per_prn_scores.csv",
+      "sha256": "e97f369923bc25cf9787be89fb254ca3fd851427e213c964adce7b60f53e1dba",
+      "size_bytes": 26057766
+    },
+    {
+      "relative_path": "plot_data.json",
+      "sha256": "1c3c6bcae5f5650e80e58910f0ed8ae334cd45efc5ef86d92b955cac1fbb3d1f",
+      "size_bytes": 2024166
+    },
+    {
+      "relative_path": "plots/clamp_hit_ratio.png",
+      "sha256": "c1f88a32325ce811e4a0eafb44f4711a86c594d822010efd9cef15775cbc36d0",
+      "size_bytes": 19693
+    },
+    {
+      "relative_path": "plots/clean_normal_scores.png",
+      "sha256": "b8c74673c29f8efb6d14446a61af9af375a9bc3d4dce79c7c3bb16bca5fdea7b",
+      "size_bytes": 17344
+    },
+    {
+      "relative_path": "plots/original_vs_clamped_nc_topi.png",
+      "sha256": "a8cf312ded2cb07ae7796d03ae5718a4d88a61d0cdbdff58d43cfd54d3a05ee4",
+      "size_bytes": 44801
+    },
+    {
+      "relative_path": "plots/predicted_scale_distribution.png",
+      "sha256": "1b9aa242978a4b0febf847db55e6230a5bb0960c8c5aa2ca424e0ba4861e71d9",
+      "size_bytes": 24043
+    },
+    {
+      "relative_path": "plots/roc_methods.png",
+      "sha256": "ac3c4510acacf046c00797ceae1c5d632c8cb62df1cf3cff74dfd3907dc99639",
+      "size_bytes": 26805
+    },
+    {
+      "relative_path": "plots/shortcut_scale_timeline.png",
+      "sha256": "f2865e9716bbd0a46bd6b739d6be681e9a898797196093713fd3410b72f6911d",
+      "size_bytes": 41767
+    },
+    {
+      "relative_path": "plots/stable_pre_post_scale.png",
+      "sha256": "b1bf9dc234d3d54339ad429c905f01a4758f6fbbb93599a7e751f9648ede5e2c",
+      "size_bytes": 32853
+    },
+    {
+      "relative_path": "profile_support.json",
+      "sha256": "57de9d6e67188d88b2f824aecf44b9e71b5422134b4b687b067204cd9027f0f2",
+      "size_bytes": 1072
+    },
+    {
+      "relative_path": "provenance.json",
+      "sha256": "e1a4da130021801ecb8cdb56c0ec565ffc5f94493189956304c6931ee71c522a",
+      "size_bytes": 1224
+    },
+    {
+      "relative_path": "refit_equivalence.json",
+      "sha256": "1e3de144e477b8ea94b75e6f5885daff3a9886ba421d0fca030ef1c1ef146222",
+      "size_bytes": 440
+    },
+    {
+      "relative_path": "scale_bounds.json",
+      "sha256": "9285e628f9c0bdf068a63e72f32dd361363f6251bbb85f8aeffb25ddbc8fc862",
+      "size_bytes": 4196
+    },
+    {
+      "relative_path": "scale_diagnostics.csv",
+      "sha256": "e8eb735df660ed2397a70fa151f3617786f5e2e64c1ff63235bd2dd87e533c52",
+      "size_bytes": 3275
+    },
+    {
+      "relative_path": "thresholds.json",
+      "sha256": "8be43f33b18e9ef1b5a97c23e73d0ec0dfc5613ece37b8367ab23bd57da5cf73",
+      "size_bytes": 1952
+    },
+    {
+      "relative_path": "verification.json",
+      "sha256": "891645b219c42da01b6d729072e8f9aa514862b78f62fe44adc324205b5bc2de",
+      "size_bytes": 702
+    }
+  ],
+  "schema": "gnss-doppler-lab.nc-topi-stage0b.hashes.v1",
+  "self_excluded": "hashes.json"
+}

@@ -1,0 +1,128 @@
+{
+  "B0": {
+    "lower_only_q1": {
+      "calibration_digest_sha256": "d43f61466086d8111ad9af6e83e9fcd91229118c5a0ee6c91ba8d317702bc7f8",
+      "lower": 0.06688467184505893,
+      "lower_quantile": 0.01,
+      "method": "higher",
+      "upper": null,
+      "upper_quantile": null
+    },
+    "no_clamp": {
+      "calibration_digest_sha256": "d43f61466086d8111ad9af6e83e9fcd91229118c5a0ee6c91ba8d317702bc7f8",
+      "lower": null,
+      "lower_quantile": null,
+      "method": "higher",
+      "upper": null,
+      "upper_quantile": null
+    },
+    "primary": {
+      "calibration_digest_sha256": "d43f61466086d8111ad9af6e83e9fcd91229118c5a0ee6c91ba8d317702bc7f8",
+      "lower": 0.06688467184505893,
+      "lower_quantile": 0.01,
+      "method": "higher",
+      "upper": 0.07810200022897199,
+      "upper_quantile": 0.99
+    },
+    "two_sided_q005_q995": {
+      "calibration_digest_sha256": "d43f61466086d8111ad9af6e83e9fcd91229118c5a0ee6c91ba8d317702bc7f8",
+      "lower": 0.0666195772609469,
+      "lower_quantile": 0.005,
+      "method": "higher",
+      "upper": 0.08007641005442014,
+      "upper_quantile": 0.995
+    },
+    "upper_only_q99": {
+      "calibration_digest_sha256": "d43f61466086d8111ad9af6e83e9fcd91229118c5a0ee6c91ba8d317702bc7f8",
+      "lower": null,
+      "lower_quantile": null,
+      "method": "higher",
+      "upper": 0.07810200022897199,
+      "upper_quantile": 0.99
+    }
+  },
+  "TOPI": {
+    "lower_only_q1": {
+      "calibration_digest_sha256": "d7a1db1a2a5b01abc31407d3243abde1527fbf37a357da40be0a480bed99ea5a",
+      "lower": 0.8950720215310011,
+      "lower_quantile": 0.01,
+      "method": "higher",
+      "upper": null,
+      "upper_quantile": null
+    },
+    "no_clamp": {
+      "calibration_digest_sha256": "d7a1db1a2a5b01abc31407d3243abde1527fbf37a357da40be0a480bed99ea5a",
+      "lower": null,
+      "lower_quantile": null,
+      "method": "higher",
+      "upper": null,
+      "upper_quantile": null
+    },
+    "primary": {
+      "calibration_digest_sha256": "d7a1db1a2a5b01abc31407d3243abde1527fbf37a357da40be0a480bed99ea5a",
+      "lower": 0.8950720215310011,
+      "lower_quantile": 0.01,
+      "method": "higher",
+      "upper": 1.369349963205879,
+      "upper_quantile": 0.99
+    },
+    "two_sided_q005_q995": {
+      "calibration_digest_sha256": "d7a1db1a2a5b01abc31407d3243abde1527fbf37a357da40be0a480bed99ea5a",
+      "lower": 0.8919981271612848,
+      "lower_quantile": 0.005,
+      "method": "higher",
+      "upper": 1.4220200618224565,
+      "upper_quantile": 0.995
+    },
+    "upper_only_q99": {
+      "calibration_digest_sha256": "d7a1db1a2a5b01abc31407d3243abde1527fbf37a357da40be0a480bed99ea5a",
+      "lower": null,
+      "lower_quantile": null,
+      "method": "higher",
+      "upper": 1.369349963205879,
+      "upper_quantile": 0.99
+    }
+  },
+  "total": {
+    "lower_only_q1": {
+      "calibration_digest_sha256": "3aea2e02878d673520cee4ab8e9a6fbde0c6e46c693f560eda87ba5f0cc679d0",
+      "lower": 1.236328275263773,
+      "lower_quantile": 0.01,
+      "method": "higher",
+      "upper": null,
+      "upper_quantile": null
+    },
+    "no_clamp": {
+      "calibration_digest_sha256": "3aea2e02878d673520cee4ab8e9a6fbde0c6e46c693f560eda87ba5f0cc679d0",
+      "lower": null,
+      "lower_quantile": null,
+      "method": "higher",
+      "upper": null,
+      "upper_quantile": null
+    },
+    "primary": {
+      "calibration_digest_sha256": "3aea2e02878d673520cee4ab8e9a6fbde0c6e46c693f560eda87ba5f0cc679d0",
+      "lower": 1.236328275263773,
+      "lower_quantile": 0.01,
+      "method": "higher",
+      "upper": 1.8996387280095701,
+      "upper_quantile": 0.99
+    },
+    "two_sided_q005_q995": {
+      "calibration_digest_sha256": "3aea2e02878d673520cee4ab8e9a6fbde0c6e46c693f560eda87ba5f0cc679d0",
+      "lower": 1.2329936108127324,
+      "lower_quantile": 0.005,
+      "method": "higher",
+      "upper": 2.009283038804399,
+      "upper_quantile": 0.995
+    },
+    "upper_only_q99": {
+      "calibration_digest_sha256": "3aea2e02878d673520cee4ab8e9a6fbde0c6e46c693f560eda87ba5f0cc679d0",
+      "lower": null,
+      "lower_quantile": null,
+      "method": "higher",
+      "upper": 1.8996387280095701,
+      "upper_quantile": 0.99
+    }
+  }
+}

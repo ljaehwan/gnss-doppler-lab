@@ -1,0 +1,167 @@
+{
+  "models": {
+    "B0": {
+      "alpha": 0.0001,
+      "attack_fit": false,
+      "coef": [
+        -0.04441735613905001,
+        0.029001148883830284,
+        -0.006389293109159163,
+        0.016744306091421766
+      ],
+      "content_digest_sha256": "78f7f26a018fd36624eceada757beee369150a9bbe072c354c33bd2b92c37aab",
+      "epsilon": 1.35,
+      "feature_digest_sha256": "2ac95b8a39be93ab091b2edb060074916a06a25ae02f7b8c57611287f244b0de",
+      "feature_schema": [
+        "log_power",
+        "log_noise_floor_scale",
+        "spectral_flatness",
+        "lag1_autocorr_magnitude"
+      ],
+      "fit_predicate": "cleanStatic/normal_train/normal/label0/valid",
+      "identity_digest_sha256": "f7b175530b2124e171bf4e797b7d2ebb5984ec45859ec90632789c0f037851c7",
+      "intercept": -2.558441064913192,
+      "iqr": [
+        0.010470305253431178,
+        0.005472299319192686,
+        0.0012091206470248306,
+        0.0024808793758824554
+      ],
+      "iqr_fallback": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "max_iter": 1000,
+      "median": [
+        15.524588680582728,
+        7.23137339077733,
+        0.3882131309818761,
+        0.22136498059728982
+      ],
+      "model_scale": 0.43792357103665663,
+      "prediction_clip": [
+        -745.0,
+        709.0
+      ],
+      "row_provenance_digest_sha256": "a3881fd6d8e1a108f781616697b183ceba88c3672ec2f73fac38047818b5d64d",
+      "rows": 6074,
+      "schema": "TargetConditioner.v2",
+      "seal": "78f7f26a018fd36624eceada757beee369150a9bbe072c354c33bd2b92c37aab",
+      "target": "B0",
+      "target_digest_sha256": "fadddff0b8b2e58ee2fc612909193fc946bed166c02d6555195932d23ac62c8d",
+      "target_transform": "log(max(target, 1e-12))"
+    },
+    "TOPI": {
+      "alpha": 0.0001,
+      "attack_fit": false,
+      "coef": [
+        -0.02763163986107311,
+        0.0024611825582519955,
+        -0.01535678946716582,
+        0.022620010575522074
+      ],
+      "content_digest_sha256": "47c6d9ee206ee83a377f3dcab2bab6865252d7039152fba1e09cf7f3f1f64eb5",
+      "epsilon": 1.35,
+      "feature_digest_sha256": "2ac95b8a39be93ab091b2edb060074916a06a25ae02f7b8c57611287f244b0de",
+      "feature_schema": [
+        "log_power",
+        "log_noise_floor_scale",
+        "spectral_flatness",
+        "lag1_autocorr_magnitude"
+      ],
+      "fit_predicate": "cleanStatic/normal_train/normal/label0/valid",
+      "identity_digest_sha256": "f7b175530b2124e171bf4e797b7d2ebb5984ec45859ec90632789c0f037851c7",
+      "intercept": 0.3304512851342138,
+      "iqr": [
+        0.010470305253431178,
+        0.005472299319192686,
+        0.0012091206470248306,
+        0.0024808793758824554
+      ],
+      "iqr_fallback": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "max_iter": 1000,
+      "median": [
+        15.524588680582728,
+        7.23137339077733,
+        0.3882131309818761,
+        0.22136498059728982
+      ],
+      "model_scale": 0.7720984112504667,
+      "prediction_clip": [
+        -745.0,
+        709.0
+      ],
+      "row_provenance_digest_sha256": "a3881fd6d8e1a108f781616697b183ceba88c3672ec2f73fac38047818b5d64d",
+      "rows": 6074,
+      "schema": "TargetConditioner.v2",
+      "seal": "47c6d9ee206ee83a377f3dcab2bab6865252d7039152fba1e09cf7f3f1f64eb5",
+      "target": "TOPI",
+      "target_digest_sha256": "6ad6f99192a41404d3ecf8d6949a2e1ea26ef7fe08d31765c4f0a18b180d0f55",
+      "target_transform": "log(max(target, 1e-12))"
+    },
+    "total": {
+      "alpha": 0.0001,
+      "attack_fit": false,
+      "coef": [
+        -0.02146851712313676,
+        0.0020083167528171077,
+        -0.014444396057310748,
+        0.029921509176485818
+      ],
+      "content_digest_sha256": "9874fc611c20918fb36db1f00b6a826b5a542a9f4a695263e181ffef028dc471",
+      "epsilon": 1.35,
+      "feature_digest_sha256": "2ac95b8a39be93ab091b2edb060074916a06a25ae02f7b8c57611287f244b0de",
+      "feature_schema": [
+        "log_power",
+        "log_noise_floor_scale",
+        "spectral_flatness",
+        "lag1_autocorr_magnitude"
+      ],
+      "fit_predicate": "cleanStatic/normal_train/normal/label0/valid",
+      "identity_digest_sha256": "f7b175530b2124e171bf4e797b7d2ebb5984ec45859ec90632789c0f037851c7",
+      "intercept": 0.6585413283393854,
+      "iqr": [
+        0.010470305253431178,
+        0.005472299319192686,
+        0.0012091206470248306,
+        0.0024808793758824554
+      ],
+      "iqr_fallback": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "max_iter": 1000,
+      "median": [
+        15.524588680582728,
+        7.23137339077733,
+        0.3882131309818761,
+        0.22136498059728982
+      ],
+      "model_scale": 0.7535116034570374,
+      "prediction_clip": [
+        -745.0,
+        709.0
+      ],
+      "row_provenance_digest_sha256": "a3881fd6d8e1a108f781616697b183ceba88c3672ec2f73fac38047818b5d64d",
+      "rows": 6074,
+      "schema": "TargetConditioner.v2",
+      "seal": "9874fc611c20918fb36db1f00b6a826b5a542a9f4a695263e181ffef028dc471",
+      "target": "total",
+      "target_digest_sha256": "c09c328a9e7f659a5515f16b69b205496b16400313d48fe861cf8d22cd270c7a",
+      "target_transform": "log(max(target, 1e-12))"
+    }
+  },
+  "permutation_digest_sha256": "203c1edff39190eb0ed889f2119ae7d6d1f38459aa5dec0534fcdadd45430c7c",
+  "same_permutation_all_targets": true,
+  "seed": 0,
+  "target_only_permutation": true
+}
