@@ -1,6 +1,4 @@
 {
-  "independent_delay_full_score": 0.04271527380097991,
-  "passes": true,
-  "physical_consistent_full_score": 344.2231741567926,
-  "status": "RECOMPUTED_AUTHENTIC_LOS_SYNTHETIC_DELAYS"
+  "reason": "frozen B0 requires historical aggregated 1.0-s node windows at 0.5-s stride; the selected complex-epoch support has no authenticated reproduction of those windows",
+  "status": "UNAVAILABLE_NO_ATTACK_SCORING"
 }

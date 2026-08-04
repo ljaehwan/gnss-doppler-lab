@@ -1,13 +1,47 @@
 {
-  "a1_a2_result_valid": true,
-  "geometry_free_attack_evaluation": true,
+  "criteria_provenance": "original preregistration r2c-gnss-stage0-20260804-bypass, section 11",
+  "gates": {
+    "b0_interface": {
+      "availability_offset_s": 1.0,
+      "checkpoint_sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
+      "evaluation_dependency_sha256": "433760ea7bde8d9094c84887fa04962846f72690c3a81668f84445fa58f03bd1",
+      "feature_columns": [
+        "tap_E4_rel_prompt_mean",
+        "tap_E3_rel_prompt_mean",
+        "tap_E2_rel_prompt_mean",
+        "tap_E_rel_prompt_mean",
+        "tap_P_rel_prompt_mean",
+        "tap_L_rel_prompt_mean",
+        "tap_L2_rel_prompt_mean",
+        "tap_L3_rel_prompt_mean",
+        "tap_L4_rel_prompt_mean"
+      ],
+      "raw_first_row_substitution_permitted": false,
+      "reason": "frozen B0 requires historical aggregated 1.0-s node windows at 0.5-s stride; the selected complex-epoch support has no authenticated reproduction of those windows",
+      "sequence_length": 12,
+      "status": "FAIL",
+      "stride_s": 0.5,
+      "training_dependency_sha256": "b1bbfe29dfaa2116d63f4b0a3914c1fc68642543bc4c727ac15e00b601d67727",
+      "training_summary_sha256": "39939e6a4ff76c2ab6f1bab15f8658c7b6d3b7d4e3b33f07d96bc02d50a012d2",
+      "window_s": 1.0
+    },
+    "complex_provenance": {
+      "source": "original preregistration section 11",
+      "status": "PASS"
+    },
+    "los_geometry": {
+      "reason": "scoring stopped before geometry fitting",
+      "status": "NOT_EVALUATED"
+    },
+    "time_alignment": {
+      "reason": "scoring stopped before geometry fitting",
+      "status": "NOT_EVALUATED"
+    }
+  },
   "later_raw_iq_2d_model_justified": false,
-  "old_commit": "75ff99b7a3fdb568682c75096ee0fd690a48dfa6",
-  "old_result_status": "SUPERSEDED_BY_EXTERNAL_DATA_DISCOVERY",
-  "old_verdict": "DATA_INVALID",
   "physics_supported": false,
-  "real_attack_performance_evaluated": true,
-  "reason": "Valid Full inputs exist; preregistered physics, shortcut, OOD, and comparison criteria are evaluated fail-closed and any failed criterion yields NOT_SUPPORTED",
+  "real_attack_performance_evaluated": false,
+  "reason": "required authenticated input/interface unavailable: time_alignment, los_geometry, b0_interface",
   "scope": "Full R2C-GNSS preregistered physics decision",
-  "verdict": "NOT_SUPPORTED"
+  "verdict": "DATA_INVALID"
 }

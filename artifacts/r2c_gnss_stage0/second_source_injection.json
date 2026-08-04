@@ -1,26 +1,4 @@
 {
-  "real_attack_replacement": false,
-  "status": "SYNTHETIC_IDEAL_INJECTION_INTO_REAL_NORMAL; EMPIRICAL_TEMPLATE_SCORING",
-  "trials": [
-    {
-      "delay_chips": -0.375,
-      "median_A1": 26.434091856988513,
-      "power_ratio": 0.1
-    },
-    {
-      "delay_chips": -0.375,
-      "median_A1": 26.43408704318795,
-      "power_ratio": 0.5
-    },
-    {
-      "delay_chips": 0.375,
-      "median_A1": 26.434084674392437,
-      "power_ratio": 0.1
-    },
-    {
-      "delay_chips": 0.375,
-      "median_A1": 26.43409458562607,
-      "power_ratio": 0.5
-    }
-  ]
+  "reason": "frozen B0 requires historical aggregated 1.0-s node windows at 0.5-s stride; the selected complex-epoch support has no authenticated reproduction of those windows",
+  "status": "UNAVAILABLE_NO_ATTACK_SCORING"
 }

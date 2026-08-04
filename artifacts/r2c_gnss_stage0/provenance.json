@@ -1,28 +1,31 @@
 {
   "branch": "research/r2c-gnss-stage0",
-  "config_sha256": "aebebacbb5e0961e7067485dd9d34b402a258dcd3501e9e5f21af77d205d5257",
+  "config_sha256": "8fb3ffdb986319526a95de5a9be575bb39c62300c8710bf4f97be8d553642371",
   "cpu_count": 12,
   "cuda_used": false,
   "executable_source_clean": true,
-  "freeze_sha256": "7f0e89adb0cf2ad2c73aaa213b479d5652782678174b85b09ea38ce3d35a8d30",
+  "freeze_sha256": "ae645b808ead6279df2d4322b416b5b37a16525715d5474c447b807dc03b15f8",
   "frozen_base_commit": "461eb4dc7bb794e719295daf028f6811658ba37f",
   "generation_policy": "clean-source-commit-v1: exact executable source bundle and immediate artifact-only child commit",
-  "numpy": "2.5.1",
+  "h5py": "3.16.0",
+  "numpy": "2.4.6",
   "platform": "Linux-6.8.0-136-generic-x86_64-with-glibc2.39",
-  "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]",
-  "runtime_s": 835.5323557853699,
+  "python": "3.11.15 (main, Jul 23 2026, 14:43:45) [Clang 22.1.3 ]",
   "source_bundle": {
-    "bundle_sha256": "2ecda71142a6696b2fb2cc454f91ad1f40da8de86ade61808352982081ca5fcb",
+    "bundle_sha256": "085596e0d72b7fd3058a45181b807fffcffed7162a568e33a20758f02f9d5b61",
     "files": {
       "configs/r2c_clean_dynamic_geometry_receiver.conf": "26fa409aa806b0020337508b231505ee6d3e08f3fc865187a2076aef3bfcf32a",
-      "configs/r2c_gnss_stage0.json": "aebebacbb5e0961e7067485dd9d34b402a258dcd3501e9e5f21af77d205d5257",
-      "scripts/run_r2c_gnss_stage0.py": "7d6fa57903217ee7d536e54581841d1b151fa476eaef0d8f9db45f9108fd0c56",
-      "scripts/verify_r2c_gnss_stage0.py": "2962de55c94844183e0c17141ddf186feb3a79762e87a43418a87d4a27d02622",
-      "src/gnss_doppler_lab/r2c_gnss.py": "5a2dd974464c83949ba4dc67ce32c323aa2b71f722d6c85b94ad9422e57df273"
+      "configs/r2c_gnss_stage0.json": "8fb3ffdb986319526a95de5a9be575bb39c62300c8710bf4f97be8d553642371",
+      "scripts/run_r2c_gnss_stage0.py": "a19570e8e7007de2e08355536232287a8d7650cfe99329b599b2090594f9278e",
+      "scripts/score_texbat_prn_node_gru.py": "433760ea7bde8d9094c84887fa04962846f72690c3a81668f84445fa58f03bd1",
+      "scripts/train_prn_node_gru.py": "b1bbfe29dfaa2116d63f4b0a3914c1fc68642543bc4c727ac15e00b601d67727",
+      "scripts/verify_r2c_gnss_stage0.py": "e021c217f9279079265b9c2cda6a22833d72cb9711568267dfa4f8ca4b8c7120",
+      "src/gnss_doppler_lab/gcmr_geometry.py": "781b66b8c485f4a656da3ed4ce82726f47f47a94cc4ea702eeab727708208921",
+      "src/gnss_doppler_lab/r2c_gnss.py": "ddcc6faa09e81858b259df59a159cf47bfb5e51ce63bc5314fd7947d63dd58c8",
+      "src/gnss_doppler_lab/trajectory.py": "c95fdd8fb513d3d800c8ace3a433063673f26eddc20315e229d234d28267227b"
     },
     "schema": "gnss-doppler-lab.r2c-source-bundle.v1"
   },
-  "source_commit_at_generation": "0b24cbe57412d96a5993e86a77754847b10e6c2f",
-  "superseded_commit": "75ff99b7a3fdb568682c75096ee0fd690a48dfa6",
+  "source_commit_at_generation": "400d732bc9468e7dd5e049fd07019e8bc9a16412",
   "task_id": "r2c-gnss-stage0-20260804"
 }

@@ -1,20 +1,4 @@
 {
-  "status": "REAL_NORMAL_COMPLEX_INJECTION_MECHANICS_ONLY",
-  "trials": [
-    {
-      "median_A1": 22.93421728104283,
-      "q99_alarm_rate": 0.0,
-      "relative_sigma": 0.01
-    },
-    {
-      "median_A1": 17.44172673649267,
-      "q99_alarm_rate": 0.0,
-      "relative_sigma": 0.05
-    },
-    {
-      "median_A1": 11.048866167719742,
-      "q99_alarm_rate": 0.0,
-      "relative_sigma": 0.1
-    }
-  ]
+  "reason": "frozen B0 requires historical aggregated 1.0-s node windows at 0.5-s stride; the selected complex-epoch support has no authenticated reproduction of those windows",
+  "status": "UNAVAILABLE_NO_ATTACK_SCORING"
 }

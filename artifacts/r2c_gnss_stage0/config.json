@@ -61,7 +61,27 @@
     "synthetic_use": "mechanics-only"
   },
   "dataset": "TEXBAT",
-  "decision_criteria_frozen": true,
+  "decision_criteria": {
+    "failed_evidence_verdict": "NOT_SUPPORTED",
+    "physics_supported_requires_all": [
+      "clean_dynamic_fpr",
+      "gain_invariance",
+      "phase_invariance",
+      "full_exceeds_b0",
+      "full_b0_ci",
+      "geometry_improvement",
+      "relation_destruction",
+      "shortcut_controls"
+    ],
+    "provenance": "original preregistration section 11",
+    "required_inputs": [
+      "complex_provenance",
+      "time_alignment",
+      "los_geometry",
+      "b0_interface"
+    ],
+    "unavailable_required_input_verdict": "DATA_INVALID"
+  },
   "delay_search_chips": {
     "maximum": 0.5,
     "minimum": -0.5,
@@ -71,8 +91,9 @@
   "external_input_policy": "required CLI NAME=NPZ overrides; resolved absolute paths and hashes are artifact provenance only",
   "geometry": {
     "maximum_condition_number": 1000000.0,
-    "minimum_prns": 4,
-    "minimum_rank": 4
+    "minimum_prns": 5,
+    "minimum_rank": 4,
+    "minimum_residual_dof": 1
   },
   "input_paths": {},
   "runtime": {
@@ -94,8 +115,7 @@
       "DS8": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/exports/ds8.npz",
       "cleanDynamic": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/rc9-real-clean-domain-poc1/exports/cleanDynamic.npz",
       "cleanStatic": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.npz"
-    },
-    "sampling": "first real receiver row per floor(time_s/0.5s),PRN; support is min/max selected source time"
+    }
   },
   "schema": "gnss-doppler-lab.r2c-gnss-stage0-config.v1",
   "seed": 20260803,

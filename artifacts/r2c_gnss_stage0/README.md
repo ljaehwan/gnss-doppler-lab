@@ -1,3 +1,3 @@
-# R2C-GNSS Stage-0 full follow-up
+# R2C-GNSS Stage-0 corrected review artifact
 
-Verdict: `NOT_SUPPORTED`. Authentic complex taps and time-aligned LOS support A1/A2/A3/A4/Full evaluation after global deterministic de-duplication. The preregistered physics contribution criteria are not all met. The old repository-local-input `DATA_INVALID` rationale is superseded.
+Verdict: `DATA_INVALID`, derived from the frozen gate record. The frozen B0 checkpoint requires aggregated one-second node windows; raw first-row substitution is prohibited. No attack metrics were recomputed or reported.

@@ -1,9 +1,9 @@
-detector,status,q99_threshold,cleanDynamic_fpr,primary_mean_normalized_pauc,reason
-B0,EVALUATED,17.698713168059097,0.016666666666666666,0.864483977048749,
-A1,EVALUATED,57.311596626874746,0.0,0.025044249678388614,
-A2,EVALUATED,43.68904332833273,0.0,0.04075510508542247,
-A3,EVALUATED,0.11739581034523068,0.0,0.04628112604895862,
-A4,EVALUATED,40.74667754994701,0.0,0.04656764987861659,
-Full R2C-GNSS,EVALUATED,2.6327343129031755,0.0,0.011458323962372218,
-Power-only,EVALUATED,30.119388843306876,0.0,0.14655016634259205,
-Noise-floor-only,UNAVAILABLE_REQUIRED_INPUT_OR_IMPLEMENTATION,UNAVAILABLE,UNAVAILABLE,UNAVAILABLE,NPZ schema has no causal receiver noise-floor array
+detector,status,reason
+B0,UNAVAILABLE_REQUIRED_B0_INTERFACE,frozen B0 requires historical aggregated 1.0-s node windows at 0.5-s stride; the selected complex-epoch support has no authenticated reproduction of those windows
+A1,UNAVAILABLE_REQUIRED_B0_INTERFACE,frozen B0 requires historical aggregated 1.0-s node windows at 0.5-s stride; the selected complex-epoch support has no authenticated reproduction of those windows
+A2,UNAVAILABLE_REQUIRED_B0_INTERFACE,frozen B0 requires historical aggregated 1.0-s node windows at 0.5-s stride; the selected complex-epoch support has no authenticated reproduction of those windows
+A3,UNAVAILABLE_REQUIRED_B0_INTERFACE,frozen B0 requires historical aggregated 1.0-s node windows at 0.5-s stride; the selected complex-epoch support has no authenticated reproduction of those windows
+A4,UNAVAILABLE_REQUIRED_B0_INTERFACE,frozen B0 requires historical aggregated 1.0-s node windows at 0.5-s stride; the selected complex-epoch support has no authenticated reproduction of those windows
+Full R2C-GNSS,UNAVAILABLE_REQUIRED_B0_INTERFACE,frozen B0 requires historical aggregated 1.0-s node windows at 0.5-s stride; the selected complex-epoch support has no authenticated reproduction of those windows
+Power-only,UNAVAILABLE_REQUIRED_B0_INTERFACE,frozen B0 requires historical aggregated 1.0-s node windows at 0.5-s stride; the selected complex-epoch support has no authenticated reproduction of those windows
+Noise-floor-only,UNAVAILABLE_REQUIRED_B0_INTERFACE,frozen B0 requires historical aggregated 1.0-s node windows at 0.5-s stride; the selected complex-epoch support has no authenticated reproduction of those windows

@@ -1,9 +1,4 @@
 {
-  "maximum_score_differences": {
-    "0.0": 0.0,
-    "0.7853981633974483": 1.2079226507921703e-13,
-    "1.5707963267948966": 3.375077994860476e-14,
-    "3.141592653589793": 2.4868995751603507e-14
-  },
-  "status": "REAL_NORMAL_CONTROL"
+  "reason": "frozen B0 requires historical aggregated 1.0-s node windows at 0.5-s stride; the selected complex-epoch support has no authenticated reproduction of those windows",
+  "status": "UNAVAILABLE_NO_ATTACK_SCORING"
 }
