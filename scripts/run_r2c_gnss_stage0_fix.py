@@ -5,7 +5,7 @@ Production output is single-use and exact-path only. ``--test-output`` is accept
 only together with ``--synthetic`` for isolated integration tests.
 """
 from __future__ import annotations
-import argparse, csv, hashlib, json, os, subprocess, sys
+import argparse, csv, hashlib, json, os, random, subprocess, sys
 from pathlib import Path
 import numpy as np
 
@@ -30,14 +30,24 @@ def source_bundle():
     files={name:sha(ROOT/name) for name in FIX_SOURCE_FILES}
     return {"files":files,"bundle_sha256":hashlib.sha256(json.dumps(files,sort_keys=True,separators=(",",":")).encode()).hexdigest()}
 
-def validate_destination(output: Path, *, test_mode=False):
+def validate_destination(output: Path, *, test_mode=False,verification_recompute=False):
     output=output.resolve(); production=(ROOT/"artifacts/r2c_gnss_stage0_fix").resolve()
-    if test_mode:
+    if verification_recompute:
+        if os.environ.get("R2C_VERIFIER_RECOMPUTE")!="1":raise ValueError("verification recompute is verifier-only")
+        if production==output or production in output.parents or ROOT.resolve() in output.parents:raise ValueError("recompute output must be outside repository")
+    elif test_mode:
         if production==output or production in output.parents or ROOT.resolve() in output.parents:
             raise ValueError("temporary test output must be outside the repository and production artifact")
     elif output!=production: raise ValueError("production output must be exactly artifacts/r2c_gnss_stage0_fix")
     if output.exists(): raise FileExistsError("one-campaign guard: output already exists")
     return output
+
+def freeze_determinism(seed):
+    os.environ["PYTHONHASHSEED"]=str(seed);random.seed(seed);np.random.seed(seed)
+    try:
+        import torch
+        torch.manual_seed(seed);torch.cuda.manual_seed_all(seed);torch.use_deterministic_algorithms(True)
+    except ImportError:pass
 
 def parse_named_specs(specs,*,roster=None):
     pairs=[]
@@ -71,6 +81,22 @@ def load_b0_validation(path:Path,config):
             if item.get(f"{prefix}_path"):
                 source=Path(item[f"{prefix}_path"]);expected=item.get(f"{prefix}_sha256")
                 if not source.is_file() or sha(source)!=expected:item.update({"status":"UNAVAILABLE_AUTHENTIC_INTERFACE","event_rows":[],"reason":f"{prefix} hash invalid"})
+        if name in config["b0"]["saved_score_sha256"]:
+            source=Path(item.get("saved_score_path",""));canonical=config["b0"]["saved_score_sha256"][name]
+            if not source.is_file() or sha(source)!=canonical:
+                item.update({"status":"UNAVAILABLE_AUTHENTIC_INTERFACE","event_rows":[],"reason":"canonical saved-score hash mismatch"});continue
+            try:
+                import pandas as pd
+                regenerated_rows=replay_b0_events(pd.read_csv(source)).to_dict("records")
+                for row in regenerated_rows:
+                    numeric=("window_bin_s","window_start_s","window_end_s","availability_time_s","btail_max_507080","btail_max_507080_ewma075")
+                    if any(not np.isfinite(float(row[k])) or float(row[k])<0 for k in numeric):raise ValueError("invalid B0 event numeric value")
+                    if float(row["availability_time_s"])<float(row["window_end_s"]):raise ValueError("noncausal B0 availability")
+                regenerated_digest=hashlib.sha256(json.dumps(regenerated_rows,sort_keys=True,separators=(",",":"),default=str).encode()).hexdigest()
+                if regenerated_digest!=item.get("event_rows_sha256") or regenerated_rows!=item.get("event_rows"):
+                    raise ValueError("validated B0 events differ from canonical replay")
+            except Exception as exc:
+                item.update({"status":"UNAVAILABLE_AUTHENTIC_INTERFACE","event_rows":[],"reason":str(exc)});continue
         rows=item.get("event_rows",[])
         if rows:
             digest=hashlib.sha256(json.dumps(rows,sort_keys=True,separators=(",",":"),default=str).encode()).hexdigest()
@@ -91,8 +117,11 @@ def load_all_epochs(path: Path):
     with np.load(path,allow_pickle=False) as z:
         required={"complex_iq","time_s","prn"}
         if missing:=required-set(z.files): raise ValueError(f"NPZ missing {sorted(missing)}")
-        iq=np.asarray(z["complex_iq"]); time=np.asarray(z["time_s"],float); prn=np.asarray(z["prn"])
+        iq=np.asarray(z["complex_iq"]); raw_time=np.asarray(z["time_s"]);prn=np.asarray(z["prn"])
+        if not np.issubdtype(iq.dtype,np.number) or not np.issubdtype(raw_time.dtype,np.number) or prn.ndim!=1:raise ValueError("NPZ role dtype mismatch")
+        time=raw_time.astype(float)
         if iq.shape!=(len(time),9,2): raise ValueError("complex input shape mismatch")
+        if len(prn)!=len(time):raise ValueError("NPZ role length mismatch")
         y=iq[...,0].astype(float)+1j*iq[...,1].astype(float)
         cn0=np.asarray(z["cn0_db_hz"],float) if "cn0_db_hz" in z.files else np.full(len(time),np.nan)
         noise=np.asarray(z["noise_floor"],float) if "noise_floor" in z.files else None
@@ -100,6 +129,32 @@ def load_all_epochs(path: Path):
     if not finite.all(): raise ValueError("all epochs must be finite/authentic; silent row dropping forbidden")
     return {"y":y,"time":time,"prn":np.asarray([int(str(p).lstrip("Gg")) for p in prn]),"cn0":cn0,"noise_floor":noise,
             "bin":np.floor(time/.5).astype(int),"source_sha256":sha(path),"row_count":len(time)}
+
+def verify_path_hash(record,role):
+    if not isinstance(record,dict) or not record.get("path") or not record.get("sha256"):raise ValueError(f"geometry {role} lineage absent")
+    target=Path(record["path"])
+    if not target.is_file() or sha(target)!=record["sha256"]:raise ValueError(f"geometry {role} path/hash mismatch")
+    return target
+
+def validate_geometry_lineage(item,input_path,input_sha):
+    lineage=item["lineage"];selected=verify_path_hash(lineage.get("selected"),"selected")
+    if selected.resolve()!=input_path.resolve() or lineage["selected"].get("sha256")!=input_sha:raise ValueError("geometry selected NPZ mismatch")
+    for role in ("rinex","observables","ephemeris","nmea"):
+        verify_path_hash(lineage.get(role),role)
+    manifest=verify_path_hash({"path":lineage["selected"].get("manifest_path"),"sha256":lineage["selected"].get("manifest_sha256")},"selected manifest")
+    receiver_iq=lineage.get("receiver_source_iq_sha256");export_iq=lineage.get("export_source_iq_sha256")
+    hash_ok=lambda value:isinstance(value,str) and len(value)==64 and all(c in "0123456789abcdef" for c in value)
+    binding=lineage.get("source_iq_binding_status")
+    if binding=="HASH_BOUND":
+        if not hash_ok(receiver_iq) or not hash_ok(export_iq) or receiver_iq!=export_iq:raise ValueError("geometry source-IQ HASH_BOUND claim invalid")
+        verify_path_hash(lineage.get("receiver_manifest"),"receiver manifest")
+    elif binding!="LINEAGE_GAP" or receiver_iq is not None or export_iq is not None:raise ValueError("geometry source-IQ lineage mismatch")
+    causal=item["event_time_causal_ephemeris_availability"]
+    if causal.get("status")=="PASS":
+        history=verify_path_hash(causal.get("decode_history"),"decode history")
+        coverage=causal.get("event_time_coverage",{})
+        if not causal.get("decoded_history_authenticated") or not coverage.get("all_events_covered"):raise ValueError("causal ephemeris coverage unauthenticated")
+    return manifest
 
 def h0_residuals(y,provider,taps,grid,*,chunk_rows=4096):
     """Profile every row in deterministic bounded chunks; no support subsampling."""
@@ -164,10 +219,10 @@ def fit_frozen_models(clean,config,provider,taps,grid,*,require_gpu):
 
 def score_bin(observations,los,provider,taps,grid,models,config,conditions_by_prn=None):
     h0=joint_profile_glrt(observations,los,provider,taps,grid,hypothesis="H0",whitener=models["analytic"])
-    individual={};rejected={}
+    individual={};individual_fits={};rejected={}
     for p,y in observations.items():
         fit=joint_profile_glrt({p:y},{},provider,taps,grid,hypothesis="H1-independent",whitener=models["analytic"])
-        if fit.valid:individual[p]=fit.score
+        if fit.valid:individual[p]=fit.score;individual_fits[p]=fit
         else:rejected[int(p)]=fit.reason or "invalid_fit"
     if conditions_by_prn is None: raise ValueError("runner neural inference conditions are required")
     neural_obs={p:y-models["neural_model"].predict(conditions_by_prn[p][0]) for p,y in observations.items()}
@@ -191,7 +246,8 @@ def score_bin(observations,los,provider,taps,grid,models,config,conditions_by_pr
     statuses["Full"]=full_result.status
     if not h0.valid:
         for d in ("A1","A2","A3","A4","Full","Neural-with-energy"):scores[d]=None;statuses[d]="UNAVAILABLE_INVALID_H0"
-    return scores,{"H0":h0,"A4":independent,"Full":shared,"A3":analytic_shared,"Neural-with-energy":energy_shared,"FullScorer":full_scorer,"statuses":statuses,
+    best_prn=max(individual,key=individual.get) if individual else None
+    return scores,{"H0":h0,"A1":individual_fits.get(best_prn),"A4":independent,"Full":shared,"A3":analytic_shared,"Neural-with-energy":energy_shared,"FullScorer":full_scorer,"statuses":statuses,
       "individual_rejected_count":len(rejected),"individual_rejected_reasons":rejected},individual
 
 def synthetic_inputs(seed=20260803):
@@ -207,7 +263,9 @@ def synthetic_inputs(seed=20260803):
 
 def write_artifact(output,documents,csvs,plots):
     output.mkdir(); (output/"plots").mkdir()
-    for name,value in documents.items(): (output/name).write_text(json.dumps(value,indent=2,sort_keys=True)+"\n")
+    for name,value in documents.items():
+        if isinstance(value,(bytes,bytearray)):(output/name).write_bytes(value)
+        else:(output/name).write_text(json.dumps(value,indent=2,sort_keys=True)+"\n")
     for name,(fields,rows) in csvs.items():
         with (output/name).open("w",newline="") as f:
             writer=csv.DictWriter(f,fieldnames=fields); writer.writeheader(); writer.writerows(rows)
@@ -263,17 +321,7 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
     wrapper_doc=load(geometry_wrapper);expected_geometry_hash=hashlib.sha256(json.dumps(config["geometry"],sort_keys=True,separators=(",",":")).encode()).hexdigest()
     if wrapper_doc.get("geometry_config",{}).get("sha256")!=expected_geometry_hash or wrapper_doc.get("geometry_config",{}).get("values")!=config["geometry"]:raise ValueError("geometry config binding mismatch")
     for name,item in geometry.items():
-        selected=item["lineage"]["selected"]
-        if Path(selected.get("path","")).resolve()!=inputs[name].resolve() or selected.get("sha256")!=data[name]["source_sha256"]:raise ValueError("geometry selected NPZ mismatch")
-        receiver_iq=item["lineage"].get("receiver_source_iq_sha256");export_iq=item["lineage"].get("export_source_iq_sha256")
-        hash_ok=lambda value:isinstance(value,str) and len(value)==64 and all(c in "0123456789abcdef" for c in value)
-        binding=item["lineage"].get("source_iq_binding_status")
-        if binding=="HASH_BOUND" and (not hash_ok(receiver_iq) or not hash_ok(export_iq) or receiver_iq!=export_iq):raise ValueError("geometry source-IQ HASH_BOUND claim invalid")
-        if binding!="HASH_BOUND":item["lineage"]["source_iq_binding_status"]="LINEAGE_GAP"
-        for lineage_name in ("receiver_manifest",):
-            lineage=item["lineage"].get(lineage_name,{})
-            if item["lineage"]["source_iq_binding_status"]=="HASH_BOUND" and (not lineage.get("path") or not Path(lineage["path"]).is_file() or sha(Path(lineage["path"]))!=lineage.get("sha256")):raise ValueError("geometry manifest lineage mismatch")
-        if item["event_time_causal_ephemeris_availability"].get("status")=="PASS" and not item["event_time_causal_ephemeris_availability"].get("decode_history_sha256"):raise ValueError("causal ephemeris lacks authenticated decode history")
+        validate_geometry_lineage(item,inputs[name],data[name]["source_sha256"])
     b0=load_b0_validation(Path(b0_validation_path),config);b0_events={}
     import pandas as pd
     for name,item in b0["scenarios"].items():
@@ -352,7 +400,7 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
             right={int(r["time_bin"]):r for r in score_rows if r["scenario"]==scenario and r["detector"]==right_name and r["score"]!=""}
             keys=sorted(set(left)&set(right)); records=[]
             for key in keys:
-                t=float(left[key]["availability_time_s"])
+                t=max(float(left[key]["availability_time_s"]),float(right[key]["availability_time_s"]))
                 if t<onset-20: records.append((t,False,float(left[key]["score"]),float(right[key]["score"])))
                 elif t>=onset+config["attacks"]["persistent_offset_s"]: records.append((t,True,float(left[key]["score"]),float(right[key]["score"])))
             try:
@@ -415,7 +463,7 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
         "export_source_iq_sha256":geometry[name].get("lineage",{}).get("selected",{}).get("source_iq_sha256")}
         for name in SCENARIOS]}
     documents={name:{} for name in TOP_LEVEL_FILES if name.endswith(".json") and name!="hashes.json"}
-    documents.update({"config.json":config,"provenance.json":provenance,"input_validity.json":{"datasets":{n:{"rows":d["row_count"]} for n,d in data.items()}},
+    documents.update({"config.json":(ROOT/"configs/r2c_gnss_stage0_fix.json").read_bytes(),"provenance.json":provenance,"input_validity.json":{"datasets":{n:{"rows":d["row_count"]} for n,d in data.items()}},
       "time_geometry_validation.json":wrapper_doc,"b0_interface_validation.json":{**b0,"core_blocked":False},
       "training_summary.json":{"models":{k:v.serialize() for k,v in models.items() if hasattr(v,"serialize")}},"thresholds.json":thresholds,
       "gain_invariance.json":control,"phase_invariance.json":control,"noise_control.json":control,"multipath_control.json":control,
@@ -434,14 +482,17 @@ def main():
     ap.add_argument("--input",action="append",default=[]);ap.add_argument("--geometry",action="append",default=[])
     ap.add_argument("--b0-validation",type=Path,help="canonical validated B0 wrapper")
     ap.add_argument("--synthetic",action="store_true"); ap.add_argument("--test-output",action="store_true")
-    args=ap.parse_args(); output=validate_destination(args.output,test_mode=args.test_output); validate_source(args.source_commit,test_mode=args.test_output)
+    ap.add_argument("--verification-recompute",action="store_true",help=argparse.SUPPRESS)
+    args=ap.parse_args(); output=validate_destination(args.output,test_mode=args.test_output,verification_recompute=args.verification_recompute); validate_source(args.source_commit,test_mode=args.test_output or args.verification_recompute)
     config=json.loads(args.config.read_text())
+    freeze_determinism(int(config["seed"]))
     if args.synthetic and not args.test_output:ap.error("--synthetic requires --test-output")
     if args.test_output and not args.synthetic: ap.error("--test-output requires --synthetic")
+    if args.verification_recompute and (args.synthetic or args.test_output):ap.error("verification recompute is production-input mode")
     if not args.synthetic and (args.config.resolve()!=(ROOT/"configs/r2c_gnss_stage0_fix.json").resolve() or config.get("schema")!="gnss-doppler-lab.r2c-gnss-stage0-fix-config.v3"):
         ap.error("production requires canonical fix config path and schema")
     if args.synthetic: result=run_synthetic(output,config,args.source_commit); print(json.dumps({"output":str(output),"synthetic":True,"detectors":list(result["scores"])})); return
     if not args.input:ap.error("production requires exact seven --input NAME=NPZ entries")
     if args.b0_validation is None:ap.error("production requires --b0-validation")
-    result=run_production(output,config,args.source_commit,args.input,args.geometry,args.b0_validation);print(json.dumps({"output":str(output),"rows":result["rows"]}))
+    result=run_production(output,config,args.source_commit,args.input,args.geometry,args.b0_validation);print(json.dumps({"output":str(output),"rows":result["rows"],"verification_recompute":args.verification_recompute}))
 if __name__=="__main__": main()

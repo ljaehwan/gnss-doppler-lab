@@ -30,8 +30,19 @@ def synthetic_smoke():
     obs={p:data["y"][data["prn"]==p][:2] for p in sorted(los)};raw=runner.h0_residuals(np.concatenate(list(obs.values())),provider,taps,grid);q=np.mean(np.abs(raw)**2,axis=1);energy=np.mean(np.abs(np.concatenate(list(obs.values())))**2,axis=1);conditions={};cursor=0
     for p,y in obs.items():
         n=len(y);conditions[p]=(np.column_stack((np.full(n,40.),q[cursor:cursor+n])),np.column_stack((np.full(n,40.),q[cursor:cursor+n],energy[cursor:cursor+n])));cursor+=n
-    smoke={**config,"optimizer_starts_m":[config["optimizer_starts_m"][0]]};scores,fits,_=runner.score_bin(obs,los,provider,taps,grid,models,smoke,conditions);controls=run_full_controls(fits["FullScorer"],obs,los,10.,provider,taps)
+    smoke={**config,"optimizer_starts_m":[config["optimizer_starts_m"][0]]};scores,fits,_=runner.score_bin(obs,los,provider,taps,grid,models,smoke,conditions)
+    # Calibrate the operational Full graph itself; controls use that exact q99.
+    calibration=[]
+    for offset in range(12):
+        shifted={p:data["y"][data["prn"]==p][offset:offset+2] for p in sorted(los)}
+        if any(len(v)!=2 for v in shifted.values()):continue
+        shifted_scores,_,_=runner.score_bin(shifted,los,provider,taps,grid,models,smoke,conditions)
+        if shifted_scores["Full"] is not None:calibration.append(shifted_scores["Full"])
+    if not calibration:raise RuntimeError("no valid operational Full calibration support")
+    threshold=runner.calibration_thresholds(calibration,["normal_calibration"]*len(calibration))["q99"]
+    controls=run_full_controls(fits["FullScorer"],obs,los,threshold,provider,taps)
     if controls["baseline_score"]!=scores["Full"]:raise RuntimeError("pre-campaign control baseline differs from operational Full")
+    if controls["threshold"]!=threshold:raise RuntimeError("control threshold differs from calibrated Full q99")
     return {"status":"PASS","template_mode":"analytic_gps_ca_acf","analytic_approximation":True,"paper_comparison_ready":False,
       "scores":scores,"fit_statuses":fits["statuses"],"controls":controls,"device":"cuda_available_checked_separately","gpu_required_for_campaign_training":True}
 

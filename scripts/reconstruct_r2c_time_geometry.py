@@ -12,6 +12,7 @@ GPS_EPOCH=datetime(1980,1,6,tzinfo=timezone.utc)
 LEAP_EFFECTIVE=((datetime(1981,7,1,tzinfo=timezone.utc),1),(datetime(1982,7,1,tzinfo=timezone.utc),2),(datetime(1983,7,1,tzinfo=timezone.utc),3),(datetime(1985,7,1,tzinfo=timezone.utc),4),(datetime(1988,1,1,tzinfo=timezone.utc),5),(datetime(1990,1,1,tzinfo=timezone.utc),6),(datetime(1991,1,1,tzinfo=timezone.utc),7),(datetime(1992,7,1,tzinfo=timezone.utc),8),(datetime(1993,7,1,tzinfo=timezone.utc),9),(datetime(1994,7,1,tzinfo=timezone.utc),10),(datetime(1996,1,1,tzinfo=timezone.utc),11),(datetime(1997,7,1,tzinfo=timezone.utc),12),(datetime(1999,1,1,tzinfo=timezone.utc),13),(datetime(2006,1,1,tzinfo=timezone.utc),14),(datetime(2009,1,1,tzinfo=timezone.utc),15),(datetime(2012,7,1,tzinfo=timezone.utc),16),(datetime(2015,7,1,tzinfo=timezone.utc),17),(datetime(2017,1,1,tzinfo=timezone.utc),18))
 def gps_utc_offset(stamp):return max((value for moment,value in LEAP_EFFECTIVE if stamp>=moment),default=0)
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+def valid_sha(value):return isinstance(value,str) and bool(re.fullmatch(r"[0-9a-f]{64}",value))
 def checksum(line):
     if not line.startswith("$") or "*" not in line:return False
     body,given=line[1:].split("*",1);value=0
@@ -84,7 +85,7 @@ def selected_bins(path,directory):
         historical=path.parents[1]/"receiver/manifest.json";declared=doc.get("receiver_manifest",{}).get("sha256")
         if historical.is_file() and declared==sha(historical):export_iq=source_iq_hash(historical.parent)
     if receiver_iq and receiver_iq!=export_iq:raise ValueError("selected NPZ/receiver source-IQ lineage mismatch")
-    lineage_status="HASH_BOUND" if receiver_iq==export_iq else "UNAUTHENTICATED_RECEIVER_IQ_LINEAGE"
+    lineage_status="HASH_BOUND" if valid_sha(receiver_iq) and valid_sha(export_iq) and receiver_iq==export_iq else "LINEAGE_GAP"
     return sorted(set(np.floor(times/.5).astype(int))),{"path":str(path),"sha256":digest,"rows":len(times),"manifest_path":str(manifest),"manifest_sha256":sha(manifest),"source_iq_sha256":export_iq,"receiver_source_iq_sha256":receiver_iq,"lineage_status":lineage_status}
 def source_iq_hash(directory):
     path=directory/"manifest.json"
@@ -128,7 +129,7 @@ def reconstruct(name,directory,selected,config,expected_week=None,expected_tow=N
     decoded=[x.decoded_tow for x in eph.values() if x.decoded_tow is not None]
     causal=False
     return {"scenario":name,"derived_time":{"status":"PASS" if week_ok and abs(rinex_rx_delta)<=1 else "FAIL","gps_week":binding["gps_week"],"start_tow_s":start,"rinex_rx_delta_s":rinex_rx_delta,"ephemeris_week_modulo":sorted(modulo),"assertions":assertions},
-      "lineage":{"rinex":binding,"observables":lineage,"selected":selected_report,"receiver_manifest":{"path":str((directory/"manifest.json").resolve()),"sha256":sha(directory/"manifest.json")} if (directory/"manifest.json").is_file() else {"status":"LINEAGE_GAP"},"receiver_source_iq_sha256":source_iq_hash(directory),"export_source_iq_sha256":selected_report.get("source_iq_sha256"),"source_iq_binding_status":selected_report.get("lineage_status"),"ephemeris_sha256":sha(directory/"gps_ephemeris.xml"),"nmea_sha256":sha(directory/"nmea_pvt.nmea")},
+      "lineage":{"rinex":binding,"observables":lineage,"selected":selected_report,"receiver_manifest":{"path":str((directory/"manifest.json").resolve()),"sha256":sha(directory/"manifest.json")} if (directory/"manifest.json").is_file() else {"status":"LINEAGE_GAP"},"receiver_source_iq_sha256":source_iq_hash(directory),"export_source_iq_sha256":selected_report.get("source_iq_sha256"),"source_iq_binding_status":selected_report.get("lineage_status"),"ephemeris":{"path":str((directory/"gps_ephemeris.xml").resolve()),"sha256":sha(directory/"gps_ephemeris.xml")},"nmea":{"path":str((directory/"nmea_pvt.nmea").resolve()),"sha256":sha(directory/"nmea_pvt.nmea")}},
       "nmea":pvt_report,"event_time_causal_ephemeris_availability":{"status":"PASS" if causal else "OFFLINE_ORACLE_ONLY","decoded_history_authenticated":causal},
       "offline_geometry_coverage":{"status":"PASS" if coverage_pass else "FAIL","valid_events":valid,"eligible_events":len(eligible),"coverage":coverage,"complete_10s_blocks":len(blocks),"rejection_reasons":reasons,"maximum_condition":max(conditions) if conditions else None},"los_by_bin":los_by_bin}
 def main():

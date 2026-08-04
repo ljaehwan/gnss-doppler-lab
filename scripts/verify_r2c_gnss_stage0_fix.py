@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Independent semantic verifier for R2C Stage-0-fix artifacts."""
 from __future__ import annotations
-import argparse,csv,hashlib,json,subprocess,sys
+import argparse,csv,hashlib,json,os,subprocess,sys,tempfile
 from pathlib import Path,PurePosixPath
 import numpy as np
 
@@ -15,12 +15,39 @@ CONTROL_FILES={"gain_invariance.json":{"gain","slow_agc"},"phase_invariance.json
  "noise_control.json":{"awgn","cn0_degradation","matched_power_noise","quantization"},
  "multipath_control.json":{"non_shared_multipath"},"second_source_injection.json":{"second_source_injection"},
  "relation_destruction.json":{"relation_destruction"}}
+LIKELIHOOD_DETECTORS={"A1","A3","A4","Full","Neural-with-energy"}
 
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def git_blob_sha1(path):
     data=path.read_bytes();return hashlib.sha1(f"blob {len(data)}\0".encode()+data).hexdigest()
 def load(path):return json.loads(path.read_text())
 def git(repo,*args):return subprocess.check_output(["git",*args],cwd=repo,text=True).strip()
+def verify_file_record(record,label,errors):
+    try:path=Path(record["path"])
+    except (KeyError,TypeError):errors.append(f"{label} path/hash missing");return
+    if not path.is_file() or sha(path)!=record.get("sha256"):errors.append(f"{label} path/hash mismatch")
+
+def external_recompute(artifact,provenance,source,repo):
+    """Regenerate using the frozen source and external provenance, never artifact evidence."""
+    with tempfile.TemporaryDirectory(prefix="r2c-verify-") as temporary:
+        base=Path(temporary);worktree=base/"source";output=base/"regenerated"
+        subprocess.run(["git","worktree","add","--detach",str(worktree),source],cwd=repo,check=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        try:
+            external=provenance["external_inputs"]
+            command=[sys.executable,str(worktree/"scripts/run_r2c_gnss_stage0_fix.py"),"--config",str(worktree/"configs/r2c_gnss_stage0_fix.json"),"--output",str(output),"--source-commit",source,"--verification-recompute"]
+            for item in sorted(external,key=lambda x:x["scenario"]):command += ["--input",f'{item["scenario"]}={item["selected"]["path"]}']
+            command += ["--geometry",external[0]["geometry"]["path"],"--b0-validation",provenance["b0_validation"]["path"]]
+            env={**os.environ,"R2C_VERIFIER_RECOMPUTE":"1","PYTHONHASHSEED":str(load(worktree/"configs/r2c_gnss_stage0_fix.json")["seed"])}
+            subprocess.run(command,cwd=worktree,env=env,check=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            excluded={"hashes.json","verification.json"};mismatches=[]
+            expected={str(p.relative_to(artifact)) for p in artifact.rglob("*") if p.is_file() and p.name not in excluded}
+            actual={str(p.relative_to(output)) for p in output.rglob("*") if p.is_file() and p.name not in excluded}
+            if expected!=actual:mismatches.append("recomputed file roster mismatch")
+            for name in sorted(expected&actual):
+                if (artifact/name).read_bytes()!=(output/name).read_bytes():mismatches.append(f"external recomputation mismatch: {name}")
+            evidence=hashlib.sha256("\n".join(f"{name}:{sha(output/name)}" for name in sorted(actual)).encode()).hexdigest()
+            return mismatches,evidence
+        finally:subprocess.run(["git","worktree","remove","--force",str(worktree)],cwd=repo,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 def independent_decision(gates):
     disq=("clean_dynamic_fpr","gain_invariance","noise_gain_alarms","relation_destruction","geometry_removal","complex_second_source","shortcut_controls")
     required=("complex_provenance","time_los_alignment","geometry_coverage","clean_dynamic_fpr","gain_invariance","phase_invariance","noise_gain_alarms","relation_destruction","full_improvement","full_a2_two_scenarios","shortcut_controls")
@@ -32,7 +59,7 @@ def independent_decision(gates):
     paper=all(gates.get(n,{}).get("status")=="PASS" for n in ("b0_authentic_common_support","full_b0_comparison","empirical_wide_template","paper_gates"))
     return core,paper,"PHYSICS_SUPPORTED" if core=="R2C_CORE_SUPPORTED" and paper else core
 
-def verify(artifact:Path,*,repo=ROOT,require_committed=True,allow_synthetic_test_artifact=False):
+def verify(artifact:Path,*,repo=ROOT,require_committed=True,allow_synthetic_test_artifact=False,recompute=True,allow_pending=False):
     errors=[];artifact=artifact.resolve()
     if not artifact.is_dir():return ["artifact missing"]
     files={p.name for p in artifact.iterdir() if p.is_file()};dirs={p.name for p in artifact.iterdir() if p.is_dir()}
@@ -96,6 +123,7 @@ def verify(artifact:Path,*,repo=ROOT,require_committed=True,allow_synthetic_test
             if "path" in value and (not Path(value["path"]).is_file() or sha(Path(value["path"]))!=value.get("sha256")):errors.append("B0 lineage hash mismatch")
         canonical=provenance.get("canonical_config",{});config_path=repo/"configs/r2c_gnss_stage0_fix.json"
         if canonical.get("path")!="configs/r2c_gnss_stage0_fix.json" or canonical.get("sha256")!=sha(config_path):errors.append("canonical config provenance mismatch")
+        if (artifact/"config.json").read_bytes()!=config_path.read_bytes():errors.append("artifact config differs from canonical bytes")
         geometry=load(artifact/"time_geometry_validation.json")
         if geometry.get("schema")!="gnss-doppler-lab.r2c-strict-time-geometry.v2" or geometry.get("attack_scores_computed") is not False or set(geometry.get("scenarios",{}))!=SCENARIOS:errors.append("geometry wrapper schema/roster mismatch")
         external_by_name={x.get("scenario"):x for x in external}
@@ -104,9 +132,18 @@ def verify(artifact:Path,*,repo=ROOT,require_committed=True,allow_synthetic_test
             selected=item.get("lineage",{}).get("selected",{});expected=external_by_name.get(name,{}).get("selected",{})
             if selected.get("path")!=expected.get("path") or selected.get("sha256")!=expected.get("sha256"):errors.append("geometry selected lineage mismatch")
             lineage=item.get("lineage",{});receiver_iq=lineage.get("receiver_source_iq_sha256");export_iq=lineage.get("export_source_iq_sha256")
-            if lineage.get("source_iq_binding_status")=="HASH_BOUND" and (not isinstance(receiver_iq,str) or len(receiver_iq)!=64 or receiver_iq!=export_iq):errors.append("geometry source-IQ binding invalid")
+            valid=lambda x:isinstance(x,str) and len(x)==64 and all(c in "0123456789abcdef" for c in x)
+            binding=lineage.get("source_iq_binding_status")
+            if binding=="HASH_BOUND" and (not valid(receiver_iq) or not valid(export_iq) or receiver_iq!=export_iq):errors.append("geometry source-IQ binding invalid")
+            elif binding!="HASH_BOUND" and (binding!="LINEAGE_GAP" or receiver_iq is not None or export_iq is not None):errors.append("geometry source-IQ lineage status invalid")
+            for role in ("rinex","observables","ephemeris","nmea","selected"):
+                verify_file_record(lineage.get(role),f"geometry {name} {role}",errors)
+            if binding=="HASH_BOUND":verify_file_record(lineage.get("receiver_manifest"),f"geometry {name} receiver_manifest",errors)
+            verify_file_record({"path":lineage.get("selected",{}).get("manifest_path"),"sha256":lineage.get("selected",{}).get("manifest_sha256")},f"geometry {name} selected manifest",errors)
             causal=item.get("event_time_causal_ephemeris_availability",{})
-            if causal.get("status")=="PASS" and not causal.get("decode_history_sha256"):errors.append("unauthenticated causal ephemeris PASS")
+            if causal.get("status")=="PASS":
+                verify_file_record(causal.get("decode_history"),f"geometry {name} decode history",errors)
+                if not causal.get("decoded_history_authenticated") or not causal.get("event_time_coverage",{}).get("all_events_covered"):errors.append("unauthenticated causal ephemeris PASS")
         b0=load(artifact/"b0_interface_validation.json")
         if b0.get("schema")!="gnss-doppler-lab.r2c-b0-validation.v2" or set(b0.get("scenarios",{}))!=SCENARIOS:errors.append("B0 validation schema/roster mismatch")
         b0_provenance=provenance.get("b0_validation",{});b0_path=Path(b0_provenance.get("path",""))
@@ -132,7 +169,8 @@ def verify(artifact:Path,*,repo=ROOT,require_committed=True,allow_synthetic_test
         if not np.isfinite(score):errors.append("nonfinite detector score")
         if not available:errors.append("invalid/unavailable fit exposed finite score")
         if d in by_detector:by_detector[d].append(score)
-        fields=(row.get(k,"") for k in ("ll0","ll1","n","k0","k1"))
+        fields=tuple(row.get(k,"") for k in ("ll0","ll1","n","k0","k1"))
+        if available and d in LIKELIHOOD_DETECTORS and not all(x!="" for x in fields):errors.append("available likelihood detector missing BIC evidence")
         if all(x!="" for x in fields):
             expected=2*(float(row["ll1"])-float(row["ll0"]))-(float(row["k1"])-float(row["k0"]))*np.log(float(row["n"]))
             if not np.isclose(score,expected,rtol=1e-11,atol=1e-11):errors.append("BIC identity mismatch")
@@ -148,7 +186,7 @@ def verify(artifact:Path,*,repo=ROOT,require_committed=True,allow_synthetic_test
         event_keys={(r.get("scenario"),r.get("time_bin")) for r in rows}
         for event_key in event_keys:
             if {r.get("detector") for r in rows if (r.get("scenario"),r.get("time_bin"))==event_key}!=ALL_DETECTORS:errors.append(f"per-event detector roster mismatch: {event_key}")
-        if load(artifact/"verification.json").get("status") in {None,"PENDING_EXTERNAL_VERIFIER"}:errors.append("pending production verification")
+        if not allow_pending and load(artifact/"verification.json").get("status") in {None,"PENDING_EXTERNAL_VERIFIER"}:errors.append("pending production verification")
     if not synthetic:
         per_detector=thresholds.get("detectors",{})
         if set(per_detector)!=ALL_DETECTORS:errors.append("threshold detector roster mismatch")
@@ -211,9 +249,23 @@ def verify(artifact:Path,*,repo=ROOT,require_committed=True,allow_synthetic_test
     if load(artifact/"config.json").get("template",{}).get("analytic_approximation") and decision.get("paper_comparison_ready"):errors.append("analytic template cannot be paper ready")
     for png in (artifact/"plots").glob("*.png"):
         if not png.with_suffix(".csv").is_file():errors.append("plot source data missing")
+    if not synthetic and recompute and not errors:
+        regenerated,evidence=external_recompute(artifact,provenance,source,repo);errors.extend(regenerated)
+        if not regenerated and not allow_pending and load(artifact/"verification.json").get("recomputation_evidence_sha256")!=evidence:errors.append("external recomputation evidence hash mismatch")
     return sorted(set(errors))
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument("artifact",type=Path);ap.add_argument("--uncommitted-test",action="store_true");ap.add_argument("--allow-synthetic-test-artifact",action="store_true");args=ap.parse_args()
-    errors=verify(args.artifact,require_committed=not args.uncommitted_test,allow_synthetic_test_artifact=args.allow_synthetic_test_artifact);print(json.dumps({"status":"PASS" if not errors else "FAIL","errors":errors},indent=2));raise SystemExit(bool(errors))
+    ap=argparse.ArgumentParser();ap.add_argument("artifact",type=Path);ap.add_argument("--uncommitted-test",action="store_true");ap.add_argument("--allow-synthetic-test-artifact",action="store_true");ap.add_argument("--finalize",action="store_true");args=ap.parse_args()
+    if args.finalize and not args.uncommitted_test:ap.error("--finalize requires --uncommitted-test")
+    if args.finalize and args.artifact.resolve()!=(ROOT/"artifacts/r2c_gnss_stage0_fix").resolve():ap.error("--finalize is only for the canonical production artifact")
+    errors=verify(args.artifact,require_committed=not args.uncommitted_test,allow_synthetic_test_artifact=args.allow_synthetic_test_artifact,allow_pending=args.finalize,recompute=not args.finalize)
+    if args.finalize and not errors:
+        provenance=load(args.artifact/"provenance.json");regen,evidence=external_recompute(args.artifact.resolve(),provenance,provenance["source_commit"],ROOT);errors.extend(regen)
+        if not errors:
+            (args.artifact/"verification.json").write_text(json.dumps({"schema":"gnss-doppler-lab.r2c-production-verification.v1","status":"PASS","deterministic_external_recomputation":True,"recomputation_evidence_sha256":evidence},indent=2,sort_keys=True)+"\n")
+            files={str(p.relative_to(args.artifact)):sha(p) for p in args.artifact.rglob("*") if p.is_file() and p.name!="hashes.json"}
+            (args.artifact/"hashes.json").write_text(json.dumps({"algorithm":"sha256","policy":"all files recursively except hashes.json","files":files},indent=2,sort_keys=True)+"\n")
+            subprocess.run(["git","add","--","artifacts/r2c_gnss_stage0_fix"],cwd=ROOT,check=True)
+            subprocess.run(["git","commit","-m","Add externally verified R2C Stage-0 fix campaign artifact"],cwd=ROOT,check=True)
+    print(json.dumps({"status":"PASS" if not errors else "FAIL","errors":errors},indent=2));raise SystemExit(bool(errors))
 if __name__=="__main__":main()

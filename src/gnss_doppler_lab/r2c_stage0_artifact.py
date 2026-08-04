@@ -32,6 +32,7 @@ FIX_SOURCE_FILES = (
     "tests/test_r2c_stage0_fix.py",
     "tests/test_r2c_stage0_correction1.py",
     "tests/test_r2c_stage0_correction2.py",
+    "tests/test_r2c_stage0_correction4.py",
 )
 
 def expected_hash_keys(root: Path):

@@ -480,7 +480,7 @@ def detector_scores(individual_scores: Mapping[int,float], analytic_shared: Join
     if not len(values): raise ValueError("A1 requires per-PRN scores")
     return {"A1":float(np.max(values)), "A2":float(np.median(values)+np.mean(np.sort(values)[-min(4,len(values)):])),
             "A3":None if analytic_shared is None or not analytic_shared.valid else analytic_shared.score,
-            "A4":neural_independent.score,
+            "A4":None if not neural_independent.valid else neural_independent.score,
             "Full":None if neural_shared is None or not neural_shared.valid else neural_shared.score,
             "Neural-with-energy":None if neural_energy is None else float(neural_energy) if np.isscalar(neural_energy) else None if not neural_energy.valid else float(neural_energy.score),
             "Power-only":float(power_score)}
