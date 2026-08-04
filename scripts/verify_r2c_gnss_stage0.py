@@ -100,7 +100,32 @@ def selected_support(path):
     for bin_index in np.unique(bins[indices]):
         group = indices[bins[indices] == bin_index]
         output[int(bin_index)] = (float(times[group].min()), float(times[group].max()))
-    return output, values, times[indices], indices
+    return output, values, times[indices], indices, prns[indices]
+
+
+def row_identity(time_s, prn, value):
+    digest = hashlib.sha256()
+    digest.update(np.asarray([time_s], dtype="<f8").tobytes())
+    digest.update(np.asarray([prn], dtype="<i8").tobytes())
+    digest.update(np.column_stack((value.real, value.imag)).astype("<f8").tobytes())
+    return digest.hexdigest()
+
+
+def deduplicated_support(raw_support):
+    _, clean_values, clean_times, _, clean_prns = raw_support["cleanStatic"]
+    source = (clean_times <= 300.0) | ((clean_times >= 320.0) & (clean_times <= 400.0))
+    hashes = {row_identity(t, p, y) for t, p, y in zip(clean_times[source], clean_prns[source], clean_values[source])}
+    output = {}
+    for name, packed in raw_support.items():
+        _, values, times, indices, prns = packed
+        keep = np.ones(len(times), bool) if name == "cleanStatic" else np.asarray([
+            row_identity(t, p, y) not in hashes for t, p, y in zip(times, prns, values)])
+        bins = np.floor(times[keep] / .5).astype(int); support = {}
+        for bin_index in np.unique(bins):
+            chosen = times[keep][bins == bin_index]
+            support[int(bin_index)] = (float(chosen.min()), float(chosen.max()))
+        output[name] = (support, values[keep], times[keep], indices[keep], prns[keep])
+    return output
 
 
 def compare_recomputed_artifact(artifact, reproduced):
@@ -200,13 +225,14 @@ def verify(artifact, check_external=True, full_recompute=False):
                 errors.append(f"tap spacing mismatch: {name}")
             raw_support[name] = selected_support(path)
         if "cleanStatic" in raw_support and template_values is not None:
-            _, values, times, indices = raw_support["cleanStatic"]
+            _, values, times, indices, _ = raw_support["cleanStatic"]
             mask = times <= 300.0
             rebuilt, metadata = build_empirical_template(values[mask], ["normal_train"] * int(mask.sum()))
             index_hash = hashlib.sha256(np.asarray(indices[mask], dtype="<i8").tobytes()).hexdigest()
             if empirical_template_hash(rebuilt) != template.get("template_sha256") or index_hash != template.get("support_selected_index_sha256"):
                 errors.append("empirical template does not reproduce from cleanStatic normal_train")
 
+        raw_support = deduplicated_support(raw_support)
     rows = list(csv.DictReader((artifact / "per_epoch_scores.csv").open()))
     scenario_rows = list(csv.DictReader((artifact / "scenario_metrics.csv").open()))
     ablation_rows = list(csv.DictReader((artifact / "ablation_metrics.csv").open()))

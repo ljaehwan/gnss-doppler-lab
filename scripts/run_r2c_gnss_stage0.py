@@ -372,7 +372,7 @@ def make_epochs(name, dataset, *, gain=1.0, template=None):
                     item[detector + "_geometry_condition"] = geometry.condition_number
                 else:
                     item[detector] = 0.0; item[detector + "_geometry_valid"] = False
-                    item[detector + "_geometry_rank"] = 0; item[detector + "_geometry_condition"] = "inf"
+                    item[detector + "_geometry_rank"] = 0; item[detector + "_geometry_condition"] = "UNAVAILABLE"
             item["event_valid"] = len(selected) >= MIN_EVENT_PRNS
         output.append(item)
     return output
