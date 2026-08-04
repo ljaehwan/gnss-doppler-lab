@@ -195,7 +195,7 @@ def verify(artifact, check_external=True, full_recompute=False):
     if validity.get("decision") == "REQUIRED_B0_INTERFACE_UNAVAILABLE":
         gate = validity.get("B0", {})
         expected_gates = {
-            "complex_provenance": {"status": "PASS", "source": "original preregistration section 11"},
+            "complex_provenance": {"status": "NOT_EVALUATED", "source": "pre-campaign fail-closed path"},
             "time_alignment": {"status": "NOT_EVALUATED", "reason": "scoring stopped before geometry fitting"},
             "los_geometry": {"status": "NOT_EVALUATED", "reason": "scoring stopped before geometry fitting"},
             "b0_interface": gate,
@@ -439,12 +439,12 @@ def verify(artifact, check_external=True, full_recompute=False):
     if decision.get("old_result_status") != "SUPERSEDED_BY_EXTERNAL_DATA_DISCOVERY":
         errors.append("superseded provenance absent")
     expected_gates = {
-        "complex_provenance": {"status": "PASS", "source": "authenticated seven-scenario input inventory"},
+        "complex_provenance": {"status": "PASS" if all(item.get("genuinely_complex") for item in validity.get("datasets", {}).values()) else "FAIL", "source": "authenticated seven-scenario input inventory"},
         "time_alignment": {"status": "PASS" if all(item.get("alignment", {}).get("valid") and
             item.get("alignment", {}).get("time_alignment") for item in validity.get("geometry_inventory", {}).values()) else "FAIL"},
         "los_geometry": {"status": "PASS" if all(item.get("alignment", {}).get("valid") and
             item.get("alignment", {}).get("matched_rows", 0) > 0 for item in validity.get("geometry_inventory", {}).values()) else "FAIL"},
-        "b0_interface": training.get("B0_interface_gate", {"status": "PASS"}),
+        "b0_interface": training.get("B0_interface_gate", {"status": "NOT_EVALUATED"}),
     }
     expected_gates.update({name: {"status": "NOT_EVALUATED",
         "reason": "authentic preregistration names the claim but contains no quantitative acceptance criterion"}

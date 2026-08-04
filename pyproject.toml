@@ -15,6 +15,7 @@ dependencies = [
   "h5py>=3.11",
   "scikit-learn>=1.4",
   "scipy>=1.11",
+  "pandas>=2.2",
 ]
 
 [project.optional-dependencies]
