@@ -21,13 +21,69 @@
     "cleanStatic": "fcd1d378c28e79fe4a550b65fc1208cde3c8fb334db11406a07fed4d90fba237"
   },
   "no_attack_label_tuning": true,
-  "sampling": "first row per floor(time/0.5s),PRN",
-  "schema": "gnss-doppler-lab.r2c-freeze.v1",
+  "sampling": "first real receiver row per floor(time_s/0.5s),PRN; support is min/max selected source time",
+  "schema": "gnss-doppler-lab.r2c-freeze.v2",
   "score_definitions": {
-    "A1": "max per-PRN profile GLRT per 0.5 s epoch",
-    "A2": "mean top-4 per-PRN A1",
-    "Power-only": "mean log1p nine-tap energy"
+    "A1": "maximum per-PRN empirical-template profile GLRT per epoch",
+    "A2": "mean top-4 empirical-template per-PRN GLRT",
+    "A3": "analytic residual whitening plus shared constellation consistency",
+    "A4": "compact neural nuisance whitening plus geometry-free top-4 evidence",
+    "B0": "frozen tap9-only PRN-local GRU plus btail_max_507080_ewma075",
+    "Full R2C-GNSS": "compact neural nuisance whitening plus shared constellation consistency",
+    "Power-only": "mean log1p nine-tap energy shortcut"
   },
-  "utc_epoch_s": 1785842156.4098482,
-  "written_before_score_computation": true
+  "source_bundle": {
+    "bundle_sha256": "f13e9858cc4f426645ffd1ef83ea1dc770ca910e7a01edf997ce89026055c188",
+    "files": {
+      "configs/r2c_clean_dynamic_geometry_receiver.conf": "26fa409aa806b0020337508b231505ee6d3e08f3fc865187a2076aef3bfcf32a",
+      "configs/r2c_gnss_stage0.json": "aebebacbb5e0961e7067485dd9d34b402a258dcd3501e9e5f21af77d205d5257",
+      "scripts/run_r2c_gnss_stage0.py": "f14c218beb6e3d082f14ecc5a28efdb2ed073bb6d65a481a27c203b541350f12",
+      "scripts/verify_r2c_gnss_stage0.py": "2962de55c94844183e0c17141ddf186feb3a79762e87a43418a87d4a27d02622",
+      "src/gnss_doppler_lab/r2c_gnss.py": "5a2dd974464c83949ba4dc67ce32c323aa2b71f722d6c85b94ad9422e57df273"
+    },
+    "schema": "gnss-doppler-lab.r2c-source-bundle.v1"
+  },
+  "template": {
+    "accepted_rows": 6335,
+    "fit_role": "cleanStatic normal_train",
+    "forbidden_fit_sources": [
+      "cleanDynamic",
+      "DS1",
+      "DS2",
+      "DS3",
+      "DS7",
+      "DS8"
+    ],
+    "hash_algorithm": "sha256(canonical little-endian float64 [real,imag])",
+    "input_rows": 6335,
+    "method": "prompt-phase rotation; prompt-amplitude normalization; componentwise real/imag median",
+    "rejected_rows": 0,
+    "support_selected_index_sha256": "48952fcbdb2d7c6c8d2abbecf4a0ceab33f721b5ad85f456a423f716583c5b48",
+    "support_source_end_s": 299.51869856,
+    "support_source_start_s": 0.04025756,
+    "template_sha256": "b95e3a070f5f7ee056cd978ab52168af5f9ee4b6b955e59f90b9570108f068cb",
+    "values_imag": [
+      -0.004720184146506946,
+      -0.0044161411806218406,
+      -0.0030129008502547475,
+      -0.0029156301159983726,
+      0.0,
+      0.0011814257316034205,
+      0.0013404969339658652,
+      0.0018969440291325649,
+      0.0034006417025439837
+    ],
+    "values_real": [
+      0.508225162443654,
+      0.63306718047788,
+      0.7597098347315997,
+      0.8872695274890836,
+      1.0,
+      0.8869810399577246,
+      0.7618776006569555,
+      0.6375917593398596,
+      0.5106854702328372
+    ]
+  },
+  "written_before_attack_score_computation": true
 }

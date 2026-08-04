@@ -1,13 +1,59 @@
 {
-  "fit_roles": [],
+  "B0": {
+    "checkpoint": "/home/ubuntu/projects/gnss-doppler-r2c-stage0/artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt",
+    "retrained": false,
+    "sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b"
+  },
+  "DS7_fit_or_calibration_uses": 0,
+  "cleanDynamic_fit_or_calibration_uses": 0,
+  "fit_products": [
+    "empirical receiver correlation template",
+    "analytic whitener",
+    "compact neural nuisance"
+  ],
+  "fit_roles": [
+    "cleanStatic normal_train"
+  ],
+  "nuisance": {
+    "analytic": {
+      "covariance_sha256": "33e94ba3bcff6729a2db310b79b2a339b630ef3b17d155be848270baad59e814",
+      "eigenvalues": [
+        15405781033.014948,
+        17825781321.223545,
+        19686889071.8342,
+        27441165343.15879,
+        35260661935.03836,
+        50027658925.075745,
+        57139642156.66339,
+        133308699770.0264,
+        487370458291.1398
+      ],
+      "epsilon": 1e-08,
+      "fit_rows": 6335,
+      "shrinkage": 0.2
+    },
+    "neural": {
+      "architecture": "shared numeric 2-8-18 MLP; mean plus diagonal error variance",
+      "conditions": [
+        "log1p_tap_energy",
+        "cn0_db_hz"
+      ],
+      "epochs": 100,
+      "fit_rows": 6335,
+      "learning_rate": 0.01,
+      "parameter_sha256": "39e2a6f087c76fc9b9cc029d861f465f26a3ff2fbbd8f2a1fe1ec2bf2b92cd70",
+      "seed": 20260803,
+      "variance_floor": 1e-08
+    }
+  },
   "sample_counts": {
     "DS1": 9867,
     "DS2": 9801,
     "DS3": 9861,
-    "DS7": 5665,
-    "DS8": 10020,
+    "DS7": 4919,
+    "DS8": 9705,
     "cleanDynamic": 623,
     "cleanStatic": 10184
   },
-  "status": "A1/A2 are profile fits, not learned; bounded neural A4 unavailable"
+  "template_sha256": "b95e3a070f5f7ee056cd978ab52168af5f9ee4b6b955e59f90b9570108f068cb"
 }

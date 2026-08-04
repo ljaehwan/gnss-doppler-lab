@@ -1,25 +1,25 @@
 {
   "real_attack_replacement": false,
-  "status": "REAL_NORMAL_COMPLEX_INJECTION_MECHANICS_ONLY",
+  "status": "SYNTHETIC_IDEAL_INJECTION_INTO_REAL_NORMAL; EMPIRICAL_TEMPLATE_SCORING",
   "trials": [
     {
       "delay_chips": -0.375,
-      "median_A1": 26.960049815346437,
+      "median_A1": 26.434091856988513,
       "power_ratio": 0.1
     },
     {
       "delay_chips": -0.375,
-      "median_A1": 26.96003847243729,
+      "median_A1": 26.43408704318795,
       "power_ratio": 0.5
     },
     {
       "delay_chips": 0.375,
-      "median_A1": 26.96004239660667,
+      "median_A1": 26.434084674392437,
       "power_ratio": 0.1
     },
     {
       "delay_chips": 0.375,
-      "median_A1": 26.96002844609621,
+      "median_A1": 26.43409458562607,
       "power_ratio": 0.5
     }
   ]

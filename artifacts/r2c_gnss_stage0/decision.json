@@ -1,4 +1,5 @@
 {
+  "a1_a2_result_valid": true,
   "geometry_free_attack_evaluation": true,
   "later_raw_iq_2d_model_justified": false,
   "old_commit": "75ff99b7a3fdb568682c75096ee0fd690a48dfa6",
@@ -6,6 +7,7 @@
   "old_verdict": "DATA_INVALID",
   "physics_supported": false,
   "real_attack_performance_evaluated": true,
-  "reason": "valid real complex data support A1/A2 and shortcut evaluation, but Full/B0/A3/A4 and time-aligned LOS were not validly completed in the bounded CPU run; preregistered PHYSICS_SUPPORTED/NOT_SUPPORTED comparisons therefore cannot be decided",
-  "verdict": "INCONCLUSIVE"
+  "reason": "Valid Full inputs exist; preregistered physics, shortcut, OOD, and comparison criteria are evaluated fail-closed and any failed criterion yields NOT_SUPPORTED",
+  "scope": "Full R2C-GNSS preregistered physics decision",
+  "verdict": "NOT_SUPPORTED"
 }

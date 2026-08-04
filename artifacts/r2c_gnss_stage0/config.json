@@ -77,6 +77,15 @@
   "input_paths": {},
   "runtime": {
     "cpu_only": true,
+    "geometry": {
+      "DS1": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds1-complex9",
+      "DS2": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9",
+      "DS3": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9",
+      "DS7": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9",
+      "DS8": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver",
+      "cleanDynamic": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/r2c-cleanDynamic-geometry-20260804",
+      "cleanStatic": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9"
+    },
     "inputs": {
       "DS1": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds1.npz",
       "DS2": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds2.npz",
@@ -86,7 +95,7 @@
       "cleanDynamic": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/rc9-real-clean-domain-poc1/exports/cleanDynamic.npz",
       "cleanStatic": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.npz"
     },
-    "sampling": "first row per floor(time/0.5s),PRN"
+    "sampling": "first real receiver row per floor(time_s/0.5s),PRN; support is min/max selected source time"
   },
   "schema": "gnss-doppler-lab.r2c-gnss-stage0-config.v1",
   "seed": 20260803,

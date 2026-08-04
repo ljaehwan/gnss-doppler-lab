@@ -1,7 +1,8 @@
 {
-  "checked_required_files": 21,
+  "checked_required_files": 22,
   "errors": [],
   "external_hashes_checked": true,
-  "hash_policy": "hashes.json and verification.json excluded; generation commit may be current or ancestor of final result commit",
-  "status": "PASS"
+  "hash_policy": "artifact excludes hashes.json/verification.json; exact clean source commit and full external-input recomputation required",
+  "status": "PASS",
+  "verifier_source_sha256": "2962de55c94844183e0c17141ddf186feb3a79762e87a43418a87d4a27d02622"
 }

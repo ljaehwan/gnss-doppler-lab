@@ -1,17 +1,66 @@
 {
-  "alarm_agreement_by_gain": {
-    "0.5": 1.0,
-    "0.75": 1.0,
-    "1": 1.0,
-    "1.5": 1.0,
-    "2": 1.0
+  "by_gain": {
+    "0.5": {
+      "A1": {
+        "alarm_agreement_vs_gain_1": 1.0,
+        "maximum_score_difference_vs_gain_1": 0.0,
+        "recomputed_epoch_count": 160
+      },
+      "A2": {
+        "alarm_agreement_vs_gain_1": 1.0,
+        "maximum_score_difference_vs_gain_1": 0.0,
+        "recomputed_epoch_count": 160
+      }
+    },
+    "0.75": {
+      "A1": {
+        "alarm_agreement_vs_gain_1": 0.99375,
+        "maximum_score_difference_vs_gain_1": 7.105427357601002e-14,
+        "recomputed_epoch_count": 160
+      },
+      "A2": {
+        "alarm_agreement_vs_gain_1": 1.0,
+        "maximum_score_difference_vs_gain_1": 4.263256414560601e-14,
+        "recomputed_epoch_count": 160
+      }
+    },
+    "1.0": {
+      "A1": {
+        "alarm_agreement_vs_gain_1": 1.0,
+        "maximum_score_difference_vs_gain_1": 0.0,
+        "recomputed_epoch_count": 160
+      },
+      "A2": {
+        "alarm_agreement_vs_gain_1": 1.0,
+        "maximum_score_difference_vs_gain_1": 0.0,
+        "recomputed_epoch_count": 160
+      }
+    },
+    "1.5": {
+      "A1": {
+        "alarm_agreement_vs_gain_1": 0.99375,
+        "maximum_score_difference_vs_gain_1": 7.105427357601002e-14,
+        "recomputed_epoch_count": 160
+      },
+      "A2": {
+        "alarm_agreement_vs_gain_1": 1.0,
+        "maximum_score_difference_vs_gain_1": 4.263256414560601e-14,
+        "recomputed_epoch_count": 160
+      }
+    },
+    "2.0": {
+      "A1": {
+        "alarm_agreement_vs_gain_1": 1.0,
+        "maximum_score_difference_vs_gain_1": 0.0,
+        "recomputed_epoch_count": 160
+      },
+      "A2": {
+        "alarm_agreement_vs_gain_1": 1.0,
+        "maximum_score_difference_vs_gain_1": 0.0,
+        "recomputed_epoch_count": 160
+      }
+    }
   },
-  "maximum_score_differences": {
-    "0.5": 0.0,
-    "0.75": 7.460698725481052e-14,
-    "1": 0.0,
-    "1.5": 7.460698725481052e-14,
-    "2": 0.0
-  },
-  "status": "REAL_NORMAL_CONTROL"
+  "status": "REAL_NORMAL_RECOMPUTED_SCORES_AND_ALARMS",
+  "threshold_source": "fixed gain=1 cleanStatic calibration q99"
 }

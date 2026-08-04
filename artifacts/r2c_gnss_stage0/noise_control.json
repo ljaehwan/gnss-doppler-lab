@@ -1,19 +1,18 @@
 {
-  "matched_power_and_lower_cn0_claim": "not separately identifiable from exported taps",
   "status": "REAL_NORMAL_COMPLEX_INJECTION_MECHANICS_ONLY",
   "trials": [
     {
-      "median_A1": 24.833933492740755,
+      "median_A1": 22.93421728104283,
       "q99_alarm_rate": 0.0,
       "relative_sigma": 0.01
     },
     {
-      "median_A1": 14.198987994646831,
+      "median_A1": 17.44172673649267,
       "q99_alarm_rate": 0.0,
       "relative_sigma": 0.05
     },
     {
-      "median_A1": 9.170102231345561,
+      "median_A1": 11.048866167719742,
       "q99_alarm_rate": 0.0,
       "relative_sigma": 0.1
     }

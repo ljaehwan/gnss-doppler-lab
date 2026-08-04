@@ -1,3 +1,3 @@
-# R2C-GNSS Stage-0 real-data correction
+# R2C-GNSS Stage-0 full follow-up
 
-Verdict: `INCONCLUSIVE`. The prior `DATA_INVALID` result at `75ff99b` is superseded: external receiver-produced complex nine-tap TEXBAT inputs were discovered and geometry-free A1/A2 and power controls were evaluated. Geometry-dependent Full/A3, neural A4, and contract-matched B0 remain unavailable in this bounded run; no LOS was fabricated. Synthetic complex controls validate mechanics only. See `docs/R2C_GNSS_STAGE0.md`.
+Verdict: `NOT_SUPPORTED`. Authentic complex taps and time-aligned LOS support A1/A2/A3/A4/Full evaluation after global deterministic de-duplication. The preregistered physics contribution criteria are not all met. The old repository-local-input `DATA_INVALID` rationale is superseded.

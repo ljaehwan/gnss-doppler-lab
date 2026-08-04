@@ -1,4 +1,7 @@
 {
-  "reason": "no validated time-aligned LOS score was produced; delay/LOS pairing was not fabricated",
-  "status": "MODEL_SPECIFIC_UNAVAILABLE"
+  "decrease": 342.83460700829585,
+  "destroyed_shared_score": 1.3885671484967383,
+  "original_shared_score": 344.2231741567926,
+  "passes": true,
+  "status": "RECOMPUTED_AUTHENTIC_LOS_PAIRING_SHUFFLE"
 }
