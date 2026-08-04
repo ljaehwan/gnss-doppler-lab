@@ -19,27 +19,27 @@ TAPS=np.arange(-.5,.5001,.125); GRID=np.arange(-.5,.5001,.125)
 
 def test_b0_prompt_normalize_then_mean_inclusive_and_no_first_row_substitution():
     rows=[]
-    for t,prompt,e4 in [(0.,2.,2.),(.5,4.,12.),(1.,8.,8.),(1.5,2.,4.)]:
+    for t,prompt,e4 in [(0.,2.,2.),(.25,2.,4.),(.5,4.,12.),(1.,8.,8.),(1.5,2.,4.)]:
         row={"time_s":t,"prn":3}
         for tap in ("E4","E3","E2","E","P","L","L2","L3","L4"): row[f"tap_{tap}"]=prompt
         row["tap_E4"]=e4; rows.append(row)
     nodes=build_b0_node_windows(pd.DataFrame(rows),run_id="r")
     assert list(nodes.columns[-9:])==list(B0_FEATURES)
-    assert nodes.iloc[0].epoch_count==3 # inclusive [0,1]
-    assert nodes.iloc[0].tap_E4_rel_prompt_mean==pytest.approx((1+3+1)/3)
+    assert nodes.iloc[0].epoch_count==4 # inclusive [0,1]
+    assert nodes.iloc[0].tap_E4_rel_prompt_mean==pytest.approx((1+2+3+1)/4)
     assert nodes.iloc[0].tap_E4_rel_prompt_mean != 1 # cannot be raw first row
     assert nodes.iloc[0].window_end_s==nodes.iloc[0].window_start_s+1
 
 
 def test_b0_sequence_rejects_gap_duplicate_and_schema_order():
-    base={"run_id":"r","prn":1,"window_start_s":0.,"window_end_s":1.,"window_mid_s":.5,"epoch_count":2,
+    base={"run_id":"r","prn":1,"channel":0,"segment_index":0,"window_start_s":0.,"window_end_s":1.,"window_mid_s":.5,"epoch_count":4,
           **{f:1. for f in B0_FEATURES}}
-    required=["run_id","prn","window_bin_s","window_start_s","window_end_s","window_mid_s","epoch_count",*B0_FEATURES]
+    required=["run_id","prn","channel","segment_index","window_bin_s","window_start_s","window_end_s","window_mid_s","epoch_count",*B0_FEATURES]
     frame=pd.DataFrame([{**base,"window_bin_s":0.},{**base,"window_bin_s":2.,"window_start_s":1.}])[required]
     with pytest.raises(ValueError,match="gap"): validate_b0_nodes(frame)
     duplicate=pd.concat([frame.iloc[:1],frame.iloc[:1]])
     with pytest.raises(ValueError,match="duplicate"): validate_b0_nodes(duplicate)
-    with pytest.raises(ValueError,match="schema/order"): validate_b0_nodes(frame[list(reversed(frame.columns))])
+    with pytest.raises(ValueError,match="feature order"): validate_b0_nodes(frame[list(reversed(frame.columns))])
 
 
 def test_b0_replay_known_binomial_and_recording_reset():
@@ -88,27 +88,27 @@ def synth(beta=(20.,-15.,7.,80.), epochs=2, phase=.4):
 
 
 def test_joint_all_epoch_bic_identity_beta_recovery_and_permutations():
-    provider,los,obs=synth(); candidates=[(0,0,0,0),(20,-15,7,80)]
+    provider,los,obs=synth()
     h0=joint_profile_glrt(obs,los,provider,TAPS,GRID,hypothesis="H0")
     ind=joint_profile_glrt(obs,los,provider,TAPS,GRID,hypothesis="H1-independent")
-    shared=joint_profile_glrt(obs,los,provider,TAPS,GRID,hypothesis="H1-shared",beta_candidates_m=candidates)
-    assert h0.epoch_count==10 and h0.n==2*9*10 and h0.k==20
-    assert ind.k==45 and shared.k==44
+    shared=joint_profile_glrt(obs,los,provider,TAPS,GRID,hypothesis="H1-shared")
+    assert h0.epoch_count==10 and h0.n==2*9*10 and h0.k==25
+    assert ind.k==50 and shared.k==49
     assert shared.bic==pytest.approx(-2*shared.log_likelihood+shared.k*np.log(shared.n))
     assert shared.score==pytest.approx(2*(shared.log_likelihood-h0.log_likelihood)-(shared.k-h0.k)*np.log(shared.n))
-    assert shared.beta_m==(20.,-15.,7.,80.) and shared.rss < h0.rss
+    assert shared.beta_m==pytest.approx((20.,-15.,7.,80.),abs=2.) and shared.rss < h0.rss
     order=[5,2,4,1,3]; perm={p:obs[p] for p in order}; plos={p:los[p] for p in order}
-    assert joint_profile_glrt(perm,plos,provider,TAPS,GRID,hypothesis="H1-shared",beta_candidates_m=candidates).score==pytest.approx(shared.score)
+    assert joint_profile_glrt(perm,plos,provider,TAPS,GRID,hypothesis="H1-shared").score==pytest.approx(shared.score,rel=1e-6)
     for p in obs: obs[p]=obs[p][::-1]
-    assert joint_profile_glrt(obs,los,provider,TAPS,GRID,hypothesis="H1-shared",beta_candidates_m=candidates).score==pytest.approx(shared.score)
+    assert joint_profile_glrt(obs,los,provider,TAPS,GRID,hypothesis="H1-shared").score==pytest.approx(shared.score,rel=1e-6)
 
 
 def test_joint_rank_dof_condition_and_nonconvergence_fail_closed():
     provider,los,obs=synth(); four={p:obs[p] for p in list(obs)[:4]}; flos={p:los[p] for p in four}
-    fit=joint_profile_glrt(four,flos,provider,TAPS,GRID,hypothesis="H1-shared",beta_candidates_m=[(0,0,0,0)])
+    fit=joint_profile_glrt(four,flos,provider,TAPS,GRID,hypothesis="H1-shared")
     assert not fit.valid and fit.reason=="insufficient_prns"
-    fit=joint_profile_glrt(obs,los,provider,TAPS,GRID,hypothesis="H1-shared",beta_candidates_m=[(1e9,0,0,0)])
-    assert not fit.valid and fit.reason=="nonconvergence_or_boundary"
+    fit=joint_profile_glrt(obs,los,provider,TAPS,GRID,hypothesis="H1-shared",beta_bounds_m=((1e9,1e9+1),)*4,optimizer_starts=[(1e9,)*4])
+    assert not fit.valid and fit.reason=="boundary_or_nonconvergence"
 
 
 def test_detectors_are_distinct_and_geometry_invalid_is_unavailable():
@@ -152,8 +152,8 @@ def test_two_layer_truth_table_b0_orthogonal_and_disqualifier_precedence():
 def test_calibration_pauc_and_actual_full_controls():
     assert set(calibration_thresholds(range(200),["normal_calibration"]*200))=={"q99","q99.5","target_fpr_1pct"}
     assert normalized_pauc([0,0,1,1],[0,1,2,3])==pytest.approx(1.)
-    y=np.ones((6,9),complex); los=geometry()
-    controls=run_full_controls(lambda value,pairing:float(np.mean(np.abs(value/value[:,4,None]))+sum((pairing or {}).keys())),y,los)
+    y={p:np.ones((2,9),complex) for p in geometry()}; los=geometry()
+    controls=run_full_controls(lambda value,pairing:float(sum(np.mean(np.abs(v/v[:,4,None])) for v in value.values())+sum((pairing or {}).keys())),y,los,20.)
     assert controls["computed_rows"]>=13 and all("pre_score" in r and "post_score" in r for r in controls["rows"])
 
 
@@ -169,14 +169,14 @@ def test_verifier_rejects_data_and_regenerated_hash_tamper(tmp_path):
     spec=importlib.util.spec_from_file_location("verify",Path(__file__).parents[1]/"scripts/verify_r2c_gnss_stage0_fix.py")
     verifier=importlib.util.module_from_spec(spec); spec.loader.exec_module(verifier)
     root=tmp_path/"r2c_gnss_stage0_fix"; root.mkdir(); (root/"plots").mkdir()
-    for name in verifier.FILES:
+    for name in verifier.TOP_LEVEL_FILES:
         path=root/name
         if name.endswith(".csv"): path.write_text("detector,ll0,ll1,n,k0,k1,score\nA1,0,1,18,2,4,-3.780743516\n")
         else: path.write_text("{}\n")
     (root/"per_epoch_scores.csv").write_text("detector,ll0,ll1,n,k0,k1,score\nFull,0,1,18,2,4,999\n")
     hashes={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in root.iterdir() if p.is_file() and p.name!="hashes.json"}
     (root/"hashes.json").write_text(json.dumps({"files":hashes}))
-    assert any("likelihood/BIC" in e for e in verifier.verify(root))
+    assert any("BIC identity" in e for e in verifier.verify(root))
 
 
 def test_neural_conditioner_schema_training_and_energy_separation():

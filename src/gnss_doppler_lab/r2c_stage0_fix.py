@@ -36,7 +36,8 @@ def _sha256(path: Path) -> str:
     return h.hexdigest()
 
 
-def build_b0_node_windows(rows, *, run_id: str, window_s: float = 1., stride_s: float = .5):
+def build_b0_node_windows(rows, *, run_id: str, window_s: float = 1., stride_s: float = .5,
+                          min_epochs: int = 4):
     """Produce historical inclusive-endpoint, Prompt-normalize-then-mean nodes.
 
     ``rows`` is a pandas frame with time_s, prn and complex or real tap_E4..tap_L4.
@@ -48,9 +49,11 @@ def build_b0_node_windows(rows, *, run_id: str, window_s: float = 1., stride_s: 
     if missing := sorted(required - set(rows.columns)):
         raise ValueError(f"B0 source rows missing columns: {missing}")
     frame = rows.copy()
-    if frame.duplicated(["time_s", "prn"]).any():
+    for column,default in (("segment_index",0),("channel",0)):
+        if column not in frame: frame[column]=default
+    if frame.duplicated(["time_s", "prn", "channel", "segment_index"]).any():
         raise ValueError("duplicate B0 source epoch/PRN")
-    frame = frame.sort_values(["prn", "time_s"], kind="mergesort")
+    frame = frame.sort_values(["segment_index","channel","prn", "time_s"], kind="mergesort")
     if not np.isfinite(frame["time_s"].to_numpy(float)).all():
         raise ValueError("nonfinite B0 time")
     taps = ("E4", "E3", "E2", "E", "P", "L", "L2", "L3", "L4")
@@ -59,11 +62,12 @@ def build_b0_node_windows(rows, *, run_id: str, window_s: float = 1., stride_s: 
     last = math.floor((float(frame.time_s.max()) - window_s) / stride_s) * stride_s
     for start in np.arange(first, last + stride_s / 2, stride_s):
         selected = frame[(frame.time_s >= start - 1e-9) & (frame.time_s <= start + window_s + 1e-9)]
-        for prn, group in selected.groupby("prn", sort=True):
+        for (segment,channel,prn), group in selected.groupby(["segment_index","channel","prn"], sort=True):
             prompt = group["tap_P"].to_numpy()
-            if len(group) == 0 or np.any(~np.isfinite(np.abs(prompt))) or np.any(np.abs(prompt) == 0):
+            if len(group) < min_epochs or np.any(~np.isfinite(np.abs(prompt))) or np.any(np.abs(prompt) == 0):
                 continue
-            row = {"run_id": run_id, "prn": int(prn), "window_bin_s": float(start / stride_s),
+            row = {"run_id": run_id, "prn": int(prn), "channel":int(channel),"segment_index":int(segment),
+                   "window_bin_s": float(start+stride_s),
                    "window_start_s": float(start), "window_end_s": float(start + window_s),
                    "window_mid_s": float(start + window_s / 2), "epoch_count": int(len(group))}
             # Native features normalize every epoch by its own Prompt, then mean.
@@ -71,28 +75,62 @@ def build_b0_node_windows(rows, *, run_id: str, window_s: float = 1., stride_s: 
                 ratio = np.abs(group[f"tap_{tap}"].to_numpy() / prompt)
                 row[f"tap_{tap}_rel_prompt_mean"] = float(np.mean(ratio))
             output.append(row)
-    return pd.DataFrame(output, columns=["run_id", "prn", "window_bin_s", "window_start_s",
+    return pd.DataFrame(output, columns=["run_id", "prn", "channel","segment_index","window_bin_s", "window_start_s",
                                                "window_end_s", "window_mid_s", "epoch_count", *B0_FEATURES])
 
 
 def validate_b0_nodes(frame, *, seq_len: int = 12) -> dict:
-    required = ["run_id", "prn", "window_bin_s", "window_start_s", "window_end_s",
+    required = ["run_id", "prn", "channel","segment_index","window_bin_s", "window_start_s", "window_end_s",
                 "window_mid_s", "epoch_count", *B0_FEATURES]
-    if list(frame.columns[:len(required)]) != required:
-        raise ValueError("B0 node schema/order mismatch")
-    numeric = frame[[c for c in required if c != "run_id"]].apply(lambda x: np.asarray(x, float))
+    if missing := [c for c in required if c not in frame.columns]:
+        raise ValueError(f"B0 node schema missing: {missing}")
+    if [c for c in frame.columns if c in B0_FEATURES] != list(B0_FEATURES):
+        raise ValueError("B0 node feature order mismatch")
+    numeric = frame[[c for c in required if c not in ("run_id","prn")]].apply(lambda x: np.asarray(x, float))
     if frame.empty or not np.isfinite(numeric.to_numpy()).all() or np.any(frame.epoch_count <= 0):
         raise ValueError("B0 nodes must be nonempty, finite, and supported")
-    if frame.duplicated(["run_id", "prn", "window_bin_s"]).any():
+    if frame.duplicated(["run_id", "prn","channel","segment_index", "window_bin_s"]).any():
         raise ValueError("duplicate B0 node")
-    for _, group in frame.groupby(["run_id", "prn"], sort=False):
+    for _, group in frame.groupby(["run_id", "prn","channel","segment_index"], sort=False):
         bins = np.sort(group.window_bin_s.to_numpy(float))
-        if len(bins) > 1 and not np.allclose(np.diff(bins), 1., atol=1e-9):
+        if len(bins) > 1 and not np.allclose(np.diff(bins), .5, atol=1e-9):
             raise ValueError("gap or ordering error in B0 PRN-local sequence")
     return {"feature_columns": list(B0_FEATURES), "seq_len": seq_len,
             "node_rows": int(len(frame)), "score_rows": int(sum(max(0, len(g)-seq_len)
-            for _, g in frame.groupby(["run_id", "prn"]))) ,
+            for _, g in frame.groupby(["run_id", "prn","channel","segment_index"]))) ,
             "availability": "target_window_end"}
+
+
+def score_b0_nodes(frame, checkpoint: Mapping, *, device="cpu"):
+    """Authentic checkpoint/scaler inference over contiguous native node sequences."""
+    import pandas as pd
+    import torch
+    validate_b0_nodes(frame); validate_b0_checkpoint(checkpoint)
+    # Architecture is the tracked native producer's exact serialized config.
+    import importlib.util
+    producer=Path(__file__).resolve().parents[2]/"scripts/train_prn_node_gru.py"
+    spec=importlib.util.spec_from_file_location("r2c_b0_producer",producer); module=importlib.util.module_from_spec(spec)
+    import sys; sys.modules[spec.name]=module; spec.loader.exec_module(module)
+    cfg=module.TrainConfig(**checkpoint["config"]); model=module.PrnLocalGRU(9,cfg).to(device)
+    model.load_state_dict(checkpoint["model_state_dict"],strict=True); model.eval()
+    mean=np.asarray(checkpoint["standardizer"]["node_mean"],np.float32)
+    std=np.asarray(checkpoint["standardizer"]["node_std"],np.float32); rows=[]
+    keys=["run_id","prn","channel","segment_index"]
+    with torch.no_grad():
+        for identity,g in frame.groupby(keys,sort=True):
+            g=g.sort_values("window_bin_s",kind="mergesort").reset_index(drop=True)
+            x=module.standardize(g[list(B0_FEATURES)].to_numpy(np.float32),mean,std)
+            for target in range(12,len(g)):
+                history=g.iloc[target-12:target]
+                expected=np.arange(float(g.iloc[target].window_bin_s)-6.,float(g.iloc[target].window_bin_s),.5)
+                if not np.allclose(history.window_bin_s.to_numpy(float),expected,atol=1e-9): continue
+                pred=model(torch.tensor(x[target-12:target][None],device=device)).cpu().numpy()[0]
+                score=float(np.sqrt(np.mean((pred-x[target])**2))); src=g.iloc[target]
+                rows.append({**dict(zip(keys,identity)),"target_window_index":target,
+                  "window_bin_s":float(src.window_bin_s),"window_start_s":float(src.window_start_s),
+                  "window_end_s":float(src.window_end_s),"window_mid_s":float(src.window_mid_s),
+                  "availability_time_s":float(src.window_end_s),"prn_node_rmse":score})
+    return pd.DataFrame(rows)
 
 
 def validate_b0_checkpoint(checkpoint: Mapping, checkpoint_path: Path | None = None) -> dict:
@@ -266,12 +304,14 @@ class ComplexWhitener:
     pseudo_covariance: np.ndarray | None = None
     inverse_sqrt: np.ndarray | None = None
     diagnostics: dict | None = None
+    mean: np.ndarray | None = None
 
     def fit(self, residuals, roles, row_ids: Sequence[str] | None = None):
         z = np.asarray(residuals, complex)
         if z.ndim != 2 or z.shape[1] != 9 or len(roles) != len(z) or set(roles) != {"normal_train"}:
             raise ValueError("whitening fit requires only cleanStatic normal_train nine-tap residuals")
-        centered = z-z.mean(0); denom=max(len(z)-1, 1)
+        self.mean = z.mean(0)
+        centered = z-self.mean; denom=max(len(z)-1, 1)
         cov = centered.T@centered.conj()/denom
         pseudo = centered.T@centered/denom
         target = np.trace(cov).real/len(cov)*np.eye(len(cov))
@@ -297,8 +337,18 @@ class ComplexWhitener:
         if self.covariance is None: raise RuntimeError("whitener is not fitted")
         encode=lambda a: {"real":a.real.tolist(), "imag":a.imag.tolist()}
         return {"shrinkage":self.shrinkage, "eigen_floor_fraction":self.eigen_floor_fraction,
+                "mean":encode(self.mean),
                 "covariance":encode(self.covariance), "pseudo_covariance":encode(self.pseudo_covariance),
                 "inverse_sqrt":encode(self.inverse_sqrt), "diagnostics":self.diagnostics}
+
+    @classmethod
+    def deserialize(cls, value):
+        decode=lambda x:np.asarray(x["real"],float)+1j*np.asarray(x["imag"],float)
+        obj=cls(float(value["shrinkage"]),float(value["eigen_floor_fraction"]))
+        obj.mean=decode(value["mean"]); obj.covariance=decode(value["covariance"])
+        obj.pseudo_covariance=decode(value["pseudo_covariance"]); obj.inverse_sqrt=decode(value["inverse_sqrt"])
+        obj.diagnostics=dict(value["diagnostics"])
+        return obj
 
 
 @dataclass(frozen=True)
@@ -306,6 +356,7 @@ class JointFit:
     hypothesis: str; log_likelihood: float; rss: float; n: int; k: int; bic: float
     score: float; delays_chips: tuple[float, ...]; beta_m: tuple[float, ...] | None
     converged: bool; boundary: bool; valid: bool; reason: str | None; epoch_count: int; prn_count: int
+    null_log_likelihood: float | None = None; null_k: int | None = None
 
 
 def _profile_epoch(y, columns):
@@ -316,63 +367,81 @@ def _profile_epoch(y, columns):
 
 def joint_profile_glrt(observations: Mapping[int, np.ndarray], los: Mapping[int, np.ndarray],
                        provider: TemplateProvider, taps: Sequence[float], delay_grid: Sequence[float],
-                       *, hypothesis: str, beta_candidates_m: Iterable[Sequence[float]] | None = None,
+                       *, hypothesis: str, whitener: ComplexWhitener | None = None,
+                       beta_bounds_m: Sequence[tuple[float,float]] = ((-150,150),(-150,150),(-150,150),(-150,150)),
+                       optimizer_starts: Sequence[Sequence[float]] | None = None,
                        maximum_condition_number: float = 1e6) -> JointFit:
-    """Profile amplitudes on every epoch for H0, independent, or shared H1."""
-    taps=np.asarray(taps,float); grid=np.asarray(delay_grid,float)
-    prns=sorted(observations); epochs=sum(len(np.asarray(observations[p])) for p in prns)
-    if not prns or any(np.asarray(observations[p]).ndim != 2 for p in prns): raise ValueError("PRN epoch matrices required")
-    n=2*len(taps)*epochs
-    base=provider.evaluate(taps)
-    def rss_for(delays):
-        total=0.
+    """Fixed-covariance proper-complex all-epoch profile likelihood.
+
+    Delays and beta are optimized from observations. Evaluation residual variance
+    is never estimated. ``optimizer_starts`` are fixed initializations, not
+    candidate solutions or injected truth.
+    """
+    from scipy.optimize import minimize
+    taps=np.asarray(taps,float); grid=np.unique(np.asarray(delay_grid,float)); prns=sorted(observations)
+    arrays={p:np.asarray(observations[p],complex) for p in prns}
+    if not prns or any(a.ndim!=2 or a.shape[1:]!=(len(taps),) or not np.isfinite(a).all() for a in arrays.values()):
+        raise ValueError("finite PRN epoch matrices aligned to taps required")
+    epochs=sum(len(a) for a in arrays.values()); n=2*len(taps)*epochs
+    if whitener is None:
+        whitener=ComplexWhitener(shrinkage=0,eigen_floor_fraction=1e-12)
+        whitener.mean=np.zeros(len(taps),complex); whitener.covariance=np.eye(len(taps)); whitener.inverse_sqrt=np.eye(len(taps)); whitener.pseudo_covariance=np.zeros((len(taps),len(taps)),complex); whitener.diagnostics={}
+    if whitener.inverse_sqrt is None or whitener.mean is None: raise ValueError("frozen fitted whitener required")
+    W=whitener.inverse_sqrt; mu=whitener.mean; logdet=float(np.linalg.slogdet(whitener.covariance)[1])
+    def profile(y, columns):
+        design=np.column_stack(columns); wd=W@design; wy=W@(y-mu)
+        amp,_,rank,s=np.linalg.lstsq(wd,wy,rcond=None)
+        if rank<len(columns) or (len(s)>1 and s[-1]<=s[0]*1e-10): return np.inf
+        r=W@(y-design@amp-mu); return float(np.vdot(r,r).real)
+    def prn_rss(p, authentic_delay, second_delay=None):
+        first=provider.evaluate(taps-authentic_delay); columns=[first]
+        if second_delay is not None:
+            if abs(second_delay)<1e-10: return np.inf
+            columns.append(provider.evaluate(taps-authentic_delay-second_delay))
+        return sum(profile(y,columns) for y in arrays[p])
+    authentic={}; rss0=0.
+    for p in prns:
+        value,d=min((prn_rss(p,float(d)),float(d)) for d in grid)
+        rss0+=value; authentic[p]=d
+    k0=2*epochs+len(prns)
+    if hypothesis=="H0": rss,k,delays,beta,boundary,converged=rss0,k0,tuple(authentic[p] for p in prns),None,False,True
+    elif hypothesis=="H1-independent":
+        rss=0.; second={}; boundary=False
         for p in prns:
-            second=provider.evaluate(taps-float(delays[p])) if delays is not None else None
-            for y in np.asarray(observations[p],complex):
-                value, rank=_profile_epoch(y,[base] if second is None else [base,second])
-                if second is not None and rank < 2: return np.inf
-                total += value
-        return total
-    rss0=rss_for(None)
-    k0=2*epochs
-    if hypothesis == "H0": rss, k, delays, beta = rss0, k0, (), None
-    elif hypothesis == "H1-independent":
-        chosen={}; rss=0.
-        for p in prns:
-            candidates=[(rss_for({q:(d if q==p else 0.) for q in prns}),d) for d in grid]
-            # score each PRN independently, not by contaminating other PRNs
-            candidates=[]
-            for d in grid:
-                subtotal=sum(_profile_epoch(y,[base,provider.evaluate(taps-d)])[0] for y in observations[p])
-                candidates.append((subtotal,float(d)))
-            value,d=min(candidates); rss+=value; chosen[p]=d
-        k=4*epochs+len(prns); delays=tuple(chosen[p] for p in prns); beta=None
-    elif hypothesis == "H1-shared":
+            feasible=[(prn_rss(p,float(da),float(ds)),float(da),float(ds))
+                      for da in grid for ds in grid if abs(ds)>1e-10]
+            value,da,d=min(feasible); rss+=value; authentic[p]=da; second[p]=d
+            boundary|=da in (grid[0],grid[-1]) or d in (grid[0],grid[-1])
+        k=4*epochs+2*len(prns); delays=tuple(second[p] for p in prns); beta=None; converged=not boundary
+    elif hypothesis=="H1-shared":
         u=np.asarray([los[p] for p in prns],float); design=np.column_stack([-u,np.ones(len(u))])
         rank=np.linalg.matrix_rank(design); cond=np.linalg.cond(design)
         if len(prns)<5 or rank<4 or len(prns)-rank<1 or cond>maximum_condition_number:
-            reason="insufficient_prns" if len(prns)<5 else "rank_or_dof_or_condition"
-            return JointFit(hypothesis,float("nan"),float("nan"),n,4*epochs+4,float("nan"),float("nan"),(),None,False,False,False,reason,epochs,len(prns))
-        candidates=list(beta_candidates_m or ())
-        if not candidates: raise ValueError("shared H1 requires deterministic beta candidates")
-        evaluated=[]
-        for candidate in candidates:
-            b=np.asarray(candidate,float)
-            if b.shape != (4,) or not np.isfinite(b).all(): continue
-            seconds={p:float((-np.dot(los[p],b[:3])+b[3])/C_M_S*1_023_000.) for p in prns}
-            if any(d<grid.min() or d>grid.max() for d in seconds.values()): continue
-            evaluated.append((rss_for(seconds),b,seconds))
-        if not evaluated:
-            return JointFit(hypothesis,float("nan"),float("nan"),n,4*epochs+4,float("nan"),float("nan"),(),None,False,True,False,"nonconvergence_or_boundary",epochs,len(prns))
-        rss,b,chosen=min(evaluated,key=lambda x:x[0]); k=4*epochs+4
-        delays=tuple(chosen[p] for p in prns); beta=tuple(map(float,b))
+            return JointFit(hypothesis,np.nan,np.nan,n,4*epochs+len(prns)+4,np.nan,np.nan,(),None,False,False,False,
+                            "insufficient_prns" if len(prns)<5 else "rank_or_dof_or_condition",epochs,len(prns))
+        bounds=tuple((float(a),float(b)) for a,b in beta_bounds_m)
+        if len(bounds)!=4 or any(a>=b for a,b in bounds): raise ValueError("four valid fixed beta bounds required")
+        def objective(b):
+            seconds={p:float((-np.dot(los[p],b[:3])+b[3])/C_M_S*1_023_000) for p in prns}
+            if any(abs(d)<1e-10 or d<grid[0] or d>grid[-1] for d in seconds.values()): return 1e100
+            return sum(min(prn_rss(p,float(da),seconds[p]) for da in grid) for p in prns)
+        starts=list(optimizer_starts or ((0,0,0,25),(0,0,0,-25),(25,-25,10,50),(-25,25,-10,-50)))
+        results=[minimize(objective,np.clip(np.asarray(s,float),[a for a,b in bounds],[b for a,b in bounds]),
+                          method="Nelder-Mead",bounds=bounds,options={"maxiter":800,"xatol":1e-7,"fatol":1e-9}) for s in starts]
+        result=min(results,key=lambda x:float(x.fun)); b=np.asarray(result.x,float); rss=float(result.fun)
+        boundary=any(abs(b[i]-bounds[i][j])<1e-6 for i in range(4) for j in (0,1))
+        seconds={p:float((-np.dot(los[p],b[:3])+b[3])/C_M_S*1_023_000) for p in prns}
+        authentic={p:min(grid,key=lambda da:prn_rss(p,float(da),seconds[p])) for p in prns}
+        delays=tuple(seconds[p] for p in prns); beta=tuple(map(float,b)); k=4*epochs+len(prns)+4
+        converged=bool(result.success and np.isfinite(rss) and rss<1e99 and not boundary)
     else: raise ValueError("unknown hypothesis")
-    floor=max(np.finfo(float).tiny, n*np.finfo(float).eps)
-    ll=-n/2*(math.log(2*math.pi)+1+math.log(max(2*rss/n,floor)))
-    bic=-2*ll+k*math.log(n)
-    ll0=-n/2*(math.log(2*math.pi)+1+math.log(max(2*rss0/n,floor)))
-    score=0. if hypothesis=="H0" else 2*(ll-ll0)-(k-k0)*math.log(n)
-    return JointFit(hypothesis,ll,rss,n,k,bic,score,delays,beta,True,False,True,None,epochs,len(prns))
+    ll0=-rss0-epochs*(len(taps)*math.log(math.pi)+logdet)
+    ll=-rss-epochs*(len(taps)*math.log(math.pi)+logdet)
+    bic=-2*ll+k*math.log(n); score=0. if hypothesis=="H0" else 2*(ll-ll0)-(k-k0)*math.log(n)
+    valid=bool(converged and np.isfinite(rss) and not boundary)
+    reason=None if valid else "boundary_or_nonconvergence"
+    return JointFit(hypothesis,float(ll),float(rss),n,int(k),float(bic),float(score),delays,beta,
+                    bool(converged),bool(boundary),valid,reason,epochs,len(prns),float(ll0),int(k0))
 
 
 def detector_scores(individual_scores: Mapping[int,float], analytic_shared: JointFit | None,
@@ -400,6 +469,13 @@ def normalized_pauc(labels, scores, maximum_fpr=.05):
     return float(np.trapezoid(tp,fp)/maximum_fpr)
 
 
+def ranking_metrics(labels, scores):
+    from sklearn.metrics import average_precision_score, roc_auc_score
+    y=np.asarray(labels,bool); s=np.asarray(scores,float)
+    return {"auroc":float(roc_auc_score(y,s)),"pr_auc":float(average_precision_score(y,s)),
+            "normalized_pauc_fpr_lte_0.05":normalized_pauc(y,s,.05)}
+
+
 def calibration_thresholds(scores, roles):
     if set(roles)!={"normal_calibration"}: raise ValueError("threshold calibration is cleanStatic normal_calibration only")
     x=np.asarray(scores,float)
@@ -408,7 +484,8 @@ def calibration_thresholds(scores, roles):
             "target_fpr_1pct":float(np.quantile(x,.99,method="higher"))}
 
 
-def detection_metrics(availability_times, labels, alarms, recording_ids, *, cadence_s=.5, sustained_count=3):
+def detection_metrics(availability_times, labels, alarms, recording_ids, *, cadence_s=.5, sustained_count=3,
+                      attack_onset_s=None):
     """Causal alarm metrics using score availability, with recording/gap resets."""
     t=np.asarray(availability_times,float); y=np.asarray(labels,bool); a=np.asarray(alarms,bool); rec=np.asarray(recording_ids)
     if not (len(t)==len(y)==len(a)==len(rec)): raise ValueError("metric rows must align")
@@ -419,7 +496,7 @@ def detection_metrics(availability_times, labels, alarms, recording_ids, *, cade
         if run>=sustained_count: sustained[i]=True
         previous=t[i]; previous_rec=rec[i]
     attack=np.flatnonzero(y); first=float(t[attack][np.argmax(sustained[attack])]) if len(attack) and sustained[attack].any() else None
-    onset=float(t[attack].min()) if len(attack) else None
+    onset=float(attack_onset_s) if attack_onset_s is not None else float(t[attack].min()) if len(attack) else None
     return {"attack_detection_rate":float(a[y].mean()) if y.any() else None,
       "sustained_detection_rate":float(sustained[y].mean()) if y.any() else None,
       "first_sustained_delay_s":None if first is None else first-onset,
@@ -435,15 +512,20 @@ def paired_block_bootstrap(times, recording_ids, labels, left, right, *, repetit
     blocks=[]
     for recording in np.unique(rec):
         idx=np.flatnonzero(rec==recording); origin=t[idx].min(); keys=np.floor((t[idx]-origin)/block_s).astype(int)
-        blocks.extend(idx[keys==key] for key in np.unique(keys))
+        for key in np.unique(keys):
+            block=idx[keys==key]
+            if t[block].max()-t[block].min()>=block_s-.5-1e-9: blocks.append(block)
     if not blocks: raise ValueError("no common paired blocks")
-    estimate=normalized_pauc(y,a)-normalized_pauc(y,b); rng=np.random.default_rng(seed); values=[]
-    for _ in range(repetitions):
-        chosen=[blocks[i] for i in rng.integers(0,len(blocks),len(blocks))]; idx=np.concatenate(chosen)
-        if y[idx].any() and (~y[idx]).any(): values.append(normalized_pauc(y[idx],a[idx])-normalized_pauc(y[idx],b[idx]))
-    if not values: raise ValueError("bootstrap samples contain no valid class pairs")
+    estimate=normalized_pauc(y,a)-normalized_pauc(y,b); rng=np.random.default_rng(seed); values=[]; draws=[]; attempts=0
+    while len(values)<repetitions:
+        attempts+=1
+        if attempts>repetitions*100: raise ValueError("unable to obtain exactly 2000 valid paired draws")
+        chosen=rng.integers(0,len(blocks),len(blocks)); idx=np.concatenate([blocks[i] for i in chosen])
+        if y[idx].any() and (~y[idx]).any():
+            values.append(normalized_pauc(y[idx],a[idx])-normalized_pauc(y[idx],b[idx])); draws.append(chosen.astype("<i8"))
     low,high=np.quantile(values,[.025,.975])
-    return {"repetitions":2000,"seed":seed,"block_s":10.,"common_events":int(common.sum()),
+    draw_hash=hashlib.sha256(np.concatenate(draws).tobytes()).hexdigest()
+    return {"repetitions":2000,"valid_draw_count":len(values),"attempt_count":attempts,"draw_index_sha256":draw_hash,"seed":seed,"block_s":10.,"common_events":int(common.sum()),
       "excluded_events":int((~common).sum()),"estimate":estimate,"ci95":[float(low),float(high)],
       "interpretation":"improvement demonstrated" if low>0 else "significant improvement not demonstrated"}
 
@@ -478,6 +560,33 @@ class SmallNuisanceConditioner:
           "fit_role":"cleanStatic normal_train"}
         return self
 
+    def predict(self, x):
+        import torch
+        if self.model is None: raise RuntimeError("conditioner is not fitted")
+        device=next(self.model.parameters()).device
+        value=torch.tensor((np.asarray(x,np.float32)-self.mean)/self.scale,device=device)
+        with torch.no_grad(): out=self.model(value).detach().cpu().numpy()
+        return out[:,:9]+1j*out[:,9:]
+
+    def serialize(self):
+        import torch
+        if self.model is None or self.summary is None: raise RuntimeError("conditioner is not fitted")
+        state={k:v.detach().cpu().numpy().tolist() for k,v in self.model.state_dict().items()}
+        return {"input_names":list(self.input_names),"hidden":self.hidden,"seed":self.seed,"with_energy":self.with_energy,
+                "mean":self.mean.tolist(),"scale":self.scale.tolist(),"state_dict":state,"summary":self.summary}
+
+    @classmethod
+    def deserialize(cls, value, *, device="cpu"):
+        import torch
+        obj=cls(value["input_names"],hidden=int(value["hidden"]),seed=int(value["seed"]),with_energy=bool(value["with_energy"]))
+        obj.mean=np.asarray(value["mean"],np.float32); obj.scale=np.asarray(value["scale"],np.float32)
+        obj.model=torch.nn.Sequential(torch.nn.Linear(len(obj.input_names),obj.hidden),torch.nn.Tanh(),torch.nn.Linear(obj.hidden,18)).to(device)
+        state={k:torch.tensor(v,dtype=obj.model.state_dict()[k].dtype,device=device) for k,v in value["state_dict"].items()}
+        obj.model.load_state_dict(state); obj.summary=dict(value["summary"])
+        packed=b"".join(v.detach().cpu().numpy().tobytes() for _,v in sorted(obj.model.state_dict().items()))
+        if hashlib.sha256(packed).hexdigest()!=obj.summary["weights_sha256"]: raise ValueError("conditioner weights hash mismatch")
+        return obj
+
 
 DISQUALIFIERS=("clean_dynamic_fpr","gain_invariance","noise_gain_alarms","relation_destruction",
                "geometry_removal","complex_second_source","shortcut_controls")
@@ -489,8 +598,10 @@ REQUIRED=("complex_provenance","time_los_alignment","geometry_coverage","clean_d
 def derive_two_layer_decision(gates: Mapping[str,Mapping[str,object]]) -> dict:
     """Pure frozen decision with evaluated-disqualifier precedence."""
     bad=[name for name in DISQUALIFIERS if gates.get(name,{}).get("status")=="FAIL"]
-    missing=[name for name in REQUIRED if gates.get(name,{}).get("status") not in {"PASS","FAIL"}]
-    failed=[name for name in REQUIRED if gates.get(name,{}).get("status")=="FAIL"]
+    coverage_evidence={"time_los_alignment","geometry_coverage"}
+    missing=[name for name in REQUIRED if gates.get(name,{}).get("status") not in {"PASS","FAIL"} or
+             (name in coverage_evidence and gates.get(name,{}).get("status")!="PASS")]
+    failed=[name for name in REQUIRED if name not in coverage_evidence and gates.get(name,{}).get("status")=="FAIL"]
     if bad: core="R2C_CORE_NOT_SUPPORTED"
     elif missing: core="R2C_CORE_INCONCLUSIVE"
     elif failed: core="R2C_CORE_NOT_SUPPORTED"
@@ -502,20 +613,47 @@ def derive_two_layer_decision(gates: Mapping[str,Mapping[str,object]]) -> dict:
             "observed_disqualifiers":bad,"missing_required_evidence":missing,"failed_required_gates":failed}
 
 
-def run_full_controls(score_fn: Callable[[np.ndarray, Mapping[int,np.ndarray]|None],float], y, los, *, seed=20260803):
-    """Execute perturbations through the supplied frozen Full path."""
-    rng=np.random.default_rng(seed); y=np.asarray(y,complex); base=float(score_fn(y,los)); rows=[]
-    def add(kind, params, changed, changed_los=los):
-        post=float(score_fn(changed,changed_los)); rows.append({"kind":kind,"parameters":params,
-            "pre_score":base,"post_score":post,"effect_size":post-base,"pre_alarm":False,"post_alarm":False})
-    for gain in (.5,.75,1.,1.5,2.): add("gain",{"gain":gain},y*gain)
-    slow=np.linspace(.75,1.25,len(y))[:,None]; add("slow_agc",{"minimum":.75,"maximum":1.25},y*slow)
-    for phase in (0.,math.pi/4,math.pi/2,math.pi): add("global_phase",{"radians":phase},y*np.exp(1j*phase))
-    power=float(np.mean(np.abs(y)**2))
-    for sigma in (.01,.05): add("awgn",{"sigma":sigma},y+sigma*np.sqrt(power/2)*(rng.normal(size=y.shape)+1j*rng.normal(size=y.shape)))
-    noise=np.sqrt(power/2)*(rng.normal(size=y.shape)+1j*rng.normal(size=y.shape)); add("matched_power_noise",{},noise)
-    scale=max(np.max(np.abs(y.real)),np.max(np.abs(y.imag)),1e-12); q=lambda a:np.round(a/scale*127)/127*scale
-    add("quantization",{"bits":8},q(y.real)+1j*q(y.imag))
-    if los:
-        keys=sorted(los); perm=keys[1:]+keys[:1]; add("relation_destruction",{"permutation":perm},y,{p:los[q] for p,q in zip(keys,perm)})
-    return {"seed":seed,"support_count":int(len(y)),"rows":rows,"computed_rows":len(rows)}
+def run_full_controls(score_fn: Callable, observations: Mapping[int,np.ndarray], los, threshold: float,
+                      provider: TemplateProvider | None = None, taps: Sequence[float] | None = None,
+                      *, seed=20260803):
+    """Run every control through the identical frozen Full scorer and threshold."""
+    rng=np.random.default_rng(seed); original={p:np.asarray(y,complex).copy() for p,y in observations.items()}
+    if not original: raise ValueError("Full controls require observations")
+    provider=provider or TemplateProvider.analytic(); taps=np.asarray(taps if taps is not None else np.arange(-.5,.5001,.125),float)
+    base=float(score_fn(original,los)); rows=[]
+    def transform(fn): return {p:fn(p,y.copy()) for p,y in original.items()}
+    def add(kind,params,changed,changed_los=los):
+        post=float(score_fn(changed,changed_los)); rows.append({"kind":kind,"parameters":params,"seed":seed,
+          "support_count":sum(len(x) for x in changed.values()),"pre_score":base,"post_score":post,
+          "effect_size":post-base,"pre_alarm":bool(base>threshold),"post_alarm":bool(post>threshold)})
+    for gain in (.5,.75,1.,1.5,2.): add("gain",{"gain":gain},transform(lambda p,y:y*gain))
+    add("slow_agc",{"minimum":.75,"maximum":1.25},transform(lambda p,y:y*np.linspace(.75,1.25,len(y))[:,None]))
+    for phase in (0.,math.pi/4,math.pi/2,math.pi): add("global_phase",{"radians":phase},transform(lambda p,y:y*np.exp(1j*phase)))
+    power=np.mean([np.mean(np.abs(y)**2) for y in original.values()])
+    def noisy(scale): return transform(lambda p,y:y+scale*np.sqrt(power/2)*(rng.normal(size=y.shape)+1j*rng.normal(size=y.shape)))
+    add("awgn",{"relative_sigma":.05},noisy(.05)); add("cn0_degradation",{"db":6.0},noisy(math.sqrt(10**(.6)-1)))
+    add("matched_power_noise",{"relative_power":1.0},transform(lambda p,y:np.sqrt(power/2)*(rng.normal(size=y.shape)+1j*rng.normal(size=y.shape))))
+    def quant(p,y):
+        scale=max(np.max(np.abs(y.real)),np.max(np.abs(y.imag)),1e-12)
+        return np.round(y.real/scale*127)/127*scale+1j*np.round(y.imag/scale*127)/127*scale
+    add("quantization",{"bits":8},transform(quant))
+    multipath={}
+    for index,(p,y) in enumerate(sorted(original.items())):
+        delay=(-.45+.13*index)% .8-.4; amp=.1+.03*(index%4); phase=rng.uniform(-math.pi,math.pi)
+        multipath[p]=y+amp*np.exp(1j*phase)*provider.evaluate(taps-delay)[None,:]*np.sqrt(np.mean(np.abs(y)**2))
+    add("non_shared_multipath",{"per_prn":True},multipath)
+    for delay in (-.35,.35):
+        for ratio in (.1,.25,.5,1.):
+            phase=float(rng.uniform(-math.pi,math.pi)); injected={}
+            for p,y in original.items():
+                component=provider.evaluate(taps-delay)[None,:]*np.exp(1j*phase)
+                component*=math.sqrt(ratio*np.mean(np.abs(y)**2)/max(np.mean(np.abs(component)**2),1e-15))
+                injected[p]=y+component
+            add("second_source_injection",{"delay_chips":delay,"power_ratio":ratio,"phase_rad":phase},injected)
+    keys=sorted(los); perm=keys[1:]+keys[:1]
+    add("relation_destruction",{"permutation":perm},original,{p:los[q] for p,q in zip(keys,perm)})
+    invariance=[r for r in rows if r["kind"] in {"gain","slow_agc","global_phase"}]
+    status="PASS" if all(r["pre_alarm"]==r["post_alarm"] for r in invariance) else "FAIL"
+    return {"seed":seed,"threshold":float(threshold),"support_count":sum(len(x) for x in original.values()),
+            "rows":rows,"computed_rows":len(rows),"status":status,
+            "criteria":{"invariance_alarm_agreement":sum(r["pre_alarm"]==r["post_alarm"] for r in invariance)/len(invariance)}}

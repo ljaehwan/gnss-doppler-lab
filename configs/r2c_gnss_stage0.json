@@ -1,15 +1,12 @@
 {
-  "schema": "gnss-doppler-lab.r2c-gnss-stage0-fix-config.v2",
+  "schema": "gnss-doppler-lab.r2c-gnss-stage0-config.v1",
   "task_id": "r2c-gnss-stage0-20260804",
   "dataset": "TEXBAT",
   "stage": "code-delay-only",
   "seed": 20260803,
   "cadence_s": 0.5,
   "tap_offsets_chips": [-0.5, -0.375, -0.25, -0.125, 0.0, 0.125, 0.25, 0.375, 0.5],
-  "delay_search_chips": {"minimum": -0.5, "maximum": 0.5, "step": 0.125, "minimum_separation": 0.125, "symmetric": true},
-  "template": {"minimum_empirical_support_chips": [-1.0, 1.0], "maximum_spacing_chips": 0.125, "fallback": "analytic_gps_ca_acf", "analytic_fallback_paper_comparison_ready": false},
-  "whitening": {"fit_source": "cleanStatic.normal_train", "shrinkage": 0.2, "eigen_floor_fraction": 0.000001, "proper_complex": true, "serialize_pseudo_covariance_diagnostics": true},
-  "joint_likelihood": {"use_all_epochs": true, "scalar_count": "2*taps*epochs", "bic": true, "profile_complex_amplitudes_per_epoch": true, "shared_beta": ["dx_m", "dy_m", "dz_m", "c_dt_m"]},
+  "delay_search_chips": {"minimum": -0.5, "maximum": 0.5, "step": 0.125, "minimum_separation": 0.125},
   "splits": {
     "normal_train": {"source_end_lte_s": 300.0},
     "normal_calibration": {"source_start_gte_s": 320.0, "source_end_lte_s": 400.0},
@@ -32,30 +29,15 @@
   "controls": {
     "gains": [0.5, 0.75, 1.0, 1.5, 2.0],
     "phases_rad": [0.0, 0.7853981633974483, 1.5707963267948966, 3.141592653589793],
-    "slow_agc": {"minimum": 0.75, "maximum": 1.25},
-    "noise": ["awgn", "cn0_degradation", "matched_power", "quantization"],
-    "multipath": "per_prn_delay_phase_amplitude",
-    "second_source": {"signed_delays": true, "random_phase": true, "power_ratios": [0.1, 0.25, 0.5, 1.0]},
-    "relation_destruction": "shuffle_prn_los_only_preserve_prn_marginals",
     "synthetic_use": "mechanics-only"
   },
   "geometry": {"minimum_prns": 5, "minimum_rank": 4, "minimum_residual_dof": 1, "maximum_condition_number": 1000000.0, "maximum_ephemeris_toe_age_s": 7200.0, "maximum_receiver_pvt_age_s": 1.0, "time_binding_filename": "geometry_time_binding.json"},
   "b0": {
-    "detector": "btail_max_507080_ewma075",
-    "window_s": 1.0,
-    "stride_s": 0.5,
-    "sequence_length": 12,
-    "target": "next_window",
-    "availability": "target_window_end",
-    "feature_columns": ["tap_E4_rel_prompt_mean", "tap_E3_rel_prompt_mean", "tap_E2_rel_prompt_mean", "tap_E_rel_prompt_mean", "tap_P_rel_prompt_mean", "tap_L_rel_prompt_mean", "tap_L2_rel_prompt_mean", "tap_L3_rel_prompt_mean", "tap_L4_rel_prompt_mean"],
-    "node_thresholds": {"q50": 0.0914354398846626, "q70": 0.12956311106681812, "q80": 0.1630456149578094},
-    "ewma_previous_state_weight": 0.75,
-    "event_q99_threshold": 4.169877716047041,
     "checkpoint_sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
     "retrain": false,
     "historical_limitation": "PRN-holdout with time overlap and cleanStatic+cleanDynamic calibration differs from this chronological cleanStatic-only contract"
   },
-  "ablation_order": ["B0-native", "A1", "A2", "A3", "A4", "Full", "Neural-with-energy", "Power-only", "Noise-floor-only-if-source-exists"],
+  "ablation_order": ["B0", "A1", "A2", "A3", "A4", "Full R2C-GNSS", "Power-only", "Noise-floor-only"],
   "decision_criteria": {
     "provenance": "original preregistration section 11",
     "required_inputs": ["complex_provenance", "time_alignment", "los_geometry", "b0_interface"],
@@ -65,10 +47,5 @@
   },
   "input_paths": {},
   "external_input_policy": "required CLI NAME=NPZ overrides; resolved absolute paths and hashes are artifact provenance only",
-  "bounded_sampling": "all finite authentic complex epochs in each 0.5-second PRN bin; deterministic chunks only",
-  "neural_no_energy": {"architecture": "small_mlp", "hidden_units": 8, "seed": 20260803, "allowed_inputs": ["prompt_normalized_complex_shape", "cn0", "h0_residual_quality", "causal_tracking_quality", "past_loop_error", "elevation"], "forbidden_inputs": ["recording_id", "scenario_id", "prn_id", "attack_label", "current_score", "future_data", "absolute_raw_power"]},
-  "neural_with_energy": {"separate_model": true, "only_addition": "explicit_energy"},
-  "geometry_coverage": {"required_scenarios": ["cleanStatic", "cleanDynamic", "DS3", "DS7", "DS8"], "diagnostic_scenarios": ["DS1", "DS2"], "minimum_fraction": 0.7, "minimum_valid_10s_blocks": 30},
-  "preserved_artifact_tree": {"path": "artifacts/r2c_gnss_stage0", "git_tree": "53f7cdab9ac324c08b94a5d6f38f6a32d3ec16b7"},
-  "campaign_output": "artifacts/r2c_gnss_stage0_fix"
+  "bounded_sampling": "first receiver row per floor(time/0.5s), PRN, frozen before attack scoring"
 }

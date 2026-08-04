@@ -1,97 +1,123 @@
 #!/usr/bin/env python3
-"""Read-only receiver-product time/geometry reconstruction (no detector scores)."""
+"""Strict read-only source-derived Stage-0 time/geometry reconstruction."""
 from __future__ import annotations
-import argparse, hashlib, json, re, sys
+import argparse,hashlib,json,re,sys
+from datetime import datetime,timezone
 from pathlib import Path
-import h5py, numpy as np, pandas as pd
-
-ROOT=Path(__file__).resolve().parents[1]; sys.path.insert(0,str(ROOT/"src"))
-from gnss_doppler_lab.gcmr_geometry import parse_gnss_sdr_gps_ephemeris_xml, satellite_position_ecef, look_angles
-from gnss_doppler_lab.r2c_stage0_fix import gps_week_tow
+import h5py,numpy as np
+ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/"src"))
+from gnss_doppler_lab.gcmr_geometry import parse_gnss_sdr_gps_ephemeris_xml,satellite_position_ecef,look_angles
 from gnss_doppler_lab.trajectory import llh_to_ecef
-
-def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
-def rinex_binding(directory):
-    files=sorted(directory.glob("*O"));
-    if len(files)!=1: raise ValueError("exactly one RINEX observation file required")
-    header="".join(files[0].read_text(errors="replace").splitlines(True)[:100])
-    match=re.search(r"\s*(\d{4})\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+([0-9.]+).*TIME OF FIRST OBS",header)
-    if not match: raise ValueError("RINEX TIME OF FIRST OBS missing")
-    from datetime import datetime,timezone
-    y,mo,d,h,mi=map(int,match.groups()[:5]); sec=float(match.group(6)); dt=datetime(y,mo,d,h,mi,int(sec),tzinfo=timezone.utc)
-    leap_match=re.search(r"\s*(\d+).*LEAP SECONDS",header); leap=int(leap_match.group(1)) if leap_match else (15 if y==2010 else 16)
-    week,_=gps_week_tow(dt,leap); return week,files[0],dt.isoformat(),leap
-
-def gga(directory):
-    rows=[]
+GPS_EPOCH=datetime(1980,1,6,tzinfo=timezone.utc)
+def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+def checksum(line):
+    if not line.startswith("$") or "*" not in line:return False
+    body,given=line[1:].split("*",1);value=0
+    for char in body:value^=ord(char)
+    try:return value==int(given[:2],16)
+    except ValueError:return False
+def rinex(directory):
+    files=sorted(directory.glob("*O"))
+    if len(files)!=1:raise ValueError("exactly one RINEX observation file required")
+    header=[]
+    for line in files[0].read_text(errors="replace").splitlines():
+        header.append(line)
+        if "END OF HEADER" in line:break
+    match=next((re.match(r"\s*(\d{4})\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+([0-9.]+)",x) for x in header if "TIME OF FIRST OBS" in x),None)
+    if not match:raise ValueError("RINEX TIME OF FIRST OBS absent")
+    y,mo,d,h,mi=map(int,match.groups()[:5]);sec=float(match.group(6));stamp=datetime(y,mo,d,h,mi,int(sec),tzinfo=timezone.utc)
+    week=int((stamp-GPS_EPOCH).total_seconds()//604800)
+    tow=(stamp-GPS_EPOCH).total_seconds()%604800
+    return {"path":str(files[0]),"sha256":sha(files[0]),"gps_week":week,"first_epoch_tow_s":tow,"time_system":"GPS"}
+def nmea_pvt(directory,start_tow):
+    rows=[];invalid_checksum=0;invalid_fix=0;previous=None;roll=0
     for line in (directory/"nmea_pvt.nmea").read_text(errors="replace").splitlines():
+        if not line.startswith("$GPGGA"):continue
+        if not checksum(line):invalid_checksum+=1;continue
         f=line.split(",")
-        if len(f)>10 and f[0].endswith("GGA") and f[1] and f[2] and f[4]:
-            raw=float(f[1]); seconds=int(raw//10000)*3600+int(raw%10000//100)*60+raw%100
-            cv=lambda x: int(float(x)//100)+float(x)%100/60
-            lat=cv(f[2])*(-1 if f[3]=="S" else 1); lon=cv(f[4])*(-1 if f[5]=="W" else 1)
-            rows.append((seconds,np.asarray(llh_to_ecef(lat,lon,float(f[9])))))
-    if not rows: raise ValueError("no valid NMEA GGA")
-    first=rows[0][0]; return [(t-first,p) for t,p in rows]
-
-def event_prns(directory, selected=None):
-    if selected is not None:
-        with np.load(selected,allow_pickle=False) as data:
-            time=np.asarray(data["time_s"],float); prn=np.asarray(data["prn"])
-        events={}
-        for t,p in zip(time,prn): events.setdefault(round(np.floor(float(t)*2)/2,6),set()).add(int(str(p).lstrip("Gg")))
-        return None,events,{"selected_npz_sha256":sha(selected),"source":"selected complex NPZ time_s/prn"}
-    obs=directory/"raw/observables.mat"
-    if obs.exists():
-        with h5py.File(obs) as f:
-            rx=np.asarray(f["RX_time"]); prn=np.asarray(f["PRN"]); flag=np.asarray(f["Flag_valid_pseudorange"])
-        values=rx[np.isfinite(rx)&(rx>0)]; start=float(values.min()); data={}
-        valid=np.isfinite(rx)&np.isfinite(prn)&(prn>0)&(flag>0)
-        for t,p in zip(rx[valid],prn[valid]): data.setdefault(round(np.floor((t-start)*2)/2,6),set()).add(int(p))
-        return start,data,{"observables_sha256":sha(obs),"source":"raw/observables.mat RX_time"}
-    track=pd.read_csv(directory/"tracking.csv",usecols=["time_s","prn"]); start_tow=None
-    data={}
-    for t,p in track.itertuples(index=False):
-        number=int(str(p).lstrip("Gg"))
-        data.setdefault(round(np.floor(float(t)*2)/2,6),set()).add(number)
-    return start_tow,data,{"tracking_sha256":sha(directory/"tracking.csv"),"source":"tracking relative time; absolute TOW lineage required"}
-
-def reconstruct(name,directory,expected_week,expected_tow,iq_sha=None,selected=None):
-    week,rinex,utc,leap=rinex_binding(directory); start,events,lineage=event_prns(directory,selected)
-    eph=parse_gnss_sdr_gps_ephemeris_xml(directory/"gps_ephemeris.xml"); positions=gga(directory)
-    start_tow=expected_tow if start is None else start
-    time_ok=week==expected_week and abs(start_tow-expected_tow)<.01
-    valid=0; rank4=0; pvt_count=0; conditions=[]
-    for relative,prns in sorted(events.items()):
-        past=[item for item in positions if item[0]<=relative+1e-6]
-        if not past: continue
-        pvt_count+=1; receiver=past[-1][1]; vectors=[]
+        try:
+            raw=float(f[1]);quality=int(f[6]);h=int(raw//10000);m=int(raw%10000//100);s=raw%100;seconds=h*3600+m*60+s
+            if quality<=0:invalid_fix+=1;continue
+            cv=lambda x:int(float(x)//100)+float(x)%100/60
+            lat=cv(f[2])*(-1 if f[3]=="S" else 1);lon=cv(f[4])*(-1 if f[5]=="W" else 1);height=float(f[9])
+        except (ValueError,IndexError):invalid_fix+=1;continue
+        if previous is not None and seconds<previous-43200:roll+=86400
+        elif previous is not None and seconds<previous:continue
+        previous=seconds;absolute_day=start_tow-start_tow%86400+seconds+roll
+        rows.append((absolute_day-start_tow,np.asarray(llh_to_ecef(lat,lon,height))))
+    if not rows:raise ValueError("no checksum-valid fixed NMEA GGA")
+    return rows,{"valid_fixes":len(rows),"invalid_checksum":invalid_checksum,"invalid_fix":invalid_fix}
+def raw_observables(directory):
+    path=directory/"raw/observables.mat"
+    with h5py.File(path) as f:
+        rx=np.asarray(f["RX_time"],float);tow=np.asarray(f["TOW_at_current_symbol_s"],float);prn=np.asarray(f["PRN"],float);flag=np.asarray(f["Flag_valid_pseudorange"],float)
+    start_values=rx[np.isfinite(rx)&(rx>0)]
+    if not len(start_values):raise ValueError("RX_time absent")
+    # The minimum must be a supported lower edge, not a singleton outlier.
+    candidate=float(start_values.min())
+    if int(np.sum((start_values>=candidate)&(start_values<=candidate+.1)))<5:raise ValueError("RX_time start lacks robust multi-channel support")
+    start=round(candidate,2)
+    consistent=np.isfinite(rx)&np.isfinite(tow)&(np.abs(rx-tow)<=1.)
+    valid=consistent&np.isfinite(prn)&(prn>=1)&(prn<=32)&(flag>0)
+    bins={}
+    for t,p in zip(rx[valid],prn[valid]):
+        rel=float(t-start)
+        if rel>=0:bins.setdefault(int(np.floor(rel/.5)),set()).add(int(p))
+    return start,bins,{"path":str(path),"sha256":sha(path),"valid_rows":int(valid.sum()),"tow_outlier_rows":int((np.isfinite(rx)&np.isfinite(tow)&~consistent).sum())}
+def selected_bins(path):
+    with np.load(path,allow_pickle=False) as z:times=np.asarray(z["time_s"],float)
+    return sorted(set(np.floor(times/.5).astype(int))),{"path":str(path),"sha256":sha(path),"rows":len(times)}
+def source_iq_hash(directory):
+    path=directory/"manifest.json"
+    if not path.is_file():return None
+    doc=json.loads(path.read_text());return (doc.get("source",{}).get("iq_sha256") or doc.get("source",{}).get("sha256") or doc.get("authenticated_inputs",{}).get("iq_after_receiver",{}).get("sha256"))
+def reconstruct(name,directory,selected,config,expected_week=None,expected_tow=None):
+    binding=rinex(directory);start,raw,lineage=raw_observables(directory);pvt,pvt_report=nmea_pvt(directory,start)
+    eph=parse_gnss_sdr_gps_ephemeris_xml(directory/"gps_ephemeris.xml");eligible,selected_report=selected_bins(selected)
+    modulo={x.WN for x in eph.values()};week_ok=all(binding["gps_week"]%1024==x for x in modulo)
+    rinex_rx_delta=binding["first_epoch_tow_s"]-min(t for t in [start] if np.isfinite(t))
+    assertions={"week":{"expected":expected_week,"derived":binding["gps_week"],"status":"NOT_PROVIDED" if expected_week is None else "PASS" if expected_week==binding["gps_week"] else "FAIL"},
+      "tow":{"expected":expected_tow,"derived":start,"status":"NOT_PROVIDED" if expected_tow is None else "PASS" if abs(expected_tow-start)<=.01 else "FAIL"}}
+    reasons={};valid=0;los_by_bin={};conditions=[];valid_bins=[]
+    for bin_id in eligible:
+        event_t=bin_id*.5+.5;event_tow=start+event_t;why=[];prns=sorted(raw.get(bin_id,set()))
+        if not prns:why.append("no_raw_valid_pseudorange")
+        past=[x for x in pvt if x[0]<=event_t+1e-9]
+        if not past or event_t-past[-1][0]>config["maximum_pvt_age_s"]:why.append("no_causal_pvt_within_1s");receiver=None
+        else:receiver=past[-1][1]
+        vectors={}
         for prn in prns:
-            if prn in eph:
-                sat=satellite_position_ecef(eph[prn],(start_tow+relative)%604800)
-                vectors.append(look_angles(receiver,sat).los_ecef)
-        if len(vectors)>=5:
-            design=np.column_stack([-np.asarray(vectors),np.ones(len(vectors))]); rank=np.linalg.matrix_rank(design); cond=np.linalg.cond(design)
-            rank4+=rank==4; conditions.append(cond); valid+=rank==4 and len(vectors)-rank>=1 and cond<=1e6
-    toes=[x.toe for x in eph.values()]; causal=all(toe<=start_tow for toe in toes)
-    manifest=directory/"manifest.json"; manifest_doc=json.loads(manifest.read_text()) if manifest.exists() else {}
-    found_iq=(manifest_doc.get("source",{}).get("iq_sha256") or manifest_doc.get("source",{}).get("sha256") or
-              manifest_doc.get("authenticated_inputs",{}).get("iq_after_receiver",{}).get("sha256"))
-    return {"scenario":name,"receiver_directory":str(directory),"authenticated_absolute_time_binding":{
-      "status":"PASS" if time_ok else "RECONSTRUCTABLE_WITH_LINEAGE_GAPS","gps_week":week,"start_tow":start_tow,
-      "expected_verified_not_assumed":{"week":expected_week,"tow":expected_tow},"rinex":str(rinex),"rinex_sha256":sha(rinex),"utc_first_observation":utc,"leap_seconds":leap,**lineage},
-      "source_iq_lineage":{"status":"PASS" if found_iq and (not iq_sha or found_iq==iq_sha) else "LINEAGE_GAP","sha256":found_iq},
-      "offline_los_reproducibility":{"status":"PASS" if valid else "UNAVAILABLE","valid_events":int(valid),"eligible_events":len(events),"coverage":float(valid/max(len(events),1))},
-      "event_time_causal_ephemeris_availability":{"status":"PASS" if causal else "OFFLINE_ORACLE_ONLY","toe_range": [min(toes),max(toes)],"event_start_tow":start_tow},
-      "pvt_coverage":{"status":"PASS" if pvt_count else "UNAVAILABLE","events":int(pvt_count),"eligible_events":len(events)},
-      "prn_rank_dof_condition_coverage":{"valid_events":int(valid),"rank4_events":int(rank4),"median_condition":float(np.median(conditions)) if conditions else None}}
-
+            item=eph.get(prn)
+            if item is None:continue
+            if item.SV_health!=0:continue
+            age=abs((event_tow-item.toe+302400)%604800-302400)
+            if age>config["maximum_toe_age_s"]:continue
+            if receiver is not None:
+                sat=satellite_position_ecef(item,event_tow%604800);vectors[prn]=look_angles(receiver,sat).los_ecef
+        if len(vectors)<config["minimum_prns"]:why.append("fewer_than_5_healthy_geometry_prns")
+        if len(vectors)>=config["minimum_prns"]:
+            design=np.column_stack([-np.asarray(list(vectors.values())),np.ones(len(vectors))]);rank=np.linalg.matrix_rank(design);dof=len(vectors)-rank;condition=float(np.linalg.cond(design));conditions.append(condition)
+            if rank<config["minimum_rank"]:why.append("rank_below_4")
+            if dof<config["minimum_residual_dof"]:why.append("residual_dof_below_1")
+            if condition>config["maximum_condition_number"]:why.append("condition_limit")
+        if why:
+            for reason in why:reasons[reason]=reasons.get(reason,0)+1
+        else:
+            valid+=1;valid_bins.append(bin_id);los_by_bin[str(bin_id)]={str(p):list(map(float,u)) for p,u in vectors.items()}
+    blocks={b//20 for b in valid_bins if all(x in valid_bins for x in range((b//20)*20,(b//20+1)*20))}
+    coverage=valid/max(len(eligible),1);coverage_pass=coverage>=config["minimum_coverage"] and len(blocks)>=config["minimum_complete_10s_blocks"]
+    decoded=[x.decoded_tow for x in eph.values() if x.decoded_tow is not None]
+    causal=bool(decoded and all(x<=start for x in decoded))
+    return {"scenario":name,"derived_time":{"status":"PASS" if week_ok and abs(rinex_rx_delta)<60 else "FAIL","gps_week":binding["gps_week"],"start_tow_s":start,"rinex_rx_delta_s":rinex_rx_delta,"ephemeris_week_modulo":sorted(modulo),"assertions":assertions},
+      "lineage":{"rinex":binding,"observables":lineage,"selected":selected_report,"receiver_source_iq_sha256":source_iq_hash(directory),"ephemeris_sha256":sha(directory/"gps_ephemeris.xml"),"nmea_sha256":sha(directory/"nmea_pvt.nmea")},
+      "nmea":pvt_report,"event_time_causal_ephemeris_availability":{"status":"PASS" if causal else "OFFLINE_ORACLE_ONLY","decoded_history_authenticated":causal},
+      "offline_geometry_coverage":{"status":"PASS" if coverage_pass else "FAIL","valid_events":valid,"eligible_events":len(eligible),"coverage":coverage,"complete_10s_blocks":len(blocks),"rejection_reasons":reasons,"maximum_condition":max(conditions) if conditions else None},"los_by_bin":los_by_bin}
 def main():
-    ap=argparse.ArgumentParser(); ap.add_argument("--receiver",action="append",required=True,help="NAME=DIR,WEEK,TOW[,IQSHA]"); ap.add_argument("--selected",action="append",default=[],help="NAME=NPZ"); ap.add_argument("--report",type=Path,required=True); args=ap.parse_args()
-    selected={k:Path(v) for k,v in (x.split("=",1) for x in args.selected)}
-    reports={}
-    for spec in args.receiver:
-        name,value=spec.split("=",1); fields=value.split(","); reports[name]=reconstruct(name,Path(fields[0]),int(fields[1]),float(fields[2]),fields[3] if len(fields)>3 else None,selected.get(name))
-    args.report.parent.mkdir(parents=True,exist_ok=True); args.report.write_text(json.dumps({"schema":"gnss-doppler-lab.r2c-time-geometry-pre-campaign.v1","attack_scores_computed":False,"scenarios":reports},indent=2)+"\n")
-    print(json.dumps({k:{"time":v["authenticated_absolute_time_binding"]["status"],"offline_coverage":v["offline_los_reproducibility"]["coverage"],"causal_ephemeris":v["event_time_causal_ephemeris_availability"]["status"]} for k,v in reports.items()}))
+    ap=argparse.ArgumentParser();ap.add_argument("--receiver",action="append",required=True,help="NAME=DIR");ap.add_argument("--selected",action="append",required=True,help="NAME=NPZ");ap.add_argument("--assert-week",action="append",default=[]);ap.add_argument("--assert-tow",action="append",default=[]);ap.add_argument("--config",type=Path,default=ROOT/"configs/r2c_gnss_stage0_fix.json");ap.add_argument("--report",type=Path,required=True);args=ap.parse_args()
+    receivers={k:Path(v) for k,v in (x.split("=",1) for x in args.receiver)};selected={k:Path(v) for k,v in (x.split("=",1) for x in args.selected)};weeks={k:int(v) for k,v in (x.split("=",1) for x in args.assert_week)};tows={k:float(v) for k,v in (x.split("=",1) for x in args.assert_tow)};config=json.loads(args.config.read_text())["geometry"]
+    reports={n:reconstruct(n,d,selected[n],config,weeks.get(n),tows.get(n)) for n,d in receivers.items()}
+    target=args.report.resolve();production=(ROOT/"artifacts/r2c_gnss_stage0_fix").resolve()
+    if target==production or production in target.parents:raise ValueError("geometry report cannot enter campaign artifact in pre-campaign phase")
+    target.parent.mkdir(parents=True,exist_ok=True);target.write_text(json.dumps({"schema":"gnss-doppler-lab.r2c-strict-time-geometry.v2","attack_scores_computed":False,"scenarios":reports},indent=2)+"\n")
+    print(json.dumps({n:{"week":r["derived_time"]["gps_week"],"tow":r["derived_time"]["start_tow_s"],"coverage":r["offline_geometry_coverage"]} for n,r in reports.items()}))
 if __name__=="__main__":main()

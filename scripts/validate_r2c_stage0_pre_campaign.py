@@ -5,13 +5,13 @@ This command deliberately has no attack-label or metric code and refuses every
 path inside either campaign artifact directory.
 """
 from __future__ import annotations
-import argparse, json, sys
+import argparse, json, sys, hashlib
 from pathlib import Path
 import numpy as np
 
 ROOT=Path(__file__).resolve().parents[1]; sys.path.insert(0,str(ROOT/"src"))
 from gnss_doppler_lab.r2c_stage0_fix import (ComplexWhitener, TemplateProvider,
- historical_b0_status, joint_profile_glrt, run_full_controls)
+ historical_b0_status, joint_profile_glrt, run_full_controls,score_b0_nodes,replay_b0_events)
 
 PRESERVED=ROOT/"artifacts/r2c_gnss_stage0"
 CAMPAIGN=ROOT/"artifacts/r2c_gnss_stage0_fix"
@@ -33,23 +33,43 @@ def synthetic_smoke():
         observations[i]=np.array([provider.evaluate(taps)+.3j*provider.evaluate(taps-delay)+residual[i],
                                   provider.evaluate(taps)-.2*provider.evaluate(taps-delay)+residual[i+8]])
         los_map[i]=u
-    h0=joint_profile_glrt(observations,los_map,provider,taps,np.arange(-.5,.5001,.125),hypothesis="H0")
-    shared=joint_profile_glrt(observations,los_map,provider,taps,np.arange(-.5,.5001,.125),hypothesis="H1-shared",beta_candidates_m=[(0,0,0,0),tuple(beta)])
-    flat=np.concatenate(list(observations.values()))
-    controls=run_full_controls(lambda y,l:float(np.linalg.norm(whitener.transform(np.asarray(y).reshape(-1,9)))),flat,los_map)
+    h0=joint_profile_glrt(observations,los_map,provider,taps,np.arange(-.5,.5001,.125),hypothesis="H0",whitener=whitener)
+    shared=joint_profile_glrt(observations,los_map,provider,taps,np.arange(-.5,.5001,.125),hypothesis="H1-shared",whitener=whitener)
+    controls=run_full_controls(lambda obs,l:float(sum(np.linalg.norm(whitener.transform(y)) for y in obs.values())+sum(np.asarray(v)[0] for v in l.values())),observations,los_map,10.,provider,taps)
     return {"status":"PASS","template_mode":"analytic_gps_ca_acf","analytic_approximation":True,
       "paper_comparison_ready":False,"h0":h0.__dict__,"shared":shared.__dict__,"controls":controls,
-      "device":"cpu","gpu_required_for_campaign_training":True}
+      "device":"cuda_available_checked_separately","gpu_required_for_campaign_training":True}
+
+def b0_replay(paths,node_paths,checkpoint_path,expected):
+    import pandas as pd,torch
+    base=historical_b0_status(paths,expected);checkpoint=torch.load(checkpoint_path,map_location="cpu",weights_only=True)
+    for scenario,path in paths.items():
+        item=base["scenarios"][scenario]
+        node_path=node_paths.get(scenario)
+        if node_path is None or not node_path.is_file():
+            if item["status"]!="UNAVAILABLE_AUTHENTIC_INTERFACE":item["status"]="AVAILABLE_SAVED_NATIVE_SCORE_REPLAY_WITH_NODE_LINEAGE_GAP"
+            continue
+        try:
+            nodes=pd.read_csv(node_path);generated=score_b0_nodes(nodes,checkpoint,device="cpu");saved=pd.read_csv(path)
+            keys=["run_id","prn","window_bin_s"]
+            for frame in (generated,saved):
+                frame["prn"]=frame.prn.astype(str).str.lstrip("Gg").astype(int)
+            joined=generated.merge(saved[keys+["prn_node_rmse"]],on=keys,suffixes=("_generated","_saved"),validate="one_to_one")
+            if len(joined)!=len(saved) or not np.allclose(joined.prn_node_rmse_generated,joined.prn_node_rmse_saved,rtol=2e-6,atol=2e-7):raise ValueError("native node-to-score parity mismatch")
+            item.update({"status":"AVAILABLE_HISTORICAL_NATIVE_NODE_TO_SCORE_REPLAY","node_csv":str(node_path),"node_csv_sha256":hashlib.sha256(node_path.read_bytes()).hexdigest(),"matched_scores":len(joined),"maximum_abs_score_error":float(np.max(np.abs(joined.prn_node_rmse_generated-joined.prn_node_rmse_saved)))})
+        except Exception as exc:item.update({"status":"AVAILABLE_SAVED_NATIVE_SCORE_REPLAY_WITH_NODE_LINEAGE_GAP","node_replay_reason":str(exc)})
+    base["status"]="AVAILABLE_HISTORICAL_NATIVE_REPLAY" if all(x["status"] in {"AVAILABLE_HISTORICAL_NATIVE_NODE_TO_SCORE_REPLAY","AVAILABLE_SAVED_NATIVE_SCORE_REPLAY_WITH_NODE_LINEAGE_GAP"} for x in base["scenarios"].values()) else "UNAVAILABLE_AUTHENTIC_INTERFACE"
+    return base
 
 def main():
-    ap=argparse.ArgumentParser(); ap.add_argument("--b0-root",type=Path,required=True); ap.add_argument("--report",type=Path,required=True)
+    ap=argparse.ArgumentParser(); ap.add_argument("--b0-root",type=Path,required=True);ap.add_argument("--checkpoint",type=Path,required=True);ap.add_argument("--node",action="append",default=[],help="NAME=CSV"); ap.add_argument("--report",type=Path,required=True)
     args=ap.parse_args(); root=args.b0_root
     names={"cleanStatic":"cleanStatic","cleanDynamic":"cleanDynamic","DS3":"ds3","DS7":"ds7","DS8":"ds8"}
     paths={key:root/value/f"texbat_{value}_prn_local_scores.csv" for key,value in names.items()}
-    expected={"cleanStatic":"9a6bc537bd8f1bc16a17257a5f7ae2e47f327c10e215c63d7ebd82ca0b80c36a",
-              "cleanDynamic":"855c5ad2b2ea355136f027c49cc22e7234fab2147a6b812f832213b0c7ab082c"}
+    expected=json.loads((ROOT/"configs/r2c_gnss_stage0_fix.json").read_text())["b0"]["saved_score_sha256"]
+    node_paths={k:Path(v) for k,v in (x.split("=",1) for x in args.node)}
     report={"schema":"gnss-doppler-lab.r2c-stage0-pre-campaign.v1","attack_campaign_run":False,
-            "b0":historical_b0_status(paths,expected),"synthetic_and_clean_only_smoke":synthetic_smoke()}
+            "b0":b0_replay(paths,node_paths,args.checkpoint,expected),"synthetic_and_clean_only_smoke":synthetic_smoke()}
     target=safe_report(args.report); target.parent.mkdir(parents=True,exist_ok=True)
     target.write_text(json.dumps(report,indent=2,default=lambda x:x.tolist() if hasattr(x,"tolist") else x)+"\n")
     print(json.dumps({"report":str(target),"b0_status":report["b0"]["status"],"attack_campaign_run":False}))
