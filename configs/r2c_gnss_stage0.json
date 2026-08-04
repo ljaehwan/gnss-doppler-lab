@@ -1,0 +1,43 @@
+{
+  "schema": "gnss-doppler-lab.r2c-gnss-stage0-config.v1",
+  "task_id": "r2c-gnss-stage0-20260804",
+  "dataset": "TEXBAT",
+  "stage": "code-delay-only",
+  "seed": 20260803,
+  "cadence_s": 0.5,
+  "tap_offsets_chips": [-1.0, -0.75, -0.5, -0.25, 0.0, 0.25, 0.5, 0.75, 1.0],
+  "delay_search_chips": {"minimum": -1.0, "maximum": 1.0, "step": 0.025, "minimum_separation": 0.10},
+  "splits": {
+    "normal_train": {"source_end_lte_s": 300.0},
+    "normal_calibration": {"source_start_gte_s": 320.0, "source_end_lte_s": 400.0},
+    "normal_holdout": {"source_start_gte_s": 420.0},
+    "guard_s": 20.0,
+    "external_normal": "cleanDynamic",
+    "normal_fit_source": "cleanStatic"
+  },
+  "attacks": {
+    "primary": ["DS3", "DS7", "DS8"],
+    "diagnostic": ["DS1", "DS2"],
+    "onset_s": {"DS1": 100.0, "DS2": 100.0, "DS3": 100.0, "DS7": 110.0, "DS8": 110.0},
+    "stable_pre_start_s": 30.0,
+    "pre_guard_s": 20.0,
+    "persistent_offset_s": 40.0
+  },
+  "thresholds": {"quantiles": [0.99, 0.995], "target_fpr": 0.01, "method": "higher", "comparison": "strict_greater"},
+  "sustained_alarm": {"contiguous_count": 3, "cadence_s": 0.5, "reset_on": ["recording", "gap", "transition"]},
+  "bootstrap": {"method": "paired_complete_time_block", "block_s": 10.0, "repetitions": 2000, "seed": 20260803, "iid_fallback": false},
+  "controls": {
+    "gains": [0.5, 0.75, 1.0, 1.5, 2.0],
+    "phases_rad": [0.0, 0.7853981633974483, 1.5707963267948966, 3.141592653589793],
+    "synthetic_use": "mechanics-only"
+  },
+  "geometry": {"minimum_prns": 4, "minimum_rank": 4, "maximum_condition_number": 1000000.0},
+  "b0": {
+    "checkpoint_sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
+    "retrain": false,
+    "historical_limitation": "PRN-holdout with time overlap and cleanStatic+cleanDynamic calibration differs from this chronological cleanStatic-only contract"
+  },
+  "ablation_order": ["B0", "A1", "A2", "A3", "A4", "Full R2C-GNSS", "Power-only", "Noise-floor-only"],
+  "decision_criteria_frozen": true,
+  "input_paths": {"texbat_root": "data/external/texbat", "raw_subdir": "raw", "derived_subdir": "derived"}
+}

@@ -1,0 +1,42 @@
+{
+  "schema": "gnss-doppler-lab.r2c-input-validity.v1",
+  "task_id": "r2c-gnss-stage0-20260804",
+  "frozen_before_attack_evaluation": true,
+  "decision": "DATA_INVALID",
+  "genuinely_complex_nine_taps_available": false,
+  "usable_raw_iq_available": false,
+  "time_aligned_los_available": false,
+  "attack_outcomes_inspected_for_tuning": false,
+  "inventory": [
+    {"recording": "cleanStatic", "raw_path": "data/external/texbat/raw/cleanStatic.bin", "raw_present": false, "derived_present": false, "complex_nine_taps": false},
+    {"recording": "cleanDynamic", "raw_path": "data/external/texbat/raw/cleanDynamic.bin", "raw_present": false, "derived_present": false, "complex_nine_taps": false},
+    {"recording": "DS1", "raw_path": "data/external/texbat/raw/ds1.bin", "raw_present": false, "derived_present": false, "complex_nine_taps": false},
+    {"recording": "DS2", "raw_path": "data/external/texbat/raw/ds2.bin", "raw_present": false, "derived_present": false, "complex_nine_taps": false},
+    {"recording": "DS3", "raw_path": "data/external/texbat/raw/ds3.bin", "raw_present": false, "derived_present": false, "complex_nine_taps": false},
+    {"recording": "DS7", "raw_path": "data/external/texbat/raw/ds7.bin", "raw_present": false, "derived_present": false, "complex_nine_taps": false},
+    {"recording": "DS8", "raw_path": "data/external/texbat/raw/ds8.bin", "raw_present": false, "derived_present": false, "complex_nine_taps": false}
+  ],
+  "existing_nine_tap_schema": {
+    "source": "src/gnss_doppler_lab/tracking_peaks.py",
+    "datasets": ["abs_E4", "abs_E3", "abs_E2", "abs_E", "abs_P", "abs_L", "abs_L2", "abs_L3", "abs_L4"],
+    "values": "magnitude-only",
+    "prompt_iq_only": true,
+    "valid_primary_evidence": false
+  },
+  "expected_raw_provenance": {
+    "receiver_or_extractor": "not run; source recordings absent",
+    "sample_rate_hz": 25000000,
+    "signal": "GPS L1 C/A",
+    "quantization": "documented by repository manifest as 16-bit complex IQ",
+    "tap_spacing": "not established by a valid complex-tap extraction",
+    "preprocessing": "none performed",
+    "hashes": "repository checksum files exist for cleanStatic/cleanDynamic/DS1/DS2, but source bytes are absent; DS3/DS7/DS8 source hashes are unavailable locally"
+  },
+  "blocking_reasons": [
+    "No receiver-produced complex I/Q values at every one of the nine correlator taps are present.",
+    "No required TEXBAT raw IQ recording is present for minimal re-extraction.",
+    "Required recordings exceed available storage before derived receiver products are considered.",
+    "No authentic PVT/ephemeris/time-aligned satellite LOS product for these recordings is present."
+  ],
+  "prohibited_substitutions_used": []
+}

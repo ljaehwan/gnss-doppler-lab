@@ -1,0 +1,17 @@
+{
+  "claims_not_supported": [
+    "TEXBAT attack detection",
+    "cleanDynamic FPR",
+    "multi-PRN physics contribution",
+    "Doppler performance"
+  ],
+  "claims_supported": [
+    "R2C code-delay mechanics and invariances are testable on synthetic controls"
+  ],
+  "criteria_frozen_before_attack_evaluation": true,
+  "later_raw_iq_2d_model_justified": false,
+  "physics_supported": false,
+  "real_attack_performance_evaluated": false,
+  "reason": "valid real complex nine-tap input/raw-IQ reconstruction path and time-aligned LOS are absent",
+  "verdict": "DATA_INVALID"
+}

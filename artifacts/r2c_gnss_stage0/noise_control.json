@@ -1,0 +1,21 @@
+{
+  "real_alarm_result": "UNAVAILABLE_DATA_INVALID",
+  "status": "MECHANICS_ONLY",
+  "trials": [
+    {
+      "median_a1_score": 3.4739640611291596,
+      "shared_alarm_claim": false,
+      "sigma": 0.01
+    },
+    {
+      "median_a1_score": 4.173900249599483,
+      "shared_alarm_claim": false,
+      "sigma": 0.03
+    },
+    {
+      "median_a1_score": 5.825374753266044,
+      "shared_alarm_claim": false,
+      "sigma": 0.1
+    }
+  ]
+}

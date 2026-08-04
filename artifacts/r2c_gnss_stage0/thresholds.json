@@ -1,0 +1,12 @@
+{
+  "alarm": "score > threshold",
+  "method": "higher",
+  "quantiles": [
+    0.99,
+    0.995
+  ],
+  "reason": "normal-calibration complex taps absent",
+  "source_required": "cleanStatic normal_calibration only",
+  "status": "UNAVAILABLE_DATA_INVALID",
+  "values": {}
+}

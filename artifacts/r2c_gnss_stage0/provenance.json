@@ -1,0 +1,91 @@
+{
+  "attack_outcomes_used_for_tuning": false,
+  "branch": "research/r2c-gnss-stage0",
+  "code_sources": {
+    "scripts/run_r2c_gnss_stage0.py": "1cf0133120baefb5b6fb0aa0430d7de66142bcd12bf02f9c6bcb3f785e34dbde",
+    "scripts/verify_r2c_gnss_stage0.py": "991c3e5e1262db86e20bdfda09405d780dca354d0ad5f9d85ee72d467bb149dc",
+    "src/gnss_doppler_lab/r2c_gnss.py": "60fa80e9092073e80d42854ed869c92a4bc35d0259c035f4cc1791ea02ababa8"
+  },
+  "config_sha256": "527a7f6b6666e65db996e8749328ca36afdc6e832d3e32557f4df1e24894d87b",
+  "dirty_at_generation": true,
+  "excluded_rows": 0,
+  "final_commit": "recorded_by_final_git_report; cannot be embedded in the commit it hashes",
+  "frozen_base_commit": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "input_sources": [
+    {
+      "complex_nine_taps": false,
+      "derived_present": false,
+      "raw_path": "data/external/texbat/raw/cleanStatic.bin",
+      "raw_present": false,
+      "recording": "cleanStatic"
+    },
+    {
+      "complex_nine_taps": false,
+      "derived_present": false,
+      "raw_path": "data/external/texbat/raw/cleanDynamic.bin",
+      "raw_present": false,
+      "recording": "cleanDynamic"
+    },
+    {
+      "complex_nine_taps": false,
+      "derived_present": false,
+      "raw_path": "data/external/texbat/raw/ds1.bin",
+      "raw_present": false,
+      "recording": "DS1"
+    },
+    {
+      "complex_nine_taps": false,
+      "derived_present": false,
+      "raw_path": "data/external/texbat/raw/ds2.bin",
+      "raw_present": false,
+      "recording": "DS2"
+    },
+    {
+      "complex_nine_taps": false,
+      "derived_present": false,
+      "raw_path": "data/external/texbat/raw/ds3.bin",
+      "raw_present": false,
+      "recording": "DS3"
+    },
+    {
+      "complex_nine_taps": false,
+      "derived_present": false,
+      "raw_path": "data/external/texbat/raw/ds7.bin",
+      "raw_present": false,
+      "recording": "DS7"
+    },
+    {
+      "complex_nine_taps": false,
+      "derived_present": false,
+      "raw_path": "data/external/texbat/raw/ds8.bin",
+      "raw_present": false,
+      "recording": "DS8"
+    }
+  ],
+  "repository": "gnss-doppler-lab",
+  "retry_fallback": {
+    "hermes_confirmed_clean_frozen_base": true,
+    "prior_run_failure": "bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted",
+    "sandbox_bypass_scope": "dedicated worktree only; environment workaround"
+  },
+  "runtime": {
+    "matplotlib": "3.11.1",
+    "numpy": "2.4.6",
+    "platform": "Linux-6.8.0-136-generic-x86_64-with-glibc2.39",
+    "python": "3.11.15"
+  },
+  "schema": "gnss-doppler-lab.r2c-provenance.v1",
+  "seeds": {
+    "bootstrap": 20260803,
+    "experiment": 20260803
+  },
+  "source_commit_at_generation": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "split_counts": {},
+  "task_id": "r2c-gnss-stage0-20260804",
+  "warnings": [
+    "No receiver-produced complex I/Q values at every one of the nine correlator taps are present.",
+    "No required TEXBAT raw IQ recording is present for minimal re-extraction.",
+    "Required recordings exceed available storage before derived receiver products are considered.",
+    "No authentic PVT/ephemeris/time-aligned satellite LOS product for these recordings is present."
+  ]
+}

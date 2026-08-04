@@ -1,0 +1,128 @@
+{
+  "ablation_order": [
+    "B0",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "Full R2C-GNSS",
+    "Power-only",
+    "Noise-floor-only"
+  ],
+  "attacks": {
+    "diagnostic": [
+      "DS1",
+      "DS2"
+    ],
+    "onset_s": {
+      "DS1": 100.0,
+      "DS2": 100.0,
+      "DS3": 100.0,
+      "DS7": 110.0,
+      "DS8": 110.0
+    },
+    "persistent_offset_s": 40.0,
+    "pre_guard_s": 20.0,
+    "primary": [
+      "DS3",
+      "DS7",
+      "DS8"
+    ],
+    "stable_pre_start_s": 30.0
+  },
+  "b0": {
+    "checkpoint_sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
+    "historical_limitation": "PRN-holdout with time overlap and cleanStatic+cleanDynamic calibration differs from this chronological cleanStatic-only contract",
+    "retrain": false
+  },
+  "bootstrap": {
+    "block_s": 10.0,
+    "iid_fallback": false,
+    "method": "paired_complete_time_block",
+    "repetitions": 2000,
+    "seed": 20260803
+  },
+  "cadence_s": 0.5,
+  "controls": {
+    "gains": [
+      0.5,
+      0.75,
+      1.0,
+      1.5,
+      2.0
+    ],
+    "phases_rad": [
+      0.0,
+      0.7853981633974483,
+      1.5707963267948966,
+      3.141592653589793
+    ],
+    "synthetic_use": "mechanics-only"
+  },
+  "dataset": "TEXBAT",
+  "decision_criteria_frozen": true,
+  "delay_search_chips": {
+    "maximum": 1.0,
+    "minimum": -1.0,
+    "minimum_separation": 0.1,
+    "step": 0.025
+  },
+  "geometry": {
+    "maximum_condition_number": 1000000.0,
+    "minimum_prns": 4,
+    "minimum_rank": 4
+  },
+  "input_paths": {
+    "derived_subdir": "derived",
+    "raw_subdir": "raw",
+    "texbat_root": "data/external/texbat"
+  },
+  "schema": "gnss-doppler-lab.r2c-gnss-stage0-config.v1",
+  "seed": 20260803,
+  "splits": {
+    "external_normal": "cleanDynamic",
+    "guard_s": 20.0,
+    "normal_calibration": {
+      "source_end_lte_s": 400.0,
+      "source_start_gte_s": 320.0
+    },
+    "normal_fit_source": "cleanStatic",
+    "normal_holdout": {
+      "source_start_gte_s": 420.0
+    },
+    "normal_train": {
+      "source_end_lte_s": 300.0
+    }
+  },
+  "stage": "code-delay-only",
+  "sustained_alarm": {
+    "cadence_s": 0.5,
+    "contiguous_count": 3,
+    "reset_on": [
+      "recording",
+      "gap",
+      "transition"
+    ]
+  },
+  "tap_offsets_chips": [
+    -1.0,
+    -0.75,
+    -0.5,
+    -0.25,
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "task_id": "r2c-gnss-stage0-20260804",
+  "thresholds": {
+    "comparison": "strict_greater",
+    "method": "higher",
+    "quantiles": [
+      0.99,
+      0.995
+    ],
+    "target_fpr": 0.01
+  }
+}

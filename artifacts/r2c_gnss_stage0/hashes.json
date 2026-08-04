@@ -1,0 +1,23 @@
+{
+  "algorithm": "sha256",
+  "files": {
+    "README.md": "583dc3b6996f28f9f3a4b433c7a240234befce3a4a5241051a0c8652602bd0fb",
+    "ablation_metrics.csv": "6d5c85f6464040a14e094dfbedea69edc49e0a14aa7871605101054ba2dfc7ea",
+    "config.json": "cdf6f58ebe714015a8dd2dffd0a87bfe31190abc7b593d277d7976c508a650fb",
+    "decision.json": "80ec0e3009d464ded61e4fda6d74570c5380e297f154b022efa5451a48056b9d",
+    "gain_invariance.json": "c4a14680dc8a2b1945ffab418443a954391291d754165851ea4d6dd2470585da",
+    "input_validity.json": "43b9cde018ecf8473217c06f2820c1a65b92c5bed985a2c9d06631f4609247a0",
+    "multipath_control.json": "5763ed1c3468afb59c1dddeb68649d60a90ee19f15ad2ec4b44b3ed84bcde76d",
+    "noise_control.json": "241cabe4ec98898e731cc4b390e50d6f349a86a056631dbe92a0126d284fac93",
+    "per_epoch_scores.csv": "c940f98598e144764474da24e3ff20677d12d4a581211bfbd08c24bf98a6341f",
+    "phase_invariance.json": "86531abd1ec26cc2ba5678772e738ab6c653a6c3633a0ede885c59d29d00ce82",
+    "plots/relation_control.png": "a6705c07255437206ee746228d9a73a537abae5fcd4e8e5b9787b33a977a2bdf",
+    "plots/relation_control_source.csv": "e6d317ef07c971edeb02d211ea3f47460b110d22d47c3015fceaae8b097ec46a",
+    "provenance.json": "cbae7b4e7cef9e39d798d5acdd51a652249e16f83940d861fa1163960f2e9fa2",
+    "relation_destruction.json": "1e00bc2ebc83e1d4de2841e6e1eb0c99f606af81a6ed7ff7b014adfc05200c04",
+    "scenario_metrics.csv": "7da696159075b6168144d9fb75a230ddfbd7d09934892e952d3f610df7c7a779",
+    "second_source_injection.json": "ad3da44e83a5318e8cb1f03379b6dd1cca73b3b58ac6712bdab9673aaa7815c1",
+    "thresholds.json": "f4319619241b1ffdec2d44204ba9b40091a2da50e98b49e89b13526734d7761f",
+    "training_summary.json": "4e57d8a43a32fc962c2107f1064a1d431e6e82f3d66e83960ba8a6bbb759c420"
+  }
+}
