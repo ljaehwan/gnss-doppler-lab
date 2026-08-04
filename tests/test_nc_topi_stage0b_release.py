@@ -20,6 +20,17 @@ def test_verifier_import_graph_is_standalone_and_bug_divergent(monkeypatch):
  v=verifier();monkeypatch.setattr(a,"higher_quantile",lambda *_a,**_k:-999.)
  assert v.higher_quantile([0.,1.,2.,3.],.5)==2.
 
+def test_verifier_loads_frozen_parent_with_prn_specific_support_and_roles():
+ v=verifier();parent=v.load_parent(ROOT/"artifacts/nc_topi_stage0")
+ assert len(parent.prn)==55591 and len(parent.events)==5283
+
+
+def test_verifier_conditioner_indices_use_frozen_prn_roles():
+ v=verifier();parent=v.load_parent(ROOT/"artifacts/nc_topi_stage0")
+ assert len(v.indices(parent,"cleanStatic","normal_train"))==6074
+ assert len(v.indices(parent,"cleanStatic","normal_calibration"))==1628
+
+
 def test_conditioner_requires_row_provenance_and_clean_state_seal():
  x=np.arange(48.,dtype=float).reshape(12,4);y=np.arange(12.)+1
  model=a.TargetConditioner.fit("TOPI",x[:8],y[:8],meta(8))

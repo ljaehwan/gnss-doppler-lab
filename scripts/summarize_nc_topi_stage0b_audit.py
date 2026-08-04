@@ -136,7 +136,7 @@ def load_parent(parent):
  eix={event_key(r):i for i,r in enumerate(events)};features=[];indices=[];ids=[]
  for r in prn:
   er=emap[event_key(r)]
-  for f in ("scenario","physical_recording_id","event_id","target_index","availability_time_s","source_start_s","source_end_s","role","phase","label","valid","tracked_prn_count"):
+  for f in ("scenario","physical_recording_id","event_id","target_index","phase","label","valid","tracked_prn_count"):
    if r[f]!=er[f]:raise ValueError(f"PRN/event mismatch {f}")
   features.append(read_json_value(imap[event_key(r)]["context_features_json"]));indices.append(eix[event_key(r)]);ids.append(identity(r))
  return Parent(prn,events,iq,np.asarray(features,float),indices,ids)
@@ -167,9 +167,8 @@ def predict(model,X):return np.exp(np.clip((np.asarray(X)-model["median"])/model
 def model_seal(target,model,X,y,ids,metadata):
  content={"schema":"TargetConditioner.v2","target":target,"feature_schema":["log_power","log_noise_floor_scale","spectral_flatness","lag1_autocorr_magnitude"],"rows":len(ids),"identity_digest_sha256":digest_json(ids),"row_provenance_digest_sha256":digest_json(metadata),"feature_digest_sha256":digest_array(X),"target_digest_sha256":digest_array(y),"median":model["median"].tolist(),"iqr":model["iqr"].tolist(),"iqr_fallback":model["fallback"].tolist(),"coef":model["coef"].tolist(),"intercept":model["intercept"],"model_scale":model["scale"],"epsilon":1.35,"alpha":.0001,"max_iter":1000,"target_transform":"log(max(target, 1e-12))","prediction_clip":[-745.,709.],"fit_predicate":"cleanStatic/normal_train/normal/label0/valid","attack_fit":False}
  return content,digest_json(content)
-def roles(parent):return {event_key(r):r["role"] for r in parent.events}
 def indices(parent,scenario,role=None):
- er=roles(parent);return [i for i,r in enumerate(parent.prn) if r["scenario"]==scenario and parse_bool(r["valid"]) and (role is None or er[event_key(r)]==role)]
+ return [i for i,r in enumerate(parent.prn) if r["scenario"]==scenario and parse_bool(r["valid"]) and (role is None or r["role"]==role)]
 def metadata(parent,ix,role):return [{"identity":parent.ids[i],"scenario":"cleanStatic","role":role,"phase":"normal","label":0,"valid":True} for i in ix]
 
 def sustained_delay(rows,method,threshold,onset):
