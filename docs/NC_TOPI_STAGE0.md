@@ -191,7 +191,10 @@ Second-peak relative powers are `[.05,.1,.2,.4,.8]`; physical separations are
 synthetic grids cannot select a threshold. Equal-RMSE tangent versus
 W-orthogonal tests use 100 deterministic trials. Nuisance controls are signed
 amplitude `+/-[.02,.05,.1]`, signed shifts `+/-[.01,.025,.05]` chips, and noise
-scales `[1,1.25,1.5]`. Amplitude and shift controls pass only under strict
+scales `[1,1.25,1.5]`. The small-shift negative control is exactly the frozen local
+numerical delay tangent `amount * np.gradient(predicted_raw, coordinates,
+edge_order=2)`; it does not use finite-support interpolation or zero-fill/truncate
+the edge taps. Amplitude and shift controls pass only under strict
 `median normalized TOPI increase < B0 increase`; noise uses the deliberate equality-
 accepting boundary `<=`. Stored amount/scale and deterministic noise vectors let the
 verifier regenerate each perturbation from the reference peak, coordinates, standardizer,
@@ -205,7 +208,8 @@ The exact physics pass grammar is:
    power `>=.2`, separation rho `>=.8`.
 3. Nuisance: median normalized TOPI increase is less than B0 increase for
    amplitude and small shift. Noise is reported and requires TOPI increase
-   `<=` B0 increase to pass.
+   `<=` B0 increase to pass. All nuisance outcomes are diagnostics only: they do
+   not alter, rescue, or fail any of c1-c8.
 
 ## Frozen decision grammar
 
@@ -224,7 +228,8 @@ use these exact operators:
 4. `c4`: at least three scenarios have pAUC delta strictly `> 0`, **or** both
    delays finite and `B0_delay - NC_delay >= .5`.
 5. `c5`: at least two paired pAUC CI lower bounds are strictly `> 0`.
-6. `c6`: equal-RMSE physics passes.
+6. `c6`: exactly the frozen equal-RMSE direction test passes; nuisance diagnostics
+   are not ANDed into this criterion.
 7. `c7`: second-peak physics passes.
 8. `c8`: actual NC mean pAUC gain over TOPI is strictly greater than shuffled
    gain and actual gain is strictly `> 0`.
@@ -369,8 +374,9 @@ otherwise only the core class/block-support reason is permitted.
 Physics stores actual/predicted/residual reference vectors, standardizer, coordinates,
 basis, Sigma/W, covariance fit identity binding, equal-RMSE raw tangent/orthogonal
 perturbations, the full second-peak grid, and amplitude/small-shift/noise nuisance raw
-perturbations.  Nuisance pass is required with equal-RMSE and second-peak pass.  The
-verifier reconstructs rather than trusting summary scalars.  Plots are rendered from
+perturbations. Nuisance pass is a separate diagnostic and never changes c1-c8; c6 is
+exactly equal-RMSE and c7 retains the preregistered second-peak grammar. The verifier
+reconstructs rather than trusting summary scalars.  Plots are rendered from
 stored data only: each scenario B0/TOPI/NC traces and PRN heatmap, tangent-vs-orthogonal,
 clean distributions, actual ROC and <=0.05 zoom, and second-peak heatmap.  Placeholder
 diagonals or empty axes are forbidden; `plot_provenance.json` records a positive data

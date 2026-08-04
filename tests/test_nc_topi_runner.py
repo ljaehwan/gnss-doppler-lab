@@ -249,6 +249,31 @@ def test_independent_verifier_and_tamper_probes(tmp_path):
     assert not v.verify_artifact(missing,verify_source=False)["ok"]
 
 
+def test_production_readme_renders_verified_results_and_corrected_decision():
+    summary=v.compute_summary(ROOT/"artifacts/nc_topi_stage0",verify_hashes=False,verify_source=False)
+    text=v.render_readme(summary)
+    assert text==v.render_readme(summary)
+    for evidence in (
+      "## Verified inventory and lineage",
+      "1,520 total metric rows = 1,480 scenario + 40 ablation",
+      "1,320 simple scalar/classification rows independently recomputed",
+      "all 1,480 scenario rows independently reconstructed",
+      "## Primary q99 / median results",
+      "DS7", "0.972973",
+      "## NC-B0 pAUC deltas and paired 10 s block bootstrap 95% CIs",
+      "## Frozen c1-c8 decision", "c6=true", "c7=false",
+      "c7_second_peak_false",
+      "nuisance controls are diagnostics only and do not rescue or fail c1-c8",
+      "median/top25_mean", "q99/q995", "all 10 ablations",
+      "cleanDynamic OOD failure", "DS1 capture failure",
+      "PD-ML", "correlator LASSO", "finite-tap",
+    ): assert evidence in text,evidence
+    manifest=json.loads((ROOT/"artifacts/nc_topi_stage0"/"data_manifest.json").read_text())
+    provenance=json.loads((ROOT/"artifacts/nc_topi_stage0"/"provenance.json").read_text())
+    assert manifest["checkpoint"]["sha256_recomputed"] in text
+    assert provenance["source_commit"] in text
+
+
 def test_artifact_stage_no_overwrite_and_failed_marker(tmp_path):
     final=tmp_path/"out"
     with r.ArtifactStage(final) as stage:
@@ -274,6 +299,48 @@ def test_synthetic_physics_raw_trials_are_deterministic_and_threshold_free():
     assert a["attack_thresholds_used"] is False and a["raw_trials"]==b["raw_trials"]
     assert max(x["b0_relative_difference"] for x in a["raw_trials"])<=1e-8
 
+
+def _production_shape_physics_result():
+    peak=np.exp(-4*r.core.CANONICAL_TAP_COORDS**2);std=np.linspace(.5,1.3,9);pairs=[]
+    for i in range(30):
+        ident=r.identity("rec","cleanStatic","G01",i,100+i)
+        residual=np.linspace(-.2,.2,9)+i/100
+        pairs.append(r.core.PeakPredictionPair(peak+residual,peak,residual/std,std,ident,
+          r.core.RAW_SPACE,r.core.RAW_SPACE,r.core.STANDARDIZED_SPACE,r.core.CANONICAL_TAP_COORDS))
+    provenance=r.core.FitProvenance("cleanStatic","normal_train",tuple(x.identity for x in pairs))
+    return r.run_synthetic_physics(pairs,r.core.fit_shrinkage_covariance(pairs,provenance=provenance))
+
+
+def test_local_shift_nuisance_is_exact_frozen_numerical_delay_tangent():
+    data=_production_shape_physics_result()
+    pred=np.asarray(data["reference_state"]["predicted_raw"])
+    expected_gradient=np.gradient(pred,r.core.CANONICAL_TAP_COORDS,edge_order=2)
+    shifts=[x for x in data["nuisance_grid"] if x["kind"]=="shift"]
+    assert shifts and data["criteria"]["nuisance_kind_pass"]["shift"] is True
+    for row in shifts:
+        expected=float(row["amount"])*expected_gradient
+        assert np.allclose(row["residual_raw"],expected,rtol=0,atol=1e-14)
+        assert np.allclose(row["changed_raw"],pred+expected,rtol=0,atol=1e-14)
+        assert expected[0] != 0 and expected[-1] != 0
+
+
+def test_verifier_equal_rmse_criterion_comes_from_reconstructed_raw_vectors():
+    import copy
+    data=copy.deepcopy(_production_shape_physics_result())
+    for row in data["raw_trials"]:
+        row["tangent_to_orthogonal_topi_ratio"]=1.0
+    data["criteria"]["equal_rmse_pass"]=False
+    errors=[];v.recompute_synthetic(data,errors)
+    assert any("equal-RMSE derived field tampered" in x or "synthetic criterion tampered: equal_rmse_pass" in x for x in errors),errors
+
+
+@pytest.mark.parametrize("criterion",("equal_rmse_pass","second_peak_pass"))
+def test_verifier_rejects_stored_raw_physics_criterion_mismatch(criterion):
+    import copy
+    data=copy.deepcopy(_production_shape_physics_result())
+    data["criteria"][criterion]=not data["criteria"][criterion]
+    errors=[];v.recompute_synthetic(data,errors)
+    assert any(f"synthetic criterion tampered: {criterion}" in x for x in errors),errors
 
 
 def test_iq_event_evidence_reuses_core_selected_indices(monkeypatch):
@@ -442,10 +509,13 @@ def test_full_sustained_metric_inventory_and_decision_uses_primary_finite_delays
     attack={x["metric"] for x in metrics if x["scenario"]=="DS1"};assert attack==expected
     delays=[x for x in metrics if x["scenario"]=="DS1" and x["metric"]=="sustained_delay"]
     assert delays and all(x["value"]==pytest.approx(1.) and x["censored"] is False and x["status"]=="detected" for x in delays)
-    synthetic={"criteria":{"equal_rmse_pass":True,"nuisance_pass":True,"second_peak_pass":True}}
+    synthetic={"criteria":{"equal_rmse_pass":True,"nuisance_pass":False,"second_peak_pass":False}}
     decision=r._derive_decision(metrics,bootstrap,synthetic)
     assert decision["evidence"]["nc_delay"]["DS1"]==pytest.approx(1.)
     assert decision["evidence"]["b0_delay"]["DS1"]==pytest.approx(1.)
+    assert decision["criteria"]["c6"] is True
+    assert decision["criteria"]["c7"] is False
+    assert decision["status"]=="NO-GO" and "c7_second_peak_false" in decision["no_go_triggers"]
 
 
 def test_physics_noise_equality_boundary_only_is_nonstrict():

@@ -979,7 +979,7 @@ def run_synthetic_physics(pairs: Sequence[core.PeakPredictionPair], covariance,
             for sign in (-1,1):
                 amount=sign*signed
                 residual=(amount*reference.predicted_raw if kind=="amplitude" else
-                    core.shift_peak(reference.predicted_raw,core.CANONICAL_TAP_COORDS,amount)-reference.predicted_raw)
+                    amount*np.gradient(reference.predicted_raw,core.CANONICAL_TAP_COORDS,edge_order=2))
                 projection=core.weighted_project(residual,basis.matrix,covariance.W,workspace=workspace,covariance=covariance)
                 nuisance.append({"kind":kind,"amount":amount,"noise_scale":1.,
                     "b0":math.sqrt(float(np.mean((residual/reference.standardizer_std)**2))),
@@ -1571,7 +1571,7 @@ def _derive_decision(metrics,bootstrap,synthetic):
       "nc_delay":{s:delay(s,"NC_TOPI") for s in core.ATTACK_SCENARIOS},
       "b0_delay":{s:delay(s,"B0") for s in core.ATTACK_SCENARIOS},
       "pauc_ci_lower":lower,"pauc_ci_upper":upper,
-      "equal_rmse_pass":bool(synthetic["criteria"]["equal_rmse_pass"] and synthetic["criteria"].get("nuisance_pass",False)),
+      "equal_rmse_pass":bool(synthetic["criteria"]["equal_rmse_pass"]),
       "second_peak_pass":bool(synthetic["criteria"]["second_peak_pass"]),
       "actual_nc_mean_pauc":float(np.mean(list(nc.values()))),
       "topi_mean_pauc":float(np.mean([pauc(s,"TOPI") for s in core.ATTACK_SCENARIOS])),

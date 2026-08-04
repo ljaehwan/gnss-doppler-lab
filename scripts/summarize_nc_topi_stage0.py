@@ -359,6 +359,7 @@ def _nuisance_kind_pass_independent(rows):
 
 def recompute_synthetic(data: Mapping[str,object], errors: list[str]) -> dict[str,object]:
     raw=data.get("raw_trials",[])
+    reconstructed_equal=[];reconstructed_second=[]
     reference=data.get("reference_state",{})
     if reference:
       try:
@@ -371,19 +372,24 @@ def recompute_synthetic(data: Mapping[str,object], errors: list[str]) -> dict[st
        for i,row in enumerate(raw):
         tangent=np.asarray(row["tangent_raw"],float);orth=np.asarray(row["orthogonal_raw"],float);std=np.asarray(row["standardizer_std"],float);basis=row["basis_matrix"]
         tb=float(np.sqrt(np.mean((tangent/std)**2)));ob=float(np.sqrt(np.mean((orth/std)**2)));tq,_=project(tangent,basis);oq,total=project(orth,basis)
-        checks=((tb,row["b0_tangent"]),(ob,row["b0_orthogonal"]),(tq,row["tangent_topi"]),(oq,row["orthogonal_topi"]))
-        if any(not math.isclose(a,float(b),rel_tol=1e-10,abs_tol=1e-12) for a,b in checks): raise ValueError(f"equal-RMSE raw reconstruction row {i}")
+        derived=(abs(tb-ob)/max(tb,ob,1e-15),tq/max(oq,1e-15),oq/max(total,1e-15))
+        checks=((tb,row["b0_tangent"]),(ob,row["b0_orthogonal"]),(tq,row["tangent_topi"]),(oq,row["orthogonal_topi"]),
+                (derived[0],row["b0_relative_difference"]),(derived[1],row["tangent_to_orthogonal_topi_ratio"]),
+                (derived[2],row["orthogonal_preserved_fraction"]))
+        if any(not math.isclose(a,float(b),rel_tol=1e-10,abs_tol=1e-12) for a,b in checks): raise ValueError(f"equal-RMSE derived field tampered/raw reconstruction row {i}")
+        reconstructed_equal.append(derived)
        pred=np.asarray(reference["predicted_raw"],float);basis=reference["basis_matrix"];std=np.asarray(reference["standardizer_std"],float)
        for i,row in enumerate(data.get("second_peak_grid",[])):
         residual=np.asarray(row["residual_raw"],float);changed=np.asarray(row["changed_raw"],float)
         if not np.allclose(residual,changed-pred,rtol=0,atol=1e-14): raise ValueError(f"second peak residual row {i}")
         topi,_=project(residual,basis);b0=float(np.sqrt(np.mean((residual/std)**2)))
         if not math.isclose(topi,float(row["topi"]),rel_tol=1e-10,abs_tol=1e-12) or not math.isclose(b0,float(row["b0"]),rel_tol=1e-10,abs_tol=1e-12): raise ValueError(f"second peak reconstruction row {i}")
+        reconstructed_second.append((float(row["relative_power"]),float(row["separation_chips"]),topi))
        coords=np.asarray(reference["coordinates"],float)
        for i,row in enumerate(data.get("nuisance_grid",[])):
         kind=row["kind"];amount=float(row["amount"]);scale=float(row["noise_scale"])
         if kind=="amplitude": expected=amount*pred
-        elif kind=="shift": expected=np.interp(coords-amount,coords,pred,left=0.,right=0.)-pred
+        elif kind=="shift": expected=amount*np.gradient(pred,coords,edge_order=2)
         elif kind=="noise": expected=np.asarray(row["noise_standard_normal"],float)*std*scale
         else: raise ValueError(f"unknown nuisance kind {kind}")
         residual=np.asarray(row["residual_raw"],float);changed=np.asarray(row["changed_raw"],float)
@@ -399,22 +405,22 @@ def recompute_synthetic(data: Mapping[str,object], errors: list[str]) -> dict[st
     result={}
     if raw:
         try:
-            rel=np.asarray([_number(x["b0_relative_difference"],"b0 rel") for x in raw])
-            ratios=np.asarray([_number(x["tangent_to_orthogonal_topi_ratio"],"ratio") for x in raw])
-            preserve=np.asarray([_number(x["orthogonal_preserved_fraction"],"preserved") for x in raw])
+            if len(reconstructed_equal)!=len(raw): raise ValueError("not all raw vectors reconstructed")
+            rel=np.asarray([x[0] for x in reconstructed_equal]);ratios=np.asarray([x[1] for x in reconstructed_equal]);preserve=np.asarray([x[2] for x in reconstructed_equal])
             result["equal_rmse_pass"]=bool(np.all(rel<=1e-8) and np.median(ratios)<=.05 and np.median(preserve)>=.95)
         except Exception as exc: errors.append(f"synthetic equal-RMSE reconstruction: {exc}")
     grid=data.get("second_peak_grid",[])
     if grid:
         try:
+            if len(reconstructed_second)!=len(grid): raise ValueError("not all raw vectors reconstructed")
             passes=[]
             for sep in (.25,.375,.5):
-                rows=[x for x in grid if math.isclose(float(x["separation_chips"]),sep)]
-                passes.append(_spearman([float(x["relative_power"]) for x in rows],[float(x["topi"]) for x in rows])>=.8)
+                rows=[x for x in reconstructed_second if math.isclose(x[1],sep)]
+                passes.append(_spearman([x[0] for x in rows],[x[2] for x in rows])>=.8)
             for power in (.2,.4,.8):
-                rows=[x for x in grid if math.isclose(float(x["relative_power"]),power)]
-                passes.append(_spearman([float(x["separation_chips"]) for x in rows],[float(x["topi"]) for x in rows])>=.8)
-            result["second_peak_pass"]=bool(all(passes))
+                rows=[x for x in reconstructed_second if math.isclose(x[0],power)]
+                passes.append(_spearman([x[1] for x in rows],[x[2] for x in rows])>=.8)
+            result["second_peak_power_pass"]=bool(all(passes[:3]));result["second_peak_separation_pass"]=bool(all(passes[3:]));result["second_peak_pass"]=bool(all(passes))
         except Exception as exc: errors.append(f"synthetic second-peak reconstruction: {exc}")
     nuisance=data.get("nuisance_grid",[])
     if nuisance:
@@ -429,7 +435,21 @@ def recompute_synthetic(data: Mapping[str,object], errors: list[str]) -> dict[st
         if name not in stated: continue
         mismatch=(stated[name]!=value) if isinstance(value,dict) else (bool(stated[name]) != value)
         if mismatch: errors.append(f"synthetic criterion tampered: {name}")
-    return {"raw_trials":len(raw),"second_peak_grid_rows":len(grid),"recomputed":result}
+    diagnostics={}
+    if len(reconstructed_equal)==len(raw) and raw:
+        diagnostics["equal_rmse"]={"max_b0_relative_difference":max(x[0] for x in reconstructed_equal),
+          "median_tangent_to_orthogonal_topi_ratio":float(np.median([x[1] for x in reconstructed_equal])),
+          "median_orthogonal_preserved_fraction":float(np.median([x[2] for x in reconstructed_equal]))}
+    if len(reconstructed_second)==len(grid) and grid:
+        diagnostics["second_peak"]={
+          "power_rho_by_separation":{str(sep):_spearman([x[0] for x in reconstructed_second if math.isclose(x[1],sep)],[x[2] for x in reconstructed_second if math.isclose(x[1],sep)]) for sep in (.25,.375,.5)},
+          "separation_rho_by_power":{str(power):_spearman([x[1] for x in reconstructed_second if math.isclose(x[0],power)],[x[2] for x in reconstructed_second if math.isclose(x[0],power)]) for power in (.2,.4,.8)}}
+    if nuisance:
+        diagnostics["nuisance"]={kind:{"rows":len(selected),
+          "median_b0_normalized":float(np.median([float(x["b0_normalized"]) for x in selected])),
+          "median_topi_normalized":float(np.median([float(x["topi_normalized"]) for x in selected])),
+          "pass":result.get("nuisance_kind_pass",{}).get(kind)} for kind in ("amplitude","shift","noise") for selected in ([x for x in nuisance if x["kind"]==kind],)}
+    return {"raw_trials":len(raw),"second_peak_grid_rows":len(grid),"recomputed":result,"diagnostics":diagnostics}
 
 
 def recompute_bootstrap(data: Mapping[str,object], errors: list[str]) -> dict[str,object]:
@@ -550,7 +570,7 @@ def _iq_features_independent(raw,epsilon=1e-12):
     lag=abs(np.vdot(z[:-1],z[1:]))/math.sqrt(float(np.vdot(z[:-1],z[:-1]).real*np.vdot(z[1:],z[1:]).real)+epsilon)
     return np.asarray([math.log(power+epsilon),math.log(noise+epsilon),flat,lag])
 
-def verify_production_contract(root: Path, errors: list[str], *, allow_test_fixture: bool=False) -> dict[str,object]:
+def verify_production_contract(root: Path, errors: list[str], *, allow_test_fixture: bool=False, physics_recomputed: Mapping[str,object]|None=None) -> dict[str,object]:
     result={};cfg=_json(root/"config.json");manifest=_json(root/"data_manifest.json");provenance=_json(root/"provenance.json")
     if "test_fixture" in cfg: errors.append("public artifact config contains forbidden test_fixture escape")
     if provenance.get("test_fixture") is not bool(allow_test_fixture): errors.append("artifact test_fixture provenance does not match verifier mode")
@@ -780,6 +800,7 @@ def verify_production_contract(root: Path, errors: list[str], *, allow_test_fixt
      else:
       if legacy.get("available") is not False or not legacy.get("reason"): raise ValueError("missing legacy source lacks explicit unavailable reason")
       result["legacy_positive_control_recomputed"]=False
+     result["legacy_positive_control"]={key:legacy.get(key) for key in ("scenario","expected_coverage","covered_keys","max_abs_rmse_error","defined_tolerance","positive_control_pass","primary_use","available")}
     except Exception as exc: errors.append(f"legacy positive control verification: {exc}")
     physics_data=_json(root/"synthetic_physics_tests.json");fit_data=_json(root/"fit_audit.json")
     ref=physics_data.get("reference_state",{})
@@ -795,7 +816,7 @@ def verify_production_contract(root: Path, errors: list[str], *, allow_test_fixt
      bootmap={(x["scenario"],x["aggregator"],x["comparison"]):x for x in boot}
      lower={s:(float(bootmap[(s,"median","NC-B0")]["ci"][0]) if bootmap[(s,"median","NC-B0")]["available"] else -1.) for s in ATTACKS}
      upper={s:(float(bootmap[(s,"median","NC-B0")]["ci"][1]) if bootmap[(s,"median","NC-B0")]["available"] else 1.) for s in ATTACKS}
-     criteria=physics_data.get("criteria",{})
+     criteria=(physics_recomputed or {}).get("recomputed",{})
      def one_delay(s,m):
       hits=[x for x in sm if x["scenario"]==s and x["method"]==m and x["aggregator"]=="median" and x["quantile"]=="0.99" and x["metric"]=="sustained_delay" and x["phase"]=="post"]
       if len(hits)!=1: raise ValueError(f"decision delay not unique {s}/{m}")
@@ -807,7 +828,7 @@ def verify_production_contract(root: Path, errors: list[str], *, allow_test_fixt
       "nc_delay":{s:one_delay(s,"NC_TOPI") for s in ATTACKS},
       "b0_delay":{s:one_delay(s,"B0") for s in ATTACKS},
       "pauc_ci_lower":lower,"pauc_ci_upper":upper,
-      "equal_rmse_pass":bool(criteria.get("equal_rmse_pass") and criteria.get("nuisance_pass")),
+      "equal_rmse_pass":bool(criteria.get("equal_rmse_pass")),
       "second_peak_pass":bool(criteria.get("second_peak_pass")),
       "actual_nc_mean_pauc":float(np.mean(list(nc.values()))),
       "topi_mean_pauc":float(np.mean([one_metric(s,"TOPI","pauc","stable_pre+post") for s in ATTACKS])),
@@ -816,6 +837,16 @@ def verify_production_contract(root: Path, errors: list[str], *, allow_test_fixt
      if stored_decision.get("evidence")!=evidence or stored_decision.get("status")!=rebuilt.status or stored_decision.get("criteria")!=rebuilt.criteria:
       errors.append("decision is not derived solely from verifier-recomputed metrics/bootstrap/physics")
     except Exception as exc:errors.append(f"independent decision evidence derivation: {exc}")
+    # README inputs are retained only after their underlying rows have been independently reconstructed.
+    def report_row(scenario,method,metric):
+     phase="normal_holdout" if scenario=="cleanStatic" else ("normal" if scenario=="cleanDynamic" else ("post" if metric in ("detection_rate","sustained_delay") else ("persistent" if metric=="persistent_alarm_ratio" else ("stable_pre" if metric=="fpr" else "stable_pre+post"))))
+     hits=[x for x in sm if x["scenario"]==scenario and x["method"]==method and x["aggregator"]=="median" and x["quantile"]=="0.99" and x["metric"]==metric and x["phase"]==phase]
+     if len(hits)!=1: raise ValueError(f"README metric not unique {scenario}/{method}/{metric}")
+     row=hits[0];return {"value":None if row.get("value","")=="" else float(row["value"]),"numerator":None if row.get("numerator","")=="" else int(float(row["numerator"])),"denominator":None if row.get("denominator","")=="" else int(float(row["denominator"])),"status":row.get("status",""),"censored":row.get("censored","")}
+    primary={s:{m:{metric:report_row(s,m,metric) for metric in (("fpr",) if s in ("cleanStatic","cleanDynamic") else ("fpr","roc_auc","pr_auc","pauc","detection_rate","sustained_delay","persistent_alarm_ratio"))} for m in ("B0","TOPI","NC_TOPI")} for s in PRODUCTION_SCENARIOS}
+    paired={s:{key:item for key,item in (("delta",evidence["pauc_delta"][s]),("ci_lower",evidence["pauc_ci_lower"][s]),("ci_upper",evidence["pauc_ci_upper"][s]),("available",bootmap[(s,"median","NC-B0")]["available"]),("valid_reps",bootmap[(s,"median","NC-B0")]["valid_reps"]))} for s in ATTACKS}
+    event_split={role:len([x for x in events if x["scenario"]=="cleanStatic" and x["role"]==role]) for role in ("normal_train","normal_calibration","normal_holdout","excluded_boundary_crossing")}
+    result["report"]={"lineage":{"source_commit":provenance.get("source_commit"),"checkpoint_sha256":manifest.get("checkpoint",{}).get("sha256_recomputed")},"inventory":{"scenario_metric_rows":len(sm),"ablation_metric_rows":len(ab),"production_metric_rows_reconstructed":result.get("metric_rows_recomputed",0),"simple_metric_rows_recomputed":sum(1 for x in sm+ab if (x.get("numerator","") and x.get("denominator","") and x.get("value","")) or (x.get("labels_json","") and x.get("scores_json","") and x.get("metric",""))),"methods":list(PRODUCTION_METHODS),"aggregators":list(AGGREGATORS),"quantiles":["q99","q995"]},"clean_split_prn_counts":result.get("split_counts",{}),"clean_split_event_counts":event_split,"iq":{"event_context_rows":len(iqrows),"linked_prn_contexts":sum(int(x["linked_pair_count"]) for x in iqrows),"raw_contexts_independently_recomputed":result.get("iq_raw_contexts_recomputed",0),"strict_causal":True},"legacy_ds7":result.get("legacy_positive_control",{}),"primary_q99_median":primary,"paired_nc_b0":paired,"decision":{"status":rebuilt.status,"criteria":rebuilt.criteria,"counts":rebuilt.counts,"no_go_triggers":rebuilt.no_go_triggers,"evidence":evidence},"physics":{"criteria":criteria,"diagnostics":(physics_recomputed or {}).get("diagnostics",{})}}
     plots=_json(root/"plot_provenance.json") if (root/"plot_provenance.json").exists() else {}
     required_plots={f"score_comparison_{s}.png" for s in PRODUCTION_SCENARIOS}|{f"prn_orth_heatmap_{s}.png" for s in PRODUCTION_SCENARIOS}|{"tangent_orth_energy.png","clean_distributions.png","roc.png","roc_low_fpr.png","second_peak_heatmap.png"}
     if set(plots.get("plots",{}))!=required_plots: errors.append("plot provenance inventory mismatch")
@@ -877,7 +908,7 @@ def compute_summary(root: str | Path, *, verify_hashes: bool=True,
     if production:
         for required in ("iq_context.csv","iq_context.npz","model_lineage_audit.json","plot_provenance.json"):
             if not (root/required).is_file(): errors.append(f"missing production required file: {required}")
-        try: production_contract=verify_production_contract(root,errors,allow_test_fixture=allow_test_fixture)
+        try: production_contract=verify_production_contract(root,errors,allow_test_fixture=allow_test_fixture,physics_recomputed=physics)
         except Exception as exc: errors.append(f"production strict contract failed: {exc}")
         scenarios=("cleanStatic","cleanDynamic","DS1","DS2","DS3","DS7","DS8")
         expected_plots={f"score_comparison_{name}.png" for name in scenarios} | {f"prn_orth_heatmap_{name}.png" for name in scenarios} | {"tangent_orth_energy.png","clean_distributions.png","roc.png","roc_low_fpr.png","second_peak_heatmap.png"}
@@ -913,48 +944,82 @@ def verify_test_artifact(root: str|Path, *, verify_source: bool=False) -> dict[s
 
 
 def render_readme(summary: Mapping[str,object]) -> str:
-    """Deterministic numeric README rendered solely from independently checked evidence."""
-    inv=summary.get("inventory",{}); epochs=summary.get("epochs",{}); th=summary.get("thresholds",{})
-    iq=summary.get("iq_causality",{}); syn=summary.get("synthetic",{}); boot=summary.get("bootstrap",{})
-    metrics=summary.get("metrics",{});fit=summary.get("fit",{});fit_audit=fit.get("fit_audit.json",{});decision_status=summary.get("decision_status","unavailable")
-    lines=[
-      "# NC-TOPI Stage-0 verified report", "",
-      "## Numeric inventory",
-      f"- Required files: {int(inv.get('required_files',0))}",
-      f"- Hashed files (hashes.json self-excluded): {int(inv.get('hashed_files',0))}",
-      f"- PNG plots: {int(inv.get('png_count',0))}",
-      f"- Epoch rows: {int(epochs.get('rows',0))}",
-      f"- PRN rows: {int(epochs.get('prn_rows',0))}",
-      f"- Event rows: {int(epochs.get('event_rows',0))}",
-      f"- Events independently reaggregated: {int(epochs.get('events_reaggregated',0))}",
-      f"- Thresholds independently recomputed: {int(th.get('checked',0))}",
-      f"- Clean calibration events: {int(th.get('clean_calibration_events',0))}",
-      f"- Metric rows: {int(metrics.get('rows',0))}",
-      f"- Metric rows independently recomputed: {int(metrics.get('recomputed_rows',0))}", "",
-      "## Frozen lineage and fit policy",
-      "- B0 predictions are regenerated from canonical complex 9-tap NPZ data and the hash-pinned checkpoint; legacy residual-only peaks are not reused as primary evidence.",
-      "- Covariance, Huber IQ conditioning, q995 cap, shuffled control and detector thresholds are cleanStatic-only fits.",
-      "- Attack-fit: false. Scenario identity, onset and PRN ID are forbidden fit features.",
-      "- cleanDynamic is evaluation-only and is never fit.",
-      f"- IQ context rows checked: {int(iq.get('checked',0))}; strict causal: {str(bool(iq.get('strict_causal',False))).lower()}.", "",
-      "## Physics and uncertainty",
-      f"- Equal-RMSE raw trials: {int(syn.get('raw_trials',0))}.",
-      f"- Second-peak grid rows: {int(syn.get('second_peak_grid_rows',0))}.",
-      f"- Bootstrap comparisons deterministically recomputed: {int(boot.get('deterministically_recomputed',0))}.",
-      f"- Bootstrap repetitions per available comparison: {int(boot.get('repetitions',2000))}.", "",
-      "## Interpretation and claims",
-      "- B0 is standardized nine-tap prediction RMSE. TOPI is raw-space W-orthogonal amp+shift energy. NC-TOPI divides TOPI by a causally predicted IQ-context scale (scale, not scale squared).",
-      "- Width tangent is diagnostic only. PD-ML, correlator LASSO and B0 are distinct baselines and are not interchangeable.",
-      "- The amplitude tangent is prompt-normalized shape-scale, not physical receiver global gain.",
-      "- DS1 failures must be reported rather than removed; transition epochs are excluded under the frozen source-support principle.",
-      "- Historical B0 training overlap can limit independence. Stage-0 can claim only hash-bound results on the frozen recordings/splits; it cannot claim universal spoofing detection or causal RF mechanism identification.", "",
-      "## Frozen decision", f"- Decision status: {decision_status}.", "- Decision evidence is rebuilt from metrics, bootstrap, and raw physics rather than trusted from decision.json.", "",
-       "## Verification result",
-      f"- Independent verification passed: {str(bool(summary.get('ok',False))).lower()}.",
-      f"- Verification error count: {len(summary.get('errors',[]))}.",
-    ]
+    """Byte-deterministic report rendered only from verifier-reconstructed evidence."""
+    inv=summary.get("inventory",{});epochs=summary.get("epochs",{});th=summary.get("thresholds",{})
+    iq_summary=summary.get("iq_causality",{});syn=summary.get("synthetic",{});boot=summary.get("bootstrap",{})
+    metrics=summary.get("metrics",{});report=summary.get("production_contract",{}).get("report",{})
+    if not report:
+        lines=["# NC-TOPI Stage-0 verified report","","## Verified inventory and lineage",
+          f"- Required files: {int(inv.get('required_files',0))}; hashed files: {int(inv.get('hashed_files',0))}; PNG plots: {int(inv.get('png_count',0))}.",
+          f"- Epoch rows: {int(epochs.get('rows',0))}; thresholds independently recomputed: {int(th.get('checked',0))}.",
+          f"- Metric rows: {int(metrics.get('rows',0))}; simple rows independently recomputed: {int(metrics.get('recomputed_rows',0))}.","",
+          "## Verification result",f"- Independent verification passed: {str(bool(summary.get('ok',False))).lower()}.",
+          f"- Verification error count: {len(summary.get('errors',[]))}."]
+        return "\n".join(lines)+"\n"
+    def f(value):
+        if value is None:return "NA"
+        if isinstance(value,bool):return str(value).lower()
+        if isinstance(value,float):return f"{value:.6g}"
+        return str(value)
+    rinv=report["inventory"];lineage=report["lineage"];prn=report["clean_split_prn_counts"];events=report["clean_split_event_counts"]
+    iq=report["iq"];legacy=report["legacy_ds7"];primary=report["primary_q99_median"]
+    physics=report["physics"];pc=physics["criteria"];diag=physics.get("diagnostics",{});decision=report["decision"]
+    total=int(rinv["scenario_metric_rows"])+int(rinv["ablation_metric_rows"])
+    lines=["# NC-TOPI Stage-0 verified report","","## Verified inventory and lineage",
+      f"- {total:,} total metric rows = {int(rinv['scenario_metric_rows']):,} scenario + {int(rinv['ablation_metric_rows']):,} ablation.",
+      f"- {int(rinv['simple_metric_rows_recomputed']):,} simple scalar/classification rows independently recomputed; all {int(rinv['production_metric_rows_reconstructed']):,} scenario rows independently reconstructed by the production contract.",
+      f"- Frozen B0 checkpoint SHA256: `{lineage['checkpoint_sha256']}`.",f"- Source commit: `{lineage['source_commit']}`.",
+      f"- Clean split PRN counts: train={prn['normal_train']:,}, calibration={prn['normal_calibration']:,}, holdout={prn['normal_holdout']:,}, excluded-boundary={prn['excluded_boundary_crossing']:,}.",
+      f"- Clean split event counts: train={events['normal_train']:,}, calibration={events['normal_calibration']:,}, holdout={events['normal_holdout']:,}, excluded-boundary={events['excluded_boundary_crossing']:,}.",
+      f"- Causal IQ: {iq['event_context_rows']:,} event contexts / {iq['linked_prn_contexts']:,} linked PRN contexts; {iq['raw_contexts_independently_recomputed']:,} raw contexts independently reread; strict causal={f(iq['strict_causal'])}.",
+      f"- DS7 legacy positive control (non-primary): coverage={legacy.get('covered_keys')}/{legacy.get('expected_coverage')}, max absolute RMSE error={f(legacy.get('max_abs_rmse_error'))}, tolerance={f(legacy.get('defined_tolerance'))}, pass={f(legacy.get('positive_control_pass'))}.","",
+      "## Primary q99 / median results",
+      "Primary evidence is the frozen median aggregator at q99. Values below are independently reconstructed from event scores and typed thresholds.","",
+      "| Scenario | Method | FPR | ROC-AUC | PR-AUC | pAUC@0.05 | stable-pre FPR | post detection | 3-consecutive sustained delay (s/status) | persistent ratio |",
+      "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
+    for scenario in PRODUCTION_SCENARIOS:
+      for method in ("B0","TOPI","NC_TOPI"):
+        rows=primary[scenario][method]
+        if scenario in ("cleanStatic","cleanDynamic"):
+          label="cleanStatic holdout" if scenario=="cleanStatic" else "cleanDynamic external"
+          lines.append(f"| {label} | {method} | {f(rows['fpr']['value'])} ({rows['fpr']['numerator']}/{rows['fpr']['denominator']}) | - | - | - | - | - | - | - |")
+        else:
+          delay=rows["sustained_delay"];detect=rows["detection_rate"];persist=rows["persistent_alarm_ratio"]
+          lines.append(f"| {scenario} | {method} | - | {f(rows['roc_auc']['value'])} | {f(rows['pr_auc']['value'])} | {f(rows['pauc']['value'])} | {f(rows['fpr']['value'])} ({rows['fpr']['numerator']}/{rows['fpr']['denominator']}) | {f(detect['value'])} ({detect['numerator']}/{detect['denominator']}) | {f(delay['value'])}/{delay['status']} | {f(persist['value'])} ({persist['numerator']}/{persist['denominator']}) |")
+    lines += ["","## NC-B0 pAUC deltas and paired 10 s block bootstrap 95% CIs",
+      "Paired scores are resampled in frozen nonoverlapping 10 s recording/label/cadence blocks (2,000 repetitions where available).","",
+      "| Attack | NC-B0 pAUC delta | 95% CI | valid reps |","|---|---:|---:|---:|"]
+    for scenario in ATTACKS:
+      row=report["paired_nc_b0"][scenario]
+      lines.append(f"| {scenario} | {f(row['delta'])} | [{f(row['ci_lower'])}, {f(row['ci_upper'])}] | {row['valid_reps']} |")
+    criteria="; ".join(f"{name}={f(value)}" for name,value in sorted(decision["criteria"].items()))
+    counts="; ".join(f"{name}={value}" for name,value in sorted(decision["counts"].items()))
+    triggers=", ".join(decision["no_go_triggers"]) or "none"
+    lines += ["","## Frozen c1-c8 decision",f"- Status: **{decision['status']}**.",f"- Criteria: {criteria}.",f"- Counts: {counts}.",f"- Exact NO-GO trigger(s): {triggers}.",
+      "- c6 is exactly the frozen equal-RMSE direction test; nuisance controls are diagnostics only and do not rescue or fail c1-c8.","",
+      "## Synthetic physics and nuisance diagnostics"]
+    equal=diag.get("equal_rmse",{});second=diag.get("second_peak",{})
+    lines += [f"- Equal-RMSE: pass={f(pc.get('equal_rmse_pass'))}; trials={syn.get('raw_trials',0)}; max B0 relative difference={f(equal.get('max_b0_relative_difference'))}; median tangent/orthogonal TOPI ratio={f(equal.get('median_tangent_to_orthogonal_topi_ratio'))}; median orthogonal preservation={f(equal.get('median_orthogonal_preserved_fraction'))}.",
+      f"- Second peak: pass={f(pc.get('second_peak_pass'))}; power pass={f(pc.get('second_peak_power_pass'))}; separation pass={f(pc.get('second_peak_separation_pass'))}; rows={syn.get('second_peak_grid_rows',0)}.",
+      f"- Second-peak power rho by separation: {json.dumps(second.get('power_rho_by_separation',{}),sort_keys=True,separators=(',',':'))}.",
+      f"- Second-peak separation rho by power: {json.dumps(second.get('separation_rho_by_power',{}),sort_keys=True,separators=(',',':'))}."]
+    for kind in ("amplitude","shift","noise"):
+      row=diag.get("nuisance",{}).get(kind,{})
+      semantics="local numerical delay tangent (amount * gradient, edge_order=2)" if kind=="shift" else ("prompt-normalized shape-scale" if kind=="amplitude" else "frozen seeded standardized noise")
+      lines.append(f"- Nuisance {kind} ({semantics}): rows={row.get('rows',0)}, median normalized B0={f(row.get('median_b0_normalized'))}, median normalized TOPI={f(row.get('median_topi_normalized'))}, pass={f(row.get('pass'))}.")
+    dynamic=primary["cleanDynamic"];ds1=primary["DS1"]["NC_TOPI"];missed=ds1["detection_rate"]["denominator"]-ds1["detection_rate"]["numerator"]
+    lines += ["","## Frozen inventory scope and limitations",
+      f"- Both median/top25_mean aggregators and q99/q995 thresholds are frozen and reported in `scenario_metrics.csv`; primary is median/q99. `ablation_metrics.csv` reports all 10 ablations.",
+      f"- cleanDynamic OOD failure: external q99/median FPR is B0={f(dynamic['B0']['fpr']['value'])}, TOPI={f(dynamic['TOPI']['fpr']['value'])}, NC-TOPI={f(dynamic['NC_TOPI']['fpr']['value'])}; this failure is reported, not hidden.",
+      f"- DS1 capture failure/reporting: q99/median NC-TOPI misses {missed}/{ds1['detection_rate']['denominator']} post epochs and its 3-consecutive delay is {f(ds1['sustained_delay']['value'])} s; no failed capture is removed.",
+      "- Frozen B0 predicts a finite nine-tap shape, not an infinite-support physical correlation function; edge/tail behavior is a finite-tap caveat.",
+      "- Historical B0 training overlap with Stage-0 source support limits independence; B0 was hash-pinned and never retrained or selected here.","",
+      "## Baselines and claim boundary",
+      "- PD-ML is a likelihood-family method, correlator LASSO is a sparse multi-component fit, and B0 is standardized frozen-predictor nine-tap RMSE. They are distinct and not interchangeable.",
+      "- Claimable contribution: a hash-bound, clean-fit, independently reconstructable Stage-0 evaluation of tangent-orthogonal TOPI and causal IQ scale conditioning on these frozen recordings/splits.",
+      "- Non-claimable: universal spoofing detection, superiority to unimplemented PD-ML/correlator LASSO baselines, causal RF-mechanism identification, or independence from historical B0 overlap.","",
+      "## Verification result",f"- Independent verification passed: {str(bool(summary.get('ok',False))).lower()}.",f"- Verification error count: {len(summary.get('errors',[]))}."]
     return "\n".join(lines)+"\n"
-
 
 def verify_artifact(root: str | Path, *, verify_source: bool=True) -> dict[str,object]:
     root=Path(root)
