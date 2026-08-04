@@ -4,6 +4,7 @@ import csv
 import importlib.util
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 import pytest
@@ -11,6 +12,35 @@ import pytest
 from gnss_doppler_lab import nc_topi_stage0b as a
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def _runner_module():
+    path = ROOT / "scripts/audit_nc_topi_shortcut.py"
+    spec = importlib.util.spec_from_file_location("stage0b_runner_under_test", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_runner_conditioner_indices_use_frozen_prn_roles_not_event_roles():
+    runner = _runner_module()
+    common = {
+        "scenario": "cleanStatic",
+        "physical_recording_id": "rec",
+        "target_index": "0",
+        "availability_time_s": "300.0",
+        "valid": "True",
+    }
+    train_prn_excluded_event = {**common, "event_id": "e1", "role": "normal_train"}
+    excluded_prn_train_event = {**common, "event_id": "e2", "role": "excluded_boundary_crossing"}
+    data = SimpleNamespace(
+        prn_rows=[train_prn_excluded_event, excluded_prn_train_event],
+        event_rows=[
+            {**common, "event_id": "e1", "role": "excluded_boundary_crossing"},
+            {**common, "event_id": "e2", "role": "normal_train"},
+        ],
+    )
+    assert runner._indices(data, "cleanStatic", "normal_train") == [0]
 
 
 def test_boolean_parser_fails_closed():

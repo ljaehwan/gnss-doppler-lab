@@ -29,10 +29,8 @@ def _csv(path,rows,fields=None):
     with Path(path).open("w",newline="",encoding="utf-8") as f:
         w=csv.DictWriter(f,fieldnames=fields,extrasaction="ignore");w.writeheader();w.writerows(rows)
 
-def _event_roles(data):return {core._event_key(r):r["role"] for r in data.event_rows}
 def _indices(data,scenario,role=None):
-    er=_event_roles(data)
-    return [i for i,r in enumerate(data.prn_rows) if r["scenario"]==scenario and core.parse_bool(r["valid"]) and (role is None or er[core._event_key(r)]==role)]
+    return [i for i,r in enumerate(data.prn_rows) if r["scenario"]==scenario and core.parse_bool(r["valid"]) and (role is None or r["role"]==role)]
 
 def _fit_models(data,shuffle=False):
     train=_indices(data,"cleanStatic","normal_train");meta=[{"identity":data.prn_identities[i],"scenario":"cleanStatic","role":"normal_train","phase":"normal","label":0,"valid":True} for i in train]
