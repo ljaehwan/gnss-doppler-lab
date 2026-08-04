@@ -1,6 +1,6 @@
 {
   "B0": {
-    "checkpoint": "/home/ubuntu/projects/gnss-doppler-r2c-stage0/artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt",
+    "checkpoint": "artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt",
     "retrained": false,
     "sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b"
   },

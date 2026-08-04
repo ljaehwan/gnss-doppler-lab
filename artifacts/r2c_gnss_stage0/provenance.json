@@ -4,25 +4,25 @@
   "cpu_count": 12,
   "cuda_used": false,
   "executable_source_clean": true,
-  "freeze_sha256": "7ba6439cb5b774e03ca7988982bfd632763f685498f535c228ce7aa93b588cad",
+  "freeze_sha256": "7f0e89adb0cf2ad2c73aaa213b479d5652782678174b85b09ea38ce3d35a8d30",
   "frozen_base_commit": "461eb4dc7bb794e719295daf028f6811658ba37f",
   "generation_policy": "clean-source-commit-v1: exact executable source bundle and immediate artifact-only child commit",
   "numpy": "2.5.1",
   "platform": "Linux-6.8.0-136-generic-x86_64-with-glibc2.39",
   "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]",
-  "runtime_s": 845.970865726471,
+  "runtime_s": 835.5323557853699,
   "source_bundle": {
-    "bundle_sha256": "f13e9858cc4f426645ffd1ef83ea1dc770ca910e7a01edf997ce89026055c188",
+    "bundle_sha256": "2ecda71142a6696b2fb2cc454f91ad1f40da8de86ade61808352982081ca5fcb",
     "files": {
       "configs/r2c_clean_dynamic_geometry_receiver.conf": "26fa409aa806b0020337508b231505ee6d3e08f3fc865187a2076aef3bfcf32a",
       "configs/r2c_gnss_stage0.json": "aebebacbb5e0961e7067485dd9d34b402a258dcd3501e9e5f21af77d205d5257",
-      "scripts/run_r2c_gnss_stage0.py": "f14c218beb6e3d082f14ecc5a28efdb2ed073bb6d65a481a27c203b541350f12",
+      "scripts/run_r2c_gnss_stage0.py": "7d6fa57903217ee7d536e54581841d1b151fa476eaef0d8f9db45f9108fd0c56",
       "scripts/verify_r2c_gnss_stage0.py": "2962de55c94844183e0c17141ddf186feb3a79762e87a43418a87d4a27d02622",
       "src/gnss_doppler_lab/r2c_gnss.py": "5a2dd974464c83949ba4dc67ce32c323aa2b71f722d6c85b94ad9422e57df273"
     },
     "schema": "gnss-doppler-lab.r2c-source-bundle.v1"
   },
-  "source_commit_at_generation": "4e4dcf3176ebc18e9e3ee5b56a781098b09645a9",
+  "source_commit_at_generation": "0b24cbe57412d96a5993e86a77754847b10e6c2f",
   "superseded_commit": "75ff99b7a3fdb568682c75096ee0fd690a48dfa6",
   "task_id": "r2c-gnss-stage0-20260804"
 }
