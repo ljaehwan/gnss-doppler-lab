@@ -128,7 +128,7 @@ def reconstruct(name,directory,selected,config,expected_week=None,expected_tow=N
     decoded=[x.decoded_tow for x in eph.values() if x.decoded_tow is not None]
     causal=False
     return {"scenario":name,"derived_time":{"status":"PASS" if week_ok and abs(rinex_rx_delta)<=1 else "FAIL","gps_week":binding["gps_week"],"start_tow_s":start,"rinex_rx_delta_s":rinex_rx_delta,"ephemeris_week_modulo":sorted(modulo),"assertions":assertions},
-      "lineage":{"rinex":binding,"observables":lineage,"selected":selected_report,"receiver_source_iq_sha256":source_iq_hash(directory),"ephemeris_sha256":sha(directory/"gps_ephemeris.xml"),"nmea_sha256":sha(directory/"nmea_pvt.nmea")},
+      "lineage":{"rinex":binding,"observables":lineage,"selected":selected_report,"receiver_manifest":{"path":str((directory/"manifest.json").resolve()),"sha256":sha(directory/"manifest.json")} if (directory/"manifest.json").is_file() else {"status":"LINEAGE_GAP"},"receiver_source_iq_sha256":source_iq_hash(directory),"export_source_iq_sha256":selected_report.get("source_iq_sha256"),"source_iq_binding_status":selected_report.get("lineage_status"),"ephemeris_sha256":sha(directory/"gps_ephemeris.xml"),"nmea_sha256":sha(directory/"nmea_pvt.nmea")},
       "nmea":pvt_report,"event_time_causal_ephemeris_availability":{"status":"PASS" if causal else "OFFLINE_ORACLE_ONLY","decoded_history_authenticated":causal},
       "offline_geometry_coverage":{"status":"PASS" if coverage_pass else "FAIL","valid_events":valid,"eligible_events":len(eligible),"coverage":coverage,"complete_10s_blocks":len(blocks),"rejection_reasons":reasons,"maximum_condition":max(conditions) if conditions else None},"los_by_bin":los_by_bin}
 def main():
@@ -137,6 +137,7 @@ def main():
     reports={n:reconstruct(n,d,selected[n],config,weeks.get(n),tows.get(n)) for n,d in receivers.items()}
     target=args.report.resolve();production=(ROOT/"artifacts/r2c_gnss_stage0_fix").resolve()
     if target==production or production in target.parents:raise ValueError("geometry report cannot enter campaign artifact in pre-campaign phase")
-    target.parent.mkdir(parents=True,exist_ok=True);target.write_text(json.dumps({"schema":"gnss-doppler-lab.r2c-strict-time-geometry.v2","attack_scores_computed":False,"scenarios":reports},indent=2)+"\n")
+    subset_hash=hashlib.sha256(json.dumps(config,sort_keys=True,separators=(",",":")).encode()).hexdigest()
+    target.parent.mkdir(parents=True,exist_ok=True);target.write_text(json.dumps({"schema":"gnss-doppler-lab.r2c-strict-time-geometry.v2","attack_scores_computed":False,"geometry_config":{"values":config,"sha256":subset_hash},"scenarios":reports},indent=2)+"\n")
     print(json.dumps({n:{"week":r["derived_time"]["gps_week"],"tow":r["derived_time"]["start_tow_s"],"coverage":r["offline_geometry_coverage"]} for n,r in reports.items()}))
 if __name__=="__main__":main()

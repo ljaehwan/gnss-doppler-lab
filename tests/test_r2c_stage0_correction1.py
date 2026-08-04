@@ -103,10 +103,10 @@ def test_runner_guard_and_synthetic_end_to_end_then_verifier_negative(tmp_path):
     with pytest.raises(FileExistsError):runner.validate_destination(existing,test_mode=True)
     output=tmp_path/"campaign";config=json.loads((ROOT/"configs/r2c_gnss_stage0_fix.json").read_text());head=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()
     runner.run_synthetic(output,config,head);assert {p.name for p in output.iterdir() if p.is_file()}==TOP_LEVEL_FILES
-    errors=verifier.verify(output,require_committed=False);assert not errors
+    errors=verifier.verify(output,require_committed=False,allow_synthetic_test_artifact=True);assert not errors
     rows=(output/"per_epoch_scores.csv").read_text().splitlines();rows[1]=rows[1].replace(",A1,",",A2,");(output/"per_epoch_scores.csv").write_text("\n".join(rows)+"\n")
     hashes=json.loads((output/"hashes.json").read_text());hashes["files"]["per_epoch_scores.csv"]=hashlib.sha256((output/"per_epoch_scores.csv").read_bytes()).hexdigest();(output/"hashes.json").write_text(json.dumps(hashes))
-    assert verifier.verify(output,require_committed=False)
+    assert verifier.verify(output,require_committed=False,allow_synthetic_test_artifact=True)
 
 def test_verifier_tamper_negative_suite(tmp_path):
     runner=load_script("run_r2c_gnss_stage0_fix");verifier=load_script("verify_r2c_gnss_stage0_fix")
@@ -119,7 +119,7 @@ def test_verifier_tamper_negative_suite(tmp_path):
             manifest=json.loads((target/"hashes.json").read_text())
             manifest["files"]={str(p.relative_to(target)):hashlib.sha256(p.read_bytes()).hexdigest() for p in target.rglob("*") if p.is_file() and p.name!="hashes.json"}
             (target/"hashes.json").write_text(json.dumps(manifest))
-        assert verifier.verify(target,require_committed=False),name
+        assert verifier.verify(target,require_committed=False,allow_synthetic_test_artifact=True),name
     case("empty_hashes",lambda p:(p/"hashes.json").write_text(json.dumps({"algorithm":"sha256","policy":"all files recursively except hashes.json","files":{}})),False)
     def gates(p):
         d=json.loads((p/"decision.json").read_text());d["verdict"]="PHYSICS_SUPPORTED";(p/"decision.json").write_text(json.dumps(d))

@@ -45,7 +45,7 @@ def test_b0_sequence_rejects_gap_duplicate_and_schema_order():
 def test_b0_replay_known_binomial_and_recording_reset():
     rows=[]
     for run in ("a","b"):
-        for prn,value in enumerate([.2,.2,.01],1): rows.append({"run_id":run,"prn":prn,"window_bin_s":0.,
+        for prn,value in enumerate([.2,.2,.01],1): rows.append({"run_id":run,"prn":prn,"window_bin_s":2.5,
             "window_start_s":2.,"window_mid_s":2.5,"prn_node_rmse":value})
     out=replay_b0_events(pd.DataFrame(rows))
     assert out.availability_time_s.tolist()==[3.,3.]

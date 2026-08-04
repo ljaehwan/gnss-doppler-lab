@@ -52,10 +52,33 @@ def parse_named_specs(specs,*,roster=None):
 def load_geometry_specs(specs):
     if len(specs)==1 and "=" not in specs[0]:
         doc=load(Path(specs[0])); scenarios=doc.get("scenarios")
-        if not isinstance(scenarios,dict):raise ValueError("geometry wrapper missing scenarios")
+        if doc.get("schema")!="gnss-doppler-lab.r2c-strict-time-geometry.v2" or doc.get("attack_scores_computed") is not False:raise ValueError("invalid geometry wrapper schema")
+        if not isinstance(scenarios,dict) or set(scenarios)!=set(SCENARIOS):raise ValueError("geometry wrapper scenario roster mismatch")
+        for name,item in scenarios.items():
+            if item.get("scenario")!=name or not all(k in item for k in ("derived_time","lineage","event_time_causal_ephemeris_availability","offline_geometry_coverage","los_by_bin")):raise ValueError("geometry wrapper scenario mismatch or missing fields")
         return scenarios,Path(specs[0])
     named=parse_named_specs(specs,roster=SCENARIOS)
     return {name:load(Path(path)) for name,path in named.items()},None
+
+def load_b0_validation(path:Path,config):
+    doc=load(path)
+    if doc.get("schema")!="gnss-doppler-lab.r2c-b0-validation.v2" or doc.get("attack_scores_computed") is not False:raise ValueError("invalid B0 validation schema")
+    if set(doc.get("scenarios",{}))!=set(SCENARIOS):raise ValueError("B0 validation scenario roster mismatch")
+    checkpoint=doc.get("checkpoint",{});checkpoint_path=Path(checkpoint.get("path",""))
+    if not checkpoint_path.is_file() or sha(checkpoint_path)!=checkpoint.get("sha256") or checkpoint.get("sha256")!=config["b0"]["checkpoint_sha256"]:raise ValueError("B0 checkpoint provenance mismatch")
+    for name,item in doc["scenarios"].items():
+        for prefix in ("saved_score","node_csv"):
+            if item.get(f"{prefix}_path"):
+                source=Path(item[f"{prefix}_path"]);expected=item.get(f"{prefix}_sha256")
+                if not source.is_file() or sha(source)!=expected:item.update({"status":"UNAVAILABLE_AUTHENTIC_INTERFACE","event_rows":[],"reason":f"{prefix} hash invalid"})
+        rows=item.get("event_rows",[])
+        if rows:
+            digest=hashlib.sha256(json.dumps(rows,sort_keys=True,separators=(",",":"),default=str).encode()).hexdigest()
+            if digest!=item.get("event_rows_sha256"):item.update({"status":"UNAVAILABLE_AUTHENTIC_INTERFACE","event_rows":[],"reason":"event rows hash invalid"})
+    valid_files=[x for x in doc["scenarios"].values() if x.get("event_rows")]
+    if not valid_files:doc["aggregate_status"]="UNAVAILABLE_AUTHENTIC_INTERFACE"
+    doc["paper_comparison_eligible"]=bool(doc.get("paper_comparison_eligible") and all(x.get("status")=="AVAILABLE_AUTHENTIC_NODE_TO_SCORE_REPLAY" for x in doc["scenarios"].values() if x.get("event_rows")))
+    return doc
 
 def validate_source(source_commit: str, *, test_mode=False):
     head=git("rev-parse","HEAD")
@@ -141,10 +164,11 @@ def fit_frozen_models(clean,config,provider,taps,grid,*,require_gpu):
 
 def score_bin(observations,los,provider,taps,grid,models,config,conditions_by_prn=None):
     h0=joint_profile_glrt(observations,los,provider,taps,grid,hypothesis="H0",whitener=models["analytic"])
-    individual={}
+    individual={};rejected={}
     for p,y in observations.items():
         fit=joint_profile_glrt({p:y},{},provider,taps,grid,hypothesis="H1-independent",whitener=models["analytic"])
-        individual[p]=fit.score
+        if fit.valid:individual[p]=fit.score
+        else:rejected[int(p)]=fit.reason or "invalid_fit"
     if conditions_by_prn is None: raise ValueError("runner neural inference conditions are required")
     neural_obs={p:y-models["neural_model"].predict(conditions_by_prn[p][0]) for p,y in observations.items()}
     energy_obs={p:y-models["energy_model"].predict(conditions_by_prn[p][1]) for p,y in observations.items()}
@@ -155,10 +179,20 @@ def score_bin(observations,los,provider,taps,grid,models,config,conditions_by_pr
     shared=full_result.fit
     analytic_shared=joint_profile_glrt(analytic_obs,shared_los,provider,taps,grid,hypothesis="H1-shared",whitener=models["analytic"],beta_bounds_m=config["beta_bounds_m"],optimizer_starts=config["optimizer_starts_m"]) if common else None
     energy_shared=joint_profile_glrt(energy_shared_obs,shared_los,provider,taps,grid,hypothesis="H1-shared",whitener=models["energy_whitener"],beta_bounds_m=config["beta_bounds_m"],optimizer_starts=config["optimizer_starts_m"]) if common else None
-    scores=detector_scores(individual,analytic_shared,independent,shared,energy_shared,float(np.mean([np.mean(np.abs(y)**2) for y in observations.values()])))
-    statuses={d:("AVAILABLE" if value is not None else "UNAVAILABLE_INVALID_GEOMETRY") for d,value in scores.items()}
+    values=np.asarray(list(individual.values()),float)
+    scores={"A1":float(values.max()) if len(values) else None,
+      "A2":float(np.median(values)+np.mean(np.sort(values)[-min(4,len(values)):])) if len(values) else None,
+      "A3":analytic_shared.score if analytic_shared is not None and analytic_shared.valid and h0.valid else None,
+      "A4":independent.score if independent.valid and h0.valid else None,
+      "Full":shared.score if shared is not None and shared.valid and h0.valid else None,
+      "Neural-with-energy":energy_shared.score if energy_shared is not None and energy_shared.valid and h0.valid else None,
+      "Power-only":float(np.mean([np.mean(np.abs(y)**2) for y in observations.values()]))}
+    statuses={d:("AVAILABLE" if value is not None else "UNAVAILABLE_INVALID_FIT") for d,value in scores.items()}
     statuses["Full"]=full_result.status
-    return scores,{"H0":h0,"A4":independent,"Full":shared,"A3":analytic_shared,"Neural-with-energy":energy_shared,"FullScorer":full_scorer,"statuses":statuses},individual
+    if not h0.valid:
+        for d in ("A1","A2","A3","A4","Full","Neural-with-energy"):scores[d]=None;statuses[d]="UNAVAILABLE_INVALID_H0"
+    return scores,{"H0":h0,"A4":independent,"Full":shared,"A3":analytic_shared,"Neural-with-energy":energy_shared,"FullScorer":full_scorer,"statuses":statuses,
+      "individual_rejected_count":len(rejected),"individual_rejected_reasons":rejected},individual
 
 def synthetic_inputs(seed=20260803):
     rng=np.random.default_rng(seed); taps=np.arange(-.5,.5001,.125); provider=TemplateProvider.analytic()
@@ -197,24 +231,20 @@ def run_synthetic(output,config,source_commit):
     smoke_config={**config,"optimizer_starts_m":[config["optimizer_starts_m"][0]]}
     scores,fits,_=score_bin(chosen,los,provider,taps,grid,models,smoke_config,condition_map)
     calibration=np.linspace(0,1,100); thresholds=calibration_thresholds(calibration,["normal_calibration"]*100)
-    def full(obs,pair):
-        local={p:(np.column_stack((np.full(len(y),40.),np.mean(np.abs(h0_residuals(y,provider,taps,grid))**2,axis=1))),
-                    np.column_stack((np.full(len(y),40.),np.mean(np.abs(h0_residuals(y,provider,taps,grid))**2,axis=1),np.mean(np.abs(y)**2,axis=1)))) for p,y in obs.items()}
-        adjusted={p:y-models["neural_model"].predict(local[p][0]) for p,y in obs.items()}
-        return joint_profile_glrt(adjusted,pair,provider,taps,grid,hypothesis="H1-shared",whitener=models["neural_whitener"],beta_bounds_m=smoke_config["beta_bounds_m"],optimizer_starts=smoke_config["optimizer_starts_m"]).score
-    controls=run_full_controls(full,chosen,los,thresholds["q99"],provider,taps,seed=config["seed"])
+    controls=run_full_controls(fits["FullScorer"],chosen,los,thresholds["q99"],provider,taps,seed=config["seed"])
+    if controls["baseline_score"]!=scores["Full"]:raise RuntimeError("synthetic control baseline differs from operational Full")
     gates={name:{"status":"NOT_EVALUATED"} for name in ("complex_provenance","time_los_alignment","geometry_coverage","clean_dynamic_fpr","gain_invariance","phase_invariance","noise_gain_alarms","relation_destruction","full_improvement","full_a2_two_scenarios","shortcut_controls")}
     decision=derive_two_layer_decision(gates)
-    provenance={"source_commit":source_commit,"source_bundle":source_bundle(),"preserved_artifact_tree":PRESERVED_TREE,"synthetic_test_mode":True,"external_inputs":[]}
-    documents={name:{} for name in TOP_LEVEL_FILES if name.endswith(".json") and name!="hashes.json"}
+    provenance={"schema":"gnss-doppler-lab.r2c-synthetic-provenance.v1","source_commit":source_commit,"source_bundle":source_bundle(),"preserved_artifact_tree":PRESERVED_TREE,"synthetic_test_mode":True,"external_inputs":[]}
+    documents={name:{"schema":f"gnss-doppler-lab.r2c-synthetic-{name[:-5].replace('_','-')}.v1","status":"NOT_APPLICABLE_SYNTHETIC"} for name in TOP_LEVEL_FILES if name.endswith(".json") and name!="hashes.json"}
     documents.update({"config.json":config,"provenance.json":provenance,"training_summary.json":{"models":{k:v.serialize() if hasattr(v,"serialize") else None for k,v in models.items() if k in ("analytic","neural_model","energy_model","neural_whitener","energy_whitener")}},
-      "thresholds.json":thresholds,"gain_invariance.json":controls,"phase_invariance.json":controls,"noise_control.json":controls,
+      "thresholds.json":{"schema":"gnss-doppler-lab.r2c-synthetic-thresholds.v1",**thresholds},"gain_invariance.json":controls,"phase_invariance.json":controls,"noise_control.json":controls,
       "multipath_control.json":controls,"second_source_injection.json":controls,"relation_destruction.json":controls,
-      "bootstrap_comparisons.json":{"status":"NOT_EVALUATED_SYNTHETIC","repetitions":2000},"decision.json":{**decision,"gates":gates},"verification.json":{"status":"PENDING_EXTERNAL_VERIFIER"}})
+      "bootstrap_comparisons.json":{"schema":"gnss-doppler-lab.r2c-synthetic-bootstrap.v1","status":"NOT_APPLICABLE_SYNTHETIC","repetitions":2000},"decision.json":{"schema":"gnss-doppler-lab.r2c-synthetic-decision.v1",**decision,"gates":gates},"verification.json":{"schema":"gnss-doppler-lab.r2c-synthetic-verification.v1","status":"SYNTHETIC_TEST_NOT_PRODUCTION"}})
     score_rows=[]
     for detector,value in scores.items():
-        fit=fits.get(detector); score_rows.append({"scenario":"synthetic","availability_time_s":.5,"detector":detector,"score":value,
-          "status":"AVAILABLE","ll0":fit.null_log_likelihood if fit else "","ll1":fit.log_likelihood if fit else "","n":fit.n if fit else "","k0":fit.null_k if fit else "","k1":fit.k if fit else ""})
+        fit=fits.get(detector);valid_fit=fit is not None and fit.valid;score_rows.append({"scenario":"synthetic","availability_time_s":.5,"detector":detector,"score":"" if value is None else value,
+          "status":fits["statuses"].get(detector,"AVAILABLE" if value is not None else "UNAVAILABLE_INVALID_FIT"),"ll0":fit.null_log_likelihood if valid_fit else "","ll1":fit.log_likelihood if valid_fit else "","n":fit.n if valid_fit else "","k0":fit.null_k if valid_fit else "","k1":fit.k if valid_fit else ""})
     for detector,reason in (("B0-native","UNAVAILABLE_SYNTHETIC_NO_NATIVE_SOURCE"),("Noise-floor-only","UNAVAILABLE_SOURCE_NOT_PRESENT")):
         score_rows.append({"scenario":"synthetic","availability_time_s":.5,"detector":detector,"score":"","ll0":"","ll1":"","n":"","k0":"","k1":"","status":reason})
     csvs={"per_epoch_scores.csv":(["scenario","availability_time_s","detector","status","score","ll0","ll1","n","k0","k1"],score_rows),
@@ -223,23 +253,31 @@ def run_synthetic(output,config,source_commit):
     write_artifact(output,documents,csvs,{"synthetic_source.csv":"time,score\n0,0\n"})
     return {"scores":scores,"controls":controls}
 
-def run_production(output,config,source_commit,input_specs,geometry_specs,b0_specs):
+def run_production(output,config,source_commit,input_specs,geometry_specs,b0_validation_path):
     inputs={k:Path(v) for k,v in parse_named_specs(input_specs,roster=SCENARIOS).items()}
     data={name:load_all_epochs(path) for name,path in inputs.items()};provider=TemplateProvider.analytic()
     taps=np.asarray(config["tap_offsets_chips"]);grid=np.asarray(config["delay_grid_chips"])
     models=fit_frozen_models(data["cleanStatic"],config,provider,taps,grid,require_gpu=config["neural"]["require_gpu"])
     geometry,geometry_wrapper=load_geometry_specs(geometry_specs)
     if set(geometry)!=set(SCENARIOS):raise ValueError("geometry roster mismatch")
-    b0_values=parse_named_specs(b0_specs,roster=SCENARIOS);b0_paths={k:Path(v) for k,v in b0_values.items() if v!="UNAVAILABLE"}
-    b0=historical_b0_status(b0_paths,config["b0"]["saved_score_sha256"])
-    for name in SCENARIOS:
-        b0["scenarios"].setdefault(name,{"status":"UNAVAILABLE_AUTHENTIC_INTERFACE","reason":"explicit unavailable input"})
-    if any(x["status"]!="AVAILABLE_AUTHENTIC_NODE_TO_SCORE_REPLAY" for x in b0["scenarios"].values()):
-        b0["status"]="RECONSTRUCTABLE_WITH_LINEAGE_GAPS";b0["paper_comparison_eligible"]=False
-    b0_events={}
-    if b0_paths:
-        import pandas as pd
-        for name,path in b0_paths.items():b0_events[name]=replay_b0_events(pd.read_csv(path))
+    wrapper_doc=load(geometry_wrapper);expected_geometry_hash=hashlib.sha256(json.dumps(config["geometry"],sort_keys=True,separators=(",",":")).encode()).hexdigest()
+    if wrapper_doc.get("geometry_config",{}).get("sha256")!=expected_geometry_hash or wrapper_doc.get("geometry_config",{}).get("values")!=config["geometry"]:raise ValueError("geometry config binding mismatch")
+    for name,item in geometry.items():
+        selected=item["lineage"]["selected"]
+        if Path(selected.get("path","")).resolve()!=inputs[name].resolve() or selected.get("sha256")!=data[name]["source_sha256"]:raise ValueError("geometry selected NPZ mismatch")
+        receiver_iq=item["lineage"].get("receiver_source_iq_sha256");export_iq=item["lineage"].get("export_source_iq_sha256")
+        hash_ok=lambda value:isinstance(value,str) and len(value)==64 and all(c in "0123456789abcdef" for c in value)
+        binding=item["lineage"].get("source_iq_binding_status")
+        if binding=="HASH_BOUND" and (not hash_ok(receiver_iq) or not hash_ok(export_iq) or receiver_iq!=export_iq):raise ValueError("geometry source-IQ HASH_BOUND claim invalid")
+        if binding!="HASH_BOUND":item["lineage"]["source_iq_binding_status"]="LINEAGE_GAP"
+        for lineage_name in ("receiver_manifest",):
+            lineage=item["lineage"].get(lineage_name,{})
+            if item["lineage"]["source_iq_binding_status"]=="HASH_BOUND" and (not lineage.get("path") or not Path(lineage["path"]).is_file() or sha(Path(lineage["path"]))!=lineage.get("sha256")):raise ValueError("geometry manifest lineage mismatch")
+        if item["event_time_causal_ephemeris_availability"].get("status")=="PASS" and not item["event_time_causal_ephemeris_availability"].get("decode_history_sha256"):raise ValueError("causal ephemeris lacks authenticated decode history")
+    b0=load_b0_validation(Path(b0_validation_path),config);b0_events={}
+    import pandas as pd
+    for name,item in b0["scenarios"].items():
+        if item.get("event_rows") and item.get("status")!="UNAVAILABLE_AUTHENTIC_INTERFACE":b0_events[name]=pd.DataFrame(item["event_rows"])
     score_rows=[];event_rows=[];control_candidates=[]
     for scenario,dataset in data.items():
         raw=h0_residuals(dataset["y"],provider,taps,grid)
@@ -257,52 +295,54 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_spe
             except (ValueError,RuntimeError):
                 # Geometry-free paths remain operational; geometry paths stay unavailable.
                 h0=joint_profile_glrt(observations,{},provider,taps,grid,hypothesis="H0",whitener=models["analytic"])
-                individual={p:joint_profile_glrt({p:y},{},provider,taps,grid,hypothesis="H1-independent",whitener=models["analytic"]).score for p,y in observations.items()}
+                per={p:joint_profile_glrt({p:y},{},provider,taps,grid,hypothesis="H1-independent",whitener=models["analytic"]) for p,y in observations.items()};individual={p:f.score for p,f in per.items() if f.valid}
                 neural_obs={p:y-models["neural_model"].predict(condition_map[p][0]) for p,y in observations.items()}
                 independent=joint_profile_glrt(neural_obs,{},provider,taps,grid,hypothesis="H1-independent",whitener=models["neural_whitener"])
-                values=np.asarray(list(individual.values()));scores={"A1":float(values.max()),"A2":float(np.median(values)+np.mean(np.sort(values)[-min(4,len(values)):])),"A3":None,"A4":independent.score,"Full":None,"Neural-with-energy":None,"Power-only":float(np.mean([np.mean(np.abs(y)**2) for y in observations.values()]))};fits={"H0":h0,"A4":independent,"statuses":{d:("UNAVAILABLE_INVALID_GEOMETRY" if d in {"A3","Full","Neural-with-energy"} else "AVAILABLE") for d in scores}}
-            native=b0_events.get(scenario)
+                values=np.asarray(list(individual.values()));scores={"A1":float(values.max()) if len(values) and h0.valid else None,"A2":float(np.median(values)+np.mean(np.sort(values)[-min(4,len(values)):])) if len(values) and h0.valid else None,"A3":None,"A4":independent.score if independent.valid and h0.valid else None,"Full":None,"Neural-with-energy":None,"Power-only":float(np.mean([np.mean(np.abs(y)**2) for y in observations.values()]))};fits={"H0":h0,"A4":independent,"statuses":{d:("AVAILABLE" if score is not None else "UNAVAILABLE_INVALID_FIT") for d,score in scores.items()},"individual_rejected_count":len(per)-len(individual),"individual_rejected_reasons":{int(p):f.reason for p,f in per.items() if not f.valid}}
+            availability_overrides={};native=b0_events.get(scenario)
             native_row=native[np.isclose(native.window_bin_s,float(bin_id)*.5)] if native is not None else None
             if native_row is not None and len(native_row)==1:
-                scores["B0-native"]=float(native_row.iloc[0].btail_max_507080_ewma075);fits["statuses"]["B0-native"]="AVAILABLE_SAVED_NATIVE_SCORE_REPLAY_WITH_NODE_LINEAGE_GAP"
+                scores["B0-native"]=float(native_row.iloc[0].btail_max_507080_ewma075);fits["statuses"]["B0-native"]=b0["scenarios"][scenario]["status"];availability_overrides["B0-native"]=float(native_row.iloc[0].availability_time_s)
             else:scores["B0-native"]=None;fits["statuses"]["B0-native"]="UNAVAILABLE_B0_SUPPORT"
             noise=dataset["noise_floor"]
             if noise is not None:scores["Noise-floor-only"]=float(np.mean(noise[indices]));fits["statuses"]["Noise-floor-only"]="AVAILABLE"
             else:scores["Noise-floor-only"]=None;fits["statuses"]["Noise-floor-only"]="UNAVAILABLE_SOURCE_NOT_PRESENT"
             if fits.get("FullScorer") is not None:control_candidates.append((scenario,int(bin_id),observations,los,fits["FullScorer"],fits.get("Full")))
             for detector,score in scores.items():
-                fit=fits.get(detector);score_rows.append({"scenario":scenario,"time_bin":int(bin_id),"availability_time_s":availability,
-                  "detector":detector,"status":fits.get("statuses",{}).get(detector,"AVAILABLE" if score is not None else "UNAVAILABLE"),"reason":fit.reason if fit and not fit.valid else "","score":"" if score is None else score,"ll0":fit.null_log_likelihood if fit else "",
-                  "ll1":fit.log_likelihood if fit else "","n":fit.n if fit else "","k0":fit.null_k if fit else "","k1":fit.k if fit else "",
+                fit=fits.get(detector);valid_fit=fit is not None and fit.valid;score_rows.append({"scenario":scenario,"time_bin":int(bin_id),"availability_time_s":availability_overrides.get(detector,availability),
+                  "detector":detector,"status":fits.get("statuses",{}).get(detector,"AVAILABLE" if score is not None else "UNAVAILABLE"),"reason":fit.reason if fit and not fit.valid else "","score":"" if score is None else score,"ll0":fit.null_log_likelihood if valid_fit else "",
+                  "ll1":fit.log_likelihood if valid_fit else "","n":fit.n if valid_fit else "","k0":fit.null_k if valid_fit else "","k1":fit.k if valid_fit else "",
                   "epoch_count":sum(len(y) for y in observations.values()),"prn_count":len(observations),"geometry_valid":bool(fit.valid) if fit and detector in {"A3","Full","Neural-with-energy"} else ""})
     clean=[r for r in score_rows if r["scenario"]=="cleanStatic" and 320<=r["availability_time_s"]<=400 and r["score"]!=""]
     detector_thresholds={}
     for detector in ALL_DETECTORS:
         values=[float(r["score"]) for r in clean if r["detector"]==detector]
-        if values:detector_thresholds[detector]=calibration_thresholds(values,["normal_calibration"]*len(values))
-    full_threshold=detector_thresholds.get("Full",{"q99":np.inf,"q99.5":np.inf,"target_fpr_1pct":np.inf})
-    thresholds={**full_threshold,"detectors":detector_thresholds,"method":"higher","comparison":"strict_greater"}
+        detector_thresholds[detector]={"status":"AVAILABLE",**calibration_thresholds(values,["normal_calibration"]*len(values))} if values else {"status":"UNAVAILABLE_CALIBRATION_SUPPORT","q99":None,"q99.5":None,"target_fpr_1pct":None}
+    full_threshold=detector_thresholds["Full"] if detector_thresholds["Full"]["status"]=="AVAILABLE" else {"q99":np.inf,"q99.5":np.inf,"target_fpr_1pct":np.inf}
+    thresholds={"schema":"gnss-doppler-lab.r2c-thresholds.v2",**full_threshold,"detectors":detector_thresholds,"method":"higher","comparison":"strict_greater"}
     metric_rows=[]
+    metric_fields=["scenario","detector","threshold","status","threshold_value","normal_fpr","auroc","pr_auc","normalized_pauc_fpr_lte_0.05","attack_detection_rate","sustained_detection_rate","first_sustained_delay_s","persistent_alarm_ratio","causal_time_field"]
     for scenario in data:
         onset=config.get("attacks",{}).get("onset_s",{}).get(scenario)
         for detector in ALL_DETECTORS:
             rows=[r for r in score_rows if r["scenario"]==scenario and r["detector"]==detector and r["score"]!=""]
-            if not rows:metric_rows.append({"scenario":scenario,"detector":detector,"status":"UNAVAILABLE_NO_SCORE_SUPPORT"});continue
+            if not rows:
+                for threshold_name in ("q99","q99.5"):metric_rows.append({"scenario":scenario,"detector":detector,"threshold":threshold_name,"status":"UNAVAILABLE_NO_SCORE_SUPPORT"})
+                continue
             if onset is None:
                 threshold=detector_thresholds.get(detector,{})
                 holdout=[r for r in rows if scenario=="cleanStatic" and r["availability_time_s"]>=420] if scenario=="cleanStatic" else rows
-                result={"scenario":scenario,"detector":detector,"status":"NORMAL_HOLDOUT" if scenario=="cleanStatic" else "EXTERNAL_NORMAL"}
                 for name in ("q99","q99.5"):
-                    value=threshold.get(name);result[f"fpr_{name}"]=None if value is None or not holdout else float(np.mean([float(r["score"])>value for r in holdout]))
-                metric_rows.append(result);continue
+                    value=threshold.get(name);metric_rows.append({"scenario":scenario,"detector":detector,"threshold":name,"status":"UNAVAILABLE_THRESHOLD" if value is None else "NORMAL_HOLDOUT" if scenario=="cleanStatic" else "EXTERNAL_NORMAL","threshold_value":value,"normal_fpr":None if value is None or not holdout else float(np.mean([float(r["score"])>value for r in holdout]))})
+                continue
             labels=np.asarray([r["availability_time_s"]>=onset+40 for r in rows]);pre=np.asarray([r["availability_time_s"]<onset-20 for r in rows]);use=labels|pre
             if labels[use].any() and (~labels[use]).any():
                 used_rows=[r for r,u in zip(rows,use) if u];used_labels=labels[use];used_scores=np.asarray([float(r["score"]) for r in used_rows])
-                result={"scenario":scenario,"detector":detector,"status":"EVALUATED",**ranking_metrics(used_labels,used_scores)}
+                ranking=ranking_metrics(used_labels,used_scores)
                 for threshold_name in ("q99","q99.5"):
                     threshold=detector_thresholds.get(detector,{}).get(threshold_name,np.inf)
-                    result.update({f"{key}_{threshold_name}":value for key,value in detection_metrics([r["availability_time_s"] for r in used_rows],used_labels,used_scores>threshold,[scenario]*len(used_rows),attack_onset_s=onset).items()})
-                metric_rows.append(result)
+                    metric_rows.append({"scenario":scenario,"detector":detector,"threshold":threshold_name,"status":"UNAVAILABLE_THRESHOLD" if not np.isfinite(threshold) else "EVALUATED","threshold_value":None if not np.isfinite(threshold) else threshold,**ranking,
+                      **detection_metrics([r["availability_time_s"] for r in used_rows],used_labels,used_scores>threshold,[scenario]*len(used_rows),attack_onset_s=onset)})
     comparisons=[]
     for scenario in config.get("attacks",{}).get("primary",[]):
         onset=config["attacks"]["onset_s"].get(scenario)
@@ -333,7 +373,7 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_spe
             valid_control=run_full_controls(full_scorer,obs,los,full_threshold["q99"],provider,taps,seed=config["seed"]);break
     control=valid_control or {"status":"NOT_EVALUATED","threshold":full_threshold["q99"],"rows":[]}
     gates={}
-    input_integrity=all(d["row_count"]>0 and len(d["source_sha256"])==64 for d in data.values())
+    input_integrity=all(d["row_count"]>0 and len(d["source_sha256"])==64 and geometry[n]["lineage"].get("source_iq_binding_status")=="HASH_BOUND" for n,d in data.items())
     gates["complex_provenance"]={"status":"PASS" if input_integrity else "FAIL","derived_from":"finite rows and source hashes"}
     coverage=[];time_status=[]
     for name in config["geometry"]["required_scenarios"]:
@@ -354,8 +394,8 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_spe
     gates["geometry_removal"]=dict(gates["relation_destruction"])
     gates["complex_second_source"]=control_gate({"second_source_injection"},lambda r:np.mean([x["post_alarm"] for x in r if x["parameters"]["power_ratio"]>=.5])>=.5)
     gates["shortcut_controls"]=control_gate({"non_shared_multipath"},lambda r:not any(x["post_alarm"] for x in r))
-    dynamic=[r for r in metric_rows if r["scenario"]=="cleanDynamic" and r["detector"]=="Full"]
-    dynamic_fpr=dynamic[0].get("fpr_q99") if dynamic else None;gates["clean_dynamic_fpr"]={"status":"UNAVAILABLE_METRIC_SUPPORT" if dynamic_fpr is None else "PASS" if dynamic_fpr<=.01 else "FAIL","value":dynamic_fpr}
+    dynamic=[r for r in metric_rows if r["scenario"]=="cleanDynamic" and r["detector"]=="Full" and r["threshold"]=="q99"]
+    dynamic_fpr=dynamic[0].get("normal_fpr") if dynamic else None;gates["clean_dynamic_fpr"]={"status":"UNAVAILABLE_METRIC_SUPPORT" if dynamic_fpr is None else "PASS" if dynamic_fpr<=.01 else "FAIL","value":dynamic_fpr}
     improvement=[x for x in available_comparisons if x["left"]=="Full" and x["right"] in {"A2","A4"}]
     gates["full_improvement"]={"status":"UNAVAILABLE_BOOTSTRAP_SUPPORT" if not improvement else "PASS" if all(x["ci95"][0]>0 for x in improvement) else "FAIL","comparisons":len(improvement)}
     a2_scenarios={x["scenario"] for x in improvement if x["right"]=="A2" and x["ci95"][0]>0}
@@ -367,22 +407,24 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_spe
     geometry_named={} if geometry_wrapper else parse_named_specs(geometry_specs)
     provenance={"source_commit":source_commit,"source_bundle":source_bundle(),"preserved_artifact_tree":PRESERVED_TREE,"synthetic_test_mode":False,
       "canonical_config":{"path":"configs/r2c_gnss_stage0_fix.json","sha256":sha(ROOT/"configs/r2c_gnss_stage0_fix.json"),"schema":config["schema"]},
+      "b0_validation":{"path":str(Path(b0_validation_path).resolve()),"sha256":sha(Path(b0_validation_path))},
       "external_inputs":[{"scenario":name,"selected":{"path":str(inputs[name].resolve()),"sha256":data[name]["source_sha256"]},
         "geometry":{"path":str((geometry_wrapper or Path(geometry_named[name])).resolve()),"sha256":sha(geometry_wrapper or Path(geometry_named[name]))},
-        "b0":{"status":b0["scenarios"][name]["status"],**({"path":str(b0_paths[name].resolve()),"sha256":sha(b0_paths[name])} if name in b0_paths else {})},
+        "b0":{"status":b0["scenarios"][name]["status"],"validation_path":str(Path(b0_validation_path).resolve()),"validation_sha256":sha(Path(b0_validation_path))},
         "receiver_source_iq_sha256":geometry[name].get("lineage",{}).get("receiver_source_iq_sha256"),
         "export_source_iq_sha256":geometry[name].get("lineage",{}).get("selected",{}).get("source_iq_sha256")}
         for name in SCENARIOS]}
     documents={name:{} for name in TOP_LEVEL_FILES if name.endswith(".json") and name!="hashes.json"}
     documents.update({"config.json":config,"provenance.json":provenance,"input_validity.json":{"datasets":{n:{"rows":d["row_count"]} for n,d in data.items()}},
-      "time_geometry_validation.json":geometry,"b0_interface_validation.json":{**b0,"core_blocked":False},
+      "time_geometry_validation.json":wrapper_doc,"b0_interface_validation.json":{**b0,"core_blocked":False},
       "training_summary.json":{"models":{k:v.serialize() for k,v in models.items() if hasattr(v,"serialize")}},"thresholds.json":thresholds,
       "gain_invariance.json":control,"phase_invariance.json":control,"noise_control.json":control,"multipath_control.json":control,
       "second_source_injection.json":control,"relation_destruction.json":control,"bootstrap_comparisons.json":bootstrap,
       "decision.json":decision,"verification.json":{"status":"PENDING_EXTERNAL_VERIFIER"}})
     fields=["scenario","time_bin","availability_time_s","detector","status","reason","score","ll0","ll1","n","k0","k1","epoch_count","prn_count","geometry_valid"]
-    csvs={"per_epoch_scores.csv":(fields,score_rows),"scenario_metrics.csv":(sorted(set().union(*(r.keys() for r in metric_rows))),metric_rows),
-      "ablation_metrics.csv":(sorted(set().union(*(r.keys() for r in metric_rows))),metric_rows)}
+    ablation_rows=[{"detector":d,"status":"AVAILABLE" if any(r["detector"]==d and r["status"] in {"EVALUATED","NORMAL_HOLDOUT","EXTERNAL_NORMAL"} for r in metric_rows) else "UNAVAILABLE","available_scenarios":sum(any(r["detector"]==d and r["scenario"]==s and r["status"] in {"EVALUATED","NORMAL_HOLDOUT","EXTERNAL_NORMAL"} for r in metric_rows) for s in SCENARIOS)} for d in ALL_DETECTORS]
+    csvs={"per_epoch_scores.csv":(fields,score_rows),"scenario_metrics.csv":(metric_fields,metric_rows),
+      "ablation_metrics.csv":(["detector","status","available_scenarios"],ablation_rows)}
     write_artifact(output,documents,csvs,{"score_source.csv":"scenario,time,detector,score\n"})
     return {"rows":len(score_rows)}
 
@@ -390,7 +432,7 @@ def main():
     ap=argparse.ArgumentParser(); ap.add_argument("--config",type=Path,default=ROOT/"configs/r2c_gnss_stage0_fix.json")
     ap.add_argument("--output",type=Path,default=ROOT/"artifacts/r2c_gnss_stage0_fix"); ap.add_argument("--source-commit",required=True)
     ap.add_argument("--input",action="append",default=[]);ap.add_argument("--geometry",action="append",default=[])
-    ap.add_argument("--b0-score",action="append",default=[],help="SCENARIO=native-prn-score.csv")
+    ap.add_argument("--b0-validation",type=Path,help="canonical validated B0 wrapper")
     ap.add_argument("--synthetic",action="store_true"); ap.add_argument("--test-output",action="store_true")
     args=ap.parse_args(); output=validate_destination(args.output,test_mode=args.test_output); validate_source(args.source_commit,test_mode=args.test_output)
     config=json.loads(args.config.read_text())
@@ -400,5 +442,6 @@ def main():
         ap.error("production requires canonical fix config path and schema")
     if args.synthetic: result=run_synthetic(output,config,args.source_commit); print(json.dumps({"output":str(output),"synthetic":True,"detectors":list(result["scores"])})); return
     if not args.input:ap.error("production requires exact seven --input NAME=NPZ entries")
-    result=run_production(output,config,args.source_commit,args.input,args.geometry,args.b0_score);print(json.dumps({"output":str(output),"rows":result["rows"]}))
+    if args.b0_validation is None:ap.error("production requires --b0-validation")
+    result=run_production(output,config,args.source_commit,args.input,args.geometry,args.b0_validation);print(json.dumps({"output":str(output),"rows":result["rows"]}))
 if __name__=="__main__": main()

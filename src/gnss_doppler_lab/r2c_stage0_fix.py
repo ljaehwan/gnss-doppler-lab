@@ -162,12 +162,11 @@ def replay_b0_events(scores):
     required = {"run_id", "prn", "window_bin_s", "window_start_s", "window_mid_s", "prn_node_rmse"}
     if missing := sorted(required - set(scores.columns)): raise ValueError(f"native score columns missing: {missing}")
     if scores.duplicated(["run_id", "window_bin_s", "prn"]).any(): raise ValueError("duplicate native B0 score")
-    for _,group in scores.groupby(["run_id","window_bin_s"],sort=False):
-        for field in ("window_start_s","window_mid_s"):
-            if group[field].nunique(dropna=False)!=1:raise ValueError("inconsistent event PRN timing")
-        if "window_end_s" in group and group.window_end_s.nunique(dropna=False)!=1:raise ValueError("inconsistent event PRN timing")
-        if "availability_time_s" in group and (group.availability_time_s.nunique(dropna=False)!=1 or not np.isclose(group.availability_time_s.iloc[0],group.window_start_s.iloc[0]+1.)):
-            raise ValueError("B0 score availability must equal target window end")
+    start=scores.window_start_s.to_numpy(float);mid=scores.window_mid_s.to_numpy(float)
+    end=scores.window_end_s.to_numpy(float) if "window_end_s" in scores else start+1.
+    valid=np.isfinite(start)&np.isfinite(mid)&np.isfinite(end)&np.isclose(end,start+1.,atol=1e-9)&np.isclose(mid,start+.5,atol=1e-9)&np.isclose(scores.window_bin_s,np.round(mid*2)/2,atol=1e-9)
+    if not np.all(valid):raise ValueError("invalid per-PRN target timing contract")
+    if "availability_time_s" in scores and not np.allclose(scores.availability_time_s,end,rtol=0,atol=1e-9):raise ValueError("B0 score availability must equal own target window end")
     rows = []
     for (run, bin_s), group in scores.groupby(["run_id", "window_bin_s"], sort=True):
         vals = group.prn_node_rmse.to_numpy(float); n = len(vals)
@@ -175,7 +174,8 @@ def replay_b0_events(scores):
                      for name, q in (("q50", .5), ("q70", .7), ("q80", .8))]
         rows.append({"run_id": run, "window_bin_s": float(bin_s),
                      "window_start_s": float(group.window_start_s.min()),
-                     "availability_time_s": float(group.window_start_s.min()+1.),
+                     "window_end_s":float((group.window_end_s if "window_end_s" in group else group.window_start_s+1.).max()),
+                     "availability_time_s":float((group.window_end_s if "window_end_s" in group else group.window_start_s+1.).max()),
                      "tracked_prn_count": n, "btail_max_507080": max(surprises)})
     out = pd.DataFrame(rows).sort_values(["run_id", "window_bin_s"]).reset_index(drop=True)
     out["btail_max_507080_ewma075"] = 0.
@@ -702,7 +702,7 @@ def run_full_controls(score_fn: Callable, observations: Mapping[int,np.ndarray],
     add("relation_destruction",{"permutation":perm},original,{p:los[q] for p,q in zip(keys,perm)})
     invariance=[r for r in rows if r["kind"] in {"gain","slow_agc","global_phase"}]
     status="PASS" if invariance and all(r["pre_alarm"] is not None and r["pre_alarm"]==r["post_alarm"] for r in invariance) else "FAIL"
-    return {"seed":seed,"threshold":float(threshold),"support_count":sum(len(x) for x in original.values()),
+    return {"schema":"gnss-doppler-lab.r2c-full-controls.v2","seed":seed,"threshold":float(threshold),"support_count":sum(len(x) for x in original.values()),
             "rows":rows,"computed_rows":len(rows),"status":status,
             "baseline_status":baseline.status,"baseline_score":baseline.score,"baseline_reason":baseline.reason,
             "criteria":{"invariance_alarm_agreement":sum(r["pre_alarm"] is not None and r["pre_alarm"]==r["post_alarm"] for r in invariance)/len(invariance)}}
