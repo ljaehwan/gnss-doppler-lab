@@ -1,0 +1,33 @@
+{
+  "config_sha256": "aebebacbb5e0961e7067485dd9d34b402a258dcd3501e9e5f21af77d205d5257",
+  "delay_grid_chips": [
+    -0.5,
+    -0.375,
+    -0.25,
+    -0.125,
+    0.0,
+    0.125,
+    0.25,
+    0.375,
+    0.5
+  ],
+  "input_hashes": {
+    "DS1": "b24d947c83890dbfa1c801bfbcb72e1fd192dd66509e927eb5afb8118902b072",
+    "DS2": "dae0f245cbb107febd220c6de33b9a279a2bad356cb0ba772daf9418bc75d7c9",
+    "DS3": "38eb5842dfec306d99bf0c5d61df6cffcb6faa25ed63721cafa8e3c3776f9b3e",
+    "DS7": "d0e6da4e27d51e3e96abf2ef7786501124072f28667671e4e40da756eb35f3c8",
+    "DS8": "d1973fa150b7b4e7359df4827f36ce60289f206e9db11c1ac2bc1fd33a0df533",
+    "cleanDynamic": "efe224bb1987cb554f0d213725f54c35479cf18ad0a91ff6202ae062439aae81",
+    "cleanStatic": "fcd1d378c28e79fe4a550b65fc1208cde3c8fb334db11406a07fed4d90fba237"
+  },
+  "no_attack_label_tuning": true,
+  "sampling": "first row per floor(time/0.5s),PRN",
+  "schema": "gnss-doppler-lab.r2c-freeze.v1",
+  "score_definitions": {
+    "A1": "max per-PRN profile GLRT per 0.5 s epoch",
+    "A2": "mean top-4 per-PRN A1",
+    "Power-only": "mean log1p nine-tap energy"
+  },
+  "utc_epoch_s": 1785842156.4098482,
+  "written_before_score_computation": true
+}

@@ -1,12 +1,19 @@
 {
-  "alarm": "score > threshold",
+  "comparison": "strict score > threshold",
   "method": "higher",
-  "quantiles": [
-    0.99,
-    0.995
-  ],
-  "reason": "normal-calibration complex taps absent",
-  "source_required": "cleanStatic normal_calibration only",
-  "status": "UNAVAILABLE_DATA_INVALID",
-  "values": {}
+  "source": "cleanStatic normal_calibration only",
+  "values": {
+    "A1": {
+      "0.99": 62.35400525454149,
+      "0.995": 70.25997018690519
+    },
+    "A2": {
+      "0.99": 47.20836248894071,
+      "0.995": 49.834675433768936
+    },
+    "Power-only": {
+      "0.99": 30.119388843306876,
+      "0.995": 30.132427520640658
+    }
+  }
 }

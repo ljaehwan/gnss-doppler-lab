@@ -1,8 +1,4 @@
 {
-  "consistent_shared_score": 70975.00959727132,
-  "decreased": true,
-  "pairing_shuffle_seed": 20260803,
-  "shuffled_shared_score": 80.51176509393783,
-  "statistical_significance": "UNAVAILABLE_DATA_INVALID",
-  "status": "MECHANICS_ONLY"
+  "reason": "no validated time-aligned LOS score was produced; delay/LOS pairing was not fabricated",
+  "status": "MODEL_SPECIFIC_UNAVAILABLE"
 }

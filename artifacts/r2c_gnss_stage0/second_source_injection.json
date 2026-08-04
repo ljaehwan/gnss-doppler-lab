@@ -1,12 +1,26 @@
 {
-  "domain": "complex",
-  "fitted_h0_delay_chips": 0.07499999999999996,
-  "fitted_h1_delays_chips": [
-    -0.125,
-    0.4750000000000001
-  ],
-  "positive_and_negative_search": true,
-  "real_performance_claim": false,
-  "reference_a1_score": 125.0051229781892,
-  "status": "MECHANICS_ONLY"
+  "real_attack_replacement": false,
+  "status": "REAL_NORMAL_COMPLEX_INJECTION_MECHANICS_ONLY",
+  "trials": [
+    {
+      "delay_chips": -0.375,
+      "median_A1": 26.960049815346437,
+      "power_ratio": 0.1
+    },
+    {
+      "delay_chips": -0.375,
+      "median_A1": 26.96003847243729,
+      "power_ratio": 0.5
+    },
+    {
+      "delay_chips": 0.375,
+      "median_A1": 26.96004239660667,
+      "power_ratio": 0.1
+    },
+    {
+      "delay_chips": 0.375,
+      "median_A1": 26.96002844609621,
+      "power_ratio": 0.5
+    }
+  ]
 }

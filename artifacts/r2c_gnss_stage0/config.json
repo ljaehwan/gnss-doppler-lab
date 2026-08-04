@@ -42,6 +42,7 @@
     "repetitions": 2000,
     "seed": 20260803
   },
+  "bounded_sampling": "first receiver row per floor(time/0.5s), PRN, frozen before attack scoring",
   "cadence_s": 0.5,
   "controls": {
     "gains": [
@@ -62,20 +63,30 @@
   "dataset": "TEXBAT",
   "decision_criteria_frozen": true,
   "delay_search_chips": {
-    "maximum": 1.0,
-    "minimum": -1.0,
-    "minimum_separation": 0.1,
-    "step": 0.025
+    "maximum": 0.5,
+    "minimum": -0.5,
+    "minimum_separation": 0.125,
+    "step": 0.125
   },
+  "external_input_policy": "required CLI NAME=NPZ overrides; resolved absolute paths and hashes are artifact provenance only",
   "geometry": {
     "maximum_condition_number": 1000000.0,
     "minimum_prns": 4,
     "minimum_rank": 4
   },
-  "input_paths": {
-    "derived_subdir": "derived",
-    "raw_subdir": "raw",
-    "texbat_root": "data/external/texbat"
+  "input_paths": {},
+  "runtime": {
+    "cpu_only": true,
+    "inputs": {
+      "DS1": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds1.npz",
+      "DS2": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds2.npz",
+      "DS3": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds3.npz",
+      "DS7": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/exports/ds7.npz",
+      "DS8": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/exports/ds8.npz",
+      "cleanDynamic": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/rc9-real-clean-domain-poc1/exports/cleanDynamic.npz",
+      "cleanStatic": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.npz"
+    },
+    "sampling": "first row per floor(time/0.5s),PRN"
   },
   "schema": "gnss-doppler-lab.r2c-gnss-stage0-config.v1",
   "seed": 20260803,
@@ -105,15 +116,15 @@
     ]
   },
   "tap_offsets_chips": [
-    -1.0,
-    -0.75,
     -0.5,
+    -0.375,
     -0.25,
+    -0.125,
     0.0,
+    0.125,
     0.25,
-    0.5,
-    0.75,
-    1.0
+    0.375,
+    0.5
   ],
   "task_id": "r2c-gnss-stage0-20260804",
   "thresholds": {

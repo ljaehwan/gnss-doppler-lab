@@ -1,21 +1,21 @@
 {
-  "real_alarm_result": "UNAVAILABLE_DATA_INVALID",
-  "status": "MECHANICS_ONLY",
+  "matched_power_and_lower_cn0_claim": "not separately identifiable from exported taps",
+  "status": "REAL_NORMAL_COMPLEX_INJECTION_MECHANICS_ONLY",
   "trials": [
     {
-      "median_a1_score": 3.4739640611291596,
-      "shared_alarm_claim": false,
-      "sigma": 0.01
+      "median_A1": 24.833933492740755,
+      "q99_alarm_rate": 0.0,
+      "relative_sigma": 0.01
     },
     {
-      "median_a1_score": 4.173900249599483,
-      "shared_alarm_claim": false,
-      "sigma": 0.03
+      "median_A1": 14.198987994646831,
+      "q99_alarm_rate": 0.0,
+      "relative_sigma": 0.05
     },
     {
-      "median_a1_score": 5.825374753266044,
-      "shared_alarm_claim": false,
-      "sigma": 0.1
+      "median_A1": 9.170102231345561,
+      "q99_alarm_rate": 0.0,
+      "relative_sigma": 0.1
     }
   ]
 }

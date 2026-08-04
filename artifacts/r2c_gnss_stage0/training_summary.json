@@ -1,8 +1,13 @@
 {
-  "analytic_nuisance_model": "not fitted",
   "fit_roles": [],
-  "neural_nuisance_model": "not fitted",
-  "reason": "cleanStatic complex nine-tap normal_train input absent",
-  "status": "UNAVAILABLE_DATA_INVALID",
-  "synthetic_controls_used_for_training": false
+  "sample_counts": {
+    "DS1": 9867,
+    "DS2": 9801,
+    "DS3": 9861,
+    "DS7": 5665,
+    "DS8": 10020,
+    "cleanDynamic": 623,
+    "cleanStatic": 10184
+  },
+  "status": "A1/A2 are profile fits, not learned; bounded neural A4 unavailable"
 }

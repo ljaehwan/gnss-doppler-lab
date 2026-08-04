@@ -1,6 +1,7 @@
 {
-  "checked_required_files": 20,
+  "checked_required_files": 21,
   "errors": [],
-  "hash_policy": "verification.json and hashes.json excluded to avoid self-reference",
+  "external_hashes_checked": true,
+  "hash_policy": "hashes.json and verification.json excluded; generation commit may be current or ancestor of final result commit",
   "status": "PASS"
 }

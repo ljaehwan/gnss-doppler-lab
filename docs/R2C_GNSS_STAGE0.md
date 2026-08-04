@@ -1,51 +1,15 @@
-# R2C-GNSS Stage-0 feasibility
+# R2C-GNSS Stage-0 real-data correction
 
-## Outcome
+The corrected bounded run supersedes the `DATA_INVALID` conclusion in commit `75ff99b`: the required receiver-produced TEXBAT complex nine-tap NPZ files were discovered outside the repository. The old artifact remains in Git history as provenance. The current verdict is `INCONCLUSIVE`, not global input invalidity.
 
-The pre-attack input gate fixes the verdict as **`DATA_INVALID`**. This worktree contains neither receiver-produced complex I/Q at all nine taps nor the corresponding TEXBAT raw IQ needed to re-extract it. Its existing nine-tap interface reads `abs_E4 … abs_L4`, which is magnitude-only; prompt I/Q does not restore the phases of the other eight taps. No time-aligned authentic PVT/LOS product is present either. Those facts make real A1/A2 evaluation invalid and geometry-dependent A3/Full evaluation impossible. No attack epoch was scored or used to tune a choice.
+The frozen per-PRN hypotheses remain `H0: y_i=a0_i R(tau-tau0_i)+n_i` and `H1: y_i=a0_i R(tau-tau0_i)+a1_i R(tau-tau1_i)+n_i`. Complex amplitudes and delays are profiled on the measured E4,E3,E2,E,P,L,L2,L3,L4 taps at 0.125-chip spacing. A1 is the profile GLRT; A2 is the top-four robust mean. The registered geometry model remains `delta_rho_i=-u_i^T delta_p+c delta_t`. No LOS is inferred from PRN.
 
-The required cleanStatic, cleanDynamic, DS3, DS7, DS8, and diagnostic DS1/DS2 raw files are absent. Repository manifests describe 25 Msps GPS L1 C/A complex IQ, but a manifest and checksum are not source bytes. The six required clean/primary recordings alone exceed the available local storage before receiver outputs. Magnitudes, triangular synthetic attacks, and historical attack-result tables were not substituted.
+The runner requires explicit repeatable `--input NAME=NPZ` arguments; reusable defaults contain no machine paths. It validates manifests, NPZ hashes, schema, I/Q ordering, tap order, timing, PRNs, and recording identity, then writes `freeze.json` before computing attack scores. It selects the first receiver row per `(floor(time/0.5 s), PRN)`, uses bin end as availability, and preserves the frozen chronological cleanStatic splits and attack phases. Thresholds use only cleanStatic 320--400 s with NumPy `higher` quantiles and strict `>` alarms.
 
-## Frozen model
+A1, A2, and Power-only were evaluated on cleanStatic, the available 30 s cleanDynamic export, primary DS3/DS7/DS8, and diagnostic DS1/DS2. B0 could not be validly recalibrated through its historical feature/checkpoint interface on these chronological complex epochs. A3/Full were not scored because time-aligned LOS was not extracted and validated in the bounded run; cleanDynamic has observables but no ephemeris/PVT output. A4 neural nuisance fitting was also not completed. These are model-specific limitations: they do not invalidate geometry-free A1/A2 results. Noise-floor-only is unavailable because the export has no causal noise-floor field.
 
-For PRN `i`, Stage-0 fits the actual receiver's documented C/A correlation template on its measured tap spacing:
+The DS7 audit found exact cleanStatic row overlap in pre-attack content, including the suspicious shared extrema, although manifests record distinct source-IQ hashes. This is treated as shared TEXBAT authentic base support, never as independent normal fit/calibration data. DS7 remains real attack evaluation input.
 
-`H0: y_i = a0_i R(τ−τ0_i) + n_i`
+Real cleanStatic vectors validate positive-gain and global-phase invariance. AWGN and physical signed-delay complex injections use real normal vectors but validate mechanics only. Multipath-versus-shared-geometry and relation-destruction claims remain unavailable because fabricating LOS would violate the contract. The nine taps have no Doppler axis, so this makes no Doppler claim and does not justify a later 2-D raw-IQ model.
 
-`H1: y_i = a0_i R(τ−τ0_i) + a1_i R(τ−τ1_i) + n_i`.
-
-Complex amplitudes are profiled by weighted least squares over supported positive and negative delays. Coincident sources and extrapolated delays are excluded. The statistic is `S_second,i = 2(log p(y_i|H1) − log p(y_i|H0))`, using a profiled noise scale so common complex phase and positive gain cancel. The implementation exposes delays, complex amplitudes, predictions, residuals, likelihoods, boundary status, and identifiability.
-
-The geometry layer converts `Δτ_i` to `Δρ_i = cΔτ_i` and robustly fits
-
-`Δρ_i ≈ −u_iᵀΔp + cΔt`, with `β=[Δx,Δy,Δz,cΔt]`.
-
-It reports rank, singular values, condition number, robust weights, leverage, residuals, and effective support. Invalid geometry returns zero shared evidence. PRN ordering is irrelevant and the PRN count is variable. Actual LOS is mandatory; PRN number is never geometry.
-
-## Frozen experiment and ablations
-
-The configuration freezes chronological cleanStatic-only train/calibration/holdout support, 20 s guards, attack phases, cleanStatic-only `higher` q99/q99.5 thresholds with strict `>`, 3-at-0.5 s sustained alarms, and paired complete 10 s block bootstrap (2,000 repetitions, seed 20260803, no IID fallback). cleanDynamic is evaluation-only. DS3/DS7/DS8 are confirmatory; DS1/DS2 are diagnostic.
-
-The registered comparisons are frozen B0, A1 GLRT, geometry-free A2 robust top-k, analytic-whitened A3 geometry, neural-whitened geometry-free A4, Full neural-plus-geometry, Power-only, and causal Noise-floor-only when available. Each requires its own cleanStatic calibration threshold. B0 retains its historical PRN-holdout/time-overlap and cleanStatic+cleanDynamic calibration limitation; its checkpoint hash is frozen, and it was not retrained or evaluated here.
-
-The analytic nuisance covariance and compact shared MLP are implemented with hard fit-role guards accepting only `normal_train`. The neural model predicts residual mean and diagonal uncertainty from numeric causal conditions; it has no PRN/scenario/recording identity or label interface.
-
-## Controls and unavailable results
-
-Synthetic mechanics-only tests cover gains 0.5–2.0, global phase, AWGN, independent-delay multipath, complex second-source injection with signed delay, consistent geometry, and delay/LOS relation destruction. These validate invariance and fail-closed mechanics only. They do not replace real attacks, establish cleanDynamic FPR, or support a physics claim. Machine-readable control results and their plot source are in the artifact.
-
-Consequently cleanDynamic FPR, DS3/DS7/DS8 ROC/PR/low-FPR pAUC and alarms, DS1/DS2 diagnostics, all real thresholds, all bootstrap CIs, Power-only/Noise-floor-only comparisons, and Full-versus-B0/A1/A2/A4 improvements are explicitly unavailable. The decision is not `NOT_SUPPORTED`: valid inputs do not exist to test the hypothesis.
-
-This differs from existing CAF monitoring (no 2D delay–Doppler surface), LASSO/CCAF decompositions (explicit two-component profile likelihood here), and PD-ML (no power-delay classifier or attack supervision). Nine taps have no Doppler axis, so no Doppler claim or pseudo-Doppler feature is made. A later raw-IQ 2D model is **not justified** by a `DATA_INVALID` Stage-0 result.
-
-## Reproduction and publication status
-
-Run with the active interpreter:
-
-```bash
-python scripts/run_r2c_gnss_stage0.py
-python scripts/verify_r2c_gnss_stage0.py --write-result
-python -m pytest tests/test_r2c_gnss.py
-```
-
-The retry used sandbox bypass solely because the first Codex attempt failed before any command with `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted`; Hermes independently confirmed the frozen worktree was clean. Provenance records this fallback. Codex commits locally on `research/r2c-gnss-stage0` but does not push or merge; remote SHA and `0/0` remote-branch status therefore remain pending Hermes verification/publication. The final handoff reports the local commit, comparison with `origin/main`, tests actually run, and main-worktree observation without modifying main or protected worktrees.
+The final decision is `INCONCLUSIVE`: valid real inputs and attack support exist, but the preregistered Full-versus-B0/A2/A4, cleanDynamic Full FPR, geometry contribution, relation destruction, and block-bootstrap criteria were not validly completed. High AUC alone is not treated as support. The artifact’s hashes exclude `hashes.json` and `verification.json`; provenance binds the generation commit, and the verifier permits that commit or a descendant final result commit, avoiding circular commit hashing.

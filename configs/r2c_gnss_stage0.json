@@ -5,8 +5,8 @@
   "stage": "code-delay-only",
   "seed": 20260803,
   "cadence_s": 0.5,
-  "tap_offsets_chips": [-1.0, -0.75, -0.5, -0.25, 0.0, 0.25, 0.5, 0.75, 1.0],
-  "delay_search_chips": {"minimum": -1.0, "maximum": 1.0, "step": 0.025, "minimum_separation": 0.10},
+  "tap_offsets_chips": [-0.5, -0.375, -0.25, -0.125, 0.0, 0.125, 0.25, 0.375, 0.5],
+  "delay_search_chips": {"minimum": -0.5, "maximum": 0.5, "step": 0.125, "minimum_separation": 0.125},
   "splits": {
     "normal_train": {"source_end_lte_s": 300.0},
     "normal_calibration": {"source_start_gte_s": 320.0, "source_end_lte_s": 400.0},
@@ -39,5 +39,7 @@
   },
   "ablation_order": ["B0", "A1", "A2", "A3", "A4", "Full R2C-GNSS", "Power-only", "Noise-floor-only"],
   "decision_criteria_frozen": true,
-  "input_paths": {"texbat_root": "data/external/texbat", "raw_subdir": "raw", "derived_subdir": "derived"}
+  "input_paths": {},
+  "external_input_policy": "required CLI NAME=NPZ overrides; resolved absolute paths and hashes are artifact provenance only",
+  "bounded_sampling": "first receiver row per floor(time/0.5s), PRN, frozen before attack scoring"
 }

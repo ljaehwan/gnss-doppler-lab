@@ -165,4 +165,8 @@ def test_artifact_manifest_shape_after_generation():
                 "second_source_injection.json", "relation_destruction.json", "decision.json", "verification.json", "hashes.json"}
     assert required <= {path.name for path in root.iterdir() if path.is_file()}
     assert (root / "plots/relation_control_source.csv").is_file()
-    assert json.loads((root / "decision.json").read_text())["verdict"] == "DATA_INVALID"
+    assert json.loads((root / "decision.json").read_text())["verdict"] in {
+        "PHYSICS_SUPPORTED", "NOT_SUPPORTED", "DATA_INVALID", "INCONCLUSIVE"
+    }
+    if (root / "freeze.json").exists():
+        assert json.loads((root / "freeze.json").read_text())["written_before_score_computation"]
