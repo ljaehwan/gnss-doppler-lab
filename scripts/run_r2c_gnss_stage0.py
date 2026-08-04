@@ -708,7 +708,7 @@ def main():
         "fit_roles": ["cleanStatic normal_train"], "fit_products": ["empirical receiver correlation template", "analytic whitener", "compact neural nuisance"],
         "template_sha256": empirical_template_hash(template), "DS7_fit_or_calibration_uses": 0,
         "cleanDynamic_fit_or_calibration_uses": 0, "nuisance": nuisance_summary,
-        "B0": {"checkpoint": str(checkpoint), "sha256": sha256_file(checkpoint), "retrained": False},
+        "B0": {"checkpoint": str(checkpoint.relative_to(ROOT)), "sha256": sha256_file(checkpoint), "retrained": False},
         "sample_counts": {name: len(value["y"]) for name, value in data.items()}})
 
     calibration_rows = [row for row in make_epochs("cleanStatic", data["cleanStatic"])
