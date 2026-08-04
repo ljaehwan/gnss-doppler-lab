@@ -103,16 +103,17 @@ def reconstruct_original_nc(topi, predicted_scale, upper_cap: float, *, epsilon:
     return target/denominator,denominator
 
 
-def check_effective_scale(topi, original_nc, materialized_denominator, *, rtol=1e-12, atol=1e-12):
-    top=_finite_array(topi,"TOPI");nc=_finite_array(original_nc,"original NC");den=_finite_array(materialized_denominator,"denominator")
-    if not (top.shape==nc.shape==den.shape): raise ValueError("effective scale vectors mismatch")
+def check_effective_scale(topi, original_nc, implementation_denominator, refit_denominator, *, rtol=1e-12, atol=1e-12):
+    top=_finite_array(topi,"TOPI");nc=_finite_array(original_nc,"original NC")
+    impl=_finite_array(implementation_denominator,"implementation denominator");refit=_finite_array(refit_denominator,"refit denominator")
+    if not (top.shape==nc.shape==impl.shape==refit.shape): raise ValueError("effective scale vectors mismatch")
     if np.any((nc==0)&(top!=0)): raise ValueError("illegal zero division: nonzero TOPI with zero NC")
-    ordinary=nc!=0
-    if np.any(ordinary) and not np.allclose(top[ordinary]/nc[ordinary],den[ordinary],rtol=rtol,atol=atol):
-        raise ValueError("inferred original scale mismatch")
-    # both-zero rows intentionally do not divide; their directly materialized denominator is authoritative.
-    if np.any(den <= 0) or not np.isfinite(den).all(): raise ValueError("materialized denominator invalid")
-    return {"ordinary_rows":int(ordinary.sum()),"both_zero_rows":int(((top==0)&(nc==0)).sum())}
+    if np.any(impl<=0) or np.any(refit<=0): raise ValueError("materialized denominator invalid")
+    ordinary=nc!=0;both=(top==0)&(nc==0)
+    if np.any(ordinary) and not np.allclose(top[ordinary]/nc[ordinary],impl[ordinary],rtol=rtol,atol=atol): raise ValueError("inferred implementation scale mismatch")
+    if np.any(ordinary) and not np.allclose(impl[ordinary],refit[ordinary],rtol=rtol,atol=atol): raise ValueError("implementation/refit denominator mismatch")
+    if np.any(both) and not np.allclose(impl[both],refit[both],rtol=rtol,atol=atol): raise ValueError("both-zero denominator mismatch")
+    return {"ordinary_rows":int(ordinary.sum()),"both_zero_rows":int(both.sum()),"implementation_refit_match":True}
 
 
 def _readonly(value) -> np.ndarray:
@@ -131,7 +132,6 @@ class ScaleBounds:
 
 @dataclass(frozen=True)
 class TargetConditioner:
-    """Immutable, target-tagged normal-only Huber conditioner."""
     target: str
     median: np.ndarray
     iqr: np.ndarray
@@ -143,53 +143,52 @@ class TargetConditioner:
     train_identity_set: frozenset[str]
     audit: Mapping[str,object]
     seal: str
+    clean_state_digest: str
 
     @staticmethod
-    def fit(target: str, X, y, identities: Sequence[object]) -> "TargetConditioner":
+    def _rows(metadata: Sequence[object], n: int, *, role: str) -> tuple[tuple[str,...], list[dict]]:
+        if len(metadata)!=n: raise ValueError(f"{role} provenance dimensions invalid")
+        normalized=[];ids=[]
+        for item in metadata:
+            if not isinstance(item,Mapping): raise ValueError(f"{role} provenance metadata required")
+            row=dict(item);ident=row.get("identity");valid=row.get("valid") is True or row.get("valid") in ("True","true");label=row.get("label") in (0,"0",0.0)
+            expected_role="normal_train" if role=="fit" else "normal_calibration"
+            if (not isinstance(ident,str) or not ident or row.get("scenario")!="cleanStatic" or row.get("role")!=expected_role or row.get("phase")!="normal" or not label or not valid):
+                raise ValueError(f"{role} provenance must be cleanStatic/{expected_role}/normal/label0/valid")
+            ids.append(ident);normalized.append({"identity":ident,"scenario":"cleanStatic","role":expected_role,"phase":"normal","label":0,"valid":True})
+        if len(set(ids))!=len(ids): raise ValueError(f"duplicate {role} identities")
+        return tuple(ids),normalized
+
+    @staticmethod
+    def fit(target: str, X, y, row_metadata: Sequence[object]) -> "TargetConditioner":
         if target not in TARGETS: raise ValueError("conditioner target must be exactly TOPI, B0, or total")
         x=_finite_array(X,"conditioner features",2);response=_finite_array(y,"conditioner target")
-        ids=tuple(str(i) for i in identities)
-        if x.shape[1]!=4 or len(x)!=len(response) or len(ids)!=len(response) or not len(ids): raise ValueError("conditioner dimensions invalid")
-        if len(set(ids))!=len(ids): raise ValueError("duplicate fit identities")
+        if x.shape[1]!=4 or len(x)!=len(response) or not len(response): raise ValueError("conditioner dimensions invalid")
+        ids,provenance=TargetConditioner._rows(row_metadata,len(response),role="fit")
         if np.any(response<0): raise ValueError("conditioner target must be nonnegative")
-        median=np.median(x,axis=0);q75,q25=np.percentile(x,[75,25],axis=0);raw_iqr=q75-q25
-        fallback=raw_iqr<=1e-8;iqr=raw_iqr.copy();iqr[fallback]=1.
-        transformed=(x-median)/iqr;log_target=np.log(np.maximum(response,EPSILON))
-        model=HuberRegressor(epsilon=1.35,alpha=1e-4,max_iter=1000).fit(transformed,log_target)
-        identity_digest=_digest_json(list(ids));feature_digest=_digest_array(x);target_digest=_digest_array(response)
-        content={"schema":"TargetConditioner.v1","target":target,"feature_schema":list(FEATURE_SCHEMA),
-                 "rows":len(ids),"identity_digest_sha256":identity_digest,"feature_digest_sha256":feature_digest,
-                 "target_digest_sha256":target_digest,"median":median.tolist(),"iqr":iqr.tolist(),
-                 "iqr_fallback":fallback.tolist(),"coef":model.coef_.tolist(),"intercept":float(model.intercept_),
-                 "model_scale":float(model.scale_),"epsilon":1.35,"alpha":1e-4,"max_iter":1000,
-                 "target_transform":"log(max(target, 1e-12))","prediction_clip":[-745.,709.],
-                 "fit_scenario":"cleanStatic","fit_role":"normal_train",
-                 "forbidden_inputs":{"attack":False,"label":False,"scenario":False,"onset":False,"prn":False}}
+        median=np.median(x,axis=0);q75,q25=np.percentile(x,[75,25],axis=0);raw_iqr=q75-q25;fallback=raw_iqr<=1e-8;iqr=raw_iqr.copy();iqr[fallback]=1.
+        transformed=(x-median)/iqr;model=HuberRegressor(epsilon=1.35,alpha=1e-4,max_iter=1000).fit(transformed,np.log(np.maximum(response,EPSILON)))
+        identity_digest=_digest_json(list(ids));content={"schema":"TargetConditioner.v2","target":target,"feature_schema":list(FEATURE_SCHEMA),"rows":len(ids),
+          "identity_digest_sha256":identity_digest,"row_provenance_digest_sha256":_digest_json(provenance),"feature_digest_sha256":_digest_array(x),"target_digest_sha256":_digest_array(response),
+          "median":median.tolist(),"iqr":iqr.tolist(),"iqr_fallback":fallback.tolist(),"coef":model.coef_.tolist(),"intercept":float(model.intercept_),"model_scale":float(model.scale_),
+          "epsilon":1.35,"alpha":1e-4,"max_iter":1000,"target_transform":"log(max(target, 1e-12))","prediction_clip":[-745.,709.],
+          "fit_predicate":"cleanStatic/normal_train/normal/label0/valid","attack_fit":False}
         seal=_digest_json(content)
-        return TargetConditioner(target,_readonly(median),_readonly(iqr),tuple(bool(x) for x in fallback),
-          _readonly(model.coef_),float(model.intercept_),float(model.scale_),identity_digest,frozenset(ids),
-          MappingProxyType(content),seal)
+        return TargetConditioner(target,_readonly(median),_readonly(iqr),tuple(bool(v) for v in fallback),_readonly(model.coef_),float(model.intercept_),float(model.scale_),identity_digest,frozenset(ids),MappingProxyType(content),seal,seal)
 
     def _validate(self):
         content=dict(self.audit)
-        if (self.target not in TARGETS or content.get("target")!=self.target or tuple(content.get("feature_schema",()))!=FEATURE_SCHEMA
-            or _digest_json(content)!=self.seal or not np.array_equal(self.median,np.asarray(content["median"]))
-            or not np.array_equal(self.iqr,np.asarray(content["iqr"])) or not np.array_equal(self.coef,np.asarray(content["coef"]))):
-            raise ValueError("conditioner immutable state seal failed")
+        if (self.target not in TARGETS or content.get("target")!=self.target or tuple(content.get("feature_schema",()))!=FEATURE_SCHEMA or _digest_json(content)!=self.seal or self.clean_state_digest!=self.seal or not np.array_equal(self.median,np.asarray(content["median"])) or not np.array_equal(self.iqr,np.asarray(content["iqr"])) or not np.array_equal(self.coef,np.asarray(content["coef"]))): raise ValueError("conditioner immutable state seal failed")
 
     def predict_scale(self, X) -> np.ndarray:
         self._validate();x=_finite_array(X,"conditioner features",2)
         if x.shape[1]!=4: raise ValueError("feature schema width must be 4")
-        log=(x-self.median)/self.iqr@self.coef+self.intercept
-        return np.exp(np.clip(log,-745.,709.))
+        return np.exp(np.clip((x-self.median)/self.iqr@self.coef+self.intercept,-745.,709.))
 
-    def calibration_bounds(self, X, identities: Sequence[object], *, lower_q=.01, upper_q=.99) -> ScaleBounds:
-        ids=tuple(str(i) for i in identities)
-        if len(ids)!=len(X) or len(set(ids))!=len(ids): raise ValueError("calibration identities invalid")
+    def calibration_bounds(self, X, row_metadata: Sequence[object], *, lower_q=.01, upper_q=.99) -> ScaleBounds:
+        ids,_=self._rows(row_metadata,len(X),role="calibration")
         if self.train_identity_set.intersection(ids): raise ValueError("train/calibration identities must be disjoint")
-        values=self.predict_scale(X)
-        lo=None if lower_q is None else higher_quantile(values,lower_q)
-        hi=None if upper_q is None else higher_quantile(values,upper_q)
+        values=self.predict_scale(X);lo=None if lower_q is None else higher_quantile(values,lower_q);hi=None if upper_q is None else higher_quantile(values,upper_q)
         return ScaleBounds(lo,hi,lower_q,upper_q,_digest_array(values))
 
 
@@ -302,65 +301,105 @@ def run_original_reconstruction_gate(parent: str | Path, *, repo: str | Path) ->
     frozen=np.asarray([float(r["NC_TOPI"]) for r in data.prn_rows])
     abs_error=np.abs(reconstructed-frozen);rel_error=abs_error/np.maximum(np.abs(frozen),EPSILON)
     if not np.allclose(reconstructed,frozen,rtol=1e-12,atol=1e-12): raise ValueError("original NC-TOPI reconstruction failed")
-    boundary=check_effective_scale(np.asarray([float(r["TOPI"]) for r in data.prn_rows]),frozen,predicted)
+    topi_values=np.asarray([float(r["TOPI"]) for r in data.prn_rows]);implementation_denominator=np.empty_like(frozen);ordinary=frozen!=0
+    implementation_denominator[ordinary]=topi_values[ordinary]/frozen[ordinary];implementation_denominator[~ordinary]=predicted[~ordinary]
+    boundary=check_effective_scale(topi_values,frozen,implementation_denominator,predicted)
     return {"ok":True,"rows":len(frozen),"train_rows":len(train),"calibration_rows":len(cal),"q995_upper_cap":float(cap),
             "max_absolute_error":float(abs_error.max()),"max_relative_error":float(rel_error.max()),
             "all_rows_within_rel_abs_1e12":True,
             "effective_scale":boundary,"relative_tolerance":1e-12,"absolute_tolerance":1e-12}
 
 
+def _fast_standardized_pauc(labels, scores, max_fpr=.05):
+    y=np.asarray(labels,dtype=np.int8);score=np.asarray(scores,dtype=np.float64);order=np.argsort(score,kind="mergesort")[::-1];ys=y[order];ss=score[order]
+    distinct=np.where(np.diff(ss))[0];ix=np.r_[distinct,len(y)-1];tps=np.cumsum(ys,dtype=float)[ix];fps=1+ix-tps;tpr=np.r_[0.,tps/tps[-1]];fpr=np.r_[0.,fps/fps[-1]];stop=np.searchsorted(fpr,max_fpr,"right");x=fpr[stop-1:stop+1];yy=tpr[stop-1:stop+1];interp=np.interp(max_fpr,x,yy);fpr=np.r_[fpr[:stop],max_fpr];tpr=np.r_[tpr[:stop],interp];partial=float(np.trapezoid(tpr,fpr));minimum=.5*max_fpr**2;maximum=max_fpr
+    return .5*(1+(partial-minimum)/(maximum-minimum))
+
 def paired_block_bootstrap(labels,score_a,score_b,recording_ids,times,*,reps=2000,seed=20260803):
-    result=stage0.paired_pauc_delta_block_bootstrap(labels,score_a,score_b,recording_ids,times,
-      max_fpr=.05,block_seconds=10.,cadence=.5,reps=reps,seed=seed)
-    digest=hashlib.sha256(np.ascontiguousarray(result.replicates,dtype=np.float64).tobytes()).hexdigest()
-    return {"available":bool(result.available),"reason":result.reason,"point_estimate":None if not np.isfinite(result.point_estimate) else float(result.point_estimate),
-            "lower":float(result.ci[0]) if result.available else None,"upper":float(result.ci[1]) if result.available else None,
-            "valid_reps":int(result.valid_reps),"reps_requested":int(reps),"complete_block_count":int(result.complete_block_count),
-            "block_epoch_count":int(result.block_epoch_count),"replicate_digest_sha256":digest,"iid_fallback":False,
-            "audit":dict(result.audit)}
+    y=np.asarray(labels,dtype=int);a=_finite_array(score_a,"score_a");b=_finite_array(score_b,"score_b");t=_finite_array(times,"times");rec=np.asarray(recording_ids,dtype=str)
+    if not(len(y)==len(a)==len(b)==len(t)==len(rec)) or not len(y):raise ValueError("paired bootstrap vectors mismatch")
+    if set(np.unique(y))!={0,1}:reason="class-deficient eligible epochs";point=None;pools={0:[],1:[]}
+    else:
+      point=_fast_standardized_pauc(y,a)-_fast_standardized_pauc(y,b);pools={0:[],1:[]}
+      for recording in sorted(set(rec)):
+       ix=np.flatnonzero(rec==recording);order=ix[np.argsort(t[ix],kind="mergesort")]
+       if len(np.unique(t[order]))!=len(order):raise ValueError("times must be unique within recording")
+       cuts=[0]+[i for i in range(1,len(order)) if y[order[i]]!=y[order[i-1]] or not np.isclose(t[order[i]]-t[order[i-1]],.5,rtol=0,atol=1e-8)]+[len(order)]
+       for left,right in zip(cuts[:-1],cuts[1:]):
+        for start in range(left,right-19,20):pools[int(y[order[start]])].append(order[start:start+20])
+      reason=None
+    audit={"resampling":"paired pAUC delta; recording/gap-safe complete nonoverlapping 10s blocks stratified by label","iid_fallback":False,"point_estimate_rows":len(y),"negative_blocks":len(pools[0]),"positive_blocks":len(pools[1]),"paired_indices":True,"max_fpr":.05,"reps_requested":reps,"seed":seed};count=len(pools[0])+len(pools[1])
+    if reason or min(len(pools[0]),len(pools[1]))<2:
+      reason=reason or "too few complete blocks in one or both class strata";replicates=np.asarray([],float);return {"available":False,"reason":reason,"point_estimate":point,"lower":None,"upper":None,"valid_reps":0,"reps_requested":reps,"complete_block_count":count,"block_epoch_count":20,"replicate_digest_sha256":hashlib.sha256(replicates.tobytes()).hexdigest(),"iid_fallback":False,"audit":audit}
+    rng=np.random.default_rng(seed);replicates=np.empty(reps,float)
+    for j in range(reps):
+      selected=np.concatenate([pools[lab][i] for lab in (0,1) for i in rng.integers(0,len(pools[lab]),len(pools[lab]))]);replicates[j]=_fast_standardized_pauc(y[selected],a[selected])-_fast_standardized_pauc(y[selected],b[selected])
+    lo,hi=np.percentile(replicates,[2.5,97.5]);audit["valid_reps"]=reps
+    return {"available":True,"reason":None,"point_estimate":float(point),"lower":float(lo),"upper":float(hi),"valid_reps":reps,"reps_requested":reps,"complete_block_count":count,"block_epoch_count":20,"replicate_digest_sha256":hashlib.sha256(np.ascontiguousarray(replicates).tobytes()).hexdigest(),"iid_fallback":False,"audit":audit}
+
+def _semicolon_floats(value: object, name: str) -> list[float]:
+    try: values=[float(x) for x in str(value).split(";") if x!=""]
+    except ValueError as exc: raise ValueError(f"invalid {name}") from exc
+    if not values or not np.isfinite(values).all(): raise ValueError(f"invalid {name}")
+    return values
+
+
+def profile_d_effective_support(event: Mapping[str,object], prn_rows: Sequence[Mapping[str,object]], iq_row: Mapping[str,object], *, b0_windows=12, cadence=.5) -> dict[str,object]:
+    if int(b0_windows)!=12 or not math.isclose(float(cadence),.5,rel_tol=0,abs_tol=1e-12): raise ValueError("Profile D B0 cadence/sequence contract mismatch")
+    starts=_semicolon_floats(iq_row.get("block_start_s"),"IQ block starts");ends=_semicolon_floats(iq_row.get("block_end_s"),"IQ block ends")
+    if len(starts)!=len(ends) or len(starts)!=int(iq_row.get("history_blocks",-1)): raise ValueError("IQ history block inventory mismatch")
+    if not math.isclose(float(iq_row.get("cadence_seconds")),.5,rel_tol=0,abs_tol=1e-12): raise ValueError("IQ cadence mismatch")
+    target_start=float(event["source_start_s"]);linked_starts=[float(r["source_start_s"]) for r in prn_rows]
+    if not math.isclose(float(iq_row["target_source_start_s"]),min([target_start]+linked_starts),rel_tol=0,abs_tol=.001): raise ValueError("IQ target source start mismatch")
+    support_starts=[target_start,target_start-b0_windows*cadence,*starts,*linked_starts];support_ends=[float(event["source_end_s"]),*ends,*[float(r["source_end_s"]) for r in prn_rows]]
+    return {"event_id":str(event["event_id"]),"effective_start_s":float(min(support_starts)),"effective_end_s":float(max(support_ends))}
+
+
+def profile_d_support_from_parent(data: ParentEvidence) -> list[dict[str,object]]:
+    iq={_event_key(r):r for r in data.iq_rows};groups={}
+    for row in data.prn_rows: groups.setdefault(_event_key(row),[]).append(row)
+    return [profile_d_effective_support(event,groups[_event_key(event)],iq[_event_key(event)]) for event in data.event_rows if event["scenario"]=="cleanDynamic"]
 
 
 def check_profile_d_support(events: Sequence[Mapping[str,object]], *, fit_callback: Callable | None=None) -> dict[str,object]:
-    """Evaluate chronological effective support before any Profile-D fit.
-
-    Inputs already contain the union support of target, 12-window B0 history,
-    and IQ history.  The search is deterministic and never randomizes rows.
-    """
     ordered=sorted(events,key=lambda x:(float(x["effective_start_s"]),float(x["effective_end_s"]),str(x["event_id"])))
-    if any(float(x["effective_end_s"])<float(x["effective_start_s"]) for x in ordered):raise ValueError("reversed effective support")
-    n=len(ordered);gap=10.
-    starts=np.asarray([float(x["effective_start_s"]) for x in ordered]);ends=np.asarray([float(x["effective_end_s"]) for x in ordered])
+    if any(float(x["effective_end_s"])<float(x["effective_start_s"]) for x in ordered): raise ValueError("reversed effective support")
+    n=len(ordered);gap=10.;starts=np.asarray([float(x["effective_start_s"]) for x in ordered]);ends=np.asarray([float(x["effective_end_s"]) for x in ordered]);prefix=np.maximum.accumulate(ends) if n else np.asarray([])
     def first_after(left,value):
         hits=np.flatnonzero(starts[left:]>=value);return None if not len(hits) else left+int(hits[0])
     best=0;best_witness=None
     for k in range(1,n//3+1):
-        cal_start=first_after(k,ends[k-1]+gap)
-        if cal_start is None or cal_start+k>n:continue
-        hold_start=first_after(cal_start+k,ends[cal_start+k-1]+gap)
-        if hold_start is not None and hold_start+k<=n:best=k;best_witness=(0,k,cal_start,cal_start+k,hold_start,hold_start+k)
-    best_counts={"normal_train":best,"normal_calibration":best,"normal_holdout":best}
-    minimum={"normal_train":50,"normal_calibration":101,"normal_holdout":50}
-    sufficient_witness=None
-    if n>=sum(minimum.values()):
-      train_end=minimum["normal_train"]
-      cal_start=first_after(train_end,ends[train_end-1]+gap)
-      if cal_start is not None:
-       cal_end=cal_start+minimum["normal_calibration"]
-       if cal_end<=n:
-        hold_start=first_after(cal_end,ends[cal_end-1]+gap)
-        if hold_start is not None and hold_start+minimum["normal_holdout"]<=n:sufficient_witness=(0,train_end,cal_start,cal_end,hold_start,hold_start+minimum["normal_holdout"])
-    sufficient=sufficient_witness is not None
-    if sufficient and fit_callback is not None:fit_callback(ordered,sufficient_witness)
-    witness=best_witness
-    support_evidence=None if witness is None else {"train_indices":[witness[0],witness[1]],"calibration_indices":[witness[2],witness[3]],"holdout_indices":[witness[4],witness[5]],
-      "train_effective_end_s":float(ends[witness[1]-1]),"calibration_effective_start_s":float(starts[witness[2]]),
-      "calibration_effective_end_s":float(ends[witness[3]-1]),"holdout_effective_start_s":float(starts[witness[4]])}
-    return {"schema":"gnss-doppler-lab.nc-topi-stage0b.profile-d-support.v1",
-      "status":"AVAILABLE" if sufficient else "INSUFFICIENT_NORMAL_SUPPORT","fit_profile_d":bool(sufficient),
-      "calibrate_profile_d":bool(sufficient),"report_performance":bool(sufficient),"random_split":False,
-      "chronological":True,"minimum_gap_seconds":gap,"b0_history_windows":12,"includes_iq_history":True,
-      "minimum_counts":minimum,"best_counts":best_counts,"best_support_evidence":support_evidence,
-      "candidate_events":n,"reason":None if sufficient else f"best chronological effective-support split {best}/{best}/{best} is below 50/101/50"}
+        for train_end in range(k,n-2*k+1):
+            cal_start=first_after(train_end,prefix[train_end-1]+gap)
+            if cal_start is None or cal_start+k>n: continue
+            cal_end=cal_start+k;hold_start=first_after(cal_end,prefix[cal_end-1]+gap)
+            if hold_start is not None and hold_start+k<=n: best=k;best_witness=(train_end-k,train_end,cal_start,cal_end,hold_start,hold_start+k);break
+    minimum={"normal_train":50,"normal_calibration":101,"normal_holdout":50};sufficient_witness=None
+    for train_start in range(0,max(0,n-sum(minimum.values())+1)):
+        train_end=train_start+50;cal_start=first_after(train_end,prefix[train_end-1]+gap)
+        if cal_start is None or cal_start+101>n: continue
+        cal_end=cal_start+101;hold_start=first_after(cal_end,prefix[cal_end-1]+gap)
+        if hold_start is not None and hold_start+50<=n: sufficient_witness=(train_start,train_end,cal_start,cal_end,hold_start,hold_start+50);break
+    sufficient=sufficient_witness is not None;available=None
+    if sufficient:
+        if fit_callback is None: raise ValueError("available callback is required before Profile D can be AVAILABLE")
+        available=fit_callback(ordered,sufficient_witness);required={"fit","clamp","threshold","holdout"}
+        if not isinstance(available,Mapping) or set(available)!=required or not all(isinstance(available[k],Mapping) for k in required): raise ValueError("available callback must return fit/clamp/threshold/holdout fields")
+    w=best_witness;support=None if w is None else {"train_indices":[w[0],w[1]],"calibration_indices":[w[2],w[3]],"holdout_indices":[w[4],w[5]],"train_effective_end_s":float(prefix[w[1]-1]),"calibration_effective_start_s":float(starts[w[2]]),"calibration_effective_end_s":float(prefix[w[3]-1]),"holdout_effective_start_s":float(starts[w[4]])}
+    result={"schema":"gnss-doppler-lab.nc-topi-stage0b.profile-d-support.v1","status":"AVAILABLE" if sufficient else "INSUFFICIENT_NORMAL_SUPPORT","fit_profile_d":sufficient,"calibrate_profile_d":sufficient,"report_performance":sufficient,"random_split":False,"chronological":True,"minimum_gap_seconds":gap,"b0_history_windows":12,"b0_history_seconds":6.,"includes_iq_history":True,"minimum_counts":minimum,"best_counts":{"normal_train":best,"normal_calibration":best,"normal_holdout":best},"best_support_evidence":support,"candidate_events":n,"reason":None if sufficient else f"best chronological effective-support split {best}/{best}/{best} is below 50/101/50"}
+    if sufficient: result["available_evidence"]=dict(available)
+    return result
+
+
+def validate_comparison_inventory(rows: Sequence[Mapping[str,object]]) -> list[str]:
+    expected={(s,c) for s in ("DS7","DS8") for c in COMPARATORS};errors=[];seen=[]
+    for row in rows:
+        key=(row.get("scenario"),row.get("comparator"));seen.append(key)
+        if row.get("reps_requested")!=2000: errors.append(f"comparison {key} repetitions must equal 2000")
+        if row.get("iid_fallback") is not False: errors.append(f"comparison {key} IID fallback forbidden")
+    if len(seen)!=12 or len(set(seen))!=12 or set(seen)!=expected: errors.append("comparison inventory must be exact six x DS7/DS8")
+    return errors
+
 
 def _finite_domain(value, name, errors, lo=0., hi=1.):
     if isinstance(value,bool) or not isinstance(value,(int,float,np.integer,np.floating)) or not np.isfinite(value) or not lo<=float(value)<=hi:
@@ -440,7 +479,13 @@ class ArtifactStage:
         result=verifier(self.path)
         if not result.get("ok"):raise RuntimeError(f"independent artifact verifier failed: {result.get('errors')}")
         if self.final.exists():raise FileExistsError(self.final)
-        os.replace(self.path,self.final);self._published=True
+        import ctypes, errno
+        libc=ctypes.CDLL(None,use_errno=True);rc=libc.renameat2(-100,os.fsencode(self.path),-100,os.fsencode(self.final),1)
+        if rc!=0:
+            err=ctypes.get_errno()
+            if err in (errno.EEXIST,errno.ENOTEMPTY): raise FileExistsError(self.final)
+            raise OSError(err,os.strerror(err),str(self.final))
+        self._published=True
     def __exit__(self,kind,value,traceback):
         if kind is not None and self.path.exists():
             (self.path/"FAILED.json").write_text(json.dumps({"exception_type":kind.__name__,"message":str(value),"published":False,"unix_time":time.time()},sort_keys=True,indent=2)+"\n")

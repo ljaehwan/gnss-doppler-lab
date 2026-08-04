@@ -35,24 +35,26 @@ def test_higher_quantile_strict_alarm_and_boundaries():
         np.array([0., 2e-12, 2.]), np.array([1e-20, 1e-20, 20.]), 10.)
     assert np.array_equal(scores, [0., 2., .2])
     assert np.array_equal(inferred, [1e-12, 1e-12, 10.])
-    a.check_effective_scale(np.array([0., 2e-12]), scores[:2], inferred[:2])
+    a.check_effective_scale(np.array([0., 2e-12]), scores[:2], inferred[:2], inferred[:2])
     with pytest.raises(ValueError, match="illegal zero division"):
-        a.check_effective_scale(np.array([1.]), np.array([0.]), np.array([1.]))
+        a.check_effective_scale(np.array([1.]), np.array([0.]), np.array([1.]), np.array([1.]))
 
 
 def test_target_conditioner_is_sealed_target_tagged_and_disjoint():
     x = np.column_stack((np.arange(12.), np.ones(12), np.arange(12.) % 3, np.linspace(.1,.4,12)))
     ids = tuple(f"row-{i}" for i in range(12))
-    model = a.TargetConditioner.fit("TOPI", x[:8], np.arange(8.) + 1, ids[:8])
+    train_meta = tuple({"identity":ids[i],"scenario":"cleanStatic","role":"normal_train","phase":"normal","label":0,"valid":True} for i in range(8))
+    cal_meta = tuple({"identity":ids[i],"scenario":"cleanStatic","role":"normal_calibration","phase":"normal","label":0,"valid":True} for i in range(8,12))
+    model = a.TargetConditioner.fit("TOPI", x[:8], np.arange(8.) + 1, train_meta)
     assert model.target == "TOPI" and model.audit["target"] == "TOPI"
-    assert model.audit["forbidden_inputs"] == {"attack": False, "label": False, "scenario": False, "onset": False, "prn": False}
+    assert model.audit["attack_fit"] is False
     assert model.median.flags.writeable is False and model.coef.flags.writeable is False
-    bounds = model.calibration_bounds(x[8:], ids[8:], lower_q=.01, upper_q=.99)
+    bounds = model.calibration_bounds(x[8:], cal_meta, lower_q=.01, upper_q=.99)
     assert bounds.lower <= bounds.upper
     with pytest.raises(ValueError, match="disjoint"):
-        model.calibration_bounds(x[:4], ids[:4], lower_q=.01, upper_q=.99)
+        model.calibration_bounds(x[:4], tuple({"identity":ids[i],"scenario":"cleanStatic","role":"normal_calibration","phase":"normal","label":0,"valid":True} for i in range(4)), lower_q=.01, upper_q=.99)
     with pytest.raises(ValueError, match="target"):
-        a.TargetConditioner.fit("shared", x[:8], np.arange(8.) + 1, ids[:8])
+        a.TargetConditioner.fit("shared", x[:8], np.arange(8.) + 1, train_meta)
 
 
 def _write_parent_fixture(root: Path):
@@ -198,8 +200,9 @@ def test_parent_evidence_gate_never_opens_configured_raw_iq(monkeypatch):
 def test_time_shuffle_is_target_only_same_permutation_and_deterministic():
     n=20;ids=tuple(f"id-{i}" for i in range(n));x=np.arange(n*4,dtype=float).reshape(n,4);y=np.arange(n,dtype=float)+1
     permutation=np.random.default_rng(0).permutation(n)
-    one=a.TargetConditioner.fit("TOPI",x,y[permutation],ids)
-    two=a.TargetConditioner.fit("TOPI",x,y[np.random.default_rng(0).permutation(n)],ids)
+    meta=tuple({"identity":ids[i],"scenario":"cleanStatic","role":"normal_train","phase":"normal","label":0,"valid":True} for i in range(n))
+    one=a.TargetConditioner.fit("TOPI",x,y[permutation],meta)
+    two=a.TargetConditioner.fit("TOPI",x,y[np.random.default_rng(0).permutation(n)],meta)
     assert one.seal==two.seal
     assert one.audit["feature_digest_sha256"]==a._digest_array(x)
     assert one.audit["identity_digest_sha256"]==a._digest_json(list(ids))
@@ -208,7 +211,10 @@ def test_time_shuffle_is_target_only_same_permutation_and_deterministic():
 def test_profile_d_sufficient_support_fits_once_after_precheck():
     times=[*range(50),*range(70,171),*range(190,240)]
     events=[{"event_id":str(i),"effective_start_s":float(t),"effective_end_s":float(t)+.5} for i,t in enumerate(times)]
-    calls=[];result=a.check_profile_d_support(events,fit_callback=lambda rows,witness:calls.append((len(rows),witness)))
+    calls=[]
+    def callback(rows,witness):
+        calls.append((len(rows),witness));return {"fit":{},"clamp":{},"threshold":{},"holdout":{}}
+    result=a.check_profile_d_support(events,fit_callback=callback)
     assert result["status"]=="AVAILABLE" and result["fit_profile_d"] is True
     assert len(calls)==1 and calls[0][0]==201
 
