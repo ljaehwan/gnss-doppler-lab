@@ -302,7 +302,10 @@ def test_verifier_tamper_negative_semantics(tmp_path):
     rows = (copied / "per_epoch_scores.csv").read_text().splitlines()
     fields = rows[0].split(",")
     values = rows[1].split(",")
-    values[fields.index("A1")] = str(float(values[fields.index("A1")]) + 123.0)
+    if "A1" in fields:
+        values[fields.index("A1")] = str(float(values[fields.index("A1")]) + 123.0)
+    else:
+        values[fields.index("status")] = "TAMPERED"
     rows[1] = ",".join(values)
     (copied / "per_epoch_scores.csv").write_text("\n".join(rows) + "\n")
     (copied / "hashes.json").write_text(json.dumps(

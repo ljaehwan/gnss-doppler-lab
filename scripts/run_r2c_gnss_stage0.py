@@ -602,8 +602,15 @@ def write_fail_closed_artifact(output, config, args, paths, geometry_dirs, inven
         "seed": 20260803, "iid_fallback": False, "comparisons": {}})
     write_json(output / "decision.json", decision)
     dump_csv(output / "plots/relation_control_source.csv", ["status","reason"], [unavailable])
-    # Preserve the required plot filename as an explicit non-result notice.
-    (output / "plots/relation_control.png").write_bytes(b"UNAVAILABLE: no attack scoring\n")
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    figure, axis = plt.subplots(figsize=(7, 2))
+    axis.axis("off")
+    axis.text(.5, .5, "UNAVAILABLE — required frozen B0 interface not reproducible",
+              ha="center", va="center")
+    figure.savefig(output / "plots/relation_control.png", dpi=120)
+    plt.close(figure)
     provenance = {"task_id": config["task_id"], "branch": git("branch", "--show-current"),
         "frozen_base_commit": "461eb4dc7bb794e719295daf028f6811658ba37f",
         "source_commit_at_generation": git("rev-parse", "HEAD"),
