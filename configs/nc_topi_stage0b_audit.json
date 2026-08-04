@@ -1,0 +1,990 @@
+{
+  "schema": "gnss-doppler-lab.nc-topi-stage0b-audit.v1",
+  "status": "contract-frozen-pre-results",
+  "purpose": "Determine whether Stage-0 NC-TOPI gains are tangent-supported or dominated by an IQ shortcut without changing Stage-0.",
+  "lineage": {
+    "parent_branch": "origin/research/nc-topi-stage0",
+    "parent_artifact_commit": "6fe5315ca0d71689609895cd3b1366bcfa1b93c1",
+    "parent_artifact_commit_short": "6fe5315",
+    "parent_generation_source_commit": "c94af28795d03a91e2f4c0faa74eb19a983ed82e",
+    "parent_artifact_path": "artifacts/nc_topi_stage0",
+    "audit_artifact_path": "artifacts/nc_topi_stage0b_audit",
+    "publication_mode": "append-only-new-directory",
+    "stage0_modification_forbidden": true,
+    "results_must_not_be_loaded_before_contract_commit": true
+  },
+  "scope": {
+    "profiles": [
+      "Profile_S",
+      "Profile_D"
+    ],
+    "primary_profile": "Profile_S",
+    "attack_scenarios": [
+      "DS1",
+      "DS2",
+      "DS3",
+      "DS7",
+      "DS8"
+    ],
+    "decision_scenarios": [
+      "DS7",
+      "DS8"
+    ],
+    "fit_scenario_profile_s": "cleanStatic",
+    "attacks_score_only": true,
+    "attack_fit": false,
+    "attack_selection": false,
+    "raw_iq_full_processing": false,
+    "complex_second_peak_synthesis": false,
+    "b0_retrain": false,
+    "post_result_tuning": false
+  },
+  "profile_s": {
+    "description": "Exact frozen Stage-0 cleanStatic source-support roles.",
+    "role_assignment_level": "event support, broadcast to linked PRN rows",
+    "roles": {
+      "normal_train": {
+        "scenario": "cleanStatic",
+        "predicate": {
+          "source_end_s": {
+            "op": "<=",
+            "value": 300.0
+          }
+        }
+      },
+      "normal_calibration": {
+        "scenario": "cleanStatic",
+        "predicate": {
+          "all": [
+            {
+              "source_start_s": {
+                "op": ">=",
+                "value": 320.0
+              }
+            },
+            {
+              "source_end_s": {
+                "op": "<=",
+                "value": 400.0
+              }
+            }
+          ]
+        }
+      },
+      "normal_holdout": {
+        "scenario": "cleanStatic",
+        "predicate": {
+          "source_start_s": {
+            "op": ">=",
+            "value": 420.0
+          }
+        }
+      }
+    },
+    "crossing_support": "exclude",
+    "role_overlap": "forbidden",
+    "clean_dynamic": {
+      "role": "external_cleanDynamic_diagnostic",
+      "profile": "Profile_S",
+      "fit_allowed": false,
+      "threshold_allowed": false,
+      "is_profile_d": false
+    }
+  },
+  "identity_and_mask": {
+    "source": "frozen Stage-0 PeakPredictionPair/event inventory",
+    "identity_key": [
+      "physical_recording_id",
+      "scenario",
+      "prn_or_event_id",
+      "target_index",
+      "availability_time_s"
+    ],
+    "event_metadata": [
+      "source_start_s",
+      "source_end_s",
+      "label",
+      "valid"
+    ],
+    "required_join": "exact full identity and metadata equality",
+    "intersection_for_primary": false,
+    "same_prn_mask_all_methods": true,
+    "same_event_mask_all_methods": true,
+    "attacks_reuse_frozen_identity_label_phase_and_mask": true,
+    "prn_weighting": "one regression row per valid frozen PRN row; the event IQ vector is broadcast to every linked PRN row",
+    "event_feature_common_within_event": true
+  },
+  "attack_phases": {
+    "onsets_seconds": {
+      "DS1": 100.0,
+      "DS2": 100.0,
+      "DS3": 100.0,
+      "DS7": 110.0,
+      "DS8": 110.0
+    },
+    "stable_pre": "event source_start_s >= 30 AND event source_end_s <= onset-20",
+    "transition": "all otherwise-before-post events, excluded from post evaluation",
+    "post": "event source_start_s >= onset",
+    "persistent": "event source_start_s >= onset+40",
+    "event_support": "minimum linked PRN source_start and maximum linked PRN source_end/availability, with phase broadcast back to linked PRN rows"
+  },
+  "conditioners": {
+    "targets": {
+      "TOPI": "S_perp",
+      "B0": "B0",
+      "total": "total_energy"
+    },
+    "one_model_per_target": true,
+    "shared_model_across_targets": false,
+    "feature_order": [
+      "log_power",
+      "log_noise_floor_scale",
+      "spectral_flatness",
+      "lag1_autocorr_magnitude"
+    ],
+    "feature_count": 4,
+    "feature_causality": "reuse frozen Stage-0 causal event IQ contexts only",
+    "event_to_prn_broadcast": true,
+    "fit_rows": "Profile_S cleanStatic normal_train valid PRN rows only",
+    "fit_target_transform": "log(max(target, 1e-12))",
+    "target_epsilon": 1e-12,
+    "predictor_standardization": {
+      "fit_rows": "same clean train PRN rows",
+      "center": "feature median",
+      "scale": "feature IQR",
+      "iqr_fallback_predicate": "IQR <= 1e-8",
+      "iqr_fallback_value": 1.0
+    },
+    "regressor": {
+      "library": "sklearn.linear_model.HuberRegressor",
+      "epsilon": 1.35,
+      "alpha": 0.0001,
+      "max_iter": 1000
+    },
+    "prediction": {
+      "log_prediction_clip": [
+        -745.0,
+        709.0
+      ],
+      "scale": "exp(clip(predicted_log_target, -745, 709))"
+    },
+    "forbidden_fit_inputs": [
+      "attack rows",
+      "attack labels",
+      "scenario IDs",
+      "attack onsets",
+      "PRN IDs",
+      "normal calibration targets",
+      "normal holdout targets",
+      "cleanDynamic rows"
+    ]
+  },
+  "original_nc_topi_reconstruction": {
+    "required": true,
+    "refit_target": "TOPI",
+    "refit_contract": "the frozen original Stage-0 RobustConditioner must be reconstructed from frozen Profile_S clean-train rows before any audit result is accepted",
+    "original_upper_cap": {
+      "quantile": 0.995,
+      "source": "actual predicted TOPI scales on Profile_S clean calibration PRN rows",
+      "numpy_method": "higher",
+      "lower_cap": null
+    },
+    "original_denominator": "max(min(predicted_TOPI_scale, clean_calibration_q995), 1e-12)",
+    "original_score": "TOPI / original_denominator",
+    "comparison": {
+      "relative_tolerance": 1e-12,
+      "absolute_tolerance": 1e-12,
+      "all_rows_required": true,
+      "mismatch_action": "fail_closed"
+    },
+    "effective_scale_diagnostic": {
+      "ordinary_case": "TOPI / NC_TOPI_original",
+      "must_match": "refit original denominator output",
+      "relative_tolerance": 1e-12,
+      "absolute_tolerance": 1e-12,
+      "NC_zero_TOPI_nonzero": "fail_closed",
+      "both_zero": "do not infer a scale by division; compare the implementation's directly materialized original denominator with the refit denominator",
+      "implementation_boundary_comparison_required": true,
+      "observed_frozen_rows_note": "all frozen rows are reported nonzero, but automated boundary tests must cover zero and both-zero cases"
+    }
+  },
+  "scale_clamps": {
+    "selection_source": "target-specific predicted scales over Profile_S clean calibration PRN rows only",
+    "attacks_may_select_bounds": false,
+    "quantile_library": "numpy.quantile",
+    "quantile_method": "higher",
+    "primary": {
+      "name": "two_sided_q1_q99",
+      "lower_quantile": 0.01,
+      "upper_quantile": 0.99,
+      "applies_separately_to_targets": [
+        "TOPI",
+        "B0",
+        "total"
+      ]
+    },
+    "diagnostic_variants": [
+      {
+        "name": "two_sided_q005_q995",
+        "lower_quantile": 0.005,
+        "upper_quantile": 0.995
+      },
+      {
+        "name": "lower_only_q1",
+        "lower_quantile": 0.01,
+        "upper_quantile": null
+      },
+      {
+        "name": "upper_only_q99",
+        "lower_quantile": null,
+        "upper_quantile": 0.99
+      },
+      {
+        "name": "no_clamp",
+        "lower_quantile": null,
+        "upper_quantile": null
+      }
+    ],
+    "diagnostic_variants_are_primary": false,
+    "diagnostic_variants_may_select_decision": false
+  },
+  "methods": {
+    "required_exact_order": [
+      "B0",
+      "TOPI",
+      "NC_TOPI_original",
+      "IQ_LOW_ONLY",
+      "IQ_OOD_ONLY",
+      "NC_TOPI_clamped",
+      "NC_B0_clamped",
+      "NC_total_clamped"
+    ],
+    "definitions": {
+      "B0": "frozen Stage-0 B0 score",
+      "TOPI": "frozen Stage-0 S_perp score",
+      "NC_TOPI_original": "frozen original TOPI normalization reconstructed under original q99.5 upper-cap semantics",
+      "IQ_LOW_ONLY": "-log(max(predicted_TOPI_scale, 1e-12))",
+      "IQ_OOD_ONLY": "-log(max(add_one_two_sided_empirical_p, 1e-12))",
+      "NC_TOPI_clamped": "TOPI / max(clamp(predicted_TOPI_scale, target_TOPI_q1, target_TOPI_q99), 1e-12)",
+      "NC_B0_clamped": "B0 / max(clamp(predicted_B0_scale, target_B0_q1, target_B0_q99), 1e-12)",
+      "NC_total_clamped": "total_energy / max(clamp(predicted_total_scale, target_total_q1, target_total_q99), 1e-12)"
+    },
+    "diagnostic_clamp_variants_storage": "separate diagnostic namespace; never replace or rename required methods"
+  },
+  "iq_only": {
+    "reference_values": "only Profile_S clean calibration predicted TOPI scales",
+    "IQ_LOW_ONLY": {
+      "formula": "-log(max(predicted_TOPI_scale, 1e-12))"
+    },
+    "IQ_OOD_ONLY": {
+      "calibration_count_symbol": "n",
+      "lower_tail": "(1 + count(calibration_scale <= evaluated_scale)) / (n + 1)",
+      "upper_tail": "(1 + count(calibration_scale >= evaluated_scale)) / (n + 1)",
+      "tie_operators": {
+        "lower": "<=",
+        "upper": ">="
+      },
+      "p_value": "min(1, 2 * min(lower_tail, upper_tail))",
+      "score": "-log(max(p_value, 1e-12))",
+      "calibration_self_evaluation": "use the same full clean calibration reference multiset including ties"
+    },
+    "event_aggregation": "median over linked valid PRN rows",
+    "aggregation_reason": "preserves the exact common mask and equals the event score when the broadcast scale is common within an event",
+    "common_scale_equality_must_be_audited": true
+  },
+  "aggregation_and_thresholds": {
+    "primary_event_aggregator": "median",
+    "primary_threshold_quantile": 0.99,
+    "threshold_source": "Profile_S clean calibration event scores, separately for each method",
+    "quantile_library": "numpy.quantile",
+    "quantile_method": "higher",
+    "alarm_comparison": "score > threshold",
+    "diagnostic_if_present": {
+      "aggregator": "top25_mean",
+      "threshold_quantile": 0.995,
+      "may_change_primary_or_decision": false
+    }
+  },
+  "metrics": {
+    "common_eligibility": "frozen Stage-0 event identity, mask, phase and labels; no method-specific intersection",
+    "point_metrics": [
+      "ROC_AUC",
+      "PR_AUC",
+      "standardized_pAUC_max_fpr_0.05",
+      "q99_normal_FPR",
+      "stable_pre_FPR",
+      "post_detection_rate",
+      "three_consecutive_alarm_delay_s",
+      "persistent_alarm_ratio"
+    ],
+    "partial_auc": {
+      "library": "sklearn.metrics.roc_auc_score",
+      "max_fpr": 0.05,
+      "standardized": true
+    },
+    "normal_fpr": {
+      "threshold": "method-specific clean calibration q99",
+      "comparison": "strict >"
+    },
+    "delay": {
+      "required_consecutive_alarms": 3,
+      "cadence_seconds": 0.5,
+      "time_field": "event availability/source_end",
+      "reset_on": [
+        "time gap",
+        "recording change",
+        "non-post row"
+      ],
+      "duplicate_recording_time": "reject",
+      "censor_if_absent": true
+    },
+    "persistent": {
+      "phase": "frozen Stage-0 persistent phase",
+      "definition": "strict-alarm count divided by eligible persistent event count"
+    },
+    "bootstrap": {
+      "statistic": "paired standardized pAUC delta: NC_TOPI_clamped minus comparator",
+      "repetitions": 2000,
+      "block_seconds": 10.0,
+      "block_construction": "complete nonoverlapping blocks within recording, label stratum and contiguous cadence run",
+      "gap_safe": true,
+      "paired": true,
+      "stratified_by_label": true,
+      "interval": "percentile_95",
+      "point_estimate": "all eligible events",
+      "iid_fallback": false,
+      "unavailable_rule": "return explicit unavailable reason for class-deficient support or fewer than two complete blocks in either stratum",
+      "seed": 20260803
+    }
+  },
+  "six_paired_comparisons": {
+    "primary": "NC_TOPI_clamped",
+    "comparators_exact_order": [
+      "B0",
+      "TOPI",
+      "IQ_LOW_ONLY",
+      "IQ_OOD_ONLY",
+      "NC_B0_clamped",
+      "NC_total_clamped"
+    ],
+    "scenarios": [
+      "DS7",
+      "DS8"
+    ],
+    "NC_TOPI_original_note": "report point metrics, q99 alarms and required decision diagnostics, but it is a reconstruction/control method rather than one of the six paired-bootstrap comparators"
+  },
+  "time_shuffle_control": {
+    "status": "diagnostic_only",
+    "seed": 0,
+    "rng": "numpy.random.default_rng",
+    "preserved_stage0_safe_rule": "keep the ordered feature matrix and typed clean-train row identities fixed; permute only the target vector within Profile_S cleanStatic normal_train PRN rows",
+    "permutation": "numpy.random.default_rng(0).permutation(n_train_rows)",
+    "same_permutation_index_for_targets": [
+      "TOPI",
+      "B0",
+      "total"
+    ],
+    "calibration_rows_permuted": false,
+    "holdout_rows_permuted": false,
+    "cleanDynamic_rows_permuted": false,
+    "attack_rows_permuted": false,
+    "attack_labels_or_times_used": false,
+    "diagnostics": "apply the same target-specific calibration clamps, event aggregation, thresholds and metrics in a separate time_shuffle namespace",
+    "may_select_or_rescue_decision": false
+  },
+  "profile_d": {
+    "description": "Chronological cleanDynamic domain-adaptation profile, available only after a support sufficiency pre-rule.",
+    "source_dataset": "cleanDynamic",
+    "availability_evaluated_before_fit": true,
+    "effective_source_support": {
+      "includes_b0_history": true,
+      "b0_history_windows": 12,
+      "includes_iq_history": true,
+      "role_support_definition": "union each candidate event's target source support with all causal source support needed by its frozen B0 12-window history and frozen IQ history"
+    },
+    "assignment": "three chronological, nonoverlapping contiguous roles in train then calibration then holdout order",
+    "minimum_source_gap_seconds_between_roles": 10.0,
+    "minimum_event_counts": {
+      "normal_train": 50,
+      "normal_calibration": 101,
+      "normal_holdout": 50
+    },
+    "calibration_minimum_reason": "with NumPy method='higher', q99 must not be the sample maximum",
+    "random_split": false,
+    "attack_rows_allowed": false,
+    "if_sufficient": "fit three new target-matched conditioners on Profile_D train only, select target clamps and thresholds on Profile_D calibration only, and evaluate Profile_D holdout",
+    "if_insufficient": {
+      "status": "INSUFFICIENT_NORMAL_SUPPORT",
+      "fit_profile_d": false,
+      "calibrate_profile_d": false,
+      "report_performance": false
+    },
+    "frozen_support_evidence": {
+      "observed_best_chronological_gap_safe_counts": {
+        "normal_train": 33,
+        "normal_calibration": 33,
+        "normal_holdout": 33
+      },
+      "use": "support evidence only",
+      "performance_claim": false
+    }
+  },
+  "decision": {
+    "name": "NC_TOPI_STAGE0B_SHORTCUT_AUDIT",
+    "does_not_change_stage0_decision": true,
+    "statuses": [
+      "IQ_SHORTCUT_DOMINATED",
+      "TANGENT_SUPPORTED",
+      "INCONCLUSIVE"
+    ],
+    "evaluation_order": [
+      "validate_evidence",
+      "evaluate_shortcut_triggers",
+      "evaluate_tangent_support",
+      "otherwise_inconclusive"
+    ],
+    "missing_or_invalid_evidence": "cannot yield TANGENT_SUPPORTED; record validation errors and return INCONCLUSIVE unless a shortcut trigger is fully evaluable and true from valid evidence",
+    "shortcut_precedence": true,
+    "shortcut_triggers": {
+      "a_iq_point_or_ci": {
+        "any": [
+          {
+            "exists_iq_method": [
+              "IQ_LOW_ONLY",
+              "IQ_OOD_ONLY"
+            ],
+            "all_scenarios": [
+              "DS7",
+              "DS8"
+            ],
+            "predicate": "pAUC(iq_method) >= pAUC(NC_TOPI_clamped)"
+          },
+          {
+            "exists_method_scenario_pair": {
+              "methods": [
+                "IQ_LOW_ONLY",
+                "IQ_OOD_ONLY"
+              ],
+              "scenarios": [
+                "DS7",
+                "DS8"
+              ]
+            },
+            "predicate": "paired_CI_upper(pAUC(NC_TOPI_clamped)-pAUC(iq_method)) <= 0"
+          }
+        ]
+      },
+      "b_nc_vs_ncb0_statistically_indistinguishable": {
+        "all_scenarios": [
+          "DS7",
+          "DS8"
+        ],
+        "predicate": "paired_CI_lower(NC_TOPI_clamped-NC_B0_clamped) <= 0 AND paired_CI_upper(NC_TOPI_clamped-NC_B0_clamped) >= 0"
+      },
+      "c_clamp_reverses_positive_original_gain": {
+        "exists_scenario": [
+          "DS7",
+          "DS8"
+        ],
+        "predicate": "pAUC(NC_TOPI_clamped)-pAUC(B0) <= 0 AND pAUC(NC_TOPI_original)-pAUC(B0) > 0"
+      },
+      "d_scale_only_gain_and_alarm_overlap": {
+        "all_scenarios": [
+          "DS7",
+          "DS8"
+        ],
+        "eligibility": "pAUC(NC_TOPI_original)-pAUC(B0) > 0",
+        "gain_fraction": "(pAUC(IQ_LOW_ONLY)-pAUC(B0))/(pAUC(NC_TOPI_original)-pAUC(B0))",
+        "gain_fraction_predicate": ">= 0.5",
+        "alarm_overlap": "count(NC_TOPI_original_q99_alarm AND IQ_LOW_ONLY_q99_alarm)/count(NC_TOPI_original_q99_alarm)",
+        "alarm_overlap_predicate": ">= 0.5",
+        "zero_original_alarm_denominator": "trigger false with explicit not_evaluable reason",
+        "nonpositive_gain_denominator": "exclude that scenario; trigger d is false unless both DS7 and DS8 are eligible"
+      },
+      "e_clean_dynamic_profile_s_fpr": {
+        "profile": "Profile_S",
+        "dataset": "cleanDynamic",
+        "method": "NC_TOPI_clamped",
+        "predicate": "q99_FPR >= 0.50"
+      }
+    },
+    "shortcut_result": "if any shortcut trigger is true, status = IQ_SHORTCUT_DOMINATED",
+    "tangent_conditions": {
+      "t1_point_over_ncb0": "for both DS7 and DS8, pAUC(NC_TOPI_clamped) > pAUC(NC_B0_clamped)",
+      "t2_point_over_iq_low": "for both DS7 and DS8, pAUC(NC_TOPI_clamped) > pAUC(IQ_LOW_ONLY)",
+      "t3_point_over_iq_ood": "for both DS7 and DS8, pAUC(NC_TOPI_clamped) > pAUC(IQ_OOD_ONLY)",
+      "t4_at_least_one_positive_ncb0_ci": "there exists scenario in DS7,DS8 with paired_CI_lower(NC_TOPI_clamped-NC_B0_clamped) > 0",
+      "t5_positive_clamped_nc_minus_b0_points": "for both DS7 and DS8, pAUC(NC_TOPI_clamped)-pAUC(B0) > 0",
+      "t6_cleanstatic_holdout": "Profile_S cleanStatic normal_holdout q99 FPR(NC_TOPI_clamped) <= 0.02",
+      "t7_all_stable_pre": "for every DS1,DS2,DS3,DS7,DS8, Profile_S stable_pre q99 FPR(NC_TOPI_clamped) < 0.05",
+      "profile_d_conditional_gate": "if and only if Profile_D is available, Profile_D normal_holdout q99 FPR(NC_TOPI_clamped) < 0.05; INSUFFICIENT_NORMAL_SUPPORT makes this gate not applicable"
+    },
+    "tangent_result": "if no shortcut trigger is true, all t1 through t7 are true, and the Profile_D conditional gate is true or not applicable, status = TANGENT_SUPPORTED",
+    "fallback_result": "INCONCLUSIVE",
+    "machine_grammar": {
+      "numeric_domains": {
+        "pauc": "finite [0,1]",
+        "delta_pauc": "finite [-1,1]",
+        "paired_ci_endpoint": "finite [-1,1] with lower <= upper",
+        "q99_fpr": "finite [0,1]",
+        "scale_gain_fraction": "finite real, defined only after its scenario denominator is >0",
+        "alarm_overlap": "finite [0,1], defined only when original-NC alarm count >0"
+      },
+      "derived_values": {
+        "delta_pauc.<scenario>.<A>_minus_<B>": "pauc.<scenario>.<A> - pauc.<scenario>.<B>",
+        "scale_gain_fraction.<scenario>": "delta_pauc.<scenario>.IQ_LOW_ONLY_minus_B0 / delta_pauc.<scenario>.NC_TOPI_original_minus_B0",
+        "alarm_overlap.NC_TOPI_original_with_IQ_LOW_ONLY.<scenario>": "intersection_count(q99_alarm.NC_TOPI_original, q99_alarm.IQ_LOW_ONLY) / count(q99_alarm.NC_TOPI_original)"
+      },
+      "undefined_derived_value": "validation error for support; shortcut d evaluates false unless all of its denominator prerequisites and values are defined",
+      "shortcut": {
+        "any": [
+          {
+            "id": "a_iq_point_or_ci",
+            "expr": {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "lhs_ref": "pauc.DS7.IQ_LOW_ONLY",
+                      "op": ">=",
+                      "rhs_ref": "pauc.DS7.NC_TOPI_clamped"
+                    },
+                    {
+                      "lhs_ref": "pauc.DS8.IQ_LOW_ONLY",
+                      "op": ">=",
+                      "rhs_ref": "pauc.DS8.NC_TOPI_clamped"
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "lhs_ref": "pauc.DS7.IQ_OOD_ONLY",
+                      "op": ">=",
+                      "rhs_ref": "pauc.DS7.NC_TOPI_clamped"
+                    },
+                    {
+                      "lhs_ref": "pauc.DS8.IQ_OOD_ONLY",
+                      "op": ">=",
+                      "rhs_ref": "pauc.DS8.NC_TOPI_clamped"
+                    }
+                  ]
+                },
+                {
+                  "lhs_ref": "paired_ci.DS7.NC_TOPI_clamped_minus_IQ_LOW_ONLY.upper",
+                  "op": "<=",
+                  "rhs_value": 0.0
+                },
+                {
+                  "lhs_ref": "paired_ci.DS8.NC_TOPI_clamped_minus_IQ_LOW_ONLY.upper",
+                  "op": "<=",
+                  "rhs_value": 0.0
+                },
+                {
+                  "lhs_ref": "paired_ci.DS7.NC_TOPI_clamped_minus_IQ_OOD_ONLY.upper",
+                  "op": "<=",
+                  "rhs_value": 0.0
+                },
+                {
+                  "lhs_ref": "paired_ci.DS8.NC_TOPI_clamped_minus_IQ_OOD_ONLY.upper",
+                  "op": "<=",
+                  "rhs_value": 0.0
+                }
+              ]
+            }
+          },
+          {
+            "id": "b_nc_vs_ncb0_statistically_indistinguishable",
+            "expr": {
+              "all": [
+                {
+                  "lhs_ref": "paired_ci.DS7.NC_TOPI_clamped_minus_NC_B0_clamped.lower",
+                  "op": "<=",
+                  "rhs_value": 0.0
+                },
+                {
+                  "lhs_ref": "paired_ci.DS7.NC_TOPI_clamped_minus_NC_B0_clamped.upper",
+                  "op": ">=",
+                  "rhs_value": 0.0
+                },
+                {
+                  "lhs_ref": "paired_ci.DS8.NC_TOPI_clamped_minus_NC_B0_clamped.lower",
+                  "op": "<=",
+                  "rhs_value": 0.0
+                },
+                {
+                  "lhs_ref": "paired_ci.DS8.NC_TOPI_clamped_minus_NC_B0_clamped.upper",
+                  "op": ">=",
+                  "rhs_value": 0.0
+                }
+              ]
+            }
+          },
+          {
+            "id": "c_clamp_reverses_positive_original_gain",
+            "expr": {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "lhs_ref": "delta_pauc.DS7.NC_TOPI_clamped_minus_B0",
+                      "op": "<=",
+                      "rhs_value": 0.0
+                    },
+                    {
+                      "lhs_ref": "delta_pauc.DS7.NC_TOPI_original_minus_B0",
+                      "op": ">",
+                      "rhs_value": 0.0
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "lhs_ref": "delta_pauc.DS8.NC_TOPI_clamped_minus_B0",
+                      "op": "<=",
+                      "rhs_value": 0.0
+                    },
+                    {
+                      "lhs_ref": "delta_pauc.DS8.NC_TOPI_original_minus_B0",
+                      "op": ">",
+                      "rhs_value": 0.0
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "d_scale_only_gain_and_alarm_overlap",
+            "expr": {
+              "all": [
+                {
+                  "lhs_ref": "delta_pauc.DS7.NC_TOPI_original_minus_B0",
+                  "op": ">",
+                  "rhs_value": 0.0
+                },
+                {
+                  "lhs_ref": "delta_pauc.DS8.NC_TOPI_original_minus_B0",
+                  "op": ">",
+                  "rhs_value": 0.0
+                },
+                {
+                  "lhs_ref": "scale_gain_fraction.DS7",
+                  "op": ">=",
+                  "rhs_value": 0.5
+                },
+                {
+                  "lhs_ref": "scale_gain_fraction.DS8",
+                  "op": ">=",
+                  "rhs_value": 0.5
+                },
+                {
+                  "lhs_ref": "alarm_overlap.NC_TOPI_original_with_IQ_LOW_ONLY.DS7",
+                  "op": ">=",
+                  "rhs_value": 0.5
+                },
+                {
+                  "lhs_ref": "alarm_overlap.NC_TOPI_original_with_IQ_LOW_ONLY.DS8",
+                  "op": ">=",
+                  "rhs_value": 0.5
+                }
+              ]
+            }
+          },
+          {
+            "id": "e_clean_dynamic_profile_s_fpr",
+            "expr": {
+              "lhs_ref": "q99_fpr.Profile_S.cleanDynamic.NC_TOPI_clamped",
+              "op": ">=",
+              "rhs_value": 0.5
+            }
+          }
+        ]
+      },
+      "tangent_support": {
+        "all": [
+          {
+            "id": "t1_point_over_ncb0",
+            "expr": {
+              "all": [
+                {
+                  "lhs_ref": "pauc.DS7.NC_TOPI_clamped",
+                  "op": ">",
+                  "rhs_ref": "pauc.DS7.NC_B0_clamped"
+                },
+                {
+                  "lhs_ref": "pauc.DS8.NC_TOPI_clamped",
+                  "op": ">",
+                  "rhs_ref": "pauc.DS8.NC_B0_clamped"
+                }
+              ]
+            }
+          },
+          {
+            "id": "t2_point_over_iq_low",
+            "expr": {
+              "all": [
+                {
+                  "lhs_ref": "pauc.DS7.NC_TOPI_clamped",
+                  "op": ">",
+                  "rhs_ref": "pauc.DS7.IQ_LOW_ONLY"
+                },
+                {
+                  "lhs_ref": "pauc.DS8.NC_TOPI_clamped",
+                  "op": ">",
+                  "rhs_ref": "pauc.DS8.IQ_LOW_ONLY"
+                }
+              ]
+            }
+          },
+          {
+            "id": "t3_point_over_iq_ood",
+            "expr": {
+              "all": [
+                {
+                  "lhs_ref": "pauc.DS7.NC_TOPI_clamped",
+                  "op": ">",
+                  "rhs_ref": "pauc.DS7.IQ_OOD_ONLY"
+                },
+                {
+                  "lhs_ref": "pauc.DS8.NC_TOPI_clamped",
+                  "op": ">",
+                  "rhs_ref": "pauc.DS8.IQ_OOD_ONLY"
+                }
+              ]
+            }
+          },
+          {
+            "id": "t4_at_least_one_positive_ncb0_ci",
+            "expr": {
+              "any": [
+                {
+                  "lhs_ref": "paired_ci.DS7.NC_TOPI_clamped_minus_NC_B0_clamped.lower",
+                  "op": ">",
+                  "rhs_value": 0.0
+                },
+                {
+                  "lhs_ref": "paired_ci.DS8.NC_TOPI_clamped_minus_NC_B0_clamped.lower",
+                  "op": ">",
+                  "rhs_value": 0.0
+                }
+              ]
+            }
+          },
+          {
+            "id": "t5_positive_clamped_nc_minus_b0_points",
+            "expr": {
+              "all": [
+                {
+                  "lhs_ref": "delta_pauc.DS7.NC_TOPI_clamped_minus_B0",
+                  "op": ">",
+                  "rhs_value": 0.0
+                },
+                {
+                  "lhs_ref": "delta_pauc.DS8.NC_TOPI_clamped_minus_B0",
+                  "op": ">",
+                  "rhs_value": 0.0
+                }
+              ]
+            }
+          },
+          {
+            "id": "t6_cleanstatic_holdout",
+            "expr": {
+              "lhs_ref": "q99_fpr.Profile_S.cleanStatic.normal_holdout.NC_TOPI_clamped",
+              "op": "<=",
+              "rhs_value": 0.02
+            }
+          },
+          {
+            "id": "t7_all_stable_pre",
+            "expr": {
+              "all": [
+                {
+                  "lhs_ref": "q99_fpr.Profile_S.DS1.stable_pre.NC_TOPI_clamped",
+                  "op": "<",
+                  "rhs_value": 0.05
+                },
+                {
+                  "lhs_ref": "q99_fpr.Profile_S.DS2.stable_pre.NC_TOPI_clamped",
+                  "op": "<",
+                  "rhs_value": 0.05
+                },
+                {
+                  "lhs_ref": "q99_fpr.Profile_S.DS3.stable_pre.NC_TOPI_clamped",
+                  "op": "<",
+                  "rhs_value": 0.05
+                },
+                {
+                  "lhs_ref": "q99_fpr.Profile_S.DS7.stable_pre.NC_TOPI_clamped",
+                  "op": "<",
+                  "rhs_value": 0.05
+                },
+                {
+                  "lhs_ref": "q99_fpr.Profile_S.DS8.stable_pre.NC_TOPI_clamped",
+                  "op": "<",
+                  "rhs_value": 0.05
+                }
+              ]
+            }
+          },
+          {
+            "id": "profile_d_conditional_gate",
+            "expr": {
+              "if": {
+                "lhs_ref": "profile_d.status",
+                "op": "==",
+                "rhs_value": "AVAILABLE"
+              },
+              "then": {
+                "lhs_ref": "q99_fpr.Profile_D.cleanDynamic.normal_holdout.NC_TOPI_clamped",
+                "op": "<",
+                "rhs_value": 0.05
+              },
+              "else_required": {
+                "lhs_ref": "profile_d.status",
+                "op": "==",
+                "rhs_value": "INSUFFICIENT_NORMAL_SUPPORT"
+              }
+            }
+          }
+        ]
+      },
+      "ordered_result_rules": [
+        {
+          "if": "shortcut.any == true",
+          "status": "IQ_SHORTCUT_DOMINATED"
+        },
+        {
+          "if": "shortcut.any == false AND tangent_support.all == true",
+          "status": "TANGENT_SUPPORTED"
+        },
+        {
+          "if": "otherwise",
+          "status": "INCONCLUSIVE"
+        }
+      ]
+    }
+  },
+  "second_peak": {
+    "stage0_c7": {
+      "preserved_value": false,
+      "preserved_status": "failure",
+      "may_delete_or_relabel_pass": false,
+      "changes_stage0_decision": false
+    },
+    "limitations_exact": [
+      "prompt-normalized magnitude direct sum",
+      "missing complex carrier phase",
+      "no Prompt renormalization after synthesis",
+      "finite 9-tap zero padding",
+      "strict separation monotonicity",
+      "single reference"
+    ],
+    "complex_domain_correction_proposal_allowed_only_if": "final Stage-0B status == TANGENT_SUPPORTED",
+    "complex_synthesis_in_this_audit": false
+  },
+  "forbidden_actions": [
+    "modify or replace artifacts/nc_topi_stage0",
+    "read attack outcomes before this contract commit",
+    "fit on attacks, labels, scenario IDs or onsets",
+    "process full raw IQ",
+    "perform complex second-peak synthesis",
+    "retrain B0",
+    "tune features, clamps, thresholds, comparisons or decision predicates after results",
+    "select diagnostic clamp variants from attack performance",
+    "use IID bootstrap fallback",
+    "use Profile_S cleanDynamic as a substitute for Profile_D"
+  ],
+  "artifact_contract": {
+    "root": "artifacts/nc_topi_stage0b_audit",
+    "append_only": true,
+    "refuse_overwrite": true,
+    "atomic_publish": true,
+    "required_files_exact": [
+      "README.md",
+      "config.json",
+      "provenance.json",
+      "data_manifest.json",
+      "parent_inventory.json",
+      "profile_support.json",
+      "fit_audit.json",
+      "refit_equivalence.json",
+      "scale_bounds.json",
+      "thresholds.json",
+      "per_prn_scores.csv",
+      "event_scores.csv",
+      "scenario_metrics.csv",
+      "bootstrap_results.json",
+      "decision.json",
+      "verification.json",
+      "hashes.json"
+    ],
+    "required_diagnostic_files_exact": [
+      "diagnostics/clamp_variant_metrics.csv",
+      "diagnostics/time_shuffle_metrics.csv",
+      "diagnostics/time_shuffle_fit_audit.json",
+      "diagnostics/iq_scale_checks.json",
+      "diagnostics/second_peak_limitations.json"
+    ],
+    "optional_only_if_parent_data_present": [
+      "diagnostics/top25_q995_metrics.csv"
+    ],
+    "config_copy_requirement": "config.json must be byte-identical to configs/nc_topi_stage0b_audit.json at the contract commit",
+    "provenance_fields_required": [
+      "contract_commit_sha",
+      "parent_artifact_commit",
+      "parent_generation_source_commit",
+      "worktree_status",
+      "command",
+      "library_versions",
+      "attack_loader_opened_after_freeze",
+      "post_result_tuning"
+    ]
+  },
+  "independent_verifier": {
+    "required": true,
+    "must_not_trust_summary_scalars": true,
+    "recompute_from": [
+      "parent frozen identities and source metadata",
+      "per_prn_scores.csv",
+      "event_scores.csv",
+      "fit and clamp manifests",
+      "threshold manifests"
+    ],
+    "checks": [
+      "parent commit and parent artifact inventory binding",
+      "no Stage-0 file modification",
+      "exact method, scenario, role, PRN and event inventories",
+      "exact common identity and valid masks",
+      "clean-only fit and calibration provenance/digests",
+      "three separate target-matched Huber fits and robust scaling parameters",
+      "original NC-TOPI reconstruction within rel/abs 1e-12",
+      "effective-scale ordinary and zero-boundary semantics",
+      "target-specific primary and diagnostic clamp quantiles with method='higher'",
+      "IQ-only empirical p-values including <= and >= tie handling",
+      "median event aggregation and event-common IQ scale equality",
+      "strict q99 alarms and all point metrics",
+      "gap-safe paired block bootstrap with exactly 2000 requested replicates and no IID fallback",
+      "Profile_D sufficiency status before any Profile_D fit",
+      "all shortcut triggers before tangent conditions and final status regeneration",
+      "preserved Stage-0 c7 failure and exact limitation list",
+      "forbidden-operation attestations"
+    ],
+    "failure_policy": "nonzero exit and no verified publication"
+  },
+  "checksums": {
+    "algorithm": "SHA-256",
+    "manifest": "hashes.json",
+    "manifest_self_exclusion": true,
+    "entry_fields": [
+      "relative_path",
+      "size_bytes",
+      "sha256"
+    ],
+    "coverage": "every regular file below artifact root except hashes.json, sorted by relative_path",
+    "independent_recompute_required": true,
+    "unexpected_or_missing_file": "fail_closed"
+  }
+}
