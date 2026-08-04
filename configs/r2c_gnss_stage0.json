@@ -31,7 +31,7 @@
     "phases_rad": [0.0, 0.7853981633974483, 1.5707963267948966, 3.141592653589793],
     "synthetic_use": "mechanics-only"
   },
-  "geometry": {"minimum_prns": 5, "minimum_rank": 4, "minimum_residual_dof": 1, "maximum_condition_number": 1000000.0},
+  "geometry": {"minimum_prns": 5, "minimum_rank": 4, "minimum_residual_dof": 1, "maximum_condition_number": 1000000.0, "maximum_ephemeris_toe_age_s": 7200.0, "maximum_receiver_pvt_age_s": 1.0, "time_binding_filename": "geometry_time_binding.json"},
   "b0": {
     "checkpoint_sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
     "retrain": false,

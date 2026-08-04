@@ -24,6 +24,9 @@ from gnss_doppler_lab.r2c_gnss import (  # noqa: E402
 NAMES = ("cleanStatic", "cleanDynamic", "DS1", "DS2", "DS3", "DS7", "DS8")
 ONSET = {"DS1": 100.0, "DS2": 100.0, "DS3": 100.0, "DS7": 110.0, "DS8": 110.0}
 DETECTORS = ("B0", "A1", "A2", "A3", "A4", "Full R2C-GNSS", "Power-only")
+EVIDENCE_GATES = ("clean_dynamic_fpr", "gain_invariance", "phase_invariance",
+                  "full_exceeds_b0", "full_b0_ci", "geometry_improvement",
+                  "relation_destruction", "shortcut_controls")
 SOURCE_FILES = ("src/gnss_doppler_lab/r2c_gnss.py", "src/gnss_doppler_lab/gcmr_geometry.py",
                 "src/gnss_doppler_lab/trajectory.py", "scripts/run_r2c_gnss_stage0.py",
                 "scripts/verify_r2c_gnss_stage0.py", "scripts/train_prn_node_gru.py",
@@ -190,10 +193,23 @@ def verify(artifact, check_external=True, full_recompute=False):
         errors.append("generation commit must be current HEAD or its immediate artifact-only parent")
 
     if validity.get("decision") == "REQUIRED_B0_INTERFACE_UNAVAILABLE":
-        recomputed = derive_stage0_verdict(decision.get("gates", {}))
-        if decision.get("verdict") != recomputed["verdict"] or decision.get("reason") != recomputed["reason"]:
-            errors.append("decision verdict/reason is inconsistent with independently recomputed gates")
         gate = validity.get("B0", {})
+        expected_gates = {
+            "complex_provenance": {"status": "PASS", "source": "original preregistration section 11"},
+            "time_alignment": {"status": "NOT_EVALUATED", "reason": "scoring stopped before geometry fitting"},
+            "los_geometry": {"status": "NOT_EVALUATED", "reason": "scoring stopped before geometry fitting"},
+            "b0_interface": gate,
+        }
+        expected_gates.update({name: {"status": "NOT_EVALUATED",
+            "reason": "required B0 gate failed before attack evaluation"} for name in EVIDENCE_GATES})
+        recomputed = derive_stage0_verdict(expected_gates)
+        if (decision.get("gates") != expected_gates or decision.get("verdict") != recomputed["verdict"]
+                or decision.get("reason") != recomputed["reason"]
+                or decision.get("physics_supported") != recomputed["physics_supported"]):
+            errors.append("decision verdict/reason is inconsistent with independently recomputed gates")
+        if (decision.get("real_attack_performance_evaluated") is not False
+                or decision.get("later_raw_iq_2d_model_justified") is not False):
+            errors.append("decision flags are inconsistent with required-gate fail-fast")
         if (gate.get("status") != "FAIL" or gate.get("raw_first_row_substitution_permitted") is not False
                 or gate.get("checkpoint_sha256") != sha256_file(ROOT / "artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt")
                 or gate.get("training_dependency_sha256") != sha256_file(ROOT / "scripts/train_prn_node_gru.py")
@@ -422,6 +438,25 @@ def verify(artifact, check_external=True, full_recompute=False):
         errors.append("decision inconsistent with required LOS data invalidity")
     if decision.get("old_result_status") != "SUPERSEDED_BY_EXTERNAL_DATA_DISCOVERY":
         errors.append("superseded provenance absent")
+    expected_gates = {
+        "complex_provenance": {"status": "PASS", "source": "authenticated seven-scenario input inventory"},
+        "time_alignment": {"status": "PASS" if all(item.get("alignment", {}).get("valid") and
+            item.get("alignment", {}).get("time_alignment") for item in validity.get("geometry_inventory", {}).values()) else "FAIL"},
+        "los_geometry": {"status": "PASS" if all(item.get("alignment", {}).get("valid") and
+            item.get("alignment", {}).get("matched_rows", 0) > 0 for item in validity.get("geometry_inventory", {}).values()) else "FAIL"},
+        "b0_interface": training.get("B0_interface_gate", {"status": "PASS"}),
+    }
+    expected_gates.update({name: {"status": "NOT_EVALUATED",
+        "reason": "authentic preregistration names the claim but contains no quantitative acceptance criterion"}
+        for name in EVIDENCE_GATES})
+    recomputed = derive_stage0_verdict(expected_gates)
+    if (decision.get("gates") != expected_gates or decision.get("verdict") != recomputed["verdict"]
+            or decision.get("reason") != recomputed["reason"]
+            or decision.get("physics_supported") != recomputed["physics_supported"]):
+        errors.append("evaluated decision gates/verdict/reason are not independently reproducible")
+    if (decision.get("real_attack_performance_evaluated") is not True
+            or decision.get("later_raw_iq_2d_model_justified") is not False):
+        errors.append("evaluated decision flags are inconsistent with artifact contents")
     if full_recompute and not errors:
         runtime = config.get("runtime", {})
         command = [sys.executable, str(ROOT / "scripts/run_r2c_gnss_stage0.py"),

@@ -441,18 +441,26 @@ def strict_alarm(score: float, threshold: float) -> bool:
 def derive_stage0_verdict(gates: Mapping[str, Mapping[str, object]]) -> dict:
     """Derive the frozen task taxonomy from explicit machine-readable gates."""
     required_inputs = ("complex_provenance", "time_alignment", "los_geometry", "b0_interface")
-    missing = [name for name in required_inputs if gates.get(name, {}).get("status") != "PASS"]
+    evidence = ("clean_dynamic_fpr", "gain_invariance", "phase_invariance",
+                "full_exceeds_b0", "full_b0_ci", "geometry_improvement",
+                "relation_destruction", "shortcut_controls")
+    ordered = required_inputs + evidence
+    unknown = sorted(set(gates).difference(ordered))
+    if unknown:
+        raise ValueError(f"unknown Stage-0 gates: {unknown}")
+    statuses = {}
+    for name in ordered:
+        status = gates.get(name, {}).get("status", "NOT_EVALUATED")
+        if status not in {"PASS", "FAIL", "NOT_EVALUATED"}:
+            raise ValueError(f"invalid Stage-0 gate status for {name}: {status}")
+        statuses[name] = status
+    missing = [name for name in required_inputs if statuses[name] != "PASS"]
     if missing:
         verdict = "DATA_INVALID"
-        reason = "required authenticated input/interface unavailable: " + ", ".join(missing)
     else:
-        evidence = ("clean_dynamic_fpr", "gain_invariance", "phase_invariance",
-                    "full_exceeds_b0", "full_b0_ci", "geometry_improvement",
-                    "relation_destruction", "shortcut_controls")
-        failed = [name for name in evidence if gates.get(name, {}).get("status") != "PASS"]
+        failed = [name for name in evidence if statuses[name] != "PASS"]
         verdict = "PHYSICS_SUPPORTED" if not failed else "NOT_SUPPORTED"
-        reason = ("all preregistered physics gates pass" if not failed else
-                  "preregistered physics gates failed: " + ", ".join(failed))
+    reason = ", ".join(f"{name}={statuses[name]}" for name in ordered)
     return {"verdict": verdict, "reason": reason, "gates": dict(gates),
             "physics_supported": verdict == "PHYSICS_SUPPORTED"}
 

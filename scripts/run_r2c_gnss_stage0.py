@@ -48,6 +48,9 @@ SOURCE_FILES = (
     "configs/r2c_clean_dynamic_geometry_receiver.conf",
 )
 MIN_EVENT_PRNS = 5
+EVIDENCE_GATES = ("clean_dynamic_fpr", "gain_invariance", "phase_invariance",
+                  "full_exceeds_b0", "full_b0_ci", "geometry_improvement",
+                  "relation_destruction", "shortcut_controls")
 
 
 def row_identity(time_s, prn, value):
@@ -112,44 +115,90 @@ def _nmea_positions(path, tow0):
     return out
 
 
-def build_geometry(directory, dataset, scenario):
+def _authoritative_time_binding(directory, scenario, filename="geometry_time_binding.json"):
+    """Load an explicit recording clock binding; never synthesize GPS time."""
+    path = Path(directory) / filename
+    if not path.is_file():
+        raise ValueError(f"authoritative full GPS week/start TOW binding absent: {filename}")
+    raw = json.loads(path.read_text())
+    if raw.get("schema") != "gnss-doppler-lab.geometry-time-binding.v1":
+        raise ValueError("geometry time binding schema mismatch")
+    if str(raw.get("scenario_id", "")).lower() != scenario.lower():
+        raise ValueError("geometry time binding scenario mismatch")
+    week, tow = raw.get("full_gps_week"), raw.get("recording_start_tow_s")
+    if isinstance(week, bool) or not isinstance(week, int) or week < 0:
+        raise ValueError("authoritative full GPS week is absent or invalid")
+    if isinstance(tow, bool) or not isinstance(tow, (int, float)) or not math.isfinite(tow):
+        raise ValueError("authoritative recording start TOW is absent or invalid")
+    fields = {"schema": raw["schema"], "scenario_id": raw["scenario_id"],
+              "full_gps_week": week, "recording_start_tow_s": float(tow)}
+    return fields, {"path": str(path.resolve()), "sha256": sha256_file(path), "fields": fields,
+                    "fields_sha256": canonical_hash(fields)}
+
+
+def build_geometry(directory, dataset, scenario, *, max_toe_age_s=7200.0,
+                   max_pvt_age_s=1.0, time_binding_filename="geometry_time_binding.json"):
     eph_path, nmea_path = directory / "gps_ephemeris.xml", directory / "nmea_pvt.nmea"
     obs_path = directory / "raw/observables.mat"
+    binding, binding_source = _authoritative_time_binding(directory, scenario, time_binding_filename)
     ephemerides = parse_gnss_sdr_gps_ephemeris_xml(eph_path)
     healthy, health = ephemeris_health_selection(ephemerides, tracked_prns=dataset["prns"])
     if obs_path.is_file():
         with h5py.File(obs_path, "r") as handle:
             rx = np.asarray(handle["RX_time"])
-        tow0 = float(np.min(rx[np.isfinite(rx) & (rx > 0)]))
-        time_source = "observables.mat minimum finite positive RX_time"
+        positive = rx[np.isfinite(rx) & (rx > 0)]
+        if positive.size == 0:
+            raise ValueError("observables RX_time has no finite positive recording start")
+        observed_tow0 = float(np.min(positive))
+        if abs(((observed_tow0 - binding["recording_start_tow_s"] + 302400.0) % 604800.0) - 302400.0) > 1e-6:
+            raise ValueError("authenticated recording start TOW disagrees with observables RX_time")
+        tow0 = binding["recording_start_tow_s"]
+        time_source = "explicit authenticated geometry time binding checked against observables.mat RX_time"
     else:
         raise ValueError("authenticated observables RX_time is required; decoded ephemeris TOW is not a recording-start binding")
+    alignment = validate_ephemeris_time_alignment(
+        ephemerides, full_gps_week=binding["full_gps_week"], recording_start_tow_s=tow0,
+        max_toe_age_s=max_toe_age_s)
     positions = _nmea_positions(nmea_path, tow0)
-    if scenario.startswith("DS"):
-        trusted = [position for relative, position in positions if 30.0 <= relative <= ONSET[scenario] - 20.0]
-        if not trusted:
-            raise ValueError("no trusted stable-pre receiver ECEF support")
-        held = np.median(np.asarray(trusted), axis=0)
-        positions = [(relative, held) for relative in dataset["time"]]
     los = {}
     mismatch = {}
+    selections = {}
     for t, p in zip(dataset["time"], dataset["prn"]):
         key = (float(t), int(p))
         if int(p) not in healthy:
-            mismatch[key] = "missing_or_unhealthy_ephemeris"; continue
+            mismatch[key] = "missing_or_unhealthy_ephemeris"
+            selections[f"{t:.9f}/G{int(p):02d}"] = {"available": False, "reason": mismatch[key]}
+            continue
         causal = [item for item in positions if item[0] <= float(t)]
         if not causal:
-            mismatch[key] = "no_causally_available_receiver_pvt"; continue
+            mismatch[key] = "no_causally_available_receiver_pvt"
+            selections[f"{t:.9f}/G{int(p):02d}"] = {"available": False, "reason": mismatch[key]}
+            continue
         nearest_t, receiver = max(causal, key=lambda item: item[0])
-        if float(t) - nearest_t > 1.0:
-            mismatch[key] = "receiver_pvt_tolerance_exceeded"; continue
+        age = float(t) - nearest_t
+        if age > max_pvt_age_s:
+            mismatch[key] = "receiver_pvt_tolerance_exceeded"
+            selections[f"{t:.9f}/G{int(p):02d}"] = {"available": False,
+                "selected_pvt_time_s": nearest_t, "age_s": age, "reason": mismatch[key]}
+            continue
         sat = satellite_position_ecef(healthy[int(p)], (tow0 + float(t)) % 604800.0)
         vector = np.asarray(look_angles(receiver, sat).los_ecef)
         if abs(np.linalg.norm(vector) - 1.0) > 1e-10:
-            mismatch[key] = "los_unit_norm_failure"; continue
+            mismatch[key] = "los_unit_norm_failure"
+            selections[f"{t:.9f}/G{int(p):02d}"] = {"available": False,
+                "selected_pvt_time_s": nearest_t, "age_s": age, "reason": mismatch[key]}
+            continue
         los[key] = vector
+        selections[f"{t:.9f}/G{int(p):02d}"] = {"available": True,
+            "selected_pvt_time_s": nearest_t, "age_s": age, "availability_time_s": float(t),
+            "reason": None}
     return los, {"valid": True, "tow0_s": tow0, "time_source": time_source,
-        "receiver_interpolation": "nearest checksum-valid GGA, tolerance 1.0 s",
+        "time_alignment": alignment, "time_binding_source": binding_source,
+        "time_alignment_sha256": canonical_hash(alignment),
+        "receiver_policy": "latest checksum-valid GGA at or before event",
+        "maximum_receiver_pvt_age_s": max_pvt_age_s,
+        "event_receiver_selections": selections,
+        "event_receiver_selections_sha256": canonical_hash(selections),
         "matched_rows": len(los), "unmatched_rows": len(mismatch),
         "mismatch_counts": {reason: list(mismatch.values()).count(reason) for reason in sorted(set(mismatch.values()))},
         "healthy_ephemeris": health,
@@ -566,6 +615,8 @@ def write_fail_closed_artifact(output, config, args, paths, geometry_dirs, inven
         "los_geometry": {"status": "NOT_EVALUATED", "reason": "scoring stopped before geometry fitting"},
         "b0_interface": gate,
     }
+    criteria.update({name: {"status": "NOT_EVALUATED",
+        "reason": "required B0 gate failed before attack evaluation"} for name in EVIDENCE_GATES})
     decision = derive_stage0_verdict(criteria)
     decision.update({"scope": "Full R2C-GNSS preregistered physics decision",
         "criteria_provenance": "original preregistration r2c-gnss-stage0-20260804-bypass, section 11",
@@ -622,7 +673,7 @@ def write_fail_closed_artifact(output, config, args, paths, geometry_dirs, inven
         "cpu_count": os.cpu_count(), "cuda_used": False}
     write_json(output / "provenance.json", provenance)
     (output / "README.md").write_text("# R2C-GNSS Stage-0 corrected review artifact\n\n"
-        "Verdict: `DATA_INVALID`, derived from the frozen gate record. The frozen B0 checkpoint requires "
+        f"Verdict: `{decision['verdict']}`. Gate reason: `{decision['reason']}`. The frozen B0 checkpoint requires "
         "aggregated one-second node windows; raw first-row substitution is prohibited. No attack metrics were recomputed or reported.\n")
     write_json(output / "verification.json", {"status": "PENDING"})
     write_json(output / "hashes.json", {"algorithm": "sha256", "files": artifact_hashes(output)})
@@ -731,7 +782,11 @@ def main():
             dataset["los"] = {}; geometry_reports[name] = {"valid": False, "reason": "not supplied"}
         else:
             try:
-                dataset["los"], geometry_reports[name] = build_geometry(directory, dataset, name)
+                dataset["los"], geometry_reports[name] = build_geometry(
+                    directory, dataset, name,
+                    max_toe_age_s=config["geometry"]["maximum_ephemeris_toe_age_s"],
+                    max_pvt_age_s=config["geometry"]["maximum_receiver_pvt_age_s"],
+                    time_binding_filename=config["geometry"]["time_binding_filename"])
             except Exception as exc:
                 dataset["los"] = {}; geometry_reports[name] = {"valid": False, "reason": str(exc)}
     for dataset in data.values():
@@ -870,7 +925,8 @@ def main():
     for name in NAMES:
         directory = geometry_dirs.get(name)
         files = {}
-        for relative in ("gps_ephemeris.xml", "raw/observables.mat", "raw/observables.dat", "nmea_pvt.nmea"):
+        for relative in ("gps_ephemeris.xml", "raw/observables.mat", "raw/observables.dat",
+                         "nmea_pvt.nmea", config["geometry"]["time_binding_filename"]):
             path = directory / relative if directory else None
             files[relative] = {"present": bool(path and path.is_file()),
                                "resolved_path": str(path) if path else None,
@@ -888,6 +944,7 @@ def main():
         "fit_roles": ["cleanStatic normal_train"], "fit_products": ["empirical receiver correlation template", "analytic whitener", "compact neural nuisance"],
         "template_sha256": empirical_template_hash(template), "DS7_fit_or_calibration_uses": 0,
         "cleanDynamic_fit_or_calibration_uses": 0, "nuisance": nuisance_summary,
+        "B0_interface_gate": b0_gate,
         "B0": {"checkpoint": str(checkpoint.relative_to(ROOT)), "sha256": sha256_file(checkpoint), "retrained": False},
         "sample_counts": {name: len(value["y"]) for name, value in data.items()}})
 
@@ -971,13 +1028,26 @@ def main():
         "original_shared_score": physical, "destroyed_shared_score": destroyed,
         "decrease": physical - destroyed, "passes": destroyed < physical})
 
-    decision = {"verdict": "NOT_SUPPORTED", "scope": "Full R2C-GNSS preregistered physics decision",
+    required_gates = {
+        "complex_provenance": {"status": "PASS", "source": "authenticated seven-scenario input inventory"},
+        "time_alignment": {"status": "PASS" if all(report.get("valid") and report.get("time_alignment")
+                                                     for report in geometry_reports.values()) else "FAIL"},
+        "los_geometry": {"status": "PASS" if all(report.get("valid") and report.get("matched_rows", 0) > 0
+                                                   for report in geometry_reports.values()) else "FAIL"},
+        "b0_interface": b0_gate,
+    }
+    # Section 11 names these claims but supplies no quantitative pass threshold.
+    # Existing metrics therefore cannot be converted into PASS/FAIL post hoc.
+    evidence_gates = {name: {"status": "NOT_EVALUATED",
+        "reason": "authentic preregistration names the claim but contains no quantitative acceptance criterion"}
+        for name in EVIDENCE_GATES}
+    decision = derive_stage0_verdict({**required_gates, **evidence_gates})
+    decision.update({"scope": "Full R2C-GNSS preregistered physics decision",
         "old_verdict": "DATA_INVALID", "old_commit": "75ff99b7a3fdb568682c75096ee0fd690a48dfa6",
         "old_result_status": "SUPERSEDED_BY_EXTERNAL_DATA_DISCOVERY",
-        "reason": "Valid Full inputs exist; preregistered physics, shortcut, OOD, and comparison criteria are evaluated fail-closed and any failed criterion yields NOT_SUPPORTED",
-        "physics_supported": False, "real_attack_performance_evaluated": True,
+        "real_attack_performance_evaluated": True,
         "geometry_free_attack_evaluation": True, "a1_a2_result_valid": True,
-        "later_raw_iq_2d_model_justified": False}
+        "later_raw_iq_2d_model_justified": False})
     write_json(output / "decision.json", decision)
 
     plot_rows = [{"scenario": row["scenario"], "detector": row["detector"],
@@ -1009,7 +1079,8 @@ def main():
         "cpu_count": os.cpu_count(), "cuda_used": False, "runtime_s": time.time() - started}
     write_json(output / "provenance.json", provenance)
     (output / "README.md").write_text(
-        "# R2C-GNSS Stage-0 full follow-up\n\nVerdict: `NOT_SUPPORTED`. Authentic complex taps and time-aligned LOS support A1/A2/A3/A4/Full evaluation after global deterministic de-duplication. The preregistered physics contribution criteria are not all met. The old repository-local-input `DATA_INVALID` rationale is superseded.\n",
+        f"# R2C-GNSS Stage-0 full follow-up\n\nVerdict: `{decision['verdict']}`. "
+        f"Gate reason: `{decision['reason']}`. No unregistered quantitative criterion is inferred.\n",
         encoding="utf8")
     write_json(output / "verification.json", {"status": "PENDING"})
     write_json(output / "hashes.json", {"algorithm": "sha256", "files": artifact_hashes(output)})

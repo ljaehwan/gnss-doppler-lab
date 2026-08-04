@@ -5,8 +5,10 @@ import json
 from pathlib import Path
 import shutil
 
+import h5py
 import numpy as np
 import pytest
+from gnss_doppler_lab.gcmr_geometry import GpsEphemeris
 
 from gnss_doppler_lab.r2c_gnss import (
     C_M_S, AnalyticResidualWhitener, ComplexTapProvenance, SmallNeuralNuisanceModel,
@@ -29,6 +31,55 @@ def fit_second_source(*args, **kwargs):
 def provenance(complex_value=True):
     return ComplexTapProvenance("source.bin", "a" * 64, "receiver-v1", "extractor-v1", 25e6,
                                 .25, "cleanStatic", complex_value, "none")
+
+
+def _geometry_ephemeris(*, week=49, toe=100.0):
+    return GpsEphemeris(7, 1.0, 4.5e-9, .01, 5153.7955, .7, .94, -.3, -8e-9,
+                        1e-10, 1e-6, 2e-6, 200., -80., 3e-8, -2e-8, toe, week,
+                        toc=toe, decoded_tow=toe + 1, SV_health=0)
+
+
+def _geometry_directory(tmp_path, *, week=2097, tow=100.0):
+    directory = tmp_path / "receiver"; (directory / "raw").mkdir(parents=True)
+    (directory / "geometry_time_binding.json").write_text(json.dumps({
+        "schema": "gnss-doppler-lab.geometry-time-binding.v1", "scenario_id": "DS3",
+        "full_gps_week": week, "recording_start_tow_s": tow}))
+    (directory / "gps_ephemeris.xml").write_text("fixture")
+    (directory / "nmea_pvt.nmea").write_text("fixture")
+    with h5py.File(directory / "raw/observables.mat", "w") as handle:
+        handle["RX_time"] = np.asarray([tow, tow + .1])
+    return directory
+
+
+def test_build_geometry_calls_alignment_and_binds_causal_pvt(tmp_path, monkeypatch):
+    runner = load_runner(); directory = _geometry_directory(tmp_path)
+    monkeypatch.setattr(runner, "parse_gnss_sdr_gps_ephemeris_xml",
+                        lambda _: {7: _geometry_ephemeris()})
+    early = np.asarray([6378137., 0., 0.]); late = np.asarray([0., 6378137., 0.])
+    monkeypatch.setattr(runner, "_nmea_positions", lambda *_: [(0., early), (.5, late)])
+    dataset = {"prns": [7], "time": np.asarray([.25]), "prn": np.asarray([7])}
+    first_los, report = runner.build_geometry(directory, dataset, "DS3")
+    assert report["time_alignment"]["full_gps_week"] == 2097
+    selection = report["event_receiver_selections"]["0.250000000/G07"]
+    assert selection["selected_pvt_time_s"] == 0.0 and selection["age_s"] == .25
+    assert report["time_binding_source"]["sha256"] == runner.sha256_file(directory / "geometry_time_binding.json")
+    monkeypatch.setattr(runner, "_nmea_positions", lambda *_: [(0., early), (.5, late * 2)])
+    second_los, _ = runner.build_geometry(directory, dataset, "DS3")
+    assert second_los[(.25, 7)] == pytest.approx(first_los[(.25, 7)])
+
+
+def test_build_geometry_rejects_missing_week_binding_week_mismatch_and_stale_toe(tmp_path, monkeypatch):
+    runner = load_runner(); dataset = {"prns": [7], "time": np.asarray([.25]), "prn": np.asarray([7])}
+    directory = tmp_path / "missing"; directory.mkdir()
+    with pytest.raises(ValueError, match="binding absent"):
+        runner.build_geometry(directory, dataset, "DS3")
+    directory = _geometry_directory(tmp_path / "week", week=2098)
+    monkeypatch.setattr(runner, "parse_gnss_sdr_gps_ephemeris_xml", lambda _: {7: _geometry_ephemeris()})
+    with pytest.raises(ValueError, match="week"):
+        runner.build_geometry(directory, dataset, "DS3")
+    directory = _geometry_directory(tmp_path / "stale", tow=1000.)
+    with pytest.raises(ValueError, match="toe age"):
+        runner.build_geometry(directory, dataset, "DS3", max_toe_age_s=10.)
 
 
 def test_complex_provenance_accepts_complex_and_rejects_magnitude():
@@ -256,7 +307,25 @@ def test_decision_is_derived_fail_closed_from_required_interface():
              ("complex_provenance", "time_alignment", "los_geometry", "b0_interface")}
     gates["b0_interface"] = {"status": "FAIL"}
     result = derive_stage0_verdict(gates)
-    assert result["verdict"] == "DATA_INVALID" and "b0_interface" in result["reason"]
+    assert result["verdict"] == "DATA_INVALID"
+    assert "time_alignment=PASS" in result["reason"]
+    assert "b0_interface=FAIL" in result["reason"]
+
+
+def test_decision_synthetic_evaluated_combinations_have_no_hard_coded_branch():
+    names = ("complex_provenance", "time_alignment", "los_geometry", "b0_interface",
+             "clean_dynamic_fpr", "gain_invariance", "phase_invariance", "full_exceeds_b0",
+             "full_b0_ci", "geometry_improvement", "relation_destruction", "shortcut_controls")
+    passing = {name: {"status": "PASS"} for name in names}
+    assert derive_stage0_verdict(passing)["verdict"] == "PHYSICS_SUPPORTED"
+    failing = {name: dict(value) for name, value in passing.items()}
+    failing["geometry_improvement"] = {"status": "FAIL"}
+    result = derive_stage0_verdict(failing)
+    assert result["verdict"] == "NOT_SUPPORTED"
+    assert "geometry_improvement=FAIL" in result["reason"]
+    absent = {name: dict(value) for name, value in passing.items()}
+    absent["full_b0_ci"] = {"status": "NOT_EVALUATED"}
+    assert derive_stage0_verdict(absent)["verdict"] == "NOT_SUPPORTED"
 
 
 def test_empirical_template_is_normal_train_only_and_real_fit_requires_it():
