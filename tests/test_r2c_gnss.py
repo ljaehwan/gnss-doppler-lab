@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import importlib.util
 import json
 from pathlib import Path
+import shutil
 
 import numpy as np
 import pytest
@@ -9,13 +11,19 @@ import pytest
 from gnss_doppler_lab.r2c_gnss import (
     C_M_S, AnalyticResidualWhitener, ComplexTapProvenance, SmallNeuralNuisanceModel,
     SourceSupport, aggregate_a2, assign_attack_phase, assign_normal_split, availability_time,
-    fit_second_source, fit_shared_constellation, full_score, inject_second_source,
+    artifact_hashes, build_empirical_template, fit_second_source as _fit_second_source,
+    fit_shared_constellation, full_score, inject_second_source,
     quantile_threshold, strict_alarm, sustained_alarms, validate_complex_taps,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
 TAPS = np.linspace(-1, 1, 9)
 GRID = np.linspace(-1, 1, 41)
+
+
+def fit_second_source(*args, **kwargs):
+    """Synthetic tests must opt in to the ideal template explicitly."""
+    return _fit_second_source(*args, template_kind="synthetic_ideal", **kwargs)
 
 
 def provenance(complex_value=True):
@@ -169,4 +177,106 @@ def test_artifact_manifest_shape_after_generation():
         "PHYSICS_SUPPORTED", "NOT_SUPPORTED", "DATA_INVALID", "INCONCLUSIVE"
     }
     if (root / "freeze.json").exists():
-        assert json.loads((root / "freeze.json").read_text())["written_before_score_computation"]
+        assert json.loads((root / "freeze.json").read_text())[
+            "written_before_attack_score_computation"
+        ]
+
+
+def load_runner():
+    spec = importlib.util.spec_from_file_location("r2c_runner", ROOT / "scripts/run_r2c_gnss_stage0.py")
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_selected_real_source_time_controls_bin_boundaries():
+    runner = load_runner()
+    common = {"y": np.ones((2, 9), complex), "prn": np.array([1, 2]),
+              "cn0": np.array([40., 40.]), "a1": np.array([1., 2.]),
+              "power": np.ones(2), "bin": np.array([639, 639])}
+    normal = {**common, "time": np.array([319.999, 320.001])}
+    row = runner.make_epochs("cleanStatic", normal)[0]
+    assert row["source_start_s"] == 319.999
+    assert row["phase"] == "excluded_guard_or_boundary"
+    attack = {**common, "time": np.array([99.999, 100.001]), "bin": np.array([199, 199])}
+    assert runner.make_epochs("DS3", attack)[0]["phase"] == "transition_excluded"
+    exact = {**common, "time": np.array([100., 100.001]), "bin": np.array([200, 200])}
+    assert runner.make_epochs("DS3", exact)[0]["phase"] == "post"
+
+
+def test_empirical_template_is_normal_train_only_and_real_fit_requires_it():
+    rng = np.random.default_rng(9)
+    base = np.asarray([.5, .62, .75, .88, 1., .87, .74, .61, .49], complex)
+    rows = np.asarray([base * (1 + .1 * rng.random()) * np.exp(1j * rng.uniform(-np.pi, np.pi))
+                       for _ in range(30)])
+    template, metadata = build_empirical_template(rows, ["normal_train"] * len(rows))
+    assert metadata["fit_role"] == "cleanStatic normal_train"
+    assert template[4] == pytest.approx(1)
+    with pytest.raises(ValueError, match="normal_train"):
+        build_empirical_template(np.r_[rows, rows[:1]], ["normal_train"] * len(rows) + ["post"])
+    with pytest.raises(ValueError, match="requires frozen"):
+        _fit_second_source(rows[0], TAPS, GRID, template_kind="empirical_receiver")
+    real = _fit_second_source(rows[0], TAPS, GRID, template_kind="empirical_receiver",
+                              template_values=template)
+    changed = _fit_second_source(rows[0], TAPS, GRID, template_kind="empirical_receiver",
+                                 template_values=template + np.linspace(0, .2, 9))
+    assert real.score != pytest.approx(changed.score)
+
+
+def test_gain_sweep_recomputes_scores_not_constant(monkeypatch):
+    runner = load_runner()
+    class Fit:
+        score = 0.0
+    def fake(value, *args, **kwargs):
+        result = Fit()
+        result.score = float(np.abs(value[0]))
+        return result
+    monkeypatch.setattr(runner, "fit_second_source", fake)
+    dataset = {"y": np.ones((2, 9), complex), "time": np.array([320.1, 320.2]),
+               "bin": np.array([640, 640]), "prn": np.array([1, 2]),
+               "cn0": np.array([40., 40.]), "a1": np.ones(2), "power": np.ones(2)}
+    reference = runner.make_epochs("cleanStatic", dataset)[0]
+    gained = runner.make_epochs("cleanStatic", dataset, gain=2., template=np.ones(9))[0]
+    assert gained["A1"] == 2 * reference["A1"]
+
+
+def test_verifier_tamper_negative_semantics(tmp_path):
+    source = ROOT / "artifacts/r2c_gnss_stage0"
+    copied = tmp_path / "artifact"
+    shutil.copytree(source, copied)
+    rows = (copied / "per_epoch_scores.csv").read_text().splitlines()
+    fields = rows[0].split(",")
+    values = rows[1].split(",")
+    values[fields.index("A1")] = str(float(values[fields.index("A1")]) + 123.0)
+    rows[1] = ",".join(values)
+    (copied / "per_epoch_scores.csv").write_text("\n".join(rows) + "\n")
+    (copied / "hashes.json").write_text(json.dumps(
+        {"algorithm": "sha256", "files": artifact_hashes(copied)}) + "\n")
+    spec = importlib.util.spec_from_file_location("r2c_verifier", ROOT / "scripts/verify_r2c_gnss_stage0.py")
+    verifier = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(verifier)
+    errors = verifier.verify(copied, check_external=False)
+    assert errors
+
+
+@pytest.mark.parametrize("relative", [
+    "per_epoch_scores.csv", "gain_invariance.json", "bootstrap_comparisons.json",
+    "decision.json", "thresholds.json", "input_validity.json", "freeze.json",
+])
+def test_independent_recomputation_rejects_regenerated_hash_tampering(tmp_path, relative):
+    source = ROOT / "artifacts/r2c_gnss_stage0"
+    authentic, changed = tmp_path / "authentic", tmp_path / "changed"
+    shutil.copytree(source, authentic); shutil.copytree(source, changed)
+    target = changed / relative
+    if target.suffix == ".csv":
+        target.write_text(target.read_text() + "# tampered\n")
+    else:
+        value = json.loads(target.read_text()); value["tampered_after_generation"] = True
+        target.write_text(json.dumps(value, sort_keys=True) + "\n")
+    (changed / "hashes.json").write_text(json.dumps(
+        {"algorithm": "sha256", "files": artifact_hashes(changed)}) + "\n")
+    spec = importlib.util.spec_from_file_location("r2c_verifier_compare", ROOT / "scripts/verify_r2c_gnss_stage0.py")
+    verifier = importlib.util.module_from_spec(spec); assert spec.loader is not None; spec.loader.exec_module(verifier)
+    assert verifier.compare_recomputed_artifact(changed, authentic)

@@ -153,6 +153,58 @@ def correlation_template(tap_offsets_chips: Sequence[float], delay_chips: float)
     return gps_ca_correlation(np.asarray(tap_offsets_chips, dtype=np.float64) - float(delay_chips))
 
 
+def empirical_template_hash(template: Sequence[complex]) -> str:
+    """Canonical hash for a frozen complex receiver template."""
+    value = np.asarray(template, dtype=np.complex128)
+    if value.shape != (9,) or not np.all(np.isfinite(value)):
+        raise ValueError("empirical template must be a finite complex nine-tap vector")
+    packed = np.column_stack((value.real, value.imag)).astype("<f8", copy=False)
+    return hashlib.sha256(packed.tobytes(order="C")).hexdigest()
+
+
+def build_empirical_template(values: np.ndarray, roles: Sequence[str]) -> tuple[np.ndarray, dict]:
+    """Robustly freeze a phase/amplitude-aligned template from normal train only.
+
+    Tracking centers the receiver correlation at prompt (tap four).  Each row is
+    rotated by prompt phase and divided by prompt amplitude before componentwise
+    medians are taken.  This consumes neither recording identity nor attack data.
+    """
+    if not roles or set(roles) != {"normal_train"}:
+        raise ValueError("empirical template fitting is restricted to cleanStatic normal_train")
+    rows = np.asarray(values, dtype=np.complex128)
+    if rows.ndim != 2 or rows.shape[1] != 9 or rows.shape[0] != len(roles):
+        raise ValueError("nine-tap rows and roles must align")
+    prompt = rows[:, 4]
+    floor = max(float(np.median(np.abs(prompt))) * 1e-6, np.finfo(float).tiny)
+    keep = np.isfinite(rows).all(axis=1) & (np.abs(prompt) > floor)
+    if int(keep.sum()) < 10:
+        raise ValueError("insufficient finite prompt support for empirical template")
+    aligned = rows[keep] * np.exp(-1j * np.angle(prompt[keep]))[:, None] / np.abs(prompt[keep])[:, None]
+    template = np.median(aligned.real, axis=0) + 1j * np.median(aligned.imag, axis=0)
+    template /= template[4]
+    metadata = {
+        "method": "prompt-phase rotation; prompt-amplitude normalization; componentwise real/imag median",
+        "fit_role": "cleanStatic normal_train",
+        "input_rows": int(rows.shape[0]),
+        "accepted_rows": int(keep.sum()),
+        "rejected_rows": int((~keep).sum()),
+        "hash_algorithm": "sha256(canonical little-endian float64 [real,imag])",
+        "template_sha256": empirical_template_hash(template),
+    }
+    return template, metadata
+
+
+def shifted_empirical_template(tap_offsets_chips: Sequence[float], delay_chips: float,
+                               template: Sequence[complex]) -> np.ndarray:
+    taps = np.asarray(tap_offsets_chips, dtype=np.float64)
+    base = np.asarray(template, dtype=np.complex128)
+    if taps.shape != (9,) or base.shape != (9,):
+        raise ValueError("empirical template and offsets must have nine taps")
+    at = taps - float(delay_chips)
+    return (np.interp(at, taps, base.real, left=0.0, right=0.0) +
+            1j * np.interp(at, taps, base.imag, left=0.0, right=0.0))
+
+
 def _whitener(covariance: np.ndarray | None, size: int, eigen_floor: float = 1e-8) -> np.ndarray:
     covariance = np.eye(size) if covariance is None else np.asarray(covariance, dtype=np.complex128)
     if covariance.shape != (size, size) or not np.all(np.isfinite(covariance)):
@@ -184,7 +236,9 @@ def _linear_fit(y: np.ndarray, columns: Sequence[np.ndarray], whitener: np.ndarr
 
 def fit_second_source(y: Sequence[complex], tap_offsets_chips: Sequence[float],
                       delay_grid_chips: Sequence[float], *, covariance: np.ndarray | None = None,
-                      minimum_separation_chips: float = 0.10) -> SecondSourceFit:
+                      minimum_separation_chips: float = 0.10,
+                      template_values: Sequence[complex] | None = None,
+                      template_kind: str | None = None) -> SecondSourceFit:
     """Grid/profile-ML H0/H1 fit with signed delays and no extrapolation."""
     observation = np.asarray(y, dtype=np.complex128)
     taps = np.asarray(tap_offsets_chips, dtype=np.float64)
@@ -194,7 +248,16 @@ def fit_second_source(y: Sequence[complex], tap_offsets_chips: Sequence[float],
     if grid.size < 2 or grid[0] < taps[0] or grid[-1] > taps[-1] or not np.any(grid < 0) or not np.any(grid > 0):
         raise ValueError("delay grid must search signed offsets inside measured tap support")
     whitener = _whitener(covariance, observation.size)
-    templates = {float(delay): correlation_template(taps, float(delay)) for delay in grid}
+    if template_kind == "empirical_receiver":
+        if template_values is None:
+            raise ValueError("empirical_receiver scoring requires frozen template values")
+        empirical_template_hash(template_values)
+        templates = {float(delay): shifted_empirical_template(taps, float(delay), template_values)
+                     for delay in grid}
+    elif template_kind == "synthetic_ideal" and template_values is None:
+        templates = {float(delay): correlation_template(taps, float(delay)) for delay in grid}
+    else:
+        raise ValueError("template_kind must explicitly be empirical_receiver or synthetic_ideal")
     h0_candidates = [_linear_fit(observation, [templates[float(d)]], whitener,
                                  (float(d),), bool(d in (grid[0], grid[-1])), minimum_separation_chips)
                      for d in grid]
