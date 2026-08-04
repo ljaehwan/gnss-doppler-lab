@@ -568,21 +568,29 @@ def main():
     calibration = [row for row in all_rows if row["scenario"] == "cleanStatic" and
                    row["phase"] == "normal_calibration"]
     detectors = ("B0", "A1", "A2", "A3", "A4", "Full R2C-GNSS", "Power-only")
+    def detector_valid(row, detector):
+        return bool(row.get(detector + "_geometry_valid", True)) and bool(row.get("event_valid", True))
+    threshold_support = {detector: [row for row in calibration if detector_valid(row, detector)]
+                         for detector in detectors}
     thresholds = {detector: {str(q): quantile_threshold(
-        [row[detector] for row in calibration], q, ["normal_calibration"] * len(calibration))
+        [row[detector] for row in threshold_support[detector]], q,
+        ["normal_calibration"] * len(threshold_support[detector]))
         for q in (0.99, 0.995)} for detector in detectors}
     write_json(output / "thresholds.json", {
         "source": "cleanStatic normal_calibration only", "source_epoch_count": len(calibration),
         "source_support_min_s": min(row["source_start_s"] for row in calibration),
         "source_support_max_s": max(row["source_end_s"] for row in calibration),
+        "detector_source_epoch_counts": {key: len(value) for key, value in threshold_support.items()},
         "method": "higher", "comparison": "strict score > threshold", "values": thresholds})
 
     per_epoch = []
     for row in all_rows:
         item = dict(row)
         for detector in detectors:
-            item[detector + "_q99_alarm"] = bool(row[detector] > thresholds[detector]["0.99"])
-            item[detector + "_q995_alarm"] = bool(row[detector] > thresholds[detector]["0.995"])
+            valid = detector_valid(row, detector)
+            item[detector + "_valid"] = valid
+            item[detector + "_q99_alarm"] = bool(valid and row[detector] > thresholds[detector]["0.99"])
+            item[detector + "_q995_alarm"] = bool(valid and row[detector] > thresholds[detector]["0.995"])
         per_epoch.append(item)
     for name in NAMES:
         indices = [i for i, row in enumerate(per_epoch) if row["scenario"] == name]
@@ -600,8 +608,19 @@ def main():
         rows = [row for row in per_epoch if row["scenario"] == name and
                 row["phase"] not in ("transition_excluded", "excluded_guard_or_boundary")]
         for detector in detectors:
+            detector_rows = [row for row in rows if row[detector + "_valid"]]
+            if not detector_rows:
+                scenarios.append({"scenario": name, "detector": detector,
+                    "role": "external_normal" if name == "cleanDynamic" else "normal" if name == "cleanStatic"
+                            else "primary" if name in ("DS3", "DS7", "DS8") else "diagnostic",
+                    "status": "UNAVAILABLE_NO_VALID_EVENTS", "epochs": 0, "available_epochs": 0,
+                    "total_candidate_epochs": len(rows), "roc_auc": "UNAVAILABLE", "pr_auc": "UNAVAILABLE",
+                    "normalized_pauc_fpr_lte_0.05": "UNAVAILABLE", "strict_q99_detection_rate": "UNAVAILABLE",
+                    "strict_q995_detection_rate": "UNAVAILABLE", "sustained_q99_detection_rate": "UNAVAILABLE",
+                    "first_sustained_alarm_delay_s": "UNAVAILABLE", "persistent_alarm_ratio": "UNAVAILABLE"})
+                continue
             if name.startswith("DS"):
-                use = [row for row in rows if row["phase"] in ("stable_pre", "post", "persistent")]
+                use = [row for row in detector_rows if row["phase"] in ("stable_pre", "post", "persistent")]
                 labels = [row["phase"] in ("post", "persistent") for row in use]
                 post = [row for row in use if row["phase"] in ("post", "persistent")]
                 persistent = [row for row in use if row["phase"] == "persistent"]
@@ -621,20 +640,21 @@ def main():
                 status = "EVALUATED" if all(metrics[key] is not None for key in
                     ("roc_auc", "pr_auc", "normalized_pauc_fpr_lte_0.05")) else "METRICS_UNAVAILABLE"
             else:
-                normal_rate = float(np.mean([row[detector + "_q99_alarm"] for row in rows]))
+                normal_rate = float(np.mean([row[detector + "_q99_alarm"] for row in detector_rows]))
                 metrics = {"roc_auc": "UNAVAILABLE_NOT_APPLICABLE", "pr_auc": "UNAVAILABLE_NOT_APPLICABLE",
                            "normalized_pauc_fpr_lte_0.05": "UNAVAILABLE_NOT_APPLICABLE",
                            "strict_q99_detection_rate": normal_rate,
-                           "strict_q995_detection_rate": float(np.mean([row[detector + "_q995_alarm"] for row in rows])),
+                           "strict_q995_detection_rate": float(np.mean([row[detector + "_q995_alarm"] for row in detector_rows])),
                            "sustained_q99_detection_rate": float(np.mean([
-                               row[detector + "_q99_sustained"] for row in rows])),
+                               row[detector + "_q99_sustained"] for row in detector_rows])),
                            "first_sustained_alarm_delay_s": "UNAVAILABLE_NOT_APPLICABLE",
                            "persistent_alarm_ratio": "UNAVAILABLE_NOT_APPLICABLE"}
-                status = "EVALUATED_NORMAL"
+                status = "EVALUATED_NORMAL_LIMITED_COVERAGE" if len(detector_rows) < len(rows) else "EVALUATED_NORMAL"
             scenarios.append({"scenario": name, "detector": detector,
                 "role": "external_normal" if name == "cleanDynamic" else "normal" if name == "cleanStatic"
                         else "primary" if name in ("DS3", "DS7", "DS8") else "diagnostic",
-                "status": status, "epochs": len(rows), **metrics})
+                "status": status, "epochs": len(detector_rows), "available_epochs": len(detector_rows),
+                "total_candidate_epochs": len(rows), **metrics})
     dump_csv(output / "scenario_metrics.csv", list(scenarios[0]), scenarios)
 
     bootstrap = {"method": "paired complete 10 s time-block bootstrap", "repetitions": 2000,
@@ -646,7 +666,8 @@ def main():
         for label, left, right in (("Full-B0", "Full R2C-GNSS", "B0"),
                                    ("Full-A2", "Full R2C-GNSS", "A2"),
                                    ("Full-A4", "Full R2C-GNSS", "A4")):
-            bootstrap["comparisons"][name + ":" + label] = bootstrap_comparison(rows, left, right)
+            paired = [row for row in rows if row[left + "_valid"] and row[right + "_valid"]]
+            bootstrap["comparisons"][name + ":" + label] = bootstrap_comparison(paired, left, right)
     write_json(output / "bootstrap_comparisons.json", bootstrap)
 
     ablations = []

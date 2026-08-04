@@ -247,8 +247,9 @@ def verify(artifact, check_external=True, full_recompute=False):
     if thresholds.get("source_epoch_count") != len(calibration):
         errors.append("threshold calibration count mismatch")
     for detector in DETECTORS:
+        detector_calibration = [row for row in calibration if as_bool(row.get(detector + "_valid", "True"))]
         for quantile in (0.99, 0.995):
-            expected = np.quantile([float(row[detector]) for row in calibration], quantile, method="higher")
+            expected = np.quantile([float(row[detector]) for row in detector_calibration], quantile, method="higher")
             if not close(expected, thresholds["values"][detector][str(quantile)]):
                 errors.append(f"threshold derivation mismatch: {detector}:{quantile}")
         threshold = float(thresholds["values"][detector]["0.99"])
@@ -276,6 +277,7 @@ def verify(artifact, check_external=True, full_recompute=False):
         usable = [row for row in rows if row["scenario"] == name and
                   row["phase"] not in ("transition_excluded", "excluded_guard_or_boundary")]
         for detector in DETECTORS:
+            usable_detector = [row for row in usable if as_bool(row.get(detector + "_valid", "True"))]
             metric = metric_map.get((name, detector))
             if metric is None:
                 errors.append(f"missing scenario metrics: {name}:{detector}")
@@ -283,7 +285,7 @@ def verify(artifact, check_external=True, full_recompute=False):
             if metric.get("status") == "EVALUATED" and any(not metric.get(key) for key in mandatory):
                 errors.append(f"EVALUATED missing mandatory metric: {name}:{detector}")
             if name.startswith("DS"):
-                use = [row for row in usable if row["phase"] in ("stable_pre", "post", "persistent")]
+                use = [row for row in usable_detector if row["phase"] in ("stable_pre", "post", "persistent")]
                 labels = [row["phase"] in ("post", "persistent") for row in use]
                 expected_metrics = {"roc_auc": roc_auc(labels, [float(row[detector]) for row in use]),
                     "pr_auc": pr_auc(labels, [float(row[detector]) for row in use]),
@@ -305,7 +307,7 @@ def verify(artifact, check_external=True, full_recompute=False):
                 elif not close(metric["first_sustained_alarm_delay_s"], expected_delay):
                     errors.append(f"first alarm availability mismatch: {name}:{detector}")
             else:
-                rate = np.mean([as_bool(row[detector + "_q99_alarm"]) for row in usable])
+                rate = np.mean([as_bool(row[detector + "_q99_alarm"]) for row in usable_detector])
                 if not close(metric["strict_q99_detection_rate"], rate):
                     errors.append(f"normal FPR mismatch: {name}:{detector}")
 
