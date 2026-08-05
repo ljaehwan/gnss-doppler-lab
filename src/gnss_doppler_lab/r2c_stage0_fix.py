@@ -373,6 +373,89 @@ class JointFit:
 
 
 @dataclass(frozen=True)
+class CompiledProfilePlan:
+    """Immutable fixed-template/fixed-whitener projection plan.
+
+    Arrays are owned, read-only snapshots.  ``signature`` binds their values so
+    callers never rely on mutable provider/whitener object identity.
+    """
+    taps: np.ndarray
+    grid: np.ndarray
+    whitener: np.ndarray
+    mean: np.ndarray
+    templates: np.ndarray
+    h0_candidates: tuple[float, ...]
+    h1_candidates: tuple[tuple[float, float], ...]
+    h0_bases: tuple[np.ndarray | None, ...]
+    h1_bases: tuple[np.ndarray | None, ...]
+    h0_basis_bank: np.ndarray
+    h1_basis_bank: np.ndarray
+    h0_valid: np.ndarray
+    h1_valid: np.ndarray
+    row_chunk: int
+    candidate_chunk: int
+    signature: str
+
+
+def _readonly(value, dtype):
+    result = np.array(value, dtype=dtype, copy=True)
+    result.setflags(write=False)
+    return result
+
+
+def _projection_basis(design: np.ndarray) -> np.ndarray | None:
+    """Legacy-compatible rank screening followed by a stable thin-SVD basis."""
+    matrix = np.asarray(design, np.complex128)
+    u, singular, _ = np.linalg.svd(matrix, full_matrices=False)
+    if not len(singular) or singular[0] == 0:
+        return None
+    legacy_rank = int(np.sum(singular > singular[0] * np.finfo(float).eps * max(matrix.shape)))
+    if legacy_rank < matrix.shape[1]:
+        return None
+    if matrix.shape[1] == 2 and singular[-1] <= singular[0] * 1e-10:
+        return None
+    return _readonly(u[:, :matrix.shape[1]], np.complex128)
+
+
+def compile_profile_plan(provider: TemplateProvider, taps: Sequence[float], delay_grid: Sequence[float],
+                         whitener: ComplexWhitener | None = None, *, row_chunk: int = 4096,
+                         candidate_chunk: int = 8) -> CompiledProfilePlan:
+    taps_array = np.asarray(taps, np.float64); grid = np.unique(np.asarray(delay_grid, np.float64))
+    if row_chunk < 1 or candidate_chunk < 1:
+        raise ValueError("profile chunks must be positive")
+    if whitener is None:
+        W = np.eye(len(taps_array), dtype=np.complex128); mean = np.zeros(len(taps_array), np.complex128)
+    else:
+        if whitener.inverse_sqrt is None or whitener.mean is None:
+            raise ValueError("frozen fitted whitener required")
+        W = np.asarray(whitener.inverse_sqrt, np.complex128); mean = np.asarray(whitener.mean, np.complex128)
+    templates = np.asarray([provider.evaluate(taps_array-float(delay)) for delay in grid], np.complex128)
+    h0 = tuple(map(float, grid))
+    h1 = tuple((float(da), float(ds)) for da in grid for ds in grid if abs(float(ds)) > 1e-10)
+    by_delay = {float(delay): template for delay, template in zip(grid, templates)}
+    h0_bases = tuple(_projection_basis(W @ by_delay[delay][:, None]) for delay in h0)
+    h1_bases = tuple(_projection_basis(W @ np.column_stack(
+        (by_delay[da], provider.evaluate(taps_array-da-ds)))) for da, ds in h1)
+    def bank(bases,columns):
+        valid=np.asarray([basis is not None for basis in bases],bool)
+        values=np.zeros((len(bases),len(taps_array),columns),np.complex128)
+        for index,basis in enumerate(bases):
+            if basis is not None:values[index]=basis
+        return _readonly(values,np.complex128),_readonly(valid,bool)
+    h0_bank,h0_valid=bank(h0_bases,1);h1_bank,h1_valid=bank(h1_bases,2)
+    frozen_taps = _readonly(taps_array, np.float64); frozen_grid = _readonly(grid, np.float64)
+    frozen_W = _readonly(W, np.complex128); frozen_mean = _readonly(mean, np.complex128)
+    frozen_templates = _readonly(templates, np.complex128)
+    digest = hashlib.sha256()
+    for value in (frozen_taps, frozen_grid, frozen_W, frozen_mean, frozen_templates):
+        digest.update(value.tobytes(order="C"))
+    digest.update(json.dumps(provider.provenance, sort_keys=True, default=str).encode())
+    return CompiledProfilePlan(frozen_taps, frozen_grid, frozen_W, frozen_mean, frozen_templates,
+                               h0, h1, h0_bases, h1_bases,h0_bank,h1_bank,h0_valid,h1_valid,int(row_chunk), int(candidate_chunk),
+                               digest.hexdigest())
+
+
+@dataclass(frozen=True)
 class ScoreResult:
     status: str
     score: float | None
@@ -393,6 +476,7 @@ def _profile_epoch(y, columns):
 def joint_profile_glrt(observations: Mapping[int, np.ndarray], los: Mapping[int, np.ndarray],
                        provider: TemplateProvider, taps: Sequence[float], delay_grid: Sequence[float],
                        *, hypothesis: str, whitener: ComplexWhitener | None = None,
+                       profile_plan: CompiledProfilePlan | None = None, scalar_reference: bool = False,
                        beta_bounds_m: Sequence[tuple[float,float]] = ((-150,150),(-150,150),(-150,150),(-150,150)),
                        optimizer_starts: Sequence[Sequence[float]] | None = None,
                        maximum_condition_number: float = 1e6) -> JointFit:
@@ -424,18 +508,78 @@ def joint_profile_glrt(observations: Mapping[int, np.ndarray], los: Mapping[int,
             if abs(second_delay)<1e-10: return np.inf
             columns.append(provider.evaluate(taps-authentic_delay-second_delay))
         return sum(profile(y,columns) for y in arrays[p])
+    if profile_plan is None and not scalar_reference:
+        profile_plan = compile_profile_plan(provider, taps, grid, whitener)
+    if profile_plan is not None:
+        if (not np.array_equal(profile_plan.taps, taps) or not np.array_equal(profile_plan.grid, grid) or
+                not np.array_equal(profile_plan.whitener, W) or not np.array_equal(profile_plan.mean, mu)):
+            raise ValueError("compiled profile plan does not match fixed inputs")
+
+        def batched_values(p, candidates, bases):
+            y = arrays[p]; totals = np.zeros(len(candidates), np.float64)
+            if bases is profile_plan.h0_bases:bank,valid_mask=profile_plan.h0_basis_bank,profile_plan.h0_valid
+            elif bases is profile_plan.h1_bases:bank,valid_mask=profile_plan.h1_basis_bank,profile_plan.h1_valid
+            else:bank=None
+            for row_start in range(0, len(y), profile_plan.row_chunk):
+                block = (y[row_start:row_start+profile_plan.row_chunk]-mu) @ W.T
+                energy = np.sum(block.real*block.real+block.imag*block.imag, axis=1, dtype=np.float64)
+                for candidate_start in range(0, len(candidates), profile_plan.candidate_chunk):
+                    stop = min(candidate_start+profile_plan.candidate_chunk, len(candidates))
+                    valid=(np.flatnonzero(valid_mask[candidate_start:stop])+candidate_start).tolist() if bank is not None else [index for index in range(candidate_start,stop) if bases[index] is not None]
+                    invalid=np.setdiff1d(np.arange(candidate_start,stop),valid,assume_unique=True);totals[invalid]=np.inf
+                    if valid:
+                        stacked=bank[valid] if bank is not None else np.stack([bases[index] for index in valid])
+                        projected=np.einsum("rt,ctk->rck",block,stacked.conj(),optimize=False)
+                        captured=np.sum(projected.real*projected.real+projected.imag*projected.imag,
+                                        axis=2,dtype=np.float64)
+                        residual=np.maximum(energy[:,None]-captured,0.)
+                        totals[np.asarray(valid)] += np.sum(residual,axis=0,dtype=np.float64)
+            return totals
+
+        def refined_min(p, candidates, bases, second_override=None):
+            values = batched_values(p, candidates, bases)
+            minimum = float(np.min(values)); total_energy = float(np.sum(
+                np.abs((arrays[p]-mu) @ W.T)**2, dtype=np.float64))
+            tolerance = max(1e-12, 1e-10*max(total_energy, 1.))
+            indices = np.flatnonzero(values <= minimum+tolerance)
+            refined = []
+            for index in indices:
+                candidate = candidates[int(index)]
+                if second_override is not None:
+                    da = float(candidate); ds = float(second_override)
+                elif isinstance(candidate, tuple):
+                    da, ds = candidate
+                else:
+                    da, ds = float(candidate), None
+                refined.append((prn_rss(p, da, ds), int(index)))
+            return min(refined, key=lambda item: (item[0], item[1]))
+
+        def vector_prn_min(p, second_delay=None):
+            if second_delay is None:
+                value, index = refined_min(p, profile_plan.h0_candidates, profile_plan.h0_bases)
+                return value, profile_plan.h0_candidates[index]
+            dynamic_bases = tuple(_projection_basis(W @ np.column_stack(
+                (provider.evaluate(taps-da), provider.evaluate(taps-da-second_delay))))
+                if abs(second_delay) > 1e-10 else None for da in profile_plan.h0_candidates)
+            value, index = refined_min(p, profile_plan.h0_candidates, dynamic_bases, second_delay)
+            return value, profile_plan.h0_candidates[index]
     authentic={}; rss0=0.
     for p in prns:
-        value,d=min((prn_rss(p,float(d)),float(d)) for d in grid)
+        value,d=(vector_prn_min(p) if profile_plan is not None else
+                 min((prn_rss(p,float(d)),float(d)) for d in grid))
         rss0+=value; authentic[p]=d
     k0=2*epochs+len(prns)
     if hypothesis=="H0": rss,k,delays,beta,boundary,converged=rss0,k0,tuple(authentic[p] for p in prns),None,False,True
     elif hypothesis=="H1-independent":
         rss=0.; second={}; boundary=False
         for p in prns:
-            feasible=[(prn_rss(p,float(da),float(ds)),float(da),float(ds))
-                      for da in grid for ds in grid if abs(ds)>1e-10]
-            value,da,d=min(feasible); rss+=value; authentic[p]=da; second[p]=d
+            if profile_plan is not None:
+                value,index=refined_min(p,profile_plan.h1_candidates,profile_plan.h1_bases)
+                da,d=profile_plan.h1_candidates[index]
+            else:
+                value,da,d=min((prn_rss(p,float(da),float(ds)),float(da),float(ds))
+                               for da in grid for ds in grid if abs(ds)>1e-10)
+            rss+=value; authentic[p]=da; second[p]=d
             boundary|=da in (grid[0],grid[-1]) or d in (grid[0],grid[-1])
         k=4*epochs+2*len(prns); delays=tuple(second[p] for p in prns); beta=None; converged=not boundary
     elif hypothesis=="H1-shared":
@@ -453,14 +597,16 @@ def joint_profile_glrt(observations: Mapping[int, np.ndarray], los: Mapping[int,
         def objective(b):
             seconds={p:float((-np.dot(los[p],b[:3])+b[3])/C_M_S*1_023_000) for p in prns}
             if any(abs(d)<1e-10 or d<grid[0] or d>grid[-1] for d in seconds.values()): return 1e100
-            return sum(min(prn_rss(p,float(da),seconds[p]) for da in grid) for p in prns)
+            return sum((vector_prn_min(p,seconds[p])[0] if profile_plan is not None else
+                        min(prn_rss(p,float(da),seconds[p]) for da in grid)) for p in prns)
         starts=list(optimizer_starts or ((0,0,0,25),(0,0,0,-25),(25,-25,10,50),(-25,25,-10,-50)))
         results=[minimize(objective,np.clip(np.asarray(s,float),[a for a,b in bounds],[b for a,b in bounds]),
                           method="Nelder-Mead",bounds=bounds,options={"maxiter":800,"xatol":1e-7,"fatol":1e-9}) for s in starts]
         result=min(results,key=lambda x:float(x.fun)); b=np.asarray(result.x,float); rss=float(result.fun)
         boundary=any(abs(b[i]-bounds[i][j])<1e-6 for i in range(4) for j in (0,1))
         seconds={p:float((-np.dot(los[p],b[:3])+b[3])/C_M_S*1_023_000) for p in prns}
-        authentic={p:min(grid,key=lambda da:prn_rss(p,float(da),seconds[p])) for p in prns}
+        authentic={p:(vector_prn_min(p,seconds[p])[1] if profile_plan is not None else
+                       min(grid,key=lambda da:prn_rss(p,float(da),seconds[p]))) for p in prns}
         delays=tuple(seconds[p] for p in prns); beta=tuple(map(float,b)); k=4*epochs+len(prns)+4
         converged=bool(result.success and np.isfinite(rss) and rss<1e99 and not boundary)
     else: raise ValueError("unknown hypothesis")
