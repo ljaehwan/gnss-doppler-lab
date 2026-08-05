@@ -36,7 +36,8 @@ def test_self_asserted_node_authentication_is_downgraded(tmp_path):
 def test_offline_los_never_enters_shared_scoring_or_controls():
     runner=module("c5_runner_los","run_r2c_gnss_stage0_fix.py")
     item={"derived_time":{"status":"PASS"},"offline_geometry_coverage":{"status":"PASS"},"event_time_causal_ephemeris_availability":{"status":"OFFLINE_ORACLE_ONLY","decoded_history_authenticated":False,"causal_decode_history_verified_by":"UNIMPLEMENTED_STAGE0"},"los_by_bin":{"0":{"1":[1,0,0]}}}
-    assert runner.causal_core_los(item)=={}
+    assert runner.offline_physics_los(item)==item["los_by_bin"]
+    assert runner.causal_deployment_los(item)=={}
     assert not runner.eligible_full_control_candidate({}, {"FullScorer":object(),"Full":object()})
 
 def test_forged_decode_history_cannot_enable_causal_pass(tmp_path):
