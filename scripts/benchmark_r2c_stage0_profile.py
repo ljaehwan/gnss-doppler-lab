@@ -87,7 +87,7 @@ def main():
       def score_task(task):
         observations,los,conditions=task;tick=time.perf_counter();scores,*_=runner.score_bin(observations,los,provider,taps,grid,models,config,conditions)
         return {"seconds":time.perf_counter()-tick,"epochs":sum(map(len,observations.values())),"prns":len(observations),"full_available":scores["Full"] is not None}
-      costs=list(runner.ordered_fork_map(tasks,score_task,args.score_workers))
+      costs=list(runner.ordered_score_map(tasks,score_task,args.score_workers))
       stage["cleanstatic_score_bin_all_s"]=time.perf_counter()-scoring_started;stage["cleanstatic_score_serial_s"]=sum(c["seconds"] for c in costs);stage["cleanstatic_parallelism"]=stage["cleanstatic_score_serial_s"]/stage["cleanstatic_score_bin_all_s"];stage["cleanstatic_end_to_end_s"]=stage["pre_scoring_total_s"]+stage["cleanstatic_score_bin_all_s"]
       return stage,models,costs,clean
     runs=[]
@@ -134,7 +134,7 @@ def main():
       "hardware":hardware_key(),"identity":{"python":platform.python_version(),"numpy":np.__version__,"scipy":scipy.__version__,"blas":blas.getvalue(),"cpu":platform.processor(),
         "ram_bytes":os.sysconf("SC_PAGE_SIZE")*os.sysconf("SC_PHYS_PAGES"),"gpu":subprocess.run(["nvidia-smi","--query-gpu=name,driver_version","--format=csv,noheader"],capture_output=True,text=True).stdout.strip(),
         "threads":{key:os.environ.get(key) for key in ("OPENBLAS_NUM_THREADS","OMP_NUM_THREADS","MKL_NUM_THREADS")}},
-      "cleanstatic_runs_s":cleanstatic_runs,"cleanstatic_median_s":percentile(cleanstatic_runs,50),"cleanstatic_max_s":max(cleanstatic_runs),"cleanstatic_certified_score_sample_bins":len(costs),
+      "execution":{"score_backend":runner.default_score_backend(),"score_workers":args.score_workers},"cleanstatic_runs_s":cleanstatic_runs,"cleanstatic_median_s":percentile(cleanstatic_runs,50),"cleanstatic_max_s":max(cleanstatic_runs),"cleanstatic_certified_score_sample_bins":len(costs),
       "stage_times":stage,"clean_bin_cost":{"median_s":percentile([c["seconds"] for c in costs],50),"p95_s":percentile([c["seconds"] for c in costs],95),"regression_coefficients":coef.tolist(),"residual_p95_s":residual_p95},
       "sequential_preprocess_s":sequential_preprocess,
       "formula":{"preprocessing_and_model_fit_s":stage["pre_scoring_total_s"]+sum(sequential_preprocess.values()),"projected_scenario_scoring_s":all_projected,"metrics_bootstrap_controls_assembly_s":non_scoring_upper,"safety_factor":1.25},

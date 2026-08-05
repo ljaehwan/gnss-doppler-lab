@@ -264,11 +264,34 @@ def ordered_fork_map(items, worker, workers):
 
 
 def default_score_workers():
-    """Conservative shared-memory default; operators may explicitly raise it."""
+    """Bounded shared-memory default; operators may explicitly raise it."""
     value=os.environ.get("R2C_STAGE0_SCORE_WORKERS")
-    workers=min(os.cpu_count() or 1,8) if value is None else int(value)
+    workers=min(os.cpu_count() or 1,16) if value is None else int(value)
     if workers < 1: raise ValueError("R2C_STAGE0_SCORE_WORKERS must be positive")
     return workers
+
+
+def default_score_backend():
+    """Use threads by default: fork duplicates the CPU inference model per worker."""
+    backend=os.environ.get("R2C_STAGE0_SCORE_BACKEND","thread").strip().lower()
+    if backend not in {"thread","fork"}: raise ValueError("R2C_STAGE0_SCORE_BACKEND must be thread or fork")
+    return backend
+
+
+def ordered_score_map(items, worker, workers, backend=None):
+    """Deterministic score map with an explicit memory-safe production backend.
+
+    The work is numerical NumPy/SciPy/Torch CPU inference that releases the GIL in
+    its kernels.  Threads therefore share frozen model and epoch memory, unlike
+    fork where each scorer dirties copy-on-write pages and can be OOM-killed.
+    Fork remains an opt-in diagnostic backend and has identical ordered results.
+    """
+    backend=default_score_backend() if backend is None else backend
+    if backend=="thread":
+        yield from ordered_bounded_map(items,worker,workers)
+    elif backend=="fork":
+        yield from ordered_fork_map(items,worker,workers)
+    else: raise ValueError("score backend must be thread or fork")
 
 def h0_residuals(y,provider,taps,grid,*,chunk_rows=4096):
     """Profile every row in deterministic bounded chunks; no support subsampling."""
@@ -468,6 +491,7 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
         if name in canonical_b0 and item.get("event_rows") and item.get("status")=="AVAILABLE_SAVED_NATIVE_SCORE_REPLAY_WITH_NODE_LINEAGE_GAP":b0_events[name]=pd.DataFrame(item["event_rows"])
     score_workers=default_score_workers() if score_workers is None else int(score_workers)
     if score_workers < 1:raise ValueError("score workers must be positive")
+    score_backend=default_score_backend()
     score_rows=[];event_rows=[];control_candidates=[]
     scenario_bins={name:input_reports[name]["bin_count"] for name in SCENARIOS}
     total_bins=sum(scenario_bins.values());completed_bins=0;completed_scenarios=0;recent=time.monotonic()
@@ -500,7 +524,7 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
         # This consumes the sorted certified-bin sequence in the same order as the
         # serial runner.  Only score computation is concurrent; all output rows,
         # observer writes, and control-candidate selection remain serial.
-        for bin_id,indices,observations,condition_map,los,availability,scores,fits in ordered_fork_map(np.unique(dataset["bin"]),score_one_bin,score_workers):
+        for bin_id,indices,observations,condition_map,los,availability,scores,fits in ordered_score_map(np.unique(dataset["bin"]),score_one_bin,score_workers,score_backend):
             availability_overrides={};native=b0_events.get(scenario)
             native_row=native[np.isclose(native.window_bin_s,float(bin_id)*.5)] if native is not None else None
             if native_row is not None and len(native_row)==1:
@@ -624,6 +648,7 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
     decision={**derive_two_layer_decision(gates),"gates":gates}
     geometry_named={} if geometry_wrapper else parse_named_specs(geometry_specs)
     provenance={"source_commit":source_commit,"source_bundle":source_bundle(),"preserved_artifact_tree":PRESERVED_TREE,"synthetic_test_mode":False,
+      "execution":{"score_backend":score_backend,"score_workers":score_workers},
       "template":{"analytic_approximation":bool(provider.analytic_approximation),"empirical_template_ready":not bool(provider.analytic_approximation),"paper_comparison_ready":bool(provider.paper_comparison_ready),"provenance":provider.provenance},
       "canonical_config":{"path":"configs/r2c_gnss_stage0_fix.json","sha256":sha(ROOT/"configs/r2c_gnss_stage0_fix.json"),"schema":config["schema"]},
       "b0_validation":{"path":str(Path(b0_validation_path).resolve()),"sha256":sha(Path(b0_validation_path))},

@@ -218,7 +218,10 @@ def test_conditioner_cpu_inference_copy_preserves_predictions():
 def test_ordered_fork_map_preserves_input_order_and_worker_results():
     spec=importlib.util.spec_from_file_location("runner",Path(__file__).parents[1]/"scripts/run_r2c_gnss_stage0_fix.py")
     module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
-    assert list(module.ordered_fork_map([3,1,2],lambda x:x*x,2))==[9,1,4]
+    expected=[9,1,4]
+    assert list(module.ordered_fork_map([3,1,2],lambda x:x*x,2))==expected
+    assert list(module.ordered_score_map([3,1,2],lambda x:x*x,2,backend="thread"))==expected
+    assert list(module.ordered_score_map([3,1,2],lambda x:x*x,2,backend="fork"))==expected
 
 
 def test_benchmark_bin_selector_is_deterministic_and_requires_offline_los_support():
