@@ -42,6 +42,11 @@ def stage0_benchmark_los(geometry):
     return geometry.get("los_by_bin",{}) if geometry.get("derived_time",{}).get("status")=="PASS" else {}
 
 
+def parallel_wall_projection(serial_seconds, sample_serial_seconds, sample_wall_seconds):
+    if sample_serial_seconds<=0 or sample_wall_seconds<=0: raise ValueError("invalid parallel benchmark timings")
+    return float(serial_seconds)/(float(sample_serial_seconds)/float(sample_wall_seconds))
+
+
 def stage0_benchmark_bin_ids(dataset, los_bins, maximum):
     eligible=[]
     for bin_id in np.unique(dataset["bin"]):
@@ -54,7 +59,7 @@ def main():
     parser=argparse.ArgumentParser();parser.add_argument("--input",action="append",required=True)
     parser.add_argument("--geometry",type=Path,required=True);parser.add_argument("--b0-validation",type=Path,required=True)
     parser.add_argument("--config",type=Path,default=ROOT/"configs/r2c_gnss_stage0_fix.json");parser.add_argument("--output",type=Path,required=True)
-    parser.add_argument("--max-score-bins",type=int,default=24)
+    parser.add_argument("--max-score-bins",type=int,default=24);parser.add_argument("--score-workers",type=int,default=int(os.environ.get("R2C_STAGE0_SCORE_WORKERS","16")))
     args=parser.parse_args();inputs=specs(args.input);config=json.loads(args.config.read_text());runner=load_runner()
     geometry_doc=json.loads(args.geometry.read_text());b0_doc=json.loads(args.b0_validation.read_text())
     if set(geometry_doc.get("scenarios",{}))!=set(SCENARIOS) or set(b0_doc.get("scenarios",{}))!=set(SCENARIOS):raise ValueError("wrapper roster mismatch")
@@ -67,15 +72,18 @@ def main():
       started=time.perf_counter();raw=runner.h0_residuals(clean["y"],provider,taps,grid,chunk_rows=config["epoch_policy"]["chunk_rows"]);stage["h0_residual_s"]=time.perf_counter()-started
       started=time.perf_counter();models=runner.fit_frozen_models(clean,config,provider,taps,grid,require_gpu=config["neural"]["require_gpu"],raw_residuals=raw);stage["frozen_model_fit_s"]=time.perf_counter()-started
       started=time.perf_counter();x=runner.inference_conditions(clean,raw,models["cn0_imputation"],False);xe=runner.inference_conditions(clean,raw,models["cn0_imputation"],True);stage["inference_conditions_s"]=time.perf_counter()-started
-      stage["pre_scoring_total_s"]=sum(stage.values());los_bins=stage0_benchmark_los(geometry);costs=[];scoring_started=time.perf_counter()
+      stage["pre_scoring_total_s"]=sum(stage.values());los_bins=stage0_benchmark_los(geometry);tasks=[];scoring_started=time.perf_counter()
       for bin_id in stage0_benchmark_bin_ids(clean,los_bins,args.max_score_bins):
         indices=np.flatnonzero(clean["bin"]==bin_id);observations={};conditions={};los={}
         for p in sorted(np.unique(clean["prn"][indices])):
           chosen=indices[clean["prn"][indices]==p];observations[int(p)]=clean["y"][chosen];conditions[int(p)]=(x[chosen],xe[chosen])
           if str(int(p)) in los_bins.get(str(int(bin_id)),{}):los[int(p)]=np.asarray(los_bins[str(int(bin_id))][str(int(p))],float)
-        tick=time.perf_counter();runner.score_bin(observations,los,provider,taps,grid,models,config,conditions)
-        costs.append({"seconds":time.perf_counter()-tick,"epochs":sum(map(len,observations.values())),"prns":len(observations)})
-      stage["cleanstatic_score_bin_all_s"]=time.perf_counter()-scoring_started;stage["cleanstatic_end_to_end_s"]=stage["pre_scoring_total_s"]+stage["cleanstatic_score_bin_all_s"]
+        tasks.append((observations,los,conditions))
+      def score_task(task):
+        observations,los,conditions=task;tick=time.perf_counter();scores,_=runner.score_bin(observations,los,provider,taps,grid,models,config,conditions)
+        return {"seconds":time.perf_counter()-tick,"epochs":sum(map(len,observations.values())),"prns":len(observations),"full_available":scores["Full"] is not None}
+      costs=list(runner.ordered_fork_map(tasks,score_task,args.score_workers))
+      stage["cleanstatic_score_bin_all_s"]=time.perf_counter()-scoring_started;stage["cleanstatic_score_serial_s"]=sum(c["seconds"] for c in costs);stage["cleanstatic_parallelism"]=stage["cleanstatic_score_serial_s"]/stage["cleanstatic_score_bin_all_s"];stage["cleanstatic_end_to_end_s"]=stage["pre_scoring_total_s"]+stage["cleanstatic_score_bin_all_s"]
       return stage,models,costs,clean
     runs=[]
     for run_index in range(3):
@@ -94,7 +102,7 @@ def main():
     residual=target-design@coef;residual_p95=max(0.,percentile(residual,95));projected={}
     for name,workload in workloads.items():
         estimates=[max(0.,float(np.dot([1,row[1],row[2]],coef))+residual_p95) for row in workload["bin_records"]]
-        projected[name]={"seconds":sum(estimates),"bins":len(estimates)}
+        serial_seconds=sum(estimates);projected[name]={"serial_seconds":serial_seconds,"seconds":parallel_wall_projection(serial_seconds,stage["cleanstatic_score_serial_s"],stage["cleanstatic_score_bin_all_s"]),"bins":len(estimates)}
     all_projected=sum(item["seconds"] for item in projected.values());non_scoring_upper=60.
     projected_p95=all_projected+stage["pre_scoring_total_s"]+sum(sequential_preprocess.values())+non_scoring_upper
     # Warmed, randomized/interleaved paired kernel diagnostics; relative speedups are diagnostic only.

@@ -228,3 +228,9 @@ def test_benchmark_bin_selector_is_deterministic_and_requires_offline_los_suppor
     los={str(b):{str(p):[1.,0.,0.] for p in range(1,6)} for b in range(5)}
     los["2"]={"1":[1.,0.,0.]}
     assert module.stage0_benchmark_bin_ids(dataset,los,3)==[0,1,4]
+
+
+def test_parallel_projection_uses_measured_effective_parallelism():
+    spec=importlib.util.spec_from_file_location("benchmark_parallel",Path(__file__).parents[1]/"scripts/benchmark_r2c_stage0_profile.py")
+    module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    assert module.parallel_wall_projection(100.,50.,25.)==pytest.approx(50.)
