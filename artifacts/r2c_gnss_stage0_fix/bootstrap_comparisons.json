@@ -1,0 +1,490 @@
+{
+  "block_s": 10,
+  "comparisons": [
+    {
+      "attempt_count": 2308,
+      "block_s": 10.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "common_events": 676,
+      "draw_index_sha256": "453445aa1ec819926c635d11ed957735db658aeb8739b945f3e5d57cfe7060d9",
+      "draw_representation": {
+        "reject_single_class": true,
+        "rng": "numpy.default_rng.PCG64",
+        "sample": "integers(0,n_blocks,n_blocks)"
+      },
+      "eligible_block_ids": [
+        "DS3:3",
+        "DS3:6",
+        "DS3:14",
+        "DS3:16"
+      ],
+      "eligible_block_ids_sha256": "0a4b4925e35e5ae610158a33fcb86e53ed465e31a14d957d5c0800d29877ae0c",
+      "estimate": -0.004240788676543539,
+      "excluded_events": 0,
+      "interpretation": "significant improvement not demonstrated",
+      "left": "A2",
+      "repetitions": 2000,
+      "right": "A1",
+      "scenario": "DS3",
+      "seed": 20260803,
+      "status": "AVAILABLE",
+      "valid_draw_count": 2000
+    },
+    {
+      "left": "Full",
+      "reason": "no common paired blocks",
+      "right": "A2",
+      "scenario": "DS3",
+      "status": "UNAVAILABLE_PAIRED_COMPLETE_BLOCKS",
+      "valid_draw_count": 0
+    },
+    {
+      "left": "Full",
+      "reason": "no paired common support",
+      "right": "A4",
+      "scenario": "DS3",
+      "status": "UNAVAILABLE_PAIRED_COMPLETE_BLOCKS",
+      "valid_draw_count": 0
+    },
+    {
+      "attempt_count": 2995,
+      "block_s": 10.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "common_events": 133,
+      "draw_index_sha256": "b509c27199bad29364856a310e4088b08e40eb141ace301ba89b4af857a2a556",
+      "draw_representation": {
+        "reject_single_class": true,
+        "rng": "numpy.default_rng.PCG64",
+        "sample": "integers(0,n_blocks,n_blocks)"
+      },
+      "eligible_block_ids": [
+        "DS3:0",
+        "DS3:3",
+        "DS3:4",
+        "DS3:5",
+        "DS3:13"
+      ],
+      "eligible_block_ids_sha256": "47b593442573255075cb447fd9e560ae93335a67cb554a592e7e9fceadc8e18b",
+      "estimate": 0.0,
+      "excluded_events": 0,
+      "interpretation": "significant improvement not demonstrated",
+      "left": "Full",
+      "repetitions": 2000,
+      "right": "B0-native",
+      "scenario": "DS3",
+      "seed": 20260803,
+      "status": "AVAILABLE",
+      "valid_draw_count": 2000
+    },
+    {
+      "attempt_count": 3066,
+      "block_s": 10.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "common_events": 133,
+      "draw_index_sha256": "1b5e72304e6b541bd9bc1dab07afd49188f48e0caa8d5701331c05fc777cefd1",
+      "draw_representation": {
+        "reject_single_class": true,
+        "rng": "numpy.default_rng.PCG64",
+        "sample": "integers(0,n_blocks,n_blocks)"
+      },
+      "eligible_block_ids": [
+        "DS3:0",
+        "DS3:5",
+        "DS3:13"
+      ],
+      "eligible_block_ids_sha256": "593336eba22e42832d0a4d0298e1ddcad54fc69c73d0e1d773da2e17f65c6439",
+      "estimate": 0.0,
+      "excluded_events": 0,
+      "interpretation": "significant improvement not demonstrated",
+      "left": "Full",
+      "repetitions": 2000,
+      "right": "Power-only",
+      "scenario": "DS3",
+      "seed": 20260803,
+      "status": "AVAILABLE",
+      "valid_draw_count": 2000
+    },
+    {
+      "attempt_count": 2009,
+      "block_s": 10.0,
+      "ci95": [
+        -0.036698278255534955,
+        0.033333333333333326
+      ],
+      "common_events": 396,
+      "draw_index_sha256": "f90d4a4de1163d608da695e2197e50cf7236ac4f6521adbfa418fa58d626efae",
+      "draw_representation": {
+        "reject_single_class": true,
+        "rng": "numpy.default_rng.PCG64",
+        "sample": "integers(0,n_blocks,n_blocks)"
+      },
+      "eligible_block_ids": [
+        "DS7:2",
+        "DS7:4",
+        "DS7:6",
+        "DS7:7",
+        "DS7:15",
+        "DS7:16",
+        "DS7:17",
+        "DS7:20",
+        "DS7:21",
+        "DS7:22",
+        "DS7:23",
+        "DS7:25",
+        "DS7:26"
+      ],
+      "eligible_block_ids_sha256": "a4f67013694a531bb74b3252598679526cbbf05666b5f98358a3afc441f0b3c4",
+      "estimate": -0.0202275937425046,
+      "excluded_events": 0,
+      "interpretation": "significant improvement not demonstrated",
+      "left": "A2",
+      "repetitions": 2000,
+      "right": "A1",
+      "scenario": "DS7",
+      "seed": 20260803,
+      "status": "AVAILABLE",
+      "valid_draw_count": 2000
+    },
+    {
+      "attempt_count": 2001,
+      "block_s": 10.0,
+      "ci95": [
+        -0.015039897764494253,
+        0.12052213012277192
+      ],
+      "common_events": 303,
+      "draw_index_sha256": "a1db84731388af9e08afcf5c7be0b59f956aba097a7a7baa4384d122fc8516ac",
+      "draw_representation": {
+        "reject_single_class": true,
+        "rng": "numpy.default_rng.PCG64",
+        "sample": "integers(0,n_blocks,n_blocks)"
+      },
+      "eligible_block_ids": [
+        "DS7:0",
+        "DS7:1",
+        "DS7:2",
+        "DS7:3",
+        "DS7:4",
+        "DS7:5",
+        "DS7:6",
+        "DS7:14",
+        "DS7:17",
+        "DS7:18",
+        "DS7:19",
+        "DS7:20",
+        "DS7:21"
+      ],
+      "eligible_block_ids_sha256": "859189fc49f31792eea069503672fc32de1fcd8fe945fe96cf8c8f0701827be1",
+      "estimate": 0.03676338078933139,
+      "excluded_events": 0,
+      "interpretation": "significant improvement not demonstrated",
+      "left": "Full",
+      "repetitions": 2000,
+      "right": "A2",
+      "scenario": "DS7",
+      "seed": 20260803,
+      "status": "AVAILABLE",
+      "valid_draw_count": 2000
+    },
+    {
+      "left": "Full",
+      "reason": "both classes required",
+      "right": "A4",
+      "scenario": "DS7",
+      "status": "UNAVAILABLE_PAIRED_COMPLETE_BLOCKS",
+      "valid_draw_count": 0
+    },
+    {
+      "attempt_count": 2001,
+      "block_s": 10.0,
+      "ci95": [
+        -0.6567192439759865,
+        -0.0808172471006589
+      ],
+      "common_events": 314,
+      "draw_index_sha256": "bbf4b9a5f8033c411d4dbe39e7520dcb4f4052e46d73f6e98882d8697d1d6e61",
+      "draw_representation": {
+        "reject_single_class": true,
+        "rng": "numpy.default_rng.PCG64",
+        "sample": "integers(0,n_blocks,n_blocks)"
+      },
+      "eligible_block_ids": [
+        "DS7:0",
+        "DS7:1",
+        "DS7:2",
+        "DS7:4",
+        "DS7:5",
+        "DS7:6",
+        "DS7:14",
+        "DS7:15",
+        "DS7:16",
+        "DS7:17",
+        "DS7:18",
+        "DS7:20",
+        "DS7:21",
+        "DS7:22"
+      ],
+      "eligible_block_ids_sha256": "d28da737a57d2e4030f810d43b39686553c12a963d6b5534c0305d3344a1fb89",
+      "estimate": -0.2642556209068535,
+      "excluded_events": 0,
+      "interpretation": "significant improvement not demonstrated",
+      "left": "Full",
+      "repetitions": 2000,
+      "right": "B0-native",
+      "scenario": "DS7",
+      "seed": 20260803,
+      "status": "AVAILABLE",
+      "valid_draw_count": 2000
+    },
+    {
+      "attempt_count": 2001,
+      "block_s": 10.0,
+      "ci95": [
+        0.42789844250053344,
+        1.0
+      ],
+      "common_events": 314,
+      "draw_index_sha256": "a1db84731388af9e08afcf5c7be0b59f956aba097a7a7baa4384d122fc8516ac",
+      "draw_representation": {
+        "reject_single_class": true,
+        "rng": "numpy.default_rng.PCG64",
+        "sample": "integers(0,n_blocks,n_blocks)"
+      },
+      "eligible_block_ids": [
+        "DS7:0",
+        "DS7:1",
+        "DS7:2",
+        "DS7:3",
+        "DS7:4",
+        "DS7:5",
+        "DS7:6",
+        "DS7:14",
+        "DS7:17",
+        "DS7:18",
+        "DS7:19",
+        "DS7:20",
+        "DS7:21"
+      ],
+      "eligible_block_ids_sha256": "859189fc49f31792eea069503672fc32de1fcd8fe945fe96cf8c8f0701827be1",
+      "estimate": 0.6361971361971361,
+      "excluded_events": 0,
+      "interpretation": "improvement demonstrated",
+      "left": "Full",
+      "repetitions": 2000,
+      "right": "Power-only",
+      "scenario": "DS7",
+      "seed": 20260803,
+      "status": "AVAILABLE",
+      "valid_draw_count": 2000
+    },
+    {
+      "attempt_count": 2052,
+      "block_s": 10.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "common_events": 469,
+      "draw_index_sha256": "c3e3ce7a0ebcb00e76b33ccf88646c8aa32de41e8770cc3921d433bb4a416ab2",
+      "draw_representation": {
+        "reject_single_class": true,
+        "rng": "numpy.default_rng.PCG64",
+        "sample": "integers(0,n_blocks,n_blocks)"
+      },
+      "eligible_block_ids": [
+        "DS8:2",
+        "DS8:5",
+        "DS8:7",
+        "DS8:22",
+        "DS8:24",
+        "DS8:26",
+        "DS8:27",
+        "DS8:28"
+      ],
+      "eligible_block_ids_sha256": "f2446a6361401a5792ecde7d92ea2eec3540e42c97124fe77b9a198ee40b29cc",
+      "estimate": -0.05160973212091424,
+      "excluded_events": 0,
+      "interpretation": "significant improvement not demonstrated",
+      "left": "A2",
+      "repetitions": 2000,
+      "right": "A1",
+      "scenario": "DS8",
+      "seed": 20260803,
+      "status": "AVAILABLE",
+      "valid_draw_count": 2000
+    },
+    {
+      "attempt_count": 2011,
+      "block_s": 10.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "common_events": 416,
+      "draw_index_sha256": "a1c6cd0b466ba7d2fbdda65bacbde14e122672ecfc9ae272168f11af1259dffd",
+      "draw_representation": {
+        "reject_single_class": true,
+        "rng": "numpy.default_rng.PCG64",
+        "sample": "integers(0,n_blocks,n_blocks)"
+      },
+      "eligible_block_ids": [
+        "DS8:0",
+        "DS8:2",
+        "DS8:5",
+        "DS8:6",
+        "DS8:21",
+        "DS8:22",
+        "DS8:24",
+        "DS8:25",
+        "DS8:26"
+      ],
+      "eligible_block_ids_sha256": "aacf0b2c84a550116a32e2a9743b56226a4361f99859e71883490d58dfbe4466",
+      "estimate": -0.030835284933645513,
+      "excluded_events": 0,
+      "interpretation": "significant improvement not demonstrated",
+      "left": "Full",
+      "repetitions": 2000,
+      "right": "A2",
+      "scenario": "DS8",
+      "seed": 20260803,
+      "status": "AVAILABLE",
+      "valid_draw_count": 2000
+    },
+    {
+      "left": "Full",
+      "reason": "both classes required",
+      "right": "A4",
+      "scenario": "DS8",
+      "status": "UNAVAILABLE_PAIRED_COMPLETE_BLOCKS",
+      "valid_draw_count": 0
+    },
+    {
+      "attempt_count": 2002,
+      "block_s": 10.0,
+      "ci95": [
+        -0.3108906005149699,
+        -0.037478298895496406
+      ],
+      "common_events": 668,
+      "draw_index_sha256": "6ac27168b96c0ef337ca0fda9f180d0b48c13d605e73a873d7282c76136aa543",
+      "draw_representation": {
+        "reject_single_class": true,
+        "rng": "numpy.default_rng.PCG64",
+        "sample": "integers(0,n_blocks,n_blocks)"
+      },
+      "eligible_block_ids": [
+        "DS8:0",
+        "DS8:1",
+        "DS8:2",
+        "DS8:3",
+        "DS8:4",
+        "DS8:5",
+        "DS8:6",
+        "DS8:14",
+        "DS8:15",
+        "DS8:16",
+        "DS8:17",
+        "DS8:18",
+        "DS8:19",
+        "DS8:20",
+        "DS8:21",
+        "DS8:22",
+        "DS8:23",
+        "DS8:24",
+        "DS8:25",
+        "DS8:26",
+        "DS8:27",
+        "DS8:28",
+        "DS8:29",
+        "DS8:30",
+        "DS8:31",
+        "DS8:33",
+        "DS8:34",
+        "DS8:35",
+        "DS8:36",
+        "DS8:37",
+        "DS8:38",
+        "DS8:41"
+      ],
+      "eligible_block_ids_sha256": "98afde3ace1779acb18989897e6b18fa71ca3739b178fbaeea447246afa0e1e0",
+      "estimate": -0.162673611111111,
+      "excluded_events": 0,
+      "interpretation": "significant improvement not demonstrated",
+      "left": "Full",
+      "repetitions": 2000,
+      "right": "B0-native",
+      "scenario": "DS8",
+      "seed": 20260803,
+      "status": "AVAILABLE",
+      "valid_draw_count": 2000
+    },
+    {
+      "attempt_count": 2007,
+      "block_s": 10.0,
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "common_events": 668,
+      "draw_index_sha256": "a1ef21f91438ff9a37ebac8bedc271a7a4f75d87c166d1270f58bd6df8f8adbe",
+      "draw_representation": {
+        "reject_single_class": true,
+        "rng": "numpy.default_rng.PCG64",
+        "sample": "integers(0,n_blocks,n_blocks)"
+      },
+      "eligible_block_ids": [
+        "DS8:0",
+        "DS8:2",
+        "DS8:4",
+        "DS8:5",
+        "DS8:6",
+        "DS8:21",
+        "DS8:22",
+        "DS8:24",
+        "DS8:25",
+        "DS8:26",
+        "DS8:27",
+        "DS8:28",
+        "DS8:33",
+        "DS8:35",
+        "DS8:36",
+        "DS8:37",
+        "DS8:38",
+        "DS8:41",
+        "DS8:42"
+      ],
+      "eligible_block_ids_sha256": "06f38dc7bab33cd530924ba727dfb226834f0d443ddb1b8e6d1c276f52c52e2b",
+      "estimate": 0.8374394155125053,
+      "excluded_events": 0,
+      "interpretation": "improvement demonstrated",
+      "left": "Full",
+      "repetitions": 2000,
+      "right": "Power-only",
+      "scenario": "DS8",
+      "seed": 20260803,
+      "status": "AVAILABLE",
+      "valid_draw_count": 2000
+    },
+    {
+      "left": "Full",
+      "right": "relation-destruction",
+      "scenario": "controls",
+      "status": "UNAVAILABLE_NO_PAIRED_EVENT_CONTROL_SUPPORT",
+      "valid_draw_count": 0
+    }
+  ],
+  "draw_index_sha256": "760b3878c135c930c1cb5924e6cdd480b8d6f5648659b792f889c45589d13f90",
+  "repetitions": 2000,
+  "seed": 20260803,
+  "status": "COMPUTED",
+  "valid_draw_count": 2000
+}

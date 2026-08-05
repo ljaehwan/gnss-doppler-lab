@@ -1,0 +1,65 @@
+{
+  "comparison": "strict_greater",
+  "detectors": {
+    "A1": {
+      "q99": -143.30977153837728,
+      "q99.5": -125.3306954743365,
+      "status": "AVAILABLE",
+      "target_fpr_1pct": -143.30977153837728
+    },
+    "A2": {
+      "q99": -379.0884485034219,
+      "q99.5": -378.1689567025421,
+      "status": "AVAILABLE",
+      "target_fpr_1pct": -379.0884485034219
+    },
+    "A3": {
+      "q99": -3238.9319622973853,
+      "q99.5": -3207.519015508078,
+      "status": "AVAILABLE",
+      "target_fpr_1pct": -3238.9319622973853
+    },
+    "A4": {
+      "q99": null,
+      "q99.5": null,
+      "status": "UNAVAILABLE_CALIBRATION_SUPPORT",
+      "target_fpr_1pct": null
+    },
+    "B0-native": {
+      "q99": 0.8615548815839029,
+      "q99.5": 0.9169274814058588,
+      "status": "AVAILABLE",
+      "target_fpr_1pct": 0.8615548815839029
+    },
+    "Full": {
+      "q99": -3246.6999474626646,
+      "q99.5": -3238.9321218317637,
+      "status": "AVAILABLE",
+      "target_fpr_1pct": -3246.6999474626646
+    },
+    "Neural-with-energy": {
+      "q99": -3246.6999621056166,
+      "q99.5": -3238.932085618333,
+      "status": "AVAILABLE",
+      "target_fpr_1pct": -3246.6999621056166
+    },
+    "Noise-floor-only": {
+      "q99": null,
+      "q99.5": null,
+      "status": "UNAVAILABLE_CALIBRATION_SUPPORT",
+      "target_fpr_1pct": null
+    },
+    "Power-only": {
+      "q99": 14034251587623.416,
+      "q99.5": 14169284350885.652,
+      "status": "AVAILABLE",
+      "target_fpr_1pct": 14034251587623.416
+    }
+  },
+  "method": "higher",
+  "q99": -3246.6999474626646,
+  "q99.5": -3238.9321218317637,
+  "schema": "gnss-doppler-lab.r2c-thresholds.v2",
+  "status": "AVAILABLE",
+  "target_fpr_1pct": -3246.6999474626646
+}

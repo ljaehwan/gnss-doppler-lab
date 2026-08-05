@@ -1,0 +1,183 @@
+{
+  "b0_validation": {
+    "path": "/home/ubuntu/.tasks/r2c-stage0-fix/b0_validation_correction5.json",
+    "sha256": "58ad21db9a5180db502f943eca8100cceeed5e793e2b74c8c02fb56caa8ea37b"
+  },
+  "canonical_config": {
+    "path": "configs/r2c_gnss_stage0_fix.json",
+    "schema": "gnss-doppler-lab.r2c-gnss-stage0-fix-config.v3",
+    "sha256": "2992d38b69ec39b6afc97c8cf7cf6b2bcdd1da3c59b349ce4ec133e38a9ca51c"
+  },
+  "execution": {
+    "score_backend": "fork",
+    "score_workers": 16
+  },
+  "external_inputs": [
+    {
+      "b0": {
+        "status": "AVAILABLE_SAVED_NATIVE_SCORE_REPLAY_WITH_NODE_LINEAGE_GAP",
+        "validation_path": "/home/ubuntu/.tasks/r2c-stage0-fix/b0_validation_correction5.json",
+        "validation_sha256": "58ad21db9a5180db502f943eca8100cceeed5e793e2b74c8c02fb56caa8ea37b"
+      },
+      "export_source_iq_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "geometry": {
+        "path": "/home/ubuntu/.tasks/r2c-stage0-fix/time_geometry_validation_correction5.json",
+        "sha256": "ed8ed6783425c82b7ab47839c009b0d1eb5fd035fc11f7bf7630d7e539ca1eb5"
+      },
+      "receiver_source_iq_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "scenario": "cleanStatic",
+      "selected": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.npz",
+        "sha256": "fcd1d378c28e79fe4a550b65fc1208cde3c8fb334db11406a07fed4d90fba237"
+      }
+    },
+    {
+      "b0": {
+        "status": "AVAILABLE_SAVED_NATIVE_SCORE_REPLAY_WITH_NODE_LINEAGE_GAP",
+        "validation_path": "/home/ubuntu/.tasks/r2c-stage0-fix/b0_validation_correction5.json",
+        "validation_sha256": "58ad21db9a5180db502f943eca8100cceeed5e793e2b74c8c02fb56caa8ea37b"
+      },
+      "export_source_iq_sha256": null,
+      "geometry": {
+        "path": "/home/ubuntu/.tasks/r2c-stage0-fix/time_geometry_validation_correction5.json",
+        "sha256": "ed8ed6783425c82b7ab47839c009b0d1eb5fd035fc11f7bf7630d7e539ca1eb5"
+      },
+      "receiver_source_iq_sha256": "9ca7029e625a34b8a3df64db69c422836885e5eb3cdcbe266d4f42983eba36a1",
+      "scenario": "cleanDynamic",
+      "selected": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/rc9-real-clean-domain-poc1/exports/cleanDynamic.npz",
+        "sha256": "efe224bb1987cb554f0d213725f54c35479cf18ad0a91ff6202ae062439aae81"
+      }
+    },
+    {
+      "b0": {
+        "status": "UNAVAILABLE_AUTHENTIC_INTERFACE",
+        "validation_path": "/home/ubuntu/.tasks/r2c-stage0-fix/b0_validation_correction5.json",
+        "validation_sha256": "58ad21db9a5180db502f943eca8100cceeed5e793e2b74c8c02fb56caa8ea37b"
+      },
+      "export_source_iq_sha256": "8c8f4caa41c8a2253688eef47818a445e3a06139b729cf587c03be33e6b6744c",
+      "geometry": {
+        "path": "/home/ubuntu/.tasks/r2c-stage0-fix/time_geometry_validation_correction5.json",
+        "sha256": "ed8ed6783425c82b7ab47839c009b0d1eb5fd035fc11f7bf7630d7e539ca1eb5"
+      },
+      "receiver_source_iq_sha256": "8c8f4caa41c8a2253688eef47818a445e3a06139b729cf587c03be33e6b6744c",
+      "scenario": "DS1",
+      "selected": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds1.npz",
+        "sha256": "b24d947c83890dbfa1c801bfbcb72e1fd192dd66509e927eb5afb8118902b072"
+      }
+    },
+    {
+      "b0": {
+        "status": "UNAVAILABLE_AUTHENTIC_INTERFACE",
+        "validation_path": "/home/ubuntu/.tasks/r2c-stage0-fix/b0_validation_correction5.json",
+        "validation_sha256": "58ad21db9a5180db502f943eca8100cceeed5e793e2b74c8c02fb56caa8ea37b"
+      },
+      "export_source_iq_sha256": "65bfba9bbb8643c1f6b8f1a48bdef8adfc0e787458f0c5b0cb54ca92977bed5e",
+      "geometry": {
+        "path": "/home/ubuntu/.tasks/r2c-stage0-fix/time_geometry_validation_correction5.json",
+        "sha256": "ed8ed6783425c82b7ab47839c009b0d1eb5fd035fc11f7bf7630d7e539ca1eb5"
+      },
+      "receiver_source_iq_sha256": "65bfba9bbb8643c1f6b8f1a48bdef8adfc0e787458f0c5b0cb54ca92977bed5e",
+      "scenario": "DS2",
+      "selected": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds2.npz",
+        "sha256": "dae0f245cbb107febd220c6de33b9a279a2bad356cb0ba772daf9418bc75d7c9"
+      }
+    },
+    {
+      "b0": {
+        "status": "AVAILABLE_SAVED_NATIVE_SCORE_REPLAY_WITH_NODE_LINEAGE_GAP",
+        "validation_path": "/home/ubuntu/.tasks/r2c-stage0-fix/b0_validation_correction5.json",
+        "validation_sha256": "58ad21db9a5180db502f943eca8100cceeed5e793e2b74c8c02fb56caa8ea37b"
+      },
+      "export_source_iq_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "geometry": {
+        "path": "/home/ubuntu/.tasks/r2c-stage0-fix/time_geometry_validation_correction5.json",
+        "sha256": "ed8ed6783425c82b7ab47839c009b0d1eb5fd035fc11f7bf7630d7e539ca1eb5"
+      },
+      "receiver_source_iq_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "scenario": "DS3",
+      "selected": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds3.npz",
+        "sha256": "38eb5842dfec306d99bf0c5d61df6cffcb6faa25ed63721cafa8e3c3776f9b3e"
+      }
+    },
+    {
+      "b0": {
+        "status": "AVAILABLE_SAVED_NATIVE_SCORE_REPLAY_WITH_NODE_LINEAGE_GAP",
+        "validation_path": "/home/ubuntu/.tasks/r2c-stage0-fix/b0_validation_correction5.json",
+        "validation_sha256": "58ad21db9a5180db502f943eca8100cceeed5e793e2b74c8c02fb56caa8ea37b"
+      },
+      "export_source_iq_sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "geometry": {
+        "path": "/home/ubuntu/.tasks/r2c-stage0-fix/time_geometry_validation_correction5.json",
+        "sha256": "ed8ed6783425c82b7ab47839c009b0d1eb5fd035fc11f7bf7630d7e539ca1eb5"
+      },
+      "receiver_source_iq_sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "scenario": "DS7",
+      "selected": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/exports/ds7.npz",
+        "sha256": "d0e6da4e27d51e3e96abf2ef7786501124072f28667671e4e40da756eb35f3c8"
+      }
+    },
+    {
+      "b0": {
+        "status": "AVAILABLE_SAVED_NATIVE_SCORE_REPLAY_WITH_NODE_LINEAGE_GAP",
+        "validation_path": "/home/ubuntu/.tasks/r2c-stage0-fix/b0_validation_correction5.json",
+        "validation_sha256": "58ad21db9a5180db502f943eca8100cceeed5e793e2b74c8c02fb56caa8ea37b"
+      },
+      "export_source_iq_sha256": null,
+      "geometry": {
+        "path": "/home/ubuntu/.tasks/r2c-stage0-fix/time_geometry_validation_correction5.json",
+        "sha256": "ed8ed6783425c82b7ab47839c009b0d1eb5fd035fc11f7bf7630d7e539ca1eb5"
+      },
+      "receiver_source_iq_sha256": null,
+      "scenario": "DS8",
+      "selected": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/exports/ds8.npz",
+        "sha256": "d1973fa150b7b4e7359df4827f36ce60289f206e9db11c1ac2bc1fd33a0df533"
+      }
+    }
+  ],
+  "preserved_artifact_tree": "53f7cdab9ac324c08b94a5d6f38f6a32d3ec16b7",
+  "source_bundle": {
+    "bundle_sha256": "229fcd9940d445b847294f48584da970ffd88bc73f76a9c823ffc0332385be94",
+    "files": {
+      "configs/detectors/texbat_btail_gate_v1.json": "45e4df9beed4b689700e928ef8217cbed17c2178a47ff240c40eec3c74e3f414",
+      "configs/r2c_gnss_stage0_fix.json": "2992d38b69ec39b6afc97c8cf7cf6b2bcdd1da3c59b349ce4ec133e38a9ca51c",
+      "pyproject.toml": "e307563e8de05c97670115f5db58030abfb3b4a06280f28521a30bb13e5b67b7",
+      "scripts/benchmark_r2c_stage0_profile.py": "9be30513bda6a29993a1b2f2bb77d77976dceef7e3f3d04a6f35145bcaee1632",
+      "scripts/eval_btail_support_gate.py": "1bb353101d1a98a8bd6a6feaa72757829669f718f3e2e2d497e64422177c5e10",
+      "scripts/reconstruct_r2c_time_geometry.py": "a1358e28e65f5e423f54c5a32d2083f4d085063c5cedf8b946e047db3c9ddb90",
+      "scripts/run_r2c_gnss_stage0_fix.py": "837a76f07daea331cff9dbef88b253bb06407506845fed8b92900b2d9be3199c",
+      "scripts/score_texbat_prn_node_gru.py": "433760ea7bde8d9094c84887fa04962846f72690c3a81668f84445fa58f03bd1",
+      "scripts/supervise_r2c_stage0.py": "c0c47215d933f03ade030ba8f65114e5a7df984fb5fee7d13a0618db9007b690",
+      "scripts/train_prn_node_gru.py": "b1bbfe29dfaa2116d63f4b0a3914c1fc68642543bc4c727ac15e00b601d67727",
+      "scripts/validate_r2c_stage0_pre_campaign.py": "b6df3d4772b710969c69861f986046ac526b712efafeaf53e99ba0731c8142d6",
+      "scripts/verify_r2c_gnss_stage0_fix.py": "f65fc9d2a8fda5e96ef3baddf7d29c28040c59856577b3506c0209b8cd7b5e2c",
+      "src/gnss_doppler_lab/normal_multi_prn_dataset.py": "138c84e30955ad816447f8962791d8ec4cf72eafe8bdbbf8211c5d02006b7f35",
+      "src/gnss_doppler_lab/r2c_stage0_artifact.py": "ff2660d02194089b1522cc3988bdc7a4a42ecb191a30f43bc5ffa2d7215cffa6",
+      "src/gnss_doppler_lab/r2c_stage0_fix.py": "47eae7a038a4ef441c100e56f9b0875d30ae9f4bea2903532d084e93af24bcb1",
+      "src/gnss_doppler_lab/r2c_stage0_observer.py": "89a32c3f05e4a4b4462cd8fe665116f65457014c3c6c6155104cb596cfcfab2e",
+      "src/gnss_doppler_lab/tracking_feature_dataset.py": "39e66ffd3092a5218606c101039a3e5365d6b6ab65ca7b3f9c91d9ff172999cc",
+      "tests/test_joint_profile_glrt_vectorized.py": "c71e6fb0a047423081ebd0d9e7a966a81c329dc70cdc1c35cc7fbf58ec6fc056",
+      "tests/test_r2c_stage0_correction1.py": "5f0a2493054538ce7424979d38ffdd7792dcfeceae68f506234ab24d2c4fe7ba",
+      "tests/test_r2c_stage0_correction2.py": "673bf1ce9a3f7fcdd5f68cee98db159bd6d3984c2c5938fab18a5c9ada0e7946",
+      "tests/test_r2c_stage0_correction4.py": "8c91f5ebd9d4afea65c48f76f8783706cdfc2daf626ab3f921b16626e721f60f",
+      "tests/test_r2c_stage0_correction5.py": "5453aac53d28524b1d7144424baa2061a3e1b1e9c97b6582dc73f6767395c927",
+      "tests/test_r2c_stage0_durable_runner.py": "7d6ce5dea2859631c20644c93a8827c1627cef26e7c7a992ba73967b48c9cab2",
+      "tests/test_r2c_stage0_fix.py": "5b9c72683eff5e542732fb26dac2e48abcccbb86eb67f2d6f6e4eec5a05fcae9"
+    }
+  },
+  "source_commit": "ade7a4b8f693ddf8a1a42900949b9ecfabf9b222",
+  "synthetic_test_mode": false,
+  "template": {
+    "analytic_approximation": true,
+    "empirical_template_ready": false,
+    "paper_comparison_ready": false,
+    "provenance": {
+      "kind": "analytic_gps_ca_acf"
+    }
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "core_physics_verdict": "R2C_CORE_NOT_SUPPORTED",
+  "failed_required_gates": [
+    "complex_provenance",
+    "clean_dynamic_fpr",
+    "relation_destruction",
+    "full_improvement"
+  ],
+  "gates": {
+    "b0_authentic_common_support": {
+      "status": "UNAVAILABLE_B0_LINEAGE"
+    },
+    "causal_deployment_readiness": {
+      "scenario_statuses": [
+        "UNAVAILABLE_CAUSAL_EPHEMERIS",
+        "UNAVAILABLE_CAUSAL_EPHEMERIS",
+        "UNAVAILABLE_CAUSAL_EPHEMERIS",
+        "UNAVAILABLE_CAUSAL_EPHEMERIS",
+        "UNAVAILABLE_CAUSAL_EPHEMERIS"
+      ],
+      "status": "UNAVAILABLE_CAUSAL_EPHEMERIS"
+    },
+    "clean_dynamic_fpr": {
+      "status": "FAIL",
+      "value": 1.0
+    },
+    "complex_provenance": {
+      "derived_from": "finite rows and source hashes",
+      "status": "FAIL"
+    },
+    "complex_second_source": {
+      "rows": 192,
+      "status": "PASS"
+    },
+    "empirical_wide_template": {
+      "provenance": {
+        "kind": "analytic_gps_ca_acf"
+      },
+      "status": "FAIL"
+    },
+    "full_a2_two_scenarios": {
+      "scenarios": [],
+      "status": "UNAVAILABLE_BOOTSTRAP_SUPPORT"
+    },
+    "full_b0_comparison": {
+      "status": "PASS"
+    },
+    "full_improvement": {
+      "comparisons": 2,
+      "significant_comparisons": 0,
+      "status": "FAIL"
+    },
+    "gain_invariance": {
+      "rows": 144,
+      "status": "UNAVAILABLE_CONTROL_SUPPORT"
+    },
+    "geometry_coverage": {
+      "scenario_statuses": [
+        "PASS",
+        "FAIL",
+        "FAIL",
+        "FAIL",
+        "PASS"
+      ],
+      "status": "FAIL"
+    },
+    "geometry_removal": {
+      "rows": 24,
+      "status": "FAIL"
+    },
+    "noise_gain_alarms": {
+      "rows": 96,
+      "status": "UNAVAILABLE_CONTROL_SUPPORT"
+    },
+    "paper_gates": {
+      "status": "FAIL"
+    },
+    "phase_invariance": {
+      "rows": 96,
+      "status": "UNAVAILABLE_CONTROL_SUPPORT"
+    },
+    "relation_destruction": {
+      "rows": 24,
+      "status": "FAIL"
+    },
+    "shortcut_controls": {
+      "rows": 24,
+      "status": "UNAVAILABLE_CONTROL_SUPPORT"
+    },
+    "time_los_alignment": {
+      "geometry_mode": "offline_physics_los",
+      "offline_oracle_geometry": true,
+      "scenario_statuses": [
+        "PASS",
+        "FAIL",
+        "FAIL",
+        "FAIL",
+        "PASS"
+      ],
+      "status": "FAIL"
+    }
+  },
+  "missing_required_evidence": [
+    "time_los_alignment",
+    "geometry_coverage",
+    "gain_invariance",
+    "phase_invariance",
+    "noise_gain_alarms",
+    "full_a2_two_scenarios",
+    "shortcut_controls"
+  ],
+  "observed_disqualifiers": [
+    "clean_dynamic_fpr",
+    "relation_destruction",
+    "geometry_removal"
+  ],
+  "paper_comparison_ready": false,
+  "verdict": "R2C_CORE_NOT_SUPPORTED"
+}

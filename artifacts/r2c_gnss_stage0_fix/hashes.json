@@ -1,0 +1,27 @@
+{
+  "algorithm": "sha256",
+  "files": {
+    "README.md": "f6564d8e3aeb23b1974f1c060b6a9cb19d61e1cb84a6ea07987d08bab2b395bd",
+    "ablation_metrics.csv": "2f4c6f8aaf660c4e3c6a94b5c1245f651f25fc5073aabb1c9dbd72b5920909c7",
+    "b0_interface_validation.json": "0644eeb2330ecfcc8214c8d91f8e8cf199b19089b85edf74b52c91128cfdf806",
+    "bootstrap_comparisons.json": "08b3a3088e039f6f265effb1663c1a8beb7082ce4d1b7b65ceaf5b9102525271",
+    "config.json": "2992d38b69ec39b6afc97c8cf7cf6b2bcdd1da3c59b349ce4ec133e38a9ca51c",
+    "decision.json": "329feafc92f5303f70450fba76b24dbc5fbaf69ad9db0e127620e866817166e6",
+    "gain_invariance.json": "a19db3f4009a0c0c5d17660b5778e17af1f30f5a7a78e4286e7f52467209f775",
+    "input_validity.json": "5103392596e5f5ed31764f6f44930e4a27f13c85aa535d5f40aee2bbdabb8532",
+    "multipath_control.json": "a19db3f4009a0c0c5d17660b5778e17af1f30f5a7a78e4286e7f52467209f775",
+    "noise_control.json": "a19db3f4009a0c0c5d17660b5778e17af1f30f5a7a78e4286e7f52467209f775",
+    "per_epoch_scores.csv": "bbbfdc928ff6d4ff45c62d46d9b58a423e0335fbcc4ed39cec8a7bde1baa3d10",
+    "phase_invariance.json": "a19db3f4009a0c0c5d17660b5778e17af1f30f5a7a78e4286e7f52467209f775",
+    "plots/score_source.csv": "3f37923ae27c99224dca0f6877b8064b9e9d32e0b28de10491e21128e295b4aa",
+    "provenance.json": "ec863e7f664e3cf7a363c8f153bfa21e8bab71a999f93e1d1b2a04fc5d83c4ac",
+    "relation_destruction.json": "a19db3f4009a0c0c5d17660b5778e17af1f30f5a7a78e4286e7f52467209f775",
+    "scenario_metrics.csv": "7d7b8e152c8e4adffd583e8eb1cee343ab116ec069c52b299e2ca9a48c9ef128",
+    "second_source_injection.json": "a19db3f4009a0c0c5d17660b5778e17af1f30f5a7a78e4286e7f52467209f775",
+    "thresholds.json": "928ff44263cde83e41b7b55d8358e3550f49c327b99c0084e6c7d74d3ba939f7",
+    "time_geometry_validation.json": "bc8fbd54ad13512e23051bf1026e2a8686f926092d8116796070bfc7b4515bd4",
+    "training_summary.json": "cbb0feb202a633b0872587c55651b7ba75ac6981fc05379bdd47b4bc5a29b9ac",
+    "verification.json": "b3ef2fe1f5da3066074a4cd89fab4266cb05b4faeb8544f95f64f707c5c84f42"
+  },
+  "policy": "all files recursively except hashes.json"
+}

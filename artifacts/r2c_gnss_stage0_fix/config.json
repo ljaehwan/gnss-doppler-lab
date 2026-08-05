@@ -1,0 +1,48 @@
+{
+  "schema": "gnss-doppler-lab.r2c-gnss-stage0-fix-config.v3",
+  "base_commit": "beb69f4eccfdc9176f742845e965ba0065496742",
+  "preserved_artifact_tree": "53f7cdab9ac324c08b94a5d6f38f6a32d3ec16b7",
+  "seed": 20260803,
+  "cadence_s": 0.5,
+  "tap_offsets_chips": [-0.5, -0.375, -0.25, -0.125, 0.0, 0.125, 0.25, 0.375, 0.5],
+  "delay_grid_chips": [-0.5, -0.375, -0.25, -0.125, 0.0, 0.125, 0.25, 0.375, 0.5],
+  "beta_bounds_m": [[-150, 150], [-150, 150], [-150, 150], [-150, 150]],
+  "optimizer_starts_m": [[0, 0, 0, 25], [0, 0, 0, -25], [25, -25, 10, 50], [-25, 25, -10, -50]],
+  "epoch_policy": {"selection": "all_finite_authentic_epochs", "chunk_rows": 4096, "subsampling": false},
+  "profile_backend": "cpu",
+  "splits": {
+    "normal_train": {"source_end_lte_s": 300.0},
+    "normal_calibration": {"source_start_gte_s": 320.0, "source_end_lte_s": 400.0},
+    "normal_holdout": {"source_start_gte_s": 420.0},
+    "guard_s": 20.0,
+    "fit_source": "cleanStatic",
+    "external_normal": "cleanDynamic"
+  },
+  "template": {"mode": "analytic_gps_ca_acf", "analytic_approximation": true, "paper_comparison_ready": false, "minimum_empirical_support_chips": [-1, 1], "maximum_spacing_chips": 0.125},
+  "whitening": {"shrinkage": 0.2, "eigen_floor_fraction": 0.000001, "fit_role": "cleanStatic.normal_train"},
+  "neural": {"hidden": 8, "epochs": 20, "learning_rate": 0.001, "require_gpu": true,
+    "no_energy_inputs": ["cn0", "h0_residual_quality"],
+    "with_energy_inputs": ["cn0", "h0_residual_quality", "explicit_energy"]},
+  "b0": {
+    "detector": "btail_max_507080_ewma075", "window_s": 1.0, "stride_s": 0.5, "min_epochs": 4, "sequence_length": 12,
+    "availability": "target_window_end", "checkpoint_sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
+    "node_thresholds": {"q50": 0.0914354398846626, "q70": 0.12956311106681812, "q80": 0.1630456149578094},
+    "ewma_previous_state_weight": 0.75, "event_q99_threshold": 4.169877716047041,
+    "saved_score_sha256": {
+      "cleanStatic": "9a6bc537bd8f1bc16a17257a5f7ae2e47f327c10e215c63d7ebd82ca0b80c36a",
+      "cleanDynamic": "855c5ad2b2ea355136f027c49cc22e7234fab2147a6b812f832213b0c7ab082c",
+      "DS3": "c62321e25fb152c8ece0fef45c3e79bb27d6679bf6ea37ef09b5db711df800d6",
+      "DS7": "d6a3480485d557a5710750ff65c09c836673339a1f23d90d1a41365e9fa91c08",
+      "DS8": "07d8909acb442b422a814ebc2424a1581d0308b618f727bdbee2c74994870db9"
+    }
+  },
+  "geometry": {"required_scenarios": ["cleanStatic", "cleanDynamic", "DS3", "DS7", "DS8"], "diagnostic_scenarios": ["DS1", "DS2"],
+    "minimum_prns": 5, "minimum_rank": 4, "minimum_residual_dof": 1, "maximum_condition_number": 1000000,
+    "maximum_toe_age_s": 7200, "maximum_pvt_age_s": 1, "minimum_coverage": 0.7, "minimum_complete_10s_blocks": 30},
+  "attacks": {"primary": ["DS3", "DS7", "DS8"], "diagnostic": ["DS1", "DS2"], "onset_s": {"DS1": 100, "DS2": 100, "DS3": 100, "DS7": 110, "DS8": 110}, "persistent_offset_s": 40},
+  "thresholds": {"quantiles": [0.99, 0.995], "target_fpr": 0.01, "method": "higher", "comparison": "strict_greater"},
+  "bootstrap": {"block_s": 10, "repetitions": 2000, "seed": 20260803, "paired_common_support": true, "iid_fallback": false},
+  "controls": {"gains": [0.5, 0.75, 1, 1.5, 2], "phases_rad": [0, 0.7853981633974483, 1.5707963267948966, 3.141592653589793], "alarm_agreement_minimum": 0.95},
+  "detectors": ["B0-native", "A1", "A2", "A3", "A4", "Full", "Neural-with-energy", "Power-only", "Noise-floor-only"],
+  "production_output": "artifacts/r2c_gnss_stage0_fix"
+}
