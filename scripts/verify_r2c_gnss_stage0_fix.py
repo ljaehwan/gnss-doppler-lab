@@ -72,7 +72,7 @@ def validate_full_threshold_aliases(thresholds):
     return errors
 
 def validate_threshold_contract(thresholds,score_rows):
-    errors=[];top_fields={"schema","q99","q99.5","target_fpr_1pct","detectors","method","comparison"}
+    errors=[];top_fields={"schema","status","q99","q99.5","target_fpr_1pct","detectors","method","comparison"}
     if not isinstance(thresholds,dict) or set(thresholds)!=top_fields:errors.append("threshold top-level contract mismatch")
     if thresholds.get("schema")!="gnss-doppler-lab.r2c-thresholds.v2" or thresholds.get("method")!="higher" or thresholds.get("comparison")!="strict_greater":errors.append("threshold method/schema contract mismatch")
     detectors=thresholds.get("detectors",{})
@@ -86,24 +86,45 @@ def validate_threshold_contract(thresholds,score_rows):
         else:expected={"status":"UNAVAILABLE_CALIBRATION_SUPPORT","q99":None,"q99.5":None,"target_fpr_1pct":None}
         item=detectors.get(detector)
         if not isinstance(item,dict) or set(item)!=fields or not strict_equal(item,expected):errors.append(f"threshold detector contract mismatch: {detector}")
+    if thresholds.get("status")!=detectors.get("Full",{}).get("status"):errors.append("threshold top-level status mismatch")
     errors.extend(validate_full_threshold_aliases(thresholds));return errors
 
 def derive_control_candidate_context(score_rows,geometry):
+    """Legacy one-block context retained for historical/synthetic fixtures."""
     candidates=[];los_bins=geometry.get("scenarios",{}).get("cleanStatic",{}).get("los_by_bin",{})
     for row in score_rows:
         if row.get("scenario")!="cleanStatic" or row.get("detector")!="Full" or row.get("status")!="AVAILABLE" or row.get("score") in (None,""):continue
         if str(row.get("geometry_valid","")).lower() not in {"true","1"} and "geometry_valid" in row:continue
-        los=los_bins.get(str(int(row["time_bin"])),{});prns=set()
-        try:prns={int(value) for value in los}
-        except (TypeError,ValueError):continue
-        try:support=int(row["epoch_count"]);count=int(row["prn_count"])
+        try:prns={int(value) for value in los_bins.get(str(int(row["time_bin"])),{})};support=int(row["epoch_count"]);count=int(row["prn_count"])
         except (TypeError,ValueError,KeyError):continue
         if prns and len(prns)==count and support>0:candidates.append((prns,support))
     return candidates[-1] if candidates else (None,None)
 
+
+def derive_control_candidate_contexts(score_rows,geometry):
+    """Independently reproduce the producer's bounded 10-s cleanStatic selection."""
+    candidates=[];los_bins=geometry.get("scenarios",{}).get("cleanStatic",{}).get("los_by_bin",{})
+    for row in score_rows:
+        if row.get("scenario")!="cleanStatic" or row.get("detector")!="Full" or row.get("status")!="AVAILABLE" or row.get("score") in (None,""):continue
+        try:bin_id=int(row["time_bin"]);support=int(row["epoch_count"]);count=int(row["prn_count"])
+        except (TypeError,ValueError,KeyError):continue
+        if bin_id%20:continue
+        if str(row.get("geometry_valid","")).lower() not in {"true","1"}:continue
+        # The runner's eligibility is Full fit + any certified LOS, not an
+        # all-LOS/observation roster equality assertion.  Preserve the certified
+        # geometry roster for the relation permutation, while allowing extra
+        # observed PRNs without a valid LOS.
+        los=los_bins.get(str(bin_id),{})
+        try:prns={int(value) for value in los}
+        except (TypeError,ValueError):continue
+        if prns and support>0 and count>0:candidates.append((bin_id,{"prns":prns,"prn_count":count,"support_count":support,"block_start_s":float(bin_id)*.5,"block_duration_s":10.}))
+    return dict(sorted(candidates)[:24])
+
 CONTROL_STATUSES={"AVAILABLE","UNAVAILABLE_INVALID_SHARED_FIT","UNAVAILABLE_INVALID_SCORE"}
 CONTROL_ROW_FIELDS={"kind","parameters","seed","threshold","support_count","baseline_status","perturbed_status",
  "baseline_reason","perturbed_reason","pre_score","post_score","effect_size","pre_alarm","post_alarm"}
+MULTIBLOCK_CONTROL_ROW_FIELDS=CONTROL_ROW_FIELDS|{"scenario","time_bin","block_start_s","block_duration_s"}
+MULTIBLOCK_CONTROL_DOCUMENT_FIELDS={"status","threshold","selected_blocks","computed_rows","rows"}
 CONTROL_DOCUMENT_FIELDS={"schema","seed","threshold","support_count","rows","computed_rows","status",
  "baseline_status","baseline_score","baseline_reason","criteria"}
 
@@ -114,7 +135,7 @@ def strict_equal(actual,expected):
     if isinstance(expected,(list,tuple)):return len(actual)==len(expected) and all(strict_equal(left,right) for left,right in zip(actual,expected))
     return actual==expected
 
-def expected_control_parameters(seed,permutation,support_count=0,tap_count=9):
+def expected_control_parameters(seed,permutation,support_count=0,tap_count=9,noise_prn_count=None):
     expected=[("gain",{"gain":x}) for x in (.5,.75,1.,1.5,2.)]
     expected += [("slow_agc",{"minimum":.75,"maximum":1.25})]
     expected += [("global_phase",{"radians":x}) for x in (0.,math.pi/4,math.pi/2,math.pi)]
@@ -123,13 +144,53 @@ def expected_control_parameters(seed,permutation,support_count=0,tap_count=9):
       ("non_shared_multipath",{"per_prn":True})]
     rng=np.random.default_rng(seed)
     for _ in range(6):rng.normal(size=support_count*tap_count)
-    rng.uniform(-math.pi,math.pi,len(permutation))
+    rng.uniform(-math.pi,math.pi,len(permutation) if noise_prn_count is None else noise_prn_count)
     for delay in (-.35,.35):
         for ratio in (.1,.25,.5,1.):expected.append(("second_source_injection",{"delay_chips":delay,"power_ratio":ratio,"phase_rad":float(rng.uniform(-math.pi,math.pi))}))
     expected.append(("relation_destruction",{"permutation":permutation}))
     return expected
 
-def validate_control_payload(control,config=None,control_prns=None,expected_support_count=None):
+def validate_multiblock_control_payload(control,config,expected_blocks):
+    """Validate flattened 10-s control blocks without trusting artifact selection."""
+    if set(control)!=MULTIBLOCK_CONTROL_DOCUMENT_FIELDS or control.get("status")!="COMPUTED" or not isinstance(control.get("rows"),list):return ["control document schema mismatch"]
+    rows=control["rows"];errors=[]
+    if type(control.get("selected_blocks")) is not int or control["selected_blocks"]!=len(expected_blocks):errors.append("control selected-block count mismatch")
+    if type(control.get("computed_rows")) is not int or control["computed_rows"]!=len(rows):errors.append("control computed-row count mismatch")
+    if type(control.get("threshold")) is not float or not np.isfinite(control["threshold"]):errors.append("control support/threshold mismatch")
+    groups={}
+    for row in rows:
+        if set(row)!=MULTIBLOCK_CONTROL_ROW_FIELDS:errors.append("control row schema mismatch");continue
+        key=(row.get("scenario"),row.get("time_bin"));groups.setdefault(key,[]).append(row)
+    actual={key[1] for key in groups if key[0]=="cleanStatic"}
+    if any(key[0]!="cleanStatic" or type(key[1]) is not int for key in groups) or actual!=set(expected_blocks):errors.append("control block roster mismatch")
+    for bin_id,ctx in expected_blocks.items():
+        block=groups.get(("cleanStatic",bin_id),[])
+        if len(block)!=24:errors.append("control row count mismatch");continue
+        seed=config.get("seed")+bin_id
+        relation=[r for r in block if r.get("kind")=="relation_destruction"]
+        permutation=relation[0].get("parameters",{}).get("permutation") if len(relation)==1 else None
+        if not isinstance(permutation,list) or set(permutation)!=ctx["prns"] or any(type(x) is not int for x in permutation) or len(set(permutation))!=len(permutation) or permutation!=sorted(permutation)[1:]+sorted(permutation)[:1]:errors.append("control relation permutation mismatch");continue
+        expected=expected_control_parameters(seed,permutation,ctx["support_count"],len(config.get("tap_offsets_chips",range(9))),ctx["prn_count"])
+        if [(r.get("kind"),r.get("parameters")) for r in block]!=expected:errors.append("control row parameter roster/multiplicity mismatch")
+        baseline_status=block[0].get("baseline_status");baseline_score=block[0].get("pre_score");baseline_reason=block[0].get("baseline_reason")
+        for row in block:
+            if row.get("seed")!=seed or row.get("threshold")!=control["threshold"] or row.get("support_count")!=ctx["support_count"]:errors.append("control row shared evidence mismatch")
+            if row.get("block_start_s")!=ctx["block_start_s"] or row.get("block_duration_s")!=ctx["block_duration_s"]:errors.append("control block timing mismatch")
+            before,after=row.get("baseline_status"),row.get("perturbed_status")
+            if before not in CONTROL_STATUSES or after not in CONTROL_STATUSES:errors.append("unknown control status");continue
+            if before!=baseline_status or row.get("baseline_reason")!=baseline_reason or row.get("pre_score")!=baseline_score:errors.append("control baseline consistency mismatch")
+            both=before==after=="AVAILABLE"
+            if both:
+                if not all(type(row.get(k)) is float and np.isfinite(row[k]) for k in ("pre_score","post_score","effect_size")) or row["effect_size"]!=row["post_score"]-row["pre_score"]:errors.append("control score/effect mismatch")
+                if type(row.get("pre_alarm")) is not bool or type(row.get("post_alarm")) is not bool or row["pre_alarm"]!=(row["pre_score"]>control["threshold"]) or row["post_alarm"]!=(row["post_score"]>control["threshold"]):errors.append("control alarm mismatch")
+            elif row.get("effect_size") is not None or row.get("pre_alarm") is not None or row.get("post_alarm") is not None:errors.append("unavailable control retained derived evidence")
+    return errors
+
+
+def validate_control_payload(control,config=None,control_prns=None,expected_support_count=None,expected_blocks=None):
+    if expected_blocks is not None and set(control)==MULTIBLOCK_CONTROL_DOCUMENT_FIELDS:
+        return validate_multiblock_control_payload(control,config or {},expected_blocks)
+
     errors=[];rows=control.get("rows")
     if set(control)!=CONTROL_DOCUMENT_FIELDS or control.get("schema")!="gnss-doppler-lab.r2c-full-controls.v2" or not isinstance(rows,list):return ["control document schema mismatch"]
     seed=control.get("seed");expected_seed=(config or {}).get("seed",20260803)
@@ -185,7 +246,7 @@ def _expected_control_gate(gate_name,rows,minimum):
     else:passed=not any(r["post_alarm"] for r in available)
     return {"status":"PASS" if passed else "FAIL","rows":len(selected)}
 
-def validate_control(filename,control,gates,synthetic=False,config=None,thresholds=None,control_prns=None,expected_support_count=None):
+def validate_control(filename,control,gates,synthetic=False,config=None,thresholds=None,control_prns=None,expected_support_count=None,expected_blocks=None):
     errors=[];rows=control.get("rows",[]);status=control.get("status")
     if thresholds is not None and not synthetic:
         full=thresholds.get("detectors",{}).get("Full",{});full_status=full.get("status");q99=full.get("q99")
@@ -203,7 +264,7 @@ def validate_control(filename,control,gates,synthetic=False,config=None,threshol
         return errors
     if synthetic:
         if not CONTROL_FILES[filename]<={r.get("kind") for r in rows}:errors.append(f"missing perturbation: {filename}")
-    else:errors.extend(validate_control_payload(control,config,control_prns,expected_support_count))
+    else:errors.extend(validate_control_payload(control,config,control_prns,expected_support_count,expected_blocks))
     if not synthetic:
         minimum=(config or {}).get("controls",{}).get("alarm_agreement_minimum")
         if not _finite_number(minimum) or not 0<=minimum<=1:errors.append("control alarm agreement threshold invalid");minimum=np.nan
@@ -462,7 +523,7 @@ def verify(artifact:Path,*,repo=ROOT,require_committed=True,allow_synthetic_test
         if not b0_path.is_file() or sha(b0_path)!=b0_provenance.get("sha256"):errors.append("B0 validation wrapper hash mismatch")
     with (artifact/"per_epoch_scores.csv").open() as handle:
         reader=csv.DictReader(handle);rows=list(reader);score_header=reader.fieldnames
-    expected_score_header=(["scenario","availability_time_s","detector","status","score","ll0","ll1","n","k0","k1"] if synthetic else ["scenario","time_bin","availability_time_s","detector","status","reason","score","ll0","ll1","n","k0","k1","epoch_count","prn_count","geometry_valid"])
+    expected_score_header=(["scenario","availability_time_s","detector","status","score","ll0","ll1","n","k0","k1"] if synthetic else ["scenario","time_bin","availability_time_s","detector","status","reason","score","ll0","ll1","n","k0","k1","epoch_count","prn_count","geometry_valid","geometry_mode","offline_oracle_geometry","causal_deployment_ready"])
     if score_header!=expected_score_header:errors.append("per_epoch_scores exact header mismatch")
     key_fields=("scenario","detector") if synthetic else ("scenario","time_bin","detector")
     keys=[tuple(r.get(k) for k in key_fields) for r in rows]
@@ -521,9 +582,10 @@ def verify(artifact:Path,*,repo=ROOT,require_committed=True,allow_synthetic_test
     control_documents={filename:load(artifact/filename) for filename in CONTROL_FILES}
     if any(document!=next(iter(control_documents.values())) for document in control_documents.values()):errors.append("control payload files are not identical")
     control_prns,control_support=(None,None) if synthetic else derive_control_candidate_context(rows,geometry)
-    if not synthetic and any(document.get("rows") for document in control_documents.values()) and (control_prns is None or control_support is None):errors.append("authenticated control candidate context unavailable")
+    control_blocks={} if synthetic else derive_control_candidate_contexts(rows,geometry)
+    if not synthetic and any(document.get("rows") for document in control_documents.values()) and not control_blocks:errors.append("authenticated control candidate context unavailable")
     for filename in CONTROL_FILES:
-        errors.extend(validate_control(filename,control_documents[filename],decision.get("gates",{}),synthetic,load(artifact/"config.json"),thresholds,control_prns,control_support))
+        errors.extend(validate_control(filename,control_documents[filename],decision.get("gates",{}),synthetic,load(artifact/"config.json"),thresholds,control_prns,control_support,control_blocks))
     bootstrap=load(artifact/"bootstrap_comparisons.json")
     comparison_hashes=[x.get("draw_index_sha256") for x in bootstrap.get("comparisons",[]) if x.get("draw_index_sha256")]
     if comparison_hashes:

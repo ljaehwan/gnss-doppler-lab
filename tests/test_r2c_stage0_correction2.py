@@ -59,7 +59,7 @@ def test_partial_geometry_and_frozen_control_fail_closed(monkeypatch):
     assert controls["baseline_status"].startswith("UNAVAILABLE_") and all(r["pre_alarm"] is None and r["post_alarm"] is None for r in controls["rows"])
 
 def test_production_synthetic_guards_and_geometry_wrapper(tmp_path):
-    runner=load_runner();production=ROOT/"artifacts/r2c_gnss_stage0_fix"
+    runner=load_runner();production=ROOT/"artifacts/r2c_gnss_stage0_fix";test_output=tmp_path/"synthetic-output"
     with pytest.raises(ValueError):runner.validate_destination(production,test_mode=True)
     with pytest.raises(ValueError,match="exact scenario roster"):runner.parse_named_specs(["cleanStatic=x"],roster=runner.SCENARIOS)
     scenario=lambda name:{"scenario":name,"derived_time":{},"lineage":{},"event_time_causal_ephemeris_availability":{},"offline_geometry_coverage":{},"los_by_bin":{}}
@@ -68,8 +68,8 @@ def test_production_synthetic_guards_and_geometry_wrapper(tmp_path):
     bad=json.loads(wrapper.read_text());bad["schema"]="wrong";wrapper.write_text(json.dumps(bad))
     with pytest.raises(ValueError,match="schema"):runner.load_geometry_specs([str(wrapper)])
     head=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()
-    command=[sys.executable,str(ROOT/"scripts/run_r2c_gnss_stage0_fix.py"),"--source-commit",head,"--synthetic","--output",str(production)]
-    result=subprocess.run(command,cwd=ROOT,text=True,capture_output=True);assert result.returncode and not production.exists()
+    command=[sys.executable,str(ROOT/"scripts/run_r2c_gnss_stage0_fix.py"),"--source-commit",head,"--synthetic","--output",str(test_output)]
+    result=subprocess.run(command,cwd=ROOT,text=True,capture_output=True);assert result.returncode and not test_output.exists()
 
 def test_boundary_finite_scores_are_never_exposed_or_alarmable(monkeypatch):
     runner=load_runner();provider=runner.TemplateProvider.analytic();taps=np.arange(-.5,.5001,.125);obs={p:np.ones((2,9),complex) for p in range(1,6)};los={p:np.eye(3)[(p-1)%3] for p in obs}
