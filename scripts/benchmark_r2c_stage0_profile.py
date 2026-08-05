@@ -80,7 +80,7 @@ def main():
           if str(int(p)) in los_bins.get(str(int(bin_id)),{}):los[int(p)]=np.asarray(los_bins[str(int(bin_id))][str(int(p))],float)
         tasks.append((observations,los,conditions))
       def score_task(task):
-        observations,los,conditions=task;tick=time.perf_counter();scores,_=runner.score_bin(observations,los,provider,taps,grid,models,config,conditions)
+        observations,los,conditions=task;tick=time.perf_counter();scores,*_=runner.score_bin(observations,los,provider,taps,grid,models,config,conditions)
         return {"seconds":time.perf_counter()-tick,"epochs":sum(map(len,observations.values())),"prns":len(observations),"full_available":scores["Full"] is not None}
       costs=list(runner.ordered_fork_map(tasks,score_task,args.score_workers))
       stage["cleanstatic_score_bin_all_s"]=time.perf_counter()-scoring_started;stage["cleanstatic_score_serial_s"]=sum(c["seconds"] for c in costs);stage["cleanstatic_parallelism"]=stage["cleanstatic_score_serial_s"]/stage["cleanstatic_score_bin_all_s"];stage["cleanstatic_end_to_end_s"]=stage["pre_scoring_total_s"]+stage["cleanstatic_score_bin_all_s"]
