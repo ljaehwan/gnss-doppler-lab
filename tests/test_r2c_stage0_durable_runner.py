@@ -28,8 +28,35 @@ def test_atomic_publish_no_partial_and_no_overwrite(tmp_path):
     mark_partial(staging,"assembling");(staging/"value").write_bytes(b"complete")
     assert not canonical.exists();atomic_publish(staging,canonical)
     assert (canonical/"value").read_bytes()==b"complete"
-    other=tmp_path/".result.other";other.mkdir()
+    other=tmp_path/".result.other";mark_partial(other,"other")
     with pytest.raises(FileExistsError):atomic_publish(other,canonical)
+
+def test_publish_preset_termination_never_commits(tmp_path):
+    import threading
+    staging=tmp_path/".result.pending";canonical=tmp_path/"result";mark_partial(staging,"pending");(staging/"x").write_text("x")
+    event=threading.Event();event.set()
+    with pytest.raises(InterruptedError):atomic_publish(staging,canonical,event)
+    assert not canonical.exists() and (staging/"PARTIAL_NON_AUTHORITATIVE").exists()
+
+def test_destination_creation_race_survives(tmp_path,monkeypatch):
+    import gnss_doppler_lab.r2c_stage0_observer as module
+    staging=tmp_path/".result.race";canonical=tmp_path/"result";mark_partial(staging,"race");(staging/"x").write_text("x")
+    real=module._rename_noreplace
+    def race(source,destination):destination.mkdir();(destination/"owner").write_text("other");return real(source,destination)
+    monkeypatch.setattr(module,"_rename_noreplace",race)
+    with pytest.raises(FileExistsError):atomic_publish(staging,canonical)
+    assert (canonical/"owner").read_text()=="other" and (staging/"PARTIAL_NON_AUTHORITATIVE").exists()
+
+def test_post_rename_parent_fsync_is_warning_not_failure(tmp_path,monkeypatch):
+    import gnss_doppler_lab.r2c_stage0_observer as module
+    staging=tmp_path/".result.fsync";canonical=tmp_path/"result";mark_partial(staging,"ready");(staging/"x").write_text("x")
+    real=module.os.fsync;calls=[]
+    def injected(fd):
+        calls.append(fd)
+        if len(calls)>3:raise OSError(5,"post rename fsync")
+        return real(fd)
+    monkeypatch.setattr(module.os,"fsync",injected);warnings=atomic_publish(staging,canonical)
+    assert canonical.is_dir() and warnings
 
 
 def test_interruption_leaves_non_authoritative_staging(tmp_path):

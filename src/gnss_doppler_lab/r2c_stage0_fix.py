@@ -403,16 +403,16 @@ class CompiledProfilePlan:
 @dataclass
 class ProfileRuntimeCounters:
     bank_evaluations: int = 0
+    unique_winner_events: int = 0
     near_tie_events: int = 0
-    refined_candidate_count: int = 0
-    decomposition_calls: int = 0
-    refinement_elapsed_s: float = 0.
+    scalar_fallback_events: int = 0
+    scalar_fallback_candidates: int = 0
+    scalar_fallback_epochs: int = 0
+    scalar_fallback_lstsq_calls: int = 0
+    scalar_fallback_elapsed_s: float = 0.
 
     def snapshot(self) -> dict[str, int | float]:
-        return {"bank_evaluations":self.bank_evaluations,"near_tie_events":self.near_tie_events,
-                "refined_candidate_count":self.refined_candidate_count,
-                "decomposition_calls":self.decomposition_calls,
-                "refinement_elapsed_s":self.refinement_elapsed_s}
+        return {name:getattr(self,name) for name in self.__dataclass_fields__}
 
 
 def _readonly(value, dtype):
@@ -467,9 +467,12 @@ def compile_profile_plan(provider: TemplateProvider, taps: Sequence[float], dela
     digest = hashlib.sha256()
     for value in (frozen_taps, frozen_grid, frozen_W, frozen_mean, frozen_templates):
         digest.update(value.tobytes(order="C"))
-    provider_digest=hashlib.sha256();provider_digest.update(json.dumps(provider.provenance, sort_keys=True, default=str).encode())
+    provider_digest=hashlib.sha256();provider_digest.update(json.dumps({"mode":"analytic" if provider.values is None else "empirical",
+      "analytic_approximation":provider.analytic_approximation,"paper_comparison_ready":provider.paper_comparison_ready,
+      "provenance":provider.provenance}, sort_keys=True, default=str).encode())
     provider_digest.update(np.asarray(provider.offsets_chips,np.float64).tobytes(order="C"))
     if provider.values is not None:provider_digest.update(np.asarray(provider.values,np.complex128).tobytes(order="C"))
+    provider_digest.update(frozen_templates.tobytes(order="C"))
     provider_binding=provider_digest.hexdigest();digest.update(provider_binding.encode())
     return CompiledProfilePlan(frozen_taps, frozen_grid, frozen_W, frozen_mean, frozen_templates,
                                h0, h1, h0_bases, h1_bases,h0_bank,h1_bank,h0_valid,h1_valid,int(row_chunk), int(candidate_chunk),
@@ -532,9 +535,12 @@ def joint_profile_glrt(observations: Mapping[int, np.ndarray], los: Mapping[int,
     if profile_plan is None and not scalar_reference:
         profile_plan = compile_profile_plan(provider, taps, grid, whitener)
     if profile_plan is not None:
-        provider_digest=hashlib.sha256();provider_digest.update(json.dumps(provider.provenance,sort_keys=True,default=str).encode())
+        provider_digest=hashlib.sha256();provider_digest.update(json.dumps({"mode":"analytic" if provider.values is None else "empirical",
+          "analytic_approximation":provider.analytic_approximation,"paper_comparison_ready":provider.paper_comparison_ready,
+          "provenance":provider.provenance},sort_keys=True,default=str).encode())
         provider_digest.update(np.asarray(provider.offsets_chips,np.float64).tobytes(order="C"))
         if provider.values is not None:provider_digest.update(np.asarray(provider.values,np.complex128).tobytes(order="C"))
+        provider_digest.update(np.asarray([provider.evaluate(taps-float(delay)) for delay in grid],np.complex128).tobytes(order="C"))
         if (not np.array_equal(profile_plan.taps, taps) or not np.array_equal(profile_plan.grid, grid) or
                 not np.array_equal(profile_plan.whitener, W) or not np.array_equal(profile_plan.mean, mu) or
                 profile_plan.provider_binding != provider_digest.hexdigest()):
@@ -568,9 +574,12 @@ def joint_profile_glrt(observations: Mapping[int, np.ndarray], los: Mapping[int,
             tolerance = max(1e-12, 1e-10*max(total_energy, 1.))
             indices = np.flatnonzero(values <= minimum+tolerance)
             if len(indices) == 1:
+                profile_plan.counters.unique_winner_events += 1
                 return float(values[int(indices[0])]), int(indices[0])
             profile_plan.counters.near_tie_events += 1
-            profile_plan.counters.refined_candidate_count += int(len(indices))
+            profile_plan.counters.scalar_fallback_events += 1
+            profile_plan.counters.scalar_fallback_candidates += int(len(indices))
+            profile_plan.counters.scalar_fallback_epochs += int(len(indices)*len(arrays[p]))
             started_refinement=time.perf_counter();refined = []
             for index in indices:
                 candidate = candidates[int(index)]
@@ -580,22 +589,11 @@ def joint_profile_glrt(observations: Mapping[int, np.ndarray], los: Mapping[int,
                     da, ds = candidate
                 else:
                     da, ds = float(candidate), None
-                columns=[provider.evaluate(taps-da)]
-                if ds is not None:columns.append(provider.evaluate(taps-da-ds))
-                design=np.column_stack(columns);wd=W@design;right=((arrays[p]-mu)@W.T).T
-                left,singular,right_vectors=np.linalg.svd(wd,full_matrices=False)
-                rank=int(np.sum(singular>singular[0]*np.finfo(float).eps*max(wd.shape))) if len(singular) and singular[0]>0 else 0
-                profile_plan.counters.decomposition_calls += 1
-                if rank<len(columns) or (len(singular)>1 and singular[-1]<=singular[0]*1e-10):
-                    exact=np.inf
-                else:
-                    exact=0.
-                    for epoch in range(len(arrays[p])):
-                        amplitude=right_vectors.conj().T@((left.conj().T@right[:,epoch])/singular)
-                        residual=W@(arrays[p][epoch]-design@amplitude-mu)
-                        exact += float(np.vdot(residual,residual).real)
+                before=profile_plan.counters.scalar_fallback_lstsq_calls
+                exact=prn_rss(p,da,ds)
+                profile_plan.counters.scalar_fallback_lstsq_calls=before+len(arrays[p])
                 refined.append((exact, int(index)))
-            profile_plan.counters.refinement_elapsed_s += time.perf_counter()-started_refinement
+            profile_plan.counters.scalar_fallback_elapsed_s += time.perf_counter()-started_refinement
             return min(refined,key=lambda item:(item[0],item[1]))
 
         def vector_prn_min(p, second_delay=None):

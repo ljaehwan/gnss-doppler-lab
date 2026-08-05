@@ -90,9 +90,7 @@ def _assert_parent_differential(epochs, row_chunk, candidate_chunk):
                                     whitener=w, profile_plan=plan)
         for name in ("hypothesis", "n", "k", "epoch_count", "prn_count", "valid",
                      "boundary", "converged", "reason", "delays_chips"):
-            if name=="delays_chips" and hypothesis=="H1-independent":
-                assert np.abs(getattr(actual,name))==pytest.approx(np.abs(getattr(expected,name)),abs=1e-12)
-            else:assert getattr(actual, name) == getattr(expected, name)
+            assert getattr(actual, name) == getattr(expected, name)
         for name in ("rss", "log_likelihood", "bic", "score", "null_log_likelihood"):
             assert getattr(actual, name) == pytest.approx(getattr(expected, name), rel=1e-10, abs=1e-8)
 
@@ -121,21 +119,22 @@ def test_hot_path_decomposition_count_is_independent_of_epochs(monkeypatch):
     assert compile_calls <= 81
 
 
-def test_lstsq_evaluation_calls_are_epoch_independent(monkeypatch):
+def test_lstsq_calls_are_zero_for_unique_and_exact_for_ties(monkeypatch):
     provider=TemplateProvider.analytic();w=whitener(dense=True,mean=True)
     plan=compile_profile_plan(provider,TAPS,GRID,w);row=observations((1,),seed=812)[1]
-    real_lstsq=np.linalg.lstsq;real_svd=np.linalg.svd;counts=[];decompositions=[]
+    real_lstsq=np.linalg.lstsq;counts=[]
     for epochs in (1,2,17,100,4096):
-        calls=[];svd_calls=[]
+        calls=[]
         monkeypatch.setattr(np.linalg,"lstsq",lambda *a,**k:(calls.append(np.shape(a[1])),real_lstsq(*a,**k))[1])
-        monkeypatch.setattr(np.linalg,"svd",lambda *a,**k:(svd_calls.append(np.shape(a[0])),real_svd(*a,**k))[1])
         joint_profile_glrt({1:np.repeat(row,epochs,axis=0)}, {}, provider,TAPS,GRID,
                            hypothesis="H1-independent",whitener=w,profile_plan=plan)
-        counts.append(len(calls));decompositions.append(len(svd_calls))
-    assert len(set(counts))==1
-    assert counts[0]==0
-    assert len(set(decompositions))==1 and decompositions[0]<=len(plan.h1_candidates)
-    assert plan.counters.decomposition_calls == sum(decompositions)
+        counts.append(len(calls))
+    assert counts==[2,4,34,200,8192]
+    assert plan.counters.scalar_fallback_lstsq_calls==sum(counts)
+    unique_plan=compile_profile_plan(provider,TAPS,GRID,w);calls=[]
+    monkeypatch.setattr(np.linalg,"lstsq",lambda *a,**k:(calls.append(1),real_lstsq(*a,**k))[1])
+    joint_profile_glrt({1:observations((17,),seed=999)[1]}, {},provider,TAPS,GRID,hypothesis="H0",whitener=w,profile_plan=unique_plan)
+    assert calls==[] and unique_plan.counters.unique_winner_events==1
 
 
 def test_jointfit_likelihood_and_bic_identities():

@@ -361,24 +361,32 @@ def run_synthetic(output,config,source_commit):
 
 def run_production(output,config,source_commit,input_specs,geometry_specs,b0_validation_path,observer=None):
     inputs={k:Path(v) for k,v in parse_named_specs(input_specs,roster=SCENARIOS).items()}
-    data={name:load_all_epochs(path) for name,path in inputs.items()};provider=TemplateProvider.analytic()
+    input_reports={}
+    for name,path in inputs.items():
+        digest=sha(path)
+        with np.load(path,allow_pickle=False) as z:
+            if not {"complex_iq","time_s","prn"}<=set(z.files):raise ValueError(f"{name} input schema incomplete")
+            rows=len(z["time_s"]);bins_count=len(np.unique(np.floor(np.asarray(z["time_s"],float)/.5).astype(int)))
+        input_reports[name]={"source_sha256":digest,"row_count":rows,"bin_count":bins_count}
+    provider=TemplateProvider.analytic()
     taps=np.asarray(config["tap_offsets_chips"]);grid=np.asarray(config["delay_grid_chips"])
-    models=fit_frozen_models(data["cleanStatic"],config,provider,taps,grid,require_gpu=config["neural"]["require_gpu"])
+    clean_data=load_all_epochs(inputs["cleanStatic"])
+    models=fit_frozen_models(clean_data,config,provider,taps,grid,require_gpu=config["neural"]["require_gpu"])
     geometry,geometry_wrapper=load_geometry_specs(geometry_specs)
     if set(geometry)!=set(SCENARIOS):raise ValueError("geometry roster mismatch")
     wrapper_doc=load(geometry_wrapper);expected_geometry_hash=hashlib.sha256(json.dumps(config["geometry"],sort_keys=True,separators=(",",":")).encode()).hexdigest()
     if wrapper_doc.get("geometry_config",{}).get("sha256")!=expected_geometry_hash or wrapper_doc.get("geometry_config",{}).get("values")!=config["geometry"]:raise ValueError("geometry config binding mismatch")
-    for name,item in geometry.items():
-        validate_geometry_lineage(item,inputs[name],data[name]["source_sha256"],name,data[name]["row_count"])
+    for name,item in geometry.items():validate_geometry_lineage(item,inputs[name],input_reports[name]["source_sha256"],name,input_reports[name]["row_count"])
     b0=load_b0_validation(Path(b0_validation_path),config);b0_events={}
     import pandas as pd
     canonical_b0=set(config["b0"]["saved_score_sha256"])
     for name,item in b0["scenarios"].items():
         if name in canonical_b0 and item.get("event_rows") and item.get("status")=="AVAILABLE_SAVED_NATIVE_SCORE_REPLAY_WITH_NODE_LINEAGE_GAP":b0_events[name]=pd.DataFrame(item["event_rows"])
     score_rows=[];event_rows=[];control_candidates=[]
-    scenario_bins={name:len(np.unique(dataset["bin"])) for name,dataset in data.items()}
+    scenario_bins={name:input_reports[name]["bin_count"] for name in SCENARIOS}
     total_bins=sum(scenario_bins.values());completed_bins=0;completed_scenarios=0;recent=time.monotonic()
-    for scenario,dataset in data.items():
+    for scenario in SCENARIOS:
+        dataset=clean_data if scenario=="cleanStatic" else load_all_epochs(inputs[scenario])
         scenario_completed=0
         if observer:observer.progress(stage="preprocessing",scenario=scenario,total_scenarios=len(SCENARIOS),completed_scenarios=completed_scenarios,
           scenario_total_bins=scenario_bins[scenario],scenario_completed_bins=0,global_total_bins=total_bins,global_completed_bins=completed_bins,current_bin=None,recent_bins_s=0.,eta_s=None)
@@ -424,6 +432,8 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
                   global_completed_bins=completed_bins,current_bin=int(bin_id),recent_bins_s=rate,eta_s=(total_bins-completed_bins)/rate)
                 if observer.termination.is_set():raise InterruptedError("SIGTERM requested at safe bin boundary")
         completed_scenarios+=1
+        del raw,x,xe,dataset
+        if scenario=="cleanStatic":clean_data=None
     clean=[r for r in score_rows if r["scenario"]=="cleanStatic" and 320<=r["availability_time_s"]<=400 and r["score"]!=""]
     detector_thresholds={}
     for detector in ALL_DETECTORS:
@@ -433,7 +443,7 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
     thresholds={"schema":"gnss-doppler-lab.r2c-thresholds.v2",**full_threshold,"detectors":detector_thresholds,"method":"higher","comparison":"strict_greater"}
     metric_rows=[]
     metric_fields=["scenario","detector","threshold","status","threshold_value","normal_fpr","auroc","pr_auc","normalized_pauc_fpr_lte_0.05","attack_detection_rate","sustained_detection_rate","first_sustained_delay_s","persistent_alarm_ratio","causal_time_field"]
-    for scenario in data:
+    for scenario in SCENARIOS:
         onset=config.get("attacks",{}).get("onset_s",{}).get(scenario)
         for detector in ALL_DETECTORS:
             rows=[r for r in score_rows if r["scenario"]==scenario and r["detector"]==detector and r["score"]!=""]
@@ -484,7 +494,7 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
             valid_control=run_full_controls(full_scorer,obs,los,full_threshold["q99"],provider,taps,seed=config["seed"]);break
     control=valid_control or {"status":"NOT_EVALUATED","threshold":full_threshold["q99"],"rows":[]}
     gates={}
-    input_integrity=all(d["row_count"]>0 and len(d["source_sha256"])==64 and geometry[n]["lineage"].get("source_iq_binding_status")=="HASH_BOUND" for n,d in data.items())
+    input_integrity=all(d["row_count"]>0 and len(d["source_sha256"])==64 and geometry[n]["lineage"].get("source_iq_binding_status")=="HASH_BOUND" for n,d in input_reports.items())
     gates["complex_provenance"]={"status":"PASS" if input_integrity else "FAIL","derived_from":"finite rows and source hashes"}
     coverage=[];time_status=[]
     for name in config["geometry"]["required_scenarios"]:
@@ -519,14 +529,14 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
     provenance={"source_commit":source_commit,"source_bundle":source_bundle(),"preserved_artifact_tree":PRESERVED_TREE,"synthetic_test_mode":False,
       "canonical_config":{"path":"configs/r2c_gnss_stage0_fix.json","sha256":sha(ROOT/"configs/r2c_gnss_stage0_fix.json"),"schema":config["schema"]},
       "b0_validation":{"path":str(Path(b0_validation_path).resolve()),"sha256":sha(Path(b0_validation_path))},
-      "external_inputs":[{"scenario":name,"selected":{"path":str(inputs[name].resolve()),"sha256":data[name]["source_sha256"]},
+      "external_inputs":[{"scenario":name,"selected":{"path":str(inputs[name].resolve()),"sha256":input_reports[name]["source_sha256"]},
         "geometry":{"path":str((geometry_wrapper or Path(geometry_named[name])).resolve()),"sha256":sha(geometry_wrapper or Path(geometry_named[name]))},
         "b0":{"status":b0["scenarios"][name]["status"],"validation_path":str(Path(b0_validation_path).resolve()),"validation_sha256":sha(Path(b0_validation_path))},
         "receiver_source_iq_sha256":geometry[name].get("lineage",{}).get("receiver_source_iq_sha256"),
         "export_source_iq_sha256":geometry[name].get("lineage",{}).get("selected",{}).get("source_iq_sha256")}
         for name in SCENARIOS]}
     documents={name:{} for name in TOP_LEVEL_FILES if name.endswith(".json") and name!="hashes.json"}
-    documents.update({"config.json":(ROOT/"configs/r2c_gnss_stage0_fix.json").read_bytes(),"provenance.json":provenance,"input_validity.json":{"datasets":{n:{"rows":d["row_count"]} for n,d in data.items()}},
+    documents.update({"config.json":(ROOT/"configs/r2c_gnss_stage0_fix.json").read_bytes(),"provenance.json":provenance,"input_validity.json":{"datasets":{n:{"rows":d["row_count"]} for n,d in input_reports.items()}},
       "time_geometry_validation.json":wrapper_doc,"b0_interface_validation.json":{**b0,"core_blocked":False},
       "training_summary.json":{"models":{k:v.serialize() for k,v in models.items() if hasattr(v,"serialize")}},"thresholds.json":thresholds,
       "gain_invariance.json":control,"phase_invariance.json":control,"noise_control.json":control,"multipath_control.json":control,
@@ -572,12 +582,13 @@ def main():
         # Assembly expects to create its destination; retain the marker in the staging parent meanwhile.
         assembly=staging/"complete";result=run_production(assembly,config,args.source_commit,args.input,args.geometry,args.b0_validation,observer)
         if observer.termination.is_set():raise InterruptedError("SIGTERM requested before seal")
-        (staging/"PARTIAL_NON_AUTHORITATIVE").unlink();os.rename(assembly,staging/"published")
+        os.rename(assembly,staging/"published")
         # Flatten the completed assembly into the exact staging path used for atomic publication.
-        completed=staging/"published";holding=output.parent/f".{output.name}.{attempt_id}.complete";os.rename(completed,holding)
-        staging.rmdir()
+        completed=staging/"published";holding=output.parent/f".{output.name}.{attempt_id}.complete";os.rename(completed,holding);mark_partial(holding,"ready_to_publish")
+        (staging/"PARTIAL_NON_AUTHORITATIVE").unlink();staging.rmdir()
         if observer.termination.is_set():mark_partial(holding,"sigterm_before_publish");raise InterruptedError("SIGTERM requested before publish")
-        atomic_publish(holding,output);published=True
+        warnings=atomic_publish(holding,output,observer.termination);published=True
+        for warning in warnings:print(f"warning: {warning}",file=sys.stderr)
         try:observer.stop("complete")
         except Exception as exc:print(f"warning: canonical publish succeeded but terminal observer write failed: {exc}",file=sys.stderr)
     except InterruptedError:

@@ -6,6 +6,8 @@ import json
 import os
 from pathlib import Path
 import signal
+import ctypes
+import errno
 import threading
 import time
 from typing import Mapping
@@ -110,11 +112,19 @@ def mark_partial(staging: Path, reason: str) -> None:
     atomic_json(staging/"PARTIAL_NON_AUTHORITATIVE", {"reason":reason,"pid":os.getpid(),"time":time.time()})
 
 
-def atomic_publish(staging: Path, canonical: Path) -> None:
-    if canonical.exists(): raise FileExistsError("canonical output already exists")
+def _rename_noreplace(source: Path, destination: Path) -> None:
+    libc=ctypes.CDLL(None,use_errno=True);renameat2=getattr(libc,"renameat2",None)
+    if renameat2 is None:raise OSError(errno.ENOTSUP,"renameat2(RENAME_NOREPLACE) unavailable; refusing unsafe publish")
+    renameat2.argtypes=(ctypes.c_int,ctypes.c_char_p,ctypes.c_int,ctypes.c_char_p,ctypes.c_uint)
+    if renameat2(-100,os.fsencode(source),-100,os.fsencode(destination),1)!=0:
+        error=ctypes.get_errno()
+        if error==errno.EEXIST:raise FileExistsError(error,"canonical output already exists",destination)
+        raise OSError(error,os.strerror(error),destination)
+
+def atomic_publish(staging: Path, canonical: Path, termination: threading.Event | None=None) -> list[str]:
     if staging.parent != canonical.parent: raise ValueError("staging and canonical output must share a filesystem directory")
     marker=staging/"PARTIAL_NON_AUTHORITATIVE"
-    if marker.exists(): marker.unlink()
+    if not marker.is_file():raise ValueError("staging lacks partial marker")
     for root, directories, files in os.walk(staging):
         for name in files:
             descriptor=os.open(Path(root)/name,os.O_RDONLY)
@@ -123,7 +133,23 @@ def atomic_publish(staging: Path, canonical: Path) -> None:
         descriptor=os.open(root,os.O_RDONLY)
         try: os.fsync(descriptor)
         finally: os.close(descriptor)
-    os.rename(staging,canonical)
-    descriptor=os.open(canonical.parent,os.O_RDONLY)
-    try: os.fsync(descriptor)
-    finally: os.close(descriptor)
+    blocked={signal.SIGTERM,signal.SIGINT};old_mask=None;published=False
+    try:
+        if hasattr(signal,"pthread_sigmask"):old_mask=signal.pthread_sigmask(signal.SIG_BLOCK,blocked)
+        pending=signal.sigpending() if hasattr(signal,"sigpending") else set()
+        if (termination is not None and termination.is_set()) or pending&blocked:raise InterruptedError("termination pending before publish")
+        marker.unlink();_rename_noreplace(staging,canonical);published=True
+    except Exception:
+        if not published:
+            staging.mkdir(parents=True,exist_ok=True)
+            if not marker.exists():atomic_json(marker,{"reason":"publish_failed","pid":os.getpid(),"time":time.time()})
+        raise
+    finally:
+        if old_mask is not None:signal.pthread_sigmask(signal.SIG_SETMASK,old_mask)
+    warnings=[]
+    try:
+        descriptor=os.open(canonical.parent,os.O_RDONLY)
+        try:os.fsync(descriptor)
+        finally:os.close(descriptor)
+    except OSError as exc:warnings.append(f"post_publish_parent_fsync_failed:{exc}")
+    return warnings
