@@ -272,19 +272,18 @@ def default_score_workers():
 
 
 def default_score_backend():
-    """Use threads by default: fork duplicates the CPU inference model per worker."""
-    backend=os.environ.get("R2C_STAGE0_SCORE_BACKEND","thread").strip().lower()
+    """Use forked CPU workers by default; threaded mode is a memory-constrained fallback."""
+    backend=os.environ.get("R2C_STAGE0_SCORE_BACKEND","fork").strip().lower()
     if backend not in {"thread","fork"}: raise ValueError("R2C_STAGE0_SCORE_BACKEND must be thread or fork")
     return backend
 
 
 def ordered_score_map(items, worker, workers, backend=None):
-    """Deterministic score map with an explicit memory-safe production backend.
+    """Deterministic score map with an explicit, benchmark-bound production backend.
 
-    The work is numerical NumPy/SciPy/Torch CPU inference that releases the GIL in
-    its kernels.  Threads therefore share frozen model and epoch memory, unlike
-    fork where each scorer dirties copy-on-write pages and can be OOM-killed.
-    Fork remains an opt-in diagnostic backend and has identical ordered results.
+    Fork uses independent CPU processes to scale the Python-heavy profile loop;
+    thread mode shares frozen model/epoch memory for constrained machines.  Both
+    preserve score order and return the identical per-bin numerical contract.
     """
     backend=default_score_backend() if backend is None else backend
     if backend=="thread":

@@ -54,6 +54,10 @@ def validate_go(path: Path, source_sha: str, config:Path,inputs,geometry:Path,b0
     expected={"python":platform.python_version(),"numpy":np.__version__,"scipy":scipy.__version__,"gpu":current_gpu,
       "ram_bytes":os.sysconf("SC_PAGE_SIZE")*os.sysconf("SC_PHYS_PAGES"),"threads":{key:os.environ.get(key) for key in ("OPENBLAS_NUM_THREADS","OMP_NUM_THREADS","MKL_NUM_THREADS")}}
     if any(identity.get(key)!=item for key,item in expected.items()):raise ValueError("benchmark software/hardware identity mismatch")
+    execution=value.get("execution",{})
+    expected_backend=os.environ.get("R2C_STAGE0_SCORE_BACKEND","fork").strip().lower()
+    expected_workers=int(os.environ.get("R2C_STAGE0_SCORE_WORKERS",min(os.cpu_count() or 1,16)))
+    if execution!={"score_backend":expected_backend,"score_workers":expected_workers}:raise ValueError("benchmark execution backend/workers mismatch")
     projection=value.get("projection",{});formula=value.get("formula",{});counters=value.get("runtime_counters",{});gates=value.get("gates",{})
     numeric=list(counters.values())
     if not numeric or any(not isinstance(x,(int,float)) or not np.isfinite(x) or x<0 for x in numeric):raise ValueError("benchmark counters malformed")
@@ -106,6 +110,15 @@ def supervise(command, attempt_dir: Path, *, stale_s=45., initial_heartbeat_s=45
             time.sleep(poll_s)
         code=int(process.returncode)
     finally:
+        # If the runner is OOM-killed, its forked score children can otherwise be
+        # re-parented and retain GBs of memory.  The worker owns a new session, so
+        # reap the entire process group on every terminal path.
+        if process is not None:
+            try: os.killpg(process.pid,signal.SIGTERM)
+            except ProcessLookupError: pass
+            time.sleep(.2)
+            try: os.killpg(process.pid,signal.SIGKILL)
+            except ProcessLookupError: pass
         signal.signal(signal.SIGTERM,old_term);signal.signal(signal.SIGINT,old_int);stdout.close();stderr.close()
     atomic_json(attempt_dir/"supervisor.json",{"status":"FINISHED","finished":time.time(),"exit_code":code,
                                                "sigterm_forwarded":forwarded,"auto_retries":0})
