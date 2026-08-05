@@ -10,7 +10,7 @@ from gnss_doppler_lab.r2c_stage0_artifact import (FIX_SOURCE_FILES,PRESERVED_TRE
  TOP_LEVEL_FILES,expected_hash_keys)
 REQUIRED_DETECTORS={"A1","A2","A3","A4","Full","Neural-with-energy","Power-only"}
 ALL_DETECTORS={"B0-native","A1","A2","A3","A4","Full","Neural-with-energy","Power-only","Noise-floor-only"}
-SCENARIOS={"cleanStatic","cleanDynamic","DS1","DS2","DS3","DS7","DS8"}
+SCENARIO_ORDER=("cleanStatic","cleanDynamic","DS1","DS2","DS3","DS7","DS8");SCENARIOS=set(SCENARIO_ORDER)
 CONTROL_FILES={"gain_invariance.json":{"gain","slow_agc"},"phase_invariance.json":{"global_phase"},
  "noise_control.json":{"awgn","cn0_degradation","matched_power_noise","quantization"},
  "multipath_control.json":{"non_shared_multipath"},"second_source_injection.json":{"second_source_injection"},
@@ -36,9 +36,12 @@ def external_recompute(artifact,provenance,source,repo):
         try:
             external=provenance["external_inputs"]
             command=[sys.executable,str(worktree/"scripts/run_r2c_gnss_stage0_fix.py"),"--config",str(worktree/"configs/r2c_gnss_stage0_fix.json"),"--output",str(output),"--source-commit",source,"--verification-recompute"]
-            for item in sorted(external,key=lambda x:x["scenario"]):command += ["--input",f'{item["scenario"]}={item["selected"]["path"]}']
+            by_scenario={item["scenario"]:item for item in external}
+            for name in SCENARIO_ORDER:
+                item=by_scenario[name];command += ["--input",f'{name}={item["selected"]["path"]}']
             command += ["--geometry",external[0]["geometry"]["path"],"--b0-validation",provenance["b0_validation"]["path"]]
-            env={**os.environ,"R2C_VERIFIER_RECOMPUTE":"1","PYTHONHASHSEED":str(load(worktree/"configs/r2c_gnss_stage0_fix.json")["seed"])}
+            env={**os.environ,"R2C_VERIFIER_RECOMPUTE":"1","R2C_ATTEMPT_ID":"verifier-recompute",
+                 "R2C_ATTEMPT_DIR":str(base/"verifier-runtime"),"PYTHONHASHSEED":str(load(worktree/"configs/r2c_gnss_stage0_fix.json")["seed"])}
             subprocess.run(command,cwd=worktree,env=env,check=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             excluded={"hashes.json","verification.json"};mismatches=[]
             expected={str(p.relative_to(artifact)) for p in artifact.rglob("*") if p.is_file() and p.name not in excluded}

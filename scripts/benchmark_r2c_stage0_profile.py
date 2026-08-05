@@ -1,52 +1,103 @@
 #!/usr/bin/env python3
-"""CleanStatic-only scale gate; never reads or scores attack scenarios."""
+"""Production-shape cleanStatic benchmark; attack inputs are metadata-counted only."""
 from __future__ import annotations
-import argparse, hashlib, json, os, platform, resource, subprocess, sys, time
+import argparse,contextlib,hashlib,importlib.util,io,json,os,platform,random,resource,subprocess,sys,time
 from pathlib import Path
 import numpy as np
+import scipy
 
-ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/"src"))
+os.environ.setdefault("OPENBLAS_NUM_THREADS","1");os.environ.setdefault("OMP_NUM_THREADS","1");os.environ.setdefault("MKL_NUM_THREADS","1")
+ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/"src"));sys.path.insert(0,str(ROOT/"scripts"))
 from gnss_doppler_lab.r2c_stage0_fix import ComplexWhitener,TemplateProvider,compile_profile_plan,joint_profile_glrt
 from supervise_r2c_stage0 import hardware_key
+SCENARIOS=("cleanStatic","cleanDynamic","DS1","DS2","DS3","DS7","DS8")
 
 def sha(path):
-    h=hashlib.sha256();h.update(path.read_bytes());return h.hexdigest()
-def timed(fn,repeats=3):
-    values=[]
-    for _ in range(repeats):start=time.perf_counter();fn();values.append(time.perf_counter()-start)
-    return min(values)
+    h=hashlib.sha256()
+    with Path(path).open("rb") as stream:
+        for block in iter(lambda:stream.read(1<<20),b""):h.update(block)
+    return h.hexdigest()
+def load_runner():
+    path=ROOT/"scripts/run_r2c_gnss_stage0_fix.py";spec=importlib.util.spec_from_file_location("r2c_benchmark_runner",path)
+    module=importlib.util.module_from_spec(spec);sys.modules[spec.name]=module;spec.loader.exec_module(module);return module
+def specs(values):
+    result=dict(item.split("=",1) for item in values)
+    if tuple(result)!=SCENARIOS:raise ValueError(f"inputs must be in exact canonical order {SCENARIOS}")
+    return {name:Path(value) for name,value in result.items()}
+def histogram(path):
+    with np.load(path,allow_pickle=False) as z:
+        time_s=np.asarray(z["time_s"],float);prn=np.asarray(z["prn"],int)
+    bins=np.floor(time_s/.5).astype(np.int64);records=[]
+    for bin_id in np.unique(bins):
+        selected=bins==bin_id;ps=prn[selected];counts=[int(np.sum(ps==p)) for p in np.unique(ps)]
+        records.append((int(bin_id),int(selected.sum()),int(len(counts)),counts))
+    digest=hashlib.sha256(json.dumps(records,separators=(",",":")).encode()).hexdigest()
+    return {"rows":len(time_s),"bins":len(records),"prns":len(np.unique(prn)),"workload_digest":digest,
+            "bin_records":records,"epochs_per_prn":{"min":min(min(x[3]) for x in records),"max":max(max(x[3]) for x in records)}}
+def percentile(values,q):return float(np.percentile(np.asarray(values,float),q))
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument("--clean",type=Path,required=True,help="canonical cleanStatic selected NPZ only")
-    ap.add_argument("--config",type=Path,default=ROOT/"configs/r2c_gnss_stage0_fix.json");ap.add_argument("--output",type=Path,required=True)
-    a=ap.parse_args();config=json.loads(a.config.read_text());
-    with np.load(a.clean,allow_pickle=False) as z:
-        iq=np.asarray(z["complex_iq"],float); y=iq[...,0]+1j*iq[...,1];prn=np.asarray(z["prn"],int)
-        bins=np.asarray(z["time_s"],float)//.5
+    parser=argparse.ArgumentParser();parser.add_argument("--input",action="append",required=True)
+    parser.add_argument("--geometry",type=Path,required=True);parser.add_argument("--b0-validation",type=Path,required=True)
+    parser.add_argument("--config",type=Path,default=ROOT/"configs/r2c_gnss_stage0_fix.json");parser.add_argument("--output",type=Path,required=True)
+    args=parser.parse_args();inputs=specs(args.input);config=json.loads(args.config.read_text());runner=load_runner()
+    geometry_doc=json.loads(args.geometry.read_text());b0_doc=json.loads(args.b0_validation.read_text())
+    if set(geometry_doc.get("scenarios",{}))!=set(SCENARIOS) or set(b0_doc.get("scenarios",{}))!=set(SCENARIOS):raise ValueError("wrapper roster mismatch")
+    workloads={name:histogram(path) for name,path in inputs.items()}
+    input_records={name:{"path":str(path.resolve()),"sha256":sha(path),**{k:v for k,v in workloads[name].items() if k!="bin_records"}} for name,path in inputs.items()}
+    stage={};started=time.perf_counter();clean=runner.load_all_epochs(inputs["cleanStatic"]);stage["load_cleanstatic_s"]=time.perf_counter()-started
     provider=TemplateProvider.analytic();taps=np.asarray(config["tap_offsets_chips"]);grid=np.asarray(config["delay_grid_chips"])
+    started=time.perf_counter();raw=runner.h0_residuals(clean["y"],provider,taps,grid,chunk_rows=config["epoch_policy"]["chunk_rows"]);stage["h0_residual_s"]=time.perf_counter()-started
+    started=time.perf_counter();models=runner.fit_frozen_models(clean,config,provider,taps,grid,require_gpu=config["neural"]["require_gpu"],raw_residuals=raw);stage["frozen_model_fit_s"]=time.perf_counter()-started
+    started=time.perf_counter();x=runner.inference_conditions(clean,raw,models["cn0_imputation"],False);xe=runner.inference_conditions(clean,raw,models["cn0_imputation"],True);stage["inference_conditions_s"]=time.perf_counter()-started
+    stage["pre_scoring_total_s"]=stage["load_cleanstatic_s"]+stage["h0_residual_s"]+stage["frozen_model_fit_s"]+stage["inference_conditions_s"]
+    geometry=geometry_doc["scenarios"]["cleanStatic"];causal=geometry.get("event_time_causal_ephemeris_availability",{}).get("status")=="PASS"
+    los_bins=runner.causal_core_los(geometry) if causal else {};bins=np.unique(clean["bin"]);costs=[];scoring_started=time.perf_counter()
+    for bin_id in bins:
+        indices=np.flatnonzero(clean["bin"]==bin_id);observations={};conditions={};los={}
+        for p in sorted(np.unique(clean["prn"][indices])):
+            chosen=indices[clean["prn"][indices]==p];observations[int(p)]=clean["y"][chosen];conditions[int(p)]=(x[chosen],xe[chosen])
+            if str(int(p)) in los_bins.get(str(int(bin_id)),{}):los[int(p)]=np.asarray(los_bins[str(int(bin_id))][str(int(p))],float)
+        tick=time.perf_counter()
+        # Operational geometry-free path: score_bin still exercises H0, per-PRN and A4; shared fits remain unavailable.
+        runner.score_bin(observations,los,provider,taps,grid,models,config,conditions)
+        costs.append({"seconds":time.perf_counter()-tick,"epochs":sum(map(len,observations.values())),"prns":len(observations)})
+    stage["cleanstatic_score_bin_all_s"]=time.perf_counter()-scoring_started;stage["cleanstatic_end_to_end_s"]=stage["pre_scoring_total_s"]+stage["cleanstatic_score_bin_all_s"]
+    design=np.asarray([[1,c["epochs"],c["prns"]] for c in costs],float);target=np.asarray([c["seconds"] for c in costs]);coef=np.linalg.lstsq(design,target,rcond=None)[0]
+    residual=target-design@coef;residual_p95=max(0.,percentile(residual,95));projected={}
+    for name,workload in workloads.items():
+        estimates=[max(0.,float(np.dot([1,row[1],row[2]],coef))+residual_p95) for row in workload["bin_records"]]
+        projected[name]={"seconds":sum(estimates),"bins":len(estimates)}
+    all_projected=sum(item["seconds"] for item in projected.values());projected_p95=all_projected+stage["pre_scoring_total_s"]
+    # Warmed, randomized/interleaved paired kernel diagnostics; relative speedups are diagnostic only.
     w=ComplexWhitener(shrinkage=0);w.mean=np.zeros(9,complex);w.covariance=np.eye(9);w.inverse_sqrt=np.eye(9);w.pseudo_covariance=np.zeros((9,9),complex);w.diagnostics={}
-    plan=compile_profile_plan(provider,taps,grid,w,row_chunk=config["epoch_policy"]["chunk_rows"])
-    sizes=[1,2,3,4,17,min(4096,len(y))]; rows=[]
-    for size in sizes:
-        obs={1:y[:size]};scalar=timed(lambda:joint_profile_glrt(obs,{},provider,taps,grid,hypothesis="H1-independent",whitener=w,scalar_reference=True),1)
-        vector=timed(lambda:joint_profile_glrt(obs,{},provider,taps,grid,hypothesis="H1-independent",whitener=w,profile_plan=plan))
-        rows.append({"epochs":size,"scalar_s":scalar,"vector_s":vector,"speedup":scalar/max(vector,1e-12)})
-    large=rows[-1];epochs_s=large["epochs"]/large["vector_s"]
-    clean_projection=len(y)/epochs_s; all_rows=sum(config.get("input_contract",{}).get("known_row_counts",[len(y)*7]))
-    all_projection=all_rows/epochs_s; upper=all_projection*1.25
-    median=float(np.median([x["speedup"] for x in rows]));worst_small=min(x["speedup"] for x in rows if x["epochs"]<=4)
-    peak=int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)*1024
-    failures=[]
-    for ok,name in ((median>=20,"median inner-kernel speedup >=20x"),(worst_small>=10,"E=1..4 speedup >=10x"),
-                    (clean_projection<=900,"cleanStatic projection <=15 min"),(all_projection<=5400,"all-scenario projection <=90 min"),
-                    (upper<=7200,"1.25x upper bound <=120 min"),(peak<=2*1024**3,"peak RSS <=2 GiB")):
-        if not ok:failures.append(name)
-    source=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()
-    report={"status":"GO" if not failures else "NO_GO","failures":failures,"source_sha":source,"config_hash":sha(a.config),
-      "hardware":hardware_key(),"versions":{"python":platform.python_version(),"numpy":np.__version__},"clean":{"rows":len(y),"bins":len(np.unique(bins)),"prns":len(np.unique(prn)),"epochs_by_prn":{str(p):int(np.sum(prn==p)) for p in np.unique(prn)}},
-      "timings":rows,"median_speedup":median,"worst_small_speedup":worst_small,"epochs_s":epochs_s,"clean_projection_s":clean_projection,
-      "all_projection_s":all_projection,"upper_bound_s":upper,"peak_rss_bytes":peak,"near_tie_fallback_count":None,"near_tie_fallback_rate":None}
-    a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
-    if failures:
-        print("benchmark NO_GO: "+"; ".join(failures),file=sys.stderr);return 1
-    print(json.dumps({"status":"GO","manifest":str(a.output)}));return 0
+    plan=compile_profile_plan(provider,taps,grid,w);sample={1:clean["y"][:17]};joint_profile_glrt(sample,{},provider,taps,grid,hypothesis="H1-independent",whitener=w,profile_plan=plan)
+    paired=[];orders=["scalar","vector"]*5;random.Random(config["seed"]).shuffle(orders)
+    for first in orders:
+        row={}
+        for kind in (first,"vector" if first=="scalar" else "scalar"):
+            tick=time.perf_counter();joint_profile_glrt(sample,{},provider,taps,grid,hypothesis="H1-independent",whitener=w,
+              profile_plan=plan if kind=="vector" else None,scalar_reference=kind=="scalar");row[kind]=time.perf_counter()-tick
+        paired.append(row)
+    counters={key:sum(p.counters.snapshot()[key] for p in models["profile_plans"].values()) for key in plan.counters.snapshot()}
+    counters["bank_evaluations"]+=plan.counters.bank_evaluations;counters["near_tie_events"]+=plan.counters.near_tie_events;counters["refined_candidate_count"]+=plan.counters.refined_candidate_count;counters["decomposition_calls"]+=plan.counters.decomposition_calls;counters["refinement_elapsed_s"]+=plan.counters.refinement_elapsed_s
+    counters["near_tie_rate"]=counters["near_tie_events"]/max(counters["bank_evaluations"],1)
+    peak=int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)*1024;upper=1.25*projected_p95
+    gates={"cleanstatic_end_to_end_p95":stage["cleanstatic_end_to_end_s"]<=900,"all_scenario_projected_p95":projected_p95<=5400,"safety_upper":upper<=7200,
+           "peak_rss":peak<=2*1024**3,"instrumentation":all(counters[key] is not None for key in counters)}
+    blas=io.StringIO()
+    with contextlib.redirect_stdout(blas):np.show_config()
+    report={"schema":"gnss-doppler-lab.r2c-stage0-profile-benchmark.v2","status":"GO" if all(gates.values()) else "NO_GO","gates":gates,
+      "source_sha":subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip(),"config":{"path":str(args.config.resolve()),"sha256":sha(args.config)},
+      "inputs":input_records,"workload_count_digest":hashlib.sha256(json.dumps({n:w["workload_digest"] for n,w in workloads.items()},sort_keys=True).encode()).hexdigest(),
+      "geometry":{"path":str(args.geometry.resolve()),"sha256":sha(args.geometry),"cleanstatic_causal_geometry":causal},"b0":{"path":str(args.b0_validation.resolve()),"sha256":sha(args.b0_validation),"aggregate_status":b0_doc.get("aggregate_status")},
+      "hardware":hardware_key(),"identity":{"python":platform.python_version(),"numpy":np.__version__,"scipy":scipy.__version__,"blas":blas.getvalue(),"cpu":platform.processor(),
+        "ram_bytes":os.sysconf("SC_PAGE_SIZE")*os.sysconf("SC_PHYS_PAGES"),"gpu":subprocess.run(["nvidia-smi","--query-gpu=name,driver_version","--format=csv,noheader"],capture_output=True,text=True).stdout.strip(),
+        "threads":{key:os.environ.get(key) for key in ("OPENBLAS_NUM_THREADS","OMP_NUM_THREADS","MKL_NUM_THREADS")}},
+      "stage_times":stage,"clean_bin_cost":{"median_s":percentile([c["seconds"] for c in costs],50),"p95_s":percentile([c["seconds"] for c in costs],95),"regression_coefficients":coef.tolist(),"residual_p95_s":residual_p95},
+      "projection":{"scenarios":projected,"all_scenario_p95_s":projected_p95,"safety_factor":1.25,"upper_bound_s":upper},"peak_rss_bytes":peak,"runtime_counters":counters,
+      "kernel_diagnostics":{"repetitions":len(paired),"scalar_median_s":percentile([x["scalar"] for x in paired],50),"scalar_p95_s":percentile([x["scalar"] for x in paired],95),
+        "vector_median_s":percentile([x["vector"] for x in paired],50),"vector_p95_s":percentile([x["vector"] for x in paired],95)}}
+    args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+    if report["status"]!="GO":print("benchmark NO_GO: "+", ".join(k for k,v in gates.items() if not v),file=sys.stderr);return 1
+    print(json.dumps({"status":"GO","manifest":str(args.output)}));return 0
 if __name__=="__main__":raise SystemExit(main())

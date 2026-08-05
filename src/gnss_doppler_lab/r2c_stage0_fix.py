@@ -6,12 +6,13 @@ joint profile likelihoods, controls/statistics, and the pure two-layer decision.
 """
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Callable, Iterable, Mapping, Sequence
 import hashlib
 import json
 import math
+import time
 from datetime import date, datetime, timezone
 
 import numpy as np
@@ -395,6 +396,23 @@ class CompiledProfilePlan:
     row_chunk: int
     candidate_chunk: int
     signature: str
+    counters: "ProfileRuntimeCounters" = field(compare=False, repr=False)
+    provider_binding: str = ""
+
+
+@dataclass
+class ProfileRuntimeCounters:
+    bank_evaluations: int = 0
+    near_tie_events: int = 0
+    refined_candidate_count: int = 0
+    decomposition_calls: int = 0
+    refinement_elapsed_s: float = 0.
+
+    def snapshot(self) -> dict[str, int | float]:
+        return {"bank_evaluations":self.bank_evaluations,"near_tie_events":self.near_tie_events,
+                "refined_candidate_count":self.refined_candidate_count,
+                "decomposition_calls":self.decomposition_calls,
+                "refinement_elapsed_s":self.refinement_elapsed_s}
 
 
 def _readonly(value, dtype):
@@ -449,10 +467,13 @@ def compile_profile_plan(provider: TemplateProvider, taps: Sequence[float], dela
     digest = hashlib.sha256()
     for value in (frozen_taps, frozen_grid, frozen_W, frozen_mean, frozen_templates):
         digest.update(value.tobytes(order="C"))
-    digest.update(json.dumps(provider.provenance, sort_keys=True, default=str).encode())
+    provider_digest=hashlib.sha256();provider_digest.update(json.dumps(provider.provenance, sort_keys=True, default=str).encode())
+    provider_digest.update(np.asarray(provider.offsets_chips,np.float64).tobytes(order="C"))
+    if provider.values is not None:provider_digest.update(np.asarray(provider.values,np.complex128).tobytes(order="C"))
+    provider_binding=provider_digest.hexdigest();digest.update(provider_binding.encode())
     return CompiledProfilePlan(frozen_taps, frozen_grid, frozen_W, frozen_mean, frozen_templates,
                                h0, h1, h0_bases, h1_bases,h0_bank,h1_bank,h0_valid,h1_valid,int(row_chunk), int(candidate_chunk),
-                               digest.hexdigest())
+                               digest.hexdigest(),ProfileRuntimeCounters(),provider_binding)
 
 
 @dataclass(frozen=True)
@@ -511,18 +532,22 @@ def joint_profile_glrt(observations: Mapping[int, np.ndarray], los: Mapping[int,
     if profile_plan is None and not scalar_reference:
         profile_plan = compile_profile_plan(provider, taps, grid, whitener)
     if profile_plan is not None:
+        provider_digest=hashlib.sha256();provider_digest.update(json.dumps(provider.provenance,sort_keys=True,default=str).encode())
+        provider_digest.update(np.asarray(provider.offsets_chips,np.float64).tobytes(order="C"))
+        if provider.values is not None:provider_digest.update(np.asarray(provider.values,np.complex128).tobytes(order="C"))
         if (not np.array_equal(profile_plan.taps, taps) or not np.array_equal(profile_plan.grid, grid) or
-                not np.array_equal(profile_plan.whitener, W) or not np.array_equal(profile_plan.mean, mu)):
+                not np.array_equal(profile_plan.whitener, W) or not np.array_equal(profile_plan.mean, mu) or
+                profile_plan.provider_binding != provider_digest.hexdigest()):
             raise ValueError("compiled profile plan does not match fixed inputs")
 
         def batched_values(p, candidates, bases):
+            profile_plan.counters.bank_evaluations += 1
             y = arrays[p]; totals = np.zeros(len(candidates), np.float64)
             if bases is profile_plan.h0_bases:bank,valid_mask=profile_plan.h0_basis_bank,profile_plan.h0_valid
             elif bases is profile_plan.h1_bases:bank,valid_mask=profile_plan.h1_basis_bank,profile_plan.h1_valid
             else:bank=None
             for row_start in range(0, len(y), profile_plan.row_chunk):
                 block = (y[row_start:row_start+profile_plan.row_chunk]-mu) @ W.T
-                energy = np.sum(block.real*block.real+block.imag*block.imag, axis=1, dtype=np.float64)
                 for candidate_start in range(0, len(candidates), profile_plan.candidate_chunk):
                     stop = min(candidate_start+profile_plan.candidate_chunk, len(candidates))
                     valid=(np.flatnonzero(valid_mask[candidate_start:stop])+candidate_start).tolist() if bank is not None else [index for index in range(candidate_start,stop) if bases[index] is not None]
@@ -530,10 +555,10 @@ def joint_profile_glrt(observations: Mapping[int, np.ndarray], los: Mapping[int,
                     if valid:
                         stacked=bank[valid] if bank is not None else np.stack([bases[index] for index in valid])
                         projected=np.einsum("rt,ctk->rck",block,stacked.conj(),optimize=False)
-                        captured=np.sum(projected.real*projected.real+projected.imag*projected.imag,
-                                        axis=2,dtype=np.float64)
-                        residual=np.maximum(energy[:,None]-captured,0.)
-                        totals[np.asarray(valid)] += np.sum(residual,axis=0,dtype=np.float64)
+                        reconstructed=np.einsum("rck,ctk->rct",projected,stacked,optimize=False)
+                        residual=block[:,None,:]-reconstructed
+                        rss_rows=np.sum(residual.real*residual.real+residual.imag*residual.imag,axis=2,dtype=np.float64)
+                        totals[np.asarray(valid)] += np.sum(rss_rows,axis=0,dtype=np.float64)
             return totals
 
         def refined_min(p, candidates, bases, second_override=None):
@@ -542,7 +567,11 @@ def joint_profile_glrt(observations: Mapping[int, np.ndarray], los: Mapping[int,
                 np.abs((arrays[p]-mu) @ W.T)**2, dtype=np.float64))
             tolerance = max(1e-12, 1e-10*max(total_energy, 1.))
             indices = np.flatnonzero(values <= minimum+tolerance)
-            refined = []
+            if len(indices) == 1:
+                return float(values[int(indices[0])]), int(indices[0])
+            profile_plan.counters.near_tie_events += 1
+            profile_plan.counters.refined_candidate_count += int(len(indices))
+            started_refinement=time.perf_counter();refined = []
             for index in indices:
                 candidate = candidates[int(index)]
                 if second_override is not None:
@@ -551,8 +580,23 @@ def joint_profile_glrt(observations: Mapping[int, np.ndarray], los: Mapping[int,
                     da, ds = candidate
                 else:
                     da, ds = float(candidate), None
-                refined.append((prn_rss(p, da, ds), int(index)))
-            return min(refined, key=lambda item: (item[0], item[1]))
+                columns=[provider.evaluate(taps-da)]
+                if ds is not None:columns.append(provider.evaluate(taps-da-ds))
+                design=np.column_stack(columns);wd=W@design;right=((arrays[p]-mu)@W.T).T
+                left,singular,right_vectors=np.linalg.svd(wd,full_matrices=False)
+                rank=int(np.sum(singular>singular[0]*np.finfo(float).eps*max(wd.shape))) if len(singular) and singular[0]>0 else 0
+                profile_plan.counters.decomposition_calls += 1
+                if rank<len(columns) or (len(singular)>1 and singular[-1]<=singular[0]*1e-10):
+                    exact=np.inf
+                else:
+                    exact=0.
+                    for epoch in range(len(arrays[p])):
+                        amplitude=right_vectors.conj().T@((left.conj().T@right[:,epoch])/singular)
+                        residual=W@(arrays[p][epoch]-design@amplitude-mu)
+                        exact += float(np.vdot(residual,residual).real)
+                refined.append((exact, int(index)))
+            profile_plan.counters.refinement_elapsed_s += time.perf_counter()-started_refinement
+            return min(refined,key=lambda item:(item[0],item[1]))
 
         def vector_prn_min(p, second_delay=None):
             if second_delay is None:

@@ -28,9 +28,14 @@ def atomic_json(path: Path, value: Mapping) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
     payload = json.dumps(dict(value), sort_keys=True, separators=(",", ":")) + "\n"
-    with temporary.open("w", encoding="utf-8") as stream:
-        stream.write(payload); stream.flush(); os.fsync(stream.fileno())
-    os.replace(temporary, path)
+    try:
+        with temporary.open("w", encoding="utf-8") as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    except Exception:
+        try: temporary.unlink()
+        except FileNotFoundError: pass
+        raise
     directory = os.open(path.parent, os.O_RDONLY)
     try: os.fsync(directory)
     finally: os.close(directory)
@@ -73,7 +78,14 @@ class ProgressObserver:
     def progress(self, **state):
         if not self.enabled: return
         with self._lock:
+            previous_completed=self.state.get("global_completed_bins",self.state.get("completed_bins",0))
             self.state.update(state); self.progress_seq += 1; value=self._document()
+            completed=value.get("global_completed_bins",value.get("completed_bins",0));total=value.get("global_total_bins",value.get("total_bins",completed))
+            if not 0 <= completed <= total or completed < previous_completed:
+                raise ValueError("progress counters must be monotonic and bounded")
+            authoritative=self.directory/"progress"/f"{self.progress_seq:012d}.json"
+            if authoritative.exists():raise FileExistsError("authoritative progress event already exists")
+            atomic_json(authoritative,value)
             with (self.directory/"progress.jsonl").open("a", encoding="utf-8") as stream:
                 stream.write(json.dumps(value,sort_keys=True,separators=(",",":"))+"\n")
                 stream.flush(); os.fsync(stream.fileno())

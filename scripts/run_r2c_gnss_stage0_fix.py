@@ -228,13 +228,15 @@ class FrozenFullScorer:
             condition=condition.copy();condition[:,0]-=float(cn0_degradation_db)
             adjusted[p]=y-self.models["neural_model"].predict(condition)
         fit=joint_profile_glrt(adjusted,{p:los[p] for p in common},self.provider,self.taps,self.grid,hypothesis="H1-shared",
-          whitener=self.models["neural_whitener"],profile_plan=self.models["profile_plans"]["neural"],beta_bounds_m=self.config["beta_bounds_m"],optimizer_starts=self.config["optimizer_starts_m"])
+          whitener=self.models["neural_whitener"],profile_plan=self.models.get("profile_plans",{}).get("neural"),beta_bounds_m=self.config["beta_bounds_m"],optimizer_starts=self.config["optimizer_starts_m"])
         return ScoreResult("AVAILABLE",float(fit.score),fit=fit) if fit.valid else ScoreResult("UNAVAILABLE_INVALID_SHARED_FIT",None,fit.reason,fit)
 
-def fit_frozen_models(clean,config,provider,taps,grid,*,require_gpu):
+def fit_frozen_models(clean,config,provider,taps,grid,*,require_gpu,raw_residuals=None):
     train=clean["time"]<=config["splits"]["normal_train"]["source_end_lte_s"]
     if not train.any(): raise ValueError("cleanStatic normal_train empty")
-    raw=h0_residuals(clean["y"],provider,taps,grid); ids=[f"{clean['time'][i]:.9f}:{clean['prn'][i]}" for i in np.flatnonzero(train)]
+    raw=h0_residuals(clean["y"],provider,taps,grid) if raw_residuals is None else np.asarray(raw_residuals,complex)
+    if raw.shape!=clean["y"].shape:raise ValueError("precomputed H0 residuals must align")
+    ids=[f"{clean['time'][i]:.9f}:{clean['prn'][i]}" for i in np.flatnonzero(train)]
     whitening_args={k:config["whitening"][k] for k in ("shrinkage","eigen_floor_fraction")}
     analytic=ComplexWhitener(**whitening_args).fit(raw[train],["normal_train"]*int(train.sum()),ids)
     finite=np.isfinite(clean["cn0"][train]); impute=float(np.median(clean["cn0"][train][finite])) if finite.any() else 0.
@@ -246,29 +248,38 @@ def fit_frozen_models(clean,config,provider,taps,grid,*,require_gpu):
     pred=neural.predict(x); prede=energy.predict(xe)
     nw=ComplexWhitener(**whitening_args).fit((raw-pred)[train],["normal_train"]*int(train.sum()),ids)
     ew=ComplexWhitener(**whitening_args).fit((raw-prede)[train],["normal_train"]*int(train.sum()),ids)
-    plans={"analytic":compile_profile_plan(provider,taps,grid,analytic,row_chunk=config["epoch_policy"]["chunk_rows"]),
-           "neural":compile_profile_plan(provider,taps,grid,nw,row_chunk=config["epoch_policy"]["chunk_rows"]),
-           "energy":compile_profile_plan(provider,taps,grid,ew,row_chunk=config["epoch_policy"]["chunk_rows"])}
+    plans={"analytic":compile_profile_plan(provider,taps,grid,analytic,row_chunk=config.get("epoch_policy",{}).get("chunk_rows",4096)),
+           "neural":compile_profile_plan(provider,taps,grid,nw,row_chunk=config.get("epoch_policy",{}).get("chunk_rows",4096)),
+           "energy":compile_profile_plan(provider,taps,grid,ew,row_chunk=config.get("epoch_policy",{}).get("chunk_rows",4096))}
     return {"analytic":analytic,"neural_model":neural,"energy_model":energy,"neural_whitener":nw,"energy_whitener":ew,"profile_plans":plans,
             "clean_raw_residuals":raw,"train_mask":train,"cn0_imputation":impute}
 
+def ensure_profile_plans(models,provider,taps,grid,config):
+    if "profile_plans" not in models:
+        chunk=config.get("epoch_policy",{}).get("chunk_rows",4096)
+        models["profile_plans"]={"analytic":compile_profile_plan(provider,taps,grid,models["analytic"],row_chunk=chunk),
+          "neural":compile_profile_plan(provider,taps,grid,models["neural_whitener"],row_chunk=chunk),
+          "energy":compile_profile_plan(provider,taps,grid,models["energy_whitener"],row_chunk=chunk)}
+    return models["profile_plans"]
+
 def score_bin(observations,los,provider,taps,grid,models,config,conditions_by_prn=None):
-    h0=joint_profile_glrt(observations,los,provider,taps,grid,hypothesis="H0",whitener=models["analytic"],profile_plan=models["profile_plans"]["analytic"])
+    plans=models.get("profile_plans",{})
+    h0=joint_profile_glrt(observations,los,provider,taps,grid,hypothesis="H0",whitener=models["analytic"],profile_plan=plans.get("analytic"))
     individual={};individual_fits={};rejected={}
     for p,y in observations.items():
-        fit=joint_profile_glrt({p:y},{},provider,taps,grid,hypothesis="H1-independent",whitener=models["analytic"],profile_plan=models["profile_plans"]["analytic"])
+        fit=joint_profile_glrt({p:y},{},provider,taps,grid,hypothesis="H1-independent",whitener=models["analytic"],profile_plan=plans.get("analytic"))
         if fit.valid:individual[p]=fit.score;individual_fits[p]=fit
         else:rejected[int(p)]=fit.reason or "invalid_fit"
     if conditions_by_prn is None: raise ValueError("runner neural inference conditions are required")
     neural_obs={p:y-models["neural_model"].predict(conditions_by_prn[p][0]) for p,y in observations.items()}
     energy_obs={p:y-models["energy_model"].predict(conditions_by_prn[p][1]) for p,y in observations.items()}
-    independent=joint_profile_glrt(neural_obs,los,provider,taps,grid,hypothesis="H1-independent",whitener=models["neural_whitener"],profile_plan=models["profile_plans"]["neural"])
+    independent=joint_profile_glrt(neural_obs,los,provider,taps,grid,hypothesis="H1-independent",whitener=models["neural_whitener"],profile_plan=plans.get("neural"))
     common=sorted(set(observations)&set(los));shared_obs={p:neural_obs[p] for p in common};shared_los={p:los[p] for p in common}
     analytic_obs={p:observations[p] for p in common};energy_shared_obs={p:energy_obs[p] for p in common}
     full_scorer=FrozenFullScorer(provider,taps,grid,models,config,conditions_by_prn);full_result=full_scorer(observations,los)
     shared=full_result.fit
-    analytic_shared=joint_profile_glrt(analytic_obs,shared_los,provider,taps,grid,hypothesis="H1-shared",whitener=models["analytic"],profile_plan=models["profile_plans"]["analytic"],beta_bounds_m=config["beta_bounds_m"],optimizer_starts=config["optimizer_starts_m"]) if common else None
-    energy_shared=joint_profile_glrt(energy_shared_obs,shared_los,provider,taps,grid,hypothesis="H1-shared",whitener=models["energy_whitener"],profile_plan=models["profile_plans"]["energy"],beta_bounds_m=config["beta_bounds_m"],optimizer_starts=config["optimizer_starts_m"]) if common else None
+    analytic_shared=joint_profile_glrt(analytic_obs,shared_los,provider,taps,grid,hypothesis="H1-shared",whitener=models["analytic"],profile_plan=plans.get("analytic"),beta_bounds_m=config["beta_bounds_m"],optimizer_starts=config["optimizer_starts_m"]) if common else None
+    energy_shared=joint_profile_glrt(energy_shared_obs,shared_los,provider,taps,grid,hypothesis="H1-shared",whitener=models["energy_whitener"],profile_plan=plans.get("energy"),beta_bounds_m=config["beta_bounds_m"],optimizer_starts=config["optimizer_starts_m"]) if common else None
     values=np.asarray(list(individual.values()),float)
     scores={"A1":float(values.max()) if len(values) else None,
       "A2":float(np.median(values)+np.mean(np.sort(values)[-min(4,len(values)):])) if len(values) else None,
@@ -296,12 +307,14 @@ def synthetic_inputs(seed=20260803):
                 rows.append((bin_id*.5+epoch*.1,p,y,40+rng.normal()))
     return rows,{p:u for p,u in enumerate(los,1)}
 
-def write_artifact(output,documents,csvs,plots):
+def write_artifact(output,documents,csvs,plots,observer=None):
     output.mkdir(); (output/"plots").mkdir()
     for name,value in documents.items():
+        if observer and observer.termination.is_set():raise InterruptedError("SIGTERM requested during assembly")
         if isinstance(value,(bytes,bytearray)):(output/name).write_bytes(value)
         else:(output/name).write_text(json.dumps(value,indent=2,sort_keys=True)+"\n")
     for name,(fields,rows) in csvs.items():
+        if observer and observer.termination.is_set():raise InterruptedError("SIGTERM requested during assembly")
         with (output/name).open("w",newline="") as f:
             writer=csv.DictWriter(f,fieldnames=fields); writer.writeheader(); writer.writerows(rows)
     for name,text in plots.items(): (output/"plots"/name).write_text(text)
@@ -363,9 +376,12 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
     for name,item in b0["scenarios"].items():
         if name in canonical_b0 and item.get("event_rows") and item.get("status")=="AVAILABLE_SAVED_NATIVE_SCORE_REPLAY_WITH_NODE_LINEAGE_GAP":b0_events[name]=pd.DataFrame(item["event_rows"])
     score_rows=[];event_rows=[];control_candidates=[]
-    total_bins=sum(len(np.unique(dataset["bin"])) for dataset in data.values());completed_bins=0;recent=time.monotonic()
+    scenario_bins={name:len(np.unique(dataset["bin"])) for name,dataset in data.items()}
+    total_bins=sum(scenario_bins.values());completed_bins=0;completed_scenarios=0;recent=time.monotonic()
     for scenario,dataset in data.items():
-        if observer:observer.progress(stage="scoring",scenario=scenario,completed_bins=completed_bins,total_bins=total_bins,current_bin=None,recent_bins_s=0.,eta_s=None)
+        scenario_completed=0
+        if observer:observer.progress(stage="preprocessing",scenario=scenario,total_scenarios=len(SCENARIOS),completed_scenarios=completed_scenarios,
+          scenario_total_bins=scenario_bins[scenario],scenario_completed_bins=0,global_total_bins=total_bins,global_completed_bins=completed_bins,current_bin=None,recent_bins_s=0.,eta_s=None)
         raw=h0_residuals(dataset["y"],provider,taps,grid)
         x=inference_conditions(dataset,raw,models["cn0_imputation"],False);xe=inference_conditions(dataset,raw,models["cn0_imputation"],True)
         los_bins=causal_core_los(geometry.get(scenario,{}))
@@ -400,10 +416,14 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
                   "ll1":fit.log_likelihood if valid_fit else "","n":fit.n if valid_fit else "","k0":fit.null_k if valid_fit else "","k1":fit.k if valid_fit else "",
                   "epoch_count":sum(len(y) for y in observations.values()),"prn_count":len(observations),"geometry_valid":bool(fit.valid) if fit and detector in {"A3","Full","Neural-with-energy"} else ""})
             completed_bins+=1
+            scenario_completed+=1
             if observer:
                 elapsed=max(time.monotonic()-recent,1e-12);rate=1./elapsed;recent=time.monotonic()
-                observer.progress(stage="scoring",scenario=scenario,completed_bins=completed_bins,total_bins=total_bins,current_bin=int(bin_id),recent_bins_s=rate,eta_s=(total_bins-completed_bins)/rate)
+                observer.progress(stage="scoring",scenario=scenario,total_scenarios=len(SCENARIOS),completed_scenarios=completed_scenarios,
+                  scenario_total_bins=scenario_bins[scenario],scenario_completed_bins=scenario_completed,global_total_bins=total_bins,
+                  global_completed_bins=completed_bins,current_bin=int(bin_id),recent_bins_s=rate,eta_s=(total_bins-completed_bins)/rate)
                 if observer.termination.is_set():raise InterruptedError("SIGTERM requested at safe bin boundary")
+        completed_scenarios+=1
     clean=[r for r in score_rows if r["scenario"]=="cleanStatic" and 320<=r["availability_time_s"]<=400 and r["score"]!=""]
     detector_thresholds={}
     for detector in ALL_DETECTORS:
@@ -516,8 +536,11 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
     ablation_rows=[{"detector":d,"status":"AVAILABLE" if any(r["detector"]==d and r["status"] in {"EVALUATED","NORMAL_HOLDOUT","EXTERNAL_NORMAL"} for r in metric_rows) else "UNAVAILABLE","available_scenarios":sum(any(r["detector"]==d and r["scenario"]==s and r["status"] in {"EVALUATED","NORMAL_HOLDOUT","EXTERNAL_NORMAL"} for r in metric_rows) for s in SCENARIOS)} for d in ALL_DETECTORS]
     csvs={"per_epoch_scores.csv":(fields,score_rows),"scenario_metrics.csv":(metric_fields,metric_rows),
       "ablation_metrics.csv":(["detector","status","available_scenarios"],ablation_rows)}
-    if observer:observer.progress(stage="assembly",scenario=None,completed_bins=completed_bins,total_bins=total_bins,current_bin=None,recent_bins_s=0.,eta_s=None)
-    write_artifact(output,documents,csvs,{"score_source.csv":"scenario,time,detector,score\n"})
+    if observer:
+        if observer.termination.is_set():raise InterruptedError("SIGTERM requested before assembly")
+        observer.progress(stage="assembly",scenario=None,total_scenarios=len(SCENARIOS),completed_scenarios=completed_scenarios,
+          scenario_total_bins=0,scenario_completed_bins=0,global_total_bins=total_bins,global_completed_bins=completed_bins,current_bin=None,recent_bins_s=0.,eta_s=0.)
+    write_artifact(output,documents,csvs,{"score_source.csv":"scenario,time,detector,score\n"},observer)
     return {"rows":len(score_rows)}
 
 def main():
@@ -544,16 +567,23 @@ def main():
     if staging.exists():raise FileExistsError("attempt staging path already exists")
     mark_partial(staging,"campaign_incomplete")
     observer=ProgressObserver(Path(os.environ.get("R2C_ATTEMPT_DIR",str(staging/"runtime")))).start();observer.install_sigterm()
+    published=False
     try:
         # Assembly expects to create its destination; retain the marker in the staging parent meanwhile.
         assembly=staging/"complete";result=run_production(assembly,config,args.source_commit,args.input,args.geometry,args.b0_validation,observer)
+        if observer.termination.is_set():raise InterruptedError("SIGTERM requested before seal")
         (staging/"PARTIAL_NON_AUTHORITATIVE").unlink();os.rename(assembly,staging/"published")
         # Flatten the completed assembly into the exact staging path used for atomic publication.
         completed=staging/"published";holding=output.parent/f".{output.name}.{attempt_id}.complete";os.rename(completed,holding)
-        staging.rmdir();atomic_publish(holding,output);observer.stop("complete")
+        staging.rmdir()
+        if observer.termination.is_set():mark_partial(holding,"sigterm_before_publish");raise InterruptedError("SIGTERM requested before publish")
+        atomic_publish(holding,output);published=True
+        try:observer.stop("complete")
+        except Exception as exc:print(f"warning: canonical publish succeeded but terminal observer write failed: {exc}",file=sys.stderr)
     except InterruptedError:
         mark_partial(staging,"sigterm");observer.stop("terminated");raise SystemExit(143)
     except Exception:
+        if published:raise
         mark_partial(staging,"failure");observer.stop("failure");raise
     print(json.dumps({"output":str(output),"rows":result["rows"],"verification_recompute":args.verification_recompute}))
 if __name__=="__main__": main()

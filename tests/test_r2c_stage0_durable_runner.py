@@ -2,8 +2,9 @@ from __future__ import annotations
 import json, os, signal, sys, time
 from pathlib import Path
 import pytest
+import importlib.util
 
-from gnss_doppler_lab.r2c_stage0_observer import ProgressObserver, atomic_publish, mark_partial
+from gnss_doppler_lab.r2c_stage0_observer import ProgressObserver, atomic_json, atomic_publish, mark_partial
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
 from supervise_r2c_stage0 import supervise
@@ -18,6 +19,8 @@ def test_heartbeat_progress_and_byte_neutrality(tmp_path):
     heart=json.loads((tmp_path/"attempt/heartbeat.json").read_text());assert heart["heartbeat_seq"]>=2
     rows=(tmp_path/"attempt/progress.jsonl").read_text().splitlines();assert len(rows)==1
     assert json.loads(rows[0])["progress_seq"]==1
+    authoritative=list((tmp_path/"attempt/progress").glob("*.json"));assert len(authoritative)==1
+    assert json.loads(authoritative[0].read_text())["progress_seq"]==1
 
 
 def test_atomic_publish_no_partial_and_no_overwrite(tmp_path):
@@ -41,7 +44,7 @@ def test_supervisor_duplicate_silent_dead_and_no_retry(tmp_path):
     assert code==0
     doc=json.loads((attempt/"supervisor.json").read_text());assert doc["exit_code"]==0 and doc["auto_retries"]==0
     with pytest.raises(FileExistsError):supervise([sys.executable,"-c","pass"],attempt)
-    dead=tmp_path/"dead";assert supervise([sys.executable,"-c","raise SystemExit(7)"],dead,poll_s=.01)==7
+    dead=tmp_path/"other-campaign/dead";dead.parent.mkdir();assert supervise([sys.executable,"-c","raise SystemExit(7)"],dead,poll_s=.01)==7
     assert json.loads((dead/"supervisor.json").read_text())["exit_code"]==7
 
 
@@ -51,3 +54,37 @@ def test_stale_heartbeat_warns_without_kill_or_retry(tmp_path):
     script="from pathlib import Path;import time; p=Path(r'%s');p.write_text('{}');time.sleep(.15)"%(attempt/"heartbeat.json")
     assert supervise([sys.executable,"-c",script],attempt,poll_s=.01,stale_s=.03)==0
     assert (attempt/"stale-heartbeat-warning.json").exists()
+
+def test_missing_initial_heartbeat_warns_without_restart(tmp_path):
+    attempt=tmp_path/"missing"
+    assert supervise([sys.executable,"-c","import time;time.sleep(.08)"],attempt,poll_s=.01,initial_heartbeat_s=.02)==0
+    assert (attempt/"missing-initial-heartbeat-warning.json").exists()
+    assert json.loads((attempt/"supervisor.json").read_text())["auto_retries"]==0
+
+def test_two_attempt_ids_share_global_exact_once_reservation(tmp_path):
+    first=tmp_path/"attempt-a";second=tmp_path/"attempt-b"
+    assert supervise([sys.executable,"-c","pass"],first,poll_s=.01)==0
+    with pytest.raises(FileExistsError):supervise([sys.executable,"-c","pass"],second,poll_s=.01)
+    assert not second.exists()
+
+def test_atomic_progress_failure_has_no_authoritative_partial(tmp_path,monkeypatch):
+    import gnss_doppler_lab.r2c_stage0_observer as module
+    real_replace=module.os.replace
+    def fail_replace(source,target):
+        if Path(target).parent.name=="progress":raise OSError(28,"No space left on device")
+        return real_replace(source,target)
+    monkeypatch.setattr(module.os,"replace",fail_replace)
+    observer=ProgressObserver(tmp_path/"attempt").start()
+    with pytest.raises(OSError):observer.progress(global_completed_bins=1,global_total_bins=2)
+    assert not list((tmp_path/"attempt/progress").glob("*.json"))
+    observer.stop()
+
+def test_observer_on_off_actual_synthetic_artifact_bytes_identical(tmp_path):
+    root=Path(__file__).resolve().parents[1];path=root/"scripts/run_r2c_gnss_stage0_fix.py"
+    spec=importlib.util.spec_from_file_location("durable_runner_synthetic",path);runner=importlib.util.module_from_spec(spec)
+    sys.modules[spec.name]=runner;spec.loader.exec_module(runner);config=json.loads((root/"configs/r2c_gnss_stage0_fix.json").read_text())
+    off=tmp_path/"off";on=tmp_path/"on";runner.freeze_determinism(config["seed"]);runner.run_synthetic(off,config,"fixture-source")
+    observer=ProgressObserver(tmp_path/"runtime",interval_s=.01).start();runner.freeze_determinism(config["seed"]);runner.run_synthetic(on,config,"fixture-source");observer.stop()
+    off_files={str(p.relative_to(off)):p.read_bytes() for p in off.rglob("*") if p.is_file()}
+    on_files={str(p.relative_to(on)):p.read_bytes() for p in on.rglob("*") if p.is_file()}
+    assert on_files==off_files
