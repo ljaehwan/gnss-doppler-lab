@@ -188,3 +188,28 @@ def test_plan_signature_binds_every_fixed_input():
     empirical_offsets=np.linspace(-2,2,33);empirical=TemplateProvider.empirical(empirical_offsets,np.maximum(1-np.abs(empirical_offsets),0).astype(complex),{"source_sha256":"c"*64})
     variants.append(compile_profile_plan(empirical,TAPS,GRID,w))
     assert all(item.signature!=base.signature for item in variants)
+
+
+def test_shared_compiled_objective_does_not_decompose_per_beta_iteration(monkeypatch):
+    """The shared beta objective must use the compiled/batched kernel, not SVD per candidate."""
+    provider=TemplateProvider.analytic(); w=whitener(dense=True,mean=True)
+    vectors=np.asarray([[1,0,0],[0,1,0],[0,0,1],[-.6,-.5,-.6245],[.5,-.7,.5099]],float)
+    vectors/=np.linalg.norm(vectors,axis=1)[:,None]
+    los={p:v for p,v in enumerate(vectors,1)}
+    truth=np.asarray([20.,-15.,10.,40.]); rng=np.random.default_rng(909)
+    obs={}
+    for p,u in los.items():
+        second=float((-u@truth[:3]+truth[3])/299792458.*1023000.)
+        base=(1+.1j)*provider.evaluate(TAPS)+(.7-.2j)*provider.evaluate(TAPS-second)
+        obs[p]=np.asarray([base+.01*(rng.normal(size=9)+1j*rng.normal(size=9)) for _ in range(4)])
+    real=np.linalg.svd; calls=[]
+    monkeypatch.setattr(np.linalg,"svd",lambda *a,**kw:(calls.append(np.shape(a[0])),real(*a,**kw))[1])
+    plan=compile_profile_plan(provider,TAPS,GRID,w,candidate_chunk=7)
+    compiled=len(calls)
+    fit=joint_profile_glrt(obs,los,provider,TAPS,GRID,hypothesis="H1-shared",whitener=w,
+                           profile_plan=plan,optimizer_starts=[truth])
+    assert fit.valid
+    # The shared objective may factor a whole candidate bank, but never dispatch
+    # a separate decomposition for each candidate.
+    extra=calls[compiled:]
+    assert extra and all(shape==(len(GRID),len(TAPS),2) for shape in extra)

@@ -596,14 +596,52 @@ def joint_profile_glrt(observations: Mapping[int, np.ndarray], los: Mapping[int,
             profile_plan.counters.scalar_fallback_elapsed_s += time.perf_counter()-started_refinement
             return min(refined,key=lambda item:(item[0],item[1]))
 
+        def dynamic_refined_min(p, second_delay):
+            """Evaluate every authentic-delay candidate without per-objective SVDs.
+
+            The compiled H0 bank supplies the first columns.  The continuous
+            shared second delay only changes column two, so use the closed-form
+            rank-two projector.  Tied candidates retain the scalar reference
+            refinement to preserve the legacy deterministic winner contract.
+            """
+            candidates = profile_plan.h0_candidates
+            y = arrays[p]
+            first = np.asarray([provider.evaluate(taps-da) for da in candidates], np.complex128)
+            second = np.asarray([provider.evaluate(taps-da-second_delay) for da in candidates], np.complex128)
+            design = np.einsum("ij,cjk->cik", W, np.stack((first, second), axis=2), optimize=True)
+            # One stacked SVD preserves the legacy orthonormal-projector algebra
+            # while eliminating one Python/LAPACK dispatch per candidate.
+            basis, singular, _ = np.linalg.svd(design, full_matrices=False)
+            valid = (singular[:,0] > 0) & (singular[:,-1] > singular[:,0]*1e-10)
+            block = (y-mu) @ W.T
+            projected = np.einsum("rt,ctk->rck", block, basis.conj(), optimize=True)
+            reconstructed = np.einsum("rck,ctk->rct", projected, basis, optimize=True)
+            residual = block[:,None,:]-reconstructed
+            values = np.sum(residual.real*residual.real+residual.imag*residual.imag, axis=(0,2), dtype=np.float64)
+            values[~valid] = np.inf
+            minimum = float(np.min(values)); total_energy = float(np.sum(np.abs(block)**2,dtype=np.float64))
+            tolerance = max(1e-12, 1e-10*max(total_energy, 1.))
+            indices = np.flatnonzero(values <= minimum+tolerance)
+            if len(indices) == 1:
+                profile_plan.counters.unique_winner_events += 1
+                return float(values[int(indices[0])]), int(indices[0])
+            profile_plan.counters.near_tie_events += 1
+            profile_plan.counters.scalar_fallback_events += 1
+            profile_plan.counters.scalar_fallback_candidates += int(len(indices))
+            profile_plan.counters.scalar_fallback_epochs += int(len(indices)*len(y))
+            started_refinement=time.perf_counter(); refined=[]
+            for index in indices:
+                exact=prn_rss(p,float(candidates[int(index)]),float(second_delay))
+                profile_plan.counters.scalar_fallback_lstsq_calls += len(y)
+                refined.append((exact,int(index)))
+            profile_plan.counters.scalar_fallback_elapsed_s += time.perf_counter()-started_refinement
+            return min(refined,key=lambda item:(item[0],item[1]))
+
         def vector_prn_min(p, second_delay=None):
             if second_delay is None:
                 value, index = refined_min(p, profile_plan.h0_candidates, profile_plan.h0_bases)
-                return value, profile_plan.h0_candidates[index]
-            dynamic_bases = tuple(_projection_basis(W @ np.column_stack(
-                (provider.evaluate(taps-da), provider.evaluate(taps-da-second_delay))))
-                if abs(second_delay) > 1e-10 else None for da in profile_plan.h0_candidates)
-            value, index = refined_min(p, profile_plan.h0_candidates, dynamic_bases, second_delay)
+            else:
+                value, index = dynamic_refined_min(p, float(second_delay))
             return value, profile_plan.h0_candidates[index]
     authentic={}; rss0=0.
     for p in prns:
