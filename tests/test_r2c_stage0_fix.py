@@ -196,3 +196,35 @@ def test_causal_metrics_and_exact_paired_block_bootstrap():
     result=paired_block_bootstrap(times,["r"]*80,labels,labels.astype(float),np.zeros(80),repetitions=2000)
     assert result["repetitions"]==2000 and result["block_s"]==10 and result["estimate"]>0
     with pytest.raises(ValueError,match="exactly 2000"): paired_block_bootstrap(times,["r"]*80,labels,labels,np.zeros(80),repetitions=10)
+
+
+def test_benchmark_uses_offline_oracle_los_when_causal_history_is_unavailable():
+    spec=importlib.util.spec_from_file_location("benchmark",Path(__file__).parents[1]/"scripts/benchmark_r2c_stage0_profile.py")
+    module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    geometry={"derived_time":{"status":"PASS"},"event_time_causal_ephemeris_availability":{"status":"UNAVAILABLE"},
+              "los_by_bin":{"0":{"1":[1.,0.,0.]}}}
+    assert module.stage0_benchmark_los(geometry)==geometry["los_by_bin"]
+
+
+def test_conditioner_cpu_inference_copy_preserves_predictions():
+    rng=np.random.default_rng(321); x=rng.normal(size=(20,2)); z=rng.normal(size=(20,9))+1j*rng.normal(size=(20,9))
+    model=SmallNuisanceConditioner(["cn0","h0_residual_quality"],hidden=3).fit(x,z,["normal_train"]*20,epochs=2)
+    copied=model.cpu_inference_copy()
+    assert next(copied.model.parameters()).device.type=="cpu"
+    assert copied.predict(x[:4])==pytest.approx(model.predict(x[:4]))
+    assert copied.summary["device"]==model.summary["device"]
+
+
+def test_ordered_fork_map_preserves_input_order_and_worker_results():
+    spec=importlib.util.spec_from_file_location("runner",Path(__file__).parents[1]/"scripts/run_r2c_gnss_stage0_fix.py")
+    module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    assert list(module.ordered_fork_map([3,1,2],lambda x:x*x,2))==[9,1,4]
+
+
+def test_benchmark_bin_selector_is_deterministic_and_requires_offline_los_support():
+    spec=importlib.util.spec_from_file_location("benchmark_select",Path(__file__).parents[1]/"scripts/benchmark_r2c_stage0_profile.py")
+    module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    dataset={"bin":np.repeat(np.arange(5),5),"prn":np.tile(np.arange(1,6),5)}
+    los={str(b):{str(p):[1.,0.,0.] for p in range(1,6)} for b in range(5)}
+    los["2"]={"1":[1.,0.,0.]}
+    assert module.stage0_benchmark_bin_ids(dataset,los,3)==[0,1,4]

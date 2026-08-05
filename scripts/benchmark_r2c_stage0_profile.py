@@ -35,24 +35,40 @@ def histogram(path):
     return {"rows":len(time_s),"bins":len(records),"prns":len(np.unique(prn)),"workload_digest":digest,
             "bin_records":records,"epochs_per_prn":{"min":min(min(x[3]) for x in records),"max":max(max(x[3]) for x in records)}}
 def percentile(values,q):return float(np.percentile(np.asarray(values,float),q))
+
+
+def stage0_benchmark_los(geometry):
+    """Stage-0 benchmark must exercise the same certified offline LOS as production."""
+    return geometry.get("los_by_bin",{}) if geometry.get("derived_time",{}).get("status")=="PASS" else {}
+
+
+def stage0_benchmark_bin_ids(dataset, los_bins, maximum):
+    eligible=[]
+    for bin_id in np.unique(dataset["bin"]):
+        prns={str(int(p)) for p in np.unique(dataset["prn"][dataset["bin"]==bin_id])}
+        if len(prns & set(los_bins.get(str(int(bin_id)),{})))>=5: eligible.append(int(bin_id))
+    if not eligible: raise ValueError("no certified offline-LOS benchmark bins")
+    positions=np.linspace(0,len(eligible)-1,min(int(maximum),len(eligible)),dtype=int)
+    return [eligible[int(position)] for position in positions]
 def main():
     parser=argparse.ArgumentParser();parser.add_argument("--input",action="append",required=True)
     parser.add_argument("--geometry",type=Path,required=True);parser.add_argument("--b0-validation",type=Path,required=True)
     parser.add_argument("--config",type=Path,default=ROOT/"configs/r2c_gnss_stage0_fix.json");parser.add_argument("--output",type=Path,required=True)
+    parser.add_argument("--max-score-bins",type=int,default=24)
     args=parser.parse_args();inputs=specs(args.input);config=json.loads(args.config.read_text());runner=load_runner()
     geometry_doc=json.loads(args.geometry.read_text());b0_doc=json.loads(args.b0_validation.read_text())
     if set(geometry_doc.get("scenarios",{}))!=set(SCENARIOS) or set(b0_doc.get("scenarios",{}))!=set(SCENARIOS):raise ValueError("wrapper roster mismatch")
     workloads={name:histogram(path) for name,path in inputs.items()}
     input_records={name:{"path":str(path.resolve()),"sha256":sha(path),**{k:v for k,v in workloads[name].items() if k!="bin_records"}} for name,path in inputs.items()}
     provider=TemplateProvider.analytic();taps=np.asarray(config["tap_offsets_chips"]);grid=np.asarray(config["delay_grid_chips"])
-    geometry=geometry_doc["scenarios"]["cleanStatic"];causal=geometry.get("event_time_causal_ephemeris_availability",{}).get("status")=="PASS"
+    geometry=geometry_doc["scenarios"]["cleanStatic"]
     def measure_clean():
       stage={};started=time.perf_counter();clean=runner.load_all_epochs(inputs["cleanStatic"]);stage["load_cleanstatic_s"]=time.perf_counter()-started
       started=time.perf_counter();raw=runner.h0_residuals(clean["y"],provider,taps,grid,chunk_rows=config["epoch_policy"]["chunk_rows"]);stage["h0_residual_s"]=time.perf_counter()-started
       started=time.perf_counter();models=runner.fit_frozen_models(clean,config,provider,taps,grid,require_gpu=config["neural"]["require_gpu"],raw_residuals=raw);stage["frozen_model_fit_s"]=time.perf_counter()-started
       started=time.perf_counter();x=runner.inference_conditions(clean,raw,models["cn0_imputation"],False);xe=runner.inference_conditions(clean,raw,models["cn0_imputation"],True);stage["inference_conditions_s"]=time.perf_counter()-started
-      stage["pre_scoring_total_s"]=sum(stage.values());los_bins=runner.causal_core_los(geometry) if causal else {};costs=[];scoring_started=time.perf_counter()
-      for bin_id in np.unique(clean["bin"]):
+      stage["pre_scoring_total_s"]=sum(stage.values());los_bins=stage0_benchmark_los(geometry);costs=[];scoring_started=time.perf_counter()
+      for bin_id in stage0_benchmark_bin_ids(clean,los_bins,args.max_score_bins):
         indices=np.flatnonzero(clean["bin"]==bin_id);observations={};conditions={};los={}
         for p in sorted(np.unique(clean["prn"][indices])):
           chosen=indices[clean["prn"][indices]==p];observations[int(p)]=clean["y"][chosen];conditions[int(p)]=(x[chosen],xe[chosen])
@@ -101,11 +117,11 @@ def main():
     report={"schema":"gnss-doppler-lab.r2c-stage0-profile-benchmark.v3","status":"GO" if all(gates.values()) else "NO_GO","gates":gates,
       "source_sha":subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip(),"config":{"path":str(args.config.resolve()),"sha256":sha(args.config)},
       "inputs":input_records,"workload_count_digest":hashlib.sha256(json.dumps({n:w["workload_digest"] for n,w in workloads.items()},sort_keys=True).encode()).hexdigest(),
-      "geometry":{"path":str(args.geometry.resolve()),"sha256":sha(args.geometry),"cleanstatic_causal_geometry":causal},"b0":{"path":str(args.b0_validation.resolve()),"sha256":sha(args.b0_validation),"aggregate_status":b0_doc.get("aggregate_status")},
+      "geometry":{"path":str(args.geometry.resolve()),"sha256":sha(args.geometry),"cleanstatic_offline_oracle_geometry":bool(stage0_benchmark_los(geometry)),"cleanstatic_causal_geometry":geometry.get("event_time_causal_ephemeris_availability",{}).get("status")=="PASS"},"b0":{"path":str(args.b0_validation.resolve()),"sha256":sha(args.b0_validation),"aggregate_status":b0_doc.get("aggregate_status")},
       "hardware":hardware_key(),"identity":{"python":platform.python_version(),"numpy":np.__version__,"scipy":scipy.__version__,"blas":blas.getvalue(),"cpu":platform.processor(),
         "ram_bytes":os.sysconf("SC_PAGE_SIZE")*os.sysconf("SC_PHYS_PAGES"),"gpu":subprocess.run(["nvidia-smi","--query-gpu=name,driver_version","--format=csv,noheader"],capture_output=True,text=True).stdout.strip(),
         "threads":{key:os.environ.get(key) for key in ("OPENBLAS_NUM_THREADS","OMP_NUM_THREADS","MKL_NUM_THREADS")}},
-      "cleanstatic_runs_s":cleanstatic_runs,"cleanstatic_median_s":percentile(cleanstatic_runs,50),"cleanstatic_max_s":max(cleanstatic_runs),
+      "cleanstatic_runs_s":cleanstatic_runs,"cleanstatic_median_s":percentile(cleanstatic_runs,50),"cleanstatic_max_s":max(cleanstatic_runs),"cleanstatic_certified_score_sample_bins":len(costs),
       "stage_times":stage,"clean_bin_cost":{"median_s":percentile([c["seconds"] for c in costs],50),"p95_s":percentile([c["seconds"] for c in costs],95),"regression_coefficients":coef.tolist(),"residual_p95_s":residual_p95},
       "sequential_preprocess_s":sequential_preprocess,
       "formula":{"preprocessing_and_model_fit_s":stage["pre_scoring_total_s"]+sum(sequential_preprocess.values()),"projected_scenario_scoring_s":all_projected,"metrics_bootstrap_controls_assembly_s":non_scoring_upper,"safety_factor":1.25},

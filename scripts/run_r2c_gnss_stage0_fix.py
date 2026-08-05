@@ -5,7 +5,7 @@ Production output is single-use and exact-path only. ``--test-output`` is accept
 only together with ``--synthetic`` for isolated integration tests.
 """
 from __future__ import annotations
-import argparse, csv, hashlib, json, os, random, subprocess, sys, time
+import argparse, csv, hashlib, json, multiprocessing, os, random, subprocess, sys, time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import numpy as np
@@ -239,6 +239,29 @@ def ordered_bounded_map(items, worker, workers):
             submit_one()
 
 
+def ordered_fork_map(items, worker, workers):
+    """Score deterministic batches in forked CPU children, preserving input order."""
+    if workers < 1: raise ValueError("score workers must be positive")
+    if os.name != "posix": raise RuntimeError("forked Stage-0 scoring requires POSIX")
+    context=multiprocessing.get_context("fork")
+    values=list(items)
+    for start in range(0,len(values),workers):
+        channels=[]; processes=[]
+        for value in values[start:start+workers]:
+            receive,send=context.Pipe(duplex=False)
+            def child(channel,item):
+                try: channel.send((True,worker(item)))
+                except BaseException as error: channel.send((False,f"{type(error).__name__}: {error}"))
+                finally: channel.close()
+            process=context.Process(target=child,args=(send,value)); process.start(); send.close()
+            channels.append(receive); processes.append(process)
+        for receive,process in zip(channels,processes):
+            try: ok,payload=receive.recv()
+            finally: receive.close(); process.join()
+            if process.exitcode != 0 or not ok: raise RuntimeError(f"forked score worker failed: {payload}")
+            yield payload
+
+
 def default_score_workers():
     """Conservative shared-memory default; operators may explicitly raise it."""
     value=os.environ.get("R2C_STAGE0_SCORE_WORKERS")
@@ -304,12 +327,14 @@ def fit_frozen_models(clean,config,provider,taps,grid,*,require_gpu,raw_residual
     energy=SmallNuisanceConditioner(config["neural"]["with_energy_inputs"],hidden=config["neural"]["hidden"],seed=config["seed"],with_energy=True).fit(
       xe[train],raw[train],["normal_train"]*int(train.sum()),epochs=config["neural"]["epochs"],learning_rate=config["neural"]["learning_rate"],require_gpu=require_gpu)
     pred=neural.predict(x); prede=energy.predict(xe)
+    # Fit uses CUDA when required; per-bin inference is CPU-resident so forked scorers do not serialize on tiny CUDA calls.
+    neural_inference=neural.cpu_inference_copy(); energy_inference=energy.cpu_inference_copy()
     nw=ComplexWhitener(**whitening_args).fit((raw-pred)[train],["normal_train"]*int(train.sum()),ids)
     ew=ComplexWhitener(**whitening_args).fit((raw-prede)[train],["normal_train"]*int(train.sum()),ids)
     plans={"analytic":compile_profile_plan(provider,taps,grid,analytic,row_chunk=config.get("epoch_policy",{}).get("chunk_rows",4096)),
            "neural":compile_profile_plan(provider,taps,grid,nw,row_chunk=config.get("epoch_policy",{}).get("chunk_rows",4096)),
            "energy":compile_profile_plan(provider,taps,grid,ew,row_chunk=config.get("epoch_policy",{}).get("chunk_rows",4096))}
-    return {"analytic":analytic,"neural_model":neural,"energy_model":energy,"neural_whitener":nw,"energy_whitener":ew,"profile_plans":plans,
+    return {"analytic":analytic,"neural_model":neural_inference,"energy_model":energy_inference,"neural_whitener":nw,"energy_whitener":ew,"profile_plans":plans,
             "clean_raw_residuals":raw,"train_mask":train,"cn0_imputation":impute}
 
 def ensure_profile_plans(models,provider,taps,grid,config):
@@ -474,7 +499,7 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
         # This consumes the sorted certified-bin sequence in the same order as the
         # serial runner.  Only score computation is concurrent; all output rows,
         # observer writes, and control-candidate selection remain serial.
-        for bin_id,indices,observations,condition_map,los,availability,scores,fits in ordered_bounded_map(np.unique(dataset["bin"]),score_one_bin,score_workers):
+        for bin_id,indices,observations,condition_map,los,availability,scores,fits in ordered_fork_map(np.unique(dataset["bin"]),score_one_bin,score_workers):
             availability_overrides={};native=b0_events.get(scenario)
             native_row=native[np.isclose(native.window_bin_s,float(bin_id)*.5)] if native is not None else None
             if native_row is not None and len(native_row)==1:
@@ -631,7 +656,7 @@ def main():
     ap.add_argument("--input",action="append",default=[]);ap.add_argument("--geometry",action="append",default=[])
     ap.add_argument("--b0-validation",type=Path,help="canonical validated B0 wrapper")
     ap.add_argument("--synthetic",action="store_true"); ap.add_argument("--test-output",action="store_true")
-    ap.add_argument("--score-workers",type=int,default=default_score_workers(),help="bounded shared-memory Stage-0 scoring threads")
+    ap.add_argument("--score-workers",type=int,default=default_score_workers(),help="bounded forked CPU Stage-0 scoring workers")
     ap.add_argument("--verification-recompute",action="store_true",help=argparse.SUPPRESS)
     args=ap.parse_args(); output=validate_destination(args.output,test_mode=args.test_output,verification_recompute=args.verification_recompute); validate_source(args.source_commit,test_mode=args.test_output or args.verification_recompute)
     config=json.loads(args.config.read_text())

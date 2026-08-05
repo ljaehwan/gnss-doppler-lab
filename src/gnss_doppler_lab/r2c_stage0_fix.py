@@ -892,6 +892,10 @@ class SmallNuisanceConditioner:
         with torch.no_grad(): out=self.model(value).detach().cpu().numpy()
         return out[:,:9]+1j*out[:,9:]
 
+    def cpu_inference_copy(self):
+        """Rehydrate a CPU-only immutable inference copy without relabeling training provenance."""
+        return self.deserialize(self.serialize(), device="cpu")
+
     def serialize(self):
         import torch
         if self.model is None or self.summary is None: raise RuntimeError("conditioner is not fitted")
