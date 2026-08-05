@@ -20,6 +20,10 @@ def hardware_key():
             "affinity":sorted(os.sched_getaffinity(0)) if hasattr(os,"sched_getaffinity") else None,"python":platform.python_version()}
 
 
+def campaign_runtime_gate(safety_upper_seconds):
+    return float(safety_upper_seconds)<=8*3600
+
+
 def sha(path):
     h=hashlib.sha256();h.update(Path(path).read_bytes());return h.hexdigest()
 def workload_digest(path):
@@ -60,7 +64,7 @@ def validate_go(path: Path, source_sha: str, config:Path,inputs,geometry:Path,b0
     stages=value.get("stage_times",{})
     if not np.isclose(stages.get("pre_scoring_total_s",np.nan)+stages.get("cleanstatic_score_bin_all_s",np.nan),stages.get("cleanstatic_end_to_end_s",np.nan),atol=1e-9):raise ValueError("stage formula inconsistent")
     recomputed={"cleanstatic_repeated_max":value.get("cleanstatic_max_s",float("inf"))<=900,
-      "all_scenario_safety_upper":projection.get("all_scenario_safety_upper_s",float("inf"))<=7200,
+      "all_scenario_safety_upper_8h":campaign_runtime_gate(projection.get("all_scenario_safety_upper_s",float("inf"))),
       "peak_rss":value.get("peak_rss_bytes",float("inf"))<=1879048192,"instrumentation":True}
     if gates!=recomputed or not all(recomputed.values()):raise ValueError("benchmark numeric gates do not independently pass")
     return value

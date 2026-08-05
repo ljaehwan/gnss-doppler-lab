@@ -241,3 +241,9 @@ def test_campaign_runtime_gate_allows_a_bounded_multi_hour_offline_oracle_run():
     module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
     assert module.campaign_runtime_gate(21218.)
     assert not module.campaign_runtime_gate(28801.)
+
+
+def test_supervisor_runtime_gate_matches_offline_campaign_contract():
+    spec=importlib.util.spec_from_file_location("supervisor",Path(__file__).parents[1]/"scripts/supervise_r2c_stage0.py")
+    module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    assert module.campaign_runtime_gate(21218.) and not module.campaign_runtime_gate(28801.)
