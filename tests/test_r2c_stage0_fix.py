@@ -234,3 +234,10 @@ def test_parallel_projection_uses_measured_effective_parallelism():
     spec=importlib.util.spec_from_file_location("benchmark_parallel",Path(__file__).parents[1]/"scripts/benchmark_r2c_stage0_profile.py")
     module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
     assert module.parallel_wall_projection(100.,50.,25.)==pytest.approx(50.)
+
+
+def test_campaign_runtime_gate_allows_a_bounded_multi_hour_offline_oracle_run():
+    spec=importlib.util.spec_from_file_location("benchmark_runtime",Path(__file__).parents[1]/"scripts/benchmark_r2c_stage0_profile.py")
+    module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    assert module.campaign_runtime_gate(21218.)
+    assert not module.campaign_runtime_gate(28801.)

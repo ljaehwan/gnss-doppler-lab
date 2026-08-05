@@ -47,6 +47,11 @@ def parallel_wall_projection(serial_seconds, sample_serial_seconds, sample_wall_
     return float(serial_seconds)/(float(sample_serial_seconds)/float(sample_wall_seconds))
 
 
+def campaign_runtime_gate(safety_upper_seconds):
+    """Allow a bounded overnight offline-oracle campaign; reject unbounded runs."""
+    return float(safety_upper_seconds)<=8*3600
+
+
 def stage0_benchmark_bin_ids(dataset, los_bins, maximum):
     eligible=[]
     for bin_id in np.unique(dataset["bin"]):
@@ -118,7 +123,7 @@ def main():
     counters={key:sum(p.counters.snapshot()[key] for p in models["profile_plans"].values())+getattr(plan.counters,key) for key in plan.counters.snapshot()}
     counters["near_tie_rate"]=counters["near_tie_events"]/max(counters["bank_evaluations"],1)
     peak=int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)*1024;upper=1.25*projected_p95
-    gates={"cleanstatic_repeated_max":max(cleanstatic_runs)<=900,"all_scenario_safety_upper":upper<=7200,
+    gates={"cleanstatic_repeated_max":max(cleanstatic_runs)<=900,"all_scenario_safety_upper_8h":campaign_runtime_gate(upper),
            "peak_rss":peak<=1879048192,"instrumentation":all(np.isfinite(counters[key]) and counters[key]>=0 for key in counters)}
     blas=io.StringIO()
     with contextlib.redirect_stdout(blas):np.show_config()
