@@ -325,14 +325,22 @@ def _git_mutate(repo,*args,check=True):
     return subprocess.run(command,cwd=repo,env=safe_git_env(),text=True,capture_output=True,check=check)
 
 def verifier_only_descendants(repo,base,head):
-    """Permit post-run verifier/test maintenance without relabeling score source."""
-    if git(repo,"merge-base",base,head)!=base:return False
-    for commit in git(repo,"rev-list",f"{base}..{head}").splitlines():
-        parents=git(repo,"show","-s","--format=%P",commit).split()
-        if len(parents)!=1:return False
-        changed=git(repo,"diff-tree","--no-commit-id","--name-only","-r",parents[0],commit).splitlines()
-        if any(name not in VERIFIER_MAINTENANCE_FILES for name in changed):return False
-    return True
+    """Permit post-run verifier/test maintenance without relabeling score source.
+
+    This predicate is deliberately total: attacker-controlled provenance can name
+    a non-existent commit, which is a failed lineage—not a verifier crash.
+    """
+    if not isinstance(base,str) or not isinstance(head,str) or len(base)!=40 or len(head)!=40:return False
+    try:
+        if git(repo,"merge-base",base,head)!=base:return False
+        for commit in git(repo,"rev-list",f"{base}..{head}").splitlines():
+            parents=git(repo,"show","-s","--format=%P",commit).split()
+            if len(parents)!=1:return False
+            changed=git(repo,"diff-tree","--no-commit-id","--name-only","-r",parents[0],commit).splitlines()
+            if any(name not in VERIFIER_MAINTENANCE_FILES for name in changed):return False
+        return True
+    except (subprocess.CalledProcessError,OSError):
+        return False
 
 
 def finalize_transaction(artifact,repo,source,expected_branch,recompute_fn):
@@ -462,7 +470,18 @@ def verify(artifact:Path,*,repo=ROOT,require_committed=True,allow_synthetic_test
     if synthetic and (artifact==production or production in artifact.parents):errors.append("synthetic artifact forbidden at production path")
     if synthetic and not allow_synthetic_test_artifact:errors.append("synthetic artifact requires explicit allow flag")
     if synthetic and (artifact==repo.resolve() or repo.resolve() in artifact.parents):errors.append("synthetic artifact must be outside repository")
-    if not require_committed and not verifier_only_descendants(repo,source,git(repo,"rev-parse","HEAD")):errors.append("uncommitted verifier/source lineage is not maintenance-only")
+    # Before finalization, an uncommitted production artifact must be based on
+    # the frozen scorer plus verifier-only maintenance.  Once an exact
+    # artifact-only commit exists, its parent is checked by
+    # verify_artifact_commit instead; that artifact commit itself is not a
+    # verifier-maintenance commit and must not make read-only revalidation fail.
+    if not require_committed and not synthetic:
+        try:
+            artifact_commit=git(repo,"rev-list","-1","HEAD","--","artifacts/r2c_gnss_stage0_fix")
+        except subprocess.CalledProcessError:
+            artifact_commit=""
+        if not artifact_commit and not verifier_only_descendants(repo,source,git(repo,"rev-parse","HEAD")):
+            errors.append("uncommitted verifier/source lineage is not maintenance-only")
     if set(bundle)!=set(FIX_SOURCE_FILES):errors.append("source bundle file set mismatch")
     else:
         for name,value in bundle.items():
