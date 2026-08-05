@@ -180,8 +180,9 @@ def offline_physics_los(item):
 
     This deliberately does not imply a causal deployment ephemeris history.
     """
-    ready=(item.get("derived_time",{}).get("status")=="PASS" and
-           item.get("offline_geometry_coverage",{}).get("status")=="PASS")
+    # Coverage is a campaign-quality gate, not permission to discard individually
+    # authenticated bins.  Score every certified offline bin and report coverage separately.
+    ready=(item.get("derived_time",{}).get("status")=="PASS" and bool(item.get("los_by_bin",{})))
     return item.get("los_by_bin",{}) if ready else {}
 
 
