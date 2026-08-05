@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Production-shape cleanStatic benchmark; attack inputs are metadata-counted only."""
 from __future__ import annotations
-import argparse,contextlib,hashlib,importlib.util,io,json,os,platform,random,resource,subprocess,sys,time
+import argparse,contextlib,ctypes,gc,hashlib,importlib.util,io,json,os,platform,random,resource,subprocess,sys,time
 from pathlib import Path
 import numpy as np
 import scipy
@@ -62,7 +62,12 @@ def main():
       stage["cleanstatic_score_bin_all_s"]=time.perf_counter()-scoring_started;stage["cleanstatic_end_to_end_s"]=stage["pre_scoring_total_s"]+stage["cleanstatic_score_bin_all_s"]
       return stage,models,costs,clean
     runs=[]
-    for _ in range(3):stage,models,costs,clean=measure_clean();runs.append(stage)
+    for run_index in range(3):
+      stage,models,costs,clean=measure_clean();runs.append(stage)
+      if run_index<2:
+        del models,costs,clean;gc.collect()
+        try:ctypes.CDLL(None).malloc_trim(0)
+        except AttributeError:pass
     stage=max(runs,key=lambda item:item["cleanstatic_end_to_end_s"]);cleanstatic_runs=[item["cleanstatic_end_to_end_s"] for item in runs]
     sequential_preprocess={}
     for name in SCENARIOS[1:]:
