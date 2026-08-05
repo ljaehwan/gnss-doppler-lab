@@ -5,7 +5,7 @@ Production output is single-use and exact-path only. ``--test-output`` is accept
 only together with ``--synthetic`` for isolated integration tests.
 """
 from __future__ import annotations
-import argparse, csv, hashlib, json, multiprocessing, os, random, subprocess, sys, time
+import argparse, csv, hashlib, json, multiprocessing, os, pickle, random, subprocess, sys, time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import numpy as np
@@ -250,13 +250,14 @@ def ordered_fork_map(items, worker, workers):
         for value in values[start:start+workers]:
             receive,send=context.Pipe(duplex=False)
             def child(channel,item):
-                try: channel.send((True,worker(item)))
-                except BaseException as error: channel.send((False,f"{type(error).__name__}: {error}"))
+                try: payload=(True,worker(item))
+                except BaseException as error: payload=(False,f"{type(error).__name__}: {error}")
+                try: channel.send_bytes(pickle.dumps(payload,protocol=pickle.HIGHEST_PROTOCOL))
                 finally: channel.close()
             process=context.Process(target=child,args=(send,value)); process.start(); send.close()
             channels.append(receive); processes.append(process)
         for receive,process in zip(channels,processes):
-            try: ok,payload=receive.recv()
+            try: ok,payload=pickle.loads(receive.recv_bytes())
             finally: receive.close(); process.join()
             if process.exitcode != 0 or not ok: raise RuntimeError(f"forked score worker failed: {payload}")
             yield payload

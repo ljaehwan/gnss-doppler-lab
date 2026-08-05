@@ -247,3 +247,11 @@ def test_supervisor_runtime_gate_matches_offline_campaign_contract():
     spec=importlib.util.spec_from_file_location("supervisor",Path(__file__).parents[1]/"scripts/supervise_r2c_stage0.py")
     module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
     assert module.campaign_runtime_gate(21218.) and not module.campaign_runtime_gate(28801.)
+
+
+def test_ordered_fork_map_returns_torch_tensor_without_resource_sharer_fd():
+    import torch
+    spec=importlib.util.spec_from_file_location("runner_tensor",Path(__file__).parents[1]/"scripts/run_r2c_gnss_stage0_fix.py")
+    module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    result=list(module.ordered_fork_map([3],lambda x:torch.tensor([x]),1))
+    assert result[0].tolist()==[3]
