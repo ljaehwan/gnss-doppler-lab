@@ -1,4 +1,4 @@
-import hashlib,importlib.util,json,subprocess,sys
+import hashlib,importlib.util,json,subprocess,sys,time
 from pathlib import Path
 import numpy as np,pandas as pd,pytest
 
@@ -89,3 +89,17 @@ def test_b0_validation_wrapper_hash_binding(tmp_path):
     assert runner.load_b0_validation(wrapper,config)["aggregate_status"]=="UNAVAILABLE_AUTHENTIC_INTERFACE"
     bad=json.loads(wrapper.read_text());bad["checkpoint"]["sha256"]="0"*64;wrapper.write_text(json.dumps(bad))
     with pytest.raises(ValueError,match="checkpoint"):runner.load_b0_validation(wrapper,config)
+
+
+def test_stage0_parallel_scoring_yields_every_bin_in_serial_order():
+    runner=load_runner();started=[];finished=[]
+    def score(bin_id):
+        started.append(bin_id);time.sleep(.01*(5-bin_id));finished.append(bin_id)
+        return {"bin":bin_id,"score":bin_id*1.25}
+    serial=[score(bin_id) for bin_id in range(5)]
+    started.clear();finished.clear()
+    parallel=list(runner.ordered_bounded_map(range(5),score,workers=2))
+    assert [row["bin"] for row in parallel]==list(range(5))
+    assert parallel==serial and set(started)==set(finished)==set(range(5))
+    with pytest.raises(ValueError,match="positive"):
+        list(runner.ordered_bounded_map(range(1),score,workers=0))

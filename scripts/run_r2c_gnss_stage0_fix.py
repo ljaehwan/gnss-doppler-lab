@@ -6,6 +6,7 @@ only together with ``--synthetic`` for isolated integration tests.
 """
 from __future__ import annotations
 import argparse, csv, hashlib, json, os, random, subprocess, sys, time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import numpy as np
 
@@ -211,6 +212,40 @@ def eligible_full_control_candidate(los,fits):
     fit=fits.get("Full")
     return bool(los and fits.get("FullScorer") is not None and fit is not None and fit.valid)
 
+
+def ordered_bounded_map(items, worker, workers):
+    """Run independent scoring work concurrently, yielding strictly input order.
+
+    At most ``2 * workers`` futures are retained.  Threads deliberately share the
+    immutable fitted models and epoch arrays: process workers would pickle/copy
+    those arrays and multiply campaign memory.  Scoring is numerical native-code
+    work, while output assembly remains on the caller thread.
+    """
+    if workers < 1: raise ValueError("score workers must be positive")
+    iterator=iter(items);pending={};submit_index=0;yield_index=0
+    with ThreadPoolExecutor(max_workers=workers,thread_name_prefix="r2c-score") as executor:
+        def submit_one():
+            nonlocal submit_index
+            try:item=next(iterator)
+            except StopIteration:return False
+            pending[submit_index]=executor.submit(worker,item);submit_index+=1
+            return True
+        for _ in range(2*workers):
+            if not submit_one():break
+        while pending:
+            future=pending.pop(yield_index)
+            yield future.result()
+            yield_index+=1
+            submit_one()
+
+
+def default_score_workers():
+    """Conservative shared-memory default; operators may explicitly raise it."""
+    value=os.environ.get("R2C_STAGE0_SCORE_WORKERS")
+    workers=min(os.cpu_count() or 1,8) if value is None else int(value)
+    if workers < 1: raise ValueError("R2C_STAGE0_SCORE_WORKERS must be positive")
+    return workers
+
 def h0_residuals(y,provider,taps,grid,*,chunk_rows=4096):
     """Profile every row in deterministic bounded chunks; no support subsampling."""
     values=np.asarray(y,complex);output=np.empty_like(values)
@@ -382,7 +417,7 @@ def run_synthetic(output,config,source_commit):
     write_artifact(output,documents,csvs,{"synthetic_source.csv":"time,score\n0,0\n"})
     return {"scores":scores,"controls":controls}
 
-def run_production(output,config,source_commit,input_specs,geometry_specs,b0_validation_path,observer=None):
+def run_production(output,config,source_commit,input_specs,geometry_specs,b0_validation_path,observer=None,score_workers=None):
     inputs={k:Path(v) for k,v in parse_named_specs(input_specs,roster=SCENARIOS).items()}
     input_reports={}
     for name,path in inputs.items():
@@ -405,6 +440,8 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
     canonical_b0=set(config["b0"]["saved_score_sha256"])
     for name,item in b0["scenarios"].items():
         if name in canonical_b0 and item.get("event_rows") and item.get("status")=="AVAILABLE_SAVED_NATIVE_SCORE_REPLAY_WITH_NODE_LINEAGE_GAP":b0_events[name]=pd.DataFrame(item["event_rows"])
+    score_workers=default_score_workers() if score_workers is None else int(score_workers)
+    if score_workers < 1:raise ValueError("score workers must be positive")
     score_rows=[];event_rows=[];control_candidates=[]
     scenario_bins={name:input_reports[name]["bin_count"] for name in SCENARIOS}
     total_bins=sum(scenario_bins.values());completed_bins=0;completed_scenarios=0;recent=time.monotonic()
@@ -418,14 +455,13 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
         geometry_item=geometry.get(scenario,{})
         # Stage-0 Full is a physics experiment: consume certified offline oracle LOS.
         los_bins=offline_physics_los(geometry_item)
-        for bin_id in np.unique(dataset["bin"]):
+        def score_one_bin(bin_id):
             indices=np.flatnonzero(dataset["bin"]==bin_id);observations={};condition_map={};los={}
             for p in sorted(np.unique(dataset["prn"][indices])):
                 chosen=indices[dataset["prn"][indices]==p];observations[int(p)]=dataset["y"][chosen]
                 condition_map[int(p)]=(x[chosen],xe[chosen])
                 vector=los_bins.get(str(int(bin_id)),{}).get(str(int(p)))
                 if vector is not None:los[int(p)]=np.asarray(vector,float)
-            availability=float(dataset["time"][indices].max())
             try:scores,fits,_=score_bin(observations,los,provider,taps,grid,models,config,condition_map)
             except (ValueError,RuntimeError):
                 # Geometry-free paths remain operational; geometry paths stay unavailable.
@@ -434,6 +470,11 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
                 neural_obs={p:y-models["neural_model"].predict(condition_map[p][0]) for p,y in observations.items()}
                 independent=joint_profile_glrt(neural_obs,{},provider,taps,grid,hypothesis="H1-independent",whitener=models["neural_whitener"])
                 values=np.asarray(list(individual.values()));scores={"A1":float(values.max()) if len(values) and h0.valid else None,"A2":float(np.median(values)+np.mean(np.sort(values)[-min(4,len(values)):])) if len(values) and h0.valid else None,"A3":None,"A4":independent.score if independent.valid and h0.valid else None,"Full":None,"Neural-with-energy":None,"Power-only":float(np.mean([np.mean(np.abs(y)**2) for y in observations.values()]))};fits={"H0":h0,"A4":independent,"statuses":{d:("AVAILABLE" if score is not None else "UNAVAILABLE_INVALID_FIT") for d,score in scores.items()},"individual_rejected_count":len(per)-len(individual),"individual_rejected_reasons":{int(p):f.reason for p,f in per.items() if not f.valid}}
+            return int(bin_id),indices,observations,condition_map,los,float(dataset["time"][indices].max()),scores,fits
+        # This consumes the sorted certified-bin sequence in the same order as the
+        # serial runner.  Only score computation is concurrent; all output rows,
+        # observer writes, and control-candidate selection remain serial.
+        for bin_id,indices,observations,condition_map,los,availability,scores,fits in ordered_bounded_map(np.unique(dataset["bin"]),score_one_bin,score_workers):
             availability_overrides={};native=b0_events.get(scenario)
             native_row=native[np.isclose(native.window_bin_s,float(bin_id)*.5)] if native is not None else None
             if native_row is not None and len(native_row)==1:
@@ -590,6 +631,7 @@ def main():
     ap.add_argument("--input",action="append",default=[]);ap.add_argument("--geometry",action="append",default=[])
     ap.add_argument("--b0-validation",type=Path,help="canonical validated B0 wrapper")
     ap.add_argument("--synthetic",action="store_true"); ap.add_argument("--test-output",action="store_true")
+    ap.add_argument("--score-workers",type=int,default=default_score_workers(),help="bounded shared-memory Stage-0 scoring threads")
     ap.add_argument("--verification-recompute",action="store_true",help=argparse.SUPPRESS)
     args=ap.parse_args(); output=validate_destination(args.output,test_mode=args.test_output,verification_recompute=args.verification_recompute); validate_source(args.source_commit,test_mode=args.test_output or args.verification_recompute)
     config=json.loads(args.config.read_text())
@@ -611,7 +653,7 @@ def main():
     published=False
     try:
         # Assembly expects to create its destination; retain the marker in the staging parent meanwhile.
-        assembly=staging/"complete";result=run_production(assembly,config,args.source_commit,args.input,args.geometry,args.b0_validation,observer)
+        assembly=staging/"complete";result=run_production(assembly,config,args.source_commit,args.input,args.geometry,args.b0_validation,observer,args.score_workers)
         if observer.termination.is_set():raise InterruptedError("SIGTERM requested before seal")
         os.rename(assembly,staging/"published")
         # Flatten the completed assembly into the exact staging path used for atomic publication.
