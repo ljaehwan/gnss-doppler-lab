@@ -19,7 +19,7 @@ CONTROL_GATES={"gain_invariance.json":("gain_invariance",),"phase_invariance.jso
  "noise_control.json":("noise_gain_alarms",),"multipath_control.json":("shortcut_controls",),
  "second_source_injection.json":("complex_second_source",),
  "relation_destruction.json":("relation_destruction","geometry_removal")}
-VERIFIER_MAINTENANCE_FILES={"scripts/verify_r2c_gnss_stage0_fix.py","tests/test_r2c_stage0_correction6.py"}
+VERIFIER_MAINTENANCE_FILES={"scripts/verify_r2c_gnss_stage0_fix.py","tests/test_r2c_stage0_correction2.py","tests/test_r2c_stage0_correction6.py"}
 LIKELIHOOD_DETECTORS={"A1","A3","A4","Full","Neural-with-energy"}
 
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -324,12 +324,23 @@ def _git_mutate(repo,*args,check=True):
     command=["git","-c",f"core.hooksPath={os.devnull}","-c","core.autocrlf=false","-c","core.safecrlf=false","-c",f"core.attributesFile={os.devnull}",*args]
     return subprocess.run(command,cwd=repo,env=safe_git_env(),text=True,capture_output=True,check=check)
 
+def verifier_only_descendants(repo,base,head):
+    """Permit post-run verifier/test maintenance without relabeling score source."""
+    if git(repo,"merge-base",base,head)!=base:return False
+    for commit in git(repo,"rev-list",f"{base}..{head}").splitlines():
+        parents=git(repo,"show","-s","--format=%P",commit).split()
+        if len(parents)!=1:return False
+        changed=git(repo,"diff-tree","--no-commit-id","--name-only","-r",parents[0],commit).splitlines()
+        if any(name not in VERIFIER_MAINTENANCE_FILES for name in changed):return False
+    return True
+
+
 def finalize_transaction(artifact,repo,source,expected_branch,recompute_fn):
     artifact=Path(artifact).resolve();repo=Path(repo).resolve();relative="artifacts/r2c_gnss_stage0_fix";errors=[]
     errors.extend(git_resolution_security_errors(repo));errors.extend(validate_repository_layout(repo))
     try:
         start_head=git(repo,"rev-parse","HEAD")
-        if start_head!=source or git(repo,"branch","--show-current")!=expected_branch:errors.append("finalize branch/HEAD mismatch")
+        if (not verifier_only_descendants(repo,source,start_head)) or git(repo,"branch","--show-current")!=expected_branch:errors.append("finalize branch/source lineage mismatch")
         if git(repo,"diff","--cached","--name-only"):errors.append("finalize requires empty index")
         if git(repo,"diff","--name-only"):errors.append("finalize requires clean tracked worktree")
         if git(repo,"ls-files","--others","--exclude-standard"):errors.append("unexpected untracked files before finalize")
@@ -350,7 +361,7 @@ def finalize_transaction(artifact,repo,source,expected_branch,recompute_fn):
             meta,path=line.split("\t",1);mode,blob,_=meta.split();entries[path]=(mode,blob)
         if set(staged)!=set(disk) or set(entries)!=set(disk) or any(not path.startswith(relative+"/") or entries[path]!=("100644",blob) for path,blob in disk.items()):raise RuntimeError("staged artifact index contract mismatch")
         _git_mutate(repo,"commit","-m","Add externally verified R2C Stage-0 fix campaign artifact");committed=True;new_head=git(repo,"rev-parse","HEAD")
-        if git(repo,"show","-s","--format=%P",new_head).split()!=[source]:raise RuntimeError("finalize commit parent mismatch")
+        if git(repo,"show","-s","--format=%P",new_head).split()!=[start_head]:raise RuntimeError("finalize commit parent mismatch")
         changed=git(repo,"diff-tree","--no-commit-id","--name-only","-r",new_head).splitlines()
         if set(changed)!=set(disk) or any(not path.startswith(relative+"/") for path in changed):raise RuntimeError("finalize commit is not exact artifact-only")
         if _tree_blobs(repo,new_head,relative)!={path.split(relative+"/",1)[1]:blob for path,blob in disk.items()}:raise RuntimeError("finalize committed bytes mismatch")
@@ -369,7 +380,8 @@ def verify_artifact_commit(repo,artifact,source):
     try:
         artifact_commit=git(repo,"rev-list","-1","HEAD","--",path)
         if not artifact_commit: return ["artifact commit not found"]
-        if git(repo,"show","-s","--format=%P",artifact_commit).split()!=[source]:errors.append("artifact commit parent is not frozen source commit")
+        parents=git(repo,"show","-s","--format=%P",artifact_commit).split()
+        if len(parents)!=1 or not verifier_only_descendants(repo,source,parents[0]):errors.append("artifact commit parent is not frozen-source verifier-only lineage")
         changed=git(repo,"diff-tree","--no-commit-id","--name-only","-r",artifact_commit).splitlines()
         if any(not name.startswith(path+"/") for name in changed):errors.append("artifact commit diff is not artifact-only")
         committed=_tree_blobs(repo,artifact_commit,path);head=_tree_blobs(repo,"HEAD",path)
@@ -450,7 +462,7 @@ def verify(artifact:Path,*,repo=ROOT,require_committed=True,allow_synthetic_test
     if synthetic and (artifact==production or production in artifact.parents):errors.append("synthetic artifact forbidden at production path")
     if synthetic and not allow_synthetic_test_artifact:errors.append("synthetic artifact requires explicit allow flag")
     if synthetic and (artifact==repo.resolve() or repo.resolve() in artifact.parents):errors.append("synthetic artifact must be outside repository")
-    if not require_committed and source!=git(repo,"rev-parse","HEAD"):errors.append("uncommitted verification source commit must equal HEAD")
+    if not require_committed and not verifier_only_descendants(repo,source,git(repo,"rev-parse","HEAD")):errors.append("uncommitted verifier/source lineage is not maintenance-only")
     if set(bundle)!=set(FIX_SOURCE_FILES):errors.append("source bundle file set mismatch")
     else:
         for name,value in bundle.items():
