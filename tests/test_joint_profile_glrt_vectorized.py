@@ -213,3 +213,24 @@ def test_shared_compiled_objective_does_not_decompose_per_beta_iteration(monkeyp
     # a separate decomposition for each candidate.
     extra=calls[compiled:]
     assert extra and all(shape==(len(GRID),len(TAPS),2) for shape in extra)
+
+
+def test_cuda_shared_backend_differential_and_invocation():
+    torch=pytest.importorskip("torch")
+    if not torch.cuda.is_available(): pytest.skip("CUDA unavailable")
+    provider=TemplateProvider.analytic();w=whitener(dense=True,mean=True)
+    vectors=np.asarray([[1,0,0],[0,1,0],[0,0,1],[-.6,-.5,-.6245],[.5,-.7,.5099]],float);vectors/=np.linalg.norm(vectors,axis=1)[:,None]
+    los={p:v for p,v in enumerate(vectors,1)};truth=np.asarray([20.,-15.,10.,40.]);rng=np.random.default_rng(2026);obs={}
+    for p,u in los.items():
+        second=float((-u@truth[:3]+truth[3])/299792458.*1023000.)
+        base=(1+.1j)*provider.evaluate(TAPS)+(.7-.2j)*provider.evaluate(TAPS-second)
+        obs[p]=np.asarray([base+.01*(rng.normal(size=9)+1j*rng.normal(size=9)) for _ in range(5)])
+    kwargs={"optimizer_starts":[truth]}
+    cpu_plan=compile_profile_plan(provider,TAPS,GRID,w);gpu_plan=compile_profile_plan(provider,TAPS,GRID,w)
+    cpu=joint_profile_glrt(obs,los,provider,TAPS,GRID,hypothesis="H1-shared",whitener=w,profile_plan=cpu_plan,**kwargs)
+    gpu=joint_profile_glrt(obs,los,provider,TAPS,GRID,hypothesis="H1-shared",whitener=w,profile_plan=gpu_plan,profile_backend="cuda",**kwargs)
+    assert gpu_plan.counters.cuda_invocations>0 and gpu_plan.counters.cuda_candidate_evaluations>0
+    assert gpu.delays_chips==pytest.approx(cpu.delays_chips,abs=1e-8)
+    assert gpu.beta_m==pytest.approx(cpu.beta_m,abs=1e-3)
+    for name in ("rss","log_likelihood","bic","score","null_log_likelihood"):
+        assert getattr(gpu,name)==pytest.approx(getattr(cpu,name),rel=1e-10,abs=1e-8)

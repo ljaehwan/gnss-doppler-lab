@@ -286,7 +286,7 @@ class FrozenFullScorer:
             condition=condition.copy();condition[:,0]-=float(cn0_degradation_db)
             adjusted[p]=y-self.models["neural_model"].predict(condition)
         fit=joint_profile_glrt(adjusted,{p:los[p] for p in common},self.provider,self.taps,self.grid,hypothesis="H1-shared",
-          whitener=self.models["neural_whitener"],profile_plan=self.models.get("profile_plans",{}).get("neural"),beta_bounds_m=self.config["beta_bounds_m"],optimizer_starts=self.config["optimizer_starts_m"])
+          whitener=self.models["neural_whitener"],profile_plan=self.models.get("profile_plans",{}).get("neural"),beta_bounds_m=self.config["beta_bounds_m"],optimizer_starts=self.config["optimizer_starts_m"],profile_backend=self.config.get("profile_backend","cpu"))
         return ScoreResult("AVAILABLE",float(fit.score),fit=fit) if fit.valid else ScoreResult("UNAVAILABLE_INVALID_SHARED_FIT",None,fit.reason,fit)
 
 def fit_frozen_models(clean,config,provider,taps,grid,*,require_gpu,raw_residuals=None):
@@ -336,8 +336,8 @@ def score_bin(observations,los,provider,taps,grid,models,config,conditions_by_pr
     analytic_obs={p:observations[p] for p in common};energy_shared_obs={p:energy_obs[p] for p in common}
     full_scorer=FrozenFullScorer(provider,taps,grid,models,config,conditions_by_prn);full_result=full_scorer(observations,los)
     shared=full_result.fit
-    analytic_shared=joint_profile_glrt(analytic_obs,shared_los,provider,taps,grid,hypothesis="H1-shared",whitener=models["analytic"],profile_plan=plans.get("analytic"),beta_bounds_m=config["beta_bounds_m"],optimizer_starts=config["optimizer_starts_m"]) if common else None
-    energy_shared=joint_profile_glrt(energy_shared_obs,shared_los,provider,taps,grid,hypothesis="H1-shared",whitener=models["energy_whitener"],profile_plan=plans.get("energy"),beta_bounds_m=config["beta_bounds_m"],optimizer_starts=config["optimizer_starts_m"]) if common else None
+    analytic_shared=joint_profile_glrt(analytic_obs,shared_los,provider,taps,grid,hypothesis="H1-shared",whitener=models["analytic"],profile_plan=plans.get("analytic"),beta_bounds_m=config["beta_bounds_m"],optimizer_starts=config["optimizer_starts_m"],profile_backend=config.get("profile_backend","cpu")) if common else None
+    energy_shared=joint_profile_glrt(energy_shared_obs,shared_los,provider,taps,grid,hypothesis="H1-shared",whitener=models["energy_whitener"],profile_plan=plans.get("energy"),beta_bounds_m=config["beta_bounds_m"],optimizer_starts=config["optimizer_starts_m"],profile_backend=config.get("profile_backend","cpu")) if common else None
     values=np.asarray(list(individual.values()),float)
     scores={"A1":float(values.max()) if len(values) else None,
       "A2":float(np.median(values)+np.mean(np.sort(values)[-min(4,len(values)):])) if len(values) else None,

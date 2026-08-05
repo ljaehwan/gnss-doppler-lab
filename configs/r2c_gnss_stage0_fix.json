@@ -9,6 +9,7 @@
   "beta_bounds_m": [[-150, 150], [-150, 150], [-150, 150], [-150, 150]],
   "optimizer_starts_m": [[0, 0, 0, 25], [0, 0, 0, -25], [25, -25, 10, 50], [-25, 25, -10, -50]],
   "epoch_policy": {"selection": "all_finite_authentic_epochs", "chunk_rows": 4096, "subsampling": false},
+  "profile_backend": "cuda",
   "splits": {
     "normal_train": {"source_end_lte_s": 300.0},
     "normal_calibration": {"source_start_gte_s": 320.0, "source_end_lte_s": 400.0},

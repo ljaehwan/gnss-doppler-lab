@@ -410,6 +410,8 @@ class ProfileRuntimeCounters:
     scalar_fallback_epochs: int = 0
     scalar_fallback_lstsq_calls: int = 0
     scalar_fallback_elapsed_s: float = 0.
+    cuda_invocations: int = 0
+    cuda_candidate_evaluations: int = 0
 
     def snapshot(self) -> dict[str, int | float]:
         return {name:getattr(self,name) for name in self.__dataclass_fields__}
@@ -503,14 +505,27 @@ def joint_profile_glrt(observations: Mapping[int, np.ndarray], los: Mapping[int,
                        profile_plan: CompiledProfilePlan | None = None, scalar_reference: bool = False,
                        beta_bounds_m: Sequence[tuple[float,float]] = ((-150,150),(-150,150),(-150,150),(-150,150)),
                        optimizer_starts: Sequence[Sequence[float]] | None = None,
-                       maximum_condition_number: float = 1e6) -> JointFit:
+                       maximum_condition_number: float = 1e6,
+                       profile_backend: str = "cpu") -> JointFit:
     """Fixed-covariance proper-complex all-epoch profile likelihood.
 
     Delays and beta are optimized from observations. Evaluation residual variance
     is never estimated. ``optimizer_starts`` are fixed initializations, not
-    candidate solutions or injected truth.
+    candidate solutions or injected truth.  ``profile_backend='cuda'`` is an
+    explicit requirement and raises when CUDA float64 PyTorch is unavailable;
+    ``'auto'`` is the sole opt-in CUDA-to-CPU fallback mode.
     """
     from scipy.optimize import minimize
+    if profile_backend not in ("cpu", "cuda", "auto"):
+        raise ValueError("profile_backend must be cpu, cuda, or auto")
+    torch = None
+    if profile_backend != "cpu":
+        try:
+            import torch as _torch
+            if not _torch.cuda.is_available(): raise RuntimeError("CUDA is unavailable")
+            torch = _torch
+        except Exception as error:
+            if profile_backend == "cuda": raise RuntimeError("CUDA profile backend required but unavailable") from error
     taps=np.asarray(taps,float); grid=np.unique(np.asarray(delay_grid,float)); prns=sorted(observations)
     arrays={p:np.asarray(observations[p],complex) for p in prns}
     if not prns or any(a.ndim!=2 or a.shape[1:]!=(len(taps),) or not np.isfinite(a).all() for a in arrays.values()):
@@ -596,6 +611,45 @@ def joint_profile_glrt(observations: Mapping[int, np.ndarray], los: Mapping[int,
             profile_plan.counters.scalar_fallback_elapsed_s += time.perf_counter()-started_refinement
             return min(refined,key=lambda item:(item[0],item[1]))
 
+        cuda_dynamic_cache = {}
+        cuda_seconds = None
+        cuda_state = None
+        def cuda_dynamic_values(seconds):
+            """Batched PRN/candidate rank-two projector on CUDA float64.
+
+            Inputs, whitening, candidate templates, and padded bin rows remain
+            device tensors for each shared-beta objective.  CPU exact RSS below
+            certifies the selected discrete candidate, retaining the established
+            likelihood and tie semantics.
+            """
+            key=tuple(float(seconds[p]) for p in prns)
+            if key in cuda_dynamic_cache:return cuda_dynamic_cache[key]
+            nonlocal cuda_state
+            candidates=np.asarray(profile_plan.h0_candidates,np.float64)
+            if cuda_state is None:
+                max_rows=max(len(arrays[p]) for p in prns); rows=np.broadcast_to(mu,(len(prns),max_rows,len(taps))).copy()
+                for i,p0 in enumerate(prns): rows[i,:len(arrays[p0])]=arrays[p0]
+                device=torch.device("cuda");Wd=torch.as_tensor(W,dtype=torch.complex128,device=device)
+                block=(torch.as_tensor(rows,dtype=torch.complex128,device=device)-torch.as_tensor(mu,dtype=torch.complex128,device=device)) @ Wd.T
+                first=np.asarray([provider.evaluate(taps-da) for da in candidates],np.complex128)
+                cuda_state=(Wd,block,torch.as_tensor(first,dtype=torch.complex128,device=device).expand(len(prns),-1,-1))
+            Wd,block,first_d=cuda_state
+            second=np.asarray([[provider.evaluate(taps-da-key[i]) for da in candidates] for i in range(len(prns))],np.complex128)
+            second_d=torch.as_tensor(second,dtype=torch.complex128,device=block.device)
+            design=torch.matmul(Wd.expand(len(prns),len(candidates),-1,-1),torch.stack((first_d,second_d),dim=-1))
+            basis,singular,_=torch.linalg.svd(design,full_matrices=False)
+            valid=(singular[...,0]>0) & (singular[...,-1]>singular[...,0]*1e-10)
+            projected=torch.einsum("prt,pctk->prck",block,basis.conj())
+            residual=block[:,:,None,:]-torch.einsum("prck,pctk->prct",projected,basis)
+            values=(residual.real.square()+residual.imag.square()).sum(dim=(1,3))
+            values=torch.where(valid,values,torch.full_like(values,float("inf")))
+            # A single host transfer is intentional: Nelder-Mead is CPU-side.
+            result=values.cpu().numpy()
+            profile_plan.counters.cuda_invocations += 1
+            profile_plan.counters.cuda_candidate_evaluations += int(result.size)
+            cuda_dynamic_cache[key]=result
+            return result
+
         def dynamic_refined_min(p, second_delay):
             """Evaluate every authentic-delay candidate without per-objective SVDs.
 
@@ -606,6 +660,15 @@ def joint_profile_glrt(observations: Mapping[int, np.ndarray], los: Mapping[int,
             """
             candidates = profile_plan.h0_candidates
             y = arrays[p]
+            if torch is not None:
+                values=cuda_dynamic_values(cuda_seconds)[prns.index(p)]
+                minimum=float(np.min(values)); total_energy=float(np.sum(np.abs((y-mu) @ W.T)**2,dtype=np.float64))
+                tolerance=max(1e-12,1e-10*max(total_energy,1.))
+                indices=np.flatnonzero(values<=minimum+tolerance)
+                # Certify the CUDA-selected shortlist with the unchanged scalar
+                # likelihood before it reaches the optimizer.
+                refined=[(prn_rss(p,float(candidates[int(index)]),float(second_delay)),int(index)) for index in indices]
+                return min(refined,key=lambda item:(item[0],item[1]))
             first = np.asarray([provider.evaluate(taps-da) for da in candidates], np.complex128)
             second = np.asarray([provider.evaluate(taps-da-second_delay) for da in candidates], np.complex128)
             design = np.einsum("ij,cjk->cik", W, np.stack((first, second), axis=2), optimize=True)
@@ -675,7 +738,9 @@ def joint_profile_glrt(observations: Mapping[int, np.ndarray], los: Mapping[int,
         bounds=tuple((float(a),float(b)) for a,b in beta_bounds_m)
         if len(bounds)!=4 or any(a>=b for a,b in bounds): raise ValueError("four valid fixed beta bounds required")
         def objective(b):
+            nonlocal cuda_seconds
             seconds={p:float((-np.dot(los[p],b[:3])+b[3])/C_M_S*1_023_000) for p in prns}
+            if torch is not None: cuda_seconds=seconds
             if any(abs(d)<1e-10 or d<grid[0] or d>grid[-1] for d in seconds.values()): return 1e100
             return sum((vector_prn_min(p,seconds[p])[0] if profile_plan is not None else
                         min(prn_rss(p,float(da),seconds[p]) for da in grid)) for p in prns)
