@@ -213,6 +213,13 @@ def eligible_full_control_candidate(los,fits):
     return bool(los and fits.get("FullScorer") is not None and fit is not None and fit.valid)
 
 
+def detach_full_scorer_for_transport(los,fits):
+    """Return control eligibility while removing non-serializable model ownership."""
+    eligible=eligible_full_control_candidate(los,fits)
+    fits.pop("FullScorer",None)
+    return eligible
+
+
 def ordered_bounded_map(items, worker, workers):
     """Run independent scoring work concurrently, yielding strictly input order.
 
@@ -519,11 +526,15 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
                 neural_obs={p:y-models["neural_model"].predict(condition_map[p][0]) for p,y in observations.items()}
                 independent=joint_profile_glrt(neural_obs,{},provider,taps,grid,hypothesis="H1-independent",whitener=models["neural_whitener"])
                 values=np.asarray(list(individual.values()));scores={"A1":float(values.max()) if len(values) and h0.valid else None,"A2":float(np.median(values)+np.mean(np.sort(values)[-min(4,len(values)):])) if len(values) and h0.valid else None,"A3":None,"A4":independent.score if independent.valid and h0.valid else None,"Full":None,"Neural-with-energy":None,"Power-only":float(np.mean([np.mean(np.abs(y)**2) for y in observations.values()]))};fits={"H0":h0,"A4":independent,"statuses":{d:("AVAILABLE" if score is not None else "UNAVAILABLE_INVALID_FIT") for d,score in scores.items()},"individual_rejected_count":len(per)-len(individual),"individual_rejected_reasons":{int(p):f.reason for p,f in per.items() if not f.valid}}
-            return int(bin_id),indices,observations,condition_map,los,float(dataset["time"][indices].max()),scores,fits
+            # Fork workers must never serialize FullScorer back to the parent:
+            # it captures torch models and was retained once per eligible bin,
+            # causing linear resident-memory growth across the campaign.
+            control_eligible=detach_full_scorer_for_transport(los,fits)
+            return int(bin_id),indices,observations,condition_map,los,float(dataset["time"][indices].max()),scores,fits,control_eligible
         # This consumes the sorted certified-bin sequence in the same order as the
         # serial runner.  Only score computation is concurrent; all output rows,
         # observer writes, and control-candidate selection remain serial.
-        for bin_id,indices,observations,condition_map,los,availability,scores,fits in ordered_score_map(np.unique(dataset["bin"]),score_one_bin,score_workers,score_backend):
+        for bin_id,indices,observations,condition_map,los,availability,scores,fits,control_eligible in ordered_score_map(np.unique(dataset["bin"]),score_one_bin,score_workers,score_backend):
             availability_overrides={};native=b0_events.get(scenario)
             native_row=native[np.isclose(native.window_bin_s,float(bin_id)*.5)] if native is not None else None
             if native_row is not None and len(native_row)==1:
@@ -532,7 +543,11 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
             noise=dataset["noise_floor"]
             if noise is not None:scores["Noise-floor-only"]=float(np.mean(noise[indices]));fits["statuses"]["Noise-floor-only"]="AVAILABLE"
             else:scores["Noise-floor-only"]=None;fits["statuses"]["Noise-floor-only"]="UNAVAILABLE_SOURCE_NOT_PRESENT"
-            if eligible_full_control_candidate(los,fits):control_candidates.append((scenario,int(bin_id),observations,los,fits["FullScorer"],fits.get("Full")))
+            # Keep bounded, deterministic cleanStatic 10-s blocks for controls.
+            # Store only observations/conditions; reconstruct one parent-owned scorer
+            # later instead of retaining a fork-deserialized torch model per bin.
+            if control_eligible and scenario=="cleanStatic" and int(bin_id)%20==0 and len(control_candidates)<24:
+                control_candidates.append((scenario,int(bin_id),observations,condition_map,los))
             for detector,score in scores.items():
                 fit=fits.get(detector);valid_fit=fit is not None and fit.valid;score_rows.append({"scenario":scenario,"time_bin":int(bin_id),"availability_time_s":availability_overrides.get(detector,availability),
                   "detector":detector,"status":fits.get("statuses",{}).get(detector,"AVAILABLE" if score is not None else "UNAVAILABLE"),"reason":fit.reason if fit and not fit.valid else "","score":"" if score is None else score,"ll0":fit.null_log_likelihood if valid_fit else "",
@@ -604,11 +619,18 @@ def run_production(output,config,source_commit,input_specs,geometry_specs,b0_val
       "valid_draw_count":2000 if available_comparisons else 0,"comparisons":comparisons,
       "draw_index_sha256":hashlib.sha256(json.dumps([x["draw_index_sha256"] for x in available_comparisons],sort_keys=True).encode()).hexdigest() if available_comparisons else None,
       "seed":config["bootstrap"]["seed"],"block_s":config["bootstrap"]["block_s"]}
-    valid_control=None
-    for scenario,b,obs,los,full_scorer,full_fit in reversed(control_candidates):
-        if scenario=="cleanStatic" and full_fit is not None and full_fit.valid:
-            valid_control=run_full_controls(full_scorer,obs,los,full_threshold["q99"],provider,taps,seed=config["seed"]);break
-    control=valid_control or {"status":"NOT_EVALUATED","threshold":full_threshold["q99"],"rows":[]}
+    control_runs=[]
+    for scenario,b,obs,condition_map,los in control_candidates:
+        full_scorer=FrozenFullScorer(provider,taps,grid,models,config,condition_map)
+        block=run_full_controls(full_scorer,obs,los,full_threshold["q99"],provider,taps,seed=config["seed"]+int(b))
+        for row in block.get("rows",[]): row.update({"scenario":scenario,"time_bin":int(b),"block_start_s":float(b)*.5,"block_duration_s":10.})
+        control_runs.append(block)
+    if control_runs:
+        control={"status":"COMPUTED","threshold":full_threshold["q99"],"selected_blocks":len(control_runs),
+          "computed_rows":sum(len(x.get("rows",[])) for x in control_runs),
+          "rows":[row for block in control_runs for row in block.get("rows",[])]}
+    else:
+        control={"status":"NOT_EVALUATED","threshold":full_threshold["q99"],"selected_blocks":0,"rows":[]}
     gates={}
     input_integrity=all(d["row_count"]>0 and len(d["source_sha256"])==64 and geometry[n]["lineage"].get("source_iq_binding_status")=="HASH_BOUND" for n,d in input_reports.items())
     gates["complex_provenance"]={"status":"PASS" if input_integrity else "FAIL","derived_from":"finite rows and source hashes"}

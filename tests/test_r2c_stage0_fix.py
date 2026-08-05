@@ -222,6 +222,10 @@ def test_ordered_fork_map_preserves_input_order_and_worker_results():
     assert list(module.ordered_fork_map([3,1,2],lambda x:x*x,2))==expected
     assert list(module.ordered_score_map([3,1,2],lambda x:x*x,2,backend="thread"))==expected
     assert list(module.ordered_score_map([3,1,2],lambda x:x*x,2,backend="fork"))==expected
+    class Fit: valid=True
+    fits={"Full":Fit(),"FullScorer":object(),"statuses":{}}
+    assert module.detach_full_scorer_for_transport({1:np.ones(3)},fits)
+    assert "FullScorer" not in fits and fits["Full"].valid
 
 
 def test_benchmark_bin_selector_is_deterministic_and_requires_offline_los_support():
