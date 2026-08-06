@@ -1,4 +1,4 @@
 command: /usr/bin/python3 -m pytest -q tests/test_acaf_nf_stage0_r12_alignment.py
 exit_code: 0
-......                                                                   [100%]
-6 passed in 0.05s
+.......                                                                  [100%]
+7 passed in 0.02s

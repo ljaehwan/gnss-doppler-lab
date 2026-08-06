@@ -1,25 +1,27 @@
 {
   "best_candidate": {
-    "boundary_fraction": 0.74625,
+    "boundary_fraction": 0.7452631578947368,
     "candidate": "prev_to_cur_aux_previous_rem_-1_carrier_-1_replica_+1",
-    "exact_center_fraction": 0.00375,
-    "median_prn_spearman": -0.02552467385138968,
-    "n": 800,
-    "pooled_spearman": -0.01893663896349838,
+    "exact_center_fraction": 0.003157894736842105,
+    "median_prn_spearman": -0.037022809123649456,
+    "n": 950,
+    "pooled_spearman": -0.024924904130233478,
     "prn_count": 19,
-    "within_tolerance_fraction": 0.0175
+    "within_tolerance_fraction": 0.018947368421052633
   },
   "gate_input": {
     "binding": "exact_same_raw",
-    "boundary_fraction": 0.74625,
+    "boundary_fraction": 0.7452631578947368,
     "candidate": "prev_to_cur_aux_previous_rem_-1_carrier_-1_replica_+1",
     "consistent_time": true,
-    "dominant_fraction": 0.05375,
-    "median_prn_spearman": -0.02552467385138968,
-    "n": 800,
-    "pooled_spearman": -0.01893663896349838,
+    "dominant_fraction": 0.05263157894736842,
+    "median_prn_spearman": -0.037022809123649456,
+    "min_prn_epochs": 50,
+    "n": 950,
+    "pooled_spearman": -0.024924904130233478,
     "prn_count": 19,
-    "within_tolerance_fraction": 0.0175
+    "required_min_prn_epochs": 50,
+    "within_tolerance_fraction": 0.018947368421052633
   },
   "selection": {
     "A1_source_binding": "PASS",
