@@ -10,7 +10,7 @@ The runner starts at the retained tracking-MAT directory and walks ancestor dire
 
 ## Interval and sampling contract
 
-Each raw interval is built from true adjacent tracker rows in the same channel and PRN: `[previous, current)` or `[current, next)`. No fixed 25,000-sample interval is assumed. Roles are assigned by chronological recording ranges first, and sampling is PRN-stratified without tracker-row reuse. Same-epoch overlap among distinct PRNs/channels is explicitly allowed; overlap between time roles is forbidden.
+Each raw interval is built from true adjacent tracker rows in the same channel and PRN: `[previous, current)` or `[current, next)`. No fixed 25,000-sample interval is assumed. Roles are assigned by chronological recording ranges first, and sampling is PRN-stratified without tracker-row reuse. The R12 default selects 950 epochs (19 retained PRNs × 50) and fails closed if any used PRN has fewer than 50 validation epochs. Same-epoch overlap among distinct PRNs/channels is explicitly allowed; overlap between time roles is forbidden.
 
 ## Alignment and fail-closed selection
 

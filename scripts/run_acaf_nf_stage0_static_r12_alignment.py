@@ -94,7 +94,7 @@ def make_plot(path, title, x, y, xlabel="", ylabel=""):
 
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument("--output", default=OUT); ap.add_argument("--raw-dir", type=Path, default=DEFAULT_RAW_DIR); ap.add_argument("--epochs", type=int, default=800); a=ap.parse_args()
+    ap = argparse.ArgumentParser(); ap.add_argument("--output", default=OUT); ap.add_argument("--raw-dir", type=Path, default=DEFAULT_RAW_DIR); ap.add_argument("--epochs", type=int, default=DEFAULT_VALIDATION_EPOCHS); a=ap.parse_args()
     clean_only_guard(["cleanStatic"]); out = Path(a.output); out.mkdir(parents=True, exist_ok=True); plots = out/"plots"; plots.mkdir(exist_ok=True)
     manifest_path, manifest, config_path, runtime_path = discover(a.raw_dir)
     if not manifest: raise RuntimeError("cleanStatic parent receiver manifest was not discovered")
@@ -138,6 +138,9 @@ def main():
     dump(out/"time_role_intervals.json", {"roles":[{"role":n,"start_sample":lo,"end_sample":hi,"start_seconds":lo/FS,"end_seconds":hi/FS} for lo,hi,n in role_bounds],"cross_role_time_overlap_forbidden":True,"cross_prn_same_epoch_overlap_allowed":True})
     counts=defaultdict(int)
     for r in selected: counts[r["prn"]]+=1
+    min_prn_epochs = min(counts.values()) if counts else 0
+    if min_prn_epochs < MIN_VALIDATION_EPOCHS_PER_PRN:
+        raise RuntimeError(f"selection violates per-PRN validation floor: minimum {min_prn_epochs}, required {MIN_VALIDATION_EPOCHS_PER_PRN}")
     csvout(out/"prn_sampling_summary.csv", [{"prn":p,"n":n,"fraction":n/len(selected)} for p,n in sorted(counts.items())])
     candidates=alignment_candidates(); grid=wide_grid(); candidate_rows=[]; detail=[]
     # Wide grid is computed for all 24 hypotheses on 800 selected true intervals; raw CAF is shared per interval/candidate semantics.
@@ -157,7 +160,7 @@ def main():
         if ci==0: detail=results
     csvout(out/"alignment_hypotheses.csv",candidate_rows)
     best=max(candidate_rows,key=lambda x:(x["within_tolerance_fraction"],x["pooled_spearman"]))
-    summary={"binding":binding,"candidate":best["candidate"],"n":best["n"],"prn_count":best["prn_count"],"dominant_fraction":dominant_fraction([r["prn"] for r in selected]),"consistent_time":roles_nonoverlap([{"role":n,"start":lo,"end":hi} for lo,hi,n in role_bounds]),**{k:best[k] for k in ("within_tolerance_fraction","pooled_spearman","median_prn_spearman","boundary_fraction")}}
+    summary={"binding":binding,"candidate":best["candidate"],"n":best["n"],"prn_count":best["prn_count"],"min_prn_epochs":min_prn_epochs,"required_min_prn_epochs":MIN_VALIDATION_EPOCHS_PER_PRN,"dominant_fraction":dominant_fraction([r["prn"] for r in selected]),"consistent_time":roles_nonoverlap([{"role":n,"start":lo,"end":hi} for lo,hi,n in role_bounds]),**{k:best[k] for k in ("within_tolerance_fraction","pooled_spearman","median_prn_spearman","boundary_fraction")}}
     gate=gate_alignment(summary); dump(out/"selected_alignment.json",gate)
     csvout(out/"center_validation.csv",detail)
     byprn=[]

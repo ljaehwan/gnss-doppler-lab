@@ -3,6 +3,9 @@ from __future__ import annotations
 from collections import Counter
 
 FS = 25_000_000
+MIN_VALIDATION_EPOCHS_PER_PRN = 50
+# Retained cleanStatic fixture has 19 usable PRNs; 19 * 50 guarantees the per-PRN validation floor.
+DEFAULT_VALIDATION_EPOCHS = 950
 
 
 def aux_samples_to_chips(aux, code_freq, fs=FS):
@@ -95,7 +98,7 @@ def gate_alignment(s):
     """Fail closed: A2/A3 failures force selected_alignment to JSON null."""
     checks = {
         "A1_source_binding": s.get("binding") in ("exact_same_raw", "same_record_header_offset"),
-        "A2_interval_alignment": s.get("n", 0) >= 800 and s.get("prn_count", 0) >= 8 and s.get("dominant_fraction", 1) <= 0.2 and bool(s.get("consistent_time")),
+        "A2_interval_alignment": s.get("n", 0) >= 800 and s.get("prn_count", 0) >= 8 and s.get("min_prn_epochs", 0) >= MIN_VALIDATION_EPOCHS_PER_PRN and s.get("dominant_fraction", 1) <= 0.2 and bool(s.get("consistent_time")),
         "A3_recovery": s.get("within_tolerance_fraction", 0) >= 0.95 and s.get("pooled_spearman", -1) >= 0.90 and s.get("median_prn_spearman", -1) >= 0.80 and s.get("boundary_fraction", 1) <= 0.05,
     }
     selected = s.get("candidate") if all(checks.values()) else None
