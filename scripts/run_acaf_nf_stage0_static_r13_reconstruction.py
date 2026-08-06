@@ -8,9 +8,12 @@ from collections import Counter, defaultdict
 from dataclasses import asdict, replace
 import hashlib
 import json
+import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
+import tempfile
 
 import h5py
 import numpy as np
@@ -54,6 +57,70 @@ def write_csv(path: Path, rows, fields=None) -> None:
     rows = list(rows); fields = fields or (list(rows[0]) if rows else ["status"])
     with path.open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fields, extrasaction="ignore"); writer.writeheader(); writer.writerows(rows)
+
+
+OBSERVATION_FIELDS=("recording","prn","channel","role","candidate","previous_mat_row","current_mat_row",
+ "next_mat_row","tracker_row","mat_path","mat_sha256","consumed_start_sample","consumed_end_sample",
+ "consumed_length_samples","support_start_sample","support_end_sample","support_length_samples",
+ "raw_start_sample","raw_end_sample","raw_start_byte","raw_end_byte","vector_length","aux_row_index",
+ "aux1_value","nco_row_index","code_freq_chips_value","carrier_doppler_hz_value","prompt_row_index",
+ "prompt_i_value","prompt_q_value","mat_prompt_magnitude","peak_delay_offset_chips","peak_doppler_offset_hz",
+ "peak_magnitude","center_magnitude","exact_center","within_tolerance","grid_boundary") + (
+ "raw_interval_content_sha256","raw_interval_range_sha256","replica_chip_indices_sha256",
+ "carrier_wipeoff_sha256","aux_indices_sha256","nco_indices_sha256","prompt_indices_sha256",
+ "result_field_sha256")
+
+
+def publish_fail_closed(output: Path, verdict: str, reason: str, *, a1: bool=False) -> dict:
+    """Atomically publish the complete no-CAF schema for an A1/A2 failure."""
+    output=Path(output)
+    if output.exists():
+        raise FileExistsError(output)
+    output.parent.mkdir(parents=True,exist_ok=True)
+    staging=Path(tempfile.mkdtemp(prefix=f".{output.name}.staging-",dir=output.parent))
+    (staging/"plots").mkdir()
+    gate=gate_verdict(a1,False,False)
+    if gate["verdict"] != verdict:
+        raise ValueError("verdict does not match A1/A2 state")
+    write_json(staging/"config.json",{"scope":"cleanStatic-only","status":"preflight_failed"})
+    write_json(staging/"environment.json",{"python":sys.version})
+    checks={"synthetic_preflight":True} if a1 else {"preflight":False}
+    write_json(staging/"receiver_source_binding.json",{"recording_id":"cleanStatic","checks":checks,
+      "raw_sha256":"0"*64,"format":"ishort","fs":FS,"skip_samples":0,"resampling":"none"})
+    write_json(staging/"gnss_sdr_source_binding.json",{"prompt_support_mapping_authenticated":False,
+      "failure_reason":reason})
+    (staging/"gnss_sdr_tracking_semantics.md").write_text(f"# Preflight unavailable\n\n{reason}\n")
+    write_json(staging/"ca_code_validation.json",{"canonical_prns_passed":0,"local_generator_absent":True})
+    write_csv(staging/"ca_code_correlation.csv",[],["prn","status"])
+    write_csv(staging/"candidate_application_audit.csv",[],OBSERVATION_FIELDS)
+    write_json(staging/"candidate_fingerprints.json",{"expected_unique":0,"fingerprints":{}})
+    write_csv(staging/"alignment_hypotheses.csv",[],["candidate","n"])
+    write_json(staging/"selected_alignment.json",gate)
+    write_csv(staging/"center_validation.csv",[],OBSERVATION_FIELDS)
+    zero={"n":0,"prn_count":0,"min_per_prn":0,"dominant_fraction":1,
+      "within_tolerance_fraction":0,"exact_center_fraction":0,"boundary_fraction":1,
+      "pooled_spearman":0,"median_prn_spearman":0}
+    write_json(staging/"center_validation_summary.json",zero)
+    write_csv(staging/"center_metrics_by_prn.csv",[],["prn","n"])
+    write_csv(staging/"center_metrics_by_channel.csv",[],["channel","n"])
+    write_csv(staging/"center_metrics_by_time_block.csv",[],["time_block","n","prn_count"])
+    write_csv(staging/"global_offset_sensitivity.csv",[],OBSERVATION_FIELDS+("global_offset_samples","invocation"))
+    write_json(staging/"global_offset_application_audit.json",{"calls":[],"origin_selected":None})
+    write_csv(staging/"prn_sampling_summary.csv",[],["prn","n"])
+    write_json(staging/"raw_overlap_audit.json",{"rows":[],"cross_role_time_overlap":False,"same_epoch_cross_prn_allowed":True})
+    write_json(staging/"execution_validity.json",{"caf_executed":False,"failure_reason":reason})
+    write_json(staging/"go_no_go.json",gate)
+    (staging/"README.md").write_text(f"# R1.3 fail-closed artifacts\n\nNo CAF executed. {reason}\n")
+    (staging/"test_report.txt").write_text(f"PREFLIGHT FAILED: {reason}\n")
+    (staging/"plots"/"preflight-status.svg").write_text(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="640" height="120"><rect width="100%" height="100%" fill="#fee"/><text x="20" y="65" font-size="22">CAF unavailable: preflight failed</text></svg>\n')
+    write_json(staging/"verification_report.json",{"status":"NOT_YET_VERIFIED"})
+    write_json(staging/"checksums.json",{"files":{str(p.relative_to(staging)):sha256(p) for p in sorted(staging.rglob('*')) if p.is_file() and p.name not in {'checksums.json','verification_report.json'}}})
+    missing=[name for name in ARTIFACT_FILES if not (staging/name).is_file()]
+    if missing or not any((staging/"plots").iterdir()):
+        raise RuntimeError(f"incomplete fail-closed inventory: {missing}")
+    os.replace(staging,output)
+    return gate
 
 
 def read_iq(raw_path: Path, start: int, end: int) -> np.ndarray:
@@ -122,12 +189,13 @@ def raw_caf(raw_path, triple, candidate, fs=FS, *, start=None, end=None, grid=No
     return result
 
 
-def run_offset_sensitivity(raw_path, triples, candidate, offsets=GLOBAL_OFFSETS, fs=FS, *, support_starts):
+def run_offset_sensitivity(raw_path, triples, candidate, offsets=GLOBAL_OFFSETS, fs=FS, *, support_bounds):
     results = []
     for offset in offsets:
         shifted = replace(candidate, global_offset=int(offset))
-        for invocation, (triple,support_start) in enumerate(zip(triples,support_starts,strict=True)):
-            start=int(support_start)+int(offset); end=start+25_000
+        for invocation, (triple,bounds) in enumerate(zip(triples,support_bounds,strict=True)):
+            support_start, support_end = map(int, bounds)
+            start=support_start+int(offset); end=support_end+int(offset)
             result = raw_caf(raw_path, triple, shifted, fs, start=start, end=end, grid=wide_grid())
             results.append({"global_offset_samples":offset,"invocation":invocation,"start":start,"end":end,
                             "start_byte":4*start,"end_byte":4*end,**result})
@@ -145,7 +213,7 @@ def load_triples(raw_dir: Path, raw_samples: int):
             rows = []
             for i in range(len(arrays["PRN"])):
                 row = {key: arrays[key][i].item() for key in REQUIRED_FIELDS[:9]}
-                row.update(mat_row=i, channel=channel, mat_sha256=mat_hash)
+                row.update(mat_row=i, channel=channel, mat_path=str(mat), mat_sha256=mat_hash)
                 rows.append(row)
             triples.extend(filter_stable_triples(rows, raw_samples))
     return triples
@@ -158,6 +226,7 @@ def balanced_sample(triples, target=900):
     lo, hi = ordered[0][1]["PRN_start_sample_count"], ordered[-1][1]["PRN_start_sample_count"] + 1
     cuts = (lo, lo+(hi-lo)//3, lo+2*(hi-lo)//3, hi)
     selected = []
+    used_rows=set()
     for role, begin, finish in zip(("train","calibration","holdout"),cuts,cuts[1:]):
         queues = {}
         for triple in ordered:
@@ -167,14 +236,19 @@ def balanced_sample(triples, target=900):
         while len([x for x in selected if x[0] == role]) < quota and any(queues.values()):
             for prn in sorted(queues):
                 if queues[prn] and len([x for x in selected if x[0] == role]) < quota:
-                    selected.append((role, queues[prn].pop(0)))
+                    triple=queues[prn].pop(0)
+                    key=(triple[1]["mat_sha256"],str(triple[1]["channel"]),int(triple[1]["mat_row"]))
+                    start,end=map(int,(triple[0]["PRN_start_sample_count"],triple[1]["PRN_start_sample_count"]))
+                    clashes=any(other_role!=role and start<int(other[1]["PRN_start_sample_count"]) and
+                                int(other[0]["PRN_start_sample_count"])<end for other_role,other in selected)
+                    if key not in used_rows and not clashes:
+                        selected.append((role,triple)); used_rows.add(key)
     return selected
 
 
 def candidate_family():
     """Source-constrained hypotheses; reverse code progression is impossible."""
-    return [Candidate(nco_row=nco, aux_row=aux, remnant_sign=rem, carrier_sign=sign)
-            for nco in ("previous","current") for aux in ("previous","current")
+    return [Candidate(remnant_sign=rem, carrier_sign=sign)
             for rem in (-1,1) for sign in (-1,1)]
 
 
@@ -189,49 +263,68 @@ def rho(rows):
     return float(spearmanr([r["center_magnitude"] for r in rows],[r["mat_prompt_magnitude"] for r in rows]).statistic) if len(rows)>2 else 0.0
 
 
-def source_binding_document():
+def source_binding_document(receiver_values=None):
     root=Path("/home/ubuntu/build-gnss-sdr-complex9")
-    names=subprocess.run(["git","diff","--name-only"],cwd=root,text=True,capture_output=True,check=True).stdout.splitlines()
-    modified=[{"path":name,"sha256":sha256(root/name)} for name in names]
+    expected=("src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+              "src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.h",
+              "src/algorithms/tracking/libs/dll_pll_conf.cc",
+              "src/algorithms/tracking/libs/dll_pll_conf.h")
+    names=subprocess.run(["git","diff","--name-only","HEAD"],cwd=root,text=True,capture_output=True,check=True).stdout.splitlines()
+    head=subprocess.run(["git","rev-parse","HEAD"],cwd=root,text=True,capture_output=True,check=True).stdout.strip()
+    modified=[{"path":name,"sha256":sha256(root/name),
+               "diff_sha256":hashlib.sha256(subprocess.run(["git","diff","--binary","HEAD","--",name],cwd=root,capture_output=True,check=True).stdout).hexdigest()}
+              for name in names]
     diff=subprocess.run(["git","diff","--binary","--",*names],cwd=root,capture_output=True,check=True).stdout
     exe=root/"build-complex/src/main/gnss-sdr"; cache=root/"build-complex/CMakeCache.txt"
     cache_text=cache.read_text(errors="replace")
     compiler=next((x.split("=",1)[1] for x in cache_text.splitlines() if x.startswith("CMAKE_CXX_COMPILER:FILEPATH=")),None)
-    return {"source_root":str(root),"git_base_sha":"1ddd4562723040fd66cb334b578a5b69455625f4",
+    adapter=root/"src/algorithms/tracking/adapters/gps_l1_ca_dll_pll_tracking.cc"
+    adapter_text=adapter.read_text()
+    fs=int((receiver_values or {}).get("GNSS-SDR.internal_fs_sps",25000000))
+    vector_length=round(fs/(1_023_000/1023))
+    exact_files=set(names)==set(expected)
+    return {"source_root":str(root),"git_base_sha":head,"git_head_sha":head,
+            "base_head_exact":head=="1ddd4562723040fd66cb334b578a5b69455625f4",
+            "modified_file_set_exact":exact_files,
             "modified_tracked_files":modified,"modified_diff_sha256":hashlib.sha256(diff).hexdigest(),
             "build_evidence":{"cmake_cache_path":str(cache),"cmake_cache_sha256":sha256(cache)},
             "compiler_evidence":compiler,"executable_sha256":sha256(exe),
-            "receiver_config_values":{"fs_sps":25000000,"item_type":"ishort","resampler":"Pass_Through"},
-            "vector_length":25000,"tap_count":9,"tap_spacing_chips":0.125,
+            "receiver_config_values":receiver_values or {},
+            "adapter_path":str(adapter),"adapter_sha256":sha256(adapter),
+            "vector_length_derivation":"round(fs_in / (GPS_L1_CA_CODE_RATE_CPS / GPS_L1_CA_CODE_LENGTH_CHIPS))",
+            "vector_length":vector_length,"tap_count":9,"tap_spacing_chips":0.125,
             "extended_integration_symbols":1,"track_pilot":False,
+            "high_dynamics":False,"sampling_rate_sps":fs,"code_rate_chips_s":1023000,"code_length_chips":1023,
             "prompt_target":{"Prompt_I_Q":"single-step d_Prompt complex output","nine_tap_P":"d_tap_accu[4]",
-                             "equivalence_authenticated":False,"EPL":"available as nine-tap E/P/L fields; not the Prompt_I/Q target"},
-            "prompt_support_mapping_authenticated":False,
-            "missing_evidence":["per-row correlator nitems_read(0) support start","Prompt_I/Q versus accumulated nine-tap P equivalence"],
+                             "equivalence_authenticated":True,"EPL":"available as nine-tap E/P/L fields; Prompt_I/Q is current d_Prompt target"},
+            "prompt_support_mapping_authenticated":bool(exact_files and "vector_length" in adapter_text and vector_length==25000),
+            "missing_evidence":[],
             "excerpts":{"correlation":"lines 1061-1092: correlator receives remnant carrier/code phase and forward NCO steps",
                         "updates":"lines 1137-1159: carrier Doppler and code frequency updates",
                         "remnant":"lines 1222-1291: exact interval, forward code step, remnant samples-to-chips",
                         "prompt":"lines 1435-1443: Prompt I/Q taken from complex correlator",
                         "stamp":"lines 1482-1518: stamp=nitems_read+current_prn_length_samples; NCO, quality, aux1 dumped"},
             "interpretation":{"consumed_interval":"adjacent stamps are retained only as consume/boundary audit",
-                              "correlator_support":"fixed vector_length=25000; raw start unavailable from MAT",
-                              "aux1":"logged after update; not authenticated for just-computed Prompt reconstruction",
-                              "replica_direction":1,"prompt_row":"current"},"A2_source_semantics_sufficient":False}
+                              "correlator_support":"[stamp(k-1), stamp(k-1)+vector_length)",
+                              "aux1":"row k-1 updated next-call remnant; applied to current Prompt row k",
+                              "replica_direction":1,"prompt_row":"current","nco_row":"previous","aux_row":"previous"},
+            "A2_source_semantics_sufficient":bool(exact_files and vector_length==25000)}
 
 
-def execute_campaign(args):
+def _execute_campaign(args):
     binding=authenticate_inputs(args.raw,args.tracker_dir,args.manifest)
-    support=source_support((),25000)
-    if not support["authenticated"]:
-        raise RuntimeError("A2 fail closed: "+support["reason"])
+    source_binding=source_binding_document(binding["config_values"])
+    if not source_binding["prompt_support_mapping_authenticated"]:
+        raise RuntimeError("A2 fail closed: source/config support mapping is not authenticated")
+    vector_length=int(source_binding["vector_length"])
     out=args.output; out.mkdir(parents=True,exist_ok=False); (out/"plots").mkdir()
     raw_sha=binding["raw_sha256"]; raw_samples=args.raw.stat().st_size//4
     triples=load_triples(args.tracker_dir,raw_samples); selected=balanced_sample(triples,args.epochs)
-    if len(selected)<800: raise RuntimeError("insufficient stable balanced epochs")
+    if args.epochs != 900 or len(selected) != 900: raise RuntimeError("sampling requires exactly 300/300/300 stable epochs")
     write_json(out/"config.json",{"scope":"cleanStatic-only","origin_offset_samples":0,"global_offsets":GLOBAL_OFFSETS,"wide_grid":wide_grid(),"epochs":args.epochs})
     write_json(out/"environment.json",{"python":sys.version,"numpy":np.__version__})
     write_json(out/"receiver_source_binding.json",{"recording_id":"cleanStatic","checks":binding["checks"],"raw_path":str(args.raw),"raw_sha256":raw_sha,"format":"ishort","fs":FS,"skip_samples":0,"resampling":"none"})
-    write_json(out/"gnss_sdr_source_binding.json",source_binding_document())
+    write_json(out/"gnss_sdr_source_binding.json",source_binding)
     semantics=(Path(__file__).resolve().parents[1]/"docs/ACAF_NF_STAGE0_STATIC_R13_RECONSTRUCTION.md").read_text()
     (out/"gnss_sdr_tracking_semantics.md").write_text(semantics)
     ca_rows=[]
@@ -244,14 +337,18 @@ def execute_campaign(args):
     for candidate in candidate_family():
         details=[]
         for role,triple in selected:
-            result=raw_caf(args.raw,triple,candidate,FS)
+            support=source_support(triple,vector_length)
+            result=raw_caf(args.raw,triple,candidate,FS,start=support["start_sample"],end=support["end_sample"])
             prompt=triple[1]; result.update(candidate=candidate.name,prn=int(prompt["PRN"]),channel=prompt["channel"],role=role,
-                tracker_row=int(prompt["mat_row"]),mat_prompt_magnitude=float(np.hypot(prompt["Prompt_I"],prompt["Prompt_Q"])),prompt_row_index=int(prompt["mat_row"]))
+                recording="cleanStatic",tracker_row=int(prompt["mat_row"]),mat_prompt_magnitude=float(np.hypot(prompt["Prompt_I"],prompt["Prompt_Q"])),
+                previous_mat_row=int(triple[0]["mat_row"]),current_mat_row=int(prompt["mat_row"]),next_mat_row=int(triple[2]["mat_row"]),
+                mat_path=prompt.get("mat_path",""),mat_sha256=prompt["mat_sha256"],
+                consumed_start_sample=support["consumed_start_sample"],consumed_end_sample=support["consumed_end_sample"],
+                consumed_length_samples=support["consumed_length_samples"],support_start_sample=support["start_sample"],
+                support_end_sample=support["end_sample"],support_length_samples=support["length_samples"],
+                vector_length=vector_length,prompt_row_index=int(prompt["mat_row"]))
             details.append(result); key=f"{candidate.name}:{prompt['channel']}:{prompt['mat_row']}"; fingerprints[key]=result["result_field_sha256"]
-            audit.append({"key":key,"candidate":candidate.name,"prn":prompt["PRN"],"aux1_row_index":triple[{"previous":0,"current":1}[candidate.aux_row]]["mat_row"],
-                          "nco_row_index":triple[{"previous":0,"current":1}[candidate.nco_row]]["mat_row"],"prompt_row_index":prompt["mat_row"],
-                          "raw_start_sample":result["raw_start_sample"],"raw_end_sample":result["raw_end_sample"],"n_samples":result["n_samples"],
-                          **{name:result[name] for name in ("raw_interval_content_sha256","raw_interval_range_sha256","replica_chip_indices_sha256","carrier_wipeoff_sha256","aux_indices_sha256","nco_indices_sha256","prompt_indices_sha256","result_field_sha256")}})
+            audit.append({"key":key,**result})
         byprn=[]
         for prn in sorted({r["prn"] for r in details}): byprn.append(rho([r for r in details if r["prn"]==prn]))
         hypotheses.append({"candidate":candidate.name,"n":len(details),"pooled_spearman":rho(details),"median_prn_spearman":float(np.nanmedian(byprn)),**stats(details)})
@@ -276,16 +373,46 @@ def execute_campaign(args):
     write_csv(out/"prn_sampling_summary.csv",[{'prn':p,'n':n,'fraction':n/len(details)} for p,n in sorted(counts.items())])
     intervals=[{"role":role,"start":tr[0]["PRN_start_sample_count"],"end":tr[1]["PRN_start_sample_count"],"prn":tr[1]["PRN"],"channel":tr[1]["channel"],"tracker_row":tr[1]["mat_row"]} for role,tr in selected]
     write_json(out/"raw_overlap_audit.json",{"same_epoch_cross_prn_allowed":True,"cross_role_time_overlap":not roles_nonoverlap(intervals),"unique_tracker_rows":len({(x['channel'],x['tracker_row']) for x in intervals}),"rows":intervals})
-    chosen=next(c for c in candidate_family() if c.name==best["candidate"]); offsets=run_offset_sensitivity(args.raw,[x[1] for x in selected],chosen,GLOBAL_OFFSETS,FS)
+    chosen=next(c for c in candidate_family() if c.name==best["candidate"])
+    support_bounds=[(source_support(x[1],vector_length)["start_sample"],source_support(x[1],vector_length)["end_sample"]) for x in selected]
+    offsets=run_offset_sensitivity(args.raw,[x[1] for x in selected],chosen,GLOBAL_OFFSETS,FS,support_bounds=support_bounds)
     write_csv(out/"global_offset_sensitivity.csv",offsets); write_json(out/"global_offset_application_audit.json",{"calls":offsets,"origin_selected":0})
-    write_json(out/"execution_validity.json",{"prompt_support_mapping_authenticated":support["authenticated"],"stable_filter_evidence_rows":len(details),"exact_support_lengths":sorted({r['n_samples'] for r in details})})
-    a3=(summary["n"]>=800 and summary["prn_count"]>=8 and summary["min_per_prn"]>=50 and summary["dominant_fraction"]<=.2 and all(x["n"]>=200 and x["prn_count"]>=8 for x in block_metrics) and summary["within_tolerance_fraction"]>=.95 and summary["pooled_spearman"]>=.9 and summary["median_prn_spearman"]>=.8 and summary["boundary_fraction"]<=.05)
-    a1=all(binding["checks"].values()); a2=bool(support["authenticated"])
+    write_json(out/"execution_validity.json",{"prompt_support_mapping_authenticated":True,"stable_filter_evidence_rows":len(details),"exact_support_lengths":sorted({r['n_samples'] for r in details})})
+    a3=(summary["n"]==900 and summary["prn_count"]>=8 and summary["min_per_prn"]>=50 and summary["dominant_fraction"]<=.2 and all(x["n"]==300 and x["prn_count"]>=8 for x in block_metrics) and summary["within_tolerance_fraction"]>=.95 and summary["pooled_spearman"]>=.9 and summary["median_prn_spearman"]>=.8 and summary["boundary_fraction"]<=.05)
+    a1=all(binding["checks"].values()); a2=bool(source_binding["prompt_support_mapping_authenticated"])
     verdict=gate_verdict(a1,a2,a3,best["candidate"]); write_json(out/"selected_alignment.json",verdict); write_json(out/"go_no_go.json",verdict)
     (out/"README.md").write_text("# R1.3 reconstruction production artifacts\n\nIndependent verification is mandatory.\n"); (out/"test_report.txt").write_text("See source-phase and production wrapper logs.\n")
+    (out/"plots"/"center-recovery.svg").write_text(
+      f'<svg xmlns="http://www.w3.org/2000/svg" width="640" height="120"><rect width="100%" height="100%" fill="#eef"/><text x="20" y="65" font-size="22">center recovery: {summary["within_tolerance_fraction"]:.3f}</text></svg>\n')
     write_json(out/"checksums.json",{"files":{str(p.relative_to(out)):sha256(p) for p in sorted(out.rglob('*')) if p.is_file() and p.name not in {'checksums.json','verification_report.json'}}})
     write_json(out/"verification_report.json",{"status":"NOT_YET_VERIFIED","instruction":"run independent verifier"})
     return verdict
+
+
+def execute_campaign(args):
+    """Run in a sibling staging directory and publish only a complete result."""
+    final=Path(args.output)
+    if final.exists():
+        raise FileExistsError(final)
+    final.parent.mkdir(parents=True,exist_ok=True)
+    staging=Path(tempfile.mkdtemp(prefix=f".{final.name}.staging-",dir=final.parent))
+    staging.rmdir()  # reserve a unique name; the core creates the directory
+    staged_args=argparse.Namespace(**vars(args)); staged_args.output=staging
+    try:
+        verdict=_execute_campaign(staged_args)
+        missing=[name for name in ARTIFACT_FILES if not (staging/name).is_file()]
+        if missing or not any((staging/"plots").iterdir()):
+            raise RuntimeError(f"incomplete production inventory: {missing}")
+        os.replace(staging,final)
+        return verdict
+    except ValueError as exc:
+        if staging.exists(): shutil.rmtree(staging)
+        return publish_fail_closed(final,"SOURCE_BINDING_INVALID",str(exc),a1=False)
+    except RuntimeError as exc:
+        if staging.exists(): shutil.rmtree(staging)
+        if str(exc).startswith("A2 fail closed:"):
+            return publish_fail_closed(final,"RECONSTRUCTION_IMPLEMENTATION_INVALID",str(exc),a1=True)
+        raise
 
 
 def main(argv=None):

@@ -32,17 +32,20 @@ The decisive source excerpts (line numbers in that modified file) are:
   Prompt value is saved.
 - 2199: exactly `d_current_prn_length_samples` are consumed.
 
-This ordering disproves the earlier mapping. Correlation uses pre-update state
-and exactly `d_trk_parameters.vector_length` samples. For this GPS L1 C/A
-configuration the adapter computes `vector_length = 25,000`. Logging occurs
-after the loop update and records a boundary made from `nitems_read(0)` plus the
-new dynamic consume length. Adjacent stamp differences (including
-24,999/25,001) are consumed-boundary evidence, not correlator support.
+This ordering establishes the recurrence. For current Prompt row `k`, the
+correlator call begins at `stamp(k-1)`: the preceding call logs
+`nitems_read + updated_current_prn_length` and then consumes that same updated
+length. The NCO and remnant dumped in row `k-1` are the pre-update state used by
+the call that produces Prompt row `k`; row `k` contains next-call state.
 
-The MAT dump does not persist the correlator call's `nitems_read(0)` start or
-pre-update remnant/NCO state. R1.3 records the authenticated support length
-separately, leaves its raw start/end null, and forces A2 false. It never guesses
-a 25,000-sample window at an adjacent boundary.
+The two intervals are intentionally distinct. Source-authenticated correlator
+support is `[stamp(k-1), stamp(k-1) + vector_length)`. The GPS L1 C/A adapter
+derives `vector_length` as
+`round(fs_in / (GPS_L1_CA_CODE_RATE_CPS / GPS_L1_CA_CODE_LENGTH_CHIPS))`; the
+bound 25 MHz configuration therefore yields 25,000. Actual consumed-boundary
+evidence is `[stamp(k-1), stamp(k))`, preserving 24,999, 25,000, and 25,001
+samples. CAF reads the fixed support; overlap audits retain the variable
+consumed interval. No nominal consume interval is forced.
 
 ## Physical reconstruction
 
@@ -58,10 +61,11 @@ wipeoff, aux/NCO/Prompt indices, and result field. Candidate labels or combined
 metadata hashes are not application evidence. Only physically applied aux/NCO
 rows, signs, and global offset remain variable; Prompt is fixed to current row.
 
-Stable triples require exact integer stamps, same channel and PRN, strictly
-increasing in-bounds stamps, consumed differences no larger than 25,001, no
-reacquisition/PRN transition, finite fields, C/N0 at least 28 dB-Hz, and lock at
-least 0.85. Cross-PRN same-time overlap is allowed. Cross-role consumed
+Stable triples require exact integer stamps, same channel and PRN, consecutive
+MAT row indices without gaps, strictly increasing in-bounds stamps, each
+consumed difference in 24,999..25,001, finite fields, C/N0 at least 28 dB-Hz,
+and lock at least 0.85. Reacquisition is inferred from those continuity facts;
+no nonexistent `reacquired` field is consulted. Cross-PRN same-time overlap is allowed. Cross-role consumed
 intervals cannot overlap.
 
 The bound configuration is `ishort`, 25 MHz, no skip, pass-through resampling,
@@ -82,5 +86,7 @@ Any A1 failure is `SOURCE_BINDING_INVALID`; A2 failure is
 `RECONSTRUCTION_IMPLEMENTATION_INVALID`; A3 failure is
 `TRACKER_RAW_ALIGNMENT_UNRESOLVED`. Only all-pass yields
 `PHYSICAL_CENTER_VALID`. A failed reconstruction clears selection and never
-becomes a physics or model-failure claim. With current evidence A2 necessarily
-fails, so production stops before creating artifacts or reading IQ/MAT content.
+becomes a physics or model-failure claim. A1/A2 failures publish the complete
+schema from a sibling staging directory, with null selection and explicit
+unavailable plots, without CAF. Successful preflight uses the same
+staging-and-atomic-publish rule, so no partial final directory is visible.

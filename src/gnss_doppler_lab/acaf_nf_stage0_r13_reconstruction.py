@@ -25,8 +25,8 @@ REQUIRED_FIELDS = (
 
 @dataclass(frozen=True)
 class Candidate:
-    nco_row: str = "current"
-    aux_row: str = "current"
+    nco_row: str = "previous"
+    aux_row: str = "previous"
     remnant_sign: int = 1
     carrier_sign: int = -1
     global_offset: int = 0
@@ -66,6 +66,7 @@ def _finite(row: Mapping) -> bool:
 
 def filter_stable_triples(rows: Sequence[Mapping], raw_samples: int,
                           min_cn0: float = 28.0, min_lock: float = .85,
+                          min_consumed_samples: int = 24_999,
                           max_consumed_samples: int = 25_001) -> list[tuple[dict, dict, dict]]:
     """Return adjacent same-channel/PRN triples whose current epoch is stable."""
     result = []
@@ -82,9 +83,9 @@ def filter_stable_triples(rows: Sequence[Mapping], raw_samples: int,
         cur = triple[1]
         if (len(prns) != 1 or next(iter(prns)) not in range(1, 33) or len(channels) != 1
                 or not (0 <= samples[0] < samples[1] < samples[2] <= int(raw_samples))
-                or min(np.diff(samples)) < 256
+                or [int(r["mat_row"]) for r in triple] != list(range(int(triple[0]["mat_row"]), int(triple[0]["mat_row"])+3))
+                or min(np.diff(samples)) < int(min_consumed_samples)
                 or max(np.diff(samples)) > int(max_consumed_samples)
-                or any(bool(r.get("reacquired", False) or r.get("prn_transition", False)) for r in triple)
                 or any(float(r["CN0_SNV_dB_Hz"]) < min_cn0 for r in triple)
                 or any(float(r["carrier_lock_test"]) < min_lock for r in triple)):
             continue
@@ -110,15 +111,19 @@ def interval_rows(triple: Sequence[Mapping], interval: str, global_offset: int =
 
 
 def source_support(triple: Sequence[Mapping], vector_length: int) -> dict:
-    """Describe authenticated correlator support without inventing its raw start.
+    """Map current Prompt to its fixed support and variable consume boundary.
 
-    Source proves the fixed support length, but the MAT dump stores a boundary
-    made with the updated consume length and does not store ``nitems_read(0)``.
+    Row ``k-1`` stores the updated boundary/state used by the call producing
+    row ``k``.  Its stamp is therefore that call's ``nitems_read``.
     """
-    del triple
-    return {"authenticated": False, "length_samples": int(vector_length),
-            "start_sample": None, "end_sample": None,
-            "reason": "correlator nitems_read start is not persisted"}
+    if len(triple) != 3 or int(vector_length) <= 0:
+        raise ValueError("a stable triple and positive authenticated vector length are required")
+    start = int(triple[0]["PRN_start_sample_count"])
+    consumed_end = int(triple[1]["PRN_start_sample_count"])
+    return {"authenticated": True, "length_samples": int(vector_length),
+            "start_sample": start, "end_sample": start + int(vector_length),
+            "consumed_start_sample": start, "consumed_end_sample": consumed_end,
+            "consumed_length_samples": consumed_end - start}
 
 
 def validate_candidate_rows(triple: Sequence[Mapping], candidate: Candidate) -> None:
@@ -199,7 +204,14 @@ def candidate_application(iq: np.ndarray, triple: Sequence[Mapping], candidate: 
             "prompt_indices_sha256": _digest({"mat_row": int(prompt["mat_row"]),
                                                "Prompt_I": float(prompt["Prompt_I"]),
                                                "Prompt_Q": float(prompt["Prompt_Q"])}),
-            "result_field_sha256": _digest(physical_result)}
+            "aux_row_index": int(aux["mat_row"]), "aux1_value": float(aux["aux1"]),
+            "nco_row_index": int(nco["mat_row"]),
+            "code_freq_chips_value": float(nco["code_freq_chips"]),
+            "carrier_doppler_hz_value": float(nco["carrier_doppler_hz"]),
+            "prompt_row_index": int(prompt["mat_row"]),
+            "prompt_i_value": float(prompt["Prompt_I"]), "prompt_q_value": float(prompt["Prompt_Q"]),
+            "result_field_sha256": (physical_result if isinstance(physical_result, str)
+                                      and len(physical_result) == 64 else _digest(physical_result))}
 
 
 def roles_nonoverlap(intervals: Sequence[Mapping]) -> bool:

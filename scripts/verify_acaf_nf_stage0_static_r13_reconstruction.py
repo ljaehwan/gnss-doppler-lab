@@ -39,10 +39,18 @@ def physical_applications_valid(rows):
     return len(by_candidate)>1 and all(by_candidate.values()) and len({tuple(sorted(v)) for v in by_candidate.values()})==len(by_candidate)
 
 def global_offset_calls_valid(calls):
-    by_epoch=defaultdict(set)
-    for call in calls: by_epoch[str(call.get("invocation"))].add((int(call.get("global_offset_samples")),int(call.get("start_byte")),int(call.get("end_byte"))))
+    by_epoch=defaultdict(list)
+    try:
+        for call in calls:
+            start=int(call.get("start")); end=int(call.get("end")); offset=int(call.get("global_offset_samples"))
+            if int(call.get("start_byte"))!=4*start or int(call.get("end_byte"))!=4*end: return False
+            if end-start != int(call.get("support_length_samples",call.get("n_samples",end-start))): return False
+            by_epoch[str(call.get("invocation"))].append((offset,start,end))
+    except (TypeError,ValueError): return False
     required={-1000,-500,0,500,1000}
-    return bool(by_epoch) and all({x[0] for x in values}==required and len({(x[1],x[2]) for x in values})==5 for values in by_epoch.values())
+    return bool(by_epoch) and all({x[0] for x in values}==required and len(values)==5 and
+      all(start-offset==values[0][1]-values[0][0] and end-offset==values[0][2]-values[0][0]
+          for offset,start,end in values) for values in by_epoch.values())
 
 def roles_nonoverlap(rows):
     for i,left in enumerate(rows):
@@ -78,6 +86,9 @@ def verify(root: Path):
     calls=offset.get("calls",[]); by_epoch=defaultdict(set)
     for call in calls: by_epoch[str(call.get("invocation"))].add((call.get("global_offset_samples"),call.get("start_byte"),call.get("end_byte")))
     offset_ok=global_offset_calls_valid(calls)
+    offset_csv=load_csv(root/"global_offset_sensitivity.csv")
+    offset_keys=("invocation","global_offset_samples","start","end","start_byte","end_byte","result_field_sha256")
+    offset_csv_ok=len(offset_csv)==len(calls) and sorted(tuple(str(x.get(k,"")) for k in offset_keys) for x in offset_csv)==sorted(tuple(str(x.get(k,"")) for k in offset_keys) for x in calls)
     binding_checks=binding.get("checks",{})
     a1=(bool(binding_checks) and all(v is True for v in binding_checks.values()) and
         binding.get("recording_id")=="cleanStatic" and _sha(binding.get("raw_sha256")) and
@@ -87,14 +98,30 @@ def verify(root: Path):
                      "executable_sha256","receiver_config_values","vector_length","tap_count",
                      "tap_spacing_chips","extended_integration_symbols","track_pilot",
                      "prompt_support_mapping_authenticated")
-    source_ok=all(k in source and source[k] not in (None,"",[]) for k in source_required)
+    source_ok=(all(k in source and source[k] not in (None,"",[]) for k in source_required) and
+      source.get("base_head_exact") is True and source.get("modified_file_set_exact") is True and
+      source.get("A2_source_semantics_sufficient") is True and int(source.get("vector_length",0))==25000)
     overlap=load_json(root/"raw_overlap_audit.json"); overlap_ok=roles_nonoverlap(overlap.get("rows",[]))
-    row_evidence=all(all(k in r for k in ("tracker_row","mat_sha256","raw_start_sample","raw_end_sample",
-                 "support_start_sample","support_end_sample","center_magnitude","mat_prompt_magnitude")) for r in rows)
-    a2=(source_ok and source.get("prompt_support_mapping_authenticated") is True and
-        ca.get("canonical_prns_passed")==32 and ca.get("local_generator_absent") is True and
-        physical_applications_valid(audit) and offset_ok and overlap_ok and row_evidence)
-    a3=(n>=800 and len(prns)>=8 and actual["min_per_prn"]>=50 and actual["dominant_fraction"]<=.2 and set(blocks)=={"train","calibration","holdout"} and all(len(v)>=200 and actual["block_prns"][k]>=8 for k,v in blocks.items()) and within>=.95 and rho>=.9 and median_rho>=.8 and boundary<=.05)
+    schema=("recording","prn","channel","previous_mat_row","current_mat_row","next_mat_row","mat_path","mat_sha256",
+      "consumed_start_sample","consumed_end_sample","consumed_length_samples","support_start_sample","support_end_sample",
+      "support_length_samples","raw_start_sample","raw_end_sample","raw_start_byte","raw_end_byte","vector_length",
+      "aux_row_index","nco_row_index","prompt_row_index","center_magnitude","mat_prompt_magnitude","role")
+    row_evidence=all(all(k in r for k in schema) for r in rows)
+    mapping_ok=all(int(r["previous_mat_row"])+1==int(r["current_mat_row"]) and int(r["current_mat_row"])+1==int(r["next_mat_row"]) and
+      int(r["aux_row_index"])==int(r["previous_mat_row"]) and int(r["nco_row_index"])==int(r["previous_mat_row"]) and
+      int(r["prompt_row_index"])==int(r["current_mat_row"]) and int(r["support_start_sample"])==int(r["consumed_start_sample"]) and
+      int(r["support_end_sample"])-int(r["support_start_sample"])==int(r["vector_length"])==int(r["support_length_samples"]) and
+      int(r["consumed_end_sample"])-int(r["consumed_start_sample"])==int(r["consumed_length_samples"]) and
+      24999<=int(r["consumed_length_samples"])<=25001 for r in rows)
+    ca_rows=load_csv(root/"ca_code_correlation.csv")
+    ca_ok=ca.get("canonical_prns_passed")==32 and ca.get("local_generator_absent") is True and len(ca_rows)==32 and {int(x["prn"]) for x in ca_rows}==set(range(1,33))
+    fingerprints=load_json(root/"candidate_fingerprints.json")
+    expected_fp={r.get("key"):r.get("result_field_sha256") for r in audit}
+    fingerprint_ok=fingerprints.get("fingerprints")==expected_fp and fingerprints.get("expected_unique")==len(expected_fp)
+    audit_schema=all(all(k in r for k in schema) for r in audit)
+    a2=(source_ok and source.get("prompt_support_mapping_authenticated") is True and ca_ok and
+        physical_applications_valid(audit) and fingerprint_ok and offset_ok and offset_csv_ok and overlap_ok and row_evidence and audit_schema and mapping_ok)
+    a3=(n==900 and len(prns)>=8 and actual["min_per_prn"]>=50 and actual["dominant_fraction"]<=.2 and set(blocks)=={"train","calibration","holdout"} and all(len(v)==300 and actual["block_prns"][k]>=8 for k,v in blocks.items()) and within>=.95 and rho>=.9 and median_rho>=.8 and boundary<=.05)
     verdict="SOURCE_BINDING_INVALID" if not a1 else "RECONSTRUCTION_IMPLEMENTATION_INVALID" if not a2 else "TRACKER_RAW_ALIGNMENT_UNRESOLVED" if not a3 else "PHYSICAL_CENTER_VALID"
     summary=load_json(root/"center_validation_summary.json")
     for key in ("n","prn_count","min_per_prn","dominant_fraction","within_tolerance_fraction","exact_center_fraction","boundary_fraction","pooled_spearman","median_prn_spearman"):

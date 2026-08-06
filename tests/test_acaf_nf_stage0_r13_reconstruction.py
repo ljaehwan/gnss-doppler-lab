@@ -57,8 +57,18 @@ def test_dynamic_consumed_interval_is_not_correlator_support():
     triple=(row(0),row(1),row(2))
     assert interval_rows(triple,'prev_to_cur')[:2] == (100,25099)
     support=source_support(triple, vector_length=25000)
-    assert support == {"authenticated":False,"length_samples":25000,"start_sample":None,
-                       "end_sample":None,"reason":"correlator nitems_read start is not persisted"}
+    assert support == {"authenticated":True,"length_samples":25000,"start_sample":100,
+                       "end_sample":25100,"consumed_start_sample":100,
+                       "consumed_end_sample":25099,"consumed_length_samples":24999}
+
+
+def test_authoritative_candidate_uses_previous_state_and_current_prompt():
+    candidate=Candidate()
+    assert candidate.nco_row == "previous" and candidate.aux_row == "previous"
+    applied=candidate_application(np.ones(8,dtype=complex),(row(0),row(1),row(2)),candidate,100,108,25e6)
+    assert applied["aux_row_index"] == 0
+    assert applied["nco_row_index"] == 0
+    assert applied["prompt_row_index"] == 1
 
 
 def test_only_physical_candidate_dimensions_remain_and_hashes_are_separate():
@@ -70,7 +80,7 @@ def test_only_physical_candidate_dimensions_remain_and_hashes_are_separate():
               "carrier_wipeoff_sha256","aux_indices_sha256","nco_indices_sha256",
               "prompt_indices_sha256","result_field_sha256"}
     assert required <= set(base)
-    for candidate in (Candidate(aux_row='previous'),Candidate(nco_row='previous'),
+    for candidate in (Candidate(aux_row='current'),Candidate(nco_row='current'),
                       Candidate(remnant_sign=-1),Candidate(carrier_sign=1),Candidate(global_offset=500)):
         applied=candidate_application(iq,rows,candidate,100+candidate.global_offset,350+candidate.global_offset,25e6)
         assert any(applied[key] != base[key] for key in required)
@@ -107,7 +117,7 @@ def test_runner_calls_canonical_and_global_offsets_recompute(monkeypatch,tmp_pat
     calls=[]
     monkeypatch.setattr(mod,'raw_caf',lambda *a,**kw: calls.append((kw['start'],kw['end'])) or {'center_magnitude':1})
     mod.run_offset_sensitivity('raw',[(row(0),row(1),row(2))],Candidate(),[0,500],25e6,
-                               support_starts=[100])
+                               support_bounds=[(100,350)])
     assert len(calls)==2 and calls[0]!=calls[1]
 
 
@@ -120,7 +130,8 @@ def test_independent_verifier_rejects_ignored_candidate_and_fake_offsets():
     changed={**same,'carrier_wipeoff_sha256':'b'*64,'result_field_sha256':'c'*64}
     assert not mod.physical_applications_valid([{'candidate':'a',**same},{'candidate':'b',**same}])
     assert mod.physical_applications_valid([{'candidate':'a',**same},{'candidate':'b',**changed}])
-    calls=[{'invocation':0,'global_offset_samples':o,'start_byte':400+4*o,'end_byte':800+4*o} for o in (-1000,-500,0,500,1000)]
+    calls=[{'invocation':0,'global_offset_samples':o,'start':100+o,'end':200+o,
+            'start_byte':400+4*o,'end_byte':800+4*o,'support_length_samples':100} for o in (-1000,-500,0,500,1000)]
     assert mod.global_offset_calls_valid(calls)
     for call in calls: call['start_byte']=400; call['end_byte']=800
     assert not mod.global_offset_calls_valid(calls)
@@ -150,11 +161,26 @@ def test_binding_is_checked_before_any_iq_or_mat_read(monkeypatch,tmp_path):
         mod.authenticate_inputs(raw,tracker,manifest)
 
 
-def test_stable_filter_rejects_fractional_stamps_reacquisition_and_long_interval():
+def test_stable_filter_rejects_fractional_stamps_row_gaps_and_long_interval():
     rows=[row(0),row(1),row(2)]
     rows[1]['PRN_start_sample_count']=25099.5
     assert not filter_stable_triples(rows,100000)
-    rows=[row(0),row(1),row(2)]; rows[1]['reacquired']=True
+    rows=[row(0),row(1),row(2)]; rows[1]['mat_row']=4
     assert not filter_stable_triples(rows,100000)
     rows=[row(0),row(1),row(2)]; rows[2]['PRN_start_sample_count']=80000
     assert not filter_stable_triples(rows,100000,max_consumed_samples=25001)
+
+
+def test_fail_closed_artifact_is_atomic_complete_and_verifies(tmp_path):
+    runner_path=ROOT/'scripts/run_acaf_nf_stage0_static_r13_reconstruction.py'
+    verifier_path=ROOT/'scripts/verify_acaf_nf_stage0_static_r13_reconstruction.py'
+    rs=importlib.util.spec_from_file_location('runner_fail',runner_path); runner=importlib.util.module_from_spec(rs); rs.loader.exec_module(runner)
+    vs=importlib.util.spec_from_file_location('verifier_fail',verifier_path); verifier=importlib.util.module_from_spec(vs); vs.loader.exec_module(verifier)
+    out=tmp_path/'artifact'
+    runner.publish_fail_closed(out,"RECONSTRUCTION_IMPLEMENTATION_INVALID","synthetic A2 failure",a1=True)
+    assert out.is_dir() and not (tmp_path/'.artifact.staging').exists()
+    assert set(runner.ARTIFACT_FILES) <= {p.name for p in out.iterdir()}
+    go=json.loads((out/'go_no_go.json').read_text())
+    assert go['selected_alignment'] is None and go['physics_no_go_claim'] is False
+    report=verifier.verify(out)
+    assert report['status']=='PASS' and report['gates']['A2_IMPLEMENTATION_AND_INTERVAL_VALIDITY']=='FAIL'
