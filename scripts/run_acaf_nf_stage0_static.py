@@ -12,7 +12,7 @@ def main():
  sched={"fixed_before_attack_evaluation":True,"native_fs_hz":25000000,"coherent_ms":1,"caf_grid":{"code_chips":CAF_CODE.tolist(),"doppler_hz":CAF_DOPPLER.tolist()},"epochs":{"cleanStatic":[30,180,330,420],**{n:[10,60,CAND[n]-2,CAND[n]+2] for n in NAMES if n!="cleanStatic"}},"candidate_times_s":CAND,"center_policy":"only matching raw-hash proven historic tracker center; unavailable center=0, INCONCLUSIVE"};put(o/"schedule.json",sched)
  src={};rows=[]
  for n in NAMES:
-  p=RAW/(n+".bin");src[n]={"path":str(p),"sha256":sha256_file(p),"bytes":p.stat().st_size,"format":"25Msps interleaved signed int16 I/Q","lineage":"hash calculated; no historic CAF/taps read","historic_center":None}
+  p=RAW/(n+".bin");h=hashlib.sha256(); f=open(p,"rb"); h.update(f.read(1048576)); f.seek(max(0,p.stat().st_size-1048576)); h.update(f.read(1048576)); f.close(); src[n]={"path":str(p),"sampled_sha256":h.hexdigest(),"bytes":p.stat().st_size,"format":"25Msps interleaved signed int16 I/Q","lineage":"sampled source fingerprint calculated; full fresh SHA256 unavailable in campaign budget; no historic CAF/taps read","historic_center":None}
   for sec in sched["epochs"][n]:
    try:
     z=caf_surface(raw_epoch(p,sec),3,25000000,0,0);r=feature(z);r.update(scenario=n,epoch_s=sec,center_status="UNVERIFIED_CENTER");rows.append(r)
