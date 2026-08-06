@@ -1,0 +1,21 @@
+{
+  "algorithm": "sha256",
+  "files": {
+    "README.md": "d82e9dcb44add9a8c77f8d69a9a6f1cbfffe5d2d0ad69dcccf405c9a6475b961",
+    "bootstrap_results.json": "74795e2191eec61c180b55b9fc38e832512eeebc5e28526503e395d5c4604194",
+    "budget_metrics.csv": "25220574d35e1a52f932652e032c1abe288340293ade8fb898cecfb84a61431b",
+    "config.json": "ab583be06b7261ebdaa505e193f2741d72fe1ddf88d5c589bbc022d6725e11d0",
+    "data_manifest.json": "7471d1c7e9aab973d0732c4c28b04a68455ba7e5906c8ef76739bcdaecbbcab5",
+    "go_no_go.json": "59a577bbbb8f0970173c6c97c04d847b738acd7bea8a7167a77feee497693277",
+    "normal_split.json": "e74f830d46560d103f2e909b681bcddb296dacef6dbbc8b37c7f8d2a6444b196",
+    "per_epoch_scores.csv": "d5d0aa34192ded5cb56f67031b2cb12a3e63a7f678ed0c4188928bdbbc3645a8",
+    "physical_controls.json": "eee12243a6a8a14437c39de6e1e52c99b722ac4bfbb1a5ad27aaeefd723773e4",
+    "plots/actual_gain_phase_awgn_controls.png": "8dca3419c3f62ed58c88f9a0a8ed38849fcb07b3db18305f296802a43872894d",
+    "plots/actual_raw_power_by_scenario.png": "9731ce62d29163fc703b3b896390395f15cac489156ea5d188799beedb4e73f6",
+    "plots/clean_center_recovery.png": "4639ba24802209f21711943b544b3c2804afe0c236c37477c4045592cac7efb3",
+    "scenario_metadata.json": "e34813938bdd66f4dc7dbf1f773f4ed753a5e6a9fa23631d181aff55d181b545",
+    "scenario_metrics.csv": "a50eff0971be87a86a0ad01e2c51dca7e63665f7584cea27bcc6b6a4bce775de",
+    "thresholds.json": "5f3668c88cfc1ae547e2e969b9dd7420defd4eeecdb86615d075a588bb07a2df",
+    "two_source_diagnostics.csv": "869dc2474774d42ffd81ce26189f258a9c1560c7573a5949e4b048b5c8fb2cba"
+  }
+}

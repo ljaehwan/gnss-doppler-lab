@@ -1,0 +1,50 @@
+{
+  "ds1": {
+    "established_start_s": 155.0,
+    "official_candidate_onset_s": 125.0,
+    "processed_time_origin": "tracker PRN_start_sample_count / 25 MHz, recording-relative",
+    "time_origin_verified_against_official_document": false,
+    "transition_end_s": 155.0,
+    "transition_start_s": 125.0
+  },
+  "ds2": {
+    "established_start_s": 145.0,
+    "official_candidate_onset_s": 110.1,
+    "processed_time_origin": "tracker PRN_start_sample_count / 25 MHz, recording-relative",
+    "time_origin_verified_against_official_document": false,
+    "transition_end_s": 145.0,
+    "transition_start_s": 110.1
+  },
+  "ds3": {
+    "established_start_s": 195.0,
+    "official_candidate_onset_s": 118.9,
+    "processed_time_origin": "tracker PRN_start_sample_count / 25 MHz, recording-relative",
+    "time_origin_verified_against_official_document": false,
+    "transition_end_s": 195.0,
+    "transition_start_s": 118.9
+  },
+  "ds4": {
+    "established_start_s": 225.0,
+    "official_candidate_onset_s": 113.8,
+    "processed_time_origin": "tracker PRN_start_sample_count / 25 MHz, recording-relative",
+    "time_origin_verified_against_official_document": false,
+    "transition_end_s": 225.0,
+    "transition_start_s": 113.8
+  },
+  "ds7": {
+    "established_start_s": 150.0,
+    "official_candidate_onset_s": 110.0,
+    "processed_time_origin": "tracker PRN_start_sample_count / 25 MHz, recording-relative",
+    "time_origin_verified_against_official_document": false,
+    "transition_end_s": 150.0,
+    "transition_start_s": 110.0
+  },
+  "ds8": {
+    "established_start_s": 150.0,
+    "official_candidate_onset_s": 110.0,
+    "processed_time_origin": "tracker PRN_start_sample_count / 25 MHz, recording-relative",
+    "time_origin_verified_against_official_document": false,
+    "transition_end_s": 150.0,
+    "transition_start_s": 110.0
+  }
+}

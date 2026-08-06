@@ -1,0 +1,52 @@
+{
+  "attack_labels_used_for_fit_calibration_threshold_or_query": false,
+  "center_contract": [
+    "PRN",
+    "PRN_start_sample_count",
+    "carrier_doppler_hz",
+    "code_freq_chips",
+    "aux1"
+  ],
+  "chip_rate_hz": 1023000.0,
+  "coherent_ms": 1,
+  "grid": {
+    "delay_chips": [
+      -1.0,
+      -0.875,
+      -0.75,
+      -0.625,
+      -0.5,
+      -0.375,
+      -0.25,
+      -0.125,
+      0.0,
+      0.125,
+      0.25,
+      0.375,
+      0.5,
+      0.625,
+      0.75,
+      0.875,
+      1.0
+    ],
+    "doppler_hz": [
+      -250.0,
+      -200.0,
+      -150.0,
+      -100.0,
+      -50.0,
+      0.0,
+      50.0,
+      100.0,
+      150.0,
+      200.0,
+      250.0
+    ]
+  },
+  "normal_only": true,
+  "query_unit": "one complex delay-Doppler coordinate",
+  "raw_format": "little-endian interleaved signed int16 IQ",
+  "sample_rate_hz": 25000000,
+  "seed": 20260806,
+  "stage": "ACAF-NF Stage-0-R1"
+}
