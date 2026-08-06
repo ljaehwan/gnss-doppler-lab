@@ -1,0 +1,54 @@
+{
+  "manifest": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/manifest.json",
+  "raw_path": "/home/ubuntu/unraid_hdd/texbat/raw/cleanStatic.bin",
+  "raw_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+  "sampling": {
+    "max_dominant_fraction": 0.2,
+    "min_per_prn": 50,
+    "min_prns": 8,
+    "target_epochs": 800
+  },
+  "scope": "cleanStatic-only",
+  "selection_gates": {
+    "A3": {
+      "boundary_fraction": 0.05,
+      "median_prn_spearman": 0.8,
+      "pooled_spearman": 0.9,
+      "within_tolerance_fraction": 0.95
+    }
+  },
+  "wide_grid": {
+    "delay_chips": [
+      -1.0,
+      -0.875,
+      -0.75,
+      -0.625,
+      -0.5,
+      -0.375,
+      -0.25,
+      -0.125,
+      0.0,
+      0.125,
+      0.25,
+      0.375,
+      0.5,
+      0.625,
+      0.75,
+      0.875,
+      1.0
+    ],
+    "doppler_hz": [
+      -250,
+      -200,
+      -150,
+      -100,
+      -50,
+      0,
+      50,
+      100,
+      150,
+      200,
+      250
+    ]
+  }
+}

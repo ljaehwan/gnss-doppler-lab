@@ -1,0 +1,23 @@
+{
+  "contract": "True consecutive rows within same channel/PRN; cross-PRN temporal overlap explicitly allowed.",
+  "role_intervals": [
+    {
+      "end_sample": 4001366016,
+      "role": "train",
+      "start_sample": 0
+    },
+    {
+      "end_sample": 8002732032,
+      "role": "calibration",
+      "start_sample": 4001366016
+    },
+    {
+      "end_sample": 12004098048,
+      "role": "holdout",
+      "start_sample": 8002732032
+    }
+  ],
+  "same_epoch_cross_prn_allowed": true,
+  "selected_rows": 800,
+  "unique_tracker_rows": 800
+}

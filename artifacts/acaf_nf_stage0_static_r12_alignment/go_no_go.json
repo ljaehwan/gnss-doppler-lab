@@ -1,0 +1,11 @@
+{
+  "diagnostic_best_candidate": "prev_to_cur_aux_previous_rem_-1_carrier_-1_replica_+1",
+  "gates": {
+    "A1_source_binding": "PASS",
+    "A2_interval_alignment": "PASS",
+    "A3_recovery": "FAIL"
+  },
+  "physics_no_go_claim": false,
+  "selected_alignment": null,
+  "verdict": "FAIL_CLOSED"
+}

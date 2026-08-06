@@ -1,0 +1,32 @@
+{
+  "best_candidate": {
+    "boundary_fraction": 0.74625,
+    "candidate": "prev_to_cur_aux_previous_rem_-1_carrier_-1_replica_+1",
+    "exact_center_fraction": 0.00375,
+    "median_prn_spearman": -0.02552467385138968,
+    "n": 800,
+    "pooled_spearman": -0.01893663896349838,
+    "prn_count": 19,
+    "within_tolerance_fraction": 0.0175
+  },
+  "gate_input": {
+    "binding": "exact_same_raw",
+    "boundary_fraction": 0.74625,
+    "candidate": "prev_to_cur_aux_previous_rem_-1_carrier_-1_replica_+1",
+    "consistent_time": true,
+    "dominant_fraction": 0.05375,
+    "median_prn_spearman": -0.02552467385138968,
+    "n": 800,
+    "pooled_spearman": -0.01893663896349838,
+    "prn_count": 19,
+    "within_tolerance_fraction": 0.0175
+  },
+  "selection": {
+    "A1_source_binding": "PASS",
+    "A2_interval_alignment": "PASS",
+    "A3_recovery": "FAIL",
+    "diagnostic_best_candidate": "prev_to_cur_aux_previous_rem_-1_carrier_-1_replica_+1",
+    "selected_alignment": null,
+    "status": "FAIL_CLOSED"
+  }
+}

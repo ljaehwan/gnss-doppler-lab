@@ -1,0 +1,35 @@
+{
+  "all_required_present": true,
+  "plots": [
+    "center_recovery_by_channel.png",
+    "center_recovery_by_prn.png",
+    "center_recovery_by_time_block.png",
+    "global_offset_sensitivity.png",
+    "raw_interval_lengths.png",
+    "wide_grid_candidate_scores.png"
+  ],
+  "required_artifacts": {
+    "README.md": true,
+    "alignment_hypotheses.csv": true,
+    "center_metrics_by_channel.csv": true,
+    "center_metrics_by_prn.csv": true,
+    "center_metrics_by_time_block.csv": true,
+    "center_validation.csv": true,
+    "center_validation_summary.json": true,
+    "config.json": true,
+    "environment.json": true,
+    "execution_validity.json": true,
+    "global_offset_sensitivity.csv": true,
+    "gnss_sdr_tracking_semantics.md": true,
+    "go_no_go.json": true,
+    "prn_sampling_summary.csv": true,
+    "raw_overlap_audit.json": true,
+    "receiver_source_binding.json": true,
+    "sample_origin_audit.json": true,
+    "selected_alignment.json": true,
+    "test_report.txt": true,
+    "time_role_intervals.json": true,
+    "tracker_source_inventory.json": true
+  },
+  "test_exit_code": 0
+}

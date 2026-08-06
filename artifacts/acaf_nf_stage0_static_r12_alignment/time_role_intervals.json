@@ -1,0 +1,27 @@
+{
+  "cross_prn_same_epoch_overlap_allowed": true,
+  "cross_role_time_overlap_forbidden": true,
+  "roles": [
+    {
+      "end_sample": 4001366016,
+      "end_seconds": 160.05464064,
+      "role": "train",
+      "start_sample": 0,
+      "start_seconds": 0.0
+    },
+    {
+      "end_sample": 8002732032,
+      "end_seconds": 320.10928128,
+      "role": "calibration",
+      "start_sample": 4001366016,
+      "start_seconds": 160.05464064
+    },
+    {
+      "end_sample": 12004098048,
+      "end_seconds": 480.16392192,
+      "role": "holdout",
+      "start_sample": 8002732032,
+      "start_seconds": 320.10928128
+    }
+  ]
+}

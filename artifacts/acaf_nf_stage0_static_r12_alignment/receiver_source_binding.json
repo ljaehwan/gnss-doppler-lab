@@ -1,0 +1,83 @@
+{
+  "A1": "PASS",
+  "actual_raw": {
+    "complex_sample_bytes": 4,
+    "format": "ishort / interleaved signed-int16 IQ",
+    "path": "/home/ubuntu/unraid_hdd/texbat/raw/cleanStatic.bin",
+    "sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+    "size_bytes": 48016392192
+  },
+  "classification": "exact_same_raw",
+  "discovery": {
+    "parent_manifest": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/manifest.json",
+    "receiver_config": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/receiver.conf",
+    "runtime_config": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/receiver.runtime.conf",
+    "started_at": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw"
+  },
+  "manifest_binding": {
+    "manifest_raw_mats": [
+      {
+        "name": "raw/epl_tracking_ch_0.mat",
+        "sha256": "baeb235408145cc1654a94d1e1c6f8fd0fc9adac5e5cff8a292dc348b959a213",
+        "size_bytes": 5489015
+      },
+      {
+        "name": "raw/epl_tracking_ch_1.mat",
+        "sha256": "26c55e6043c2e319e08c0b1d4fdbdaa44696d042f0f343ffc4e2041f09521f11",
+        "size_bytes": 5443161
+      },
+      {
+        "name": "raw/epl_tracking_ch_10.mat",
+        "sha256": "8951dcd30665ae0faeca381910cfaa06c2ea03bf077d219dc96c62e00a4ec0e1",
+        "size_bytes": 28880639
+      },
+      {
+        "name": "raw/epl_tracking_ch_2.mat",
+        "sha256": "2683991662c6c4d552ec6d0d2969c9c0291fd6abdeb9e3e3be3eb4c53343f3dc",
+        "size_bytes": 5447271
+      },
+      {
+        "name": "raw/epl_tracking_ch_3.mat",
+        "sha256": "413d837e707101f6d1664d808b93f4060f7b194ebdc260aeac68b0de996fea6c",
+        "size_bytes": 5886168
+      },
+      {
+        "name": "raw/epl_tracking_ch_4.mat",
+        "sha256": "45f79e885715b3c99262302d6c33124029fc07bab6a2d3bb45e76eeaeda151cf",
+        "size_bytes": 5432894
+      },
+      {
+        "name": "raw/epl_tracking_ch_5.mat",
+        "sha256": "38c90c1e47e9c19097f5fe8c24f9f07f53e88ca8e730393807b7e023a8b9a3e8",
+        "size_bytes": 5472174
+      },
+      {
+        "name": "raw/epl_tracking_ch_6.mat",
+        "sha256": "c7fb92cbb29be0ba26207d336d811e68441bffa6b029a134f503a9de7cb0000e",
+        "size_bytes": 5457352
+      },
+      {
+        "name": "raw/epl_tracking_ch_7.mat",
+        "sha256": "df48b0ed3cdacd5a00587cd2a664650d0c2b1bd8b63fa07fa74e78857ec2b94a",
+        "size_bytes": 5410435
+      },
+      {
+        "name": "raw/epl_tracking_ch_8.mat",
+        "sha256": "dd64b65894472fb9fe7f2bb925c7ff8d41311f533889e3293b1809e4b8f176c4",
+        "size_bytes": 5396492
+      },
+      {
+        "name": "raw/epl_tracking_ch_9.mat",
+        "sha256": "66feb6c4180a8a8dc1d32047b6505858d7795b49b432b907c91941a49c727ae2",
+        "size_bytes": 5473646
+      }
+    ],
+    "manifest_raw_path": "/home/ubuntu/unraid/gnss-datasets/texbat/raw/cleanStatic.bin",
+    "manifest_raw_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+    "manifest_raw_size_bytes": 48016392192,
+    "manifest_tracker_raw_directory": "raw",
+    "recording_id": "cleanStatic"
+  },
+  "source_semantics_sufficient": true,
+  "verified_fact": "Parent receiver manifest binds the cleanStatic tracker MATs to raw SHA-256 dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9; actual selected raw SHA-256 is dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9."
+}
