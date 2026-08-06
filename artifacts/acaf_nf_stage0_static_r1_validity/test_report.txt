@@ -1,0 +1,8 @@
+command: /usr/bin/python3 -m pytest -q tests/test_acaf_nf_stage0_r11_validity.py
+exit_code: 0
+result: PASS
+stdout:
+...............                                                          [100%]
+15 passed in 0.66s
+
+stderr:

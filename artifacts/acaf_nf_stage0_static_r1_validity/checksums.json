@@ -1,0 +1,28 @@
+{
+  "algorithm": "sha256",
+  "excluded_self_reference": "checksums.json cannot hash its own final bytes",
+  "files": {
+    "README.md": "f67f280f6526374bbf4479a269b071d074b71cd338a515d7aea0b60025339716",
+    "alignment_hypotheses.csv": "b1d61d65c3667986a653a8563e87b2015c7937292448e947f8c5b56f0386254f",
+    "bootstrap_results.json": "37d9660eb810e9854e1da62a2c0641bef16c5f3028f0541e76622145b7479a29",
+    "budget_metrics.csv": "fbf033120b3b1e05f42c244ecfe5afd87302dbf364172bbbdca83edea3f1b6c5",
+    "center_validation.csv": "98909cb5ca2006510be084b1147deb432588014e6fca1fd932efaeb0678472b6",
+    "center_validation_summary.json": "258a3e396083cbdd7ebb59b1d26f037110776fb80af6cdb5aab14e11ea4a7d77",
+    "config.json": "396aa38976bd249b08a3bbce5479d784d1a76cb13d051432d5e9cf06a02a3b93",
+    "data_manifest.json": "938bf5d89c3d4b312c46de494059cc90e153b8e70d4ee12d606fe88fdefb254c",
+    "environment.json": "b23add16ea0ced9ee96a3f1d5dc23f0c5c8525b431b7ad3d22e7e5190afb818d",
+    "execution_validity.json": "3094cb4127ceab64f0c51b91ac1b5febb20823c615c1e7ecca26ce294316ba66",
+    "go_no_go.json": "b32af6e63241e8dfffa67a4dc80721ddc98057f7250392dc9e40186fea337d85",
+    "normal_split.json": "749edbbc0ba9f8e9a9ba2a9d1c1f673949a13aef317f32090cf917d6ba5a32d0",
+    "per_epoch_scores.csv": "c2bce61ae60cbfca702737550ce49abf1a53e62ca28f1853a56b0340b9e672c1",
+    "physical_controls.json": "34021ec459718ff7ff37eb1b5e675cd0b127fd21d19ecf19e255f827ec9bb6bd",
+    "sample_count_summary.json": "f7a6a2a146c305129c11d562518e160d199c9dd121f1137aebfc43352cbea4fa",
+    "scenario_metrics.csv": "da1571b075161566938b0e2c808f5b3ca152526c66ef17be9900e1ea1c92729b",
+    "selected_alignment.json": "a5ad0fbbbdbf22def7a6581e4c49c040f1e126d0b78f0432ed2833cf36018cfc",
+    "test_report.txt": "b6684ce6c5f2884f945ef426b22352a29bc6eacf8bb295f3e9528d6423161eae",
+    "thresholds.json": "62e0d845a7ad69ff0fb4b3c806a394ac69ab48599df1b87afd68fdf4771a5750",
+    "tracker_source_inventory.json": "483dab08191255526fb47febf73ae5c089ab00c0c129f7c2cfba69e637151ddd",
+    "verification_report.json": "76c40373f3babc05ed0595ec6129fff977e76cdaa521b4524beec1b8840e899b"
+  },
+  "scope": "recursive_all_regular_artifacts_except_checksums.json_self_reference"
+}

@@ -1,0 +1,23 @@
+{
+  "cleanStatic_raw": {
+    "byte_bounds_convention": "[sample_start*4, sample_end_exclusive*4)",
+    "bytes": 48016392192,
+    "duration_s": 480.16392192,
+    "exists": true,
+    "path": "/home/ubuntu/unraid_hdd/texbat/raw/cleanStatic.bin",
+    "samples": 12004098048,
+    "sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9"
+  },
+  "ds4_manifest_search": {
+    "reason": "no DS4 tracker/raw manifest supplied",
+    "searched": [
+      "data/external/texbat/manifests",
+      "configured tracker roots"
+    ],
+    "status": "NOT_FOUND"
+  },
+  "ds7_ds8_one_second_overlap": {
+    "independent_normal_evidence": false,
+    "status": "UNRECONSTRUCTABLE_RECORDING_RELATIVE_COUNTERS"
+  }
+}

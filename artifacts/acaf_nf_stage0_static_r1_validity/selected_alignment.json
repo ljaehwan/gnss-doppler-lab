@@ -1,0 +1,21 @@
+{
+  "candidates_evaluated": 8,
+  "selected": {
+    "boundary_fraction": 0.9883333333333333,
+    "center_peak_fraction": 0.011666666666666667,
+    "dominant_fraction": 0.9966666666666667,
+    "eligible_n": 1997,
+    "n": 600,
+    "name": "interval_k_to_k1_tracker_k1_rem_plus_wipe_minus",
+    "prn_count": 3,
+    "prns": [
+      3,
+      16,
+      19
+    ],
+    "prompt_spearman": 0.09801988338856496,
+    "status": "EVALUATED_CLEAN_ONLY"
+  },
+  "selection_rule": "max Prompt Spearman, then center peak, then lower boundary; attacks excluded",
+  "status": "SELECTED_CLEAN_ACTUAL_PROMPT_AND_CENTER_EVIDENCE"
+}

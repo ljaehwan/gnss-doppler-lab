@@ -1,0 +1,17 @@
+{
+  "attack_data_used": false,
+  "chronological_contiguous_roles": true,
+  "raw_ranges_nonoverlap": true,
+  "required": {
+    "calibration": 500,
+    "holdout": 500,
+    "train": 1000
+  },
+  "roles": {
+    "calibration": 500,
+    "holdout": 500,
+    "train": 1000
+  },
+  "source": "cleanStatic only",
+  "status": "PASS"
+}

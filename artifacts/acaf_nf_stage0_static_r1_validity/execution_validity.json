@@ -1,0 +1,6 @@
+{
+  "fail_closed": true,
+  "gate_a": "FAIL",
+  "gate_b": "NOT_EVALUATED_UNTIL_CENTER_VALID",
+  "gate_c": "INCOMPLETE"
+}

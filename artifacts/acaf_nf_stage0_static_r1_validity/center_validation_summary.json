@@ -1,0 +1,32 @@
+{
+  "boundary_fraction": 0.986,
+  "dominant_fraction": 0.996,
+  "gate_a": {
+    "checks": {
+      "boundary": false,
+      "dominant": false,
+      "n": true,
+      "prns": false,
+      "spearman": false,
+      "within": false
+    },
+    "status": "FAIL"
+  },
+  "n": 500,
+  "prn_count": 3,
+  "prns": [
+    3,
+    16,
+    19
+  ],
+  "r0_definition": "absolute reconstructed peak delay offset from the 3x3 center (chips)",
+  "r0_delay_error_chips_mean_abs": 0.09075,
+  "r1_definition": "absolute reconstructed peak Doppler offset from the 3x3 center (Hz)",
+  "r1_doppler_error_hz_mean_abs": 48.1,
+  "spearman": 0.13124903699614798,
+  "tolerances": {
+    "delay_chips": 0.125,
+    "doppler_hz": 50
+  },
+  "within_fraction": 0.014
+}

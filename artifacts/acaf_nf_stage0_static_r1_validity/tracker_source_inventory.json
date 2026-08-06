@@ -1,0 +1,98 @@
+{
+  "aux1_source": "d_rem_code_phase_samples; converted by aux1*code_freq_chips/fs",
+  "base": "1ddd4562723040fd66cb334b578a5b69455625f4",
+  "generator_sha256": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+  "mat_files": [
+    {
+      "bytes": 5489015,
+      "channel": "0",
+      "missing_required": [],
+      "n_rows": 35798,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_0.mat",
+      "sha256": "baeb235408145cc1654a94d1e1c6f8fd0fc9adac5e5cff8a292dc348b959a213"
+    },
+    {
+      "bytes": 5443161,
+      "channel": "1",
+      "missing_required": [],
+      "n_rows": 36261,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_1.mat",
+      "sha256": "26c55e6043c2e319e08c0b1d4fdbdaa44696d042f0f343ffc4e2041f09521f11"
+    },
+    {
+      "bytes": 28880639,
+      "channel": "10",
+      "missing_required": [],
+      "n_rows": 190026,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_10.mat",
+      "sha256": "8951dcd30665ae0faeca381910cfaa06c2ea03bf077d219dc96c62e00a4ec0e1"
+    },
+    {
+      "bytes": 5447271,
+      "channel": "2",
+      "missing_required": [],
+      "n_rows": 36301,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_2.mat",
+      "sha256": "2683991662c6c4d552ec6d0d2969c9c0291fd6abdeb9e3e3be3eb4c53343f3dc"
+    },
+    {
+      "bytes": 5886168,
+      "channel": "3",
+      "missing_required": [],
+      "n_rows": 38493,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_3.mat",
+      "sha256": "413d837e707101f6d1664d808b93f4060f7b194ebdc260aeac68b0de996fea6c"
+    },
+    {
+      "bytes": 5432894,
+      "channel": "4",
+      "missing_required": [],
+      "n_rows": 36260,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_4.mat",
+      "sha256": "45f79e885715b3c99262302d6c33124029fc07bab6a2d3bb45e76eeaeda151cf"
+    },
+    {
+      "bytes": 5472174,
+      "channel": "5",
+      "missing_required": [],
+      "n_rows": 36303,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_5.mat",
+      "sha256": "38c90c1e47e9c19097f5fe8c24f9f07f53e88ca8e730393807b7e023a8b9a3e8"
+    },
+    {
+      "bytes": 5457352,
+      "channel": "6",
+      "missing_required": [],
+      "n_rows": 36230,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_6.mat",
+      "sha256": "c7fb92cbb29be0ba26207d336d811e68441bffa6b029a134f503a9de7cb0000e"
+    },
+    {
+      "bytes": 5410435,
+      "channel": "7",
+      "missing_required": [],
+      "n_rows": 36258,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_7.mat",
+      "sha256": "df48b0ed3cdacd5a00587cd2a664650d0c2b1bd8b63fa07fa74e78857ec2b94a"
+    },
+    {
+      "bytes": 5396492,
+      "channel": "8",
+      "missing_required": [],
+      "n_rows": 36139,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_8.mat",
+      "sha256": "dd64b65894472fb9fe7f2bb925c7ff8d41311f533889e3293b1809e4b8f176c4"
+    },
+    {
+      "bytes": 5473646,
+      "channel": "9",
+      "missing_required": [],
+      "n_rows": 35570,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_9.mat",
+      "sha256": "66feb6c4180a8a8dc1d32047b6505858d7795b49b432b907c91941a49c727ae2"
+    }
+  ],
+  "prn_start_source": "nitems_read + current PRN samples",
+  "source": "/home/ubuntu/build-gnss-sdr-complex9/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+  "tree_state": "modified (confirmed external provenance)"
+}
