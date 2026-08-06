@@ -8,9 +8,9 @@ import pytest
 
 from gnss_doppler_lab.acquisition_surface import gps_l1ca_code
 from gnss_doppler_lab.acaf_nf_stage0_r13_reconstruction import (
-    Candidate, caf, candidate_fingerprint, clean_only_guard, code_replica,
+    Candidate, caf, candidate_application, clean_only_guard, code_replica,
     filter_stable_triples, gate_verdict, interval_rows, roles_nonoverlap,
-    wide_grid,
+    source_support, wide_grid,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -53,14 +53,27 @@ def test_stable_filter_exact_lengths_quality_and_cross_prn_rejection():
     assert not filter_stable_triples([row(0),row(1,prn=2),row(2)],100000)
 
 
-def test_all_candidate_variables_physically_change_fingerprint():
-    iq=np.ones(250,dtype=np.complex64); rows=(row(0),row(1),row(2)); base=Candidate()
-    basefp=candidate_fingerprint(iq,rows,base,100,25099,25e6)
-    variants=[Candidate(aux_row='previous'),Candidate(remnant_sign=-1),Candidate(carrier_sign=1),
-              Candidate(code_freq_row='next'),Candidate(interval='cur_to_next'),Candidate(global_offset=500)]
-    for candidate in variants:
-        fp=candidate_fingerprint(iq,rows,candidate,100+candidate.global_offset,25099+candidate.global_offset,25e6)
-        assert fp != basefp
+def test_dynamic_consumed_interval_is_not_correlator_support():
+    triple=(row(0),row(1),row(2))
+    assert interval_rows(triple,'prev_to_cur')[:2] == (100,25099)
+    support=source_support(triple, vector_length=25000)
+    assert support == {"authenticated":False,"length_samples":25000,"start_sample":None,
+                       "end_sample":None,"reason":"correlator nitems_read start is not persisted"}
+
+
+def test_only_physical_candidate_dimensions_remain_and_hashes_are_separate():
+    fields=set(Candidate.__dataclass_fields__)
+    assert fields == {"aux_row","nco_row","remnant_sign","carrier_sign","global_offset"}
+    iq=np.arange(250,dtype=np.float32).astype(np.complex64); rows=(row(0),row(1),row(2))
+    base=candidate_application(iq,rows,Candidate(),100,350,25e6)
+    required={"raw_interval_content_sha256","raw_interval_range_sha256","replica_chip_indices_sha256",
+              "carrier_wipeoff_sha256","aux_indices_sha256","nco_indices_sha256",
+              "prompt_indices_sha256","result_field_sha256"}
+    assert required <= set(base)
+    for candidate in (Candidate(aux_row='previous'),Candidate(nco_row='previous'),
+                      Candidate(remnant_sign=-1),Candidate(carrier_sign=1),Candidate(global_offset=500)):
+        applied=candidate_application(iq,rows,candidate,100+candidate.global_offset,350+candidate.global_offset,25e6)
+        assert any(applied[key] != base[key] for key in required)
 
 
 def test_replica_equation_and_caf_known_center(monkeypatch):
@@ -93,15 +106,20 @@ def test_runner_calls_canonical_and_global_offsets_recompute(monkeypatch,tmp_pat
     spec=importlib.util.spec_from_file_location('runner',path); mod=importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
     calls=[]
     monkeypatch.setattr(mod,'raw_caf',lambda *a,**kw: calls.append((kw['start'],kw['end'])) or {'center_magnitude':1})
-    mod.run_offset_sensitivity('raw',[(row(0),row(1),row(2))],Candidate(),[0,500],25e6)
+    mod.run_offset_sensitivity('raw',[(row(0),row(1),row(2))],Candidate(),[0,500],25e6,
+                               support_starts=[100])
     assert len(calls)==2 and calls[0]!=calls[1]
 
 
 def test_independent_verifier_rejects_ignored_candidate_and_fake_offsets():
     path=ROOT/'scripts/verify_acaf_nf_stage0_static_r13_reconstruction.py'
     spec=importlib.util.spec_from_file_location('verifier',path); mod=importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
-    assert not mod.candidate_fingerprints_valid({'expected_unique':2,'fingerprints':{'a':'same','b':'same'}})
-    assert mod.candidate_fingerprints_valid({'expected_unique':2,'fingerprints':{'a':'one','b':'two'}})
+    fields=['raw_interval_content_sha256','raw_interval_range_sha256','replica_chip_indices_sha256',
+            'carrier_wipeoff_sha256','aux_indices_sha256','nco_indices_sha256','prompt_indices_sha256','result_field_sha256']
+    same={k:'a'*64 for k in fields}
+    changed={**same,'carrier_wipeoff_sha256':'b'*64,'result_field_sha256':'c'*64}
+    assert not mod.physical_applications_valid([{'candidate':'a',**same},{'candidate':'b',**same}])
+    assert mod.physical_applications_valid([{'candidate':'a',**same},{'candidate':'b',**changed}])
     calls=[{'invocation':0,'global_offset_samples':o,'start_byte':400+4*o,'end_byte':800+4*o} for o in (-1000,-500,0,500,1000)]
     assert mod.global_offset_calls_valid(calls)
     for call in calls: call['start_byte']=400; call['end_byte']=800
@@ -115,6 +133,28 @@ def test_raw_caf_spies_canonical_generator(monkeypatch):
     monkeypatch.setattr(mod,'read_iq',lambda *a: np.ones(10,dtype=complex))
     monkeypatch.setattr(mod,'gps_l1ca_code',lambda prn: seen.append(prn) or np.ones(1023))
     monkeypatch.setattr(mod,'caf',lambda *a,**k: {'result_field_hash':'x'})
-    monkeypatch.setattr(mod,'candidate_fingerprint',lambda *a,**k: 'fp')
+    monkeypatch.setattr(mod,'candidate_application',lambda *a,**k: {'result_field_sha256':'fp'})
     result=mod.raw_caf('unused',(row(0),row(1),row(2)),Candidate(),start=100,end=110)
     assert seen==[1] and result['n_samples']==10
+
+
+def test_binding_is_checked_before_any_iq_or_mat_read(monkeypatch,tmp_path):
+    path=ROOT/'scripts/run_acaf_nf_stage0_static_r13_reconstruction.py'
+    spec=importlib.util.spec_from_file_location('runner_binding',path); mod=importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
+    raw=tmp_path/'benign.bin'; raw.write_bytes(b'benign')
+    tracker=tmp_path/'raw'; tracker.mkdir()
+    manifest=tmp_path/'manifest.json'; manifest.write_text(json.dumps({'recording_id':'not-cleanStatic'}))
+    monkeypatch.setattr(mod,'read_iq',lambda *a: pytest.fail('IQ read before binding'))
+    monkeypatch.setattr(mod,'load_triples',lambda *a: pytest.fail('MAT read before binding'))
+    with pytest.raises(ValueError,match='binding'):
+        mod.authenticate_inputs(raw,tracker,manifest)
+
+
+def test_stable_filter_rejects_fractional_stamps_reacquisition_and_long_interval():
+    rows=[row(0),row(1),row(2)]
+    rows[1]['PRN_start_sample_count']=25099.5
+    assert not filter_stable_triples(rows,100000)
+    rows=[row(0),row(1),row(2)]; rows[1]['reacquired']=True
+    assert not filter_stable_triples(rows,100000)
+    rows=[row(0),row(1),row(2)]; rows[2]['PRN_start_sample_count']=80000
+    assert not filter_stable_triples(rows,100000,max_consumed_samples=25001)

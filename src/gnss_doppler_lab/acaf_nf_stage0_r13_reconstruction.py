@@ -25,16 +25,10 @@ REQUIRED_FIELDS = (
 
 @dataclass(frozen=True)
 class Candidate:
-    interval: str = "prev_to_cur"
-    measurement_row: str = "current"
     nco_row: str = "current"
-    prompt_row: str = "current"
     aux_row: str = "current"
-    carrier_doppler_row: str = "current"
-    code_freq_row: str = "current"
     remnant_sign: int = 1
     carrier_sign: int = -1
-    replica_direction: int = 1
     global_offset: int = 0
 
     @property
@@ -71,7 +65,8 @@ def _finite(row: Mapping) -> bool:
 
 
 def filter_stable_triples(rows: Sequence[Mapping], raw_samples: int,
-                          min_cn0: float = 28.0, min_lock: float = .85) -> list[tuple[dict, dict, dict]]:
+                          min_cn0: float = 28.0, min_lock: float = .85,
+                          max_consumed_samples: int = 25_001) -> list[tuple[dict, dict, dict]]:
     """Return adjacent same-channel/PRN triples whose current epoch is stable."""
     result = []
     for i in range(1, len(rows) - 1):
@@ -80,11 +75,16 @@ def filter_stable_triples(rows: Sequence[Mapping], raw_samples: int,
             continue
         prns = {int(r["PRN"]) for r in triple}
         channels = {str(r["channel"]) for r in triple}
-        samples = [int(r["PRN_start_sample_count"]) for r in triple]
+        raw_stamps = [r["PRN_start_sample_count"] for r in triple]
+        if any(float(x) != int(float(x)) for x in raw_stamps):
+            continue
+        samples = [int(x) for x in raw_stamps]
         cur = triple[1]
         if (len(prns) != 1 or next(iter(prns)) not in range(1, 33) or len(channels) != 1
                 or not (0 <= samples[0] < samples[1] < samples[2] <= int(raw_samples))
                 or min(np.diff(samples)) < 256
+                or max(np.diff(samples)) > int(max_consumed_samples)
+                or any(bool(r.get("reacquired", False) or r.get("prn_transition", False)) for r in triple)
                 or any(float(r["CN0_SNV_dB_Hz"]) < min_cn0 for r in triple)
                 or any(float(r["carrier_lock_test"]) < min_lock for r in triple)):
             continue
@@ -109,14 +109,23 @@ def interval_rows(triple: Sequence[Mapping], interval: str, global_offset: int =
     return int(start) + int(global_offset), int(end) + int(global_offset), prompt
 
 
+def source_support(triple: Sequence[Mapping], vector_length: int) -> dict:
+    """Describe authenticated correlator support without inventing its raw start.
+
+    Source proves the fixed support length, but the MAT dump stores a boundary
+    made with the updated consume length and does not store ``nitems_read(0)``.
+    """
+    del triple
+    return {"authenticated": False, "length_samples": int(vector_length),
+            "start_sample": None, "end_sample": None,
+            "reason": "correlator nitems_read start is not persisted"}
+
+
 def validate_candidate_rows(triple: Sequence[Mapping], candidate: Candidate) -> None:
-    names = (candidate.measurement_row, candidate.nco_row, candidate.prompt_row,
-             candidate.aux_row, candidate.carrier_doppler_row, candidate.code_freq_row)
+    names = (candidate.nco_row, candidate.aux_row)
     referenced = [_row(triple, name) for name in names]
     if len({int(row["PRN"]) for row in referenced}) != 1:
         raise ValueError("candidate referenced rows with different PRNs")
-    if candidate.replica_direction != 1:
-        raise ValueError("source establishes forward code progression")
     if candidate.remnant_sign not in (-1, 1) or candidate.carrier_sign not in (-1, 1):
         raise ValueError("candidate signs must be +/-1")
 
@@ -152,7 +161,7 @@ def caf(iq: np.ndarray, prn, fs: float, code_freq_chips: float, aux1_samples: fl
         for ci, delay in enumerate(grid["delay_chips"]):
             replica, chip_hash = code_replica(prn, len(iq), fs, code_freq_chips, aux1_samples,
                                                candidate.remnant_sign, delay,
-                                               replica_direction=candidate.replica_direction)
+                                               replica_direction=1)
             chip_hashes[str(delay)] = chip_hash
             values[di, ci] = abs(np.vdot(replica, wiped))
     flat = int(values.argmax()); di, ci = np.unravel_index(flat, values.shape)
@@ -168,22 +177,29 @@ def caf(iq: np.ndarray, prn, fs: float, code_freq_chips: float, aux1_samples: fl
             "result_field_hash": _digest(values)}
 
 
-def candidate_fingerprint(iq: np.ndarray, triple: Sequence[Mapping], candidate: Candidate,
-                          start: int, end: int, fs: float) -> str:
+def candidate_application(iq: np.ndarray, triple: Sequence[Mapping], candidate: Candidate,
+                          start: int, end: int, fs: float, result_field=None) -> dict:
+    """Return separately auditable hashes of inputs actually applied."""
     validate_candidate_rows(triple, candidate)
     aux = _row(triple, candidate.aux_row); nco = _row(triple, candidate.nco_row)
-    carrier = _row(triple, candidate.carrier_doppler_row)
     n = len(iq)
     replica, replica_hash = code_replica(aux["PRN"], n, fs, nco["code_freq_chips"], aux["aux1"],
-                                         candidate.remnant_sign, 0, replica_direction=candidate.replica_direction)
-    wipe, wipe_hash = carrier_wipeoff(n, fs, carrier["carrier_doppler_hz"], 0, candidate.carrier_sign)
-    fields = {"candidate": asdict(candidate), "raw_interval": [start, end],
-              "selected_raw_interval_hash": _digest(np.asarray(iq)),
-              "replica_chip_index_hash": replica_hash, "carrier_wipeoff_hash": wipe_hash,
-              "aux1_row_index": aux["mat_row"], "nco_row_index": nco["mat_row"],
-              "prompt_row_index": _row(triple, candidate.prompt_row)["mat_row"],
-              "applied_input_hash": _digest(replica * wipe)}
-    return _digest(fields)
+                                         candidate.remnant_sign, 0, replica_direction=1)
+    wipe, wipe_hash = carrier_wipeoff(n, fs, nco["carrier_doppler_hz"], 0, candidate.carrier_sign)
+    prompt = triple[1]
+    physical_result = result_field if result_field is not None else replica * wipe * np.asarray(iq)
+    return {"raw_interval_content_sha256": _digest(np.asarray(iq)),
+            "raw_interval_range_sha256": _digest([int(start), int(end)]),
+            "replica_chip_indices_sha256": replica_hash,
+            "carrier_wipeoff_sha256": wipe_hash,
+            "aux_indices_sha256": _digest({"mat_row": int(aux["mat_row"]), "aux1": float(aux["aux1"])}),
+            "nco_indices_sha256": _digest({"mat_row": int(nco["mat_row"]),
+                                            "code_freq_chips": float(nco["code_freq_chips"]),
+                                            "carrier_doppler_hz": float(nco["carrier_doppler_hz"])}),
+            "prompt_indices_sha256": _digest({"mat_row": int(prompt["mat_row"]),
+                                               "Prompt_I": float(prompt["Prompt_I"]),
+                                               "Prompt_Q": float(prompt["Prompt_Q"])}),
+            "result_field_sha256": _digest(physical_result)}
 
 
 def roles_nonoverlap(intervals: Sequence[Mapping]) -> bool:

@@ -9,6 +9,7 @@ from dataclasses import asdict, replace
 import hashlib
 import json
 from pathlib import Path
+import subprocess
 import sys
 
 import h5py
@@ -18,9 +19,9 @@ from scipy.stats import spearmanr
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from gnss_doppler_lab.acquisition_surface import gps_l1ca_code
 from gnss_doppler_lab.acaf_nf_stage0_r13_reconstruction import (
-    FS, GLOBAL_OFFSETS, REQUIRED_FIELDS, Candidate, caf, candidate_fingerprint,
+    FS, GLOBAL_OFFSETS, REQUIRED_FIELDS, Candidate, caf, candidate_application,
     clean_only_guard, filter_stable_triples, gate_verdict, interval_rows,
-    roles_nonoverlap, wide_grid,
+    roles_nonoverlap, source_support, wide_grid,
 )
 
 OUT = Path("artifacts/acaf_nf_stage0_static_r13_reconstruction")
@@ -62,30 +63,71 @@ def read_iq(raw_path: Path, start: int, end: int) -> np.ndarray:
     return data[0::2].astype(np.float32) + 1j * data[1::2].astype(np.float32)
 
 
+def authenticate_inputs(raw_path: Path, tracker_dir: Path, manifest_path: Path | None = None) -> dict:
+    """Authenticate the benign receiver run before opening any IQ or MAT file."""
+    raw_path=Path(raw_path); tracker_dir=Path(tracker_dir)
+    manifest_path=Path(manifest_path) if manifest_path else tracker_dir.parent/"manifest.json"
+    try: manifest=json.loads(manifest_path.read_text())
+    except (OSError,json.JSONDecodeError) as exc: raise ValueError("receiver binding manifest unavailable") from exc
+    if manifest.get("recording_id")!="cleanStatic" or manifest.get("normal_only") is not True or manifest.get("attack_inputs_read") is not False:
+        raise ValueError("receiver binding is not cleanStatic-only")
+    auth=manifest.get("authenticated_inputs",{}); iq=auth.get("iq_before_receiver",{})
+    receiver=manifest.get("receiver",{}); retained=manifest.get("retained_files",[])
+    config_path=manifest_path.parent/receiver.get("config","")
+    runtime_path=manifest_path.parent/receiver.get("runtime_config","")
+    executable=Path(receiver.get("executable","/nonexistent"))
+    expected_mats={x["name"]:x for x in retained if x.get("role")=="raw_receiver_output" and x.get("name","").endswith(".mat")}
+    actual_mats={str(p.relative_to(manifest_path.parent)):p for p in sorted(tracker_dir.glob("epl_tracking_ch_*.mat"))}
+    checks={
+      "raw_path":raw_path.resolve()==Path(iq.get("path","/nonexistent")).resolve(),
+      "raw_size":raw_path.is_file() and raw_path.stat().st_size==int(iq.get("size_bytes",-1)),
+      "raw_sha256":raw_path.is_file() and sha256(raw_path)==iq.get("sha256"),
+      "config_sha256":config_path.is_file() and sha256(config_path)==receiver.get("config_sha256"),
+      "runtime_config_sha256":runtime_path.is_file() and sha256(runtime_path)==receiver.get("runtime_config_sha256"),
+      "executable_sha256":executable.is_file() and sha256(executable)==receiver.get("executable_sha256"),
+      "mat_inventory":set(actual_mats)==set(expected_mats),
+      "mat_hashes":bool(actual_mats) and all(sha256(path)==expected_mats[name].get("sha256") for name,path in actual_mats.items()),
+    }
+    config=config_path.read_text() if config_path.is_file() else ""
+    required={"SignalSource.item_type":"ishort","SignalSource.sampling_frequency":"25000000",
+              "GNSS-SDR.internal_fs_sps":"25000000","Resampler.implementation":"Pass_Through",
+              "Tracking_1C.tap_count":"9","Tracking_1C.tap_spacing_chips":"0.125"}
+    values={}
+    for line in config.splitlines():
+        if "=" in line and not line.lstrip().startswith("#"):
+            key,value=line.split("=",1); values[key.strip()]=value.strip()
+    checks["receiver_config_values"]=all(values.get(k)==v for k,v in required.items())
+    if not all(checks.values()): raise ValueError("receiver binding failed: "+",".join(k for k,v in checks.items() if not v))
+    return {"checks":checks,"raw_sha256":iq["sha256"],"manifest_path":str(manifest_path),
+            "manifest_sha256":sha256(manifest_path),"config_values":values,
+            "mat_inventory":[{"path":name,"sha256":expected_mats[name]["sha256"]} for name in sorted(expected_mats)]}
+
+
 def raw_caf(raw_path, triple, candidate, fs=FS, *, start=None, end=None, grid=None):
     """One physical invocation: independently read the requested byte range and correlate it."""
-    start0, end0, _ = interval_rows(triple, candidate.interval, candidate.global_offset)
-    start = start0 if start is None else int(start); end = end0 if end is None else int(end)
+    if start is None or end is None:
+        raise ValueError("authenticated correlator support bounds are required")
+    start=int(start); end=int(end)
     iq = read_iq(Path(raw_path), start, end)
     # Calling the imported canonical function here is intentional and spy-verifiable.
     gps_l1ca_code(triple[1]["PRN"])
     aux = triple[{"previous":0,"current":1,"next":2}[candidate.aux_row]]
-    nco = triple[{"previous":0,"current":1,"next":2}[candidate.code_freq_row]]
-    carrier = triple[{"previous":0,"current":1,"next":2}[candidate.carrier_doppler_row]]
+    nco = triple[{"previous":0,"current":1,"next":2}[candidate.nco_row]]
     result = caf(iq, triple[1]["PRN"], fs, nco["code_freq_chips"], aux["aux1"],
-                 carrier["carrier_doppler_hz"], candidate, grid)
+                 nco["carrier_doppler_hz"], candidate, grid)
+    application=candidate_application(iq,triple,candidate,start,end,fs,result.get("result_field_hash"))
     result.update({"raw_start_sample":start,"raw_end_sample":end,"raw_start_byte":4*start,
                    "raw_end_byte":4*end,"n_samples":end-start,
-                   "candidate_fingerprint":candidate_fingerprint(iq,triple,candidate,start,end,fs)})
+                   **application})
     return result
 
 
-def run_offset_sensitivity(raw_path, triples, candidate, offsets=GLOBAL_OFFSETS, fs=FS):
+def run_offset_sensitivity(raw_path, triples, candidate, offsets=GLOBAL_OFFSETS, fs=FS, *, support_starts):
     results = []
     for offset in offsets:
         shifted = replace(candidate, global_offset=int(offset))
-        for invocation, triple in enumerate(triples):
-            start, end, _ = interval_rows(triple, shifted.interval, shifted.global_offset)
+        for invocation, (triple,support_start) in enumerate(zip(triples,support_starts,strict=True)):
+            start=int(support_start)+int(offset); end=start+25_000
             result = raw_caf(raw_path, triple, shifted, fs, start=start, end=end, grid=wide_grid())
             results.append({"global_offset_samples":offset,"invocation":invocation,"start":start,"end":end,
                             "start_byte":4*start,"end_byte":4*end,**result})
@@ -131,9 +173,7 @@ def balanced_sample(triples, target=900):
 
 def candidate_family():
     """Source-constrained hypotheses; reverse code progression is impossible."""
-    return [Candidate(interval="prev_to_cur", measurement_row="current", prompt_row="current",
-                      nco_row=nco, aux_row=aux, carrier_doppler_row=nco,
-                      code_freq_row=nco, remnant_sign=rem, carrier_sign=sign)
+    return [Candidate(nco_row=nco, aux_row=aux, remnant_sign=rem, carrier_sign=sign)
             for nco in ("previous","current") for aux in ("previous","current")
             for rem in (-1,1) for sign in (-1,1)]
 
@@ -150,27 +190,47 @@ def rho(rows):
 
 
 def source_binding_document():
-    source=Path("/home/ubuntu/build-gnss-sdr-complex9/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc")
-    return {"source_root":"/home/ubuntu/build-gnss-sdr-complex9","git_base_sha":"1ddd4562723040fd66cb334b578a5b69455625f4",
-            "modified_file":str(source),"modified_file_sha256":sha256(source),
+    root=Path("/home/ubuntu/build-gnss-sdr-complex9")
+    names=subprocess.run(["git","diff","--name-only"],cwd=root,text=True,capture_output=True,check=True).stdout.splitlines()
+    modified=[{"path":name,"sha256":sha256(root/name)} for name in names]
+    diff=subprocess.run(["git","diff","--binary","--",*names],cwd=root,capture_output=True,check=True).stdout
+    exe=root/"build-complex/src/main/gnss-sdr"; cache=root/"build-complex/CMakeCache.txt"
+    cache_text=cache.read_text(errors="replace")
+    compiler=next((x.split("=",1)[1] for x in cache_text.splitlines() if x.startswith("CMAKE_CXX_COMPILER:FILEPATH=")),None)
+    return {"source_root":str(root),"git_base_sha":"1ddd4562723040fd66cb334b578a5b69455625f4",
+            "modified_tracked_files":modified,"modified_diff_sha256":hashlib.sha256(diff).hexdigest(),
+            "build_evidence":{"cmake_cache_path":str(cache),"cmake_cache_sha256":sha256(cache)},
+            "compiler_evidence":compiler,"executable_sha256":sha256(exe),
+            "receiver_config_values":{"fs_sps":25000000,"item_type":"ishort","resampler":"Pass_Through"},
+            "vector_length":25000,"tap_count":9,"tap_spacing_chips":0.125,
+            "extended_integration_symbols":1,"track_pilot":False,
+            "prompt_target":{"Prompt_I_Q":"single-step d_Prompt complex output","nine_tap_P":"d_tap_accu[4]",
+                             "equivalence_authenticated":False,"EPL":"available as nine-tap E/P/L fields; not the Prompt_I/Q target"},
+            "prompt_support_mapping_authenticated":False,
+            "missing_evidence":["per-row correlator nitems_read(0) support start","Prompt_I/Q versus accumulated nine-tap P equivalence"],
             "excerpts":{"correlation":"lines 1061-1092: correlator receives remnant carrier/code phase and forward NCO steps",
                         "updates":"lines 1137-1159: carrier Doppler and code frequency updates",
                         "remnant":"lines 1222-1291: exact interval, forward code step, remnant samples-to-chips",
                         "prompt":"lines 1435-1443: Prompt I/Q taken from complex correlator",
                         "stamp":"lines 1482-1518: stamp=nitems_read+current_prn_length_samples; NCO, quality, aux1 dumped"},
-            "interpretation":{"interval":"MAT row k Prompt corresponds to [stamp(k-1),stamp(k))",
-                              "aux1":"d_rem_code_phase_samples; convert using code_freq/fs",
-                              "replica_direction":1,"prompt_row":"current"},"A2_source_semantics_sufficient":True}
+            "interpretation":{"consumed_interval":"adjacent stamps are retained only as consume/boundary audit",
+                              "correlator_support":"fixed vector_length=25000; raw start unavailable from MAT",
+                              "aux1":"logged after update; not authenticated for just-computed Prompt reconstruction",
+                              "replica_direction":1,"prompt_row":"current"},"A2_source_semantics_sufficient":False}
 
 
 def execute_campaign(args):
+    binding=authenticate_inputs(args.raw,args.tracker_dir,args.manifest)
+    support=source_support((),25000)
+    if not support["authenticated"]:
+        raise RuntimeError("A2 fail closed: "+support["reason"])
     out=args.output; out.mkdir(parents=True,exist_ok=False); (out/"plots").mkdir()
-    raw_sha=sha256(args.raw); raw_samples=args.raw.stat().st_size//4
+    raw_sha=binding["raw_sha256"]; raw_samples=args.raw.stat().st_size//4
     triples=load_triples(args.tracker_dir,raw_samples); selected=balanced_sample(triples,args.epochs)
     if len(selected)<800: raise RuntimeError("insufficient stable balanced epochs")
     write_json(out/"config.json",{"scope":"cleanStatic-only","origin_offset_samples":0,"global_offsets":GLOBAL_OFFSETS,"wide_grid":wide_grid(),"epochs":args.epochs})
     write_json(out/"environment.json",{"python":sys.version,"numpy":np.__version__})
-    write_json(out/"receiver_source_binding.json",{"A1_SOURCE_BINDING":"PASS","raw_path":str(args.raw),"raw_sha256":raw_sha,"format":"ishort","fs":FS,"skip_samples":0,"resampling":"none"})
+    write_json(out/"receiver_source_binding.json",{"recording_id":"cleanStatic","checks":binding["checks"],"raw_path":str(args.raw),"raw_sha256":raw_sha,"format":"ishort","fs":FS,"skip_samples":0,"resampling":"none"})
     write_json(out/"gnss_sdr_source_binding.json",source_binding_document())
     semantics=(Path(__file__).resolve().parents[1]/"docs/ACAF_NF_STAGE0_STATIC_R13_RECONSTRUCTION.md").read_text()
     (out/"gnss_sdr_tracking_semantics.md").write_text(semantics)
@@ -187,11 +247,11 @@ def execute_campaign(args):
             result=raw_caf(args.raw,triple,candidate,FS)
             prompt=triple[1]; result.update(candidate=candidate.name,prn=int(prompt["PRN"]),channel=prompt["channel"],role=role,
                 tracker_row=int(prompt["mat_row"]),mat_prompt_magnitude=float(np.hypot(prompt["Prompt_I"],prompt["Prompt_Q"])),prompt_row_index=int(prompt["mat_row"]))
-            details.append(result); key=f"{candidate.name}:{prompt['channel']}:{prompt['mat_row']}"; fingerprints[key]=result["candidate_fingerprint"]
+            details.append(result); key=f"{candidate.name}:{prompt['channel']}:{prompt['mat_row']}"; fingerprints[key]=result["result_field_sha256"]
             audit.append({"key":key,"candidate":candidate.name,"prn":prompt["PRN"],"aux1_row_index":triple[{"previous":0,"current":1}[candidate.aux_row]]["mat_row"],
                           "nco_row_index":triple[{"previous":0,"current":1}[candidate.nco_row]]["mat_row"],"prompt_row_index":prompt["mat_row"],
                           "raw_start_sample":result["raw_start_sample"],"raw_end_sample":result["raw_end_sample"],"n_samples":result["n_samples"],
-                          "candidate_fingerprint":result["candidate_fingerprint"],"result_field_hash":result["result_field_hash"]})
+                          **{name:result[name] for name in ("raw_interval_content_sha256","raw_interval_range_sha256","replica_chip_indices_sha256","carrier_wipeoff_sha256","aux_indices_sha256","nco_indices_sha256","prompt_indices_sha256","result_field_sha256")}})
         byprn=[]
         for prn in sorted({r["prn"] for r in details}): byprn.append(rho([r for r in details if r["prn"]==prn]))
         hypotheses.append({"candidate":candidate.name,"n":len(details),"pooled_spearman":rho(details),"median_prn_spearman":float(np.nanmedian(byprn)),**stats(details)})
@@ -218,9 +278,10 @@ def execute_campaign(args):
     write_json(out/"raw_overlap_audit.json",{"same_epoch_cross_prn_allowed":True,"cross_role_time_overlap":not roles_nonoverlap(intervals),"unique_tracker_rows":len({(x['channel'],x['tracker_row']) for x in intervals}),"rows":intervals})
     chosen=next(c for c in candidate_family() if c.name==best["candidate"]); offsets=run_offset_sensitivity(args.raw,[x[1] for x in selected],chosen,GLOBAL_OFFSETS,FS)
     write_csv(out/"global_offset_sensitivity.csv",offsets); write_json(out/"global_offset_application_audit.json",{"calls":offsets,"origin_selected":0})
-    write_json(out/"execution_validity.json",{"source_interval_semantics_confirmed":True,"candidate_fields_applied":True,"stable_filter_applied":True,"exact_interval_lengths":sorted({r['n_samples'] for r in details}),"all_candidates_distinct":len(set(fingerprints.values()))==len(fingerprints)})
+    write_json(out/"execution_validity.json",{"prompt_support_mapping_authenticated":support["authenticated"],"stable_filter_evidence_rows":len(details),"exact_support_lengths":sorted({r['n_samples'] for r in details})})
     a3=(summary["n"]>=800 and summary["prn_count"]>=8 and summary["min_per_prn"]>=50 and summary["dominant_fraction"]<=.2 and all(x["n"]>=200 and x["prn_count"]>=8 for x in block_metrics) and summary["within_tolerance_fraction"]>=.95 and summary["pooled_spearman"]>=.9 and summary["median_prn_spearman"]>=.8 and summary["boundary_fraction"]<=.05)
-    verdict=gate_verdict(True,True,a3,best["candidate"]); write_json(out/"selected_alignment.json",verdict); write_json(out/"go_no_go.json",verdict)
+    a1=all(binding["checks"].values()); a2=bool(support["authenticated"])
+    verdict=gate_verdict(a1,a2,a3,best["candidate"]); write_json(out/"selected_alignment.json",verdict); write_json(out/"go_no_go.json",verdict)
     (out/"README.md").write_text("# R1.3 reconstruction production artifacts\n\nIndependent verification is mandatory.\n"); (out/"test_report.txt").write_text("See source-phase and production wrapper logs.\n")
     write_json(out/"checksums.json",{"files":{str(p.relative_to(out)):sha256(p) for p in sorted(out.rglob('*')) if p.is_file() and p.name not in {'checksums.json','verification_report.json'}}})
     write_json(out/"verification_report.json",{"status":"NOT_YET_VERIFIED","instruction":"run independent verifier"})
@@ -230,6 +291,7 @@ def execute_campaign(args):
 def main(argv=None):
     parser=argparse.ArgumentParser()
     parser.add_argument("--raw",type=Path,required=True); parser.add_argument("--tracker-dir",type=Path,required=True)
+    parser.add_argument("--manifest",type=Path)
     parser.add_argument("--output",type=Path,default=OUT); parser.add_argument("--epochs",type=int,default=900); parser.add_argument("--execute-production",action="store_true")
     args=parser.parse_args(argv)
     clean_only_guard(["cleanStatic"])
