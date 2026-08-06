@@ -42,9 +42,9 @@ def main():
  for method in ['EPL_3','fixed_9tap','random_queries','shuffled_queries','clean_selected','dense_reference']:
   for k in [3,5,9,16]:b.append({'method':method,'K':k,'coordinates':qi.get(str(k),list(range(k))) if method=='clean_selected' else list(range(k)),'attack_low_fpr_pauc':'UNAVAILABLE_CENTER_LINEAGE','compute_coordinates':k})
  csvout(o/'budget_metrics.csv',b,['method','K','coordinates','attack_low_fpr_pauc','compute_coordinates'])
- atoms=[];coords=[]
+ reference_field=surfaces[("cleanStatic",30.)][0]; atoms=[];coords=[]
  for f in CAF_DOPPLER:
-  for d in CAF_CODE: atoms.append(caf_complex(replica(3,1000000,1000),3,1000000,0,0,[d],[f]));coords.append((float(d),float(f)))
+  for d in CAF_CODE: atoms.append(np.roll(np.roll(reference_field, int(round(f/50.)), axis=0), int(round(d/.125)), axis=1));coords.append((float(d),float(f)))
  diag=[]
  for r in rows:
   c,_=surfaces[(r['scenario'],r['epoch_s'])];q=two_source_fit(c,atoms,[abs(d)==1 or abs(f)==250 for d,f in coords]);d,f=coords[q['second_index']];q.update({'scenario':r['scenario'],'epoch_s':r['epoch_s'],'second_delay_chip':d,'second_doppler_hz':f,'physical_evidence_status':'NOT_INTERPRETABLE_UNVERIFIED_CENTER'});diag.append(q)
