@@ -188,7 +188,7 @@ def test_manifest_inventory_ignores_non_tracking_mat_and_accepts_tracking_only(t
         {'name':'raw/epl_tracking_ch_0.mat','role':'raw_receiver_output','sha256':mod.sha256(tracking)},
         {'name':'raw/observables.mat','role':'raw_receiver_output','sha256':mod.sha256(observables)}]
     manifest={'recording_id':'cleanStatic','normal_only':True,'attack_inputs_read':False,
-      'authenticated_inputs':{'iq_before_receiver':{'path':str(raw),'size_bytes':8,'sha256':mod.sha256(raw)}},
+      'authenticated_inputs':{'iq_before_receiver':{'path':str(tmp_path/'historical'/'cleanStatic.bin'),'size_bytes':8,'sha256':mod.sha256(raw)}},
       'receiver':{'config':'receiver.conf','runtime_config':'receiver.runtime.conf','executable':str(executable),
         'config_sha256':mod.sha256(config),'runtime_config_sha256':mod.sha256(runtime),'executable_sha256':mod.sha256(executable)},
       'retained_files':retained}

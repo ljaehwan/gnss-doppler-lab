@@ -115,7 +115,7 @@ def verify(root: Path):
             if not math.isclose(float(saved_row[key]),float(value),rel_tol=1e-9,abs_tol=1e-9): offset_csv_ok=False
     binding_checks=binding.get("checks",{})
     a1=(bool(binding_checks) and all(v is True for v in binding_checks.values()) and
-        binding.get("recording_id")=="cleanStatic" and _sha(binding.get("raw_sha256")) and
+        binding.get("recording_id")=="cleanStatic" and binding.get("classification")=="exact_same_raw" and _sha(binding.get("raw_sha256")) and
         _sha(binding.get("manifest_sha256")) and bool(binding.get("manifest_path")) and
         bool(binding.get("mat_inventory")) and all(_sha(item.get("sha256")) for item in binding.get("mat_inventory",[])) and
         isinstance(binding.get("config_values"),dict) and binding.get("format")=="ishort" and

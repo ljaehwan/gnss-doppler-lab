@@ -149,7 +149,7 @@ def authenticate_inputs(raw_path: Path, tracker_dir: Path, manifest_path: Path |
                    and x.get("name","").endswith(".mat")}
     actual_mats={str(p.relative_to(manifest_path.parent)):p for p in sorted(tracker_dir.glob("epl_tracking_ch_*.mat"))}
     checks={
-      "raw_path":raw_path.resolve()==Path(iq.get("path","/nonexistent")).resolve(),
+      "raw_name":raw_path.name==Path(iq.get("path","/nonexistent")).name,
       "raw_size":raw_path.is_file() and raw_path.stat().st_size==int(iq.get("size_bytes",-1)),
       "raw_sha256":raw_path.is_file() and sha256(raw_path)==iq.get("sha256"),
       "config_sha256":config_path.is_file() and sha256(config_path)==receiver.get("config_sha256"),
@@ -168,7 +168,8 @@ def authenticate_inputs(raw_path: Path, tracker_dir: Path, manifest_path: Path |
             key,value=line.split("=",1); values[key.strip()]=value.strip()
     checks["receiver_config_values"]=all(values.get(k)==v for k,v in required.items())
     if not all(checks.values()): raise ValueError("receiver binding failed: "+",".join(k for k,v in checks.items() if not v))
-    return {"checks":checks,"raw_sha256":iq["sha256"],"manifest_path":str(manifest_path),
+    return {"checks":checks,"raw_sha256":iq["sha256"],"raw_path_classification":"exact_same_raw",
+            "manifest_raw_path":iq.get("path"),"current_raw_path":str(raw_path),"manifest_path":str(manifest_path),
             "manifest_sha256":sha256(manifest_path),"config_values":values,
             "mat_inventory":[{"path":name,"sha256":expected_mats[name]["sha256"]} for name in sorted(expected_mats)]}
 
@@ -338,6 +339,8 @@ def _execute_campaign(args):
     write_json(out/"receiver_source_binding.json",{"recording_id":"cleanStatic","checks":binding["checks"],
       "raw_path":str(args.raw),"raw_sha256":raw_sha,"format":"ishort","fs":FS,"skip_samples":0,"resampling":"none",
       "manifest_path":binding["manifest_path"],"manifest_sha256":binding["manifest_sha256"],
+      "manifest_raw_path":binding["manifest_raw_path"],"current_raw_path":binding["current_raw_path"],
+      "classification":binding["raw_path_classification"],
       "config_values":binding["config_values"],"mat_inventory":binding["mat_inventory"]})
     write_json(out/"gnss_sdr_source_binding.json",source_binding)
     semantics=(Path(__file__).resolve().parents[1]/"docs/ACAF_NF_STAGE0_STATIC_R13_RECONSTRUCTION.md").read_text()
