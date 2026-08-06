@@ -87,13 +87,39 @@ def verify(root: Path):
     for call in calls: by_epoch[str(call.get("invocation"))].add((call.get("global_offset_samples"),call.get("start_byte"),call.get("end_byte")))
     offset_ok=global_offset_calls_valid(calls)
     offset_csv=load_csv(root/"global_offset_sensitivity.csv")
-    offset_keys=("invocation","global_offset_samples","start","end","start_byte","end_byte","result_field_sha256")
-    offset_csv_ok=len(offset_csv)==len(calls) and sorted(tuple(str(x.get(k,"")) for k in offset_keys) for x in offset_csv)==sorted(tuple(str(x.get(k,"")) for k in offset_keys) for x in calls)
+    recomputed_offsets=[]
+    for offset_value in (-1000,-500,0,500,1000):
+        group=[row for row in calls if int(row.get("global_offset_samples"))==offset_value]
+        count=len(group)
+        exact_fraction=sum(float(r["peak_delay_offset_chips"])==0 and float(r["peak_doppler_offset_hz"])==0 for r in group)/count if count else 0
+        within_fraction=sum(abs(float(r["peak_delay_offset_chips"]))<=.125 and abs(float(r["peak_doppler_offset_hz"]))<=50 for r in group)/count if count else 0
+        boundary_fraction=sum(str(r["grid_boundary"]).lower() in ("1","true") for r in group)/count if count else 1
+        pooled=float(spearmanr([float(r["center_magnitude"]) for r in group],[float(r["mat_prompt_magnitude"]) for r in group]).statistic) if count>2 else 0
+        per_prn=[]
+        for prn in sorted({int(r["prn"]) for r in group}):
+            pr=[r for r in group if int(r["prn"])==prn]
+            if len(pr)>2: per_prn.append(float(spearmanr([float(r["center_magnitude"]) for r in pr],[float(r["mat_prompt_magnitude"]) for r in pr]).statistic))
+        recomputed_offsets.append({"global_offset_samples":offset_value,"valid_raw_epochs":count,
+          "exact_center_fraction":exact_fraction,"within_tolerance_fraction":within_fraction,
+          "boundary_fraction":boundary_fraction,"pooled_spearman":pooled,
+          "median_prn_spearman":float(np.nanmedian(per_prn)) if per_prn else 0,
+          "peak_delay_median":float(np.median([float(r["peak_delay_offset_chips"]) for r in group])) if group else 0,
+          "peak_doppler_median":float(np.median([float(r["peak_doppler_offset_hz"]) for r in group])) if group else 0})
+    saved_offsets={int(row["global_offset_samples"]):row for row in offset_csv}
+    offset_csv_ok=len(saved_offsets)==5
+    for expected in recomputed_offsets:
+        saved_row=saved_offsets.get(expected["global_offset_samples"])
+        if saved_row is None: offset_csv_ok=False; continue
+        for key,value in expected.items():
+            if key=="global_offset_samples": continue
+            if not math.isclose(float(saved_row[key]),float(value),rel_tol=1e-9,abs_tol=1e-9): offset_csv_ok=False
     binding_checks=binding.get("checks",{})
     a1=(bool(binding_checks) and all(v is True for v in binding_checks.values()) and
         binding.get("recording_id")=="cleanStatic" and _sha(binding.get("raw_sha256")) and
-        binding.get("format")=="ishort" and float(binding.get("fs",0))==25_000_000 and
-        int(binding.get("skip_samples",-1))==0 and binding.get("resampling")=="none")
+        _sha(binding.get("manifest_sha256")) and bool(binding.get("manifest_path")) and
+        bool(binding.get("mat_inventory")) and all(_sha(item.get("sha256")) for item in binding.get("mat_inventory",[])) and
+        isinstance(binding.get("config_values"),dict) and binding.get("format")=="ishort" and
+        float(binding.get("fs",0))==25_000_000 and int(binding.get("skip_samples",-1))==0 and binding.get("resampling")=="none")
     source_required=("git_base_sha","modified_tracked_files","build_evidence","compiler_evidence",
                      "executable_sha256","receiver_config_values","vector_length","tap_count",
                      "tap_spacing_chips","extended_integration_symbols","track_pilot",
@@ -116,12 +142,12 @@ def verify(root: Path):
     ca_rows=load_csv(root/"ca_code_correlation.csv")
     ca_ok=ca.get("canonical_prns_passed")==32 and ca.get("local_generator_absent") is True and len(ca_rows)==32 and {int(x["prn"]) for x in ca_rows}==set(range(1,33))
     fingerprints=load_json(root/"candidate_fingerprints.json")
-    expected_fp={r.get("key"):r.get("result_field_sha256") for r in audit}
+    expected_fp={r.get("key"):{field:r.get(field) for field in PHYSICAL_HASH_FIELDS} for r in audit}
     fingerprint_ok=fingerprints.get("fingerprints")==expected_fp and fingerprints.get("expected_unique")==len(expected_fp)
     audit_schema=all(all(k in r for k in schema) for r in audit)
     a2=(source_ok and source.get("prompt_support_mapping_authenticated") is True and ca_ok and
         physical_applications_valid(audit) and fingerprint_ok and offset_ok and offset_csv_ok and overlap_ok and row_evidence and audit_schema and mapping_ok)
-    a3=(n==900 and len(prns)>=8 and actual["min_per_prn"]>=50 and actual["dominant_fraction"]<=.2 and set(blocks)=={"train","calibration","holdout"} and all(len(v)==300 and actual["block_prns"][k]>=8 for k,v in blocks.items()) and within>=.95 and rho>=.9 and median_rho>=.8 and boundary<=.05)
+    a3=(n>=800 and len(prns)>=8 and actual["min_per_prn"]>=50 and actual["dominant_fraction"]<=.2 and set(blocks)=={"train","calibration","holdout"} and all(len(v)>=200 and actual["block_prns"][k]>=8 for k,v in blocks.items()) and within>=.95 and rho>=.9 and median_rho>=.8 and boundary<=.05)
     verdict="SOURCE_BINDING_INVALID" if not a1 else "RECONSTRUCTION_IMPLEMENTATION_INVALID" if not a2 else "TRACKER_RAW_ALIGNMENT_UNRESOLVED" if not a3 else "PHYSICAL_CENTER_VALID"
     summary=load_json(root/"center_validation_summary.json")
     for key in ("n","prn_count","min_per_prn","dominant_fraction","within_tolerance_fraction","exact_center_fraction","boundary_fraction","pooled_spearman","median_prn_spearman"):

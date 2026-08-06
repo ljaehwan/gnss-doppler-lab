@@ -171,16 +171,82 @@ def test_stable_filter_rejects_fractional_stamps_row_gaps_and_long_interval():
     assert not filter_stable_triples(rows,100000,max_consumed_samples=25001)
 
 
+def test_manifest_inventory_ignores_non_tracking_mat_and_accepts_tracking_only(tmp_path, monkeypatch):
+    path=ROOT/'scripts/run_acaf_nf_stage0_static_r13_reconstruction.py'
+    spec=importlib.util.spec_from_file_location('runner_inventory',path); mod=importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
+    receiver=tmp_path/'receiver'; tracker=receiver/'raw'; tracker.mkdir(parents=True)
+    raw=tmp_path/'cleanStatic.bin'; raw.write_bytes(b'\0'*8)
+    tracking=tracker/'epl_tracking_ch_0.mat'; tracking.write_bytes(b'tracking')
+    observables=tracker/'observables.mat'; observables.write_bytes(b'observables')
+    config=receiver/'receiver.conf'; config.write_text('\n'.join([
+        'SignalSource.item_type=ishort','SignalSource.sampling_frequency=25000000',
+        'GNSS-SDR.internal_fs_sps=25000000','Resampler.implementation=Pass_Through',
+        'Tracking_1C.tap_count=9','Tracking_1C.tap_spacing_chips=0.125']))
+    runtime=receiver/'receiver.runtime.conf'; runtime.write_text('runtime')
+    executable=tmp_path/'gnss-sdr'; executable.write_bytes(b'exe')
+    retained=[
+        {'name':'raw/epl_tracking_ch_0.mat','role':'raw_receiver_output','sha256':mod.sha256(tracking)},
+        {'name':'raw/observables.mat','role':'raw_receiver_output','sha256':mod.sha256(observables)}]
+    manifest={'recording_id':'cleanStatic','normal_only':True,'attack_inputs_read':False,
+      'authenticated_inputs':{'iq_before_receiver':{'path':str(raw),'size_bytes':8,'sha256':mod.sha256(raw)}},
+      'receiver':{'config':'receiver.conf','runtime_config':'receiver.runtime.conf','executable':str(executable),
+        'config_sha256':mod.sha256(config),'runtime_config_sha256':mod.sha256(runtime),'executable_sha256':mod.sha256(executable)},
+      'retained_files':retained}
+    manifest_path=receiver/'manifest.json'; manifest_path.write_text(json.dumps(manifest))
+    binding=mod.authenticate_inputs(raw,tracker,manifest_path)
+    assert binding['checks']['mat_inventory'] is True
+    assert [x['path'] for x in binding['mat_inventory']]==['raw/epl_tracking_ch_0.mat']
+
+
+def test_float_integral_prn_is_normalized_before_canonical_caf(tmp_path):
+    path=ROOT/'scripts/run_acaf_nf_stage0_static_r13_reconstruction.py'
+    spec=importlib.util.spec_from_file_location('runner_prn',path); mod=importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
+    mat=tmp_path/'epl_tracking_ch_0.mat'
+    with __import__('h5py').File(mat,'w') as h:
+        for key in mod.REQUIRED_FIELDS[:9]:
+            if key=='PRN': values=np.array([1.0,1.0,1.0])
+            elif key=='PRN_start_sample_count': values=np.array([100.0,25100.0,50100.0])
+            elif key=='CN0_SNV_dB_Hz': values=np.array([35.0]*3)
+            elif key=='carrier_lock_test': values=np.array([.95]*3)
+            else: values=np.array([1.0,1.0,1.0])
+            h.create_dataset(key,data=values)
+    triples=mod.load_triples(tmp_path,100000)
+    assert triples and all(type(r['PRN']) is int and r['PRN']==1 for r in triples[0])
+
+
+def test_balanced_969_selection_meets_nineteen_prn_floor_and_balanced_blocks():
+    path=ROOT/'scripts/run_acaf_nf_stage0_static_r13_reconstruction.py'
+    spec=importlib.util.spec_from_file_location('runner_balance',path); mod=importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
+    triples=[]
+    for role_block in range(3):
+        base=role_block*10_000_000
+        for repeat in range(60):
+            for prn in range(1,20):
+                s=base+(repeat*19+prn)*25000
+                rs=[]
+                for i,stamp in enumerate((s,s+25000,s+50000)):
+                    rr=row(i,prn=prn); rr['PRN_start_sample_count']=stamp; rr['mat_row']=role_block*100000+repeat*57+prn*3+i; rr['mat_sha256']=f'{prn:064x}'[-64:]
+                    rs.append(rr)
+                triples.append(tuple(rs))
+    selected=mod.balanced_sample(triples,969)
+    from collections import Counter
+    assert len(selected)==969
+    counts=Counter(int(t[1]['PRN']) for _,t in selected)
+    blocks=Counter(role for role,_ in selected)
+    assert len(counts)==19 and min(counts.values())>=50
+    assert min(blocks.values())==max(blocks.values())==323
+
+
 def test_fail_closed_artifact_is_atomic_complete_and_verifies(tmp_path):
     runner_path=ROOT/'scripts/run_acaf_nf_stage0_static_r13_reconstruction.py'
     verifier_path=ROOT/'scripts/verify_acaf_nf_stage0_static_r13_reconstruction.py'
     rs=importlib.util.spec_from_file_location('runner_fail',runner_path); runner=importlib.util.module_from_spec(rs); rs.loader.exec_module(runner)
     vs=importlib.util.spec_from_file_location('verifier_fail',verifier_path); verifier=importlib.util.module_from_spec(vs); vs.loader.exec_module(verifier)
     out=tmp_path/'artifact'
-    runner.publish_fail_closed(out,"RECONSTRUCTION_IMPLEMENTATION_INVALID","synthetic A2 failure",a1=True)
+    runner.publish_fail_closed(out,"SOURCE_BINDING_INVALID","synthetic A1 failure",a1=False)
     assert out.is_dir() and not (tmp_path/'.artifact.staging').exists()
     assert set(runner.ARTIFACT_FILES) <= {p.name for p in out.iterdir()}
     go=json.loads((out/'go_no_go.json').read_text())
     assert go['selected_alignment'] is None and go['physics_no_go_claim'] is False
     report=verifier.verify(out)
-    assert report['status']=='PASS' and report['gates']['A2_IMPLEMENTATION_AND_INTERVAL_VALIDITY']=='FAIL'
+    assert report['status']=='PASS' and report['gates']['A1_SOURCE_BINDING']=='FAIL'
