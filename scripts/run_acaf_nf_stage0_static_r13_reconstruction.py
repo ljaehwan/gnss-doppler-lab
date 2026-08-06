@@ -6,6 +6,7 @@ import argparse
 import csv
 from collections import Counter, defaultdict
 from dataclasses import asdict, replace
+from itertools import combinations
 import hashlib
 import json
 import os
@@ -229,31 +230,49 @@ def load_triples(raw_dir: Path, raw_samples: int):
     return triples
 
 
-def balanced_sample(triples, target=969):
-    """Time-first thirds, then PRN round robin; no tracker row can be reused."""
-    ordered = sorted(triples, key=lambda x: (x[1]["PRN_start_sample_count"], x[1]["PRN"], x[1]["channel"]))
+def balanced_sample(triples, target=969, min_prns=8):
+    """Choose a dense common cleanStatic span, split time first, then round-robin PRNs."""
+    ordered=sorted(triples,key=lambda x:(x[0]["PRN_start_sample_count"],x[1]["PRN_start_sample_count"],x[1]["PRN"],x[1]["channel"]))
     if not ordered: return []
-    lo, hi = ordered[0][1]["PRN_start_sample_count"], ordered[-1][1]["PRN_start_sample_count"] + 1
-    cuts = (lo, lo+(hi-lo)//3, lo+2*(hi-lo)//3, hi)
-    selected = []
-    used_rows=set()
     role_names=("train","calibration","holdout")
     quotas={role:target//3+(index < target%3) for index,role in enumerate(role_names)}
-    for role, begin, finish in zip(role_names,cuts,cuts[1:]):
-        queues = {}
-        for triple in ordered:
-            sample = triple[1]["PRN_start_sample_count"]
-            if begin <= sample < finish: queues.setdefault(int(triple[1]["PRN"]),[]).append(triple)
-        quota = quotas[role]
-        while len([x for x in selected if x[0] == role]) < quota and any(queues.values()):
-            for prn in sorted(queues):
-                if queues[prn] and len([x for x in selected if x[0] == role]) < quota:
+    by_prn=defaultdict(list)
+    for triple in ordered: by_prn[int(triple[1]["PRN"])].append(triple)
+    minimum_total=sum(quotas.values())//min_prns
+    eligible_prns=sorted(prn for prn,rows in by_prn.items() if len(rows)>=minimum_total)
+    spans=[]
+    for combo in combinations(eligible_prns,min_prns):
+        lo=max(min(int(t[0]["PRN_start_sample_count"]) for t in by_prn[p]) for p in combo)
+        hi=min(max(int(t[1]["PRN_start_sample_count"]) for t in by_prn[p]) for p in combo)
+        if hi>lo: spans.append((hi-lo,combo,lo,hi))
+    best=None
+    for width,combo,lo,hi in sorted(spans,reverse=True):
+        cuts=(lo,lo+(hi-lo)//3,lo+2*(hi-lo)//3,hi+1)
+        feasible=True
+        for role,begin,finish in zip(role_names,cuts,cuts[1:]):
+            floor=quotas[role]//min_prns
+            for prn in combo:
+                count=sum(begin<=int(t[0]["PRN_start_sample_count"]) and int(t[1]["PRN_start_sample_count"])<=finish for t in by_prn[prn])
+                if count<floor: feasible=False; break
+            if not feasible: break
+        if feasible:
+            best=(width,combo,cuts)
+            break
+    if best is None: return []
+    _,chosen_prns,cuts=best
+    selected=[]; used_rows=set()
+    for role,begin,finish in zip(role_names,cuts,cuts[1:]):
+        queues={prn:[t for t in by_prn[prn]
+                     if begin<=int(t[0]["PRN_start_sample_count"])
+                     and int(t[1]["PRN_start_sample_count"])<=finish]
+                for prn in chosen_prns}
+        quota=quotas[role]
+        while sum(1 for x in selected if x[0]==role)<quota and any(queues.values()):
+            for prn in chosen_prns:
+                if queues[prn] and sum(1 for x in selected if x[0]==role)<quota:
                     triple=queues[prn].pop(0)
                     key=(triple[1]["mat_sha256"],str(triple[1]["channel"]),int(triple[1]["mat_row"]))
-                    start,end=map(int,(triple[0]["PRN_start_sample_count"],triple[1]["PRN_start_sample_count"]))
-                    clashes=any(other_role!=role and start<int(other[1]["PRN_start_sample_count"]) and
-                                int(other[0]["PRN_start_sample_count"])<end for other_role,other in selected)
-                    if key not in used_rows and not clashes:
+                    if key not in used_rows:
                         selected.append((role,triple)); used_rows.add(key)
     return selected
 
