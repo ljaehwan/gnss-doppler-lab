@@ -43,3 +43,58 @@ def bootstrap_mean(x,seed=0):
  x=np.array(x,float)
  if len(x)<2:return [None,None]
  r=np.random.default_rng(seed);z=[r.choice(x,len(x)).mean() for _ in range(500)];return [float(np.quantile(z,.025)),float(np.quantile(z,.975))]
+
+
+# Stage-0 complex-field model helpers.  These deliberately have no attack inputs.
+def caf_complex(iq, prn, fs, center_code, center_doppler, code_grid=CAF_CODE, doppler_grid=CAF_DOPPLER):
+    n = int(fs // 1000); x=np.asarray(iq[:n],np.complex64); tt=np.arange(n,dtype=np.float64)/fs
+    out=np.empty((len(doppler_grid),len(code_grid)),np.complex128)
+    for i,d in enumerate(doppler_grid):
+        y=x*np.exp(-2j*np.pi*(center_doppler+d)*tt)
+        for j,c in enumerate(code_grid): out[i,j]=np.vdot(replica(prn,fs,n,center_code+c),y)/n
+    return out
+
+def normalize_caf(c, eps=1e-12, center=None):
+    c=np.asarray(c,np.complex128); flat=c.ravel();
+    if center is None: anchor=int(np.argmax(np.abs(flat)))
+    else: anchor=int(center)
+    if abs(flat[anchor]) <= eps: anchor=int(np.argmax(np.abs(flat)))
+    phase=np.angle(flat[anchor]) if abs(flat[anchor])>eps else 0.0
+    norm=np.linalg.norm(flat)
+    return (c*np.exp(-1j*phase)/(norm+eps)), {'anchor_index':anchor,'fallback':center is not None and anchor!=center,'norm':float(norm)}
+
+def complex_vector(c):
+    z=np.asarray(c).ravel(); return np.concatenate([z.real,z.imag])
+
+def fit_h0(clean_vectors, ridge=1e-3):
+    x=np.asarray(clean_vectors,float)
+    if x.ndim!=2 or len(x)<2: raise ValueError('at least two clean train vectors required')
+    mu=np.median(x,axis=0)
+    xc=x-mu; emp=(xc.T@xc)/max(1,len(x)-1); scale=float(np.trace(emp)/emp.shape[0])
+    cov=(1-ridge)*emp+ridge*scale*np.eye(emp.shape[0])+1e-8*np.eye(emp.shape[0])
+    return {'mu':mu,'precision':np.linalg.pinv(cov,rcond=1e-8),'ridge':ridge}
+
+def h0_score(v,h0):
+    d=np.asarray(v)-h0['mu']; return float(d@h0['precision']@d)
+
+def clean_query_indices(clean_vectors,k):
+    x=np.asarray(clean_vectors,float)
+    if k<1 or k>x.shape[1]: raise ValueError('invalid K')
+    # deterministic pivoted greedy variance selection, clean-only
+    remain=list(range(x.shape[1])); chosen=[]; residual=x-x.mean(0)
+    for _ in range(k):
+        j=max(remain,key=lambda q: (float(np.var(residual[:,q])),-q)); chosen.append(j); remain.remove(j)
+    return chosen
+
+def two_source_fit(c, atoms, boundary_flags=None):
+    y=np.asarray(c).ravel(); A=np.asarray(atoms).reshape(len(atoms),-1).T
+    one=[]
+    for j in range(A.shape[1]):
+        q=np.linalg.lstsq(A[:,[j]],y,rcond=None)[0]; one.append((float(np.vdot(y-A[:,[j]]@q,y-A[:,[j]]@q).real),j,q))
+    r1,j1,a1=min(one,key=lambda z:z[0]); candidates=[]
+    for j2 in range(A.shape[1]):
+        if j2==j1: continue
+        q=np.linalg.lstsq(A[:,[j1,j2]],y,rcond=None)[0]; rr=float(np.vdot(y-A[:,[j1,j2]]@q,y-A[:,[j1,j2]]@q).real); candidates.append((rr,j2,q))
+    r2,j2,a=min(candidates,key=lambda z:z[0])
+    n=len(y); bic1=n*np.log(r1/n+1e-15)+2*np.log(n); bic2=n*np.log(r2/n+1e-15)+4*np.log(n)
+    return {'single_residual':r1,'two_residual':r2,'bic_improvement':float(bic1-bic2),'first_index':j1,'second_index':j2,'amplitude_ratio':float(abs(a[1])/(abs(a[0])+1e-12)),'boundary':bool(boundary_flags[j2]) if boundary_flags is not None else False}
