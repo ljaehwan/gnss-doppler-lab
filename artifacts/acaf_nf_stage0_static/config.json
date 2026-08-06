@@ -1,0 +1,49 @@
+{
+  "attack_labels_used_for_fit_calibration_threshold_or_query_selection": false,
+  "center_policy": "tracker centers required for physical claims; unavailable=score/status only",
+  "coherent_ms": 1,
+  "grid": {
+    "delay_chips": [
+      -1.0,
+      -0.875,
+      -0.75,
+      -0.625,
+      -0.5,
+      -0.375,
+      -0.25,
+      -0.125,
+      0.0,
+      0.125,
+      0.25,
+      0.375,
+      0.5,
+      0.625,
+      0.75,
+      0.875,
+      1.0
+    ],
+    "doppler_hz": [
+      -250.0,
+      -200.0,
+      -150.0,
+      -100.0,
+      -50.0,
+      0.0,
+      50.0,
+      100.0,
+      150.0,
+      200.0,
+      250.0
+    ]
+  },
+  "pre_registered_before_attack_read": true,
+  "query_budgets": [
+    3,
+    5,
+    9,
+    16
+  ],
+  "raw_format": "little-endian int16 interleaved I,Q",
+  "sample_rate_hz": 25000000,
+  "seed": 20260806
+}

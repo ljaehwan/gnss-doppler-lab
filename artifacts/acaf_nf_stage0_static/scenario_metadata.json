@@ -1,0 +1,102 @@
+{
+  "ds1": {
+    "established": [
+      155.0,
+      999999
+    ],
+    "evidence": "UNVERIFIED: bundled official PDF must be interpreted against raw origin",
+    "official_candidate_s": {
+      "injection": 125.0
+    },
+    "processed_time_offset_s": null,
+    "time_origin_verified": false,
+    "transition": [
+      125.0,
+      155.0
+    ]
+  },
+  "ds2": {
+    "established": [
+      140.1,
+      999999
+    ],
+    "evidence": "UNVERIFIED: bundled official PDF must be interpreted against raw origin",
+    "official_candidate_s": {
+      "injection": 110.1
+    },
+    "processed_time_offset_s": null,
+    "time_origin_verified": false,
+    "transition": [
+      110.1,
+      140.1
+    ]
+  },
+  "ds3": {
+    "established": [
+      148.9,
+      195.0
+    ],
+    "evidence": "UNVERIFIED: bundled official PDF must be interpreted against raw origin",
+    "official_candidate_s": {
+      "injection": 118.9,
+      "pull_off": 195.0
+    },
+    "processed_time_offset_s": null,
+    "time_origin_verified": false,
+    "transition": [
+      118.9,
+      195.0
+    ]
+  },
+  "ds4": {
+    "established": [
+      143.8,
+      225.0
+    ],
+    "evidence": "UNVERIFIED: bundled official PDF must be interpreted against raw origin",
+    "official_candidate_s": {
+      "injection": 113.8,
+      "pull_off": 225.0
+    },
+    "processed_time_offset_s": null,
+    "time_origin_verified": false,
+    "transition": [
+      113.8,
+      225.0
+    ]
+  },
+  "ds7": {
+    "established": [
+      150.0,
+      999999
+    ],
+    "evidence": "UNVERIFIED: bundled official PDF must be interpreted against raw origin",
+    "official_candidate_s": {
+      "injection": 110.0,
+      "programmed_push": 150.0
+    },
+    "processed_time_offset_s": null,
+    "time_origin_verified": false,
+    "transition": [
+      110.0,
+      150.0
+    ]
+  },
+  "ds8": {
+    "established": [
+      150.0,
+      999999
+    ],
+    "evidence": "UNVERIFIED: bundled official PDF must be interpreted against raw origin",
+    "official_candidate_s": {
+      "injection": 110.0,
+      "programmed_push": 150.0
+    },
+    "processed_time_offset_s": null,
+    "time_origin_verified": false,
+    "transition": [
+      110.0,
+      150.0
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "b0_comparison": false,
+  "normality": false,
+  "physical_evidence": false,
+  "query_evidence": false,
+  "reasons": [
+    "raw tracker code/doppler centers are unverified",
+    "DS7/DS8 cleanStatic exact-time overlap cannot be excluded",
+    "official processed time origin not verified",
+    "no detection claim allowed"
+  ],
+  "two_family_bootstrap_improvement": false,
+  "verdict": "INCONCLUSIVE"
+}

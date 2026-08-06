@@ -1,0 +1,82 @@
+{
+  "documents": [
+    {
+      "official_source": "bundled TEXBAT document",
+      "page_quote_status": "UNVERIFIED_IN_THIS_RUN",
+      "path": "data/external/texbat/docs/The Texas Spoofing Test Battery_1.pdf",
+      "sha256": "92ed5b0800b90fec6141db51921b0b654a01ed0d657a2b060c8a7d14b63fd208"
+    },
+    {
+      "official_source": "bundled TEXBAT document",
+      "page_quote_status": "UNVERIFIED_IN_THIS_RUN",
+      "path": "data/external/texbat/docs/texbat_ds7_and_ds8.pdf",
+      "sha256": "3ac9a01f79a7f099f93b91f2def613b6fa41897f0cf700cb4434795b974aa149"
+    }
+  ],
+  "full_hash_policy": "not completed; no physical claim permitted",
+  "sources": {
+    "cleanStatic": {
+      "bytes": 48016392192,
+      "center_lineage": "UNVERIFIED",
+      "fingerprint_sha256": "f8f180bb23ccb3af727b3610f753e2f8cd6bf2969babdff79338915def8d2e7f",
+      "format_verified_by_size": true,
+      "full_sha256": null,
+      "path": "/home/ubuntu/unraid_hdd/texbat/raw/cleanStatic.bin",
+      "raw_read": true
+    },
+    "ds1": {
+      "bytes": 46170898432,
+      "center_lineage": "UNVERIFIED",
+      "fingerprint_sha256": "72f3327ee53e5b270781adda8f3a488c18c3046858515ed56e396ca12907357f",
+      "format_verified_by_size": true,
+      "full_sha256": null,
+      "path": "/home/ubuntu/unraid_hdd/texbat/raw/ds1.bin",
+      "raw_read": true
+    },
+    "ds2": {
+      "bytes": 45717913600,
+      "center_lineage": "UNVERIFIED",
+      "fingerprint_sha256": "49a5afe66f869b2a537e6c54f7a8268ff2419b0799a9711d1d775c500ed12b63",
+      "format_verified_by_size": true,
+      "full_sha256": null,
+      "path": "/home/ubuntu/unraid_hdd/texbat/raw/ds2.bin",
+      "raw_read": true
+    },
+    "ds3": {
+      "bytes": 45785022464,
+      "center_lineage": "UNVERIFIED",
+      "fingerprint_sha256": "9cb41d4a098846d4c21e7230ee7f1a6f8f7aa38ad84bf6253e0bd899da0b7bf5",
+      "format_verified_by_size": true,
+      "full_sha256": null,
+      "path": "/home/ubuntu/unraid_hdd/texbat/raw/ds3.bin",
+      "raw_read": true
+    },
+    "ds4": {
+      "bytes": 12821987328,
+      "center_lineage": "UNVERIFIED",
+      "fingerprint_sha256": "e6181e52a9127c45513f21b8d3f95539970b1e3d9cd2bfaffd24835cbd8347fe",
+      "format_verified_by_size": true,
+      "full_sha256": null,
+      "path": "/home/ubuntu/unraid_hdd/texbat/raw/ds4.bin",
+      "raw_read": true
+    },
+    "ds7": {
+      "bytes": 27059290112,
+      "center_lineage": "UNVERIFIED",
+      "fingerprint_sha256": "f8f180bb23ccb3af727b3610f753e2f8cd6bf2969babdff79338915def8d2e7f",
+      "format_verified_by_size": true,
+      "full_sha256": null,
+      "path": "/home/ubuntu/unraid_hdd/texbat/raw/ds7.bin",
+      "raw_read": true
+    },
+    "ds8": {
+      "bytes": 47000141168,
+      "center_lineage": "UNVERIFIED",
+      "fingerprint_sha256": "f8f180bb23ccb3af727b3610f753e2f8cd6bf2969babdff79338915def8d2e7f",
+      "format_verified_by_size": true,
+      "full_sha256": null,
+      "path": "/home/ubuntu/unraid_hdd/texbat/raw/ds8.bin",
+      "raw_read": true
+    }
+  }
+}

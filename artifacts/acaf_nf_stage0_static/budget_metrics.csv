@@ -1,0 +1,25 @@
+method,K,coordinates,attack_low_fpr_pauc,compute_coordinates
+EPL_3,3,"[0, 1, 2]",UNAVAILABLE_CENTER_LINEAGE,3
+EPL_3,5,"[0, 1, 2, 3, 4]",UNAVAILABLE_CENTER_LINEAGE,5
+EPL_3,9,"[0, 1, 2, 3, 4, 5, 6, 7, 8]",UNAVAILABLE_CENTER_LINEAGE,9
+EPL_3,16,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]",UNAVAILABLE_CENTER_LINEAGE,16
+fixed_9tap,3,"[0, 1, 2]",UNAVAILABLE_CENTER_LINEAGE,3
+fixed_9tap,5,"[0, 1, 2, 3, 4]",UNAVAILABLE_CENTER_LINEAGE,5
+fixed_9tap,9,"[0, 1, 2, 3, 4, 5, 6, 7, 8]",UNAVAILABLE_CENTER_LINEAGE,9
+fixed_9tap,16,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]",UNAVAILABLE_CENTER_LINEAGE,16
+random_queries,3,"[0, 1, 2]",UNAVAILABLE_CENTER_LINEAGE,3
+random_queries,5,"[0, 1, 2, 3, 4]",UNAVAILABLE_CENTER_LINEAGE,5
+random_queries,9,"[0, 1, 2, 3, 4, 5, 6, 7, 8]",UNAVAILABLE_CENTER_LINEAGE,9
+random_queries,16,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]",UNAVAILABLE_CENTER_LINEAGE,16
+shuffled_queries,3,"[0, 1, 2]",UNAVAILABLE_CENTER_LINEAGE,3
+shuffled_queries,5,"[0, 1, 2, 3, 4]",UNAVAILABLE_CENTER_LINEAGE,5
+shuffled_queries,9,"[0, 1, 2, 3, 4, 5, 6, 7, 8]",UNAVAILABLE_CENTER_LINEAGE,9
+shuffled_queries,16,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]",UNAVAILABLE_CENTER_LINEAGE,16
+clean_selected,3,"[173, 176, 159]",UNAVAILABLE_CENTER_LINEAGE,3
+clean_selected,5,"[173, 176, 159, 142, 156]",UNAVAILABLE_CENTER_LINEAGE,5
+clean_selected,9,"[173, 176, 159, 142, 156, 125, 108, 307, 324]",UNAVAILABLE_CENTER_LINEAGE,9
+clean_selected,16,"[173, 176, 159, 142, 156, 125, 108, 307, 324, 6, 91, 290, 359, 23, 171, 74]",UNAVAILABLE_CENTER_LINEAGE,16
+dense_reference,3,"[0, 1, 2]",UNAVAILABLE_CENTER_LINEAGE,3
+dense_reference,5,"[0, 1, 2, 3, 4]",UNAVAILABLE_CENTER_LINEAGE,5
+dense_reference,9,"[0, 1, 2, 3, 4, 5, 6, 7, 8]",UNAVAILABLE_CENTER_LINEAGE,9
+dense_reference,16,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]",UNAVAILABLE_CENTER_LINEAGE,16
