@@ -157,18 +157,19 @@ def carrier_wipeoff(n: int, fs: float, tracker_doppler_hz: float,
 def caf(iq: np.ndarray, prn, fs: float, code_freq_chips: float, aux1_samples: float,
         tracker_doppler_hz: float, candidate: Candidate, grid: Mapping[str, Sequence[float]] | None = None):
     grid = grid or wide_grid()
-    values = np.empty((len(grid["doppler_hz"]), len(grid["delay_chips"])), dtype=float)
-    chip_hashes, wipe_hashes = {}, {}
-    for di, doppler in enumerate(grid["doppler_hz"]):
-        wipe, wipe_hash = carrier_wipeoff(len(iq), fs, tracker_doppler_hz, doppler, candidate.carrier_sign)
-        wipe_hashes[str(doppler)] = wipe_hash
-        wiped = np.asarray(iq) * wipe
-        for ci, delay in enumerate(grid["delay_chips"]):
-            replica, chip_hash = code_replica(prn, len(iq), fs, code_freq_chips, aux1_samples,
-                                               candidate.remnant_sign, delay,
-                                               replica_direction=1)
-            chip_hashes[str(delay)] = chip_hash
-            values[di, ci] = abs(np.vdot(replica, wiped))
+    delays=list(grid["delay_chips"]); dopplers=list(grid["doppler_hz"])
+    replicas=[]; chip_hashes={}
+    for delay in delays:
+        replica,chip_hash=code_replica(prn,len(iq),fs,code_freq_chips,aux1_samples,
+                                       candidate.remnant_sign,delay,replica_direction=1)
+        replicas.append(replica); chip_hashes[str(delay)]=chip_hash
+    wipes=[]; wipe_hashes={}
+    for doppler in dopplers:
+        wipe,wipe_hash=carrier_wipeoff(len(iq),fs,tracker_doppler_hz,doppler,candidate.carrier_sign)
+        wipes.append(wipe); wipe_hashes[str(doppler)]=wipe_hash
+    replica_matrix=np.asarray(replicas,dtype=np.float64)
+    wiped_matrix=np.asarray(wipes,dtype=np.complex128)*np.asarray(iq,dtype=np.complex128)[None,:]
+    values=np.abs(wiped_matrix @ replica_matrix.T)
     flat = int(values.argmax()); di, ci = np.unravel_index(flat, values.shape)
     center_di = list(grid["doppler_hz"]).index(0); center_ci = list(grid["delay_chips"]).index(0)
     return {"peak_delay_offset_chips": grid["delay_chips"][ci],
