@@ -1,4 +1,4 @@
-import ast, csv, hashlib, importlib.util, json
+import ast, csv, hashlib, importlib.util, json, os, shutil
 from types import SimpleNamespace
 from pathlib import Path
 import numpy as np
@@ -150,6 +150,57 @@ def test_r13_verification_report_tamper_fails(synthetic_success_artifact,monkeyp
   return value
  monkeypatch.setattr(verifier,"loadj",tampered);result=verifier.verify(synthetic_success_artifact)
  assert result["status"]=="FAIL" and "r13_verification_report" in result["errors"]
+
+def _isolated_r13(tmp_path,for_verifier=False):
+ base=tmp_path/"isolated-root";art=base/"artifacts/acaf_nf_stage0_static_r13_reconstruction"
+ shutil.copytree(ROOT/"artifacts/acaf_nf_stage0_static_r13_reconstruction",art)
+ if for_verifier:
+  source=base/"src/gnss_doppler_lab/acaf_nf_stage0_r13_reconstruction.py";source.parent.mkdir(parents=True);shutil.copy2(ROOT/"src/gnss_doppler_lab/acaf_nf_stage0_r13_reconstruction.py",source)
+ return base,art
+
+def _assert_r13_rejected(path_kind,base,art,synthetic_success_artifact):
+ if path_kind=="producer":
+  producer=_load_script("run_acaf_nf_stage0_static_r14_doppler_validation.py");producer.R13_ARTIFACT=art
+  with pytest.raises(RuntimeError):producer.authenticate_r13()
+ else:
+  verifier=_load_script("verify_acaf_nf_stage0_static_r14_doppler_validation.py");verifier.ROOT=base;result=verifier.verify(synthetic_success_artifact)
+  assert result["status"]=="FAIL"
+  return result
+
+REPORT_MUTATIONS={
+ "verdict":(b'"verdict": "TRACKER_RAW_ALIGNMENT_UNRESOLVED"',b'"verdict": "TRACKER_RAW_ALIGNMENT_UNRESOLVEE"'),
+ "gates":(b'"A1_SOURCE_BINDING": "PASS"',b'"A1_SOURCE_BINDING": "FAIL"'),
+ "recomputed":(b'"n": 969,',b'"n": 968,'),
+ "recursive":(b'"README.md": "597c36c3b555bc24128ad496db3a384b86934b344d7787d45d9eda751a1d0016"',b'"README.md": "697c36c3b555bc24128ad496db3a384b86934b344d7787d45d9eda751a1d0016"'),
+ "ca":(b'"code_sha256": "b201d6e762aac9d6ca916158d4770a38006236cf07cd67842773eed6cdf4b026"',b'"code_sha256": "a201d6e762aac9d6ca916158d4770a38006236cf07cd67842773eed6cdf4b026"'),
+}
+
+@pytest.mark.parametrize("path_kind",["producer","verifier"])
+@pytest.mark.parametrize("field",list(REPORT_MUTATIONS))
+def test_r13_report_semantic_field_mutation_rejected_by_exact_digest(synthetic_success_artifact,tmp_path,path_kind,field):
+ base,art=_isolated_r13(tmp_path,path_kind=="verifier");report=art/"verification_report.json";before=report.read_bytes();old,new=REPORT_MUTATIONS[field]
+ assert before.count(old)==1 and len(old)==len(new);report.write_bytes(before.replace(old,new,1))
+ assert report.stat().st_size==20868 and hashlib.sha256(report.read_bytes()).hexdigest()!="4a4177a51b2fcd1d552155e5714efbb69afcfa2fa3da51bd3594201bda884591"
+ result=_assert_r13_rejected(path_kind,base,art,synthetic_success_artifact)
+ if result is not None:assert "r13_verification_report_trust_anchor" in result["errors"]
+
+@pytest.mark.parametrize("path_kind",["producer","verifier"])
+def test_r13_report_byte_only_mutation_rejected_by_exact_digest(synthetic_success_artifact,tmp_path,path_kind):
+ base,art=_isolated_r13(tmp_path,path_kind=="verifier");report=art/"verification_report.json";payload=report.read_bytes();assert payload.endswith(b"\n")
+ report.write_bytes(payload[:-1]+b" ");assert report.stat().st_size==20868 and json.loads(report.read_text())["status"]=="PASS"
+ result=_assert_r13_rejected(path_kind,base,art,synthetic_success_artifact)
+ if result is not None:assert "r13_verification_report_trust_anchor" in result["errors"]
+
+@pytest.mark.parametrize("path_kind",["producer","verifier"])
+@pytest.mark.parametrize("extra_kind",["empty_dir","nested_file","symlink"])
+def test_r13_exact_recursive_inventory_rejects_every_extra_entry(synthetic_success_artifact,tmp_path,path_kind,extra_kind):
+ base,art=_isolated_r13(tmp_path,path_kind=="verifier")
+ if extra_kind=="empty_dir":(art/"unexpected-empty").mkdir()
+ elif extra_kind=="nested_file":
+  nested=art/"plots/unexpected/nested.txt";nested.parent.mkdir();nested.write_text("unexpected\n")
+ else:os.symlink("README.md",art/"unexpected-link")
+ result=_assert_r13_rejected(path_kind,base,art,synthetic_success_artifact)
+ if result is not None:assert "r13_manifest_inventory" in result["errors"]
 
 @pytest.mark.parametrize("kind",["file","directory","symlink"])
 def test_nested_extra_rewritten_checksum_fails_closed(synthetic_success_artifact,tmp_path,kind):

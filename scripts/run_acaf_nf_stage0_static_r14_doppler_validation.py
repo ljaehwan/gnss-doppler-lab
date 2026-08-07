@@ -10,7 +10,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT/"src"),str(ROOT/"scripts")]
 from gnss_doppler_lab.acquisition_surface import gps_l1ca_code
 from gnss_doppler_lab.acaf_nf_stage0_r13_reconstruction import code_replica,carrier_wipeoff,source_support
-from gnss_doppler_lab.acaf_nf_stage0_r14_doppler_validation import (CANDIDATE_STRING,FROZEN_CONFIG,FS,LENGTHS,R13_REFERENCE,ROLES,R13_SOURCE_SHA256,R13_CHECKSUMS_SHA256,R13_CENTER_VALIDATION_SHA256,R13_IDENTITY_ORDER_SHA256,aggregation_gate,bootstrap_paired,clean_only_guard,common_anchor_blocks,delay_gate,delay_metrics,diagnostic_aggregates,doppler_metrics,final_gates,offset_zero_clearly_better,paired_improvements,prompt_evidence,prompt_gate,prompt_metrics)
+from gnss_doppler_lab.acaf_nf_stage0_r14_doppler_validation import (CANDIDATE_STRING,FROZEN_CONFIG,FS,LENGTHS,R13_REFERENCE,ROLES,R13_SOURCE_SHA256,R13_CHECKSUMS_SHA256,R13_VERIFICATION_REPORT_SHA256,R13_VERIFICATION_REPORT_BYTES,R13_CENTER_VALIDATION_SHA256,R13_IDENTITY_ORDER_SHA256,aggregation_gate,bootstrap_paired,clean_only_guard,common_anchor_blocks,delay_gate,delay_metrics,diagnostic_aggregates,doppler_metrics,final_gates,offset_zero_clearly_better,paired_improvements,prompt_evidence,prompt_gate,prompt_metrics)
 from run_acaf_nf_stage0_static_r13_reconstruction import authenticate_inputs,balanced_sample,load_triples,read_iq,sha256
 OUT=ROOT/"artifacts/acaf_nf_stage0_static_r14_doppler_validation"
 R13_ARTIFACT=ROOT/"artifacts/acaf_nf_stage0_static_r13_reconstruction"
@@ -37,14 +37,25 @@ def validate_reference(m):
  return m.get("role_counts")=={r:323 for r in ROLES} and all(k in m and abs(float(m[k])-float(v))<=1e-6 for k,v in R13_REFERENCE.items())
 def valid_r13_report(report):
  return (isinstance(report,dict) and set(report)==R13_REPORT_KEYS and report.get("status")=="PASS" and report.get("errors")==[] and isinstance(report.get("gates"),dict) and isinstance(report.get("recomputed"),dict) and isinstance(report.get("recursive_checksums"),dict) and isinstance(report.get("ca_code_independent_validation"),dict))
+def exact_r13_inventory(manifest_files):
+ expected_files=set(manifest_files)|{"checksums.json","verification_report.json"};expected_dirs={"plots"};files=set();dirs=set();links=set();other=set()
+ for p in R13_ARTIFACT.rglob("*"):
+  rel=p.relative_to(R13_ARTIFACT).as_posix()
+  if p.is_symlink():links.add(rel)
+  elif p.is_file():files.add(rel)
+  elif p.is_dir():dirs.add(rel)
+  else:other.add(rel)
+ manifest_plots={n for n in manifest_files if n.startswith("plots/")}
+ return (R13_ARTIFACT.is_dir() and not R13_ARTIFACT.is_symlink() and len(manifest_files)==25 and len(expected_files)==27 and manifest_plots=={"plots/center-recovery.svg"} and files==expected_files and dirs==expected_dirs and not links and not other)
 def authenticate_r13():
+ report_path=R13_ARTIFACT/"verification_report.json"
  if sha256(R13_SOURCE)!=R13_SOURCE_SHA256 or sha256(R13_ARTIFACT/"checksums.json")!=R13_CHECKSUMS_SHA256:raise RuntimeError("approved R1.3 trust anchor drift")
+ if report_path.stat().st_size!=R13_VERIFICATION_REPORT_BYTES or sha256(report_path)!=R13_VERIFICATION_REPORT_SHA256:raise RuntimeError("R1.3 verification report trust anchor drift")
  manifest=json.loads((R13_ARTIFACT/"checksums.json").read_text())
  if set(manifest)!={"files"} or not isinstance(manifest["files"],dict) or not manifest["files"]:raise RuntimeError("R1.3 checksum manifest schema")
- expected=set(manifest["files"])|{"checksums.json","verification_report.json"}; actual={str(p.relative_to(R13_ARTIFACT)) for p in R13_ARTIFACT.rglob("*") if p.is_file()}
- if actual!=expected:raise RuntimeError("R1.3 inventory drift")
+ if not exact_r13_inventory(manifest["files"]):raise RuntimeError("R1.3 exact recursive inventory drift")
  if any(not (R13_ARTIFACT/n).is_file() or sha256(R13_ARTIFACT/n)!=d for n,d in manifest["files"].items()):raise RuntimeError("R1.3 manifest entry drift")
- report=json.loads((R13_ARTIFACT/"verification_report.json").read_text())
+ report=json.loads(report_path.read_text())
  if not valid_r13_report(report):raise RuntimeError("R1.3 verification report schema/PASS drift")
  center=R13_ARTIFACT/"center_validation.csv"
  if sha256(center)!=R13_CENTER_VALIDATION_SHA256:raise RuntimeError("R1.3 center evidence drift")

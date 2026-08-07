@@ -11,7 +11,7 @@ ROOT=Path(__file__).resolve().parents[1]
 REQUIRED=("README.md config.json environment.json r13_frozen_lineage.json frozen_reconstruction_config.json prompt_reproduction_metrics.json prompt_reproduction_by_prn.csv prompt_reproduction_by_channel.csv prompt_reproduction_by_time_block.csv delay_recovery_metrics.json delay_recovery_by_prn.csv delay_recovery_by_time_block.csv doppler_1ms_metrics.json aggregation_metrics.csv aggregation_by_prn.csv aggregation_by_time_block.csv paired_improvement.csv bootstrap_results.json doppler_mainlobe_diagnostics.csv residual_doppler_diagnostics.json per_block_scores.csv execution_validity.json go_no_go.json test_report.txt verification_report.json checksums.json plots").split()
 PLOTS={"l-histograms":("Doppler offset (Hz)","Count"),"l-recovery":("Integration length L","Recovery fraction"),"prn-l1-l20":("PRN","Within 50 Hz fraction"),"role-comparison":("Integration length L","Within 50 Hz fraction"),"prompt-scatter":("MAT Prompt magnitude","Reconstructed center magnitude"),"delay-histogram":("Delay offset (chips)","Count"),"peak-center-distribution":("Peak / center ratio","Empirical cumulative fraction")}
 R13_REPORT_KEYS={"ca_code_independent_validation","candidate_physical_applications","cross_role_nonoverlap","errors","gates","global_offsets_independent","recomputed","recursive_checksums","status","verdict"}
-SOURCE_SHA="9889a5e5007c92d6016e5ef0d38a03cea96cdd40eded3cea91df1e4276d16e42";CHECKSUMS_SHA="04b5395b311641b4ab3f3a58a1a5cbb54d4249068f8252659049ea4386a95abb";CENTER_SHA="cb07c2b3d192c6bd30e6eeca6ffae6d615523f1ba4569d4259ccb01d866ba198";IDENTITY_SHA="65933645102b7a05087f0d9991ad1c55c822b4b83090cb57a4e6f74e17675e5c";ROLES=("train","calibration","holdout");LENGTHS=(1,5,10,20);DOP=list(range(-250,251,50));DEL=[round(-1+.125*i,3) for i in range(17)]
+SOURCE_SHA="9889a5e5007c92d6016e5ef0d38a03cea96cdd40eded3cea91df1e4276d16e42";CHECKSUMS_SHA="04b5395b311641b4ab3f3a58a1a5cbb54d4249068f8252659049ea4386a95abb";REPORT_SHA="4a4177a51b2fcd1d552155e5714efbb69afcfa2fa3da51bd3594201bda884591";REPORT_BYTES=20868;CENTER_SHA="cb07c2b3d192c6bd30e6eeca6ffae6d615523f1ba4569d4259ccb01d866ba198";IDENTITY_SHA="65933645102b7a05087f0d9991ad1c55c822b4b83090cb57a4e6f74e17675e5c";ROLES=("train","calibration","holdout");LENGTHS=(1,5,10,20);DOP=list(range(-250,251,50));DEL=[round(-1+.125*i,3) for i in range(17)]
 R13={"n":969,"prn_count":8,"pooled_spearman":0.9999965049269979,"median_prn_spearman":0.9999652753663446,"boundary_fraction":0.006191950464396285,"within_tolerance_fraction":0.8565531475748194,"exact_center_fraction":0.42105263157894735}
 CANDIDATE="nco_row=previous_aux_row=previous_remnant_sign=-1_carrier_sign=-1_global_offset=0"
 def loadj(p):return json.loads(p.read_text())
@@ -37,6 +37,16 @@ def exact_inventory(root):
  return files==expected_files and dirs==expected_dirs and not links and not other
 def valid_r13_report(report):
  return (isinstance(report,dict) and set(report)==R13_REPORT_KEYS and report.get("status")=="PASS" and report.get("errors")==[] and isinstance(report.get("gates"),dict) and isinstance(report.get("recomputed"),dict) and isinstance(report.get("recursive_checksums"),dict) and isinstance(report.get("ca_code_independent_validation"),dict))
+def exact_r13_inventory(root,manifest_files):
+ expected_files=set(manifest_files)|{"checksums.json","verification_report.json"};expected_dirs={"plots"};files=set();dirs=set();links=set();other=set()
+ for p in root.rglob("*"):
+  rel=p.relative_to(root).as_posix()
+  if p.is_symlink():links.add(rel)
+  elif p.is_file():files.add(rel)
+  elif p.is_dir():dirs.add(rel)
+  else:other.add(rel)
+ manifest_plots={n for n in manifest_files if n.startswith("plots/")}
+ return (root.is_dir() and not root.is_symlink() and len(manifest_files)==25 and len(expected_files)==27 and manifest_plots=={"plots/center-recovery.svg"} and files==expected_files and dirs==expected_dirs and not links and not other)
 def plot_payloads(aggregation,aggregation_prn,aggregation_role,epochs):
  by_l={int(r["L"]):r for r in aggregation};ratios=sorted(float(r["peak_center_ratio"]) for r in epochs);delays=sorted({float(r["peak_delay_offset_chips"]) for r in epochs})
  return {
@@ -91,11 +101,12 @@ def verify(root:Path):
  if not root.is_dir() or root.is_symlink() or not exact_inventory(root):return {"status":"FAIL","errors":["exact_recursive_inventory"]}
  try:
   if loadj(root/"checksums.json")!={"files":checksums(root)}:errors.append("recursive_checksums")
-  source=ROOT/"src/gnss_doppler_lab/acaf_nf_stage0_r13_reconstruction.py";art=ROOT/"artifacts/acaf_nf_stage0_static_r13_reconstruction";mp=art/"checksums.json";centerp=art/"center_validation.csv"
+  source=ROOT/"src/gnss_doppler_lab/acaf_nf_stage0_r13_reconstruction.py";art=ROOT/"artifacts/acaf_nf_stage0_static_r13_reconstruction";mp=art/"checksums.json";centerp=art/"center_validation.csv";reportp=art/"verification_report.json"
   if digest(source)!=SOURCE_SHA or digest(mp)!=CHECKSUMS_SHA or digest(centerp)!=CENTER_SHA:errors.append("r13_trust_anchor")
-  manifest=loadj(mp);expected=set(manifest.get("files",{}))|{"checksums.json","verification_report.json"};found={str(p.relative_to(art)) for p in art.rglob("*") if p.is_file()}
-  if set(manifest)!={"files"} or expected!=found or any(digest(art/n)!=d for n,d in manifest.get("files",{}).items()):errors.append("r13_manifest_inventory")
-  if not valid_r13_report(loadj(art/"verification_report.json")):errors.append("r13_verification_report")
+  if reportp.stat().st_size!=REPORT_BYTES or digest(reportp)!=REPORT_SHA:errors.append("r13_verification_report_trust_anchor")
+  manifest=loadj(mp);manifest_files=manifest.get("files",{}) if isinstance(manifest,dict) else {}
+  if set(manifest)!={"files"} or not isinstance(manifest_files,dict) or not exact_r13_inventory(art,manifest_files) or any(digest(art/n)!=d for n,d in manifest_files.items()):errors.append("r13_manifest_inventory")
+  if not valid_r13_report(loadj(reportp)):errors.append("r13_verification_report")
   frozen=loadc(centerp);fids=[(str(r["channel"]),int(r["prn"]),int(r["tracker_row"]),str(r["role"])) for r in frozen]
   if hashlib.sha256(canon(fids).encode()).hexdigest()!=IDENTITY_SHA:errors.append("r13_identity_order")
   fr=[dict(r,delay_boundary=b(r["grid_boundary"]),doppler_boundary=b(r["grid_boundary"])) for r in frozen]
