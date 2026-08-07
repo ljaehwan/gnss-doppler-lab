@@ -8,6 +8,8 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 from typing import Iterable, Mapping, Sequence
+import hashlib
+import json
 
 import numpy as np
 
@@ -56,6 +58,35 @@ class FrozenStage1Config:
 FROZEN_CONFIG = FrozenStage1Config()
 
 
+@dataclass(frozen=True)
+class H1Template:
+    coordinate: tuple[int, int]
+    surface: np.ndarray
+    source_role: str
+    construction_method: str
+    digest: str
+    lineage: Mapping
+
+
+def build_h1_template(coordinate, surface, *, source_role, construction_method,
+                      lineage) -> H1Template:
+    coordinate = tuple(coordinate)
+    value = np.asarray(surface, dtype=np.complex128)
+    if coordinate not in H1_COORDINATES:
+        raise ValueError("coordinate is outside the frozen non-center H1 grid")
+    if value.shape != (len(DOPPLERS), len(DELAYS)) or not np.isfinite(value).all():
+        raise ValueError("H1 template must be a finite frozen-grid surface")
+    if source_role != "normal_train":
+        raise ValueError("H1 templates must be constructed from normal_train")
+    if construction_method != "raw_iq_periodic_recorrelation":
+        raise ValueError("untrusted H1 construction method")
+    if not isinstance(lineage, Mapping) or not lineage:
+        raise ValueError("H1 lineage is required")
+    digest = hashlib.sha256(np.ascontiguousarray(value).view(np.uint8)).hexdigest()
+    return H1Template(coordinate, value.copy(), source_role, construction_method,
+                      digest, dict(lineage))
+
+
 def dense_complex_caf(iq: np.ndarray, prn: int, code_freq_chips: float,
                       aux1_samples: float, tracker_doppler_hz: float,
                       *, fs_hz: float = FS_HZ) -> np.ndarray:
@@ -78,6 +109,7 @@ def normalize_caf(caf: np.ndarray, floor: float = 1e-12) -> tuple[np.ndarray, di
     center = c[..., CENTER[0], CENTER[1]]
     denominator = np.maximum(np.abs(center), float(floor))
     y = c * np.exp(-1j * np.angle(center))[..., None, None] / denominator[..., None, None]
+    y[..., CENTER[0], CENTER[1]] = 1.0 + 0.0j
     return y, {"center_complex_real": np.real(center), "center_complex_imag": np.imag(center),
                "center_magnitude": np.abs(center), "normalization_floor": float(floor),
                "floor_applied": np.abs(center) < floor}
@@ -99,14 +131,18 @@ def chronological_split(rows: Sequence[Mapping], fractions=(.6, .2, .2)) -> dict
 def assert_no_raw_overlap(roles: Mapping[str, Sequence[Mapping]]) -> None:
     bounds = {}
     for role, rows in roles.items():
-        intervals = [(int(r["support_start_sample"]), int(r["support_end_sample"])) for r in rows]
-        if any(a >= b for a, b in intervals):
+        intervals = [(str(r.get("recording_sha256", r.get("recording_id", ""))),
+                      int(r["support_start_sample"]), int(r["support_end_sample"])) for r in rows]
+        if any(not identity or b-a != SUPPORT_SAMPLES or a < 0
+               for identity, a, b in intervals):
             raise ValueError("invalid raw interval")
         bounds[role] = intervals
     names = list(bounds)
     for i, left in enumerate(names):
         for right in names[i + 1:]:
-            if any(a < d and c < b for a, b in bounds[left] for c, d in bounds[right]):
+            if any(identity == other and a < d and c < b
+                   for identity, a, b in bounds[left]
+                   for other, c, d in bounds[right]):
                 raise ValueError("raw overlap across roles")
 
 
@@ -130,7 +166,10 @@ def consecutive_windows(rows: Sequence[Mapping], length: int = WINDOW_LENGTH) ->
         for end in range(length - 1, len(group)):
             w = group[end-length+1:end+1]
             starts = [int(r["support_start_sample"]) for r in w]
-            if (all(int(r.get("support_samples", SUPPORT_SAMPLES)) == SUPPORT_SAMPLES for r in w)
+            identities=[(str(r.get("channel")),int(r["prn"]),int(r.get("tracker_row", r.get("row", starts[k]//SUPPORT_SAMPLES)))) for k,r in enumerate(w)]
+            if (len(set(identities)) == length
+                    and all(int(r["support_end_sample"])-int(r["support_start_sample"]) == SUPPORT_SAMPLES for r in w)
+                    and len({r.get("phase") for r in w if "phase" in r}) <= 1
                     and all(float(r.get("cn0_db_hz", 0)) >= 28 for r in w)
                     and all(float(r.get("carrier_lock", 0)) >= .85 for r in w)
                     and all(24_999 <= b-a <= 25_001 for a, b in zip(starts, starts[1:]))):
@@ -142,14 +181,24 @@ def learn_diagonal_variance(train: np.ndarray, floor: float = 1e-8) -> np.ndarra
     x = np.asarray(train, dtype=np.complex128)
     if x.ndim < 2 or len(x) < 2:
         raise ValueError("normal train surfaces required")
+    if not np.isfinite(x).all() or not np.isfinite(floor) or floor <= 0:
+        raise ValueError("finite training surfaces and positive floor required")
     variance = np.var(x.real, axis=0, ddof=1) + np.var(x.imag, axis=0, ddof=1)
+    variance[CENTER] = np.nan
     return np.maximum(variance, floor)
 
 
 def _weighted_fit(y: np.ndarray, columns: Sequence[np.ndarray], variance: np.ndarray):
     target = np.asarray(y).reshape(-1)
     design = np.column_stack([np.asarray(c).reshape(-1) for c in columns])
-    weights = 1 / np.sqrt(np.broadcast_to(variance, np.asarray(y).shape).reshape(-1))
+    var = np.broadcast_to(variance, np.asarray(y).shape).reshape(-1)
+    mask = np.ones(np.asarray(y).shape, dtype=bool); mask[CENTER] = False; mask=mask.reshape(-1)
+    if (not np.isfinite(target[mask]).all() or not np.isfinite(design[mask]).all()
+            or not np.isfinite(var[mask]).all() or np.any(var[mask] <= 0)):
+        raise ValueError("diagonal quasi-WLS requires finite values and positive variance")
+    target=target[mask];design=design[mask];weights = 1 / np.sqrt(var[mask])
+    if np.linalg.matrix_rank(design * weights[:,None]) != design.shape[1]:
+        raise ValueError("degenerate WLS design")
     coef, *_ = np.linalg.lstsq(design * weights[:, None], target * weights, rcond=None)
     residual = (target - design @ coef) * weights
     return float(np.vdot(residual, residual).real), coef
@@ -162,14 +211,16 @@ def two_source_wls(y: np.ndarray, template0: np.ndarray,
     rss0, coef0 = _weighted_fit(y, [template0], variance)
     candidates = []
     for coordinate, template in shifted_templates.items():
-        if tuple(coordinate) == CENTER:
-            continue
-        rss, coef = _weighted_fit(y, [template0, template], variance)
+        if not isinstance(template,H1Template) or tuple(coordinate)!=template.coordinate:
+            raise ValueError("validated H1Template required")
+        rss, coef = _weighted_fit(y, [template0, template.surface], variance)
         candidates.append((rss, tuple(coordinate), coef))
     if not candidates:
         raise ValueError("H1 requires at least one non-center delta")
     rss1, delta, coef1 = min(candidates, key=lambda x: x[0])
-    rss1 = min(rss0, rss1)
+    tolerance=1e-10*max(1.,rss0)
+    if rss1 > rss0+tolerance:
+        raise ArithmeticError("nested H1 RSS exceeds H0")
     return {"h0_rss": rss0, "h1_rss": rss1, "raw_s2src": rss0-rss1,
             "selected_delta": delta, "h0_alpha": coef0[0],
             "h1_alpha": coef1[0], "h1_beta": coef1[1]}
@@ -180,6 +231,7 @@ def calibrate_scores(raw_scores: Sequence[float], penalties: Sequence[float] | N
     p = np.zeros_like(x) if penalties is None else np.asarray(penalties, dtype=float)
     if x.ndim != 1 or len(x) < 3 or p.shape != x.shape or not np.isfinite(x-p).all():
         raise ValueError("finite clean calibration scores required")
+    if np.any(p != p[0]):raise ValueError("complexity penalty must be one frozen scalar")
     adjusted = x-p; med = float(np.median(adjusted)); scale = float(np.quantile(adjusted, .75)-np.quantile(adjusted, .25))
     scale = max(scale, np.finfo(float).eps)
     return {"center": med, "scale": scale, "complexity_penalty": float(np.median(p)),
@@ -252,24 +304,38 @@ def synthesize_same_prn_second_source(prn: int, n: int, delay_chips: float,
 
 def binary_metrics(labels, scores, max_fpr=.01) -> dict:
     from sklearn.metrics import average_precision_score, roc_auc_score, roc_curve
-    y=np.asarray(labels, int); s=np.asarray(scores, float); fpr,tpr,_=roc_curve(y,s)
-    mask=fpr<=max_fpr
-    pauc=float(np.trapz(tpr[mask], fpr[mask])/max_fpr) if np.sum(mask)>=2 else 0.
+    if not np.isfinite(max_fpr) or not 0 < max_fpr <= 1: raise ValueError("max_fpr must be in (0,1]")
+    y=np.asarray(labels, int); s=np.asarray(scores, float)
+    if y.ndim!=1 or s.shape!=y.shape or not np.isfinite(s).all():raise ValueError("finite aligned labels/scores required")
+    fpr,tpr,_=roc_curve(y,s); stop=np.searchsorted(fpr,max_fpr,"right")
+    xf=list(fpr[:stop]);yt=list(tpr[:stop])
+    if not xf or xf[-1] < max_fpr:
+        xf.append(max_fpr);yt.append(float(np.interp(max_fpr,fpr,tpr)))
+    # Standardized to [0,1] over the requested false-positive range.
+    pauc=float(np.trapz(yt,xf)/max_fpr)
     return {"roc_auc":float(roc_auc_score(y,s)), "average_precision":float(average_precision_score(y,s)), "partial_auc":pauc, "max_fpr":max_fpr}
 
 
 def alarm_metrics(times, scores, threshold, onset) -> dict:
-    t=np.asarray(times,float); alarm=np.asarray(scores,float)>=threshold; pre=t<onset; post=t>=onset
+    t=np.asarray(times,float);s=np.asarray(scores,float)
+    if t.ndim!=1 or s.shape!=t.shape or not np.isfinite(t).all() or not np.isfinite(s).all() or np.any(np.diff(t)<=0):raise ValueError("sorted unique finite aligned times/scores required")
+    alarm=s>=threshold; pre=t<onset; post=t>=onset
     first=t[post & alarm]
     return {"pre_onset_fpr":float(np.mean(alarm[pre])) if np.any(pre) else None,
             "detection_fraction":float(np.mean(alarm[post])) if np.any(post) else None,
             "alarm_delay_s":float(first[0]-onset) if len(first) else None}
 
 
-def block_bootstrap_effect(normal, other, block_ids, replicates=1000, seed=1) -> dict:
+def block_bootstrap_effect(normal, other, block_ids, replicates=1000, seed=1,
+                           *, times=None, block_seconds=10.0) -> dict:
     a=np.asarray(normal,float); b=np.asarray(other,float); ids=np.asarray(block_ids)
+    if a.ndim!=1 or b.shape!=a.shape or ids.shape!=a.shape or not np.isfinite(a).all() or not np.isfinite(b).all() or replicates<=0 or not np.isfinite(block_seconds) or block_seconds<=0:raise ValueError("finite paired arrays and positive replicates/block duration required")
+    if times is not None:
+        t=np.asarray(times,float)
+        if t.shape!=a.shape or not np.isfinite(t).all() or np.any(np.diff(t)<0):raise ValueError("finite chronological paired times required")
+        if any(np.ptp(t[ids==x])>block_seconds for x in np.unique(ids)):raise ValueError("block exceeds declared duration")
     unique=np.unique(ids); rng=np.random.default_rng(seed); estimates=[]
     for _ in range(replicates):
         chosen=rng.choice(unique,len(unique),replace=True); mask=np.concatenate([np.flatnonzero(ids==x) for x in chosen])
         estimates.append(float(np.mean(b[mask])-np.mean(a[mask])))
-    return {"effect":float(np.mean(b-a)), "ci95":[float(np.quantile(estimates,.025)),float(np.quantile(estimates,.975))], "block_seconds":10, "seed":seed, "replicates":replicates}
+    return {"effect":float(np.mean(b-a)), "ci95":[float(np.quantile(estimates,.025)),float(np.quantile(estimates,.975))], "block_seconds":float(block_seconds), "times_verified":times is not None, "seed":seed, "replicates":replicates}

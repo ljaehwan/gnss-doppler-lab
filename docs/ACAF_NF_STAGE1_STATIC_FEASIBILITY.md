@@ -21,11 +21,14 @@ deltas must be 24,999..25,001 with CN0 >= 28 and carrier lock >= .85. Decimated
 
 For each complex CAF `C`, normalization is
 
-`Y = C exp(-j angle(C[0,0])) / max(|C[0,0]|, floor)`.
+`Y = C exp(-j angle(C[zero Doppler, zero delay])) / max(|C_center|, floor)`.
 
 Here `[0,0]` denotes the zero-delay/zero-Doppler center, not the array corner.
-The raw center complex value, magnitude, floor, and floor-use flag remain
-explicit diagnostics.
+The normalized center is deterministically `1+0j` for eligible epochs. The
+center coordinate is excluded from variance estimation and both quasi-WLS
+fits. The raw center complex value, magnitude, floor, and floor-use flag remain
+explicit diagnostics; floor-applied epochs fail the fixed clean-only quality
+gate and are ineligible.
 
 ## Normal-only model
 
@@ -34,8 +37,8 @@ only source for variance, model, penalty, threshold, and pooling selection.
 Attack labels cannot enter fitting, calibration, or selection; an attack may
 only contribute pre-onset FPR after the foundation passes.
 
-With fixed diagonal variance `v` learned from normal train, complex weighted
-least squares fits
+With fixed diagonal variance `v` learned from normal train, complex diagonal
+quasi-WLS (not covariance whitening) fits
 
 `H0: Y = alpha T0 + epsilon`
 
@@ -44,9 +47,12 @@ least squares fits
 `alpha` and `beta` are unconstrained complex amplitudes. RSS is the sum of
 `|residual|^2/v`. H1 selects the non-center delta with minimum RSS and therefore
 must have `RSS1 <= RSS0`. The saved `raw_s2src = RSS0-RSS1` is diagnostic only.
-The primary score subtracts a fixed complexity correction and uses robust
-calibration-tail centering/scaling; every such quantity is fixed using
-cleanStatic calibration only.
+The primary statistic is the full minimized delta search. Search multiplicity
+is therefore learned empirically on untouched clean calibration data; the
+frozen scalar penalty is zero and is identical at calibration and inference.
+Training (or a separate selection split) chooses model and pooling. Calibration
+only estimates the transform and q99/q99.5/target-1% thresholds; holdout is
+evaluation-only.
 
 Fixed comparison selectors are power-only, Prompt magnitude, complex EPL,
 fixed nine complex delay taps, dense one-source residual, and dense two-source
@@ -64,15 +70,21 @@ delay. Finite zero-padded shifts and additions at CAF peaks are prohibited.
 ## Fail-closed artifact semantics
 
 The producer rejects an existing destination, builds in a sibling staging
-directory, and atomically publishes. In `FOUNDATION_INVALID`, all science CSVs
+directory, and publishes with Linux `RENAME_NOREPLACE`. In `FOUNDATION_INVALID`, all science CSVs
 are header-only; model, threshold, and bootstrap JSON are `NOT_EVALUATED`; and
 `plots/` is empty with its reason recorded in execution validity. There are no
 placeholder plots or stale metrics. Raw-byte reads are recorded as
 `full_sha256_only`, and `no_attack_raw_scoring_performed=true`.
 
-The standalone verifier does not import the producer or its verdict logic. It
-recomputes recursive checksums, full raw hashes, MAT support counts, timelines,
-empty-science semantics, and the foundation conclusion. DS7 and DS8 pre-attack
+The standalone verifier does not import the producer or its verdict logic. Its
+pinned declarative source-binding configuration freezes exact tracker MAT
+filename/SHA inventories and exact manifest JSON pointers. It recomputes
+recursive checksums, full raw hashes, strict MAT schemas/support/L20 counts,
+timelines, empty-science semantics, R1.4 lineage, and the foundation conclusion.
+The producer report is pending and checksum-covered. Only an external verifier
+`--finalize` pass may write PASS and regenerate checksums; a second read-only
+pass validates that closure. `--skip-external-recompute` is diagnostic
+`INCOMPLETE` and cannot finalize. DS7 and DS8 pre-attack
 data are paired replay diagnostics—not independent normals—if byte identity is
 authenticated.
 
