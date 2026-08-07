@@ -33,3 +33,9 @@
   - `scripts/verify_acaf_nf_stage1_r1.py`
 
 Checkpoint B가 `CONTINUOUS_TRACKER_VALID`일 때만 C로 진행한다. DS4의 manifest/raw alignment는 별도 근거 없이 보정하지 않고 fail-closed로 유지한다.
+
+## Checkpoint C
+
+- DS3/DS7/DS8은 raw SHA가 receiver manifest에 직접 결속된 경우에만 primary tracker로 VALID 판정한다.
+- DS4는 약 128.22초까지만 transition-only coverage를 기록한다. 기존 receiver manifest에 raw SHA와 build SHA가 없어 `INVALID_RECORD_ALIGNMENT`이며 공격 점수 입력으로 사용할 수 없다.
+- phase 경계와 L20은 각 scenario에서 독립 계산하며 서로 다른 channel/PRN을 연결하지 않는다.

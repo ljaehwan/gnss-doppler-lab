@@ -5,7 +5,7 @@ import argparse
 import csv
 import hashlib
 import json
-from collections import Counter
+from collections import Counter, defaultdict
 import re
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
@@ -283,12 +283,14 @@ def build_continuous_tracker_rows(
     tracker_path: str | Path,
     *,
     raw_sample_count: int | None = None,
+    mat_inventory: dict[str, str] | None = None,
 ) -> tuple[list[ContinuousTrackerRow], dict[str, Any]]:
     root = Path(tracker_path)
     if not root.is_dir():
         raise ValueError(f"tracker path is not directory: {root}")
 
-    mats = sorted([p for p in root.glob("*.mat") if _is_tracker_mat(p)])
+    mats = (sorted(root / name for name in mat_inventory)
+            if mat_inventory is not None else sorted([p for p in root.glob("*.mat") if _is_tracker_mat(p)]))
     if not mats:
         raise ValueError(f"no MAT files in {root}")
 
@@ -629,6 +631,121 @@ def validate_cleanstatic_reconstruction(rows: Sequence[ContinuousTrackerRow], ra
         '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300"><title>cleanStatic Prompt reproduction ratio</title>'
         '<polyline fill="none" stroke="#0b6e4f" stroke-width="1" points="' + points + '"/></svg>\n', encoding="utf-8")
     return report
+
+
+def _json_pointer(document: Any, pointer: str | None) -> Any:
+    if pointer is None or not pointer.startswith("/"):
+        return None
+    value = document
+    for part in pointer[1:].split("/"):
+        if not isinstance(value, dict) or part not in value:
+            return None
+        value = value[part]
+    return value
+
+
+def _scenario_phases(scenario: str, raw_samples: int) -> dict[str, tuple[int, int]]:
+    second = FS_HZ
+    boundaries = {
+        "ds3": (("pre_onset", 0, 118.9), ("transition", 118.9, 195.0), ("established", 195.0, None)),
+        "ds4": (("pre_onset", 0, 113.8), ("transition_only", 113.8, None)),
+        "ds7": (("pre_onset", 0, 110.0), ("transition", 110.0, 130.0), ("held", 130.0, 150.0), ("time_push", 150.0, None)),
+        "ds8": (("pre_onset", 0, 110.0), ("transition", 110.0, 130.0), ("held", 130.0, 150.0), ("time_push", 150.0, None)),
+    }[scenario]
+    return {name: (int(start * second), raw_samples if end is None else min(raw_samples, int(end * second)))
+            for name, start, end in boundaries}
+
+
+def _phase_coverage(rows: Sequence[ContinuousTrackerRow], phases: dict[str, tuple[int, int]]) -> dict[str, dict[str, Any]]:
+    grouped: dict[tuple[int, int], list[ContinuousTrackerRow]] = defaultdict(list)
+    for row in rows:
+        grouped[(row.channel, row.prn)].append(row)
+    result: dict[str, dict[str, Any]] = {}
+    for phase, (begin, end) in phases.items():
+        phase_rows = [row for row in rows if row.raw_start_sample >= begin and row.raw_end_sample <= end]
+        l20 = 0; pairs: set[tuple[int, int]] = set()
+        for pair, values in grouped.items():
+            selected = sorted([row for row in values if row.raw_start_sample >= begin and row.raw_end_sample <= end],
+                              key=lambda row: row.raw_start_sample)
+            run = 1
+            for left, right in zip(selected, selected[1:]):
+                run = run + 1 if right.raw_start_sample - left.raw_start_sample == SUPPORT_SAMPLES else 1
+                if run >= 20:
+                    l20 += 1; pairs.add(pair)
+        result[phase] = {"start_sample": begin, "end_sample_exclusive": end, "rows": len(phase_rows),
+                         "l20_windows": l20, "l20_prn_channels": len(pairs)}
+    return result
+
+
+def _scenario_binding(cfg: dict[str, Any], scenario: str, report: dict[str, Any]) -> dict[str, Any]:
+    source = cfg["scenarios"][scenario]
+    manifest_path = Path(source["manifest_path"]); manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    pointers = source["manifest_pointers"]
+    raw_hash = _json_pointer(manifest, pointers.get("raw_sha256"))
+    rate = _json_pointer(manifest, pointers.get("sample_rate_hz"))
+    sample_format = _json_pointer(manifest, pointers.get("sample_format"))
+    reasons: list[str] = []
+    if raw_hash != source["raw_sha256"]: reasons.append("invalid_record_alignment:receiver_manifest_raw_sha256_unbound")
+    if rate != FS_HZ: reasons.append("receiver_manifest_sample_rate_mismatch")
+    if sample_format not in {"ishort_complex_iq", "ishort interleaved IQ"}: reasons.append("receiver_manifest_sample_format_mismatch")
+    if not report["dat_sample_stamp_match"]: reasons.append("dat_mat_sample_stamp_mismatch")
+    receiver = manifest.get("receiver", {})
+    return {
+        "scenario": scenario, "status": "PASS" if not reasons else "INVALID_RECORD_ALIGNMENT",
+        "reasons": reasons, "raw_path": source["raw_path"], "raw_sha256": source["raw_sha256"],
+        "raw_size_bytes": Path(source["raw_path"]).stat().st_size,
+        "receiver_manifest_path": source["manifest_path"], "receiver_manifest_sha256": source["manifest_sha256"],
+        "receiver_config_path": source["receiver_config_path"], "receiver_config_sha256": source["receiver_config_sha256"],
+        "gnss_sdr_name": receiver.get("name"), "gnss_sdr_executable": receiver.get("executable", receiver.get("path")),
+        "gnss_sdr_build_sha256": receiver.get("executable_sha256", receiver.get("sha256")),
+        "tracker_path": source["tracker_path"], "tracker_mat_inventory": source["mat_inventory"],
+        "manifest_pointers": pointers,
+        "dat_record_contract": {"record_bytes": DAT_RECORD_BYTES, "sample_stamp_offset": DAT_SAMPLE_STAMP_OFFSET,
+                                "all_rows_match_mat": report["dat_sample_stamp_match"]},
+    }
+
+
+def build_attack_trackers(source_binding: str | Path, output_dir: str | Path) -> Path:
+    root = Path(output_dir); root.mkdir(parents=True, exist_ok=True)
+    config_path = Path(source_binding); cfg = json.loads(config_path.read_text(encoding="utf-8"))
+    timelines: dict[str, Any] = {"schema": "acaf_nf_stage1_scenario_timeline.v1", "sample_rate_hz": FS_HZ}
+    scenarios: dict[str, Any] = {}
+    bindings: dict[str, Any] = {}
+    for scenario in ("ds3", "ds4", "ds7", "ds8"):
+        source = cfg["scenarios"][scenario]; raw = Path(source["raw_path"]); raw_samples = raw.stat().st_size // 4
+        rows, report = build_continuous_tracker_rows(scenario, source["tracker_path"], raw_sample_count=raw_samples,
+                                                      mat_inventory=source["mat_inventory"])
+        save_continuous_tracker_csv(rows, root / f"continuous_tracker_{scenario}.csv")
+        phases = _scenario_phases(scenario, raw_samples); coverage = _phase_coverage(rows, phases)
+        binding = _scenario_binding(cfg, scenario, report)
+        binding["source_binding_config"] = str(config_path)
+        binding["source_binding_config_sha256"] = _sha256(config_path)
+        post_names = ("transition", "held", "time_push", "established", "transition_only")
+        post_l20 = sum(coverage[name]["l20_windows"] for name in post_names if name in coverage)
+        status = "VALID" if report["status"] == "CONTINUOUS_TRACKER_VALID" and binding["status"] == "PASS" and post_l20 > 0 else "INVALID"
+        if scenario == "ds4" and binding["status"] != "PASS": status = "INVALID_RECORD_ALIGNMENT"
+        scenarios[scenario] = {"status": status, "tracker_validation": report, "binding_status": binding["status"],
+                               "phase_coverage": coverage, "rows": len(rows), "post_onset_l20_windows": post_l20,
+                               "limited_diagnostic": scenario == "ds4"}
+        bindings[scenario] = binding
+        timelines[scenario] = {"raw_samples": raw_samples, "duration_seconds": raw_samples / FS_HZ,
+                               "phases": {name: {"start_sample": a, "end_sample_exclusive": b,
+                                                 "start_seconds": a / FS_HZ, "end_seconds": b / FS_HZ}
+                                          for name, (a, b) in phases.items()},
+                               "pull_off_unavailable": scenario == "ds4" and raw_samples < int(225 * FS_HZ)}
+    primary_valid = all(scenarios[name]["status"] == "VALID" for name in ("ds3", "ds7", "ds8"))
+    ds4_closed = scenarios["ds4"]["status"] == "INVALID_RECORD_ALIGNMENT"
+    manifest = {"schema": "acaf_nf_stage1_attack_trackers.v1", "checkpoint": "C",
+                "status": "CHECKPOINT_C_COMPLETE_WITH_DS4_FAIL_CLOSED" if primary_valid and ds4_closed else "CHECKPOINT_C_INVALID",
+                "primary_scenarios_valid": primary_valid, "ds4_fail_closed": ds4_closed, "scenarios": scenarios,
+                "generated_at_utc": datetime.now(timezone.utc).isoformat()}
+    (root / "attack_tracker_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    (root / "scenario_timeline.json").write_text(json.dumps(timelines, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    existing = json.loads((root / "source_binding.json").read_text(encoding="utf-8")) if (root / "source_binding.json").is_file() else {}
+    existing["schema"] = "acaf_nf_stage1_source_binding.v2"; existing["scenarios"] = {"cleanStatic": dict(existing), **bindings}
+    existing["source_binding_config"] = str(config_path); existing["source_binding_config_sha256"] = _sha256(config_path)
+    (root / "source_binding.json").write_text(json.dumps(existing, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return root
 
 
 def audit_tracker_cadence(scenario: str, tracker_path: str | Path, *, require_contiguous_rows: bool = False) -> tuple[dict[str, Any], list[TrackerCadenceRow]]:

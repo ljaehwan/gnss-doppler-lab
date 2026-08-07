@@ -73,23 +73,24 @@ def _vector(handle: h5py.File, name: str) -> np.ndarray:
     return np.asarray(handle[name]).reshape(-1)
 
 
-def _verify_source_rows(root: Path, errors: list[str]) -> tuple[int, int]:
+def _verify_source_rows(root: Path, errors: list[str], scenario: str = "cleanStatic") -> tuple[int, int]:
     binding = json.loads((root / "source_binding.json").read_text(encoding="utf-8"))
+    if "scenarios" in binding: binding = binding["scenarios"][scenario]
     config_path = Path(binding["source_binding_config"])
     if sha256(config_path) != binding["source_binding_config_sha256"]: errors.append("source_binding_config_hash")
-    cfg = json.loads(config_path.read_text(encoding="utf-8"))["scenarios"]["cleanStatic"]
+    cfg = json.loads(config_path.read_text(encoding="utf-8"))["scenarios"][scenario]
     for key, expected in (("raw_sha256", cfg["raw_sha256"]), ("receiver_config_sha256", cfg["receiver_config_sha256"]),
                           ("receiver_manifest_sha256", cfg["manifest_sha256"])):
         if binding.get(key) != expected: errors.append(f"binding_value:{key}")
-    for path_key, hash_key in (("receiver_config_path", "receiver_config_sha256"),
-                               ("receiver_manifest_path", "receiver_manifest_sha256"),
-                               ("gnss_sdr_executable", "gnss_sdr_build_sha256")):
+    external = [("receiver_config_path", "receiver_config_sha256"), ("receiver_manifest_path", "receiver_manifest_sha256")]
+    if binding.get("gnss_sdr_build_sha256"): external.append(("gnss_sdr_executable", "gnss_sdr_build_sha256"))
+    for path_key, hash_key in external:
         path = Path(binding[path_key])
         if not path.is_file() or sha256(path) != binding[hash_key]: errors.append(f"external_hash:{path_key}")
     raw = Path(binding["raw_path"])
     if not raw.is_file() or raw.stat().st_size != binding["raw_size_bytes"]: errors.append("raw_size_binding")
 
-    with (root / "continuous_tracker_cleanStatic.csv").open(newline="", encoding="utf-8") as handle:
+    with (root / f"continuous_tracker_{scenario}.csv").open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
     mats: dict[str, dict[str, np.ndarray]] = {}
     pairs: dict[tuple[int, int], list[int]] = defaultdict(list)
@@ -229,10 +230,65 @@ def verify_b(root: Path) -> tuple[bool,list[str],dict[str,object]]:
     return not errors,errors,report
 
 
+def _pointer(document: Any, pointer: str | None) -> Any:
+    if pointer is None or not pointer.startswith("/"): return None
+    value=document
+    for part in pointer[1:].split("/"):
+        if not isinstance(value,dict) or part not in value: return None
+        value=value[part]
+    return value
+
+
+def verify_c(root: Path) -> tuple[bool,list[str],dict[str,object]]:
+    errors: list[str]=[]; scenarios=("ds3","ds4","ds7","ds8")
+    required=[*(f"continuous_tracker_{s}.csv" for s in scenarios),"attack_tracker_manifest.json","scenario_timeline.json",
+              "source_binding.json","execution_manifest_checkpoint_c.json","checksums.json"]
+    for name in required:
+        if not (root/name).is_file(): errors.append(f"missing_file:{name}")
+    if errors: return False,errors,{"status":"FAIL","errors":errors,"checkpoint":"C","artifact_path":str(root)}
+    verify_checksums(root,errors)
+    attack=json.loads((root/"attack_tracker_manifest.json").read_text(encoding="utf-8"))
+    timeline=json.loads((root/"scenario_timeline.json").read_text(encoding="utf-8"))
+    source=json.loads((root/"source_binding.json").read_text(encoding="utf-8"))
+    recomputed={}
+    for scenario in scenarios:
+        pairs,l20=_verify_source_rows(root,errors,scenario)
+        binding=source["scenarios"][scenario];manifest=json.loads(Path(binding["receiver_manifest_path"]).read_text(encoding="utf-8"))
+        bound=_pointer(manifest,binding["manifest_pointers"].get("raw_sha256"))==binding["raw_sha256"]
+        expected_status="INVALID_RECORD_ALIGNMENT" if scenario=="ds4" else "PASS"
+        if binding["status"]!=expected_status or (scenario=="ds4" and bound) or (scenario!="ds4" and not bound):
+            errors.append(f"binding_status:{scenario}")
+        with (root/f"continuous_tracker_{scenario}.csv").open(newline="",encoding="utf-8") as handle: rows=list(csv.DictReader(handle))
+        coverage={}
+        for phase,limits in timeline[scenario]["phases"].items():
+            begin=int(limits["start_sample"]);end=int(limits["end_sample_exclusive"])
+            selected=[r for r in rows if int(r["raw_start_sample"])>=begin and int(r["raw_end_sample"])<=end]
+            groups: dict[tuple[int,int],list[int]]=defaultdict(list)
+            for row in selected: groups[(int(row["channel"]),int(row["prn"]))].append(int(row["raw_start_sample"]))
+            windows=0;valid_pairs=0
+            for starts in groups.values():
+                starts.sort();run=1;pair_windows=0
+                for delta in np.diff(starts):
+                    run=run+1 if delta==SUPPORT else 1
+                    if run>=20: windows+=1;pair_windows+=1
+                valid_pairs+=pair_windows>0
+            coverage[phase]={"start_sample":begin,"end_sample_exclusive":end,"rows":len(selected),
+                             "l20_windows":windows,"l20_prn_channels":valid_pairs}
+        if coverage!=attack["scenarios"][scenario]["phase_coverage"]: errors.append(f"phase_coverage:{scenario}")
+        recomputed[scenario]={"prn_channels":pairs,"l20_windows":l20,"binding":expected_status,"phase_coverage":coverage}
+    expected="CHECKPOINT_C_COMPLETE_WITH_DS4_FAIL_CLOSED"
+    if attack.get("status")!=expected or not attack.get("primary_scenarios_valid") or not attack.get("ds4_fail_closed"):
+        errors.append("checkpoint_c_status")
+    report={"status":"PASS" if not errors else "FAIL","errors":errors,"checkpoint":"C","artifact_path":str(root),
+            "scientific_status":expected,"recomputed":recomputed}
+    return not errors,errors,report
+
+
 def main() -> None:
-    parser=argparse.ArgumentParser();parser.add_argument("artifact",type=Path);parser.add_argument("--checkpoint",choices=("A","B"),default="A")
+    parser=argparse.ArgumentParser();parser.add_argument("artifact",type=Path);parser.add_argument("--checkpoint",choices=("A","B","C"),default="A")
     parser.add_argument("--write-report",action="store_true");args=parser.parse_args()
-    ok,_,report=verify_a(args.artifact) if args.checkpoint=="A" else verify_b(args.artifact)
+    ok,_,report=(verify_a(args.artifact) if args.checkpoint=="A" else verify_b(args.artifact)
+                 if args.checkpoint=="B" else verify_c(args.artifact))
     if args.write_report:
         (args.artifact/"verification_report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n",encoding="utf-8")
     print(json.dumps(report,indent=2,sort_keys=True));raise SystemExit(0 if ok else 2)

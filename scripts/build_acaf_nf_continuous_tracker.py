@@ -25,7 +25,7 @@ SRC = ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-from gnss_doppler_lab.acaf_nf_stage1_continuous_tracker import build_audit, build_continuous_tracker
+from gnss_doppler_lab.acaf_nf_stage1_continuous_tracker import build_audit, build_attack_trackers, build_continuous_tracker
 
 
 def _sha256(path: Path) -> str:
@@ -91,7 +91,7 @@ def main() -> None:
     parser.add_argument("--source-binding", default="configs/acaf_nf_stage1_source_binding.json")
     parser.add_argument("--output", default="artifacts/acaf_nf_stage1_r1_continuous_tracker")
     parser.add_argument("--scenario", action="append", default=None)
-    parser.add_argument("--checkpoint", choices=("A", "B"), default="A")
+    parser.add_argument("--checkpoint", choices=("A", "B", "C"), default="A")
     args = parser.parse_args()
 
     output = Path(args.output)
@@ -102,7 +102,7 @@ def main() -> None:
             output,
             scenarios=tuple(args.scenario) if args.scenario else None,
         )
-    else:
+    elif args.checkpoint == "B":
         requested = tuple(args.scenario) if args.scenario else ("cleanStatic",)
         if len(requested) != 1 or requested[0] != "cleanStatic":
             raise ValueError("checkpoint B only supports --scenario cleanStatic")
@@ -111,9 +111,16 @@ def main() -> None:
             output,
             scenario="cleanStatic",
         )
+    else:
+        requested = tuple(args.scenario) if args.scenario else ("ds3", "ds4", "ds7", "ds8")
+        if requested != ("ds3", "ds4", "ds7", "ds8"):
+            raise ValueError("checkpoint C requires ds3, ds4, ds7, ds8 in that order")
+        output = build_attack_trackers(args.source_binding, output)
 
     if args.checkpoint == "B":
         requested = ["cleanStatic"]
+    elif args.checkpoint == "C":
+        requested = ["ds3", "ds4", "ds7", "ds8"]
     else:
         requested = list(args.scenario) if args.scenario else list(all_scenarios)
 
@@ -132,7 +139,8 @@ def main() -> None:
     )
     if requested:
         command += " " + " ".join([shlex.join(["--scenario", s]) for s in requested])
-    manifest_path = "execution_manifest.json" if args.checkpoint == "A" else "execution_manifest_checkpoint_b.json"
+    manifest_path = ("execution_manifest.json" if args.checkpoint == "A" else
+                     "execution_manifest_checkpoint_b.json" if args.checkpoint == "B" else "execution_manifest_checkpoint_c.json")
     _write_manifest(
         output,
         command,

@@ -17,9 +17,9 @@ def main() -> None:
     )
     parser.add_argument(
         "--checkpoint",
-        choices=("A", "B"),
+        choices=("A", "B", "C"),
         default="A",
-        help="Checkpoint selector. Supported: A (tracker cadence audit), B (cleanStatic continuous tracker).",
+        help="Checkpoint selector: A cadence, B cleanStatic validation, C attack tracker/source binding.",
     )
     parser.add_argument(
         "--scenario",
@@ -58,6 +58,14 @@ def main() -> None:
             "--scenario",
             args.scenario[0] if args.scenario else "cleanStatic",
         ]
+        result = subprocess.run(cmd, check=True)
+    elif args.checkpoint == "C":
+        expected = ["ds3", "ds4", "ds7", "ds8"]
+        if args.scenario and args.scenario != expected:
+            raise ValueError("--scenario for checkpoint C must be ds3,ds4,ds7,ds8")
+        cmd = [sys.executable, str(Path("scripts/build_acaf_nf_continuous_tracker.py")), "--checkpoint", "C",
+               "--source-binding", args.source_binding, "--output", args.output]
+        for scenario in expected: cmd.extend(["--scenario", scenario])
         result = subprocess.run(cmd, check=True)
     else:
         raise ValueError(f"Unsupported checkpoint: {args.checkpoint}")
