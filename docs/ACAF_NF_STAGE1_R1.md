@@ -39,3 +39,4 @@ Checkpoint B가 `CONTINUOUS_TRACKER_VALID`일 때만 C로 진행한다. DS4의 m
 - DS3/DS7/DS8은 raw SHA가 receiver manifest에 직접 결속된 경우에만 primary tracker로 VALID 판정한다.
 - DS4는 약 128.22초까지만 transition-only coverage를 기록한다. 기존 receiver manifest에 raw SHA와 build SHA가 없어 `INVALID_RECORD_ALIGNMENT`이며 공격 점수 입력으로 사용할 수 없다.
 - phase 경계와 L20은 각 scenario에서 독립 계산하며 서로 다른 channel/PRN을 연결하지 않는다.
+- stock GNSS-SDR dump는 1 ms correlation 설정에서도 navigation-bit 경계에서만 기록한다. 복구 replay는 tracking loop 수식과 telemetry gate를 유지하고 valid 1 ms loop마다 dump만 추가한 별도 hash-bound binary를 사용한다.
