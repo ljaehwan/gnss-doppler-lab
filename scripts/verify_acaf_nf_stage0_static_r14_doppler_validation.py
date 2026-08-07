@@ -2,13 +2,15 @@
 """Independent fail-closed verifier; imports no R1.4 producer helpers."""
 from __future__ import annotations
 import argparse,ast,csv,hashlib,json,math
+import xml.etree.ElementTree as ET
 from collections import Counter,defaultdict
 from pathlib import Path
 import numpy as np
 from scipy.stats import spearmanr
 ROOT=Path(__file__).resolve().parents[1]
-REQUIRED=("README.md config.json environment.json r13_frozen_lineage.json frozen_reconstruction_config.json prompt_reproduction_metrics.json prompt_reproduction_by_prn.csv prompt_reproduction_by_time_block.csv delay_recovery_metrics.json delay_recovery_by_prn.csv delay_recovery_by_time_block.csv doppler_1ms_metrics.json aggregation_metrics.csv aggregation_by_prn.csv aggregation_by_time_block.csv paired_improvement.csv bootstrap_results.json doppler_mainlobe_diagnostics.csv residual_doppler_diagnostics.json per_block_scores.csv execution_validity.json go_no_go.json test_report.txt verification_report.json checksums.json plots").split()
-PLOTS={"l-histograms":("Doppler offset (Hz)","Count",("L1","L5","L10","L20")),"l-recovery":("Integration length L","Within 50 Hz fraction",("overall",)),"prn-l1-l20":("PRN","Within 50 Hz fraction",("L1","L20")),"role-comparison":("Role","Within 50 Hz fraction",("train","calibration","holdout")),"prompt-scatter":("MAT Prompt magnitude","Reconstructed center magnitude",("epochs",)),"delay-histogram":("Delay offset (chips)","Count",("epochs",)),"peak-center-distribution":("Peak / center ratio","Count",("epochs",))}
+REQUIRED=("README.md config.json environment.json r13_frozen_lineage.json frozen_reconstruction_config.json prompt_reproduction_metrics.json prompt_reproduction_by_prn.csv prompt_reproduction_by_channel.csv prompt_reproduction_by_time_block.csv delay_recovery_metrics.json delay_recovery_by_prn.csv delay_recovery_by_time_block.csv doppler_1ms_metrics.json aggregation_metrics.csv aggregation_by_prn.csv aggregation_by_time_block.csv paired_improvement.csv bootstrap_results.json doppler_mainlobe_diagnostics.csv residual_doppler_diagnostics.json per_block_scores.csv execution_validity.json go_no_go.json test_report.txt verification_report.json checksums.json plots").split()
+PLOTS={"l-histograms":("Doppler offset (Hz)","Count"),"l-recovery":("Integration length L","Recovery fraction"),"prn-l1-l20":("PRN","Within 50 Hz fraction"),"role-comparison":("Integration length L","Within 50 Hz fraction"),"prompt-scatter":("MAT Prompt magnitude","Reconstructed center magnitude"),"delay-histogram":("Delay offset (chips)","Count"),"peak-center-distribution":("Peak / center ratio","Empirical cumulative fraction")}
+R13_REPORT_KEYS={"ca_code_independent_validation","candidate_physical_applications","cross_role_nonoverlap","errors","gates","global_offsets_independent","recomputed","recursive_checksums","status","verdict"}
 SOURCE_SHA="9889a5e5007c92d6016e5ef0d38a03cea96cdd40eded3cea91df1e4276d16e42";CHECKSUMS_SHA="04b5395b311641b4ab3f3a58a1a5cbb54d4249068f8252659049ea4386a95abb";CENTER_SHA="cb07c2b3d192c6bd30e6eeca6ffae6d615523f1ba4569d4259ccb01d866ba198";IDENTITY_SHA="65933645102b7a05087f0d9991ad1c55c822b4b83090cb57a4e6f74e17675e5c";ROLES=("train","calibration","holdout");LENGTHS=(1,5,10,20);DOP=list(range(-250,251,50));DEL=[round(-1+.125*i,3) for i in range(17)]
 R13={"n":969,"prn_count":8,"pooled_spearman":0.9999965049269979,"median_prn_spearman":0.9999652753663446,"boundary_fraction":0.006191950464396285,"within_tolerance_fraction":0.8565531475748194,"exact_center_fraction":0.42105263157894735}
 CANDIDATE="nco_row=previous_aux_row=previous_remnant_sign=-1_carrier_sign=-1_global_offset=0"
@@ -24,6 +26,30 @@ def array_sha(a):return hashlib.sha256(np.ascontiguousarray(a).view(np.uint8)).h
 def canon(v):return json.dumps(v,sort_keys=True,separators=(",",":"),allow_nan=False)
 def b(v):return v is True or str(v).lower() in {"true","1"}
 def checksums(root):return {str(p.relative_to(root)):digest(p) for p in sorted(root.rglob("*")) if p.is_file() and p.name not in {"checksums.json","verification_report.json"}}
+def exact_inventory(root):
+ expected_files=(set(REQUIRED)-{"plots"})|{f"plots/{name}.svg" for name in PLOTS};expected_dirs={"plots"};files=set();dirs=set();links=set();other=set()
+ for p in root.rglob("*"):
+  rel=str(p.relative_to(root))
+  if p.is_symlink():links.add(rel)
+  elif p.is_file():files.add(rel)
+  elif p.is_dir():dirs.add(rel)
+  else:other.add(rel)
+ return files==expected_files and dirs==expected_dirs and not links and not other
+def valid_r13_report(report):
+ return (isinstance(report,dict) and set(report)==R13_REPORT_KEYS and report.get("status")=="PASS" and report.get("errors")==[] and isinstance(report.get("gates"),dict) and isinstance(report.get("recomputed"),dict) and isinstance(report.get("recursive_checksums"),dict) and isinstance(report.get("ca_code_independent_validation"),dict))
+def plot_payloads(aggregation,aggregation_prn,aggregation_role,epochs):
+ by_l={int(r["L"]):r for r in aggregation};ratios=sorted(float(r["peak_center_ratio"]) for r in epochs);delays=sorted({float(r["peak_delay_offset_chips"]) for r in epochs})
+ return {
+  "l-histograms":{"kind":"grouped_histogram","series":[{"label":f"L{L}","points":[[float(x),int(n)] for x,n in sorted(by_l[L]["histogram"].items(),key=lambda z:float(z[0]))]} for L in LENGTHS]},
+  "l-recovery":{"kind":"line","series":[{"label":f"within {hz} Hz","points":[[L,float(by_l[L][f"within_{hz}_fraction"])] for L in LENGTHS]} for hz in (50,100,150)]},
+  "prn-l1-l20":{"kind":"line","series":[{"label":f"L{L}","points":[[int(r["prn"]),float(r["within_50_fraction"])] for r in aggregation_prn if int(r["L"])==L]} for L in (1,20)]},
+  "role-comparison":{"kind":"line","series":[{"label":role,"points":[[int(r["L"]),float(r["within_50_fraction"])] for r in aggregation_role if r["role"]==role]} for role in ROLES]},
+  "prompt-scatter":{"kind":"scatter","series":[{"label":"969 epochs","points":[[float(r["mat_prompt_magnitude"]),float(r["center_magnitude"])] for r in epochs]}]},
+  "delay-histogram":{"kind":"histogram","series":[{"label":"epochs","points":[[x,sum(float(r["peak_delay_offset_chips"])==x for r in epochs)] for x in delays]}]},
+  "peak-center-distribution":{"kind":"distribution","series":[{"label":"epochs","points":[[x,(i+1)/len(ratios)] for i,x in enumerate(ratios)]}]}}
+def plot_semantic_ok(path,xlabel,ylabel,payload):
+ tree=ET.parse(path);root=tree.getroot();meta=next((x for x in root.iter() if x.tag.endswith("metadata") and x.attrib.get("id")=="canonical-data"),None);data=canon(payload)
+ return meta is not None and meta.text==data and meta.attrib.get("data-sha256")==hashlib.sha256(data.encode()).hexdigest() and xlabel in "".join(root.itertext()) and ylabel in "".join(root.itertext()) and any(x.tag.endswith(("path","rect","circle")) for x in root.iter())
 def close(a,z,tol=1e-11):
  if isinstance(a,(dict,list)) and isinstance(z,str):
   try:z=ast.literal_eval(z)
@@ -61,20 +87,15 @@ def gate(a1,a2,a3a,a3b,a3c):
  v="RECONSTRUCTION_IMPLEMENTATION_INVALID" if not a1 or not a2 else "TRACKER_RAW_RECONSTRUCTION_UNRESOLVED" if not a3a or not a3b else "PHYSICAL_RECONSTRUCTION_VALID_DOPPLER_RESOLUTION_LIMITED" if not a3c else "PHYSICAL_CENTER_VALID"
  return {"A1_SOURCE_BINDING":"PASS" if a1 else "FAIL","A2_RECONSTRUCTION_IMPLEMENTATION":"PASS" if a2 else "FAIL","A3a_PROMPT_REPRODUCTION":"PASS" if a3a else "FAIL","A3b_CODE_DELAY":"PASS" if a3b else "FAIL","A3c_DOPPLER_AGGREGATION":"PASS" if a3c else "FAIL","verdict":v}
 def verify(root:Path):
- errors=[];actual_top={p.name for p in root.iterdir()} if root.is_dir() else set();missing=set(REQUIRED)-actual_top;extra=actual_top-set(REQUIRED)
- if missing or extra:return {"status":"FAIL","errors":[f"inventory:missing={sorted(missing)}:extra={sorted(extra)}"]}
+ errors=[]
+ if not root.is_dir() or root.is_symlink() or not exact_inventory(root):return {"status":"FAIL","errors":["exact_recursive_inventory"]}
  try:
   if loadj(root/"checksums.json")!={"files":checksums(root)}:errors.append("recursive_checksums")
-  plotfiles={p.name for p in (root/"plots").iterdir() if p.is_file()};expectedplots={x+".svg" for x in PLOTS}
-  if plotfiles!=expectedplots:errors.append("plot_inventory")
-  for name,(xl,yl,series) in PLOTS.items():
-   text=(root/"plots"/(name+".svg")).read_text()
-   if len(text)<300 or "polyline" not in text or "<line" not in text or xl not in text or yl not in text or any(x not in text for x in series):errors.append("plot_"+name)
   source=ROOT/"src/gnss_doppler_lab/acaf_nf_stage0_r13_reconstruction.py";art=ROOT/"artifacts/acaf_nf_stage0_static_r13_reconstruction";mp=art/"checksums.json";centerp=art/"center_validation.csv"
   if digest(source)!=SOURCE_SHA or digest(mp)!=CHECKSUMS_SHA or digest(centerp)!=CENTER_SHA:errors.append("r13_trust_anchor")
   manifest=loadj(mp);expected=set(manifest.get("files",{}))|{"checksums.json","verification_report.json"};found={str(p.relative_to(art)) for p in art.rglob("*") if p.is_file()}
   if set(manifest)!={"files"} or expected!=found or any(digest(art/n)!=d for n,d in manifest.get("files",{}).items()):errors.append("r13_manifest_inventory")
-  if loadj(art/"verification_report.json").get("status")!="PASS":errors.append("r13_verification")
+  if not valid_r13_report(loadj(art/"verification_report.json")):errors.append("r13_verification_report")
   frozen=loadc(centerp);fids=[(str(r["channel"]),int(r["prn"]),int(r["tracker_row"]),str(r["role"])) for r in frozen]
   if hashlib.sha256(canon(fids).encode()).hexdigest()!=IDENTITY_SHA:errors.append("r13_identity_order")
   fr=[dict(r,delay_boundary=b(r["grid_boundary"]),doppler_boundary=b(r["grid_boundary"])) for r in frozen]
@@ -97,6 +118,7 @@ def verify(root:Path):
   if not valid_ref(ref) or not close(ref,lineage.get("r14_raw_recomputed_reference_metrics",{}),1e-6):errors.append("r14_reference_recompute")
   if not close(prompt(raw),loadj(root/"prompt_reproduction_metrics.json")):errors.append("prompt_overall")
   if not close(grouped(raw,"prn",prompt),loadc(root/"prompt_reproduction_by_prn.csv")):errors.append("prompt_prn")
+  if not close(grouped(raw,"channel",prompt),loadc(root/"prompt_reproduction_by_channel.csv")):errors.append("prompt_channel")
   if not close(grouped(raw,"role",prompt),loadc(root/"prompt_reproduction_by_time_block.csv")):errors.append("prompt_role")
   if not close(delay(raw),loadj(root/"delay_recovery_metrics.json")):errors.append("delay_overall")
   if not close(grouped(raw,"prn",delay),loadc(root/"delay_recovery_by_prn.csv")):errors.append("delay_prn")
@@ -127,6 +149,9 @@ def verify(root:Path):
   if not close(ag,loadc(root/"aggregation_metrics.csv")):errors.append("aggregation_overall")
   if not close(agp,loadc(root/"aggregation_by_prn.csv")):errors.append("aggregation_prn")
   if not close(agr,loadc(root/"aggregation_by_time_block.csv")):errors.append("aggregation_role")
+  payloads=plot_payloads(ag,agp,agr,raw)
+  for name,(xl,yl) in PLOTS.items():
+   if not plot_semantic_ok(root/"plots"/(name+".svg"),xl,yl,payloads[name]):errors.append("plot_semantic_"+name)
   expected_pairs=[];expected_boot={}
   left={(x["channel"],x["prn"],x["anchor_tracker_row"],x["role"]):x for x in recomputed[1]}
   for L in (5,10,20):

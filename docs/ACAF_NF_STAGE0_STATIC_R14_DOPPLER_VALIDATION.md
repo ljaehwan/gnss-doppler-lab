@@ -31,8 +31,15 @@ than deleting an anchor; larger overlaps, duplicate constituents, and role
 crossing fail closed. Every constituent uses its own tracker state and digest.
 `per_block_scores.csv` records all epoch complex surfaces plus each exact
 anchor/L constituent list, interval, overlap audit, common-anchor ID, primary
-surface and three independently recomputable diagnostic surfaces. The
-predeclared surface is
+surface and three independently recomputable diagnostic surfaces. Prompt
+reproduction is also emitted per PRN, per role/time block, and per actual
+tracker channel in `prompt_reproduction_by_channel.csv`; the verifier rebuilds
+all grouped metrics from raw epoch evidence. The artifact has exactly 26
+allowed top-level files plus the `plots/` directory, whose exact seven SVG
+relative paths are enforced recursively with no extra directory or symlink.
+Each SVG has labeled axes and legends and embeds a canonical evidence payload
+and SHA-256 that the verifier independently reconstructs from CSV evidence.
+The predeclared surface is
 `mean_k(|C_k|^2 / (sum_grid |C_k|^2 + eps))`; raw power sum, magnitude mean,
 and robust median are diagnostics. Fixed-seed PRN-block bootstrap confidence
 intervals compare L=5/10/20 with paired L=1 anchors.

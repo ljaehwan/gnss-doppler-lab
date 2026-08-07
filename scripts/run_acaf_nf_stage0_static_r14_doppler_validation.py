@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Authenticated, cleanStatic-only R1.4 producer (source phase: never auto-runs)."""
 from __future__ import annotations
-import argparse,csv,hashlib,json,os,shutil,sys,tempfile,time
+import argparse,csv,hashlib,html,json,os,shutil,sys,tempfile,time
 from collections import Counter,defaultdict
 from pathlib import Path
 import numpy as np
@@ -16,8 +16,9 @@ OUT=ROOT/"artifacts/acaf_nf_stage0_static_r14_doppler_validation"
 R13_ARTIFACT=ROOT/"artifacts/acaf_nf_stage0_static_r13_reconstruction"
 R13_SOURCE=ROOT/"src/gnss_doppler_lab/acaf_nf_stage0_r13_reconstruction.py"
 GRID={"delay_chips":[round(-1+.125*i,3) for i in range(17)],"doppler_hz":list(range(-250,251,50))}
-INVENTORY=("README.md config.json environment.json r13_frozen_lineage.json frozen_reconstruction_config.json prompt_reproduction_metrics.json prompt_reproduction_by_prn.csv prompt_reproduction_by_time_block.csv delay_recovery_metrics.json delay_recovery_by_prn.csv delay_recovery_by_time_block.csv doppler_1ms_metrics.json aggregation_metrics.csv aggregation_by_prn.csv aggregation_by_time_block.csv paired_improvement.csv bootstrap_results.json doppler_mainlobe_diagnostics.csv residual_doppler_diagnostics.json per_block_scores.csv execution_validity.json go_no_go.json test_report.txt verification_report.json checksums.json plots").split()
-PLOTS={"l-histograms":("Doppler offset (Hz)","Count",("L1","L5","L10","L20")),"l-recovery":("Integration length L","Within 50 Hz fraction",("overall",)),"prn-l1-l20":("PRN","Within 50 Hz fraction",("L1","L20")),"role-comparison":("Role","Within 50 Hz fraction",ROLES),"prompt-scatter":("MAT Prompt magnitude","Reconstructed center magnitude",("epochs",)),"delay-histogram":("Delay offset (chips)","Count",("epochs",)),"peak-center-distribution":("Peak / center ratio","Count",("epochs",))}
+INVENTORY=("README.md config.json environment.json r13_frozen_lineage.json frozen_reconstruction_config.json prompt_reproduction_metrics.json prompt_reproduction_by_prn.csv prompt_reproduction_by_channel.csv prompt_reproduction_by_time_block.csv delay_recovery_metrics.json delay_recovery_by_prn.csv delay_recovery_by_time_block.csv doppler_1ms_metrics.json aggregation_metrics.csv aggregation_by_prn.csv aggregation_by_time_block.csv paired_improvement.csv bootstrap_results.json doppler_mainlobe_diagnostics.csv residual_doppler_diagnostics.json per_block_scores.csv execution_validity.json go_no_go.json test_report.txt verification_report.json checksums.json plots").split()
+PLOTS={"l-histograms":("Doppler offset (Hz)","Count"),"l-recovery":("Integration length L","Recovery fraction"),"prn-l1-l20":("PRN","Within 50 Hz fraction"),"role-comparison":("Integration length L","Within 50 Hz fraction"),"prompt-scatter":("MAT Prompt magnitude","Reconstructed center magnitude"),"delay-histogram":("Delay offset (chips)","Count"),"peak-center-distribution":("Peak / center ratio","Empirical cumulative fraction")}
+R13_REPORT_KEYS={"ca_code_independent_validation","candidate_physical_applications","cross_role_nonoverlap","errors","gates","global_offsets_independent","recomputed","recursive_checksums","status","verdict"}
 def write_json(p,v):p.write_text(json.dumps(v,indent=2,sort_keys=True,allow_nan=False)+"\n")
 def write_csv(p,rows):
  rows=list(rows);fields=list(dict.fromkeys(k for row in rows for k in row)) if rows else ["status"]
@@ -34,6 +35,8 @@ def r13_metrics(rows):
  return {"n":len(rows),"prn_count":len(prns),"role_counts":dict(sorted(roles.items())),"pooled_spearman":rho(rows),"median_prn_spearman":float(np.median([rho([r for r in rows if int(r["prn"])==p]) for p in prns])),"boundary_fraction":float(np.mean([bool(r["delay_boundary"]) or bool(r["doppler_boundary"]) for r in rows])),"within_tolerance_fraction":float(np.mean([abs(float(r["peak_delay_offset_chips"]))<=.125 and abs(float(r["peak_doppler_offset_hz"]))<=50 for r in rows])),"exact_center_fraction":float(np.mean([float(r["peak_delay_offset_chips"])==0 and float(r["peak_doppler_offset_hz"])==0 for r in rows]))}
 def validate_reference(m):
  return m.get("role_counts")=={r:323 for r in ROLES} and all(k in m and abs(float(m[k])-float(v))<=1e-6 for k,v in R13_REFERENCE.items())
+def valid_r13_report(report):
+ return (isinstance(report,dict) and set(report)==R13_REPORT_KEYS and report.get("status")=="PASS" and report.get("errors")==[] and isinstance(report.get("gates"),dict) and isinstance(report.get("recomputed"),dict) and isinstance(report.get("recursive_checksums"),dict) and isinstance(report.get("ca_code_independent_validation"),dict))
 def authenticate_r13():
  if sha256(R13_SOURCE)!=R13_SOURCE_SHA256 or sha256(R13_ARTIFACT/"checksums.json")!=R13_CHECKSUMS_SHA256:raise RuntimeError("approved R1.3 trust anchor drift")
  manifest=json.loads((R13_ARTIFACT/"checksums.json").read_text())
@@ -42,7 +45,7 @@ def authenticate_r13():
  if actual!=expected:raise RuntimeError("R1.3 inventory drift")
  if any(not (R13_ARTIFACT/n).is_file() or sha256(R13_ARTIFACT/n)!=d for n,d in manifest["files"].items()):raise RuntimeError("R1.3 manifest entry drift")
  report=json.loads((R13_ARTIFACT/"verification_report.json").read_text())
- if report.get("status")!="PASS" or report.get("errors")!=[]:raise RuntimeError("R1.3 verification is not PASS")
+ if not valid_r13_report(report):raise RuntimeError("R1.3 verification report schema/PASS drift")
  center=R13_ARTIFACT/"center_validation.csv"
  if sha256(center)!=R13_CENTER_VALIDATION_SHA256:raise RuntimeError("R1.3 center evidence drift")
  with center.open(newline="") as f:rows=list(csv.DictReader(f))
@@ -62,10 +65,29 @@ def surface_score(surface,identity):
 def score_fields(surface,prefix):
  x=surface_score(surface,{})
  return {f"{prefix}_{k}":x[k] for k in ("peak_magnitude","peak_delay_offset_chips","peak_doppler_offset_hz","center_magnitude","peak_center_ratio")}
-def svg_plot(path,title,xlabel,ylabel,series,values):
- vals=[float(v) for v in values] or [0.];lo=min(vals);hi=max(vals);span=max(hi-lo,1e-12);pts=" ".join(f"{55+i*500/max(len(vals)-1,1):.2f},{250-(v-lo)*180/span:.2f}" for i,v in enumerate(vals))
- labels=" ".join(f'<text x="60" y="{30+14*i}">{s}</text>' for i,s in enumerate(series))
- path.write_text(f'<svg xmlns="http://www.w3.org/2000/svg" width="640" height="320"><title>{title}</title><line x1="50" y1="260" x2="600" y2="260" stroke="black"/><line x1="50" y1="20" x2="50" y2="260" stroke="black"/><text x="260" y="305">{xlabel}</text><text x="5" y="15">{ylabel}</text>{labels}<polyline points="{pts}" fill="none" stroke="blue"/></svg>\n')
+def plot_payloads(aggregation,aggregation_prn,aggregation_role,epochs):
+ by_l={int(r["L"]):r for r in aggregation};ratios=sorted(float(r["peak_center_ratio"]) for r in epochs);delays=sorted({float(r["peak_delay_offset_chips"]) for r in epochs})
+ return {
+  "l-histograms":{"kind":"grouped_histogram","series":[{"label":f"L{L}","points":[[float(x),int(n)] for x,n in sorted(by_l[L]["histogram"].items(),key=lambda z:float(z[0]))]} for L in LENGTHS]},
+  "l-recovery":{"kind":"line","series":[{"label":f"within {hz} Hz","points":[[L,float(by_l[L][f"within_{hz}_fraction"])] for L in LENGTHS]} for hz in (50,100,150)]},
+  "prn-l1-l20":{"kind":"line","series":[{"label":f"L{L}","points":[[int(r["prn"]),float(r["within_50_fraction"])] for r in aggregation_prn if int(r["L"])==L]} for L in (1,20)]},
+  "role-comparison":{"kind":"line","series":[{"label":role,"points":[[int(r["L"]),float(r["within_50_fraction"])] for r in aggregation_role if r["role"]==role]} for role in ROLES]},
+  "prompt-scatter":{"kind":"scatter","series":[{"label":"969 epochs","points":[[float(r["mat_prompt_magnitude"]),float(r["center_magnitude"])] for r in epochs]}]},
+  "delay-histogram":{"kind":"histogram","series":[{"label":"epochs","points":[[x,sum(float(r["peak_delay_offset_chips"])==x for r in epochs)] for x in delays]}]},
+  "peak-center-distribution":{"kind":"distribution","series":[{"label":"epochs","points":[[x,(i+1)/len(ratios)] for i,x in enumerate(ratios)]}]}}
+def svg_plot(path,title,xlabel,ylabel,payload):
+ colors=("#1f77b4","#d62728","#2ca02c","#9467bd");points=[p for s in payload["series"] for p in s["points"]];xs=[float(p[0]) for p in points] or [0.];ys=[float(p[1]) for p in points] or [0.];xmin,xmax=min(xs),max(xs);ymin=min(0.,min(ys));ymax=max(ys);sx=lambda x:70+(float(x)-xmin)*500/max(xmax-xmin,1e-15);sy=lambda y:255-(float(y)-ymin)*205/max(ymax-ymin,1e-15)
+ marks=[]
+ for j,s in enumerate(payload["series"]):
+  color=colors[j%len(colors)];pp=s["points"]
+  if payload["kind"] in {"line","distribution"}:
+   marks.append(f'<path d="'+" ".join(("M" if i==0 else "L")+f" {sx(p[0]):.3f} {sy(p[1]):.3f}" for i,p in enumerate(pp))+f'" fill="none" stroke="{color}" stroke-width="2"/>')
+   marks.extend(f'<circle cx="{sx(p[0]):.3f}" cy="{sy(p[1]):.3f}" r="2" fill="{color}"/>' for p in pp)
+  elif payload["kind"]=="scatter":marks.extend(f'<circle cx="{sx(p[0]):.3f}" cy="{sy(p[1]):.3f}" r="1.5" fill="{color}" opacity="0.55"/>' for p in pp)
+  else:
+   width=440/max(len(pp)*max(len(payload["series"]),1),1);marks.extend(f'<rect x="{sx(p[0])-width/2+j*width/len(payload["series"]):.3f}" y="{sy(p[1]):.3f}" width="{width/len(payload["series"]):.3f}" height="{255-sy(p[1]):.3f}" fill="{color}"/>' for p in pp)
+ legend="".join(f'<rect x="505" y="{18+16*i}" width="10" height="10" fill="{colors[i%len(colors)]}"/><text x="520" y="{27+16*i}" font-size="11">{html.escape(str(s["label"]))}</text>' for i,s in enumerate(payload["series"]));data=canon(payload);sha=hashlib.sha256(data.encode()).hexdigest()
+ path.write_text(f'<svg xmlns="http://www.w3.org/2000/svg" width="640" height="320"><title>{html.escape(title)}</title><metadata id="canonical-data" data-sha256="{sha}">{html.escape(data)}</metadata><line x1="70" y1="255" x2="570" y2="255" stroke="black"/><line x1="70" y1="50" x2="70" y2="255" stroke="black"/><text x="270" y="305">{html.escape(xlabel)}</text><text x="8" y="35">{html.escape(ylabel)}</text><text x="70" y="275">{xmin:.6g}</text><text x="535" y="275">{xmax:.6g}</text>{legend}{"".join(marks)}</svg>\n')
 def run(args):
  lineage,frozen_rows=authenticate_r13();binding=authenticate_inputs(args.raw,args.tracker_dir,args.manifest)
  if not all(binding["checks"].values()):raise RuntimeError("A1 source binding failed")
@@ -100,7 +122,7 @@ def run(args):
   if {L:len(blocks[L]) for L in LENGTHS}!={L:513 for L in LENGTHS}:raise RuntimeError("common anchor count is not exact 513")
   l20=next(x for x in aggregation if x["L"]==20);pair20=[r for r in paired if r["L"]==20];prn_diff=[{"prn":p,"difference":float(np.mean([r["difference"] for r in pair20 if r["prn"]==p]))} for p in sorted({r["prn"] for r in pair20})];role_diff=[{"role":p,"difference":float(np.mean([r["difference"] for r in pair20 if r["role"]==p]))} for p in ROLES]
   a1=validate_reference(reproduced);a2=FROZEN_CONFIG.document()["candidate_string"]==CANDIDATE_STRING and len(gps_l1ca_code(1))==1023;a3a=prompt_gate(prompt_all) and all(prompt_gate(x) for x in prompt_prn+prompt_channel+prompt_role) and offset_zero_clearly_better(offset_rows);a3b=delay_gate(delay_all,delay_prn,delay_role);a3c=aggregation_gate(l20,boots["20"],prn_diff,role_diff);verdict=final_gates(a1,a2,a3a,a3b,a3c)
-  write_json(stage/"config.json",{"scope":"cleanStatic-only","epochs":969,"lengths":list(LENGTHS),"grid":GRID,"bootstrap_seed":1401,"bootstrap_replicates":10000,"aggregation_primary":"mean normalized power","diagnostics":["raw power sum","magnitude mean","robust median"]});write_json(stage/"environment.json",{"python":sys.version,"numpy":np.__version__});write_json(stage/"r13_frozen_lineage.json",lineage);write_json(stage/"frozen_reconstruction_config.json",FROZEN_CONFIG.document());write_json(stage/"prompt_reproduction_metrics.json",prompt_all);write_csv(stage/"prompt_reproduction_by_prn.csv",prompt_prn);write_csv(stage/"prompt_reproduction_by_time_block.csv",prompt_role);write_json(stage/"delay_recovery_metrics.json",delay_all);write_csv(stage/"delay_recovery_by_prn.csv",delay_prn);write_csv(stage/"delay_recovery_by_time_block.csv",delay_role);write_json(stage/"doppler_1ms_metrics.json",doppler_all);write_csv(stage/"aggregation_metrics.csv",aggregation);write_csv(stage/"aggregation_by_prn.csv",aggregation_prn);write_csv(stage/"aggregation_by_time_block.csv",aggregation_role);write_csv(stage/"paired_improvement.csv",paired);write_json(stage/"bootstrap_results.json",boots)
+  write_json(stage/"config.json",{"scope":"cleanStatic-only","epochs":969,"lengths":list(LENGTHS),"grid":GRID,"bootstrap_seed":1401,"bootstrap_replicates":10000,"aggregation_primary":"mean normalized power","diagnostics":["raw power sum","magnitude mean","robust median"]});write_json(stage/"environment.json",{"python":sys.version,"numpy":np.__version__});write_json(stage/"r13_frozen_lineage.json",lineage);write_json(stage/"frozen_reconstruction_config.json",FROZEN_CONFIG.document());write_json(stage/"prompt_reproduction_metrics.json",prompt_all);write_csv(stage/"prompt_reproduction_by_prn.csv",prompt_prn);write_csv(stage/"prompt_reproduction_by_channel.csv",prompt_channel);write_csv(stage/"prompt_reproduction_by_time_block.csv",prompt_role);write_json(stage/"delay_recovery_metrics.json",delay_all);write_csv(stage/"delay_recovery_by_prn.csv",delay_prn);write_csv(stage/"delay_recovery_by_time_block.csv",delay_role);write_json(stage/"doppler_1ms_metrics.json",doppler_all);write_csv(stage/"aggregation_metrics.csv",aggregation);write_csv(stage/"aggregation_by_prn.csv",aggregation_prn);write_csv(stage/"aggregation_by_time_block.csv",aggregation_role);write_csv(stage/"paired_improvement.csv",paired);write_json(stage/"bootstrap_results.json",boots)
   main=[]
   for r in scores:
    s=surfaces[(str(r["channel"]),int(r["prn"]),int(r["tracker_row"]))];center=s[5,8];sl=np.abs(s[:,8]);global_ratio=float(np.max(np.abs(s))/max(abs(center),np.finfo(float).eps));slice_ratio=float(np.max(sl)/max(abs(center),np.finfo(float).eps));row={k:r[k] for k in ("role","prn","channel","tracker_row")}
@@ -108,8 +130,8 @@ def run(args):
     z=s[GRID["doppler_hz"].index(d),8];q=z/center if abs(center)>0 else complex(np.nan,np.nan);tag=f"{d:+d}_hz";row|={f"real_{tag}":float(z.real),f"imag_{tag}":float(z.imag),f"magnitude_{tag}":float(abs(z)),f"center_normalized_real_{tag}":float(q.real),f"center_normalized_imag_{tag}":float(q.imag)}
    row|={"global_2d_peak_center_ratio":global_ratio,"delay_center_slice_1d_peak_center_ratio":slice_ratio};main.append(row)
   write_csv(stage/"doppler_mainlobe_diagnostics.csv",main);write_json(stage/"residual_doppler_diagnostics.json",{"status":"NOT_APPLICABLE","used_by_gate":False,"reason":"authenticated MAT complex Prompt continuity not established"});write_csv(stage/"per_block_scores.csv",epoch_evidence+block_rows);write_json(stage/"execution_validity.json",{"caf_executed":True,"source_authenticated":True,"r13_lineage_validated_before_aggregation":True,"elapsed_seconds":time.perf_counter()-started,"common_anchor_counts":{str(k):len(v) for k,v in blocks.items()},"attack_inputs_read":False,"overlap_policy":"0 or 1 sample between consecutive fixed 25000 supports","overlap_samples":sum(int(r["overlap_samples"]) for r in block_rows),"overlap_rejection_count":sum(int(r["rejected_overlap_count"]) for r in block_rows)});write_json(stage/"go_no_go.json",verdict);(stage/"README.md").write_text("# R1.4 Doppler validation\n\nAuthenticated cleanStatic-only reconstruction; no candidate or attack search.\n");(stage/"test_report.txt").write_text("Source-phase focused tests are recorded in the correction commit.\n")
-  vals=[float(x["within_50_fraction"]) for x in aggregation]
-  for name,(xl,yl,series) in PLOTS.items():svg_plot(stage/"plots"/f"{name}.svg",name,xl,yl,series,vals)
+  payloads=plot_payloads(aggregation,aggregation_prn,aggregation_role,scores)
+  for name,(xl,yl) in PLOTS.items():svg_plot(stage/"plots"/f"{name}.svg",name,xl,yl,payloads[name])
   write_json(stage/"verification_report.json",{"status":"NOT_YET_VERIFIED"});write_json(stage/"checksums.json",{"files":{str(p.relative_to(stage)):sha256(p) for p in sorted(stage.rglob("*")) if p.is_file() and p.name not in {"checksums.json","verification_report.json"}}})
   actual={p.name for p in stage.iterdir()};missing=set(INVENTORY)-actual;extra=actual-set(INVENTORY)
   if missing or extra:raise RuntimeError(f"top-level inventory drift missing={missing} extra={extra}")

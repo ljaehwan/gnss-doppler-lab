@@ -115,7 +115,8 @@ def synthetic_success_artifact(tmp_path_factory):
  return out
 
 def test_run_success_latent_authenticated_io_and_inventory(synthetic_success_artifact):
- root=synthetic_success_artifact;assert len({p.name for p in root.iterdir()})==26;assert len([p for p in root.iterdir() if p.is_file()])==25;assert len(list((root/"plots").glob("*.svg")))==7
+ root=synthetic_success_artifact;assert len({p.name for p in root.iterdir()})==27;assert len([p for p in root.iterdir() if p.is_file()])==26;assert len(list((root/"plots").glob("*.svg")))==7
+ assert (root/"prompt_reproduction_by_channel.csv").is_file()
  rows=list(csv.DictReader((root/"per_block_scores.csv").open()));assert sum(r["record_type"]=="epoch" for r in rows)==969;assert {int(r["L"]) for r in rows if r["record_type"]=="aggregate"}=={1,5,10,20};assert all(v==513 for v in json.loads((root/"execution_validity.json").read_text())["common_anchor_counts"].values())
 
 def _rehash(verifier,root):
@@ -124,7 +125,7 @@ def _rehash(verifier,root):
 def test_independent_verifier_accepts_success(synthetic_success_artifact):
  assert _load_script("verify_acaf_nf_stage0_static_r14_doppler_validation.py").verify(synthetic_success_artifact)["status"]=="PASS"
 
-@pytest.mark.parametrize("filename,kind,field",[("prompt_reproduction_metrics.json","json","median_relative_error"),("prompt_reproduction_by_time_block.csv","csv","pooled_spearman"),("per_block_scores.csv","constituent","constituent_identities"),("paired_improvement.csv","csv","difference"),("bootstrap_results.json","bootstrap","ci95_low"),("doppler_mainlobe_diagnostics.csv","csv","imag_+50_hz"),("go_no_go.json","json","verdict"),("execution_validity.json","json","caf_executed")])
+@pytest.mark.parametrize("filename,kind,field",[("prompt_reproduction_metrics.json","json","median_relative_error"),("prompt_reproduction_by_channel.csv","csv","pooled_spearman"),("prompt_reproduction_by_time_block.csv","csv","pooled_spearman"),("per_block_scores.csv","constituent","constituent_identities"),("paired_improvement.csv","csv","difference"),("bootstrap_results.json","bootstrap","ci95_low"),("doppler_mainlobe_diagnostics.csv","csv","imag_+50_hz"),("go_no_go.json","json","verdict"),("execution_validity.json","json","caf_executed")])
 def test_checksum_rewritten_tampers_fail(synthetic_success_artifact,tmp_path,filename,kind,field):
  import shutil
  verifier=_load_script("verify_acaf_nf_stage0_static_r14_doppler_validation.py");work=tmp_path/filename.replace(".","_");shutil.copytree(synthetic_success_artifact,work);p=work/filename
@@ -140,3 +141,34 @@ def test_checksum_rewritten_tampers_fail(synthetic_success_artifact,tmp_path,fil
   else:d[field]=.5
   p.write_text(json.dumps(d,indent=2,sort_keys=True)+"\n")
  _rehash(verifier,work);assert verifier.verify(work)["status"]=="FAIL"
+
+def test_r13_verification_report_tamper_fails(synthetic_success_artifact,monkeypatch):
+ verifier=_load_script("verify_acaf_nf_stage0_static_r14_doppler_validation.py");real=verifier.loadj
+ def tampered(path):
+  value=real(path)
+  if path.name=="verification_report.json" and path.parent.name=="acaf_nf_stage0_static_r13_reconstruction":value=dict(value,errors=["tampered"])
+  return value
+ monkeypatch.setattr(verifier,"loadj",tampered);result=verifier.verify(synthetic_success_artifact)
+ assert result["status"]=="FAIL" and "r13_verification_report" in result["errors"]
+
+@pytest.mark.parametrize("kind",["file","directory","symlink"])
+def test_nested_extra_rewritten_checksum_fails_closed(synthetic_success_artifact,tmp_path,kind):
+ import os,shutil
+ verifier=_load_script("verify_acaf_nf_stage0_static_r14_doppler_validation.py");work=tmp_path/("nested-"+kind);shutil.copytree(synthetic_success_artifact,work);extra=work/"plots"/"nested"
+ if kind=="file":extra.mkdir();(extra/"extra.txt").write_text("extra\n")
+ elif kind=="directory":extra.mkdir()
+ else:os.symlink("l-recovery.svg",work/"plots"/"extra-link.svg")
+ _rehash(verifier,work)
+ assert verifier.verify(work)=={"status":"FAIL","errors":["exact_recursive_inventory"]}
+
+def test_plot_payload_tamper_with_rewritten_checksum_fails(synthetic_success_artifact,tmp_path):
+ import shutil
+ verifier=_load_script("verify_acaf_nf_stage0_static_r14_doppler_validation.py");work=tmp_path/"plot-tamper";shutil.copytree(synthetic_success_artifact,work);p=work/"plots/prompt-scatter.svg"
+ text=p.read_text();needle="&quot;label&quot;:&quot;969 epochs&quot;";assert needle in text;p.write_text(text.replace(needle,"&quot;label&quot;:&quot;968 epochs&quot;",1));_rehash(verifier,work)
+ result=verifier.verify(work);assert result["status"]=="FAIL" and "plot_semantic_prompt-scatter" in result["errors"]
+
+def test_svg_plots_embed_distinct_canonical_evidence(synthetic_success_artifact):
+ verifier=_load_script("verify_acaf_nf_stage0_static_r14_doppler_validation.py");digests=set()
+ for name in verifier.PLOTS:
+  text=(synthetic_success_artifact/"plots"/(name+".svg")).read_text();assert "canonical-data" in text and "data-sha256" in text and "polyline" not in text;digests.add(text.split('data-sha256="',1)[1].split('"',1)[0])
+ assert len(digests)==7
