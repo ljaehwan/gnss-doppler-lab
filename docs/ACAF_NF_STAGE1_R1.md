@@ -15,6 +15,15 @@
 - 실행:
   - `python3 scripts/run_acaf_nf_stage1_r1.py --checkpoint A`
 
+## Checkpoint B
+
+- exact 25,000-sample half-open support만 출력한다. 24,999/25,001 cadence는 감사 증거로 보존하지만 연속 tracker support로 사용하지 않는다.
+- NCO/code/carrier/aux는 previous MAT/DAT row, Prompt는 current row에 결속한다.
+- C/N0와 carrier lock은 previous/current/next same-PRN triple 전체에서 gate한다.
+- GNSS-SDR의 148-byte DAT record에서 offset 80의 little-endian uint64 sample stamp를 직접 읽어 MAT 전체 row와 대조한다.
+- 서로 다른 receiver channel은 동일한 전역 IQ 시간을 의도적으로 공유한다. interval uniqueness는 channel/PRN 내부에서 검증하고 L20은 channel/PRN을 넘지 않는다.
+- cleanStatic 969 epoch CAF, exact L20 aggregation, R1.4 공통 epoch 수치/complex-surface SHA 재현을 producer와 독립 verifier가 각각 검증한다.
+
 ## 현재 구현 상태
 
 - Checkpoint A 빌더/감사 모듈 도입 완료:
@@ -23,8 +32,4 @@
   - `scripts/run_acaf_nf_stage1_r1.py`
   - `scripts/verify_acaf_nf_stage1_r1.py`
 
-## 다음 단계
-
-- Checkpoint B: cleanStatic 연속 tracker 검증
-- Checkpoint C: DS3/DS4/DS7/DS8 tracker 재생성 및 source-binding
-- Checkpoint D: 실제 Stage-1 성능 실험 및 독립 검증
+Checkpoint B가 `CONTINUOUS_TRACKER_VALID`일 때만 C로 진행한다. DS4의 manifest/raw alignment는 별도 근거 없이 보정하지 않고 fail-closed로 유지한다.

@@ -4,7 +4,7 @@ from pathlib import Path
 import h5py
 import numpy as np
 
-from gnss_doppler_lab.acaf_nf_stage1_continuous_tracker import audit_tracker_cadence, build_audit
+from gnss_doppler_lab.acaf_nf_stage1_continuous_tracker import audit_tracker_cadence, build_audit, build_continuous_tracker_rows
 
 
 def _write_simple_mat(path: Path) -> None:
@@ -55,3 +55,26 @@ def test_build_audit(tmp_path, monkeypatch):
     output = build_audit(cfg_path, tmp_path / "artifact")
     assert (output / "tracker_cadence_audit.json").exists()
     assert (output / "tracker_cadence_by_channel.csv").exists()
+
+
+def test_continuous_rows_use_previous_state_current_prompt_and_exact_dat_stamp(tmp_path):
+    tracker = tmp_path / "tracker"
+    tracker.mkdir()
+    mat = tracker / "epl_tracking_ch_0.mat"
+    _write_simple_mat(mat)
+    stamps = np.arange(25, dtype=np.uint64) * 25_000
+    records = bytearray(25 * 148)
+    for i, stamp in enumerate(stamps):
+        records[i * 148 + 80:i * 148 + 88] = int(stamp).to_bytes(8, "little")
+    mat.with_suffix(".dat").write_bytes(records)
+
+    rows, report = build_continuous_tracker_rows("cleanStatic", tracker, raw_sample_count=1_000_000)
+    assert len(rows) == 23
+    assert rows[0].state_mat_row == 0
+    assert rows[0].mat_row == 1
+    assert rows[0].raw_start_sample == 0
+    assert rows[0].raw_end_sample == 25_000
+    assert rows[0].prompt_i == 1.0
+    assert rows[0].source_dat_sample_stamp_match is True
+    assert report["raw_contiguous"] is True
+    assert report["unique_intervals"] is True

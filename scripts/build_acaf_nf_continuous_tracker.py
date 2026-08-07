@@ -43,7 +43,7 @@ def _write_checksums(output_dir: Path) -> None:
             "size_bytes": path.stat().st_size,
         }
         for path in sorted(output_dir.rglob("*"))
-        if path.is_file() and path.name != "checksums.json"
+        if path.is_file() and path.name not in {"checksums.json", "verification_report.json"}
     }
     (output_dir / "checksums.json").write_text(
         json.dumps({"algorithm": "sha256", "files": files}, indent=2, sort_keys=True) + "\n",
@@ -64,7 +64,7 @@ def _write_manifest(
         "command": command,
         "checkpoint": checkpoint,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
-        "git_head": "TO_BE_TRACKED",
+        "git_head": _git_head(),
         "output_root": str(output_dir),
         "source_binding": str(source_binding),
         "scenarios": scenarios,
@@ -141,10 +141,11 @@ def main() -> None:
         checkpoint=args.checkpoint,
         filename=manifest_path,
     )
+    (output / "verification_report.json").write_text(
+        json.dumps({"status": "PENDING_INDEPENDENT_VERIFICATION", "checkpoint": args.checkpoint}, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
     _write_checksums(output)
-    manifest = json.loads((output / manifest_path).read_text(encoding="utf-8"))
-    manifest["git_head"] = _git_head()
-    (output / manifest_path).write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(f"built: {output}")
 
 

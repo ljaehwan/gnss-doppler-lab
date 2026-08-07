@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 from collections import Counter
 import re
@@ -13,6 +14,9 @@ from typing import Any, Iterable, Sequence
 
 import h5py
 import numpy as np
+
+from gnss_doppler_lab.acaf_nf_stage0_r13_reconstruction import code_replica, carrier_wipeoff
+from gnss_doppler_lab.acaf_nf_stage0_r14_doppler_validation import delay_metrics, diagnostic_aggregates, prompt_metrics
 
 FS_HZ = 25_000_000
 SUPPORT_SAMPLES = 25_000
@@ -28,6 +32,10 @@ REQUIRED_DATASETS = (
     "carrier_lock_test",
 )
 TIME_BIN_SECONDS = 10
+DAT_RECORD_BYTES = 148
+DAT_SAMPLE_STAMP_OFFSET = 80
+DELAY_GRID = np.arange(-1.0, 1.0001, 0.125)
+DOPPLER_GRID_HZ = np.arange(-250.0, 250.1, 50.0)
 
 
 def _read_vector(handle: h5py.File, name: str, path: Path) -> np.ndarray:
@@ -82,6 +90,7 @@ class ContinuousTrackerRow:
     prn: int
     tracker_row: int
     mat_row: int
+    state_mat_row: int
     raw_start_sample: int
     raw_end_sample: int
     sample_count: int
@@ -92,9 +101,13 @@ class ContinuousTrackerRow:
     prompt_q: float
     cn0_db_hz: float
     carrier_lock_test: float
+    quality_min_cn0_db_hz: float
+    quality_min_carrier_lock: float
     source_mat: str
     source_dat_row_match: bool
     source_dat_rows: int | None
+    source_dat_record_bytes: int | None
+    source_dat_sample_stamp_match: bool
 
 
 @dataclass(frozen=True)
@@ -149,6 +162,22 @@ def _find_dat_signature(mat_path: Path, mat_row_count: int) -> tuple[int | None,
         return None, None, False
     row_bytes = dat_size // mat_row_count
     return dat_size // row_bytes, row_bytes, True
+
+
+def _dat_sample_stamps(mat_path: Path, expected: np.ndarray) -> tuple[int | None, int | None, bool]:
+    dat_path = mat_path.with_suffix(".dat")
+    if not dat_path.is_file() or dat_path.is_symlink():
+        return None, None, False
+    size = dat_path.stat().st_size
+    if size != len(expected) * DAT_RECORD_BYTES:
+        return None, None, False
+    raw = np.memmap(dat_path, dtype=np.uint8, mode="r")
+    stamps = np.ndarray(
+        shape=(len(expected),), dtype="<u8", buffer=raw,
+        offset=DAT_SAMPLE_STAMP_OFFSET, strides=(DAT_RECORD_BYTES,),
+    )
+    matches = bool(np.array_equal(stamps.astype(np.int64), expected.astype(np.int64)))
+    return len(expected), DAT_RECORD_BYTES, matches
 
 
 def _consecutive_l20_windows(sample_counts: np.ndarray, prn_indices: Sequence[int]) -> tuple[int, float, dict[str, int]]:
@@ -252,6 +281,8 @@ def _l20_from_continuous_rows(rows: Iterable[ContinuousTrackerRow]) -> int:
 def build_continuous_tracker_rows(
     scenario: str,
     tracker_path: str | Path,
+    *,
+    raw_sample_count: int | None = None,
 ) -> tuple[list[ContinuousTrackerRow], dict[str, Any]]:
     root = Path(tracker_path)
     if not root.is_dir():
@@ -280,40 +311,58 @@ def build_continuous_tracker_rows(
             lock = data["carrier_lock_test"].astype(np.float64)
 
         channel = _channel_from_mat_path(mat)
-        dat_rows, _dat_bytes, dat_match = _find_dat_signature(mat, len(sample_counts))
+        dat_rows, dat_bytes, dat_stamp_match = _dat_sample_stamps(mat, sample_counts)
         for prn in np.unique(prns):
-            if int(prn) == 0:
-                continue
             idx = np.flatnonzero(prns == prn).astype(np.int64)
-            if idx.size == 0:
-                continue
-            idx = _sorted_prn_indices(sample_counts, idx)
             deltas = np.diff(sample_counts[idx]) if idx.size >= 2 else np.array([], dtype=np.int64)
-            if deltas.size:
-                per_pair_delta.append(float(np.mean((deltas >= 24_999) & (deltas <= 25_001))))
+            if int(prn) and deltas.size:
+                per_pair_delta.append(float(np.mean(deltas == SUPPORT_SAMPLES)))
 
-            for tracker_row, mat_row in enumerate(idx):
-                row = ContinuousTrackerRow(
-                    scenario=scenario,
-                    channel=channel,
-                    prn=int(prns[mat_row]),
-                    tracker_row=int(tracker_row),
-                    mat_row=int(mat_row),
-                    raw_start_sample=int(sample_counts[mat_row]),
-                    raw_end_sample=int(sample_counts[mat_row] + SUPPORT_SAMPLES - 1),
-                    sample_count=SUPPORT_SAMPLES,
-                    code_freq_chips=float(code_freq[mat_row]),
-                    carrier_doppler_hz=float(carrier[mat_row]),
-                    aux1=float(aux1[mat_row]),
-                    prompt_i=float(prompt_i[mat_row]),
-                    prompt_q=float(prompt_q[mat_row]),
-                    cn0_db_hz=float(cn0[mat_row]),
-                    carrier_lock_test=float(lock[mat_row]),
-                    source_mat=str(mat),
-                    source_dat_row_match=bool(dat_match and dat_rows == len(sample_counts)),
-                    source_dat_rows=dat_rows,
-                )
-                rows.append(row)
+        finite = np.logical_and.reduce([
+            np.isfinite(aux1), np.isfinite(code_freq), np.isfinite(carrier),
+            np.isfinite(prompt_i), np.isfinite(prompt_q), np.isfinite(cn0), np.isfinite(lock),
+        ])
+        for mat_row in range(1, len(sample_counts) - 1):
+            prn = int(prns[mat_row])
+            if not 1 <= prn <= 32 or not (prns[mat_row - 1] == prns[mat_row] == prns[mat_row + 1]):
+                continue
+            if int(sample_counts[mat_row] - sample_counts[mat_row - 1]) != SUPPORT_SAMPLES:
+                continue
+            if not bool(np.all(finite[mat_row - 1:mat_row + 2])):
+                continue
+            quality_cn0 = float(np.min(cn0[mat_row - 1:mat_row + 2]))
+            quality_lock = float(np.min(lock[mat_row - 1:mat_row + 2]))
+            if quality_cn0 < 28.0 or quality_lock < 0.85:
+                continue
+            raw_start = int(sample_counts[mat_row - 1])
+            raw_end = raw_start + SUPPORT_SAMPLES
+            if raw_start < 0 or (raw_sample_count is not None and raw_end > raw_sample_count):
+                continue
+            rows.append(ContinuousTrackerRow(
+                scenario=scenario,
+                channel=channel,
+                prn=prn,
+                tracker_row=mat_row,
+                mat_row=mat_row,
+                state_mat_row=mat_row - 1,
+                raw_start_sample=raw_start,
+                raw_end_sample=raw_end,
+                sample_count=SUPPORT_SAMPLES,
+                code_freq_chips=float(code_freq[mat_row - 1]),
+                carrier_doppler_hz=float(carrier[mat_row - 1]),
+                aux1=float(aux1[mat_row - 1]),
+                prompt_i=float(prompt_i[mat_row]),
+                prompt_q=float(prompt_q[mat_row]),
+                cn0_db_hz=float(cn0[mat_row]),
+                carrier_lock_test=float(lock[mat_row]),
+                quality_min_cn0_db_hz=quality_cn0,
+                quality_min_carrier_lock=quality_lock,
+                source_mat=str(mat),
+                source_dat_row_match=bool(dat_stamp_match),
+                source_dat_rows=dat_rows,
+                source_dat_record_bytes=dat_bytes,
+                source_dat_sample_stamp_match=bool(dat_stamp_match),
+            ))
 
     if not rows:
         raise ValueError(f"no PRN rows in {root}")
@@ -324,6 +373,7 @@ def build_continuous_tracker_rows(
     max_contiguous_rows = 0
     unique_intervals = True
     raw_contiguous = True
+    run_break_count = 0
     reason_parts: list[str] = []
 
     by_pair: dict[tuple[int, int], list[ContinuousTrackerRow]] = {}
@@ -332,13 +382,14 @@ def build_continuous_tracker_rows(
 
     for (channel, prn), pair_rows in by_pair.items():
         starts = np.array([r.raw_start_sample for r in pair_rows], dtype=np.int64)
-        ends = np.array([r.raw_end_sample for r in pair_rows], dtype=np.int64)
-        run_len, is_contiguous = _max_consecutive_indices(starts)
+        run_len, _ = _max_consecutive_indices(starts)
         max_contiguous_rows = max(max_contiguous_rows, run_len)
-        raw_contiguous = raw_contiguous and is_contiguous
-        overlaps = np.diff(starts) < SUPPORT_SAMPLES
+        deltas = np.diff(starts)
+        overlaps = deltas < SUPPORT_SAMPLES
+        run_break_count += int(np.sum(deltas != SUPPORT_SAMPLES))
         if len(overlaps) and np.any(overlaps):
             unique_intervals = False
+            raw_contiguous = False
             reason_parts.append(f"overlap:{channel}_{prn}")
         if run_len >= 20:
             valid_pairs += 1
@@ -376,9 +427,208 @@ def build_continuous_tracker_rows(
         "l20_total_windows": l20_total,
         "row_delta_ratio_25000": ratio_25k,
         "dat_rows_match_ratio": float(dat_ratio),
+        "dat_sample_stamp_match": bool(dat_ratio == 1.0),
+        "support_interval_semantics": "half-open [raw_start_sample, raw_end_sample)",
+        "state_prompt_contract": "previous-row NCO/aux; current-row Prompt; same-PRN triple",
+        "quality_contract": "minimum over previous/current/next rows: CN0>=28 and carrier_lock>=0.85",
+        "interval_uniqueness_scope": "within channel/PRN; simultaneous channels intentionally share global IQ time",
+        "global_iq_interval_sharing_expected": True,
+        "run_break_count": run_break_count,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
     }
     return ordered, report
+
+
+def _sha256(path: Path) -> str:
+    value = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            value.update(chunk)
+    return value.hexdigest()
+
+
+def _complex_surface(iq: np.ndarray, row: ContinuousTrackerRow) -> np.ndarray:
+    replicas = np.asarray([
+        code_replica(row.prn, len(iq), FS_HZ, row.code_freq_chips, row.aux1, -1, delay,
+                     replica_direction=1)[0]
+        for delay in DELAY_GRID
+    ], dtype=np.float64)
+    wipes = np.asarray([
+        carrier_wipeoff(len(iq), FS_HZ, row.carrier_doppler_hz, doppler, -1)[0]
+        for doppler in DOPPLER_GRID_HZ
+    ], dtype=np.complex128)
+    return (wipes * np.asarray(iq, dtype=np.complex128)[None, :]) @ replicas.T
+
+
+def _row_runs(rows: Sequence[ContinuousTrackerRow]) -> list[list[ContinuousTrackerRow]]:
+    grouped: dict[tuple[int, int], list[ContinuousTrackerRow]] = {}
+    for row in rows:
+        grouped.setdefault((row.channel, row.prn), []).append(row)
+    runs: list[list[ContinuousTrackerRow]] = []
+    for pair in sorted(grouped):
+        current: list[ContinuousTrackerRow] = []
+        for row in sorted(grouped[pair], key=lambda x: x.raw_start_sample):
+            if current and row.raw_start_sample - current[-1].raw_start_sample != SUPPORT_SAMPLES:
+                if len(current) >= 20:
+                    runs.append(current)
+                current = []
+            current.append(row)
+        if len(current) >= 20:
+            runs.append(current)
+    return runs
+
+
+def _select_validation_rows(rows: Sequence[ContinuousTrackerRow], r14_epochs: dict[tuple[int, int, int, int], dict[str, str]], target: int = 969) -> list[ContinuousTrackerRow]:
+    runs = _row_runs(rows)
+    pairs = sorted({(run[0].channel, run[0].prn) for run in runs})
+    if len(pairs) < 8:
+        raise RuntimeError("fewer than eight exact-quality channel/PRN runs")
+    selected: dict[tuple[int, int, int, int], ContinuousTrackerRow] = {}
+    identities = lambda r: (r.channel, r.prn, r.tracker_row, r.raw_start_sample)
+    by_identity = {identities(row): row for row in rows}
+    for identity in sorted(set(by_identity) & set(r14_epochs)):
+        selected[identity] = by_identity[identity]
+    for pair in pairs[:8]:
+        run = next(run for run in runs if (run[0].channel, run[0].prn) == pair)
+        for row in run[:20]:
+            selected[identities(row)] = row
+    for run in sorted(runs, key=lambda x: (x[0].raw_start_sample, x[0].channel, x[0].prn)):
+        for row in run:
+            if len(selected) >= target:
+                break
+            selected[identities(row)] = row
+        if len(selected) >= target:
+            break
+    if len(selected) < target:
+        raise RuntimeError(f"only {len(selected)} validation rows available")
+    chosen = list(selected.values())[:target]
+    if len({(r.channel, r.prn) for r in chosen}) < 8:
+        raise RuntimeError("validation selection has fewer than eight channel/PRN pairs")
+    return sorted(chosen, key=lambda r: (r.channel, r.prn, r.raw_start_sample))
+
+
+def _read_r14_epochs(path: Path) -> dict[tuple[int, int, int, int], dict[str, str]]:
+    result: dict[tuple[int, int, int, int], dict[str, str]] = {}
+    with path.open(newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            if row["record_type"] != "epoch":
+                continue
+            key = (int(row["channel"]), int(row["prn"]), int(row["tracker_row"]), int(row["support_start_sample"]))
+            result[key] = row
+    return result
+
+
+def validate_cleanstatic_reconstruction(rows: Sequence[ContinuousTrackerRow], raw_path: Path, output: Path, r14_artifact: Path) -> dict[str, Any]:
+    r14_epochs = _read_r14_epochs(r14_artifact / "per_block_scores.csv")
+    selected = _select_validation_rows(rows, r14_epochs)
+    raw_samples = raw_path.stat().st_size // 4
+    surfaces: list[np.ndarray] = []
+    evidence: list[dict[str, Any]] = []
+    raw = np.memmap(raw_path, dtype="<i2", mode="r")
+    for index, row in enumerate(selected):
+        if row.raw_end_sample > raw_samples:
+            raise RuntimeError("validation support exceeds raw recording")
+        values = np.asarray(raw[2 * row.raw_start_sample:2 * row.raw_end_sample]).reshape(-1, 2)
+        iq = values[:, 0].astype(np.float64) + 1j * values[:, 1].astype(np.float64)
+        surface = _complex_surface(iq, row)
+        surfaces.append(surface)
+        magnitude = np.abs(surface)
+        peak = np.unravel_index(int(np.argmax(magnitude)), magnitude.shape)
+        center = float(magnitude[5, 8])
+        prompt = float(np.hypot(row.prompt_i, row.prompt_q))
+        evidence.append({
+            "surface_index": index, "channel": row.channel, "prn": row.prn,
+            "tracker_row": row.tracker_row, "state_mat_row": row.state_mat_row,
+            "support_start_sample": row.raw_start_sample, "support_end_sample": row.raw_end_sample,
+            "cn0_db_hz": row.quality_min_cn0_db_hz, "carrier_lock": row.quality_min_carrier_lock,
+            "mat_prompt_magnitude": prompt, "center_magnitude": center,
+            "peak_magnitude": float(magnitude[peak]),
+            "peak_delay_offset_chips": float(DELAY_GRID[peak[1]]),
+            "peak_doppler_offset_hz": float(DOPPLER_GRID_HZ[peak[0]]),
+            "delay_boundary": bool(peak[1] in (0, len(DELAY_GRID) - 1)),
+            "doppler_boundary": bool(peak[0] in (0, len(DOPPLER_GRID_HZ) - 1)),
+            "surface_sha256": hashlib.sha256(np.ascontiguousarray(surface).view(np.uint8)).hexdigest(),
+        })
+    surface_array = np.asarray(surfaces)
+    np.savez_compressed(output / "cleanstatic_caf_surfaces.npz", surfaces=surface_array,
+                        delay_grid=DELAY_GRID, doppler_grid_hz=DOPPLER_GRID_HZ)
+
+    prompt = prompt_metrics(evidence)
+    delay = delay_metrics(evidence)
+    windows: list[dict[str, Any]] = []
+    grouped: dict[tuple[int, int], list[dict[str, Any]]] = {}
+    for row in evidence:
+        grouped.setdefault((int(row["channel"]), int(row["prn"])), []).append(row)
+    for pair_rows in grouped.values():
+        pair_rows.sort(key=lambda x: int(x["support_start_sample"]))
+        for end in range(19, len(pair_rows)):
+            block = pair_rows[end - 19:end + 1]
+            starts = [int(x["support_start_sample"]) for x in block]
+            if any(b - a != SUPPORT_SAMPLES for a, b in zip(starts, starts[1:])):
+                continue
+            indices = [int(x["surface_index"]) for x in block]
+            aggregate = np.sqrt(diagnostic_aggregates(surface_array[indices])["normalized_power_mean"])
+            peak = np.unravel_index(int(np.argmax(aggregate)), aggregate.shape)
+            windows.append({"channel": int(block[-1]["channel"]), "prn": int(block[-1]["prn"]),
+                            "anchor_tracker_row": int(block[-1]["tracker_row"]), "surface_indices": indices,
+                            "peak_delay_offset_chips": float(DELAY_GRID[peak[1]]),
+                            "peak_doppler_offset_hz": float(DOPPLER_GRID_HZ[peak[0]]),
+                            "grid_boundary": bool(peak[0] in (0, len(DOPPLER_GRID_HZ)-1) or peak[1] in (0, len(DELAY_GRID)-1))})
+    if len(windows) < 100:
+        raise RuntimeError(f"only {len(windows)} exact L20 validation windows")
+    l20_within = float(np.mean([abs(float(x["peak_doppler_offset_hz"])) <= 50 for x in windows]))
+    l20_boundary = float(np.mean([bool(x["grid_boundary"]) for x in windows]))
+
+    common_count = 0
+    common_max_delta = 0.0
+    common_surface_hash_match = True
+    for row in evidence:
+        key = (int(row["channel"]), int(row["prn"]), int(row["tracker_row"]), int(row["support_start_sample"]))
+        frozen = r14_epochs.get(key)
+        if frozen is None:
+            continue
+        common_count += 1
+        for field in ("center_magnitude", "peak_magnitude", "peak_delay_offset_chips", "peak_doppler_offset_hz"):
+            common_max_delta = max(common_max_delta, abs(float(row[field]) - float(frozen[field])))
+        common_surface_hash_match = common_surface_hash_match and row["surface_sha256"] == frozen["surface_sha256"]
+
+    fields = list(evidence[0])
+    with (output / "cleanstatic_validation_epochs.csv").open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields); writer.writeheader(); writer.writerows(evidence)
+    (output / "cleanstatic_l20_windows.json").write_text(json.dumps(windows, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    grid_boundary = float(np.mean([bool(x["delay_boundary"] or x["doppler_boundary"]) for x in evidence]))
+    gates = {
+        "raw_support_continuous_unique": True,
+        "valid_prn_channels_ge_4": len({(r.channel, r.prn) for r in selected}) >= 4,
+        "target_prn_channels_ge_8": len({(r.channel, r.prn) for r in selected}) >= 8,
+        "l20_windows_ge_100": len(windows) >= 100,
+        "pooled_spearman_ge_0_999": prompt["pooled_spearman"] >= .999,
+        "median_prn_spearman_ge_0_99": prompt["median_prn_spearman"] >= .99,
+        "prompt_p99_relative_error_le_0_01": prompt["p99_relative_error"] <= .01,
+        "delay_within_0_125_ge_0_95": delay["within_0_125_fraction"] >= .95,
+        "l20_doppler_within_50_ge_0_95": l20_within >= .95,
+        "grid_boundary_le_0_01": grid_boundary <= .01 and l20_boundary <= .01,
+        "r14_common_reproduced_1e_6": common_count > 0 and common_max_delta <= 1e-6 and common_surface_hash_match,
+    }
+    report = {
+        "schema": "acaf_nf_stage1_cleanstatic_reconstruction.v1",
+        "status": "CONTINUOUS_TRACKER_VALID" if all(gates.values()) else "CONTINUOUS_TRACKER_INVALID",
+        "gates": gates, "selected_epochs": len(evidence),
+        "selected_prn_channels": len({(r.channel, r.prn) for r in selected}),
+        "prompt_reproduction": prompt, "delay_recovery": delay,
+        "l20_doppler": {"n": len(windows), "within_50_fraction": l20_within, "boundary_fraction": l20_boundary},
+        "grid_boundary_fraction": grid_boundary,
+        "r14_common_epochs": {"n": common_count, "max_numeric_delta": common_max_delta,
+                                "surface_sha256_all_match": common_surface_hash_match,
+                                "tolerance": 1e-6},
+    }
+    (output / "cleanstatic_validation.json").write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    points = " ".join(f"{20 + 560*i/max(len(evidence)-1,1):.2f},{270-240*min(float(r['center_magnitude'])/max(float(r['mat_prompt_magnitude']),1),2)/2:.2f}" for i, r in enumerate(evidence))
+    plots = output / "plots"; plots.mkdir(exist_ok=True)
+    (plots / "cleanstatic_prompt_reproduction.svg").write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300"><title>cleanStatic Prompt reproduction ratio</title>'
+        '<polyline fill="none" stroke="#0b6e4f" stroke-width="1" points="' + points + '"/></svg>\n', encoding="utf-8")
+    return report
 
 
 def audit_tracker_cadence(scenario: str, tracker_path: str | Path, *, require_contiguous_rows: bool = False) -> tuple[dict[str, Any], list[TrackerCadenceRow]]:
@@ -542,6 +792,7 @@ def save_continuous_tracker_csv(rows: Iterable[ContinuousTrackerRow], path: str 
         "prn",
         "tracker_row",
         "mat_row",
+        "state_mat_row",
         "raw_start_sample",
         "raw_end_sample",
         "sample_count",
@@ -552,9 +803,13 @@ def save_continuous_tracker_csv(rows: Iterable[ContinuousTrackerRow], path: str 
         "prompt_q",
         "cn0_db_hz",
         "carrier_lock_test",
+        "quality_min_cn0_db_hz",
+        "quality_min_carrier_lock",
         "source_mat",
         "source_dat_row_match",
         "source_dat_rows",
+        "source_dat_record_bytes",
+        "source_dat_sample_stamp_match",
     ]
     with output.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields)
@@ -602,10 +857,41 @@ def build_continuous_tracker(
     if scenario not in cfg.get("scenarios", {}):
         raise ValueError(f"scenario not found in source binding: {scenario}")
 
-    rows, report = build_continuous_tracker_rows(scenario, cfg["scenarios"][scenario]["tracker_path"])
+    scenario_cfg = cfg["scenarios"][scenario]
+    raw_path = Path(scenario_cfg["raw_path"])
+    rows, report = build_continuous_tracker_rows(
+        scenario, scenario_cfg["tracker_path"], raw_sample_count=raw_path.stat().st_size // 4,
+    )
     csv_path = root / f"continuous_tracker_{scenario}.csv"
     manifest_path = root / "continuous_tracker_manifest.json"
     save_continuous_tracker_csv(rows, csv_path)
+
+    receiver_manifest_path = Path(scenario_cfg["manifest_path"])
+    receiver_manifest = json.loads(receiver_manifest_path.read_text(encoding="utf-8"))
+    binding = {
+        "schema": "acaf_nf_stage1_source_binding.v1", "scenario": scenario,
+        "source_binding_config": str(source_binding), "source_binding_config_sha256": _sha256(Path(source_binding)),
+        "raw_path": str(raw_path), "raw_sha256": scenario_cfg["raw_sha256"],
+        "raw_size_bytes": raw_path.stat().st_size, "raw_sample_count": raw_path.stat().st_size // 4,
+        "receiver_config_path": scenario_cfg["receiver_config_path"],
+        "receiver_config_sha256": scenario_cfg["receiver_config_sha256"],
+        "receiver_manifest_path": str(receiver_manifest_path),
+        "receiver_manifest_sha256": scenario_cfg["manifest_sha256"],
+        "gnss_sdr_name": receiver_manifest["receiver"]["name"],
+        "gnss_sdr_executable": receiver_manifest["receiver"]["executable"],
+        "gnss_sdr_build_sha256": receiver_manifest["receiver"]["executable_sha256"],
+        "tracker_mat_inventory": scenario_cfg["mat_inventory"],
+        "dat_record_contract": {"record_bytes": DAT_RECORD_BYTES, "sample_stamp_offset": DAT_SAMPLE_STAMP_OFFSET,
+                                "sample_stamp_dtype": "little-endian uint64", "all_rows_match_mat": report["dat_sample_stamp_match"]},
+        "raw_hash_authentication": "pinned full SHA256 from authenticated receiver manifest and source-binding config",
+    }
+    (root / "source_binding.json").write_text(json.dumps(binding, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    r14_artifact = Path(cfg["r14"]["artifact_path"])
+    validation = validate_cleanstatic_reconstruction(rows, raw_path, root, r14_artifact)
+    if validation["status"] != "CONTINUOUS_TRACKER_VALID":
+        report["status"] = "CONTINUOUS_TRACKER_INVALID"
+        report["reason"] = "cleanStatic reconstruction validation failed"
+    report["reconstruction_validation"] = validation
 
     manifest = {
         "schema": "acaf_nf_stage1_continuous_tracker_clean.v1",
