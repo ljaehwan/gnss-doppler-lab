@@ -26,6 +26,9 @@ DOPPLERS = tuple(float(x) for x in range(-250, 251, 50))
 CENTER = (DOPPLERS.index(0.0), DELAYS.index(0.0))
 H1_COORDINATES = tuple((i, j) for i in range(len(DOPPLERS))
                        for j in range(len(DELAYS)) if (i, j) != CENTER)
+H1_GRID_SHA256 = hashlib.sha256(json.dumps(
+    {"delays": DELAYS, "dopplers": DOPPLERS}, separators=(",", ":"),
+    sort_keys=True).encode()).hexdigest()
 FROZEN_CANDIDATE = Candidate("previous", "previous", -1, -1, 0)
 
 
@@ -65,11 +68,51 @@ class H1Template:
     source_role: str
     construction_method: str
     digest: str
-    lineage: Mapping
+    lineage_json: str
 
 
-def build_h1_template(coordinate, surface, *, source_role, construction_method,
-                      lineage) -> H1Template:
+def _canonical_h1_lineage(lineage, construction_method: str) -> str:
+    required = {"recording_sha256", "scenario", "role", "raw_intervals",
+                "construction_method", "algorithm", "version", "grid_sha256"}
+    if not isinstance(lineage, Mapping) or set(lineage) != required:
+        raise ValueError("exact H1 provenance keys are required")
+    is_hash = lambda value: (isinstance(value, str) and len(value) == 64
+                             and all(c in "0123456789abcdef" for c in value))
+    if (not is_hash(lineage["recording_sha256"])
+            or lineage["scenario"] != "cleanStatic"
+            or lineage["role"] != "normal_train"
+            or lineage["construction_method"] != construction_method
+            or lineage["algorithm"] != "dense_complex_caf_periodic_l1ca"
+            or lineage["version"] != "1"
+            or lineage["grid_sha256"] != H1_GRID_SHA256
+            or not isinstance(lineage["raw_intervals"], list)
+            or not lineage["raw_intervals"]):
+        raise ValueError("invalid H1 provenance values")
+    for interval in lineage["raw_intervals"]:
+        if (not isinstance(interval, Mapping)
+                or set(interval) != {"start", "end", "sha256", "recording_sha256"}
+                or type(interval["start"]) is not int or type(interval["end"]) is not int
+                or interval["start"] < 0 or interval["end"] <= interval["start"]
+                or not is_hash(interval["sha256"])
+                or interval["recording_sha256"] != lineage["recording_sha256"]):
+            raise ValueError("invalid H1 raw interval provenance")
+    return json.dumps(lineage, separators=(",", ":"), sort_keys=True,
+                      ensure_ascii=True, allow_nan=False)
+
+
+def _h1_digest(surface, coordinate, source_role, construction_method,
+               lineage_json) -> str:
+    h = hashlib.sha256()
+    h.update(np.ascontiguousarray(surface, dtype=np.complex128).view(np.uint8))
+    h.update(json.dumps(list(coordinate), separators=(",", ":")).encode())
+    h.update(source_role.encode())
+    h.update(construction_method.encode())
+    h.update(lineage_json.encode())
+    return h.hexdigest()
+
+
+def _build_h1_template_from_surface_for_test(coordinate, surface, *, source_role,
+                                              construction_method, lineage) -> H1Template:
     coordinate = tuple(coordinate)
     value = np.asarray(surface, dtype=np.complex128)
     if coordinate not in H1_COORDINATES:
@@ -80,34 +123,62 @@ def build_h1_template(coordinate, surface, *, source_role, construction_method,
         raise ValueError("H1 templates must be constructed from normal_train")
     if construction_method != "raw_iq_periodic_recorrelation":
         raise ValueError("untrusted H1 construction method")
-    required = {"recording_sha256", "role", "raw_intervals", "construction_method"}
-    if (not isinstance(lineage, Mapping) or set(lineage) != required
-            or lineage["role"] != "normal_train"
-            or lineage["construction_method"] != construction_method
-            or not isinstance(lineage["recording_sha256"], str)
-            or len(lineage["recording_sha256"]) != 64
-            or not isinstance(lineage["raw_intervals"], list)
-            or not lineage["raw_intervals"]):
-        raise ValueError("exact H1 provenance is required")
-    for interval in lineage["raw_intervals"]:
-        if (not isinstance(interval, Mapping) or set(interval) != {"start", "end", "sha256"}
-                or not isinstance(interval["start"], int) or not isinstance(interval["end"], int)
-                or interval["start"] < 0 or interval["end"] <= interval["start"]
-                or not isinstance(interval["sha256"], str) or len(interval["sha256"]) != 64):
-            raise ValueError("invalid H1 raw interval provenance")
+    lineage_json = _canonical_h1_lineage(lineage, construction_method)
     frozen = np.array(value, dtype=np.complex128, copy=True, order="C")
     frozen.flags.writeable = False
-    digest = hashlib.sha256(frozen.view(np.uint8)).hexdigest()
+    digest = _h1_digest(frozen, coordinate, source_role, construction_method,
+                        lineage_json)
     return H1Template(coordinate, frozen, source_role, construction_method,
-                      digest, dict(lineage))
+                      digest, lineage_json)
+
+
+def build_h1_template_from_raw_recorrelation(
+        coordinate, raw_iq_intervals, *, lineage, prn: int,
+        code_freq_chips: float, aux1_samples: float,
+        tracker_doppler_hz: float, fs_hz: float = FS_HZ) -> H1Template:
+    """Construct H1 only by recomputing authenticated cleanStatic raw intervals."""
+    coordinate = tuple(coordinate)
+    lineage_json = _canonical_h1_lineage(
+        lineage, "raw_iq_periodic_recorrelation")
+    intervals = list(raw_iq_intervals)
+    if len(intervals) != len(lineage["raw_intervals"]):
+        raise ValueError("raw interval count does not match lineage")
+    if (type(prn) is not int or not 1 <= prn <= 32
+            or not all(np.isfinite(v) for v in (code_freq_chips, aux1_samples,
+                                                tracker_doppler_hz, fs_hz))
+            or code_freq_chips <= 0 or fs_hz <= 0):
+        raise ValueError("invalid raw recorrelation controls")
+    surfaces = []
+    di, dj = coordinate
+    for raw, provenance in zip(intervals, lineage["raw_intervals"]):
+        raw_array = np.ascontiguousarray(raw)
+        if (not np.iscomplexobj(raw_array) or raw_array.ndim != 1
+                or raw_array.size != SUPPORT_SAMPLES
+                or not np.isfinite(raw_array).all()
+                or provenance["end"] - provenance["start"] != raw_array.size):
+            raise ValueError("raw interval must be exactly one finite support")
+        actual = hashlib.sha256(raw_array.view(np.uint8)).hexdigest()
+        if actual != provenance["sha256"]:
+            raise ValueError("raw interval SHA-256 mismatch")
+        x = np.asarray(raw_array, dtype=np.complex128)
+        surfaces.append(dense_complex_caf(
+            x, prn, code_freq_chips, aux1_samples + DELAYS[dj],
+            tracker_doppler_hz + DOPPLERS[di], fs_hz=fs_hz))
+    surface = np.mean(np.stack(surfaces), axis=0)
+    return _build_h1_template_from_surface_for_test(
+        coordinate, surface, source_role="normal_train",
+        construction_method="raw_iq_periodic_recorrelation",
+        lineage=json.loads(lineage_json))
 
 
 def dense_complex_caf(iq: np.ndarray, prn: int, code_freq_chips: float,
                       aux1_samples: float, tracker_doppler_hz: float,
                       *, fs_hz: float = FS_HZ) -> np.ndarray:
     """Complex CAF using the audited R1.3 physical replica/wipe primitives."""
-    x = np.asarray(iq, dtype=np.complex128)
-    if x.ndim != 1 or x.size != SUPPORT_SAMPLES or not np.isfinite(x).all():
+    raw = np.asarray(iq)
+    x = np.asarray(raw, dtype=np.complex128)
+    if (not np.iscomplexobj(raw) or x.ndim != 1 or x.size != SUPPORT_SAMPLES
+            or not np.isfinite(x).all()):
         raise ValueError("CAF requires exactly 25,000 finite complex samples")
     replicas = [code_replica(prn, x.size, fs_hz, code_freq_chips, aux1_samples,
                              -1, d, replica_direction=1)[0] for d in DELAYS]
@@ -233,8 +304,18 @@ def two_source_wls(y: np.ndarray, template0: np.ndarray,
     for coordinate, template in shifted_templates.items():
         if not isinstance(template,H1Template) or tuple(coordinate)!=template.coordinate:
             raise ValueError("validated H1Template required")
-        actual = hashlib.sha256(np.ascontiguousarray(template.surface).view(np.uint8)).hexdigest()
-        if template.surface.flags.writeable or actual != template.digest:
+        try:
+            lineage_json = _canonical_h1_lineage(
+                json.loads(template.lineage_json), template.construction_method)
+        except (AttributeError, TypeError, ValueError, json.JSONDecodeError):
+            raise ValueError("H1 template provenance failure") from None
+        actual = _h1_digest(template.surface, template.coordinate,
+                            template.source_role, template.construction_method,
+                            lineage_json)
+        if (template.surface.flags.writeable or actual != template.digest
+                or template.source_role != "normal_train"
+                or template.construction_method != "raw_iq_periodic_recorrelation"
+                or template.lineage_json != lineage_json):
             raise ValueError("H1 template immutability/digest failure")
         rss, coef = _weighted_fit(y, [template0, template.surface], variance)
         candidates.append((rss, tuple(coordinate), coef))
@@ -286,10 +367,13 @@ def pool_prns(values: Mapping[int, float], method: str) -> tuple[float, dict]:
     return float(pooled), {"prn_count": len(x), "dominant_fraction": float(np.max(np.abs(x))/max(np.sum(np.abs(x)), np.finfo(float).eps))}
 
 
-def choose_pooling(clean_selection: Sequence[Mapping]) -> str:
+def choose_pooling(clean_selection: Sequence[Mapping], *, cleanstatic_sha256: str | None = None) -> str:
     """Normal-only choice: minimum block-to-block median absolute deviation."""
-    if (not clean_selection or any(row.get("role") not in {"clean_train", "selection"}
-                                   for row in clean_selection)):
+    if (cleanstatic_sha256 is None or not clean_selection
+            or any(row.get("role") not in {"clean_train", "selection"}
+                   or row.get("scenario") != "cleanStatic"
+                   or row.get("recording_sha256") != cleanstatic_sha256
+                   for row in clean_selection)):
         raise ValueError("pooling selection accepts clean_train or selection only")
     objectives = {}
     for method in ("median", "top50_mean", "trimmed_mean"):
@@ -299,21 +383,28 @@ def choose_pooling(clean_selection: Sequence[Mapping]) -> str:
 
 
 def apply_gain_phase(iq, gain: float, phase_rad: float):
-    return np.asarray(iq, complex) * float(gain) * np.exp(1j*float(phase_rad))
+    raw=np.asarray(iq);x=np.asarray(raw,complex)
+    if not np.iscomplexobj(raw) or x.ndim!=1 or not len(x) or not np.isfinite(x).all() or not np.isfinite(gain) or gain<=0 or not np.isfinite(phase_rad):raise ValueError("invalid gain/phase control")
+    return x * float(gain) * np.exp(1j*float(phase_rad))
 
 
 def add_awgn(iq, sigma: float, seed: int = 0):
-    rng=np.random.default_rng(seed); x=np.asarray(iq, complex)
+    rng=np.random.default_rng(seed);raw=np.asarray(iq);x=np.asarray(raw, complex)
+    if not np.iscomplexobj(raw) or x.ndim!=1 or not len(x) or not np.isfinite(x).all() or not np.isfinite(sigma) or sigma<0:raise ValueError("invalid AWGN control")
     return x + sigma/np.sqrt(2)*(rng.normal(size=x.shape)+1j*rng.normal(size=x.shape))
 
 
 def noise_floor(iq) -> float:
-    return float(np.mean(np.abs(np.asarray(iq))**2))
+    raw=np.asarray(iq);x=np.asarray(raw,complex)
+    if not np.iscomplexobj(raw) or x.ndim!=1 or not len(x) or not np.isfinite(x).all():raise ValueError("finite nonempty complex IQ required")
+    value=float(np.mean(np.abs(x)**2))
+    if not np.isfinite(value):raise ValueError("nonfinite noise floor")
+    return value
 
 
 def amplitude_control(iq, target_rms: float):
-    x=np.asarray(iq, complex); rms=np.sqrt(np.mean(np.abs(x)**2))
-    if rms == 0: raise ValueError("zero input RMS")
+    raw=np.asarray(iq);x=np.asarray(raw, complex); rms=np.sqrt(np.mean(np.abs(x)**2))
+    if not np.iscomplexobj(raw) or x.ndim!=1 or not len(x) or not np.isfinite(x).all() or not np.isfinite(target_rms) or target_rms<=0 or not np.isfinite(rms) or rms<=0: raise ValueError("invalid RMS control")
     return x * float(target_rms)/rms
 
 
@@ -322,6 +413,11 @@ def synthesize_same_prn_second_source(prn: int, n: int, delay_chips: float,
                                       amplitude: float, *, fs_hz: float = FS_HZ,
                                       code_rate: float = 1.023e6) -> np.ndarray:
     """Physical analytic fractional code-phase replica; never zero padded."""
+    if (type(prn) is not int or not 1<=prn<=32 or type(n) is not int or n<=0
+            or not all(np.isfinite(v) for v in (delay_chips,residual_doppler_hz,
+                                                phase_rad,amplitude,fs_hz,code_rate))
+            or amplitude<0 or fs_hz<=0 or code_rate<=0):
+        raise ValueError("invalid physical synthesis control")
     phase = np.arange(n)*code_rate/fs_hz - float(delay_chips)
     code = gps_l1ca_code(prn)[np.floor(phase).astype(np.int64) % 1023]
     carrier = np.exp(1j*(2*np.pi*float(residual_doppler_hz)*np.arange(n)/fs_hz+float(phase_rad)))
@@ -338,7 +434,7 @@ def binary_metrics(labels, scores, max_fpr=.01) -> dict:
     if not xf or xf[-1] < max_fpr:
         xf.append(max_fpr);yt.append(float(np.interp(max_fpr,fpr,tpr)))
     # Standardized to [0,1] over the requested false-positive range.
-    raw=float(np.trapz(yt,xf))
+    raw=float(np.trapezoid(yt,xf))
     minimum=.5*max_fpr**2
     maximum=max_fpr
     pauc=.5*(1+(raw-minimum)/(maximum-minimum)) if max_fpr < 1 else raw
@@ -358,14 +454,16 @@ def alarm_metrics(times, scores, threshold, onset) -> dict:
 
 
 def block_bootstrap_effect(normal, other, replicates=1000, seed=1,
-                           *, times=None, block_seconds=10.0, block_ids=None) -> dict:
+                           *, times=None, block_seconds=10.0, block_origin_s=None,
+                           block_ids=None) -> dict:
     a=np.asarray(normal,float); b=np.asarray(other,float); t=np.asarray(times,float)
     if (a.ndim!=1 or not len(a) or b.shape!=a.shape or t.shape!=a.shape
             or not np.isfinite(a).all() or not np.isfinite(b).all() or not np.isfinite(t).all()
             or np.any(np.diff(t)<0) or not isinstance(replicates, (int, np.integer))
-            or replicates<=0 or not np.isfinite(block_seconds) or block_seconds<=0):
+            or replicates<=0 or block_seconds != 10.0
+            or block_origin_s is None or not np.isfinite(block_origin_s)):
         raise ValueError("finite paired arrays, chronological times, and positive replicates required")
-    derived=np.floor((t-t[0])/block_seconds).astype(np.int64)
+    derived=np.floor((t-float(block_origin_s))/10.0).astype(np.int64)
     if block_ids is not None:
         supplied=np.asarray(block_ids)
         if supplied.shape!=a.shape or not np.array_equal(supplied,derived):
@@ -377,4 +475,6 @@ def block_bootstrap_effect(normal, other, replicates=1000, seed=1,
         estimates.append(float(np.mean(b[mask])-np.mean(a[mask])))
     ci=[float(np.quantile(estimates,.025)),float(np.quantile(estimates,.975))]
     if not np.isfinite(ci).all():raise ArithmeticError("nonfinite bootstrap CI")
-    return {"effect":float(np.mean(b-a)), "ci95":ci, "block_seconds":float(block_seconds), "times_verified":True, "seed":seed, "replicates":int(replicates)}
+    return {"effect":float(np.mean(b-a)), "ci95":ci, "block_seconds":10.0,
+            "block_origin_s":float(block_origin_s), "times_verified":True,
+            "seed":seed, "replicates":int(replicates)}

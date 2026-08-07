@@ -19,6 +19,13 @@ current. The dense grid is delay -1..+1 chip in .125-chip steps and Doppler
 deltas must be 24,999..25,001 with CN0 >= 28 and carrier lock >= .85. Decimated
 ~20 ms or ~500,000-sample rows are unavailable and are never interpolated.
 
+`SignalSource.samples` is a count limit, never an offset. Skip, header, and
+offset keys are forbidden and the first file sample is raw sample zero. Under
+the receiver's `ishort` item semantics, cleanStatic's configured count is
+exactly 24,008,196,096 scalar int16 items (`raw_size_bytes/2`), covering the
+whole file; its complex-IQ sample count is `raw_size_bytes/4`. A configured
+count of zero means all source items and is valid for the other scenarios.
+
 For each complex CAF `C`, normalization is
 
 `Y = C exp(-j angle(C[zero Doppler, zero delay])) / max(|C_center|, floor)`.
@@ -66,6 +73,15 @@ Raw-IQ controls cover gain, global phase, AWGN/noise floor, and amplitude.
 Second-source fixtures are analytic same-PRN fractional-code-phase replicas
 with residual Doppler, arbitrary phase, amplitude, and positive or negative
 delay. Finite zero-padded shifts and additions at CAF peaks are prohibited.
+Every physical control is finite and range checked. H1 templates are built by
+re-correlating authenticated cleanStatic complex raw intervals, not accepted as
+caller-supplied surfaces. Their digest covers the complex surface bytes,
+coordinate, source role, construction method, and canonical deep-frozen JSON
+provenance, including exact interval and grid hashes.
+
+Bootstrap blocks are frozen at exactly 10 seconds and use an explicit finite
+recording/phase origin: `floor((time-origin)/10)`. Supplied block IDs must equal
+that derivation exactly, and the origin is recorded.
 
 ## Fail-closed artifact semantics
 
@@ -81,9 +97,14 @@ pinned declarative source-binding configuration freezes exact tracker MAT
 filename/SHA inventories and exact manifest JSON pointers. It recomputes
 recursive checksums, full raw hashes, strict MAT schemas/support/L20 counts,
 timelines, empty-science semantics, R1.4 lineage, and the foundation conclusion.
-The producer report is pending and checksum-covered. Only an external verifier
+It also independently reruns the exact focused Stage-1 and relevant Stage0-R1.4
+pytest commands with one BLAS thread and compares commands, source HEAD,
+dependency versions, exit status, and semantic collected/pass/fail counts to
+the checksum-covered producer report. Only an external verifier
 `--finalize` pass may write PASS and regenerate checksums; a second read-only
-pass validates that closure. `--skip-external-recompute` is diagnostic
+pass validates that closure. Finalization first copies pending input into a
+private staging tree; both semantic passes operate on that copy before an
+atomic no-replace rename. `--skip-external-recompute` is diagnostic
 `INCOMPLETE` and cannot finalize. DS7 and DS8 pre-attack
 data are paired replay diagnostics—not independent normals—if byte identity is
 authenticated.

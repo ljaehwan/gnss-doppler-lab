@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Independent Stage-1 fail-closed verifier; intentionally duplicates constants."""
 from __future__ import annotations
-import argparse,csv,ctypes,errno,hashlib,json,os,shutil,stat,subprocess,sys,tempfile
+import argparse,csv,ctypes,errno,hashlib,json,os,re,shutil,stat,subprocess,sys,tempfile
 from pathlib import Path
 import h5py,numpy as np
 
@@ -15,6 +15,11 @@ EXPECTED={"cleanStatic":{"all":{"triples":101278,"l20":100864,"prns":11}},"ds3":
 TIMELINES={"ds3":{"onset_s":118.9,"pull_off_s":195.0},"ds4":{"onset_s":113.8,"pull_off_s":225.0,"raw_end_approx_s":128.22},"ds7":{"injection_s":110.,"transition":[110.,130.],"held":[130.,150.],"time_push_start_s":150.},"ds8":{"injection_s":110.,"transition":[110.,130.],"held":[130.,150.],"time_push_start_s":150.}}
 PHASES={"cleanStatic":{"all":[0,None]},"ds3":{"pre":[0,2972500000],"onset_to_pulloff":[2972500000,4875000000],"post_pulloff":[4875000000,None]},"ds4":{"pre":[0,2845000000],"transition_only":[2845000000,5625000000]},"ds7":{"pre":[0,2750000000],"transition":[2750000000,3250000000],"held":[3250000000,3750000000],"time_push":[3750000000,None]},"ds8":{"pre":[0,2750000000],"transition":[2750000000,3250000000],"held":[3250000000,3750000000],"time_push":[3750000000,None]}}
 REQUIRED={"stamp":"PRN_start_sample_count","prn":"PRN","carrier_doppler_hz":"carrier_doppler_hz","code_freq_chips":"code_freq_chips","aux1":"aux1","prompt_i":"Prompt_I","prompt_q":"Prompt_Q","cn0":"CN0_SNV_dB_Hz","lock":"carrier_lock_test"}
+FROZEN={"signal":"canonical_gps_l1_ca","fs_hz":25000000.0,"raw_format":"signed_int16_interleaved_complex_iq","global_raw_offset_samples":0,"nco_row":"previous","aux_row":"previous","remnant_sign":-1,"carrier_sign":-1,"replica_direction":"forward","prompt_row":"current","support_samples":25000,"window_length":20,"delay_start_chip":-1.0,"delay_stop_chip":1.0,"delay_step_chip":.125,"doppler_start_hz":-250.0,"doppler_stop_hz":250.0,"doppler_step_hz":50.0,"h1_center_excluded":True}
+CAMPAIGN={"frozen":FROZEN,"source_binding_config_sha256":SOURCE_BINDING_SHA256,"search_complexity":{"calibration_statistic":"full_minimized_delta_search","scalar_penalty":0.0},"delay_grid":[-1.0+i*.125 for i in range(17)],"doppler_grid_hz":list(range(-250,251,50)),"pooling_candidates":["median","top50_mean","trimmed_mean"],"baseline_B0":"PROVISIONAL_UNAVAILABLE"}
+SOURCE_KEYS={"raw_path","raw_sha256","expected_raw_sha256","raw_size_bytes","raw_sample_count","raw_count_unit","raw_bytes_read_purpose","raw_checks","tracker_path","manifest_path","manifest_sha256","receiver_config_path","receiver_config_sha256","manifest_checks","receiver_config_checks","tracker_raw_binding"}
+AUDIT_KEYS={"scenario","counts","expected","matches_expected","excluded","boundary_crossing_supports","mat_inventory","accepted_rule","twenty_ms_gaps_interpolated","tracker_raw_binding_status","receiver_config_status"}
+TEST_TARGETS=[["tests/test_acaf_nf_stage1_static_feasibility.py"],["tests/test_acaf_nf_stage0.py","tests/test_acaf_nf_stage0_r1.py","tests/test_acaf_nf_stage0_r11_validity.py","tests/test_acaf_nf_stage0_r12_alignment.py","tests/test_acaf_nf_stage0_r13_reconstruction.py","tests/test_acaf_nf_stage0_r14_doppler_validation.py"]]
 
 def digest(path):
  h=hashlib.sha256()
@@ -22,12 +27,21 @@ def digest(path):
   while b:=f.read(8*1024*1024):h.update(b)
  return h.hexdigest()
 def load(path):return json.loads(Path(path).read_text())
+def test_versions():
+ result={"python":sys.version.split()[0],"numpy":np.__version__,"h5py":h5py.__version__}
+ for package in ("scipy","sklearn","matplotlib"):result[package]=__import__(package).__version__
+ return result
+def pytest_counts(stdout):
+ matches=re.findall(r"(?:(\d+) failed,?\s*)?(?:(\d+) passed).*? in [0-9.]+s",stdout)
+ if not matches:return None
+ failed,passed=matches[-1];passed=int(passed);failed=int(failed or 0)
+ return {"collected":passed+failed,"passed":passed,"failed":failed}
 def field(f,n):return np.asarray(f[n]).reshape(-1) if n in f else None
 def json_pointer(document,pointer):
  value=document
  for token in pointer.split("/")[1:]:value=value[token.replace("~1","/").replace("~0","~")]
  return value
-def metadata_contract(spec, scenario):
+def metadata_contract(spec, scenario, raw_size_bytes):
  manifest=load(spec["manifest_path"]);pointers=spec["manifest_pointers"]
  rate=json_pointer(manifest,pointers["sample_rate_hz"]);fmt=str(json_pointer(manifest,pointers["sample_format"])).lower()
  if rate!=25000000 or "ishort" not in fmt or not ("iq" in fmt or "complex" in fmt):raise ValueError("manifest rate/format contract")
@@ -41,11 +55,16 @@ def metadata_contract(spec, scenario):
   if line and not line.startswith("#") and "=" in line:
    key,value=line.split("=",1);values[key.strip()]=value.strip()
  forbidden=[k for k in values if k.startswith("SignalSource.") and any(x in k.lower() for x in ("skip","header","offset"))]
- expected={"SignalSource.item_type":"ishort","SignalSource.sampling_frequency":"25000000","SignalSource.samples":"0"};failures=[]
+ expected={"SignalSource.item_type":"ishort","SignalSource.sampling_frequency":"25000000"};failures=[]
  if forbidden:failures.append("FORBIDDEN_SKIP_HEADER_OFFSET_KEY")
  if any(values.get(k)!=v for k,v in expected.items()):failures.append("SOURCE_KEYS_MISMATCH")
  if not values.get("SignalSource.filename"):failures.append("MISSING_FILENAME")
- receiver={"status":"FAIL" if failures else "PASS","reasons":failures,"keys":{k:values.get(k) for k in (*expected,"SignalSource.filename")},"expected_keys":expected,"forbidden_keys":forbidden,"configured_filename_alias_classification":"HISTORICAL_RELOCATED_ALIAS","configured_filename_content_sha256":spec["raw_sha256"],"first_file_sample_is_raw_sample":0}
+ try:samples=int(values.get("SignalSource.samples", ""))
+ except ValueError:samples=-1
+ full_scalar_count=raw_size_bytes//2;covers=samples==0 or samples==full_scalar_count
+ if samples<0 or not covers:failures.append("SAMPLES_DO_NOT_COVER_FULL_FILE")
+ expected["SignalSource.samples"]="0_or_exact_scalar_int16_full_source_count"
+ receiver={"status":"FAIL" if failures else "PASS","reasons":failures,"keys":{k:values.get(k) for k in ("SignalSource.item_type","SignalSource.sampling_frequency","SignalSource.samples","SignalSource.filename")},"expected_keys":expected,"forbidden_keys":forbidden,"configured_filename_alias_classification":"HISTORICAL_RELOCATED_ALIAS","configured_filename_content_sha256":spec["raw_sha256"],"first_file_sample_is_raw_sample":0,"count_unit":"scalar_int16","configured_count":samples,"full_source_count":full_scalar_count,"covers_full_file":covers}
  return raw_binding,receiver
 def phase_name(scenario,sample):
  for name,(start,end) in PHASES[scenario].items():
@@ -130,29 +149,58 @@ def verify(root:Path, recompute_external=True, *, authenticated_hash_ledger=None
   elif report!={"status":"PENDING_INDEPENDENT_VERIFICATION","producer_verdict_not_authoritative":True}:errors.append("verification_report_pending_schema")
   if load(root/"scenario_timeline.json")!=TIMELINES:errors.append("timeline")
   campaign=load(root/"config.json")
-  if set(campaign)!={"frozen","source_binding_config_sha256","search_complexity","delay_grid","doppler_grid_hz","pooling_candidates","baseline_B0"} or campaign.get("source_binding_config_sha256")!=SOURCE_BINDING_SHA256 or campaign.get("baseline_B0")!="PROVISIONAL_UNAVAILABLE":errors.append("campaign_config_schema")
+  if campaign!=CAMPAIGN:errors.append("campaign_config_schema")
   execution=load(root/"execution_validity.json");go=load(root/"go_no_go.json")
   if set(execution)!={"status","no_attack_raw_scoring_performed","attack_iq_bytes_read_for_scoring","raw_bytes_read_purpose","science_csv_semantics","plots","B0"}:errors.append("execution_schema")
   if set(go)!={"verdict","PHYSICS_FEASIBILITY_GO","physics_feasibility_status","PAPER_CANDIDATE_GO","paper_candidate_status","stage2_justified","reason"}:errors.append("go_schema")
-  if execution.get("no_attack_raw_scoring_performed") is not True or execution.get("raw_bytes_read_purpose")!="full_sha256_only" or execution.get("attack_iq_bytes_read_for_scoring")!=0:errors.append("attack_scoring_semantics")
+  if set(execution.get("plots",{}))!={"count","reason"}:errors.append("execution_nested_schema")
+  if execution.get("no_attack_raw_scoring_performed") is not True or execution.get("raw_bytes_read_purpose")!="full_sha256_only" or execution.get("attack_iq_bytes_read_for_scoring")!=0 or execution.get("status")!="FOUNDATION_INVALID" or execution.get("science_csv_semantics")!="header_only" or execution.get("plots",{}).get("count")!=0:errors.append("attack_scoring_semantics")
   if go.get("verdict")!="FOUNDATION_INVALID" or go.get("physics_feasibility_status")!="NOT_EVALUATED" or go.get("paper_candidate_status")!="NOT_EVALUATED" or go.get("stage2_justified") is not False:errors.append("verdict_semantics")
   if go.get("PHYSICS_FEASIBILITY_GO") is not False or go.get("PAPER_CANDIDATE_GO") is not False or execution.get("B0")!="PROVISIONAL_UNAVAILABLE":errors.append("go_or_baseline_semantics")
   readme=(root/"README.md").read_text()
   if not all(x in readme for x in ("FOUNDATION_INVALID","not a physics `NO_GO`","never scored","NOT_EVALUATED","PROVISIONAL_UNAVAILABLE")):errors.append("readme_verdict_wording")
-  test_report=(root/"test_report.txt").read_text()
-  if not all(x in test_report for x in ("command:","exit_code: 0","collected:","passed:","failed:","Python","numpy","scipy","h5py","sklearn","matplotlib")):errors.append("test_report_schema")
-  binding=load(root/"source_binding.json");sources=binding["sources"];audits=binding["tracker_support_audits"]
+  test_report=load(root/"test_report.txt");test_head=subprocess.run(["git","rev-parse","HEAD"],cwd=ROOT,text=True,capture_output=True,check=True).stdout.strip()
+  commands=[[sys.executable,"-m","pytest","-q",*targets] for targets in TEST_TARGETS]
+  if (set(test_report)!={"schema","source_head","versions","environment","runs"} or test_report.get("schema")!="acaf-stage1-test-report-v1" or test_report.get("source_head")!=test_head or test_report.get("versions")!=test_versions() or test_report.get("environment")!={"OPENBLAS_NUM_THREADS":"1","OMP_NUM_THREADS":"1","MKL_NUM_THREADS":"1"} or not isinstance(test_report.get("runs"),list) or len(test_report["runs"])!=2):errors.append("test_report_schema")
+  else:
+   for saved,command in zip(test_report["runs"],commands):
+    if set(saved)!={"command","stdout","exit_code","collected","passed","failed"} or saved.get("command")!=command or saved.get("exit_code")!=0 or pytest_counts(saved.get("stdout",""))!={k:saved.get(k) for k in ("collected","passed","failed")}:errors.append("test_report_run_schema");continue
+    if recompute_external:
+     env={**os.environ,"OPENBLAS_NUM_THREADS":"1","OMP_NUM_THREADS":"1","MKL_NUM_THREADS":"1"};rerun=subprocess.run(command,cwd=ROOT,text=True,capture_output=True,env=env)
+     counts=pytest_counts(rerun.stdout+rerun.stderr)
+     if rerun.returncode!=0 or counts!={k:saved[k] for k in ("collected","passed","failed")}:errors.append("test_report_recompute")
+  binding=load(root/"source_binding.json")
+  if set(binding)!={"sources","tracker_support_audits","ds7_ds8_pre_attack_pairing"} or binding.get("ds7_ds8_pre_attack_pairing")!="paired replay diagnostic only if byte identity authenticated":errors.append("source_binding_schema")
+  sources=binding.get("sources",{});audits=binding.get("tracker_support_audits",{})
+  if set(sources)!=set(HASHES) or set(audits)!=set(HASHES):errors.append("source_binding_scenarios")
   for s,h in HASHES.items():
+   if set(sources.get(s,{}))!=SOURCE_KEYS or set(audits.get(s,{}))!=AUDIT_KEYS:errors.append("source_binding_nested_schema:"+s);continue
    if sources[s]["raw_sha256"]!=h or sources[s]["raw_bytes_read_purpose"]!="full_sha256_only":errors.append("raw_binding_document:"+s)
    spec=canonical["scenarios"][s]
    for key in ("raw_path","tracker_path","manifest_path","receiver_config_path"):
     if sources[s].get(key)!=spec[key]:errors.append("artifact_external_path:"+s+":"+key)
+   if (sources[s].get("manifest_sha256")!=spec["manifest_sha256"] or sources[s].get("receiver_config_sha256")!=spec["receiver_config_sha256"] or sources[s].get("expected_raw_sha256")!=h or sources[s].get("raw_count_unit")!="complex_int16_iq" or sources[s].get("raw_size_bytes")!=sources[s].get("raw_sample_count")*4):errors.append("source_values:"+s)
+   expected_raw_checks={"size_divisible_by_4":{"status":"PASS"},"format":{"status":"PASS"},"rate":{"status":"PASS"},"sample_count":sources[s]["raw_sample_count"]}
+   if sources[s].get("raw_checks")!=expected_raw_checks:errors.append("raw_checks:"+s)
+   manifest_checks=sources[s].get("manifest_checks",{});receiver_checks=sources[s].get("receiver_config_checks",{})
+   if (set(manifest_checks)!={"tracker_raw_binding","sample_rate","sample_format"}
+       or set(manifest_checks.get("sample_rate",{}))!={"status","pointer","value"}
+       or set(manifest_checks.get("sample_format",{}))!={"status","pointer","value"}
+       or set(receiver_checks)!={"status","reasons","keys","expected_keys","forbidden_keys","configured_filename_alias_classification","configured_filename_content_sha256","first_file_sample_is_raw_sample","count_unit","configured_count","full_source_count","covers_full_file"}
+       or receiver_checks.get("count_unit")!="scalar_int16" or receiver_checks.get("covers_full_file") is not True
+       or receiver_checks.get("first_file_sample_is_raw_sample")!=0
+       or receiver_checks.get("full_source_count")!=sources[s]["raw_size_bytes"]//2):errors.append("metadata_nested_schema:"+s)
+   for phase,expected in EXPECTED[s].items():
+    count=audits[s].get("counts",{}).get(phase,{})
+    if set(count)!={"triples","l20","prns","dominant_fraction","crossing_excluded"} or {k:count.get(k) for k in ("triples","l20","prns")}!=expected:errors.append("support_nested_schema:"+s+":"+phase)
+   required_manifest_status="FAIL" if s=="ds4" else "PASS"
+   if (sources[s].get("tracker_raw_binding",{}).get("status")!=required_manifest_status or sources[s].get("receiver_config_checks",{}).get("status")!="PASS" or audits[s].get("receiver_config_status")!="PASS" or audits[s].get("tracker_raw_binding_status")!=required_manifest_status):errors.append("mandatory_source_gate:"+s)
    if recompute_external:
     if authenticated_hash_ledger is not None:
      if not integration_diagnostic or authenticated_hash_ledger.get(s)!=h:errors.append("invalid_test_hash_ledger:"+s)
     elif digest(sources[s]["raw_path"])!=h:errors.append("raw_hash:"+s)
     if digest(spec["manifest_path"])!=spec["manifest_sha256"] or digest(spec["receiver_config_path"])!=spec["receiver_config_sha256"]:errors.append("metadata_hash:"+s)
-    raw_binding,receiver_binding=metadata_contract(spec,s)
+    raw_binding,receiver_binding=metadata_contract(spec,s,sources[s]["raw_size_bytes"])
     if raw_binding!=sources[s].get("tracker_raw_binding") or receiver_binding!=sources[s].get("receiver_config_checks"):errors.append("metadata_contract:"+s)
     worker=subprocess.run([sys.executable,str(Path(__file__)),"--preflight-scenario",s,"--raw-sample-count",str(sources[s]["raw_sample_count"])],capture_output=True,text=True)
     if worker.returncode:raise RuntimeError("metadata worker failed:"+s+":"+worker.stderr)
@@ -164,6 +212,8 @@ def verify(root:Path, recompute_external=True, *, authenticated_hash_ledger=None
   if sources["ds4"].get("tracker_raw_binding")!={"status":"FAIL","reason":"MANIFEST_DOES_NOT_BIND_RAW_SHA","pointer":None}:errors.append("ds4_unbound_semantics")
   if EXPECTED["ds7"]["time_push"]["triples"] or EXPECTED["ds8"]["transition"]["triples"] or EXPECTED["ds8"]["held"]["triples"]:errors.append("foundation_derivation")
   lineage=load(root/"r14_frozen_lineage.json")
+  lineage_keys={"artifact","artifact_checksums_sha256","verification_report_sha256","verifier_sha256","module_sha256","runner_sha256","verifier_required","contract","base_sha","git_head","git_dirty","stage1_source_hashes","versions","status"}
+  if set(lineage)!=lineage_keys or lineage.get("status")!="PASS" or lineage.get("base_sha")!=canonical["base_commit"] or lineage.get("contract")!=FROZEN or lineage.get("verifier_required")!="PASS" or lineage.get("versions")!=test_versions():errors.append("r14_lineage_schema")
   if lineage.get("artifact")!=str(ROOT/canonical["r14"]["artifact_path"]):errors.append("r14_artifact_path")
   for field,config_field in (("artifact_checksums_sha256","checksums_sha256"),("verification_report_sha256","verification_report_sha256"),("verifier_sha256","verifier_sha256"),("module_sha256","module_sha256"),("runner_sha256","runner_sha256")):
    if lineage.get(field)!=canonical["r14"][config_field]:errors.append("r14_lineage:"+field)
@@ -171,6 +221,17 @@ def verify(root:Path, recompute_external=True, *, authenticated_hash_ledger=None
   if source_hashes!=expected_source_hashes:errors.append("stage1_source_hashes")
   actual_head=subprocess.run(["git","rev-parse","HEAD"],cwd=ROOT,text=True,capture_output=True,check=True).stdout.strip();actual_dirty=bool(subprocess.run(["git","status","--porcelain"],cwd=ROOT,text=True,capture_output=True,check=True).stdout)
   if lineage.get("git_head")!=actual_head or lineage.get("git_dirty")!=actual_dirty:errors.append("git_state")
+  reasons=[]
+  if audits.get("ds4",{}).get("tracker_raw_binding_status")=="FAIL":reasons.append("DS4_MANIFEST_DOES_NOT_BIND_RAW_SHA")
+  if audits.get("ds4",{}).get("counts",{}).get("transition_only",{}).get("l20",0)==0:reasons.append("DS4_NO_POST_L20")
+  if sum(audits.get("ds7",{}).get("counts",{}).get(p,{}).get("triples",0) for p in ("transition","held","time_push"))==0:reasons.append("DS7_NO_POST_SUPPORT")
+  d8=audits.get("ds8",{}).get("counts",{})
+  if d8.get("transition",{}).get("triples",0)==d8.get("held",{}).get("triples",0)==0:reasons.append("DS8_NO_TRANSITION_OR_HELD_SUPPORT")
+  if d8.get("time_push",{}).get("prns")==1:reasons.append("DS8_TIME_PUSH_ONE_PRN_DIAGNOSTIC_ONLY")
+  exact_reason=";".join(reasons)
+  if not reasons or go.get("reason")!=exact_reason or execution.get("plots",{}).get("reason")!=exact_reason:errors.append("foundation_reason_derivation")
+  expected_not_eval={"status":"NOT_EVALUATED","value":None,"reason":exact_reason}
+  if any(load(root/name)!=expected_not_eval for name in ("normal_model_summary.json","thresholds.json","bootstrap_results.json")):errors.append("not_evaluated_exact")
   if recompute_external:
    r=subprocess.run([sys.executable,str(ROOT/"scripts/verify_acaf_nf_stage0_static_r14_doppler_validation.py"),lineage["artifact"]],capture_output=True,text=True)
    if r.returncode:errors.append("r14_verifier")
@@ -188,23 +249,31 @@ def main(argv=None):
  if a.finalize_to and a.skip_external_recompute:raise SystemExit("diagnostic skip cannot finalize")
  if a.integration_authenticated_hash_ledger and os.environ.get("ACAF_TEST_ONLY_HASH_LEDGER")!="1":raise SystemExit("test-only hash ledger requires ACAF_TEST_ONLY_HASH_LEDGER=1")
  ledger=load(a.integration_authenticated_hash_ledger) if a.integration_authenticated_hash_ledger else None
- result=verify(a.artifact,not a.skip_external_recompute,authenticated_hash_ledger=ledger,integration_diagnostic=ledger is not None)
  if a.finalize_to:
-  if result["status"]!="PASS":raise SystemExit(1)
   destination=a.finalize_to
   if destination.exists():raise FileExistsError(destination)
   stage=Path(tempfile.mkdtemp(prefix=destination.name+".verifying-",dir=destination.parent))
-  shutil.rmtree(stage);shutil.copytree(a.artifact,stage,symlinks=True)
-  (stage/"verification_report.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
-  files={n:{"sha256":digest(stage/n),"size_bytes":(stage/n).stat().st_size} for n in sorted(NAMES-{"checksums.json"})}
-  (stage/"checksums.json").write_text(json.dumps({"algorithm":"sha256","files":files},indent=2,sort_keys=True)+"\n")
-  for item in stage.rglob("*"):
-   if item.is_file():
-    with item.open("rb") as handle:os.fsync(handle.fileno())
-  for directory in (stage,stage/"plots"):
-   fd=os.open(directory,os.O_RDONLY);os.fsync(fd);os.close(fd)
-  libc=ctypes.CDLL(None,use_errno=True);rc=libc.renameat2(-100,os.fsencode(stage),-100,os.fsencode(destination),1)
-  if rc:raise OSError(ctypes.get_errno(),os.strerror(ctypes.get_errno()),destination)
-  parent_fd=os.open(destination.parent,os.O_RDONLY);os.fsync(parent_fd);os.close(parent_fd)
+  shutil.rmtree(stage)
+  try:
+   shutil.copytree(a.artifact,stage,symlinks=True)
+   result=verify(stage,True,authenticated_hash_ledger=ledger,integration_diagnostic=ledger is not None)
+   if result["status"]!="PASS":raise RuntimeError("copied staging tree failed external verification")
+   (stage/"verification_report.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
+   files={n:{"sha256":digest(stage/n),"size_bytes":(stage/n).stat().st_size} for n in sorted(NAMES-{"checksums.json"})}
+   (stage/"checksums.json").write_text(json.dumps({"algorithm":"sha256","files":files},indent=2,sort_keys=True)+"\n")
+   closure=verify(stage,True,authenticated_hash_ledger=ledger,integration_diagnostic=ledger is not None)
+   if closure["status"]!="PASS":raise RuntimeError("staging closure verification failed")
+   for item in stage.rglob("*"):
+    if item.is_file():
+     with item.open("rb") as handle:os.fsync(handle.fileno())
+   for directory in (stage,stage/"plots"):
+    fd=os.open(directory,os.O_RDONLY);os.fsync(fd);os.close(fd)
+   libc=ctypes.CDLL(None,use_errno=True);rc=libc.renameat2(-100,os.fsencode(stage),-100,os.fsencode(destination),1)
+   if rc:raise OSError(ctypes.get_errno(),os.strerror(ctypes.get_errno()),destination)
+   parent_fd=os.open(destination.parent,os.O_RDONLY);os.fsync(parent_fd);os.close(parent_fd)
+  except Exception:
+   shutil.rmtree(stage,ignore_errors=True);raise
+ else:
+  result=verify(a.artifact,not a.skip_external_recompute,authenticated_hash_ledger=ledger,integration_diagnostic=ledger is not None)
  print(json.dumps(result,indent=2,sort_keys=True));raise SystemExit(0 if result["status"]=="PASS" else 2 if result["status"]=="INCOMPLETE" else 1)
 if __name__=="__main__":main()

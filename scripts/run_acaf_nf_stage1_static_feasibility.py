@@ -2,7 +2,7 @@
 """Produce the deterministic fail-closed Stage-1 feasibility artifact."""
 from __future__ import annotations
 
-import argparse, csv, ctypes, errno, hashlib, json, os, shutil, subprocess, sys, tempfile
+import argparse, csv, ctypes, errno, hashlib, json, os, re, shutil, subprocess, sys, tempfile
 from pathlib import Path
 
 import h5py
@@ -42,6 +42,8 @@ EXPECTED_PHASE={
  "ds7":{"pre":{"triples":100520,"l20":100290,"prns":11},"transition":{"triples":0,"l20":0,"prns":0},"held":{"triples":0,"l20":0,"prns":0},"time_push":{"triples":0,"l20":0,"prns":0}},
  "ds8":{"pre":{"triples":102940,"l20":102662,"prns":10},"transition":{"triples":0,"l20":0,"prns":0},"held":{"triples":0,"l20":0,"prns":0},"time_push":{"triples":288,"l20":232,"prns":1}}}
 SCIENCE_CSV={"scenario_metrics.csv":["status","reason","scenario"],"phase_metrics.csv":["status","reason","scenario","phase"],"per_window_scores.csv":["status","reason","scenario","time_s","score"],"secondary_component_metrics.csv":["status","reason","component"],"baseline_metrics.csv":["status","reason","baseline"],"control_metrics.csv":["status","reason","control"]}
+TEST_TARGETS=[["tests/test_acaf_nf_stage1_static_feasibility.py"],
+              ["tests/test_acaf_nf_stage0.py","tests/test_acaf_nf_stage0_r1.py","tests/test_acaf_nf_stage0_r11_validity.py","tests/test_acaf_nf_stage0_r12_alignment.py","tests/test_acaf_nf_stage0_r13_reconstruction.py","tests/test_acaf_nf_stage0_r14_doppler_validation.py"]]
 
 def digest(path, chunk=8*1024*1024):
  h=hashlib.sha256()
@@ -92,15 +94,24 @@ def authenticate_receiver_config(path, scenario_config):
   if not line or line.startswith("#") or "=" not in line:continue
   key,value=line.split("=",1);values[key.strip()]=value.strip()
  forbidden=[k for k in values if k.startswith("SignalSource.") and any(x in k.lower() for x in ("skip","header","offset"))]
- expected={"SignalSource.item_type":"ishort","SignalSource.sampling_frequency":"25000000","SignalSource.samples":"0"}
+ expected={"SignalSource.item_type":"ishort","SignalSource.sampling_frequency":"25000000"}
  failures=[]
  if forbidden:failures.append("FORBIDDEN_SKIP_HEADER_OFFSET_KEY")
  if any(values.get(k)!=v for k,v in expected.items()):failures.append("SOURCE_KEYS_MISMATCH")
  if not values.get("SignalSource.filename"):failures.append("MISSING_FILENAME")
- filename=values["SignalSource.filename"]
- return {"status":"FAIL" if failures else "PASS","reasons":failures,"keys":{k:values.get(k) for k in (*expected,"SignalSource.filename")},"expected_keys":expected,"forbidden_keys":forbidden,
+ raw_size=scenario_config.get("raw_size_bytes")
+ if raw_size is None and scenario_config.get("raw_path") and Path(scenario_config["raw_path"]).is_file():raw_size=Path(scenario_config["raw_path"]).stat().st_size
+ try:samples=int(values.get("SignalSource.samples", ""))
+ except ValueError:samples=-1
+ full_scalar_count=None if raw_size is None else raw_size//2
+ covers_full_file=samples==0 or (full_scalar_count is not None and samples==full_scalar_count)
+ if samples<0 or not covers_full_file:failures.append("SAMPLES_DO_NOT_COVER_FULL_FILE")
+ expected["SignalSource.samples"]="0_or_exact_scalar_int16_full_source_count"
+ return {"status":"FAIL" if failures else "PASS","reasons":failures,"keys":{k:values.get(k) for k in ("SignalSource.item_type","SignalSource.sampling_frequency","SignalSource.samples","SignalSource.filename")},"expected_keys":expected,"forbidden_keys":forbidden,
          "configured_filename_alias_classification":"HISTORICAL_RELOCATED_ALIAS",
-         "configured_filename_content_sha256":scenario_config["raw_sha256"],"first_file_sample_is_raw_sample":0}
+         "configured_filename_content_sha256":scenario_config["raw_sha256"],"first_file_sample_is_raw_sample":0,
+         "count_unit":"scalar_int16","configured_count":samples,"full_source_count":full_scalar_count,
+         "covers_full_file":covers_full_file}
 
 def _field(handle,name):
  if name not in handle:return None
@@ -259,9 +270,9 @@ def publish(args, *, audit_function=support_audit):
    configured["_observables_noninputs"]=source_config["tracker_inventory_contract"]["observables_noninputs_by_scenario"][scenario]
    audits[scenario]=audit_function(tracker_paths[scenario],scenario,size//4,configured)
    audits[scenario]["tracker_raw_binding_status"]=manifest_checks["tracker_raw_binding"]["status"]
-   receiver_checks=authenticate_receiver_config(receiver_config,configured)
+   receiver_checks=authenticate_receiver_config(receiver_config,{**configured,"raw_size_bytes":size})
    audits[scenario]["receiver_config_status"]=receiver_checks["status"]
-   bindings[scenario]={"raw_path":str(raw),"raw_sha256":actual,"expected_raw_sha256":HASHES[scenario],"raw_size_bytes":size,"raw_sample_count":size//4,"raw_bytes_read_purpose":"full_sha256_only","tracker_path":str(tracker_paths[scenario]),"manifest_path":str(manifest),"manifest_sha256":digest(manifest),"receiver_config_path":str(receiver_config),"receiver_config_sha256":digest(receiver_config),"manifest_checks":manifest_checks,"receiver_config_checks":receiver_checks,"tracker_raw_binding":manifest_checks["tracker_raw_binding"]}
+   bindings[scenario]={"raw_path":str(raw),"raw_sha256":actual,"expected_raw_sha256":HASHES[scenario],"raw_size_bytes":size,"raw_sample_count":size//4,"raw_count_unit":"complex_int16_iq","raw_bytes_read_purpose":"full_sha256_only","raw_checks":raw_checks,"tracker_path":str(tracker_paths[scenario]),"manifest_path":str(manifest),"manifest_sha256":digest(manifest),"receiver_config_path":str(receiver_config),"receiver_config_sha256":digest(receiver_config),"manifest_checks":manifest_checks,"receiver_config_checks":receiver_checks,"tracker_raw_binding":manifest_checks["tracker_raw_binding"]}
   verdict=foundation_gate(audits)
   if verdict["verdict"]!="FOUNDATION_INVALID":raise RuntimeError("this producer is authorized only for fail-closed artifact")
   config={"frozen":FROZEN_CONFIG.document(),"source_binding_config_sha256":SOURCE_BINDING_SHA256,"search_complexity":{"calibration_statistic":"full_minimized_delta_search","scalar_penalty":0.0},"delay_grid":list(np.arange(-1,1.0001,.125)),"doppler_grid_hz":list(range(-250,251,50)),"pooling_candidates":["median","top50_mean","trimmed_mean"],"baseline_B0":"PROVISIONAL_UNAVAILABLE"}
@@ -271,9 +282,9 @@ def publish(args, *, audit_function=support_audit):
    module=__import__(package);versions[package]=module.__version__
   git_head=subprocess.run(["git","rev-parse","HEAD"],cwd=ROOT,text=True,capture_output=True,check=True).stdout.strip();git_dirty=bool(subprocess.run(["git","status","--porcelain"],cwd=ROOT,text=True,capture_output=True,check=True).stdout)
   source_hashes={"producer_sha256":digest(Path(__file__)),"module_sha256":digest(ROOT/"src/gnss_doppler_lab/acaf_nf_stage1_static_feasibility.py"),"verifier_sha256":digest(ROOT/"scripts/verify_acaf_nf_stage1_static_feasibility.py"),"config_sha256":digest(SOURCE_BINDING_CONFIG)}
-  dump(staging/"r14_frozen_lineage.json",{"artifact":str(R14_ARTIFACT),"artifact_checksums_sha256":source_config["r14"]["checksums_sha256"],"verification_report_sha256":source_config["r14"]["verification_report_sha256"],"verifier_sha256":source_config["r14"]["verifier_sha256"],"module_sha256":source_config["r14"]["module_sha256"],"runner_sha256":source_config["r14"]["runner_sha256"],"verifier_required":"PASS","contract":FROZEN_CONFIG.document(),"base_sha":source_config["base_commit"],"git_head":git_head,"git_dirty":git_dirty,"stage1_source_hashes":source_hashes,"versions":versions,"status":"AUTHENTICATED_BY_PREFLIGHT"})
+  dump(staging/"r14_frozen_lineage.json",{"artifact":str(R14_ARTIFACT),"artifact_checksums_sha256":source_config["r14"]["checksums_sha256"],"verification_report_sha256":source_config["r14"]["verification_report_sha256"],"verifier_sha256":source_config["r14"]["verifier_sha256"],"module_sha256":source_config["r14"]["module_sha256"],"runner_sha256":source_config["r14"]["runner_sha256"],"verifier_required":"PASS","contract":FROZEN_CONFIG.document(),"base_sha":source_config["base_commit"],"git_head":git_head,"git_dirty":git_dirty,"stage1_source_hashes":source_hashes,"versions":versions,"status":"PASS"})
   dump(staging/"scenario_timeline.json",TIMELINES)
-  reason="required primary scenario continuous same-PRN 1 ms tracker/raw support is absent under frozen R1.4"
+  reason=";".join(verdict["reasons"])
   not_eval={"status":"NOT_EVALUATED","value":None,"reason":reason}
   dump(staging/"normal_model_summary.json",not_eval);dump(staging/"thresholds.json",not_eval);dump(staging/"bootstrap_results.json",not_eval)
   for name,fields in SCIENCE_CSV.items():write_csv_header(staging/name,fields)
@@ -282,10 +293,20 @@ def publish(args, *, audit_function=support_audit):
   dump(staging/"verification_report.json",{"status":"PENDING_INDEPENDENT_VERIFICATION","producer_verdict_not_authoritative":True})
   (staging/"plots").mkdir()
   report_path=Path(args.test_report_input)
-  report=report_path.read_text()
-  required=("command:","exit_code:","collected:","passed:","failed:","Python","numpy","scipy","h5py","sklearn","matplotlib")
-  if not report.strip() or any(x not in report for x in required) or "exit_code: 0" not in report:raise ValueError("test report is not a successful exact source-phase capture")
-  (staging/"test_report.txt").write_text(report)
+  report=json.loads(report_path.read_text())
+  report_keys={"schema","source_head","versions","environment","runs"};run_keys={"command","stdout","exit_code","collected","passed","failed"}
+  expected_commands=[[sys.executable,"-m","pytest","-q",*targets] for targets in TEST_TARGETS]
+  if (set(report)!=report_keys or report.get("schema")!="acaf-stage1-test-report-v1"
+      or report.get("source_head")!=git_head or report.get("versions")!=versions
+      or report.get("environment")!={"OPENBLAS_NUM_THREADS":"1","OMP_NUM_THREADS":"1","MKL_NUM_THREADS":"1"}
+      or not isinstance(report.get("runs"),list) or len(report["runs"])!=2
+      or any(set(run)!=run_keys or run.get("command")!=command or run.get("exit_code")!=0
+             or type(run.get("collected")) is not int or run.get("collected")<=0
+             or run.get("passed")!=run.get("collected") or run.get("failed")!=0
+             or not isinstance(run.get("stdout"),str) or not run["stdout"].strip()
+             for run,command in zip(report["runs"],expected_commands))):
+   raise ValueError("test report is not an exact successful source-phase capture")
+  (staging/"test_report.txt").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
   (staging/"README.md").write_text("# ACAF-NF Stage-1 static feasibility\n\n`FOUNDATION_INVALID` is a source-support finding, not a physics `NO_GO`. Attack raw IQ was full-hashed only and was never scored. Science CSVs are header-only, model/threshold/bootstrap are `NOT_EVALUATED`, and `plots/` is intentionally empty. `PHYSICS_FEASIBILITY_GO=false` and `PAPER_CANDIDATE_GO=false` mean not evaluated. Stage-2 is not justified until independently validated continuous 1 ms tracker/source binding exists. B0 is `PROVISIONAL_UNAVAILABLE` because its exact evaluator interface, support, and threshold lineage were not authenticated.\n")
   files={str(p.relative_to(staging)):{"sha256":digest(p),"size_bytes":p.stat().st_size} for p in sorted(staging.rglob("*")) if p.is_file() and p.name!="checksums.json"}
   dump(staging/"checksums.json",{"algorithm":"sha256","files":files})
