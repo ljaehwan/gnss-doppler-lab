@@ -424,6 +424,17 @@ def synthesize_same_prn_second_source(prn: int, n: int, delay_chips: float,
     return float(amplitude)*code*carrier
 
 
+def _trapezoid_integral(y, x) -> float:
+    """NumPy-version-independent composite trapezoid integral."""
+    yy = np.asarray(y, dtype=float)
+    xx = np.asarray(x, dtype=float)
+    if yy.ndim != 1 or xx.ndim != 1 or yy.shape != xx.shape or yy.size < 2:
+        raise ValueError("aligned one-dimensional integration coordinates required")
+    if not np.isfinite(yy).all() or not np.isfinite(xx).all():
+        raise ValueError("finite integration coordinates required")
+    return float(np.sum(np.diff(xx) * (yy[:-1] + yy[1:]) * 0.5))
+
+
 def binary_metrics(labels, scores, max_fpr=.01) -> dict:
     from sklearn.metrics import average_precision_score, roc_auc_score, roc_curve
     if not np.isfinite(max_fpr) or not 0 < max_fpr <= 1: raise ValueError("max_fpr must be in (0,1]")
@@ -434,7 +445,7 @@ def binary_metrics(labels, scores, max_fpr=.01) -> dict:
     if not xf or xf[-1] < max_fpr:
         xf.append(max_fpr);yt.append(float(np.interp(max_fpr,fpr,tpr)))
     # Standardized to [0,1] over the requested false-positive range.
-    raw=float(np.trapezoid(yt,xf))
+    raw=_trapezoid_integral(yt,xf)
     minimum=.5*max_fpr**2
     maximum=max_fpr
     pauc=.5*(1+(raw-minimum)/(maximum-minimum)) if max_fpr < 1 else raw
