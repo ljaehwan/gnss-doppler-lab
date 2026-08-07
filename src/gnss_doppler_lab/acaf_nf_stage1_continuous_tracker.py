@@ -55,7 +55,7 @@ def _to_int64(values: np.ndarray, path: Path, name: str) -> np.ndarray:
 
 
 def _channel_from_mat_path(path: Path) -> int:
-    match = re.fullmatch(r"(?:epl_tracking_ch_|epl_track|epl_)(\d+)\.mat", path.name)
+    match = re.fullmatch(r"(?:epl_tracking_ch_|epl_track|epl_|e)(\d+)\.mat", path.name)
     if not match:
         raise ValueError(f"cannot infer channel from MAT filename: {path.name}")
     return int(match.group(1))
@@ -212,7 +212,7 @@ def _to_time_window_distribution(window_counts: dict[str, int]) -> dict[str, int
 
 
 def _is_tracker_mat(path: Path) -> bool:
-    return bool(re.fullmatch(r"(?:epl_tracking_ch_|epl_)\d+\.mat", path.name))
+    return bool(re.fullmatch(r"(?:epl_tracking_ch_|epl_track|epl_|e)\d+\.mat", path.name))
 
 
 def _sorted_prn_indices(sample_counts: np.ndarray, idx: np.ndarray) -> np.ndarray:
@@ -734,10 +734,14 @@ def build_attack_trackers(source_binding: str | Path, output_dir: str | Path) ->
                                           for name, (a, b) in phases.items()},
                                "pull_off_unavailable": scenario == "ds4" and raw_samples < int(225 * FS_HZ)}
     primary_valid = all(scenarios[name]["status"] == "VALID" for name in ("ds3", "ds7", "ds8"))
+    ds4_valid = scenarios["ds4"]["status"] == "VALID"
     ds4_closed = scenarios["ds4"]["status"] == "INVALID_RECORD_ALIGNMENT"
+    checkpoint_status = ("CHECKPOINT_C_COMPLETE" if primary_valid and ds4_valid else
+                         "CHECKPOINT_C_COMPLETE_WITH_DS4_FAIL_CLOSED" if primary_valid and ds4_closed else
+                         "CHECKPOINT_C_INVALID")
     manifest = {"schema": "acaf_nf_stage1_attack_trackers.v1", "checkpoint": "C",
-                "status": "CHECKPOINT_C_COMPLETE_WITH_DS4_FAIL_CLOSED" if primary_valid and ds4_closed else "CHECKPOINT_C_INVALID",
-                "primary_scenarios_valid": primary_valid, "ds4_fail_closed": ds4_closed, "scenarios": scenarios,
+                "status": checkpoint_status, "primary_scenarios_valid": primary_valid,
+                "ds4_valid": ds4_valid, "ds4_fail_closed": ds4_closed, "scenarios": scenarios,
                 "generated_at_utc": datetime.now(timezone.utc).isoformat()}
     (root / "attack_tracker_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     (root / "scenario_timeline.json").write_text(json.dumps(timelines, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -997,9 +1001,9 @@ def build_continuous_tracker(
         "receiver_config_sha256": scenario_cfg["receiver_config_sha256"],
         "receiver_manifest_path": str(receiver_manifest_path),
         "receiver_manifest_sha256": scenario_cfg["manifest_sha256"],
-        "gnss_sdr_name": receiver_manifest["receiver"]["name"],
-        "gnss_sdr_executable": receiver_manifest["receiver"]["executable"],
-        "gnss_sdr_build_sha256": receiver_manifest["receiver"]["executable_sha256"],
+        "gnss_sdr_name": receiver_manifest["receiver"].get("name"),
+        "gnss_sdr_executable": receiver_manifest["receiver"].get("executable", receiver_manifest["receiver"].get("path")),
+        "gnss_sdr_build_sha256": receiver_manifest["receiver"].get("executable_sha256", receiver_manifest["receiver"].get("sha256")),
         "tracker_mat_inventory": scenario_cfg["mat_inventory"],
         "dat_record_contract": {"record_bytes": DAT_RECORD_BYTES, "sample_stamp_offset": DAT_SAMPLE_STAMP_OFFSET,
                                 "sample_stamp_dtype": "little-endian uint64", "all_rows_match_mat": report["dat_sample_stamp_match"]},

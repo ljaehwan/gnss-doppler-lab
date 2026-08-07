@@ -252,16 +252,16 @@ def verify_c(root: Path) -> tuple[bool,list[str],dict[str,object]]:
     source=json.loads((root/"source_binding.json").read_text(encoding="utf-8"))
     recomputed={}
     for scenario in scenarios:
-        row_errors: list[str] = [] if scenario == "ds4" else errors
+        binding=source["scenarios"][scenario];manifest=json.loads(Path(binding["receiver_manifest_path"]).read_text(encoding="utf-8"))
+        bound=_pointer(manifest,binding["manifest_pointers"].get("raw_sha256"))==binding["raw_sha256"]
+        expected_status="PASS" if bound else "INVALID_RECORD_ALIGNMENT"
+        row_errors: list[str] = [] if scenario == "ds4" and not bound else errors
         pairs,l20=_verify_source_rows(root,row_errors,scenario)
-        if scenario == "ds4":
+        if scenario == "ds4" and not bound:
             unexpected=[error for error in row_errors if not error.startswith(("dat_size:", "dat_stamp:"))]
             if unexpected: errors.extend(f"ds4_unexpected:{error}" for error in unexpected)
             if not row_errors: errors.append("ds4_missing_alignment_failure")
-        binding=source["scenarios"][scenario];manifest=json.loads(Path(binding["receiver_manifest_path"]).read_text(encoding="utf-8"))
-        bound=_pointer(manifest,binding["manifest_pointers"].get("raw_sha256"))==binding["raw_sha256"]
-        expected_status="INVALID_RECORD_ALIGNMENT" if scenario=="ds4" else "PASS"
-        if binding["status"]!=expected_status or (scenario=="ds4" and bound) or (scenario!="ds4" and not bound):
+        if binding["status"]!=expected_status or (expected_status=="PASS" and not bound):
             errors.append(f"binding_status:{scenario}")
         with (root/f"continuous_tracker_{scenario}.csv").open(newline="",encoding="utf-8") as handle: rows=list(csv.DictReader(handle))
         coverage={}
@@ -282,19 +282,57 @@ def verify_c(root: Path) -> tuple[bool,list[str],dict[str,object]]:
         if coverage!=attack["scenarios"][scenario]["phase_coverage"]: errors.append(f"phase_coverage:{scenario}")
         recomputed[scenario]={"prn_channels":pairs,"l20_windows":l20,"binding":expected_status,
                               "alignment_errors":row_errors if scenario == "ds4" else [],"phase_coverage":coverage}
-    expected="CHECKPOINT_C_COMPLETE_WITH_DS4_FAIL_CLOSED"
-    if attack.get("status")!=expected or not attack.get("primary_scenarios_valid") or not attack.get("ds4_fail_closed"):
+    ds4_valid=source["scenarios"]["ds4"]["status"]=="PASS"
+    expected="CHECKPOINT_C_COMPLETE" if ds4_valid else "CHECKPOINT_C_COMPLETE_WITH_DS4_FAIL_CLOSED"
+    if (attack.get("status")!=expected or not attack.get("primary_scenarios_valid")
+            or bool(attack.get("ds4_valid"))!=ds4_valid or bool(attack.get("ds4_fail_closed"))==ds4_valid):
         errors.append("checkpoint_c_status")
     report={"status":"PASS" if not errors else "FAIL","errors":errors,"checkpoint":"C","artifact_path":str(root),
             "scientific_status":expected,"recomputed":recomputed}
     return not errors,errors,report
 
 
+def verify_d(root: Path) -> tuple[bool,list[str],dict[str,object]]:
+    errors: list[str]=[]
+    required=["README.md","config.json","normal_model_summary.json","thresholds.json","per_window_scores.csv",
+              "scenario_metrics.csv","phase_metrics.csv","baseline_metrics.csv","control_metrics.csv",
+              "secondary_component_metrics.csv","bootstrap_results.json","execution_validity.json","go_no_go.json",
+              "checkpoint_c_verification_report.json","test_report.txt","checksums.json","plots/stage1_r1_scores.png"]
+    for name in required:
+        if not (root/name).is_file(): errors.append(f"missing_file:{name}")
+    if errors: return False,errors,{"status":"FAIL","errors":errors,"checkpoint":"D","artifact_path":str(root)}
+    verify_checksums(root,errors)
+    c=json.loads((root/"checkpoint_c_verification_report.json").read_text(encoding="utf-8"))
+    if c.get("status")!="PASS" or c.get("scientific_status")!="CHECKPOINT_C_COMPLETE": errors.append("checkpoint_c_gate")
+    config=json.loads((root/"config.json").read_text(encoding="utf-8"));source=Path(config["source_binding"])
+    if not source.is_file() or sha256(source)!=config.get("source_binding_sha256"): errors.append("source_binding_hash")
+    with (root/"per_window_scores.csv").open(newline="",encoding="utf-8") as handle: rows=list(csv.DictReader(handle))
+    if not rows or any(r["scenario"]!="cleanStatic" for r in rows if r["role"] in {"train","selection","calibration","holdout"}):
+        errors.append("attack_data_in_normal_roles")
+    calibration=[float(r["score"]) for r in rows if r["scenario"]=="cleanStatic" and r["role"]=="calibration"]
+    thresholds=json.loads((root/"thresholds.json").read_text(encoding="utf-8"));q99=float(np.quantile(calibration,.99,method="higher"))
+    if abs(q99-float(thresholds.get("q99",float("nan"))))>1e-12 or thresholds.get("source")!="cleanStatic_calibration_only": errors.append("threshold_recompute")
+    execution=json.loads((root/"execution_validity.json").read_text(encoding="utf-8"))
+    if (execution.get("status")!="FOUNDATION_PASS_SCIENCE_EXECUTED" or not execution.get("caf_executed")
+            or execution.get("attack_rows_in_fit_or_calibration")!=0 or execution.get("science_csv_semantics")!="numeric"):
+        errors.append("execution_semantics")
+    go=json.loads((root/"go_no_go.json").read_text(encoding="utf-8"));physics=go.get("physics_criteria",{});paper=go.get("paper_criteria",{})
+    expected_physics=bool(physics) and all(bool(x) for x in physics.values());expected_paper=expected_physics and bool(paper) and all(bool(x) for x in paper.values())
+    if go.get("foundation")!="FOUNDATION_PASS" or bool(go.get("PHYSICS_FEASIBILITY_GO"))!=expected_physics or bool(go.get("PAPER_CANDIDATE_GO"))!=expected_paper:
+        errors.append("go_no_go_recompute")
+    test=(root/"test_report.txt").read_text(encoding="utf-8")
+    if "exit_code: 0" not in test or "passed" not in test: errors.append("test_report")
+    report={"status":"PASS" if not errors else "FAIL","errors":errors,"checkpoint":"D","artifact_path":str(root),
+            "scientific_status":go.get("verdict"),"foundation":"FOUNDATION_PASS","recomputed":{"q99":q99,"rows":len(rows),
+            "physics_feasibility_go":expected_physics,"paper_candidate_go":expected_paper}}
+    return not errors,errors,report
+
+
 def main() -> None:
-    parser=argparse.ArgumentParser();parser.add_argument("artifact",type=Path);parser.add_argument("--checkpoint",choices=("A","B","C"),default="A")
+    parser=argparse.ArgumentParser();parser.add_argument("artifact",type=Path);parser.add_argument("--checkpoint",choices=("A","B","C","D"),default="A")
     parser.add_argument("--write-report",action="store_true");args=parser.parse_args()
     ok,_,report=(verify_a(args.artifact) if args.checkpoint=="A" else verify_b(args.artifact)
-                 if args.checkpoint=="B" else verify_c(args.artifact))
+                 if args.checkpoint=="B" else verify_c(args.artifact) if args.checkpoint=="C" else verify_d(args.artifact))
     if args.write_report:
         (args.artifact/"verification_report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n",encoding="utf-8")
     print(json.dumps(report,indent=2,sort_keys=True));raise SystemExit(0 if ok else 2)

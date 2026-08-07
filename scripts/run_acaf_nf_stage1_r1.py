@@ -7,6 +7,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from gnss_doppler_lab.acaf_nf_stage1_r1 import run_stage1_r1
+
 
 def main() -> None:
     parser = argparse.ArgumentParser()
@@ -17,9 +19,9 @@ def main() -> None:
     )
     parser.add_argument(
         "--checkpoint",
-        choices=("A", "B", "C"),
+        choices=("A", "B", "C", "D"),
         default="A",
-        help="Checkpoint selector: A cadence, B cleanStatic validation, C attack tracker/source binding.",
+        help="Checkpoint selector: A cadence, B cleanStatic validation, C attack binding, D actual evaluation.",
     )
     parser.add_argument(
         "--scenario",
@@ -67,6 +69,10 @@ def main() -> None:
                "--source-binding", args.source_binding, "--output", args.output]
         for scenario in expected: cmd.extend(["--scenario", scenario])
         result = subprocess.run(cmd, check=True)
+    elif args.checkpoint == "D":
+        if args.scenario: raise ValueError("--scenario is not accepted for checkpoint D")
+        run_stage1_r1(Path(args.output), Path(args.source_binding))
+        result = subprocess.CompletedProcess([], 0)
     else:
         raise ValueError(f"Unsupported checkpoint: {args.checkpoint}")
 

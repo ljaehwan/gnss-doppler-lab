@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
@@ -54,7 +55,8 @@ def run(args: argparse.Namespace) -> Path:
             result=subprocess.run(command,stdout=log,stderr=subprocess.STDOUT,cwd=output)
         exit_code=result.returncode
         if exit_code!=0:raise RuntimeError(f"receiver failed with exit {exit_code}")
-    mats=sorted(raw_dir.glob("epl_track*.mat"));dats=sorted(raw_dir.glob("epl_track*.dat"))
+    canonical=lambda p: bool(re.fullmatch(r"(?:epl_tracking_ch_|epl_track|epl_|e)\d+\.(?:mat|dat)",p.name))
+    mats=sorted(p for p in raw_dir.glob("*.mat") if canonical(p));dats=sorted(p for p in raw_dir.glob("*.dat") if canonical(p))
     mat_stems={p.stem for p in mats};dat_stems={p.stem for p in dats}
     if not mats or mat_stems!=dat_stems:raise RuntimeError("receiver did not produce paired MAT/DAT files")
     provenance=json.loads(args.build_provenance.read_text(encoding="utf-8"))
@@ -76,7 +78,7 @@ def run(args: argparse.Namespace) -> Path:
 
 
 def main() -> None:
-    p=argparse.ArgumentParser();p.add_argument("--scenario",choices=("ds7","ds8"),required=True);p.add_argument("--source-binding",type=Path,default=ROOT/"configs/acaf_nf_stage1_source_binding.json")
+    p=argparse.ArgumentParser();p.add_argument("--scenario",choices=("cleanStatic","ds3","ds4","ds7","ds8"),required=True);p.add_argument("--source-binding",type=Path,default=ROOT/"configs/acaf_nf_stage1_source_binding.json")
     p.add_argument("--gnss-sdr",type=Path,required=True);p.add_argument("--binary-sha256",required=True);p.add_argument("--build-provenance",type=Path,required=True);p.add_argument("--output",type=Path,required=True)
     p.add_argument("--finalize-existing",action="store_true",help="validate and manifest an already completed receiver replay")
     print(run(p.parse_args()))
