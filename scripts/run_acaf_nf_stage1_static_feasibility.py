@@ -12,9 +12,9 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
 from gnss_doppler_lab.acaf_nf_stage1_static_feasibility import FROZEN_CONFIG,consecutive_windows
 
-DEFAULT_OUTPUT=ROOT/"artifacts/acaf_nf_stage1_static_feasibility"
+DEFAULT_OUTPUT=ROOT/"artifacts/acaf_nf_stage1_static_feasibility.pending"
 SOURCE_BINDING_CONFIG=ROOT/"configs/acaf_nf_stage1_source_binding.json"
-SOURCE_BINDING_SHA256="21a261676e095683d68a753094967d18a4f048f3c4a03b50d2596e385543913e"
+SOURCE_BINDING_SHA256="23e4e5846283ba4a7e4e04f69c62c994acd339d1f848bba4415f865fc252c4ae"
 R14_ARTIFACT=ROOT/"artifacts/acaf_nf_stage0_static_r14_doppler_validation"
 RAW_ROOT=Path("/home/ubuntu/unraid_hdd/texbat/raw")
 TRACKERS={
@@ -37,7 +37,7 @@ PHASES={
  "ds8":{"pre":[0,2_750_000_000],"transition":[2_750_000_000,3_250_000_000],"held":[3_250_000_000,3_750_000_000],"time_push":[3_750_000_000,None]}}
 EXPECTED_PHASE={
  "cleanStatic":{"all":{"triples":101278,"l20":100864,"prns":11}},
- "ds3":{"pre":{"triples":148699,"l20":148196,"prns":11},"onset_to_pulloff":{"triples":39762,"l20":39605,"prns":5},"post_pulloff":{"triples":5200,"l20":5124,"prns":3}},
+ "ds3":{"pre":{"triples":148699,"l20":148196,"prns":11},"onset_to_pulloff":{"triples":39761,"l20":39604,"prns":5},"post_pulloff":{"triples":5200,"l20":5124,"prns":3}},
  "ds4":{"pre":{"triples":107471,"l20":106914,"prns":11},"transition_only":{"triples":18,"l20":0,"prns":0}},
  "ds7":{"pre":{"triples":100520,"l20":100290,"prns":11},"transition":{"triples":0,"l20":0,"prns":0},"held":{"triples":0,"l20":0,"prns":0},"time_push":{"triples":0,"l20":0,"prns":0}},
  "ds8":{"pre":{"triples":102940,"l20":102662,"prns":10},"transition":{"triples":0,"l20":0,"prns":0},"held":{"triples":0,"l20":0,"prns":0},"time_push":{"triples":288,"l20":232,"prns":1}}}
@@ -85,18 +85,55 @@ def authenticate_manifest(document,scenario):
  checks["sample_format"]={"status":"PASS" if "ishort" in fmt and ("iq" in fmt or "complex" in fmt) else "FAIL","pointer":pointers["format"],"value":fmt}
  return checks
 
+def authenticate_receiver_config(path, scenario_config):
+ values={}
+ for raw_line in Path(path).read_text().splitlines():
+  line=raw_line.strip()
+  if not line or line.startswith("#") or "=" not in line:continue
+  key,value=line.split("=",1);values[key.strip()]=value.strip()
+ forbidden=[k for k in values if k.startswith("SignalSource.") and any(x in k.lower() for x in ("skip","header","offset"))]
+ expected={"SignalSource.item_type":"ishort","SignalSource.sampling_frequency":"25000000","SignalSource.samples":"0"}
+ failures=[]
+ if forbidden:failures.append("FORBIDDEN_SKIP_HEADER_OFFSET_KEY")
+ if any(values.get(k)!=v for k,v in expected.items()):failures.append("SOURCE_KEYS_MISMATCH")
+ if not values.get("SignalSource.filename"):failures.append("MISSING_FILENAME")
+ filename=values["SignalSource.filename"]
+ return {"status":"FAIL" if failures else "PASS","reasons":failures,"keys":{k:values.get(k) for k in (*expected,"SignalSource.filename")},"expected_keys":expected,"forbidden_keys":forbidden,
+         "configured_filename_alias_classification":"HISTORICAL_RELOCATED_ALIAS",
+         "configured_filename_content_sha256":scenario_config["raw_sha256"],"first_file_sample_is_raw_sample":0}
+
 def _field(handle,name):
  if name not in handle:return None
  return np.asarray(handle[name]).reshape(-1)
 
 REQUIRED={"stamp":"PRN_start_sample_count","prn":"PRN","carrier_doppler_hz":"carrier_doppler_hz","code_freq_chips":"code_freq_chips","aux1":"aux1","prompt_i":"Prompt_I","prompt_q":"Prompt_Q","cn0":"CN0_SNV_dB_Hz","lock":"carrier_lock_test"}
-def tracker_rows(tracker:Path, raw_sample_count=None):
+def tracker_rows(tracker:Path, raw_sample_count=None, inventory_config=None, scenario=None):
  rows=[];inventory=[]
  tracker=Path(tracker)
  if tracker.is_symlink() or not tracker.is_dir():raise ValueError("tracker root must be a real directory")
- entries=list(tracker.iterdir());expected={p.name for p in entries if p.name.endswith((".mat",".dat"))}
- if any(p.is_symlink() or not p.is_file() for p in entries):raise ValueError("unexpected nested/symlink/special tracker entry")
- mats=sorted(p for p in entries if p.suffix==".mat" and p.stem not in {"observables","obse"})
+ entries=list(tracker.iterdir())
+ aliases=[]
+ if inventory_config is not None:
+  canonical=set(inventory_config["mat_inventory"])
+  ignored=set(inventory_config.get("ignored_alias_symlinks",{}))
+  observations=set(inventory_config["_observables_noninputs"])
+  dats={Path(n).with_suffix(".dat").name for n in canonical}
+  if {p.name for p in entries} != canonical|ignored|observations|dats:raise ValueError("exact tracker inventory mismatch")
+  for p in entries:
+   if p.name in canonical and (p.is_symlink() or not p.is_file()):raise ValueError("canonical MAT must be regular")
+   elif p.name in ignored:
+    if not p.is_symlink():raise ValueError("expected ignored alias symlink")
+    raw_target=os.readlink(p);resolved=(p.parent/raw_target).resolve(strict=True)
+    relative=resolved.relative_to(tracker.resolve()).as_posix()
+    if relative!=inventory_config["ignored_alias_symlinks"][p.name]:raise ValueError("alias target mismatch")
+    aliases.append({"filename":p.name,"link_target":raw_target,"resolved_relative_target":relative,"ignored_noninput":True})
+   elif p.name in observations|dats:
+    if p.is_symlink() or not p.is_file():raise ValueError("noninput must be regular")
+   elif p.is_symlink() or not p.is_file():raise ValueError("unexpected tracker node")
+  mats=sorted(tracker/n for n in canonical)
+ else:
+  if any(p.is_symlink() or not p.is_file() for p in entries):raise ValueError("unexpected nested/symlink/special tracker entry")
+  mats=sorted(p for p in entries if p.suffix==".mat" and p.stem not in {"observables","obse"})
  if not mats:raise ValueError("no tracker MAT files")
  for mat in mats:
   with h5py.File(mat,"r") as f:
@@ -107,7 +144,11 @@ def tracker_rows(tracker:Path, raw_sample_count=None):
    if n<3 or any(len(v)!=n for v in values.values()):raise ValueError(f"{mat.name}: required field length mismatch")
    if any(v.dtype.kind not in "iuf" or not np.isfinite(v).all() for v in values.values()):raise ValueError(f"{mat.name}: required field type/nonfinite")
    if not np.equal(values["stamp"],np.floor(values["stamp"])).all():raise ValueError(f"{mat.name}: noninteger stamp")
-   inventory.append({"filename":mat.name,"sha256":digest(mat),"rows":n,"fields":sorted(f.keys())})
+   schema=[{"name":name,"dtype":str(f[name].dtype),"shape":list(f[name].shape)} for name in sorted(f.keys())]
+   schema_digest=hashlib.sha256(json.dumps(schema,separators=(",",":"),sort_keys=True).encode()).hexdigest()
+   entry={"filename":mat.name,"sha256":digest(mat),"size_bytes":mat.stat().st_size,"rows":n,"required_field_schema":{"digest_sha256":schema_digest,"fields":schema}}
+   if inventory_config is not None and entry["sha256"]!=inventory_config["mat_inventory"][mat.name]:raise ValueError("pinned canonical MAT hash mismatch")
+   inventory.append(entry)
    starts=values["stamp"].astype(np.int64);prns=values["prn"]
    channel=mat.stem
    for i in range(1,n-1):
@@ -119,7 +160,7 @@ def tracker_rows(tracker:Path, raw_sample_count=None):
      "prn_valid":bool(all(1<=int(prns[j])<=32 for j in (i-1,i,i+1))),"finite_required":bool(finite),
      "min_triple_cn0":float(min(values["cn0"][i-1:i+2])),"min_triple_lock":float(min(values["lock"][i-1:i+2])),
      "raw_bounds":bool(start>=0 and (raw_sample_count is None or end<=raw_sample_count))})
- return rows,inventory
+ return rows,{"canonical_mat_files":inventory,"ignored_alias_symlinks":sorted(aliases,key=lambda x:x["filename"]),"ignored_regular_noninputs":sorted(observations|dats) if inventory_config is not None else []}
 
 def phase_name(scenario,sample):
  if isinstance(sample,float) and not sample.is_integer():sample=round(sample*25_000_000)
@@ -128,8 +169,8 @@ def phase_name(scenario,sample):
   if sample>=a and (b is None or sample<b):return name
  raise ValueError((scenario,sample))
 
-def support_audit(tracker,scenario,raw_sample_count=None):
- rows,inventory=tracker_rows(tracker,raw_sample_count);accepted=[];excluded={}
+def support_audit(tracker,scenario,raw_sample_count=None,inventory_config=None):
+ rows,inventory=tracker_rows(tracker,raw_sample_count,inventory_config,scenario);accepted=[];excluded={}
  for r in rows:
   reasons=[]
   if not r["same_prn_triple"]:reasons.append("MIXED_PRN_TRIPLE")
@@ -145,20 +186,33 @@ def support_audit(tracker,scenario,raw_sample_count=None):
       and r["min_triple_lock"]>=.85):accepted.append(r)
   else:
    for reason in reasons:excluded[reason]=excluded.get(reason,0)+1
- counts={};windows=[];crossing=0
+ counts={}
+ crossing=sum(phase_name(scenario,r["start"])!=phase_name(scenario,r["end"]-1) for r in accepted)
  for phase in EXPECTED_PHASE[scenario]:
   selected=[r for r in accepted if phase_name(scenario,r["start"])==phase and phase_name(scenario,r["end"]-1)==phase]
-  crossing += sum(phase_name(scenario,r["start"])!=phase_name(scenario,r["end"]-1) for r in accepted)
   eligible=[{"channel":r["channel"],"prn":r["prn"],"tracker_row":r["row"],"phase":phase,"support_start_sample":r["start"],"support_end_sample":r["end"],"cn0_db_hz":r["min_triple_cn0"],"carrier_lock":r["min_triple_lock"]} for r in selected]
-  ws=consecutive_windows(eligible);windows.extend(ws)
-  counts[phase]={"triples":len(selected),"l20":len(ws),"prns":len({int(w[-1]["prn"]) for w in ws}),"dominant_fraction":max((sum(int(w[-1]["prn"])==p for w in ws)/len(ws) for p in {int(w[-1]["prn"]) for w in ws}),default=0.)}
- return {"scenario":scenario,"counts":counts,"expected":EXPECTED_PHASE[scenario],"matches_expected":all({k:counts[p][k] for k in ("triples","l20","prns")}==e for p,e in EXPECTED_PHASE[scenario].items()),"triple_identities":[[r["channel"],r["prn"],r["row"],r["start"],r["end"]] for r in accepted],"l20_identities":[[[x["channel"],x["prn"],x["tracker_row"],x["support_start_sample"],x["support_end_sample"]] for x in w] for w in windows],"excluded":excluded,"boundary_crossing_supports":crossing,"mat_inventory":inventory,"accepted_rule":"previous-row support; exact triple; deltas 24999..25001; finite full schema; CN0>=28; lock>=.85","twenty_ms_gaps_interpolated":False}
+  per_prn={}
+  groups={}
+  for r in eligible:groups.setdefault((r["channel"],r["prn"]),[]).append(r)
+  for group in groups.values():
+   group.sort(key=lambda r:r["support_start_sample"])
+   for j in range(19,len(group)):
+    w=group[j-19:j+1]
+    if (len({r["tracker_row"] for r in w})==20
+        and all(b["tracker_row"]==a["tracker_row"]+1 and 24999<=b["support_start_sample"]-a["support_start_sample"]<=25001 for a,b in zip(w,w[1:]))
+        and phase_name(scenario,w[0]["support_start_sample"])==phase_name(scenario,w[-1]["support_end_sample"]-1)==phase):per_prn[w[-1]["prn"]]=per_prn.get(w[-1]["prn"],0)+1
+  total=sum(per_prn.values())
+  counts[phase]={"triples":len(selected),"l20":total,"prns":len(per_prn),"dominant_fraction":max(per_prn.values(),default=0)/total if total else 0.,"crossing_excluded":sum(phase_name(scenario,r["start"])==phase and phase_name(scenario,r["end"]-1)!=phase for r in accepted)}
+ return {"scenario":scenario,"counts":counts,"expected":EXPECTED_PHASE[scenario],"matches_expected":all({k:counts[p][k] for k in ("triples","l20","prns")}==e for p,e in EXPECTED_PHASE[scenario].items()),"excluded":excluded,"boundary_crossing_supports":crossing,"mat_inventory":inventory,"accepted_rule":"previous-row support; exact triple; deltas 24999..25001; finite full schema; quality every row; bounds; half-open phase containment","twenty_ms_gaps_interpolated":False}
 
 def foundation_gate(audits):
  """Derive the source-only foundation verdict; scoring is not in this API."""
  failures=[]
  for name in ("cleanStatic","ds3","ds4","ds7","ds8"):
   if name not in audits or not audits[name].get("matches_expected"):failures.append(f"{name}_support_audit_mismatch")
+ if audits.get("ds4",{}).get("tracker_raw_binding_status")=="FAIL":failures.insert(0,"DS4_MANIFEST_DOES_NOT_BIND_RAW_SHA")
+ for name in audits:
+  if audits[name].get("receiver_config_status")=="FAIL":failures.append(name+"_RECEIVER_CONFIG_TIME_ORIGIN_FAIL")
  if audits.get("ds4",{}).get("counts",{}).get("transition_only",{}).get("l20",0)==0:failures.append("DS4_NO_POST_L20")
  if sum(audits.get("ds7",{}).get("counts",{}).get(p,{}).get("triples",0) for p in ("transition","held","time_push"))==0:failures.append("DS7_NO_POST_SUPPORT")
  d8=audits.get("ds8",{}).get("counts",{})
@@ -180,25 +234,34 @@ def publish(args, *, audit_function=support_audit):
  output.parent.mkdir(parents=True,exist_ok=True)
  staging=Path(tempfile.mkdtemp(prefix=output.name+".staging-",dir=output.parent))
  try:
-  if digest(SOURCE_BINDING_CONFIG)!=SOURCE_BINDING_SHA256:raise RuntimeError("pinned source-binding config drift")
+  if SOURCE_BINDING_SHA256=="TO_BE_FINALIZED" or digest(SOURCE_BINDING_CONFIG)!=SOURCE_BINDING_SHA256:raise RuntimeError("pinned source-binding config drift")
   source_config=json.loads(SOURCE_BINDING_CONFIG.read_text())
   raw_paths={s:Path(getattr(args,"raw_"+("clean" if s=="cleanStatic" else s))) for s in TRACKERS}
   tracker_paths={s:Path(getattr(args,"tracker_"+("clean" if s=="cleanStatic" else s))) for s in TRACKERS}
   bindings={};audits={}
   for scenario in TRACKERS:
    raw=raw_paths[scenario]
+   configured=source_config["scenarios"][scenario]
+   if raw!=Path(configured["raw_path"]):raise RuntimeError(f"{scenario} artifact-controlled raw path rejected")
    if not raw.is_file():raise FileNotFoundError(raw)
    actual=digest(raw)
    if actual!=HASHES[scenario]:raise RuntimeError(f"{scenario} raw SHA-256 mismatch")
-   manifest=discover_manifest(tracker_paths[scenario])
-   if manifest is None:raise RuntimeError(f"{scenario} tracker manifest unavailable")
+   if tracker_paths[scenario]!=Path(configured["tracker_path"]):raise RuntimeError(f"{scenario} artifact-controlled tracker path rejected")
+   manifest=Path(configured["manifest_path"])
+   receiver_config=Path(configured["receiver_config_path"])
+   if not manifest.is_file() or not receiver_config.is_file():raise RuntimeError(f"{scenario} configured metadata unavailable")
+   if digest(manifest)!=configured["manifest_sha256"] or digest(receiver_config)!=configured["receiver_config_sha256"]:raise RuntimeError(f"{scenario} pinned metadata hash mismatch")
    manifest_doc=json.loads(manifest.read_text())
    manifest_checks=authenticate_manifest(manifest_doc,scenario)
    if scenario!="ds4" and any(x["status"]!="PASS" for x in manifest_checks.values()):raise RuntimeError(f"{scenario} exact manifest binding failed")
    size=raw.stat().st_size
    raw_checks={"size_divisible_by_4":{"status":"PASS" if size%4==0 else "FAIL"},"format":{"status":"PASS" if manifest_checks["sample_format"]["status"]=="PASS" else "FAIL"},"rate":{"status":"PASS" if manifest_checks["sample_rate"]["status"]=="PASS" else "FAIL"},"sample_count":size//4}
-   audits[scenario]=audit_function(tracker_paths[scenario],scenario,size//4)
-   bindings[scenario]={"raw_path":str(raw),"raw_sha256":actual,"expected_raw_sha256":HASHES[scenario],"raw_size_bytes":size,"raw_sample_count":size//4,"raw_bytes_read_purpose":"full_sha256_only","raw_checks":raw_checks,"tracker_path":str(tracker_paths[scenario]),"manifest_path":str(manifest),"manifest_sha256":digest(manifest),"manifest_checks":manifest_checks,"tracker_raw_binding":manifest_checks["tracker_raw_binding"]}
+   configured["_observables_noninputs"]=source_config["tracker_inventory_contract"]["observables_noninputs_by_scenario"][scenario]
+   audits[scenario]=audit_function(tracker_paths[scenario],scenario,size//4,configured)
+   audits[scenario]["tracker_raw_binding_status"]=manifest_checks["tracker_raw_binding"]["status"]
+   receiver_checks=authenticate_receiver_config(receiver_config,configured)
+   audits[scenario]["receiver_config_status"]=receiver_checks["status"]
+   bindings[scenario]={"raw_path":str(raw),"raw_sha256":actual,"expected_raw_sha256":HASHES[scenario],"raw_size_bytes":size,"raw_sample_count":size//4,"raw_bytes_read_purpose":"full_sha256_only","tracker_path":str(tracker_paths[scenario]),"manifest_path":str(manifest),"manifest_sha256":digest(manifest),"receiver_config_path":str(receiver_config),"receiver_config_sha256":digest(receiver_config),"manifest_checks":manifest_checks,"receiver_config_checks":receiver_checks,"tracker_raw_binding":manifest_checks["tracker_raw_binding"]}
   verdict=foundation_gate(audits)
   if verdict["verdict"]!="FOUNDATION_INVALID":raise RuntimeError("this producer is authorized only for fail-closed artifact")
   config={"frozen":FROZEN_CONFIG.document(),"source_binding_config_sha256":SOURCE_BINDING_SHA256,"search_complexity":{"calibration_statistic":"full_minimized_delta_search","scalar_penalty":0.0},"delay_grid":list(np.arange(-1,1.0001,.125)),"doppler_grid_hz":list(range(-250,251,50)),"pooling_candidates":["median","top50_mean","trimmed_mean"],"baseline_B0":"PROVISIONAL_UNAVAILABLE"}
@@ -206,8 +269,9 @@ def publish(args, *, audit_function=support_audit):
   versions={"python":sys.version.split()[0],"numpy":np.__version__,"h5py":h5py.__version__}
   for package in ("scipy","sklearn","matplotlib"):
    module=__import__(package);versions[package]=module.__version__
-  git_head=subprocess.run(["git","rev-parse","HEAD"],cwd=ROOT,text=True,capture_output=True,check=True).stdout.strip()
-  dump(staging/"r14_frozen_lineage.json",{"artifact":str(R14_ARTIFACT),"artifact_checksums_sha256":source_config["r14"]["checksums_sha256"],"verification_report_sha256":source_config["r14"]["verification_report_sha256"],"verifier_sha256":source_config["r14"]["verifier_sha256"],"module_sha256":source_config["r14"]["module_sha256"],"runner_sha256":source_config["r14"]["runner_sha256"],"verifier_required":"PASS","contract":FROZEN_CONFIG.document(),"base_sha":source_config["base_commit"],"git_head":git_head,"git_dirty":False,"versions":versions,"status":"AUTHENTICATED_BY_PREFLIGHT"})
+  git_head=subprocess.run(["git","rev-parse","HEAD"],cwd=ROOT,text=True,capture_output=True,check=True).stdout.strip();git_dirty=bool(subprocess.run(["git","status","--porcelain"],cwd=ROOT,text=True,capture_output=True,check=True).stdout)
+  source_hashes={"producer_sha256":digest(Path(__file__)),"module_sha256":digest(ROOT/"src/gnss_doppler_lab/acaf_nf_stage1_static_feasibility.py"),"verifier_sha256":digest(ROOT/"scripts/verify_acaf_nf_stage1_static_feasibility.py"),"config_sha256":digest(SOURCE_BINDING_CONFIG)}
+  dump(staging/"r14_frozen_lineage.json",{"artifact":str(R14_ARTIFACT),"artifact_checksums_sha256":source_config["r14"]["checksums_sha256"],"verification_report_sha256":source_config["r14"]["verification_report_sha256"],"verifier_sha256":source_config["r14"]["verifier_sha256"],"module_sha256":source_config["r14"]["module_sha256"],"runner_sha256":source_config["r14"]["runner_sha256"],"verifier_required":"PASS","contract":FROZEN_CONFIG.document(),"base_sha":source_config["base_commit"],"git_head":git_head,"git_dirty":git_dirty,"stage1_source_hashes":source_hashes,"versions":versions,"status":"AUTHENTICATED_BY_PREFLIGHT"})
   dump(staging/"scenario_timeline.json",TIMELINES)
   reason="required primary scenario continuous same-PRN 1 ms tracker/raw support is absent under frozen R1.4"
   not_eval={"status":"NOT_EVALUATED","value":None,"reason":reason}

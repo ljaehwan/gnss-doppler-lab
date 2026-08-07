@@ -80,10 +80,25 @@ def build_h1_template(coordinate, surface, *, source_role, construction_method,
         raise ValueError("H1 templates must be constructed from normal_train")
     if construction_method != "raw_iq_periodic_recorrelation":
         raise ValueError("untrusted H1 construction method")
-    if not isinstance(lineage, Mapping) or not lineage:
-        raise ValueError("H1 lineage is required")
-    digest = hashlib.sha256(np.ascontiguousarray(value).view(np.uint8)).hexdigest()
-    return H1Template(coordinate, value.copy(), source_role, construction_method,
+    required = {"recording_sha256", "role", "raw_intervals", "construction_method"}
+    if (not isinstance(lineage, Mapping) or set(lineage) != required
+            or lineage["role"] != "normal_train"
+            or lineage["construction_method"] != construction_method
+            or not isinstance(lineage["recording_sha256"], str)
+            or len(lineage["recording_sha256"]) != 64
+            or not isinstance(lineage["raw_intervals"], list)
+            or not lineage["raw_intervals"]):
+        raise ValueError("exact H1 provenance is required")
+    for interval in lineage["raw_intervals"]:
+        if (not isinstance(interval, Mapping) or set(interval) != {"start", "end", "sha256"}
+                or not isinstance(interval["start"], int) or not isinstance(interval["end"], int)
+                or interval["start"] < 0 or interval["end"] <= interval["start"]
+                or not isinstance(interval["sha256"], str) or len(interval["sha256"]) != 64):
+            raise ValueError("invalid H1 raw interval provenance")
+    frozen = np.array(value, dtype=np.complex128, copy=True, order="C")
+    frozen.flags.writeable = False
+    digest = hashlib.sha256(frozen.view(np.uint8)).hexdigest()
+    return H1Template(coordinate, frozen, source_role, construction_method,
                       digest, dict(lineage))
 
 
@@ -104,9 +119,12 @@ def dense_complex_caf(iq: np.ndarray, prn: int, code_freq_chips: float,
 def normalize_caf(caf: np.ndarray, floor: float = 1e-12) -> tuple[np.ndarray, dict]:
     """Remove center phase and gain, returning the unhidden raw diagnostics."""
     c = np.asarray(caf, dtype=np.complex128)
-    if c.shape[-2:] != (len(DOPPLERS), len(DELAYS)) or floor <= 0:
+    if (c.shape[-2:] != (len(DOPPLERS), len(DELAYS)) or not np.isfinite(c).all()
+            or not np.isfinite(floor) or floor <= 0):
         raise ValueError("invalid CAF shape or normalization floor")
     center = c[..., CENTER[0], CENTER[1]]
+    if np.any(np.abs(center) < floor):
+        raise ValueError("normalization floor applied; CAF is ineligible")
     denominator = np.maximum(np.abs(center), float(floor))
     y = c * np.exp(-1j * np.angle(center))[..., None, None] / denominator[..., None, None]
     y[..., CENTER[0], CENTER[1]] = 1.0 + 0.0j
@@ -206,13 +224,18 @@ def _weighted_fit(y: np.ndarray, columns: Sequence[np.ndarray], variance: np.nda
 
 def two_source_wls(y: np.ndarray, template0: np.ndarray,
                    shifted_templates: Mapping[tuple[int, int], np.ndarray],
-                   variance: np.ndarray) -> dict:
+                   variance: np.ndarray, *, _test_allow_incomplete_grid: bool = False) -> dict:
     """Fit H0=alpha*T0 and H1=alpha*T0+beta*Tdelta by complex WLS."""
     rss0, coef0 = _weighted_fit(y, [template0], variance)
+    if not _test_allow_incomplete_grid and set(shifted_templates) != set(H1_COORDINATES):
+        raise ValueError("H1 requires the exact complete frozen coordinate grid")
     candidates = []
     for coordinate, template in shifted_templates.items():
         if not isinstance(template,H1Template) or tuple(coordinate)!=template.coordinate:
             raise ValueError("validated H1Template required")
+        actual = hashlib.sha256(np.ascontiguousarray(template.surface).view(np.uint8)).hexdigest()
+        if template.surface.flags.writeable or actual != template.digest:
+            raise ValueError("H1 template immutability/digest failure")
         rss, coef = _weighted_fit(y, [template0, template.surface], variance)
         candidates.append((rss, tuple(coordinate), coef))
     if not candidates:
@@ -263,11 +286,14 @@ def pool_prns(values: Mapping[int, float], method: str) -> tuple[float, dict]:
     return float(pooled), {"prn_count": len(x), "dominant_fraction": float(np.max(np.abs(x))/max(np.sum(np.abs(x)), np.finfo(float).eps))}
 
 
-def choose_pooling(clean_calibration: Sequence[Mapping]) -> str:
+def choose_pooling(clean_selection: Sequence[Mapping]) -> str:
     """Normal-only choice: minimum block-to-block median absolute deviation."""
+    if (not clean_selection or any(row.get("role") not in {"clean_train", "selection"}
+                                   for row in clean_selection)):
+        raise ValueError("pooling selection accepts clean_train or selection only")
     objectives = {}
     for method in ("median", "top50_mean", "trimmed_mean"):
-        pooled = [pool_prns(row["scores"], method)[0] for row in clean_calibration]
+        pooled = [pool_prns(row["scores"], method)[0] for row in clean_selection]
         objectives[method] = float(np.median(np.abs(pooled-np.median(pooled))))
     return min(objectives, key=lambda k: (objectives[k], k))
 
@@ -312,13 +338,18 @@ def binary_metrics(labels, scores, max_fpr=.01) -> dict:
     if not xf or xf[-1] < max_fpr:
         xf.append(max_fpr);yt.append(float(np.interp(max_fpr,fpr,tpr)))
     # Standardized to [0,1] over the requested false-positive range.
-    pauc=float(np.trapz(yt,xf)/max_fpr)
+    raw=float(np.trapz(yt,xf))
+    minimum=.5*max_fpr**2
+    maximum=max_fpr
+    pauc=.5*(1+(raw-minimum)/(maximum-minimum)) if max_fpr < 1 else raw
     return {"roc_auc":float(roc_auc_score(y,s)), "average_precision":float(average_precision_score(y,s)), "partial_auc":pauc, "max_fpr":max_fpr}
 
 
 def alarm_metrics(times, scores, threshold, onset) -> dict:
     t=np.asarray(times,float);s=np.asarray(scores,float)
-    if t.ndim!=1 or s.shape!=t.shape or not np.isfinite(t).all() or not np.isfinite(s).all() or np.any(np.diff(t)<=0):raise ValueError("sorted unique finite aligned times/scores required")
+    if (t.ndim!=1 or not len(t) or s.shape!=t.shape or not np.isfinite(t).all()
+            or not np.isfinite(s).all() or not np.isfinite(threshold)
+            or not np.isfinite(onset) or np.any(np.diff(t)<=0)):raise ValueError("sorted unique finite aligned times/scores required")
     alarm=s>=threshold; pre=t<onset; post=t>=onset
     first=t[post & alarm]
     return {"pre_onset_fpr":float(np.mean(alarm[pre])) if np.any(pre) else None,
@@ -326,16 +357,24 @@ def alarm_metrics(times, scores, threshold, onset) -> dict:
             "alarm_delay_s":float(first[0]-onset) if len(first) else None}
 
 
-def block_bootstrap_effect(normal, other, block_ids, replicates=1000, seed=1,
-                           *, times=None, block_seconds=10.0) -> dict:
-    a=np.asarray(normal,float); b=np.asarray(other,float); ids=np.asarray(block_ids)
-    if a.ndim!=1 or b.shape!=a.shape or ids.shape!=a.shape or not np.isfinite(a).all() or not np.isfinite(b).all() or replicates<=0 or not np.isfinite(block_seconds) or block_seconds<=0:raise ValueError("finite paired arrays and positive replicates/block duration required")
-    if times is not None:
-        t=np.asarray(times,float)
-        if t.shape!=a.shape or not np.isfinite(t).all() or np.any(np.diff(t)<0):raise ValueError("finite chronological paired times required")
-        if any(np.ptp(t[ids==x])>block_seconds for x in np.unique(ids)):raise ValueError("block exceeds declared duration")
+def block_bootstrap_effect(normal, other, replicates=1000, seed=1,
+                           *, times=None, block_seconds=10.0, block_ids=None) -> dict:
+    a=np.asarray(normal,float); b=np.asarray(other,float); t=np.asarray(times,float)
+    if (a.ndim!=1 or not len(a) or b.shape!=a.shape or t.shape!=a.shape
+            or not np.isfinite(a).all() or not np.isfinite(b).all() or not np.isfinite(t).all()
+            or np.any(np.diff(t)<0) or not isinstance(replicates, (int, np.integer))
+            or replicates<=0 or not np.isfinite(block_seconds) or block_seconds<=0):
+        raise ValueError("finite paired arrays, chronological times, and positive replicates required")
+    derived=np.floor((t-t[0])/block_seconds).astype(np.int64)
+    if block_ids is not None:
+        supplied=np.asarray(block_ids)
+        if supplied.shape!=a.shape or not np.array_equal(supplied,derived):
+            raise ValueError("supplied block IDs do not equal exact derived IDs")
+    ids=derived
     unique=np.unique(ids); rng=np.random.default_rng(seed); estimates=[]
     for _ in range(replicates):
         chosen=rng.choice(unique,len(unique),replace=True); mask=np.concatenate([np.flatnonzero(ids==x) for x in chosen])
         estimates.append(float(np.mean(b[mask])-np.mean(a[mask])))
-    return {"effect":float(np.mean(b-a)), "ci95":[float(np.quantile(estimates,.025)),float(np.quantile(estimates,.975))], "block_seconds":float(block_seconds), "times_verified":times is not None, "seed":seed, "replicates":replicates}
+    ci=[float(np.quantile(estimates,.025)),float(np.quantile(estimates,.975))]
+    if not np.isfinite(ci).all():raise ArithmeticError("nonfinite bootstrap CI")
+    return {"effect":float(np.mean(b-a)), "ci95":ci, "block_seconds":float(block_seconds), "times_verified":True, "seed":seed, "replicates":int(replicates)}
