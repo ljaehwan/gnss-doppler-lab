@@ -41,6 +41,56 @@ ARTIFACT_FILES = (
     "go_no_go.json", "test_report.txt", "verification_report.json", "checksums.json",
 )
 
+CA_CODE_FIELDS = (
+    "prn", "input_int", "input_gxx", "int_gxx_exact", "length", "alphabet",
+    "alphabet_exact", "cyclic_zero_shift", "cyclic_max_nonzero_shift",
+    "cyclic_nonzero_equal_1023_count", "zero_shift_peak_exact",
+    "nonzero_no_1023_peak", "code_sha256", "status",
+)
+
+
+def _legacy_bad_code_fixture(prn: int) -> np.ndarray:
+    """Frozen regression fixture for the previously used, reversed-register generator."""
+    taps={1:(2,6),2:(3,7),3:(4,8),4:(5,9),5:(1,9),6:(2,10),7:(1,8),8:(2,9),9:(3,10),10:(2,3),11:(3,4),12:(5,6),13:(6,7),14:(7,8),15:(8,9),16:(9,10),17:(1,4),18:(2,5),19:(3,6),20:(4,7),21:(5,8),22:(6,9),23:(1,3),24:(4,6),25:(5,7),26:(6,8),27:(7,9),28:(8,10),29:(1,6),30:(2,7),31:(3,8),32:(4,9)}
+    g1=np.ones(10,dtype=np.int8); g2=np.ones(10,dtype=np.int8)
+    out=np.empty(1023,dtype=np.int8); a,b=taps[prn]
+    for i in range(1023):
+        out[i]=1 if g1[-1] == (g2[a-1] ^ g2[b-1]) else -1
+        g1=np.r_[g1[1:],g1[2]^g1[9]]
+        g2=np.r_[g2[1:],g2[1]^g2[2]^g2[5]^g2[7]^g2[8]^g2[9]]
+    return out
+
+
+def ca_code_evidence():
+    """Generate fail-closed, cyclic C/A-code evidence from the canonical implementation."""
+    rows=[]
+    for prn in range(1,33):
+        code_int=np.asarray(gps_l1ca_code(prn))
+        code_gxx=np.asarray(gps_l1ca_code(f"G{prn:02d}"))
+        code64=code_int.astype(np.int64,copy=False)
+        cyclic=np.asarray([np.dot(code64,np.roll(code64,shift)) for shift in range(1023)])
+        alphabet=sorted(int(value) for value in np.unique(code_int))
+        exact=np.array_equal(code_int,code_gxx)
+        row={"prn":prn,"input_int":prn,"input_gxx":f"G{prn:02d}",
+             "int_gxx_exact":exact,"length":len(code_int),
+             "alphabet":",".join(map(str,alphabet)),"alphabet_exact":alphabet==[-1,1],
+             "cyclic_zero_shift":int(cyclic[0]),
+             "cyclic_max_nonzero_shift":int(cyclic[1:].max()),
+             "cyclic_nonzero_equal_1023_count":int(np.count_nonzero(cyclic[1:]==1023)),
+             "zero_shift_peak_exact":int(cyclic[0])==1023,
+             "nonzero_no_1023_peak":not np.any(cyclic[1:]==1023),
+             "code_sha256":hashlib.sha256(code_int.tobytes()).hexdigest()}
+        row["status"]="PASS" if (exact and row["length"]==1023 and row["alphabet_exact"]
+          and row["zero_shift_peak_exact"] and row["nonzero_no_1023_peak"]) else "FAIL"
+        rows.append(row)
+    canonical=np.asarray(gps_l1ca_code(1)); legacy=_legacy_bad_code_fixture(1)
+    legacy_evidence={"fixture_id":"legacy_reversed_register_v1","prn":1,
+      "canonical_sha256":hashlib.sha256(canonical.tobytes()).hexdigest(),
+      "legacy_sha256":hashlib.sha256(legacy.tobytes()).hexdigest(),
+      "differing_chips":int(np.count_nonzero(canonical!=legacy)),
+      "differs":not np.array_equal(canonical,legacy)}
+    return rows,legacy_evidence
+
 
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
@@ -91,8 +141,11 @@ def publish_fail_closed(output: Path, verdict: str, reason: str, *, a1: bool=Fal
     write_json(staging/"gnss_sdr_source_binding.json",{"prompt_support_mapping_authenticated":False,
       "failure_reason":reason})
     (staging/"gnss_sdr_tracking_semantics.md").write_text(f"# Preflight unavailable\n\n{reason}\n")
-    write_json(staging/"ca_code_validation.json",{"canonical_prns_passed":0,"local_generator_absent":True})
-    write_csv(staging/"ca_code_correlation.csv",[],["prn","status"])
+    ca_rows,legacy_evidence=ca_code_evidence()
+    write_json(staging/"ca_code_validation.json",{"schema_version":"canonical_gps_l1ca_cyclic_v1",
+      "canonical_prns_passed":sum(row["status"]=="PASS" for row in ca_rows),
+      "local_generator_absent":True,"legacy_bad_generator_evidence":legacy_evidence,"rows":ca_rows})
+    write_csv(staging/"ca_code_correlation.csv",ca_rows,CA_CODE_FIELDS)
     write_csv(staging/"candidate_application_audit.csv",[],OBSERVATION_FIELDS)
     write_json(staging/"candidate_fingerprints.json",{"expected_unique":0,"fingerprints":{}})
     write_csv(staging/"alignment_hypotheses.csv",[],["candidate","n"])
@@ -181,8 +234,6 @@ def raw_caf(raw_path, triple, candidate, fs=FS, *, start=None, end=None, grid=No
         raise ValueError("authenticated correlator support bounds are required")
     start=int(start); end=int(end)
     iq = read_iq(Path(raw_path), start, end)
-    # Calling the imported canonical function here is intentional and spy-verifiable.
-    gps_l1ca_code(triple[1]["PRN"])
     aux = triple[{"previous":0,"current":1,"next":2}[candidate.aux_row]]
     nco = triple[{"previous":0,"current":1,"next":2}[candidate.nco_row]]
     result = caf(iq, triple[1]["PRN"], fs, nco["code_freq_chips"], aux["aux1"],
@@ -364,12 +415,11 @@ def _execute_campaign(args):
     write_json(out/"gnss_sdr_source_binding.json",source_binding)
     semantics=(Path(__file__).resolve().parents[1]/"docs/ACAF_NF_STAGE0_STATIC_R13_RECONSTRUCTION.md").read_text()
     (out/"gnss_sdr_tracking_semantics.md").write_text(semantics)
-    ca_rows=[]
-    for prn in range(1,33):
-        code=gps_l1ca_code(prn); corr=np.correlate(code,code,mode="full")
-        ca_rows.append({"prn":prn,"length":len(code),"peak":float(corr.max()),"code_sha256":hashlib.sha256(code.tobytes()).hexdigest()})
-    write_json(out/"ca_code_validation.json",{"canonical_prns_passed":32,"local_generator_absent":True,"rows":ca_rows})
-    write_csv(out/"ca_code_correlation.csv",ca_rows)
+    ca_rows,legacy_evidence=ca_code_evidence()
+    write_json(out/"ca_code_validation.json",{"schema_version":"canonical_gps_l1ca_cyclic_v1",
+      "canonical_prns_passed":sum(row["status"]=="PASS" for row in ca_rows),
+      "local_generator_absent":True,"legacy_bad_generator_evidence":legacy_evidence,"rows":ca_rows})
+    write_csv(out/"ca_code_correlation.csv",ca_rows,CA_CODE_FIELDS)
     hypotheses=[]; details_by_name={}; audit=[]; fingerprints={}
     for candidate in candidate_family():
         details=[]

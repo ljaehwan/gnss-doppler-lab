@@ -2,12 +2,16 @@
 """Independent R1.3 artifact verifier; trusts no runner summary fields."""
 from __future__ import annotations
 
-import argparse, csv, hashlib, json, math
+import argparse, ast, csv, hashlib, json, math, sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
 import numpy as np
 from scipy.stats import spearmanr
+
+REPO_ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(REPO_ROOT/"src"))
+from gnss_doppler_lab.acquisition_surface import gps_l1ca_code
 
 REQUIRED=("README.md","config.json","environment.json","receiver_source_binding.json","gnss_sdr_source_binding.json","gnss_sdr_tracking_semantics.md","ca_code_validation.json","ca_code_correlation.csv","candidate_application_audit.csv","candidate_fingerprints.json","alignment_hypotheses.csv","selected_alignment.json","center_validation.csv","center_validation_summary.json","center_metrics_by_prn.csv","center_metrics_by_channel.csv","center_metrics_by_time_block.csv","global_offset_sensitivity.csv","global_offset_application_audit.json","prn_sampling_summary.csv","raw_overlap_audit.json","execution_validity.json","go_no_go.json","test_report.txt","verification_report.json","checksums.json","plots")
 
@@ -26,6 +30,97 @@ def f(row,key): return float(row[key])
 PHYSICAL_HASH_FIELDS=("raw_interval_content_sha256","raw_interval_range_sha256",
  "replica_chip_indices_sha256","carrier_wipeoff_sha256","aux_indices_sha256",
  "nco_indices_sha256","prompt_indices_sha256","result_field_sha256")
+CA_CODE_FIELDS=("prn","input_int","input_gxx","int_gxx_exact","length","alphabet",
+ "alphabet_exact","cyclic_zero_shift","cyclic_max_nonzero_shift",
+ "cyclic_nonzero_equal_1023_count","zero_shift_peak_exact","nonzero_no_1023_peak",
+ "code_sha256","status")
+PRODUCTION_MODULE=REPO_ROOT/"src/gnss_doppler_lab/acaf_nf_stage0_r13_reconstruction.py"
+
+
+def _legacy_bad_code_fixture(prn):
+    """Frozen independent regression fixture for the rejected reversed-register code."""
+    taps={1:(2,6),2:(3,7),3:(4,8),4:(5,9),5:(1,9),6:(2,10),7:(1,8),8:(2,9),9:(3,10),10:(2,3),11:(3,4),12:(5,6),13:(6,7),14:(7,8),15:(8,9),16:(9,10),17:(1,4),18:(2,5),19:(3,6),20:(4,7),21:(5,8),22:(6,9),23:(1,3),24:(4,6),25:(5,7),26:(6,8),27:(7,9),28:(8,10),29:(1,6),30:(2,7),31:(3,8),32:(4,9)}
+    g1=np.ones(10,dtype=np.int8); g2=np.ones(10,dtype=np.int8)
+    out=np.empty(1023,dtype=np.int8); a,b=taps[prn]
+    for i in range(1023):
+        out[i]=1 if g1[-1] == (g2[a-1] ^ g2[b-1]) else -1
+        g1=np.r_[g1[1:],g1[2]^g1[9]]
+        g2=np.r_[g2[1:],g2[1]^g2[2]^g2[5]^g2[7]^g2[8]^g2[9]]
+    return out
+
+
+def independently_recompute_ca():
+    rows=[]
+    for prn in range(1,33):
+        code_int=np.asarray(gps_l1ca_code(prn))
+        code_gxx=np.asarray(gps_l1ca_code(f"G{prn:02d}"))
+        code64=code_int.astype(np.int64,copy=False)
+        cyclic=np.asarray([np.dot(code64,np.roll(code64,shift)) for shift in range(1023)])
+        alphabet=sorted(int(value) for value in np.unique(code_int))
+        exact=np.array_equal(code_int,code_gxx)
+        row={"prn":prn,"input_int":prn,"input_gxx":f"G{prn:02d}",
+          "int_gxx_exact":exact,"length":len(code_int),
+          "alphabet":",".join(map(str,alphabet)),"alphabet_exact":alphabet==[-1,1],
+          "cyclic_zero_shift":int(cyclic[0]),
+          "cyclic_max_nonzero_shift":int(cyclic[1:].max()),
+          "cyclic_nonzero_equal_1023_count":int(np.count_nonzero(cyclic[1:]==1023)),
+          "zero_shift_peak_exact":int(cyclic[0])==1023,
+          "nonzero_no_1023_peak":not np.any(cyclic[1:]==1023),
+          "code_sha256":hashlib.sha256(code_int.tobytes()).hexdigest()}
+        row["status"]="PASS" if (exact and row["length"]==1023 and row["alphabet_exact"]
+          and row["zero_shift_peak_exact"] and row["nonzero_no_1023_peak"]) else "FAIL"
+        rows.append(row)
+    canonical=np.asarray(gps_l1ca_code(1)); legacy=_legacy_bad_code_fixture(1)
+    legacy_evidence={"fixture_id":"legacy_reversed_register_v1","prn":1,
+      "canonical_sha256":hashlib.sha256(canonical.tobytes()).hexdigest(),
+      "legacy_sha256":hashlib.sha256(legacy.tobytes()).hexdigest(),
+      "differing_chips":int(np.count_nonzero(canonical!=legacy)),
+      "differs":not np.array_equal(canonical,legacy)}
+    return rows,legacy_evidence
+
+
+def inspect_production_generator_source():
+    try:
+        source=PRODUCTION_MODULE.read_bytes()
+        tree=ast.parse(source.decode())
+        forbidden=sorted({node.name for node in ast.walk(tree)
+          if isinstance(node,(ast.FunctionDef,ast.AsyncFunctionDef))
+          and node.name in {"ca_code","gps_l1ca_code"}})
+        return {"path":str(PRODUCTION_MODULE.relative_to(REPO_ROOT)),
+          "source_sha256":hashlib.sha256(source).hexdigest(),
+          "forbidden_local_definitions":forbidden,"local_generator_absent":not forbidden}
+    except (OSError,SyntaxError,UnicodeDecodeError) as exc:
+        return {"path":str(PRODUCTION_MODULE),"source_inspection_error":type(exc).__name__,
+          "forbidden_local_definitions":[],"local_generator_absent":False}
+
+
+def validate_ca_artifacts(root, summary):
+    """Compare every persisted C/A field with independent canonical recomputation."""
+    evidence={"schema_version":"canonical_gps_l1ca_cyclic_v1"}
+    try:
+        expected,legacy=independently_recompute_ca()
+        inspection=inspect_production_generator_source()
+        with (root/"ca_code_correlation.csv").open(newline="") as handle:
+            reader=csv.DictReader(handle); fields=tuple(reader.fieldnames or ()); saved=list(reader)
+        evidence.update({"canonical_rows":expected,"legacy_bad_generator_evidence":legacy,
+                         "production_source_inspection":inspection})
+        expected_csv=[{key:str(row[key]) for key in CA_CODE_FIELDS} for row in expected]
+        summary_ok=(summary.get("schema_version")=="canonical_gps_l1ca_cyclic_v1"
+          and summary.get("canonical_prns_passed")==32
+          and summary.get("local_generator_absent") is True
+          and summary.get("legacy_bad_generator_evidence")==legacy
+          and summary.get("rows")==expected)
+        ok=(fields==CA_CODE_FIELDS and saved==expected_csv and summary_ok
+          and inspection["local_generator_absent"] is True
+          and legacy["differs"] is True and legacy["differing_chips"]>0
+          and all(row["status"]=="PASS" for row in expected))
+        evidence.update({"csv_schema_exact":fields==CA_CODE_FIELDS,"csv_rows_exact":saved==expected_csv,
+                         "producer_summary_exact":summary_ok,"status":"PASS" if ok else "FAIL"})
+        return ok,evidence
+    except Exception as exc:
+        evidence.update({"status":"FAIL","error":f"{type(exc).__name__}:{exc}"})
+        return False,evidence
+
 
 def _sha(value):
     return isinstance(value,str) and len(value)==64 and all(c in "0123456789abcdef" for c in value)
@@ -139,8 +234,8 @@ def verify(root: Path):
       int(r["support_end_sample"])-int(r["support_start_sample"])==int(r["vector_length"])==int(r["support_length_samples"]) and
       int(r["consumed_end_sample"])-int(r["consumed_start_sample"])==int(r["consumed_length_samples"]) and
       24999<=int(r["consumed_length_samples"])<=25001 for r in rows)
-    ca_rows=load_csv(root/"ca_code_correlation.csv")
-    ca_ok=ca.get("canonical_prns_passed")==32 and ca.get("local_generator_absent") is True and len(ca_rows)==32 and {int(x["prn"]) for x in ca_rows}==set(range(1,33))
+    ca_ok,ca_evidence=validate_ca_artifacts(root,ca)
+    if not ca_ok: errors.append("ca_code_validation_invalid")
     fingerprints=load_json(root/"candidate_fingerprints.json")
     expected_fp={r.get("key"):{field:r.get(field) for field in PHYSICAL_HASH_FIELDS} for r in audit}
     fingerprint_ok=fingerprints.get("fingerprints")==expected_fp and fingerprints.get("expected_unique")==len(expected_fp)
@@ -170,7 +265,8 @@ def verify(root: Path):
     return {"status":"PASS" if not errors else "FAIL","errors":errors,"recomputed":actual,
             "gates":{"A1_SOURCE_BINDING":"PASS" if a1 else "FAIL","A2_IMPLEMENTATION_AND_INTERVAL_VALIDITY":"PASS" if a2 else "FAIL","A3_MULTI_PRN_CENTER_RECOVERY":"PASS" if a3 else "FAIL"},"verdict":verdict,
             "candidate_physical_applications":physical_applications_valid(audit),"global_offsets_independent":offset_ok,
-            "cross_role_nonoverlap":overlap_ok,"recursive_checksums":recomputed}
+            "cross_role_nonoverlap":overlap_ok,"ca_code_independent_validation":ca_evidence,
+            "recursive_checksums":recomputed}
 
 def main():
     ap=argparse.ArgumentParser(); ap.add_argument("artifact_dir",type=Path); args=ap.parse_args()

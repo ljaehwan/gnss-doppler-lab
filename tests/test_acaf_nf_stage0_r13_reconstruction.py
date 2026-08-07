@@ -1,4 +1,5 @@
 import ast
+import csv
 import importlib.util
 import json
 from pathlib import Path
@@ -30,10 +31,13 @@ def test_canonical_ca_all_prns_and_no_local_generator():
         a=gps_l1ca_code(prn); b=gps_l1ca_code(f"G{prn:02d}")
         assert np.array_equal(a,b) and len(a)==1023 and set(a)=={-1,1}
         assert np.dot(a,a)==1023
-    assert not np.array_equal(legacy_bad_code(1),gps_l1ca_code(1))
+    canonical=gps_l1ca_code(1); legacy=legacy_bad_code(1)
+    assert not np.array_equal(legacy,canonical)
+    assert np.count_nonzero(legacy!=canonical)>0
     for rel in ('src/gnss_doppler_lab/acaf_nf_stage0_r13_reconstruction.py','scripts/run_acaf_nf_stage0_static_r13_reconstruction.py'):
         tree=ast.parse((ROOT/rel).read_text())
-        assert not any(isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef)) and n.name=='ca_code' for n in ast.walk(tree))
+        assert not any(isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef))
+          and n.name in {'ca_code','gps_l1ca_code'} for n in ast.walk(tree))
 
 
 def row(i, prn=1, cn0=35, lock=.95):
@@ -137,15 +141,16 @@ def test_independent_verifier_rejects_ignored_candidate_and_fake_offsets():
     assert not mod.global_offset_calls_valid(calls)
 
 
-def test_raw_caf_spies_canonical_generator(monkeypatch):
+def test_raw_caf_spies_production_correlation_canonical_generator(monkeypatch):
     path=ROOT/'scripts/run_acaf_nf_stage0_static_r13_reconstruction.py'
     spec=importlib.util.spec_from_file_location('runner_spy',path); mod=importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
-    seen=[]
+    import gnss_doppler_lab.acaf_nf_stage0_r13_reconstruction as production
+    seen=[]; canonical=production.gps_l1ca_code
     monkeypatch.setattr(mod,'read_iq',lambda *a: np.ones(10,dtype=complex))
-    monkeypatch.setattr(mod,'gps_l1ca_code',lambda prn: seen.append(prn) or np.ones(1023))
-    monkeypatch.setattr(mod,'caf',lambda *a,**k: {'result_field_hash':'x'})
+    monkeypatch.setattr(production,'gps_l1ca_code',lambda prn: seen.append(prn) or canonical(prn))
     monkeypatch.setattr(mod,'candidate_application',lambda *a,**k: {'result_field_sha256':'fp'})
-    result=mod.raw_caf('unused',(row(0),row(1),row(2)),Candidate(),start=100,end=110)
+    result=mod.raw_caf('unused',(row(0),row(1),row(2)),Candidate(),start=100,end=110,
+      grid={'delay_chips':[0], 'doppler_hz':[0]})
     assert seen==[1] and result['n_samples']==10
 
 
@@ -250,3 +255,37 @@ def test_fail_closed_artifact_is_atomic_complete_and_verifies(tmp_path):
     assert go['selected_alignment'] is None and go['physics_no_go_claim'] is False
     report=verifier.verify(out)
     assert report['status']=='PASS' and report['gates']['A1_SOURCE_BINDING']=='FAIL'
+    ca=report['ca_code_independent_validation']
+    assert ca['status']=='PASS' and ca['csv_schema_exact'] and ca['csv_rows_exact']
+    assert ca['production_source_inspection']['local_generator_absent'] is True
+    assert ca['legacy_bad_generator_evidence']['differs'] is True
+    assert ca['legacy_bad_generator_evidence']['differing_chips']>0
+
+
+@pytest.mark.parametrize('tamper', ['hash','length','alphabet','schema'])
+def test_independent_verifier_rejects_tampered_ca_artifacts(tmp_path,tamper):
+    runner_path=ROOT/'scripts/run_acaf_nf_stage0_static_r13_reconstruction.py'
+    verifier_path=ROOT/'scripts/verify_acaf_nf_stage0_static_r13_reconstruction.py'
+    rs=importlib.util.spec_from_file_location(f'runner_ca_{tamper}',runner_path); runner=importlib.util.module_from_spec(rs); rs.loader.exec_module(runner)
+    vs=importlib.util.spec_from_file_location(f'verifier_ca_{tamper}',verifier_path); verifier=importlib.util.module_from_spec(vs); vs.loader.exec_module(verifier)
+    out=tmp_path/'artifact'
+    runner.publish_fail_closed(out,"SOURCE_BINDING_INVALID","synthetic A1 failure",a1=False)
+    csv_path=out/'ca_code_correlation.csv'
+    with csv_path.open(newline='') as handle:
+        reader=csv.DictReader(handle); fields=list(reader.fieldnames); rows=list(reader)
+    summary_path=out/'ca_code_validation.json'; summary=json.loads(summary_path.read_text())
+    if tamper=='schema':
+        fields.remove('status')
+    else:
+        csv_value,json_value={'hash':('0'*64,'0'*64),'length':('1022',1022),
+                              'alphabet':('-1,0,1','-1,0,1')}[tamper]
+        key={'hash':'code_sha256','length':'length','alphabet':'alphabet'}[tamper]
+        rows[0][key]=csv_value; summary['rows'][0][key]=json_value
+        summary_path.write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
+    with csv_path.open('w',newline='') as handle:
+        writer=csv.DictWriter(handle,fields,extrasaction='ignore'); writer.writeheader(); writer.writerows(rows)
+    (out/'checksums.json').write_text(json.dumps({'files':verifier.recursive_checksums(out)},indent=2,sort_keys=True)+'\n')
+    report=verifier.verify(out)
+    assert report['status']=='FAIL'
+    assert 'ca_code_validation_invalid' in report['errors']
+    assert report['ca_code_independent_validation']['status']=='FAIL'
