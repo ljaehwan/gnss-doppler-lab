@@ -1,0 +1,14 @@
+{
+  "aux_row": "previous",
+  "candidate_string": "nco_row=previous_aux_row=previous_remnant_sign=-1_carrier_sign=-1_global_offset=0",
+  "carrier_sign": -1,
+  "fs_hz": 25000000.0,
+  "global_offset_samples": 0,
+  "nco_row": "previous",
+  "prompt_row": "current",
+  "raw_format": "interleaved_signed_int16_iq",
+  "remnant_sign": -1,
+  "replica_direction": "forward",
+  "signal": "gps_l1ca_code",
+  "support_samples": 25000
+}

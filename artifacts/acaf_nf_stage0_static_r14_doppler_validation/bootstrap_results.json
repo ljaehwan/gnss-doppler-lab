@@ -1,0 +1,26 @@
+{
+  "10": {
+    "ci95_high": 0.20468960863697688,
+    "ci95_low": 0.07100591715976332,
+    "observed_difference": 0.1286549707602339,
+    "replicates": 10000,
+    "seed": 1401,
+    "sign_consistent": true
+  },
+  "20": {
+    "ci95_high": 0.22807017543859648,
+    "ci95_low": 0.07100591715976332,
+    "observed_difference": 0.1364522417153996,
+    "replicates": 10000,
+    "seed": 1401,
+    "sign_consistent": true
+  },
+  "5": {
+    "ci95_high": 0.17647058823529413,
+    "ci95_low": 0.07100591715976332,
+    "observed_difference": 0.1189083820662768,
+    "replicates": 10000,
+    "seed": 1401,
+    "sign_consistent": true
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "attack_inputs_read": false,
+  "caf_executed": true,
+  "common_anchor_counts": {
+    "1": 513,
+    "10": 513,
+    "20": 513,
+    "5": 513
+  },
+  "elapsed_seconds": 118.08099404201494,
+  "overlap_policy": "0 or 1 sample between consecutive fixed 25000 supports",
+  "overlap_rejection_count": 0,
+  "overlap_samples": 309,
+  "r13_lineage_validated_before_aggregation": true,
+  "source_authenticated": true
+}

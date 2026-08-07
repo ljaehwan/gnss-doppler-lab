@@ -1,0 +1,50 @@
+{
+  "artifact_path": "artifacts/acaf_nf_stage0_static_r13_reconstruction",
+  "center_validation_sha256": "cb07c2b3d192c6bd30e6eeca6ffae6d615523f1ba4569d4259ccb01d866ba198",
+  "identity_order_sha256": "65933645102b7a05087f0d9991ad1c55c822b4b83090cb57a4e6f74e17675e5c",
+  "immutable_candidate": "nco_row=previous_aux_row=previous_remnant_sign=-1_carrier_sign=-1_global_offset=0",
+  "inventory_verified": true,
+  "manifest_entry_count": 25,
+  "metrics_tolerance": 1e-06,
+  "r13_artifact_checksums_sha256": "04b5395b311641b4ab3f3a58a1a5cbb54d4249068f8252659049ea4386a95abb",
+  "r13_source_sha256": "9889a5e5007c92d6016e5ef0d38a03cea96cdd40eded3cea91df1e4276d16e42",
+  "r14_raw_recomputed_reference_metrics": {
+    "boundary_fraction": 0.006191950464396285,
+    "exact_center_fraction": 0.42105263157894735,
+    "median_prn_spearman": 0.9999652753663446,
+    "n": 969,
+    "pooled_spearman": 0.9999965049269979,
+    "prn_count": 8,
+    "role_counts": {
+      "calibration": 323,
+      "holdout": 323,
+      "train": 323
+    },
+    "within_tolerance_fraction": 0.8565531475748194
+  },
+  "recomputed_reference_metrics": {
+    "boundary_fraction": 0.006191950464396285,
+    "exact_center_fraction": 0.42105263157894735,
+    "median_prn_spearman": 0.9999652753663446,
+    "n": 969,
+    "pooled_spearman": 0.9999965049269979,
+    "prn_count": 8,
+    "role_counts": {
+      "calibration": 323,
+      "holdout": 323,
+      "train": 323
+    },
+    "within_tolerance_fraction": 0.8565531475748194
+  },
+  "reference_metrics": {
+    "boundary_fraction": 0.006191950464396285,
+    "exact_center_fraction": 0.42105263157894735,
+    "median_prn_spearman": 0.9999652753663446,
+    "n": 969,
+    "pooled_spearman": 0.9999965049269979,
+    "prn_count": 8,
+    "within_tolerance_fraction": 0.8565531475748194
+  },
+  "source_path": "src/gnss_doppler_lab/acaf_nf_stage0_r13_reconstruction.py",
+  "verification_status": "PASS"
+}
