@@ -7,7 +7,7 @@ import h5py,numpy as np
 
 ROOT=Path(__file__).resolve().parents[1]
 SOURCE_BINDING_CONFIG=ROOT/"configs/acaf_nf_stage1_source_binding.json"
-SOURCE_BINDING_SHA256="23e4e5846283ba4a7e4e04f69c62c994acd339d1f848bba4415f865fc252c4ae"
+SOURCE_BINDING_SHA256="af59415f82c3615ebba0690fa9b7a117ea9348bf1d61ab7a95e716d981cef8ae"
 NAMES={"README.md","config.json","source_binding.json","r14_frozen_lineage.json","scenario_timeline.json","normal_model_summary.json","thresholds.json","scenario_metrics.csv","phase_metrics.csv","per_window_scores.csv","secondary_component_metrics.csv","baseline_metrics.csv","control_metrics.csv","bootstrap_results.json","go_no_go.json","execution_validity.json","verification_report.json","checksums.json","test_report.txt"}
 CSV_HEADERS={"scenario_metrics.csv":["status","reason","scenario"],"phase_metrics.csv":["status","reason","scenario","phase"],"per_window_scores.csv":["status","reason","scenario","time_s","score"],"secondary_component_metrics.csv":["status","reason","component"],"baseline_metrics.csv":["status","reason","baseline"],"control_metrics.csv":["status","reason","control"]};CSVS=set(CSV_HEADERS)
 HASHES={"cleanStatic":"dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9","ds3":"e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d","ds4":"1fff2b048a00732686bb1d77a13941da81c9fac648ca3695a9028f4ee3485285","ds7":"d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e","ds8":"1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78"}

@@ -12,11 +12,26 @@
     "canonical_mat_files_must_be_regular": true,
     "canonical_dat_noninputs": "exact_stem_match_for_every_canonical_mat",
     "observables_noninputs_by_scenario": {
-      "cleanStatic": ["observables.dat", "observables.mat"],
-      "ds3": ["observables.dat", "observables.mat"],
-      "ds4": ["obse.dat", "obse.mat"],
-      "ds7": ["observables.dat", "observables.mat"],
-      "ds8": []
+      "cleanStatic": [
+        "observables.dat",
+        "observables.mat"
+      ],
+      "ds3": [
+        "observables.dat",
+        "observables.mat"
+      ],
+      "ds4": [
+        "obse.dat",
+        "obse.mat"
+      ],
+      "ds7": [
+        "observabl.dat",
+        "observabl.mat"
+      ],
+      "ds8": [
+        "observabl.dat",
+        "observabl.mat"
+      ]
     },
     "other_entries_forbidden": true
   },
@@ -141,13 +156,13 @@
     "ds7": {
       "raw_path": "/home/ubuntu/unraid_hdd/texbat/raw/ds7.bin",
       "raw_sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
-      "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/raw",
-      "manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/manifest.json",
-      "receiver_config_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/receiver.conf",
-      "manifest_sha256": "46cc88456d6985463377cf972a37e3e5cbc663079619b77263b125cd5d65644d",
-      "receiver_config_sha256": "9cecb8eb91a5521707e4a1e9bc0c739d4bce2dbfe952293b9e5d13e987c62cf0",
+      "tracker_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw",
+      "manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/manifest.json",
+      "receiver_config_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/receiver.conf",
+      "manifest_sha256": "7b0bdc69c754e71eecf750b0b2e61fb52a6a4e6787409e393ef156439276f785",
+      "receiver_config_sha256": "6b918b55708d528e3202234dbd4ce7444fe9df191fa4537524c7a38362fd7fa1",
       "manifest_pointers": {
-        "raw_sha256": "/source/iq_sha256",
+        "raw_sha256": "/source/sha256",
         "sample_rate_hz": "/source/sample_rate_hz",
         "sample_format": "/source/sample_format"
       },
@@ -157,31 +172,31 @@
         "first_file_sample_is_raw_sample": 0
       },
       "mat_inventory": {
-        "epl_tracking_ch_0.mat": "0d6e47f9a4f9da2419e10f3dc65e923acd026ba53dcf95f2f593a116e340fcdc",
-        "epl_tracking_ch_1.mat": "a0fbd4edaa61c0df84fde94dbc7f22b5f91a3a255d5a8741bbf7182d7079f1ef",
-        "epl_tracking_ch_10.mat": "b12cc27d24fdb8d7917dc5b1c5e13d360c752265476307e046b1b1ce191f7650",
-        "epl_tracking_ch_2.mat": "3d4794066d0db873d0058d0192d0bfbd5dd9c73458111eee960c13cf707c0522",
-        "epl_tracking_ch_3.mat": "6031653d81f7cb1fcf65b64b3604949c99cda12d06a39e949b441383b0d8a877",
-        "epl_tracking_ch_4.mat": "3fefc6a5bb2262a079df359c973faa187045f319f750d64e1c05d50c028b566a",
-        "epl_tracking_ch_5.mat": "4c386e280df9f5c38e00db43fe3e946820b8220504122067540d4e7ce907111b",
-        "epl_tracking_ch_6.mat": "f7f01aad6775ec30cf732b01c5076c122376f9569d7d7ccab29c69206264b58f",
-        "epl_tracking_ch_7.mat": "79b24c3e332c0b830c4719f448c2802a301820f9c3ab0e12f9cfbf6831c097cf",
-        "epl_tracking_ch_8.mat": "0ece56f16ca7d83bff9cc108b476131b0453fe9d95474a096c5a359dc6bb9cc6",
-        "epl_tracking_ch_9.mat": "e4f197d1221961512a700c0d8b396de4c7504758808ea5dc06cd1b4d5442210b"
+        "epl_track0.mat": "7e98c51ecac3b8c6db5623b2101a3f4b386de1e23e76d5049420538903d1824f",
+        "epl_track1.mat": "05f4874d91b0bded3d50c6ff662f5debd76363c89d2512c891f2c8e206c4f7f6",
+        "epl_track10.mat": "f89ed02de731aad06f6680857cf17eb877ed5fd1fbc6f11947f15fc83855acb6",
+        "epl_track2.mat": "c2abf21e0c2fa3db8af98b29c2198ffc549f2d43895fa09e8fef3e41e81ed22e",
+        "epl_track3.mat": "2d95144938fb1846b7e371fccfadbcec07af9e2537a631182a25c04c975ec9af",
+        "epl_track4.mat": "82706a870a185e06b4996564731c6a912608b1b996066a9de7dcf3bff49493f4",
+        "epl_track5.mat": "034d805a519abe3f915bb4cc2aafea40fa9ed96d08d826a5eecb61415820df5a",
+        "epl_track6.mat": "149b8c4d5dabee0d4d8bb7ece5fd0d47f190f226036c88e377863a634f75bee8",
+        "epl_track7.mat": "48a53038a4629ca459d7e0d6ee6e56f4aec5781c7b878cbc558dd6974730b9a2",
+        "epl_track8.mat": "5d4a8eb17a4c66d73999a3072d922ec85882fd6f5c083dcad72a084712cc6e47",
+        "epl_track9.mat": "d39f992f65fee8fc8cad0848963615c02f5b767102b5065bf70652e4fb15541a"
       }
     },
     "ds8": {
       "raw_path": "/home/ubuntu/unraid_hdd/texbat/raw/ds8.bin",
       "raw_sha256": "1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78",
-      "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/raw",
-      "manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/manifest.json",
-      "receiver_config_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/receiver.conf",
-      "manifest_sha256": "2acb11c8e2e5b3f704cbde057d60d771cb6f75316320611d5d93b7c1001aa7e9",
-      "receiver_config_sha256": "57aaa9d419c0b126ead3c98d1a90a267f3c9c23a37ad4e2f30cab5b6a8202f5a",
+      "tracker_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw",
+      "manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/manifest.json",
+      "receiver_config_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/receiver.conf",
+      "manifest_sha256": "c057383e21601f021c751d7012a018a2a793c23e08f1998f8c1967749fabe9d8",
+      "receiver_config_sha256": "c770b761b0301c2a0dc5e51f54e6d6dcf9cae4dce3e26b71259740e894004715",
       "manifest_pointers": {
         "raw_sha256": "/source/sha256",
         "sample_rate_hz": "/source/sample_rate_hz",
-        "sample_format": "/source/format"
+        "sample_format": "/source/sample_format"
       },
       "origin_contract": {
         "config_filename_key": "SignalSource.filename",
@@ -189,17 +204,17 @@
         "first_file_sample_is_raw_sample": 0
       },
       "mat_inventory": {
-        "epl_tracking_ch_0.mat": "ba77e39fbbb3993e1e83a4321428faa31c8a994f24c0f666128d7b6e632ca4dd",
-        "epl_tracking_ch_1.mat": "c7fe167a58ae1684c2535d5b511bad061a7cb889b09910250c965136faf1fca4",
-        "epl_tracking_ch_10.mat": "99efde5cecd585448838d16938688e5e32235b587dd1890a3f68fb3c421b0e7f",
-        "epl_tracking_ch_2.mat": "035a2dfa889f8a29ecafc5d44e842cbccbbe0c557982896d099aae2da997cff5",
-        "epl_tracking_ch_3.mat": "08e7a2b57ace03bb324e21a7082a61d00d8265779e28bfcfa08060fd5f12b3fe",
-        "epl_tracking_ch_4.mat": "2effa1210059adcf84ef162316a9caa3277791e44e4e44ba399602b93103012d",
-        "epl_tracking_ch_5.mat": "bae62c3a11ad7d498752c10c4cd151856a1187dd9d1e91bb1207ced3ee61bd26",
-        "epl_tracking_ch_6.mat": "defdb58902b7de1f72b7279937ecf2241a65a23de300ddee91c5abed287b6a05",
-        "epl_tracking_ch_7.mat": "2eee49461d48877dcd319afbb6171dc82c940f289b1dbbb24199bed92086b10b",
-        "epl_tracking_ch_8.mat": "80c1b40d269a480dad5530f75ae571bdd11e47568a6503b4a3d847fbc2d17ad2",
-        "epl_tracking_ch_9.mat": "e3934eb28a7464dfb7869e5d883bd6943f9d97c203814c0653b7242d90b4cd7a"
+        "epl_track0.mat": "8a1727400febfa99991569956314b27dd3911d265391dbc1b6abf584d7b4c9c6",
+        "epl_track1.mat": "16ce33d22cd71bbd984fc472380136c252c4a00315d005392d55461f05df77b3",
+        "epl_track10.mat": "6bbb9879f8dda67278d0540193b9bbc4bdad73eb9180fe9a9d42a7554cec5d25",
+        "epl_track2.mat": "3aff7fe603ca9caecbfc8bb10414ccf8fa8bd259760a54f0cc7045cf8689bfe7",
+        "epl_track3.mat": "90432c9f472c61d162e898966ed2f0272118b6fb28aaed4c56315347537af178",
+        "epl_track4.mat": "e8facfb16c020688455dc3e9aedad7890a432f0d6a1f3672591d747f0e3c5d51",
+        "epl_track5.mat": "959045bd60d5220a1a7b32adf62166ae1fdf78eb049ad3eaa5ec8f2ac2b359fa",
+        "epl_track6.mat": "d043d97b390c3a01888809240969fc00341037e4805a4c23e3edeeb305880667",
+        "epl_track7.mat": "6bf69316e2467059ad8fd3248658938970ae24cba326dc177d3e2902afdf348b",
+        "epl_track8.mat": "1fa124e33522d66e4d21c99a1fd32cd8da517f8b97d8b709aec4caa9c3eec036",
+        "epl_track9.mat": "bb123b58d164ef48d41fd02454d2c857ac52393882c3cfe1d179df3fbe938c92"
       }
     }
   }

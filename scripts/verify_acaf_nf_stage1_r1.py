@@ -252,7 +252,12 @@ def verify_c(root: Path) -> tuple[bool,list[str],dict[str,object]]:
     source=json.loads((root/"source_binding.json").read_text(encoding="utf-8"))
     recomputed={}
     for scenario in scenarios:
-        pairs,l20=_verify_source_rows(root,errors,scenario)
+        row_errors: list[str] = [] if scenario == "ds4" else errors
+        pairs,l20=_verify_source_rows(root,row_errors,scenario)
+        if scenario == "ds4":
+            unexpected=[error for error in row_errors if not error.startswith(("dat_size:", "dat_stamp:"))]
+            if unexpected: errors.extend(f"ds4_unexpected:{error}" for error in unexpected)
+            if not row_errors: errors.append("ds4_missing_alignment_failure")
         binding=source["scenarios"][scenario];manifest=json.loads(Path(binding["receiver_manifest_path"]).read_text(encoding="utf-8"))
         bound=_pointer(manifest,binding["manifest_pointers"].get("raw_sha256"))==binding["raw_sha256"]
         expected_status="INVALID_RECORD_ALIGNMENT" if scenario=="ds4" else "PASS"
@@ -275,7 +280,8 @@ def verify_c(root: Path) -> tuple[bool,list[str],dict[str,object]]:
             coverage[phase]={"start_sample":begin,"end_sample_exclusive":end,"rows":len(selected),
                              "l20_windows":windows,"l20_prn_channels":valid_pairs}
         if coverage!=attack["scenarios"][scenario]["phase_coverage"]: errors.append(f"phase_coverage:{scenario}")
-        recomputed[scenario]={"prn_channels":pairs,"l20_windows":l20,"binding":expected_status,"phase_coverage":coverage}
+        recomputed[scenario]={"prn_channels":pairs,"l20_windows":l20,"binding":expected_status,
+                              "alignment_errors":row_errors if scenario == "ds4" else [],"phase_coverage":coverage}
     expected="CHECKPOINT_C_COMPLETE_WITH_DS4_FAIL_CLOSED"
     if attack.get("status")!=expected or not attack.get("primary_scenarios_valid") or not attack.get("ds4_fail_closed"):
         errors.append("checkpoint_c_status")

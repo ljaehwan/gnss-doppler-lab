@@ -14,7 +14,7 @@ from gnss_doppler_lab.acaf_nf_stage1_static_feasibility import FROZEN_CONFIG,con
 
 DEFAULT_OUTPUT=ROOT/"artifacts/acaf_nf_stage1_static_feasibility.pending"
 SOURCE_BINDING_CONFIG=ROOT/"configs/acaf_nf_stage1_source_binding.json"
-SOURCE_BINDING_SHA256="23e4e5846283ba4a7e4e04f69c62c994acd339d1f848bba4415f865fc252c4ae"
+SOURCE_BINDING_SHA256="af59415f82c3615ebba0690fa9b7a117ea9348bf1d61ab7a95e716d981cef8ae"
 R14_ARTIFACT=ROOT/"artifacts/acaf_nf_stage0_static_r14_doppler_validation"
 RAW_ROOT=Path("/home/ubuntu/unraid_hdd/texbat/raw")
 TRACKERS={

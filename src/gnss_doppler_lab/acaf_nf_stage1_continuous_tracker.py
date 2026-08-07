@@ -55,7 +55,7 @@ def _to_int64(values: np.ndarray, path: Path, name: str) -> np.ndarray:
 
 
 def _channel_from_mat_path(path: Path) -> int:
-    match = re.search(r"(?:_ch_|_)(\d+)\.mat$", path.name)
+    match = re.fullmatch(r"(?:epl_tracking_ch_|epl_track|epl_)(\d+)\.mat", path.name)
     if not match:
         raise ValueError(f"cannot infer channel from MAT filename: {path.name}")
     return int(match.group(1))
@@ -742,9 +742,12 @@ def build_attack_trackers(source_binding: str | Path, output_dir: str | Path) ->
     (root / "attack_tracker_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     (root / "scenario_timeline.json").write_text(json.dumps(timelines, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     existing = json.loads((root / "source_binding.json").read_text(encoding="utf-8")) if (root / "source_binding.json").is_file() else {}
-    existing["schema"] = "acaf_nf_stage1_source_binding.v2"; existing["scenarios"] = {"cleanStatic": dict(existing), **bindings}
-    existing["source_binding_config"] = str(config_path); existing["source_binding_config_sha256"] = _sha256(config_path)
-    (root / "source_binding.json").write_text(json.dumps(existing, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    clean_binding = existing.get("scenarios", {}).get("cleanStatic") if "scenarios" in existing else existing
+    document = {"schema": "acaf_nf_stage1_source_binding.v2",
+                "scenarios": {"cleanStatic": clean_binding, **bindings},
+                "source_binding_config": str(config_path),
+                "source_binding_config_sha256": _sha256(config_path)}
+    (root / "source_binding.json").write_text(json.dumps(document, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return root
 
 
