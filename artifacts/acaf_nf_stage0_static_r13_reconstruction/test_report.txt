@@ -1,0 +1,6 @@
+R1.3 focused verification
+source_commit: f2d66ab2be89814bb67ed39b7203730918a0ca3e
+command: PYTHONPATH=src python3 -m pytest -q tests/test_acaf_nf_stage0_r13_reconstruction.py
+result: 20 passed in 45.25s
+compile_check: PASS
+git_diff_check: PASS

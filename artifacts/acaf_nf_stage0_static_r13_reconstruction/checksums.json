@@ -1,0 +1,29 @@
+{
+  "files": {
+    "README.md": "597c36c3b555bc24128ad496db3a384b86934b344d7787d45d9eda751a1d0016",
+    "alignment_hypotheses.csv": "ca0d4e43a7b6e2cbd501ec12fb89c45299ebf0a38fcfcd9395ca23dc9a813b1f",
+    "ca_code_correlation.csv": "9a62e5827f6844bcd0b98cd978aff06fa3e45da30ae81fb27a7108b3af87b469",
+    "ca_code_validation.json": "ef7052f78e1fb23d3e427c1a77c83e2c76f578f66c247b6012551e9c5b876ee2",
+    "candidate_application_audit.csv": "24eaceef69bef357f041b60600d31e703464c2edc7ce55c50388249564068805",
+    "candidate_fingerprints.json": "34f0394af2b34ccc9749f6c7f6257347f984dbc7b224942a93f9f1613c783600",
+    "center_metrics_by_channel.csv": "485b522b11201381b6508f64402c2fdc9bfbdb503b007cfd6af387e7090e44b8",
+    "center_metrics_by_prn.csv": "24c32fce88856c82868b90cfb84ac29a361ba534e336191bbe51817647a5b051",
+    "center_metrics_by_time_block.csv": "d50afb3ccd40919c8d155628d7f54dc8e4f6baeb9fd611d6100ee2c6fa034947",
+    "center_validation.csv": "cb07c2b3d192c6bd30e6eeca6ffae6d615523f1ba4569d4259ccb01d866ba198",
+    "center_validation_summary.json": "44692d6ef05eef00558807c635cfc10f063bbc1e03d0f2efd69f4b5ce898b918",
+    "config.json": "0dfe62c6e544eec589d5ea86f74c2b2fb4a7b37611b4c97eca08f2785e7855b4",
+    "environment.json": "c50f1c83b3a85a50948cf3c12e4dc07a77701ae3cb75e175748319e18a6e8ffc",
+    "execution_validity.json": "77c5afe719bf9ae4ae662a593ade02f4c2278c416d63bf91b3c76770f5a2c24e",
+    "global_offset_application_audit.json": "5846bff9dcf7ed13f8338a85fa0291298136ba91aeaee790ce840fac16a19acb",
+    "global_offset_sensitivity.csv": "8811463667acc316bd019465a775e0564aae82e0fa3e1a6aa8ff1ec51096c80e",
+    "gnss_sdr_source_binding.json": "876f16d715673cf0f2cff69fbb40bfe466edece95b92d07da5cdd31672febda2",
+    "gnss_sdr_tracking_semantics.md": "406c5b15bca84449df2af3255e70d5058a865ed484f0b2b6869475d27eabe628",
+    "go_no_go.json": "b6e12b59a995190654b448316f166fc0a814a87c1cabab4425214de3aaf08129",
+    "plots/center-recovery.svg": "991a63f70eba8ed65a8f75321a0a0c480f6dea538be9e652fd05f1113f22d850",
+    "prn_sampling_summary.csv": "38a6fc1fcdb4a5b16efc17ec0249277232f7378e93789f218bc9d15dff9c7557",
+    "raw_overlap_audit.json": "6c9478bf223a5b1c45754ff9c042afcfa6fe02b38e33a2bc79e3e68680af03fe",
+    "receiver_source_binding.json": "4b327324b29ba3674c8f3a055bb1fe59d8f131d096442691c427691dbe142074",
+    "selected_alignment.json": "b6e12b59a995190654b448316f166fc0a814a87c1cabab4425214de3aaf08129",
+    "test_report.txt": "4229e627548b3438975334ceca0ec26c6d8994153d213c9572056fddd72f5d7b"
+  }
+}

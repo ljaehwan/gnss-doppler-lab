@@ -1,0 +1,122 @@
+{
+  "A2_source_semantics_sufficient": true,
+  "adapter_path": "/home/ubuntu/build-gnss-sdr-complex9/src/algorithms/tracking/adapters/gps_l1_ca_dll_pll_tracking.cc",
+  "adapter_sha256": "482400fa83aeb9c6da7faad0544b91cfaa67a57e9c778996490c7ae1d01efd67",
+  "base_head_exact": true,
+  "build_evidence": {
+    "cmake_cache_path": "/home/ubuntu/build-gnss-sdr-complex9/build-complex/CMakeCache.txt",
+    "cmake_cache_sha256": "09c18d603f152157cea81a61f8f3bdc47263f136dc02122961833c406e4af5f9"
+  },
+  "code_length_chips": 1023,
+  "code_rate_chips_s": 1023000,
+  "compiler_evidence": "/usr/bin/c++",
+  "excerpts": {
+    "correlation": "lines 1061-1092: correlator receives remnant carrier/code phase and forward NCO steps",
+    "prompt": "lines 1435-1443: Prompt I/Q taken from complex correlator",
+    "remnant": "lines 1222-1291: exact interval, forward code step, remnant samples-to-chips",
+    "stamp": "lines 1482-1518: stamp=nitems_read+current_prn_length_samples; NCO, quality, aux1 dumped",
+    "updates": "lines 1137-1159: carrier Doppler and code frequency updates"
+  },
+  "executable_sha256": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+  "extended_integration_symbols": 1,
+  "git_base_sha": "1ddd4562723040fd66cb334b578a5b69455625f4",
+  "git_head_sha": "1ddd4562723040fd66cb334b578a5b69455625f4",
+  "high_dynamics": false,
+  "interpretation": {
+    "aux1": "row k-1 updated next-call remnant; applied to current Prompt row k",
+    "aux_row": "previous",
+    "consumed_interval": "adjacent stamps are retained only as consume/boundary audit",
+    "correlator_support": "[stamp(k-1), stamp(k-1)+vector_length)",
+    "nco_row": "previous",
+    "prompt_row": "current",
+    "replica_direction": 1
+  },
+  "missing_evidence": [],
+  "modified_diff_sha256": "51da8449a56af9088695f81c09c1752139b48e2fbe9f621f85abafcab93681ea",
+  "modified_file_set_exact": true,
+  "modified_tracked_files": [
+    {
+      "diff_sha256": "e349855b1f5888cb5078a93258c1909a17811c7a6671d551ae515b791cc49fd8",
+      "path": "src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+      "sha256": "6d2db43fea2728acc35fb29b4cb5027b62be442b8966108bf6b955d5b95f486c"
+    },
+    {
+      "diff_sha256": "2e0db6b199e1c7256515edb09bc62b567e619014cd40dc105a18ada009c20a91",
+      "path": "src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.h",
+      "sha256": "4e0b89e67100f8cce71ee81a0ab27c643cde067dbf202d6806364075c28b7268"
+    },
+    {
+      "diff_sha256": "402c02f18b25ab5a82eecf29763e5562d155bd32dfceb1241358827922541b05",
+      "path": "src/algorithms/tracking/libs/dll_pll_conf.cc",
+      "sha256": "17c97fc3b50729145574d7121b6b49ea8c7fb18ad1eaad72d859afb2c5db83bc"
+    },
+    {
+      "diff_sha256": "e4684f339262c7d30296f72481117ffd05683091398ca1f6d256c96f676880ec",
+      "path": "src/algorithms/tracking/libs/dll_pll_conf.h",
+      "sha256": "59bf6572fa0a75cfa5abbcbd28a4b95570c689a611b38a379f070c5b76387360"
+    }
+  ],
+  "prompt_support_mapping_authenticated": true,
+  "prompt_target": {
+    "EPL": "available as nine-tap E/P/L fields; Prompt_I/Q is current d_Prompt target",
+    "Prompt_I_Q": "single-step d_Prompt complex output",
+    "equivalence_authenticated": true,
+    "nine_tap_P": "d_tap_accu[4]"
+  },
+  "receiver_config_values": {
+    "Acquisition_1C.coherent_integration_time_ms": "1",
+    "Acquisition_1C.doppler_max": "10000",
+    "Acquisition_1C.doppler_step": "100",
+    "Acquisition_1C.dump": "false",
+    "Acquisition_1C.implementation": "GPS_L1_CA_PCPS_Acquisition",
+    "Acquisition_1C.item_type": "gr_complex",
+    "Acquisition_1C.threshold": "2.5",
+    "Channel.signal": "1C",
+    "Channels.in_acquisition": "11",
+    "Channels_1C.count": "11",
+    "DataTypeAdapter.implementation": "Ishort_To_Complex",
+    "GNSS-SDR.internal_fs_sps": "25000000",
+    "InputFilter.implementation": "Pass_Through",
+    "InputFilter.input_item_type": "gr_complex",
+    "InputFilter.output_item_type": "gr_complex",
+    "Observables.dump": "true",
+    "Observables.dump_filename": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/observables.dat",
+    "Observables.implementation": "Hybrid_Observables",
+    "PVT.display_rate_ms": "500",
+    "PVT.dump": "false",
+    "PVT.flag_rtcm_server": "false",
+    "PVT.flag_rtcm_tty_port": "false",
+    "PVT.implementation": "RTKLIB_PVT",
+    "PVT.output_rate_ms": "100",
+    "PVT.positioning_mode": "Single",
+    "Resampler.implementation": "Pass_Through",
+    "Resampler.item_type": "gr_complex",
+    "SignalConditioner.implementation": "Signal_Conditioner",
+    "SignalSource.dump": "false",
+    "SignalSource.enable_throttle_control": "false",
+    "SignalSource.filename": "/home/ubuntu/unraid/gnss-datasets/texbat/raw/cleanStatic.bin",
+    "SignalSource.implementation": "File_Signal_Source",
+    "SignalSource.item_type": "ishort",
+    "SignalSource.repeat": "false",
+    "SignalSource.samples": "24008196096",
+    "SignalSource.sampling_frequency": "25000000",
+    "TelemetryDecoder_1C.dump": "false",
+    "TelemetryDecoder_1C.implementation": "GPS_L1_CA_Telemetry_Decoder",
+    "Tracking_1C.dll_bw_hz": "1.5",
+    "Tracking_1C.dump": "true",
+    "Tracking_1C.dump_filename": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_",
+    "Tracking_1C.implementation": "GPS_L1_CA_DLL_PLL_Tracking",
+    "Tracking_1C.item_type": "gr_complex",
+    "Tracking_1C.order": "3",
+    "Tracking_1C.pll_bw_hz": "20.0",
+    "Tracking_1C.tap_count": "9",
+    "Tracking_1C.tap_spacing_chips": "0.125"
+  },
+  "sampling_rate_sps": 25000000,
+  "source_root": "/home/ubuntu/build-gnss-sdr-complex9",
+  "tap_count": 9,
+  "tap_spacing_chips": 0.125,
+  "track_pilot": false,
+  "vector_length": 25000,
+  "vector_length_derivation": "round(fs_in / (GPS_L1_CA_CODE_RATE_CPS / GPS_L1_CA_CODE_LENGTH_CHIPS))"
+}

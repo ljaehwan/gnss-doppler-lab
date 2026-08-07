@@ -1,0 +1,120 @@
+{
+  "checks": {
+    "config_sha256": true,
+    "executable_sha256": true,
+    "mat_hashes": true,
+    "mat_inventory": true,
+    "raw_name": true,
+    "raw_sha256": true,
+    "raw_size": true,
+    "receiver_config_values": true,
+    "runtime_config_sha256": true
+  },
+  "classification": "exact_same_raw",
+  "config_values": {
+    "Acquisition_1C.coherent_integration_time_ms": "1",
+    "Acquisition_1C.doppler_max": "10000",
+    "Acquisition_1C.doppler_step": "100",
+    "Acquisition_1C.dump": "false",
+    "Acquisition_1C.implementation": "GPS_L1_CA_PCPS_Acquisition",
+    "Acquisition_1C.item_type": "gr_complex",
+    "Acquisition_1C.threshold": "2.5",
+    "Channel.signal": "1C",
+    "Channels.in_acquisition": "11",
+    "Channels_1C.count": "11",
+    "DataTypeAdapter.implementation": "Ishort_To_Complex",
+    "GNSS-SDR.internal_fs_sps": "25000000",
+    "InputFilter.implementation": "Pass_Through",
+    "InputFilter.input_item_type": "gr_complex",
+    "InputFilter.output_item_type": "gr_complex",
+    "Observables.dump": "true",
+    "Observables.dump_filename": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/observables.dat",
+    "Observables.implementation": "Hybrid_Observables",
+    "PVT.display_rate_ms": "500",
+    "PVT.dump": "false",
+    "PVT.flag_rtcm_server": "false",
+    "PVT.flag_rtcm_tty_port": "false",
+    "PVT.implementation": "RTKLIB_PVT",
+    "PVT.output_rate_ms": "100",
+    "PVT.positioning_mode": "Single",
+    "Resampler.implementation": "Pass_Through",
+    "Resampler.item_type": "gr_complex",
+    "SignalConditioner.implementation": "Signal_Conditioner",
+    "SignalSource.dump": "false",
+    "SignalSource.enable_throttle_control": "false",
+    "SignalSource.filename": "/home/ubuntu/unraid/gnss-datasets/texbat/raw/cleanStatic.bin",
+    "SignalSource.implementation": "File_Signal_Source",
+    "SignalSource.item_type": "ishort",
+    "SignalSource.repeat": "false",
+    "SignalSource.samples": "24008196096",
+    "SignalSource.sampling_frequency": "25000000",
+    "TelemetryDecoder_1C.dump": "false",
+    "TelemetryDecoder_1C.implementation": "GPS_L1_CA_Telemetry_Decoder",
+    "Tracking_1C.dll_bw_hz": "1.5",
+    "Tracking_1C.dump": "true",
+    "Tracking_1C.dump_filename": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_",
+    "Tracking_1C.implementation": "GPS_L1_CA_DLL_PLL_Tracking",
+    "Tracking_1C.item_type": "gr_complex",
+    "Tracking_1C.order": "3",
+    "Tracking_1C.pll_bw_hz": "20.0",
+    "Tracking_1C.tap_count": "9",
+    "Tracking_1C.tap_spacing_chips": "0.125"
+  },
+  "current_raw_path": "/home/ubuntu/unraid_hdd/texbat/raw/cleanStatic.bin",
+  "format": "ishort",
+  "fs": 25000000.0,
+  "manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/manifest.json",
+  "manifest_raw_path": "/home/ubuntu/unraid/gnss-datasets/texbat/raw/cleanStatic.bin",
+  "manifest_sha256": "ced3722a7b560fc0efce5f347c7e09cd81e7a660969a17c8a85bb56c9e11e30a",
+  "mat_inventory": [
+    {
+      "path": "raw/epl_tracking_ch_0.mat",
+      "sha256": "baeb235408145cc1654a94d1e1c6f8fd0fc9adac5e5cff8a292dc348b959a213"
+    },
+    {
+      "path": "raw/epl_tracking_ch_1.mat",
+      "sha256": "26c55e6043c2e319e08c0b1d4fdbdaa44696d042f0f343ffc4e2041f09521f11"
+    },
+    {
+      "path": "raw/epl_tracking_ch_10.mat",
+      "sha256": "8951dcd30665ae0faeca381910cfaa06c2ea03bf077d219dc96c62e00a4ec0e1"
+    },
+    {
+      "path": "raw/epl_tracking_ch_2.mat",
+      "sha256": "2683991662c6c4d552ec6d0d2969c9c0291fd6abdeb9e3e3be3eb4c53343f3dc"
+    },
+    {
+      "path": "raw/epl_tracking_ch_3.mat",
+      "sha256": "413d837e707101f6d1664d808b93f4060f7b194ebdc260aeac68b0de996fea6c"
+    },
+    {
+      "path": "raw/epl_tracking_ch_4.mat",
+      "sha256": "45f79e885715b3c99262302d6c33124029fc07bab6a2d3bb45e76eeaeda151cf"
+    },
+    {
+      "path": "raw/epl_tracking_ch_5.mat",
+      "sha256": "38c90c1e47e9c19097f5fe8c24f9f07f53e88ca8e730393807b7e023a8b9a3e8"
+    },
+    {
+      "path": "raw/epl_tracking_ch_6.mat",
+      "sha256": "c7fb92cbb29be0ba26207d336d811e68441bffa6b029a134f503a9de7cb0000e"
+    },
+    {
+      "path": "raw/epl_tracking_ch_7.mat",
+      "sha256": "df48b0ed3cdacd5a00587cd2a664650d0c2b1bd8b63fa07fa74e78857ec2b94a"
+    },
+    {
+      "path": "raw/epl_tracking_ch_8.mat",
+      "sha256": "dd64b65894472fb9fe7f2bb925c7ff8d41311f533889e3293b1809e4b8f176c4"
+    },
+    {
+      "path": "raw/epl_tracking_ch_9.mat",
+      "sha256": "66feb6c4180a8a8dc1d32047b6505858d7795b49b432b907c91941a49c727ae2"
+    }
+  ],
+  "raw_path": "/home/ubuntu/unraid_hdd/texbat/raw/cleanStatic.bin",
+  "raw_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+  "recording_id": "cleanStatic",
+  "resampling": "none",
+  "skip_samples": 0
+}
