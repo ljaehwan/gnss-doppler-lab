@@ -1,4 +1,5 @@
-import ast, importlib.util, json
+import ast, csv, hashlib, importlib.util, json
+from types import SimpleNamespace
 from pathlib import Path
 import numpy as np
 import pytest
@@ -53,6 +54,10 @@ def test_l_blocks_common_anchor_and_rejections():
  assert not common_anchor_blocks(mixed)[20]
  duplicate=rows+[dict(rows[-1])]
  with pytest.raises(ValueError,match="duplicate"):common_anchor_blocks(duplicate)
+ one_sample=[dict(datum(i),support_start_sample=i*24999) for i in range(20)]
+ assert len(common_anchor_blocks(one_sample)[20])==1
+ excessive=[dict(datum(i),support_start_sample=i*24998) for i in range(20)]
+ assert not common_anchor_blocks(excessive)[20]
 
 def test_paired_improvement_and_fixed_bootstrap_seed():
  l1=[datum(i,prn=i%8+1,doppler=100) for i in range(80)]; l20=[datum(i,prn=i%8+1,doppler=0) for i in range(80)]
@@ -85,3 +90,53 @@ def test_independent_verifier_does_not_import_producer_and_tamper_helpers_fail()
 def test_smoke_vectorized_aggregation_is_small_and_finite():
  rng=np.random.default_rng(14); surfaces=rng.normal(size=(20,11,17))+1j*rng.normal(size=(20,11,17))
  out=diagnostic_aggregates(surfaces); assert out["normalized_power_mean"].shape==(11,17) and np.isfinite(out["normalized_power_mean"]).all()
+
+def _load_script(name):
+ path=ROOT/"scripts"/name;spec=importlib.util.spec_from_file_location(name,path);mod=importlib.util.module_from_spec(spec);spec.loader.exec_module(mod);return mod
+
+@pytest.fixture(scope="module")
+def synthetic_success_artifact(tmp_path_factory):
+ """Exercise run() end-to-end while replacing only authenticated external I/O."""
+ runmod=_load_script("run_acaf_nf_stage0_static_r14_doppler_validation.py")
+ with (ROOT/"artifacts/acaf_nf_stage0_static_r13_reconstruction/center_validation.csv").open(newline="") as f:frozen=list(csv.DictReader(f))
+ triples=[];byid={}
+ for r in frozen:
+  key=(str(r["channel"]),int(r["prn"]),int(r["tracker_row"]));byid[key]=r
+  state={"mat_row":int(r["nco_row_index"]),"code_freq_chips":float(r["code_freq_chips_value"]),"carrier_doppler_hz":float(r["carrier_doppler_hz_value"]),"aux1":float(r["aux1_value"]),"mat_path":r["mat_path"]}
+  prompt={"PRN":int(r["prn"]),"channel":str(r["channel"]),"mat_row":int(r["tracker_row"]),"Prompt_I":float(r["mat_prompt_magnitude"]),"Prompt_Q":0.,"CN0_SNV_dB_Hz":35.,"carrier_lock_test":.95,"mat_path":r["mat_path"],"_support":{"start_sample":int(r["support_start_sample"]),"end_sample":int(r["support_end_sample"]),"length_samples":25000}}
+  triples.append((r["role"],(state,prompt,{})))
+ out=tmp_path_factory.mktemp("r14-success")/"artifact";raw=out.parent/"cleanStatic.bin";raw.write_bytes(b"\0\0\0\0")
+ runmod.authenticate_inputs=lambda *a,**k:{"checks":{"raw":True,"tracker":True,"manifest":True}};runmod.load_triples=lambda *a,**k:[];runmod.balanced_sample=lambda *a,**k:triples;runmod.source_support=lambda t,n:t[1]["_support"];runmod.read_iq=lambda *a,**k:np.zeros(8,dtype=np.complex128)
+ def surface(iq,row):
+  r=byid[(str(row["channel"]),int(row["prn"]),int(row["tracker_row"]))];s=np.zeros((11,17),complex);di=runmod.GRID["doppler_hz"].index(int(float(r["peak_doppler_offset_hz"])));ci=runmod.GRID["delay_chips"].index(float(r["peak_delay_offset_chips"]));s[5,8]=float(r["center_magnitude"]);s[di,ci]=float(r["peak_magnitude"]);return s
+ runmod.complex_caf_surface=surface
+ verdict=runmod.run(SimpleNamespace(raw=raw,tracker_dir=out.parent,manifest=None,output=out))
+ assert verdict["verdict"] in {"TRACKER_RAW_RECONSTRUCTION_UNRESOLVED","PHYSICAL_RECONSTRUCTION_VALID_DOPPLER_RESOLUTION_LIMITED","PHYSICAL_CENTER_VALID"}
+ return out
+
+def test_run_success_latent_authenticated_io_and_inventory(synthetic_success_artifact):
+ root=synthetic_success_artifact;assert len({p.name for p in root.iterdir()})==26;assert len([p for p in root.iterdir() if p.is_file()])==25;assert len(list((root/"plots").glob("*.svg")))==7
+ rows=list(csv.DictReader((root/"per_block_scores.csv").open()));assert sum(r["record_type"]=="epoch" for r in rows)==969;assert {int(r["L"]) for r in rows if r["record_type"]=="aggregate"}=={1,5,10,20};assert all(v==513 for v in json.loads((root/"execution_validity.json").read_text())["common_anchor_counts"].values())
+
+def _rehash(verifier,root):
+ checks={str(x.relative_to(root)):verifier.digest(x) for x in sorted(root.rglob("*")) if x.is_file() and x.name not in {"checksums.json","verification_report.json"}};(root/"checksums.json").write_text(json.dumps({"files":checks},indent=2,sort_keys=True)+"\n")
+
+def test_independent_verifier_accepts_success(synthetic_success_artifact):
+ assert _load_script("verify_acaf_nf_stage0_static_r14_doppler_validation.py").verify(synthetic_success_artifact)["status"]=="PASS"
+
+@pytest.mark.parametrize("filename,kind,field",[("prompt_reproduction_metrics.json","json","median_relative_error"),("prompt_reproduction_by_time_block.csv","csv","pooled_spearman"),("per_block_scores.csv","constituent","constituent_identities"),("paired_improvement.csv","csv","difference"),("bootstrap_results.json","bootstrap","ci95_low"),("doppler_mainlobe_diagnostics.csv","csv","imag_+50_hz"),("go_no_go.json","json","verdict"),("execution_validity.json","json","caf_executed")])
+def test_checksum_rewritten_tampers_fail(synthetic_success_artifact,tmp_path,filename,kind,field):
+ import shutil
+ verifier=_load_script("verify_acaf_nf_stage0_static_r14_doppler_validation.py");work=tmp_path/filename.replace(".","_");shutil.copytree(synthetic_success_artifact,work);p=work/filename
+ if kind in {"csv","constituent"}:
+  with p.open(newline="") as f:rows=list(csv.DictReader(f));fields=list(rows[0])
+  i=969 if kind=="constituent" else 0;rows[i][field]=rows[i+1][field] if kind=="constituent" else "123"
+  with p.open("w",newline="") as f:w=csv.DictWriter(f,fields);w.writeheader();w.writerows(rows)
+ else:
+  d=json.loads(p.read_text())
+  if kind=="bootstrap":d["20"][field]=.123
+  elif field=="caf_executed":d[field]=False
+  elif field=="verdict":d[field]="RECONSTRUCTION_IMPLEMENTATION_INVALID" if d[field]!="RECONSTRUCTION_IMPLEMENTATION_INVALID" else "PHYSICAL_CENTER_VALID"
+  else:d[field]=.5
+  p.write_text(json.dumps(d,indent=2,sort_keys=True)+"\n")
+ _rehash(verifier,work);assert verifier.verify(work)["status"]=="FAIL"

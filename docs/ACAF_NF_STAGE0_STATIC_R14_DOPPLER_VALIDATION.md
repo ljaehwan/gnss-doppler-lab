@@ -1,8 +1,13 @@
 # ACAF-NF Stage-0 static R1.4 Doppler validation
 
 R1.4 is a `cleanStatic` scientific reconstruction diagnostic. It freezes the
-R1.3 candidate and checks R1.3 source/artifact hashes and reference metrics
-before downstream validity. It does not select an alignment, calibrate a
+R1.3 candidate and checks the approved R1.3 source SHA-256
+`9889a5e5007c92d6016e5ef0d38a03cea96cdd40eded3cea91df1e4276d16e42`
+and checksums-manifest SHA-256
+`04b5395b311641b4ab3f3a58a1a5cbb54d4249068f8252659049ea4386a95abb`.
+It rehashes every manifest entry, enforces the exact R1.3 inventory and PASS
+verification, and freezes the checksum-bound 969-row center-validation identity
+order before checking independently recomputed reference metrics. It does not select an alignment, calibrate a
 detector, read an attack recording, compare B0, or make an ACAF-NF claim.
 
 The physical configuration is canonical GPS L1 C/A, interleaved signed-int16
@@ -20,7 +25,13 @@ reconstruction-failure gate.
 
 Noncoherent L=1,5,10,20 results use the same L=20-capable anchors. A block is
 consecutive within one channel, PRN, and role, meets C/N0 and lock limits, and
-has valid raw support. Every constituent uses its own tracker state. The
+has valid raw support. A source-authenticated one-sample overlap (24,999 start
+sample delta for fixed 25,000-sample supports) is retained and audited rather
+than deleting an anchor; larger overlaps, duplicate constituents, and role
+crossing fail closed. Every constituent uses its own tracker state and digest.
+`per_block_scores.csv` records all epoch complex surfaces plus each exact
+anchor/L constituent list, interval, overlap audit, common-anchor ID, primary
+surface and three independently recomputable diagnostic surfaces. The
 predeclared surface is
 `mean_k(|C_k|^2 / (sum_grid |C_k|^2 + eps))`; raw power sum, magnitude mean,
 and robust median are diagnostics. Fixed-seed PRN-block bootstrap confidence

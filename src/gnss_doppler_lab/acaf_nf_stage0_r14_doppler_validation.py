@@ -20,6 +20,10 @@ SUPPORT_SAMPLES = 25_000
 LENGTHS = (1, 5, 10, 20)
 ROLES = ("train", "calibration", "holdout")
 CANDIDATE_STRING = "nco_row=previous_aux_row=previous_remnant_sign=-1_carrier_sign=-1_global_offset=0"
+R13_SOURCE_SHA256 = "9889a5e5007c92d6016e5ef0d38a03cea96cdd40eded3cea91df1e4276d16e42"
+R13_CHECKSUMS_SHA256 = "04b5395b311641b4ab3f3a58a1a5cbb54d4249068f8252659049ea4386a95abb"
+R13_CENTER_VALIDATION_SHA256 = "cb07c2b3d192c6bd30e6eeca6ffae6d615523f1ba4569d4259ccb01d866ba198"
+R13_IDENTITY_ORDER_SHA256 = "65933645102b7a05087f0d9991ad1c55c822b4b83090cb57a4e6f74e17675e5c"
 R13_REFERENCE = {
     "n": 969, "prn_count": 8,
     "pooled_spearman": 0.9999965049269979,
@@ -198,7 +202,12 @@ def common_anchor_blocks(rows: Sequence[Mapping], lengths=LENGTHS) -> dict[int, 
             starts = [int(r["support_start_sample"]) for r in window]
             valid = all(bool(r.get("valid_raw_support", True)) and int(r.get("support_length_samples", SUPPORT_SAMPLES)) == SUPPORT_SAMPLES
                         and float(r["cn0_db_hz"]) >= 28 and float(r["carrier_lock"]) >= .85 for r in window)
-            if ids != list(range(ids[0], ids[0]+20)) or len(roles) != 1 or not valid or any(b <= a for a, b in zip(starts, starts[1:])):
+            # Source-authenticated 25,000-sample supports may overlap by one
+            # sample when their starts differ by 24,999; authenticated positive
+            # gaps are retained.  Reject duplicates and overlap greater than one.
+            deltas = [b-a for a, b in zip(starts, starts[1:])]
+            if (ids != list(range(ids[0], ids[0]+20)) or len(roles) != 1 or not valid
+                    or any(delta < SUPPORT_SAMPLES-1 for delta in deltas)):
                 continue
             for length in lengths:
                 block = window[-length:]
