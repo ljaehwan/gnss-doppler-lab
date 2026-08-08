@@ -1,0 +1,743 @@
+{
+  "authoritative_git_sha": "7693d5ec13934b54f9ab5fa68d04f60d437dd060",
+  "excluded_large_tracker_exports": {
+    "cleanStatic": {
+      "channel_prn_pairs": [
+        [
+          0,
+          30
+        ],
+        [
+          1,
+          19
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          20
+        ],
+        [
+          4,
+          16
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          7,
+          13
+        ],
+        [
+          8,
+          23
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          10,
+          8
+        ],
+        [
+          10,
+          11
+        ],
+        [
+          10,
+          31
+        ]
+      ],
+      "channels": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10
+      ],
+      "excluded_from_git": true,
+      "first_support_start_sample": 2014232,
+      "last_support_end_sample": 10421918083,
+      "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/continuous_tracker_cleanStatic.csv",
+      "phase_coverage": {
+        "all": {
+          "rows": 98232
+        }
+      },
+      "prns": [
+        1,
+        3,
+        6,
+        7,
+        8,
+        11,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30,
+        31
+      ],
+      "receiver_seconds": 39,
+      "rows": 98232,
+      "rows_match_manifest": true,
+      "sha256": "55ac72a39f3073191581b640d87be43aafe47bc90750909c4fe37c033d7062fa",
+      "size_bytes": 35826273
+    },
+    "ds3": {
+      "channel_prn_pairs": [
+        [
+          0,
+          23
+        ],
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          11
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          19
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          4,
+          20
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          6,
+          10
+        ],
+        [
+          6,
+          30
+        ],
+        [
+          7,
+          16
+        ],
+        [
+          8,
+          13
+        ],
+        [
+          9,
+          10
+        ],
+        [
+          9,
+          20
+        ],
+        [
+          10,
+          8
+        ],
+        [
+          10,
+          30
+        ],
+        [
+          10,
+          31
+        ]
+      ],
+      "channels": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "excluded_from_git": true,
+      "first_support_start_sample": 2031183,
+      "last_support_end_sample": 11444951687,
+      "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/continuous_tracker_ds3.csv",
+      "phase_coverage": {
+        "established": {
+          "end_sample_exclusive": 11446255616,
+          "l20_prn_channels": 11,
+          "l20_windows": 1124609,
+          "rows": 2247008,
+          "start_sample": 4875000000
+        },
+        "pre_onset": {
+          "end_sample_exclusive": 2972500000,
+          "l20_prn_channels": 10,
+          "l20_windows": 516046,
+          "rows": 1102420,
+          "start_sample": 0
+        },
+        "transition": {
+          "end_sample_exclusive": 4875000000,
+          "l20_prn_channels": 14,
+          "l20_windows": 279434,
+          "rows": 585698,
+          "start_sample": 2972500000
+        }
+      },
+      "prns": [
+        3,
+        6,
+        7,
+        8,
+        10,
+        11,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30,
+        31
+      ],
+      "receiver_seconds": 458,
+      "rows": 3935144,
+      "rows_match_manifest": true,
+      "sha256": "74f014934481a61fbf07e0ab93ef648e616f8ad249782f3c139545e22493fad2",
+      "size_bytes": 1601340522
+    },
+    "ds4": {
+      "channel_prn_pairs": [
+        [
+          0,
+          23
+        ],
+        [
+          1,
+          20
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          32
+        ],
+        [
+          4,
+          16
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          7,
+          30
+        ],
+        [
+          8,
+          19
+        ],
+        [
+          9,
+          10
+        ],
+        [
+          10,
+          13
+        ]
+      ],
+      "channels": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "excluded_from_git": true,
+      "first_support_start_sample": 2585483,
+      "last_support_end_sample": 3204196262,
+      "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/continuous_tracker_ds4.csv",
+      "phase_coverage": {
+        "pre_onset": {
+          "end_sample_exclusive": 2845000000,
+          "l20_prn_channels": 11,
+          "l20_windows": 486703,
+          "rows": 1076858,
+          "start_sample": 0
+        },
+        "transition_only": {
+          "end_sample_exclusive": 3205496832,
+          "l20_prn_channels": 9,
+          "l20_windows": 63728,
+          "rows": 139632,
+          "start_sample": 2845000000
+        }
+      },
+      "prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30,
+        32
+      ],
+      "receiver_seconds": 129,
+      "rows": 1216500,
+      "rows_match_manifest": true,
+      "sha256": "99a04643561da2e14840da21264f701d265ff7c8be94245ab16cb0e3a345508f",
+      "size_bytes": 492554228
+    },
+    "ds7": {
+      "channel_prn_pairs": [
+        [
+          0,
+          23
+        ],
+        [
+          1,
+          20
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          10
+        ],
+        [
+          4,
+          19
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          7,
+          13
+        ],
+        [
+          8,
+          30
+        ],
+        [
+          9,
+          16
+        ],
+        [
+          10,
+          17
+        ]
+      ],
+      "channels": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "excluded_from_git": true,
+      "first_support_start_sample": 2014232,
+      "last_support_end_sample": 6763518890,
+      "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/continuous_tracker_ds7.csv",
+      "phase_coverage": {
+        "held": {
+          "end_sample_exclusive": 3750000000,
+          "l20_prn_channels": 10,
+          "l20_windows": 88089,
+          "rows": 193587,
+          "start_sample": 3250000000
+        },
+        "pre_onset": {
+          "end_sample_exclusive": 2750000000,
+          "l20_prn_channels": 10,
+          "l20_windows": 474256,
+          "rows": 1004478,
+          "start_sample": 0
+        },
+        "time_push": {
+          "end_sample_exclusive": 6764822528,
+          "l20_prn_channels": 10,
+          "l20_windows": 537058,
+          "rows": 1128473,
+          "start_sample": 3750000000
+        },
+        "transition": {
+          "end_sample_exclusive": 3250000000,
+          "l20_prn_channels": 10,
+          "l20_windows": 88299,
+          "rows": 193605,
+          "start_sample": 2750000000
+        }
+      },
+      "prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        17,
+        19,
+        20,
+        23,
+        30
+      ],
+      "receiver_seconds": 271,
+      "rows": 2520173,
+      "rows_match_manifest": true,
+      "sha256": "420234b5d2ce4bf7743c680a1c527983f2034060aa66a16c4e2bfb7617866cfe",
+      "size_bytes": 1019486313
+    },
+    "ds8": {
+      "channel_prn_pairs": [
+        [
+          0,
+          19
+        ],
+        [
+          1,
+          16
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          10
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          4,
+          32
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          7,
+          20
+        ],
+        [
+          8,
+          23
+        ],
+        [
+          9,
+          13
+        ],
+        [
+          10,
+          30
+        ]
+      ],
+      "channels": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "excluded_from_git": true,
+      "first_support_start_sample": 2064232,
+      "last_support_end_sample": 11748734613,
+      "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/continuous_tracker_ds8.csv",
+      "phase_coverage": {
+        "held": {
+          "end_sample_exclusive": 3750000000,
+          "l20_prn_channels": 11,
+          "l20_windows": 88790,
+          "rows": 194559,
+          "start_sample": 3250000000
+        },
+        "pre_onset": {
+          "end_sample_exclusive": 2750000000,
+          "l20_prn_channels": 11,
+          "l20_windows": 476325,
+          "rows": 1026332,
+          "start_sample": 0
+        },
+        "time_push": {
+          "end_sample_exclusive": 11750035292,
+          "l20_prn_channels": 10,
+          "l20_windows": 1432971,
+          "rows": 3019392,
+          "start_sample": 3750000000
+        },
+        "transition": {
+          "end_sample_exclusive": 3250000000,
+          "l20_prn_channels": 11,
+          "l20_windows": 88632,
+          "rows": 204740,
+          "start_sample": 2750000000
+        }
+      },
+      "prns": [
+        3,
+        4,
+        6,
+        7,
+        8,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30,
+        32
+      ],
+      "receiver_seconds": 470,
+      "rows": 4445055,
+      "rows_match_manifest": true,
+      "sha256": "aff1a2928f4817502dfcfa602fa04689ff0513457e231f8329735018653f4653",
+      "size_bytes": 1802833744
+    }
+  },
+  "excluded_receiver_binary": {
+    "sha256": "4b391f84270b421f84c92d7d9981b5f3fddd6c2e6b65917a3c4d8dfd1f1a99d3",
+    "size_bytes": 36565600
+  },
+  "preserved_files": [
+    "README.md",
+    "go_no_go.json",
+    "scenario_metrics.csv",
+    "phase_metrics.csv",
+    "baseline_metrics.csv",
+    "control_metrics.csv",
+    "per_window_scores.csv",
+    "secondary_component_metrics.csv",
+    "thresholds.json",
+    "normal_model_summary.json",
+    "bootstrap_results.json",
+    "execution_validity.json",
+    "verification_report.json",
+    "checkpoint_c_verification_report.json",
+    "checksums.json",
+    "test_report.txt",
+    "config.json",
+    "cleanstatic_validation.json",
+    "cleanstatic_validation_epochs.csv",
+    "cleanstatic_l20_windows.json",
+    "cleanstatic_caf_surfaces.npz",
+    "continuous_tracker_manifest.json",
+    "attack_tracker_manifest.json",
+    "tracker_cadence_audit.json",
+    "tracker_cadence_by_channel.csv",
+    "scenario_timeline.json",
+    "source_binding.json",
+    "execution_manifest.json",
+    "execution_manifest_checkpoint_b.json",
+    "execution_manifest_checkpoint_c.json",
+    "plots/cleanstatic_prompt_reproduction.svg",
+    "plots/stage1_r1_scores.png",
+    "receiver_exporter_build/build_provenance.json",
+    "receiver_replays/cleanStatic/manifest.json",
+    "receiver_replays/cleanStatic/receiver.conf",
+    "receiver_replays/ds3/manifest.json",
+    "receiver_replays/ds3/receiver.conf",
+    "receiver_replays/ds4/manifest.json",
+    "receiver_replays/ds4/receiver.conf",
+    "receiver_replays/ds7/manifest.json",
+    "receiver_replays/ds7/receiver.conf",
+    "receiver_replays/ds8/manifest.json",
+    "receiver_replays/ds8/receiver.conf"
+  ],
+  "preserved_under": "r1_preserved",
+  "r1_artifact": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker",
+  "receiver_and_raw_bindings": {
+    "cleanStatic": {
+      "mat_inventory": {
+        "epl_tracking_ch_0.mat": "baeb235408145cc1654a94d1e1c6f8fd0fc9adac5e5cff8a292dc348b959a213",
+        "epl_tracking_ch_1.mat": "26c55e6043c2e319e08c0b1d4fdbdaa44696d042f0f343ffc4e2041f09521f11",
+        "epl_tracking_ch_10.mat": "8951dcd30665ae0faeca381910cfaa06c2ea03bf077d219dc96c62e00a4ec0e1",
+        "epl_tracking_ch_2.mat": "2683991662c6c4d552ec6d0d2969c9c0291fd6abdeb9e3e3be3eb4c53343f3dc",
+        "epl_tracking_ch_3.mat": "413d837e707101f6d1664d808b93f4060f7b194ebdc260aeac68b0de996fea6c",
+        "epl_tracking_ch_4.mat": "45f79e885715b3c99262302d6c33124029fc07bab6a2d3bb45e76eeaeda151cf",
+        "epl_tracking_ch_5.mat": "38c90c1e47e9c19097f5fe8c24f9f07f53e88ca8e730393807b7e023a8b9a3e8",
+        "epl_tracking_ch_6.mat": "c7fb92cbb29be0ba26207d336d811e68441bffa6b029a134f503a9de7cb0000e",
+        "epl_tracking_ch_7.mat": "df48b0ed3cdacd5a00587cd2a664650d0c2b1bd8b63fa07fa74e78857ec2b94a",
+        "epl_tracking_ch_8.mat": "dd64b65894472fb9fe7f2bb925c7ff8d41311f533889e3293b1809e4b8f176c4",
+        "epl_tracking_ch_9.mat": "66feb6c4180a8a8dc1d32047b6505858d7795b49b432b907c91941a49c727ae2"
+      },
+      "raw_path": "/home/ubuntu/unraid_hdd/texbat/raw/cleanStatic.bin",
+      "raw_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "raw_size_bytes": 48016392192,
+      "receiver_config_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/receiver.conf",
+      "receiver_config_sha256": "ce74f719338a8a97021ba10a0c72927e3e44db01120d355b5443fcc559504930",
+      "receiver_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/manifest.json",
+      "receiver_manifest_sha256": "ced3722a7b560fc0efce5f347c7e09cd81e7a660969a17c8a85bb56c9e11e30a"
+    },
+    "ds3": {
+      "mat_inventory": {
+        "epl_track0.mat": "552f1cea9d888c4f4940dba8b325f6c3450f76b486363d85743e3bc96663ba98",
+        "epl_track1.mat": "e367ee89ff6aa601a675cb261bc95dbb5128bee59189420f59356debca68a5ce",
+        "epl_track10.mat": "f4b015a1611edd754f61cf93a9a5ab6a6e747f66ada5baf427906bded45c5596",
+        "epl_track2.mat": "05420b4b81855ed90ba3396e73a4289172ae7ec3a4b77643bd122b29a0d5ee6f",
+        "epl_track3.mat": "f0c1207f90c6614cf6a95b20c8c4b9f5839361a6aefdb28078a0276ef9e4902b",
+        "epl_track4.mat": "a67149d988f7ad9729b24154c24e84f61de2424008060e2d43ee837f7fc0f3d0",
+        "epl_track5.mat": "1b595dd4f10f968d505bb8c30f79e73047472d8506fded2c2304fd1707238296",
+        "epl_track6.mat": "df4b27f980035ad74bfa0ebeab7ee529bc72064c68772e4853c2ad002941de5e",
+        "epl_track7.mat": "b055b8772d3a9cb415262c03d68e266c8216386950852a8b15167d6567058b45",
+        "epl_track8.mat": "3e635305d7385365595d9dd73fa04ef518cd31fd92b60acc4e92dabded71bfd0",
+        "epl_track9.mat": "2d32dc13d3ec3b2e0b3667fe6315118a3e994ec437781b45b8214fa5df7882d5"
+      },
+      "raw_path": "/home/ubuntu/unraid_hdd/texbat/raw/ds3.bin",
+      "raw_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "raw_size_bytes": 45785022464,
+      "receiver_config_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/receiver.conf",
+      "receiver_config_sha256": "1df5f4d282c4df746340ac7bb4d1f176e32692a9a03b9730990364b2a65ab7c1",
+      "receiver_manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/manifest.json",
+      "receiver_manifest_sha256": "253126223a0db5bfc15357ad675d66b3cb514d2157d54f8b3ebfaaa3831a4df1"
+    },
+    "ds4": {
+      "mat_inventory": {
+        "epl_track0.mat": "bfc33bda15ff3831c7a554d0c907d8af4603bc31fe02543a4ca180ebfea811b3",
+        "epl_track1.mat": "290e5183265bd02169ea7400fb555bc08acb5e60bb54d62eeb03ba08323c80ef",
+        "epl_track10.mat": "5a27cf2671d9b07e58ec1b24bc7824ff9fd57be67592bf38955bb6c64a3e75e7",
+        "epl_track2.mat": "a2f861c77fd2df74cdeea26e738cb68c5bc8199d322ea383147cc1b6051f680c",
+        "epl_track3.mat": "1ff62d6b1c04f5c923d60255a4daaae61b663f86326b3103e061285676bcd781",
+        "epl_track4.mat": "67b4fa43eacbf6f265ff5e277ec6c2613c61566afb6b7377be4993c6e303cab3",
+        "epl_track5.mat": "916bcca4687ff4269f6b3af47b846b5f233f664e846a7671156010f7a2321974",
+        "epl_track6.mat": "0c57691278882a272ffc570078c71e37e7bf4e3cf11d9020d7eb37f7c18554eb",
+        "epl_track7.mat": "7e5a9d3534a1ebe7ea4bf1f9947f67ded72ab17c4447640d6c41d1aeed36b0da",
+        "epl_track8.mat": "a88d1b0000cebdd8d2ea7d413d9d4de9baa1680349e6ea710b185f115b2c55d9",
+        "epl_track9.mat": "c07fa594e9cf113fc1d2e3bc4a0c027f0d4be28068bc6b5734ef0c0ad38d094e"
+      },
+      "raw_path": "/home/ubuntu/unraid_hdd/texbat/raw/ds4.bin",
+      "raw_sha256": "1fff2b048a00732686bb1d77a13941da81c9fac648ca3695a9028f4ee3485285",
+      "raw_size_bytes": 12821987328,
+      "receiver_config_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/receiver.conf",
+      "receiver_config_sha256": "79ae9335a606cee7b1aca1716f30f419381d115b3619b81eacced87bff7a8fbc",
+      "receiver_manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/manifest.json",
+      "receiver_manifest_sha256": "45819c72323706cdc96fc19518f5ebbe77b28fe20af44169596c69492f215580"
+    },
+    "ds7": {
+      "mat_inventory": {
+        "epl_track0.mat": "7e98c51ecac3b8c6db5623b2101a3f4b386de1e23e76d5049420538903d1824f",
+        "epl_track1.mat": "05f4874d91b0bded3d50c6ff662f5debd76363c89d2512c891f2c8e206c4f7f6",
+        "epl_track10.mat": "f89ed02de731aad06f6680857cf17eb877ed5fd1fbc6f11947f15fc83855acb6",
+        "epl_track2.mat": "c2abf21e0c2fa3db8af98b29c2198ffc549f2d43895fa09e8fef3e41e81ed22e",
+        "epl_track3.mat": "2d95144938fb1846b7e371fccfadbcec07af9e2537a631182a25c04c975ec9af",
+        "epl_track4.mat": "82706a870a185e06b4996564731c6a912608b1b996066a9de7dcf3bff49493f4",
+        "epl_track5.mat": "034d805a519abe3f915bb4cc2aafea40fa9ed96d08d826a5eecb61415820df5a",
+        "epl_track6.mat": "149b8c4d5dabee0d4d8bb7ece5fd0d47f190f226036c88e377863a634f75bee8",
+        "epl_track7.mat": "48a53038a4629ca459d7e0d6ee6e56f4aec5781c7b878cbc558dd6974730b9a2",
+        "epl_track8.mat": "5d4a8eb17a4c66d73999a3072d922ec85882fd6f5c083dcad72a084712cc6e47",
+        "epl_track9.mat": "d39f992f65fee8fc8cad0848963615c02f5b767102b5065bf70652e4fb15541a"
+      },
+      "raw_path": "/home/ubuntu/unraid_hdd/texbat/raw/ds7.bin",
+      "raw_sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "raw_size_bytes": 27059290112,
+      "receiver_config_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/receiver.conf",
+      "receiver_config_sha256": "6b918b55708d528e3202234dbd4ce7444fe9df191fa4537524c7a38362fd7fa1",
+      "receiver_manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/manifest.json",
+      "receiver_manifest_sha256": "7b0bdc69c754e71eecf750b0b2e61fb52a6a4e6787409e393ef156439276f785"
+    },
+    "ds8": {
+      "mat_inventory": {
+        "epl_track0.mat": "8a1727400febfa99991569956314b27dd3911d265391dbc1b6abf584d7b4c9c6",
+        "epl_track1.mat": "16ce33d22cd71bbd984fc472380136c252c4a00315d005392d55461f05df77b3",
+        "epl_track10.mat": "6bbb9879f8dda67278d0540193b9bbc4bdad73eb9180fe9a9d42a7554cec5d25",
+        "epl_track2.mat": "3aff7fe603ca9caecbfc8bb10414ccf8fa8bd259760a54f0cc7045cf8689bfe7",
+        "epl_track3.mat": "90432c9f472c61d162e898966ed2f0272118b6fb28aaed4c56315347537af178",
+        "epl_track4.mat": "e8facfb16c020688455dc3e9aedad7890a432f0d6a1f3672591d747f0e3c5d51",
+        "epl_track5.mat": "959045bd60d5220a1a7b32adf62166ae1fdf78eb049ad3eaa5ec8f2ac2b359fa",
+        "epl_track6.mat": "d043d97b390c3a01888809240969fc00341037e4805a4c23e3edeeb305880667",
+        "epl_track7.mat": "6bf69316e2467059ad8fd3248658938970ae24cba326dc177d3e2902afdf348b",
+        "epl_track8.mat": "1fa124e33522d66e4d21c99a1fd32cd8da517f8b97d8b709aec4caa9c3eec036",
+        "epl_track9.mat": "bb123b58d164ef48d41fd02454d2c857ac52393882c3cfe1d179df3fbe938c92"
+      },
+      "raw_path": "/home/ubuntu/unraid_hdd/texbat/raw/ds8.bin",
+      "raw_sha256": "1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78",
+      "raw_size_bytes": 47000141168,
+      "receiver_config_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/receiver.conf",
+      "receiver_config_sha256": "c770b761b0301c2a0dc5e51f54e6d6dcf9cae4dce3e26b71259740e894004715",
+      "receiver_manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/manifest.json",
+      "receiver_manifest_sha256": "c057383e21601f021c751d7012a018a2a793c23e08f1998f8c1967749fabe9d8"
+    }
+  },
+  "receiver_second_summary_file": "r1_tracker_receiver_second_summary.csv",
+  "receiver_second_summary_rows": 1367,
+  "schema": "acaf_nf_stage1_r2_r1_inventory.v1"
+}

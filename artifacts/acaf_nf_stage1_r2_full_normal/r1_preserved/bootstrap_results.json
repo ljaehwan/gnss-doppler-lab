@@ -1,0 +1,57 @@
+{
+  "scenarios": {
+    "ds3": {
+      "block_seconds": 10,
+      "ci95": [
+        3.596393704584753,
+        128.7918015156568
+      ],
+      "effect": 57.145254646755404,
+      "post_blocks": 11,
+      "pre_blocks": 6,
+      "replicates": 1000,
+      "seed": 100,
+      "status": "PASS"
+    },
+    "ds4": {
+      "block_seconds": 10,
+      "ci95": [
+        -96.32967675868056,
+        3.7299070934644862
+      ],
+      "effect": -29.730657236895233,
+      "post_blocks": 2,
+      "pre_blocks": 6,
+      "replicates": 1000,
+      "seed": 101,
+      "status": "PASS"
+    },
+    "ds7": {
+      "block_seconds": 10,
+      "ci95": [
+        1.615663360287782,
+        39.92712974456616
+      ],
+      "effect": 17.32102408623567,
+      "post_blocks": 10,
+      "pre_blocks": 6,
+      "replicates": 1000,
+      "seed": 102,
+      "status": "PASS"
+    },
+    "ds8": {
+      "block_seconds": 10,
+      "ci95": [
+        8.46738512145192,
+        47.713854966814196
+      ],
+      "effect": 27.092378479350195,
+      "post_blocks": 10,
+      "pre_blocks": 6,
+      "replicates": 1000,
+      "seed": 103,
+      "status": "PASS"
+    }
+  },
+  "schema": "acaf_nf_stage1_r1_bootstrap.v1"
+}

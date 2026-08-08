@@ -1,0 +1,84 @@
+{
+  "checkpoint": "B",
+  "generated_at_utc": "2026-08-07T16:00:17.138975+00:00",
+  "rows": 98232,
+  "scenario": "cleanStatic",
+  "schema": "acaf_nf_stage1_continuous_tracker_clean.v1",
+  "source_binding": "configs/acaf_nf_stage1_r1_source_binding.json",
+  "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw",
+  "validation": {
+    "dat_rows_match_ratio": 1.0,
+    "dat_sample_stamp_match": true,
+    "generated_at_utc": "2026-08-07T15:58:18.576960+00:00",
+    "global_iq_interval_sharing_expected": true,
+    "interval_uniqueness_scope": "within channel/PRN; simultaneous channels intentionally share global IQ time",
+    "l20_total_windows": 40352,
+    "max_contiguous_rows": 155,
+    "prn_channels": 13,
+    "quality_contract": "minimum over previous/current/next rows: CN0>=28 and carrier_lock>=0.85",
+    "raw_contiguous": true,
+    "reason": null,
+    "reconstruction_validation": {
+      "delay_recovery": {
+        "boundary_fraction": 0.0,
+        "exact_center_fraction": 0.9845201238390093,
+        "histogram": {
+          "-0.125": 6,
+          "0.0": 954,
+          "0.125": 9
+        },
+        "n": 969,
+        "within_0_125_fraction": 1.0
+      },
+      "gates": {
+        "delay_within_0_125_ge_0_95": true,
+        "grid_boundary_le_0_01": true,
+        "l20_doppler_within_50_ge_0_95": true,
+        "l20_windows_ge_100": true,
+        "median_prn_spearman_ge_0_99": true,
+        "pooled_spearman_ge_0_999": true,
+        "prompt_p99_relative_error_le_0_01": true,
+        "r14_common_reproduced_1e_6": true,
+        "raw_support_continuous_unique": true,
+        "target_prn_channels_ge_8": true,
+        "valid_prn_channels_ge_4": true
+      },
+      "grid_boundary_fraction": 0.007223942208462332,
+      "l20_doppler": {
+        "boundary_fraction": 0.0,
+        "n": 219,
+        "within_50_fraction": 1.0
+      },
+      "prompt_reproduction": {
+        "max_relative_error": 0.00475690903985293,
+        "median_prn_spearman": 1.0,
+        "median_relative_error": 2.9317406375906074e-06,
+        "n": 969,
+        "p95_relative_error": 0.0010276993876375152,
+        "p99_relative_error": 0.0018409780335762308,
+        "pooled_spearman": 0.999993906702917
+      },
+      "r14_common_epochs": {
+        "max_numeric_delta": 0.0,
+        "n": 229,
+        "surface_sha256_all_match": true,
+        "tolerance": 1e-06
+      },
+      "schema": "acaf_nf_stage1_cleanstatic_reconstruction.v1",
+      "selected_epochs": 969,
+      "selected_prn_channels": 9,
+      "status": "CONTINUOUS_TRACKER_VALID"
+    },
+    "row_delta_ratio_25000": 0.6275411762181237,
+    "rows": 98232,
+    "run_break_count": 3070,
+    "scenario": "cleanStatic",
+    "schema": "acaf_nf_stage1_continuous_tracker_clean.v1",
+    "state_prompt_contract": "previous-row NCO/aux; current-row Prompt; same-PRN triple",
+    "status": "CONTINUOUS_TRACKER_VALID",
+    "support_interval_semantics": "half-open [raw_start_sample, raw_end_sample)",
+    "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw",
+    "unique_intervals": true,
+    "valid_prn_channels": 10
+  }
+}

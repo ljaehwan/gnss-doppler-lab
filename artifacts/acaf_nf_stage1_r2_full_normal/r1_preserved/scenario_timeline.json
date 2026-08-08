@@ -1,0 +1,110 @@
+{
+  "ds3": {
+    "duration_seconds": 457.85022464,
+    "phases": {
+      "established": {
+        "end_sample_exclusive": 11446255616,
+        "end_seconds": 457.85022464,
+        "start_sample": 4875000000,
+        "start_seconds": 195.0
+      },
+      "pre_onset": {
+        "end_sample_exclusive": 2972500000,
+        "end_seconds": 118.9,
+        "start_sample": 0,
+        "start_seconds": 0.0
+      },
+      "transition": {
+        "end_sample_exclusive": 4875000000,
+        "end_seconds": 195.0,
+        "start_sample": 2972500000,
+        "start_seconds": 118.9
+      }
+    },
+    "pull_off_unavailable": false,
+    "raw_samples": 11446255616
+  },
+  "ds4": {
+    "duration_seconds": 128.21987328,
+    "phases": {
+      "pre_onset": {
+        "end_sample_exclusive": 2845000000,
+        "end_seconds": 113.8,
+        "start_sample": 0,
+        "start_seconds": 0.0
+      },
+      "transition_only": {
+        "end_sample_exclusive": 3205496832,
+        "end_seconds": 128.21987328,
+        "start_sample": 2845000000,
+        "start_seconds": 113.8
+      }
+    },
+    "pull_off_unavailable": true,
+    "raw_samples": 3205496832
+  },
+  "ds7": {
+    "duration_seconds": 270.59290112,
+    "phases": {
+      "held": {
+        "end_sample_exclusive": 3750000000,
+        "end_seconds": 150.0,
+        "start_sample": 3250000000,
+        "start_seconds": 130.0
+      },
+      "pre_onset": {
+        "end_sample_exclusive": 2750000000,
+        "end_seconds": 110.0,
+        "start_sample": 0,
+        "start_seconds": 0.0
+      },
+      "time_push": {
+        "end_sample_exclusive": 6764822528,
+        "end_seconds": 270.59290112,
+        "start_sample": 3750000000,
+        "start_seconds": 150.0
+      },
+      "transition": {
+        "end_sample_exclusive": 3250000000,
+        "end_seconds": 130.0,
+        "start_sample": 2750000000,
+        "start_seconds": 110.0
+      }
+    },
+    "pull_off_unavailable": false,
+    "raw_samples": 6764822528
+  },
+  "ds8": {
+    "duration_seconds": 470.00141168,
+    "phases": {
+      "held": {
+        "end_sample_exclusive": 3750000000,
+        "end_seconds": 150.0,
+        "start_sample": 3250000000,
+        "start_seconds": 130.0
+      },
+      "pre_onset": {
+        "end_sample_exclusive": 2750000000,
+        "end_seconds": 110.0,
+        "start_sample": 0,
+        "start_seconds": 0.0
+      },
+      "time_push": {
+        "end_sample_exclusive": 11750035292,
+        "end_seconds": 470.00141168,
+        "start_sample": 3750000000,
+        "start_seconds": 150.0
+      },
+      "transition": {
+        "end_sample_exclusive": 3250000000,
+        "end_seconds": 130.0,
+        "start_sample": 2750000000,
+        "start_seconds": 110.0
+      }
+    },
+    "pull_off_unavailable": false,
+    "raw_samples": 11750035292
+  },
+  "sample_rate_hz": 25000000,
+  "schema": "acaf_nf_stage1_scenario_timeline.v1"
+}

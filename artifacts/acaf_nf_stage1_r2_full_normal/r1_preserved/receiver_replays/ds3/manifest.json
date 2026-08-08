@@ -1,0 +1,62 @@
+{
+  "generated_at_utc": "2026-08-07T16:29:53.702355+00:00",
+  "receiver": {
+    "build_provenance": "artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_exporter_build/build_provenance.json",
+    "build_provenance_sha256": "71d9f30d5f4d5b7fcc6fa62aa93872f73cf7377dbecdbe5a9e95d7c0febb819d",
+    "command": [
+      "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_exporter_build/gnss-sdr-continuous-1ms",
+      "--config_file=/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/receiver.conf",
+      "--keyboard=false"
+    ],
+    "config": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/receiver.conf",
+    "config_sha256": "1df5f4d282c4df746340ac7bb4d1f176e32692a9a03b9730990364b2a65ab7c1",
+    "executable": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_exporter_build/gnss-sdr-continuous-1ms",
+    "executable_sha256": "4b391f84270b421f84c92d7d9981b5f3fddd6c2e6b65917a3c4d8dfd1f1a99d3",
+    "exit_code": 0,
+    "exporter_patch_sha256": "fb13c5b14be5fa9a4d6a65fc926f2724b5b3b5d9d82a7bccb96a04963673355b",
+    "original_config": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/receiver.conf",
+    "original_config_sha256": "5aff08f34cacadf18b5ec3ca03be76ec9cfc8393b0ae90c4718a974ac22158c0"
+  },
+  "scenario": "ds3",
+  "schema": "acaf_nf_continuous_receiver_replay.v1",
+  "source": {
+    "first_file_sample": 0,
+    "format": "ishort_complex_iq",
+    "iq_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+    "path": "/home/ubuntu/unraid_hdd/texbat/raw/ds3.bin",
+    "sample_format": "ishort_complex_iq",
+    "sample_rate_hz": 25000000,
+    "sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+    "size_bytes": 45785022464
+  },
+  "tracking": {
+    "dat_inventory": {
+      "epl_track0.dat": "96ea0996297be2bd2cab20fcf8a5408487bea60d8af0a1ed1617f5cb8503f229",
+      "epl_track1.dat": "8375a56985de5155680eb4903e2a3a4fff90e7f220055726e9e9e95e9bdd1414",
+      "epl_track10.dat": "87f31a0b1ab97625a262455472eb595ae84bb340e5f84241f53f8e63561bbca6",
+      "epl_track2.dat": "980cf49e5563b7b8ef080f9f1b0dc0001cb1b7ab1460f6f59d5424069c557d5a",
+      "epl_track3.dat": "389db419726e893b22577ac62db6d81001f982adec71290dc491cce7dd24a8b0",
+      "epl_track4.dat": "66ca2f7b18593658aa8924ddc6c457a99ac608ed532c32d803d1c368edecb448",
+      "epl_track5.dat": "33844b7e9cc9dab600c084bdfd82e996764f8393abfd154006a014fb54203ca8",
+      "epl_track6.dat": "108ad4239a2d1daaf2ba0d92afd85b7deacb2cb1c40a216b81c4c6373208f6da",
+      "epl_track7.dat": "3605f90e11d6d89472ac21b0bd423679143d8b305820620ccd606f6de579a6ee",
+      "epl_track8.dat": "d4d703300445d7767cff7ebe3e542c6098824e70f7ead0fee9a20b2f8644548a",
+      "epl_track9.dat": "a40a1826a883afdb903b5c0c14a231bb2b86ab2d0eceb05cbc082451b16febe9"
+    },
+    "dump_contract": "valid tracking loop at every 1 ms integration; telemetry output unchanged",
+    "extend_correlation_symbols": 1,
+    "mat_inventory": {
+      "epl_track0.mat": "552f1cea9d888c4f4940dba8b325f6c3450f76b486363d85743e3bc96663ba98",
+      "epl_track1.mat": "e367ee89ff6aa601a675cb261bc95dbb5128bee59189420f59356debca68a5ce",
+      "epl_track10.mat": "f4b015a1611edd754f61cf93a9a5ab6a6e747f66ada5baf427906bded45c5596",
+      "epl_track2.mat": "05420b4b81855ed90ba3396e73a4289172ae7ec3a4b77643bd122b29a0d5ee6f",
+      "epl_track3.mat": "f0c1207f90c6614cf6a95b20c8c4b9f5839361a6aefdb28078a0276ef9e4902b",
+      "epl_track4.mat": "a67149d988f7ad9729b24154c24e84f61de2424008060e2d43ee837f7fc0f3d0",
+      "epl_track5.mat": "1b595dd4f10f968d505bb8c30f79e73047472d8506fded2c2304fd1707238296",
+      "epl_track6.mat": "df4b27f980035ad74bfa0ebeab7ee529bc72064c68772e4853c2ad002941de5e",
+      "epl_track7.mat": "b055b8772d3a9cb415262c03d68e266c8216386950852a8b15167d6567058b45",
+      "epl_track8.mat": "3e635305d7385365595d9dd73fa04ef518cd31fd92b60acc4e92dabded71bfd0",
+      "epl_track9.mat": "2d32dc13d3ec3b2e0b3667fe6315118a3e994ec437781b45b8214fa5df7882d5"
+    }
+  }
+}

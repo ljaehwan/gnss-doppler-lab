@@ -1,0 +1,43 @@
+{
+  "B0": "PROVISIONAL_UNAVAILABLE",
+  "attack_bins_per_phase": 6,
+  "attack_data_used_for_fit": false,
+  "clean_bins_per_role": 3,
+  "delay_grid": [
+    -1.0,
+    -0.875,
+    -0.75,
+    -0.625,
+    -0.5,
+    -0.375,
+    -0.25,
+    -0.125,
+    0.0,
+    0.125,
+    0.25,
+    0.375,
+    0.5,
+    0.625,
+    0.75,
+    0.875,
+    1.0
+  ],
+  "doppler_grid_hz": [
+    -250.0,
+    -200.0,
+    -150.0,
+    -100.0,
+    -50.0,
+    0.0,
+    50.0,
+    100.0,
+    150.0,
+    200.0,
+    250.0
+  ],
+  "prns_per_bin": 3,
+  "schema": "acaf_nf_stage1_r1_config.v1",
+  "source_binding": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/configs/acaf_nf_stage1_r1_source_binding.json",
+  "source_binding_sha256": "5bc34c109fd7f4725fc0f207be71bbe3017aaf010afbfe218b82e7546c927a8a",
+  "window_length": 20
+}

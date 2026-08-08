@@ -1,0 +1,841 @@
+{
+  "algorithm": "sha256",
+  "files": {
+    "README.md": {
+      "sha256": "9ae2aa5c84a94b8d7848712d43f1ef3910e5d687346d4f28c313da65e35427b8",
+      "size_bytes": 401
+    },
+    "attack_tracker_manifest.json": {
+      "sha256": "90c63032ca67cee446389ee83b7472c74ed82e3ed521892a0f3d6c32bf0c7f00",
+      "size_bytes": 8998
+    },
+    "baseline_metrics.csv": {
+      "sha256": "735295141a12c8a0f30dfd8d5f72e695349c55b5469d83eaf8d4d68d337aa1e1",
+      "size_bytes": 737
+    },
+    "bootstrap_results.json": {
+      "sha256": "72846a713fbb9227149b6a477716ace708f3ca8559054cdd7b9b9f0ca5eff917",
+      "size_bytes": 1179
+    },
+    "checkpoint_c_verification_report.json": {
+      "sha256": "55ead3ca6d26d436209c9179d99353728cd55150013358420e3e71ef05549cf1",
+      "size_bytes": 3554
+    },
+    "cleanstatic_caf_surfaces.npz": {
+      "sha256": "087f53536f844445a48ad7569697c98ff2fe468e1afac5e8005ff6fa8c8064e8",
+      "size_bytes": 2787521
+    },
+    "cleanstatic_l20_windows.json": {
+      "sha256": "c4154fd4e2f075f2448a8d0f1ed458067ff42a919971213147095b3e6bb2a05e",
+      "size_bytes": 92467
+    },
+    "cleanstatic_validation.json": {
+      "sha256": "c8bf2901733c4dc81955f10dab9a62d0c11a05155a9592d3468c0b666b19cc27",
+      "size_bytes": 1443
+    },
+    "cleanstatic_validation_epochs.csv": {
+      "sha256": "5b62609d15e19c2a14e2035254de0442132792a05b6fd620a0903d06fa3d7840",
+      "size_bytes": 208872
+    },
+    "config.json": {
+      "sha256": "34329423510beb5a64def34ed206570ca6f18b533b7a974a3fbf0fe83db2be4f",
+      "size_bytes": 828
+    },
+    "continuous_tracker_cleanStatic.csv": {
+      "sha256": "55ac72a39f3073191581b640d87be43aafe47bc90750909c4fe37c033d7062fa",
+      "size_bytes": 35826273
+    },
+    "continuous_tracker_ds3.csv": {
+      "sha256": "74f014934481a61fbf07e0ab93ef648e616f8ad249782f3c139545e22493fad2",
+      "size_bytes": 1601340522
+    },
+    "continuous_tracker_ds4.csv": {
+      "sha256": "99a04643561da2e14840da21264f701d265ff7c8be94245ab16cb0e3a345508f",
+      "size_bytes": 492554228
+    },
+    "continuous_tracker_ds7.csv": {
+      "sha256": "420234b5d2ce4bf7743c680a1c527983f2034060aa66a16c4e2bfb7617866cfe",
+      "size_bytes": 1019486313
+    },
+    "continuous_tracker_ds8.csv": {
+      "sha256": "aff1a2928f4817502dfcfa602fa04689ff0513457e231f8329735018653f4653",
+      "size_bytes": 1802833744
+    },
+    "continuous_tracker_manifest.json": {
+      "sha256": "386233666e71913a681fdfb24618f3f96df97f1ab49d4d2730c4734df79b72cb",
+      "size_bytes": 3216
+    },
+    "control_metrics.csv": {
+      "sha256": "ded4d7649f7695a556f1fbb36efd38c3dd4e14e1ca23902289a1f861b22c6e8b",
+      "size_bytes": 612
+    },
+    "execution_manifest.json": {
+      "sha256": "7f207498769b32a320dcf006d3667a841e8ccbc61b337d63dc1f11378303f848",
+      "size_bytes": 654
+    },
+    "execution_manifest_checkpoint_b.json": {
+      "sha256": "a78f406697438de396526a37712d2a9c905acc34d8b79c56f3c1db55ed8c809e",
+      "size_bytes": 556
+    },
+    "execution_manifest_checkpoint_c.json": {
+      "sha256": "4034101b62cca3228709b8d52c63bffaa46482b6ce55a77b706ec76f24d51bb0",
+      "size_bytes": 618
+    },
+    "execution_validity.json": {
+      "sha256": "8d7e4da90e58e5b0775514b5c5aac619a342a47424b049265f7d0ef533d3ccc1",
+      "size_bytes": 406
+    },
+    "go_no_go.json": {
+      "sha256": "fef055c813620c7832f1cad51c9d8ef9cce6062d248d2ff3c0e9cf91a20e00a2",
+      "size_bytes": 639
+    },
+    "normal_model_summary.json": {
+      "sha256": "fb211448a00d0e6a71ebf29693c0b90df43fb0e3718f8877b4758e3388fb616f",
+      "size_bytes": 386
+    },
+    "per_window_scores.csv": {
+      "sha256": "cc3e2933b2915065b4c69a55f6807155c2afda7406c4d98061b841b5ac2aebd3",
+      "size_bytes": 20797
+    },
+    "phase_metrics.csv": {
+      "sha256": "b8dd5afdbfb2d526e4dd1bc903d665d471f0073455744c8ea6ceec6db9b89bc6",
+      "size_bytes": 770
+    },
+    "plots/cleanstatic_prompt_reproduction.svg": {
+      "sha256": "f341098b8be708cd97f2415adc39098721289fa9f1b30b154fd8410f92056732",
+      "size_bytes": 13617
+    },
+    "plots/stage1_r1_scores.png": {
+      "sha256": "671db068b488e8534606c87a84b32d99b6c1aa8e8f79324064eafe90dd72356f",
+      "size_bytes": 90819
+    },
+    "receiver_exporter_build/build_provenance.json": {
+      "sha256": "71d9f30d5f4d5b7fcc6fa62aa93872f73cf7377dbecdbe5a9e95d7c0febb819d",
+      "size_bytes": 1336
+    },
+    "receiver_exporter_build/gnss-sdr-continuous-1ms": {
+      "sha256": "4b391f84270b421f84c92d7d9981b5f3fddd6c2e6b65917a3c4d8dfd1f1a99d3",
+      "size_bytes": 36565600
+    },
+    "receiver_replays/cleanStatic/GSDR219x53.26N": {
+      "sha256": "6375a11d9d59f5a34bba2d85c779ab893e585bc03540e351c3ec4c5032141bd5",
+      "size_bytes": 8586
+    },
+    "receiver_replays/cleanStatic/GSDR219x53.26O": {
+      "sha256": "386044d3b37cd444584594d4b0ddc92fed58e0770df3b36a9ddf6f3cb385354c",
+      "size_bytes": 401517
+    },
+    "receiver_replays/cleanStatic/gps_ephemeris.xml": {
+      "sha256": "f46e15d87c89ff590bcc34630e221a7c845486bb9525b2e73e8e5e0bc580e5e1",
+      "size_bytes": 18347
+    },
+    "receiver_replays/cleanStatic/gps_iono.xml": {
+      "sha256": "148ced4bfeda9f152a3d8ceadef5f58419e3fd608007f4470ce0a996e64eff7b",
+      "size_bytes": 603
+    },
+    "receiver_replays/cleanStatic/gps_utc_model.xml": {
+      "sha256": "d35126a7694efb0ae592cae5402c0f9118484ecb20edc4151714bccbb913b842",
+      "size_bytes": 516
+    },
+    "receiver_replays/cleanStatic/manifest.json": {
+      "sha256": "1f5e83b8e2c1ffe40a06c9081bc26da89d1a99cc2c1328cb7ea51247f9179b47",
+      "size_bytes": 4269
+    },
+    "receiver_replays/cleanStatic/nmea_pvt.nmea": {
+      "sha256": "7b14ad35f014cc7c7a02dbfa90548714fba98329eab21991b6fe544717d1f12e",
+      "size_bytes": 1812921
+    },
+    "receiver_replays/cleanStatic/pvt.dat_260807_235313.geojson": {
+      "sha256": "33b798a0cb83a776b049bd7887afbeac996c17dadb3e98ef318de714521822fd",
+      "size_bytes": 300128
+    },
+    "receiver_replays/cleanStatic/pvt.dat_260807_235313.gpx": {
+      "sha256": "443ba3f385fb5063c71a328b7a7215f4ce586433c0691ddfe625c35c14265ed8",
+      "size_bytes": 1756408
+    },
+    "receiver_replays/cleanStatic/pvt.dat_260807_235313.kml": {
+      "sha256": "8e4c5951eef1185614f0eb54144b4cc31e837f5c3760560c69cff9d6ad8ecd25",
+      "size_bytes": 5192464
+    },
+    "receiver_replays/cleanStatic/raw/e0.dat": {
+      "sha256": "587f84d3903306b7fed92edfd1cae5b23b12f89e98de707f37692d44d9ff2a68",
+      "size_bytes": 71051692
+    },
+    "receiver_replays/cleanStatic/raw/e0.mat": {
+      "sha256": "02da02d665149c31737f15a8e167a423fa801c59684c11521ed153430df9def8",
+      "size_bytes": 68927000
+    },
+    "receiver_replays/cleanStatic/raw/e1.dat": {
+      "sha256": "ccf1491482ca42fcb48c7da27eacdc98b5ec0294ea510703a480cdf43b34f88c",
+      "size_bytes": 44238088
+    },
+    "receiver_replays/cleanStatic/raw/e1.mat": {
+      "sha256": "4006dcbe36d43cde294f96c7ec2776e78cb2cdad3bbd527c885d931e134a8c81",
+      "size_bytes": 45064547
+    },
+    "receiver_replays/cleanStatic/raw/e10.dat": {
+      "sha256": "8972109de4a15c0e98da80d1ad6c07d153506cd994418c02ed06dd485aec757d",
+      "size_bytes": 71046216
+    },
+    "receiver_replays/cleanStatic/raw/e10.mat": {
+      "sha256": "3a8d250ffc87192b46a40fbb61360c46f7d148978ca4878b0877f4dd6f88e695",
+      "size_bytes": 68557240
+    },
+    "receiver_replays/cleanStatic/raw/e2.dat": {
+      "sha256": "2df7fcee1b9ffa6d0702cea30f757bd45917b6e326d3c6ade72bc9fa8473fb77",
+      "size_bytes": 71058056
+    },
+    "receiver_replays/cleanStatic/raw/e2.mat": {
+      "sha256": "dc396ed49ea103ade001d93a36de3550f0c334ef8887def934162ea710144ff9",
+      "size_bytes": 68707430
+    },
+    "receiver_replays/cleanStatic/raw/e3.dat": {
+      "sha256": "f83112e85a8aebcac1c16524f23cd0bb1428a732dbb83c1fd38a4614d9337b1e",
+      "size_bytes": 70951940
+    },
+    "receiver_replays/cleanStatic/raw/e3.mat": {
+      "sha256": "f264c2a249fe8b635e932a323f4157c71328163024564793323bd0aa4332538b",
+      "size_bytes": 70473389
+    },
+    "receiver_replays/cleanStatic/raw/e4.dat": {
+      "sha256": "d1469c9596cc3b2396ba1351d7777892cbd1a5fda73e89c7e0e6dae00f2cdc12",
+      "size_bytes": 71035708
+    },
+    "receiver_replays/cleanStatic/raw/e4.mat": {
+      "sha256": "7752937be7b45daf79e7a858644683903fe44d08c159d60a535bf624c1979f05",
+      "size_bytes": 70574776
+    },
+    "receiver_replays/cleanStatic/raw/e5.dat": {
+      "sha256": "f605e9f238791fb7579790dfdf7df194078ba25771da75e5fcb937c87ac1ed24",
+      "size_bytes": 71057908
+    },
+    "receiver_replays/cleanStatic/raw/e5.mat": {
+      "sha256": "2fc138db47b40d2a0530181110123b786c4012769a7d28b038df6b6d38caf43a",
+      "size_bytes": 69344182
+    },
+    "receiver_replays/cleanStatic/raw/e6.dat": {
+      "sha256": "7599b518645afb869bd6804ac001c2dbf112a84cc215881cfece6be5ca2cbf8b",
+      "size_bytes": 71058056
+    },
+    "receiver_replays/cleanStatic/raw/e6.mat": {
+      "sha256": "c16c0f8d0c98775acef1145f79bcb995448c7481430305cd81b2cb0936549f5a",
+      "size_bytes": 69392041
+    },
+    "receiver_replays/cleanStatic/raw/e7.dat": {
+      "sha256": "e14fb0dd89cfdc9e25287ea5d1bd2bf6e86b0329d87e0e51f3c6c94f260d37ba",
+      "size_bytes": 70968220
+    },
+    "receiver_replays/cleanStatic/raw/e7.mat": {
+      "sha256": "555731ed84ffe606b4620aba0693ec09967297d86e1b067dbb87db2b34e3fa4e",
+      "size_bytes": 70476307
+    },
+    "receiver_replays/cleanStatic/raw/e8.dat": {
+      "sha256": "5147c7d1918380bd5e9a4c2a98d1303993acad48f34047528bdcafc47a8dde94",
+      "size_bytes": 71051840
+    },
+    "receiver_replays/cleanStatic/raw/e8.mat": {
+      "sha256": "d6eff008974ef244e7d61aab94fee7596314ae3b56c4d5224e2453d025536542",
+      "size_bytes": 68602995
+    },
+    "receiver_replays/cleanStatic/raw/e9.dat": {
+      "sha256": "15fa059342a7fd19589a35e6f046ed2ccd79c833398798d000dc1b285ddac539",
+      "size_bytes": 71052136
+    },
+    "receiver_replays/cleanStatic/raw/e9.mat": {
+      "sha256": "0f763869d6fab0129e928c203352c6baec8587bacef769684535db4bab5defb8",
+      "size_bytes": 69096382
+    },
+    "receiver_replays/cleanStatic/raw/o.dat": {
+      "sha256": "9d7dc7183eded6696b92405019eab5d591ef02ca7a172636af78840163512268",
+      "size_bytes": 14780304
+    },
+    "receiver_replays/cleanStatic/raw/o.mat": {
+      "sha256": "5526646920c05b6c03bf461984a09a63b150a25ec96cb578c1f18c636a85acce",
+      "size_bytes": 6185662
+    },
+    "receiver_replays/cleanStatic/receiver.conf": {
+      "sha256": "504f9d499b38b0919a4e31b99d86f8cdcec36eabc1b738cfa745174a695f193f",
+      "size_bytes": 2034
+    },
+    "receiver_replays/cleanStatic/receiver.log": {
+      "sha256": "8fd0dafa21eb9e95cee3a8ab32ac9c45036052ce4e64f6f99a817f70492a5dc3",
+      "size_bytes": 311698
+    },
+    "receiver_replays/ds3/GSDR220b18.26N": {
+      "sha256": "0b025d6b771b7fab488c9ee8bc1373b53139dde4ad6d752882356ee5069f7798",
+      "size_bytes": 7938
+    },
+    "receiver_replays/ds3/GSDR220b18.26O": {
+      "sha256": "e6759a74a7d7c07358ca7bd8bd24376badcd3f0ce92e37ac6f41692b526e50dd",
+      "size_bytes": 100602
+    },
+    "receiver_replays/ds3/gps_ephemeris.xml": {
+      "sha256": "7b6ecf7dc672ebb029a22e0abfa22052c50c7b36579e0bb5f9c0e1c3898cc5e1",
+      "size_bytes": 16848
+    },
+    "receiver_replays/ds3/gps_iono.xml": {
+      "sha256": "148ced4bfeda9f152a3d8ceadef5f58419e3fd608007f4470ce0a996e64eff7b",
+      "size_bytes": 603
+    },
+    "receiver_replays/ds3/gps_utc_model.xml": {
+      "sha256": "d35126a7694efb0ae592cae5402c0f9118484ecb20edc4151714bccbb913b842",
+      "size_bytes": 516
+    },
+    "receiver_replays/ds3/manifest.json": {
+      "sha256": "253126223a0db5bfc15357ad675d66b3cb514d2157d54f8b3ebfaaa3831a4df1",
+      "size_bytes": 4402
+    },
+    "receiver_replays/ds3/nmea_pvt.nmea": {
+      "sha256": "2ebedb78adf6fc64f7b6dae0f5a342e790b659e5b8abc8d27d5ccc9b5d85e01f",
+      "size_bytes": 481532
+    },
+    "receiver_replays/ds3/pvt.dat_260808_011857.geojson": {
+      "sha256": "6cccd069bed72241e3a14c5573ed383aacbb162a5379df97f04e3f1d076c0bdd",
+      "size_bytes": 86354
+    },
+    "receiver_replays/ds3/pvt.dat_260808_011857.gpx": {
+      "sha256": "644a3ab4a430347baa7161506a81355c98e55134280601d97d63136a4f6383b2",
+      "size_bytes": 505116
+    },
+    "receiver_replays/ds3/pvt.dat_260808_011857.kml": {
+      "sha256": "d54dbc30ceff307ff7e04dd32352b47fbf4c08ed4e13613a7ea7504a7d8abd30",
+      "size_bytes": 1492032
+    },
+    "receiver_replays/ds3/raw/epl_track0.dat": {
+      "sha256": "96ea0996297be2bd2cab20fcf8a5408487bea60d8af0a1ed1617f5cb8503f229",
+      "size_bytes": 67735900
+    },
+    "receiver_replays/ds3/raw/epl_track0.mat": {
+      "sha256": "552f1cea9d888c4f4940dba8b325f6c3450f76b486363d85743e3bc96663ba98",
+      "size_bytes": 65788598
+    },
+    "receiver_replays/ds3/raw/epl_track1.dat": {
+      "sha256": "8375a56985de5155680eb4903e2a3a4fff90e7f220055726e9e9e95e9bdd1414",
+      "size_bytes": 49833672
+    },
+    "receiver_replays/ds3/raw/epl_track1.mat": {
+      "sha256": "e367ee89ff6aa601a675cb261bc95dbb5128bee59189420f59356debca68a5ce",
+      "size_bytes": 50450818
+    },
+    "receiver_replays/ds3/raw/epl_track10.dat": {
+      "sha256": "87f31a0b1ab97625a262455472eb595ae84bb340e5f84241f53f8e63561bbca6",
+      "size_bytes": 47465080
+    },
+    "receiver_replays/ds3/raw/epl_track10.mat": {
+      "sha256": "f4b015a1611edd754f61cf93a9a5ab6a6e747f66ada5baf427906bded45c5596",
+      "size_bytes": 48018148
+    },
+    "receiver_replays/ds3/raw/epl_track2.dat": {
+      "sha256": "980cf49e5563b7b8ef080f9f1b0dc0001cb1b7ab1460f6f59d5424069c557d5a",
+      "size_bytes": 67748332
+    },
+    "receiver_replays/ds3/raw/epl_track2.mat": {
+      "sha256": "05420b4b81855ed90ba3396e73a4289172ae7ec3a4b77643bd122b29a0d5ee6f",
+      "size_bytes": 65960770
+    },
+    "receiver_replays/ds3/raw/epl_track3.dat": {
+      "sha256": "389db419726e893b22577ac62db6d81001f982adec71290dc491cce7dd24a8b0",
+      "size_bytes": 67736048
+    },
+    "receiver_replays/ds3/raw/epl_track3.mat": {
+      "sha256": "f0c1207f90c6614cf6a95b20c8c4b9f5839361a6aefdb28078a0276ef9e4902b",
+      "size_bytes": 66011523
+    },
+    "receiver_replays/ds3/raw/epl_track4.dat": {
+      "sha256": "66ca2f7b18593658aa8924ddc6c457a99ac608ed532c32d803d1c368edecb448",
+      "size_bytes": 66048404
+    },
+    "receiver_replays/ds3/raw/epl_track4.mat": {
+      "sha256": "a67149d988f7ad9729b24154c24e84f61de2424008060e2d43ee837f7fc0f3d0",
+      "size_bytes": 65325305
+    },
+    "receiver_replays/ds3/raw/epl_track5.dat": {
+      "sha256": "33844b7e9cc9dab600c084bdfd82e996764f8393abfd154006a014fb54203ca8",
+      "size_bytes": 66476272
+    },
+    "receiver_replays/ds3/raw/epl_track5.mat": {
+      "sha256": "1b595dd4f10f968d505bb8c30f79e73047472d8506fded2c2304fd1707238296",
+      "size_bytes": 65220537
+    },
+    "receiver_replays/ds3/raw/epl_track6.dat": {
+      "sha256": "108ad4239a2d1daaf2ba0d92afd85b7deacb2cb1c40a216b81c4c6373208f6da",
+      "size_bytes": 55701576
+    },
+    "receiver_replays/ds3/raw/epl_track6.mat": {
+      "sha256": "df4b27f980035ad74bfa0ebeab7ee529bc72064c68772e4853c2ad002941de5e",
+      "size_bytes": 55873276
+    },
+    "receiver_replays/ds3/raw/epl_track7.dat": {
+      "sha256": "3605f90e11d6d89472ac21b0bd423679143d8b305820620ccd606f6de579a6ee",
+      "size_bytes": 67735752
+    },
+    "receiver_replays/ds3/raw/epl_track7.mat": {
+      "sha256": "b055b8772d3a9cb415262c03d68e266c8216386950852a8b15167d6567058b45",
+      "size_bytes": 66124920
+    },
+    "receiver_replays/ds3/raw/epl_track8.dat": {
+      "sha256": "d4d703300445d7767cff7ebe3e542c6098824e70f7ead0fee9a20b2f8644548a",
+      "size_bytes": 67742264
+    },
+    "receiver_replays/ds3/raw/epl_track8.mat": {
+      "sha256": "3e635305d7385365595d9dd73fa04ef518cd31fd92b60acc4e92dabded71bfd0",
+      "size_bytes": 65969197
+    },
+    "receiver_replays/ds3/raw/epl_track9.dat": {
+      "sha256": "a40a1826a883afdb903b5c0c14a231bb2b86ab2d0eceb05cbc082451b16febe9",
+      "size_bytes": 67435904
+    },
+    "receiver_replays/ds3/raw/epl_track9.mat": {
+      "sha256": "2d32dc13d3ec3b2e0b3667fe6315118a3e994ec437781b45b8214fa5df7882d5",
+      "size_bytes": 67303003
+    },
+    "receiver_replays/ds3/raw/observabl.dat": {
+      "sha256": "a8ffb61ca462817f847c0f3bb4c50f1ac5141779049d0e34e03c93b4d31f20a4",
+      "size_bytes": 14091616
+    },
+    "receiver_replays/ds3/raw/observabl.mat": {
+      "sha256": "212be44ec72cdcddb506b4c89ea53d2c7f7995ca46b7396b6b1c03e8be66c3bf",
+      "size_bytes": 4951699
+    },
+    "receiver_replays/ds3/receiver.conf": {
+      "sha256": "1df5f4d282c4df746340ac7bb4d1f176e32692a9a03b9730990364b2a65ab7c1",
+      "size_bytes": 2000
+    },
+    "receiver_replays/ds3/receiver.log": {
+      "sha256": "361971e331bdb4157605f458c4fc6c4cacf81d32cf61506b998ffb92e68f67be",
+      "size_bytes": 156845
+    },
+    "receiver_replays/ds4/GSDR219x24.26N": {
+      "sha256": "f2e6a8f3ad1dda3bf804fed767b0d746026c6da59aca1cf63d8227cf38ce8ae3",
+      "size_bytes": 7290
+    },
+    "receiver_replays/ds4/GSDR219x24.26O": {
+      "sha256": "e1d3ff97ac3d23b30b9395e699d0bf4c7a0345b4391f1bc5110fa39947c45627",
+      "size_bytes": 80919
+    },
+    "receiver_replays/ds4/gps_ephemeris.xml": {
+      "sha256": "7ea5c6a461a771f97d42007dbfe263caad1ebdec3c3e0db951382cfb63d1eb4c",
+      "size_bytes": 15357
+    },
+    "receiver_replays/ds4/manifest.json": {
+      "sha256": "45819c72323706cdc96fc19518f5ebbe77b28fe20af44169596c69492f215580",
+      "size_bytes": 4467
+    },
+    "receiver_replays/ds4/nmea_pvt.nmea": {
+      "sha256": "1ddca16046a4923b4c1db09b9fbea4754743df3a2708877aae4f0400a3d274ef",
+      "size_bytes": 364752
+    },
+    "receiver_replays/ds4/pvt.dat_260807_232454.geojson": {
+      "sha256": "e7a9c63bbfd4f85c3ef7bd55b4656680c06ca16890cf1ebd7ed333d01bc3ee64",
+      "size_bytes": 62672
+    },
+    "receiver_replays/ds4/pvt.dat_260807_232454.gpx": {
+      "sha256": "7b94dec4b1c63bc892ee32c6806115dec19e92e743c4fde605cfe1e943c7b41a",
+      "size_bytes": 366592
+    },
+    "receiver_replays/ds4/pvt.dat_260807_232454.kml": {
+      "sha256": "4a59f761b095dbab6956e7230aa6ff83a7511f6ac3ea6bc70ce381fd907b9ac5",
+      "size_bytes": 1082460
+    },
+    "receiver_replays/ds4/raw/epl_track0.dat": {
+      "sha256": "09fcb65296bd723e08e9b8d823cda5803be80e85f6bacfb41f3d7d0847f686fd",
+      "size_bytes": 18944296
+    },
+    "receiver_replays/ds4/raw/epl_track0.mat": {
+      "sha256": "bfc33bda15ff3831c7a554d0c907d8af4603bc31fe02543a4ca180ebfea811b3",
+      "size_bytes": 18595760
+    },
+    "receiver_replays/ds4/raw/epl_track1.dat": {
+      "sha256": "e9d38a13e2ad46095ee5e1e85ebcc939b6a0cfca57b0dbf39312e2d2a52fba53",
+      "size_bytes": 18704832
+    },
+    "receiver_replays/ds4/raw/epl_track1.mat": {
+      "sha256": "290e5183265bd02169ea7400fb555bc08acb5e60bb54d62eeb03ba08323c80ef",
+      "size_bytes": 18698906
+    },
+    "receiver_replays/ds4/raw/epl_track10.dat": {
+      "sha256": "a91254105ebd47837d2a48f991dd1cf228f020bad2f3ca5f5483001637830ba9",
+      "size_bytes": 18957024
+    },
+    "receiver_replays/ds4/raw/epl_track10.mat": {
+      "sha256": "5a27cf2671d9b07e58ec1b24bc7824ff9fd57be67592bf38955bb6c64a3e75e7",
+      "size_bytes": 18527588
+    },
+    "receiver_replays/ds4/raw/epl_track2.dat": {
+      "sha256": "01d70bec0289439b92dca39aa8ebfd1b3ed6661efc2440e6a7ab69264be34306",
+      "size_bytes": 18962944
+    },
+    "receiver_replays/ds4/raw/epl_track2.mat": {
+      "sha256": "a2f861c77fd2df74cdeea26e738cb68c5bc8199d322ea383147cc1b6051f680c",
+      "size_bytes": 18572793
+    },
+    "receiver_replays/ds4/raw/epl_track3.dat": {
+      "sha256": "bf48c1d08ab6f3fe262cc4860ce91d830b7c6f413a927dbc9167ff42b4927023",
+      "size_bytes": 11439216
+    },
+    "receiver_replays/ds4/raw/epl_track3.mat": {
+      "sha256": "1ff62d6b1c04f5c923d60255a4daaae61b663f86326b3103e061285676bcd781",
+      "size_bytes": 11771842
+    },
+    "receiver_replays/ds4/raw/epl_track4.dat": {
+      "sha256": "8d516ec4992ca118459fdd407a1f8db8f64bb499acb405f4050a9c53c4103918",
+      "size_bytes": 18956876
+    },
+    "receiver_replays/ds4/raw/epl_track4.mat": {
+      "sha256": "67b4fa43eacbf6f265ff5e277ec6c2613c61566afb6b7377be4993c6e303cab3",
+      "size_bytes": 18542518
+    },
+    "receiver_replays/ds4/raw/epl_track5.dat": {
+      "sha256": "a2e21ccab5c093c4501ed0fc0f972068c8f77f04c48dcf70b558e73768be2100",
+      "size_bytes": 18962944
+    },
+    "receiver_replays/ds4/raw/epl_track5.mat": {
+      "sha256": "916bcca4687ff4269f6b3af47b846b5f233f664e846a7671156010f7a2321974",
+      "size_bytes": 18581959
+    },
+    "receiver_replays/ds4/raw/epl_track6.dat": {
+      "sha256": "679dc686737232f17f45f874a49d89f59a285334028f0de2f1a967d3bcc7dda0",
+      "size_bytes": 18963092
+    },
+    "receiver_replays/ds4/raw/epl_track6.mat": {
+      "sha256": "0c57691278882a272ffc570078c71e37e7bf4e3cf11d9020d7eb37f7c18554eb",
+      "size_bytes": 18584221
+    },
+    "receiver_replays/ds4/raw/epl_track7.dat": {
+      "sha256": "064be5f09f9d7a6b498e489191947dbb1a7202fa47f3b97fa7efd30a10e436c0",
+      "size_bytes": 18675972
+    },
+    "receiver_replays/ds4/raw/epl_track7.mat": {
+      "sha256": "7e5a9d3534a1ebe7ea4bf1f9947f67ded72ab17c4447640d6c41d1aeed36b0da",
+      "size_bytes": 18665957
+    },
+    "receiver_replays/ds4/raw/epl_track8.dat": {
+      "sha256": "85c9e9aad4bfdf1dcf39dd474e929f1c11ec5826859ed9bce872226de95b290e",
+      "size_bytes": 18950660
+    },
+    "receiver_replays/ds4/raw/epl_track8.mat": {
+      "sha256": "a88d1b0000cebdd8d2ea7d413d9d4de9baa1680349e6ea710b185f115b2c55d9",
+      "size_bytes": 18551632
+    },
+    "receiver_replays/ds4/raw/epl_track9.dat": {
+      "sha256": "a3cb204d0f346d4537dbd77228faa0607a895c3ca7752bf7bf171f4bab1e39d7",
+      "size_bytes": 18963092
+    },
+    "receiver_replays/ds4/raw/epl_track9.mat": {
+      "sha256": "c07fa594e9cf113fc1d2e3bc4a0c027f0d4be28068bc6b5734ef0c0ad38d094e",
+      "size_bytes": 18988722
+    },
+    "receiver_replays/ds4/raw/observabl.dat": {
+      "sha256": "baf875c0cadc9b60d1f86bea1d1bc1436e99e1b9060cf77fba3108b9793fde7b",
+      "size_bytes": 3938704
+    },
+    "receiver_replays/ds4/raw/observabl.mat": {
+      "sha256": "5be413ecef5ef57c7d0a07259fadfcd0d67b57efa618a743bba4ff736bdd4562",
+      "size_bytes": 1472908
+    },
+    "receiver_replays/ds4/receiver.conf": {
+      "sha256": "79ae9335a606cee7b1aca1716f30f419381d115b3619b81eacced87bff7a8fbc",
+      "size_bytes": 2000
+    },
+    "receiver_replays/ds4/receiver.log": {
+      "sha256": "edbbec0563452196dfbb3f38e921d2590227c2b9beb5ac695f53089e94b60ffb",
+      "size_bytes": 72235
+    },
+    "receiver_replays/ds7/auxiliary/GSDR219w47.26N": {
+      "sha256": "cfa7accf281f72deb446bb0c1bb975b97ddd42844240c192bfb16fbe8abfa7bb",
+      "size_bytes": 7290
+    },
+    "receiver_replays/ds7/auxiliary/GSDR219w47.26O": {
+      "sha256": "7b3d313e398b32156f3adc013a8f7a601d501b62964719aeb6c8bbd228737460",
+      "size_bytes": 204768
+    },
+    "receiver_replays/ds7/auxiliary/pvt.dat_260807_224727.geojson": {
+      "sha256": "516f76d170bd1b139ebd2bd2803b0ee5157544c69c71cee6dd466eeebed6a277",
+      "size_bytes": 157600
+    },
+    "receiver_replays/ds7/auxiliary/pvt.dat_260807_224727.gpx": {
+      "sha256": "47fd83edb5e4624709528caf0b0beaccf4008aabc2701324f31e52cb6325ba80",
+      "size_bytes": 922200
+    },
+    "receiver_replays/ds7/auxiliary/pvt.dat_260807_224727.kml": {
+      "sha256": "825e0fc6edea7ee51e291fc0542603d7cfc2c74de56ce963dc5c857b5e25c42d",
+      "size_bytes": 2725472
+    },
+    "receiver_replays/ds7/manifest.json": {
+      "sha256": "7b0bdc69c754e71eecf750b0b2e61fb52a6a4e6787409e393ef156439276f785",
+      "size_bytes": 4462
+    },
+    "receiver_replays/ds7/raw/epl_track0.dat": {
+      "sha256": "db4d72b941ed226559ed7ff5206ab89d80a166063dc32ac72d8c5e434b8bb088",
+      "size_bytes": 40021716
+    },
+    "receiver_replays/ds7/raw/epl_track0.mat": {
+      "sha256": "7e98c51ecac3b8c6db5623b2101a3f4b386de1e23e76d5049420538903d1824f",
+      "size_bytes": 39012046
+    },
+    "receiver_replays/ds7/raw/epl_track1.dat": {
+      "sha256": "a848b2884994fd2752465b737d6b28ce52765e0a770552e78965eeb840d91620",
+      "size_bytes": 39942092
+    },
+    "receiver_replays/ds7/raw/epl_track1.mat": {
+      "sha256": "05f4874d91b0bded3d50c6ff662f5debd76363c89d2512c891f2c8e206c4f7f6",
+      "size_bytes": 39936585
+    },
+    "receiver_replays/ds7/raw/epl_track10.dat": {
+      "sha256": "cac63e31440bf71dd6e189f8e0e9f040ed14ca24b53522599c7e53e38c191978",
+      "size_bytes": 16073540
+    },
+    "receiver_replays/ds7/raw/epl_track10.mat": {
+      "sha256": "f89ed02de731aad06f6680857cf17eb877ed5fd1fbc6f11947f15fc83855acb6",
+      "size_bytes": 16644682
+    },
+    "receiver_replays/ds7/raw/epl_track2.dat": {
+      "sha256": "84bbb1f398176c8d12ec7b2a96b430eb36e19103bbf947ef7e08f2b4fddc33cb",
+      "size_bytes": 40034296
+    },
+    "receiver_replays/ds7/raw/epl_track2.mat": {
+      "sha256": "c2abf21e0c2fa3db8af98b29c2198ffc549f2d43895fa09e8fef3e41e81ed22e",
+      "size_bytes": 39107883
+    },
+    "receiver_replays/ds7/raw/epl_track3.dat": {
+      "sha256": "1c417d15c7b6c4a44f52a36ff2564ea1009e9f162a932b520c0130d3c457a202",
+      "size_bytes": 39869276
+    },
+    "receiver_replays/ds7/raw/epl_track3.mat": {
+      "sha256": "2d95144938fb1846b7e371fccfadbcec07af9e2537a631182a25c04c975ec9af",
+      "size_bytes": 39905843
+    },
+    "receiver_replays/ds7/raw/epl_track4.dat": {
+      "sha256": "782e16cd04c447b65269b28a0fee262d6b20ed07aee7402b92603e4b07c40755",
+      "size_bytes": 40027784
+    },
+    "receiver_replays/ds7/raw/epl_track4.mat": {
+      "sha256": "82706a870a185e06b4996564731c6a912608b1b996066a9de7dcf3bff49493f4",
+      "size_bytes": 39327931
+    },
+    "receiver_replays/ds7/raw/epl_track5.dat": {
+      "sha256": "1c6f0b4370a13b4caf8e41b05317347fff571eddd8023149bd208e7ba7f5449d",
+      "size_bytes": 40034296
+    },
+    "receiver_replays/ds7/raw/epl_track5.mat": {
+      "sha256": "034d805a519abe3f915bb4cc2aafea40fa9ed96d08d826a5eecb61415820df5a",
+      "size_bytes": 39448159
+    },
+    "receiver_replays/ds7/raw/epl_track6.dat": {
+      "sha256": "80f7c7e8f0dd433fb8f53d78d747e332b8f6cd9d403ece256659b04e1a80e7a0",
+      "size_bytes": 40034148
+    },
+    "receiver_replays/ds7/raw/epl_track6.mat": {
+      "sha256": "149b8c4d5dabee0d4d8bb7ece5fd0d47f190f226036c88e377863a634f75bee8",
+      "size_bytes": 39471524
+    },
+    "receiver_replays/ds7/raw/epl_track7.dat": {
+      "sha256": "3a226bedb62102bb05054aae29fe1574bdb88e2599c3c772b50f4f1895dbbbac",
+      "size_bytes": 40028228
+    },
+    "receiver_replays/ds7/raw/epl_track7.mat": {
+      "sha256": "48a53038a4629ca459d7e0d6ee6e56f4aec5781c7b878cbc558dd6974730b9a2",
+      "size_bytes": 38995838
+    },
+    "receiver_replays/ds7/raw/epl_track8.dat": {
+      "sha256": "973b8849807bf382a7e9378f80cf7cf081ede53865f0c8849511707d79e12914",
+      "size_bytes": 36648056
+    },
+    "receiver_replays/ds7/raw/epl_track8.mat": {
+      "sha256": "5d4a8eb17a4c66d73999a3072d922ec85882fd6f5c083dcad72a084712cc6e47",
+      "size_bytes": 36519605
+    },
+    "receiver_replays/ds7/raw/epl_track9.dat": {
+      "sha256": "bf74b242eb24ec5bc03a9c77c64acc4c23cfd6bffc689074bc803cc3e5f32dac",
+      "size_bytes": 40028080
+    },
+    "receiver_replays/ds7/raw/epl_track9.mat": {
+      "sha256": "d39f992f65fee8fc8cad0848963615c02f5b767102b5065bf70652e4fb15541a",
+      "size_bytes": 39195982
+    },
+    "receiver_replays/ds7/raw/observabl.dat": {
+      "sha256": "e6e65a5ecc9bbd74e5803ef338f982874c6d8008b0bb7a7a195192d01718d82f",
+      "size_bytes": 8324008
+    },
+    "receiver_replays/ds7/raw/observabl.mat": {
+      "sha256": "511db55eccde240aa0a87ecbedf49bcdf0714b2d0d7f4fc24399912727d91330",
+      "size_bytes": 3274247
+    },
+    "receiver_replays/ds7/receiver.conf": {
+      "sha256": "6b918b55708d528e3202234dbd4ce7444fe9df191fa4537524c7a38362fd7fa1",
+      "size_bytes": 2000
+    },
+    "receiver_replays/ds7/receiver.log": {
+      "sha256": "24e3f2ec10b382ab4f2806af6870486163f6b6a8709e5948c716ef3d60fc39ab",
+      "size_bytes": 166228
+    },
+    "receiver_replays/ds8/auxiliary/GSDR219w55.26N": {
+      "sha256": "37c2e56c1ce36c5d4f1ccc40bc9e31073e2920f4605f415f60c6cf1437c1c3e7",
+      "size_bytes": 7938
+    },
+    "receiver_replays/ds8/auxiliary/GSDR219w55.26O": {
+      "sha256": "3a130e768bee6b9b501ad7ecbb4955dae39628e0026d99bfa469505f72eb557b",
+      "size_bytes": 89505
+    },
+    "receiver_replays/ds8/auxiliary/gps_ephemeris.xml": {
+      "sha256": "9b24fbb497fcfa0c51962f29f6befd6034c0726ed0f93628e31fa564c3976af3",
+      "size_bytes": 16848
+    },
+    "receiver_replays/ds8/auxiliary/gps_iono.xml": {
+      "sha256": "148ced4bfeda9f152a3d8ceadef5f58419e3fd608007f4470ce0a996e64eff7b",
+      "size_bytes": 603
+    },
+    "receiver_replays/ds8/auxiliary/gps_utc_model.xml": {
+      "sha256": "d35126a7694efb0ae592cae5402c0f9118484ecb20edc4151714bccbb913b842",
+      "size_bytes": 516
+    },
+    "receiver_replays/ds8/auxiliary/nmea_pvt.nmea": {
+      "sha256": "37590e76506c0352a87304f8680006f18d0c9e9d9402443a07603be3a0306b46",
+      "size_bytes": 397817
+    },
+    "receiver_replays/ds8/auxiliary/pvt.dat_260807_225506.geojson": {
+      "sha256": "d25af969547770c28120472747dfd21c3050514c0f6ef8b021cb2d9a7abedc26",
+      "size_bytes": 69680
+    },
+    "receiver_replays/ds8/auxiliary/pvt.dat_260807_225506.gpx": {
+      "sha256": "30dfb9f125ca337f94b8fdc847e1eff99cb0b499d5edeb0772761854310ef905",
+      "size_bytes": 407595
+    },
+    "receiver_replays/ds8/auxiliary/pvt.dat_260807_225506.kml": {
+      "sha256": "2e569b1cf5f39e726f6548aaf0e8ff780fb703dc7015999af0022679291d1b16",
+      "size_bytes": 1203628
+    },
+    "receiver_replays/ds8/manifest.json": {
+      "sha256": "c057383e21601f021c751d7012a018a2a793c23e08f1998f8c1967749fabe9d8",
+      "size_bytes": 4462
+    },
+    "receiver_replays/ds8/raw/epl_track0.dat": {
+      "sha256": "122a8fb0f1e3ab94e5888a57c907314afeb91794920e198aea046d136e52f01a",
+      "size_bytes": 69540464
+    },
+    "receiver_replays/ds8/raw/epl_track0.mat": {
+      "sha256": "8a1727400febfa99991569956314b27dd3911d265391dbc1b6abf584d7b4c9c6",
+      "size_bytes": 68141761
+    },
+    "receiver_replays/ds8/raw/epl_track1.dat": {
+      "sha256": "3f7f1af59c8d22ed71e6ff157de9a281083c7f3d5fddad560a5801a884e6b2eb",
+      "size_bytes": 69540168
+    },
+    "receiver_replays/ds8/raw/epl_track1.mat": {
+      "sha256": "16ce33d22cd71bbd984fc472380136c252c4a00315d005392d55461f05df77b3",
+      "size_bytes": 68006444
+    },
+    "receiver_replays/ds8/raw/epl_track10.dat": {
+      "sha256": "b74759d2a943ed3ee686477734475e79b2fdee1e47828ff17d907f66288ce5ed",
+      "size_bytes": 69231144
+    },
+    "receiver_replays/ds8/raw/epl_track10.mat": {
+      "sha256": "6bbb9879f8dda67278d0540193b9bbc4bdad73eb9180fe9a9d42a7554cec5d25",
+      "size_bytes": 69108748
+    },
+    "receiver_replays/ds8/raw/epl_track2.dat": {
+      "sha256": "4aa8c787b5d92be92c9f592d6cc75b12172f0a4a2e7459e4c88e6813b20e45b0",
+      "size_bytes": 69539724
+    },
+    "receiver_replays/ds8/raw/epl_track2.mat": {
+      "sha256": "3aff7fe603ca9caecbfc8bb10414ccf8fa8bd259760a54f0cc7045cf8689bfe7",
+      "size_bytes": 68013626
+    },
+    "receiver_replays/ds8/raw/epl_track3.dat": {
+      "sha256": "b9e657e95865aa05916e6532d16621443f1c69c3f3abf451368e88083bb32c19",
+      "size_bytes": 69433904
+    },
+    "receiver_replays/ds8/raw/epl_track3.mat": {
+      "sha256": "90432c9f472c61d162e898966ed2f0272118b6fb28aaed4c56315347537af178",
+      "size_bytes": 69307740
+    },
+    "receiver_replays/ds8/raw/epl_track4.dat": {
+      "sha256": "dc4e2c7faa9fc07225e4e4b8aa9b97f4c61a934fd9f161e53efd0faaaaad0a64",
+      "size_bytes": 37339216
+    },
+    "receiver_replays/ds8/raw/epl_track4.mat": {
+      "sha256": "e8facfb16c020688455dc3e9aedad7890a432f0d6a1f3672591d747f0e3c5d51",
+      "size_bytes": 38255023
+    },
+    "receiver_replays/ds8/raw/epl_track5.dat": {
+      "sha256": "5882539ea48a48e9ab3ffd47e65da6b6ce6e7ab2d81c91f858cfb47fb0bf41c0",
+      "size_bytes": 69546384
+    },
+    "receiver_replays/ds8/raw/epl_track5.mat": {
+      "sha256": "959045bd60d5220a1a7b32adf62166ae1fdf78eb049ad3eaa5ec8f2ac2b359fa",
+      "size_bytes": 68408185
+    },
+    "receiver_replays/ds8/raw/epl_track6.dat": {
+      "sha256": "526eb7a56c11c5458d8537345bdd7129253326f37adb28040fdd071fceb1acd4",
+      "size_bytes": 69546532
+    },
+    "receiver_replays/ds8/raw/epl_track6.mat": {
+      "sha256": "d043d97b390c3a01888809240969fc00341037e4805a4c23e3edeeb305880667",
+      "size_bytes": 68487427
+    },
+    "receiver_replays/ds8/raw/epl_track7.dat": {
+      "sha256": "0f53776e66cc5402e29b58ea8e2df41f38be02c5ca76d1432c90d873ae6f54bb",
+      "size_bytes": 68736528
+    },
+    "receiver_replays/ds8/raw/epl_track7.mat": {
+      "sha256": "6bf69316e2467059ad8fd3248658938970ae24cba326dc177d3e2902afdf348b",
+      "size_bytes": 68600855
+    },
+    "receiver_replays/ds8/raw/epl_track8.dat": {
+      "sha256": "8b56a93cd9ac6e6be40ae724c8b84ccef5632a797139a8a0fceee823a10fdc23",
+      "size_bytes": 69534100
+    },
+    "receiver_replays/ds8/raw/epl_track8.mat": {
+      "sha256": "1fa124e33522d66e4d21c99a1fd32cd8da517f8b97d8b709aec4caa9c3eec036",
+      "size_bytes": 67739104
+    },
+    "receiver_replays/ds8/raw/epl_track9.dat": {
+      "sha256": "453a8da9ceaa044742d2a2376c016de8758d68b325f0ce8a0b9ad80506227846",
+      "size_bytes": 69540464
+    },
+    "receiver_replays/ds8/raw/epl_track9.mat": {
+      "sha256": "bb123b58d164ef48d41fd02454d2c857ac52393882c3cfe1d179df3fbe938c92",
+      "size_bytes": 67718425
+    },
+    "receiver_replays/ds8/receiver.conf": {
+      "sha256": "c770b761b0301c2a0dc5e51f54e6d6dcf9cae4dce3e26b71259740e894004715",
+      "size_bytes": 2208
+    },
+    "receiver_replays/ds8/receiver.log": {
+      "sha256": "73789be6bc1dc3a7b16d0e4911b942c61f1707722cba6ecc0b29e382a26b9da9",
+      "size_bytes": 153293
+    },
+    "scenario_metrics.csv": {
+      "sha256": "44c3a71a7e11f8b45a8bae9ec79158235c3c9c9dc43986a8944fec03b4e7305b",
+      "size_bytes": 336
+    },
+    "scenario_timeline.json": {
+      "sha256": "9e2e36dbf5490f1a7e857cbbe64d811b16787d820bc8a2fdab017e62c0f584f1",
+      "size_bytes": 2859
+    },
+    "secondary_component_metrics.csv": {
+      "sha256": "7af9d3599d069fcba28307fc4dca54278f39b1cb0e6a3ad1fd4ffcf70dc536b7",
+      "size_bytes": 4827
+    },
+    "source_binding.json": {
+      "sha256": "7d4b85ccf077c69887b99f4255bd0eb50d16bb73bf863fdbe4954f9eb13c5fd5",
+      "size_bytes": 15068
+    },
+    "test_report.txt": {
+      "sha256": "8bf787697e27d744e0c142040a385c00f624f051cef4e84ea7332c9a0e98bbda",
+      "size_bytes": 909
+    },
+    "thresholds.json": {
+      "sha256": "6032ac38225ffc19469a6d7d6baa516eb3a7d334a54154ffc9fa7d2b0af18dd7",
+      "size_bytes": 379
+    },
+    "tracker_cadence_audit.json": {
+      "sha256": "a4b44a8e8da36da087546b6c3e1119ee90fa99a03c02f8024d6941923544ee91",
+      "size_bytes": 89951
+    },
+    "tracker_cadence_by_channel.csv": {
+      "sha256": "7e5cd9121519120af87a811ca832d59530a1a773f0f2e2b24fce2e5cc6cff983",
+      "size_bytes": 12966
+    }
+  }
+}

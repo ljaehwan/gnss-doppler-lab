@@ -1,0 +1,39 @@
+{
+  "binary": "gnss-sdr-continuous-1ms",
+  "binary_sha256": "4b391f84270b421f84c92d7d9981b5f3fddd6c2e6b65917a3c4d8dfd1f1a99d3",
+  "binary_size_bytes": 36565600,
+  "build_command": [
+    "cmake",
+    "--build",
+    "/tmp/acaf-nf-gnss-sdr-h1s1nmap/build",
+    "--target",
+    "gnss-sdr",
+    "-j",
+    "18"
+  ],
+  "configure_command": [
+    "cmake",
+    "-G",
+    "Ninja",
+    "-S",
+    "/tmp/acaf-nf-gnss-sdr-h1s1nmap/source",
+    "-B",
+    "/tmp/acaf-nf-gnss-sdr-h1s1nmap/build",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DENABLE_UNIT_TESTING=OFF",
+    "-DENABLE_SYSTEM_TESTING=OFF",
+    "-DENABLE_CUDA=OFF",
+    "-DENABLE_OPENCL=OFF",
+    "-DENABLE_FPGA=OFF",
+    "-DENABLE_OSMOSDR=OFF"
+  ],
+  "exporter_patch": "patches/gnss-sdr-valid-1ms-tracking-dump.patch",
+  "exporter_patch_sha256": "fb13c5b14be5fa9a4d6a65fc926f2724b5b3b5d9d82a7bccb96a04963673355b",
+  "generated_at_utc": "2026-08-07T13:46:56.473653+00:00",
+  "patched_tracking_source_sha256": "282a390c36fe44c5617c65a7e9df6a42a39628a342f28cb13e364f7f5badf5a0",
+  "schema": "acaf_nf_gnss_sdr_continuous_exporter_build.v1",
+  "source_dirty_diff_bytes": 19590,
+  "source_dirty_diff_sha256": "51da8449a56af9088695f81c09c1752139b48e2fbe9f621f85abafcab93681ea",
+  "source_git_head": "1ddd4562723040fd66cb334b578a5b69455625f4",
+  "source_tree": "/home/ubuntu/build-gnss-sdr-complex9"
+}

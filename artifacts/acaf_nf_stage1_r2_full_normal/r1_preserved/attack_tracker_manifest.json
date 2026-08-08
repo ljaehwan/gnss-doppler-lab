@@ -1,0 +1,234 @@
+{
+  "checkpoint": "C",
+  "ds4_fail_closed": false,
+  "ds4_valid": true,
+  "generated_at_utc": "2026-08-07T16:42:17.662769+00:00",
+  "primary_scenarios_valid": true,
+  "scenarios": {
+    "ds3": {
+      "binding_status": "PASS",
+      "limited_diagnostic": false,
+      "phase_coverage": {
+        "established": {
+          "end_sample_exclusive": 11446255616,
+          "l20_prn_channels": 11,
+          "l20_windows": 1124609,
+          "rows": 2247008,
+          "start_sample": 4875000000
+        },
+        "pre_onset": {
+          "end_sample_exclusive": 2972500000,
+          "l20_prn_channels": 10,
+          "l20_windows": 516046,
+          "rows": 1102420,
+          "start_sample": 0
+        },
+        "transition": {
+          "end_sample_exclusive": 4875000000,
+          "l20_prn_channels": 14,
+          "l20_windows": 279434,
+          "rows": 585698,
+          "start_sample": 2972500000
+        }
+      },
+      "post_onset_l20_windows": 1404043,
+      "rows": 3935144,
+      "status": "VALID",
+      "tracker_validation": {
+        "dat_rows_match_ratio": 1.0,
+        "dat_sample_stamp_match": true,
+        "generated_at_utc": "2026-08-07T16:32:36.308390+00:00",
+        "global_iq_interval_sharing_expected": true,
+        "interval_uniqueness_scope": "within channel/PRN; simultaneous channels intentionally share global IQ time",
+        "l20_total_windows": 1920265,
+        "max_contiguous_rows": 340,
+        "prn_channels": 19,
+        "quality_contract": "minimum over previous/current/next rows: CN0>=28 and carrier_lock>=0.85",
+        "raw_contiguous": true,
+        "reason": null,
+        "row_delta_ratio_25000": 0.9524524611445851,
+        "rows": 3935144,
+        "run_break_count": 107280,
+        "scenario": "ds3",
+        "schema": "acaf_nf_stage1_continuous_tracker_clean.v1",
+        "state_prompt_contract": "previous-row NCO/aux; current-row Prompt; same-PRN triple",
+        "status": "CONTINUOUS_TRACKER_VALID",
+        "support_interval_semantics": "half-open [raw_start_sample, raw_end_sample)",
+        "tracker_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw",
+        "unique_intervals": true,
+        "valid_prn_channels": 17
+      }
+    },
+    "ds4": {
+      "binding_status": "PASS",
+      "limited_diagnostic": true,
+      "phase_coverage": {
+        "pre_onset": {
+          "end_sample_exclusive": 2845000000,
+          "l20_prn_channels": 11,
+          "l20_windows": 486703,
+          "rows": 1076858,
+          "start_sample": 0
+        },
+        "transition_only": {
+          "end_sample_exclusive": 3205496832,
+          "l20_prn_channels": 9,
+          "l20_windows": 63728,
+          "rows": 139632,
+          "start_sample": 2845000000
+        }
+      },
+      "post_onset_l20_windows": 63728,
+      "rows": 1216500,
+      "status": "VALID",
+      "tracker_validation": {
+        "dat_rows_match_ratio": 1.0,
+        "dat_sample_stamp_match": true,
+        "generated_at_utc": "2026-08-07T16:35:01.204981+00:00",
+        "global_iq_interval_sharing_expected": true,
+        "interval_uniqueness_scope": "within channel/PRN; simultaneous channels intentionally share global IQ time",
+        "l20_total_windows": 550517,
+        "max_contiguous_rows": 213,
+        "prn_channels": 11,
+        "quality_contract": "minimum over previous/current/next rows: CN0>=28 and carrier_lock>=0.85",
+        "raw_contiguous": true,
+        "reason": null,
+        "row_delta_ratio_25000": 0.9669675001125663,
+        "rows": 1216500,
+        "run_break_count": 35438,
+        "scenario": "ds4",
+        "schema": "acaf_nf_stage1_continuous_tracker_clean.v1",
+        "state_prompt_contract": "previous-row NCO/aux; current-row Prompt; same-PRN triple",
+        "status": "CONTINUOUS_TRACKER_VALID",
+        "support_interval_semantics": "half-open [raw_start_sample, raw_end_sample)",
+        "tracker_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw",
+        "unique_intervals": true,
+        "valid_prn_channels": 11
+      }
+    },
+    "ds7": {
+      "binding_status": "PASS",
+      "limited_diagnostic": false,
+      "phase_coverage": {
+        "held": {
+          "end_sample_exclusive": 3750000000,
+          "l20_prn_channels": 10,
+          "l20_windows": 88089,
+          "rows": 193587,
+          "start_sample": 3250000000
+        },
+        "pre_onset": {
+          "end_sample_exclusive": 2750000000,
+          "l20_prn_channels": 10,
+          "l20_windows": 474256,
+          "rows": 1004478,
+          "start_sample": 0
+        },
+        "time_push": {
+          "end_sample_exclusive": 6764822528,
+          "l20_prn_channels": 10,
+          "l20_windows": 537058,
+          "rows": 1128473,
+          "start_sample": 3750000000
+        },
+        "transition": {
+          "end_sample_exclusive": 3250000000,
+          "l20_prn_channels": 10,
+          "l20_windows": 88299,
+          "rows": 193605,
+          "start_sample": 2750000000
+        }
+      },
+      "post_onset_l20_windows": 713446,
+      "rows": 2520173,
+      "status": "VALID",
+      "tracker_validation": {
+        "dat_rows_match_ratio": 1.0,
+        "dat_sample_stamp_match": true,
+        "generated_at_utc": "2026-08-07T16:36:47.947507+00:00",
+        "global_iq_interval_sharing_expected": true,
+        "interval_uniqueness_scope": "within channel/PRN; simultaneous channels intentionally share global IQ time",
+        "l20_total_windows": 1187920,
+        "max_contiguous_rows": 155,
+        "prn_channels": 11,
+        "quality_contract": "minimum over previous/current/next rows: CN0>=28 and carrier_lock>=0.85",
+        "raw_contiguous": true,
+        "reason": null,
+        "row_delta_ratio_25000": 0.9596691407002148,
+        "rows": 2520173,
+        "run_break_count": 70889,
+        "scenario": "ds7",
+        "schema": "acaf_nf_stage1_continuous_tracker_clean.v1",
+        "state_prompt_contract": "previous-row NCO/aux; current-row Prompt; same-PRN triple",
+        "status": "CONTINUOUS_TRACKER_VALID",
+        "support_interval_semantics": "half-open [raw_start_sample, raw_end_sample)",
+        "tracker_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw",
+        "unique_intervals": true,
+        "valid_prn_channels": 10
+      }
+    },
+    "ds8": {
+      "binding_status": "PASS",
+      "limited_diagnostic": false,
+      "phase_coverage": {
+        "held": {
+          "end_sample_exclusive": 3750000000,
+          "l20_prn_channels": 11,
+          "l20_windows": 88790,
+          "rows": 194559,
+          "start_sample": 3250000000
+        },
+        "pre_onset": {
+          "end_sample_exclusive": 2750000000,
+          "l20_prn_channels": 11,
+          "l20_windows": 476325,
+          "rows": 1026332,
+          "start_sample": 0
+        },
+        "time_push": {
+          "end_sample_exclusive": 11750035292,
+          "l20_prn_channels": 10,
+          "l20_windows": 1432971,
+          "rows": 3019392,
+          "start_sample": 3750000000
+        },
+        "transition": {
+          "end_sample_exclusive": 3250000000,
+          "l20_prn_channels": 11,
+          "l20_windows": 88632,
+          "rows": 204740,
+          "start_sample": 2750000000
+        }
+      },
+      "post_onset_l20_windows": 1610393,
+      "rows": 4445055,
+      "status": "VALID",
+      "tracker_validation": {
+        "dat_rows_match_ratio": 1.0,
+        "dat_sample_stamp_match": true,
+        "generated_at_utc": "2026-08-07T16:40:18.097790+00:00",
+        "global_iq_interval_sharing_expected": true,
+        "interval_uniqueness_scope": "within channel/PRN; simultaneous channels intentionally share global IQ time",
+        "l20_total_windows": 2086956,
+        "max_contiguous_rows": 188,
+        "prn_channels": 13,
+        "quality_contract": "minimum over previous/current/next rows: CN0>=28 and carrier_lock>=0.85",
+        "raw_contiguous": true,
+        "reason": null,
+        "row_delta_ratio_25000": 0.9485326205700352,
+        "rows": 4445055,
+        "run_break_count": 125762,
+        "scenario": "ds8",
+        "schema": "acaf_nf_stage1_continuous_tracker_clean.v1",
+        "state_prompt_contract": "previous-row NCO/aux; current-row Prompt; same-PRN triple",
+        "status": "CONTINUOUS_TRACKER_VALID",
+        "support_interval_semantics": "half-open [raw_start_sample, raw_end_sample)",
+        "tracker_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw",
+        "unique_intervals": true,
+        "valid_prn_channels": 11
+      }
+    }
+  },
+  "schema": "acaf_nf_stage1_attack_trackers.v1",
+  "status": "CHECKPOINT_C_COMPLETE"
+}

@@ -1,0 +1,17 @@
+{
+  "attack_rows_in_fit_or_calibration": 0,
+  "caf_executed": true,
+  "foundation_inputs": {
+    "checkpoint_b": "PASS",
+    "checkpoint_c": "PASS"
+  },
+  "full_noncenter_grid": 186,
+  "h0_h1_wls_executed": true,
+  "plots": {
+    "count": 1,
+    "path": "plots/stage1_r1_scores.png"
+  },
+  "raw_supports_scored": 5400,
+  "science_csv_semantics": "numeric",
+  "status": "FOUNDATION_PASS_SCIENCE_EXECUTED"
+}

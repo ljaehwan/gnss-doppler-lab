@@ -1,0 +1,14 @@
+{
+  "artifact_path": "artifacts/acaf_nf_stage1_r1_continuous_tracker",
+  "checkpoint": "D",
+  "errors": [],
+  "foundation": "FOUNDATION_PASS",
+  "recomputed": {
+    "paper_candidate_go": false,
+    "physics_feasibility_go": false,
+    "q99": 2.317252898455417,
+    "rows": 90
+  },
+  "scientific_status": "PHYSICS_FEASIBILITY_NO_GO",
+  "status": "PASS"
+}

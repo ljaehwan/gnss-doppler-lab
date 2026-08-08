@@ -1,0 +1,11 @@
+{
+  "checkpoint": "B",
+  "command": "PYTHONPATH=src python3 scripts/build_acaf_nf_continuous_tracker.py --checkpoint B --source-binding configs/acaf_nf_stage1_r1_source_binding.json --output artifacts/acaf_nf_stage1_r1_continuous_tracker --scenario cleanStatic",
+  "generated_at_utc": "2026-08-07T16:00:17.173884+00:00",
+  "git_head": "d5064099bb62bd250c46e28af29b77436e330887",
+  "output_root": "artifacts/acaf_nf_stage1_r1_continuous_tracker",
+  "scenarios": [
+    "cleanStatic"
+  ],
+  "source_binding": "configs/acaf_nf_stage1_r1_source_binding.json"
+}

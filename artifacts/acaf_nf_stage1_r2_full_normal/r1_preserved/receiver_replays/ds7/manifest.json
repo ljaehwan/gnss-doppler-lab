@@ -1,0 +1,62 @@
+{
+  "generated_at_utc": "2026-08-07T14:07:33.534989+00:00",
+  "receiver": {
+    "build_provenance": "artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_exporter_build/build_provenance.json",
+    "build_provenance_sha256": "71d9f30d5f4d5b7fcc6fa62aa93872f73cf7377dbecdbe5a9e95d7c0febb819d",
+    "command": [
+      "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_exporter_build/gnss-sdr-continuous-1ms",
+      "--config_file=/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/receiver.conf",
+      "--keyboard=false"
+    ],
+    "config": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/receiver.conf",
+    "config_sha256": "6b918b55708d528e3202234dbd4ce7444fe9df191fa4537524c7a38362fd7fa1",
+    "executable": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_exporter_build/gnss-sdr-continuous-1ms",
+    "executable_sha256": "4b391f84270b421f84c92d7d9981b5f3fddd6c2e6b65917a3c4d8dfd1f1a99d3",
+    "exit_code": 0,
+    "exporter_patch_sha256": "fb13c5b14be5fa9a4d6a65fc926f2724b5b3b5d9d82a7bccb96a04963673355b",
+    "original_config": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/receiver.conf",
+    "original_config_sha256": "6b918b55708d528e3202234dbd4ce7444fe9df191fa4537524c7a38362fd7fa1"
+  },
+  "scenario": "ds7",
+  "schema": "acaf_nf_continuous_receiver_replay.v1",
+  "source": {
+    "first_file_sample": 0,
+    "format": "ishort_complex_iq",
+    "iq_sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+    "path": "/home/ubuntu/unraid_hdd/texbat/raw/ds7.bin",
+    "sample_format": "ishort_complex_iq",
+    "sample_rate_hz": 25000000,
+    "sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+    "size_bytes": 27059290112
+  },
+  "tracking": {
+    "dat_inventory": {
+      "epl_track0.dat": "db4d72b941ed226559ed7ff5206ab89d80a166063dc32ac72d8c5e434b8bb088",
+      "epl_track1.dat": "a848b2884994fd2752465b737d6b28ce52765e0a770552e78965eeb840d91620",
+      "epl_track10.dat": "cac63e31440bf71dd6e189f8e0e9f040ed14ca24b53522599c7e53e38c191978",
+      "epl_track2.dat": "84bbb1f398176c8d12ec7b2a96b430eb36e19103bbf947ef7e08f2b4fddc33cb",
+      "epl_track3.dat": "1c417d15c7b6c4a44f52a36ff2564ea1009e9f162a932b520c0130d3c457a202",
+      "epl_track4.dat": "782e16cd04c447b65269b28a0fee262d6b20ed07aee7402b92603e4b07c40755",
+      "epl_track5.dat": "1c6f0b4370a13b4caf8e41b05317347fff571eddd8023149bd208e7ba7f5449d",
+      "epl_track6.dat": "80f7c7e8f0dd433fb8f53d78d747e332b8f6cd9d403ece256659b04e1a80e7a0",
+      "epl_track7.dat": "3a226bedb62102bb05054aae29fe1574bdb88e2599c3c772b50f4f1895dbbbac",
+      "epl_track8.dat": "973b8849807bf382a7e9378f80cf7cf081ede53865f0c8849511707d79e12914",
+      "epl_track9.dat": "bf74b242eb24ec5bc03a9c77c64acc4c23cfd6bffc689074bc803cc3e5f32dac"
+    },
+    "dump_contract": "valid tracking loop at every 1 ms integration; telemetry output unchanged",
+    "extend_correlation_symbols": 1,
+    "mat_inventory": {
+      "epl_track0.mat": "7e98c51ecac3b8c6db5623b2101a3f4b386de1e23e76d5049420538903d1824f",
+      "epl_track1.mat": "05f4874d91b0bded3d50c6ff662f5debd76363c89d2512c891f2c8e206c4f7f6",
+      "epl_track10.mat": "f89ed02de731aad06f6680857cf17eb877ed5fd1fbc6f11947f15fc83855acb6",
+      "epl_track2.mat": "c2abf21e0c2fa3db8af98b29c2198ffc549f2d43895fa09e8fef3e41e81ed22e",
+      "epl_track3.mat": "2d95144938fb1846b7e371fccfadbcec07af9e2537a631182a25c04c975ec9af",
+      "epl_track4.mat": "82706a870a185e06b4996564731c6a912608b1b996066a9de7dcf3bff49493f4",
+      "epl_track5.mat": "034d805a519abe3f915bb4cc2aafea40fa9ed96d08d826a5eecb61415820df5a",
+      "epl_track6.mat": "149b8c4d5dabee0d4d8bb7ece5fd0d47f190f226036c88e377863a634f75bee8",
+      "epl_track7.mat": "48a53038a4629ca459d7e0d6ee6e56f4aec5781c7b878cbc558dd6974730b9a2",
+      "epl_track8.mat": "5d4a8eb17a4c66d73999a3072d922ec85882fd6f5c083dcad72a084712cc6e47",
+      "epl_track9.mat": "d39f992f65fee8fc8cad0848963615c02f5b767102b5065bf70652e4fb15541a"
+    }
+  }
+}

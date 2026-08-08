@@ -1,0 +1,132 @@
+{
+  "artifact_path": "artifacts/acaf_nf_stage1_r1_continuous_tracker",
+  "checkpoint": "C",
+  "errors": [],
+  "recomputed": {
+    "ds3": {
+      "alignment_errors": [],
+      "binding": "PASS",
+      "l20_windows": 1920265,
+      "phase_coverage": {
+        "established": {
+          "end_sample_exclusive": 11446255616,
+          "l20_prn_channels": 11,
+          "l20_windows": 1124609,
+          "rows": 2247008,
+          "start_sample": 4875000000
+        },
+        "pre_onset": {
+          "end_sample_exclusive": 2972500000,
+          "l20_prn_channels": 10,
+          "l20_windows": 516046,
+          "rows": 1102420,
+          "start_sample": 0
+        },
+        "transition": {
+          "end_sample_exclusive": 4875000000,
+          "l20_prn_channels": 14,
+          "l20_windows": 279434,
+          "rows": 585698,
+          "start_sample": 2972500000
+        }
+      },
+      "prn_channels": 19
+    },
+    "ds4": {
+      "alignment_errors": [],
+      "binding": "PASS",
+      "l20_windows": 550517,
+      "phase_coverage": {
+        "pre_onset": {
+          "end_sample_exclusive": 2845000000,
+          "l20_prn_channels": 11,
+          "l20_windows": 486703,
+          "rows": 1076858,
+          "start_sample": 0
+        },
+        "transition_only": {
+          "end_sample_exclusive": 3205496832,
+          "l20_prn_channels": 9,
+          "l20_windows": 63728,
+          "rows": 139632,
+          "start_sample": 2845000000
+        }
+      },
+      "prn_channels": 11
+    },
+    "ds7": {
+      "alignment_errors": [],
+      "binding": "PASS",
+      "l20_windows": 1187920,
+      "phase_coverage": {
+        "held": {
+          "end_sample_exclusive": 3750000000,
+          "l20_prn_channels": 10,
+          "l20_windows": 88089,
+          "rows": 193587,
+          "start_sample": 3250000000
+        },
+        "pre_onset": {
+          "end_sample_exclusive": 2750000000,
+          "l20_prn_channels": 10,
+          "l20_windows": 474256,
+          "rows": 1004478,
+          "start_sample": 0
+        },
+        "time_push": {
+          "end_sample_exclusive": 6764822528,
+          "l20_prn_channels": 10,
+          "l20_windows": 537058,
+          "rows": 1128473,
+          "start_sample": 3750000000
+        },
+        "transition": {
+          "end_sample_exclusive": 3250000000,
+          "l20_prn_channels": 10,
+          "l20_windows": 88299,
+          "rows": 193605,
+          "start_sample": 2750000000
+        }
+      },
+      "prn_channels": 11
+    },
+    "ds8": {
+      "alignment_errors": [],
+      "binding": "PASS",
+      "l20_windows": 2086956,
+      "phase_coverage": {
+        "held": {
+          "end_sample_exclusive": 3750000000,
+          "l20_prn_channels": 11,
+          "l20_windows": 88790,
+          "rows": 194559,
+          "start_sample": 3250000000
+        },
+        "pre_onset": {
+          "end_sample_exclusive": 2750000000,
+          "l20_prn_channels": 11,
+          "l20_windows": 476325,
+          "rows": 1026332,
+          "start_sample": 0
+        },
+        "time_push": {
+          "end_sample_exclusive": 11750035292,
+          "l20_prn_channels": 10,
+          "l20_windows": 1432971,
+          "rows": 3019392,
+          "start_sample": 3750000000
+        },
+        "transition": {
+          "end_sample_exclusive": 3250000000,
+          "l20_prn_channels": 11,
+          "l20_windows": 88632,
+          "rows": 204740,
+          "start_sample": 2750000000
+        }
+      },
+      "prn_channels": 13
+    }
+  },
+  "scientific_status": "CHECKPOINT_C_COMPLETE",
+  "status": "PASS"
+}

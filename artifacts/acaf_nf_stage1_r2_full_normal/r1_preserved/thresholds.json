@@ -1,0 +1,15 @@
+{
+  "calibration": {
+    "center": 78.17118186347314,
+    "complexity_penalty": 0.0,
+    "scale": 154.05006925114492,
+    "source": "cleanStatic_calibration_only",
+    "threshold": 4.634505796910834
+  },
+  "calibration_bins": 3,
+  "pooling": "top50_mean",
+  "q99": 2.317252898455417,
+  "q99_5": 2.317252898455417,
+  "source": "cleanStatic_calibration_only",
+  "status": "PASS"
+}

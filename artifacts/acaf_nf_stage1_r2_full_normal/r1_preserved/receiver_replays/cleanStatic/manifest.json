@@ -1,0 +1,62 @@
+{
+  "generated_at_utc": "2026-08-07T15:41:15.350470+00:00",
+  "receiver": {
+    "build_provenance": "artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_exporter_build/build_provenance.json",
+    "build_provenance_sha256": "71d9f30d5f4d5b7fcc6fa62aa93872f73cf7377dbecdbe5a9e95d7c0febb819d",
+    "command": [
+      "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_exporter_build/gnss-sdr-continuous-1ms",
+      "--config_file=/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/receiver.conf",
+      "--keyboard=false"
+    ],
+    "config": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/receiver.conf",
+    "config_sha256": "504f9d499b38b0919a4e31b99d86f8cdcec36eabc1b738cfa745174a695f193f",
+    "executable": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_exporter_build/gnss-sdr-continuous-1ms",
+    "executable_sha256": "4b391f84270b421f84c92d7d9981b5f3fddd6c2e6b65917a3c4d8dfd1f1a99d3",
+    "exit_code": 0,
+    "exporter_patch_sha256": "fb13c5b14be5fa9a4d6a65fc926f2724b5b3b5d9d82a7bccb96a04963673355b",
+    "original_config": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/receiver.conf",
+    "original_config_sha256": "ce74f719338a8a97021ba10a0c72927e3e44db01120d355b5443fcc559504930"
+  },
+  "scenario": "cleanStatic",
+  "schema": "acaf_nf_continuous_receiver_replay.v1",
+  "source": {
+    "first_file_sample": 0,
+    "format": "ishort_complex_iq",
+    "iq_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+    "path": "/home/ubuntu/unraid_hdd/texbat/raw/cleanStatic.bin",
+    "sample_format": "ishort_complex_iq",
+    "sample_rate_hz": 25000000,
+    "sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+    "size_bytes": 48016392192
+  },
+  "tracking": {
+    "dat_inventory": {
+      "e0.dat": "587f84d3903306b7fed92edfd1cae5b23b12f89e98de707f37692d44d9ff2a68",
+      "e1.dat": "ccf1491482ca42fcb48c7da27eacdc98b5ec0294ea510703a480cdf43b34f88c",
+      "e10.dat": "8972109de4a15c0e98da80d1ad6c07d153506cd994418c02ed06dd485aec757d",
+      "e2.dat": "2df7fcee1b9ffa6d0702cea30f757bd45917b6e326d3c6ade72bc9fa8473fb77",
+      "e3.dat": "f83112e85a8aebcac1c16524f23cd0bb1428a732dbb83c1fd38a4614d9337b1e",
+      "e4.dat": "d1469c9596cc3b2396ba1351d7777892cbd1a5fda73e89c7e0e6dae00f2cdc12",
+      "e5.dat": "f605e9f238791fb7579790dfdf7df194078ba25771da75e5fcb937c87ac1ed24",
+      "e6.dat": "7599b518645afb869bd6804ac001c2dbf112a84cc215881cfece6be5ca2cbf8b",
+      "e7.dat": "e14fb0dd89cfdc9e25287ea5d1bd2bf6e86b0329d87e0e51f3c6c94f260d37ba",
+      "e8.dat": "5147c7d1918380bd5e9a4c2a98d1303993acad48f34047528bdcafc47a8dde94",
+      "e9.dat": "15fa059342a7fd19589a35e6f046ed2ccd79c833398798d000dc1b285ddac539"
+    },
+    "dump_contract": "valid tracking loop at every 1 ms integration; telemetry output unchanged",
+    "extend_correlation_symbols": 1,
+    "mat_inventory": {
+      "e0.mat": "02da02d665149c31737f15a8e167a423fa801c59684c11521ed153430df9def8",
+      "e1.mat": "4006dcbe36d43cde294f96c7ec2776e78cb2cdad3bbd527c885d931e134a8c81",
+      "e10.mat": "3a8d250ffc87192b46a40fbb61360c46f7d148978ca4878b0877f4dd6f88e695",
+      "e2.mat": "dc396ed49ea103ade001d93a36de3550f0c334ef8887def934162ea710144ff9",
+      "e3.mat": "f264c2a249fe8b635e932a323f4157c71328163024564793323bd0aa4332538b",
+      "e4.mat": "7752937be7b45daf79e7a858644683903fe44d08c159d60a535bf624c1979f05",
+      "e5.mat": "2fc138db47b40d2a0530181110123b786c4012769a7d28b038df6b6d38caf43a",
+      "e6.mat": "c16c0f8d0c98775acef1145f79bcb995448c7481430305cd81b2cb0936549f5a",
+      "e7.mat": "555731ed84ffe606b4620aba0693ec09967297d86e1b067dbb87db2b34e3fa4e",
+      "e8.mat": "d6eff008974ef244e7d61aab94fee7596314ae3b56c4d5224e2453d025536542",
+      "e9.mat": "0f763869d6fab0129e928c203352c6baec8587bacef769684535db4bab5defb8"
+    }
+  }
+}

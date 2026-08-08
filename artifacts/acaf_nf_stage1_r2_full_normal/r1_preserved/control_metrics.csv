@@ -1,0 +1,10 @@
+control,kind,score,delay_chips,doppler_hz
+identity,negative,-0.07948031402667315,-0.875,250.0
+gain_1_7,negative,-0.07948031402667592,-0.875,250.0
+global_phase_1_2,negative,-0.07948031402669234,-0.875,250.0
+awgn_5pct,negative,-0.09733581946361025,0.25,-250.0
+amplitude_only,negative,-0.07948031402667259,-0.875,250.0
+second_source_d-0.25_f-100_r0.25,positive,0.017165271465802295,-0.625,50.0
+second_source_d0.25_f100_r0.25,positive,0.15292866173803643,1.0,-250.0
+second_source_d-0.5_f150_r0.5,positive,0.7782836250007782,-0.625,50.0
+second_source_d0.5_f-150_r0.5,positive,1.4795740869594864,0.125,250.0

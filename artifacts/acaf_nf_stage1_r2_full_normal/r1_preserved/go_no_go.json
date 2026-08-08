@@ -1,0 +1,22 @@
+{
+  "B0": "PROVISIONAL_UNAVAILABLE",
+  "PAPER_CANDIDATE_GO": false,
+  "PHYSICS_FEASIBILITY_GO": false,
+  "foundation": "FOUNDATION_PASS",
+  "paper_criteria": {
+    "all_primary_bootstrap_positive": true,
+    "dense_low_fpr_ge_fixed": false,
+    "prn_not_dominated": false,
+    "static_pre_fpr_le_0_05": false
+  },
+  "physics_criteria": {
+    "clean_holdout_fpr_le_0_02": true,
+    "ds3_ds4_pre_fpr_le_0_05": false,
+    "gain_phase_invariant": true,
+    "not_power_only": false,
+    "positive_control_sensitive": true,
+    "two_of_three_bootstrap_positive": true
+  },
+  "stage2_justified": false,
+  "verdict": "PHYSICS_FEASIBILITY_NO_GO"
+}

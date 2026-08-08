@@ -1,0 +1,12 @@
+{
+  "calibration_windows": 9,
+  "h1_coordinates": 186,
+  "holdout_windows": 9,
+  "pooling": "top50_mean",
+  "selection_windows": 9,
+  "source": "cleanStatic_only",
+  "status": "PASS",
+  "template0_sha256": "afb7ae5aac1b8161569f9086a79cfeda816d4ca1f88469f6307eafbe7fef10ec",
+  "train_windows": 9,
+  "variance_sha256": "c5555f8f351ab665d67bbe92fdc7d05d011438a054a431425fbc0056835c67d0"
+}

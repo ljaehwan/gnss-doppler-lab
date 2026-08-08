@@ -1,0 +1,10 @@
+command: /usr/bin/python3 -m pytest -q tests/test_acaf_nf_stage1_continuous_tracker.py tests/test_acaf_nf_stage1_static_feasibility.py tests/test_acaf_nf_stage1_r1.py
+exit_code: 0
+............................................                             [100%]
+=============================== warnings summary ===============================
+../../../../.local/lib/python3.12/site-packages/matplotlib/projections/__init__.py:63
+  /home/ubuntu/.local/lib/python3.12/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+    warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+44 passed, 1 warning in 3.11s
