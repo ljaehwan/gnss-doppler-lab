@@ -1,0 +1,23 @@
+{
+  "ds4_claim_scope": "transition_only_truncated_recording",
+  "ds7_ds8_independent": false,
+  "source": "preregistered TEXBAT metadata/known transitions",
+  "timeline": {
+    "ds3": {
+      "onset": 118.9
+    },
+    "ds4": {
+      "onset": 113.8,
+      "truncated_at_approximately": 128.2
+    },
+    "ds7": {
+      "injection": 110.0,
+      "time_push": 150.0
+    },
+    "ds8": {
+      "injection": 110.0,
+      "scer": true,
+      "time_push": 150.0
+    }
+  }
+}

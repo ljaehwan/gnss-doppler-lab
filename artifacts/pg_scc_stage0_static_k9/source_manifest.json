@@ -1,0 +1,40 @@
+{
+  "attack_cache_bytes_read_before_freeze": 0,
+  "attack_iq_bytes_read_before_freeze": 0,
+  "attack_sources": {
+    "ds3": {
+      "expected_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "path": "/home/ubuntu/unraid_hdd/texbat/raw/ds3.bin",
+      "status": "NOT_OPENED_BEFORE_FREEZE"
+    },
+    "ds4": {
+      "expected_sha256": "1fff2b048a00732686bb1d77a13941da81c9fac648ca3695a9028f4ee3485285",
+      "path": "/home/ubuntu/unraid_hdd/texbat/raw/ds4.bin",
+      "status": "NOT_OPENED_BEFORE_FREEZE"
+    },
+    "ds7": {
+      "expected_sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "path": "/home/ubuntu/unraid_hdd/texbat/raw/ds7.bin",
+      "status": "NOT_OPENED_BEFORE_FREEZE"
+    },
+    "ds8": {
+      "expected_sha256": "1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78",
+      "path": "/home/ubuntu/unraid_hdd/texbat/raw/ds8.bin",
+      "status": "NOT_OPENED_BEFORE_FREEZE"
+    }
+  },
+  "clean_cache": {
+    "json": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-pg-scc-stage0-static-k9/artifacts/acaf_nf_stage1_r3_static_detection/clean_features.json",
+    "json_sha256": "50b9c2f7f0ad61de976eb73e85b6d6736391597a0d3e7fe7ac2778d2484b9550",
+    "npz": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-pg-scc-stage0-static-k9/artifacts/acaf_nf_stage1_r3_static_detection/clean_features.npz",
+    "npz_sha256": "17a0e65f07fd3fe952e2f057c4a6bf082ac4d373063165769928e06aa0cad9c6",
+    "rows": 572
+  },
+  "clean_raw": {
+    "authenticated_by_foundation": true,
+    "expected_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+    "path": "/home/ubuntu/unraid_hdd/texbat/raw/cleanStatic.bin"
+  },
+  "schema": "pg_scc_source_manifest.v1",
+  "status": "PASS_CLEAN_ONLY_AT_FREEZE"
+}

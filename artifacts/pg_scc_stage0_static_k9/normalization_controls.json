@@ -1,0 +1,13 @@
+{
+  "comparison": {
+    "local_energy": {
+      "max_gain_phase_aligned_error": 1.218993120890035e-07
+    },
+    "prompt_phase": {
+      "max_gain_phase_aligned_error": 7.927359193792362e-08
+    }
+  },
+  "covariance_source": "cleanStatic train only",
+  "selected": "prompt_phase",
+  "shrinkage_to_diagonal": 1.0
+}

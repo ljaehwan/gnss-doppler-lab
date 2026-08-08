@@ -1,0 +1,363 @@
+{
+  "attack_cache_bytes_read_before_freeze": 0,
+  "attack_iq_bytes_read_before_freeze": 0,
+  "base_commit": "442ed57e25a84eab0ddcecfc61f073c9d01cf837",
+  "branch": "research/pg-scc-stage0-static-k9",
+  "budget_unit": "one complex coordinate (real+imag together)",
+  "covariance": {
+    "complex": true,
+    "shrinkage_to_diagonal": 1.0,
+    "source": "cleanStatic train only",
+    "variance_floor_relative": 0.0001
+  },
+  "dense_grid_coordinates": 187,
+  "final_mask_source": {
+    "3": "ai_symmetric_k3",
+    "5": "ai_symmetric_k5",
+    "9": "ai_symmetric_k9"
+  },
+  "gates": {
+    "actual_correlations_reduced": true,
+    "families_significantly_better_than_fixed9_min": 2,
+    "foundation_lineage_pass": true,
+    "k9_dense_macro_low_fpr_pauc_relative_gap_max": 0.05,
+    "learned_better_than_random_uniform_shuffled": true,
+    "negative_controls_pass": true,
+    "real_attack_label_used_for_design": false,
+    "same_prn_positive_control_pass": true,
+    "shortcut_controls_pass": true,
+    "worst_clean_holdout_or_external_pre_fpr_max": 0.05
+  },
+  "glrt": {
+    "delta_doppler_hz": [
+      -150.0,
+      -75.0,
+      0.0,
+      75.0,
+      150.0
+    ],
+    "delta_tau_chips": [
+      -0.75,
+      -0.375,
+      -0.125,
+      0.0,
+      0.125,
+      0.375,
+      0.75
+    ],
+    "exclude_zero_zero": true,
+    "h0": "one complex amplitude times cleanStatic authentic CAF template",
+    "h1": "authentic template plus same-PRN analytic second-source template with two complex amplitudes",
+    "ridge": 0.001,
+    "score": "max(whitened_RSS_H0-whitened_RSS_H1,0)/K"
+  },
+  "masks": {
+    "analytic_sparse_k3": [
+      93,
+      42,
+      116
+    ],
+    "analytic_sparse_k5": [
+      93,
+      42,
+      116,
+      36,
+      132
+    ],
+    "analytic_sparse_k9": [
+      93,
+      42,
+      116,
+      36,
+      132,
+      125,
+      26,
+      0,
+      131
+    ],
+    "fixed9": [
+      93,
+      89,
+      90,
+      91,
+      92,
+      94,
+      95,
+      96,
+      97
+    ],
+    "pg_scc_k3": [
+      93,
+      61,
+      125
+    ],
+    "pg_scc_k5": [
+      93,
+      61,
+      125,
+      5,
+      181
+    ],
+    "pg_scc_k9": [
+      93,
+      61,
+      125,
+      5,
+      181,
+      40,
+      146,
+      44,
+      142
+    ]
+  },
+  "model": "PG-SCC (Physics-Guided Sparse Complex Correlator Detector)",
+  "normalization": "prompt_phase",
+  "pooling": "median",
+  "protected_component_sha256": {
+    "config.json": "36445d6323ad566dca3aa6f65b91f3c2958b6beae8980134a53eca0c673b1d8c",
+    "foundation_validation.json": "cd6270b98f8c9e318059b5912671daa3d1e09ab0a4da2ecc59aabe499527d47e",
+    "gate_definition.json": "7dffa865fea3eb8c8f899f89e634f30ba48d621e7a2f24d161e34005862592cf",
+    "masks.json": "c89262a3145d579bf54eaf018482cf7ce138a8c10b1bd7609250087fd9a70617",
+    "normalization_controls.json": "46ab392c85a10c7c25f54f9fa298ba0b868169f4665f558ce17d107a223c702c",
+    "normalization_covariance.npz": "e6a2ccf882969e39176e1512909e585e07ead33f4fcef4886d953b9103329323",
+    "pooling.json": "69e9eb3069994f70faed8ebe0b4ae6f0c7351182f84af7865c76dd1fe7599c8f",
+    "selected_coordinates.csv": "24941779a0271efca061dc3124a2c910e6e1f1300a2b53a90afca23c58464443",
+    "selector_training_summary.json": "0ad97caa2a64078ac87d2b96bf6190ea140a3a2a44bbd60ba7519780369e2644",
+    "source_manifest.json": "b04a87f483a5b9e7b729536f6b904daadd8364f9b172411b77d3fd202c7bee24",
+    "synthetic_bank_summary.json": "19266886fb84027d4ecf9f54e1a7292f6feb9adb4c5e5da3c78efe1be30e7dfb",
+    "thresholds.json": "68505aeee4ee4ae4116171e1028e919f21d2b5d70d7d80be6131893174d9c3b3",
+    "timeline.json": "c2427fd05d26412ed1d1c1cbef36dd934ca00dc8a4b1bbfc4503923ba3b8daad"
+  },
+  "real_attack_labels_used_for_selector_pooling_threshold": false,
+  "schema": "pg_scc_frozen_design.v1",
+  "thresholds": {
+    "ai_sparse_k3:K3": {
+      "events": 14,
+      "q99": 0.4887328319117604,
+      "q99.5": 0.4887328319117604,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "ai_sparse_k5:K5": {
+      "events": 14,
+      "q99": 0.612427309836827,
+      "q99.5": 0.612427309836827,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "ai_sparse_k9:K9": {
+      "events": 14,
+      "q99": 0.49087631353273903,
+      "q99.5": 0.49087631353273903,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "analytic_sparse_k3:K3": {
+      "events": 14,
+      "q99": 0.30717227277237946,
+      "q99.5": 0.30717227277237946,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "analytic_sparse_k5:K5": {
+      "events": 14,
+      "q99": 0.47918396873073044,
+      "q99.5": 0.47918396873073044,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "analytic_sparse_k9:K9": {
+      "events": 14,
+      "q99": 0.3872844429631274,
+      "q99.5": 0.3872844429631274,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "dense_one_source_residual:K187": {
+      "events": 14,
+      "q99": 1.0683024727798323,
+      "q99.5": 1.0683024727798323,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "dense_two_source_glrt:K187": {
+      "events": 14,
+      "q99": 0.23442298260155753,
+      "q99.5": 0.23442298260155753,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "epl3:K3": {
+      "events": 14,
+      "q99": 1.2249361771195943,
+      "q99.5": 1.2249361771195943,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "fixed9:K9": {
+      "events": 14,
+      "q99": 0.5858042255566045,
+      "q99.5": 0.5858042255566045,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "pg_scc_k3:K3": {
+      "events": 14,
+      "q99": 0.7012737402751812,
+      "q99.5": 0.7012737402751812,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "pg_scc_k5:K5": {
+      "events": 14,
+      "q99": 0.2928104230942732,
+      "q99.5": 0.2928104230942732,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "pg_scc_k9:K9": {
+      "events": 14,
+      "q99": 0.28717316060299675,
+      "q99.5": 0.28717316060299675,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "random1_k3:K3": {
+      "events": 14,
+      "q99": 0.6762733314014804,
+      "q99.5": 0.6762733314014804,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "random1_k5:K5": {
+      "events": 14,
+      "q99": 0.3872726830711341,
+      "q99.5": 0.3872726830711341,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "random1_k9:K9": {
+      "events": 14,
+      "q99": 0.5022761037738683,
+      "q99.5": 0.5022761037738683,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "random2_k3:K3": {
+      "events": 14,
+      "q99": 0.6658628005755208,
+      "q99.5": 0.6658628005755208,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "random2_k5:K5": {
+      "events": 14,
+      "q99": 0.31858994434789656,
+      "q99.5": 0.31858994434789656,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "random2_k9:K9": {
+      "events": 14,
+      "q99": 0.2944243554726047,
+      "q99.5": 0.2944243554726047,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "random3_k3:K3": {
+      "events": 14,
+      "q99": 0.6272266462277605,
+      "q99.5": 0.6272266462277605,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "random3_k5:K5": {
+      "events": 14,
+      "q99": 0.5095582873477227,
+      "q99.5": 0.5095582873477227,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "random3_k9:K9": {
+      "events": 14,
+      "q99": 0.48980879187548826,
+      "q99.5": 0.48980879187548826,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "random4_k3:K3": {
+      "events": 14,
+      "q99": 0.6687045425193223,
+      "q99.5": 0.6687045425193223,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "random4_k5:K5": {
+      "events": 14,
+      "q99": 0.6387010093796235,
+      "q99.5": 0.6387010093796235,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "random4_k9:K9": {
+      "events": 14,
+      "q99": 0.4045626331013368,
+      "q99.5": 0.4045626331013368,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "random5_k3:K3": {
+      "events": 14,
+      "q99": 0.3399466231567624,
+      "q99.5": 0.3399466231567624,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "random5_k5:K5": {
+      "events": 14,
+      "q99": 0.44490765932219567,
+      "q99.5": 0.44490765932219567,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "random5_k9:K9": {
+      "events": 14,
+      "q99": 0.38752330636728216,
+      "q99.5": 0.38752330636728216,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "raw_power_only:K0": {
+      "events": 14,
+      "q99": 5585483.43163,
+      "q99.5": 5585483.43163,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "shuffled_k3:K3": {
+      "events": 14,
+      "q99": 0.6685429450363066,
+      "q99.5": 0.6685429450363066,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "shuffled_k5:K5": {
+      "events": 14,
+      "q99": 0.684570904445065,
+      "q99.5": 0.684570904445065,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "shuffled_k9:K9": {
+      "events": 14,
+      "q99": 0.5602967799806111,
+      "q99.5": 0.5602967799806111,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "uniform_k3:K3": {
+      "events": 14,
+      "q99": 0.5147820024314133,
+      "q99.5": 0.5147820024314133,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "uniform_k5:K5": {
+      "events": 14,
+      "q99": 0.38861443509737414,
+      "q99.5": 0.38861443509737414,
+      "source": "cleanStatic calibration event pooling only"
+    },
+    "uniform_k9:K9": {
+      "events": 14,
+      "q99": 0.13349144179316427,
+      "q99.5": 0.13349144179316427,
+      "source": "cleanStatic calibration event pooling only"
+    }
+  },
+  "timeline": {
+    "ds3": {
+      "onset": 118.9
+    },
+    "ds4": {
+      "onset": 113.8,
+      "truncated_at_approximately": 128.2
+    },
+    "ds7": {
+      "injection": 110.0,
+      "time_push": 150.0
+    },
+    "ds8": {
+      "injection": 110.0,
+      "scer": true,
+      "time_push": 150.0
+    }
+  }
+}

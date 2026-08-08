@@ -1,0 +1,232 @@
+{
+  "assumptions": [
+    "The authenticated inherited L20 complex CAF cache is reused because its raw-IQ/tracker reconstruction is independently reproducible and attack-free during design.",
+    "A diagonal complex covariance is the fully shrunk covariance required because 180 clean train PRN-windows are fewer than 187 complex coordinates.",
+    "Calibration contains 14 one-second pooled events; exact q99/q99.5 empirical thresholds are reported but tail precision is explicitly audited as limited.",
+    "DS4 is the authenticated 128-second truncated recording, so only transition claims are permitted.",
+    "DS7 and DS8 count as one non-independent family.",
+    "B0 is UNAVAILABLE unless its native checkpoint can be rerun on identical PG-SCC epoch/PRN support; historic CSVs are forbidden."
+  ],
+  "base_branch": "research/acaf-nf-stage1-r3-static-detection",
+  "base_commit": "442ed57e25a84eab0ddcecfc61f073c9d01cf837",
+  "branch": "research/pg-scc-stage0-static-k9",
+  "budgets_complex_coordinates": [
+    3,
+    5,
+    9
+  ],
+  "clean_roles_seconds": {
+    "calibration": [
+      64,
+      82
+    ],
+    "guard_1": [
+      45,
+      47
+    ],
+    "guard_2": [
+      62,
+      64
+    ],
+    "guard_3": [
+      82,
+      84
+    ],
+    "holdout": [
+      84,
+      100
+    ],
+    "prohibited_for_fit_selection_calibration": [
+      100,
+      null
+    ],
+    "selection": [
+      47,
+      62
+    ],
+    "train": [
+      10,
+      45
+    ],
+    "warmup_excluded": [
+      0,
+      10
+    ]
+  },
+  "covariance": {
+    "complex": true,
+    "shrinkage_to_diagonal": 1.0,
+    "source": "cleanStatic train only",
+    "variance_floor_relative": 0.0001
+  },
+  "dense_grid": {
+    "delay_chips": [
+      -1.0,
+      -0.875,
+      -0.75,
+      -0.625,
+      -0.5,
+      -0.375,
+      -0.25,
+      -0.125,
+      0.0,
+      0.125,
+      0.25,
+      0.375,
+      0.5,
+      0.625,
+      0.75,
+      0.875,
+      1.0
+    ],
+    "doppler_hz": [
+      -250,
+      -200,
+      -150,
+      -100,
+      -50,
+      0,
+      50,
+      100,
+      150,
+      200,
+      250
+    ]
+  },
+  "diagnostic_budget": 16,
+  "gates": {
+    "actual_correlations_reduced": true,
+    "families_significantly_better_than_fixed9_min": 2,
+    "foundation_lineage_pass": true,
+    "k9_dense_macro_low_fpr_pauc_relative_gap_max": 0.05,
+    "learned_better_than_random_uniform_shuffled": true,
+    "negative_controls_pass": true,
+    "real_attack_label_used_for_design": false,
+    "same_prn_positive_control_pass": true,
+    "shortcut_controls_pass": true,
+    "worst_clean_holdout_or_external_pre_fpr_max": 0.05
+  },
+  "glrt": {
+    "delta_doppler_hz": [
+      -150.0,
+      -75.0,
+      0.0,
+      75.0,
+      150.0
+    ],
+    "delta_tau_chips": [
+      -0.75,
+      -0.375,
+      -0.125,
+      0.0,
+      0.125,
+      0.375,
+      0.75
+    ],
+    "exclude_zero_zero": true,
+    "h0": "one complex amplitude times cleanStatic authentic CAF template",
+    "h1": "authentic template plus same-PRN analytic second-source template with two complex amplitudes",
+    "ridge": 0.001,
+    "score": "max(whitened_RSS_H0-whitened_RSS_H1,0)/K"
+  },
+  "model_name": "PG-SCC (Physics-Guided Sparse Complex Correlator Detector)",
+  "normalization_candidates": [
+    "prompt_phase",
+    "local_energy"
+  ],
+  "normalization_selected": "prompt_phase",
+  "pooling_candidates": [
+    "median",
+    "robust_mean",
+    "topk_mean"
+  ],
+  "scenario_family": {
+    "ds3": "ds3",
+    "ds4": "ds4",
+    "ds7": "ds7_ds8",
+    "ds8": "ds7_ds8"
+  },
+  "schema": "pg_scc_stage0_static_k9_config.v1",
+  "seed": 20260808,
+  "sources": {
+    "attack_cache_json": "artifacts/acaf_nf_stage1_r3_static_detection/attack_features.json",
+    "attack_cache_npz": "artifacts/acaf_nf_stage1_r3_static_detection/attack_features.npz",
+    "attack_raw": {
+      "ds3": "/home/ubuntu/unraid_hdd/texbat/raw/ds3.bin",
+      "ds4": "/home/ubuntu/unraid_hdd/texbat/raw/ds4.bin",
+      "ds7": "/home/ubuntu/unraid_hdd/texbat/raw/ds7.bin",
+      "ds8": "/home/ubuntu/unraid_hdd/texbat/raw/ds8.bin"
+    },
+    "clean_cache_json": "artifacts/acaf_nf_stage1_r3_static_detection/clean_features.json",
+    "clean_cache_npz": "artifacts/acaf_nf_stage1_r3_static_detection/clean_features.npz",
+    "clean_raw": "/home/ubuntu/unraid_hdd/texbat/raw/cleanStatic.bin",
+    "foundation_artifact": "artifacts/acaf_nf_stage1_r2a_l20_foundation_audit",
+    "raw_sha256": {
+      "cleanStatic": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "ds3": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "ds4": "1fff2b048a00732686bb1d77a13941da81c9fac648ca3695a9028f4ee3485285",
+      "ds7": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "ds8": "1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78"
+    }
+  },
+  "synthetic_bank": {
+    "different_prn": false,
+    "max_h1_per_split": 160,
+    "noise_sigma_prompt_fraction": [
+      0.0,
+      0.02,
+      0.05
+    ],
+    "phase_count": 12,
+    "relative_amplitude": [
+      0.25,
+      0.5,
+      1.0,
+      1.5
+    ],
+    "relative_delay_chips": [
+      -0.75,
+      -0.375,
+      -0.125,
+      0.0,
+      0.125,
+      0.375,
+      0.75
+    ],
+    "relative_doppler_hz": [
+      -150.0,
+      -75.0,
+      0.0,
+      75.0,
+      150.0
+    ],
+    "same_prn_only": true,
+    "split": "SHA-256(parameter tuple) modulo 4; validation iff zero",
+    "zero_padding": false
+  },
+  "threshold": {
+    "reported": [
+      "q99",
+      "q99.5"
+    ],
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "timeline_seconds": {
+    "ds3": {
+      "onset": 118.9
+    },
+    "ds4": {
+      "onset": 113.8,
+      "truncated_at_approximately": 128.2
+    },
+    "ds7": {
+      "injection": 110.0,
+      "time_push": 150.0
+    },
+    "ds8": {
+      "injection": 110.0,
+      "scer": true,
+      "time_push": 150.0
+    }
+  }
+}

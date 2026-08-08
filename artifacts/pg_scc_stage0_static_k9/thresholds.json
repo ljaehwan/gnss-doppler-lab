@@ -1,0 +1,212 @@
+{
+  "ai_sparse_k3:K3": {
+    "events": 14,
+    "q99": 0.4887328319117604,
+    "q99.5": 0.4887328319117604,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "ai_sparse_k5:K5": {
+    "events": 14,
+    "q99": 0.612427309836827,
+    "q99.5": 0.612427309836827,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "ai_sparse_k9:K9": {
+    "events": 14,
+    "q99": 0.49087631353273903,
+    "q99.5": 0.49087631353273903,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "analytic_sparse_k3:K3": {
+    "events": 14,
+    "q99": 0.30717227277237946,
+    "q99.5": 0.30717227277237946,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "analytic_sparse_k5:K5": {
+    "events": 14,
+    "q99": 0.47918396873073044,
+    "q99.5": 0.47918396873073044,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "analytic_sparse_k9:K9": {
+    "events": 14,
+    "q99": 0.3872844429631274,
+    "q99.5": 0.3872844429631274,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "dense_one_source_residual:K187": {
+    "events": 14,
+    "q99": 1.0683024727798323,
+    "q99.5": 1.0683024727798323,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "dense_two_source_glrt:K187": {
+    "events": 14,
+    "q99": 0.23442298260155753,
+    "q99.5": 0.23442298260155753,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "epl3:K3": {
+    "events": 14,
+    "q99": 1.2249361771195943,
+    "q99.5": 1.2249361771195943,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "fixed9:K9": {
+    "events": 14,
+    "q99": 0.5858042255566045,
+    "q99.5": 0.5858042255566045,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "pg_scc_k3:K3": {
+    "events": 14,
+    "q99": 0.7012737402751812,
+    "q99.5": 0.7012737402751812,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "pg_scc_k5:K5": {
+    "events": 14,
+    "q99": 0.2928104230942732,
+    "q99.5": 0.2928104230942732,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "pg_scc_k9:K9": {
+    "events": 14,
+    "q99": 0.28717316060299675,
+    "q99.5": 0.28717316060299675,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "random1_k3:K3": {
+    "events": 14,
+    "q99": 0.6762733314014804,
+    "q99.5": 0.6762733314014804,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "random1_k5:K5": {
+    "events": 14,
+    "q99": 0.3872726830711341,
+    "q99.5": 0.3872726830711341,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "random1_k9:K9": {
+    "events": 14,
+    "q99": 0.5022761037738683,
+    "q99.5": 0.5022761037738683,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "random2_k3:K3": {
+    "events": 14,
+    "q99": 0.6658628005755208,
+    "q99.5": 0.6658628005755208,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "random2_k5:K5": {
+    "events": 14,
+    "q99": 0.31858994434789656,
+    "q99.5": 0.31858994434789656,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "random2_k9:K9": {
+    "events": 14,
+    "q99": 0.2944243554726047,
+    "q99.5": 0.2944243554726047,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "random3_k3:K3": {
+    "events": 14,
+    "q99": 0.6272266462277605,
+    "q99.5": 0.6272266462277605,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "random3_k5:K5": {
+    "events": 14,
+    "q99": 0.5095582873477227,
+    "q99.5": 0.5095582873477227,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "random3_k9:K9": {
+    "events": 14,
+    "q99": 0.48980879187548826,
+    "q99.5": 0.48980879187548826,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "random4_k3:K3": {
+    "events": 14,
+    "q99": 0.6687045425193223,
+    "q99.5": 0.6687045425193223,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "random4_k5:K5": {
+    "events": 14,
+    "q99": 0.6387010093796235,
+    "q99.5": 0.6387010093796235,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "random4_k9:K9": {
+    "events": 14,
+    "q99": 0.4045626331013368,
+    "q99.5": 0.4045626331013368,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "random5_k3:K3": {
+    "events": 14,
+    "q99": 0.3399466231567624,
+    "q99.5": 0.3399466231567624,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "random5_k5:K5": {
+    "events": 14,
+    "q99": 0.44490765932219567,
+    "q99.5": 0.44490765932219567,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "random5_k9:K9": {
+    "events": 14,
+    "q99": 0.38752330636728216,
+    "q99.5": 0.38752330636728216,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "raw_power_only:K0": {
+    "events": 14,
+    "q99": 5585483.43163,
+    "q99.5": 5585483.43163,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "shuffled_k3:K3": {
+    "events": 14,
+    "q99": 0.6685429450363066,
+    "q99.5": 0.6685429450363066,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "shuffled_k5:K5": {
+    "events": 14,
+    "q99": 0.684570904445065,
+    "q99.5": 0.684570904445065,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "shuffled_k9:K9": {
+    "events": 14,
+    "q99": 0.5602967799806111,
+    "q99.5": 0.5602967799806111,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "uniform_k3:K3": {
+    "events": 14,
+    "q99": 0.5147820024314133,
+    "q99.5": 0.5147820024314133,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "uniform_k5:K5": {
+    "events": 14,
+    "q99": 0.38861443509737414,
+    "q99.5": 0.38861443509737414,
+    "source": "cleanStatic calibration event pooling only"
+  },
+  "uniform_k9:K9": {
+    "events": 14,
+    "q99": 0.13349144179316427,
+    "q99.5": 0.13349144179316427,
+    "source": "cleanStatic calibration event pooling only"
+  }
+}

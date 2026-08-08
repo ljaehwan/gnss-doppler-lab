@@ -1,0 +1,49 @@
+{
+  "clean_raw_expected_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+  "clean_raw_path": "/home/ubuntu/unraid_hdd/texbat/raw/cleanStatic.bin",
+  "clean_raw_size_bytes": 48016392192,
+  "clean_role_audit": {
+    "boundary_crossing_windows": 0,
+    "chronological": true,
+    "raw_range_nonoverlap": true,
+    "roles": {
+      "calibration": {
+        "max_end": 2028692857,
+        "min_start": 1600013457,
+        "windows": 140
+      },
+      "holdout": {
+        "max_end": 2481760817,
+        "min_start": 2100009061,
+        "windows": 132
+      },
+      "selection": {
+        "max_end": 1526166797,
+        "min_start": 1175005056,
+        "windows": 120
+      },
+      "train": {
+        "max_end": 1102640904,
+        "min_start": 250006144,
+        "windows": 180
+      }
+    },
+    "status": "PASS"
+  },
+  "foundation_verdict": "FOUNDATION_VALID",
+  "full_sha256_reused_from_authenticated_inherited_audit": true,
+  "independent_verifier": "PASS",
+  "inherited_foundation_files": {
+    "execution_validity.json": "958c921577c5916eb7ea3ceef4d30b138059fe37894558d2f53352d5b2348eeb",
+    "foundation_verdict.json": "747c465b3337b8a76b8c9616e600426917c49e7b984294486eafa74a9ecf27cb",
+    "source_binding.json": "7ecb43a574a26d2913b9570f31a2f4b3818c37bc2d0cf6497e3ffab5edddd7bd",
+    "tracker_state_alignment.csv": "6fb07abe380f176233e58429342a3e20a64cfe147838f0972a9903379c48e48f",
+    "verification_report.json": "40e26258f1dda022aac75ef373d2f2a0287c3645a38cba3331ff174e179aab0a"
+  },
+  "l20_windows": 1200,
+  "raw_recomputed_windows": 3,
+  "schema": "pg_scc_foundation_validation.v1",
+  "status": "PASS",
+  "within_50_fraction": 0.9983333333333333,
+  "zero_center_fallback": false
+}

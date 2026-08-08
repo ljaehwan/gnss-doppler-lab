@@ -1,0 +1,16 @@
+{
+  "calibration_tail_audit": {
+    "events_per_method": [
+      14
+    ],
+    "reason": "14 one-second events cannot precisely estimate q99/q99.5 tails",
+    "status": "LIMITED"
+  },
+  "errors": [],
+  "foundation": "PASS",
+  "freeze_files_verified": 14,
+  "leakage": "PASS",
+  "mode": "freeze_only",
+  "schema": "pg_scc_independent_audit.v1",
+  "status": "PASS"
+}

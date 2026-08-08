@@ -1,0 +1,12 @@
+{
+  "actual_correlations_reduced": true,
+  "families_significantly_better_than_fixed9_min": 2,
+  "foundation_lineage_pass": true,
+  "k9_dense_macro_low_fpr_pauc_relative_gap_max": 0.05,
+  "learned_better_than_random_uniform_shuffled": true,
+  "negative_controls_pass": true,
+  "real_attack_label_used_for_design": false,
+  "same_prn_positive_control_pass": true,
+  "shortcut_controls_pass": true,
+  "worst_clean_holdout_or_external_pre_fpr_max": 0.05
+}
