@@ -480,13 +480,27 @@ def _row_runs(rows: Sequence[ContinuousTrackerRow]) -> list[list[ContinuousTrack
     return runs
 
 
-def _select_validation_rows(rows: Sequence[ContinuousTrackerRow], r14_epochs: dict[tuple[int, int, int, int], dict[str, str]], target: int = 969) -> list[ContinuousTrackerRow]:
+def _validation_identity(row: ContinuousTrackerRow, match_mode: str) -> tuple[int, ...]:
+    if match_mode == "exact_tracker_row":
+        return (row.channel, row.prn, row.tracker_row, row.raw_start_sample)
+    if match_mode == "raw_support":
+        return (row.channel, row.prn, row.raw_start_sample)
+    raise ValueError(f"unsupported R1.4 match mode: {match_mode}")
+
+
+def _select_validation_rows(
+    rows: Sequence[ContinuousTrackerRow],
+    r14_epochs: dict[tuple[int, ...], dict[str, str]],
+    target: int = 969,
+    *,
+    r14_match_mode: str = "exact_tracker_row",
+) -> list[ContinuousTrackerRow]:
     runs = _row_runs(rows)
     pairs = sorted({(run[0].channel, run[0].prn) for run in runs})
     if len(pairs) < 8:
         raise RuntimeError("fewer than eight exact-quality channel/PRN runs")
-    selected: dict[tuple[int, int, int, int], ContinuousTrackerRow] = {}
-    identities = lambda r: (r.channel, r.prn, r.tracker_row, r.raw_start_sample)
+    selected: dict[tuple[int, ...], ContinuousTrackerRow] = {}
+    identities = lambda r: _validation_identity(r, r14_match_mode)
     by_identity = {identities(row): row for row in rows}
     for identity in sorted(set(by_identity) & set(r14_epochs)):
         selected[identity] = by_identity[identity]
@@ -509,20 +523,32 @@ def _select_validation_rows(rows: Sequence[ContinuousTrackerRow], r14_epochs: di
     return sorted(chosen, key=lambda r: (r.channel, r.prn, r.raw_start_sample))
 
 
-def _read_r14_epochs(path: Path) -> dict[tuple[int, int, int, int], dict[str, str]]:
-    result: dict[tuple[int, int, int, int], dict[str, str]] = {}
+def _read_r14_epochs(path: Path, *, match_mode: str = "exact_tracker_row") -> dict[tuple[int, ...], dict[str, str]]:
+    result: dict[tuple[int, ...], dict[str, str]] = {}
     with path.open(newline="", encoding="utf-8") as handle:
         for row in csv.DictReader(handle):
             if row["record_type"] != "epoch":
                 continue
-            key = (int(row["channel"]), int(row["prn"]), int(row["tracker_row"]), int(row["support_start_sample"]))
+            if match_mode == "exact_tracker_row":
+                key = (int(row["channel"]), int(row["prn"]), int(row["tracker_row"]), int(row["support_start_sample"]))
+            elif match_mode == "raw_support":
+                key = (int(row["channel"]), int(row["prn"]), int(row["support_start_sample"]))
+            else:
+                raise ValueError(f"unsupported R1.4 match mode: {match_mode}")
             result[key] = row
     return result
 
 
-def validate_cleanstatic_reconstruction(rows: Sequence[ContinuousTrackerRow], raw_path: Path, output: Path, r14_artifact: Path) -> dict[str, Any]:
-    r14_epochs = _read_r14_epochs(r14_artifact / "per_block_scores.csv")
-    selected = _select_validation_rows(rows, r14_epochs)
+def validate_cleanstatic_reconstruction(
+    rows: Sequence[ContinuousTrackerRow],
+    raw_path: Path,
+    output: Path,
+    r14_artifact: Path,
+    *,
+    r14_match_mode: str = "exact_tracker_row",
+) -> dict[str, Any]:
+    r14_epochs = _read_r14_epochs(r14_artifact / "per_block_scores.csv", match_mode=r14_match_mode)
+    selected = _select_validation_rows(rows, r14_epochs, r14_match_mode=r14_match_mode)
     raw_samples = raw_path.stat().st_size // 4
     surfaces: list[np.ndarray] = []
     evidence: list[dict[str, Any]] = []
@@ -585,7 +611,10 @@ def validate_cleanstatic_reconstruction(rows: Sequence[ContinuousTrackerRow], ra
     common_max_delta = 0.0
     common_surface_hash_match = True
     for row in evidence:
-        key = (int(row["channel"]), int(row["prn"]), int(row["tracker_row"]), int(row["support_start_sample"]))
+        if r14_match_mode == "exact_tracker_row":
+            key = (int(row["channel"]), int(row["prn"]), int(row["tracker_row"]), int(row["support_start_sample"]))
+        else:
+            key = (int(row["channel"]), int(row["prn"]), int(row["support_start_sample"]))
         frozen = r14_epochs.get(key)
         if frozen is None:
             continue
@@ -620,7 +649,8 @@ def validate_cleanstatic_reconstruction(rows: Sequence[ContinuousTrackerRow], ra
         "prompt_reproduction": prompt, "delay_recovery": delay,
         "l20_doppler": {"n": len(windows), "within_50_fraction": l20_within, "boundary_fraction": l20_boundary},
         "grid_boundary_fraction": grid_boundary,
-        "r14_common_epochs": {"n": common_count, "max_numeric_delta": common_max_delta,
+        "r14_common_epochs": {"n": common_count, "match_mode": r14_match_mode,
+                              "max_numeric_delta": common_max_delta,
                                 "surface_sha256_all_match": common_surface_hash_match,
                                 "tolerance": 1e-6},
     }

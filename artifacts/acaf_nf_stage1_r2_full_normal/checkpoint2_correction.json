@@ -1,0 +1,11 @@
+{
+  "attack_data_used_for_selection": false,
+  "correct_manifest": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/manifest.json",
+  "correct_manifest_sha256": "1f5e83b8e2c1ffe40a06c9081bc26da89d1a99cc2c1328cb7ea51247f9179b47",
+  "correct_source": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw",
+  "invalid_source": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/continuous_tracker_cleanStatic.csv",
+  "invalid_source_disposition": "retained only in git history/R1 preservation; not relabeled or used by corrected checkpoint2",
+  "result": "FOUNDATION_INVALID",
+  "schema": "acaf_nf_stage1_r2_checkpoint2_correction.v1",
+  "supersedes_commit": "b5d53fa"
+}

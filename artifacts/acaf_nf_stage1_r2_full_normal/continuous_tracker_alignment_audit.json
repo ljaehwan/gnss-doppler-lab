@@ -1,74 +1,93 @@
 {
   "attacks_examined_for_alignment": false,
-  "candidate_row_shifts": [
+  "candidate_prompt_semantics": [
+    "current",
+    "next"
+  ],
+  "candidate_state_shifts": [
     -1,
     0,
     1
   ],
-  "exporter_semantics": {
-    "carrier_code_aux_alignment": "Prompt(k) uses NCO/code/aux and raw support identified by row k-1",
-    "log_data_call_order": "do_correlation_step; save_correlation_results; run_dll_pll; update_tracking_vars; check_carrier_phase_coherent_initialization; log_data",
-    "nav_bit_gate_effect": "R1 patch moves log_data outside d_current_data_symbol==0 only in narrow tracking; dump cadence becomes each valid 1 ms DLL/PLL cycle while telemetry/nav-bit gating is unchanged",
-    "nco_aux_at_log": "loop/remnant state updated for the next call; row k state applies to Prompt row k+1",
-    "prompt_at_log": "d_Prompt from the correlation just completed (current row k)",
-    "r1_exporter_patch_sha256": "fb13c5b14be5fa9a4d6a65fc926f2724b5b3b5d9d82a7bccb96a04963673355b",
-    "source_contains_unpatched_gate": true,
-    "source_git_head": "1ddd4562723040fd66cb334b578a5b69455625f4",
-    "source_sha256_current": "6d2db43fea2728acc35fb29b4cb5027b62be442b8966108bf6b955d5b95f486c",
-    "stamp_at_log": "nitems_read(0)+d_current_prn_length_samples; boundary for the next call"
+  "fresh_replay_manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/manifest.json",
+  "fresh_replay_manifest_sha256": "1f5e83b8e2c1ffe40a06c9081bc26da89d1a99cc2c1328cb7ea51247f9179b47",
+  "gates": {
+    "canonical_mapping_selected": true,
+    "fresh_manifest_authenticated": true,
+    "pooled_spearman_ge_0_999": true,
+    "prompt_p99_relative_error_le_0_01": true
   },
   "metrics": {
-    "-1": {
+    "prompt_current_state_shift_+0": {
       "clean_only": true,
-      "max_relative_error": 1.856867407174767,
-      "median_pair_spearman": 0.021978021978021976,
-      "median_relative_error": 0.10777791193316216,
-      "n": 158,
-      "p99_relative_error": 0.6931652238670075,
-      "pooled_spearman": 0.9239441461971313
-    },
-    "0": {
-      "clean_only": true,
-      "max_relative_error": 0.0036232576995018917,
+      "max_relative_error": 0.07140659144420036,
       "median_pair_spearman": 1.0,
-      "median_relative_error": 3.367160110234746e-06,
-      "n": 158,
-      "p99_relative_error": 0.0027356190943474408,
-      "pooled_spearman": 0.9999847876122485
+      "median_relative_error": 3.3364121632128985e-06,
+      "n": 160,
+      "p99_relative_error": 0.008025145720638156,
+      "pooled_spearman": 0.9999941403961092
     },
-    "1": {
+    "prompt_current_state_shift_+1": {
       "clean_only": true,
-      "max_relative_error": 1.9992922253244347,
-      "median_pair_spearman": -0.0021978021978021935,
-      "median_relative_error": 0.10841097361944141,
-      "n": 158,
-      "p99_relative_error": 0.9574077819172087,
-      "pooled_spearman": 0.9150601117502003
+      "max_relative_error": 16.263972980840897,
+      "median_pair_spearman": 0.2657342657342658,
+      "median_relative_error": 0.11865380933510244,
+      "n": 160,
+      "p99_relative_error": 3.519257775314534,
+      "pooled_spearman": 0.9453269658971054
+    },
+    "prompt_current_state_shift_-1": {
+      "clean_only": true,
+      "max_relative_error": 3.295126392855658,
+      "median_pair_spearman": 0.1258741258741259,
+      "median_relative_error": 0.10026373927223342,
+      "n": 160,
+      "p99_relative_error": 1.750686200035942,
+      "pooled_spearman": 0.9421832884097034
+    },
+    "prompt_next_state_shift_+0": {
+      "clean_only": true,
+      "max_relative_error": 2.1983548596616886,
+      "median_pair_spearman": 0.2622377622377623,
+      "median_relative_error": 0.11612843745053825,
+      "n": 160,
+      "p99_relative_error": 1.4065728614547048,
+      "pooled_spearman": 0.9451101605531467
+    },
+    "prompt_next_state_shift_+1": {
+      "clean_only": true,
+      "max_relative_error": 0.07140659144420036,
+      "median_pair_spearman": 1.0,
+      "median_relative_error": 3.499561387121375e-06,
+      "n": 160,
+      "p99_relative_error": 0.008386276542177185,
+      "pooled_spearman": 0.9999941403961092
+    },
+    "prompt_next_state_shift_-1": {
+      "clean_only": true,
+      "max_relative_error": 12.73718584182717,
+      "median_pair_spearman": -0.06993006993006994,
+      "median_relative_error": 0.10485179731355998,
+      "n": 160,
+      "p99_relative_error": 1.396646079973328,
+      "pooled_spearman": 0.9392183288409703
     }
   },
-  "r14_common_mapping": {
-    "exact_r1_mapping": "current Prompt k + previous NCO/aux k-1 + support stamp k-1",
-    "identity": [
-      "channel",
-      "prn",
-      "tracker_row",
-      "support_start_sample"
-    ],
-    "r1_common_epochs": {
-      "max_numeric_delta": 0.0,
-      "n": 229,
-      "surface_sha256_all_match": true,
-      "tolerance": 1e-06
-    }
-  },
-  "schema": "acaf_nf_stage1_r2_alignment_audit.v1",
+  "probe_rows": 160,
+  "schema": "acaf_nf_stage1_r2_fresh_alignment_audit.v2",
+  "selected_candidate": "prompt_current_state_shift_+0",
   "selected_mapping": {
+    "equivalent_reindexing": "next Prompt k+1 with current state/stamp k",
     "nco_aux": "previous MAT row k-1",
     "prompt": "current MAT row k",
     "support": "[stamp(k-1), stamp(k-1)+25000)",
     "tracker_csv_state_mat_row": "k-1"
   },
   "selected_row_shift": 0,
-  "selection_data": "cleanStatic_only",
-  "status": "PASS"
+  "selection_data": "fresh_cleanStatic_replay_only",
+  "status": "PASS",
+  "supersedes": {
+    "commit": "b5d53fa",
+    "reason": "checkpoint2 consumed the authenticated original tracker CSV rather than this fresh exporter replay"
+  }
 }

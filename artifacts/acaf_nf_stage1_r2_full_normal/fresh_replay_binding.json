@@ -1,0 +1,201 @@
+{
+  "all_file_hashes_match_manifest": true,
+  "all_mat_dat_rows_match": true,
+  "dump_contract": "valid tracking loop at every 1 ms integration; telemetry output unchanged",
+  "exporter_patch_sha256": "fb13c5b14be5fa9a4d6a65fc926f2724b5b3b5d9d82a7bccb96a04963673355b",
+  "exporter_rows": 5098445,
+  "extend_correlation_symbols": 1,
+  "files": {
+    "raw/e0.dat": {
+      "exporter_rows": 480079,
+      "manifest_sha256": "587f84d3903306b7fed92edfd1cae5b23b12f89e98de707f37692d44d9ff2a68",
+      "mat_dat_rows_match": true,
+      "mat_rows": 480079,
+      "sha256": "587f84d3903306b7fed92edfd1cae5b23b12f89e98de707f37692d44d9ff2a68",
+      "sha256_match": true,
+      "size_bytes": 71051692
+    },
+    "raw/e0.mat": {
+      "exporter_rows": 480079,
+      "manifest_sha256": "02da02d665149c31737f15a8e167a423fa801c59684c11521ed153430df9def8",
+      "sha256": "02da02d665149c31737f15a8e167a423fa801c59684c11521ed153430df9def8",
+      "sha256_match": true,
+      "size_bytes": 68927000
+    },
+    "raw/e1.dat": {
+      "exporter_rows": 298906,
+      "manifest_sha256": "ccf1491482ca42fcb48c7da27eacdc98b5ec0294ea510703a480cdf43b34f88c",
+      "mat_dat_rows_match": true,
+      "mat_rows": 298906,
+      "sha256": "ccf1491482ca42fcb48c7da27eacdc98b5ec0294ea510703a480cdf43b34f88c",
+      "sha256_match": true,
+      "size_bytes": 44238088
+    },
+    "raw/e1.mat": {
+      "exporter_rows": 298906,
+      "manifest_sha256": "4006dcbe36d43cde294f96c7ec2776e78cb2cdad3bbd527c885d931e134a8c81",
+      "sha256": "4006dcbe36d43cde294f96c7ec2776e78cb2cdad3bbd527c885d931e134a8c81",
+      "sha256_match": true,
+      "size_bytes": 45064547
+    },
+    "raw/e10.dat": {
+      "exporter_rows": 480042,
+      "manifest_sha256": "8972109de4a15c0e98da80d1ad6c07d153506cd994418c02ed06dd485aec757d",
+      "mat_dat_rows_match": true,
+      "mat_rows": 480042,
+      "sha256": "8972109de4a15c0e98da80d1ad6c07d153506cd994418c02ed06dd485aec757d",
+      "sha256_match": true,
+      "size_bytes": 71046216
+    },
+    "raw/e10.mat": {
+      "exporter_rows": 480042,
+      "manifest_sha256": "3a8d250ffc87192b46a40fbb61360c46f7d148978ca4878b0877f4dd6f88e695",
+      "sha256": "3a8d250ffc87192b46a40fbb61360c46f7d148978ca4878b0877f4dd6f88e695",
+      "sha256_match": true,
+      "size_bytes": 68557240
+    },
+    "raw/e2.dat": {
+      "exporter_rows": 480122,
+      "manifest_sha256": "2df7fcee1b9ffa6d0702cea30f757bd45917b6e326d3c6ade72bc9fa8473fb77",
+      "mat_dat_rows_match": true,
+      "mat_rows": 480122,
+      "sha256": "2df7fcee1b9ffa6d0702cea30f757bd45917b6e326d3c6ade72bc9fa8473fb77",
+      "sha256_match": true,
+      "size_bytes": 71058056
+    },
+    "raw/e2.mat": {
+      "exporter_rows": 480122,
+      "manifest_sha256": "dc396ed49ea103ade001d93a36de3550f0c334ef8887def934162ea710144ff9",
+      "sha256": "dc396ed49ea103ade001d93a36de3550f0c334ef8887def934162ea710144ff9",
+      "sha256_match": true,
+      "size_bytes": 68707430
+    },
+    "raw/e3.dat": {
+      "exporter_rows": 479405,
+      "manifest_sha256": "f83112e85a8aebcac1c16524f23cd0bb1428a732dbb83c1fd38a4614d9337b1e",
+      "mat_dat_rows_match": true,
+      "mat_rows": 479405,
+      "sha256": "f83112e85a8aebcac1c16524f23cd0bb1428a732dbb83c1fd38a4614d9337b1e",
+      "sha256_match": true,
+      "size_bytes": 70951940
+    },
+    "raw/e3.mat": {
+      "exporter_rows": 479405,
+      "manifest_sha256": "f264c2a249fe8b635e932a323f4157c71328163024564793323bd0aa4332538b",
+      "sha256": "f264c2a249fe8b635e932a323f4157c71328163024564793323bd0aa4332538b",
+      "sha256_match": true,
+      "size_bytes": 70473389
+    },
+    "raw/e4.dat": {
+      "exporter_rows": 479971,
+      "manifest_sha256": "d1469c9596cc3b2396ba1351d7777892cbd1a5fda73e89c7e0e6dae00f2cdc12",
+      "mat_dat_rows_match": true,
+      "mat_rows": 479971,
+      "sha256": "d1469c9596cc3b2396ba1351d7777892cbd1a5fda73e89c7e0e6dae00f2cdc12",
+      "sha256_match": true,
+      "size_bytes": 71035708
+    },
+    "raw/e4.mat": {
+      "exporter_rows": 479971,
+      "manifest_sha256": "7752937be7b45daf79e7a858644683903fe44d08c159d60a535bf624c1979f05",
+      "sha256": "7752937be7b45daf79e7a858644683903fe44d08c159d60a535bf624c1979f05",
+      "sha256_match": true,
+      "size_bytes": 70574776
+    },
+    "raw/e5.dat": {
+      "exporter_rows": 480121,
+      "manifest_sha256": "f605e9f238791fb7579790dfdf7df194078ba25771da75e5fcb937c87ac1ed24",
+      "mat_dat_rows_match": true,
+      "mat_rows": 480121,
+      "sha256": "f605e9f238791fb7579790dfdf7df194078ba25771da75e5fcb937c87ac1ed24",
+      "sha256_match": true,
+      "size_bytes": 71057908
+    },
+    "raw/e5.mat": {
+      "exporter_rows": 480121,
+      "manifest_sha256": "2fc138db47b40d2a0530181110123b786c4012769a7d28b038df6b6d38caf43a",
+      "sha256": "2fc138db47b40d2a0530181110123b786c4012769a7d28b038df6b6d38caf43a",
+      "sha256_match": true,
+      "size_bytes": 69344182
+    },
+    "raw/e6.dat": {
+      "exporter_rows": 480122,
+      "manifest_sha256": "7599b518645afb869bd6804ac001c2dbf112a84cc215881cfece6be5ca2cbf8b",
+      "mat_dat_rows_match": true,
+      "mat_rows": 480122,
+      "sha256": "7599b518645afb869bd6804ac001c2dbf112a84cc215881cfece6be5ca2cbf8b",
+      "sha256_match": true,
+      "size_bytes": 71058056
+    },
+    "raw/e6.mat": {
+      "exporter_rows": 480122,
+      "manifest_sha256": "c16c0f8d0c98775acef1145f79bcb995448c7481430305cd81b2cb0936549f5a",
+      "sha256": "c16c0f8d0c98775acef1145f79bcb995448c7481430305cd81b2cb0936549f5a",
+      "sha256_match": true,
+      "size_bytes": 69392041
+    },
+    "raw/e7.dat": {
+      "exporter_rows": 479515,
+      "manifest_sha256": "e14fb0dd89cfdc9e25287ea5d1bd2bf6e86b0329d87e0e51f3c6c94f260d37ba",
+      "mat_dat_rows_match": true,
+      "mat_rows": 479515,
+      "sha256": "e14fb0dd89cfdc9e25287ea5d1bd2bf6e86b0329d87e0e51f3c6c94f260d37ba",
+      "sha256_match": true,
+      "size_bytes": 70968220
+    },
+    "raw/e7.mat": {
+      "exporter_rows": 479515,
+      "manifest_sha256": "555731ed84ffe606b4620aba0693ec09967297d86e1b067dbb87db2b34e3fa4e",
+      "sha256": "555731ed84ffe606b4620aba0693ec09967297d86e1b067dbb87db2b34e3fa4e",
+      "sha256_match": true,
+      "size_bytes": 70476307
+    },
+    "raw/e8.dat": {
+      "exporter_rows": 480080,
+      "manifest_sha256": "5147c7d1918380bd5e9a4c2a98d1303993acad48f34047528bdcafc47a8dde94",
+      "mat_dat_rows_match": true,
+      "mat_rows": 480080,
+      "sha256": "5147c7d1918380bd5e9a4c2a98d1303993acad48f34047528bdcafc47a8dde94",
+      "sha256_match": true,
+      "size_bytes": 71051840
+    },
+    "raw/e8.mat": {
+      "exporter_rows": 480080,
+      "manifest_sha256": "d6eff008974ef244e7d61aab94fee7596314ae3b56c4d5224e2453d025536542",
+      "sha256": "d6eff008974ef244e7d61aab94fee7596314ae3b56c4d5224e2453d025536542",
+      "sha256_match": true,
+      "size_bytes": 68602995
+    },
+    "raw/e9.dat": {
+      "exporter_rows": 480082,
+      "manifest_sha256": "15fa059342a7fd19589a35e6f046ed2ccd79c833398798d000dc1b285ddac539",
+      "mat_dat_rows_match": true,
+      "mat_rows": 480082,
+      "sha256": "15fa059342a7fd19589a35e6f046ed2ccd79c833398798d000dc1b285ddac539",
+      "sha256_match": true,
+      "size_bytes": 71052136
+    },
+    "raw/e9.mat": {
+      "exporter_rows": 480082,
+      "manifest_sha256": "0f763869d6fab0129e928c203352c6baec8587bacef769684535db4bab5defb8",
+      "sha256": "0f763869d6fab0129e928c203352c6baec8587bacef769684535db4bab5defb8",
+      "sha256_match": true,
+      "size_bytes": 69096382
+    }
+  },
+  "manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/manifest.json",
+  "manifest_sha256": "1f5e83b8e2c1ffe40a06c9081bc26da89d1a99cc2c1328cb7ea51247f9179b47",
+  "receiver_config": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/receiver.conf",
+  "receiver_config_sha256": "504f9d499b38b0919a4e31b99d86f8cdcec36eabc1b738cfa745174a695f193f",
+  "receiver_executable": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_exporter_build/gnss-sdr-continuous-1ms",
+  "receiver_executable_sha256": "4b391f84270b421f84c92d7d9981b5f3fddd6c2e6b65917a3c4d8dfd1f1a99d3",
+  "replay_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic",
+  "scenario": "cleanStatic",
+  "schema": "acaf_nf_stage1_r2_fresh_replay_binding.v1",
+  "source_path": "/home/ubuntu/unraid_hdd/texbat/raw/cleanStatic.bin",
+  "source_sample_format": "ishort_complex_iq",
+  "source_sample_rate_hz": 25000000,
+  "source_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+  "source_size_bytes": 48016392192,
+  "status": "PASS"
+}

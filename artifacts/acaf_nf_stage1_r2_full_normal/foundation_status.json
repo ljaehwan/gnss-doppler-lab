@@ -1,0 +1,14 @@
+{
+  "attack_iq_scoring_performed": false,
+  "checkpoint3_physics_authorized": false,
+  "continuous_tracker_status": "CONTINUOUS_TRACKER_INVALID",
+  "failed_clean_gates": [
+    "grid_boundary_le_0_01",
+    "l20_doppler_within_50_ge_0_95",
+    "r14_common_reproduced_1e_6"
+  ],
+  "reason": "fresh replay failed one or more independent clean foundation gates",
+  "schema": "acaf_nf_stage1_r2_foundation.v1",
+  "status": "FOUNDATION_INVALID",
+  "supersedes_invalid_checkpoint2_commit": "b5d53fa"
+}

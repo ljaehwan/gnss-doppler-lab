@@ -1,0 +1,132 @@
+{
+  "accepted_rows": 4716117,
+  "alignment": {
+    "equivalent_reindexing": "next Prompt k+1 with current state/stamp k",
+    "nco_aux": "previous MAT row k-1",
+    "prompt": "current MAT row k",
+    "support": "[stamp(k-1), stamp(k-1)+25000)",
+    "tracker_csv_state_mat_row": "k-1"
+  },
+  "csv_path": "artifacts/acaf_nf_stage1_r2_full_normal/continuous_tracker_cleanStatic.csv",
+  "csv_sha256": "5bd6ace9fe29b31c56d7aacce2a56329c526dc2a4a0d6b35cdbdcae3929f9ad6",
+  "csv_size_bytes": 1951111900,
+  "exporter_rows": 5098445,
+  "fresh_replay_binding": "fresh_replay_binding.json",
+  "fresh_replay_manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/manifest.json",
+  "fresh_replay_manifest_sha256": "1f5e83b8e2c1ffe40a06c9081bc26da89d1a99cc2c1328cb7ea51247f9179b47",
+  "generated_at_utc": "2026-08-08T00:13:04.197396+00:00",
+  "rows": 4716117,
+  "scenario": "cleanStatic",
+  "schema": "acaf_nf_stage1_r2_fresh_continuous_tracker.v1",
+  "status": "CONTINUOUS_TRACKER_INVALID",
+  "supersedes_invalid_checkpoint2_commit": "b5d53fa",
+  "tracker_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw",
+  "validation": {
+    "alignment": {
+      "equivalent_reindexing": "next Prompt k+1 with current state/stamp k",
+      "nco_aux": "previous MAT row k-1",
+      "prompt": "current MAT row k",
+      "support": "[stamp(k-1), stamp(k-1)+25000)",
+      "tracker_csv_state_mat_row": "k-1"
+    },
+    "alignment_row_shift": 0,
+    "alignment_selected_from": "fresh_cleanStatic_replay_only",
+    "attack_alignment_selection_rows": 0,
+    "delay_recovery": {
+      "boundary_fraction": 0.0010319917440660474,
+      "exact_center_fraction": 0.978328173374613,
+      "histogram": {
+        "-0.125": 6,
+        "-0.375": 1,
+        "-0.5": 1,
+        "0.0": 948,
+        "0.125": 11,
+        "0.25": 1,
+        "1.0": 1
+      },
+      "n": 969,
+      "within_0_125_fraction": 0.9958720330237358
+    },
+    "fresh_replay_binding_status": "PASS",
+    "fresh_tracker_cadence": {
+      "dat_rows_match_ratio": 1.0,
+      "dat_sample_stamp_match": true,
+      "generated_at_utc": "2026-08-08T00:08:53.605662+00:00",
+      "global_iq_interval_sharing_expected": true,
+      "interval_uniqueness_scope": "within channel/PRN; simultaneous channels intentionally share global IQ time",
+      "l20_total_windows": 2150484,
+      "max_contiguous_rows": 187,
+      "prn_channels": 15,
+      "quality_contract": "minimum over previous/current/next rows: CN0>=28 and carrier_lock>=0.85",
+      "raw_contiguous": true,
+      "reason": null,
+      "row_delta_ratio_25000": 0.946021485060561,
+      "rows": 4716117,
+      "run_break_count": 136566,
+      "scenario": "cleanStatic",
+      "schema": "acaf_nf_stage1_continuous_tracker_clean.v1",
+      "state_prompt_contract": "previous-row NCO/aux; current-row Prompt; same-PRN triple",
+      "status": "CONTINUOUS_TRACKER_VALID",
+      "support_interval_semantics": "half-open [raw_start_sample, raw_end_sample)",
+      "tracker_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw",
+      "unique_intervals": true,
+      "valid_prn_channels": 12
+    },
+    "gates": {
+      "delay_within_0_125_ge_0_95": true,
+      "grid_boundary_le_0_01": false,
+      "l20_doppler_within_50_ge_0_95": false,
+      "l20_windows_ge_100": true,
+      "median_prn_spearman_ge_0_99": true,
+      "pooled_spearman_ge_0_999": true,
+      "prompt_p99_relative_error_le_0_01": true,
+      "r14_common_reproduced_1e_6": false,
+      "raw_support_continuous_unique": true,
+      "target_prn_channels_ge_8": true,
+      "valid_prn_channels_ge_4": true
+    },
+    "grid_boundary_fraction": 0.015479876160990712,
+    "l20_doppler": {
+      "boundary_fraction": 0.0,
+      "n": 171,
+      "within_50_fraction": 0.8596491228070176
+    },
+    "producer_status": "FAIL",
+    "prompt_reproduction": {
+      "max_relative_error": 0.01794688472443773,
+      "median_prn_spearman": 1.0,
+      "median_relative_error": 2.992495935716377e-06,
+      "n": 969,
+      "p95_relative_error": 0.0010626954486009361,
+      "p99_relative_error": 0.002298550646486093,
+      "pooled_spearman": 0.9999956476449408
+    },
+    "r14_common_epochs": {
+      "match_mode": "raw_support",
+      "max_numeric_delta": 9128.282013691962,
+      "n": 117,
+      "surface_sha256_all_match": false,
+      "tolerance": 1e-06
+    },
+    "scenario_semantics_checks": {
+      "attacks": {
+        "reason": "foundation gate evaluated before attack replay",
+        "status": "NOT_EVALUATED"
+      },
+      "cleanStatic": {
+        "mapping": {
+          "equivalent_reindexing": "next Prompt k+1 with current state/stamp k",
+          "nco_aux": "previous MAT row k-1",
+          "prompt": "current MAT row k",
+          "support": "[stamp(k-1), stamp(k-1)+25000)",
+          "tracker_csv_state_mat_row": "k-1"
+        },
+        "status": "PASS"
+      }
+    },
+    "schema": "acaf_nf_stage1_cleanstatic_reconstruction.v1",
+    "selected_epochs": 969,
+    "selected_prn_channels": 10,
+    "status": "CONTINUOUS_TRACKER_INVALID"
+  }
+}
