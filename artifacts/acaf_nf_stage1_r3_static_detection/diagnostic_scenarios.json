@@ -1,0 +1,16 @@
+{
+  "core_exclusions_not_accessed": [
+    "cleanDynamic",
+    "ds5",
+    "ds6"
+  ],
+  "ds1": {
+    "core_gate_used": false,
+    "status": "NOT_EVALUATED_MISSING_R2A_TRACKER_BINDING"
+  },
+  "ds2": {
+    "core_gate_used": false,
+    "status": "NOT_EVALUATED_MISSING_R2A_TRACKER_BINDING"
+  },
+  "reason": "No authenticated R2a-aligned tracker replay/manifest exists for DS1 or DS2; raw IQ was not opened without that binding."
+}

@@ -1,0 +1,33 @@
+{
+  "detection_gate_descriptive_only": {
+    "active_beats_same_k_fixed_primary_families": 1,
+    "active_beats_same_k_fixed_required_families": 2,
+    "active_k9_macro_pauc": 0.5886752136752137,
+    "active_k9_within_5pct_dense_primary_families": 1,
+    "active_outperforms_random_and_uniform_primary_families": 1,
+    "active_query_gate_pass": false,
+    "detection_gate_pass": false,
+    "family_weighting": "DS3, DS4, pooled DS7/DS8 each weight 1/3",
+    "power_only_explanation_excluded": false,
+    "power_only_macro_pauc": 0.9715099715099714,
+    "query_shuffle_decreased_all_three_primary_families": false
+  },
+  "ds7_ds8_independent_confirmations": false,
+  "gates": {
+    "b0_lineage_available": false,
+    "clean_holdout_q99_fpr_le_2pct": true,
+    "ds4_full_available": false,
+    "gain_phase_fpr_increase_le_2pp": true,
+    "minimum_4_prns": true,
+    "raw_provenance_timeline_pass": true,
+    "strict_external_pre_worst_fpr_le_5pct": true
+  },
+  "primary_family_definition": [
+    "ds3",
+    "ds4",
+    "ds7_ds8"
+  ],
+  "reason": "FULL_DS4_UNAVAILABLE and native exact B0 lineage unavailable; preregistered rules prohibit forced GO/NO-GO.",
+  "threshold_or_policy_changed_after_attack": false,
+  "verdict": "ACAF_NF_INCONCLUSIVE"
+}

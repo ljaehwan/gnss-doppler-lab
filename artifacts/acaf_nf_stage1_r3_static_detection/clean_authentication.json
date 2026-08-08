@@ -1,0 +1,14 @@
+{
+  "actual_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+  "expected_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+  "full_hash_performed": true,
+  "manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/manifest.json",
+  "manifest_raw_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+  "manifest_sha256": "1f5e83b8e2c1ffe40a06c9081bc26da89d1a99cc2c1328cb7ea51247f9179b47",
+  "raw_path": "/home/ubuntu/unraid_hdd/texbat/raw/cleanStatic.bin",
+  "raw_size_bytes": 48016392192,
+  "sample_format": "ishort_complex_iq",
+  "sample_rate_hz": 25000000,
+  "scenario": "cleanStatic",
+  "status": "PASS"
+}

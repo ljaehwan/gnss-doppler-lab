@@ -1,0 +1,15 @@
+{
+  "attack_iq_opened_before_freeze": false,
+  "files": {
+    "calibration.json": "618b4c21ffc46402bf8ae84459e74c5387d06208bd593f892d699a1e6abc6266",
+    "model.pt": "6d927f8e7e1571e31e8a573bfd4dfd48943f5890a346e7f96e49509188a25460",
+    "model_context.pt": "ffd235921845261fa7f54c0fc8c8b713f3f0d0ec5e89924cdd2fb6b4cb694bc3",
+    "model_no_context.pt": "a97502d86676b96d189ef69a661407a02ea6d856ab20a7544ef61120a255c5b3",
+    "normal_field_reference.npz": "f1ccb31bbdc6b821e24993284c6515802e0458b8c93547cc1880822a7c611002",
+    "pooling.json": "f26a0701369f550e10ebf4c682f270df82a87047538d8d75d8d859aa29f6d70d",
+    "query_policy.json": "b8eaa74195289a7a5b680cb51a176e677334850e41f7e5b3464c2ee67b717ad0",
+    "thresholds.json": "07642b656991947b2a28da971a233f9616857d98dd19e3e2a6168dc4ffdceef9"
+  },
+  "generated_at_utc": "2026-08-08T10:00:44.435076+00:00",
+  "schema": "acaf_nf_stage1_r3_freeze.v1"
+}

@@ -1,0 +1,16 @@
+ACAF-NF Stage-1 R3 test report
+date_local=2026-08-08
+
+[focused_acaf]
+command=PYTHONPATH=src /home/ubuntu/.venvs/cmte-a2/bin/python -m pytest -q tests/test_acaf_nf*.py
+exit_code=0
+result=173 passed, 1 warning in 223.32s
+
+[full_suite]
+command=PYTHONPATH=src /home/ubuntu/.venvs/cmte-a2/bin/python -m pytest -q --junitxml=artifacts/acaf_nf_stage1_r3_static_detection/pytest.xml
+exit_code=1
+result=612 passed, 8 failed, 1 warning in 246.81s
+classification=8 unrelated pre-existing/environmental failures; no ACAF test failed
+details=2 matplotlib mplot3d failures caused by mixed system/user matplotlib packages; 6 CPC failures caused by missing pre-existing scripts/train_peak_floor_temporal_autoencoder.py
+scope_action=No unrelated legacy code or environment was modified.
+junit_xml_retained=false; the complete stable summary and failure classification are recorded in this report.

@@ -1,0 +1,166 @@
+{
+  "alignment": "Prompt(k), NCO/code/aux(k-1), raw [stamp(k-1), stamp(k-1)+25000)",
+  "attack_event_targets_per_phase": {
+    "established_pull_off": 24,
+    "injection_takeover": 24,
+    "strict_pre": 12
+  },
+  "b0": {
+    "historic_scores_reused": false,
+    "status": "REQUIRE_NATIVE_EXACT_LINEAGE"
+  },
+  "base_branch": "research/acaf-nf-stage1-r2a-l20-foundation-audit",
+  "base_commit": "bf037c0fb9f73a24f9219d425de23b2b02235219",
+  "bootstrap": {
+    "block_seconds": 10,
+    "replicates": 10000,
+    "seed": 20260808
+  },
+  "budgets_complex_coordinates": [
+    3,
+    5,
+    9,
+    16,
+    187
+  ],
+  "clean_event_targets": {
+    "calibration": 14,
+    "holdout": 12,
+    "selection": 12,
+    "train": 18
+  },
+  "clean_roles_seconds": {
+    "calibration": [
+      64,
+      82
+    ],
+    "guard_1": [
+      45,
+      47
+    ],
+    "guard_2": [
+      62,
+      64
+    ],
+    "guard_3": [
+      82,
+      84
+    ],
+    "holdout": [
+      84,
+      100
+    ],
+    "prohibited_for_fit_selection_calibration": [
+      100,
+      null
+    ],
+    "selection": [
+      47,
+      62
+    ],
+    "train": [
+      10,
+      45
+    ],
+    "warmup_excluded": [
+      0,
+      10
+    ]
+  },
+  "core_exclusions": [
+    "cleanDynamic",
+    "ds5",
+    "ds6"
+  ],
+  "delay_grid_chips": [
+    -1.0,
+    -0.875,
+    -0.75,
+    -0.625,
+    -0.5,
+    -0.375,
+    -0.25,
+    -0.125,
+    0.0,
+    0.125,
+    0.25,
+    0.375,
+    0.5,
+    0.625,
+    0.75,
+    0.875,
+    1.0
+  ],
+  "diagnostic_only": [
+    "ds1",
+    "ds2"
+  ],
+  "doppler_grid_hz": [
+    -250,
+    -200,
+    -150,
+    -100,
+    -50,
+    0,
+    50,
+    100,
+    150,
+    200,
+    250
+  ],
+  "ds7_ds8_independent_confirmations": false,
+  "foundation_artifact": "artifacts/acaf_nf_stage1_r2a_l20_foundation_audit",
+  "go_no_go_gates_frozen_before_attack": {
+    "active_budget_max": 9,
+    "b0_macro_pauc_difference_min": -0.02,
+    "clean_holdout_q99_fpr_max": 0.02,
+    "dense_pauc_tolerance": 0.05,
+    "gain_phase_fpr_increase_max_percentage_points": 2.0,
+    "minimum_prns": 4,
+    "primary_families_required": 2,
+    "strict_external_pre_onset_worst_run_fpr_max": 0.05
+  },
+  "l20": 20,
+  "long_name": "Active Cross-Ambiguity Neural Field",
+  "model_name": "ACAF-NF Stage-1 R3",
+  "quality": {
+    "carrier_lock_min": 0.85,
+    "cn0_min_db_hz": 28.0,
+    "minimum_prns": 4
+  },
+  "raw_paths": {
+    "cleanStatic": "/home/ubuntu/unraid_hdd/texbat/raw/cleanStatic.bin",
+    "ds3": "/home/ubuntu/unraid_hdd/texbat/raw/ds3.bin",
+    "ds4": "/home/ubuntu/unraid_hdd/texbat/raw/ds4.bin",
+    "ds7": "/home/ubuntu/unraid_hdd/texbat/raw/ds7.bin",
+    "ds8": "/home/ubuntu/unraid_hdd/texbat/raw/ds8.bin"
+  },
+  "raw_sha256": {
+    "cleanStatic": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+    "ds3": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+    "ds4": "1fff2b048a00732686bb1d77a13941da81c9fac648ca3695a9028f4ee3485285",
+    "ds7": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+    "ds8": "1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78"
+  },
+  "request_sha256": "b418eecfe1d64e993ed4d5e65aa6a7af672ad5a3b33c12d89c5d2d734189e71e",
+  "sample_rate_hz": 25000000,
+  "scenario_family": {
+    "ds3": "ds3",
+    "ds4": "ds4",
+    "ds7": "ds7_ds8",
+    "ds8": "ds7_ds8"
+  },
+  "schema": "acaf_nf_stage1_r3_preregistered_config.v1",
+  "seed": 20260808,
+  "support_samples": 25000,
+  "threshold": {
+    "primary": "q99",
+    "reported": [
+      "q99",
+      "q99.5"
+    ],
+    "source": "cleanStatic calibration only",
+    "target_fpr": 0.01
+  },
+  "tracker_root": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays"
+}

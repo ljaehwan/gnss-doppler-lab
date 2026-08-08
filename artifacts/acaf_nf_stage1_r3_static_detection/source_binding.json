@@ -1,0 +1,441 @@
+{
+  "attacks": {
+    "ds3": {
+      "actual_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "expected_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "full_hash_performed": true,
+      "manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/manifest.json",
+      "manifest_raw_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "manifest_sha256": "253126223a0db5bfc15357ad675d66b3cb514d2157d54f8b3ebfaaa3831a4df1",
+      "raw_path": "/home/ubuntu/unraid_hdd/texbat/raw/ds3.bin",
+      "raw_size_bytes": 45785022464,
+      "sample_format": "ishort_complex_iq",
+      "sample_rate_hz": 25000000,
+      "scenario": "ds3",
+      "status": "PASS"
+    },
+    "ds4": {
+      "actual_sha256": "1fff2b048a00732686bb1d77a13941da81c9fac648ca3695a9028f4ee3485285",
+      "expected_sha256": "1fff2b048a00732686bb1d77a13941da81c9fac648ca3695a9028f4ee3485285",
+      "full_hash_performed": true,
+      "manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/manifest.json",
+      "manifest_raw_sha256": "1fff2b048a00732686bb1d77a13941da81c9fac648ca3695a9028f4ee3485285",
+      "manifest_sha256": "45819c72323706cdc96fc19518f5ebbe77b28fe20af44169596c69492f215580",
+      "raw_path": "/home/ubuntu/unraid_hdd/texbat/raw/ds4.bin",
+      "raw_size_bytes": 12821987328,
+      "sample_format": "ishort_complex_iq",
+      "sample_rate_hz": 25000000,
+      "scenario": "ds4",
+      "status": "PASS"
+    },
+    "ds7": {
+      "actual_sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "expected_sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "full_hash_performed": true,
+      "manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/manifest.json",
+      "manifest_raw_sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "manifest_sha256": "7b0bdc69c754e71eecf750b0b2e61fb52a6a4e6787409e393ef156439276f785",
+      "raw_path": "/home/ubuntu/unraid_hdd/texbat/raw/ds7.bin",
+      "raw_size_bytes": 27059290112,
+      "sample_format": "ishort_complex_iq",
+      "sample_rate_hz": 25000000,
+      "scenario": "ds7",
+      "status": "PASS"
+    },
+    "ds8": {
+      "actual_sha256": "1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78",
+      "expected_sha256": "1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78",
+      "full_hash_performed": true,
+      "manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/manifest.json",
+      "manifest_raw_sha256": "1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78",
+      "manifest_sha256": "c057383e21601f021c751d7012a018a2a793c23e08f1998f8c1967749fabe9d8",
+      "raw_path": "/home/ubuntu/unraid_hdd/texbat/raw/ds8.bin",
+      "raw_size_bytes": 47000141168,
+      "sample_format": "ishort_complex_iq",
+      "sample_rate_hz": 25000000,
+      "scenario": "ds8",
+      "status": "PASS"
+    }
+  },
+  "cleanStatic": {
+    "actual_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+    "expected_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+    "full_hash_performed": true,
+    "manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/manifest.json",
+    "manifest_raw_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+    "manifest_sha256": "1f5e83b8e2c1ffe40a06c9081bc26da89d1a99cc2c1328cb7ea51247f9179b47",
+    "raw_path": "/home/ubuntu/unraid_hdd/texbat/raw/cleanStatic.bin",
+    "raw_size_bytes": 48016392192,
+    "sample_format": "ishort_complex_iq",
+    "sample_rate_hz": 25000000,
+    "scenario": "cleanStatic",
+    "status": "PASS"
+  },
+  "tracker_mat_binding": {
+    "cleanStatic": {
+      "files": {
+        "e0.mat": {
+          "actual_sha256": "02da02d665149c31737f15a8e167a423fa801c59684c11521ed153430df9def8",
+          "expected_sha256": "02da02d665149c31737f15a8e167a423fa801c59684c11521ed153430df9def8",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e0.mat"
+        },
+        "e1.mat": {
+          "actual_sha256": "4006dcbe36d43cde294f96c7ec2776e78cb2cdad3bbd527c885d931e134a8c81",
+          "expected_sha256": "4006dcbe36d43cde294f96c7ec2776e78cb2cdad3bbd527c885d931e134a8c81",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e1.mat"
+        },
+        "e10.mat": {
+          "actual_sha256": "3a8d250ffc87192b46a40fbb61360c46f7d148978ca4878b0877f4dd6f88e695",
+          "expected_sha256": "3a8d250ffc87192b46a40fbb61360c46f7d148978ca4878b0877f4dd6f88e695",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e10.mat"
+        },
+        "e2.mat": {
+          "actual_sha256": "dc396ed49ea103ade001d93a36de3550f0c334ef8887def934162ea710144ff9",
+          "expected_sha256": "dc396ed49ea103ade001d93a36de3550f0c334ef8887def934162ea710144ff9",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e2.mat"
+        },
+        "e3.mat": {
+          "actual_sha256": "f264c2a249fe8b635e932a323f4157c71328163024564793323bd0aa4332538b",
+          "expected_sha256": "f264c2a249fe8b635e932a323f4157c71328163024564793323bd0aa4332538b",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e3.mat"
+        },
+        "e4.mat": {
+          "actual_sha256": "7752937be7b45daf79e7a858644683903fe44d08c159d60a535bf624c1979f05",
+          "expected_sha256": "7752937be7b45daf79e7a858644683903fe44d08c159d60a535bf624c1979f05",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e4.mat"
+        },
+        "e5.mat": {
+          "actual_sha256": "2fc138db47b40d2a0530181110123b786c4012769a7d28b038df6b6d38caf43a",
+          "expected_sha256": "2fc138db47b40d2a0530181110123b786c4012769a7d28b038df6b6d38caf43a",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e5.mat"
+        },
+        "e6.mat": {
+          "actual_sha256": "c16c0f8d0c98775acef1145f79bcb995448c7481430305cd81b2cb0936549f5a",
+          "expected_sha256": "c16c0f8d0c98775acef1145f79bcb995448c7481430305cd81b2cb0936549f5a",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e6.mat"
+        },
+        "e7.mat": {
+          "actual_sha256": "555731ed84ffe606b4620aba0693ec09967297d86e1b067dbb87db2b34e3fa4e",
+          "expected_sha256": "555731ed84ffe606b4620aba0693ec09967297d86e1b067dbb87db2b34e3fa4e",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e7.mat"
+        },
+        "e8.mat": {
+          "actual_sha256": "d6eff008974ef244e7d61aab94fee7596314ae3b56c4d5224e2453d025536542",
+          "expected_sha256": "d6eff008974ef244e7d61aab94fee7596314ae3b56c4d5224e2453d025536542",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e8.mat"
+        },
+        "e9.mat": {
+          "actual_sha256": "0f763869d6fab0129e928c203352c6baec8587bacef769684535db4bab5defb8",
+          "expected_sha256": "0f763869d6fab0129e928c203352c6baec8587bacef769684535db4bab5defb8",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e9.mat"
+        }
+      },
+      "manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/manifest.json",
+      "manifest_sha256": "1f5e83b8e2c1ffe40a06c9081bc26da89d1a99cc2c1328cb7ea51247f9179b47",
+      "status": "PASS"
+    },
+    "ds3": {
+      "files": {
+        "epl_track0.mat": {
+          "actual_sha256": "552f1cea9d888c4f4940dba8b325f6c3450f76b486363d85743e3bc96663ba98",
+          "expected_sha256": "552f1cea9d888c4f4940dba8b325f6c3450f76b486363d85743e3bc96663ba98",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track0.mat"
+        },
+        "epl_track1.mat": {
+          "actual_sha256": "e367ee89ff6aa601a675cb261bc95dbb5128bee59189420f59356debca68a5ce",
+          "expected_sha256": "e367ee89ff6aa601a675cb261bc95dbb5128bee59189420f59356debca68a5ce",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track1.mat"
+        },
+        "epl_track10.mat": {
+          "actual_sha256": "f4b015a1611edd754f61cf93a9a5ab6a6e747f66ada5baf427906bded45c5596",
+          "expected_sha256": "f4b015a1611edd754f61cf93a9a5ab6a6e747f66ada5baf427906bded45c5596",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track10.mat"
+        },
+        "epl_track2.mat": {
+          "actual_sha256": "05420b4b81855ed90ba3396e73a4289172ae7ec3a4b77643bd122b29a0d5ee6f",
+          "expected_sha256": "05420b4b81855ed90ba3396e73a4289172ae7ec3a4b77643bd122b29a0d5ee6f",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track2.mat"
+        },
+        "epl_track3.mat": {
+          "actual_sha256": "f0c1207f90c6614cf6a95b20c8c4b9f5839361a6aefdb28078a0276ef9e4902b",
+          "expected_sha256": "f0c1207f90c6614cf6a95b20c8c4b9f5839361a6aefdb28078a0276ef9e4902b",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track3.mat"
+        },
+        "epl_track4.mat": {
+          "actual_sha256": "a67149d988f7ad9729b24154c24e84f61de2424008060e2d43ee837f7fc0f3d0",
+          "expected_sha256": "a67149d988f7ad9729b24154c24e84f61de2424008060e2d43ee837f7fc0f3d0",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track4.mat"
+        },
+        "epl_track5.mat": {
+          "actual_sha256": "1b595dd4f10f968d505bb8c30f79e73047472d8506fded2c2304fd1707238296",
+          "expected_sha256": "1b595dd4f10f968d505bb8c30f79e73047472d8506fded2c2304fd1707238296",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track5.mat"
+        },
+        "epl_track6.mat": {
+          "actual_sha256": "df4b27f980035ad74bfa0ebeab7ee529bc72064c68772e4853c2ad002941de5e",
+          "expected_sha256": "df4b27f980035ad74bfa0ebeab7ee529bc72064c68772e4853c2ad002941de5e",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track6.mat"
+        },
+        "epl_track7.mat": {
+          "actual_sha256": "b055b8772d3a9cb415262c03d68e266c8216386950852a8b15167d6567058b45",
+          "expected_sha256": "b055b8772d3a9cb415262c03d68e266c8216386950852a8b15167d6567058b45",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track7.mat"
+        },
+        "epl_track8.mat": {
+          "actual_sha256": "3e635305d7385365595d9dd73fa04ef518cd31fd92b60acc4e92dabded71bfd0",
+          "expected_sha256": "3e635305d7385365595d9dd73fa04ef518cd31fd92b60acc4e92dabded71bfd0",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track8.mat"
+        },
+        "epl_track9.mat": {
+          "actual_sha256": "2d32dc13d3ec3b2e0b3667fe6315118a3e994ec437781b45b8214fa5df7882d5",
+          "expected_sha256": "2d32dc13d3ec3b2e0b3667fe6315118a3e994ec437781b45b8214fa5df7882d5",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track9.mat"
+        }
+      },
+      "manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/manifest.json",
+      "manifest_sha256": "253126223a0db5bfc15357ad675d66b3cb514d2157d54f8b3ebfaaa3831a4df1",
+      "status": "PASS"
+    },
+    "ds4": {
+      "files": {
+        "epl_track0.mat": {
+          "actual_sha256": "bfc33bda15ff3831c7a554d0c907d8af4603bc31fe02543a4ca180ebfea811b3",
+          "expected_sha256": "bfc33bda15ff3831c7a554d0c907d8af4603bc31fe02543a4ca180ebfea811b3",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track0.mat"
+        },
+        "epl_track1.mat": {
+          "actual_sha256": "290e5183265bd02169ea7400fb555bc08acb5e60bb54d62eeb03ba08323c80ef",
+          "expected_sha256": "290e5183265bd02169ea7400fb555bc08acb5e60bb54d62eeb03ba08323c80ef",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track1.mat"
+        },
+        "epl_track10.mat": {
+          "actual_sha256": "5a27cf2671d9b07e58ec1b24bc7824ff9fd57be67592bf38955bb6c64a3e75e7",
+          "expected_sha256": "5a27cf2671d9b07e58ec1b24bc7824ff9fd57be67592bf38955bb6c64a3e75e7",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track10.mat"
+        },
+        "epl_track2.mat": {
+          "actual_sha256": "a2f861c77fd2df74cdeea26e738cb68c5bc8199d322ea383147cc1b6051f680c",
+          "expected_sha256": "a2f861c77fd2df74cdeea26e738cb68c5bc8199d322ea383147cc1b6051f680c",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track2.mat"
+        },
+        "epl_track3.mat": {
+          "actual_sha256": "1ff62d6b1c04f5c923d60255a4daaae61b663f86326b3103e061285676bcd781",
+          "expected_sha256": "1ff62d6b1c04f5c923d60255a4daaae61b663f86326b3103e061285676bcd781",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track3.mat"
+        },
+        "epl_track4.mat": {
+          "actual_sha256": "67b4fa43eacbf6f265ff5e277ec6c2613c61566afb6b7377be4993c6e303cab3",
+          "expected_sha256": "67b4fa43eacbf6f265ff5e277ec6c2613c61566afb6b7377be4993c6e303cab3",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track4.mat"
+        },
+        "epl_track5.mat": {
+          "actual_sha256": "916bcca4687ff4269f6b3af47b846b5f233f664e846a7671156010f7a2321974",
+          "expected_sha256": "916bcca4687ff4269f6b3af47b846b5f233f664e846a7671156010f7a2321974",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track5.mat"
+        },
+        "epl_track6.mat": {
+          "actual_sha256": "0c57691278882a272ffc570078c71e37e7bf4e3cf11d9020d7eb37f7c18554eb",
+          "expected_sha256": "0c57691278882a272ffc570078c71e37e7bf4e3cf11d9020d7eb37f7c18554eb",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track6.mat"
+        },
+        "epl_track7.mat": {
+          "actual_sha256": "7e5a9d3534a1ebe7ea4bf1f9947f67ded72ab17c4447640d6c41d1aeed36b0da",
+          "expected_sha256": "7e5a9d3534a1ebe7ea4bf1f9947f67ded72ab17c4447640d6c41d1aeed36b0da",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track7.mat"
+        },
+        "epl_track8.mat": {
+          "actual_sha256": "a88d1b0000cebdd8d2ea7d413d9d4de9baa1680349e6ea710b185f115b2c55d9",
+          "expected_sha256": "a88d1b0000cebdd8d2ea7d413d9d4de9baa1680349e6ea710b185f115b2c55d9",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track8.mat"
+        },
+        "epl_track9.mat": {
+          "actual_sha256": "c07fa594e9cf113fc1d2e3bc4a0c027f0d4be28068bc6b5734ef0c0ad38d094e",
+          "expected_sha256": "c07fa594e9cf113fc1d2e3bc4a0c027f0d4be28068bc6b5734ef0c0ad38d094e",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track9.mat"
+        }
+      },
+      "manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/manifest.json",
+      "manifest_sha256": "45819c72323706cdc96fc19518f5ebbe77b28fe20af44169596c69492f215580",
+      "status": "PASS"
+    },
+    "ds7": {
+      "files": {
+        "epl_track0.mat": {
+          "actual_sha256": "7e98c51ecac3b8c6db5623b2101a3f4b386de1e23e76d5049420538903d1824f",
+          "expected_sha256": "7e98c51ecac3b8c6db5623b2101a3f4b386de1e23e76d5049420538903d1824f",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track0.mat"
+        },
+        "epl_track1.mat": {
+          "actual_sha256": "05f4874d91b0bded3d50c6ff662f5debd76363c89d2512c891f2c8e206c4f7f6",
+          "expected_sha256": "05f4874d91b0bded3d50c6ff662f5debd76363c89d2512c891f2c8e206c4f7f6",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track1.mat"
+        },
+        "epl_track10.mat": {
+          "actual_sha256": "f89ed02de731aad06f6680857cf17eb877ed5fd1fbc6f11947f15fc83855acb6",
+          "expected_sha256": "f89ed02de731aad06f6680857cf17eb877ed5fd1fbc6f11947f15fc83855acb6",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track10.mat"
+        },
+        "epl_track2.mat": {
+          "actual_sha256": "c2abf21e0c2fa3db8af98b29c2198ffc549f2d43895fa09e8fef3e41e81ed22e",
+          "expected_sha256": "c2abf21e0c2fa3db8af98b29c2198ffc549f2d43895fa09e8fef3e41e81ed22e",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track2.mat"
+        },
+        "epl_track3.mat": {
+          "actual_sha256": "2d95144938fb1846b7e371fccfadbcec07af9e2537a631182a25c04c975ec9af",
+          "expected_sha256": "2d95144938fb1846b7e371fccfadbcec07af9e2537a631182a25c04c975ec9af",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track3.mat"
+        },
+        "epl_track4.mat": {
+          "actual_sha256": "82706a870a185e06b4996564731c6a912608b1b996066a9de7dcf3bff49493f4",
+          "expected_sha256": "82706a870a185e06b4996564731c6a912608b1b996066a9de7dcf3bff49493f4",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track4.mat"
+        },
+        "epl_track5.mat": {
+          "actual_sha256": "034d805a519abe3f915bb4cc2aafea40fa9ed96d08d826a5eecb61415820df5a",
+          "expected_sha256": "034d805a519abe3f915bb4cc2aafea40fa9ed96d08d826a5eecb61415820df5a",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track5.mat"
+        },
+        "epl_track6.mat": {
+          "actual_sha256": "149b8c4d5dabee0d4d8bb7ece5fd0d47f190f226036c88e377863a634f75bee8",
+          "expected_sha256": "149b8c4d5dabee0d4d8bb7ece5fd0d47f190f226036c88e377863a634f75bee8",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track6.mat"
+        },
+        "epl_track7.mat": {
+          "actual_sha256": "48a53038a4629ca459d7e0d6ee6e56f4aec5781c7b878cbc558dd6974730b9a2",
+          "expected_sha256": "48a53038a4629ca459d7e0d6ee6e56f4aec5781c7b878cbc558dd6974730b9a2",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track7.mat"
+        },
+        "epl_track8.mat": {
+          "actual_sha256": "5d4a8eb17a4c66d73999a3072d922ec85882fd6f5c083dcad72a084712cc6e47",
+          "expected_sha256": "5d4a8eb17a4c66d73999a3072d922ec85882fd6f5c083dcad72a084712cc6e47",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track8.mat"
+        },
+        "epl_track9.mat": {
+          "actual_sha256": "d39f992f65fee8fc8cad0848963615c02f5b767102b5065bf70652e4fb15541a",
+          "expected_sha256": "d39f992f65fee8fc8cad0848963615c02f5b767102b5065bf70652e4fb15541a",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track9.mat"
+        }
+      },
+      "manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/manifest.json",
+      "manifest_sha256": "7b0bdc69c754e71eecf750b0b2e61fb52a6a4e6787409e393ef156439276f785",
+      "status": "PASS"
+    },
+    "ds8": {
+      "files": {
+        "epl_track0.mat": {
+          "actual_sha256": "8a1727400febfa99991569956314b27dd3911d265391dbc1b6abf584d7b4c9c6",
+          "expected_sha256": "8a1727400febfa99991569956314b27dd3911d265391dbc1b6abf584d7b4c9c6",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track0.mat"
+        },
+        "epl_track1.mat": {
+          "actual_sha256": "16ce33d22cd71bbd984fc472380136c252c4a00315d005392d55461f05df77b3",
+          "expected_sha256": "16ce33d22cd71bbd984fc472380136c252c4a00315d005392d55461f05df77b3",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track1.mat"
+        },
+        "epl_track10.mat": {
+          "actual_sha256": "6bbb9879f8dda67278d0540193b9bbc4bdad73eb9180fe9a9d42a7554cec5d25",
+          "expected_sha256": "6bbb9879f8dda67278d0540193b9bbc4bdad73eb9180fe9a9d42a7554cec5d25",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track10.mat"
+        },
+        "epl_track2.mat": {
+          "actual_sha256": "3aff7fe603ca9caecbfc8bb10414ccf8fa8bd259760a54f0cc7045cf8689bfe7",
+          "expected_sha256": "3aff7fe603ca9caecbfc8bb10414ccf8fa8bd259760a54f0cc7045cf8689bfe7",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track2.mat"
+        },
+        "epl_track3.mat": {
+          "actual_sha256": "90432c9f472c61d162e898966ed2f0272118b6fb28aaed4c56315347537af178",
+          "expected_sha256": "90432c9f472c61d162e898966ed2f0272118b6fb28aaed4c56315347537af178",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track3.mat"
+        },
+        "epl_track4.mat": {
+          "actual_sha256": "e8facfb16c020688455dc3e9aedad7890a432f0d6a1f3672591d747f0e3c5d51",
+          "expected_sha256": "e8facfb16c020688455dc3e9aedad7890a432f0d6a1f3672591d747f0e3c5d51",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track4.mat"
+        },
+        "epl_track5.mat": {
+          "actual_sha256": "959045bd60d5220a1a7b32adf62166ae1fdf78eb049ad3eaa5ec8f2ac2b359fa",
+          "expected_sha256": "959045bd60d5220a1a7b32adf62166ae1fdf78eb049ad3eaa5ec8f2ac2b359fa",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track5.mat"
+        },
+        "epl_track6.mat": {
+          "actual_sha256": "d043d97b390c3a01888809240969fc00341037e4805a4c23e3edeeb305880667",
+          "expected_sha256": "d043d97b390c3a01888809240969fc00341037e4805a4c23e3edeeb305880667",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track6.mat"
+        },
+        "epl_track7.mat": {
+          "actual_sha256": "6bf69316e2467059ad8fd3248658938970ae24cba326dc177d3e2902afdf348b",
+          "expected_sha256": "6bf69316e2467059ad8fd3248658938970ae24cba326dc177d3e2902afdf348b",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track7.mat"
+        },
+        "epl_track8.mat": {
+          "actual_sha256": "1fa124e33522d66e4d21c99a1fd32cd8da517f8b97d8b709aec4caa9c3eec036",
+          "expected_sha256": "1fa124e33522d66e4d21c99a1fd32cd8da517f8b97d8b709aec4caa9c3eec036",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track8.mat"
+        },
+        "epl_track9.mat": {
+          "actual_sha256": "bb123b58d164ef48d41fd02454d2c857ac52393882c3cfe1d179df3fbe938c92",
+          "expected_sha256": "bb123b58d164ef48d41fd02454d2c857ac52393882c3cfe1d179df3fbe938c92",
+          "match": true,
+          "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track9.mat"
+        }
+      },
+      "manifest_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/manifest.json",
+      "manifest_sha256": "c057383e21601f021c751d7012a018a2a793c23e08f1998f8c1967749fabe9d8",
+      "status": "PASS"
+    }
+  }
+}

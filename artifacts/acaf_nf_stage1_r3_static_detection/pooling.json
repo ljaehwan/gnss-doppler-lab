@@ -1,0 +1,11 @@
+{
+  "attack_results_used": false,
+  "candidates": {
+    "median": 0.10855871175046905,
+    "soft_topk": 1.3249084488932632,
+    "topk_mean": 0.5598748765383066,
+    "trimmed_mean": 0.26422344614833526
+  },
+  "method": "median",
+  "source": "cleanStatic selection only"
+}

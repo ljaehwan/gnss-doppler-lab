@@ -1,0 +1,130 @@
+{
+  "boundary_crossing_windows_excluded": true,
+  "byte_overlap_status": "PASS",
+  "census": {
+    "channels": [
+      {
+        "candidate_seconds": 84,
+        "channel": 0,
+        "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e0.mat",
+        "rows": 480079
+      },
+      {
+        "candidate_seconds": 16,
+        "channel": 1,
+        "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e1.mat",
+        "rows": 298906
+      },
+      {
+        "candidate_seconds": 84,
+        "channel": 2,
+        "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e2.mat",
+        "rows": 480122
+      },
+      {
+        "candidate_seconds": 84,
+        "channel": 3,
+        "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e3.mat",
+        "rows": 479405
+      },
+      {
+        "candidate_seconds": 84,
+        "channel": 4,
+        "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e4.mat",
+        "rows": 479971
+      },
+      {
+        "candidate_seconds": 84,
+        "channel": 5,
+        "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e5.mat",
+        "rows": 480121
+      },
+      {
+        "candidate_seconds": 84,
+        "channel": 6,
+        "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e6.mat",
+        "rows": 480122
+      },
+      {
+        "candidate_seconds": 84,
+        "channel": 7,
+        "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e7.mat",
+        "rows": 479515
+      },
+      {
+        "candidate_seconds": 84,
+        "channel": 8,
+        "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e8.mat",
+        "rows": 480080
+      },
+      {
+        "candidate_seconds": 84,
+        "channel": 9,
+        "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e9.mat",
+        "rows": 480082
+      },
+      {
+        "candidate_seconds": 84,
+        "channel": 10,
+        "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e10.mat",
+        "rows": 480042
+      }
+    ],
+    "scenario": "cleanStatic",
+    "selected": {
+      "calibration": 14,
+      "holdout": 12,
+      "selection": 12,
+      "train": 18
+    }
+  },
+  "clean_after_100s_accessed": false,
+  "guards_excluded": [
+    [
+      0,
+      10
+    ],
+    [
+      45,
+      47
+    ],
+    [
+      62,
+      64
+    ],
+    [
+      82,
+      84
+    ]
+  ],
+  "prn_windows": {
+    "calibration": 140,
+    "holdout": 132,
+    "selection": 120,
+    "train": 180
+  },
+  "roles": {
+    "calibration": [
+      64.0,
+      82.0
+    ],
+    "holdout": [
+      84.0,
+      100.0
+    ],
+    "selection": [
+      47.0,
+      62.0
+    ],
+    "train": [
+      10.0,
+      45.0
+    ]
+  },
+  "windows": {
+    "calibration": 140,
+    "holdout": 132,
+    "selection": 120,
+    "train": 180
+  }
+}

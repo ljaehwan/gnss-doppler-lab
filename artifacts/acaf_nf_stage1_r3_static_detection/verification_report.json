@@ -1,0 +1,63 @@
+{
+  "b0_alignment_checked": true,
+  "ds7_ds8_family_checked": true,
+  "errors": [],
+  "freeze_hashes_recomputed": true,
+  "independent_raw_recomputation_performed": true,
+  "leakage_boundaries_checked": true,
+  "producer_imported": false,
+  "raw_tracker_binding_checked": true,
+  "representative_neural_score": {
+    "absolute_delta": 9.527715264523451e-07,
+    "actual": -0.9041792882813348,
+    "pre_observation": true,
+    "query_order": [
+      93,
+      16,
+      33,
+      15,
+      50,
+      32,
+      67,
+      14,
+      84
+    ],
+    "status": "PASS",
+    "stored": -0.9041783355098083
+  },
+  "representative_raw_l20": {
+    "channel": 0,
+    "max_abs_surface_delta": 3.416945728133842e-08,
+    "prn": 16,
+    "raw_end_sample": 250805525,
+    "raw_start_sample": 250305525,
+    "scenario": "cleanStatic",
+    "status": "PASS",
+    "time_s": 10.022221,
+    "tolerance": 2e-05
+  },
+  "schema": "acaf_nf_stage1_r3_verifier.v1",
+  "status": "PASS",
+  "tracker_mat_binding": {
+    "cleanStatic": {
+      "all_match": true,
+      "files": 11
+    },
+    "ds3": {
+      "all_match": true,
+      "files": 11
+    },
+    "ds4": {
+      "all_match": true,
+      "files": 11
+    },
+    "ds7": {
+      "all_match": true,
+      "files": 11
+    },
+    "ds8": {
+      "all_match": true,
+      "files": 11
+    }
+  }
+}

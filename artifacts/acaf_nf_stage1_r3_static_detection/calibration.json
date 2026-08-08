@@ -1,0 +1,188 @@
+{
+  "active_adaptive:K16": {
+    "center": -2.4195105832465944,
+    "n": 14,
+    "scale": 0.1706891830742423,
+    "source": "cleanStatic calibration only"
+  },
+  "active_adaptive:K3": {
+    "center": 2.966763004582156,
+    "n": 14,
+    "scale": 0.24569551702465997,
+    "source": "cleanStatic calibration only"
+  },
+  "active_adaptive:K5": {
+    "center": 1.2516385686919942,
+    "n": 14,
+    "scale": 0.2483463909262511,
+    "source": "cleanStatic calibration only"
+  },
+  "active_adaptive:K9": {
+    "center": -0.807280777423953,
+    "n": 14,
+    "scale": 0.19973266667414136,
+    "source": "cleanStatic calibration only"
+  },
+  "active_context:K9": {
+    "center": -2.0072351947382066,
+    "n": 14,
+    "scale": 0.143754080406854,
+    "source": "cleanStatic calibration only"
+  },
+  "active_magnitude:K3": {
+    "center": 2.480323573971897,
+    "n": 14,
+    "scale": 0.06221523939411311,
+    "source": "cleanStatic calibration only"
+  },
+  "active_magnitude:K5": {
+    "center": 2.2770788169591407,
+    "n": 14,
+    "scale": 0.0679802988449536,
+    "source": "cleanStatic calibration only"
+  },
+  "active_magnitude:K9": {
+    "center": 1.906647982617805,
+    "n": 14,
+    "scale": 0.05914188306692125,
+    "source": "cleanStatic calibration only"
+  },
+  "active_no_context:K9": {
+    "center": -0.807280777423953,
+    "n": 14,
+    "scale": 0.19973266667414136,
+    "source": "cleanStatic calibration only"
+  },
+  "analytic_two_source_glrt:K187": {
+    "center": 0.21302836012662357,
+    "n": 14,
+    "scale": 0.11796195220068253,
+    "source": "cleanStatic calibration only"
+  },
+  "dense_nf:K187": {
+    "center": -4.22034764289856,
+    "n": 14,
+    "scale": 0.04755878448486328,
+    "source": "cleanStatic calibration only"
+  },
+  "dense_one_source_residual:K187": {
+    "center": 0.4963332349323207,
+    "n": 14,
+    "scale": 0.17087870135575978,
+    "source": "cleanStatic calibration only"
+  },
+  "epl_3:K3": {
+    "center": -4.693479215741119,
+    "n": 14,
+    "scale": 0.02207860586540189,
+    "source": "cleanStatic calibration only"
+  },
+  "epl_3_complex:K3": {
+    "center": 0.0006433582332231798,
+    "n": 14,
+    "scale": 0.00024432701118741495,
+    "source": "cleanStatic calibration only"
+  },
+  "fixed_9_delay_tap_complex:K9": {
+    "center": 0.0004134723860011407,
+    "n": 14,
+    "scale": 0.00011208460005629445,
+    "source": "cleanStatic calibration only"
+  },
+  "fixed_delay_9:K9": {
+    "center": -4.9844585786373194,
+    "n": 14,
+    "scale": 0.047228755258911015,
+    "source": "cleanStatic calibration only"
+  },
+  "learned_fixed:K16": {
+    "center": -2.418953496963392,
+    "n": 14,
+    "scale": 0.1396367809952732,
+    "source": "cleanStatic calibration only"
+  },
+  "learned_fixed:K3": {
+    "center": 2.966763004582156,
+    "n": 14,
+    "scale": 0.24569551702465997,
+    "source": "cleanStatic calibration only"
+  },
+  "learned_fixed:K5": {
+    "center": 1.2516385686919942,
+    "n": 14,
+    "scale": 0.2483463909262511,
+    "source": "cleanStatic calibration only"
+  },
+  "learned_fixed:K9": {
+    "center": -0.807280777423953,
+    "n": 14,
+    "scale": 0.19973266667414136,
+    "source": "cleanStatic calibration only"
+  },
+  "previous_acaf_r1_proxy:K187": {
+    "center": 0.0010216236696578562,
+    "n": 14,
+    "scale": 0.00042282808863092214,
+    "source": "cleanStatic calibration only"
+  },
+  "prompt_magnitude_only:K0": {
+    "center": 4525201.864218332,
+    "n": 14,
+    "scale": 119580.23106334545,
+    "source": "cleanStatic calibration only"
+  },
+  "random_fixed:K16": {
+    "center": -4.731840184964806,
+    "n": 14,
+    "scale": 0.04131587039136608,
+    "source": "cleanStatic calibration only"
+  },
+  "random_fixed:K3": {
+    "center": -2.159947185601979,
+    "n": 14,
+    "scale": 0.04125658746609728,
+    "source": "cleanStatic calibration only"
+  },
+  "random_fixed:K5": {
+    "center": -3.8180555904821762,
+    "n": 14,
+    "scale": 0.023506433488248213,
+    "source": "cleanStatic calibration only"
+  },
+  "random_fixed:K9": {
+    "center": -3.8283016129512806,
+    "n": 14,
+    "scale": 0.0311318817641264,
+    "source": "cleanStatic calibration only"
+  },
+  "raw_power_only:K0": {
+    "center": 5542202.420152,
+    "n": 14,
+    "scale": 62572.30934925098,
+    "source": "cleanStatic calibration only"
+  },
+  "uniform_fixed:K16": {
+    "center": -2.5658522309591905,
+    "n": 14,
+    "scale": 0.06496543675658994,
+    "source": "cleanStatic calibration only"
+  },
+  "uniform_fixed:K3": {
+    "center": 3.6310381343175853,
+    "n": 14,
+    "scale": 0.39710650858316976,
+    "source": "cleanStatic calibration only"
+  },
+  "uniform_fixed:K5": {
+    "center": 2.6002617866843964,
+    "n": 14,
+    "scale": 0.20174288123116657,
+    "source": "cleanStatic calibration only"
+  },
+  "uniform_fixed:K9": {
+    "center": 0.506159232424908,
+    "n": 14,
+    "scale": 0.11014011963687009,
+    "source": "cleanStatic calibration only"
+  }
+}

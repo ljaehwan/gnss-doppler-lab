@@ -1,0 +1,9 @@
+{
+  "comparison_valid": false,
+  "epoch_alignment_tolerance_s": 1.0,
+  "historic_scores_reused": false,
+  "native_evaluator_invoked": false,
+  "reason": "No frozen B0 TEXBAT node-feature and threshold lineage exists on the exact R3 epochs; OAKBAT/CMTE checkpoints are different input campaigns.",
+  "same_epoch_scores_computed": false,
+  "status": "UNAVAILABLE_EXACT_LINEAGE"
+}

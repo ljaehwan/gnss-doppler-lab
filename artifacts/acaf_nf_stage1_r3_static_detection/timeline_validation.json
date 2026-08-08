@@ -1,0 +1,381 @@
+{
+  "raw_time_origin": "first complex sample is t=0; receiver PRN_start_sample_count is absolute from first_file_sample=0",
+  "scenarios": {
+    "ds3": {
+      "duration_s": 457.85022464,
+      "official_onset_s": 118.9,
+      "phases": {
+        "established_pull_off": [
+          195.0,
+          457.85022464
+        ],
+        "injection_takeover": [
+          118.9,
+          195.0
+        ],
+        "strict_pre": [
+          100.0,
+          118.9
+        ]
+      },
+      "status": "PASS",
+      "tracker_census": {
+        "channels": [
+          {
+            "candidate_seconds": 359,
+            "channel": 0,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track0.mat",
+            "rows": 457675
+          },
+          {
+            "candidate_seconds": 213,
+            "channel": 1,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track1.mat",
+            "rows": 336714
+          },
+          {
+            "candidate_seconds": 359,
+            "channel": 2,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track2.mat",
+            "rows": 457759
+          },
+          {
+            "candidate_seconds": 352,
+            "channel": 3,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track3.mat",
+            "rows": 457676
+          },
+          {
+            "candidate_seconds": 308,
+            "channel": 4,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track4.mat",
+            "rows": 446273
+          },
+          {
+            "candidate_seconds": 343,
+            "channel": 5,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track5.mat",
+            "rows": 449164
+          },
+          {
+            "candidate_seconds": 148,
+            "channel": 6,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track6.mat",
+            "rows": 376362
+          },
+          {
+            "candidate_seconds": 358,
+            "channel": 7,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track7.mat",
+            "rows": 457674
+          },
+          {
+            "candidate_seconds": 357,
+            "channel": 8,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track8.mat",
+            "rows": 457718
+          },
+          {
+            "candidate_seconds": 324,
+            "channel": 9,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track9.mat",
+            "rows": 455648
+          },
+          {
+            "candidate_seconds": 108,
+            "channel": 10,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds3/raw/epl_track10.mat",
+            "rows": 320710
+          }
+        ],
+        "scenario": "ds3",
+        "selected": {
+          "established_pull_off": 24,
+          "injection_takeover": 24,
+          "strict_pre": 12
+        }
+      }
+    },
+    "ds4": {
+      "duration_s": 128.21987328,
+      "official_onset_s": 113.8,
+      "phases": {
+        "injection_takeover": [
+          113.8,
+          128.21987328
+        ],
+        "strict_pre": [
+          100.0,
+          113.8
+        ]
+      },
+      "status": "FULL_DS4_UNAVAILABLE",
+      "tracker_census": {
+        "channels": [
+          {
+            "candidate_seconds": 30,
+            "channel": 0,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track0.mat",
+            "rows": 128002
+          },
+          {
+            "candidate_seconds": 30,
+            "channel": 1,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track1.mat",
+            "rows": 126384
+          },
+          {
+            "candidate_seconds": 30,
+            "channel": 2,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track2.mat",
+            "rows": 128128
+          },
+          {
+            "candidate_seconds": 0,
+            "channel": 3,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track3.mat",
+            "rows": 77292
+          },
+          {
+            "candidate_seconds": 30,
+            "channel": 4,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track4.mat",
+            "rows": 128087
+          },
+          {
+            "candidate_seconds": 30,
+            "channel": 5,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track5.mat",
+            "rows": 128128
+          },
+          {
+            "candidate_seconds": 30,
+            "channel": 6,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track6.mat",
+            "rows": 128129
+          },
+          {
+            "candidate_seconds": 30,
+            "channel": 7,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track7.mat",
+            "rows": 126189
+          },
+          {
+            "candidate_seconds": 30,
+            "channel": 8,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track8.mat",
+            "rows": 128045
+          },
+          {
+            "candidate_seconds": 30,
+            "channel": 9,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track9.mat",
+            "rows": 128129
+          },
+          {
+            "candidate_seconds": 30,
+            "channel": 10,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds4/raw/epl_track10.mat",
+            "rows": 128088
+          }
+        ],
+        "scenario": "ds4",
+        "selected": {
+          "injection_takeover": 16,
+          "strict_pre": 12
+        }
+      }
+    },
+    "ds7": {
+      "duration_s": 270.59290112,
+      "official_onset_s": 110.0,
+      "phases": {
+        "established_pull_off": [
+          150.0,
+          270.59290112
+        ],
+        "injection_takeover": [
+          110.0,
+          150.0
+        ],
+        "strict_pre": [
+          100.0,
+          110.0
+        ]
+      },
+      "status": "PASS",
+      "tracker_census": {
+        "channels": [
+          {
+            "candidate_seconds": 171,
+            "channel": 0,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track0.mat",
+            "rows": 270417
+          },
+          {
+            "candidate_seconds": 170,
+            "channel": 1,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track1.mat",
+            "rows": 269879
+          },
+          {
+            "candidate_seconds": 171,
+            "channel": 2,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track2.mat",
+            "rows": 270502
+          },
+          {
+            "candidate_seconds": 171,
+            "channel": 3,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track3.mat",
+            "rows": 269387
+          },
+          {
+            "candidate_seconds": 171,
+            "channel": 4,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track4.mat",
+            "rows": 270458
+          },
+          {
+            "candidate_seconds": 171,
+            "channel": 5,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track5.mat",
+            "rows": 270502
+          },
+          {
+            "candidate_seconds": 171,
+            "channel": 6,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track6.mat",
+            "rows": 270501
+          },
+          {
+            "candidate_seconds": 171,
+            "channel": 7,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track7.mat",
+            "rows": 270461
+          },
+          {
+            "candidate_seconds": 162,
+            "channel": 8,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track8.mat",
+            "rows": 247622
+          },
+          {
+            "candidate_seconds": 171,
+            "channel": 9,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track9.mat",
+            "rows": 270460
+          },
+          {
+            "candidate_seconds": 0,
+            "channel": 10,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds7/raw/epl_track10.mat",
+            "rows": 108605
+          }
+        ],
+        "scenario": "ds7",
+        "selected": {
+          "established_pull_off": 24,
+          "injection_takeover": 24,
+          "strict_pre": 10
+        }
+      }
+    },
+    "ds8": {
+      "duration_s": 470.00141168,
+      "official_onset_s": 110.0,
+      "phases": {
+        "established_pull_off": [
+          150.0,
+          470.00141168
+        ],
+        "injection_takeover": [
+          110.0,
+          150.0
+        ],
+        "strict_pre": [
+          100.0,
+          110.0
+        ]
+      },
+      "status": "PASS",
+      "tracker_census": {
+        "channels": [
+          {
+            "candidate_seconds": 370,
+            "channel": 0,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track0.mat",
+            "rows": 469868
+          },
+          {
+            "candidate_seconds": 370,
+            "channel": 1,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track1.mat",
+            "rows": 469866
+          },
+          {
+            "candidate_seconds": 364,
+            "channel": 2,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track2.mat",
+            "rows": 469863
+          },
+          {
+            "candidate_seconds": 370,
+            "channel": 3,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track3.mat",
+            "rows": 469148
+          },
+          {
+            "candidate_seconds": 34,
+            "channel": 4,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track4.mat",
+            "rows": 252292
+          },
+          {
+            "candidate_seconds": 370,
+            "channel": 5,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track5.mat",
+            "rows": 469908
+          },
+          {
+            "candidate_seconds": 370,
+            "channel": 6,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track6.mat",
+            "rows": 469909
+          },
+          {
+            "candidate_seconds": 369,
+            "channel": 7,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track7.mat",
+            "rows": 464436
+          },
+          {
+            "candidate_seconds": 370,
+            "channel": 8,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track8.mat",
+            "rows": 469825
+          },
+          {
+            "candidate_seconds": 370,
+            "channel": 9,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track9.mat",
+            "rows": 469868
+          },
+          {
+            "candidate_seconds": 353,
+            "channel": 10,
+            "path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/ds8/raw/epl_track10.mat",
+            "rows": 467778
+          }
+        ],
+        "scenario": "ds8",
+        "selected": {
+          "established_pull_off": 24,
+          "injection_takeover": 24,
+          "strict_pre": 10
+        }
+      }
+    }
+  },
+  "schema": "acaf_nf_stage1_r3_timeline.v1"
+}

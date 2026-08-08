@@ -1,0 +1,11 @@
+ablation,method,budget,primary_family_macro_pauc,status,note
+A0,raw_power_only,0,0.9715099715099714,PASS,
+A1,epl_3,3,0.7613960113960113,PASS,
+A2,fixed_delay_9,9,0.8771367521367521,PASS,
+A3,dense_one_source_residual,187,0.9287749287749287,PASS,
+A4,analytic_two_source_glrt,187,0.9198717948717948,PASS,
+A5,learned_fixed,9,0.5886752136752137,PASS,
+A6,active_magnitude,9,0.5014245014245015,PASS,
+A7,active_adaptive,9,0.5886752136752137,PASS,
+A8,active_no_context,9,0.5886752136752137,PASS,Full selected by clean selection NLL; A8 can coincide with Full when NF-no-context wins.
+Full,active_adaptive,9,0.5886752136752137,PASS,Full selected by clean selection NLL; A8 can coincide with Full when NF-no-context wins.

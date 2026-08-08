@@ -1,0 +1,117 @@
+{
+  "awgn_cn0": {
+    "formula": "sigma_quadrature = measured_raw_rms / sqrt(2 * 10^(target_cn0/10) * 0.001s)",
+    "fpr_by_target": {
+      "35": 0.5,
+      "40": 0.0,
+      "45": 0.5
+    },
+    "method": "actual raw-IQ AWGN followed by complete CAF re-correlation",
+    "rows": [
+      {
+        "added_awgn_per_quadrature_sigma_mean": 934.4712277972443,
+        "alarm": false,
+        "calibrated_score": 0.6375948463671467,
+        "raw_rms_mean": 2350.0707218182256,
+        "target_cn0_db_hz": 35,
+        "window": 0
+      },
+      {
+        "added_awgn_per_quadrature_sigma_mean": 935.8452201659759,
+        "alarm": true,
+        "calibrated_score": 1.9972794623449805,
+        "raw_rms_mean": 2353.52612969137,
+        "target_cn0_db_hz": 35,
+        "window": 1
+      },
+      {
+        "added_awgn_per_quadrature_sigma_mean": 525.491788591755,
+        "alarm": false,
+        "calibrated_score": 1.0100978653287567,
+        "raw_rms_mean": 2350.0707218182256,
+        "target_cn0_db_hz": 40,
+        "window": 0
+      },
+      {
+        "added_awgn_per_quadrature_sigma_mean": 526.264441281189,
+        "alarm": false,
+        "calibrated_score": -0.3850732280496873,
+        "raw_rms_mean": 2353.52612969137,
+        "target_cn0_db_hz": 40,
+        "window": 1
+      },
+      {
+        "added_awgn_per_quadrature_sigma_mean": 295.5057487733343,
+        "alarm": false,
+        "calibrated_score": 0.09605671596285657,
+        "raw_rms_mean": 2350.0707218182256,
+        "target_cn0_db_hz": 45,
+        "window": 0
+      },
+      {
+        "added_awgn_per_quadrature_sigma_mean": 295.94024331062246,
+        "alarm": true,
+        "calibrated_score": 3.62255398331028,
+        "raw_rms_mean": 2353.52612969137,
+        "target_cn0_db_hz": 45,
+        "window": 1
+      }
+    ]
+  },
+  "base_pooled_calibrated_fpr": 0.0,
+  "base_pooled_event_n": 12,
+  "base_prn_n": 132,
+  "fpr_unit": "pooled variable-PRN event after frozen calibration",
+  "gain": {
+    "0.5": {
+      "alarm_delta": 0.0,
+      "max_abs_score_delta": 1.1419864165418403e-08,
+      "pooled_calibrated_fpr": 0.0
+    },
+    "0.8": {
+      "alarm_delta": 0.0,
+      "max_abs_score_delta": 7.980468779145156e-07,
+      "pooled_calibrated_fpr": 0.0
+    },
+    "1.2": {
+      "alarm_delta": 0.0,
+      "max_abs_score_delta": 5.212313072266994e-07,
+      "pooled_calibrated_fpr": 0.0
+    },
+    "2.0": {
+      "alarm_delta": 0.0,
+      "max_abs_score_delta": 2.8549660413546007e-09,
+      "pooled_calibrated_fpr": 0.0
+    }
+  },
+  "gain_phase_fpr_increase_max_percentage_points": 0.0,
+  "global_phase": {
+    "-1.6144850718027848": {
+      "alarm_delta": 0.0,
+      "max_abs_score_delta": 3.7240866013199536e-07,
+      "pooled_calibrated_fpr": 0.0
+    },
+    "0": {
+      "alarm_delta": 0.0,
+      "max_abs_score_delta": 5.709931194530782e-09,
+      "pooled_calibrated_fpr": 0.0
+    },
+    "0.7853981633974483": {
+      "alarm_delta": 0.0,
+      "max_abs_score_delta": 9.957058240139816e-07,
+      "pooled_calibrated_fpr": 0.0
+    },
+    "1.5707963267948966": {
+      "alarm_delta": 0.0,
+      "max_abs_score_delta": 5.709931194530782e-09,
+      "pooled_calibrated_fpr": 0.0
+    },
+    "3.141592653589793": {
+      "alarm_delta": 0.0,
+      "max_abs_score_delta": 5.709930306352362e-09,
+      "pooled_calibrated_fpr": 0.0
+    }
+  },
+  "normalization": "per-ms prompt phase and magnitude",
+  "raw_rms_diagnostic_used_for_scale_audit": true
+}

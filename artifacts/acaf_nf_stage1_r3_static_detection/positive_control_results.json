@@ -1,0 +1,208 @@
+{
+  "construction": "actual authenticated raw IQ plus a generated same-PRN complex code/carrier second source; full CAF re-correlation and per-ms prompt renormalization",
+  "different_prn_used": false,
+  "magnitude_only_addition": false,
+  "multiple_power_ratios": true,
+  "relative_phase_sweep": [
+    0,
+    1.5707963267948966,
+    3.141592653589793
+  ],
+  "results": [
+    {
+      "active_k9_score": -0.4422183319485527,
+      "analytic_two_source_glrt": 2.1792831097648415,
+      "delay_chips": -0.25,
+      "power_amplitude_ratio": 0.25,
+      "relative_phase_rad": 0.0,
+      "residual_doppler_hz": -100.0
+    },
+    {
+      "active_k9_score": -0.5057722212498431,
+      "analytic_two_source_glrt": 0.5356131748524334,
+      "delay_chips": -0.125,
+      "power_amplitude_ratio": 0.25,
+      "relative_phase_rad": 0.0,
+      "residual_doppler_hz": 50.0
+    },
+    {
+      "active_k9_score": -1.3180986386898323,
+      "analytic_two_source_glrt": 0.48041426610263016,
+      "delay_chips": 0.125,
+      "power_amplitude_ratio": 0.25,
+      "relative_phase_rad": 0.0,
+      "residual_doppler_hz": -50.0
+    },
+    {
+      "active_k9_score": -1.9039601652354416,
+      "analytic_two_source_glrt": 2.4066886225372617,
+      "delay_chips": 0.25,
+      "power_amplitude_ratio": 0.25,
+      "relative_phase_rad": 0.0,
+      "residual_doppler_hz": 100.0
+    },
+    {
+      "active_k9_score": -0.3974442384422662,
+      "analytic_two_source_glrt": 4.329318318818289,
+      "delay_chips": -0.25,
+      "power_amplitude_ratio": 0.25,
+      "relative_phase_rad": 1.5707963267948966,
+      "residual_doppler_hz": -100.0
+    },
+    {
+      "active_k9_score": -0.5853368201271506,
+      "analytic_two_source_glrt": 1.3114983753226235,
+      "delay_chips": -0.125,
+      "power_amplitude_ratio": 0.25,
+      "relative_phase_rad": 1.5707963267948966,
+      "residual_doppler_hz": 50.0
+    },
+    {
+      "active_k9_score": -1.4066378181822887,
+      "analytic_two_source_glrt": 0.7320026264368918,
+      "delay_chips": 0.125,
+      "power_amplitude_ratio": 0.25,
+      "relative_phase_rad": 1.5707963267948966,
+      "residual_doppler_hz": -50.0
+    },
+    {
+      "active_k9_score": -2.0401781485030375,
+      "analytic_two_source_glrt": 3.5920024854150436,
+      "delay_chips": 0.25,
+      "power_amplitude_ratio": 0.25,
+      "relative_phase_rad": 1.5707963267948966,
+      "residual_doppler_hz": 100.0
+    },
+    {
+      "active_k9_score": -1.2262849910961096,
+      "analytic_two_source_glrt": 6.627692250496667,
+      "delay_chips": -0.25,
+      "power_amplitude_ratio": 0.25,
+      "relative_phase_rad": 3.141592653589793,
+      "residual_doppler_hz": -100.0
+    },
+    {
+      "active_k9_score": -1.1423476061023956,
+      "analytic_two_source_glrt": 1.7228765399936203,
+      "delay_chips": -0.125,
+      "power_amplitude_ratio": 0.25,
+      "relative_phase_rad": 3.141592653589793,
+      "residual_doppler_hz": 50.0
+    },
+    {
+      "active_k9_score": 0.2242817704057764,
+      "analytic_two_source_glrt": 1.8062741453988547,
+      "delay_chips": 0.125,
+      "power_amplitude_ratio": 0.25,
+      "relative_phase_rad": 3.141592653589793,
+      "residual_doppler_hz": -50.0
+    },
+    {
+      "active_k9_score": 1.3291065053499882,
+      "analytic_two_source_glrt": 7.708200845840799,
+      "delay_chips": 0.25,
+      "power_amplitude_ratio": 0.25,
+      "relative_phase_rad": 3.141592653589793,
+      "residual_doppler_hz": 100.0
+    },
+    {
+      "active_k9_score": -0.05893010645959418,
+      "analytic_two_source_glrt": 10.072105462676072,
+      "delay_chips": -0.25,
+      "power_amplitude_ratio": 0.75,
+      "relative_phase_rad": 0.0,
+      "residual_doppler_hz": -100.0
+    },
+    {
+      "active_k9_score": -0.20643347217086433,
+      "analytic_two_source_glrt": 2.3372864572701526,
+      "delay_chips": -0.125,
+      "power_amplitude_ratio": 0.75,
+      "relative_phase_rad": 0.0,
+      "residual_doppler_hz": 50.0
+    },
+    {
+      "active_k9_score": -1.9455876803048051,
+      "analytic_two_source_glrt": 2.444530667317559,
+      "delay_chips": 0.125,
+      "power_amplitude_ratio": 0.75,
+      "relative_phase_rad": 0.0,
+      "residual_doppler_hz": -50.0
+    },
+    {
+      "active_k9_score": -3.1024915641022948,
+      "analytic_two_source_glrt": 11.592592923184691,
+      "delay_chips": 0.25,
+      "power_amplitude_ratio": 0.75,
+      "relative_phase_rad": 0.0,
+      "residual_doppler_hz": 100.0
+    },
+    {
+      "active_k9_score": 0.48821621626932593,
+      "analytic_two_source_glrt": 22.466830734002258,
+      "delay_chips": -0.25,
+      "power_amplitude_ratio": 0.75,
+      "relative_phase_rad": 1.5707963267948966,
+      "residual_doppler_hz": -100.0
+    },
+    {
+      "active_k9_score": -0.030515390102762188,
+      "analytic_two_source_glrt": 5.882259843734778,
+      "delay_chips": -0.125,
+      "power_amplitude_ratio": 0.75,
+      "relative_phase_rad": 1.5707963267948966,
+      "residual_doppler_hz": 50.0
+    },
+    {
+      "active_k9_score": -2.5571506777048167,
+      "analytic_two_source_glrt": 4.635314299219398,
+      "delay_chips": 0.125,
+      "power_amplitude_ratio": 0.75,
+      "relative_phase_rad": 1.5707963267948966,
+      "residual_doppler_hz": -50.0
+    },
+    {
+      "active_k9_score": -3.8763429729075796,
+      "analytic_two_source_glrt": 22.394027581285997,
+      "delay_chips": 0.25,
+      "power_amplitude_ratio": 0.75,
+      "relative_phase_rad": 1.5707963267948966,
+      "residual_doppler_hz": 100.0
+    },
+    {
+      "active_k9_score": -2.553093028813267,
+      "analytic_two_source_glrt": 509.0191133483938,
+      "delay_chips": -0.25,
+      "power_amplitude_ratio": 0.75,
+      "relative_phase_rad": 3.141592653589793,
+      "residual_doppler_hz": -100.0
+    },
+    {
+      "active_k9_score": -3.0906582296669987,
+      "analytic_two_source_glrt": 120.88105840911122,
+      "delay_chips": -0.125,
+      "power_amplitude_ratio": 0.75,
+      "relative_phase_rad": 3.141592653589793,
+      "residual_doppler_hz": 50.0
+    },
+    {
+      "active_k9_score": 9.339206400576174,
+      "analytic_two_source_glrt": 132.52280540140657,
+      "delay_chips": 0.125,
+      "power_amplitude_ratio": 0.75,
+      "relative_phase_rad": 3.141592653589793,
+      "residual_doppler_hz": -50.0
+    },
+    {
+      "active_k9_score": 28.277899278167247,
+      "analytic_two_source_glrt": 595.7110930002406,
+      "delay_chips": 0.25,
+      "power_amplitude_ratio": 0.75,
+      "relative_phase_rad": 3.141592653589793,
+      "residual_doppler_hz": 100.0
+    }
+  ],
+  "signed_delay_and_doppler": true,
+  "status": "DIAGNOSTIC_ONLY",
+  "zero_padding_or_circular_shift_used": false
+}
