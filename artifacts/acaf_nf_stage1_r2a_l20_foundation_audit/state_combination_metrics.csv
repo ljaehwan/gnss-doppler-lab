@@ -1,0 +1,9 @@
+combination,raw_support_source,state_source,carrier_sign,availability,channel,prn,receiver_time_s,one_ms_within_50_fraction,one_ms_delay_within_0_125_fraction,l20_peak_doppler_offset_hz,l20_peak_delay_offset_chips,l20_grid_boundary,l20_center_peak_ratio
+fresh_raw+fresh_state_kminus1,fresh cleanStatic authenticated raw,fresh tracker shift +0,-1,AVAILABLE,7,10,0.68739548,0.8,1.0,0.0,0.0,False,1.0
+fresh_raw+fresh_state_k,fresh cleanStatic authenticated raw,fresh tracker shift +1,-1,AVAILABLE,7,10,0.68739548,0.85,1.0,0.0,0.0,False,1.0
+fresh_raw+fresh_state_kminus2,fresh cleanStatic authenticated raw,fresh tracker shift -1,-1,AVAILABLE,7,10,0.68739548,0.8,1.0,0.0,0.0,False,1.0
+fresh_raw+fresh_state_sign_reversed,fresh cleanStatic authenticated raw,fresh tracker shift +0,1,AVAILABLE,7,10,0.68739548,0.3,0.15,-150.0,0.375,False,0.8604094689122136
+R1.4_raw_support+R1.4_state,same authenticated cleanStatic bytes,R1.4 previous row,-1,AVAILABLE_STORED_COMPLEX_SURFACES,R1.4 common anchor,R1.4 common anchor,,,,0.0,0.0,False,1.0
+fresh_raw_support+R1.4_state,same authenticated cleanStatic bytes,R1.4 state,-1,ONLY_ON_117_COMMON_SUPPORTS,8,13,9-12 s common interval,,,0.0,0.0,False,1.0
+same_raw_support+fresh_tracker_state,same authenticated cleanStatic bytes,fresh tracker k-1,-1,AVAILABLE_ON_117_COMMON_SUPPORTS,8,13,9.05572304,0.85,1.0,0.0,0.0,False,1.0
+same_raw_support+R1.4_state,same authenticated cleanStatic bytes,R1.4 previous row,-1,AVAILABLE_ON_117_COMMON_SUPPORTS,8,13,9.05572304,0.85,1.0,0.0,0.0,False,1.0

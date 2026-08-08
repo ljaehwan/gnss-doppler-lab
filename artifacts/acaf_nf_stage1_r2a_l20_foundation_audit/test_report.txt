@@ -1,0 +1,8 @@
+PASS 2026-08-08 Asia/Seoul
+
+- `pytest -q tests/test_acaf*.py`: PASS (162 tests)
+- `python3 scripts/verify_acaf_nf_stage0_static_r14_doppler_validation.py artifacts/acaf_nf_stage0_static_r14_doppler_validation`: PASS
+- `python3 scripts/verify_acaf_nf_stage1_r2.py artifacts/acaf_nf_stage1_r2_full_normal --checkpoint 4`: PASS
+- `python3 scripts/verify_acaf_nf_stage1_r2a_l20_foundation_audit.py`: PASS; 3 L20 windows / 60 constituent CAF surfaces recomputed from authenticated cleanStatic raw and fresh MAT state, aggregate SHA-256 exact match
+
+Covered contracts: R1.4/R2 numerical aggregation equivalence, Doppler wipe-off sign, k/k-1 NCO alignment, sample-counter semantics, contiguous causal L20, PRN/channel reassignment exclusion, 24,999/25,000 support behavior, streaming determinism, clean-only/no-attack guard, no model or threshold fitting, artifact verification, and existing ACAF units/verifiers.

@@ -1,0 +1,52 @@
+{
+  "candidate_10hz_windows_census": 43334,
+  "candidate_frequency_hz": 10,
+  "causal_prn_channels_in_census": 12,
+  "delay_within_0_125_fraction": 0.99725,
+  "doppler_histogram_hz": {
+    "-100.0": 2,
+    "-50.0": 39,
+    "0.0": 1126,
+    "50.0": 33
+  },
+  "evaluated_prn_channels": 9,
+  "evaluated_windows": 1200,
+  "evaluation_design": "deterministic pair-stratified sample from causal 10-Hz candidates across the full recording",
+  "exact_center_fraction": 0.9383333333333334,
+  "excluded_incomplete_lineage_pairs": [
+    [
+      1,
+      8
+    ],
+    [
+      1,
+      32
+    ],
+    [
+      4,
+      30
+    ]
+  ],
+  "full_span_valid_prn_channels": 9,
+  "l20_delay_boundary_fraction": 0.0,
+  "l20_doppler_boundary_fraction": 0.0,
+  "l20_grid_boundary_fraction": 0.0,
+  "l20_windows": 1200,
+  "minimum_required_windows": 1000,
+  "one_ms_delay_boundary_fraction": 0.000125,
+  "one_ms_doppler_boundary_fraction": 0.008625,
+  "one_ms_epochs": 24000,
+  "one_ms_grid_boundary_fraction": 0.008666666666666666,
+  "overall_grid_boundary_fraction": 0.008666666666666666,
+  "prompt_reproduction": {
+    "max_relative_error": 0.006777698689929945,
+    "median_relative_error": 3.2922783393951605e-06,
+    "n": 24000,
+    "p99_relative_error": 0.0020148079023426194,
+    "pooled_spearman": 0.9999989493793384
+  },
+  "recording_duration_s": 480.16392192,
+  "schema": "acaf_nf_stage1_r2a_full_cleanstatic_l20_metrics.v1",
+  "within_100_fraction": 1.0,
+  "within_50_fraction": 0.9983333333333333
+}

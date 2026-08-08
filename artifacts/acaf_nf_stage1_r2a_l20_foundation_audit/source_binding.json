@@ -1,0 +1,45 @@
+{
+  "attacks": {
+    "ds3": {
+      "bytes_read": 0,
+      "status": "NOT_ACCESSED"
+    },
+    "ds4": {
+      "bytes_read": 0,
+      "status": "NOT_ACCESSED"
+    },
+    "ds7": {
+      "bytes_read": 0,
+      "status": "NOT_ACCESSED"
+    },
+    "ds8": {
+      "bytes_read": 0,
+      "status": "NOT_ACCESSED"
+    }
+  },
+  "base_branch": "research/acaf-nf-stage1-r2-full-normal",
+  "base_commit": "45df3c8b9996a853f4ae03fe8e93e885b16161f7",
+  "fresh_receiver": {
+    "config_sha256": "504f9d499b38b0919a4e31b99d86f8cdcec36eabc1b738cfa745174a695f193f",
+    "executable_sha256": "4b391f84270b421f84c92d7d9981b5f3fddd6c2e6b65917a3c4d8dfd1f1a99d3",
+    "manifest": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/manifest.json",
+    "manifest_sha256": "1f5e83b8e2c1ffe40a06c9081bc26da89d1a99cc2c1328cb7ea51247f9179b47"
+  },
+  "r14_artifact": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r2a-l20-foundation-audit/artifacts/acaf_nf_stage0_static_r14_doppler_validation",
+  "r14_receiver": {
+    "config_sha256": "ce74f719338a8a97021ba10a0c72927e3e44db01120d355b5443fcc559504930",
+    "executable_sha256": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+    "manifest": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/manifest.json",
+    "manifest_sha256": "ced3722a7b560fc0efce5f347c7e09cd81e7a660969a17c8a85bb56c9e11e30a"
+  },
+  "r2_artifact": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r2a-l20-foundation-audit/artifacts/acaf_nf_stage1_r2_full_normal",
+  "raw": {
+    "path": "/home/ubuntu/unraid_hdd/texbat/raw/cleanStatic.bin",
+    "recording": "cleanStatic",
+    "sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+    "size_bytes": 48016392192,
+    "size_rechecked": 48016392192
+  },
+  "schema": "acaf_nf_stage1_r2a_source_binding.v1",
+  "status": "PASS"
+}

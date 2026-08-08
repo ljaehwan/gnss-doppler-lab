@@ -1,0 +1,3 @@
+channel,prn,pair,receiver_time_s,time_segment,anchor_tracker_row,raw_start_sample,raw_end_sample,peak_doppler_offset_hz,peak_delay_offset_chips,delay_boundary,doppler_boundary,grid_boundary,center_peak_ratio,cn0_db_hz,carrier_lock,assignment_run_length_at_anchor
+3,20,3/20,106.30744592,front,105551,2657211148,2657711148,-100.0,0.0,False,False,False,0.9908612001611372,40.9412841796875,0.9123354554176331,20
+7,10,7/10,129.60034544,front,128953,3239533636,3240033636,-100.0,0.0,False,False,False,0.9897977497233805,40.86067581176758,0.9211324453353882,79

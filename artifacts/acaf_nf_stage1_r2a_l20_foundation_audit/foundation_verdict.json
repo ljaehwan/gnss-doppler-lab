@@ -1,0 +1,111 @@
+{
+  "attack_performance_evaluated": false,
+  "deterministic_replay_equivalence": {
+    "classification": "NOT_APPLICABLE_AS_DETERMINISTIC_REPLAY_EQUIVALENCE",
+    "gate_name_retained": "r14_common_reproduced_1e_6",
+    "historic_common_supports": 117,
+    "historic_result": false,
+    "historic_surface_hash_all_match": false,
+    "reason": "R1.4 and fresh replay do not bind the same receiver executable/config/initial phase/channel numbering; common raw bytes alone do not define deterministic replay identity.",
+    "same_build_config_raw_initial_assignment_would_require_exact_numeric_and_hash_match": true,
+    "used_as_physical_validity_gate": false
+  },
+  "failure_cause": {
+    "calculation_bug": false,
+    "carrier_sign_bug": false,
+    "correction": "retain k-1 state/current Prompt and frozen equations; enumerate causal same-assignment 10-Hz L20 candidates over the full cleanStatic tracker, exclude reacquired pair lineages absent from one or more recording thirds, then take a deterministic pair/time-stratified validation sample",
+    "dominant_failure_pair": "7/10",
+    "dominant_pair_failure_share": 1.0,
+    "k_kminus1_bug": false,
+    "old_failure_by_pair": {
+      "7/10": 24
+    },
+    "old_failure_count": 24,
+    "old_l20_windows": 171,
+    "old_window_by_pair": {
+      "0/16": 48,
+      "1/32": 1,
+      "1/8": 1,
+      "2/3": 1,
+      "3/20": 1,
+      "4/30": 1,
+      "5/6": 1,
+      "6/7": 1,
+      "7/10": 95,
+      "8/13": 21
+    },
+    "old_within_50_fraction": 0.8596491228070176,
+    "root_cause": "R2 validation-row selection forced the first 20 rows of each pair and then formed L20 only inside the truncated 969-row set, over-weighting the fresh receiver acquisition transient on channel 7 / PRN 10 around 0.67-0.80 s."
+  },
+  "gate_auto_promoted": false,
+  "gates": {
+    "causal_alignment_verified": true,
+    "delay_within_0_125_ge_0_95": true,
+    "grid_boundary_le_0_01": true,
+    "l20_doppler_within_50_ge_0_95": true,
+    "prn_channels_ge_8": true,
+    "prompt_p99_relative_error_le_0_01": true,
+    "prompt_pooled_spearman_ge_0_999": true,
+    "raw_provenance_authenticated": true,
+    "sample_windows_ge_1000": true
+  },
+  "model_trained": false,
+  "physical_tracker_validity": {
+    "metrics": {
+      "candidate_10hz_windows_census": 43334,
+      "candidate_frequency_hz": 10,
+      "causal_prn_channels_in_census": 12,
+      "delay_within_0_125_fraction": 0.99725,
+      "doppler_histogram_hz": {
+        "-100.0": 2,
+        "-50.0": 39,
+        "0.0": 1126,
+        "50.0": 33
+      },
+      "evaluated_prn_channels": 9,
+      "evaluated_windows": 1200,
+      "evaluation_design": "deterministic pair-stratified sample from causal 10-Hz candidates across the full recording",
+      "exact_center_fraction": 0.9383333333333334,
+      "excluded_incomplete_lineage_pairs": [
+        [
+          1,
+          8
+        ],
+        [
+          1,
+          32
+        ],
+        [
+          4,
+          30
+        ]
+      ],
+      "full_span_valid_prn_channels": 9,
+      "l20_delay_boundary_fraction": 0.0,
+      "l20_doppler_boundary_fraction": 0.0,
+      "l20_grid_boundary_fraction": 0.0,
+      "l20_windows": 1200,
+      "minimum_required_windows": 1000,
+      "one_ms_delay_boundary_fraction": 0.000125,
+      "one_ms_doppler_boundary_fraction": 0.008625,
+      "one_ms_epochs": 24000,
+      "one_ms_grid_boundary_fraction": 0.008666666666666666,
+      "overall_grid_boundary_fraction": 0.008666666666666666,
+      "prompt_reproduction": {
+        "max_relative_error": 0.006777698689929945,
+        "median_relative_error": 3.2922783393951605e-06,
+        "n": 24000,
+        "p99_relative_error": 0.0020148079023426194,
+        "pooled_spearman": 0.9999989493793384
+      },
+      "recording_duration_s": 480.16392192,
+      "schema": "acaf_nf_stage1_r2a_full_cleanstatic_l20_metrics.v1",
+      "within_100_fraction": 1.0,
+      "within_50_fraction": 0.9983333333333333
+    },
+    "status": "PASS"
+  },
+  "schema": "acaf_nf_stage1_r2a_foundation_verdict.v1",
+  "thresholds_changed": false,
+  "verdict": "FOUNDATION_VALID"
+}

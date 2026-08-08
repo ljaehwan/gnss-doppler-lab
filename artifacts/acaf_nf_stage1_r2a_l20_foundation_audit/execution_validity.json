@@ -1,0 +1,220 @@
+{
+  "attack_iq_bytes_read": 0,
+  "attack_iq_files_opened": [],
+  "attack_scenarios_evaluated": [],
+  "candidate_selected_from_attack_results": false,
+  "cleanstatic_epochs_recomputed_from_raw": 24000,
+  "cleanstatic_raw_bytes_addressable": 48016392192,
+  "cleanstatic_windows_evaluated": 1200,
+  "excluded_incomplete_lineage_pairs": [
+    [
+      1,
+      8
+    ],
+    [
+      1,
+      32
+    ],
+    [
+      4,
+      30
+    ]
+  ],
+  "full_span_pair_segments": {
+    "0/16": [
+      "back",
+      "front",
+      "middle"
+    ],
+    "1/32": [
+      "back"
+    ],
+    "1/8": [
+      "front"
+    ],
+    "10/23": [
+      "back",
+      "front",
+      "middle"
+    ],
+    "2/3": [
+      "back",
+      "front",
+      "middle"
+    ],
+    "3/20": [
+      "back",
+      "front",
+      "middle"
+    ],
+    "4/30": [
+      "middle"
+    ],
+    "5/6": [
+      "back",
+      "front",
+      "middle"
+    ],
+    "6/7": [
+      "back",
+      "front",
+      "middle"
+    ],
+    "7/10": [
+      "back",
+      "front",
+      "middle"
+    ],
+    "8/13": [
+      "back",
+      "front",
+      "middle"
+    ],
+    "9/19": [
+      "back",
+      "front",
+      "middle"
+    ]
+  },
+  "generated_at_utc": "2026-08-08T06:26:57.869542+00:00",
+  "model_training_executed": false,
+  "schema": "acaf_nf_stage1_r2a_execution_validity.v1",
+  "status": "FOUNDATION_VALID",
+  "threshold_fitting_executed": false,
+  "thresholds_changed": false,
+  "tracker_census": [
+    {
+      "candidate_10hz_windows": 4799,
+      "candidate_windows_by_prn": {
+        "16": 4799
+      },
+      "channel": 0,
+      "mat_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e0.mat",
+      "rejected_quality_rows": 18,
+      "rejected_reassignment_rows": 0,
+      "rejected_support_rows": 43361,
+      "rows": 480079
+    },
+    {
+      "candidate_10hz_windows": 794,
+      "candidate_windows_by_prn": {
+        "8": 462,
+        "32": 332
+      },
+      "channel": 1,
+      "mat_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e1.mat",
+      "rejected_quality_rows": 180320,
+      "rejected_reassignment_rows": 18,
+      "rejected_support_rows": 39060,
+      "rows": 298906
+    },
+    {
+      "candidate_10hz_windows": 4785,
+      "candidate_windows_by_prn": {
+        "23": 4785
+      },
+      "channel": 10,
+      "mat_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e10.mat",
+      "rejected_quality_rows": 1603,
+      "rejected_reassignment_rows": 0,
+      "rejected_support_rows": 8640,
+      "rows": 480042
+    },
+    {
+      "candidate_10hz_windows": 4759,
+      "candidate_windows_by_prn": {
+        "3": 4759
+      },
+      "channel": 2,
+      "mat_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e2.mat",
+      "rejected_quality_rows": 4162,
+      "rejected_reassignment_rows": 0,
+      "rejected_support_rows": 9446,
+      "rows": 480122
+    },
+    {
+      "candidate_10hz_windows": 4293,
+      "candidate_windows_by_prn": {
+        "20": 4293
+      },
+      "channel": 3,
+      "mat_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e3.mat",
+      "rejected_quality_rows": 3384,
+      "rejected_reassignment_rows": 0,
+      "rejected_support_rows": 45098,
+      "rows": 479405
+    },
+    {
+      "candidate_10hz_windows": 1,
+      "candidate_windows_by_prn": {
+        "30": 1
+      },
+      "channel": 4,
+      "mat_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e4.mat",
+      "rejected_quality_rows": 12222,
+      "rejected_reassignment_rows": 0,
+      "rejected_support_rows": 50586,
+      "rows": 479971
+    },
+    {
+      "candidate_10hz_windows": 4792,
+      "candidate_windows_by_prn": {
+        "6": 4792
+      },
+      "channel": 5,
+      "mat_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e5.mat",
+      "rejected_quality_rows": 959,
+      "rejected_reassignment_rows": 0,
+      "rejected_support_rows": 10020,
+      "rows": 480121
+    },
+    {
+      "candidate_10hz_windows": 4779,
+      "candidate_windows_by_prn": {
+        "7": 4779
+      },
+      "channel": 6,
+      "mat_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e6.mat",
+      "rejected_quality_rows": 2141,
+      "rejected_reassignment_rows": 0,
+      "rejected_support_rows": 28128,
+      "rows": 480122
+    },
+    {
+      "candidate_10hz_windows": 4770,
+      "candidate_windows_by_prn": {
+        "10": 4770
+      },
+      "channel": 7,
+      "mat_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e7.mat",
+      "rejected_quality_rows": 2817,
+      "rejected_reassignment_rows": 0,
+      "rejected_support_rows": 7871,
+      "rows": 479515
+    },
+    {
+      "candidate_10hz_windows": 4779,
+      "candidate_windows_by_prn": {
+        "13": 4779
+      },
+      "channel": 8,
+      "mat_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e8.mat",
+      "rejected_quality_rows": 2138,
+      "rejected_reassignment_rows": 0,
+      "rejected_support_rows": 26460,
+      "rows": 480080
+    },
+    {
+      "candidate_10hz_windows": 4783,
+      "candidate_windows_by_prn": {
+        "19": 4783
+      },
+      "channel": 9,
+      "mat_path": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/raw/e9.mat",
+      "rejected_quality_rows": 1641,
+      "rejected_reassignment_rows": 0,
+      "rejected_support_rows": 38564,
+      "rows": 480082
+    }
+  ]
+}

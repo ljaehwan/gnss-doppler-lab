@@ -1,0 +1,66 @@
+{
+  "alignment": "Prompt(k), NCO/code/aux(k-1), raw [stamp(k-1), stamp(k-1)+25000)",
+  "candidate_frequency_hz": 10,
+  "carrier_lock_min": 0.85,
+  "cn0_min_db_hz": 28.0,
+  "delay_grid_chips": [
+    -1.0,
+    -0.875,
+    -0.75,
+    -0.625,
+    -0.5,
+    -0.375,
+    -0.25,
+    -0.125,
+    0.0,
+    0.125,
+    0.25,
+    0.375,
+    0.5,
+    0.625,
+    0.75,
+    0.875,
+    1.0
+  ],
+  "doppler_grid_hz": [
+    -250.0,
+    -200.0,
+    -150.0,
+    -100.0,
+    -50.0,
+    0.0,
+    50.0,
+    100.0,
+    150.0,
+    200.0,
+    250.0
+  ],
+  "schema": "acaf_nf_stage1_r2a_config.v1",
+  "scope": "cleanStatic-only",
+  "selection": "deterministic all-pair stratified across full recording",
+  "support_samples": 25000,
+  "target_windows": 1200,
+  "threshold_or_model_fitting": false,
+  "thresholds_changed": false,
+  "verification_samples": [
+    {
+      "aggregate_sha256": "490263deb2b3acc2b672b9cfd7ff4400baf4c887cafa9096231bc8f0b33f001f",
+      "anchor_row": 225,
+      "channel": 0,
+      "prn": 16
+    },
+    {
+      "aggregate_sha256": "51530ef55f5fee0c08d45bb581c93ffd3eab5a858e588d3aafc59db76132459b",
+      "anchor_row": 331,
+      "channel": 0,
+      "prn": 16
+    },
+    {
+      "aggregate_sha256": "752ba928bb543cf0d2ec33590c9ecba3bc410463be0596fd0d580f2c9f606f6f",
+      "anchor_row": 40,
+      "channel": 7,
+      "prn": 10
+    }
+  ],
+  "workers": 4
+}

@@ -1,0 +1,11 @@
+# ACAF-NF Stage-1 R2a L20 foundation audit
+
+This cleanStatic-only audit answers why the prior L20 center recovery was **85.9649%** even though Prompt and delay reproduced correctly.
+
+1. **85.96% failure cause.** The R1.4 and R2 aggregation equations are numerically equivalent within `1e-12`. The old R2 selector forced each pair's first 20 rows into a 969-epoch subset; 24 of its 24 L20 failures came from channel 7 / PRN 10 during the fresh receiver acquisition transient around 0.67–0.80 s. This was a validation-selection bias, not a CAF sign, normalization, or k/k-1 error.
+2. **Correction.** The physical alignment remains Prompt `k`, NCO/code/aux `k-1`, and raw support `[stamp(k-1), stamp(k-1)+25000)`. R2a scans the full tracker for contiguous same-assignment 10-Hz L20 candidates and evaluates a deterministic all-pair/time-stratified clean-only sample. Reassignments, discontinuities, supports other than 25,000 samples, and reacquired pair lineages absent from any recording third are excluded before CAF evaluation. The excluded incomplete lineages are [(1, 8), (1, 32), (4, 30)].
+3. **Why R1.4 and fresh differ.** They share authenticated raw bytes but are independent receiver executions with different build/config/initial carrier phase/channel assignment lineage. The historic `r14_common_reproduced_1e_6` result remains recorded as FAIL, but it is classified separately from physical validity; identical hashes are required only for a truly identical deterministic replay.
+4. **Full cleanStatic result.** 1200 L20 windows (9 PRN/channel pairs; 24000 raw-recomputed 1-ms constituents): ±50 Hz 99.8333%, ±100 Hz 100.0000%, exact center 93.8333%, delay ±0.125 chip 99.7250%, overall boundary 0.8667%, Prompt Spearman 0.999998949, Prompt p99 error 0.2015%.
+5. **Foundation verdict.** `FOUNDATION_VALID`. Thresholds and gates were not changed or auto-promoted.
+6. **No attack/model claim.** No attack IQ was opened or evaluated, and no model, threshold, bootstrap, B0, DS3/DS4/DS7/DS8 score was fit or computed. Therefore this audit says nothing about attack detection performance or model feasibility.
+7. **Next step.** The frozen physical alignment may proceed to a separately authorized attack/model stage.
