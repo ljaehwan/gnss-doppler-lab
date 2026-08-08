@@ -20,7 +20,10 @@ import numpy as np
 from scipy.stats import spearmanr
 
 from gnss_doppler_lab.acaf_nf_stage0_r13_reconstruction import code_replica, carrier_wipeoff
-from gnss_doppler_lab.acaf_nf_stage1_continuous_tracker import ContinuousTrackerRow
+from gnss_doppler_lab.acaf_nf_stage1_continuous_tracker import (
+    ContinuousTrackerRow,
+    validate_cleanstatic_reconstruction,
+)
 
 FS_HZ = 25_000_000
 SUPPORT = 25_000
@@ -290,5 +293,92 @@ def checkpoint1(output: Path, r1: Path) -> Path:
         f"cleanStatic-only exporter alignment shift `{audit['selected_row_shift']}`. No attack data selected alignment.\n",
         encoding="utf-8",
     )
+    _refresh_checksums(output)
+    return output
+
+
+def _csv_tracker_rows(path: Path) -> list[ContinuousTrackerRow]:
+    result: list[ContinuousTrackerRow] = []
+    with path.open(newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            result.append(ContinuousTrackerRow(
+                scenario=row["scenario"], channel=int(row["channel"]), prn=int(row["prn"]),
+                tracker_row=int(row["tracker_row"]), mat_row=int(row["mat_row"]),
+                state_mat_row=int(row["state_mat_row"]), raw_start_sample=int(row["raw_start_sample"]),
+                raw_end_sample=int(row["raw_end_sample"]), sample_count=int(row["sample_count"]),
+                code_freq_chips=float(row["code_freq_chips"]), carrier_doppler_hz=float(row["carrier_doppler_hz"]),
+                aux1=float(row["aux1"]), prompt_i=float(row["prompt_i"]), prompt_q=float(row["prompt_q"]),
+                cn0_db_hz=float(row["cn0_db_hz"]), carrier_lock_test=float(row["carrier_lock_test"]),
+                quality_min_cn0_db_hz=float(row["quality_min_cn0_db_hz"]),
+                quality_min_carrier_lock=float(row["quality_min_carrier_lock"]), source_mat=row["source_mat"],
+                source_dat_row_match=row["source_dat_row_match"] == "True",
+                source_dat_rows=int(row["source_dat_rows"]), source_dat_record_bytes=int(row["source_dat_record_bytes"]),
+                source_dat_sample_stamp_match=row["source_dat_sample_stamp_match"] == "True",
+            ))
+    return result
+
+
+def _first_rows_semantics(path: Path, limit: int = 32) -> dict[str, Any]:
+    checked = 0
+    errors: list[str] = []
+    mats: dict[str, dict[str, np.ndarray]] = {}
+    with path.open(newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            mat_path = row["source_mat"]
+            if mat_path not in mats:
+                with h5py.File(mat_path, "r") as source:
+                    mats[mat_path] = {name: _vector(source, name) for name in (
+                        "PRN_start_sample_count", "PRN", "carrier_doppler_hz", "code_freq_chips", "aux1",
+                        "Prompt_I", "Prompt_Q")}
+            values = mats[mat_path]; current = int(row["mat_row"]); state = int(row["state_mat_row"])
+            if state != current - 1: errors.append("state_not_previous")
+            if int(row["raw_start_sample"]) != int(values["PRN_start_sample_count"][state]): errors.append("support_stamp")
+            if int(row["raw_end_sample"]) - int(row["raw_start_sample"]) != SUPPORT: errors.append("support_length")
+            for name, index, csv_name in (
+                ("carrier_doppler_hz", state, "carrier_doppler_hz"), ("code_freq_chips", state, "code_freq_chips"),
+                ("aux1", state, "aux1"), ("Prompt_I", current, "prompt_i"), ("Prompt_Q", current, "prompt_q"),
+            ):
+                if float(row[csv_name]) != float(values[name][index]): errors.append(f"value:{csv_name}")
+            checked += 1
+            if checked >= limit: break
+    return {"status": "PASS" if not errors and checked == limit else "FAIL", "checked_rows": checked,
+            "errors": sorted(set(errors)), "mapping": "current Prompt k; previous NCO/aux k-1; support stamp k-1"}
+
+
+def checkpoint2(output: Path, r1: Path) -> Path:
+    alignment = json.loads((output / "continuous_tracker_alignment_audit.json").read_text(encoding="utf-8"))
+    if alignment.get("status") != "PASS" or alignment.get("selected_row_shift") != 0:
+        raise RuntimeError("clean-selected alignment is not valid shift 0")
+    rows = _csv_tracker_rows(r1 / "continuous_tracker_cleanStatic.csv")
+    source = json.loads((r1 / "source_binding.json").read_text(encoding="utf-8"))["scenarios"]["cleanStatic"]
+    temporary = output / "checkpoint2_reconstruction"
+    if temporary.exists(): shutil.rmtree(temporary)
+    temporary.mkdir(parents=True)
+    report = validate_cleanstatic_reconstruction(
+        rows, Path(source["raw_path"]), temporary, Path("artifacts/acaf_nf_stage0_static_r14_doppler_validation"))
+    mapping = {
+        "cleanstatic_validation.json": "full_cleanstatic_validation.json",
+        "cleanstatic_validation_epochs.csv": "full_cleanstatic_validation_epochs.csv",
+        "cleanstatic_caf_surfaces.npz": "full_cleanstatic_caf_surfaces.npz",
+        "cleanstatic_l20_windows.json": "full_cleanstatic_l20_windows.json",
+    }
+    for old, new in mapping.items(): shutil.move(temporary / old, output / new)
+    source_plot = temporary / "plots" / "cleanstatic_prompt_reproduction.svg"
+    plot_target = output / "plots" / "full_cleanstatic_prompt_reproduction.svg"
+    plot_target.parent.mkdir(exist_ok=True); shutil.move(source_plot, plot_target)
+    shutil.rmtree(temporary)
+    semantics = {scenario: _first_rows_semantics(r1 / f"continuous_tracker_{scenario}.csv") for scenario in SCENARIOS}
+    report["alignment"] = alignment["selected_mapping"]
+    report["alignment_row_shift"] = 0
+    report["alignment_selected_from"] = "cleanStatic_only"
+    report["attack_alignment_selection_rows"] = 0
+    report["scenario_semantics_checks"] = semantics
+    report["producer_status"] = "PASS" if report["status"] == "CONTINUOUS_TRACKER_VALID" and all(
+        value["status"] == "PASS" for value in semantics.values()) else "FAIL"
+    if report["producer_status"] != "PASS": report["status"] = "CONTINUOUS_TRACKER_INVALID"
+    _dump(output / "full_cleanstatic_validation.json", report)
+    config = json.loads((output / "config.json").read_text(encoding="utf-8")); config["checkpoint"] = 2
+    config["frozen_alignment"] = alignment["selected_mapping"]; config["full_cleanstatic_validation_epochs"] = report["selected_epochs"]
+    _dump(output / "config.json", config)
     _refresh_checksums(output)
     return output

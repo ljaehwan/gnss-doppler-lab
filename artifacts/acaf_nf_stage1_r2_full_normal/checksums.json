@@ -9,12 +9,32 @@
       "size_bytes": 41150
     },
     "config.json": {
-      "sha256": "c0266bc9430066e44ee432b87f03ab240fbf71e0211e2f82f48b4f012d4c8587",
-      "size_bytes": 470
+      "sha256": "70150e0ffbe984f27f868e8e243f5dc6ad5c9e28245030e719a11a23663d562a",
+      "size_bytes": 706
     },
     "continuous_tracker_alignment_audit.json": {
       "sha256": "9ef5a19fec0f107895893d6f50fc63fa770dc72c365f3f298fa00a0d0d0a94d8",
       "size_bytes": 2825
+    },
+    "full_cleanstatic_caf_surfaces.npz": {
+      "sha256": "087f53536f844445a48ad7569697c98ff2fe468e1afac5e8005ff6fa8c8064e8",
+      "size_bytes": 2787521
+    },
+    "full_cleanstatic_l20_windows.json": {
+      "sha256": "c4154fd4e2f075f2448a8d0f1ed458067ff42a919971213147095b3e6bb2a05e",
+      "size_bytes": 92467
+    },
+    "full_cleanstatic_validation.json": {
+      "sha256": "ae1e0cf72927d53975abd5b705b1fc86c3bd92d0ab13a4d613ed04f609425f3f",
+      "size_bytes": 2653
+    },
+    "full_cleanstatic_validation_epochs.csv": {
+      "sha256": "5b62609d15e19c2a14e2035254de0442132792a05b6fd620a0903d06fa3d7840",
+      "size_bytes": 208872
+    },
+    "plots/full_cleanstatic_prompt_reproduction.svg": {
+      "sha256": "f341098b8be708cd97f2415adc39098721289fa9f1b30b154fd8410f92056732",
+      "size_bytes": 13617
     },
     "r1_artifact_inventory.json": {
       "sha256": "e8915561e1d509d75e97a3df856457bcd0ded0f80b48d02be58b9c1ccd00953e",
