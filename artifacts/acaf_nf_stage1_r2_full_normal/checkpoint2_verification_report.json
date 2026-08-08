@@ -1,0 +1,35 @@
+{
+  "checkpoint": 2,
+  "errors": [],
+  "recomputed": {
+    "derived_foundation_status": "FOUNDATION_INVALID",
+    "derived_tracker_status": "CONTINUOUS_TRACKER_INVALID",
+    "fresh_exporter_rows": 5098445,
+    "fresh_tracker_rows": 4716117,
+    "fresh_tracker_sha256": "5bd6ace9fe29b31c56d7aacce2a56329c526dc2a4a0d6b35cdbdcae3929f9ad6",
+    "gates": {
+      "delay_within_0_125_ge_0_95": true,
+      "grid_boundary_le_0_01": false,
+      "l20_doppler_within_50_ge_0_95": false,
+      "l20_windows_ge_100": true,
+      "median_prn_spearman_ge_0_99": true,
+      "pooled_spearman_ge_0_999": true,
+      "prompt_p99_relative_error_le_0_01": true,
+      "r14_common_reproduced_1e_6": false,
+      "raw_support_continuous_unique": true,
+      "target_prn_channels_ge_8": true,
+      "valid_prn_channels_ge_4": true
+    },
+    "l20_windows": 171,
+    "median_prn_spearman": 1.0,
+    "p99_relative_error": 0.002298550646486093,
+    "pooled_spearman": 0.9999956476449408,
+    "r14_common_epochs": 117,
+    "r14_max_numeric_delta": 9128.282013691962,
+    "r14_surface_hash_all_match": false,
+    "selected_epochs": 969,
+    "selected_prn_channels": 10
+  },
+  "schema": "acaf_nf_stage1_r2_verification.v1",
+  "status": "PASS"
+}

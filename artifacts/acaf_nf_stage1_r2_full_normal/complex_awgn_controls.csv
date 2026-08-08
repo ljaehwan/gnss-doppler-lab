@@ -1,0 +1,6 @@
+scenario,control,status,reason,noise_reference,snr_db,score
+cleanStatic,complex_awgn,NOT_EVALUATED,Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized,frontend_output_ADC_input_referred,,
+ds3,complex_awgn,NOT_EVALUATED,Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized,frontend_output_ADC_input_referred,,
+ds4,complex_awgn,NOT_EVALUATED,Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized,frontend_output_ADC_input_referred,,
+ds7,complex_awgn,NOT_EVALUATED,Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized,frontend_output_ADC_input_referred,,
+ds8,complex_awgn,NOT_EVALUATED,Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized,frontend_output_ADC_input_referred,,

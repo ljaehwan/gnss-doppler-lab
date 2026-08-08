@@ -1,0 +1,22 @@
+{
+  "B0_evaluator_executed": false,
+  "attack_iq_bytes_read_for_scoring": 0,
+  "attack_rows_in_fit_or_calibration": 0,
+  "bootstrap_executed": false,
+  "caf_attack_scoring_executed": false,
+  "checkpoint3_physics_executed": false,
+  "foundation_evidence_plots": [
+    "plots/full_cleanstatic_prompt_reproduction.svg"
+  ],
+  "h0_h1_fit_executed": false,
+  "physics_plots": {
+    "count": 0,
+    "status": "NOT_EVALUATED"
+  },
+  "reason": "Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized",
+  "schema": "acaf_nf_stage1_r2_execution_validity.v1",
+  "science_csv_semantics": "explicit_NOT_EVALUATED_rows",
+  "science_status": "NOT_EVALUATED",
+  "status": "FOUNDATION_INVALID",
+  "threshold_calibration_executed": false
+}

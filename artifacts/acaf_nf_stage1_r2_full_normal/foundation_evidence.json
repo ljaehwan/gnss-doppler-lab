@@ -1,0 +1,80 @@
+{
+  "attack_evidence": "NOT_EVALUATED",
+  "attack_iq_bytes_read_for_scoring": 0,
+  "checkpoint2_independent_verifier": {
+    "artifact": "checkpoint2_verification_report.json",
+    "derived_foundation_status": "FOUNDATION_INVALID",
+    "derived_tracker_status": "CONTINUOUS_TRACKER_INVALID",
+    "status": "PASS"
+  },
+  "clean_validation": {
+    "delay_recovery": {
+      "boundary_fraction": 0.0010319917440660474,
+      "exact_center_fraction": 0.978328173374613,
+      "histogram": {
+        "-0.125": 6,
+        "-0.375": 1,
+        "-0.5": 1,
+        "0.0": 948,
+        "0.125": 11,
+        "0.25": 1,
+        "1.0": 1
+      },
+      "n": 969,
+      "within_0_125_fraction": 0.9958720330237358
+    },
+    "failed_gates": [
+      "grid_boundary_le_0_01",
+      "l20_doppler_within_50_ge_0_95",
+      "r14_common_reproduced_1e_6"
+    ],
+    "gates": {
+      "delay_within_0_125_ge_0_95": true,
+      "grid_boundary_le_0_01": false,
+      "l20_doppler_within_50_ge_0_95": false,
+      "l20_windows_ge_100": true,
+      "median_prn_spearman_ge_0_99": true,
+      "pooled_spearman_ge_0_999": true,
+      "prompt_p99_relative_error_le_0_01": true,
+      "r14_common_reproduced_1e_6": false,
+      "raw_support_continuous_unique": true,
+      "target_prn_channels_ge_8": true,
+      "valid_prn_channels_ge_4": true
+    },
+    "grid_boundary_fraction": 0.015479876160990712,
+    "l20_doppler": {
+      "boundary_fraction": 0.0,
+      "n": 171,
+      "within_50_fraction": 0.8596491228070176
+    },
+    "prompt_reproduction": {
+      "max_relative_error": 0.01794688472443773,
+      "median_prn_spearman": 1.0,
+      "median_relative_error": 2.992495935716377e-06,
+      "n": 969,
+      "p95_relative_error": 0.0010626954486009361,
+      "p99_relative_error": 0.002298550646486093,
+      "pooled_spearman": 0.9999956476449408
+    },
+    "r14_common_epochs": {
+      "match_mode": "raw_support",
+      "max_numeric_delta": 9128.282013691962,
+      "n": 117,
+      "surface_sha256_all_match": false,
+      "tolerance": 1e-06
+    },
+    "selected_epochs": 969,
+    "selected_prn_channels": 10
+  },
+  "fresh_replay_manifest_sha256": "1f5e83b8e2c1ffe40a06c9081bc26da89d1a99cc2c1328cb7ea51247f9179b47",
+  "fresh_tracker": {
+    "exporter_rows": 5098445,
+    "rows": 4716117,
+    "sha256": "5bd6ace9fe29b31c56d7aacce2a56329c526dc2a4a0d6b35cdbdcae3929f9ad6",
+    "size_bytes": 1951111900,
+    "status": "CONTINUOUS_TRACKER_INVALID"
+  },
+  "reason": "Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized",
+  "schema": "acaf_nf_stage1_r2_checkpoint4_foundation_evidence.v1",
+  "status": "FOUNDATION_INVALID"
+}

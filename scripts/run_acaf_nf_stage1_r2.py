@@ -5,12 +5,12 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from gnss_doppler_lab.acaf_nf_stage1_r2 import checkpoint1, checkpoint2
+from gnss_doppler_lab.acaf_nf_stage1_r2 import checkpoint1, checkpoint2, checkpoint4
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--checkpoint", choices=("1", "2"), default="1")
+    parser.add_argument("--checkpoint", choices=("1", "2", "4"), default="1")
     parser.add_argument("--output", type=Path, default=Path("artifacts/acaf_nf_stage1_r2_full_normal"))
     parser.add_argument(
         "--r1-artifact",
@@ -20,8 +20,10 @@ def main() -> None:
     args = parser.parse_args()
     if args.checkpoint == "1":
         checkpoint1(args.output, args.r1_artifact)
-    else:
+    elif args.checkpoint == "2":
         checkpoint2(args.output, args.r1_artifact)
+    else:
+        checkpoint4(args.output)
 
 
 if __name__ == "__main__":

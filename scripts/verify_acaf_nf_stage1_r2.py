@@ -13,6 +13,17 @@ import h5py
 import numpy as np
 from scipy.stats import spearmanr
 
+CHECKPOINT4_REQUIRED = (
+    "README.md", "go_no_go.json", "execution_validity.json", "foundation_evidence.json",
+    "normal_split.json", "ensemble_h1.json", "thresholds.json", "normal_model_summary.json",
+    "bootstrap_results.json", "b0_results.json", "scenario_metrics.csv", "phase_metrics.csv",
+    "baseline_metrics.csv", "control_metrics.csv", "per_window_scores.csv",
+    "secondary_component_metrics.csv", "positive_control_sweep.csv", "complex_awgn_controls.csv",
+    "attack_tracker_manifest.json", "scenario_timeline.json", "source_binding.json",
+    "execution_manifest.json", "checkpoint4_manifest.json", "checkpoint2_verification_report.json",
+    "plots/README.md", "config.json", "checksums.json", "test_report.txt", "verification_report.json",
+)
+
 
 def digest(path: Path) -> str:
     value = hashlib.sha256()
@@ -161,9 +172,126 @@ def verify_checkpoint2(root: Path) -> tuple[bool, dict]:
                        "checkpoint":2,"errors":sorted(set(errors)),"recomputed":recomputed}
 
 
+def _csv_rows(path: Path) -> list[dict[str, str]]:
+    with path.open(newline="", encoding="utf-8") as handle:
+        return list(csv.DictReader(handle))
+
+
+def verify_checkpoint4(root: Path) -> tuple[bool, dict]:
+    errors: list[str] = []
+    for name in CHECKPOINT4_REQUIRED:
+        if not (root / name).is_file(): errors.append(f"missing:{name}")
+    if errors:
+        return False, {"schema":"acaf_nf_stage1_r2_verification.v1","status":"FAIL","checkpoint":4,"errors":errors}
+    foundation=json.loads((root/"foundation_status.json").read_text(encoding="utf-8"))
+    clean=json.loads((root/"full_cleanstatic_validation.json").read_text(encoding="utf-8"))
+    tracker=json.loads((root/"fresh_continuous_tracker_manifest.json").read_text(encoding="utf-8"))
+    cp2=json.loads((root/"checkpoint2_verification_report.json").read_text(encoding="utf-8"))
+    evidence=json.loads((root/"foundation_evidence.json").read_text(encoding="utf-8"))
+    if (foundation.get("status")!="FOUNDATION_INVALID" or foundation.get("checkpoint3_physics_authorized") is not False
+            or foundation.get("attack_iq_scoring_performed") is not False): errors.append("foundation_status")
+    if (clean.get("status")!="CONTINUOUS_TRACKER_INVALID" or all(clean.get("gates",{}).values())):
+        errors.append("clean_foundation_not_invalid")
+    if (cp2.get("status")!="PASS" or cp2.get("checkpoint")!=2
+            or cp2.get("recomputed",{}).get("derived_tracker_status")!="CONTINUOUS_TRACKER_INVALID"
+            or cp2.get("recomputed",{}).get("derived_foundation_status")!="FOUNDATION_INVALID"):
+        errors.append("checkpoint2_independent_verification")
+    failed=sorted(key for key,value in clean["gates"].items() if not value)
+    if failed!=sorted(foundation.get("failed_clean_gates",[])): errors.append("failed_gate_lineage")
+    expected_evidence={
+        "rows":tracker["rows"],"sha256":tracker["csv_sha256"],"size_bytes":tracker["csv_size_bytes"],
+        "exporter_rows":tracker["exporter_rows"],"status":tracker["status"],
+    }
+    if evidence.get("fresh_tracker")!=expected_evidence: errors.append("tracker_evidence")
+    ce=evidence.get("clean_validation",{})
+    for key in ("selected_epochs","selected_prn_channels","gates","prompt_reproduction","delay_recovery",
+                "l20_doppler","grid_boundary_fraction","r14_common_epochs"):
+        if ce.get(key)!=clean.get(key): errors.append(f"clean_evidence:{key}")
+    if evidence.get("attack_iq_bytes_read_for_scoring")!=0 or evidence.get("attack_evidence")!="NOT_EVALUATED":
+        errors.append("attack_evidence")
+    go=json.loads((root/"go_no_go.json").read_text(encoding="utf-8"))
+    if (go.get("verdict")!="FOUNDATION_INVALID" or go.get("physics_feasibility_status")!="NOT_EVALUATED"
+            or go.get("paper_candidate_status")!="NOT_EVALUATED" or go.get("PHYSICS_FEASIBILITY_GO") is not False
+            or go.get("PAPER_CANDIDATE_GO") is not False or go.get("stage2_justified") is not False
+            or go.get("B0",{}).get("status")!="NOT_EVALUATED"): errors.append("go_no_go_semantics")
+    execution=json.loads((root/"execution_validity.json").read_text(encoding="utf-8"))
+    false_fields=("checkpoint3_physics_executed","caf_attack_scoring_executed","h0_h1_fit_executed",
+                  "threshold_calibration_executed","bootstrap_executed","B0_evaluator_executed")
+    if (execution.get("status")!="FOUNDATION_INVALID" or execution.get("science_status")!="NOT_EVALUATED"
+            or any(execution.get(key) is not False for key in false_fields)
+            or execution.get("attack_rows_in_fit_or_calibration")!=0
+            or execution.get("attack_iq_bytes_read_for_scoring")!=0
+            or execution.get("science_csv_semantics")!="explicit_NOT_EVALUATED_rows"
+            or execution.get("physics_plots",{}).get("count")!=0): errors.append("execution_semantics")
+    split=json.loads((root/"normal_split.json").read_text(encoding="utf-8"))
+    fractions=[item.get("fraction") for item in split.get("fractions",[])]
+    roles=[item.get("role") for item in split.get("fractions",[])]
+    if (split.get("status")!="NOT_EVALUATED" or split.get("applied") is not False
+            or split.get("chronological") is not True or split.get("no_overlap") is not True
+            or fractions!=[.4,.15,.25,.2] or roles!=["train","h1_selection","calibration","holdout"]
+            or split.get("boundaries") is not None): errors.append("normal_split_semantics")
+    unavailable_json=("ensemble_h1.json","thresholds.json","normal_model_summary.json","bootstrap_results.json","b0_results.json")
+    for name in unavailable_json:
+        value=json.loads((root/name).read_text(encoding="utf-8"))
+        if value.get("status")!="NOT_EVALUATED": errors.append(f"not_evaluated:{name}")
+    if json.loads((root/"b0_results.json").read_text(encoding="utf-8")).get("historic_scores_reused") is not False:
+        errors.append("b0_reuse")
+    csv_contracts={
+        "scenario_metrics.csv":5,"phase_metrics.csv":17,"baseline_metrics.csv":5,"control_metrics.csv":4,
+        "per_window_scores.csv":17,"secondary_component_metrics.csv":5,"positive_control_sweep.csv":1,
+        "complex_awgn_controls.csv":5,
+    }
+    rows_by_file={}
+    for name,count in csv_contracts.items():
+        rows=_csv_rows(root/name);rows_by_file[name]=len(rows)
+        if len(rows)!=count or any(row.get("status")!="NOT_EVALUATED" for row in rows):
+            errors.append(f"csv_status:{name}")
+        for row in rows:
+            for field,value in row.items():
+                if field not in {"scenario","phase","role","status","reason","baseline","lineage","control","kind","noise_reference"} and value:
+                    errors.append(f"unavailable_numeric_value:{name}:{field}")
+    attack=json.loads((root/"attack_tracker_manifest.json").read_text(encoding="utf-8"))
+    if (attack.get("status")!="NOT_EVALUATED" or attack.get("attack_replays_read") is not False
+            or attack.get("attack_iq_bytes_read_for_scoring")!=0
+            or attack.get("mapping_selected_from_attack_data") is not False
+            or any(value.get("status")!="NOT_EVALUATED" for value in attack.get("scenarios",{}).values())):
+        errors.append("attack_manifest")
+    source=json.loads((root/"source_binding.json").read_text(encoding="utf-8"))
+    if (source.get("status")!="FOUNDATION_INVALID"
+            or any(value.get("status")!="NOT_EVALUATED" for value in source.get("attacks",{}).values())):
+        errors.append("source_binding")
+    manifest=json.loads((root/"checkpoint4_manifest.json").read_text(encoding="utf-8"))
+    if (manifest.get("checkpoint")!=4 or manifest.get("status")!="FOUNDATION_INVALID"
+            or manifest.get("science_status")!="NOT_EVALUATED"
+            or manifest.get("required_artifacts")!=list(CHECKPOINT4_REQUIRED)
+            or manifest.get("attack_results_used_for_selection") is not False): errors.append("checkpoint4_manifest")
+    config=json.loads((root/"config.json").read_text(encoding="utf-8"))
+    if (config.get("checkpoint")!=4 or config.get("status")!="FOUNDATION_INVALID"
+            or config.get("science_status")!="NOT_EVALUATED" or config.get("physics_executed") is not False
+            or config.get("attack_data_read") is not False or config.get("B0")!="NOT_EVALUATED"):
+        errors.append("config_semantics")
+    readme=(root/"README.md").read_text(encoding="utf-8")
+    if not all(text in readme for text in ("FOUNDATION_INVALID","NOT_EVALUATED","No attack replay","prohibited")):
+        errors.append("readme_semantics")
+    checks=json.loads((root/"checksums.json").read_text(encoding="utf-8"))["files"]
+    for name in CHECKPOINT4_REQUIRED:
+        if name in {"checksums.json","verification_report.json"}: continue
+        if checks.get(name,{}).get("sha256")!=digest(root/name): errors.append(f"checksum:{name}")
+    recomputed={
+        "derived_tracker_status":"CONTINUOUS_TRACKER_INVALID","derived_foundation_status":"FOUNDATION_INVALID",
+        "science_status":"NOT_EVALUATED","failed_clean_gates":failed,
+        "fresh_tracker_rows":tracker["rows"],"fresh_tracker_sha256":tracker["csv_sha256"],
+        "attack_iq_bytes_read_for_scoring":0,"checkpoint3_physics_executed":False,
+        "csv_rows":rows_by_file,"required_artifact_count":len(CHECKPOINT4_REQUIRED),
+    }
+    return not errors,{"schema":"acaf_nf_stage1_r2_verification.v1","status":"PASS" if not errors else "FAIL",
+                       "checkpoint":4,"errors":sorted(set(errors)),"recomputed":recomputed}
+
+
 def main() -> None:
-    parser=argparse.ArgumentParser();parser.add_argument("artifact",type=Path);parser.add_argument("--checkpoint",choices=("2",),default="2")
-    parser.add_argument("--write-report",action="store_true");args=parser.parse_args();ok,report=verify_checkpoint2(args.artifact)
+    parser=argparse.ArgumentParser();parser.add_argument("artifact",type=Path);parser.add_argument("--checkpoint",choices=("2","4"),default="2")
+    parser.add_argument("--write-report",action="store_true");args=parser.parse_args()
+    ok,report=verify_checkpoint2(args.artifact) if args.checkpoint=="2" else verify_checkpoint4(args.artifact)
     if args.write_report: (args.artifact/"verification_report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n",encoding="utf-8")
     print(json.dumps(report,indent=2,sort_keys=True));raise SystemExit(0 if ok else 2)
 

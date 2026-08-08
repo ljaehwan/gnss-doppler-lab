@@ -50,11 +50,29 @@ R1_REQUIRED = (
 SCENARIOS = ("cleanStatic", "ds3", "ds4", "ds7", "ds8")
 FRESH_REPLAY_RELATIVE = Path("receiver_replays/cleanStatic")
 INVALID_CHECKPOINT2_SHA = "b5d53fa"
+CHECKPOINT4_REQUIRED = (
+    "README.md", "go_no_go.json", "execution_validity.json", "foundation_evidence.json",
+    "normal_split.json", "ensemble_h1.json", "thresholds.json", "normal_model_summary.json",
+    "bootstrap_results.json", "b0_results.json", "scenario_metrics.csv", "phase_metrics.csv",
+    "baseline_metrics.csv", "control_metrics.csv", "per_window_scores.csv",
+    "secondary_component_metrics.csv", "positive_control_sweep.csv", "complex_awgn_controls.csv",
+    "attack_tracker_manifest.json", "scenario_timeline.json", "source_binding.json",
+    "execution_manifest.json", "checkpoint4_manifest.json", "checkpoint2_verification_report.json",
+    "plots/README.md", "config.json", "checksums.json", "test_report.txt", "verification_report.json",
+)
 
 
 def _dump(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _write_csv(path: Path, fields: Iterable[str], rows: Iterable[dict[str, Any]]) -> None:
+    fieldnames = tuple(fields)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
 
 
 def _sha256(path: Path) -> str:
@@ -608,6 +626,229 @@ def checkpoint2(output: Path, r1: Path) -> Path:
         "or used here. Fresh cleanStatic MAT/DAT files are authenticated against their replay manifest and reconstructed "
         f"with clean-only alignment. Corrected status: `{report['status']}` / `{foundation['status']}`. "
         "Attack IQ was not scored and Checkpoint 3 physics is not authorized when foundation is invalid.\n",
+        encoding="utf-8",
+    )
+    _refresh_checksums(output)
+    return output
+
+
+def checkpoint4(output: Path) -> Path:
+    """Publish a complete fail-closed record without executing physics."""
+    foundation = json.loads((output / "foundation_status.json").read_text(encoding="utf-8"))
+    clean = json.loads((output / "full_cleanstatic_validation.json").read_text(encoding="utf-8"))
+    tracker = json.loads((output / "fresh_continuous_tracker_manifest.json").read_text(encoding="utf-8"))
+    if foundation.get("status") != "FOUNDATION_INVALID" or foundation.get("checkpoint3_physics_authorized") is not False:
+        raise RuntimeError("Checkpoint 4 fail-closed publication requires FOUNDATION_INVALID")
+    if clean.get("status") != "CONTINUOUS_TRACKER_INVALID":
+        raise RuntimeError("Checkpoint 4 cannot publish without the invalid fresh clean tracker result")
+    cp2_report = output / "checkpoint2_verification_report.json"
+    current_report = output / "verification_report.json"
+    if not cp2_report.is_file():
+        verified = json.loads(current_report.read_text(encoding="utf-8"))
+        if (verified.get("checkpoint") != 2 or verified.get("status") != "PASS"
+                or verified.get("recomputed", {}).get("derived_foundation_status") != "FOUNDATION_INVALID"):
+            raise RuntimeError("independent Checkpoint 2 FOUNDATION_INVALID verification is missing")
+        shutil.copy2(current_report, cp2_report)
+
+    reason = "Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized"
+    failed = list(foundation["failed_clean_gates"])
+    evidence = {
+        "schema": "acaf_nf_stage1_r2_checkpoint4_foundation_evidence.v1",
+        "status": "FOUNDATION_INVALID", "reason": reason,
+        "fresh_replay_manifest_sha256": tracker["fresh_replay_manifest_sha256"],
+        "fresh_tracker": {
+            "rows": tracker["rows"], "sha256": tracker["csv_sha256"],
+            "size_bytes": tracker["csv_size_bytes"], "exporter_rows": tracker["exporter_rows"],
+            "status": tracker["status"],
+        },
+        "clean_validation": {
+            "selected_epochs": clean["selected_epochs"], "selected_prn_channels": clean["selected_prn_channels"],
+            "gates": clean["gates"], "failed_gates": failed,
+            "prompt_reproduction": clean["prompt_reproduction"], "delay_recovery": clean["delay_recovery"],
+            "l20_doppler": clean["l20_doppler"], "grid_boundary_fraction": clean["grid_boundary_fraction"],
+            "r14_common_epochs": clean["r14_common_epochs"],
+        },
+        "checkpoint2_independent_verifier": {
+            "artifact": "checkpoint2_verification_report.json", "status": "PASS",
+            "derived_tracker_status": "CONTINUOUS_TRACKER_INVALID",
+            "derived_foundation_status": "FOUNDATION_INVALID",
+        },
+        "attack_evidence": "NOT_EVALUATED", "attack_iq_bytes_read_for_scoring": 0,
+    }
+    _dump(output / "foundation_evidence.json", evidence)
+
+    split = {
+        "schema": "acaf_nf_stage1_r2_normal_split.v1", "status": "NOT_EVALUATED",
+        "chronological": True, "no_overlap": True, "applied": False,
+        "fractions": [
+            {"role": "train", "fraction": 0.40}, {"role": "h1_selection", "fraction": 0.15},
+            {"role": "calibration", "fraction": 0.25}, {"role": "holdout", "fraction": 0.20},
+        ],
+        "boundaries": None, "receiver_seconds": None, "reason": reason,
+    }
+    _dump(output / "normal_split.json", split)
+    _dump(output / "ensemble_h1.json", {
+        "schema": "acaf_nf_stage1_r2_ensemble_h1.v1", "status": "NOT_EVALUATED",
+        "fit_performed": False, "selection_performed": False, "selected_members": None,
+        "attack_data_used_for_selection": False, "reason": reason,
+    })
+    _dump(output / "thresholds.json", {
+        "schema": "acaf_nf_stage1_r2_thresholds.v1", "status": "NOT_EVALUATED",
+        "threshold_fit_performed": False, "calibration_support": None, "thresholds": None,
+        "attack_data_used": False, "reason": reason,
+    })
+    _dump(output / "normal_model_summary.json", {
+        "schema": "acaf_nf_stage1_r2_normal_model.v1", "status": "NOT_EVALUATED",
+        "model_fit_performed": False, "T0": None, "diagonal_variance": None,
+        "pooling": None, "ensemble_h1": None, "reason": reason,
+    })
+    _dump(output / "bootstrap_results.json", {
+        "schema": "acaf_nf_stage1_r2_bootstrap.v1", "status": "NOT_EVALUATED",
+        "bootstrap_performed": False, "resamples": 0, "confidence_intervals": None,
+        "B0_handling": "NOT_EVALUATED", "reason": reason,
+    })
+    _dump(output / "b0_results.json", {
+        "schema": "acaf_nf_stage1_r2_b0.v1", "status": "NOT_EVALUATED",
+        "native_evaluator_invoked": False, "same_epoch_scores_computed": False,
+        "historic_scores_reused": False, "metrics": None, "reason": reason,
+    })
+
+    scenario_rows = [{
+        "scenario": scenario, "status": "NOT_EVALUATED", "reason": reason,
+        "pre_onset_fpr": "", "attack_detection_rate": "", "first_alarm_delay_s": "",
+        "holdout_fpr": "", "sustained_alarm_fraction": "",
+    } for scenario in SCENARIOS]
+    _write_csv(output / "scenario_metrics.csv", scenario_rows[0], scenario_rows)
+    phases = {
+        "cleanStatic": ("train", "h1_selection", "calibration", "holdout"),
+        "ds3": ("pre_onset", "transition", "established"),
+        "ds4": ("pre_onset", "transition_only"),
+        "ds7": ("pre_onset", "transition", "held", "time_push"),
+        "ds8": ("pre_onset", "transition", "held", "time_push"),
+    }
+    phase_rows = [{
+        "scenario": scenario, "phase": phase, "status": "NOT_EVALUATED", "reason": reason,
+        "n": "", "mean_score": "", "alarm_fraction": "", "prn_coverage_min": "",
+    } for scenario, names in phases.items() for phase in names]
+    _write_csv(output / "phase_metrics.csv", phase_rows[0], phase_rows)
+    score_rows = [{
+        "scenario": row["scenario"], "phase": row["phase"], "role": row["phase"],
+        "status": "NOT_EVALUATED", "reason": reason, "receiver_second": "", "score": "",
+        "power_only": "", "prompt_magnitude": "", "epl_3point_complex": "",
+        "fixed_9_delay_tap_complex": "", "dense_one_source_residual": "",
+        "dense_two_source_score": "", "selected_delay_chips": "", "selected_doppler_hz": "",
+        "beta_alpha_ratio": "", "grid_boundary": "", "prn_count": "", "dominant_fraction": "",
+    } for row in phase_rows]
+    _write_csv(output / "per_window_scores.csv", score_rows[0], score_rows)
+    component_rows = [{
+        "scenario": scenario, "status": "NOT_EVALUATED", "reason": reason,
+        "delay_chips": "", "doppler_hz": "", "beta_alpha_ratio": "",
+        "grid_boundary": "", "prn_count": "",
+    } for scenario in SCENARIOS]
+    _write_csv(output / "secondary_component_metrics.csv", component_rows[0], component_rows)
+    baseline_rows = [{
+        "baseline": name, "status": "NOT_EVALUATED", "reason": reason,
+        "roc_auc": "", "average_precision": "", "partial_auc": "", "max_fpr": "", "lineage": lineage,
+    } for name, lineage in (
+        ("power_only", "raw_iq_mean_power_not_computed"),
+        ("prompt_magnitude", "fresh_tracker_prompt_not_scored"),
+        ("epl_3point_complex", "NOT_EVALUATED"),
+        ("fixed_9_delay_tap_complex", "NOT_EVALUATED"),
+        ("B0", "native_same_epoch_evaluator_not_invoked"),
+    )]
+    _write_csv(output / "baseline_metrics.csv", baseline_rows[0], baseline_rows)
+    control_rows = [{
+        "control": name, "kind": kind, "status": "NOT_EVALUATED", "reason": reason,
+        "score": "", "delay_chips": "", "doppler_hz": "",
+    } for name, kind in (
+        ("identity", "negative"), ("gain_phase", "negative"),
+        ("complex_awgn", "strengthened_negative"), ("full_positive_sweep", "positive"),
+    )]
+    _write_csv(output / "control_metrics.csv", control_rows[0], control_rows)
+    positive_rows = [{
+        "control": "full_positive_sweep", "status": "NOT_EVALUATED", "reason": reason,
+        "amplitude": "", "delay_chips": "", "doppler_hz": "", "score": "", "detected": "",
+    }]
+    _write_csv(output / "positive_control_sweep.csv", positive_rows[0], positive_rows)
+    awgn_rows = [{
+        "scenario": scenario, "control": "complex_awgn", "status": "NOT_EVALUATED", "reason": reason,
+        "noise_reference": "frontend_output_ADC_input_referred", "snr_db": "", "score": "",
+    } for scenario in SCENARIOS]
+    _write_csv(output / "complex_awgn_controls.csv", awgn_rows[0], awgn_rows)
+
+    _dump(output / "attack_tracker_manifest.json", {
+        "schema": "acaf_nf_stage1_r2_attack_trackers.v1", "status": "NOT_EVALUATED",
+        "mapping_if_authorized": tracker["alignment"], "mapping_selected_from_attack_data": False,
+        "attack_replays_read": False, "attack_iq_bytes_read_for_scoring": 0,
+        "scenarios": {scenario: {"status": "NOT_EVALUATED", "reason": reason} for scenario in SCENARIOS[1:]},
+    })
+    _dump(output / "scenario_timeline.json", {
+        "schema": "acaf_nf_stage1_r2_scenario_timeline.v1", "status": "NOT_EVALUATED",
+        "phase_names_preserved_for_reporting_only": {key: list(value) for key, value in phases.items()},
+        "numeric_boundaries_used_for_scoring": False, "reason": reason,
+    })
+    _dump(output / "source_binding.json", {
+        "schema": "acaf_nf_stage1_r2_fail_closed_source_binding.v1", "status": "FOUNDATION_INVALID",
+        "cleanStatic": {"status": "AUTHENTICATED_BUT_FOUNDATION_INVALID",
+                        "binding": "fresh_replay_binding.json", "tracker": "fresh_continuous_tracker_manifest.json"},
+        "attacks": {scenario: {"status": "NOT_EVALUATED"} for scenario in SCENARIOS[1:]},
+        "historic_r1_sources": "preserved_under_r1_preserved_only_not_relabelled",
+    })
+    _dump(output / "go_no_go.json", {
+        "schema": "acaf_nf_stage1_r2_go_no_go.v1", "verdict": "FOUNDATION_INVALID",
+        "foundation": "FOUNDATION_INVALID", "continuous_tracker": "CONTINUOUS_TRACKER_INVALID",
+        "physics_feasibility_status": "NOT_EVALUATED", "PHYSICS_FEASIBILITY_GO": False,
+        "paper_candidate_status": "NOT_EVALUATED", "PAPER_CANDIDATE_GO": False,
+        "stage2_justified": False, "failed_foundation_gates": failed,
+        "B0": {"status": "NOT_EVALUATED", "native_evaluator_invoked": False},
+        "reason": reason,
+    })
+    _dump(output / "execution_validity.json", {
+        "schema": "acaf_nf_stage1_r2_execution_validity.v1", "status": "FOUNDATION_INVALID",
+        "science_status": "NOT_EVALUATED", "checkpoint3_physics_executed": False,
+        "caf_attack_scoring_executed": False, "h0_h1_fit_executed": False,
+        "threshold_calibration_executed": False, "bootstrap_executed": False,
+        "B0_evaluator_executed": False, "attack_rows_in_fit_or_calibration": 0,
+        "attack_iq_bytes_read_for_scoring": 0, "science_csv_semantics": "explicit_NOT_EVALUATED_rows",
+        "physics_plots": {"count": 0, "status": "NOT_EVALUATED"},
+        "foundation_evidence_plots": ["plots/full_cleanstatic_prompt_reproduction.svg"],
+        "reason": reason,
+    })
+    _dump(output / "execution_manifest.json", {
+        "schema": "acaf_nf_stage1_r2_checkpoint4_execution.v1", "checkpoint": 4,
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(), "status": "FOUNDATION_INVALID",
+        "mode": "fail_closed_publication_only", "physics_executed": False,
+        "attack_data_read": False, "source_foundation": "foundation_status.json",
+        "checkpoint2_verification": "checkpoint2_verification_report.json",
+    })
+    _dump(output / "checkpoint4_manifest.json", {
+        "schema": "acaf_nf_stage1_r2_checkpoint4_manifest.v1", "checkpoint": 4,
+        "status": "FOUNDATION_INVALID", "science_status": "NOT_EVALUATED",
+        "required_artifacts": list(CHECKPOINT4_REQUIRED), "failed_foundation_gates": failed,
+        "physics_artifacts_are_placeholders": True, "actual_numeric_evidence": "foundation_evidence.json",
+        "attack_results_used_for_selection": False, "reason": reason,
+    })
+    plots = output / "plots"; plots.mkdir(exist_ok=True)
+    (plots / "README.md").write_text(
+        "# Checkpoint 4 plots\n\nNo physics/performance plots were generated because the foundation is invalid. "
+        "`full_cleanstatic_prompt_reproduction.svg` is retained only as actual Checkpoint 2 foundation evidence.\n",
+        encoding="utf-8",
+    )
+    config = json.loads((output / "config.json").read_text(encoding="utf-8"))
+    config.update({
+        "checkpoint": 4, "status": "FOUNDATION_INVALID", "science_status": "NOT_EVALUATED",
+        "physics_executed": False, "attack_data_read": False,
+        "chronological_normal_split": {"fractions": [0.40, 0.15, 0.25, 0.20], "applied": False},
+        "B0": "NOT_EVALUATED",
+    })
+    _dump(output / "config.json", config)
+    (output / "README.md").write_text(
+        "# ACAF-NF Stage-1 R2 full-normal\n\n"
+        "Final fail-closed Checkpoint 4. Corrective Checkpoint 2 supersedes `b5d53fa` and authenticates the fresh "
+        "cleanStatic exporter replay, but mandatory clean gates fail. Final status: `CONTINUOUS_TRACKER_INVALID` / "
+        "`FOUNDATION_INVALID`; physics and all performance metrics are `NOT_EVALUATED`. No attack replay was read or "
+        "scored, no model/threshold/bootstrap/B0 evaluation ran, and false GO/NO-GO performance claims are prohibited. "
+        "Actual fresh-tracker and clean-gate numbers remain in `foundation_evidence.json` and the Checkpoint 2 artifacts.\n",
         encoding="utf-8",
     )
     _refresh_checksums(output)

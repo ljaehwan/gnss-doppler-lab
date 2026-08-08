@@ -1,0 +1,32 @@
+{
+  "attack_iq_bytes_read_for_scoring": 0,
+  "attack_replays_read": false,
+  "mapping_if_authorized": {
+    "equivalent_reindexing": "next Prompt k+1 with current state/stamp k",
+    "nco_aux": "previous MAT row k-1",
+    "prompt": "current MAT row k",
+    "support": "[stamp(k-1), stamp(k-1)+25000)",
+    "tracker_csv_state_mat_row": "k-1"
+  },
+  "mapping_selected_from_attack_data": false,
+  "scenarios": {
+    "ds3": {
+      "reason": "Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized",
+      "status": "NOT_EVALUATED"
+    },
+    "ds4": {
+      "reason": "Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized",
+      "status": "NOT_EVALUATED"
+    },
+    "ds7": {
+      "reason": "Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized",
+      "status": "NOT_EVALUATED"
+    },
+    "ds8": {
+      "reason": "Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized",
+      "status": "NOT_EVALUATED"
+    }
+  },
+  "schema": "acaf_nf_stage1_r2_attack_trackers.v1",
+  "status": "NOT_EVALUATED"
+}

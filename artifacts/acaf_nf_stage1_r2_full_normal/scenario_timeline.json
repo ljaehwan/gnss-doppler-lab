@@ -1,0 +1,35 @@
+{
+  "numeric_boundaries_used_for_scoring": false,
+  "phase_names_preserved_for_reporting_only": {
+    "cleanStatic": [
+      "train",
+      "h1_selection",
+      "calibration",
+      "holdout"
+    ],
+    "ds3": [
+      "pre_onset",
+      "transition",
+      "established"
+    ],
+    "ds4": [
+      "pre_onset",
+      "transition_only"
+    ],
+    "ds7": [
+      "pre_onset",
+      "transition",
+      "held",
+      "time_push"
+    ],
+    "ds8": [
+      "pre_onset",
+      "transition",
+      "held",
+      "time_push"
+    ]
+  },
+  "reason": "Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized",
+  "schema": "acaf_nf_stage1_r2_scenario_timeline.v1",
+  "status": "NOT_EVALUATED"
+}

@@ -1,0 +1,24 @@
+{
+  "attacks": {
+    "ds3": {
+      "status": "NOT_EVALUATED"
+    },
+    "ds4": {
+      "status": "NOT_EVALUATED"
+    },
+    "ds7": {
+      "status": "NOT_EVALUATED"
+    },
+    "ds8": {
+      "status": "NOT_EVALUATED"
+    }
+  },
+  "cleanStatic": {
+    "binding": "fresh_replay_binding.json",
+    "status": "AUTHENTICATED_BUT_FOUNDATION_INVALID",
+    "tracker": "fresh_continuous_tracker_manifest.json"
+  },
+  "historic_r1_sources": "preserved_under_r1_preserved_only_not_relabelled",
+  "schema": "acaf_nf_stage1_r2_fail_closed_source_binding.v1",
+  "status": "FOUNDATION_INVALID"
+}

@@ -1,10 +1,21 @@
 {
+  "B0": "NOT_EVALUATED",
   "alignment_row_shift": 0,
   "alignment_selection_source": "cleanStatic_only",
+  "attack_data_read": false,
   "attacks_used_for_alignment": false,
   "authoritative_base_sha": "7693d5ec13934b54f9ab5fa68d04f60d437dd060",
-  "checkpoint": 2,
+  "checkpoint": 4,
   "checkpoint2_correction_supersedes": "b5d53fa",
+  "chronological_normal_split": {
+    "applied": false,
+    "fractions": [
+      0.4,
+      0.15,
+      0.25,
+      0.2
+    ]
+  },
   "fresh_replay_manifest": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker/receiver_replays/cleanStatic/manifest.json",
   "fresh_replay_manifest_sha256": "1f5e83b8e2c1ffe40a06c9081bc26da89d1a99cc2c1328cb7ea51247f9179b47",
   "frozen_alignment": {
@@ -16,6 +27,9 @@
   },
   "full_cleanstatic_validation_epochs": 969,
   "output": "artifacts/acaf_nf_stage1_r2_full_normal",
+  "physics_executed": false,
   "r1_artifact": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-acaf-nf-stage1-r1-continuous-tracker/artifacts/acaf_nf_stage1_r1_continuous_tracker",
-  "schema": "acaf_nf_stage1_r2_config.v1"
+  "schema": "acaf_nf_stage1_r2_config.v1",
+  "science_status": "NOT_EVALUATED",
+  "status": "FOUNDATION_INVALID"
 }

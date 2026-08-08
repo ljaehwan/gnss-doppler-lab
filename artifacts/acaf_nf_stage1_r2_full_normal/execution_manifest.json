@@ -1,0 +1,11 @@
+{
+  "attack_data_read": false,
+  "checkpoint": 4,
+  "checkpoint2_verification": "checkpoint2_verification_report.json",
+  "generated_at_utc": "2026-08-08T00:37:03.050322+00:00",
+  "mode": "fail_closed_publication_only",
+  "physics_executed": false,
+  "schema": "acaf_nf_stage1_r2_checkpoint4_execution.v1",
+  "source_foundation": "foundation_status.json",
+  "status": "FOUNDATION_INVALID"
+}

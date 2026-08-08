@@ -1,0 +1,6 @@
+baseline,status,reason,roc_auc,average_precision,partial_auc,max_fpr,lineage
+power_only,NOT_EVALUATED,Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized,,,,,raw_iq_mean_power_not_computed
+prompt_magnitude,NOT_EVALUATED,Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized,,,,,fresh_tracker_prompt_not_scored
+epl_3point_complex,NOT_EVALUATED,Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized,,,,,NOT_EVALUATED
+fixed_9_delay_tap_complex,NOT_EVALUATED,Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized,,,,,NOT_EVALUATED
+B0,NOT_EVALUATED,Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized,,,,,native_same_epoch_evaluator_not_invoked

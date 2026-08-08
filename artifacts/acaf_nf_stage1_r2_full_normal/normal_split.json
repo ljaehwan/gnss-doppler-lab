@@ -1,0 +1,28 @@
+{
+  "applied": false,
+  "boundaries": null,
+  "chronological": true,
+  "fractions": [
+    {
+      "fraction": 0.4,
+      "role": "train"
+    },
+    {
+      "fraction": 0.15,
+      "role": "h1_selection"
+    },
+    {
+      "fraction": 0.25,
+      "role": "calibration"
+    },
+    {
+      "fraction": 0.2,
+      "role": "holdout"
+    }
+  ],
+  "no_overlap": true,
+  "reason": "Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized",
+  "receiver_seconds": null,
+  "schema": "acaf_nf_stage1_r2_normal_split.v1",
+  "status": "NOT_EVALUATED"
+}

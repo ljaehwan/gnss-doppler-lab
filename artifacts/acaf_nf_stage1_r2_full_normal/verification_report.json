@@ -1,34 +1,30 @@
 {
-  "checkpoint": 2,
+  "checkpoint": 4,
   "errors": [],
   "recomputed": {
+    "attack_iq_bytes_read_for_scoring": 0,
+    "checkpoint3_physics_executed": false,
+    "csv_rows": {
+      "baseline_metrics.csv": 5,
+      "complex_awgn_controls.csv": 5,
+      "control_metrics.csv": 4,
+      "per_window_scores.csv": 17,
+      "phase_metrics.csv": 17,
+      "positive_control_sweep.csv": 1,
+      "scenario_metrics.csv": 5,
+      "secondary_component_metrics.csv": 5
+    },
     "derived_foundation_status": "FOUNDATION_INVALID",
     "derived_tracker_status": "CONTINUOUS_TRACKER_INVALID",
-    "fresh_exporter_rows": 5098445,
+    "failed_clean_gates": [
+      "grid_boundary_le_0_01",
+      "l20_doppler_within_50_ge_0_95",
+      "r14_common_reproduced_1e_6"
+    ],
     "fresh_tracker_rows": 4716117,
     "fresh_tracker_sha256": "5bd6ace9fe29b31c56d7aacce2a56329c526dc2a4a0d6b35cdbdcae3929f9ad6",
-    "gates": {
-      "delay_within_0_125_ge_0_95": true,
-      "grid_boundary_le_0_01": false,
-      "l20_doppler_within_50_ge_0_95": false,
-      "l20_windows_ge_100": true,
-      "median_prn_spearman_ge_0_99": true,
-      "pooled_spearman_ge_0_999": true,
-      "prompt_p99_relative_error_le_0_01": true,
-      "r14_common_reproduced_1e_6": false,
-      "raw_support_continuous_unique": true,
-      "target_prn_channels_ge_8": true,
-      "valid_prn_channels_ge_4": true
-    },
-    "l20_windows": 171,
-    "median_prn_spearman": 1.0,
-    "p99_relative_error": 0.002298550646486093,
-    "pooled_spearman": 0.9999956476449408,
-    "r14_common_epochs": 117,
-    "r14_max_numeric_delta": 9128.282013691962,
-    "r14_surface_hash_all_match": false,
-    "selected_epochs": 969,
-    "selected_prn_channels": 10
+    "required_artifact_count": 29,
+    "science_status": "NOT_EVALUATED"
   },
   "schema": "acaf_nf_stage1_r2_verification.v1",
   "status": "PASS"
