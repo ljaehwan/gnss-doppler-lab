@@ -637,6 +637,8 @@ def checkpoint4(output: Path) -> Path:
     foundation = json.loads((output / "foundation_status.json").read_text(encoding="utf-8"))
     clean = json.loads((output / "full_cleanstatic_validation.json").read_text(encoding="utf-8"))
     tracker = json.loads((output / "fresh_continuous_tracker_manifest.json").read_text(encoding="utf-8"))
+    existing_evidence = json.loads((output / "foundation_evidence.json").read_text(encoding="utf-8")) if (output / "foundation_evidence.json").is_file() else {}
+    publication_exclusions = existing_evidence.get("publication_excluded_binaries")
     if foundation.get("status") != "FOUNDATION_INVALID" or foundation.get("checkpoint3_physics_authorized") is not False:
         raise RuntimeError("Checkpoint 4 fail-closed publication requires FOUNDATION_INVALID")
     if clean.get("status") != "CONTINUOUS_TRACKER_INVALID":
@@ -675,6 +677,8 @@ def checkpoint4(output: Path) -> Path:
         },
         "attack_evidence": "NOT_EVALUATED", "attack_iq_bytes_read_for_scoring": 0,
     }
+    if publication_exclusions:
+        evidence["publication_excluded_binaries"] = publication_exclusions
     _dump(output / "foundation_evidence.json", evidence)
 
     split = {
@@ -821,13 +825,16 @@ def checkpoint4(output: Path) -> Path:
         "attack_data_read": False, "source_foundation": "foundation_status.json",
         "checkpoint2_verification": "checkpoint2_verification_report.json",
     })
-    _dump(output / "checkpoint4_manifest.json", {
+    checkpoint4_manifest = {
         "schema": "acaf_nf_stage1_r2_checkpoint4_manifest.v1", "checkpoint": 4,
         "status": "FOUNDATION_INVALID", "science_status": "NOT_EVALUATED",
         "required_artifacts": list(CHECKPOINT4_REQUIRED), "failed_foundation_gates": failed,
         "physics_artifacts_are_placeholders": True, "actual_numeric_evidence": "foundation_evidence.json",
         "attack_results_used_for_selection": False, "reason": reason,
-    })
+    }
+    if publication_exclusions:
+        checkpoint4_manifest["publication_excluded_binaries"] = [item["path"] for item in publication_exclusions["files"]]
+    _dump(output / "checkpoint4_manifest.json", checkpoint4_manifest)
     plots = output / "plots"; plots.mkdir(exist_ok=True)
     (plots / "README.md").write_text(
         "# Checkpoint 4 plots\n\nNo physics/performance plots were generated because the foundation is invalid. "
@@ -842,13 +849,20 @@ def checkpoint4(output: Path) -> Path:
         "B0": "NOT_EVALUATED",
     })
     _dump(output / "config.json", config)
+    publication_note = (
+        " For publication, only `r1_preserved/cleanstatic_caf_surfaces.npz` and "
+        "`full_cleanstatic_caf_surfaces.npz` are excluded because their 2.79 MB Git blobs exceed the approximately "
+        "1 MiB GitHub connector transfer cap; exact object identity and provenance remain inventoried."
+        if publication_exclusions else ""
+    )
     (output / "README.md").write_text(
         "# ACAF-NF Stage-1 R2 full-normal\n\n"
         "Final fail-closed Checkpoint 4. Corrective Checkpoint 2 supersedes `b5d53fa` and authenticates the fresh "
         "cleanStatic exporter replay, but mandatory clean gates fail. Final status: `CONTINUOUS_TRACKER_INVALID` / "
         "`FOUNDATION_INVALID`; physics and all performance metrics are `NOT_EVALUATED`. No attack replay was read or "
         "scored, no model/threshold/bootstrap/B0 evaluation ran, and false GO/NO-GO performance claims are prohibited. "
-        "Actual fresh-tracker and clean-gate numbers remain in `foundation_evidence.json` and the Checkpoint 2 artifacts.\n",
+        "Actual fresh-tracker and clean-gate numbers remain in `foundation_evidence.json` and the Checkpoint 2 artifacts."
+        f"{publication_note}\n",
         encoding="utf-8",
     )
     _refresh_checksums(output)

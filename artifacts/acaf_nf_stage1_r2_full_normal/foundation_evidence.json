@@ -74,6 +74,27 @@
     "size_bytes": 1951111900,
     "status": "CONTINUOUS_TRACKER_INVALID"
   },
+  "publication_excluded_binaries": {
+    "policy": "Only two non-required CAF NPZ binaries are excluded because each exceeds the approximately 1 MiB GitHub connector blob-transfer cap; all numeric CSV, JSON, and plot evidence remains tracked",
+    "files": [
+      {
+        "path": "r1_preserved/cleanstatic_caf_surfaces.npz",
+        "sha256": "087f53536f844445a48ad7569697c98ff2fe468e1afac5e8005ff6fa8c8064e8",
+        "git_blob_sha1": "ab9159aeb0988eb94b71e00b577fee688ff92d9b",
+        "size_bytes": 2787521,
+        "tracked_in_final_tree": false,
+        "provenance_inventory": "r1_artifact_inventory.json:publication_exclusions"
+      },
+      {
+        "path": "full_cleanstatic_caf_surfaces.npz",
+        "sha256": "96462868a776b8e4b4e5637054084631c976e684fe095aa14889f926efab284b",
+        "git_blob_sha1": "e7d48a38ad52a6322181230de5765b54bad4194b",
+        "size_bytes": 2787062,
+        "tracked_in_final_tree": false,
+        "provenance_inventory": "r1_artifact_inventory.json:publication_exclusions"
+      }
+    ]
+  },
   "reason": "Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized",
   "schema": "acaf_nf_stage1_r2_checkpoint4_foundation_evidence.v1",
   "status": "FOUNDATION_INVALID"

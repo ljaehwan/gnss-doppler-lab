@@ -23,6 +23,19 @@
     ],
     "fresh_tracker_rows": 4716117,
     "fresh_tracker_sha256": "5bd6ace9fe29b31c56d7aacce2a56329c526dc2a4a0d6b35cdbdcae3929f9ad6",
+    "publication_excluded_binaries": {
+      "full_cleanstatic_caf_surfaces.npz": {
+        "git_blob_sha1": "e7d48a38ad52a6322181230de5765b54bad4194b",
+        "sha256": "96462868a776b8e4b4e5637054084631c976e684fe095aa14889f926efab284b",
+        "size_bytes": 2787062
+      },
+      "r1_preserved/cleanstatic_caf_surfaces.npz": {
+        "git_blob_sha1": "ab9159aeb0988eb94b71e00b577fee688ff92d9b",
+        "sha256": "087f53536f844445a48ad7569697c98ff2fe468e1afac5e8005ff6fa8c8064e8",
+        "size_bytes": 2787521
+      }
+    },
+    "publication_excluded_binary_count": 2,
     "required_artifact_count": 29,
     "science_status": "NOT_EVALUATED"
   },

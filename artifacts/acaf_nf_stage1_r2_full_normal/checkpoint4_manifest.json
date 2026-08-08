@@ -8,6 +8,10 @@
     "r14_common_reproduced_1e_6"
   ],
   "physics_artifacts_are_placeholders": true,
+  "publication_excluded_binaries": [
+    "r1_preserved/cleanstatic_caf_surfaces.npz",
+    "full_cleanstatic_caf_surfaces.npz"
+  ],
   "reason": "Checkpoint 2 fresh replay failed mandatory clean foundation gates; physics was not authorized",
   "required_artifacts": [
     "README.md",

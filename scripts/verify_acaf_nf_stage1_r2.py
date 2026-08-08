@@ -23,6 +23,18 @@ CHECKPOINT4_REQUIRED = (
     "execution_manifest.json", "checkpoint4_manifest.json", "checkpoint2_verification_report.json",
     "plots/README.md", "config.json", "checksums.json", "test_report.txt", "verification_report.json",
 )
+PUBLICATION_EXCLUDED_BINARIES = {
+    "r1_preserved/cleanstatic_caf_surfaces.npz": {
+        "sha256": "087f53536f844445a48ad7569697c98ff2fe468e1afac5e8005ff6fa8c8064e8",
+        "git_blob_sha1": "ab9159aeb0988eb94b71e00b577fee688ff92d9b",
+        "size_bytes": 2787521,
+    },
+    "full_cleanstatic_caf_surfaces.npz": {
+        "sha256": "96462868a776b8e4b4e5637054084631c976e684fe095aa14889f926efab284b",
+        "git_blob_sha1": "e7d48a38ad52a6322181230de5765b54bad4194b",
+        "size_bytes": 2787062,
+    },
+}
 
 
 def digest(path: Path) -> str:
@@ -188,6 +200,7 @@ def verify_checkpoint4(root: Path) -> tuple[bool, dict]:
     tracker=json.loads((root/"fresh_continuous_tracker_manifest.json").read_text(encoding="utf-8"))
     cp2=json.loads((root/"checkpoint2_verification_report.json").read_text(encoding="utf-8"))
     evidence=json.loads((root/"foundation_evidence.json").read_text(encoding="utf-8"))
+    r1_inventory=json.loads((root/"r1_artifact_inventory.json").read_text(encoding="utf-8"))
     if (foundation.get("status")!="FOUNDATION_INVALID" or foundation.get("checkpoint3_physics_authorized") is not False
             or foundation.get("attack_iq_scoring_performed") is not False): errors.append("foundation_status")
     if (clean.get("status")!="CONTINUOUS_TRACKER_INVALID" or all(clean.get("gates",{}).values())):
@@ -265,15 +278,45 @@ def verify_checkpoint4(root: Path) -> tuple[bool, dict]:
             or manifest.get("science_status")!="NOT_EVALUATED"
             or manifest.get("required_artifacts")!=list(CHECKPOINT4_REQUIRED)
             or manifest.get("attack_results_used_for_selection") is not False): errors.append("checkpoint4_manifest")
+    expected_excluded=list(PUBLICATION_EXCLUDED_BINARIES)
+    if manifest.get("publication_excluded_binaries")!=expected_excluded: errors.append("excluded_binary_manifest")
     config=json.loads((root/"config.json").read_text(encoding="utf-8"))
     if (config.get("checkpoint")!=4 or config.get("status")!="FOUNDATION_INVALID"
             or config.get("science_status")!="NOT_EVALUATED" or config.get("physics_executed") is not False
             or config.get("attack_data_read") is not False or config.get("B0")!="NOT_EVALUATED"):
         errors.append("config_semantics")
     readme=(root/"README.md").read_text(encoding="utf-8")
-    if not all(text in readme for text in ("FOUNDATION_INVALID","NOT_EVALUATED","No attack replay","prohibited")):
+    if not all(text in readme for text in ("FOUNDATION_INVALID","NOT_EVALUATED","No attack replay","prohibited","1 MiB","Git blob")):
         errors.append("readme_semantics")
     checks=json.loads((root/"checksums.json").read_text(encoding="utf-8"))["files"]
+    inventory_exclusions=r1_inventory.get("publication_exclusions",{})
+    inventory_files={item.get("path"):item for item in inventory_exclusions.get("files",[])}
+    evidence_files={item.get("path"):item for item in evidence.get("publication_excluded_binaries",{}).get("files",[])}
+    if (inventory_exclusions.get("publication_transport_limit_bytes_approximate")!=1048576
+            or list(inventory_files)!=expected_excluded or list(evidence_files)!=expected_excluded):
+        errors.append("excluded_binary_inventory")
+    for path,expected in PUBLICATION_EXCLUDED_BINARIES.items():
+        item=inventory_files.get(path,{}); summary=evidence_files.get(path,{})
+        if (root/path).exists(): errors.append(f"excluded_binary_present:{path}")
+        if path in checks: errors.append(f"excluded_binary_in_checksums:{path}")
+        for field,value in expected.items():
+            if item.get(field)!=value or summary.get(field)!=value: errors.append(f"excluded_binary_identity:{path}:{field}")
+        if (item.get("tracked_in_final_tree") is not False or summary.get("tracked_in_final_tree") is not False
+                or not item.get("source_path") or not item.get("provenance")
+                or "GitHub connector" not in item.get("exclusion_reason","")
+                or not item.get("numeric_companions")):
+            errors.append(f"excluded_binary_provenance:{path}")
+        for companion,sha256 in item.get("numeric_companions",{}).items():
+            if not (root/companion).is_file() or digest(root/companion)!=sha256:
+                errors.append(f"excluded_binary_companion:{path}:{companion}")
+    retained_evidence=(
+        "full_cleanstatic_validation.json","full_cleanstatic_validation_epochs.csv","full_cleanstatic_l20_windows.json",
+        "r1_preserved/cleanstatic_validation.json","r1_preserved/cleanstatic_validation_epochs.csv",
+        "r1_preserved/cleanstatic_l20_windows.json","plots/full_cleanstatic_prompt_reproduction.svg",
+    )
+    for name in retained_evidence:
+        if not (root/name).is_file() or checks.get(name,{}).get("sha256")!=digest(root/name):
+            errors.append(f"retained_numeric_or_plot_evidence:{name}")
     for name in CHECKPOINT4_REQUIRED:
         if name in {"checksums.json","verification_report.json"}: continue
         if checks.get(name,{}).get("sha256")!=digest(root/name): errors.append(f"checksum:{name}")
@@ -283,6 +326,8 @@ def verify_checkpoint4(root: Path) -> tuple[bool, dict]:
         "fresh_tracker_rows":tracker["rows"],"fresh_tracker_sha256":tracker["csv_sha256"],
         "attack_iq_bytes_read_for_scoring":0,"checkpoint3_physics_executed":False,
         "csv_rows":rows_by_file,"required_artifact_count":len(CHECKPOINT4_REQUIRED),
+        "publication_excluded_binary_count":len(PUBLICATION_EXCLUDED_BINARIES),
+        "publication_excluded_binaries":PUBLICATION_EXCLUDED_BINARIES,
     }
     return not errors,{"schema":"acaf_nf_stage1_r2_verification.v1","status":"PASS" if not errors else "FAIL",
                        "checkpoint":4,"errors":sorted(set(errors)),"recomputed":recomputed}

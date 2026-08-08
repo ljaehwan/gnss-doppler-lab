@@ -1,8 +1,8 @@
 {
   "files": {
     "README.md": {
-      "sha256": "a77940c271a6429653cf79a3ddf05dba2787806220b2aa015a9b3203609bafb7",
-      "size_bytes": 576
+      "sha256": "1421e19bed503d9496c49043e53044456e50d069f7db654c111c3124f83255c4",
+      "size_bytes": 943
     },
     "attack_tracker_manifest.json": {
       "sha256": "100af2ac929ec6bb9b4aeff535fc3037b1f8b1c8c4f01e0ba401d3e16986863f",
@@ -29,8 +29,8 @@
       "size_bytes": 1218
     },
     "checkpoint4_manifest.json": {
-      "sha256": "052bbdfb1ce39816f94499d8947bbaa2dc005fcb31d57edc9b83fd3a5f8d7f38",
-      "size_bytes": 1395
+      "sha256": "581b0ad97c7716085462131df89112cf1a54346ea33003b46c30155c4143b2ca",
+      "size_bytes": 1526
     },
     "clean_alignment_shift_evidence.csv": {
       "sha256": "f81357cb0143e407e473ff7e5b3d5913ae5cf6f24d8dd2de43c09502fb88eb83",
@@ -69,8 +69,8 @@
       "size_bytes": 762
     },
     "foundation_evidence.json": {
-      "sha256": "f15f8309a5e3f888e98100e7527efb901dc98eda5c691c028fae72c0cab55dbc",
-      "size_bytes": 2638
+      "sha256": "409f0883f25a1f1adb2d0ecc244bfa9f6cfa05ed65db2f67737fb6426481ca79",
+      "size_bytes": 3675
     },
     "foundation_status.json": {
       "sha256": "164424f1dfee929665e070d14be53b9fd58b171f073d93d36a4a3993ac19147d",
@@ -87,10 +87,6 @@
     "fresh_replay_binding.json": {
       "sha256": "5d3a0728e904adbdb6d3523141fba6173f77d8d65bb6d205c1eba77ecaba96bd",
       "size_bytes": 8918
-    },
-    "full_cleanstatic_caf_surfaces.npz": {
-      "sha256": "96462868a776b8e4b4e5637054084631c976e684fe095aa14889f926efab284b",
-      "size_bytes": 2787062
     },
     "full_cleanstatic_l20_windows.json": {
       "sha256": "c1f11d3b13d73f2a1c2f5749a757ff506cb805a5a6171cde71c16976a02b46c0",
@@ -137,8 +133,8 @@
       "size_bytes": 203
     },
     "r1_artifact_inventory.json": {
-      "sha256": "e8915561e1d509d75e97a3df856457bcd0ded0f80b48d02be58b9c1ccd00953e",
-      "size_bytes": 22146
+      "sha256": "66eda5d9608170fadbde56b5c180de06c65e66beb6d6daad4f9f3af300b98d7d",
+      "size_bytes": 25313
     },
     "r1_preserved/README.md": {
       "sha256": "9ae2aa5c84a94b8d7848712d43f1ef3910e5d687346d4f28c313da65e35427b8",
@@ -159,10 +155,6 @@
     "r1_preserved/checkpoint_c_verification_report.json": {
       "sha256": "55ead3ca6d26d436209c9179d99353728cd55150013358420e3e71ef05549cf1",
       "size_bytes": 3554
-    },
-    "r1_preserved/cleanstatic_caf_surfaces.npz": {
-      "sha256": "087f53536f844445a48ad7569697c98ff2fe468e1afac5e8005ff6fa8c8064e8",
-      "size_bytes": 2787521
     },
     "r1_preserved/cleanstatic_l20_windows.json": {
       "sha256": "c4154fd4e2f075f2448a8d0f1ed458067ff42a919971213147095b3e6bb2a05e",
@@ -325,7 +317,7 @@
       "size_bytes": 582
     },
     "test_report.txt": {
-      "sha256": "a28a4f2c93b24251d9dab4d0f3cb648e62470c930ef67724936493ddd8f8745a",
+      "sha256": "adcb54856aeba0325f4d15d64750e73e7030f9fde3c89befcc2d618610aaff62",
       "size_bytes": 430
     },
     "thresholds.json": {
