@@ -1,0 +1,30 @@
+{
+  "b0_reuse_audit": "PASS",
+  "bootstrap_audit": "10-second block resampling",
+  "calibration_tail_audit": {
+    "events_per_method": [
+      14
+    ],
+    "reason": "14 one-second events cannot precisely estimate q99/q99.5 tails",
+    "status": "LIMITED"
+  },
+  "compute_audit": "raw read + code replica + carrier wipeoff + correlations included",
+  "dense_teacher_audit": "actual complex two-template GLS over the frozen dense grid",
+  "ds4_claim_audit": "transition-only",
+  "ds78_counting_audit": "one family",
+  "errors": [],
+  "fixed9_support_audit": "identical cached epoch/PRN rows and shared pooling",
+  "foundation": "PASS",
+  "freeze_files_verified": 14,
+  "leakage": "PASS",
+  "mode": "final",
+  "raw_power_shortcut_control": {
+    "control": "raw_power_alarm_overlap",
+    "criterion": "raw power explains <90% of PG-SCC alarms",
+    "status": "PASS",
+    "value": "0.4639175257731959"
+  },
+  "schema": "pg_scc_independent_audit.v1",
+  "status": "PASS",
+  "verdict_recomputed": "NO_GO"
+}

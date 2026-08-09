@@ -1,3 +1,3 @@
 # PG-SCC Stage-0 static K<=9
 
-This directory currently contains the clean-only frozen design. Attack IQ/cache bytes read before freeze: **0**. Post-freeze evaluation must verify `freeze_manifest.json` before opening attack inputs.
+Final verdict: **NO_GO**. The mask, pooling, normalization, thresholds, timeline, and gates were frozen and committed before any attack cache/IQ access. DS4 is truncated and supports transition-only claims; DS7/DS8 are one family; exact B0 is unavailable.

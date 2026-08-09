@@ -1,0 +1,27 @@
+{
+  "b0_exact": "UNAVAILABLE",
+  "full_ds4_available": false,
+  "gates": {
+    "actual_correlations_reduced": true,
+    "attack_label_isolation": true,
+    "foundation_lineage": true,
+    "gain_phase_awgn_negative_controls": false,
+    "k9_within_5pct_dense_macro_pauc": false,
+    "learned_better_than_random_uniform_shuffled": false,
+    "power_runid_boundary_shortcuts_not_explanatory": true,
+    "same_prn_positive_control": true,
+    "two_families_significantly_better_than_fixed9": false,
+    "worst_clean_or_external_fpr_le_5pct": false
+  },
+  "metrics": {
+    "dense_macro_low_fpr_pauc": 0.8913817663817664,
+    "families_significantly_better_than_fixed9": 0,
+    "pg_scc_k9_macro_low_fpr_pauc": 0.7720797720797722,
+    "relative_dense_gap": 0.1338393927287254,
+    "worst_fpr": 0.08333333333333333
+  },
+  "no_post_attack_retuning": true,
+  "schema": "pg_scc_final_verdict.v1",
+  "verdict": "NO_GO",
+  "wcl_main_model_candidacy": "NOT_A_MAIN_MODEL_CANDIDATE"
+}

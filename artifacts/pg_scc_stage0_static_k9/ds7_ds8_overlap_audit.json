@@ -1,0 +1,21 @@
+{
+  "bytes_per_sample": 100000,
+  "clean_ds7_identical_segments": 2,
+  "clean_ds8_identical_segments": 2,
+  "ds7_ds8_identical_segments": 2,
+  "hashes": {
+    "cleanStatic:105": "96f2161b2ebdc3cb334165ac8d86b712919139d3c6d4753b6d81cd7caf70b044",
+    "cleanStatic:20": "56f742f8835918920356a2c6d6e0ac3c83b8389cbb2d83fd8637a568e5253c93",
+    "ds7:105": "96f2161b2ebdc3cb334165ac8d86b712919139d3c6d4753b6d81cd7caf70b044",
+    "ds7:20": "56f742f8835918920356a2c6d6e0ac3c83b8389cbb2d83fd8637a568e5253c93",
+    "ds8:105": "96f2161b2ebdc3cb334165ac8d86b712919139d3c6d4753b6d81cd7caf70b044",
+    "ds8:20": "56f742f8835918920356a2c6d6e0ac3c83b8389cbb2d83fd8637a568e5253c93"
+  },
+  "independent_family_count": 1,
+  "sampled_seconds": [
+    20,
+    105
+  ],
+  "schema": "pg_scc_ds78_overlap_audit.v1",
+  "status": "AUDITED_NON_INDEPENDENT"
+}

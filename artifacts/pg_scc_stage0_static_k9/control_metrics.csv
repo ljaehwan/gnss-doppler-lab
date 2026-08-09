@@ -1,0 +1,10 @@
+control,status,value,criterion
+global_gain_and_phase,PASS,1.2624690182150289e-09,max score drift <1e-6
+awgn_sigma_0.02,FAIL,0.425,clean false response <=5%
+awgn_sigma_0.05,FAIL,0.8625,clean false response <=5%
+single_source_power_increase,PASS,9.468476003249293e-10,score drift <1e-6
+same_prn_second_source,PASS,1.0,synthetic detection >=80%
+learned_vs_random_uniform_shuffled,FAIL,-0.13746438746438716,macro pAUC difference >0
+mask_boundary_concentration,PASS,0.2222222222222222,boundary fraction <=0.5
+raw_power_alarm_overlap,PASS,0.4639175257731959,raw power explains <90% of PG-SCC alarms
+dense_teacher_sparse_rank,PASS,0.8448925288125361,positive Spearman correlation

@@ -1,0 +1,59 @@
+{
+  "attack_cache": {
+    "json": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-pg-scc-stage0-static-k9/artifacts/acaf_nf_stage1_r3_static_detection/attack_features.json",
+    "json_sha256": "73a67101e078383d8d1e9ef91a762d2ac5441299c7cb7ec608c5820130cd7940",
+    "npz": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-pg-scc-stage0-static-k9/artifacts/acaf_nf_stage1_r3_static_detection/attack_features.npz",
+    "npz_sha256": "78496ff64eca7dc4bba3185435d7814c4b90c8c2434cb55f63440c3f3d4ccb22"
+  },
+  "frozen_hashes_verified_before_attack_open": {
+    "config.json": "36445d6323ad566dca3aa6f65b91f3c2958b6beae8980134a53eca0c673b1d8c",
+    "foundation_validation.json": "cd6270b98f8c9e318059b5912671daa3d1e09ab0a4da2ecc59aabe499527d47e",
+    "frozen_design.json": "28de36cfa264c755712d52e051d882d366a9a5d9065471371ad27309f1f07d7a",
+    "gate_definition.json": "7dffa865fea3eb8c8f899f89e634f30ba48d621e7a2f24d161e34005862592cf",
+    "masks.json": "c89262a3145d579bf54eaf018482cf7ce138a8c10b1bd7609250087fd9a70617",
+    "normalization_controls.json": "46ab392c85a10c7c25f54f9fa298ba0b868169f4665f558ce17d107a223c702c",
+    "normalization_covariance.npz": "e6a2ccf882969e39176e1512909e585e07ead33f4fcef4886d953b9103329323",
+    "pooling.json": "69e9eb3069994f70faed8ebe0b4ae6f0c7351182f84af7865c76dd1fe7599c8f",
+    "selected_coordinates.csv": "24941779a0271efca061dc3124a2c910e6e1f1300a2b53a90afca23c58464443",
+    "selector_training_summary.json": "0ad97caa2a64078ac87d2b96bf6190ea140a3a2a44bbd60ba7519780369e2644",
+    "source_manifest.json": "b04a87f483a5b9e7b729536f6b904daadd8364f9b172411b77d3fd202c7bee24",
+    "synthetic_bank_summary.json": "19266886fb84027d4ecf9f54e1a7292f6feb9adb4c5e5da3c78efe1be30e7dfb",
+    "thresholds.json": "68505aeee4ee4ae4116171e1028e919f21d2b5d70d7d80be6131893174d9c3b3",
+    "timeline.json": "c2427fd05d26412ed1d1c1cbef36dd934ca00dc8a4b1bbfc4503923ba3b8daad"
+  },
+  "sources": {
+    "ds3": {
+      "actual_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "expected_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "full_hash_performed": true,
+      "path": "/home/ubuntu/unraid_hdd/texbat/raw/ds3.bin",
+      "size_bytes": 45785022464,
+      "status": "PASS"
+    },
+    "ds4": {
+      "actual_sha256": "1fff2b048a00732686bb1d77a13941da81c9fac648ca3695a9028f4ee3485285",
+      "expected_sha256": "1fff2b048a00732686bb1d77a13941da81c9fac648ca3695a9028f4ee3485285",
+      "full_hash_performed": true,
+      "path": "/home/ubuntu/unraid_hdd/texbat/raw/ds4.bin",
+      "size_bytes": 12821987328,
+      "status": "PASS"
+    },
+    "ds7": {
+      "actual_sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "expected_sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "full_hash_performed": true,
+      "path": "/home/ubuntu/unraid_hdd/texbat/raw/ds7.bin",
+      "size_bytes": 27059290112,
+      "status": "PASS"
+    },
+    "ds8": {
+      "actual_sha256": "1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78",
+      "expected_sha256": "1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78",
+      "full_hash_performed": true,
+      "path": "/home/ubuntu/unraid_hdd/texbat/raw/ds8.bin",
+      "size_bytes": 47000141168,
+      "status": "PASS"
+    }
+  },
+  "status": "PASS"
+}

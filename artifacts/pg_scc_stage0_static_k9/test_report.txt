@@ -1,0 +1,19 @@
+PG-SCC Stage-0 static K<=9 test report
+Date: 2026-08-09 Asia/Seoul
+
+Applicable suite:
+  PYTHONPATH=src pytest -q tests/test_pg_scc.py tests/test_pg_scc_physics.py tests/test_acaf_nf_stage0.py tests/test_acaf_nf_stage0_r12_alignment.py tests/test_acaf_nf_stage0_r13_reconstruction.py tests/test_acaf_nf_stage0_r14_doppler_validation.py tests/test_acaf_nf_stage1_r2a_l20_foundation_audit.py
+
+Result:
+  105 passed in 200.54s
+
+Independent artifact verification:
+  PYTHONPATH=src python3 scripts/verify_pg_scc_artifacts.py
+  PASS; verdict recomputed as NO_GO.
+
+Environment limitations:
+  A broader related-suite run collected 36 failures, all caused by the optional
+  pandas dependency being unavailable in tests/test_oakbat_9tap_detection_pipeline.py.
+  PyTorch is also unavailable; the frozen S1 selector therefore uses the documented
+  explicit NumPy Adam implementation. Neither limitation affects the applicable
+  105-test result above.
