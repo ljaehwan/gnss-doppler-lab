@@ -1,0 +1,130 @@
+{
+  "committed_event_identities": false,
+  "committed_prn_sets": false,
+  "common_unique_prn_histogram": {
+    "10": 184,
+    "11": 33,
+    "6": 2,
+    "7": 5,
+    "8": 12,
+    "9": 24
+  },
+  "eligible_event_counts": {
+    "3": 260,
+    "5": 260,
+    "9": 241
+  },
+  "event_key_used_locally_only": [
+    "source_role",
+    "scenario",
+    "phase",
+    "second"
+  ],
+  "exclusive_support_strata": {
+    "dense_only": 0,
+    "k3": 0,
+    "k5": 19,
+    "k9": 241,
+    "unsupported": 0
+  },
+  "inventory_mode": "METADATA_ONLY",
+  "isolation_guards": {
+    "accepted_input_basenames": [
+      "attack_features.json",
+      "clean_features.json"
+    ],
+    "accepted_input_suffix": ".json",
+    "csv_opened": false,
+    "npz_opened": false,
+    "outcome_fields_rejected": [
+      "alarm",
+      "alarms",
+      "attack_score",
+      "auc",
+      "auroc",
+      "detector_outcome",
+      "label",
+      "labels",
+      "metric",
+      "metrics",
+      "outcome",
+      "outcomes",
+      "score",
+      "scores",
+      "threshold",
+      "thresholds",
+      "verdict",
+      "verdicts"
+    ],
+    "output_contains_only_aggregates": true
+  },
+  "method_availability": {
+    "dense_two_source_glrt": {
+      "available_events": 260,
+      "minimum_common_unique_prns": 1,
+      "unavailable_events": 0
+    },
+    "epl3": {
+      "available_events": 260,
+      "minimum_common_unique_prns": 3,
+      "unavailable_events": 0
+    },
+    "fixed9": {
+      "available_events": 241,
+      "minimum_common_unique_prns": 9,
+      "unavailable_events": 19
+    },
+    "pg_scc_k3": {
+      "available_events": 260,
+      "minimum_common_unique_prns": 3,
+      "unavailable_events": 0
+    },
+    "pg_scc_k5": {
+      "available_events": 260,
+      "minimum_common_unique_prns": 5,
+      "unavailable_events": 0
+    },
+    "pg_scc_k9": {
+      "available_events": 241,
+      "minimum_common_unique_prns": 9,
+      "unavailable_events": 19
+    },
+    "shuffled_k3": {
+      "available_events": 260,
+      "minimum_common_unique_prns": 3,
+      "unavailable_events": 0
+    },
+    "shuffled_k5": {
+      "available_events": 260,
+      "minimum_common_unique_prns": 5,
+      "unavailable_events": 0
+    },
+    "shuffled_k9": {
+      "available_events": 241,
+      "minimum_common_unique_prns": 9,
+      "unavailable_events": 19
+    },
+    "uniform_k5": {
+      "available_events": 260,
+      "minimum_common_unique_prns": 5,
+      "unavailable_events": 0
+    }
+  },
+  "outcome_values_accessible": false,
+  "schema": "pg_scc_stage0_r2_support_inventory.v1",
+  "source_provenance": [
+    {
+      "logical_name": "clean_features.json",
+      "rows": 572,
+      "sha256": "50b9c2f7f0ad61de976eb73e85b6d6736391597a0d3e7fe7ac2778d2484b9550"
+    },
+    {
+      "logical_name": "attack_features.json",
+      "rows": 1990,
+      "sha256": "73a67101e078383d8d1e9ef91a762d2ac5441299c7cb7ec608c5820130cd7940"
+    }
+  ],
+  "support_infeasible_event_count": 0,
+  "total_event_count": 260,
+  "total_metadata_rows": 2562
+}

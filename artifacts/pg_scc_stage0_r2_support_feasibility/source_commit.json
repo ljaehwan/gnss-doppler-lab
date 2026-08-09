@@ -1,0 +1,24 @@
+{
+  "schema": "pg_scc_stage0_r2_support_feasibility_source.v1",
+  "branch": "research/pg-scc-stage0-r2-support-feasibility",
+  "phase1_base_commit": "8cd78ed724e57f97498da26547a9ecbbc2a78fe1",
+  "preserved_r1_fail_closed_commit": "8cd78ed724e57f97498da26547a9ecbbc2a78fe1",
+  "parent_r1_implementation_commit": "5359bfab74d44d7153a32c5cf708ccab240fe219",
+  "parent_r1_preregistration_commit": "5e5339282c6154630fd11f94415cba794d9fa1ec",
+  "main_sha_at_phase1_start": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "r1_blocker": "common_support_event_has_fewer_than_4_unique_prns",
+  "iteration_status": "POST_R1_SUPPORT_REPAIRED_DIAGNOSTIC",
+  "independent_confirmatory_evidence": false,
+  "protected_r2_outcomes_opened_in_phase1": false,
+  "support_inventory_inputs": [
+    {
+      "logical_name": "clean_features.json",
+      "sha256": "50b9c2f7f0ad61de976eb73e85b6d6736391597a0d3e7fe7ac2778d2484b9550"
+    },
+    {
+      "logical_name": "attack_features.json",
+      "sha256": "73a67101e078383d8d1e9ef91a762d2ac5441299c7cb7ec608c5820130cd7940"
+    }
+  ],
+  "implementation_freeze_binding": "full exact HEAD supplied at Phase 2 and verified before protected input open"
+}

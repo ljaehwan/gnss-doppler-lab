@@ -1,0 +1,103 @@
+{
+  "schema": "pg_scc_stage0_r2_support_feasibility_config.v1",
+  "scientific_status": {
+    "iteration": "POST_R1_SUPPORT_REPAIRED_DIAGNOSTIC",
+    "independent_confirmatory_evidence": false,
+    "requires_new_untouched_holdout_for_confirmation": true,
+    "r1_status_preserved": "FAIL_CLOSED"
+  },
+  "event_support": {
+    "event_key": ["source_role", "scenario", "phase", "second"],
+    "prn_key": "prn",
+    "time_s_is_not_an_event_identity_field": true,
+    "common_support": "exact intersection of unique PRNs across every method in the comparison family",
+    "paired_comparisons_require_identical_common_prn_set": true,
+    "k_eff_allowed": false,
+    "eligibility_uses_outcomes": false,
+    "exclusive_strata": {
+      "K9": {"minimum_common_unique_prns": 9},
+      "K5": {"minimum_common_unique_prns": 5, "maximum_common_unique_prns": 8},
+      "K3": {"minimum_common_unique_prns": 3, "maximum_common_unique_prns": 4},
+      "DENSE_ONLY": {"minimum_common_unique_prns": 1, "maximum_common_unique_prns": 2},
+      "UNSUPPORTED": {"maximum_common_unique_prns": 0}
+    },
+    "eligible_families": {
+      "K9": ["K9", "K5", "K3", "DENSE"],
+      "K5": ["K5", "K3", "DENSE"],
+      "K3": ["K3", "DENSE"],
+      "DENSE_ONLY": ["DENSE"],
+      "UNSUPPORTED": []
+    }
+  },
+  "comparison_families": {
+    "K9": ["pg_scc_k9", "fixed9", "shuffled_k9"],
+    "K5": ["pg_scc_k5", "uniform_k5", "shuffled_k5"],
+    "K3": ["pg_scc_k3", "epl3", "shuffled_k3"],
+    "DENSE": ["dense_two_source_glrt"]
+  },
+  "relationship_controls": {
+    "ablation": "fixed or uniform non-learned comparator at identical K and event/PRN support",
+    "permutation": "frozen shuffled_k3/shuffled_k5/shuffled_k9 coordinate-relationship control",
+    "required_for_interpretation": true,
+    "minimum_paired_temporal_blocks": 2,
+    "selection_on_attack_outcomes": false
+  },
+  "minimum_gates": {
+    "calibration_events_per_support_stratum": 10,
+    "clean_holdout_events_per_support_stratum": 10,
+    "positive_events_per_family_support_stratum": 10,
+    "temporal_blocks_per_ci": 2,
+    "block_seconds": 10.0,
+    "bootstrap_iterations": 2000,
+    "bootstrap_seeds": [2026081021, 2026081022, 2026081023]
+  },
+  "calibration": {
+    "source": "cleanStatic calibration only within the same support stratum and fixed K",
+    "quantile": 0.99,
+    "quantile_method": "higher",
+    "clean_false_alarm_gate": 0.05,
+    "confidence": 0.95,
+    "exact_interval": "Clopper-Pearson",
+    "leave_one_block_out": true
+  },
+  "aggregate_estimands": {
+    "primary": "per-support-stratum, per-family paired effect and normalized low-FPR pAUC",
+    "event_weighting_within_cell": "equal event weight",
+    "family_weighting": "DS3, DS4-transition-only, and DS7/DS8-combined receive equal weight when all are AVAILABLE",
+    "overall_weighting": "report event-count-weighted and equal-stratum summaries separately; never pool raw scores across K or strata",
+    "unavailable_cells": "remain explicit and are excluded only from the named aggregate with numerator and denominator reported"
+  },
+  "controls": {
+    "awgn_empirical_residual_multipliers": [0.5, 1.0, 2.0],
+    "seed_stability_seeds": [2026081001, 2026081002, 2026081003, 2026081004, 2026081005, 2026081006, 2026081007, 2026081008, 2026081009, 2026081010, 2026081011, 2026081012, 2026081013, 2026081014, 2026081015, 2026081016, 2026081017, 2026081018, 2026081019, 2026081020],
+    "ds4_scope": "transition_only_truncated_recording",
+    "ds7_ds8_independent": false
+  },
+  "leakage_guards": {
+    "attack_fit": false,
+    "attack_based_selection": false,
+    "post_attack_retuning": false,
+    "support_selection_fields": ["source_role", "scenario", "phase", "second", "prn", "method_availability"],
+    "threshold_inputs": "cleanStatic calibration only",
+    "selector_inputs": "cleanStatic train/selection plus frozen synthetic bank only"
+  },
+  "output_gates": [
+    {"gate": 0, "requirement": "implementation freeze and provenance", "allowed_outputs": []},
+    {"gate": 1, "requirement": "metadata-only support accounting", "allowed_outputs": ["support_accounting.json", "fail_closed.json"]},
+    {"gate": 2, "requirement": "identical paired support and denominator checks", "allowed_outputs": ["calibration.json", "support_accounting.json", "fail_closed.json"]},
+    {"gate": 3, "requirement": "clean calibration and false-alarm gates", "allowed_outputs": ["calibration.json", "control_results.json", "support_accounting.json", "fail_closed.json"]},
+    {"gate": 4, "requirement": "relationship ablation/permutation and uncertainty evidence", "allowed_outputs": ["paired_results.json", "control_results.json", "calibration.json", "support_accounting.json", "fail_closed.json"]},
+    {"gate": 5, "requirement": "provenance and checksum verification", "allowed_outputs": ["final_diagnostic.json", "artifact_manifest_sha256.json", "paired_results.json", "control_results.json", "calibration.json", "support_accounting.json"]}
+  ],
+  "fail_closed": {
+    "no_event_disappears": true,
+    "denominator_mismatch": "FAIL_CLOSED",
+    "support_reconstruction_mismatch": "FAIL_CLOSED",
+    "nonidentical_paired_support": "FAIL_CLOSED",
+    "outcome_dependent_selection": "FAIL_CLOSED",
+    "relationship_control_missing": "FAIL_CLOSED",
+    "calibration_or_sample_gate_failure": "UNAVAILABLE_OR_LIMITED_CELL",
+    "manifest_or_lineage_failure": "FAIL_CLOSED",
+    "verdict_on_gate_failure": "NO_CAUSAL_INTERPRETATION"
+  }
+}
