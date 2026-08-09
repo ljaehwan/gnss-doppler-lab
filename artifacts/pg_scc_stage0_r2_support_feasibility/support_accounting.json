@@ -1,0 +1,196 @@
+{
+  "comparison_families": {
+    "DENSE": {
+      "common_unique_prn_histogram": {
+        "10": 184,
+        "11": 33,
+        "6": 2,
+        "7": 5,
+        "8": 12,
+        "9": 24
+      },
+      "eligible_event_counts": {
+        "DENSE": 260,
+        "K3": 260,
+        "K5": 260,
+        "K9": 241
+      },
+      "exclusive_support_strata": {
+        "DENSE_ONLY": 0,
+        "K3": 0,
+        "K5": 19,
+        "K9": 241,
+        "UNSUPPORTED": 0
+      },
+      "total_events": 260
+    },
+    "K3": {
+      "common_unique_prn_histogram": {
+        "10": 184,
+        "11": 33,
+        "6": 2,
+        "7": 5,
+        "8": 12,
+        "9": 24
+      },
+      "eligible_event_counts": {
+        "DENSE": 260,
+        "K3": 260,
+        "K5": 260,
+        "K9": 241
+      },
+      "exclusive_support_strata": {
+        "DENSE_ONLY": 0,
+        "K3": 0,
+        "K5": 19,
+        "K9": 241,
+        "UNSUPPORTED": 0
+      },
+      "total_events": 260
+    },
+    "K5": {
+      "common_unique_prn_histogram": {
+        "10": 184,
+        "11": 33,
+        "6": 2,
+        "7": 5,
+        "8": 12,
+        "9": 24
+      },
+      "eligible_event_counts": {
+        "DENSE": 260,
+        "K3": 260,
+        "K5": 260,
+        "K9": 241
+      },
+      "exclusive_support_strata": {
+        "DENSE_ONLY": 0,
+        "K3": 0,
+        "K5": 19,
+        "K9": 241,
+        "UNSUPPORTED": 0
+      },
+      "total_events": 260
+    },
+    "K9": {
+      "common_unique_prn_histogram": {
+        "10": 184,
+        "11": 33,
+        "6": 2,
+        "7": 5,
+        "8": 12,
+        "9": 24
+      },
+      "eligible_event_counts": {
+        "DENSE": 260,
+        "K3": 260,
+        "K5": 260,
+        "K9": 241
+      },
+      "exclusive_support_strata": {
+        "DENSE_ONLY": 0,
+        "K3": 0,
+        "K5": 19,
+        "K9": 241,
+        "UNSUPPORTED": 0
+      },
+      "total_events": 260
+    }
+  },
+  "event_identities_emitted": false,
+  "implementation_freeze": {
+    "ahead_behind": [
+      0,
+      0
+    ],
+    "branch": "research/pg-scc-stage0-r2-support-feasibility",
+    "config_sha256": "013d83dc2245e6cb896607aeec124e7d5cd9fb0a107832affc9aec4d9b12e904",
+    "frozen_input_files_verified": 14,
+    "implementation_sha": "91019e51996d40700b0b626225980e7d86e9cfb4",
+    "r1_files_verified": 3,
+    "remote_sha": "91019e51996d40700b0b626225980e7d86e9cfb4",
+    "source_sha256": "9529f04e66b85861b187f20b124fd003d8ad49de0657ba78fd773d3ae0e9f57a",
+    "status": "PASS",
+    "support_summary_sha256": "e55190563d9b4711984a94e79b0d0e6e35c604c3a58e81af39b08d12ad85b513"
+  },
+  "method_availability": {
+    "dense_two_source_glrt": {
+      "available_events": 260,
+      "denominator_events": 260,
+      "unavailable_events": 0
+    },
+    "epl3": {
+      "available_events": 260,
+      "denominator_events": 260,
+      "unavailable_events": 0
+    },
+    "fixed9": {
+      "available_events": 260,
+      "denominator_events": 260,
+      "unavailable_events": 0
+    },
+    "pg_scc_k3": {
+      "available_events": 260,
+      "denominator_events": 260,
+      "unavailable_events": 0
+    },
+    "pg_scc_k5": {
+      "available_events": 260,
+      "denominator_events": 260,
+      "unavailable_events": 0
+    },
+    "pg_scc_k9": {
+      "available_events": 260,
+      "denominator_events": 260,
+      "unavailable_events": 0
+    },
+    "shuffled_k3": {
+      "available_events": 260,
+      "denominator_events": 260,
+      "unavailable_events": 0
+    },
+    "shuffled_k5": {
+      "available_events": 260,
+      "denominator_events": 260,
+      "unavailable_events": 0
+    },
+    "shuffled_k9": {
+      "available_events": 260,
+      "denominator_events": 260,
+      "unavailable_events": 0
+    },
+    "uniform_k5": {
+      "available_events": 260,
+      "denominator_events": 260,
+      "unavailable_events": 0
+    }
+  },
+  "no_event_drop": true,
+  "prn_sets_emitted": false,
+  "schema": "pg_scc_stage0_r2_support_accounting.v1",
+  "universe": {
+    "common_unique_prn_histogram": {
+      "10": 184,
+      "11": 33,
+      "6": 2,
+      "7": 5,
+      "8": 12,
+      "9": 24
+    },
+    "eligible_event_counts": {
+      "DENSE": 260,
+      "K3": 260,
+      "K5": 260,
+      "K9": 241
+    },
+    "exclusive_support_strata": {
+      "DENSE_ONLY": 0,
+      "K3": 0,
+      "K5": 19,
+      "K9": 241,
+      "UNSUPPORTED": 0
+    },
+    "total_events": 260
+  },
+  "universe_fingerprint": "00b41b11bd0349b944d5144c5d687118976121dbbc56d279c6fba16730ef9b1c"
+}

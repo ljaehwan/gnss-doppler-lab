@@ -1,0 +1,111 @@
+{
+  "awgn": {
+    "pg_scc_k9:K9": {
+      "cn0_mapping": {
+        "reason": "normalized CAF residual sigma has no unique physical C/N0 mapping",
+        "status": "UNAVAILABLE"
+      },
+      "empirical_controls": [
+        {
+          "false_response": 0.46111111111111114,
+          "multiplier": 0.5,
+          "sigma": 0.01959560723999447
+        },
+        {
+          "false_response": 0.7333333333333333,
+          "multiplier": 1.0,
+          "sigma": 0.03919121447998894
+        },
+        {
+          "false_response": 0.9722222222222222,
+          "multiplier": 2.0,
+          "sigma": 0.07838242895997788
+        }
+      ],
+      "empirical_residual_sigma": 0.03919121447998894,
+      "legacy_normalized_caf": [
+        {
+          "empirical_multiple": 0.5103184544130934,
+          "false_response": 0.4444444444444444,
+          "sigma": 0.02
+        },
+        {
+          "empirical_multiple": 1.2757961360327335,
+          "false_response": 0.8722222222222222,
+          "sigma": 0.05
+        }
+      ],
+      "raw_iq": {
+        "reason": "raw-IQ CAF regeneration input/provenance not present in frozen feature cache",
+        "status": "UNAVAILABLE"
+      },
+      "schema": "pg_scc_awgn_reaudit.v1",
+      "status": "AWGN_INCONCLUSIVE"
+    }
+  },
+  "awgn_status": "AVAILABLE",
+  "covariance_controls": {
+    "current_diagonal": {
+      "attack_based_choice": false,
+      "condition_number": 10.470502024482803,
+      "source": "cleanStatic train only"
+    },
+    "empirical_variance_clipping": {
+      "attack_based_choice": false,
+      "condition_number": 11.232080840286203,
+      "source": "cleanStatic train only"
+    },
+    "low_rank_plus_diagonal": {
+      "attack_based_choice": false,
+      "condition_number": 1414.2889574776495,
+      "source": "cleanStatic train only"
+    },
+    "stronger_variance_floor": {
+      "attack_based_choice": false,
+      "condition_number": 18.36706645251129,
+      "source": "cleanStatic train only"
+    }
+  },
+  "leakage_guards": {
+    "attack_based_selection": false,
+    "attack_fit": false,
+    "post_attack_retuning": false
+  },
+  "relationship_controls": [
+    "RELATIONAL_ABLATION",
+    "RELATIONSHIP_PERMUTATION"
+  ],
+  "schema": "pg_scc_stage0_r2_control_results.v1",
+  "selector_seed_stability": {
+    "attack_based_selection": false,
+    "learned_evidence": {
+      "3": {
+        "learned_synthetic_teacher_spearman": 0.9692933401118454,
+        "random_95th_percentile": 0.9723334207980058,
+        "random_percentile": 0.895,
+        "selector_proxy_vs_final_glrt_spearman": 0.9939452580481165
+      },
+      "5": {
+        "learned_synthetic_teacher_spearman": 0.9777539072109156,
+        "random_95th_percentile": 0.9796567831586773,
+        "random_percentile": 0.89,
+        "selector_proxy_vs_final_glrt_spearman": 0.9897748331338045
+      },
+      "9": {
+        "learned_synthetic_teacher_spearman": 0.981929252013054,
+        "random_95th_percentile": 0.9871962925911957,
+        "random_percentile": 0.69,
+        "selector_proxy_vs_final_glrt_spearman": 0.9911835610148089
+      }
+    },
+    "median_pairwise_jaccard": {
+      "3": 1.0,
+      "5": 1.0,
+      "9": 1.0
+    },
+    "random_control_rows": 600,
+    "seed_count": 20,
+    "seed_rows": 60,
+    "status": "PASS"
+  }
+}

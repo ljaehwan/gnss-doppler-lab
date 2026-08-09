@@ -1,0 +1,27 @@
+{
+  "all_denominators_explicit": true,
+  "available_relationship_permutation_cells": 3,
+  "implementation_freeze": {
+    "ahead_behind": [
+      0,
+      0
+    ],
+    "branch": "research/pg-scc-stage0-r2-support-feasibility",
+    "config_sha256": "013d83dc2245e6cb896607aeec124e7d5cd9fb0a107832affc9aec4d9b12e904",
+    "frozen_input_files_verified": 14,
+    "implementation_sha": "91019e51996d40700b0b626225980e7d86e9cfb4",
+    "r1_files_verified": 3,
+    "remote_sha": "91019e51996d40700b0b626225980e7d86e9cfb4",
+    "source_sha256": "9529f04e66b85861b187f20b124fd003d8ad49de0657ba78fd773d3ae0e9f57a",
+    "status": "PASS",
+    "support_summary_sha256": "e55190563d9b4711984a94e79b0d0e6e35c604c3a58e81af39b08d12ad85b513"
+  },
+  "independent_confirmatory_evidence": false,
+  "interpretation": "DIAGNOSTIC_ONLY",
+  "k_eff_used": false,
+  "relationship_permutation_cells": 36,
+  "requires_new_untouched_holdout": true,
+  "schema": "pg_scc_stage0_r2_final_diagnostic.v1",
+  "status": "POST_R1_SUPPORT_REPAIRED_DIAGNOSTIC",
+  "total_events": 260
+}
