@@ -1,0 +1,95 @@
+{
+  "absent_final_artifacts": [
+    "README.md",
+    "artifact_manifest_sha256.json",
+    "awgn_reaudit.json",
+    "bootstrap_intervals.csv",
+    "calibration_uncertainty.json",
+    "coordinate_contributions.csv",
+    "dense_teacher_diagnostics.json",
+    "k3_exploratory_metrics.csv",
+    "mask_seed_stability.csv",
+    "nested_mask_analysis.csv",
+    "plots/",
+    "random_mask_distribution.csv",
+    "reproduction_check.json",
+    "root_cause_verdict.json",
+    "score_dilution_metrics.csv",
+    "selector_proxy_audit.json",
+    "synthetic_real_mismatch.csv"
+  ],
+  "assertions": {
+    "additional_protected_outcomes_inspected_after_gate": false,
+    "audit_rerun": false,
+    "frozen_implementation_modified": false,
+    "outcome_based_retuning": false,
+    "support_gate_relaxed": false
+  },
+  "attempt_count": 1,
+  "blocker_code": "common_support_event_has_fewer_than_4_unique_prns",
+  "executed_command": "python3 scripts/run_pg_scc_root_cause_audit.py --implementation-sha 5359bfab74d44d7153a32c5cf708ccab240fe219",
+  "execution": {
+    "exit_code": 1,
+    "exit_evidence_timestamp_utc": "2026-08-09T11:26:47.041Z",
+    "final_marker": "FAIL_CLOSED_BLOCKER=common_support_event_has_fewer_than_4_unique_prns",
+    "final_marker_timestamp_utc": "2026-08-09T11:27:16.606Z",
+    "invocation_timestamp_utc": "2026-08-09T11:25:35.544Z",
+    "traceback": [
+      {
+        "code": "raise SystemExit(main())",
+        "file": "scripts/run_pg_scc_root_cause_audit.py",
+        "function": "<module>",
+        "line": 1400
+      },
+      {
+        "code": "support = validate_common_support(_score_table(metadata, fits), core_methods, ...)",
+        "file": "scripts/run_pg_scc_root_cause_audit.py",
+        "function": "main",
+        "line": 1321
+      },
+      {
+        "code": "raise RuntimeError(\"pooled event has insufficient unique PRN support\")",
+        "file": "scripts/run_pg_scc_root_cause_audit.py",
+        "function": "validate_common_support",
+        "line": 151
+      }
+    ]
+  },
+  "frozen_bindings": {
+    "config_path": "artifacts/pg_scc_stage0_r1_root_cause_audit/config.json",
+    "config_sha256": "ade700892fe3e055e0154ae859ba701a36f11a6ec9245db4b39fd087426eb0e6",
+    "implementation_commit": "5359bfab74d44d7153a32c5cf708ccab240fe219",
+    "preregistration_commit": "5e5339282c6154630fd11f94415cba794d9fa1ec",
+    "source_commit_path": "artifacts/pg_scc_stage0_r1_root_cause_audit/source_commit.json",
+    "source_commit_sha256": "13ab9e544f06903dd6fde04c42e8aefb35a66946bbaf0456e95040fbb777d428"
+  },
+  "integrity_precheck": {
+    "ahead_behind": [
+      0,
+      0
+    ],
+    "branch": "research/pg-scc-stage0-r1-root-cause-audit",
+    "local_sha": "5359bfab74d44d7153a32c5cf708ccab240fe219",
+    "main_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+    "main_unchanged": true,
+    "origin_main_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+    "remote_sha": "5359bfab74d44d7153a32c5cf708ccab240fe219",
+    "status_clean": true
+  },
+  "live_audit_process_at_preservation": false,
+  "present_frozen_files": [
+    "config.json",
+    "source_commit.json"
+  ],
+  "provenance": {
+    "session_jsonl": "/home/ubuntu/.codex/sessions/2026/08/09/rollout-2026-08-09T15-29-32-019fe536-5cac-78c0-9cba-2583e15b4362.jsonl",
+    "session_uuid": "019fe536-5cac-78c0-9cba-2583e15b4362"
+  },
+  "schema": "pg_scc_stage0_r1_fail_closed_report.v1",
+  "specific_event_identity": {
+    "reason": "The frozen failure message did not expose the event identity; no additional protected outcome inspection is permitted.",
+    "status": "UNAVAILABLE"
+  },
+  "status": "FAIL_CLOSED",
+  "support_gate_message": "pooled event has insufficient unique PRN support"
+}
