@@ -1,0 +1,215 @@
+{
+  "attack_based_selection": false,
+  "attack_fit": false,
+  "audit_labels": {
+    "attack_alternative_analysis": "POST_HOC_DIAGNOSTIC",
+    "k3": "EXPLORATORY_ONLY"
+  },
+  "awgn_control": {
+    "caf_empirical_residual_multipliers": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "legacy_normalized_caf_sigma": [
+      0.02,
+      0.05
+    ],
+    "raw_iq_if_available": true,
+    "verdicts": [
+      "AWGN_FAILURE_VALID",
+      "AWGN_CONTROL_MISSCALED",
+      "AWGN_INCONCLUSIVE"
+    ]
+  },
+  "bootstrap": {
+    "block_seconds": 10.0,
+    "family_grouping": {
+      "ds3": "ds3",
+      "ds4": "ds4_transition_only",
+      "ds7": "ds7_ds8",
+      "ds8": "ds7_ds8"
+    },
+    "iterations": 2000,
+    "seed": 2026080921,
+    "seeds": [
+      2026080921,
+      2026080922,
+      2026080923
+    ]
+  },
+  "calibration_uncertainty": {
+    "block_bootstrap_iterations": 2000,
+    "confidence": 0.95,
+    "exact_interval": "Clopper-Pearson",
+    "leave_one_block_out": true,
+    "quantiles": [
+      0.99,
+      0.995
+    ],
+    "seed": 2026080931,
+    "threshold_quantile_method": "higher"
+  },
+  "common_support": {
+    "comparison_key": [
+      "scenario",
+      "phase",
+      "second",
+      "time_s",
+      "prn"
+    ],
+    "drop_to_exact_intersection": true,
+    "minimum_prns_per_pooled_event": 4,
+    "pooling": "median",
+    "require_identical_epoch_prn_pooling_timeline": true,
+    "timeline_source": "artifacts/pg_scc_stage0_static_k9/timeline.json"
+  },
+  "covariance_diagnostics": {
+    "attack_based_choice_prohibited": true,
+    "source": "cleanStatic train only",
+    "variants": [
+      {
+        "name": "current_diagonal",
+        "shrinkage_to_diagonal": 1.0,
+        "variance_floor_relative_to_median": 0.0001
+      },
+      {
+        "clip_quantiles": [
+          0.05,
+          0.95
+        ],
+        "name": "empirical_variance_clipping",
+        "shrinkage_to_diagonal": 1.0,
+        "variance_floor_relative_to_median": 0.0001
+      },
+      {
+        "name": "stronger_variance_floor",
+        "shrinkage_to_diagonal": 1.0,
+        "variance_floor_relative_to_median": 0.01
+      },
+      {
+        "diagonal_shrinkage": 0.25,
+        "eigenvalue_floor_relative_to_median_diagonal": 0.01,
+        "name": "low_rank_plus_diagonal",
+        "rank_rule": "min(20, floor(sqrt(n_train)), n_train-2, dimension-1)"
+      }
+    ]
+  },
+  "dense_physics_diagnostic": {
+    "projection_ratio": "squared weighted norm of projection onto centered synthetic-template span divided by squared weighted perturbation norm",
+    "report_best_fit": [
+      "delay_chips",
+      "doppler_hz",
+      "second_source_amplitude",
+      "residual_direction"
+    ],
+    "synthetic_bank_is_frozen": true
+  },
+  "diagnostic_scores": {
+    "bic_parameterization": {
+      "h0_real_parameters": 2,
+      "h1_real_parameters": 6,
+      "observations": "2*K real observations"
+    },
+    "definitions": {
+      "delta_bic": "2*raw_rss_improvement-(h1_real_parameters-h0_real_parameters)*ln(2*K)",
+      "dof_corrected_likelihood_improvement": "((rss_h0-rss_h1)/(h1_real_parameters-h0_real_parameters))/(rss_h1/max(2*K-h1_real_parameters,1))",
+      "improvement_per_k": "raw_rss_improvement/K",
+      "raw_rss_improvement": "max(rss_h0-rss_h1,0)"
+    },
+    "names": [
+      "raw_rss_improvement",
+      "improvement_per_k",
+      "delta_bic",
+      "dof_corrected_likelihood_improvement"
+    ],
+    "zero_denominator_policy": "UNAVAILABLE"
+  },
+  "final_root_cause_rules": {
+    "K3_WORTH_INDEPENDENT_CONFIRMATION": "K3 exceeds the 95th percentile of both random and shuffled K3, is at least non-inferior to fixed9 on paired common support, has stable external static FPR <=0.05, and physical coordinates are stable across selector seeds",
+    "REPAIRABLE_BUT_REQUIRES_NEW_CONFIRMATION": "at least one attack-independent implementation/objective/control defect is numerically supported and a repair can be specified without choosing on attack performance",
+    "TERMINATE_PG_SCC": "dense teacher is weaker than fixed9 on common support and selector is not statistically identifiable or meaningfully above random masks",
+    "allowed": [
+      "TERMINATE_PG_SCC",
+      "REPAIRABLE_BUT_REQUIRES_NEW_CONFIRMATION",
+      "K3_WORTH_INDEPENDENT_CONFIRMATION"
+    ],
+    "precedence": [
+      "K3_WORTH_INDEPENDENT_CONFIRMATION",
+      "REPAIRABLE_BUT_REQUIRES_NEW_CONFIRMATION",
+      "TERMINATE_PG_SCC"
+    ]
+  },
+  "guard": {
+    "attack_based_selection": false,
+    "attack_fit": false,
+    "attack_labels_allowed_only_after_preregistration": true,
+    "post_attack_retuning": false,
+    "selector_inputs": "cleanStatic train/selection plus preregistered synthetic bank only",
+    "threshold_inputs": "frozen cleanStatic calibration only"
+  },
+  "nested_mask_accounting": {
+    "coordinate_order": "frozen pg_scc_k3 order, then exact set difference pg_scc_k5\\pg_scc_k3 in frozen k5 order, then exact set difference pg_scc_k9\\pg_scc_k5 in frozen k9 order",
+    "masks_source": "artifacts/pg_scc_stage0_static_k9/masks.json",
+    "required_relations": [
+      "set(K3) subset set(K5)",
+      "set(K5) subset set(K9)",
+      "len(K3,K5,K9)=(3,5,9)",
+      "no duplicate coordinate"
+    ]
+  },
+  "post_attack_retuning": false,
+  "random_masks": {
+    "count_per_budget": {
+      "3": 200,
+      "5": 200,
+      "9": 200
+    },
+    "include_prompt_coordinate": true,
+    "sample_without_replacement": true,
+    "seed": 2026080911,
+    "selection_metric": "synthetic validation sparse-GLRT and teacher-preservation only; attack metrics report-only"
+  },
+  "reproduction": {
+    "alarm_count_absolute_tolerance": 0,
+    "metric_absolute_tolerance": 1e-10,
+    "score_absolute_tolerance": 1e-10,
+    "score_relative_tolerance": 1e-9,
+    "status_on_failure": "REPRODUCTION_MISMATCH",
+    "threshold_absolute_tolerance": 1e-12
+  },
+  "schema": "pg_scc_stage0_r1_root_cause_audit_config.v1",
+  "selector": {
+    "epochs": 350,
+    "seed_count": 20,
+    "seeds": [
+      2026081001,
+      2026081002,
+      2026081003,
+      2026081004,
+      2026081005,
+      2026081006,
+      2026081007,
+      2026081008,
+      2026081009,
+      2026081010,
+      2026081011,
+      2026081012,
+      2026081013,
+      2026081014,
+      2026081015,
+      2026081016,
+      2026081017,
+      2026081018,
+      2026081019,
+      2026081020
+    ]
+  },
+  "statistical_rules": {
+    "ds4_if_fewer_than_two_attack_blocks": "LIMITED",
+    "family_unit": "ds3, ds4 transition-only, ds7/ds8 combined",
+    "k3_noninferiority_margin_normalized_pauc": 0.0,
+    "mask_identifiable_if": "median pairwise Jaccard >=0.5 and learned synthetic-GLRT metric exceeds random 95th percentile",
+    "random_superiority_percentile": 0.95
+  }
+}

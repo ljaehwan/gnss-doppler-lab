@@ -1,0 +1,29 @@
+{
+  "base_ref": "origin/research/pg-scc-stage0-static-k9",
+  "base_tip_after_fetch": "f0db77dc3cdccf0b8076e3c54c5a61b390fa685f",
+  "branch": "research/pg-scc-stage0-r1-root-cause-audit",
+  "branch_head_before_preregistration": "f0db77dc3cdccf0b8076e3c54c5a61b390fa685f",
+  "dispatch_request": {
+    "bytes": 14719,
+    "path": "/home/ubuntu/.local/share/gnss-research-prompts/pg_scc_stage0_r1_root_cause_audit_request_20260809.md",
+    "sha256": "157cc611ca0d97f759a99d2127acae4048ecf249968ad36614525b0cf6c77781"
+  },
+  "frozen_artifact": "artifacts/pg_scc_stage0_static_k9",
+  "frozen_design_sha256": "28de36cfa264c755712d52e051d882d366a9a5d9065471371ad27309f1f07d7a",
+  "git_invariants": {
+    "base_divergence_before_preregistration": [
+      0,
+      0
+    ],
+    "head_equals_base_tip": true,
+    "merge_base_equals_base_tip": true,
+    "origin": "https://github.com/ljaehwan/gnss-doppler-lab.git",
+    "status_clean_before_preregistration": true,
+    "worktree": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-pg-scc-stage0-r1-root-cause-audit"
+  },
+  "host": "gnss-lab",
+  "main_sha_at_start": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "origin_main_sha_at_start": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "preregistration_phase": "BEFORE_POST_HOC_ATTACK_ANALYSIS",
+  "schema": "pg_scc_stage0_r1_source_commit.v1"
+}
