@@ -91,12 +91,14 @@ def test_common_exact_support_requires_unique_identical_keys_and_prns():
         runner.validate_common_support(rows + [dict(rows[0])], ["a", "b"], minimum_prns=4)
     changed = [dict(row) for row in rows]
     changed[-1]["time_s"] = 1.25
-    with pytest.raises(RuntimeError, match="identical"):
+    with pytest.raises(RuntimeError, match="raw-row support mismatch"):
         runner.validate_common_support(changed, ["a", "b"], minimum_prns=4)
-    with pytest.raises(RuntimeError, match="PRN"):
-        runner.validate_common_support(
-            _support_rows("a")[:3] + _support_rows("b")[:3], ["a", "b"], minimum_prns=4
-        )
+    excluded = runner.validate_common_support(
+        _support_rows("a")[:3] + _support_rows("b")[:3], ["a", "b"], minimum_prns=4
+    )
+    assert excluded["eligible_event_count"] == 0
+    assert excluded["excluded_event_count"] == 1
+    assert excluded["excluded_pooled_events"][0]["prn_count"] == 3
 
 
 def test_clean_synthetic_roles_are_separate_from_attack_report_only():
@@ -177,11 +179,11 @@ def test_required_artifact_schema_and_manifest_verifier(tmp_path):
         else:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text("{}\n" if path.suffix == ".json" else "x\n", encoding="utf-8")
-    for name in ("config.json", "source_commit.json"):
+    for name in ("config.json", "source_commit.json", "r1_failure_binding.json"):
         (tmp_path / name).write_bytes(
             (
                 ROOT
-                / "artifacts/pg_scc_stage0_r1_root_cause_audit"
+                / "artifacts/pg_scc_stage0_r2_root_cause_audit"
                 / name
             ).read_bytes()
         )
@@ -194,11 +196,14 @@ def test_required_artifact_schema_and_manifest_verifier(tmp_path):
 
 def test_config_and_source_are_frozen_and_phase2_entrypoint_is_guarded():
     runner = load_runner()
-    config = ROOT / "artifacts/pg_scc_stage0_r1_root_cause_audit/config.json"
+    config = ROOT / "artifacts/pg_scc_stage0_r2_root_cause_audit/config.json"
     assert runner.sha256(config) == runner.CONFIG_SHA256
     source = json.loads(
-        (ROOT / "artifacts/pg_scc_stage0_r1_root_cause_audit/source_commit.json").read_text()
+        (ROOT / "artifacts/pg_scc_stage0_r2_root_cause_audit/source_commit.json").read_text()
     )
-    assert source["preregistration_phase"] == "BEFORE_POST_HOC_ATTACK_ANALYSIS"
+    assert source["phase_boundary"] == (
+        "PHASE_1_PREREGISTRATION_ONLY_BEFORE_ANY_PHASE_2_IMPLEMENTATION_OR_SUPPORT_PREFLIGHT"
+    )
     text = (ROOT / "scripts/run_pg_scc_root_cause_audit.py").read_text()
-    assert text.index("verify_implementation_freeze(") < text.index("load_protected_inputs(")
+    assert "report = run_metadata_support_preflight()" in text
+    assert "protected = load_protected_inputs_after_preflight()" in text

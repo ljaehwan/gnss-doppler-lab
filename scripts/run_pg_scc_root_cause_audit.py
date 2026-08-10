@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import ast
 import csv
 import hashlib
 import json
@@ -11,7 +12,7 @@ import subprocess
 import sys
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Iterable, Mapping, Sequence
+from typing import Any, Callable, Iterable, Mapping, Sequence
 
 import matplotlib
 matplotlib.use("Agg")
@@ -23,7 +24,7 @@ from sklearn.metrics import roc_auc_score
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from gnss_doppler_lab.pg_scc import load_feature_cache
+from gnss_doppler_lab.pg_scc import load_feature_cache, pool_events as frozen_pool_events
 from gnss_doppler_lab.pg_scc_physics import (
     CENTER, COORDINATES, DEFAULT_SEARCH, N_COORDINATES,
     analytic_same_prn_template, normalize_complex,
@@ -34,13 +35,51 @@ from gnss_doppler_lab.pg_scc_selector import (
 )
 
 FROZEN = ROOT / "artifacts/pg_scc_stage0_static_k9"
-OUTPUT = ROOT / "artifacts/pg_scc_stage0_r1_root_cause_audit"
+R1_OUTPUT = ROOT / "artifacts/pg_scc_stage0_r1_root_cause_audit"
+OUTPUT = ROOT / "artifacts/pg_scc_stage0_r2_root_cause_audit"
 CACHE = ROOT / "artifacts/acaf_nf_stage1_r3_static_detection"
 FAMILY = {"ds3": "ds3", "ds4": "ds4", "ds7": "ds7_ds8", "ds8": "ds7_ds8"}
 FAMILY_MEMBERS = {"ds3": ("ds3",), "ds4": ("ds4",), "ds7_ds8": ("ds7", "ds8")}
-CONFIG_SHA256 = "ade700892fe3e055e0154ae859ba701a36f11a6ec9245db4b39fd087426eb0e6"
-SOURCE_SHA256 = "13ab9e544f06903dd6fde04c42e8aefb35a66946bbaf0456e95040fbb777d428"
-PREREGISTRATION_SHA = "5e5339282c6154630fd11f94415cba794d9fa1ec"
+CONFIG_SHA256 = "336802a95e82df1da82822520fe8bd838bf18ce17da6ae29aa5695449f3b67f5"
+SOURCE_SHA256 = "571b80ec11a9f860317f84c5d1808fddda270e988dfb8d25948df0999de0f8a4"
+R1_FAILURE_BINDING_SHA256 = "550f3fde25742b571fa0a5206a96d0454300d1fe1732671b9bf655ccbb3f379f"
+PREREGISTRATION_SHA = "162b67f921a719ddb8ad68ef99b50ad2c263773d"
+R1_FAIL_CLOSED_SHA = "8cd78ed724e57f97498da26547a9ecbbc2a78fe1"
+FROZEN_DESIGN_SHA256 = "28de36cfa264c755712d52e051d882d366a9a5d9065471371ad27309f1f07d7a"
+R1_ARTIFACT_SHA256 = {
+    "config.json": "ade700892fe3e055e0154ae859ba701a36f11a6ec9245db4b39fd087426eb0e6",
+    "source_commit.json": "13ab9e544f06903dd6fde04c42e8aefb35a66946bbaf0456e95040fbb777d428",
+    "r1_fail_closed_report.json": "041cc432cdc893e9dba867d6d3dc005e3ee7f2c8d25d542d54d4f374ca68e3f5",
+}
+FROZEN_EXPECTED_SUPPORT_PATH = FROZEN / "per_epoch_scores.csv"
+FROZEN_EXPECTED_SUPPORT_SHA256 = "d3fd253807aea873dadce767fc027d3f0d4060ad8d3519e4c800b166e9e3bef5"
+FROZEN_EXPECTED_PROJECTION_FIELDS = (
+    "scenario", "phase", "second", "time_s", "channel", "prn", "method", "budget",
+)
+R1_PRESERVED_PATHS = {
+    "artifacts/pg_scc_stage0_r1_root_cause_audit/config.json": "ade700892fe3e055e0154ae859ba701a36f11a6ec9245db4b39fd087426eb0e6",
+    "artifacts/pg_scc_stage0_r1_root_cause_audit/r1_fail_closed_report.json": "041cc432cdc893e9dba867d6d3dc005e3ee7f2c8d25d542d54d4f374ca68e3f5",
+    "artifacts/pg_scc_stage0_r1_root_cause_audit/source_commit.json": "13ab9e544f06903dd6fde04c42e8aefb35a66946bbaf0456e95040fbb777d428",
+    "docs/PG_SCC_ROOT_CAUSE_AUDIT_IMPLEMENTATION.md": "ad746e2f481918a9a85e588beeaf709abbcaf3fcb81450b36c590372adad40dc",
+    "docs/PG_SCC_ROOT_CAUSE_AUDIT_R1_FAIL_CLOSED.md": "4596439585dc7275774a709b5fd41da59b329e842b5cbc0a078256774b495b08",
+    "scripts/run_pg_scc_root_cause_audit.py": "66009f9d14f9c66de4414e46dd3f2f12cd0f3a49cd96c7ae7deb0ea8663d7a76",
+    "scripts/verify_pg_scc_root_cause_audit.py": "b9eb52f854e14b5a743c80d0bc5dc38ebb9d7c7eaef245cbe9a6389b81bb573a",
+    "tests/test_pg_scc_root_cause_audit.py": "c0bb5f07ffd7f45c136d94d3a46420e9d222b3140e5c5f3270fbb8404438a290",
+}
+PHASE2_ALLOWED_CHANGED_PATHS = {
+    "artifacts/pg_scc_stage0_r2_root_cause_audit/config.json",
+    "artifacts/pg_scc_stage0_r2_root_cause_audit/source_commit.json",
+    "artifacts/pg_scc_stage0_r2_root_cause_audit/r1_failure_binding.json",
+    "artifacts/pg_scc_stage0_r2_root_cause_audit/support_preflight.json",
+    "scripts/run_pg_scc_root_cause_audit.py",
+    "scripts/verify_pg_scc_root_cause_audit.py",
+    "tests/test_pg_scc_root_cause_audit.py",
+    "tests/test_pg_scc_r2_preflight.py",
+}
+CORE_METHODS = (
+    "pg_scc_k3", "pg_scc_k5", "pg_scc_k9", "fixed9", "epl3",
+    "dense_two_source_glrt", "shuffled_k3",
+)
 AUDIT_LABELS = {"attack": "POST_HOC_DIAGNOSTIC", "k3": "EXPLORATORY_ONLY"}
 REQUIRED_ROOT_CAUSES = (
     "SCORE_DILUTION", "NOISY_COORDINATE_ADDITION", "H1_NULL_OVERFIT",
@@ -50,7 +89,8 @@ REQUIRED_ROOT_CAUSES = (
     "GENUINE_LACK_OF_SPARSE_GAIN",
 )
 REQUIRED_ARTIFACTS = (
-    "README.md", "config.json", "source_commit.json", "reproduction_check.json",
+    "README.md", "config.json", "source_commit.json", "r1_failure_binding.json",
+    "support_preflight.json", "reproduction_check.json",
     "nested_mask_analysis.csv", "coordinate_contributions.csv",
     "score_dilution_metrics.csv", "dense_teacher_diagnostics.json",
     "synthetic_real_mismatch.csv", "selector_proxy_audit.json",
@@ -70,7 +110,7 @@ IMPLEMENTATION_FILES = (
     "scripts/run_pg_scc_root_cause_audit.py",
     "scripts/verify_pg_scc_root_cause_audit.py",
     "tests/test_pg_scc_root_cause_audit.py",
-    "docs/PG_SCC_ROOT_CAUSE_AUDIT_IMPLEMENTATION.md",
+    "tests/test_pg_scc_r2_preflight.py",
 )
 ALLOWED_ROLES = {
     "selector": {"clean_train", "clean_selection", "synthetic_train", "synthetic_validation"},
@@ -133,28 +173,382 @@ def assert_allowed_role(path: str, role: str) -> str:
     return "PASS"
 
 
-def validate_common_support(rows: Sequence[Mapping[str, Any]], methods: Sequence[str],
-                            minimum_prns: int = 4) -> dict[str, Any]:
-    key_names = ("scenario", "phase", "second", "time_s", "prn")
-    supports: dict[str, set[tuple[Any, ...]]] = {}
-    for method in methods:
-        keys = [tuple(row[name] for name in key_names) for row in rows if row.get("method") == method]
-        if len(keys) != len(set(keys)):
-            raise RuntimeError(f"duplicate common-support row for {method}")
-        supports[method] = set(keys)
-    if not methods or any(supports[method] != supports[methods[0]] for method in methods[1:]):
-        raise RuntimeError("detector supports are not identical on exact comparison key")
-    event_prns: dict[tuple[Any, ...], set[Any]] = defaultdict(set)
-    for scenario, phase, second, time_s, prn in supports[methods[0]]:
-        event_prns[(scenario, phase, second, time_s)].add(prn)
-    if any(len(prns) < minimum_prns for prns in event_prns.values()):
-        raise RuntimeError("pooled event has insufficient unique PRN support")
+def _pooled_details(rows: Sequence[Mapping[str, Any]]) -> dict[tuple[Any, ...], dict[str, Any]]:
+    pooled: dict[tuple[Any, ...], set[int]] = defaultdict(set)
+    for row in rows:
+        pooled[(str(row["scenario"]), str(row["phase"]), int(row["second"]))].add(int(row["prn"]))
     return {
-        "status": "PASS", "comparison_key": list(key_names),
-        "common_rows_per_detector": len(supports[methods[0]]),
-        "pooled_events": len(event_prns), "minimum_prns": minimum_prns,
+        event: {"prns": sorted(prns), "prn_count": len(prns)}
+        for event, prns in pooled.items()
     }
 
+
+def _event_detail_text(prefix: str, detail: Mapping[str, Any]) -> str:
+    prns = [int(value) for value in detail.get("prns", [])]
+    return f"{prefix}_unique_prn_count={len(prns)} {prefix}_prns={prns}"
+
+
+def validate_common_support(rows: Sequence[Mapping[str, Any]], methods: Sequence[str],
+                            minimum_prns: int = 4,
+                            frozen_expected_count: int | None = None,
+                            frozen_expected_events: Sequence[Mapping[str, Any]] | None = None,
+                            frozen_expected_source: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    """Validate complete detector support using exact row and pooled-event identities."""
+    if minimum_prns != 4:
+        raise RuntimeError(f"minimum unique PRN support must remain exactly 4, got {minimum_prns}")
+    ordered_methods = list(methods)
+    if not ordered_methods:
+        raise RuntimeError("raw-row support mismatch: no detectors supplied")
+    selected = [row for row in rows if row.get("method") in set(ordered_methods)]
+    channel_present = any("channel" in row and row.get("channel") is not None for row in selected)
+    if channel_present and any("channel" not in row or row.get("channel") is None for row in selected):
+        raise RuntimeError("raw-row support mismatch: optional channel presence is inconsistent")
+    key_names = ("scenario", "phase", "second", "time_s", "prn") + (
+        ("channel",) if channel_present else ()
+    )
+    supports: dict[str, set[tuple[Any, ...]]] = {}
+    event_supports: dict[str, dict[tuple[Any, ...], dict[str, Any]]] = {}
+    method_rows_by_name: dict[str, list[Mapping[str, Any]]] = {}
+    for method in ordered_methods:
+        method_rows = [row for row in selected if row.get("method") == method]
+        method_rows_by_name[method] = method_rows
+        keys = [tuple(row[name] for name in key_names) for row in method_rows]
+        if len(keys) != len(set(keys)):
+            seen: set[tuple[Any, ...]] = set()
+            duplicate = keys[0]
+            for key in keys:
+                if key in seen:
+                    duplicate = key
+                    break
+                seen.add(key)
+            event = _event_identity_from_raw_key(duplicate)
+            detail = _pooled_details(method_rows)[
+                (event["scenario"], event["phase"], event["second"])
+            ]
+            raise RuntimeError(
+                "duplicate raw-row support "
+                f"detector={method} pooled_event={json.dumps(event, sort_keys=True)} "
+                f"unique_prn_count={detail['prn_count']} prns={detail['prns']} raw_row={duplicate!r}"
+            )
+        supports[method] = set(keys)
+        event_supports[method] = _pooled_details(method_rows)
+
+    reference_method = ordered_methods[0]
+    reference_raw = supports[reference_method]
+    reference_events = event_supports[reference_method]
+    for method in ordered_methods[1:]:
+        if supports[method] != reference_raw:
+            difference = sorted(
+                supports[method] ^ reference_raw,
+                key=lambda value: tuple(str(item) for item in value),
+            )[0]
+            event_identity = _event_identity_from_raw_key(difference)
+            event = (
+                event_identity["scenario"], event_identity["phase"], event_identity["second"]
+            )
+            reference_detail = reference_events.get(event, {"prns": [], "prn_count": 0})
+            detector_detail = event_supports[method].get(event, {"prns": [], "prn_count": 0})
+            raise RuntimeError(
+                "raw-row support mismatch "
+                f"detector={method} pooled_event={json.dumps(event_identity, sort_keys=True)} "
+                f"{_event_detail_text('reference', reference_detail)} "
+                f"{_event_detail_text('detector', detector_detail)} raw_row={difference!r}"
+            )
+
+    eligible_supports = {
+        method: {
+            event: detail for event, detail in event_supports[method].items()
+            if int(detail["prn_count"]) >= minimum_prns
+        }
+        for method in ordered_methods
+    }
+    eligible_hashes = validate_eligible_event_support(eligible_supports)
+    raw_hashes = {method: _support_hash(supports[method]) for method in ordered_methods}
+    event_rows = [
+        {
+            "eligible": int(detail["prn_count"]) >= minimum_prns,
+            "identity": _pooled_event_identity(event),
+            "prn_count": int(detail["prn_count"]),
+            "prns": list(detail["prns"]),
+        }
+        for event, detail in sorted(reference_events.items())
+    ]
+    eligible = [
+        {key: value for key, value in event.items() if key != "eligible"}
+        for event in event_rows if event["eligible"]
+    ]
+    excluded = [
+        {key: value for key, value in event.items() if key != "eligible"}
+        for event in event_rows if not event["eligible"]
+    ]
+    reconstructed_count = len(eligible)
+    expected_records = list(frozen_expected_events or [])
+    expected_count = (
+        len(expected_records) if frozen_expected_events is not None
+        else reconstructed_count if frozen_expected_count is None
+        else int(frozen_expected_count)
+    )
+    event_records_match = True
+    if frozen_expected_events is not None:
+        event_records_match = eligible == expected_records
+    count_match = reconstructed_count == expected_count
+    status = "PASS" if count_match and event_records_match else "FAIL"
+    return {
+        "schema": "pg_scc_stage0_r2_support_validation.v1",
+        "status": status,
+        "raw_row_support_key": list(key_names),
+        "pooled_event_key": ["scenario", "phase", "second"],
+        "minimum_unique_prns": minimum_prns,
+        "total_raw_event_count": len(reference_raw),
+        "common_rows_per_detector": len(reference_raw),
+        "eligible_event_count": reconstructed_count,
+        "excluded_event_count": len(excluded),
+        "pooled_events": reconstructed_count,
+        "pooled_event_unique_prn_counts": event_rows,
+        "eligible_pooled_event_identities": [event["identity"] for event in eligible],
+        "eligible_pooled_events": eligible,
+        "excluded_pooled_event_identities": [event["identity"] for event in excluded],
+        "excluded_pooled_events": excluded,
+        "per_detector_raw_row_support_hashes": raw_hashes,
+        "per_detector_eligible_event_support_hashes": eligible_hashes,
+        "frozen_pooled_event_expected_count": expected_count,
+        "reconstructed_pooled_event_count": reconstructed_count,
+        "frozen_pooled_event_count_match": count_match,
+        "frozen_pooled_event_records_match": event_records_match,
+        "frozen_pooled_event_support_hash": _support_hash({
+            (item["identity"]["scenario"], item["identity"]["phase"], int(item["identity"]["second"]))
+            for item in expected_records
+        }) if expected_records else _support_hash(set()),
+        "frozen_pooled_event_expected_count_source": dict(frozen_expected_source or {}),
+    }
+
+
+def _event_identity_from_raw_key(key: tuple[Any, ...]) -> dict[str, Any]:
+    return {"scenario": str(key[0]), "phase": str(key[1]), "second": int(key[2])}
+
+
+def _pooled_event_identity(event: tuple[Any, ...]) -> dict[str, Any]:
+    return {"scenario": str(event[0]), "phase": str(event[1]), "second": int(event[2])}
+
+
+def _support_hash(values: Iterable[tuple[Any, ...]]) -> str:
+    canonical = sorted((list(value) for value in values), key=lambda value: tuple(map(str, value)))
+    payload = json.dumps(canonical, separators=(",", ":"), ensure_ascii=False).encode()
+    return hashlib.sha256(payload).hexdigest()
+
+
+def validate_eligible_event_support(
+    supports: Mapping[str, Mapping[tuple[Any, ...], Mapping[str, Any]]],
+) -> dict[str, str]:
+    methods = list(supports)
+    if not methods:
+        raise RuntimeError("eligible-event support mismatch: no detectors supplied")
+    reference_method = methods[0]
+    reference = set(supports[reference_method])
+    for method in methods[1:]:
+        actual = set(supports[method])
+        if actual != reference:
+            event = sorted(reference ^ actual)[0]
+            reference_detail = supports[reference_method].get(event, {"prns": [], "prn_count": 0})
+            detector_detail = supports[method].get(event, {"prns": [], "prn_count": 0})
+            detail = reference_detail if event in reference else detector_detail
+            raise RuntimeError(
+                "eligible-event support mismatch "
+                f"detector={method} pooled_event={json.dumps(_pooled_event_identity(event), sort_keys=True)} "
+                f"prn_count={detail['prn_count']} {_event_detail_text('reference', reference_detail)} "
+                f"{_event_detail_text('detector', detector_detail)}"
+            )
+    return {method: _support_hash(set(supports[method])) for method in methods}
+
+
+def load_frozen_expected_support() -> dict[str, Any]:
+    """Project only support metadata from an independently frozen PG-SCC score container."""
+    current_hash = sha256(FROZEN_EXPECTED_SUPPORT_PATH)
+    immutable_bytes = subprocess.check_output(
+        ["git", "show", f"{R1_FAIL_CLOSED_SHA}:{FROZEN_EXPECTED_SUPPORT_PATH.relative_to(ROOT)}"],
+        cwd=ROOT,
+    )
+    immutable_hash = hashlib.sha256(immutable_bytes).hexdigest()
+    if current_hash != FROZEN_EXPECTED_SUPPORT_SHA256 or immutable_hash != current_hash:
+        raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:frozen expected-support source drift")
+    projection = subprocess.run(
+        ["cut", "-d,", "-f1-6,11-12", str(FROZEN_EXPECTED_SUPPORT_PATH)],
+        text=True, capture_output=True,
+    )
+    if projection.returncode:
+        raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:frozen support projection failed")
+    projected_rows = list(csv.DictReader(projection.stdout.splitlines()))
+    if tuple(projected_rows[0].keys()) != FROZEN_EXPECTED_PROJECTION_FIELDS:
+        raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:frozen support projection schema drift")
+    selected = [
+        row for row in projected_rows
+        if row["method"] == "pg_scc_k9" and int(row["budget"]) == 9
+    ]
+    if not selected:
+        raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:no independent frozen expected support")
+    details = _pooled_details(selected)
+    event_records = [
+        {
+            "identity": _pooled_event_identity(event),
+            "prn_count": int(detail["prn_count"]),
+            "prns": list(detail["prns"]),
+        }
+        for event, detail in sorted(details.items()) if int(detail["prn_count"]) >= 4
+    ]
+    source = {
+        "path": str(FROZEN_EXPECTED_SUPPORT_PATH.relative_to(ROOT)),
+        "sha256": current_hash,
+        "immutable_commit": R1_FAIL_CLOSED_SHA,
+        "projection_fields": list(FROZEN_EXPECTED_PROJECTION_FIELDS),
+        "filter": {"method": "pg_scc_k9", "budget": 9},
+        "eligible_event_count": len(event_records),
+        "eligible_event_support_hash": _support_hash({
+            (item["identity"]["scenario"], item["identity"]["phase"], item["identity"]["second"])
+            for item in event_records
+        }),
+    }
+    return {"source": source, "eligible_event_count": len(event_records), "event_records": event_records}
+
+
+def frozen_pg_scc_pooled_event_count(metadata: Sequence[Mapping[str, Any]]) -> int:
+    """Compatibility helper for synthetic gate fixtures; production uses an immutable artifact."""
+    synthetic = [
+        {
+            **{key: row[key] for key in ("scenario", "phase", "second", "time_s", "prn")},
+            "method": "frozen_pg_scc_reference", "budget": 0, "score": 0.0,
+        }
+        for row in metadata
+    ]
+    return len(frozen_pool_events(synthetic, "median"))
+
+
+def verify_r1_artifact_immutability() -> dict[str, Any]:
+    actual = {name: sha256(R1_OUTPUT / name) for name in R1_ARTIFACT_SHA256}
+    return {
+        "status": "PASS" if actual == R1_ARTIFACT_SHA256 else "FAIL",
+        "sha256": actual,
+        "expected_sha256": dict(R1_ARTIFACT_SHA256),
+    }
+
+
+def _function_ast_hash(source: str, name: str) -> str:
+    tree = ast.parse(source)
+    node = next(
+        item for item in tree.body
+        if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)) and item.name == name
+    )
+    return hashlib.sha256(ast.dump(node, include_attributes=False).encode()).hexdigest()
+
+
+def assert_frozen_formula_identity() -> dict[str, Any]:
+    groups = {
+        "score": (
+            "batch_glrt", "diagnostic_scores", "pooled_events", "metric_bundle", "_fit_all",
+            "reproduce", "reproduce_exact", "nested_outputs",
+            "residual_components", "_dense_mismatch",
+        ),
+        "normalization": ("normalize_all", "_surface_array"),
+        "selector": (
+            "generate_random_masks", "compute_seed_stability", "_selector_audit", "_jaccard",
+        ),
+        "covariance": ("covariance_variants", "_covariance_audit", "residual_components"),
+        "synthetic": ("_selector_audit", "_dense_mismatch", "_awgn_audit"),
+        "mask": ("validate_nested_masks", "generate_random_masks"),
+        "threshold": ("metric_bundle", "_calibration_audit", "_root_cause_verdict"),
+    }
+    names = tuple(dict.fromkeys(name for values in groups.values() for name in values))
+    current_source = Path(__file__).read_text(encoding="utf-8")
+    r1_source = subprocess.check_output(
+        ["git", "show", f"{R1_FAIL_CLOSED_SHA}:scripts/run_pg_scc_root_cause_audit.py"],
+        cwd=ROOT, text=True,
+    )
+    functions = {}
+    for name in names:
+        current = _function_ast_hash(current_source, name)
+        expected = _function_ast_hash(r1_source, name)
+        functions[name] = {"current": current, "r1": expected, "match": current == expected}
+    artifacts = {}
+    for name in ("masks.json", "thresholds.json"):
+        current = sha256(FROZEN / name)
+        expected_bytes = subprocess.check_output(
+            ["git", "show", f"{R1_FAIL_CLOSED_SHA}:artifacts/pg_scc_stage0_static_k9/{name}"],
+            cwd=ROOT,
+        )
+        expected = hashlib.sha256(expected_bytes).hexdigest()
+        artifacts[name] = {"current": current, "r1": expected, "match": current == expected}
+    source_files = {}
+    for relative in (
+        "src/gnss_doppler_lab/pg_scc.py",
+        "src/gnss_doppler_lab/pg_scc_physics.py",
+        "src/gnss_doppler_lab/pg_scc_selector.py",
+    ):
+        expected_bytes = subprocess.check_output(
+            ["git", "show", f"{R1_FAIL_CLOSED_SHA}:{relative}"], cwd=ROOT,
+        )
+        expected = hashlib.sha256(expected_bytes).hexdigest()
+        current = sha256(ROOT / relative)
+        source_files[relative] = {"current": current, "r1": expected, "match": current == expected}
+    matches = (
+        all(item["match"] for item in functions.values())
+        and all(item["match"] for item in artifacts.values())
+        and all(item["match"] for item in source_files.values())
+    )
+    return {
+        "status": "PASS" if matches else "FAIL",
+        "groups": {name: list(values) for name, values in groups.items()},
+        "function_ast_sha256": functions,
+        "frozen_artifact_sha256": artifacts,
+        "frozen_source_sha256": source_files,
+    }
+
+
+def _git_changed_paths_since_r1() -> set[str]:
+    commands = (
+        ["git", "diff", "--name-only", R1_FAIL_CLOSED_SHA, "--"],
+        ["git", "diff", "--cached", "--name-only", "--"],
+        ["git", "ls-files", "--others", "--exclude-standard"],
+    )
+    changed: set[str] = set()
+    for command in commands:
+        result = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, check=True)
+        changed.update(line for line in result.stdout.splitlines() if line)
+    return changed
+
+
+def verify_r1_identity() -> dict[str, Any]:
+    binding = load_json(OUTPUT / "r1_failure_binding.json")
+    bound = binding.get("preserved_file_sha256", {})
+    immutable_hashes = {}
+    for path, expected in R1_PRESERVED_PATHS.items():
+        committed = subprocess.check_output(["git", "show", f"{R1_FAIL_CLOSED_SHA}:{path}"], cwd=ROOT)
+        immutable_hashes[path] = hashlib.sha256(committed).hexdigest()
+    binding_match = bound == R1_PRESERVED_PATHS and immutable_hashes == R1_PRESERVED_PATHS
+    current_preserved = {
+        path: sha256(ROOT / path)
+        for path in R1_PRESERVED_PATHS
+        if path.startswith("artifacts/pg_scc_stage0_r1_root_cause_audit/") or path.startswith("docs/")
+    }
+    current_match = all(current_preserved[path] == R1_PRESERVED_PATHS[path] for path in current_preserved)
+    changed = _git_changed_paths_since_r1()
+    disallowed = sorted(changed - PHASE2_ALLOWED_CHANGED_PATHS)
+    code = assert_frozen_formula_identity()
+    declarations = binding.get("explicit_unchanged_declarations", {})
+    status = (
+        binding.get("r1_fail_closed_commit") == R1_FAIL_CLOSED_SHA
+        and binding_match and current_match and len(immutable_hashes) == 8
+        and declarations and all(value is True for value in declarations.values())
+        and not disallowed and code["status"] == "PASS"
+    )
+    return {
+        "status": "PASS" if status else "FAIL",
+        "binding_hashes_verified": len(immutable_hashes),
+        "preserved_file_sha256": immutable_hashes,
+        "current_preserved_file_sha256": current_preserved,
+        "disallowed_paths_unchanged": not disallowed,
+        "disallowed_changed_paths": disallowed,
+        "phase2_changed_paths": sorted(changed),
+        "unchanged_code_identity": code,
+    }
 
 def generate_random_masks(seed: int, counts: Mapping[int, int]) -> dict[int, list[list[int]]]:
     rng = np.random.default_rng(seed)
@@ -259,6 +653,209 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def read_support_metadata(path: Path) -> list[dict[str, Any]]:
+    """Read only identity/support scalars through a fixed external projection."""
+    projection = (
+        '.[] | {scenario, phase, second, time_s, prn} '
+        '+ (if has("channel") and .channel != null then {channel} else {} end)'
+    )
+    result = subprocess.run(
+        ["jq", "-ce", projection, str(path)],
+        text=True,
+        capture_output=True,
+    )
+    if result.returncode:
+        raise RuntimeError(f"support metadata projection failed: {path}:{result.stderr.strip()}")
+    required = {"scenario", "phase", "second", "time_s", "prn"}
+    output = []
+    for index, line in enumerate(result.stdout.splitlines()):
+        row = json.loads(line)
+        if not required.issubset(row):
+            raise RuntimeError(f"support metadata missing identity fields: {path}:{index}")
+        if set(row) - (required | {"channel"}):
+            raise RuntimeError(f"support projection exposed non-identity fields: {path}:{index}")
+        output.append(row)
+    return output
+
+
+def build_metadata_support_preflight_report(
+    *, metadata_paths: Sequence[Path] | None = None,
+) -> dict[str, Any]:
+    """Reconstruct every preflight field from whitelisted metadata projections."""
+    paths = list(metadata_paths or (
+        CACHE / "clean_features.json",
+        CACHE / "attack_features.json",
+    ))
+    phase1_expected = {
+        "config.json": CONFIG_SHA256,
+        "source_commit.json": SOURCE_SHA256,
+        "r1_failure_binding.json": R1_FAILURE_BINDING_SHA256,
+    }
+    phase1_actual = {name: sha256(OUTPUT / name) for name in phase1_expected}
+    if phase1_actual != phase1_expected:
+        raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:Phase-1 artifact checksum drift")
+    config = load_json(OUTPUT / "config.json")
+    source = load_json(OUTPUT / "source_commit.json")
+    if source.get("branch") != "research/pg-scc-stage0-r2-root-cause-audit":
+        raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:Phase-1 source binding drift")
+    if source.get("protected_score_fields_read_before_preregistration") != 0:
+        raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:Phase-1 protected-access drift")
+    support_config = config["common_support"]
+    minimum_prns = int(
+        support_config["eligible_event_filtering"]["minimum_unique_prns_per_pooled_event"]
+    )
+    if minimum_prns != 4:
+        raise RuntimeError("minimum unique PRN support drift")
+    if support_config["raw_row_support"]["base_key"] != [
+        "scenario", "phase", "second", "time_s", "prn"
+    ]:
+        raise RuntimeError("raw-row identity drift")
+    if support_config["pooled_event_identity"]["key"] != ["scenario", "phase", "second"]:
+        raise RuntimeError("pooled-event identity drift")
+    source_rows: list[dict[str, Any]] = []
+    metadata: list[dict[str, Any]] = []
+    for source_path in paths:
+        projected = read_support_metadata(source_path)
+        metadata.extend(projected)
+        source_rows.append({
+            "path": str(source_path.relative_to(ROOT)),
+            "sha256": sha256(source_path),
+            "rows": len(projected),
+        })
+    frozen = load_frozen_expected_support()
+    detector_rows = [
+        {**row, "method": method}
+        for method in CORE_METHODS
+        for row in metadata
+    ]
+    report = validate_common_support(
+        detector_rows,
+        CORE_METHODS,
+        minimum_prns=minimum_prns,
+        frozen_expected_events=frozen["event_records"],
+        frozen_expected_source=frozen["source"],
+    )
+    r1_artifacts = verify_r1_artifact_immutability()
+    r1_identity = verify_r1_identity()
+    formulas = r1_identity["unchanged_code_identity"]
+    report.update({
+        "schema": "pg_scc_stage0_r2_support_preflight.v1",
+        "status": "PASS" if (
+            report["status"] == "PASS"
+            and r1_artifacts["status"] == "PASS"
+            and r1_identity["status"] == "PASS"
+            and formulas["status"] == "PASS"
+        ) else "FAIL",
+        "metadata_fields_read": [
+            "scenario", "phase", "second", "time_s", "prn", "channel_if_present",
+        ],
+        "metadata_projection": "fixed jq whitelist; non-identity values are not emitted",
+        "metadata_sources": source_rows,
+        "protected_score_fields_read": 0,
+        "protected_score_fields_projected_or_read": 0,
+        "containers_opened_for_metadata_projection": [
+            item["path"] for item in source_rows
+        ] + [frozen["source"]["path"]],
+        "score_bearing_containers_opened_for_metadata_projection": [{
+            "path": frozen["source"]["path"],
+            "sha256": frozen["source"]["sha256"],
+            "projection_fields": frozen["source"]["projection_fields"],
+            "excluded_fields": ["score"],
+        }],
+        "r1_artifact_immutability": r1_artifacts,
+        "r1_identity": r1_identity,
+        "frozen_formula_identity": formulas,
+    })
+    return report
+
+
+def run_metadata_support_preflight(
+    *, output_path: Path | None = None,
+    metadata_paths: Sequence[Path] | None = None,
+) -> dict[str, Any]:
+    """Execute Phase-2 support checks without projecting any protected score field."""
+    target = output_path or (OUTPUT / "support_preflight.json")
+    report = build_metadata_support_preflight_report(metadata_paths=metadata_paths)
+    dump_json(target, report)
+    return report
+
+
+def validate_committed_support_preflight(
+    report: Mapping[str, Any], *, require_head_blob: bool = False,
+) -> dict[str, Any]:
+    """Exact-compare the committed report with an independent full reconstruction."""
+    try:
+        expected = build_metadata_support_preflight_report()
+    except Exception as exc:
+        raise RuntimeError(f"FAIL_CLOSED_SUPPORT_PREFLIGHT:reconstruction failed:{exc}") from exc
+    if dict(report) != expected:
+        differing = sorted(
+            key for key in set(report) | set(expected) if report.get(key) != expected.get(key)
+        )
+        raise RuntimeError(
+            "FAIL_CLOSED_SUPPORT_PREFLIGHT:committed semantics/accounting mismatch:"
+            + ",".join(differing)
+        )
+    if expected["status"] != "PASS" or expected["protected_score_fields_projected_or_read"] != 0:
+        raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:reconstructed preflight is not PASS")
+    if require_head_blob:
+        committed = subprocess.run(
+            ["git", "show", "HEAD:artifacts/pg_scc_stage0_r2_root_cause_audit/support_preflight.json"],
+            cwd=ROOT, text=True, capture_output=True,
+        )
+        canonical = json.dumps(dict(report), indent=2, sort_keys=True, allow_nan=False) + "\n"
+        if committed.returncode or committed.stdout != canonical:
+            raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:preflight bytes are not committed at HEAD")
+    return expected
+
+
+def load_protected_inputs_after_preflight(
+    *,
+    preflight_path: Path = OUTPUT / "support_preflight.json",
+    protected_loader: Callable[[], dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Fail closed before invoking a protected loader unless all semantics reconstruct."""
+    try:
+        report = load_json(preflight_path)
+        validate_committed_support_preflight(
+            report,
+            require_head_blob=protected_loader is None and preflight_path.resolve() == (
+                OUTPUT / "support_preflight.json"
+            ).resolve(),
+        )
+    except RuntimeError:
+        raise
+    except Exception as exc:
+        raise RuntimeError(f"FAIL_CLOSED_SUPPORT_PREFLIGHT:invalid report:{exc}") from exc
+    loader = protected_loader or load_protected_inputs
+    return loader()
+
+
+def filter_metric_inputs_to_eligible_events(
+    metadata: Sequence[Mapping[str, Any]],
+    scores_by_method: Mapping[str, np.ndarray],
+    support: Mapping[str, Any],
+) -> tuple[list[Mapping[str, Any]], dict[str, np.ndarray]]:
+    """Apply the proven common eligible-event set before unchanged metric logic."""
+    if support.get("status") != "PASS":
+        raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:cannot filter from failed support")
+    eligible = {
+        (item["scenario"], item["phase"], int(item["second"]))
+        for item in support.get("eligible_pooled_event_identities", [])
+    }
+    keep = np.asarray([
+        (str(row["scenario"]), str(row["phase"]), int(row["second"])) in eligible
+        for row in metadata
+    ], dtype=bool)
+    filtered_metadata = [row for row, include in zip(metadata, keep) if include]
+    filtered_scores: dict[str, np.ndarray] = {}
+    for method, scores in scores_by_method.items():
+        values = np.asarray(scores)
+        if len(values) != len(metadata):
+            raise RuntimeError(f"FAIL_CLOSED_SUPPORT_PREFLIGHT:score length mismatch:{method}")
+        filtered_scores[method] = values[keep]
+    return filtered_metadata, filtered_scores
+
 def normalize_all(surfaces: np.ndarray) -> np.ndarray:
     return np.asarray([normalize_complex(surface, "prompt_phase") for surface in surfaces], np.complex128)
 
@@ -355,17 +952,36 @@ def verify_preregistration(config: dict[str, Any], source: dict[str, Any]) -> di
     errors = []
     branch = subprocess.check_output(["git", "branch", "--show-current"], cwd=ROOT, text=True).strip()
     head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
-    base = subprocess.check_output(["git", "merge-base", "HEAD", source["base_ref"]], cwd=ROOT, text=True).strip()
+    base_ref = source["base_source"]["ref"]
+    base_expected = source["base_source"]["sha"]
+    base = subprocess.check_output(["git", "merge-base", "HEAD", base_ref], cwd=ROOT, text=True).strip()
     if branch != source["branch"]:
         errors.append("branch_mismatch")
-    if base != source["base_tip_after_fetch"]:
+    if base != base_expected:
         errors.append("base_merge_base_mismatch")
-    if subprocess.call(["git", "merge-base", "--is-ancestor", "5e5339282c6154630fd11f94415cba794d9fa1ec", head], cwd=ROOT) != 0:
+    if subprocess.call(
+        ["git", "merge-base", "--is-ancestor", PREREGISTRATION_SHA, head], cwd=ROOT
+    ) != 0:
         errors.append("preregistration_not_ancestor")
     for key in ("attack_fit", "attack_based_selection", "post_attack_retuning"):
         if config.get(key) is not False or config["guard"].get(key) is not False:
             errors.append(key)
-    if sha256(FROZEN / "frozen_design.json") != source["frozen_design_sha256"]:
+    if source.get("protected_score_fields_read_before_preregistration") != 0:
+        errors.append("preregistration_protected_access")
+    expected_files = {
+        "config.json": CONFIG_SHA256,
+        "source_commit.json": SOURCE_SHA256,
+        "r1_failure_binding.json": R1_FAILURE_BINDING_SHA256,
+    }
+    errors.extend(
+        f"phase1_hash:{name}" for name, expected in expected_files.items()
+        if sha256(OUTPUT / name) != expected
+    )
+    if verify_r1_artifact_immutability()["status"] != "PASS":
+        errors.append("r1_artifact_drift")
+    if assert_frozen_formula_identity()["status"] != "PASS":
+        errors.append("frozen_formula_drift")
+    if sha256(FROZEN / "frozen_design.json") != FROZEN_DESIGN_SHA256:
         errors.append("frozen_design_drift")
     freeze = load_json(FROZEN / "freeze_manifest.json")
     drift = [name for name, digest in freeze.items()
@@ -592,7 +1208,7 @@ def verify_implementation_freeze(expected_sha: str) -> dict[str, Any]:
     branch = _git("branch", "--show-current")
     if expected_sha != head or len(expected_sha) != 40:
         errors.append("implementation_sha_not_exact_head")
-    if branch != "research/pg-scc-stage0-r1-root-cause-audit":
+    if branch != "research/pg-scc-stage0-r2-root-cause-audit":
         errors.append("branch_mismatch")
     if subprocess.run(["git", "merge-base", "--is-ancestor", PREREGISTRATION_SHA, head],
                       cwd=ROOT).returncode:
@@ -603,13 +1219,20 @@ def verify_implementation_freeze(expected_sha: str) -> dict[str, Any]:
             errors.append(f"implementation_untracked:{relative}")
     config_path = OUTPUT / "config.json"
     source_path = OUTPUT / "source_commit.json"
+    binding_path = OUTPUT / "r1_failure_binding.json"
     if sha256(config_path) != CONFIG_SHA256:
         errors.append("frozen_config_hash")
     if sha256(source_path) != SOURCE_SHA256:
         errors.append("frozen_source_hash")
-    for relative, expected in (("config.json", CONFIG_SHA256), ("source_commit.json", SOURCE_SHA256)):
+    if sha256(binding_path) != R1_FAILURE_BINDING_SHA256:
+        errors.append("frozen_r1_failure_binding_hash")
+    for relative, expected in (
+        ("config.json", CONFIG_SHA256),
+        ("source_commit.json", SOURCE_SHA256),
+        ("r1_failure_binding.json", R1_FAILURE_BINDING_SHA256),
+    ):
         committed = subprocess.check_output(
-            ["git", "show", f"{PREREGISTRATION_SHA}:artifacts/pg_scc_stage0_r1_root_cause_audit/{relative}"],
+            ["git", "show", f"{PREREGISTRATION_SHA}:artifacts/pg_scc_stage0_r2_root_cause_audit/{relative}"],
             cwd=ROOT,
         )
         if hashlib.sha256(committed).hexdigest() != expected:
@@ -624,11 +1247,14 @@ def verify_implementation_freeze(expected_sha: str) -> dict[str, Any]:
         if divergence != ["0", "0"]:
             errors.append("local_remote_ahead_behind_not_0_0")
     status = _git("status", "--porcelain=v1", "--untracked-files=all")
-    allowed_files = set(REQUIRED_ARTIFACTS) - {"plots", "config.json", "source_commit.json"}
+    allowed_files = set(REQUIRED_ARTIFACTS) - {
+        "plots", "config.json", "source_commit.json", "r1_failure_binding.json",
+        "support_preflight.json",
+    }
     dirty = []
     for line in status.splitlines():
         relative = line[3:]
-        prefix = "artifacts/pg_scc_stage0_r1_root_cause_audit/"
+        prefix = "artifacts/pg_scc_stage0_r2_root_cause_audit/"
         if relative.startswith(prefix):
             child = relative[len(prefix):]
             if child in allowed_files or (child.startswith("plots/") and child.split("/", 1)[1] in REQUIRED_PLOTS):
@@ -641,7 +1267,7 @@ def verify_implementation_freeze(expected_sha: str) -> dict[str, Any]:
         path = FROZEN / relative
         if not path.is_file() or sha256(path) != expected:
             errors.append(f"frozen_input_hash:{relative}")
-    if sha256(FROZEN / "frozen_design.json") != source["frozen_design_sha256"]:
+    if sha256(FROZEN / "frozen_design.json") != FROZEN_DESIGN_SHA256:
         errors.append("frozen_design_hash")
     if errors:
         raise RuntimeError("FAIL_CLOSED_IMPLEMENTATION_FREEZE:" + ";".join(errors))
@@ -649,6 +1275,7 @@ def verify_implementation_freeze(expected_sha: str) -> dict[str, Any]:
         "status": "PASS", "implementation_sha": head, "remote_sha": remote,
         "ahead_behind": [0, 0], "branch": branch,
         "config_sha256": CONFIG_SHA256, "source_sha256": SOURCE_SHA256,
+        "r1_failure_binding_sha256": R1_FAILURE_BINDING_SHA256,
         "frozen_files_verified": len(frozen_manifest),
     }
 
@@ -709,8 +1336,10 @@ def _score_table(metadata: Sequence[Mapping[str, Any]],
     rows = []
     for method, fit in fits.items():
         for meta, score in zip(metadata, fit["score"]):
-            rows.append({**{key: meta[key] for key in ("scenario", "phase", "second", "time_s", "prn")},
-                         "method": method, "score": float(score)})
+            identity = {key: meta[key] for key in ("scenario", "phase", "second", "time_s", "prn")}
+            if "channel" in meta and meta["channel"] is not None:
+                identity["channel"] = meta["channel"]
+            rows.append({**identity, "method": method, "score": float(score)})
     return rows
 
 
@@ -1246,7 +1875,7 @@ def _save_plots(nested: Sequence[Mapping[str, Any]], contributions: Sequence[Map
 def _write_readme(freeze: Mapping[str, Any], reproduction: Mapping[str, Any],
                   verdict: Mapping[str, Any], unavailable: Sequence[str]) -> None:
     lines = [
-        "# PG-SCC Stage-0 R1 Root-Cause Audit",
+        "# PG-SCC Stage-0 R2 Root-Cause Audit",
         "",
         "This artifact was generated deterministically from the implementation freeze "
         f"{freeze['implementation_sha']}.",
@@ -1289,21 +1918,35 @@ def config_allowed_verdicts() -> set[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--implementation-sha", required=True,
+    parser.add_argument("--implementation-sha",
                         help="full pushed implementation-freeze commit SHA")
+    parser.add_argument("--metadata-preflight", action="store_true")
     parser.add_argument("--output", type=Path, default=OUTPUT)
     args = parser.parse_args()
     if args.output.resolve() != OUTPUT.resolve():
         raise RuntimeError("output must be the preregistered artifact directory")
 
-    freeze = verify_implementation_freeze(args.implementation_sha)
     config = load_json(OUTPUT / "config.json")
     source = load_json(OUTPUT / "source_commit.json")
     precheck = verify_preregistration(config, source)
     if precheck["status"] != "PASS":
         raise RuntimeError("preregistration verification failed:" + ",".join(precheck["errors"]))
+    if args.metadata_preflight:
+        if args.implementation_sha:
+            raise RuntimeError("metadata preflight must not accept a protected-execution SHA")
+        report = run_metadata_support_preflight()
+        print(json.dumps({
+            "status": report["status"],
+            "eligible_event_count": report["eligible_event_count"],
+            "excluded_event_count": report["excluded_event_count"],
+            "protected_score_fields_read": report["protected_score_fields_read"],
+        }, sort_keys=True))
+        return 0 if report["status"] == "PASS" else 1
+    if not args.implementation_sha:
+        raise RuntimeError("--implementation-sha is required for protected Phase 3 execution")
 
-    protected = load_protected_inputs()
+    freeze = verify_implementation_freeze(args.implementation_sha)
+    protected = load_protected_inputs_after_preflight()
     clean_records = protected["clean_records"]
     attack_records = protected["attack_records"]
     if {row["scenario"] for row in attack_records} != {"ds3", "ds4", "ds7", "ds8"}:
@@ -1316,11 +1959,23 @@ def main() -> int:
     masks = {name: [int(x) for x in values] for name, values in protected["masks"].items()}
     validate_nested_masks(masks)
     fits = _fit_all(normalized, auth, covariance, masks)
-    core_methods = ("pg_scc_k3", "pg_scc_k5", "pg_scc_k9", "fixed9", "epl3",
-                    "dense_two_source_glrt", "shuffled_k3")
-    support = validate_common_support(_score_table(metadata, fits), core_methods,
-                                      int(config["common_support"]["minimum_prns_per_pooled_event"]))
-    bundles = {method: metric_bundle(metadata, fit["score"]) for method, fit in fits.items()}
+    committed_preflight = load_json(OUTPUT / "support_preflight.json")
+    support = validate_common_support(
+        _score_table(metadata, fits),
+        CORE_METHODS,
+        int(config["common_support"]["eligible_event_filtering"]["minimum_unique_prns_per_pooled_event"]),
+        frozen_expected_events=committed_preflight["eligible_pooled_events"],
+        frozen_expected_source=committed_preflight["frozen_pooled_event_expected_count_source"],
+    )
+    if support["status"] != "PASS":
+        raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:frozen pooled-event support mismatch")
+    metric_metadata, metric_scores = filter_metric_inputs_to_eligible_events(
+        metadata, {method: fit["score"] for method, fit in fits.items()}, support,
+    )
+    bundles = {
+        method: metric_bundle(metric_metadata, metric_scores[method])
+        for method in fits
+    }
 
     reproduction = reproduce_exact(
         metadata, fits, bundles, masks, protected["stored_scores"],
