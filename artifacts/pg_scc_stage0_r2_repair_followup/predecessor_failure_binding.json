@@ -1,0 +1,20 @@
+{
+  "authorized_failure_metadata_only": {
+    "error": "KeyError: mean_improvement_per_k",
+    "exit_code": 1,
+    "failure_stage": "plot generation in _save_plots",
+    "implementation_freeze_sha": "05cb5a5421461bb90bafc6cd3683a119ddf09555",
+    "protected_attempt_count": 1,
+    "protected_run_state_sha256": "3ccf0e3ffa91d9c6907dc137917b4de9f00f03298f6e06ea46453fee97c632b3",
+    "result_commit": null,
+    "terminal_state": "TERMINAL_FAIL_CLOSED"
+  },
+  "branch": "research/pg-scc-stage0-r2-root-cause-audit",
+  "immutability": {
+    "partial_scientific_outputs_inspected": false,
+    "partial_scientific_outputs_reused": false,
+    "predecessor_branch_or_worktree_mutated": false,
+    "retry_on_predecessor_branch": false
+  },
+  "schema": "pg_scc_stage0_r2_repair_followup_predecessor_failure_binding.v1"
+}

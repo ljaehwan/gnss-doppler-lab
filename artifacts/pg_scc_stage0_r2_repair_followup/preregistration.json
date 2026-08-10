@@ -1,0 +1,130 @@
+{
+  "allowed_repair_surface": {
+    "implementation": [
+      {
+        "allowed_change": "Schema-safe selection of the existing score-dilution value used only by plot generation; accept the producer key mean_improvement_per_coordinate when mean_improvement_per_k is absent.",
+        "file": "scripts/run_pg_scc_root_cause_audit.py",
+        "function": "_save_plots"
+      }
+    ],
+    "provenance_and_verification_only": [
+      "artifacts/pg_scc_stage0_r2_repair_followup/**",
+      "scripts/run_pg_scc_root_cause_audit.py follow-up path/branch/preregistration gates only",
+      "scripts/verify_pg_scc_r2_repair_followup.py",
+      "scripts/verify_pg_scc_r2_semantic_diff.py",
+      "tests/test_pg_scc_r2_repair_followup.py"
+    ],
+    "synthetic_tests": [
+      "Reproduce the dilution-row schema mismatch without protected data.",
+      "Prove all nine plot files are generated.",
+      "Prove input scientific values are byte/structure-equal before and after plotting."
+    ]
+  },
+  "artifact_namespace": "artifacts/pg_scc_stage0_r2_repair_followup",
+  "attempt_policy": {
+    "campaign_classification": "SEPARATELY_LABELED_REPAIR_FOLLOWUP_NOT_A_RETRY",
+    "maximum_protected_attempts": 1,
+    "on_any_gate_or_execution_failure": "TERMINAL_FAIL_CLOSED_NO_RETRY_NO_REPAIR_NO_RESULT_COMMIT",
+    "output_policy": "fresh_followup_namespace_only",
+    "predecessor_outputs_reused": false
+  },
+  "base_sha": "05cb5a5421461bb90bafc6cd3683a119ddf09555",
+  "branch": "research/pg-scc-stage0-r2-repair-followup",
+  "canonical_protected_invocation": {
+    "command": "python3 scripts/run_pg_scc_root_cause_audit.py --implementation-sha \"$(git rev-parse HEAD)\" --output artifacts/pg_scc_stage0_r2_repair_followup",
+    "implementation_sha_rule": "The shell substitution must resolve once to the full local HEAD, which must equal the pushed implementation-freeze SHA.",
+    "working_directory": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-pg-scc-stage0-r2-repair-followup"
+  },
+  "contract": {
+    "bytes": 6323,
+    "path": "/home/ubuntu/.local/share/hermes-prompts/pg_scc_r2_repair_followup.md",
+    "sha256": "407755295f197fcc2d6b892e767a866313ae3a184593f156b6f3f60ac3a5c984"
+  },
+  "forbidden_changes": [
+    "scientific scores",
+    "metric definitions",
+    "thresholds",
+    "seeds",
+    "selector logic",
+    "support masks",
+    "sample inclusion or exclusion",
+    "data loading or projection",
+    "preprocessing",
+    "covariance or scoring logic",
+    "bootstrap or statistical tests",
+    "decision rules",
+    "scenario or family aggregation",
+    "frozen audit questions"
+  ],
+  "forbidden_predecessor_access": {
+    "authorized_exception": "Only failure metadata enumerated in predecessor_failure_binding.json and the committed implementation/metadata contracts may be read.",
+    "paths_never_to_inspect_or_reuse": [
+      "artifacts/pg_scc_stage0_r2_root_cause_audit/root_cause_verdict.json",
+      "artifacts/pg_scc_stage0_r2_root_cause_audit/*.csv",
+      "artifacts/pg_scc_stage0_r2_root_cause_audit/plots/**",
+      "artifacts/pg_scc_stage0_r2_root_cause_audit/partial result values"
+    ],
+    "protected_score_fields_read_before_preregistration": 0
+  },
+  "frozen_scientific_contract": {
+    "config_source": "artifacts/pg_scc_stage0_r2_root_cause_audit/config.json",
+    "config_sha256": "336802a95e82df1da82822520fe8bd838bf18ce17da6ae29aa5695449f3b67f5",
+    "no_retuning": true
+  },
+  "git_identity_at_start": {
+    "branch_head": "05cb5a5421461bb90bafc6cd3683a119ddf09555",
+    "clean": true,
+    "head_equals_required_base": true,
+    "host": "gnss-lab",
+    "main_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+    "main_untouched": true,
+    "origin_main_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+    "origin_url": "https://github.com/ljaehwan/gnss-doppler-lab.git",
+    "remote_followup_branch_absent": true
+  },
+  "required_outputs": [
+    "README.md",
+    "config.json",
+    "source_commit.json",
+    "r1_failure_binding.json",
+    "support_preflight.json",
+    "pre_run_state.json",
+    "implementation_manifest_sha256.json",
+    "semantic_diff_audit.json",
+    "attempt_state.json",
+    "reproduction_check.json",
+    "nested_mask_analysis.csv",
+    "coordinate_contributions.csv",
+    "score_dilution_metrics.csv",
+    "dense_teacher_diagnostics.json",
+    "synthetic_real_mismatch.csv",
+    "selector_proxy_audit.json",
+    "mask_seed_stability.csv",
+    "random_mask_distribution.csv",
+    "k3_exploratory_metrics.csv",
+    "awgn_reaudit.json",
+    "calibration_uncertainty.json",
+    "bootstrap_intervals.csv",
+    "root_cause_verdict.json",
+    "artifact_manifest_sha256.json",
+    "plots/nested_coordinate_map.png",
+    "plots/clean_variance_attack_contribution.png",
+    "plots/rss_score_dilution.png",
+    "plots/synthetic_real_delay_doppler.png",
+    "plots/learned_random_percentile.png",
+    "plots/seed_mask_stability.png",
+    "plots/detector_performance.png",
+    "plots/empirical_noise_awgn_response.png",
+    "plots/calibration_threshold_uncertainty.png"
+  ],
+  "required_verifiers": [
+    "python3 -m json.tool artifacts/pg_scc_stage0_r2_repair_followup/preregistration.json",
+    "python3 -m json.tool artifacts/pg_scc_stage0_r2_repair_followup/predecessor_failure_binding.json",
+    "python3 scripts/verify_pg_scc_r2_semantic_diff.py --base 05cb5a5421461bb90bafc6cd3683a119ddf09555 --output artifacts/pg_scc_stage0_r2_repair_followup/semantic_diff_audit.json",
+    "pytest -q tests/test_pg_scc_root_cause_audit.py tests/test_pg_scc_r2_preflight.py tests/test_pg_scc_r2_repair_followup.py",
+    "python3 scripts/verify_pg_scc_r2_repair_followup.py --artifact artifacts/pg_scc_stage0_r2_repair_followup",
+    "python3 scripts/verify_pg_scc_r2_repair_followup.py --artifact artifacts/pg_scc_stage0_r2_repair_followup --fresh-clone --revision HEAD",
+    "git diff --check"
+  ],
+  "schema": "pg_scc_stage0_r2_repair_followup_preregistration.v1"
+}
