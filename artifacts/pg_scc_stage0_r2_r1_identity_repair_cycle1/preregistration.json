@@ -1,0 +1,148 @@
+{
+  "schema": "pg_scc_stage0_r2_r1_identity_repair_preregistration.v1",
+  "cycle": 1,
+  "campaign_identity": {
+    "branch": "research/pg-scc-stage0-r2-r1-identity-repair",
+    "required_base_sha": "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d",
+    "branch_head_at_start": "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d",
+    "artifact_namespace": "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1",
+    "protected_main_ref_at_start": "461eb4dc7bb794e719295daf028f6811658ba37f",
+    "origin_main_ref_at_start": "461eb4dc7bb794e719295daf028f6811658ba37f",
+    "remote_cycle_branch_absent_at_start": true,
+    "clean_at_start": true
+  },
+  "governing_contract": {
+    "path": "/home/ubuntu/.local/share/hermes-prompts/pg_scc_r2_r1_identity_repair.md",
+    "sha256": "53e1b7ba2374abf4a01b1516eab5802c5baf3701b7760bf55c3d3039adb5a23a"
+  },
+  "predecessor_binding": {
+    "branch": "research/pg-scc-stage0-r2-repair-followup",
+    "implementation_freeze_sha": "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d",
+    "preregistration_sha": "5ba338e8b946fb7cb604d827e47f94eff72b0fa6",
+    "protected_attempt_count": 1,
+    "state": "TERMINAL_FAIL_CLOSED",
+    "exit_code": 1,
+    "failure_stage": "validate_committed_support_preflight before protected loader invocation",
+    "exact_failure": "RuntimeError: FAIL_CLOSED_SUPPORT_PREFLIGHT:committed semantics/accounting mismatch:r1_identity",
+    "protected_loader_invoked": false,
+    "scientific_verdict": "UNAVAILABLE",
+    "scientific_result_commit": null,
+    "attempt_state_sha256": "9203c3a998e7e92a320e6627cce799f6f008ea1721f14e1e8baa482ab163b4d0",
+    "partial_outputs_inspected_or_reused": false
+  },
+  "allowed_evidence": [
+    "Committed source at or descended from the required base SHA.",
+    "Committed metadata and accounting contracts.",
+    "Synthetic fixtures.",
+    "Read-only recomputation that cannot load protected score-bearing fields.",
+    "Only the predecessor failure/provenance metadata explicitly bound above."
+  ],
+  "allowed_repair_surface": {
+    "implementation": "The minimum correction to r1_identity identity/accounting provenance, serialization, regeneration, or validation consistency required for committed support preflight to faithfully match frozen scientific semantics.",
+    "verification": [
+      "Synthetic and committed-metadata regression tests reproducing and repairing the r1_identity mismatch.",
+      "A verifier for branch, ancestry, manifest, preflight, result, and artifact integrity.",
+      "A machine-readable semantic-diff audit proving scientific computation paths remain equivalent.",
+      "A machine-readable zero-protected-access proof for all pre-execution diagnosis and repair work.",
+      "Cycle-local provenance and result artifacts under the registered artifact namespace."
+    ]
+  },
+  "forbidden_changes": [
+    "scientific metric definitions",
+    "thresholds",
+    "seeds",
+    "selector or support rules",
+    "sample inclusion or exclusion",
+    "scoring",
+    "covariance",
+    "preprocessing",
+    "bootstrap or statistical tests",
+    "decision rules",
+    "frozen audit questions",
+    "changes made merely to pass a gate",
+    "inspection or reuse of predecessor partial scientific metrics, plots, verdicts, or score-bearing outputs",
+    "mutation of protected main or predecessor worktrees"
+  ],
+  "canonical_protected_invocation": {
+    "working_directory": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-pg-scc-stage0-r2-r1-identity-repair",
+    "command": "python3 scripts/run_pg_scc_root_cause_audit.py --implementation-sha \"$(git rev-parse HEAD)\" --output artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1",
+    "implementation_sha_rule": "The shell substitution resolves exactly once to the full clean local HEAD, which must equal the pushed implementation-freeze SHA and origin branch SHA.",
+    "fresh_output_rule": "No protected invocation or partial scientific output may exist in this cycle namespace before the canonical command.",
+    "maximum_invocations_this_cycle": 1
+  },
+  "exact_once_policy": {
+    "protected_attempts_allowed": 1,
+    "retry_same_invocation": false,
+    "mutate_failed_cycle": false,
+    "reuse_failed_cycle_outputs": false,
+    "failure_record_required": true,
+    "failure_record_fields": [
+      "exact_command",
+      "exit_code",
+      "failure_stage",
+      "protected_loader_invoked",
+      "artifact_hashes"
+    ]
+  },
+  "autonomous_successor_cycle_policy": {
+    "maximum_total_cycles_this_session": 4,
+    "next_cycle_trigger": "Any engineering or local provenance, schema, accounting, or test failure that does not require changing scientific definitions.",
+    "next_cycle_order": "Preserve and freeze the failed cycle, create a distinct fresh namespace, commit and non-force push the next cycle preregistration, then diagnose and repair.",
+    "stop_conditions": [
+      "destructive or system-wide action required",
+      "credentials cannot be relayed safely",
+      "scientific definitions or evaluation criteria require alteration",
+      "leakage or provenance cannot be preserved",
+      "remote history diverges",
+      "four separately preregistered cycles fail"
+    ]
+  },
+  "required_pre_execution_artifacts": [
+    "preregistration.json",
+    "source_commit.json",
+    "r1_failure_binding.json",
+    "support_preflight.json",
+    "pre_run_state.json",
+    "implementation_manifest_sha256.json",
+    "semantic_diff_audit.json",
+    "zero_protected_access.json"
+  ],
+  "required_execution_and_result_artifacts": [
+    "attempt_state.json",
+    "reproduction_check.json",
+    "nested_mask_analysis.csv",
+    "coordinate_contributions.csv",
+    "score_dilution_metrics.csv",
+    "dense_teacher_diagnostics.json",
+    "synthetic_real_mismatch.csv",
+    "selector_proxy_audit.json",
+    "mask_seed_stability.csv",
+    "random_mask_distribution.csv",
+    "k3_exploratory_metrics.csv",
+    "awgn_reaudit.json",
+    "calibration_uncertainty.json",
+    "bootstrap_intervals.csv",
+    "root_cause_verdict.json",
+    "artifact_manifest_sha256.json",
+    "plots/nested_coordinate_map.png",
+    "plots/clean_variance_attack_contribution.png",
+    "plots/rss_score_dilution.png",
+    "plots/synthetic_real_delay_doppler.png",
+    "plots/learned_random_percentile.png",
+    "plots/seed_mask_stability.png",
+    "plots/detector_performance.png",
+    "plots/empirical_noise_awgn_response.png",
+    "plots/calibration_threshold_uncertainty.png"
+  ],
+  "result_policy": {
+    "allowed_verdicts": [
+      "GO",
+      "NO_GO",
+      "INCONCLUSIVE"
+    ],
+    "result_must_be_honest": true,
+    "final_commit_must_be_immutable_and_non_force_pushed": true,
+    "remote_equality_and_clean_tree_required": true
+  },
+  "protected_score_fields_read_before_preregistration": 0
+}
