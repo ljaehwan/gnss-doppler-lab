@@ -1,0 +1,31 @@
+{
+  "base_sha": "2ddeccbfe934deeff527a165469fdafa1618ca33",
+  "files": {
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1/attempt_state.json": "23c5a418ca63fe56b821cba1ebd16efbd2ed5a3ae992e37fc9496ba2f5d9f1fe",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1/pre_run_state.json": "ae21ef75babaef5d34a5487b318a445d33691740f0d5e05747b6eae1ba1a926d",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/config.json": "336802a95e82df1da82822520fe8bd838bf18ce17da6ae29aa5695449f3b67f5",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/predecessor_failure_binding.json": "800bfc2d9dade5e91bfa3081fa348e544a113f6ad2ee9f8765b10f955a3f817b",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/preregistration.json": "f9152be9e0b2b23738687e4340d49b7e7185aeaa910d24f325ecab5c07957c84",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/r1_failure_binding.json": "550f3fde25742b571fa0a5206a96d0454300d1fe1732671b9bf655ccbb3f379f",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/source_commit.json": "571b80ec11a9f860317f84c5d1808fddda270e988dfb8d25948df0999de0f8a4",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/support_preflight.json": "8eab210574a4f2407a261b0a63553842b1fb984c2c9fdaf85520c7abc3fbdb93",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/zero_protected_access.json": "5243e12b4386b84beb02c8264580fc5ce73b954874b05e488aeb3f039d2e42b1",
+    "scripts/run_pg_scc_root_cause_audit.py": "3e231e1e0654cd64428acf2770659fe4fed3af90bfa83fc462b1bc675aabf3f4",
+    "scripts/verify_pg_scc_r2_r1_identity_cycle2.py": "d1e7c2f61e4ffcef55fc2fd12be1913a96ee7ad2c52fd67bc970b4107efa0198",
+    "scripts/verify_pg_scc_r2_r1_identity_cycle2_semantic_diff.py": "13e0c8565b5ee0d86f3ad4f9dba08a4c2e24023d28c94ea0b5de2903f6dee0e8",
+    "scripts/verify_pg_scc_r2_r1_identity_repair.py": "6f318e6f19d6b12f858432cab5b2addec07ba9e536b955094d10f7b54cdb967d",
+    "scripts/verify_pg_scc_r2_r1_identity_semantic_diff.py": "23822a9cad9e253ad37cb1da24b1c8bc8d8f5439799eabb401e0a1a8f1d96664",
+    "scripts/verify_pg_scc_r2_repair_followup.py": "633f061fbd5856f898a7eae1c97d5bfd9b23a43fb11a29c6d437b6a31810a2b5",
+    "scripts/verify_pg_scc_r2_semantic_diff.py": "3067d707a315e50568fe5d2025923aa8cb43e36918ebbe1aeddf3f73304fa0b8",
+    "scripts/verify_pg_scc_root_cause_audit.py": "25b4c8cb7138e8219f56014ad675b4088a30f105d033ba99a1d55d94adde3cdb",
+    "tests/test_pg_scc_r2_preflight.py": "2184ad2dde79d7b0c73341234ca56d4a48b7fafc6c26b65f0dac960eda3326ff",
+    "tests/test_pg_scc_r2_r1_identity_cycle2.py": "931d56c60691fb8335e84cc1664f8bd00b4078a4552cd13dbe9fd5104c0799f4",
+    "tests/test_pg_scc_r2_r1_identity_repair.py": "4cd89d94722a1a76a300321b6054a8066c228d3066f7cec3de46fd38b52c5f98",
+    "tests/test_pg_scc_r2_repair_followup.py": "0d1cfd654a6d6753494354399d2b329da96cb6462e76a1772fb08a27e175d379",
+    "tests/test_pg_scc_root_cause_audit.py": "9c40f7ffdf6a468d08ffe8354367e3a875c11862f224c82cabab93946a018186"
+  },
+  "implementation_freeze_rule": "commit containing these exact hashes",
+  "preregistration_sha": "a4603a801328666cdf70784154132e213d6d25f6",
+  "protected_score_fields_read_before_freeze": 0,
+  "schema": "pg_scc_stage0_r2_r1_identity_repair_cycle2_implementation_manifest.v1"
+}

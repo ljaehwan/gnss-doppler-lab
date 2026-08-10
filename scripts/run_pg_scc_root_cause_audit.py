@@ -36,14 +36,14 @@ from gnss_doppler_lab.pg_scc_selector import (
 
 FROZEN = ROOT / "artifacts/pg_scc_stage0_static_k9"
 R1_OUTPUT = ROOT / "artifacts/pg_scc_stage0_r1_root_cause_audit"
-OUTPUT = ROOT / "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1"
+OUTPUT = ROOT / "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2"
 CACHE = ROOT / "artifacts/acaf_nf_stage1_r3_static_detection"
 FAMILY = {"ds3": "ds3", "ds4": "ds4", "ds7": "ds7_ds8", "ds8": "ds7_ds8"}
 FAMILY_MEMBERS = {"ds3": ("ds3",), "ds4": ("ds4",), "ds7_ds8": ("ds7", "ds8")}
 CONFIG_SHA256 = "336802a95e82df1da82822520fe8bd838bf18ce17da6ae29aa5695449f3b67f5"
 SOURCE_SHA256 = "571b80ec11a9f860317f84c5d1808fddda270e988dfb8d25948df0999de0f8a4"
 R1_FAILURE_BINDING_SHA256 = "550f3fde25742b571fa0a5206a96d0454300d1fe1732671b9bf655ccbb3f379f"
-PREREGISTRATION_SHA = "174610776c69f9ab2bc085be191cbdc563934625"
+PREREGISTRATION_SHA = "a4603a801328666cdf70784154132e213d6d25f6"
 REQUIRED_BASE_SHA = "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d"
 R1_FAIL_CLOSED_SHA = "8cd78ed724e57f97498da26547a9ecbbc2a78fe1"
 FROZEN_DESIGN_SHA256 = "28de36cfa264c755712d52e051d882d366a9a5d9065471371ad27309f1f07d7a"
@@ -101,6 +101,20 @@ PHASE2_ALLOWED_CHANGED_PATHS = {
     "scripts/verify_pg_scc_r2_r1_identity_repair.py",
     "scripts/verify_pg_scc_r2_r1_identity_semantic_diff.py",
     "tests/test_pg_scc_r2_r1_identity_repair.py",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1/attempt_state.json",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/config.json",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/implementation_manifest_sha256.json",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/pre_run_state.json",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/predecessor_failure_binding.json",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/preregistration.json",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/r1_failure_binding.json",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/semantic_diff_audit.json",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/source_commit.json",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/support_preflight.json",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/zero_protected_access.json",
+    "scripts/verify_pg_scc_r2_r1_identity_cycle2.py",
+    "scripts/verify_pg_scc_r2_r1_identity_cycle2_semantic_diff.py",
+    "tests/test_pg_scc_r2_r1_identity_cycle2.py",
 }
 CORE_METHODS = (
     "pg_scc_k3", "pg_scc_k5", "pg_scc_k9", "fixed9", "epl3",
@@ -142,10 +156,13 @@ IMPLEMENTATION_FILES = (
     "scripts/verify_pg_scc_r2_semantic_diff.py",
     "scripts/verify_pg_scc_r2_r1_identity_repair.py",
     "scripts/verify_pg_scc_r2_r1_identity_semantic_diff.py",
+    "scripts/verify_pg_scc_r2_r1_identity_cycle2.py",
+    "scripts/verify_pg_scc_r2_r1_identity_cycle2_semantic_diff.py",
     "tests/test_pg_scc_root_cause_audit.py",
     "tests/test_pg_scc_r2_preflight.py",
     "tests/test_pg_scc_r2_repair_followup.py",
     "tests/test_pg_scc_r2_r1_identity_repair.py",
+    "tests/test_pg_scc_r2_r1_identity_cycle2.py",
 )
 ALLOWED_ROLES = {
     "selector": {"clean_train", "clean_selection", "synthetic_train", "synthetic_validation"},
@@ -835,7 +852,7 @@ def validate_committed_support_preflight(
         raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:reconstructed preflight is not PASS")
     if require_head_blob:
         committed = subprocess.run(
-            ["git", "show", "HEAD:artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1/support_preflight.json"],
+            ["git", "show", "HEAD:artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/support_preflight.json"],
             cwd=ROOT, text=True, capture_output=True,
         )
         canonical = json.dumps(dict(report), indent=2, sort_keys=True, allow_nan=False) + "\n"
@@ -1288,7 +1305,7 @@ def verify_implementation_freeze(expected_sha: str) -> dict[str, Any]:
     dirty = []
     for line in status.splitlines():
         relative = line[3:]
-        prefix = "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1/"
+        prefix = "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2/"
         if relative.startswith(prefix):
             child = relative[len(prefix):]
             if child in allowed_files or (child.startswith("plots/") and child.split("/", 1)[1] in REQUIRED_PLOTS):
@@ -1951,14 +1968,14 @@ def _validate_required_outputs() -> None:
 def _write_followup_attempt_state(freeze: Mapping[str, Any], verdict: Mapping[str, Any]) -> None:
     dump_json(OUTPUT / "attempt_state.json", {
         "attempt_count": 1,
-        "artifact_namespace": "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1",
-        "canonical_command": "python3 scripts/run_pg_scc_root_cause_audit.py --implementation-sha \"$(git rev-parse HEAD)\" --output artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1",
+        "artifact_namespace": "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2",
+        "canonical_command": "python3 scripts/run_pg_scc_root_cause_audit.py --implementation-sha \"$(git rev-parse HEAD)\" --output artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2",
         "exit_code": 0,
         "failure_stage": None,
         "implementation_sha": freeze["implementation_sha"],
         "predecessor_partial_outputs_reused": False,
         "protected_loader_invoked": True,
-        "schema": "pg_scc_stage0_r2_r1_identity_repair_attempt_state.v1",
+        "schema": "pg_scc_stage0_r2_r1_identity_repair_cycle2_attempt_state.v1",
         "scientific_verdict": verdict["verdict"],
         "state": "COMPLETED",
     })
@@ -2098,8 +2115,8 @@ def main() -> int:
          "navigation-bit truth", "tracker recentering state", "multipath ground truth"],
     )
     _write_followup_attempt_state(freeze, verdict)
-    _validate_required_outputs()
     finalize_manifest(OUTPUT)
+    _validate_required_outputs()
     print(json.dumps({"status": "COMPLETE", "verdict": verdict["verdict"],
                       "implementation_sha": freeze["implementation_sha"]}, sort_keys=True))
     return 0

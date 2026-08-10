@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -59,32 +60,20 @@ def test_predecessor_committed_report_mismatch_is_exactly_r1_identity():
     assert repaired["protected_score_fields_projected_or_read"] == 0
 
 
-def test_cycle_preflight_exactly_matches_metadata_only_reconstruction():
-    runner = load_runner()
-    committed = json.loads((CYCLE / "support_preflight.json").read_text(encoding="utf-8"))
-    reconstructed = runner.build_metadata_support_preflight_report()
-    assert committed == reconstructed
-    assert committed["status"] == "PASS"
-    assert committed["r1_identity"]["status"] == "PASS"
-    assert committed["r1_identity"]["disallowed_changed_paths"] == []
-    assert CYCLE_PREREG in committed["r1_identity"]["phase2_changed_paths"]
-    runner.validate_committed_support_preflight(committed)
+def test_cycle1_committed_preflight_bytes_remain_frozen():
+    manifest = json.loads((CYCLE / "implementation_manifest_sha256.json").read_text())
+    relative = "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1/support_preflight.json"
+    actual = hashlib.sha256((CYCLE / "support_preflight.json").read_bytes()).hexdigest()
+    assert actual == manifest["files"][relative]
 
 
-def test_exact_repaired_preflight_opens_only_a_synthetic_loader():
-    runner = load_runner()
-    called: list[str] = []
-
-    def synthetic_loader():
-        called.append("synthetic")
-        return {"loaded": "synthetic-only"}
-
-    result = runner.load_protected_inputs_after_preflight(
-        preflight_path=CYCLE / "support_preflight.json",
-        protected_loader=synthetic_loader,
-    )
-    assert result == {"loaded": "synthetic-only"}
-    assert called == ["synthetic"]
+def test_cycle1_terminal_record_forbids_retry_and_reuse():
+    attempt = json.loads((CYCLE / "attempt_state.json").read_text(encoding="utf-8"))
+    assert attempt["state"] == "TERMINAL_FAIL_CLOSED"
+    assert attempt["retry_forbidden"] is True
+    assert attempt["protected_loader_invoked"] is True
+    assert attempt["partial_scientific_outputs_inspected"] is False
+    assert attempt["partial_scientific_outputs_reused"] is False
 
 
 def test_cycle_identity_paths_are_explicitly_authorized():

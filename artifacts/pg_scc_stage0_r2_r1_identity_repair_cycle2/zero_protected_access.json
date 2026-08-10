@@ -1,0 +1,16 @@
+{
+  "authorized_diagnostic_evidence": [
+    "committed runner source at the cycle-2 preregistration boundary",
+    "cycle-1 terminal error, failure stage, loader flag, exit code, and blind artifact hashes",
+    "synthetic regression fixtures",
+    "fixed-whitelist metadata projection excluding protected score fields"
+  ],
+  "cycle": 2,
+  "diagnosis": "Required-output validation demanded artifact_manifest_sha256.json immediately before finalize_manifest created that file.",
+  "partial_cycle1_scientific_outputs_inspected": false,
+  "partial_cycle1_scientific_outputs_reused": false,
+  "protected_loader_invoked_for_cycle2_diagnosis": false,
+  "protected_score_fields_projected_or_read_for_cycle2_diagnosis": 0,
+  "repair_classification": "ENGINEERING_LOCAL_ARTIFACT_SCHEMA_ORDERING_ONLY",
+  "schema": "pg_scc_stage0_r2_r1_identity_repair_cycle2_zero_protected_access.v1"
+}

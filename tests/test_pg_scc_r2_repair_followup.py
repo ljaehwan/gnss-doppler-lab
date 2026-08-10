@@ -82,7 +82,7 @@ def test_mixed_dilution_schema_generates_all_plots_without_value_mutation(tmp_pa
 
 def test_cycle_namespace_preserves_exact_plot_repair():
     runner = load_runner()
-    assert runner.OUTPUT == ROOT / "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1"
-    assert runner.PREREGISTRATION_SHA == "174610776c69f9ab2bc085be191cbdc563934625"
+    assert runner.OUTPUT == ROOT / "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2"
+    assert runner.PREREGISTRATION_SHA == "a4603a801328666cdf70784154132e213d6d25f6"
     source = (ROOT / "scripts/run_pg_scc_root_cause_audit.py").read_text(encoding="utf-8")
     assert 'if row["group"] == group and "mean_improvement_per_k" in row' in source
