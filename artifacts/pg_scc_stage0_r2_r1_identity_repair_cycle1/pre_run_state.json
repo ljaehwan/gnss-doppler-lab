@@ -1,0 +1,18 @@
+{
+  "ahead_behind": [
+    0,
+    0
+  ],
+  "branch": "research/pg-scc-stage0-r2-r1-identity-repair",
+  "canonical_command": "python3 scripts/run_pg_scc_root_cause_audit.py --implementation-sha \"$(git rev-parse HEAD)\" --output artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1",
+  "cycle": 1,
+  "implementation_sha": "2ddeccbfe934deeff527a165469fdafa1618ca33",
+  "main_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "predecessor_partial_outputs_reused": false,
+  "protected_attempt_count_before": 0,
+  "protected_loader_invoked": false,
+  "protected_score_fields_read_before_run": 0,
+  "remote_sha": "2ddeccbfe934deeff527a165469fdafa1618ca33",
+  "schema": "pg_scc_stage0_r2_r1_identity_repair_pre_run_state.v1",
+  "state": "READY"
+}
