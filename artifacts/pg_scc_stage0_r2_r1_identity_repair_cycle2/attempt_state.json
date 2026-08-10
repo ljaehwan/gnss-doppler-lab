@@ -1,0 +1,13 @@
+{
+  "artifact_namespace": "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2",
+  "attempt_count": 1,
+  "canonical_command": "python3 scripts/run_pg_scc_root_cause_audit.py --implementation-sha \"$(git rev-parse HEAD)\" --output artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2",
+  "exit_code": 0,
+  "failure_stage": null,
+  "implementation_sha": "99735cb5156ecdb7fc11c1eddf3348afa401c686",
+  "predecessor_partial_outputs_reused": false,
+  "protected_loader_invoked": true,
+  "schema": "pg_scc_stage0_r2_r1_identity_repair_cycle2_attempt_state.v1",
+  "scientific_verdict": "REPAIRABLE_BUT_REQUIRES_NEW_CONFIRMATION",
+  "state": "COMPLETED"
+}

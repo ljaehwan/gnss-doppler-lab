@@ -1,0 +1,89 @@
+{
+  "attack_based_choice": false,
+  "attack_projection_ratio_median": 0.9067752550912317,
+  "covariance_diagnostics": {
+    "selection_rule": "no variant selected on attack outcomes",
+    "status": "AVAILABLE",
+    "variants": {
+      "current_diagonal": {
+        "attack_based_choice": false,
+        "condition_number": 10.470502024482803,
+        "report_only_metrics": {
+          "dense_two_source_glrt": {
+            "attack_label": "POST_HOC_DIAGNOSTIC",
+            "macro_pauc": 0.8913817663817664,
+            "worst_fpr": 0.0
+          },
+          "pg_scc_k9": {
+            "attack_label": "POST_HOC_DIAGNOSTIC",
+            "macro_pauc": 0.7720797720797722,
+            "worst_fpr": 0.08333333333333333
+          }
+        },
+        "selection_role": "CLEAN_TRAIN_ONLY"
+      },
+      "empirical_variance_clipping": {
+        "attack_based_choice": false,
+        "condition_number": 11.232080840286203,
+        "report_only_metrics": {
+          "dense_two_source_glrt": {
+            "attack_label": "POST_HOC_DIAGNOSTIC",
+            "macro_pauc": 0.902065527065527,
+            "worst_fpr": 0.0
+          },
+          "pg_scc_k9": {
+            "attack_label": "POST_HOC_DIAGNOSTIC",
+            "macro_pauc": 0.7720797720797722,
+            "worst_fpr": 0.08333333333333333
+          }
+        },
+        "selection_role": "CLEAN_TRAIN_ONLY"
+      },
+      "low_rank_plus_diagonal": {
+        "attack_based_choice": false,
+        "condition_number": 1414.2889574776495,
+        "report_only_metrics": {
+          "dense_two_source_glrt": {
+            "attack_label": "POST_HOC_DIAGNOSTIC",
+            "macro_pauc": 0.7418091168091169,
+            "worst_fpr": 0.08333333333333333
+          },
+          "pg_scc_k9": {
+            "attack_label": "POST_HOC_DIAGNOSTIC",
+            "macro_pauc": 0.8397435897435898,
+            "worst_fpr": 0.3
+          }
+        },
+        "selection_role": "CLEAN_TRAIN_ONLY"
+      },
+      "stronger_variance_floor": {
+        "attack_based_choice": false,
+        "condition_number": 18.36706645251129,
+        "report_only_metrics": {
+          "dense_two_source_glrt": {
+            "attack_label": "POST_HOC_DIAGNOSTIC",
+            "macro_pauc": 0.902065527065527,
+            "worst_fpr": 0.0
+          },
+          "pg_scc_k9": {
+            "attack_label": "POST_HOC_DIAGNOSTIC",
+            "macro_pauc": 0.8611111111111112,
+            "worst_fpr": 0.08333333333333333
+          }
+        },
+        "selection_role": "CLEAN_TRAIN_ONLY"
+      }
+    }
+  },
+  "covariance_source": "cleanStatic train only",
+  "interpretation_status": "POST_HOC_DIAGNOSTIC",
+  "missing_physical_inputs": {
+    "multipath_ground_truth": "UNAVAILABLE",
+    "navigation_bits": "UNAVAILABLE",
+    "raw_iq_reaudit": "UNAVAILABLE",
+    "tracker_recentering_state": "UNAVAILABLE"
+  },
+  "schema": "pg_scc_dense_teacher_diagnostics.v1",
+  "status": "AVAILABLE",
+  "synthetic_template_span_dimension": 34
+}
