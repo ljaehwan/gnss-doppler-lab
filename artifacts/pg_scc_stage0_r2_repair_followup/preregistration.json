@@ -2,7 +2,7 @@
   "allowed_repair_surface": {
     "implementation": [
       {
-        "allowed_change": "Schema-safe selection of the existing score-dilution value used only by plot generation; accept the producer key mean_improvement_per_coordinate when mean_improvement_per_k is absent.",
+        "allowed_change": "Schema-safe plot-only filtering: plot absolute dilution rows that define mean_improvement_per_k and exclude paired-change rows that instead define mean_improvement_per_k_change.",
         "file": "scripts/run_pg_scc_root_cause_audit.py",
         "function": "_save_plots"
       }
@@ -15,7 +15,7 @@
       "tests/test_pg_scc_r2_repair_followup.py"
     ],
     "synthetic_tests": [
-      "Reproduce the dilution-row schema mismatch without protected data.",
+      "Reproduce the mixed absolute-row and paired-change-row dilution schema mismatch without protected data.",
       "Prove all nine plot files are generated.",
       "Prove input scientific values are byte/structure-equal before and after plotting."
     ]
