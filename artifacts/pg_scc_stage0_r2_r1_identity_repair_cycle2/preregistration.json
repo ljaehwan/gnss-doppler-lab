@@ -1,0 +1,120 @@
+{
+  "allowed_evidence": [
+    "Committed source and committed provenance/accounting contracts.",
+    "Synthetic fixtures.",
+    "The cycle-1 terminal attempt error, stage, loader flag, exit code, and blind artifact hashes only.",
+    "No cycle-1 partial scientific metrics, plots, verdicts, or score-bearing output values."
+  ],
+  "allowed_repair_surface": {
+    "implementation": "The minimum local artifact-schema, manifest creation/validation ordering, or provenance consistency correction required for the frozen successful scientific computation to complete artifact finalization.",
+    "verification": [
+      "Synthetic regression reproducing validation-before-manifest failure.",
+      "Regression proving manifest creation precedes manifest-required schema validation.",
+      "Machine-readable semantic-diff audit proving every scientific computation path is equivalent to cycle-1 freeze.",
+      "Machine-readable proof that no failed-cycle scientific output was inspected or reused."
+    ]
+  },
+  "autonomous_successor_cycle_policy": {
+    "maximum_total_cycles_this_session": 4,
+    "next_cycle_order": "Freeze the failed cycle, create and non-force push a distinct successor preregistration in a fresh namespace, then diagnose and repair.",
+    "next_cycle_trigger": "Any engineering or local provenance, schema, accounting, or test failure that does not require changing scientific definitions.",
+    "stop_conditions": [
+      "destructive or system-wide action required",
+      "credentials cannot be relayed safely",
+      "scientific definitions or evaluation criteria require alteration",
+      "leakage or provenance cannot be preserved",
+      "remote history diverges",
+      "four separately preregistered cycles fail"
+    ]
+  },
+  "campaign_identity": {
+    "artifact_namespace": "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2",
+    "branch": "research/pg-scc-stage0-r2-r1-identity-repair",
+    "branch_head_at_start": "976c97057c55a1a4f8637351cf6b20a830e0fd69",
+    "protected_main_ref_at_start": "461eb4dc7bb794e719295daf028f6811658ba37f",
+    "remote_branch_head_at_start": "2ddeccbfe934deeff527a165469fdafa1618ca33",
+    "required_base_sha": "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d",
+    "tracked_tree_clean_at_start": true
+  },
+  "canonical_protected_invocation": {
+    "command": "python3 scripts/run_pg_scc_root_cause_audit.py --implementation-sha \"$(git rev-parse HEAD)\" --output artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle2",
+    "fresh_output_rule": "No protected invocation or partial scientific output may exist in this cycle namespace before the canonical command.",
+    "implementation_sha_rule": "The substitution resolves exactly once to clean local HEAD equal to the pushed cycle-2 implementation freeze and origin branch SHA.",
+    "maximum_invocations_this_cycle": 1,
+    "working_directory": "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-pg-scc-stage0-r2-r1-identity-repair"
+  },
+  "cycle": 2,
+  "exact_once_policy": {
+    "failure_record_required": true,
+    "maximum_protected_attempts": 1,
+    "mutate_failed_cycle": false,
+    "retry_same_invocation": false,
+    "reuse_failed_cycle_outputs": false
+  },
+  "forbidden_changes": [
+    "scientific metric definitions",
+    "thresholds",
+    "seeds",
+    "selector or support rules",
+    "sample inclusion or exclusion",
+    "scoring",
+    "covariance",
+    "preprocessing",
+    "bootstrap or statistical tests",
+    "decision rules",
+    "frozen audit questions",
+    "inspection or reuse of cycle-1 partial scientific metrics, plots, verdicts, or score-bearing outputs",
+    "mutation of cycle-1 outputs after terminal record creation",
+    "mutation of protected main or predecessor worktrees"
+  ],
+  "governing_contract": {
+    "path": "/home/ubuntu/.local/share/hermes-prompts/pg_scc_r2_r1_identity_repair.md",
+    "sha256": "53e1b7ba2374abf4a01b1516eab5802c5baf3701b7760bf55c3d3039adb5a23a"
+  },
+  "predecessor_binding": {
+    "artifact_namespace": "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1",
+    "attempt_state_sha256": "23c5a418ca63fe56b821cba1ebd16efbd2ed5a3ae992e37fc9496ba2f5d9f1fe",
+    "exact_error": "RuntimeError: required artifact schema incomplete: ['artifact_manifest_sha256.json']",
+    "exit_code": 1,
+    "failure_classification": "ENGINEERING_LOCAL_ARTIFACT_SCHEMA_ORDERING",
+    "failure_stage": "_validate_required_outputs after protected analysis artifacts were generated and before finalize_manifest",
+    "implementation_freeze_sha": "2ddeccbfe934deeff527a165469fdafa1618ca33",
+    "partial_scientific_outputs_inspected": false,
+    "partial_scientific_outputs_reused": false,
+    "preregistration_sha": "174610776c69f9ab2bc085be191cbdc563934625",
+    "protected_attempt_count": 1,
+    "protected_loader_invoked": true,
+    "scientific_verdict": "UNAVAILABLE",
+    "terminal_evidence_commit": "976c97057c55a1a4f8637351cf6b20a830e0fd69",
+    "terminal_state": "TERMINAL_FAIL_CLOSED"
+  },
+  "protected_access_accounting": {
+    "cycle1_protected_loader_invoked": true,
+    "cycle2_engineering_diagnosis_protected_score_fields_read_before_preregistration": 0,
+    "cycle2_partial_scientific_outputs_inspected": false,
+    "cycle2_partial_scientific_outputs_reused": false
+  },
+  "required_pre_execution_artifacts": [
+    "preregistration.json",
+    "config.json",
+    "source_commit.json",
+    "r1_failure_binding.json",
+    "predecessor_failure_binding.json",
+    "support_preflight.json",
+    "semantic_diff_audit.json",
+    "implementation_manifest_sha256.json",
+    "zero_protected_access.json",
+    "pre_run_state.json"
+  ],
+  "result_policy": {
+    "allowed_campaign_verdicts": [
+      "GO",
+      "NO_GO",
+      "INCONCLUSIVE"
+    ],
+    "final_commit_must_be_non_force_pushed": true,
+    "remote_equality_and_clean_tree_required": true,
+    "result_must_be_honest": true
+  },
+  "schema": "pg_scc_stage0_r2_r1_identity_repair_preregistration.v1"
+}
