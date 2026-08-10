@@ -1,0 +1,22 @@
+{
+  "base_sha": "05cb5a5421461bb90bafc6cd3683a119ddf09555",
+  "files": {
+    "artifacts/pg_scc_stage0_r2_repair_followup/config.json": "336802a95e82df1da82822520fe8bd838bf18ce17da6ae29aa5695449f3b67f5",
+    "artifacts/pg_scc_stage0_r2_repair_followup/predecessor_failure_binding.json": "6c7083bbccdd20752ae40d84433919c64ebe3afba7a3c18fb6ab8a1b388a7160",
+    "artifacts/pg_scc_stage0_r2_repair_followup/preregistration.json": "b6b47e431ccc10dff76e08e6ba9bbbd4f9140bd23977ee9af2ab6aba15adc8a1",
+    "artifacts/pg_scc_stage0_r2_repair_followup/r1_failure_binding.json": "550f3fde25742b571fa0a5206a96d0454300d1fe1732671b9bf655ccbb3f379f",
+    "artifacts/pg_scc_stage0_r2_repair_followup/source_commit.json": "571b80ec11a9f860317f84c5d1808fddda270e988dfb8d25948df0999de0f8a4",
+    "artifacts/pg_scc_stage0_r2_repair_followup/support_preflight.json": "7bc731b489ea0b2ea2f6e32717ee5a8781cb334003ba6bdc1b669314ecaaecf0",
+    "scripts/run_pg_scc_root_cause_audit.py": "0ef9030be8f37f32626d42e327826b1051691edff42495706c58aa4f88cee8ec",
+    "scripts/verify_pg_scc_r2_repair_followup.py": "633f061fbd5856f898a7eae1c97d5bfd9b23a43fb11a29c6d437b6a31810a2b5",
+    "scripts/verify_pg_scc_r2_semantic_diff.py": "3067d707a315e50568fe5d2025923aa8cb43e36918ebbe1aeddf3f73304fa0b8",
+    "scripts/verify_pg_scc_root_cause_audit.py": "25b4c8cb7138e8219f56014ad675b4088a30f105d033ba99a1d55d94adde3cdb",
+    "tests/test_pg_scc_r2_preflight.py": "2184ad2dde79d7b0c73341234ca56d4a48b7fafc6c26b65f0dac960eda3326ff",
+    "tests/test_pg_scc_r2_repair_followup.py": "5ffc738b511d72881e0f993edc7b3f79a44949cc3718089ed2e4379f2408bf9c",
+    "tests/test_pg_scc_root_cause_audit.py": "9c40f7ffdf6a468d08ffe8354367e3a875c11862f224c82cabab93946a018186"
+  },
+  "implementation_freeze_rule": "commit containing these exact hashes",
+  "preregistration_sha": "5ba338e8b946fb7cb604d827e47f94eff72b0fa6",
+  "protected_score_fields_read_before_freeze": 0,
+  "schema": "pg_scc_stage0_r2_repair_followup_implementation_manifest.v1"
+}

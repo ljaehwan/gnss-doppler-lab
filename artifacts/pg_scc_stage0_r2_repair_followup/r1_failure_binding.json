@@ -1,0 +1,51 @@
+{
+  "explicit_unchanged_declarations": {
+    "formulas": true,
+    "masks": true,
+    "model": true,
+    "scores": true,
+    "statistics": true,
+    "thresholds": true,
+    "verdict_gates": true
+  },
+  "normalized_r1_blocker": {
+    "classification": "COMMON_SUPPORT_VALIDATOR_EVENT_IDENTITY_DEFECT",
+    "failure_stage": "common-support validation before protected outcome execution",
+    "incorrect_r1_pooled_event_key": [
+      "scenario",
+      "phase",
+      "second",
+      "time_s"
+    ],
+    "minimum_unique_prns_unchanged": 4,
+    "r1_scientific_verdict": "NOT_REACHED",
+    "required_r2_pooled_event_key": [
+      "scenario",
+      "phase",
+      "second"
+    ],
+    "summary": "R1 failed closed because its common-support validator included tracker-specific time_s in pooled-event identity even though frozen PG-SCC pool_events() groups by scenario, phase, second; the R1 failure is not a scientific NO-GO."
+  },
+  "permitted_r2_code_scope": [
+    "separate common-support raw-row identity from pooled-event identity",
+    "add metadata-only support preflight",
+    "add precise failure messages containing pooled-event identity and PRN count",
+    "write only to the R2 output namespace",
+    "add related tests and verifier changes"
+  ],
+  "preserved_file_sha256": {
+    "artifacts/pg_scc_stage0_r1_root_cause_audit/config.json": "ade700892fe3e055e0154ae859ba701a36f11a6ec9245db4b39fd087426eb0e6",
+    "artifacts/pg_scc_stage0_r1_root_cause_audit/r1_fail_closed_report.json": "041cc432cdc893e9dba867d6d3dc005e3ee7f2c8d25d542d54d4f374ca68e3f5",
+    "artifacts/pg_scc_stage0_r1_root_cause_audit/source_commit.json": "13ab9e544f06903dd6fde04c42e8aefb35a66946bbaf0456e95040fbb777d428",
+    "docs/PG_SCC_ROOT_CAUSE_AUDIT_IMPLEMENTATION.md": "ad746e2f481918a9a85e588beeaf709abbcaf3fcb81450b36c590372adad40dc",
+    "docs/PG_SCC_ROOT_CAUSE_AUDIT_R1_FAIL_CLOSED.md": "4596439585dc7275774a709b5fd41da59b329e842b5cbc0a078256774b495b08",
+    "scripts/run_pg_scc_root_cause_audit.py": "66009f9d14f9c66de4414e46dd3f2f12cd0f3a49cd96c7ae7deb0ea8663d7a76",
+    "scripts/verify_pg_scc_root_cause_audit.py": "b9eb52f854e14b5a743c80d0bc5dc38ebb9d7c7eaef245cbe9a6389b81bb573a",
+    "tests/test_pg_scc_root_cause_audit.py": "c0bb5f07ffd7f45c136d94d3a46420e9d222b3140e5c5f3270fbb8404438a290"
+  },
+  "r1_branch": "research/pg-scc-stage0-r1-root-cause-audit",
+  "r1_fail_closed_commit": "8cd78ed724e57f97498da26547a9ecbbc2a78fe1",
+  "r1_implementation_commit": "5359bfab74d44d7153a32c5cf708ccab240fe219",
+  "r1_preregistration_commit": "5e5339282c6154630fd11f94415cba794d9fa1ec",
+  "schema": "pg_scc_stage0_r2_r1_failure_binding.v1"
+}
