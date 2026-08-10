@@ -1,0 +1,17 @@
+{
+  "schema": "pg_scc_stage0_r2_protected_run_state.v1",
+  "state": "TERMINAL_FAIL_CLOSED",
+  "implementation_freeze": "05cb5a5421461bb90bafc6cd3683a119ddf09555",
+  "utc_start_time": "2026-08-10T01:57:44Z",
+  "utc_end_time": "2026-08-10T02:01:27Z",
+  "command": "python3 scripts/run_pg_scc_root_cause_audit.py --implementation-sha 05cb5a5421461bb90bafc6cd3683a119ddf09555",
+  "protected_access_before_freeze": 0,
+  "protected_attempt_count_before_command": 0,
+  "protected_attempt_count": 1,
+  "authorized_attempt_number": 1,
+  "exit_code": 1,
+  "failure_stage": "plot_generation:_save_plots",
+  "error": "KeyError: mean_improvement_per_k",
+  "retry_permitted": false,
+  "result_commit": "NONE"
+}

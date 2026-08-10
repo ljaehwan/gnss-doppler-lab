@@ -1,0 +1,127 @@
+{
+  "methods": {
+    "dense_two_source_glrt": {
+      "block_seconds": 10.0,
+      "bootstrap_iterations": 2000,
+      "bootstrap_seed": 2026080931,
+      "bootstrap_threshold_interval": [
+        0.14022020408443653,
+        0.23442298260155747
+      ],
+      "calibration_block_count": 3,
+      "calibration_events": 14,
+      "clopper_pearson_95": [
+        0.0,
+        0.26464846939705117
+      ],
+      "holdout_alarms": 0,
+      "holdout_events": 12,
+      "leave_one_block_out_range": [
+        0.17961356502904174,
+        0.23442298260155747
+      ],
+      "q99": 0.23442298260155747,
+      "q99_5": 0.23442298260155747,
+      "q99_equals_q99_5": true
+    },
+    "fixed9": {
+      "block_seconds": 10.0,
+      "bootstrap_iterations": 2000,
+      "bootstrap_seed": 2026080931,
+      "bootstrap_threshold_interval": [
+        0.30694530361195915,
+        0.5858042255566043
+      ],
+      "calibration_block_count": 3,
+      "calibration_events": 14,
+      "clopper_pearson_95": [
+        0.0,
+        0.26464846939705117
+      ],
+      "holdout_alarms": 0,
+      "holdout_events": 12,
+      "leave_one_block_out_range": [
+        0.5451697124581609,
+        0.5858042255566043
+      ],
+      "q99": 0.5858042255566043,
+      "q99_5": 0.5858042255566043,
+      "q99_equals_q99_5": true
+    },
+    "pg_scc_k3": {
+      "block_seconds": 10.0,
+      "bootstrap_iterations": 2000,
+      "bootstrap_seed": 2026080931,
+      "bootstrap_threshold_interval": [
+        0.4771206755504167,
+        0.7012737402751801
+      ],
+      "calibration_block_count": 3,
+      "calibration_events": 14,
+      "clopper_pearson_95": [
+        0.0,
+        0.26464846939705117
+      ],
+      "holdout_alarms": 0,
+      "holdout_events": 12,
+      "leave_one_block_out_range": [
+        0.5036139824603523,
+        0.7012737402751801
+      ],
+      "q99": 0.7012737402751801,
+      "q99_5": 0.7012737402751801,
+      "q99_equals_q99_5": true
+    },
+    "pg_scc_k5": {
+      "block_seconds": 10.0,
+      "bootstrap_iterations": 2000,
+      "bootstrap_seed": 2026080931,
+      "bootstrap_threshold_interval": [
+        0.22026577736589903,
+        0.2928104230942718
+      ],
+      "calibration_block_count": 3,
+      "calibration_events": 14,
+      "clopper_pearson_95": [
+        0.0021075932318602286,
+        0.38479616515094406
+      ],
+      "holdout_alarms": 1,
+      "holdout_events": 12,
+      "leave_one_block_out_range": [
+        0.27674752966624705,
+        0.2928104230942718
+      ],
+      "q99": 0.2928104230942718,
+      "q99_5": 0.2928104230942718,
+      "q99_equals_q99_5": true
+    },
+    "pg_scc_k9": {
+      "block_seconds": 10.0,
+      "bootstrap_iterations": 2000,
+      "bootstrap_seed": 2026080931,
+      "bootstrap_threshold_interval": [
+        0.2246070952732028,
+        0.287173160602996
+      ],
+      "calibration_block_count": 3,
+      "calibration_events": 14,
+      "clopper_pearson_95": [
+        0.0021075932318602286,
+        0.38479616515094406
+      ],
+      "holdout_alarms": 1,
+      "holdout_events": 12,
+      "leave_one_block_out_range": [
+        0.2797030295203376,
+        0.287173160602996
+      ],
+      "q99": 0.287173160602996,
+      "q99_5": 0.287173160602996,
+      "q99_equals_q99_5": true
+    }
+  },
+  "reason": "small frozen calibration tail; no extra clean epochs added",
+  "schema": "pg_scc_calibration_uncertainty.v1",
+  "status": "LIMITED"
+}

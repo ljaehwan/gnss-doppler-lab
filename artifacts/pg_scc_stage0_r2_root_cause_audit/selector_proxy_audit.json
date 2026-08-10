@@ -1,0 +1,67 @@
+{
+  "attack_based_selection": false,
+  "input_roles": [
+    "clean_selection",
+    "clean_train",
+    "synthetic_train",
+    "synthetic_validation"
+  ],
+  "learned_evidence": {
+    "3": {
+      "learned_synthetic_teacher_spearman": 0.9692933401118454,
+      "random_95th_percentile": 0.9723334207980058,
+      "random_percentile": 0.895,
+      "selector_proxy_vs_final_glrt_spearman": 0.9939452580481165
+    },
+    "5": {
+      "learned_synthetic_teacher_spearman": 0.9777539072109156,
+      "random_95th_percentile": 0.9796567831586773,
+      "random_percentile": 0.89,
+      "selector_proxy_vs_final_glrt_spearman": 0.9897748331338045
+    },
+    "9": {
+      "learned_synthetic_teacher_spearman": 0.981929252013054,
+      "random_95th_percentile": 0.9871962925911957,
+      "random_percentile": 0.69,
+      "selector_proxy_vs_final_glrt_spearman": 0.9911835610148089
+    }
+  },
+  "median_pairwise_jaccard": {
+    "3": 1.0,
+    "5": 1.0,
+    "9": 1.0
+  },
+  "proxy_vs_final_glrt": {
+    "3": {
+      "learned_synthetic_teacher_spearman": 0.9692933401118454,
+      "random_95th_percentile": 0.9723334207980058,
+      "random_percentile": 0.895,
+      "selector_proxy_vs_final_glrt_spearman": 0.9939452580481165
+    },
+    "5": {
+      "learned_synthetic_teacher_spearman": 0.9777539072109156,
+      "random_95th_percentile": 0.9796567831586773,
+      "random_percentile": 0.89,
+      "selector_proxy_vs_final_glrt_spearman": 0.9897748331338045
+    },
+    "9": {
+      "learned_synthetic_teacher_spearman": 0.981929252013054,
+      "random_95th_percentile": 0.9871962925911957,
+      "random_percentile": 0.69,
+      "selector_proxy_vs_final_glrt_spearman": 0.9911835610148089
+    }
+  },
+  "random_masks_per_budget": {
+    "3": 200,
+    "5": 200,
+    "9": 200
+  },
+  "schema": "pg_scc_selector_proxy_audit.v1",
+  "seed_count": 20,
+  "soft_vs_hard": {
+    "definition": "soft objective final loss versus deterministic symmetric hard projection validation GLRT",
+    "per_seed_final_loss_recorded": true,
+    "status": "AVAILABLE"
+  },
+  "status": "PASS"
+}

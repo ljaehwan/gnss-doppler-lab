@@ -1,0 +1,103 @@
+{
+  "schema": "pg_scc_stage0_r2_terminal_fail_closed_delivery.v1",
+  "generated_utc": "2026-08-10T22:56:04Z",
+  "implementation_sha": "05cb5a5421461bb90bafc6cd3683a119ddf09555",
+  "protected_execution": {
+    "attempt_count": 1,
+    "command": "python3 scripts/run_pg_scc_root_cause_audit.py --implementation-sha 05cb5a5421461bb90bafc6cd3683a119ddf09555",
+    "exit_code": 1,
+    "failure_stage": "plot_generation:_save_plots",
+    "error": "KeyError: mean_improvement_per_k",
+    "state": "TERMINAL_FAIL_CLOSED",
+    "rerun_permitted": false
+  },
+  "final_scientific_verdict": "UNAVAILABLE",
+  "verdict_validation": {
+    "artifact_exists": true,
+    "artifact_sha256": "15baab1daa7b12dc4db436611a86af58e33b5bdecfe8960d8b1d15a8a450b122",
+    "reported_candidate_verdict": "REPAIRABLE_BUT_REQUIRES_NEW_CONFIRMATION",
+    "local_structure_check": "PASS",
+    "committed_verifier_validated": false,
+    "reason": "The committed verifier failed on missing required artifacts before validating the partial verdict. The candidate is preserved but is not a validated final verdict."
+  },
+  "reproduction_status": "PASS",
+  "reproduction_artifact_sha256": "eb321de999652d1ef47683ee3c4e5b1b7d34557d9bbc339e6421b8193e81a098",
+  "common_support": {
+    "status": "PASS",
+    "eligible_event_count": 260,
+    "excluded_event_count": 0
+  },
+  "missing_required_artifacts": [
+    "README.md",
+    "artifact_manifest_sha256.json",
+    "plots/calibration_threshold_uncertainty.png",
+    "plots/detector_performance.png",
+    "plots/empirical_noise_awgn_response.png",
+    "plots/learned_random_percentile.png",
+    "plots/rss_score_dilution.png",
+    "plots/seed_mask_stability.png",
+    "plots/synthetic_real_delay_doppler.png"
+  ],
+  "verifier": {
+    "command": "python3 scripts/verify_pg_scc_root_cause_audit.py --artifact artifacts/pg_scc_stage0_r2_root_cause_audit",
+    "exit_code": 1,
+    "status": "FAIL",
+    "errors": [
+      "missing:README.md",
+      "missing:artifact_manifest_sha256.json",
+      "missing:plots/calibration_threshold_uncertainty.png",
+      "missing:plots/detector_performance.png",
+      "missing:plots/empirical_noise_awgn_response.png",
+      "missing:plots/learned_random_percentile.png",
+      "missing:plots/rss_score_dilution.png",
+      "missing:plots/seed_mask_stability.png",
+      "missing:plots/synthetic_real_delay_doppler.png"
+    ]
+  },
+  "tests": {
+    "command": "pytest -q tests/test_pg_scc_root_cause_audit.py tests/test_pg_scc_r2_preflight.py",
+    "exit_code": 0,
+    "status": "PASS",
+    "passed": 25,
+    "failed": 0,
+    "warnings": 1
+  },
+  "assertions": {
+    "protected_producer_rerun": false,
+    "post_failure_retuning": false,
+    "scientific_definitions_changed": false,
+    "partial_verdict_marked_validated": false,
+    "preserved_outputs_overwritten_or_deleted": false,
+    "implementation_freeze_amended": false
+  },
+  "delivery_state_before_result_commit": {
+    "branch": "research/pg-scc-stage0-r2-root-cause-audit",
+    "local_sha": "05cb5a5421461bb90bafc6cd3683a119ddf09555",
+    "remote_sha": "05cb5a5421461bb90bafc6cd3683a119ddf09555",
+    "ahead_behind": [0, 0],
+    "tracked_tree_clean": true
+  },
+  "preserved_artifact_inventory_sha256": {
+    "awgn_reaudit.json": "71b354bcec5b5f5d7c604676a800896f96447331dd134478a1175daf258baa82",
+    "bootstrap_intervals.csv": "7507a19eeefdf2d7e5a2c6344a155c650a1a0e59d418479109dc825652caea76",
+    "calibration_uncertainty.json": "bc01ec17ac37d9615ae87073879ff99a4b27d9ab4adf031ea7b4f88a57eb00d6",
+    "config.json": "336802a95e82df1da82822520fe8bd838bf18ce17da6ae29aa5695449f3b67f5",
+    "coordinate_contributions.csv": "eeb326e8ebe36f9a41d36e6896a01259b0e1018f30aeb6aae85710c7e167b169",
+    "dense_teacher_diagnostics.json": "9583cad556a4feab1712e973666c3fbc6463f8fb9311d55c831d09525bab3114",
+    "k3_exploratory_metrics.csv": "047614a5616d10988da5effc52a70c813cd7987d670e813a6710caa61eb68ba0",
+    "mask_seed_stability.csv": "7856cde9eab452d23b2b4777f31b34d238ad91e68e6b49ea9c0f30b133e48324",
+    "nested_mask_analysis.csv": "63e8cff9d610401626da8be063a97fbb00ab51706de79898d6aa9c8c2d408a44",
+    "plots/clean_variance_attack_contribution.png": "3c0199b4e7d9f864b4678268e3fcd9f18713d4b999ea5dc34ccaf529267243ae",
+    "plots/nested_coordinate_map.png": "6267ecb5b89993b3a5cbdca31bedfe80f86607896b0294e7c3c5f245b976cbf3",
+    "protected_run_state.json": "3ccf0e3ffa91d9c6907dc137917b4de9f00f03298f6e06ea46453fee97c632b3",
+    "r1_failure_binding.json": "550f3fde25742b571fa0a5206a96d0454300d1fe1732671b9bf655ccbb3f379f",
+    "random_mask_distribution.csv": "cfb440ffd27e0a5ef110bf84caa08cfb7692b136c1d5e88bc2df5f7c024ea3ff",
+    "reproduction_check.json": "eb321de999652d1ef47683ee3c4e5b1b7d34557d9bbc339e6421b8193e81a098",
+    "root_cause_verdict.json": "15baab1daa7b12dc4db436611a86af58e33b5bdecfe8960d8b1d15a8a450b122",
+    "score_dilution_metrics.csv": "eea60880e167990dea9cbb3ff59be4ef2ef2c46c2d4021941b0bfa4d8b6c5e99",
+    "selector_proxy_audit.json": "ccc97f4c1801f4069e265dccf670050fb61520e1734f708f35166990183bdfb7",
+    "source_commit.json": "571b80ec11a9f860317f84c5d1808fddda270e988dfb8d25948df0999de0f8a4",
+    "support_preflight.json": "e5467b513b6b91c18337692837ec1a3330691a3c8cae7cb3242c6eab0a67c7b1",
+    "synthetic_real_mismatch.csv": "c47f64ca4c0d8be319b866e2e08c088da481388cde162c804ae5514665d4a489"
+  }
+}

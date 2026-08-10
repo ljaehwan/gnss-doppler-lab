@@ -1,0 +1,10 @@
+boundary_doppler,delay_chips,doppler_hz,high_doppler,index,order,stage
+False,0.0,0.0,False,93,1,K3
+False,0.25,-100.0,False,61,2,K3
+False,-0.25,100.0,False,125,3,K3
+True,-0.375,-250.0,True,5,4,K5_new
+True,0.375,250.0,True,181,5,K5_new
+False,-0.25,-150.0,True,40,6,K9_new
+False,0.25,150.0,True,146,7,K9_new
+False,0.25,-150.0,True,44,8,K9_new
+False,-0.25,150.0,True,142,9,K9_new

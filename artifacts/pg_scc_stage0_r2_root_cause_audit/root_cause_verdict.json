@@ -1,0 +1,111 @@
+{
+  "exactly_one_verdict": true,
+  "implementation_freeze": {
+    "ahead_behind": [
+      0,
+      0
+    ],
+    "branch": "research/pg-scc-stage0-r2-root-cause-audit",
+    "config_sha256": "336802a95e82df1da82822520fe8bd838bf18ce17da6ae29aa5695449f3b67f5",
+    "frozen_files_verified": 14,
+    "implementation_sha": "05cb5a5421461bb90bafc6cd3683a119ddf09555",
+    "r1_failure_binding_sha256": "550f3fde25742b571fa0a5206a96d0454300d1fe1732671b9bf655ccbb3f379f",
+    "remote_sha": "05cb5a5421461bb90bafc6cd3683a119ddf09555",
+    "source_sha256": "571b80ec11a9f860317f84c5d1808fddda270e988dfb8d25948df0999de0f8a4",
+    "status": "PASS"
+  },
+  "labels": {
+    "attack": "POST_HOC_DIAGNOSTIC",
+    "k3": "EXPLORATORY_ONLY"
+  },
+  "precedence_applied": [
+    "K3_WORTH_INDEPENDENT_CONFIRMATION",
+    "REPAIRABLE_BUT_REQUIRES_NEW_CONFIRMATION",
+    "TERMINATE_PG_SCC"
+  ],
+  "reproduction_status": "PASS",
+  "root_causes": {
+    "AWGN_CONTROL_MISSCALE": {
+      "numeric_evidence": {
+        "availability_or_verdict": "AWGN_INCONCLUSIVE"
+      },
+      "status": "UNSUPPORTED"
+    },
+    "CALIBRATION_TAIL_INSUFFICIENCY": {
+      "numeric_evidence": {
+        "status": "LIMITED"
+      },
+      "status": "SUPPORTED"
+    },
+    "DENSE_COVARIANCE_FAILURE": {
+      "numeric_evidence": {
+        "clean_only_variants": 4
+      },
+      "status": "SUPPORTED"
+    },
+    "GENUINE_LACK_OF_SPARSE_GAIN": {
+      "numeric_evidence": {
+        "k9_minus_fixed9": -0.16203703703703687
+      },
+      "status": "SUPPORTED"
+    },
+    "H1_NULL_OVERFIT": {
+      "numeric_evidence": {
+        "clean_split_diagnostics_emitted": true
+      },
+      "status": "SUPPORTED"
+    },
+    "MASK_NON_IDENTIFIABILITY": {
+      "numeric_evidence": {
+        "3": 1.0,
+        "5": 1.0,
+        "9": 1.0
+      },
+      "status": "UNSUPPORTED"
+    },
+    "NOISY_COORDINATE_ADDITION": {
+      "numeric_evidence": {
+        "coordinate_diagnostics_emitted": true
+      },
+      "status": "SUPPORTED"
+    },
+    "SCORE_DILUTION": {
+      "numeric_evidence": {
+        "k3_minus_k9_macro_pauc": 0.14957264957264949
+      },
+      "status": "SUPPORTED"
+    },
+    "SELECTOR_PROXY_OBJECTIVE_MISMATCH": {
+      "numeric_evidence": {
+        "3": {
+          "learned_synthetic_teacher_spearman": 0.9692933401118454,
+          "random_95th_percentile": 0.9723334207980058,
+          "random_percentile": 0.895,
+          "selector_proxy_vs_final_glrt_spearman": 0.9939452580481165
+        },
+        "5": {
+          "learned_synthetic_teacher_spearman": 0.9777539072109156,
+          "random_95th_percentile": 0.9796567831586773,
+          "random_percentile": 0.89,
+          "selector_proxy_vs_final_glrt_spearman": 0.9897748331338045
+        },
+        "9": {
+          "learned_synthetic_teacher_spearman": 0.981929252013054,
+          "random_95th_percentile": 0.9871962925911957,
+          "random_percentile": 0.69,
+          "selector_proxy_vs_final_glrt_spearman": 0.9911835610148089
+        }
+      },
+      "status": "SUPPORTED"
+    },
+    "SYNTHETIC_REAL_PHYSICS_MISMATCH": {
+      "numeric_evidence": {
+        "availability": "POST_HOC_DIAGNOSTIC",
+        "median_projection_ratio": 0.9067752550912317
+      },
+      "status": "SUPPORTED"
+    }
+  },
+  "schema": "pg_scc_root_cause_verdict.v1",
+  "verdict": "REPAIRABLE_BUT_REQUIRES_NEW_CONFIRMATION"
+}
