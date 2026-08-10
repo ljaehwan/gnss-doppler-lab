@@ -1,0 +1,23 @@
+{
+  "authorized_failure_metadata_only": {
+    "attempt_state_sha256": "9203c3a998e7e92a320e6627cce799f6f008ea1721f14e1e8baa482ab163b4d0",
+    "error": "RuntimeError: FAIL_CLOSED_SUPPORT_PREFLIGHT:committed semantics/accounting mismatch:r1_identity",
+    "exit_code": 1,
+    "failure_stage": "validate_committed_support_preflight before protected loader invocation",
+    "implementation_freeze_sha": "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d",
+    "preregistration_sha": "5ba338e8b946fb7cb604d827e47f94eff72b0fa6",
+    "protected_attempt_count": 1,
+    "protected_loader_invoked": false,
+    "result_commit": null,
+    "scientific_verdict": "UNAVAILABLE",
+    "terminal_state": "TERMINAL_FAIL_CLOSED"
+  },
+  "branch": "research/pg-scc-stage0-r2-repair-followup",
+  "immutability": {
+    "partial_scientific_outputs_inspected": false,
+    "partial_scientific_outputs_reused": false,
+    "predecessor_branch_or_worktree_mutated": false,
+    "retry_on_predecessor_branch": false
+  },
+  "schema": "pg_scc_stage0_r2_r1_identity_repair_predecessor_failure_binding.v1"
+}

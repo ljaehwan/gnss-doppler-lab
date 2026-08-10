@@ -1,0 +1,26 @@
+{
+  "base_sha": "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d",
+  "files": {
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1/config.json": "336802a95e82df1da82822520fe8bd838bf18ce17da6ae29aa5695449f3b67f5",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1/predecessor_failure_binding.json": "84e3cad81f17421c36fc535fbf052204a90cce08ae60c7f8320011dd0ccd2d66",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1/preregistration.json": "cebc2cd7993be52b4311f8afa35afbf4b12d976c5d8380743bc595ea44b7f5cf",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1/r1_failure_binding.json": "550f3fde25742b571fa0a5206a96d0454300d1fe1732671b9bf655ccbb3f379f",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1/source_commit.json": "571b80ec11a9f860317f84c5d1808fddda270e988dfb8d25948df0999de0f8a4",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1/support_preflight.json": "ca5b2b9e21dcfdd5ded5163a456b04cfeec82fcfbe1708e54980d4167656acd5",
+    "artifacts/pg_scc_stage0_r2_r1_identity_repair_cycle1/zero_protected_access.json": "d8c13d21a24806204b8b91e93276839fde5153b55485e3c550447668f84f47dd",
+    "scripts/run_pg_scc_root_cause_audit.py": "78f8670238bd39a3339a85d9ab2ea8e2abea06a4122c4ee453e0852e7a717601",
+    "scripts/verify_pg_scc_r2_r1_identity_repair.py": "6f318e6f19d6b12f858432cab5b2addec07ba9e536b955094d10f7b54cdb967d",
+    "scripts/verify_pg_scc_r2_r1_identity_semantic_diff.py": "23822a9cad9e253ad37cb1da24b1c8bc8d8f5439799eabb401e0a1a8f1d96664",
+    "scripts/verify_pg_scc_r2_repair_followup.py": "633f061fbd5856f898a7eae1c97d5bfd9b23a43fb11a29c6d437b6a31810a2b5",
+    "scripts/verify_pg_scc_r2_semantic_diff.py": "3067d707a315e50568fe5d2025923aa8cb43e36918ebbe1aeddf3f73304fa0b8",
+    "scripts/verify_pg_scc_root_cause_audit.py": "25b4c8cb7138e8219f56014ad675b4088a30f105d033ba99a1d55d94adde3cdb",
+    "tests/test_pg_scc_r2_preflight.py": "2184ad2dde79d7b0c73341234ca56d4a48b7fafc6c26b65f0dac960eda3326ff",
+    "tests/test_pg_scc_r2_r1_identity_repair.py": "c517e54dd05924b7b17a39f46bffab577fb37dd0113768ec963e39eefa72634c",
+    "tests/test_pg_scc_r2_repair_followup.py": "69efa0c30a0ace8bb0b18784198a997e03ae233889f5359f39fc3cfdf26626c7",
+    "tests/test_pg_scc_root_cause_audit.py": "9c40f7ffdf6a468d08ffe8354367e3a875c11862f224c82cabab93946a018186"
+  },
+  "implementation_freeze_rule": "commit containing these exact hashes",
+  "preregistration_sha": "174610776c69f9ab2bc085be191cbdc563934625",
+  "protected_score_fields_read_before_freeze": 0,
+  "schema": "pg_scc_stage0_r2_r1_identity_repair_implementation_manifest.v1"
+}

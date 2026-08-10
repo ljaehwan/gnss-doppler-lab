@@ -1,0 +1,23 @@
+{
+  "authorized_diagnostic_evidence": [
+    "committed source",
+    "committed metadata and accounting contracts",
+    "synthetic fixtures",
+    "fixed-whitelist metadata projection excluding protected score fields",
+    "authorized predecessor failure and provenance metadata"
+  ],
+  "containers_opened_for_metadata_projection": [
+    "artifacts/acaf_nf_stage1_r3_static_detection/clean_features.json",
+    "artifacts/acaf_nf_stage1_r3_static_detection/attack_features.json",
+    "artifacts/pg_scc_stage0_static_k9/per_epoch_scores.csv"
+  ],
+  "cycle": 1,
+  "diagnosis": "r1_identity serialized changed-path accounting was generated before all ignored cycle provenance paths were staged, so committed and reconstructed identity differed despite frozen scientific semantics.",
+  "partial_predecessor_scientific_outputs_inspected": false,
+  "partial_predecessor_scientific_outputs_reused": false,
+  "protected_loader_invoked": false,
+  "protected_score_fields_projected_or_read": 0,
+  "protected_score_fields_read": 0,
+  "repair_classification": "IDENTITY_ACCOUNTING_PROVENANCE_ONLY",
+  "schema": "pg_scc_stage0_r2_r1_identity_repair_zero_protected_access.v1"
+}
