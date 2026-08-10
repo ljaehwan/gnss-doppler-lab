@@ -1,0 +1,15 @@
+{
+  "attempt_count": 1,
+  "canonical_invocation": "python3 scripts/run_pg_scc_root_cause_audit.py --implementation-sha \"$(git rev-parse HEAD)\" --output artifacts/pg_scc_stage0_r2_repair_followup",
+  "error": "RuntimeError: FAIL_CLOSED_SUPPORT_PREFLIGHT:committed semantics/accounting mismatch:r1_identity",
+  "exit_code": 1,
+  "failure_stage": "validate_committed_support_preflight before protected loader invocation",
+  "implementation_sha": "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d",
+  "predecessor_partial_outputs_reused": false,
+  "protected_loader_invoked": false,
+  "result_commit": null,
+  "retry_permitted": false,
+  "schema": "pg_scc_stage0_r2_repair_followup_attempt_state.v1",
+  "scientific_verdict": "UNAVAILABLE",
+  "state": "TERMINAL_FAIL_CLOSED"
+}

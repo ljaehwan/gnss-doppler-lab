@@ -1,0 +1,57 @@
+{
+  "artifact_namespace": "artifacts/pg_scc_stage0_r2_repair_followup",
+  "attempt": {
+    "attempt_count": 1,
+    "canonical_invocation": "python3 scripts/run_pg_scc_root_cause_audit.py --implementation-sha \"$(git rev-parse HEAD)\" --output artifacts/pg_scc_stage0_r2_repair_followup",
+    "error": "RuntimeError: FAIL_CLOSED_SUPPORT_PREFLIGHT:committed semantics/accounting mismatch:r1_identity",
+    "exit_code": 1,
+    "failure_stage": "validate_committed_support_preflight before protected loader invocation",
+    "protected_loader_invoked": false,
+    "retry_permitted": false,
+    "traceback": "protected_attempt_traceback.txt"
+  },
+  "delivery_reconciliation": {
+    "active_producer_observed": false,
+    "fresh_clone_verifier": "FAIL",
+    "json_validation": "PASS",
+    "normal_verifier": "FAIL",
+    "related_tests": "PASS_27",
+    "semantic_verifier": "PASS",
+    "timestamp_utc": "2026-08-10T23:46:07Z"
+  },
+  "git_before_delivery_commit": {
+    "ahead_behind": [
+      0,
+      0
+    ],
+    "branch": "research/pg-scc-stage0-r2-repair-followup",
+    "head": "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d",
+    "main_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+    "main_unchanged": true,
+    "remote_sha": "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d"
+  },
+  "implementation_sha": "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d",
+  "missing_scientific_artifacts": [
+    "README.md",
+    "artifact_manifest_sha256.json",
+    "awgn_reaudit.json",
+    "bootstrap_intervals.csv",
+    "calibration_uncertainty.json",
+    "coordinate_contributions.csv",
+    "dense_teacher_diagnostics.json",
+    "k3_exploratory_metrics.csv",
+    "mask_seed_stability.csv",
+    "nested_mask_analysis.csv",
+    "plots",
+    "random_mask_distribution.csv",
+    "reproduction_check.json",
+    "root_cause_verdict.json",
+    "score_dilution_metrics.csv",
+    "selector_proxy_audit.json",
+    "synthetic_real_mismatch.csv"
+  ],
+  "result_commit": null,
+  "schema": "pg_scc_stage0_r2_repair_followup_fail_closed_delivery.v1",
+  "scientific_verdict": "UNAVAILABLE",
+  "state": "TERMINAL_FAIL_CLOSED"
+}

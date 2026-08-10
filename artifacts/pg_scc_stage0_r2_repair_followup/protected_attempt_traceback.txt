@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-pg-scc-stage0-r2-repair-followup/scripts/run_pg_scc_root_cause_audit.py", line 2087, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-pg-scc-stage0-r2-repair-followup/scripts/run_pg_scc_root_cause_audit.py", line 1980, in main
+    protected = load_protected_inputs_after_preflight()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-pg-scc-stage0-r2-repair-followup/scripts/run_pg_scc_root_cause_audit.py", line 838, in load_protected_inputs_after_preflight
+    validate_committed_support_preflight(
+  File "/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-pg-scc-stage0-r2-repair-followup/scripts/run_pg_scc_root_cause_audit.py", line 813, in validate_committed_support_preflight
+    raise RuntimeError(
+RuntimeError: FAIL_CLOSED_SUPPORT_PREFLIGHT:committed semantics/accounting mismatch:r1_identity

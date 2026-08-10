@@ -1,0 +1,9 @@
+...........................                                              [100%]
+=============================== warnings summary ===============================
+tests/test_pg_scc_root_cause_audit.py::test_diagnostic_formulae_and_unavailable_zero_denominator
+  /home/ubuntu/.local/lib/python3.12/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+    warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+27 passed, 1 warning in 12.11s
+TESTS_EXIT=0

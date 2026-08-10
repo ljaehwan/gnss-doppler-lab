@@ -1,0 +1,8 @@
+{
+  "errors": [],
+  "exit_code": 0,
+  "invocation": "python3 scripts/verify_pg_scc_r2_semantic_diff.py --base 05cb5a5421461bb90bafc6cd3683a119ddf09555 --output /tmp/pg_scc_r2_semantic_diff_audit.json",
+  "non_plot_scientific_functions_equivalent": true,
+  "status": "PASS",
+  "unexpected_changed_paths": []
+}

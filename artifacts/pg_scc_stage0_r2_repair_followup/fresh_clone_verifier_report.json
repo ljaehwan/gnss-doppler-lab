@@ -1,0 +1,29 @@
+{
+  "errors": [
+    "base_verifier:missing:README.md",
+    "base_verifier:missing:artifact_manifest_sha256.json",
+    "base_verifier:missing:awgn_reaudit.json",
+    "base_verifier:missing:bootstrap_intervals.csv",
+    "base_verifier:missing:calibration_uncertainty.json",
+    "base_verifier:missing:coordinate_contributions.csv",
+    "base_verifier:missing:dense_teacher_diagnostics.json",
+    "base_verifier:missing:k3_exploratory_metrics.csv",
+    "base_verifier:missing:mask_seed_stability.csv",
+    "base_verifier:missing:nested_mask_analysis.csv",
+    "base_verifier:missing:plots",
+    "base_verifier:missing:random_mask_distribution.csv",
+    "base_verifier:missing:reproduction_check.json",
+    "base_verifier:missing:root_cause_verdict.json",
+    "base_verifier:missing:score_dilution_metrics.csv",
+    "base_verifier:missing:selector_proxy_audit.json",
+    "base_verifier:missing:synthetic_real_mismatch.csv",
+    "missing:attempt_state.json",
+    "missing:pre_run_state.json"
+  ],
+  "exit_code": 1,
+  "fresh_clone": true,
+  "invocation": "python3 scripts/verify_pg_scc_r2_repair_followup.py --artifact artifacts/pg_scc_stage0_r2_repair_followup --fresh-clone --revision HEAD",
+  "revision": "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d",
+  "schema": "pg_scc_stage0_r2_repair_followup_verification.v1",
+  "status": "FAIL"
+}

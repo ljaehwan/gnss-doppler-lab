@@ -1,0 +1,22 @@
+{
+  "attempt_count_before_invocation": 0,
+  "base_sha": "05cb5a5421461bb90bafc6cd3683a119ddf09555",
+  "branch": "research/pg-scc-stage0-r2-repair-followup",
+  "canonical_invocation": "python3 scripts/run_pg_scc_root_cause_audit.py --implementation-sha \"$(git rev-parse HEAD)\" --output artifacts/pg_scc_stage0_r2_repair_followup",
+  "implementation_manifest_sha256": "9018b4fe324129cbef1ad44c14390980c42c085fd84619e2983072d79694f8d2",
+  "implementation_sha": "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d",
+  "local_remote_ahead_behind": [
+    0,
+    0
+  ],
+  "planned_protected_attempt_count": 1,
+  "predecessor_partial_outputs_reused": false,
+  "preregistration_sha": "5ba338e8b946fb7cb604d827e47f94eff72b0fa6",
+  "preregistration_sha256": "b6b47e431ccc10dff76e08e6ba9bbbd4f9140bd23977ee9af2ab6aba15adc8a1",
+  "protected_score_fields_read_before_freeze": 0,
+  "schema": "pg_scc_stage0_r2_repair_followup_pre_run_state.v1",
+  "semantic_diff_audit_sha256": "b64ee5b20b1b74d88e8a151d755cad1628658e7bf4a980e0ce2bb3fda9940857",
+  "state": "READY",
+  "support_preflight_sha256": "7bc731b489ea0b2ea2f6e32717ee5a8781cb334003ba6bdc1b669314ecaaecf0",
+  "timestamp_utc": "2026-08-10T05:41:03Z"
+}
