@@ -45,6 +45,7 @@ MANIFEST_FILES = (
     "artifacts/pg_scc_stage0_r2_validator_repair/validator_root_cause.json",
     "artifacts/pg_scc_stage0_r2_validator_repair/test_report.txt",
     "artifacts/pg_scc_stage0_r2_validator_repair/semantic_diff_audit.json",
+    "artifacts/pg_scc_stage0_r2_validator_finalization_followup/preregistration.json",
 )
 PLOTS = (
     "nested_coordinate_map.png", "clean_variance_attack_contribution.png",
@@ -73,6 +74,7 @@ def _load_base_verifier():
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
+    module.SOURCE_SHA256 = SOURCE_SHA256
     return module
 
 

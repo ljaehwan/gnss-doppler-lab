@@ -1,0 +1,31 @@
+{
+  "final_full_matrix": {
+    "command": "python3 -m pytest -q tests/test_pg_scc_root_cause_audit.py tests/test_pg_scc_r2_preflight.py tests/test_pg_scc_r2_repair_followup.py tests/test_pg_scc_r2_validator_repair.py",
+    "passed": 54,
+    "status": "PASS",
+    "warnings": 1
+  },
+  "focused_green": {
+    "command": "python3 -m pytest -q tests/test_pg_scc_r2_validator_repair.py",
+    "passed": 27,
+    "status": "PASS",
+    "warnings": 1
+  },
+  "initial_full_matrix_metadata_guard": {
+    "failed": 1,
+    "failure": "unregistered hash-preserved result paths in legacy R1 identity allowlist",
+    "passed": 53,
+    "resolution": "registered only preregistered preserved result/finalization paths",
+    "warnings": 1
+  },
+  "red": {
+    "command": "python3 -m pytest -q tests/test_pg_scc_r2_validator_repair.py::test_finalization_validates_outputs_before_manifest_and_manifest_after",
+    "expected_failure": "_validate_required_outputs() got an unexpected keyword argument 'require_manifest'",
+    "failed": 1,
+    "status": "RED",
+    "warnings": 1
+  },
+  "schema": "pg_scc_stage0_r2_validator_finalization_test_report.v1",
+  "status": "PASS",
+  "timestamp_utc": "2026-08-11T05:50:36Z"
+}

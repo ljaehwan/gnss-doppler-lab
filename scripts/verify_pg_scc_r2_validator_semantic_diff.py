@@ -16,6 +16,8 @@ RUNNER = "scripts/run_pg_scc_root_cause_audit.py"
 PREREGISTRATION_SHA = "c7887316ed981d0e7cde74b2bbadeb1cf83bb233"
 ALLOWED_CHANGED_FUNCTIONS = {
     "_write_followup_attempt_state": "validator-repair attempt-state schema binding only",
+    "_validate_required_outputs": "metadata-only two-phase manifest finalization validation",
+    "main": "metadata-only manifest finalization ordering",
     "build_metadata_support_preflight_report": "validator-repair source provenance binding only",
     "verify_preregistration": "validator-repair branch/base provenance gate",
     "verify_implementation_freeze": "validator-repair branch/namespace provenance gate",
@@ -76,6 +78,7 @@ MANIFEST_FILES = (
     "artifacts/pg_scc_stage0_r2_validator_repair/validator_root_cause.json",
     "artifacts/pg_scc_stage0_r2_validator_repair/test_report.txt",
     "artifacts/pg_scc_stage0_r2_validator_repair/semantic_diff_audit.json",
+    "artifacts/pg_scc_stage0_r2_validator_finalization_followup/preregistration.json",
 )
 
 
@@ -141,6 +144,7 @@ def _allowed_path(path: str) -> bool:
             "tests/test_pg_scc_r2_validator_repair.py",
         }
         or path.startswith("artifacts/pg_scc_stage0_r2_validator_repair/")
+        or path.startswith("artifacts/pg_scc_stage0_r2_validator_finalization_followup/")
     )
 
 

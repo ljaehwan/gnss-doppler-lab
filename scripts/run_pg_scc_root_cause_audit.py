@@ -118,6 +118,37 @@ PHASE2_ALLOWED_CHANGED_PATHS = {
     "scripts/verify_pg_scc_r2_validator_repair.py",
     "scripts/verify_pg_scc_r2_validator_semantic_diff.py",
     "tests/test_pg_scc_r2_validator_repair.py",
+    "artifacts/pg_scc_stage0_r2_validator_repair/README.md",
+    "artifacts/pg_scc_stage0_r2_validator_repair/artifact_manifest_sha256.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/awgn_reaudit.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/bootstrap_intervals.csv",
+    "artifacts/pg_scc_stage0_r2_validator_repair/calibration_uncertainty.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/coordinate_contributions.csv",
+    "artifacts/pg_scc_stage0_r2_validator_repair/dense_teacher_diagnostics.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/k3_exploratory_metrics.csv",
+    "artifacts/pg_scc_stage0_r2_validator_repair/mask_seed_stability.csv",
+    "artifacts/pg_scc_stage0_r2_validator_repair/nested_mask_analysis.csv",
+    "artifacts/pg_scc_stage0_r2_validator_repair/plots/calibration_threshold_uncertainty.png",
+    "artifacts/pg_scc_stage0_r2_validator_repair/plots/clean_variance_attack_contribution.png",
+    "artifacts/pg_scc_stage0_r2_validator_repair/plots/detector_performance.png",
+    "artifacts/pg_scc_stage0_r2_validator_repair/plots/empirical_noise_awgn_response.png",
+    "artifacts/pg_scc_stage0_r2_validator_repair/plots/learned_random_percentile.png",
+    "artifacts/pg_scc_stage0_r2_validator_repair/plots/nested_coordinate_map.png",
+    "artifacts/pg_scc_stage0_r2_validator_repair/plots/rss_score_dilution.png",
+    "artifacts/pg_scc_stage0_r2_validator_repair/plots/seed_mask_stability.png",
+    "artifacts/pg_scc_stage0_r2_validator_repair/plots/synthetic_real_delay_doppler.png",
+    "artifacts/pg_scc_stage0_r2_validator_repair/random_mask_distribution.csv",
+    "artifacts/pg_scc_stage0_r2_validator_repair/root_cause_verdict.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/score_dilution_metrics.csv",
+    "artifacts/pg_scc_stage0_r2_validator_repair/selector_proxy_audit.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/synthetic_real_mismatch.csv",
+    "artifacts/pg_scc_stage0_r2_validator_finalization_followup/finalization_report.json",
+    "artifacts/pg_scc_stage0_r2_validator_finalization_followup/fresh_clone_verifier_report.json",
+    "artifacts/pg_scc_stage0_r2_validator_finalization_followup/ordinary_verifier_report.json",
+    "artifacts/pg_scc_stage0_r2_validator_finalization_followup/preserved_hash_audit.json",
+    "artifacts/pg_scc_stage0_r2_validator_finalization_followup/preregistration.json",
+    "artifacts/pg_scc_stage0_r2_validator_finalization_followup/semantic_guard_report.json",
+    "artifacts/pg_scc_stage0_r2_validator_finalization_followup/test_report.json",
 }
 CORE_METHODS = (
     "pg_scc_k3", "pg_scc_k5", "pg_scc_k9", "fixed9", "epl3",
@@ -174,6 +205,7 @@ IMPLEMENTATION_MANIFEST_FILES = (
     "artifacts/pg_scc_stage0_r2_validator_repair/validator_root_cause.json",
     "artifacts/pg_scc_stage0_r2_validator_repair/test_report.txt",
     "artifacts/pg_scc_stage0_r2_validator_repair/semantic_diff_audit.json",
+    "artifacts/pg_scc_stage0_r2_validator_finalization_followup/preregistration.json",
 )
 ALLOWED_ROLES = {
     "selector": {"clean_train", "clean_selection", "synthetic_train", "synthetic_validation"},
@@ -2119,8 +2151,12 @@ def _write_readme(freeze: Mapping[str, Any], reproduction: Mapping[str, Any],
     (OUTPUT / "README.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def _validate_required_outputs() -> None:
-    missing = [name for name in REQUIRED_ARTIFACTS if not (OUTPUT / name).exists()]
+def _validate_required_outputs(*, require_manifest: bool = True) -> None:
+    required = [
+        name for name in REQUIRED_ARTIFACTS
+        if require_manifest or name != "artifact_manifest_sha256.json"
+    ]
+    missing = [name for name in required if not (OUTPUT / name).exists()]
     missing.extend(f"plots/{name}" for name in REQUIRED_PLOTS if not (OUTPUT / "plots" / name).is_file())
     if missing:
         raise RuntimeError(f"required artifact schema incomplete: {missing}")
@@ -2131,6 +2167,15 @@ def _validate_required_outputs() -> None:
         raise RuntimeError("invalid root-cause verdict")
     if not verdict.get("exactly_one_verdict"):
         raise RuntimeError("verdict cardinality failure")
+    if require_manifest:
+        manifest = load_json(OUTPUT / "artifact_manifest_sha256.json")
+        actual = {
+            str(path.relative_to(OUTPUT)): sha256(path)
+            for path in sorted(OUTPUT.rglob("*"))
+            if path.is_file() and path.name != "artifact_manifest_sha256.json"
+        }
+        if manifest != actual:
+            raise RuntimeError("artifact manifest mismatch")
 
 
 def _write_followup_attempt_state(freeze: Mapping[str, Any], verdict: Mapping[str, Any]) -> None:
@@ -2278,8 +2323,9 @@ def main() -> int:
          "navigation-bit truth", "tracker recentering state", "multipath ground truth"],
     )
     _write_followup_attempt_state(freeze, verdict)
-    _validate_required_outputs()
+    _validate_required_outputs(require_manifest=False)
     finalize_manifest(OUTPUT)
+    _validate_required_outputs(require_manifest=True)
     print(json.dumps({"status": "COMPLETE", "verdict": verdict["verdict"],
                       "implementation_sha": freeze["implementation_sha"]}, sort_keys=True))
     return 0

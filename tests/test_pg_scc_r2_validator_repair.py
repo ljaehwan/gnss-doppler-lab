@@ -321,3 +321,40 @@ def test_independent_verifier_rejects_freeze_dirty_tamper(status_line):
 def test_independent_verifier_allows_untracked_preregistered_pre_run_state():
     verifier = load_validator_verifier()
     assert verifier._preexecution_dirty_errors(f"?? {PRE_RUN_PATH}") == []
+
+
+def test_finalization_validates_outputs_before_manifest_and_manifest_after(
+    monkeypatch, tmp_path
+):
+    runner = load_runner()
+    monkeypatch.setattr(runner, "OUTPUT", tmp_path)
+    for relative in runner.REQUIRED_ARTIFACTS:
+        path = tmp_path / relative
+        if relative in {"plots", "artifact_manifest_sha256.json"}:
+            continue
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("{}\n" if path.suffix == ".json" else "preserved\n", encoding="utf-8")
+    (tmp_path / "root_cause_verdict.json").write_text(
+        json.dumps(
+            {
+                "exactly_one_verdict": True,
+                "root_causes": {name: {} for name in runner.REQUIRED_ROOT_CAUSES},
+                "verdict": "REPAIRABLE_BUT_REQUIRES_NEW_CONFIRMATION",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    plot_root = tmp_path / "plots"
+    plot_root.mkdir()
+    for name in runner.REQUIRED_PLOTS:
+        (plot_root / name).write_bytes(b"preserved-plot")
+
+    runner._validate_required_outputs(require_manifest=False)
+    manifest = runner.finalize_manifest(tmp_path)
+    assert "artifact_manifest_sha256.json" not in manifest
+    runner._validate_required_outputs(require_manifest=True)
+
+    (tmp_path / "README.md").write_text("tampered\n", encoding="utf-8")
+    with pytest.raises(RuntimeError, match="artifact manifest mismatch"):
+        runner._validate_required_outputs(require_manifest=True)

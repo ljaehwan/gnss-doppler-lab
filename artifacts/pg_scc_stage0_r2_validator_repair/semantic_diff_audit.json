@@ -1,7 +1,9 @@
 {
   "allowed_changed_functions": {
+    "_validate_required_outputs": "metadata-only two-phase manifest finalization validation",
     "_write_followup_attempt_state": "validator-repair attempt-state schema binding only",
     "build_metadata_support_preflight_report": "validator-repair source provenance binding only",
+    "main": "metadata-only manifest finalization ordering",
     "validate_committed_support_preflight": "stable exact plus bounded operational-path validation",
     "verify_implementation_freeze": "validator-repair branch/namespace provenance gate",
     "verify_preregistration": "validator-repair branch/base provenance gate"
@@ -232,9 +234,9 @@
     },
     "_validate_required_outputs": {
       "base_ast_sha256": "41e143566fc53c15bda4d9e5d0cec10f1786f11f5a9e9cadffc71118a557c9c9",
-      "classification": "SCIENTIFIC_OR_UTILITY_UNCHANGED",
-      "current_ast_sha256": "41e143566fc53c15bda4d9e5d0cec10f1786f11f5a9e9cadffc71118a557c9c9",
-      "equivalent": true
+      "classification": "metadata-only two-phase manifest finalization validation",
+      "current_ast_sha256": "ec40e0a9da7a3558e0e704da44c5491ef2aaf617e81e44dfdd4c25bceaac0db2",
+      "equivalent": false
     },
     "_write_followup_attempt_state": {
       "base_ast_sha256": "59b3ebb33865e9695bdc3136c713cb9d007797c1ad30dfd9a7e45f50fa815f9b",
@@ -358,9 +360,9 @@
     },
     "main": {
       "base_ast_sha256": "51b750c2868e8de39391e74b28b5618cb48c5139876922fc83adecff4025b62c",
-      "classification": "SCIENTIFIC_OR_UTILITY_UNCHANGED",
-      "current_ast_sha256": "51b750c2868e8de39391e74b28b5618cb48c5139876922fc83adecff4025b62c",
-      "equivalent": true
+      "classification": "metadata-only manifest finalization ordering",
+      "current_ast_sha256": "d768abbc7f0c1367759c6ee2496b6e1942b0c9ef85e570189e3d84d8864e916a",
+      "equivalent": false
     },
     "metric_bundle": {
       "base_ast_sha256": "68e0839aa135ad62f190b602d211e595378b48aef99b3e383b0670ddd91b3223",
