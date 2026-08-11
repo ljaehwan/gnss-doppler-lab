@@ -1,0 +1,685 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.frozen-config.v1",
+  "phase": 1,
+  "implementation_status": "NOT_IMPLEMENTED",
+  "random_seed": 23,
+  "constants": {
+    "speed_of_light_m_s": 299792458.0,
+    "gps_l1_hz": 1575420000.0,
+    "gps_ca_chip_rate_hz": 1023000.0,
+    "l1_to_ca_ratio": 1540.0,
+    "code_chip_m": 293.0522561094819,
+    "lambda_L1_m": 0.19029367279836487,
+    "code_chip_m_formula": "speed_of_light_m_s/gps_ca_chip_rate_hz",
+    "lambda_L1_m_formula": "speed_of_light_m_s/gps_l1_hz"
+  },
+  "epoching": {
+    "epoch_s": 0.02,
+    "bin_interval": "[start,end)",
+    "aggregation": "per-PRN componentwise median using only rows whose timestamp is inside the bin",
+    "minimum_valid_prns": 4,
+    "duplicate_policy": "exact duplicate scientific rows are fatal",
+    "gap_reset_s": 0.03,
+    "variable_prn_set": true,
+    "prn_permutation_invariant": true,
+    "schedule": "epoch k is [0.02*k,0.02*(k+1)) anchored to recording start",
+    "availability_timestamp": "0.02*(k+1), the right endpoint",
+    "anchor_s": 0.0
+  },
+  "cleanstatic_roles": {
+    "warmup_excluded_s": "[0,30)",
+    "train_s": "[30,210)",
+    "guard_1_s": "[210,220)",
+    "calibration_s": "[220,340)",
+    "guard_2_s": "[340,350)",
+    "holdout_s": "[350,470)",
+    "tail_excluded_s": "[470,480.16392192)",
+    "history_rule": "No epoch or raw sample may occur in more than one role. Predictor/state histories reset at each role, scenario, segment, channel/PRN identity change, or gap; the first 0.20 s after reset is ineligible. Score windows must be wholly contained in one role.",
+    "inner_roles": {
+      "train_fit_s": "[30,140)",
+      "guard_s": "[140,150)",
+      "lambda_validation_s": "[150,210)",
+      "containment": "All are half-open; no raw sample, epoch, history, score window, covariance edge, or state-prior edge crosses an inner-role boundary."
+    }
+  },
+  "signed_q": {
+    "ordered_channels": [
+      "I_E_normalized",
+      "Q_E_normalized",
+      "I_P_normalized",
+      "Q_P_normalized",
+      "I_L_normalized",
+      "Q_L_normalized",
+      "code_error_chips",
+      "pll_phase_error_cycles",
+      "carrier_doppler_hz",
+      "code_frequency_offset_chips_s"
+    ],
+    "complex_normalization": "For C_E,C_P,C_L, divide each signed I/Q component by sqrt(|C_E|^2+|C_P|^2+|C_L|^2)+epsilon_i; epsilon_i is the cleanStatic-train q0.001 positive denominator and is frozen before calibration.",
+    "code_frequency_offset": "code_freq_chips - 1023000",
+    "forbidden_inputs": [
+      "IQ power",
+      "Prompt magnitude as a score",
+      "C/N0 as a score",
+      "carrier_lock_test as a score",
+      "PRN ID as a numeric feature"
+    ],
+    "nuisance_only": [
+      "carrier_lock_test"
+    ],
+    "grouping_only": [
+      "PRN",
+      "channel",
+      "segment_index"
+    ],
+    "field_semantics": {
+      "carr_error_hz": "Wrapped Costas PLL discriminator in cycles, not Hz; direct range loading is CONDITIONAL on the closed_loop_transfer_jacobian preflight, including wrapping and linear range.",
+      "carr_error_filt_hz": "Bit-identical to carrier_doppler_hz on cleanStatic; excluded from signed_q as a duplicate and never a separate innovation.",
+      "code_error_chips": "Source-comment unit ambiguity remains; direct range loading is CONDITIONAL on the closed_loop_transfer_jacobian preflight.",
+      "carrier_doppler_hz": "NCO state level; only its frozen one-step VAR residual may carry range-rate loading after transfer preflight.",
+      "code_frequency_offset_chips_s": "NCO state offset level; only its frozen one-step VAR residual may carry range-rate loading after transfer preflight.",
+      "complex_EPL": "Covariance-only with zero direct geometry loading; no separate source/synthetic Jacobian is preregistered."
+    },
+    "innovation_rule": "Every scientific innovation is the frozen one-step VAR residual. No discriminator, loop-filter, or NCO raw field is itself called an innovation.",
+    "metadata_only_excluded_from_primary": [
+      "CN0_SNV_dB_Hz"
+    ]
+  },
+  "h0_predictor": {
+    "model": "shared-coefficient linear VAR(10)",
+    "lag_epochs": 10,
+    "history_s": 0.2,
+    "fit_source": "cleanStatic train-fit [30,140) only",
+    "fit": "ridge least squares pooled over eligible PRN histories with one shared intercept and one shared coefficient matrix per lag; no PRN parameters",
+    "ridge_grid": [
+      0.0001,
+      0.001,
+      0.01,
+      0.1,
+      1.0,
+      10.0
+    ],
+    "ridge_selection": "Use train-fit [30,140), guard [140,150), validation [150,210), all half-open; minimize arithmetic mean one-step squared error on the exact common eligible validation support, relative ties within 1e-12 choose larger ridge.",
+    "output": "signed one-step residual r_i(t)=q_i(t)-qhat_i(t)"
+  },
+  "normal_whitening": {
+    "fit_source": "cleanStatic train-fit [30,140) only",
+    "mean": "Per ordered q channel Huber-1.345 location from eligible per-PRN one-step VAR residuals.",
+    "covariance": "Ledoit-Wolf Sigma_train on centered eligible per-PRN residual vectors.",
+    "eigendecomposition": "Symmetrize Sigma_train as (Sigma+Sigma^T)/2, compute numpy.linalg.eigh, and form the symmetric inverse square root V*diag(floored_eigenvalue^-1/2)*V^T.",
+    "eigenvalue_floor": "max(1e-8*largest_eigenvalue,1e-8 absolute if largest_eigenvalue is zero); negative/nonfinite largest eigenvalue is validity failure.",
+    "formula": "z_i,t=Sigma_train^(-1/2)*(r_i,t-mu_train)",
+    "coordinates": "Gamma is estimated only after this pooled per-PRN whitening, in z coordinates.",
+    "conditioning": "none; calibration and attacks fit no score-function parameter",
+    "sign_preserved": true
+  },
+  "hypotheses": {
+    "H0": "Frozen normal VAR residual model with no extra coordinated input.",
+    "H1_state_order": [
+      "delta_p_x_m",
+      "delta_p_y_m",
+      "delta_p_z_m",
+      "delta_b_m",
+      "delta_v_x_m_s",
+      "delta_v_y_m_s",
+      "delta_v_z_m_s",
+      "delta_bdot_m_s"
+    ],
+    "geometry": {
+      "delta_rho_m": "-u_i^T delta_p + delta_b",
+      "delta_rhodot_m_s": "-u_i^T delta_v + delta_bdot",
+      "code_error_chips": "CONDITIONAL direct range row only after closed_loop_transfer_jacobian proves receiver equation, unit, sign, wrapping/linear range, loop path, and VAR-transferred gain.",
+      "pll_phase_error_cycles": "CONDITIONAL direct range row only after closed_loop_transfer_jacobian proves wrapped Costas equation, unit, sign, linear range, loop path, and VAR-transferred gain.",
+      "carrier_doppler_hz": "CONDITIONAL range-rate loading on the frozen one-step VAR residual of this NCO state level only.",
+      "code_frequency_offset_chips_s": "CONDITIONAL range-rate loading on the frozen one-step VAR residual of this NCO state offset only.",
+      "complex_EPL_channels": "zero direct geometry loading; covariance-only because no separate source/synthetic Jacobian is preregistered",
+      "predictor_transfer": "G is the direct physical design after the exact frozen one-step VAR lag operator and preflight-proved closed-loop signed gain; signs/scales/lags may never be chosen from attacks."
+    },
+    "geometry_sign_preflight": "Before any protected attack rows are opened, a clean/synthetic source-verified unit test must confirm DLL/PLL/Doppler sign conventions. Failure makes A3, A4, and Full UNAVAILABLE; no sign may be selected from attacks.",
+    "state_prior": {
+      "model": "constant velocity for delta_p/delta_b with smooth random walks for delta_v/delta_bdot",
+      "state_transition_dt_s": 0.02,
+      "window_s": 1.0,
+      "stride_s": 0.5,
+      "smoothness_grid": [
+        0.1,
+        1.0,
+        10.0,
+        100.0
+      ],
+      "selection": "Use config.lambda_selection exactly; Full/A3/A4 share Full-selected lambda.",
+      "state_scales": {
+        "position_and_clock_m": 10.0,
+        "velocity_and_clock_drift_m_s": 1.0
+      },
+      "estimator_role": "fixed-prior penalized MAP linear smoother used only to estimate state",
+      "physical_state_order": [
+        "delta_p_x_m",
+        "delta_p_y_m",
+        "delta_p_z_m",
+        "delta_b_m",
+        "delta_v_x_m_s",
+        "delta_v_y_m_s",
+        "delta_v_z_m_s",
+        "delta_bdot_m_s"
+      ],
+      "D": "diag(10 m,10 m,10 m,10 m,1 m/s,1 m/s,1 m/s,1 m/s)",
+      "theta": "theta=D^-1 x",
+      "F_phys": "with dt=0.02 s: p_next=p+v*dt; b_next=b+bdot*dt; v_next=v; bdot_next=bdot",
+      "F_norm": "D^-1 F_phys D",
+      "prior_objective": "lambda*||theta_0||^2 + lambda*sum_k ||theta_{k+1}-F_norm*theta_k||^2 over contiguous epochs",
+      "precision_definition": "R is the unique physical-coordinate precision induced by the exact normalized prior objective above.",
+      "reset": "Every role/segment/gap reset starts a new theta_0 prior; no prior edge crosses a reset."
+    },
+    "closed_loop_transfer_jacobian": {
+      "status": "MANDATORY_PRE_ATTACK",
+      "sources": "source-byte-hash and deterministic source/synthetic tests only; no attack selection",
+      "required_for_each_requested_direct_row": [
+        "source byte hash",
+        "integration interval and cadence",
+        "exact receiver equation",
+        "units",
+        "sign",
+        "discriminator wrapping and linear range",
+        "loop-filter/NCO update path",
+        "deterministic impulse signed gain through the one-step VAR transfer",
+        "deterministic ramp signed gain through the one-step VAR transfer"
+      ],
+      "rows": {
+        "carr_error_hz": "CONDITIONAL wrapped Costas range row",
+        "code_error_chips": "CONDITIONAL source-ambiguous range row",
+        "carrier_doppler_hz": "CONDITIONAL one-step-residual range-rate row from NCO state",
+        "code_freq_chips": "CONDITIONAL one-step-residual range-rate row from NCO state",
+        "complex_EPL": "ZERO_DIRECT_LOADING covariance-only"
+      },
+      "row_failure": "Set that requested direct row loading to exactly zero before protected access.",
+      "method_failure": "If remaining proved code-range/carrier-range/range-rate geometry is insufficient for A3, A4, or Full, mark the affected method UNAVAILABLE and set validity INVALID_EXPERIMENT_NO_ATTACK_ACCESS.",
+      "verdict_rule": "Transfer invalidity/unavailability is not a scientific NO-GO and protected rows remain sealed.",
+      "source_synthetic_vectors": {
+        "epochs": 50,
+        "dt_s": 0.02,
+        "initialization": "all physical states and loop/NCO perturbation states exactly zero",
+        "range_impulse": "rho=+0.01 m only at k=10",
+        "rate_step_ramp": "rhodot=+0.001 m/s for k>=10; rho is accumulated causally from zero using dt=0.02 s",
+        "wrapping": "disabled only for these epsilon tests after proving epsilon lies inside the exact source linear range; verify the wrap boundary separately at its exact source threshold",
+        "analytic_tolerance": {
+          "atol": 1e-12,
+          "rtol": 1e-09
+        },
+        "required_matches": [
+          "each direct pre-VAR q shift equals analytic B_t*x_t",
+          "source wrap boundary",
+          "integration interval/cadence",
+          "source byte hash",
+          "NCO update path"
+        ]
+      },
+      "var_transfer": {
+        "pre_var_shift": "q_shift_t=B_t*x_t",
+        "residual_shift": "g_t=B_t*x_t-sum_(l=1..L) A_l*B_(t-l)*x_(t-l)",
+        "history": "pre-window x and q_shift history is exactly zero after reset",
+        "assembly": "Stack exact observed g_t rows in epoch, numeric-PRN, frozen-channel order, then apply the lower-Cholesky C_t^(-1/2) solve.",
+        "uniqueness": "This is the only G used for MAP/EDF. Apply the frozen shared VAR exactly once and never a second transfer."
+      },
+      "method_availability": {
+        "A3": "requires at least one validated range row: code_error_chips or carr_error_hz-semantic-cycles",
+        "A4": "requires at least one validated rate row: code_freq_chips_s or carrier_doppler_hz",
+        "Full": "requires A3 and A4, plus at least one validated code-family row and at least one validated carrier-family row",
+        "mandatory_full_failure": "INVALID_EXPERIMENT_NO_ATTACK_ACCESS before protected access"
+      }
+    },
+    "geometry_observability": {
+      "matrix": "M_t has rows [-u_i,t^T,1] with PRNs sorted numerically.",
+      "svd": "numpy.linalg.svd(M_t,full_matrices=False); sigma_max=sigma_1; numeric rank counts singular values >1e-10*sigma_max.",
+      "rank_required": 4,
+      "condition_number": "kappa=sigma_max/sigma_4",
+      "maximum_condition_number": 10000.0,
+      "same_range_rate_rule": "The identical M_t rank/condition test applies to range and rate geometry.",
+      "g_scaling": "G uses the already-frozen physical state scaling D.",
+      "epoch_failure": "Epoch unavailable; if required observations/PRNs remain insufficient, window unavailable.",
+      "claim_rule": "Position-vs-clock claims require rank=4 and kappa<=1e4 at every included epoch.",
+      "zero_rule": "If sigma_max is zero/nonfinite or sigma_4 is nonpositive/nonfinite, rank/condition fails and the epoch is unavailable."
+    },
+    "direct_local_physical_jacobian": {
+      "state": "x_t=[p_x_m,p_y_m,p_z_m,b_m,v_x_m_s,v_y_m_s,v_z_m_s,bdot_m_s]",
+      "range": "rho_i,t=-u_i,t^T*p_t+b_t",
+      "range_rate": "rhodot_i,t=-u_i,t^T*v_t+bdot_t",
+      "candidate_pre_var_q_shifts": {
+        "code_error_chips": "-rho_i,t/code_chip_m; CONDITIONAL on source sign/unit preflight",
+        "carr_error_hz_semantic_cycles": "-rho_i,t/lambda_L1_m; CONDITIONAL on Costas wrap/linear-range/source preflight",
+        "code_freq_chips_s": "-rhodot_i,t/code_chip_m; CONDITIONAL on source NCO sign/unit preflight",
+        "carrier_doppler_hz": "-rhodot_i,t/lambda_L1_m; CONDITIONAL on source NCO sign/unit preflight",
+        "complex_EPL_CN0_quality": "exactly zero direct loading"
+      },
+      "source_column_semantics": "The source column carr_error_hz is semantically carr_error_cycles.",
+      "opposite_sign_rule": "If a source equation has the opposite preregistered sign, the preflight fails and that row loading is zero/unavailable. No silent flip; any alternate convention requires a new preregistration before attack access."
+    }
+  },
+  "score": {
+    "estimator": "fixed-prior penalized MAP linear smoother used only to estimate x",
+    "observed_coordinates": "y is stacked common-nuisance-whitened Z on the exact finite observed coordinates; G is the correspondingly whitened H1 design after frozen VAR and closed-loop transfer.",
+    "objective": "xhat=argmin_x ||y-Gx||^2 + x^T R x",
+    "observation_log_likelihood": "ell_obs(y;x)=-0.5*||y-Gx||^2 + constant",
+    "prior_excluded_from_likelihood": [
+      "state-prior quadratic",
+      "state-prior determinant",
+      "marginal/integrated Kalman evidence"
+    ],
+    "influence": "A=G(G^T G+R)^(-1)G^T on observed coordinates",
+    "effective_dof": "nu_eff=trace(A)",
+    "n_obs": "len(y)",
+    "formula": "S=2*(ell_obs(y;xhat)-ell_obs(y;0))-nu_eff*log(n_obs)",
+    "penalty_count": "exactly once",
+    "interpretation": "penalized observation-RSS improvement plus one explicit effective-DoF BIC penalty; raw RSS improvement alone is forbidden",
+    "linear_algebra": "Use stable solves; pseudoinverse is permitted only with frozen rcond=1e-10.",
+    "pseudoinverse_rcond": 1e-10,
+    "required_trace_bounds": "0<=nu_eff<=rank(G)<=n_obs",
+    "clipping": "none",
+    "forbidden_substitutes": [
+      "raw RSS improvement alone",
+      "integrated or marginal state-prior likelihood",
+      "double-counted prior/complexity penalty",
+      "residual RMSE",
+      "power",
+      "norm-only final score",
+      "arbitrary score fusion"
+    ]
+  },
+  "thresholds": {
+    "source": "cleanStatic calibration scores only; calibration fits or conditions no score-function parameter",
+    "scores": "Emit scores from the fully frozen train-fitted model, covariance, Gamma, transfer, lambda, and support rules.",
+    "empirical_quantiles": [
+      0.99,
+      0.995
+    ],
+    "nearest_rank": "For q in {0.99,0.995}, sort n finite eligible calibration scores ascending and select zero-based index ceil(q*n)-1.",
+    "primary": "empirical_q99",
+    "primary_target_fpr": 0.01,
+    "strict_comparison": "alarm iff score > threshold",
+    "conformal_claim": false,
+    "dependence_note": "Temporal dependence prevents finite-sample conformal coverage; false-alarm validity is empirical via cleanStatic holdout and provenance-valid external pre-onset gates."
+  },
+  "persistent_alarm": {
+    "schedule": "Evaluate causally at each current emitted score on scheduled 0.5 s slots.",
+    "definition": "Current endpoint is persistent iff at least 3 of the trailing 5 consecutive scheduled slots, including current, have score>threshold.",
+    "missing_rule": "Any unavailable or missing slot breaks the run; it is neither a non-alarm nor bridgeable.",
+    "assignment": "Persistent status belongs only to the current endpoint and is never assigned retroactively.",
+    "first_persistent_alarm": "First current score availability endpoint satisfying the trailing 3-of-5 rule.",
+    "control_failure": "Any eligible non-clock control has persistent-alarm ratio >0.10 or a run of 10 consecutive available alarm slots at any frozen threshold."
+  },
+  "bootstrap": {
+    "replicates": 2000,
+    "seed": 23,
+    "block_assignment": "For score availability endpoint t_end, b=floor((numpy.nextafter(t_end,-numpy.inf)-phase_start)/10).",
+    "boundary_rule": "A score ending exactly at a 10-s boundary belongs to the preceding block whose data it uses.",
+    "block_bounds": "[phase_start+10*b,min(phase_start+10*(b+1),phase_end))",
+    "final_block": "Include only if duration>=5 s; otherwise discard.",
+    "score_eligibility": "The complete 1-s window must lie in both the phase and assigned block.",
+    "resampling": "Resample blocks with replacement within cell to original block count, preserving paired rows/masks. After resampling, recompute equal row weights within each cell and equal total cell weights.",
+    "ds7_ds8_family": "Sample a family block index and include corresponding available DS7/DS8 members; never independent clusters. Pre-110 replay excluded.",
+    "percentile": "Nearest-rank without interpolation: sort B=2000 values; index=ceil(q*B)-1 zero-based, clamped to [0,B-1].",
+    "one_sided_95_lcb": {
+      "q": 0.05,
+      "index_zero_based": 99
+    },
+    "two_sided_95_interval": {
+      "q_low": 0.025,
+      "index_low_zero_based": 49,
+      "q_high": 0.975,
+      "index_high_zero_based": 1949
+    },
+    "boundary": "No block crosses role, phase, or scenario."
+  },
+  "verification_contract": {
+    "implementation_must_include_and_pass": [
+      {
+        "id": "causal_window",
+        "criterion": "Every feature, residual, state window, and alarm at time t uses no sample after t."
+      },
+      {
+        "id": "normal_only_fit_calibration",
+        "criterion": "Fit, model selection, whitening, calibration, and thresholds use only their frozen cleanStatic roles."
+      },
+      {
+        "id": "raw_sample_role_overlap_leakage",
+        "criterion": "No raw sample index occurs in more than one train/calibration/holdout role or crosses a role-contained score window."
+      },
+      {
+        "id": "epoch_role_overlap_leakage",
+        "criterion": "No derived epoch occurs in more than one train/calibration/holdout role."
+      },
+      {
+        "id": "timestamp_onset",
+        "criterion": "Timestamp derivation, half-open timeline intervals, onset, pull-off, and score availability anchors match the frozen contract."
+      },
+      {
+        "id": "geometry_unit_sign",
+        "criterion": "Source/synthetic tests prove units and signs for every physical loading; ambiguity fails closed without attack-based selection."
+      },
+      {
+        "id": "prn_permutation_invariance",
+        "criterion": "Any PRN ordering permutation leaves scores and availability unchanged within numeric tolerance."
+      },
+      {
+        "id": "variable_prn_count",
+        "criterion": "Valid variable PRN sets score consistently and fewer than four PRNs yields unavailable, never an imputed score."
+      },
+      {
+        "id": "relation_shuffle_preservation",
+        "criterion": "Each relation-destruction control preserves every preregistered marginal/support condition and breaks only its stated relation."
+      },
+      {
+        "id": "dof_correction",
+        "criterion": "Effective DoF equals trace(A) of the fixed-prior MAP smoother observation influence on exact observed coordinates and is included exactly once in the BIC penalty."
+      },
+      {
+        "id": "common_support",
+        "criterion": "All compared methods use the exact same eligible event, epoch, and PRN mask; an unavailable event is removed from every method."
+      },
+      {
+        "id": "deterministic_reproduction",
+        "criterion": "Two clean runs with seed 23 produce byte-identical scientific tables and JSON after canonical serialization."
+      },
+      {
+        "id": "artifact_checksum",
+        "criterion": "Every required artifact passes SHA-256, size, path, ordering, recursion, and temporary-file exclusions."
+      },
+      {
+        "id": "fresh_clone_verifier",
+        "criterion": "A fresh clone at the pinned commit verifies inputs, reruns tests and the clean-only pipeline, and reproduces required outputs without untracked dependencies."
+      },
+      {
+        "id": "closed_loop_transfer_jacobian",
+        "criterion": "Source/synthetic-only preflight proves every requested direct row and deterministic impulse/ramp VAR-transferred gain before attack access."
+      },
+      {
+        "id": "common_mode_gamma",
+        "criterion": "Train-only deterministic Gamma estimator, PSD floor, and identical H0/H1 nuisance covariance pass."
+      },
+      {
+        "id": "geometry_observability",
+        "criterion": "Per-epoch rank=4 LOS checks and state-scaled stacked condition number<=1e4 pass."
+      },
+      {
+        "id": "influence_trace_bounds",
+        "criterion": "With rcond=1e-10, 0<=trace(A)<=rank(G)<=n_obs and penalty is counted exactly once."
+      },
+      {
+        "id": "causal_schedule_persistence",
+        "criterion": "Epoch/window anchors, right-end availability, phase containment, missing-slot breaks, and causal trailing 3-of-5 pass."
+      },
+      {
+        "id": "pooling_bootstrap",
+        "criterion": "Cell-balanced pooling and aligned paired block bootstrap, including DS7/DS8 family clustering, match the frozen equations."
+      },
+      {
+        "id": "ablation_equations",
+        "criterion": "A1, A2, and A5 equations, training sources, priors, resets, thresholds, and contrast-specific support pass."
+      },
+      {
+        "id": "controls_generation",
+        "criterion": "Every mandatory holdout-only control and level is generated with verified semantics or validity fails before protected access."
+      },
+      {
+        "id": "validity_verdict_separation",
+        "criterion": "Invalidity writes invalid_run.json and cannot emit or masquerade as a scientific final verdict."
+      },
+      {
+        "id": "gamma_coordinate_temporal_uniqueness",
+        "criterion": "Prove Sigma symmetric whitening, z-only median Gamma fit, arithmetic centering, independent c_t, exact C_t/blockdiag, and deterministic lower-Cholesky solves."
+      },
+      {
+        "id": "physical_B_VAR_G_uniqueness",
+        "criterion": "Prove exact B formulas/signs/test vectors, one-and-only-one VAR transfer, zero reset history, observed stacking, and C whitening."
+      },
+      {
+        "id": "lambda_gcv_uniqueness",
+        "criterion": "Prove exact inner roles, common lambda support, per-window GCV, relative tie, minimum 100 windows, and sharing rules."
+      },
+      {
+        "id": "weighted_pauc_uniqueness",
+        "criterion": "Prove cell/row weights, exact float64 ties, grouped ROC, alpha interpolation, trapezoid normalization, and paired support."
+      },
+      {
+        "id": "bootstrap_assignment_percentiles",
+        "criterion": "Prove nextafter endpoint blocks, full-window containment, post-resample weights, family clustering, and nearest-rank indices."
+      },
+      {
+        "id": "content_derived_rng_controls",
+        "criterion": "Prove SHA256-derived 128-bit big-endian PCG64 seeds, canonical orders, seed recording, and exact control stages/formulas."
+      },
+      {
+        "id": "invalid_manifest_verifier_uniqueness",
+        "criterion": "Prove exact invalid set/schema, canonical manifest membership, target/evidence commits, and verification PASS distinct from science validity."
+      }
+    ],
+    "all_required": true,
+    "failure_effect": "Scientific/semantic integrity failure => INVALID_EXPERIMENT_NO_ATTACK_ACCESS before attack access. Administrative packaging mismatch => VERIFICATION_ADMIN_WARNING and repaired verifier PASS before delivery."
+  },
+  "protected_access_contract": {
+    "ledger_required": true,
+    "file_access_preflight_required": true,
+    "file_access_trace_required": true,
+    "preflight": "Before any protected read, resolve the canonical path; classify scenario/phase/row range; verify authorization, source checksum, size, timeline, and allowlist; reject directories, globs, prior-result paths, and unclassified reads.",
+    "trace_fields": [
+      "UTC timestamp",
+      "actor/process",
+      "canonical path",
+      "operation",
+      "byte or row range",
+      "scenario and phase",
+      "purpose",
+      "expected and observed SHA-256/size",
+      "authorization",
+      "outcome"
+    ],
+    "trace_rule": "Append an immutable record before and after every protected access; a missing, mismatched, or retroactively created trace invalidates the experiment.",
+    "phase1_state": "NO_PROTECTED_ACCESS_AUTHORIZED"
+  },
+  "normal_common_mode": {
+    "fit_source": "eligible cleanStatic train-fit [30,140) epochs only; N_t>=4; no attack conditioning",
+    "epoch_summary": "For each epoch t, m_t is the coordinatewise median across numerically sorted valid PRNs of z_i,t.",
+    "matrix": "Stack m_t as rows in increasing epoch order; center each q channel by its arithmetic train-fit mean.",
+    "estimator": "Ledoit-Wolf Gamma on the centered m_t row matrix, in z coordinates only.",
+    "eigenvalue_floor": "Symmetrize Gamma; numpy.linalg.eigh; floor eigenvalues at 1e-8*largest eigenvalue, or 1e-8 absolute when largest eigenvalue is exactly zero; negative/nonfinite largest eigenvalue is validity failure.",
+    "temporal_model": "c_t are independent across epochs; there is no temporal covariance beyond the frozen per-PRN VAR prediction.",
+    "h0": "z_i,t=c_t+epsilon_i,t, c_t~N(0,Gamma)",
+    "h1": "z_i,t=c_t+H_i,t*s_t+epsilon_i,t, c_t~N(0,Gamma)",
+    "epoch_covariance": "For N_t valid PRNs and observed q rows, C_t=I_(N_t*q)+(1_N*1_N^T) kron Gamma, restricted to exact observed coordinates.",
+    "window_covariance": "For the 50 epochs of an eligible 1-s window, C=blockdiag(C_t) in chronological order.",
+    "whitening": "Apply deterministic numpy.linalg.cholesky lower factor L_t of C_t and solve L_t*y_white=y and L_t*G_white=G at each epoch; never form an explicit inverse.",
+    "failure": "Cholesky failure makes the epoch/window unavailable and triggers the frozen preflight validity rule when mandatory Full cannot remain available.",
+    "permutation_rule": "Covariance construction is invariant to PRN permutation; canonical storage/orders use numeric PRN and frozen q schema index."
+  },
+  "evaluation_schedule": {
+    "epoch": "epoch k=[0.02*k,0.02*(k+1)) from recording start; availability is right endpoint",
+    "score_window": "window j=[0.5*j,0.5*j+1.0) from recording start; availability is right endpoint",
+    "eligibility": "Window wholly inside one frozen role/phase; every residual prediction uses only prior epochs from that same role/segment after reset and 0.20 s warmup.",
+    "pre_onset_fpr": "Both the full window and its availability endpoint are strictly within the half-open pre-onset phase; endpoint equal to onset is excluded.",
+    "phase_metrics": "Full score window must be inside the half-open phase; straddling windows are unavailable."
+  },
+  "validity_contract": {
+    "states": [
+      "PREREGISTERED_UNVALIDATED",
+      "VALID_FOR_PROTECTED_ACCESS",
+      "INVALID_EXPERIMENT_NO_ATTACK_ACCESS",
+      "VALID_SCIENCE"
+    ],
+    "scientific_integrity_failures": [
+      "data leakage",
+      "scientific input/table timeline mismatch",
+      "scientific source/checksum mismatch",
+      "access-ledger mismatch",
+      "implementation/source mismatch",
+      "mandatory Full unavailable",
+      "failed mandatory semantic transform generation/preflight"
+    ],
+    "failure_state": "INVALID_EXPERIMENT_NO_ATTACK_ACCESS",
+    "failure_rule": "Write invalid_run.json, attack_access_count=0, do not open protected rows, and do not emit final_verdict.json.",
+    "control_boundary": "Pre-protected validation requires successful generation and semantic verification of mandatory control transforms, not their alarm behavior. Alarm behavior is scientific G5 after valid access; poor behavior yields scientific NO-GO in an otherwise valid run.",
+    "valid_science_rule": "Only VALID_SCIENCE may emit final_verdict.json.",
+    "admin_warning": {
+      "state": "VERIFICATION_ADMIN_WARNING",
+      "examples": [
+        "manifest key ordering",
+        "plot PNG byte hash when plot data source is unchanged",
+        "verifier-report packaging mismatch"
+      ],
+      "effect": "May be repaired in an evidence-only descendant commit without changing scientific tables or verdict; final delivery still requires repaired verifier PASS."
+    }
+  },
+  "verifier_contract": {
+    "commands": {
+      "tests": "python -m pytest -q tests/test_gcspo_stage0.py",
+      "clean_only": "python scripts/run_gcspo_stage0.py --phase clean-only --config artifacts/gcspo_stage0_static/config.json",
+      "full_verify": "python scripts/verify_gcspo_stage0.py --artifact-dir artifacts/gcspo_stage0_static --mode full",
+      "fresh_clone": "python scripts/verify_gcspo_fresh_clone.py --repo-url https://github.com/ljaehwan/gnss-doppler-lab.git --commit <PINNED_RESULT_SHA> --artifact-dir artifacts/gcspo_stage0_static"
+    },
+    "exit_semantics": "Exit 0 only on PASS; nonzero on FAIL.",
+    "reports": {
+      "verifier_report.json": "full_verify",
+      "fresh_clone_verifier_report.json": "fresh_clone"
+    },
+    "report_required_fields": [
+      "schema",
+      "commit",
+      "target_commit",
+      "evidence_commit",
+      "config_sha256",
+      "artifact_manifest_sha256",
+      "checks",
+      "overall_status",
+      "verified_run_status",
+      "command",
+      "started_utc",
+      "finished_utc",
+      "exit_code"
+    ],
+    "overall_status_enum": [
+      "PASS",
+      "FAIL"
+    ],
+    "fresh_clone_requirements": [
+      "checkout target_commit exactly, independent of branch",
+      "tracked source only",
+      "test command",
+      "clean-only deterministic reproduction when run status permits",
+      "canonical manifest membership/checksums",
+      "scientific source/input binding",
+      "no silent dependency on original-worktree untracked files",
+      "record target_commit and evidence_commit"
+    ],
+    "report_field_types": {
+      "checks": "array",
+      "overall_status": "enum PASS/FAIL",
+      "exit_code": "integer",
+      "all_other_required_fields": "nonempty string except hashes are 64 lowercase hex"
+    },
+    "field_semantics": {
+      "commit": "alias of target_commit for backward schema compatibility; must equal target_commit",
+      "target_commit": "commit containing the scientific or validly fail-closed invalid artifacts being verified",
+      "evidence_commit": "commit containing verifier reports; may equal target_commit or be an evidence-only descendant",
+      "artifact_manifest_sha256": "SHA-256 of artifact_manifest_sha256.json file bytes",
+      "overall_status": "PASS when verification behavior succeeds, including correctly confirming a fail-closed invalid run",
+      "verified_run_status": "exactly VALID_SCIENCE or INVALID_EXPERIMENT_NO_ATTACK_ACCESS",
+      "exit_code": "0 means verification PASS, not scientific GO; nonzero means verification FAIL"
+    },
+    "verified_run_status_enum": [
+      "VALID_SCIENCE",
+      "INVALID_EXPERIMENT_NO_ATTACK_ACCESS"
+    ],
+    "invalid_run_verification": "On invalid runs, checks use the exact invalid required set and overall_status PASS means the verifier correctly confirmed fail-closed invalidity."
+  },
+  "lambda_selection": {
+    "inner_roles": {
+      "train_fit_s": "[30,140)",
+      "guard_s": "[140,150)",
+      "lambda_validation_s": "[150,210)",
+      "containment": "All are half-open; no raw sample, epoch, history, score window, covariance edge, or state-prior edge crosses an inner-role boundary."
+    },
+    "grid": [
+      0.1,
+      1.0,
+      10.0,
+      100.0
+    ],
+    "support": "For each method, intersect eligible lambda-validation windows across all four lambda candidates before computing any objective.",
+    "per_window": {
+      "RSS_w": "||y-G*xhat||^2 on exact observed common support",
+      "n_w": "len(y)",
+      "nu_w": "trace(A)",
+      "GCV_w": "n_w*RSS_w/max(n_w-nu_w,1e-12)^2"
+    },
+    "objective": "Arithmetic mean GCV_w across the common eligible lambda-validation windows.",
+    "tie_rule": "For objectives g1,g2, tie iff abs(g1-g2)<=1e-12*max(abs(g1),abs(g2),1); choose larger lambda.",
+    "minimum_common_windows": 100,
+    "insufficient_windows": "method unavailable",
+    "sharing": {
+      "Full_A3_A4": "use Full-selected lambda",
+      "A2": "select scalar lambda",
+      "A5": "select block-state lambda"
+    },
+    "attack_data": "forbidden",
+    "nonfinite": "Any nonfinite RSS, n, nu, GCV, or mean objective makes that lambda/method unavailable."
+  },
+  "weighted_pauc": {
+    "alpha": 0.05,
+    "weights": "Let C_pos and C_neg be included positive and negative cell counts. Each positive cell has total weight 1/C_pos and each row in it weight 1/(C_pos*n_cell); each negative cell analogously has total 1/C_neg and row weight 1/(C_neg*n_cell).",
+    "support": "NaN/unavailable rows are removed from every method in that contrast by exact paired support.",
+    "ordering": "Cast scores to float64, sort descending, and group scores for which float64 numeric equality (==) is true; update every row in an equal-score group simultaneously. NaN is unavailable and absent by paired support.",
+    "curve": "Start (FPR,TPR)=(0,0); append grouped cumulative points; linearly interpolate TPR at FPR=0.05 if required.",
+    "integration": "Trapezoid-integrate TPR over FPR in [0,0.05] and divide by 0.05.",
+    "unavailable": "No positive or no negative total weight.",
+    "denominators": "Total positive and negative weights are each exactly 1 before cumulative ROC construction."
+  },
+  "deterministic_randomness": {
+    "seed_material": "UTF-8 string 23|control_id|scenario|phase|block_id|level|object_id",
+    "digest": "SHA256(seed_material)",
+    "seed_integer": "int.from_bytes(first 16 digest bytes,byteorder=\"big\",signed=False), a 128-bit integer",
+    "generator": "numpy.random.Generator(numpy.random.PCG64(seed))",
+    "no_global_draw_order": true,
+    "canonical_orders": {
+      "scenarios": "lexicographic",
+      "phases": "lexicographic",
+      "PRNs": "numeric",
+      "q_channels": "frozen schema index"
+    },
+    "recording": "Record NumPy version and every seed material plus derived integer seed in physical_controls.json or relation_destruction_metrics.json.",
+    "component_encoding": "Use exact machine-readable identifiers; block_id is base-10 integer b; integer levels are base-10; float levels use Python format(value,\".17g\"); missing/not-applicable components use literal NA; object_id is the frozen semantic object identifier."
+  },
+  "invalid_run_contract": {
+    "required_paths": [
+      "README.md",
+      "config.json",
+      "data_inventory.json",
+      "preregistration.json",
+      "source_commit.json",
+      "access_ledger.jsonl",
+      "invalid_run.json",
+      "artifact_manifest_sha256.json",
+      "verifier_report.json",
+      "fresh_clone_verifier_report.json"
+    ],
+    "forbidden_paths": [
+      "final_verdict.json"
+    ],
+    "invalid_run_required_fields": [
+      "schema",
+      "run_status",
+      "reason_codes",
+      "failed_checks",
+      "attack_access_count",
+      "target_commit",
+      "config_sha256",
+      "started_utc",
+      "failed_utc"
+    ],
+    "run_status": "INVALID_EXPERIMENT_NO_ATTACK_ACCESS",
+    "reason_codes": "sorted lexicographically and unique",
+    "failed_checks": "array in deterministic check order",
+    "attack_access_count": 0,
+    "manifest_membership": "Include every invalid required file except artifact_manifest_sha256.json, verifier_report.json, and fresh_clone_verifier_report.json.",
+    "exact_set_only": true,
+    "extra_artifacts": "forbidden; access_ledger.jsonl is the complete access trace for invalid runs"
+  }
+}
