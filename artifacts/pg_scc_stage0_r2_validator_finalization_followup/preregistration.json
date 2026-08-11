@@ -1,0 +1,130 @@
+{
+  "acceptance_criteria": {
+    "additional_protected_execution_count": 0,
+    "additional_protected_loader_call_count": 0,
+    "additional_protected_retry_count": 0,
+    "artifact_manifest_created_by_standard_writer_from_preserved_outputs": true,
+    "fresh_clone_verifier": "PASS",
+    "minimum_relevant_tests_passed": 53,
+    "ordinary_verifier": "PASS",
+    "preserved_one_shot_output_hashes_unchanged": true,
+    "protected_execution_count_must_equal": 1,
+    "protected_loader_call_count_must_equal": 1,
+    "protected_retry_count_must_equal": 0,
+    "semantic_science_guard": "PASS"
+  },
+  "authorized_operations_after_remote_preregistration_sync": [
+    "strict TDD RED test demonstrating the finalization-order and self-manifest cycle",
+    "minimal finalization sequencing fix only",
+    "non-protected creation of artifact_manifest_sha256.json from preserved outputs using the standard manifest writer",
+    "ordinary verifier execution and separate follow-up PASS report generation",
+    "fresh-clone verifier execution and fresh_clone_verifier_report.json generation",
+    "complete relevant tests and semantic/science guards without protected access",
+    "follow-up evidence files under artifacts/pg_scc_stage0_r2_validator_finalization_followup/"
+  ],
+  "branch": "research/pg-scc-stage0-r2-validator-repair",
+  "checkpoint_sequence": [
+    "metadata-only follow-up preregistration commit",
+    "normal non-force preregistration push and explicit remote 0/0 confirmation",
+    "strict TDD RED finalization-order/self-manifest test before production edits",
+    "minimal finalization sequencing repair",
+    "non-protected standard manifest creation from hash-preserved one-shot outputs",
+    "ordinary and fresh-clone verification",
+    "53-or-more relevant tests and semantic/science guards",
+    "follow-up evidence commit and normal non-force delivery"
+  ],
+  "fail_closed_result_sha": "cc0e24a9fdf9048fba2be37d2e48480e343f00d4",
+  "follow_up_evidence_namespace": "artifacts/pg_scc_stage0_r2_validator_finalization_followup/",
+  "forbidden_operations": [
+    "protected loader re-entry",
+    "protected producer re-entry",
+    "any protected read or projection",
+    "any additional protected execution or retry",
+    "any science or scientific-definition change",
+    "any threshold change",
+    "any selector change",
+    "any _save_plots change",
+    "any model, mask, score, statistics, event-set, pooling, split, covariance, calibration, or bootstrap change",
+    "any predecessor artifact change",
+    "mutation or regeneration of any preserved one-shot CSV, JSON, PNG, README, trace, state, or verifier-report byte",
+    "rerunning the scientific audit producer"
+  ],
+  "implementation_freeze_sha": "0ada6bd096af578fcd881b8df805e8dfff13177c",
+  "main_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "missing_files_at_preregistration": [
+    "artifacts/pg_scc_stage0_r2_validator_repair/artifact_manifest_sha256.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/fresh_clone_verifier_report.json"
+  ],
+  "original_protected_counts": {
+    "protected_execution_count": 1,
+    "protected_loader_call_count": 1,
+    "protected_retry_count": 0
+  },
+  "preserved_one_shot_outputs": {
+    "algorithm": "sha256",
+    "file_count": 29,
+    "files": {
+      "artifacts/pg_scc_stage0_r2_validator_repair/README.md": "fd1351d31ffa5eb0f1e31c3fadf3965f13d39963b901f561e78bba49ec7b83b4",
+      "artifacts/pg_scc_stage0_r2_validator_repair/artifact_verifier_report.json": "6dbc90adf7ee2e5033eda92de30d6d07f1542fe6c3656f15b69c598c13121ffc",
+      "artifacts/pg_scc_stage0_r2_validator_repair/attempt_state.json": "dda5e84ad268501bd5d378eddf1786b84282b2ff681ec48ed11b1234cb2f856d",
+      "artifacts/pg_scc_stage0_r2_validator_repair/awgn_reaudit.json": "71b354bcec5b5f5d7c604676a800896f96447331dd134478a1175daf258baa82",
+      "artifacts/pg_scc_stage0_r2_validator_repair/bootstrap_intervals.csv": "7507a19eeefdf2d7e5a2c6344a155c650a1a0e59d418479109dc825652caea76",
+      "artifacts/pg_scc_stage0_r2_validator_repair/calibration_uncertainty.json": "bc01ec17ac37d9615ae87073879ff99a4b27d9ab4adf031ea7b4f88a57eb00d6",
+      "artifacts/pg_scc_stage0_r2_validator_repair/coordinate_contributions.csv": "eeb326e8ebe36f9a41d36e6896a01259b0e1018f30aeb6aae85710c7e167b169",
+      "artifacts/pg_scc_stage0_r2_validator_repair/dense_teacher_diagnostics.json": "9583cad556a4feab1712e973666c3fbc6463f8fb9311d55c831d09525bab3114",
+      "artifacts/pg_scc_stage0_r2_validator_repair/execution_trace.json": "787d124e0953ea53943707a97e46cdf3e35b85d1b0ff2d057e15ec7ad269ce27",
+      "artifacts/pg_scc_stage0_r2_validator_repair/k3_exploratory_metrics.csv": "047614a5616d10988da5effc52a70c813cd7987d670e813a6710caa61eb68ba0",
+      "artifacts/pg_scc_stage0_r2_validator_repair/mask_seed_stability.csv": "7856cde9eab452d23b2b4777f31b34d238ad91e68e6b49ea9c0f30b133e48324",
+      "artifacts/pg_scc_stage0_r2_validator_repair/nested_mask_analysis.csv": "63e8cff9d610401626da8be063a97fbb00ab51706de79898d6aa9c8c2d408a44",
+      "artifacts/pg_scc_stage0_r2_validator_repair/normal_verifier_report.json": "8b3309380bc73bacdd91568e0710559d5de5ec2a9a6f402a640383d866fa6c7a",
+      "artifacts/pg_scc_stage0_r2_validator_repair/plots/calibration_threshold_uncertainty.png": "a5cecbd4a0e0996f6b8741d4b0028f170fd57fd37e8748f1eee79f6c15fee219",
+      "artifacts/pg_scc_stage0_r2_validator_repair/plots/clean_variance_attack_contribution.png": "3c0199b4e7d9f864b4678268e3fcd9f18713d4b999ea5dc34ccaf529267243ae",
+      "artifacts/pg_scc_stage0_r2_validator_repair/plots/detector_performance.png": "6ecb2b95a2fa18f5c1f34cac69b29d22a3740d7ac167325e8347de2a74a17736",
+      "artifacts/pg_scc_stage0_r2_validator_repair/plots/empirical_noise_awgn_response.png": "4ec20b6d9ad98bec1893c23aa17d0d41fa583d5046753f056adc467a9f91c75c",
+      "artifacts/pg_scc_stage0_r2_validator_repair/plots/learned_random_percentile.png": "66915f591a3e2e131f507c421877b1782df75f53bed9ec6fbbb88b9503daafd8",
+      "artifacts/pg_scc_stage0_r2_validator_repair/plots/nested_coordinate_map.png": "6267ecb5b89993b3a5cbdca31bedfe80f86607896b0294e7c3c5f245b976cbf3",
+      "artifacts/pg_scc_stage0_r2_validator_repair/plots/rss_score_dilution.png": "1626461f5e0d02de66226af44523135c99ea9964c3e5e128a31038f2caed97c7",
+      "artifacts/pg_scc_stage0_r2_validator_repair/plots/seed_mask_stability.png": "d8756dc3a6e4e9a2ab35daa70f2314f88a2771acd1e11bfbf0904d44fd9b7d12",
+      "artifacts/pg_scc_stage0_r2_validator_repair/plots/synthetic_real_delay_doppler.png": "566de79c895f719effa2e8e36bffd878e1a2ffd0557c03ee1327f025a74eae44",
+      "artifacts/pg_scc_stage0_r2_validator_repair/pre_run_state.json": "f2c728f76d49240b62eb3a15b2f449277ca101caa9d948acdfc51f75101bc70c",
+      "artifacts/pg_scc_stage0_r2_validator_repair/random_mask_distribution.csv": "cfb440ffd27e0a5ef110bf84caa08cfb7692b136c1d5e88bc2df5f7c024ea3ff",
+      "artifacts/pg_scc_stage0_r2_validator_repair/reproduction_check.json": "eb321de999652d1ef47683ee3c4e5b1b7d34557d9bbc339e6421b8193e81a098",
+      "artifacts/pg_scc_stage0_r2_validator_repair/root_cause_verdict.json": "d70508d5edb411aebfab3cd2fca01793b3849cc3f619b8655d0b2c5316c278f2",
+      "artifacts/pg_scc_stage0_r2_validator_repair/score_dilution_metrics.csv": "eea60880e167990dea9cbb3ff59be4ef2ef2c46c2d4021941b0bfa4d8b6c5e99",
+      "artifacts/pg_scc_stage0_r2_validator_repair/selector_proxy_audit.json": "ccc97f4c1801f4069e265dccf670050fb61520e1734f708f35166990183bdfb7",
+      "artifacts/pg_scc_stage0_r2_validator_repair/synthetic_real_mismatch.csv": "c47f64ca4c0d8be319b866e2e08c088da481388cde162c804ae5514665d4a489"
+    },
+    "source_commit": "cc0e24a9fdf9048fba2be37d2e48480e343f00d4",
+    "unchanged_requirement": "Every listed path must remain byte-identical through follow-up completion."
+  },
+  "preregistration_scope": "METADATA_ONLY_NO_REPAIR",
+  "protected_access_policy": {
+    "additional_protected_execution_maximum": 0,
+    "additional_protected_loader_call_maximum": 0,
+    "additional_protected_read_maximum": 0,
+    "additional_protected_retry_maximum": 0,
+    "producer_reentry_forbidden": true
+  },
+  "root_cause": {
+    "code": "REQUIRED_OUTPUT_VALIDATION_PRECEDES_ARTIFACT_MANIFEST_WRITER",
+    "exact_error": "required artifact schema incomplete: ['artifact_manifest_sha256.json']",
+    "mechanism": "_validate_required_outputs requires artifact_manifest_sha256.json before the existing subsequent finalize_manifest writer can create it.",
+    "protected_execution_outcome": "FAIL_CLOSED_AFTER_SCIENTIFIC_OUTPUT_GENERATION"
+  },
+  "schema": "pg_scc_stage0_r2_validator_finalization_followup_preregistration.v1",
+  "scientific_baseline_sha": "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d",
+  "source_preregistration_sha": "c7887316ed981d0e7cde74b2bbadeb1cf83bb233",
+  "state_at_preregistration": {
+    "ahead_behind": [
+      0,
+      0
+    ],
+    "branch": "research/pg-scc-stage0-r2-validator-repair",
+    "live_remote_sha": "cc0e24a9fdf9048fba2be37d2e48480e343f00d4",
+    "local_sha": "cc0e24a9fdf9048fba2be37d2e48480e343f00d4",
+    "main_unchanged": true,
+    "tracking_sha": "cc0e24a9fdf9048fba2be37d2e48480e343f00d4",
+    "worktree_clean": true
+  },
+  "timestamp_utc": "2026-08-11T05:37:01Z"
+}
