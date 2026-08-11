@@ -1,0 +1,23 @@
+{
+  "analysis_executed": false,
+  "base_verifier": {
+    "analysis_executed": false,
+    "errors": [],
+    "files_verified": 39,
+    "schema": "pg_scc_root_cause_verification.v1",
+    "status": "PASS"
+  },
+  "errors": [],
+  "files_verified": 39,
+  "fresh_clone": true,
+  "implementation_sha": "0ada6bd096af578fcd881b8df805e8dfff13177c",
+  "no_retuning": "PASS",
+  "plots_verified": 9,
+  "protected_execution_count": 1,
+  "protected_loader_call_count": 1,
+  "protected_retry_count": 0,
+  "revision": "33848201d18d386e9e9cfce8ce21d9b31f042c22",
+  "schema": "pg_scc_stage0_r2_validator_finalization_fresh_clone_verifier_report.v1",
+  "scientific_verdict": "REPAIRABLE_BUT_REQUIRES_NEW_CONFIRMATION",
+  "status": "PASS"
+}
