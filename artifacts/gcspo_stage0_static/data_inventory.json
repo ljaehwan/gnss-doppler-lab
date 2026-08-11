@@ -1,0 +1,577 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.data-inventory.v1",
+  "phase": 1,
+  "inspection_boundary": {
+    "attack_feature_rows_read": false,
+    "attack_post_onset_rows_read": false,
+    "past_performance_artifacts_read": false,
+    "permitted_attack_inspection": "paths, existence, sizes, checksums, receiver manifests, schema key/type structure",
+    "cleanstatic_scientific_rows_read": true,
+    "phase1_review_correction_attack_rows_read": false,
+    "phase1_review_correction_past_performance_artifacts_read": false,
+    "phase1_semantic_block_correction_attack_rows_read": false,
+    "phase1_semantic_block_correction_post_onset_rows_read": false,
+    "phase1_semantic_block_correction_past_performance_artifacts_read": false,
+    "phase1_final_uniqueness_attack_rows_read": false,
+    "phase1_final_uniqueness_post_onset_rows_read": false,
+    "phase1_final_uniqueness_prior_results_read": false
+  },
+  "cleanstatic_primary": {
+    "dataset": "TEXBAT cleanStatic",
+    "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9",
+    "receiver_manifest": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/manifest.json",
+      "sha256": "ced3722a7b560fc0efce5f347c7e09cd81e7a660969a17c8a85bb56c9e11e30a"
+    },
+    "source_iq": {
+      "manifest_path": "/home/ubuntu/unraid/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "manifest_authenticated_during_receiver_run": true,
+      "sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "size_bytes": 48016392192,
+      "sample_format": "interleaved int16 I,Q (ishort complex IQ)",
+      "sample_rate_hz": 25000000,
+      "duration_s": 480.16392192,
+      "mainserver_path": "/mnt/user/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "vm_mounted": false,
+      "mainserver_present": true
+    },
+    "receiver": {
+      "binary_sha256": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+      "config_sha256": "ce74f719338a8a97021ba10a0c72927e3e44db01120d355b5443fcc559504930",
+      "tracking_csv_sha256": "e64d10a585ad96fa9e41df13aee85ef291076c688e2f87cd01bb50a35e54fc3f",
+      "tracking_summary_csv_sha256": "0a015d17613a946cc737dd633e3534d4fc6583051123d2262795ea2d04b2389d",
+      "mat_file_count": 11,
+      "tap_count": 9,
+      "tap_spacing_chips": 0.125,
+      "valid_rows": 553639,
+      "all_audited_candidate_values_finite": true,
+      "tracking_end_s": 480.16138036
+    },
+    "normal_only_coverage_audit": {
+      "epoch_bin_s": 0.02,
+      "stable_intervals": [
+        {
+          "interval_s": "[30,210)",
+          "minimum_tracked_prns_per_bin": 10
+        },
+        {
+          "interval_s": "[210,220)",
+          "minimum_tracked_prns_per_bin": 10
+        },
+        {
+          "interval_s": "[220,340)",
+          "minimum_tracked_prns_per_bin": 10
+        },
+        {
+          "interval_s": "[340,350)",
+          "minimum_tracked_prns_per_bin": 11
+        },
+        {
+          "interval_s": "[350,470)",
+          "minimum_tracked_prns_per_bin": 10
+        }
+      ],
+      "observation": "Most channel/PRN streams have 0.020 s cadence; a reacquiring/shared channel contains 0.001 s rows. Phase 2 must aggregate causally into fixed 0.020 s bins and never treat sub-bin rows as independent epochs."
+    },
+    "geometry_time_anchor": {
+      "observables_rx_time_min_positive_s": 477900.0,
+      "observables_rx_time_max_s": 478359.26,
+      "candidate_mapping": "GPS TOW(t)=477900.0 + PRN_start_sample_count/25000000",
+      "join_status": "CONDITIONAL",
+      "required_preflight": "Checksum-valid NMEA/RMC GPS week, healthy ephemeris, observables RX_time agreement within 0.05 s, and receiver-output co-identity must all pass before LOS is generated."
+    }
+  },
+  "receiver_field_inventory": [
+    {
+      "candidate": "complex Early/Prompt/Late I/Q",
+      "path": "raw/epl_tracking_ch_*.mat",
+      "names": [
+        "I_E",
+        "Q_E",
+        "I_P",
+        "Q_P",
+        "I_L",
+        "Q_L"
+      ],
+      "unit": "signed correlator accumulation units",
+      "cadence": "native rows, predominantly 0.020 s; causally binned to 0.020 s",
+      "provenance": "patched dll_pll_veml_tracking dump writer; source and binary hashes in source_commit.json",
+      "availability": "AVAILABLE",
+      "missingness_cleanstatic": "0/553639; I_P==Prompt_I and Q_P==Prompt_Q exactly"
+    },
+    {
+      "candidate": "DLL discriminator",
+      "path": "raw/epl_tracking_ch_*.mat",
+      "names": [
+        "code_error_chips",
+        "code_error_filt_chips"
+      ],
+      "unit": "code_error_chips has unresolved integration-vs-chip scaling ambiguity; code_error_filt_chips is source-commented chips/s despite its name",
+      "cadence": "native tracking row",
+      "provenance": "dll_nc_e_minus_l_normalized and DLL loop filter in pinned receiver source",
+      "availability": "AVAILABLE_STATISTICALLY_DIRECT_LOADING_CONDITIONAL_ON_CLOSED_LOOP_TRANSFER",
+      "missingness_cleanstatic": "0/553639",
+      "use_rule": "The raw discriminator is not an innovation. code_error_chips direct loading is zero unless its source ambiguity and full closed-loop VAR-transferred Jacobian are proved pre-attack."
+    },
+    {
+      "candidate": "PLL phase error",
+      "path": "raw/epl_tracking_ch_*.mat",
+      "names": [
+        "carr_error_hz"
+      ],
+      "unit": "wrapped Costas PLL discriminator in cycles; dataset suffix _hz is misleading",
+      "cadence": "native tracking row",
+      "provenance": "PLL discriminator and dump writer in pinned receiver source",
+      "availability": "AVAILABLE_STATISTICALLY_DIRECT_LOADING_CONDITIONAL_ON_CLOSED_LOOP_TRANSFER",
+      "missingness_cleanstatic": "0/553639",
+      "use_rule": "The raw discriminator is not an innovation. Only its frozen one-step VAR residual may be used, and direct range loading requires source/synthetic proof of wrapping, linear range, units, sign, loop path, and transferred gain."
+    },
+    {
+      "candidate": "FLL frequency error",
+      "path": null,
+      "names": [],
+      "unit": null,
+      "cadence": null,
+      "provenance": "d_carr_freq_error_hz exists internally but is not written to this dump",
+      "availability": "MISSING",
+      "missingness_cleanstatic": "not a dataset"
+    },
+    {
+      "candidate": "carrier Doppler and filtered carrier command",
+      "path": "raw/epl_tracking_ch_*.mat",
+      "names": [
+        "carrier_doppler_hz",
+        "carr_error_filt_hz"
+      ],
+      "unit": "Hz state/NCO values",
+      "cadence": "native tracking row",
+      "provenance": "receiver dump writer and loop filter",
+      "availability": "AVAILABLE_AS_STATE_NCO_ONLY",
+      "missingness_cleanstatic": "0/553639; carr_error_filt_hz is bit-identical to carrier_doppler_hz",
+      "use_rule": "These are NCO state levels, not innovations. Only the frozen one-step VAR residual of carrier_doppler_hz may receive preflight-proved range-rate loading; carr_error_filt_hz stays excluded as a duplicate."
+    },
+    {
+      "candidate": "code frequency",
+      "path": "raw/epl_tracking_ch_*.mat",
+      "names": [
+        "code_freq_chips"
+      ],
+      "unit": "chips/s state/NCO value",
+      "cadence": "native tracking row",
+      "provenance": "receiver DLL/NCO source",
+      "availability": "AVAILABLE_AS_STATE_NCO_ONLY",
+      "missingness_cleanstatic": "0/553639",
+      "use_rule": "This is an NCO state level, not an innovation. Only the frozen one-step VAR residual of code_freq_chips-1023000 may receive preflight-proved range-rate loading."
+    },
+    {
+      "candidate": "residual code phase",
+      "path": "raw/epl_tracking_ch_*.mat",
+      "names": [
+        "aux1"
+      ],
+      "unit": "samples",
+      "cadence": "native tracking row",
+      "provenance": "dump writer assigns d_rem_code_phase_samples; generic aux1 name requires source hash",
+      "availability": "AVAILABLE_AS_DEBUG_FIELD",
+      "missingness_cleanstatic": "0/553639"
+    },
+    {
+      "candidate": "Prompt phase increment",
+      "path": null,
+      "names": [],
+      "unit": null,
+      "cadence": null,
+      "provenance": "not dumped directly; derivation from Prompt complex values is not a verified receiver field",
+      "availability": "MISSING",
+      "missingness_cleanstatic": "not a dataset"
+    },
+    {
+      "candidate": "C/N0",
+      "path": "raw/epl_tracking_ch_*.mat",
+      "names": [
+        "CN0_SNV_dB_Hz"
+      ],
+      "unit": "dB-Hz",
+      "cadence": "native tracking row",
+      "provenance": "receiver dump writer",
+      "availability": "AVAILABLE_NUISANCE_ONLY",
+      "missingness_cleanstatic": "0/553639"
+    },
+    {
+      "candidate": "lock/tracking quality",
+      "path": "raw/epl_tracking_ch_*.mat",
+      "names": [
+        "carrier_lock_test"
+      ],
+      "unit": "dimensionless receiver lock statistic",
+      "cadence": "native tracking row",
+      "provenance": "receiver dump writer",
+      "availability": "AVAILABLE_NUISANCE_ONLY",
+      "missingness_cleanstatic": "0/553639"
+    },
+    {
+      "candidate": "elevation/azimuth/LOS",
+      "path": "derived from gps_ephemeris.xml plus trusted static receiver position and time anchor",
+      "names": [
+        "los_ecef",
+        "elevation_deg",
+        "azimuth_deg"
+      ],
+      "unit": "unitless ECEF unit vector and degrees",
+      "cadence": "0.020 s model epochs",
+      "provenance": "repository gcmr_geometry source hashes plus per-run NMEA/ephemeris",
+      "availability": "DERIVABLE_CONDITIONALLY",
+      "missingness_cleanstatic": "must fail closed per epoch/PRN if timing, health, or ephemeris is invalid"
+    },
+    {
+      "candidate": "PRN start sample count",
+      "path": "raw/epl_tracking_ch_*.mat",
+      "names": [
+        "PRN_start_sample_count"
+      ],
+      "unit": "raw complex sample index",
+      "cadence": "native tracking row",
+      "provenance": "nitems_read plus current PRN length in receiver dump writer",
+      "availability": "AVAILABLE",
+      "missingness_cleanstatic": "0/553639"
+    },
+    {
+      "candidate": "source sample index",
+      "path": "raw/epl_tracking_ch_*.mat",
+      "names": [
+        "PRN_start_sample_count",
+        "aux2"
+      ],
+      "unit": "raw complex sample index",
+      "cadence": "native tracking row",
+      "provenance": "aux2 duplicates current input item count as double; uint64 field is canonical",
+      "availability": "AVAILABLE",
+      "missingness_cleanstatic": "0/553639"
+    },
+    {
+      "candidate": "timestamp",
+      "path": "derived",
+      "names": [
+        "time_s"
+      ],
+      "unit": "seconds from recording start",
+      "cadence": "native then 0.020 s causal bins",
+      "provenance": "PRN_start_sample_count/source.sample_rate_hz",
+      "availability": "DERIVABLE_EXACTLY",
+      "missingness_cleanstatic": "0/553639"
+    }
+  ],
+  "scenario_inventory": [
+    {
+      "id": "cleanDynamic",
+      "role": "OOD normal only; never static GO/NO-GO",
+      "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/rc9-real-clean-domain-poc1/receiver/cleanDynamic",
+      "receiver_manifest_sha256": "1cd81f68b8485f7908e2e757802500716b90a2534909998a982a773f88976acc",
+      "iq_sha256": "9ca7029e625a34b8a3df64db69c422836885e5eb3cdcbe266d4f42983eba36a1",
+      "iq_size_bytes": 44291850240,
+      "sample_rate_hz": 25000000,
+      "receiver_processed_duration_s": 60.0,
+      "receiver_binary_sha256": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+      "receiver_config_sha256": "51f14ff6bb676621902b2d871ba2f608eadf602431402635004855743395aaaa",
+      "iq_path_mainserver": "/mnt/user/gnss-datasets/texbat/raw/cleanDynamic.bin",
+      "raw_iq_access": "HOST_ACCESSIBLE_NOT_VM_MOUNTED"
+    },
+    {
+      "id": "DS1",
+      "role": "diagnostic only",
+      "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds1-complex9",
+      "iq_sha256": "8c8f4caa41c8a2253688eef47818a445e3a06139b729cf587c03be33e6b6744c",
+      "tracking_csv_sha256": "b93104e131a9bbdaaa63b8ffb1ce686f777b3065b8acd8987c6f1b2b46b84b8e",
+      "receiver_config_sha256": "85b773efd9c7bcd56beb49eb3bd5a307f3de5a7cf8330107c4eeead9b90f1da5",
+      "iq_path_mainserver": "/mnt/user/gnss-datasets/texbat/raw/ds1.bin",
+      "iq_size_bytes": 46170898432,
+      "raw_iq_access": "HOST_ACCESSIBLE_NOT_VM_MOUNTED"
+    },
+    {
+      "id": "DS2",
+      "role": "diagnostic only",
+      "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9",
+      "iq_sha256": "65bfba9bbb8643c1f6b8f1a48bdef8adfc0e787458f0c5b0cb54ca92977bed5e",
+      "tracking_csv_sha256": "e8e3f65933dbcd692ab75fc1682a77ccfdf7736f7cc8ae2f376964c85f74ab5f",
+      "receiver_config_sha256": "84184ebbff9ca874c846e7a7bd42627d9b7fbee3eaa9a21394d27f4f94fc3242",
+      "iq_path_mainserver": "/mnt/user/gnss-datasets/texbat/raw/ds2.bin",
+      "iq_size_bytes": 45717913600,
+      "raw_iq_access": "HOST_ACCESSIBLE_NOT_VM_MOUNTED"
+    },
+    {
+      "id": "DS3",
+      "role": "primary static evaluation",
+      "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9",
+      "iq_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "tracking_csv_sha256": "7523534b99a878b2027feff4fc307ca327bef1a5e7682c4a909eb7cb7236e516",
+      "receiver_config_sha256": "5aff08f34cacadf18b5ec3ca03be76ec9cfc8393b0ae90c4718a974ac22158c0",
+      "iq_path_mainserver": "/mnt/user/gnss-datasets/texbat/raw/ds3.bin",
+      "iq_size_bytes": 45785022464,
+      "raw_iq_access": "HOST_ACCESSIBLE_NOT_VM_MOUNTED"
+    },
+    {
+      "id": "DS4",
+      "role": "primary transition-only unless authenticated coverage reaches 225 s",
+      "receiver_root": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation",
+      "iq_sha256": null,
+      "tracking_csv_sha256": null,
+      "receiver_config_sha256": null,
+      "row_count_from_manifest": 216932,
+      "actual_end_time_s": null,
+      "coverage_status": "BLOCKED: receiver manifest omits end counter/time and authenticated output checksums; Phase-1 boundary forbids opening attack rows to reconstruct it",
+      "treatment": "TRANSITION_ONLY_FAIL_CLOSED",
+      "iq_path_mainserver": "/mnt/user/gnss-datasets/texbat/raw/ds4.bin",
+      "iq_size_bytes": 12821987328,
+      "raw_iq_access": "HOST_ACCESSIBLE_NOT_VM_MOUNTED"
+    },
+    {
+      "id": "DS5",
+      "role": "OOD dynamic only",
+      "receiver_outputs": "NOT LOCATED",
+      "iq_path_mainserver": "/mnt/user/gnss-datasets/texbat/raw/ds5.bin",
+      "iq_size_bytes": 41825599488,
+      "raw_iq_access": "HOST_ACCESSIBLE_NOT_VM_MOUNTED"
+    },
+    {
+      "id": "DS6",
+      "role": "OOD dynamic only",
+      "receiver_outputs": "NOT LOCATED",
+      "iq_path_mainserver": "/mnt/user/gnss-datasets/texbat/raw/ds6.bin",
+      "iq_size_bytes": 41825599488,
+      "raw_iq_access": "HOST_ACCESSIBLE_NOT_VM_MOUNTED"
+    },
+    {
+      "id": "DS7",
+      "role": "primary static evaluation; family-coupled with DS8",
+      "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9",
+      "alternate_receiver_root": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/texbat_ds7_9tap_eval_20260724/ds7/receiver/texbat-ds7-method-a-9tap-external-validation",
+      "receiver_manifest_sha256": "46cc88456d6985463377cf972a37e3e5cbc663079619b77263b125cd5d65644d",
+      "receiver_binary_sha256": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+      "receiver_config_sha256": "9cecb8eb91a5521707e4a1e9bc0c739d4bce2dbfe952293b9e5d13e987c62cf0",
+      "tracking_csv_sha256": "4ae801f7a9a44736dbaf8f99164c2d6d9be769dc51c520f2720fd924b1646efa",
+      "tracking_summary_csv_sha256": "a7c58bc8b352cf541a5027495d2f3b3c157be36b684e0760634ba8c6b90c0c5e",
+      "observables_mat_sha256": "3aea67391b1d6f6557fdc5395a7815fc28e64d81a6ec1687009310ead57ec443",
+      "ephemeris_sha256": "4c20014dbcd6a18a58671914be12a3ad159bd6add36382b1df69362f1cf37271",
+      "nmea_sha256": "b0d5d7f123a119d527035618d74b766a09a53c8cc9b5428dfa1783ec512dfd67",
+      "iq_path_mainserver": "/mnt/user/gnss-datasets/texbat/raw/ds7.bin",
+      "iq_sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "iq_size_bytes": 27059290112,
+      "raw_iq_access": "HOST_ACCESSIBLE_NOT_VM_MOUNTED",
+      "metadata_only_verified": true,
+      "pre110_evidence_role": "TRAINING_REPLAY_DESCRIPTIVE",
+      "pre110_excluded_from": [
+        "calibration",
+        "G1",
+        "worst external FPR",
+        "confidence intervals",
+        "bootstrap/resampling"
+      ],
+      "post110_evidence_role": "ATTACK_EVIDENCE_ONE_DS7_DS8_FAMILY_AFTER_VALID_PROTECTED_ACCESS_ONLY"
+    },
+    {
+      "id": "DS8",
+      "role": "primary static evaluation; family-coupled with DS7",
+      "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver",
+      "alternate_receiver_root": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/texbat_ds8_9tap_eval_20260724/ds8/receiver/texbat-ds8-method-a-9tap-external-validation",
+      "receiver_manifest_sha256": "2acb11c8e2e5b3f704cbde057d60d771cb6f75316320611d5d93b7c1001aa7e9",
+      "receiver_binary_sha256": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+      "receiver_config_sha256": "57aaa9d419c0b126ead3c98d1a90a267f3c9c23a37ad4e2f30cab5b6a8202f5a",
+      "tracking_csv_sha256": "26916ef68e0687da4c8a5a50b6ead3d1ab127e75d211fa2fcf892258d0a34084",
+      "tracking_summary_csv_sha256": "30cc2925a74fe82eb9d259ff9a6de410f9d77451f606f46bac24a4a9c85271ba",
+      "observables": "ABSENT",
+      "ephemeris_sha256": "dd52c4431dab52df80d9a1487d49f3fca4c868d66c2f9cc5707b0b2f5702fd7d",
+      "nmea_sha256": "d984b6cc6b3731c66936e1ef7799c7f64647d73f6a7d39de1daac05a94b0a5f3",
+      "iq_path_mainserver": "/mnt/user/gnss-datasets/texbat/raw/ds8.bin",
+      "iq_sha256": "1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78",
+      "iq_size_bytes": 47000141168,
+      "raw_iq_access": "HOST_ACCESSIBLE_NOT_VM_MOUNTED",
+      "metadata_only_verified": true,
+      "pre110_evidence_role": "TRAINING_REPLAY_DESCRIPTIVE",
+      "pre110_excluded_from": [
+        "calibration",
+        "G1",
+        "worst external FPR",
+        "confidence intervals",
+        "bootstrap/resampling"
+      ],
+      "post110_evidence_role": "ATTACK_EVIDENCE_ONE_DS7_DS8_FAMILY_AFTER_VALID_PROTECTED_ACCESS_ONLY"
+    }
+  ],
+  "attack_geometry_time_anchors": {
+    "status": "CANDIDATE_CONFIG_ONLY_NOT_PHASE1_PROVEN",
+    "DS1": {
+      "tow0_s": 477900.0,
+      "source": "scripts/run_gcmr_texbat_external.py",
+      "preflight": "observables RX_time"
+    },
+    "DS2": {
+      "tow0_s": 477900.02,
+      "source": "scripts/run_gcmr_texbat_external.py",
+      "preflight": "observables RX_time"
+    },
+    "DS3": {
+      "tow0_s": 477900.0,
+      "source": "scripts/run_gcmr_texbat_external.py",
+      "preflight": "observables RX_time"
+    },
+    "DS4": {
+      "tow0_s": 477900.0,
+      "source": "scripts/run_gcmr_texbat_external.py",
+      "preflight": "alternate NMEA/common-replay assertion because observables are absent"
+    },
+    "DS7": {
+      "tow0_s": null,
+      "source": null,
+      "preflight": "MISSING"
+    },
+    "DS8": {
+      "tow0_s": null,
+      "source": null,
+      "preflight": "MISSING"
+    },
+    "rule": "No candidate anchor may be treated as a causal join until the per-run observables/NMEA/ephemeris/source-identity preflight is independently authenticated without post-onset PVT."
+  },
+  "ds7_ds8_pre110_identity_test": {
+    "status": "PASS_IDENTICAL_PREFIX",
+    "sample_rate_hz": 25000000,
+    "bytes_per_complex_sample": 4,
+    "half_open_sample_interval": "[0,2750000000)",
+    "half_open_byte_interval": "[0,11000000000)",
+    "algorithm": "Read-only MainServer SHA-256 over exactly bytes [0,11000000000) of each raw file, with before/after fstat-equivalent device:inode:size:mtime identity checks",
+    "paths": {
+      "cleanStatic": "/mnt/user/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "DS7": "/mnt/user/gnss-datasets/texbat/raw/ds7.bin",
+      "DS8": "/mnt/user/gnss-datasets/texbat/raw/ds8.bin"
+    },
+    "digests_sha256": {
+      "cleanStatic": "f0ba0d3816f21fcad14f71f9bf2087e37c0580e44f2168dfd95ceeeef9de9866",
+      "DS7": "f0ba0d3816f21fcad14f71f9bf2087e37c0580e44f2168dfd95ceeeef9de9866",
+      "DS8": "f0ba0d3816f21fcad14f71f9bf2087e37c0580e44f2168dfd95ceeeef9de9866"
+    },
+    "byte_counts": {
+      "cleanStatic": 11000000000,
+      "DS7": 11000000000,
+      "DS8": 11000000000
+    },
+    "identities_unchanged_during_hash": {
+      "cleanStatic": true,
+      "DS7": true,
+      "DS8": true
+    },
+    "durable_identity_rule": "Device and inode values are execution guards only and are not durable scientific identity.",
+    "independence_rule": "cleanStatic/DS7/DS8 pre-110 s are one evidence family and are never independent calibration, FPR, or bootstrap evidence.",
+    "duration_s": 110.0,
+    "evidence_role": "TRAINING_REPLAY_DESCRIPTIVE",
+    "excluded_from": [
+      "calibration",
+      "G1",
+      "worst external FPR",
+      "all confidence intervals",
+      "all bootstrap/resampling"
+    ],
+    "post110_rule": "DS7/DS8 attack evidence is one family cluster after valid protected access only."
+  },
+  "provenance_blockers": [
+    "Raw TEXBAT IQ is present on MainServer but not VM-mounted; read-only orchestration is required for raw-byte access.",
+    "DS4 receiver manifest lacks raw-IQ hash, receiver config hash, tracking-output hash, and authenticated end-time coverage.",
+    "DS7/DS8 preferred receiver outputs are byte-pinned, but protected timeline/geometry joins remain unopened and must fail closed until authorized preflight.",
+    "DS5/DS6 receiver outputs were not located.",
+    "The patched receiver source tree is dirty and lacks an immutable full patch/build recipe.",
+    "Attack geometry joins and timeline/sample-counter coverage have not been opened under Phase 1 and must remain sealed until authorization."
+  ],
+  "raw_source_access": {
+    "authoritative_host": "MainServer 192.168.0.77",
+    "authoritative_root": "/mnt/user/gnss-datasets/texbat/raw",
+    "vm_mount_root": "/home/ubuntu/unraid/gnss-datasets/texbat/raw",
+    "vm_mount_status": "NOT_MOUNTED",
+    "global_status": "HOST_ACCESSIBLE_NOT_VM_MOUNTED",
+    "read_method": "Orchestrated read-only SSH may hash/read the MainServer files; no raw IQ was opened during this Phase-1 correction.",
+    "files": [
+      {
+        "name": "cleanStatic.bin",
+        "mainserver_path": "/mnt/user/gnss-datasets/texbat/raw/cleanStatic.bin",
+        "size_bytes": 48016392192
+      },
+      {
+        "name": "cleanDynamic.bin",
+        "mainserver_path": "/mnt/user/gnss-datasets/texbat/raw/cleanDynamic.bin",
+        "size_bytes": 44291850240
+      },
+      {
+        "name": "ds1.bin",
+        "mainserver_path": "/mnt/user/gnss-datasets/texbat/raw/ds1.bin",
+        "size_bytes": 46170898432
+      },
+      {
+        "name": "ds2.bin",
+        "mainserver_path": "/mnt/user/gnss-datasets/texbat/raw/ds2.bin",
+        "size_bytes": 45717913600
+      },
+      {
+        "name": "ds3.bin",
+        "mainserver_path": "/mnt/user/gnss-datasets/texbat/raw/ds3.bin",
+        "size_bytes": 45785022464
+      },
+      {
+        "name": "ds4.bin",
+        "mainserver_path": "/mnt/user/gnss-datasets/texbat/raw/ds4.bin",
+        "size_bytes": 12821987328
+      },
+      {
+        "name": "ds5.bin",
+        "mainserver_path": "/mnt/user/gnss-datasets/texbat/raw/ds5.bin",
+        "size_bytes": 41825599488
+      },
+      {
+        "name": "ds6.bin",
+        "mainserver_path": "/mnt/user/gnss-datasets/texbat/raw/ds6.bin",
+        "size_bytes": 41825599488
+      },
+      {
+        "name": "ds7.bin",
+        "mainserver_path": "/mnt/user/gnss-datasets/texbat/raw/ds7.bin",
+        "size_bytes": 27059290112
+      },
+      {
+        "name": "ds8.bin",
+        "mainserver_path": "/mnt/user/gnss-datasets/texbat/raw/ds8.bin",
+        "size_bytes": 47000141168
+      }
+    ]
+  },
+  "pre_exposure_ledger": {
+    "texbat_prior_exposure": true,
+    "review_correction_disclosure": "The repository and research team have prior TEXBAT experiment exposure. During Phase 1, an isolated read-only independent audit used one overly broad source search that surfaced some pre-existing result-path output in that isolated worker.",
+    "transmission_to_implementation_worker": "No numeric prior score/result was transmitted to this implementation worker.",
+    "influence": "No prior result was used to choose features, score, thresholds, controls, gates, or hyperparameters.",
+    "evidence_status": "All TEXBAT results are developmental; final confirmation requires OAKBAT or a sealed new static session.",
+    "do_not_elaborate_by_inspection": true
+  },
+  "semantic_block_resolution": {
+    "scope": "preregistration only",
+    "implementation_performed": false,
+    "science_run": false,
+    "protected_attack_or_post_onset_rows_read": false,
+    "historic_results_inspected": false,
+    "validity_before_protected_access": "INVALID_EXPERIMENT_NO_ATTACK_ACCESS on any failed source/checksum/timeline/geometry/closed-loop transfer/test/control-generation preflight"
+  },
+  "receiver_coordinate_contract": {
+    "residual": "r_i,t is the frozen one-step VAR residual; raw discriminator/NCO values are not innovations",
+    "pooled_whitening": "z_i,t=Sigma_train^(-1/2)*(r_i,t-mu_train) with symmetric eigendecomposition and frozen floor",
+    "gamma_coordinate": "z only",
+    "gamma_temporal_covariance": "none; c_t independent by epoch",
+    "carr_error_source_name": "carr_error_hz",
+    "carr_error_semantic_unit": "cycles",
+    "complex_EPL_CN0_quality_direct_loading": "zero"
+  },
+  "final_uniqueness_resolution": {
+    "scope": "preregistration only",
+    "implementation_performed": false,
+    "science_run": false,
+    "protected_attack_or_post_onset_rows_read": false,
+    "prior_results_read": false,
+    "starting_commit": "fe753874d41c351ef0e76ca1d0eeac5fb232640b",
+    "scientific_invalidity": "INVALID_EXPERIMENT_NO_ATTACK_ACCESS",
+    "administrative_state": "VERIFICATION_ADMIN_WARNING repairable without scientific changes; delivery still requires verifier PASS"
+  }
+}

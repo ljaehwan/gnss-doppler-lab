@@ -1,0 +1,97 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.source-commit.v1",
+  "phase": 1,
+  "authoritative_repository": {
+    "branch": "research/gcspo-stage0-static",
+    "expected_base_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+    "head_before_phase1": "461eb4dc7bb794e719295daf028f6811658ba37f",
+    "origin_main_before_phase1": "461eb4dc7bb794e719295daf028f6811658ba37f",
+    "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static",
+    "remote": "https://github.com/ljaehwan/gnss-doppler-lab.git",
+    "status_before_phase1": "clean"
+  },
+  "phase1_delivery_commit": {
+    "sha_recording_rule": "The commit SHA is reported at delivery because a commit cannot contain its own SHA without a self-reference.",
+    "sha": null
+  },
+  "receiver_binary": {
+    "path": "/home/ubuntu/build-gnss-sdr-complex9/build-complex/src/main/gnss-sdr",
+    "sha256": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb"
+  },
+  "receiver_source_provenance": {
+    "git_head": "1ddd4562723040fd66cb334b578a5b69455625f4",
+    "git_state": "detached and dirty; patched files and untracked build-complex exist",
+    "tracking_discriminators_cc_sha256": "00cb68a02fdd3ab51395e4af2e758060a7e299a76a68424c37fcf6cba38f69ec",
+    "tracking_loop_cc_sha256": "6d2db43fea2728acc35fb29b4cb5027b62be442b8966108bf6b955d5b95f486c",
+    "exact_source_rerun_status": "UNAVAILABLE",
+    "missing": [
+      "a committed patch or immutable archive of the complete patched receiver source tree",
+      "an authenticated build recipe/toolchain manifest linking that source snapshot to the receiver binary"
+    ],
+    "interpretation": "Existing receiver outputs remain byte-pinned by manifest and binary hashes, but a new scientifically exact receiver rerun must fail closed until the missing source/build provenance is sealed."
+  },
+  "repository_geometry_sources": {
+    "scripts/run_gcmr_texbat_external.py": "756cea2362565b1c84f4fb5e852d29536fafe183d58872ba15c8b5291b4a871c",
+    "src/gnss_doppler_lab/gcmr_experiment.py": "bb0a60ae59211ee3460d49d54cb653bfd4d9c567356a0b4b1f42abb8886c3147",
+    "src/gnss_doppler_lab/gcmr_geometry.py": "781b66b8c485f4a656da3ed4ce82726f47f47a94cc4ea702eeab727708208921",
+    "src/gnss_doppler_lab/gcmr_relations.py": "2679db9534b5c8ac840b5fee046f74b167692b0fb6d95d61dd77e07be901e968"
+  },
+  "b0_exact_sources": {
+    "checkpoint_path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt",
+    "checkpoint_sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
+    "gate_config_path": "configs/detectors/texbat_btail_gate_v1.json",
+    "gate_config_sha256": "45e4df9beed4b689700e928ef8217cbed17c2178a47ff240c40eec3c74e3f414",
+    "gate_implementation_path": "scripts/eval_btail_support_gate.py",
+    "gate_implementation_sha256": "1bb353101d1a98a8bd6a6feaa72757829669f718f3e2e2d497e64422177c5e10"
+  },
+  "gcmr_exact_sources": {
+    "checkpoint_path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/frozen/gcmr-texbat-cleanstatic-frozen-v1-seed23/model.pt",
+    "checkpoint_sha256": "4eccfdbad1c3e86cce2248d98d87efb019d63048226df04e7f9bb270908bf4a5",
+    "native_event_window_s": 1.0,
+    "native_event_stride_s": 0.5,
+    "availability": "ADAPTER_REQUIRED / CONDITIONALLY_AVAILABLE_FOR_EXACT_COMMON_SUPPORT",
+    "support_rule": "Rebuild events from raw TrackingRows only after the common epoch+PRN mask; do not reuse historic score CSVs."
+  },
+  "phase1_review_correction": {
+    "prior_delivery_commit": "8f0e08805f40c223e95ef9cfd9ef2c7215e38ed8",
+    "amendment_rule": "Amend once before first external delivery; report the new SHA externally because self-reference remains impossible.",
+    "protected_attack_rows_read": false,
+    "past_performance_artifacts_read_by_implementation_worker": false
+  },
+  "phase1_semantic_block_correction": {
+    "prior_delivery_commit": "d8035a7baff675d2f99ff87680e3c39aebcd27ce",
+    "amendment_rule": "Amend the same unpushed Phase-1 commit; report new SHA externally because self-reference remains impossible.",
+    "scope": "six-file preregistration package only",
+    "implementation_performed": false,
+    "science_run": false,
+    "protected_attack_or_post_onset_rows_read": false,
+    "historic_results_inspected": false
+  },
+  "required_future_paths": {
+    "tests": "tests/test_gcspo_stage0.py",
+    "runner": "scripts/run_gcspo_stage0.py",
+    "verifier": "scripts/verify_gcspo_stage0.py",
+    "fresh_clone_verifier": "scripts/verify_gcspo_fresh_clone.py",
+    "status": "PREREGISTERED_NOT_IMPLEMENTED"
+  },
+  "canonical_future_commands": {
+    "tests": "python -m pytest -q tests/test_gcspo_stage0.py",
+    "clean_only": "python scripts/run_gcspo_stage0.py --phase clean-only --config artifacts/gcspo_stage0_static/config.json",
+    "full_verify": "python scripts/verify_gcspo_stage0.py --artifact-dir artifacts/gcspo_stage0_static --mode full",
+    "fresh_clone": "python scripts/verify_gcspo_fresh_clone.py --repo-url https://github.com/ljaehwan/gnss-doppler-lab.git --commit <PINNED_RESULT_SHA> --artifact-dir artifacts/gcspo_stage0_static"
+  },
+  "phase1_final_uniqueness_correction": {
+    "prior_delivery_commit": "fe753874d41c351ef0e76ca1d0eeac5fb232640b",
+    "amendment_rule": "Amend the same unpushed Phase-1 commit; report new SHA because self-reference is impossible.",
+    "scope": "same six preregistration files only",
+    "implementation_performed": false,
+    "science_run": false,
+    "protected_attack_or_post_onset_rows_read": false,
+    "prior_results_read": false
+  },
+  "future_report_commit_semantics": {
+    "target_commit": "scientific or validly fail-closed invalid artifact commit verified exactly",
+    "evidence_commit": "report-containing commit; target or evidence-only descendant",
+    "fresh_clone": "checkout target_commit exactly, independent of branch"
+  }
+}
