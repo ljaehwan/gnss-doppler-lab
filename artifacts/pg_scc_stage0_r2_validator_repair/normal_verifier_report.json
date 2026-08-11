@@ -1,0 +1,9 @@
+{
+  "errors": [
+    "base_verifier:missing:artifact_manifest_sha256.json"
+  ],
+  "protected_execution_count": 1,
+  "protected_loader_call_count": 1,
+  "schema": "pg_scc_stage0_r2_validator_repair_verification.v1",
+  "status": "FAIL"
+}

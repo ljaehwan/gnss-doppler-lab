@@ -1,0 +1,42 @@
+{
+  "cn0_mapping": {
+    "reason": "normalized CAF residual sigma has no unique physical C/N0 mapping",
+    "status": "UNAVAILABLE"
+  },
+  "empirical_controls": [
+    {
+      "false_response": 0.46111111111111114,
+      "multiplier": 0.5,
+      "sigma": 0.01959560723999447
+    },
+    {
+      "false_response": 0.7333333333333333,
+      "multiplier": 1.0,
+      "sigma": 0.03919121447998894
+    },
+    {
+      "false_response": 0.9722222222222222,
+      "multiplier": 2.0,
+      "sigma": 0.07838242895997788
+    }
+  ],
+  "empirical_residual_sigma": 0.03919121447998894,
+  "legacy_normalized_caf": [
+    {
+      "empirical_multiple": 0.5103184544130934,
+      "false_response": 0.4444444444444444,
+      "sigma": 0.02
+    },
+    {
+      "empirical_multiple": 1.2757961360327335,
+      "false_response": 0.8722222222222222,
+      "sigma": 0.05
+    }
+  ],
+  "raw_iq": {
+    "reason": "raw-IQ CAF regeneration input/provenance not present in frozen feature cache",
+    "status": "UNAVAILABLE"
+  },
+  "schema": "pg_scc_awgn_reaudit.v1",
+  "status": "AWGN_INCONCLUSIVE"
+}

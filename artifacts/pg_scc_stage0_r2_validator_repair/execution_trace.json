@@ -1,0 +1,44 @@
+{
+  "attempt_state_written_before_failure": true,
+  "canonical_invocation": "python3 scripts/run_pg_scc_root_cause_audit.py --implementation-sha 0ada6bd096af578fcd881b8df805e8dfff13177c --output artifacts/pg_scc_stage0_r2_validator_repair",
+  "error_message": "required artifact schema incomplete: ['artifact_manifest_sha256.json']",
+  "error_type": "RuntimeError",
+  "exit_code": 1,
+  "failure_stage": "required_output_validation_before_finalize_manifest",
+  "implementation_sha": "0ada6bd096af578fcd881b8df805e8dfff13177c",
+  "missing_required_artifacts": [
+    "artifact_manifest_sha256.json"
+  ],
+  "no_retry_permitted": true,
+  "partial_scientific_outputs_preserved": true,
+  "producer_active_after_exit": false,
+  "protected_execution_count": 1,
+  "protected_loader_call_count": 1,
+  "protected_loader_invoked": true,
+  "artifact_verifier_status": "FAIL",
+  "fresh_clone_verifier_status": "DEFERRED_UNTIL_FAIL_CLOSED_EVIDENCE_COMMIT",
+  "git_diff_check": "PASS",
+  "key_metrics": {
+    "additional_rows": 0,
+    "k3_minus_k9_macro_pauc": 0.14957264957264949,
+    "k9_minus_fixed9": -0.16203703703703687,
+    "max_absolute_score_error": 4.760636329592671e-13,
+    "max_relative_score_error": 2.309927789473024e-13,
+    "missing_rows": 0,
+    "score_mismatch_rows": 0
+  },
+  "normal_verifier_status": "FAIL",
+  "plot_count": 9,
+  "plots_nonempty": true,
+  "reproduction_status": "PASS",
+  "scientific_verdict": "REPAIRABLE_BUT_REQUIRES_NEW_CONFIRMATION",
+  "semantic_science_guard": "PASS",
+  "tests": {
+    "passed": 53,
+    "warnings": 1
+  },
+  "result_commit_eligible": false,
+  "schema": "pg_scc_stage0_r2_validator_repair_execution_trace.v1",
+  "state": "FAIL_CLOSED",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-pg-scc-stage0-r2-validator-repair/scripts/run_pg_scc_root_cause_audit.py\", line 2289, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-pg-scc-stage0-r2-validator-repair/scripts/run_pg_scc_root_cause_audit.py\", line 2281, in main\n    _validate_required_outputs()\n  File \"/home/ubuntu/orca/workspaces/gnss-doppler-lab/research-pg-scc-stage0-r2-validator-repair/scripts/run_pg_scc_root_cause_audit.py\", line 2126, in _validate_required_outputs\n    raise RuntimeError(f\"required artifact schema incomplete: {missing}\")\nRuntimeError: required artifact schema incomplete: ['artifact_manifest_sha256.json']\n"
+}
