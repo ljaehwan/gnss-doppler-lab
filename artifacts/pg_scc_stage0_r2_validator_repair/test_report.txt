@@ -1,0 +1,75 @@
+PG-SCC R2 validator repair TDD and metadata/synthetic dry-run report
+
+Protected loader invoked during Phase C/D dry-runs: false
+Protected loader call count during Phase C/D dry-runs: 0
+Protected execution count: 0
+
+RED
+Command: pytest -q tests/test_pg_scc_r2_validator_repair.py
+Result: 3 failed, 6 passed, 1 warning
+Expected failures:
+- test_validator_gate_2_pre_run_operational_addition_passes
+- test_validator_gate_3_attempt_state_operational_addition_preserves_stable_pass
+- test_validator_gate_8_loader_called_exactly_once_after_validator_passes
+Failure: FAIL_CLOSED_SUPPORT_PREFLIGHT:committed semantics/accounting mismatch:r1_identity
+
+INDEPENDENT-REVIEW HARDENING RED
+Command: pytest -q tests/test_pg_scc_r2_validator_repair.py
+Result: 17 failed, 9 passed, 1 warning
+Expected failure classes:
+- mutable worktree preregistration expanded the operational allowlist
+- manifest schema/base/preregistration identity and deleted keys were not rejected
+- modified tracked preregistration/manifest/semantic/binding metadata were ignored
+- unregistered dirty namespace files were ignored
+- runner and independent verifier lacked strict dirty-status helpers
+
+HARDENED FOCUSED GREEN
+Command: python3 -m pytest -q tests/test_pg_scc_r2_validator_repair.py
+Result: 26 passed, 1 warning
+
+REQUIRED TEST MATRIX
+Command: python3 -m pytest -q tests/test_pg_scc_root_cause_audit.py tests/test_pg_scc_r2_preflight.py tests/test_pg_scc_r2_repair_followup.py tests/test_pg_scc_r2_validator_repair.py
+Result: 53 passed, 1 warning
+
+METADATA PREFLIGHT
+Command: python3 scripts/run_pg_scc_root_cause_audit.py --metadata-preflight --output artifacts/pg_scc_stage0_r2_validator_repair
+Result: PASS
+Eligible event count: 260
+Excluded event count: 0
+Protected score fields read: 0
+
+ACTUAL COMMITTED-PREFLIGHT CANDIDATE VALIDATION
+Result: PASS
+Operational allowlist source commit: c7887316ed981d0e7cde74b2bbadeb1cf83bb233
+Operational allowlist blob SHA256: 25fcfdb342b733fab7e296f72940a92aabf89fdd03b662bda0845ca8bbd884c0
+Mutable worktree preregistration tamper: FAIL_CLOSED as required
+Allowed operational additions:
+- artifacts/pg_scc_stage0_r2_validator_repair/implementation_manifest_sha256.json
+- artifacts/pg_scc_stage0_r2_validator_repair/semantic_diff_audit.json
+Manifest schema/base/preregistration/key-set tamper tests: FAIL_CLOSED as required
+Tracked freeze metadata and unregistered namespace dirty tests: FAIL_CLOSED as required
+Untracked preregistered pre_run_state allowance test: PASS
+Protected loader call count: 0
+
+TEN PREREGISTERED DRY-RUN GATES
+1. committed preflight only => PASS
+2. add pre_run_state.json => PASS
+3. allowed attempt_state.json exists => stable invariants PASS
+4. arbitrary disallowed source change => FAIL_CLOSED as required
+5. support event count change => FAIL_CLOSED as required
+6. protected score read count change => FAIL_CLOSED as required
+7. loader sentinel remains at 0 until validator PASS => PASS
+8. loader sentinel called exactly once only after validator PASS => PASS
+9. mixed absolute-dilution and paired-change rows generate exactly 9 required plots => PASS
+10. scientific functions and files equal implementation SHA 9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d => PASS
+
+SEMANTIC VERIFIER
+Command: python3 scripts/verify_pg_scc_r2_validator_semantic_diff.py --base 9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d --output artifacts/pg_scc_stage0_r2_validator_repair/semantic_diff_audit.json
+Result: PASS
+Errors: []
+Preregistered scientific function AST hashes: all PASS
+Preregistered frozen file hashes: all PASS
+Predecessor fail-closed file byte equivalence: all PASS
+
+GIT DIFF CHECK
+Result: PASS

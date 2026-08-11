@@ -36,15 +36,17 @@ from gnss_doppler_lab.pg_scc_selector import (
 
 FROZEN = ROOT / "artifacts/pg_scc_stage0_static_k9"
 R1_OUTPUT = ROOT / "artifacts/pg_scc_stage0_r1_root_cause_audit"
-OUTPUT = ROOT / "artifacts/pg_scc_stage0_r2_repair_followup"
+OUTPUT = ROOT / "artifacts/pg_scc_stage0_r2_validator_repair"
 CACHE = ROOT / "artifacts/acaf_nf_stage1_r3_static_detection"
 FAMILY = {"ds3": "ds3", "ds4": "ds4", "ds7": "ds7_ds8", "ds8": "ds7_ds8"}
 FAMILY_MEMBERS = {"ds3": ("ds3",), "ds4": ("ds4",), "ds7_ds8": ("ds7", "ds8")}
 CONFIG_SHA256 = "336802a95e82df1da82822520fe8bd838bf18ce17da6ae29aa5695449f3b67f5"
-SOURCE_SHA256 = "571b80ec11a9f860317f84c5d1808fddda270e988dfb8d25948df0999de0f8a4"
+SOURCE_SHA256 = "2b2c7bc55d031a9fd86f210e249a51d44c0a7f0e92500159e2b60dc05db87f70"
 R1_FAILURE_BINDING_SHA256 = "550f3fde25742b571fa0a5206a96d0454300d1fe1732671b9bf655ccbb3f379f"
-PREREGISTRATION_SHA = "5ba338e8b946fb7cb604d827e47f94eff72b0fa6"
-REQUIRED_BASE_SHA = "05cb5a5421461bb90bafc6cd3683a119ddf09555"
+PREREGISTRATION_SHA = "c7887316ed981d0e7cde74b2bbadeb1cf83bb233"
+PREREGISTRATION_BLOB_SHA256 = "25fcfdb342b733fab7e296f72940a92aabf89fdd03b662bda0845ca8bbd884c0"
+REQUIRED_BASE_SHA = "68ab54677f5d0b4b55cc39279aec631f60f655a9"
+SCIENTIFIC_IMPLEMENTATION_SHA = "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d"
 R1_FAIL_CLOSED_SHA = "8cd78ed724e57f97498da26547a9ecbbc2a78fe1"
 FROZEN_DESIGN_SHA256 = "28de36cfa264c755712d52e051d882d366a9a5d9065471371ad27309f1f07d7a"
 R1_ARTIFACT_SHA256 = {
@@ -76,18 +78,46 @@ PHASE2_ALLOWED_CHANGED_PATHS = {
     "scripts/verify_pg_scc_root_cause_audit.py",
     "tests/test_pg_scc_root_cause_audit.py",
     "tests/test_pg_scc_r2_preflight.py",
+    "artifacts/pg_scc_stage0_r2_repair_followup/attempt_state.json",
     "artifacts/pg_scc_stage0_r2_repair_followup/config.json",
+    "artifacts/pg_scc_stage0_r2_repair_followup/fail_closed_delivery_manifest_sha256.json",
+    "artifacts/pg_scc_stage0_r2_repair_followup/fail_closed_delivery_report.json",
+    "artifacts/pg_scc_stage0_r2_repair_followup/fresh_clone_verifier_report.json",
     "artifacts/pg_scc_stage0_r2_repair_followup/implementation_manifest_sha256.json",
+    "artifacts/pg_scc_stage0_r2_repair_followup/normal_verifier_report.json",
     "artifacts/pg_scc_stage0_r2_repair_followup/pre_run_state.json",
     "artifacts/pg_scc_stage0_r2_repair_followup/predecessor_failure_binding.json",
     "artifacts/pg_scc_stage0_r2_repair_followup/preregistration.json",
+    "artifacts/pg_scc_stage0_r2_repair_followup/protected_attempt_traceback.txt",
     "artifacts/pg_scc_stage0_r2_repair_followup/r1_failure_binding.json",
+    "artifacts/pg_scc_stage0_r2_repair_followup/related_tests_report.txt",
     "artifacts/pg_scc_stage0_r2_repair_followup/semantic_diff_audit.json",
+    "artifacts/pg_scc_stage0_r2_repair_followup/semantic_verifier_report.json",
     "artifacts/pg_scc_stage0_r2_repair_followup/source_commit.json",
     "artifacts/pg_scc_stage0_r2_repair_followup/support_preflight.json",
     "scripts/verify_pg_scc_r2_repair_followup.py",
     "scripts/verify_pg_scc_r2_semantic_diff.py",
     "tests/test_pg_scc_r2_repair_followup.py",
+    "artifacts/pg_scc_stage0_r2_validator_repair/artifact_verifier_report.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/attempt_state.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/config.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/execution_trace.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/fresh_clone_verifier_report.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/implementation_manifest_sha256.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/normal_verifier_report.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/pre_run_state.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/predecessor_failure_binding.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/preregistration.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/r1_failure_binding.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/reproduction_check.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/semantic_diff_audit.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/source_commit.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/support_preflight.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/test_report.txt",
+    "artifacts/pg_scc_stage0_r2_validator_repair/validator_root_cause.json",
+    "scripts/verify_pg_scc_r2_validator_repair.py",
+    "scripts/verify_pg_scc_r2_validator_semantic_diff.py",
+    "tests/test_pg_scc_r2_validator_repair.py",
 }
 CORE_METHODS = (
     "pg_scc_k3", "pg_scc_k5", "pg_scc_k9", "fixed9", "epl3",
@@ -105,7 +135,7 @@ REQUIRED_ARTIFACTS = (
     "README.md", "config.json", "source_commit.json", "r1_failure_binding.json",
     "support_preflight.json", "preregistration.json", "predecessor_failure_binding.json",
     "pre_run_state.json", "implementation_manifest_sha256.json",
-    "semantic_diff_audit.json", "attempt_state.json", "reproduction_check.json",
+    "semantic_diff_audit.json", "validator_root_cause.json", "attempt_state.json", "reproduction_check.json",
     "nested_mask_analysis.csv", "coordinate_contributions.csv",
     "score_dilution_metrics.csv", "dense_teacher_diagnostics.json",
     "synthetic_real_mismatch.csv", "selector_proxy_audit.json",
@@ -126,9 +156,24 @@ IMPLEMENTATION_FILES = (
     "scripts/verify_pg_scc_root_cause_audit.py",
     "scripts/verify_pg_scc_r2_repair_followup.py",
     "scripts/verify_pg_scc_r2_semantic_diff.py",
+    "scripts/verify_pg_scc_r2_validator_repair.py",
+    "scripts/verify_pg_scc_r2_validator_semantic_diff.py",
     "tests/test_pg_scc_root_cause_audit.py",
     "tests/test_pg_scc_r2_preflight.py",
     "tests/test_pg_scc_r2_repair_followup.py",
+    "tests/test_pg_scc_r2_validator_repair.py",
+)
+IMPLEMENTATION_MANIFEST_FILES = (
+    *IMPLEMENTATION_FILES,
+    "artifacts/pg_scc_stage0_r2_validator_repair/config.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/source_commit.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/r1_failure_binding.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/support_preflight.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/preregistration.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/predecessor_failure_binding.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/validator_root_cause.json",
+    "artifacts/pg_scc_stage0_r2_validator_repair/test_report.txt",
+    "artifacts/pg_scc_stage0_r2_validator_repair/semantic_diff_audit.json",
 )
 ALLOWED_ROLES = {
     "selector": {"clean_train", "clean_selection", "synthetic_train", "synthetic_validation"},
@@ -714,9 +759,9 @@ def build_metadata_support_preflight_report(
         raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:Phase-1 artifact checksum drift")
     config = load_json(OUTPUT / "config.json")
     source = load_json(OUTPUT / "source_commit.json")
-    if source.get("branch") != "research/pg-scc-stage0-r2-root-cause-audit":
+    if source.get("branch") != "research/pg-scc-stage0-r2-validator-repair":
         raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:Phase-1 source binding drift")
-    if source.get("protected_score_fields_read_before_preregistration") != 0:
+    if source.get("metadata_only_phase_a", {}).get("protected_score_fields_read") != 0:
         raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:Phase-1 protected-access drift")
     support_config = config["common_support"]
     minimum_prns = int(
@@ -801,24 +846,83 @@ def run_metadata_support_preflight(
 def validate_committed_support_preflight(
     report: Mapping[str, Any], *, require_head_blob: bool = False,
 ) -> dict[str, Any]:
-    """Exact-compare the committed report with an independent full reconstruction."""
+    """Exact-check stable semantics and bound post-preflight operational paths."""
     try:
         expected = build_metadata_support_preflight_report()
     except Exception as exc:
         raise RuntimeError(f"FAIL_CLOSED_SUPPORT_PREFLIGHT:reconstruction failed:{exc}") from exc
-    if dict(report) != expected:
+
+    committed = dict(report)
+    committed_identity = committed.get("r1_identity")
+    expected_identity = expected.get("r1_identity")
+    if not isinstance(committed_identity, Mapping) or not isinstance(expected_identity, Mapping):
+        raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:invalid r1_identity schema")
+
+    committed_stable = {key: value for key, value in committed.items() if key != "r1_identity"}
+    expected_stable = {key: value for key, value in expected.items() if key != "r1_identity"}
+    if committed_stable != expected_stable:
         differing = sorted(
-            key for key in set(report) | set(expected) if report.get(key) != expected.get(key)
+            key for key in set(committed_stable) | set(expected_stable)
+            if committed_stable.get(key) != expected_stable.get(key)
         )
         raise RuntimeError(
             "FAIL_CLOSED_SUPPORT_PREFLIGHT:committed semantics/accounting mismatch:"
             + ",".join(differing)
         )
+
+    committed_identity_stable = {
+        key: value for key, value in committed_identity.items()
+        if key != "phase2_changed_paths"
+    }
+    expected_identity_stable = {
+        key: value for key, value in expected_identity.items()
+        if key != "phase2_changed_paths"
+    }
+    if committed_identity_stable != expected_identity_stable:
+        differing = sorted(
+            key for key in set(committed_identity_stable) | set(expected_identity_stable)
+            if committed_identity_stable.get(key) != expected_identity_stable.get(key)
+        )
+        raise RuntimeError(
+            "FAIL_CLOSED_SUPPORT_PREFLIGHT:stable r1_identity mismatch:"
+            + ",".join(differing)
+        )
+
+    committed_path_list = committed_identity.get("phase2_changed_paths")
+    expected_path_list = expected_identity.get("phase2_changed_paths")
+    if (
+        not isinstance(committed_path_list, list)
+        or not isinstance(expected_path_list, list)
+        or any(not isinstance(path, str) for path in [*committed_path_list, *expected_path_list])
+        or committed_path_list != sorted(set(committed_path_list))
+        or expected_path_list != sorted(set(expected_path_list))
+    ):
+        raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:invalid phase2_changed_paths schema")
+    committed_paths = set(committed_path_list)
+    expected_paths = set(expected_path_list)
+    removed_paths = sorted(committed_paths - expected_paths)
+
+    preregistration = _load_committed_preregistration()
+    operational_path_list = preregistration.get("dynamic_operational_path_contract", {}).get(
+        "allowed_only_when_added_after_committed_preflight_and_subset_of_this_set"
+    )
+    if (
+        not isinstance(operational_path_list, list)
+        or any(not isinstance(path, str) for path in operational_path_list)
+        or operational_path_list != sorted(set(operational_path_list))
+    ):
+        raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:invalid operational path preregistration")
+    unregistered_additions = sorted((expected_paths - committed_paths) - set(operational_path_list))
+    if removed_paths or unregistered_additions:
+        raise RuntimeError(
+            "FAIL_CLOSED_SUPPORT_PREFLIGHT:dynamic operational path mismatch:"
+            f"removed={removed_paths},unregistered_additions={unregistered_additions}"
+        )
     if expected["status"] != "PASS" or expected["protected_score_fields_projected_or_read"] != 0:
         raise RuntimeError("FAIL_CLOSED_SUPPORT_PREFLIGHT:reconstructed preflight is not PASS")
     if require_head_blob:
         committed = subprocess.run(
-            ["git", "show", "HEAD:artifacts/pg_scc_stage0_r2_repair_followup/support_preflight.json"],
+            ["git", "show", "HEAD:artifacts/pg_scc_stage0_r2_validator_repair/support_preflight.json"],
             cwd=ROOT, text=True, capture_output=True,
         )
         canonical = json.dumps(dict(report), indent=2, sort_keys=True, allow_nan=False) + "\n"
@@ -972,7 +1076,7 @@ def verify_preregistration(config: dict[str, Any], source: dict[str, Any]) -> di
     head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     base_expected = REQUIRED_BASE_SHA
     base = subprocess.check_output(["git", "merge-base", "HEAD", base_expected], cwd=ROOT, text=True).strip()
-    if branch != "research/pg-scc-stage0-r2-repair-followup":
+    if branch != "research/pg-scc-stage0-r2-validator-repair":
         errors.append("branch_mismatch")
     if base != base_expected:
         errors.append("base_merge_base_mismatch")
@@ -983,7 +1087,7 @@ def verify_preregistration(config: dict[str, Any], source: dict[str, Any]) -> di
     for key in ("attack_fit", "attack_based_selection", "post_attack_retuning"):
         if config.get(key) is not False or config["guard"].get(key) is not False:
             errors.append(key)
-    if source.get("protected_score_fields_read_before_preregistration") != 0:
+    if source.get("metadata_only_phase_a", {}).get("protected_score_fields_read") != 0:
         errors.append("preregistration_protected_access")
     expected_files = {
         "config.json": CONFIG_SHA256,
@@ -1218,6 +1322,108 @@ def _git(*args: str, check: bool = True) -> str:
     return result.stdout.strip()
 
 
+def _load_committed_preregistration() -> dict[str, Any]:
+    """Load only the hash-bound preregistration blob from its exact commit."""
+    relative = "artifacts/pg_scc_stage0_r2_validator_repair/preregistration.json"
+    try:
+        raw = subprocess.check_output(
+            ["git", "show", f"{PREREGISTRATION_SHA}:{relative}"], cwd=ROOT,
+        )
+    except subprocess.CalledProcessError as exc:
+        raise RuntimeError("FAIL_CLOSED_PREREGISTRATION_BLOB:unavailable") from exc
+    if hashlib.sha256(raw).hexdigest() != PREREGISTRATION_BLOB_SHA256:
+        raise RuntimeError("FAIL_CLOSED_PREREGISTRATION_BLOB:hash_mismatch")
+    try:
+        preregistration = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError("FAIL_CLOSED_PREREGISTRATION_BLOB:invalid_json") from exc
+    if (
+        not isinstance(preregistration, dict)
+        or preregistration.get("branch") != "research/pg-scc-stage0-r2-validator-repair"
+        or preregistration.get("base_sha") != REQUIRED_BASE_SHA
+    ):
+        raise RuntimeError("FAIL_CLOSED_PREREGISTRATION_BLOB:identity_mismatch")
+    return preregistration
+
+
+def _operational_additions() -> set[str]:
+    preregistration = _load_committed_preregistration()
+    values = preregistration.get("dynamic_operational_path_contract", {}).get(
+        "allowed_only_when_added_after_committed_preflight_and_subset_of_this_set"
+    )
+    if (
+        not isinstance(values, list)
+        or any(not isinstance(path, str) for path in values)
+        or values != sorted(set(values))
+    ):
+        raise RuntimeError("FAIL_CLOSED_PREREGISTRATION_BLOB:invalid_operational_paths")
+    return set(values)
+
+
+def _freeze_dirty_errors(status: str) -> list[str]:
+    """Allow only untracked post-preflight additions named by committed preregistration."""
+    operational = _operational_additions()
+    return [
+        line for line in status.splitlines()
+        if line and not (line[:2] == "??" and line[3:] in operational)
+    ]
+
+
+def _implementation_manifest_errors() -> list[str]:
+    errors: list[str] = []
+    path = OUTPUT / "implementation_manifest_sha256.json"
+    try:
+        manifest = load_json(path)
+    except (OSError, ValueError, json.JSONDecodeError):
+        return ["implementation_manifest_unreadable"]
+    expected_outer_keys = {
+        "schema", "base_sha", "implementation_freeze_rule", "preregistration_sha",
+        "protected_score_fields_read_before_freeze", "files",
+    }
+    if set(manifest) != expected_outer_keys:
+        errors.append("implementation_manifest_schema_key_set")
+    if manifest.get("schema") != "pg_scc_stage0_r2_validator_repair_implementation_manifest.v1":
+        errors.append("implementation_manifest_schema")
+    if manifest.get("base_sha") != SCIENTIFIC_IMPLEMENTATION_SHA:
+        errors.append("implementation_manifest_base")
+    if manifest.get("preregistration_sha") != PREREGISTRATION_SHA:
+        errors.append("implementation_manifest_preregistration")
+    if manifest.get("implementation_freeze_rule") != "commit containing these exact hashes":
+        errors.append("implementation_manifest_freeze_rule")
+    if manifest.get("protected_score_fields_read_before_freeze") != 0:
+        errors.append("implementation_manifest_protected_access")
+    files = manifest.get("files")
+    if not isinstance(files, dict) or set(files) != set(IMPLEMENTATION_MANIFEST_FILES):
+        errors.append("implementation_manifest_key_set")
+        files = files if isinstance(files, dict) else {}
+    prereg_relative = "artifacts/pg_scc_stage0_r2_validator_repair/preregistration.json"
+    if files.get(prereg_relative) != PREREGISTRATION_BLOB_SHA256:
+        errors.append("implementation_manifest_preregistration_blob")
+    for relative in IMPLEMENTATION_MANIFEST_FILES:
+        expected = files.get(relative)
+        current = ROOT / relative
+        if not isinstance(expected, str) or not current.is_file() or sha256(current) != expected:
+            errors.append(f"implementation_hash:{relative}")
+        try:
+            committed = subprocess.check_output(["git", "show", f"HEAD:{relative}"], cwd=ROOT)
+        except subprocess.CalledProcessError:
+            errors.append(f"implementation_uncommitted:{relative}")
+        else:
+            if not isinstance(expected, str) or hashlib.sha256(committed).hexdigest() != expected:
+                errors.append(f"implementation_head_hash:{relative}")
+    try:
+        committed_manifest = subprocess.check_output(
+            ["git", "show", "HEAD:artifacts/pg_scc_stage0_r2_validator_repair/implementation_manifest_sha256.json"],
+            cwd=ROOT,
+        )
+    except subprocess.CalledProcessError:
+        errors.append("implementation_manifest_uncommitted")
+    else:
+        if path.read_bytes() != committed_manifest:
+            errors.append("implementation_manifest_head_bytes")
+    return errors
+
+
 def verify_implementation_freeze(expected_sha: str) -> dict[str, Any]:
     """Fail before any protected cache/result is opened."""
     errors: list[str] = []
@@ -1225,7 +1431,7 @@ def verify_implementation_freeze(expected_sha: str) -> dict[str, Any]:
     branch = _git("branch", "--show-current")
     if expected_sha != head or len(expected_sha) != 40:
         errors.append("implementation_sha_not_exact_head")
-    if branch != "research/pg-scc-stage0-r2-repair-followup":
+    if branch != "research/pg-scc-stage0-r2-validator-repair":
         errors.append("branch_mismatch")
     if subprocess.run(["git", "merge-base", "--is-ancestor", PREREGISTRATION_SHA, head],
                       cwd=ROOT).returncode:
@@ -1243,14 +1449,22 @@ def verify_implementation_freeze(expected_sha: str) -> dict[str, Any]:
         errors.append("frozen_source_hash")
     if sha256(binding_path) != R1_FAILURE_BINDING_SHA256:
         errors.append("frozen_r1_failure_binding_hash")
-    for relative, expected in (
-        ("config.json", CONFIG_SHA256),
-        ("source_commit.json", SOURCE_SHA256),
-        ("r1_failure_binding.json", R1_FAILURE_BINDING_SHA256),
+    errors.extend(_implementation_manifest_errors())
+    for relative, expected, committed_path in (
+        ("config.json", CONFIG_SHA256, "artifacts/pg_scc_stage0_r2_root_cause_audit/config.json"),
+        (
+            "source_commit.json",
+            SOURCE_SHA256,
+            "artifacts/pg_scc_stage0_r2_validator_repair/source_commit.json",
+        ),
+        (
+            "r1_failure_binding.json",
+            R1_FAILURE_BINDING_SHA256,
+            "artifacts/pg_scc_stage0_r2_root_cause_audit/r1_failure_binding.json",
+        ),
     ):
         committed = subprocess.check_output(
-            ["git", "show", f"{PREREGISTRATION_SHA}:artifacts/pg_scc_stage0_r2_root_cause_audit/{relative}"],
-            cwd=ROOT,
+            ["git", "show", f"{PREREGISTRATION_SHA}:{committed_path}"], cwd=ROOT,
         )
         if hashlib.sha256(committed).hexdigest() != expected:
             errors.append(f"preregistration_blob_hash:{relative}")
@@ -1264,19 +1478,7 @@ def verify_implementation_freeze(expected_sha: str) -> dict[str, Any]:
         if divergence != ["0", "0"]:
             errors.append("local_remote_ahead_behind_not_0_0")
     status = _git("status", "--porcelain=v1", "--untracked-files=all")
-    allowed_files = set(REQUIRED_ARTIFACTS) - {
-        "plots", "config.json", "source_commit.json", "r1_failure_binding.json",
-        "support_preflight.json",
-    }
-    dirty = []
-    for line in status.splitlines():
-        relative = line[3:]
-        prefix = "artifacts/pg_scc_stage0_r2_repair_followup/"
-        if relative.startswith(prefix):
-            child = relative[len(prefix):]
-            if child in allowed_files or (child.startswith("plots/") and child.split("/", 1)[1] in REQUIRED_PLOTS):
-                continue
-        dirty.append(line)
+    dirty = _freeze_dirty_errors(status)
     if dirty:
         errors.append("dirty_worktree_outside_declared_outputs:" + "|".join(dirty))
     frozen_manifest = load_json(FROZEN / "freeze_manifest.json")
@@ -1936,7 +2138,7 @@ def _write_followup_attempt_state(freeze: Mapping[str, Any], verdict: Mapping[st
         "attempt_count": 1,
         "implementation_sha": freeze["implementation_sha"],
         "predecessor_partial_outputs_reused": False,
-        "schema": "pg_scc_stage0_r2_repair_followup_attempt_state.v1",
+        "schema": "pg_scc_stage0_r2_validator_repair_attempt_state.v1",
         "scientific_verdict": verdict["verdict"],
         "state": "COMPLETED",
     })
