@@ -1,0 +1,14 @@
+{
+  "fail_closed_result_sha": "cc0e24a9fdf9048fba2be37d2e48480e343f00d4",
+  "finalized_tip_sha": "5a694a0662376b9e357fa930638657a90e20d7df",
+  "hardening_preregistration_sha": "bafbe69365bd99380f9a976cd6dcdd4e951abfab",
+  "preserved_file_count": 29,
+  "preserved_files_verified": 29,
+  "protected_execution_count": 1,
+  "protected_loader_call_count": 1,
+  "protected_retry_count": 0,
+  "schema": "pg_scc_stage0_r2_validator_verifier_hardening_preserved_hash_audit.v1",
+  "status": "PASS",
+  "timestamp_utc": "2026-08-11T06:32:16Z",
+  "verification": "worktree SHA-256 equals bafbe693 preregistered digest and bytes equal cc0e24a Git blob for every preserved path"
+}

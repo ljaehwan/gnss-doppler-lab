@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import importlib.util
 import json
+import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -328,12 +331,13 @@ def test_finalization_validates_outputs_before_manifest_and_manifest_after(
 ):
     runner = load_runner()
     monkeypatch.setattr(runner, "OUTPUT", tmp_path)
-    for relative in runner.REQUIRED_ARTIFACTS:
+    for relative in sorted(runner._committed_artifact_entry_names()):
         path = tmp_path / relative
-        if relative in {"plots", "artifact_manifest_sha256.json"}:
-            continue
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text("{}\n" if path.suffix == ".json" else "preserved\n", encoding="utf-8")
+        if path.suffix == ".png":
+            path.write_bytes(b"preserved-plot")
+        else:
+            path.write_text("{}\n" if path.suffix == ".json" else "preserved\n", encoding="utf-8")
     (tmp_path / "root_cause_verdict.json").write_text(
         json.dumps(
             {
@@ -345,11 +349,6 @@ def test_finalization_validates_outputs_before_manifest_and_manifest_after(
         + "\n",
         encoding="utf-8",
     )
-    plot_root = tmp_path / "plots"
-    plot_root.mkdir()
-    for name in runner.REQUIRED_PLOTS:
-        (plot_root / name).write_bytes(b"preserved-plot")
-
     runner._validate_required_outputs(require_manifest=False)
     manifest = runner.finalize_manifest(tmp_path)
     assert "artifact_manifest_sha256.json" not in manifest
@@ -358,3 +357,86 @@ def test_finalization_validates_outputs_before_manifest_and_manifest_after(
     (tmp_path / "README.md").write_text("tampered\n", encoding="utf-8")
     with pytest.raises(RuntimeError, match="artifact manifest mismatch"):
         runner._validate_required_outputs(require_manifest=True)
+
+
+
+def test_unknown_artifact_with_regenerated_manifest_fails_closed(tmp_path):
+    runner = load_runner()
+    verifier = load_validator_verifier()
+    artifact = tmp_path / "artifact"
+    shutil.copytree(ROOT / "artifacts/pg_scc_stage0_r2_validator_repair", artifact)
+    (artifact / "unknown_artifact.json").write_text("{}\n", encoding="utf-8")
+    runner.finalize_manifest(artifact)
+
+    errors = verifier._artifact_manifest_errors(artifact)
+    assert "artifact_manifest_expected_key_set" in errors
+    assert "artifact_actual_expected_file_set" in errors
+
+
+def test_missing_expected_artifact_with_regenerated_manifest_fails_closed(tmp_path):
+    runner = load_runner()
+    verifier = load_validator_verifier()
+    artifact = tmp_path / "artifact"
+    shutil.copytree(ROOT / "artifacts/pg_scc_stage0_r2_validator_repair", artifact)
+    (artifact / "normal_verifier_report.json").unlink()
+    runner.finalize_manifest(artifact)
+
+    errors = verifier._artifact_manifest_errors(artifact)
+    assert "artifact_manifest_expected_key_set" in errors
+    assert "artifact_actual_expected_file_set" in errors
+
+
+def test_mutable_hardening_preregistration_cannot_widen_committed_artifact_set(
+    monkeypatch,
+):
+    verifier = load_validator_verifier()
+    path = (
+        ROOT
+        / "artifacts/pg_scc_stage0_r2_validator_verifier_hardening/preregistration.json"
+    )
+    tampered = json.loads(path.read_text(encoding="utf-8"))
+    tampered["artifact_closed_world_contract"]["exact_entry_names"].append(
+        "unknown_artifact.json"
+    )
+    original_read_text = Path.read_text
+
+    def tampered_read_text(candidate, *args, **kwargs):
+        if candidate == path:
+            return json.dumps(tampered)
+        return original_read_text(candidate, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "read_text", tampered_read_text)
+    names = verifier._committed_artifact_entry_names()
+    assert len(names) == 39
+    assert "unknown_artifact.json" not in names
+
+
+def test_phase2_allowlist_exact_equality_and_no_finalization_report():
+    runner = load_runner()
+    relative = (
+        "artifacts/pg_scc_stage0_r2_validator_verifier_hardening/"
+        "preregistration.json"
+    )
+    preregistration = json.loads(
+        subprocess.check_output(
+            ["git", "show", f"bafbe69365bd99380f9a976cd6dcdd4e951abfab:{relative}"],
+            cwd=ROOT,
+        )
+    )
+    contract = preregistration["legacy_phase2_allowlist_contract"]
+    canonical = json.dumps(
+        sorted(runner.PHASE2_ALLOWED_CHANGED_PATHS),
+        separators=(",", ":"),
+    ).encode()
+
+    assert len(runner.PHASE2_ALLOWED_CHANGED_PATHS) == contract[
+        "expected_post_hardening_entry_count"
+    ]
+    assert hashlib.sha256(canonical).hexdigest() == contract[
+        "expected_post_hardening_exact_set_sha256"
+    ]
+    assert (
+        "artifacts/pg_scc_stage0_r2_validator_finalization_followup/"
+        "finalization_report.json"
+        not in runner.PHASE2_ALLOWED_CHANGED_PATHS
+    )

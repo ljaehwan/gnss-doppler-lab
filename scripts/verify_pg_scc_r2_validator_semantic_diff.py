@@ -22,18 +22,24 @@ ALLOWED_CHANGED_FUNCTIONS = {
     "verify_preregistration": "validator-repair branch/base provenance gate",
     "verify_implementation_freeze": "validator-repair branch/namespace provenance gate",
     "validate_committed_support_preflight": "stable exact plus bounded operational-path validation",
+    "_allowed_path": "verifier-hardening evidence namespace registration",
 }
 ALLOWED_NEW_FUNCTIONS: dict[str, str] = {
     "_load_committed_preregistration": "hash-bound committed preregistration loader",
     "_operational_additions": "committed operational path extraction",
     "_freeze_dirty_errors": "closed-world freeze dirty-path gate",
     "_implementation_manifest_errors": "closed-world implementation manifest gate",
+    "_load_committed_verifier_hardening_preregistration": "hash-bound hardening preregistration loader",
+    "_committed_artifact_entry_names": "committed closed-world artifact name-set loader",
 }
 ALLOWED_CHANGED_ASSIGNMENTS = {
     "OUTPUT",
     "SOURCE_SHA256",
     "PREREGISTRATION_SHA",
     "PREREGISTRATION_BLOB_SHA256",
+    "VERIFIER_HARDENING_PREREGISTRATION_SHA",
+    "VERIFIER_HARDENING_PREREGISTRATION_BLOB_SHA256",
+    "VERIFIER_HARDENING_PREREGISTRATION_PATH",
     "REQUIRED_BASE_SHA",
     "SCIENTIFIC_IMPLEMENTATION_SHA",
     "PHASE2_ALLOWED_CHANGED_PATHS",
@@ -79,6 +85,7 @@ MANIFEST_FILES = (
     "artifacts/pg_scc_stage0_r2_validator_repair/test_report.txt",
     "artifacts/pg_scc_stage0_r2_validator_repair/semantic_diff_audit.json",
     "artifacts/pg_scc_stage0_r2_validator_finalization_followup/preregistration.json",
+    "artifacts/pg_scc_stage0_r2_validator_verifier_hardening/preregistration.json",
 )
 
 
@@ -145,6 +152,7 @@ def _allowed_path(path: str) -> bool:
         }
         or path.startswith("artifacts/pg_scc_stage0_r2_validator_repair/")
         or path.startswith("artifacts/pg_scc_stage0_r2_validator_finalization_followup/")
+        or path.startswith("artifacts/pg_scc_stage0_r2_validator_verifier_hardening/")
     )
 
 

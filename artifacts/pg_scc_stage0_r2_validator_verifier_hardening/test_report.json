@@ -1,0 +1,35 @@
+{
+  "focused_green": {
+    "command": "python3 -m pytest -q tests/test_pg_scc_r2_validator_repair.py",
+    "passed": 31,
+    "status": "PASS",
+    "warnings": 1
+  },
+  "full_relevant_suite": {
+    "command": "python3 -m pytest -q tests/test_pg_scc_root_cause_audit.py tests/test_pg_scc_r2_preflight.py tests/test_pg_scc_r2_repair_followup.py tests/test_pg_scc_r2_validator_repair.py",
+    "passed": 58,
+    "status": "PASS",
+    "warnings": 1
+  },
+  "injection_negative_tests": {
+    "missing_expected_artifact_with_regenerated_manifest": "PASS_FAIL_CLOSED",
+    "mutable_worktree_preregistration_widening": "PASS_IGNORED_MUTABLE_STATE",
+    "phase2_allowlist_exact_equality": "PASS",
+    "unknown_artifact_with_regenerated_manifest": "PASS_FAIL_CLOSED"
+  },
+  "red": {
+    "failed": 4,
+    "failures": [
+      "unknown artifact: missing _artifact_manifest_errors closed-world checker",
+      "missing expected artifact: missing _artifact_manifest_errors closed-world checker",
+      "mutable worktree preregistration: missing _committed_artifact_entry_names immutable loader",
+      "PHASE2 allowlist: actual 79 paths did not equal preregistered 84 paths"
+    ],
+    "passed": 0,
+    "status": "RED",
+    "warnings": 1
+  },
+  "schema": "pg_scc_stage0_r2_validator_verifier_hardening_test_report.v1",
+  "status": "PASS",
+  "timestamp_utc": "2026-08-11T06:32:16Z"
+}

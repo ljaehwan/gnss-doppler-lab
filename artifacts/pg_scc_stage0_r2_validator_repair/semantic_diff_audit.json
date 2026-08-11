@@ -1,5 +1,6 @@
 {
   "allowed_changed_functions": {
+    "_allowed_path": "verifier-hardening evidence namespace registration",
     "_validate_required_outputs": "metadata-only two-phase manifest finalization validation",
     "_write_followup_attempt_state": "validator-repair attempt-state schema binding only",
     "build_metadata_support_preflight_report": "validator-repair source provenance binding only",
@@ -9,9 +10,11 @@
     "verify_preregistration": "validator-repair branch/base provenance gate"
   },
   "allowed_new_functions": {
+    "_committed_artifact_entry_names": "committed closed-world artifact name-set loader",
     "_freeze_dirty_errors": "closed-world freeze dirty-path gate",
     "_implementation_manifest_errors": "closed-world implementation manifest gate",
     "_load_committed_preregistration": "hash-bound committed preregistration loader",
+    "_load_committed_verifier_hardening_preregistration": "hash-bound hardening preregistration loader",
     "_operational_additions": "committed operational path extraction"
   },
   "assignment_ast_equivalence": {
@@ -235,7 +238,7 @@
     "_validate_required_outputs": {
       "base_ast_sha256": "41e143566fc53c15bda4d9e5d0cec10f1786f11f5a9e9cadffc71118a557c9c9",
       "classification": "metadata-only two-phase manifest finalization validation",
-      "current_ast_sha256": "ec40e0a9da7a3558e0e704da44c5491ef2aaf617e81e44dfdd4c25bceaac0db2",
+      "current_ast_sha256": "14e813ef88dbfcf8dda156e3048c06e8adf82b7151cbc8aad072a53cacc0bca1",
       "equivalent": false
     },
     "_write_followup_attempt_state": {
@@ -486,9 +489,11 @@
     }
   },
   "new_functions": [
+    "_committed_artifact_entry_names",
     "_freeze_dirty_errors",
     "_implementation_manifest_errors",
     "_load_committed_preregistration",
+    "_load_committed_verifier_hardening_preregistration",
     "_operational_additions"
   ],
   "non_plot_scientific_functions_equivalent": true,

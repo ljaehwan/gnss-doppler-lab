@@ -45,6 +45,13 @@ SOURCE_SHA256 = "2b2c7bc55d031a9fd86f210e249a51d44c0a7f0e92500159e2b60dc05db87f7
 R1_FAILURE_BINDING_SHA256 = "550f3fde25742b571fa0a5206a96d0454300d1fe1732671b9bf655ccbb3f379f"
 PREREGISTRATION_SHA = "c7887316ed981d0e7cde74b2bbadeb1cf83bb233"
 PREREGISTRATION_BLOB_SHA256 = "25fcfdb342b733fab7e296f72940a92aabf89fdd03b662bda0845ca8bbd884c0"
+VERIFIER_HARDENING_PREREGISTRATION_SHA = "bafbe69365bd99380f9a976cd6dcdd4e951abfab"
+VERIFIER_HARDENING_PREREGISTRATION_BLOB_SHA256 = (
+    "58c0e3333df0cc25ea74cf3be6d662f684a224e88885cd58e2502a088f7c2aea"
+)
+VERIFIER_HARDENING_PREREGISTRATION_PATH = (
+    "artifacts/pg_scc_stage0_r2_validator_verifier_hardening/preregistration.json"
+)
 REQUIRED_BASE_SHA = "68ab54677f5d0b4b55cc39279aec631f60f655a9"
 SCIENTIFIC_IMPLEMENTATION_SHA = "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d"
 R1_FAIL_CLOSED_SHA = "8cd78ed724e57f97498da26547a9ecbbc2a78fe1"
@@ -142,13 +149,18 @@ PHASE2_ALLOWED_CHANGED_PATHS = {
     "artifacts/pg_scc_stage0_r2_validator_repair/score_dilution_metrics.csv",
     "artifacts/pg_scc_stage0_r2_validator_repair/selector_proxy_audit.json",
     "artifacts/pg_scc_stage0_r2_validator_repair/synthetic_real_mismatch.csv",
-    "artifacts/pg_scc_stage0_r2_validator_finalization_followup/finalization_report.json",
     "artifacts/pg_scc_stage0_r2_validator_finalization_followup/fresh_clone_verifier_report.json",
     "artifacts/pg_scc_stage0_r2_validator_finalization_followup/ordinary_verifier_report.json",
     "artifacts/pg_scc_stage0_r2_validator_finalization_followup/preserved_hash_audit.json",
     "artifacts/pg_scc_stage0_r2_validator_finalization_followup/preregistration.json",
     "artifacts/pg_scc_stage0_r2_validator_finalization_followup/semantic_guard_report.json",
     "artifacts/pg_scc_stage0_r2_validator_finalization_followup/test_report.json",
+    "artifacts/pg_scc_stage0_r2_validator_verifier_hardening/fresh_clone_verifier_report.json",
+    "artifacts/pg_scc_stage0_r2_validator_verifier_hardening/ordinary_verifier_report.json",
+    "artifacts/pg_scc_stage0_r2_validator_verifier_hardening/preregistration.json",
+    "artifacts/pg_scc_stage0_r2_validator_verifier_hardening/preserved_hash_audit.json",
+    "artifacts/pg_scc_stage0_r2_validator_verifier_hardening/semantic_guard_report.json",
+    "artifacts/pg_scc_stage0_r2_validator_verifier_hardening/test_report.json",
 }
 CORE_METHODS = (
     "pg_scc_k3", "pg_scc_k5", "pg_scc_k9", "fixed9", "epl3",
@@ -206,6 +218,7 @@ IMPLEMENTATION_MANIFEST_FILES = (
     "artifacts/pg_scc_stage0_r2_validator_repair/test_report.txt",
     "artifacts/pg_scc_stage0_r2_validator_repair/semantic_diff_audit.json",
     "artifacts/pg_scc_stage0_r2_validator_finalization_followup/preregistration.json",
+    "artifacts/pg_scc_stage0_r2_validator_verifier_hardening/preregistration.json",
 )
 ALLOWED_ROLES = {
     "selector": {"clean_train", "clean_selection", "synthetic_train", "synthetic_validation"},
@@ -1378,6 +1391,55 @@ def _load_committed_preregistration() -> dict[str, Any]:
     return preregistration
 
 
+def _load_committed_verifier_hardening_preregistration() -> dict[str, Any]:
+    """Load the verifier-hardening contract only from its exact committed blob."""
+    try:
+        raw = subprocess.check_output(
+            [
+                "git", "show",
+                f"{VERIFIER_HARDENING_PREREGISTRATION_SHA}:"
+                f"{VERIFIER_HARDENING_PREREGISTRATION_PATH}",
+            ],
+            cwd=ROOT,
+        )
+    except subprocess.CalledProcessError as exc:
+        raise RuntimeError("FAIL_CLOSED_HARDENING_PREREGISTRATION_BLOB:unavailable") from exc
+    if hashlib.sha256(raw).hexdigest() != VERIFIER_HARDENING_PREREGISTRATION_BLOB_SHA256:
+        raise RuntimeError("FAIL_CLOSED_HARDENING_PREREGISTRATION_BLOB:hash_mismatch")
+    try:
+        preregistration = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError("FAIL_CLOSED_HARDENING_PREREGISTRATION_BLOB:invalid_json") from exc
+    if (
+        not isinstance(preregistration, dict)
+        or preregistration.get("schema")
+        != "pg_scc_stage0_r2_validator_verifier_hardening_preregistration.v1"
+        or preregistration.get("branch")
+        != "research/pg-scc-stage0-r2-validator-repair"
+    ):
+        raise RuntimeError("FAIL_CLOSED_HARDENING_PREREGISTRATION_BLOB:identity_mismatch")
+    return preregistration
+
+
+def _committed_artifact_entry_names() -> set[str]:
+    preregistration = _load_committed_verifier_hardening_preregistration()
+    contract = preregistration.get("artifact_closed_world_contract")
+    values = contract.get("exact_entry_names") if isinstance(contract, Mapping) else None
+    if (
+        not isinstance(values, list)
+        or any(not isinstance(name, str) for name in values)
+        or values != sorted(set(values))
+        or len(values) != 39
+        or not isinstance(contract, Mapping)
+        or contract.get("entry_count") != 39
+        or contract.get("binding_commit_sha")
+        != "5a694a0662376b9e357fa930638657a90e20d7df"
+        or "artifact_manifest_sha256.json" in values
+    ):
+        raise RuntimeError("FAIL_CLOSED_HARDENING_PREREGISTRATION_BLOB:artifact_set")
+    return set(values)
+
+
 def _operational_additions() -> set[str]:
     preregistration = _load_committed_preregistration()
     values = preregistration.get("dynamic_operational_path_contract", {}).get(
@@ -2169,11 +2231,17 @@ def _validate_required_outputs(*, require_manifest: bool = True) -> None:
         raise RuntimeError("verdict cardinality failure")
     if require_manifest:
         manifest = load_json(OUTPUT / "artifact_manifest_sha256.json")
+        self_manifest = OUTPUT / "artifact_manifest_sha256.json"
         actual = {
             str(path.relative_to(OUTPUT)): sha256(path)
             for path in sorted(OUTPUT.rglob("*"))
-            if path.is_file() and path.name != "artifact_manifest_sha256.json"
+            if path.is_file() and path != self_manifest
         }
+        expected_names = _committed_artifact_entry_names()
+        if not isinstance(manifest, dict) or set(manifest) != expected_names:
+            raise RuntimeError("artifact manifest expected key set mismatch")
+        if set(actual) != expected_names:
+            raise RuntimeError("artifact actual expected file set mismatch")
         if manifest != actual:
             raise RuntimeError("artifact manifest mismatch")
 

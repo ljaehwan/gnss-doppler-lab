@@ -21,6 +21,13 @@ BRANCH = "research/pg-scc-stage0-r2-validator-repair"
 BASE_SHA = "68ab54677f5d0b4b55cc39279aec631f60f655a9"
 PREREGISTRATION_SHA = "c7887316ed981d0e7cde74b2bbadeb1cf83bb233"
 PREREGISTRATION_BLOB_SHA256 = "25fcfdb342b733fab7e296f72940a92aabf89fdd03b662bda0845ca8bbd884c0"
+VERIFIER_HARDENING_PREREGISTRATION_SHA = "bafbe69365bd99380f9a976cd6dcdd4e951abfab"
+VERIFIER_HARDENING_PREREGISTRATION_BLOB_SHA256 = (
+    "58c0e3333df0cc25ea74cf3be6d662f684a224e88885cd58e2502a088f7c2aea"
+)
+VERIFIER_HARDENING_PREREGISTRATION_PATH = (
+    "artifacts/pg_scc_stage0_r2_validator_verifier_hardening/preregistration.json"
+)
 CONFIG_SHA256 = "336802a95e82df1da82822520fe8bd838bf18ce17da6ae29aa5695449f3b67f5"
 SOURCE_SHA256 = "2b2c7bc55d031a9fd86f210e249a51d44c0a7f0e92500159e2b60dc05db87f70"
 R1_BINDING_SHA256 = "550f3fde25742b571fa0a5206a96d0454300d1fe1732671b9bf655ccbb3f379f"
@@ -46,6 +53,7 @@ MANIFEST_FILES = (
     "artifacts/pg_scc_stage0_r2_validator_repair/test_report.txt",
     "artifacts/pg_scc_stage0_r2_validator_repair/semantic_diff_audit.json",
     "artifacts/pg_scc_stage0_r2_validator_finalization_followup/preregistration.json",
+    "artifacts/pg_scc_stage0_r2_validator_verifier_hardening/preregistration.json",
 )
 PLOTS = (
     "nested_coordinate_map.png", "clean_variance_attack_contribution.png",
@@ -76,6 +84,71 @@ def _load_base_verifier():
     spec.loader.exec_module(module)
     module.SOURCE_SHA256 = SOURCE_SHA256
     return module
+
+
+def _committed_artifact_entry_names() -> set[str]:
+    try:
+        raw = subprocess.check_output(
+            [
+                "git", "show",
+                f"{VERIFIER_HARDENING_PREREGISTRATION_SHA}:"
+                f"{VERIFIER_HARDENING_PREREGISTRATION_PATH}",
+            ],
+            cwd=ROOT,
+        )
+    except subprocess.CalledProcessError as exc:
+        raise RuntimeError("committed_hardening_preregistration_unavailable") from exc
+    if hashlib.sha256(raw).hexdigest() != VERIFIER_HARDENING_PREREGISTRATION_BLOB_SHA256:
+        raise RuntimeError("committed_hardening_preregistration_blob_hash")
+    try:
+        preregistration = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError("committed_hardening_preregistration_json") from exc
+    contract = preregistration.get("artifact_closed_world_contract")
+    values = contract.get("exact_entry_names") if isinstance(contract, dict) else None
+    if (
+        preregistration.get("schema")
+        != "pg_scc_stage0_r2_validator_verifier_hardening_preregistration.v1"
+        or not isinstance(values, list)
+        or any(not isinstance(name, str) for name in values)
+        or values != sorted(set(values))
+        or len(values) != 39
+        or contract.get("entry_count") != 39
+        or contract.get("binding_commit_sha")
+        != "5a694a0662376b9e357fa930638657a90e20d7df"
+        or "artifact_manifest_sha256.json" in values
+    ):
+        raise RuntimeError("committed_hardening_artifact_set")
+    return set(values)
+
+
+def _artifact_manifest_errors(root: Path) -> list[str]:
+    errors: list[str] = []
+    manifest_path = root / "artifact_manifest_sha256.json"
+    try:
+        manifest = _load(manifest_path)
+    except (OSError, ValueError, json.JSONDecodeError):
+        return ["artifact_manifest_unreadable"]
+    expected_names = _committed_artifact_entry_names()
+    self_manifest = root / "artifact_manifest_sha256.json"
+    actual = {
+        str(path.relative_to(root)): _digest(path)
+        for path in sorted(root.rglob("*"))
+        if path.is_file() and path != self_manifest
+    }
+    if not isinstance(manifest, dict) or set(manifest) != expected_names:
+        errors.append("artifact_manifest_expected_key_set")
+        manifest = manifest if isinstance(manifest, dict) else {}
+    if set(actual) != expected_names:
+        errors.append("artifact_actual_expected_file_set")
+    if set(manifest) != set(actual):
+        errors.append("artifact_manifest_actual_file_set")
+    errors.extend(
+        f"artifact_checksum:{name}"
+        for name in sorted(set(manifest) & set(actual))
+        if manifest[name] != actual[name]
+    )
+    return errors
 
 
 def _committed_operational_additions() -> set[str]:
@@ -259,6 +332,7 @@ def verify_tree(root: Path) -> dict[str, Any]:
     ).read_bytes():
         errors.append("no_retuning_config")
     errors.extend(_manifest_errors(root))
+    errors.extend(_artifact_manifest_errors(root))
     for name in PLOTS:
         path = root / "plots" / name
         if not path.is_file() or path.stat().st_size == 0:
