@@ -1,0 +1,82 @@
+{
+  "artifact_namespace": "artifacts/pg_scc_stage0_r2_validator_repair/",
+  "committed_phase2_changed_paths": [
+    "artifacts/pg_scc_stage0_r2_repair_followup/predecessor_failure_binding.json",
+    "artifacts/pg_scc_stage0_r2_repair_followup/preregistration.json",
+    "artifacts/pg_scc_stage0_r2_root_cause_audit/config.json",
+    "artifacts/pg_scc_stage0_r2_root_cause_audit/r1_failure_binding.json",
+    "artifacts/pg_scc_stage0_r2_root_cause_audit/source_commit.json",
+    "artifacts/pg_scc_stage0_r2_root_cause_audit/support_preflight.json",
+    "scripts/run_pg_scc_root_cause_audit.py",
+    "scripts/verify_pg_scc_r2_repair_followup.py",
+    "scripts/verify_pg_scc_r2_semantic_diff.py",
+    "scripts/verify_pg_scc_root_cause_audit.py",
+    "tests/test_pg_scc_r2_preflight.py",
+    "tests/test_pg_scc_r2_repair_followup.py",
+    "tests/test_pg_scc_root_cause_audit.py"
+  ],
+  "disallowed_changed_paths": [],
+  "disallowed_paths_unchanged": true,
+  "exact_list_difference": {
+    "added_after_committed_preflight": [
+      "artifacts/pg_scc_stage0_r2_repair_followup/config.json",
+      "artifacts/pg_scc_stage0_r2_repair_followup/implementation_manifest_sha256.json",
+      "artifacts/pg_scc_stage0_r2_repair_followup/pre_run_state.json",
+      "artifacts/pg_scc_stage0_r2_repair_followup/r1_failure_binding.json",
+      "artifacts/pg_scc_stage0_r2_repair_followup/semantic_diff_audit.json",
+      "artifacts/pg_scc_stage0_r2_repair_followup/source_commit.json",
+      "artifacts/pg_scc_stage0_r2_repair_followup/support_preflight.json"
+    ],
+    "removed_after_committed_preflight": []
+  },
+  "final_root_cause": "DYNAMIC_OPERATIONAL_PATH_EXACT_COMPARISON_BUG",
+  "implementation_sha": "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d",
+  "metadata_only_reproduction": {
+    "committed_preflight_created_before_pre_run_state": true,
+    "committed_preflight_git_commit": "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d",
+    "historical_reconstruction_error": "FAIL_CLOSED_SUPPORT_PREFLIGHT:committed semantics/accounting mismatch:r1_identity",
+    "pre_run_state_added_immediately_before_protected_invocation": true,
+    "pre_run_state_git_commit": "68ab54677f5d0b4b55cc39279aec631f60f655a9",
+    "protected_loader_call_count": 0,
+    "protected_loader_invoked": false,
+    "protected_score_or_verdict_values_read": 0,
+    "status": "REPRODUCED"
+  },
+  "proof": {
+    "all_added_paths_were_members_of_phase2_allowed_changed_paths": true,
+    "committed_path_count": 13,
+    "defective_validator_ast_sha256": "40fb05abcde62ce8f96001bddc61a45a2a33c8a7f37deb29b657cdc4aeb5c427",
+    "defective_validator_semantics": "dict(report) != independently reconstructed report, so the entire r1_identity dictionary was exact-compared",
+    "dynamic_field_that_differed": "r1_identity.phase2_changed_paths",
+    "reconstructed_path_count": 20,
+    "stable_fail_closed_fields_remained_valid": {
+      "disallowed_changed_paths": [],
+      "disallowed_paths_unchanged": true,
+      "protected_score_fields_projected_or_read": 0,
+      "status": "PASS"
+    }
+  },
+  "reconstructed_phase2_changed_paths": [
+    "artifacts/pg_scc_stage0_r2_repair_followup/config.json",
+    "artifacts/pg_scc_stage0_r2_repair_followup/implementation_manifest_sha256.json",
+    "artifacts/pg_scc_stage0_r2_repair_followup/pre_run_state.json",
+    "artifacts/pg_scc_stage0_r2_repair_followup/predecessor_failure_binding.json",
+    "artifacts/pg_scc_stage0_r2_repair_followup/preregistration.json",
+    "artifacts/pg_scc_stage0_r2_repair_followup/r1_failure_binding.json",
+    "artifacts/pg_scc_stage0_r2_repair_followup/semantic_diff_audit.json",
+    "artifacts/pg_scc_stage0_r2_repair_followup/source_commit.json",
+    "artifacts/pg_scc_stage0_r2_repair_followup/support_preflight.json",
+    "artifacts/pg_scc_stage0_r2_root_cause_audit/config.json",
+    "artifacts/pg_scc_stage0_r2_root_cause_audit/r1_failure_binding.json",
+    "artifacts/pg_scc_stage0_r2_root_cause_audit/source_commit.json",
+    "artifacts/pg_scc_stage0_r2_root_cause_audit/support_preflight.json",
+    "scripts/run_pg_scc_root_cause_audit.py",
+    "scripts/verify_pg_scc_r2_repair_followup.py",
+    "scripts/verify_pg_scc_r2_semantic_diff.py",
+    "scripts/verify_pg_scc_root_cause_audit.py",
+    "tests/test_pg_scc_r2_preflight.py",
+    "tests/test_pg_scc_r2_repair_followup.py",
+    "tests/test_pg_scc_root_cause_audit.py"
+  ],
+  "schema": "pg_scc_stage0_r2_validator_root_cause.v1"
+}

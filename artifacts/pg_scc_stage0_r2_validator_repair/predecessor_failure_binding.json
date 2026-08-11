@@ -1,0 +1,24 @@
+{
+  "authorized_predecessor_failure_metadata": {
+    "error": "FAIL_CLOSED_SUPPORT_PREFLIGHT:committed semantics/accounting mismatch:r1_identity",
+    "implementation_sha": "9839823c00cafc34fbbf1d6b1dbe069eb2c4e74d",
+    "protected_loader_call_count": 0,
+    "protected_loader_invoked": false
+  },
+  "base_fail_closed_delivery_commit": "68ab54677f5d0b4b55cc39279aec631f60f655a9",
+  "immutability": {
+    "partial_predecessor_results_copied": false,
+    "partial_predecessor_results_inspected": false,
+    "predecessor_branch_mutated": false,
+    "predecessor_fail_closed_artifacts_preserved_byte_for_byte": true,
+    "predecessor_namespace_tree_object": "94d0e435a7cf7aa61562648c98e5a3216bcc2e97",
+    "prior_r1_identity_repair_branch_content_inspected": false,
+    "protected_score_or_verdict_values_read": false
+  },
+  "metadata_only_authorized_inputs": [
+    "artifacts/pg_scc_stage0_r2_repair_followup/support_preflight.json r1_identity and status metadata",
+    "artifacts/pg_scc_stage0_r2_repair_followup/pre_run_state.json sequencing and provenance metadata"
+  ],
+  "new_artifact_namespace": "artifacts/pg_scc_stage0_r2_validator_repair/",
+  "schema": "pg_scc_stage0_r2_validator_repair_predecessor_failure_binding.v1"
+}
