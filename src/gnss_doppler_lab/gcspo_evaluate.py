@@ -1,0 +1,337 @@
+"""Delivered one-shot evaluator for protected static TEXBAT receiver outputs."""
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+import numpy as np
+
+from .gcspo_a5 import role_a5_terms, score_a5_terms
+from .gcspo_ablations import role_a2_terms, score_a2_terms
+from .gcspo_artifacts import canonical_write_json, sha256_file
+from .gcspo_clean import EPOCH_S, a1_role_scores, residual_table
+from .gcspo_full import (GeometryCache, geometry_preflight, protected_geometry_preflight, role_full_terms, role_full_terms_from_z,
+                         score_full_terms)
+from .gcspo_statistics import (compute_scientific_gates, exact_contrast_support, execute_relation_destructions, paired_block_bootstrap,
+                               primary_pauc_rows, scenario_phase_balanced_pauc, scheduled_persistence)
+from .gcspo_protected import (discrimination_metrics, load_receiver_tracking, phase_rows,
+                              reconstruct_normal_model, scientific_verdict, score_metrics, write_csv)
+
+STATIC_PHASES = {
+    "DS3": (("pre_onset", 0., 118.9), ("transition", 118.9, 195.), ("established", 195., None)),
+    "DS4": (("pre_onset", 0., 113.8), ("transition", 113.8, 225.), ("established", 225., None)),
+    "DS7": (("pre_onset_replay", 0., 110.), ("transition", 110., 150.), ("established", 150., None)),
+    "DS8": (("pre_onset_replay", 0., 110.), ("transition", 110., 150.), ("established", 150., None)),
+}
+VALIDATED = {"code_error_chips", "pll_phase_error_cycles", "carrier_doppler_hz", "code_frequency_offset_chips_s"}
+
+
+def _ranges(scenario, end_s):
+    if scenario not in STATIC_PHASES:
+        return (("diagnostic", 0., end_s),)
+    return tuple((name, start, end_s if final is None else min(final, end_s)) for name, start, final in STATIC_PHASES[scenario] if start < end_s)
+
+
+CLEAN_CONTRAST_COUNT = 238
+_CLEAN_CONTRAST_FILES = ("clean_only_report.json", "clean_ablation_report.json", "clean_a5_report.json")
+
+
+def load_clean_contrast_rows(root, identities):
+    """Load the frozen cleanStatic negative cell from byte-pinned clean evidence."""
+    root = Path(root).resolve()
+    by_path = {str(Path(row.get("path", "")).resolve()): row for row in identities if isinstance(row, dict)}
+    documents, source = {}, {}
+    for name in _CLEAN_CONTRAST_FILES:
+        path = (root / name).resolve(); identity = by_path.get(str(path))
+        if identity is None or identity.get("sha256") != sha256_file(path) or identity.get("size_bytes") != path.stat().st_size:
+            raise ValueError(f"clean contrast identity mismatch: {name}")
+        documents[name] = json.loads(path.read_text())
+        source[name] = {"sha256": identity["sha256"], "size_bytes": identity["size_bytes"]}
+    clean, ablation, a5 = (documents[name] for name in _CLEAN_CONTRAST_FILES)
+    statuses = ((clean, "CLEAN_ONLY_PASS"), (ablation, "CLEAN_ABLATIONS_PASS"), (a5, "CLEAN_A5_PASS"))
+    if any(doc.get("run_status") != status or doc.get("attack_access_count") != 0 or
+           doc.get("protected_attack_rows_read") is not False for doc, status in statuses):
+        raise ValueError("clean contrast source status/identity mismatch")
+    try:
+        method_rows = {"Full": clean["scores"]["Full_holdout"], "A1": clean["scores"]["A1_holdout"],
+                       "A2": ablation["methods"]["A2"]["holdout"], "A5": a5["holdout"]}
+    except (KeyError, TypeError):
+        raise ValueError("clean contrast cell is missing") from None
+    if any(len(rows) != CLEAN_CONTRAST_COUNT for rows in method_rows.values()):
+        raise ValueError("clean contrast cell count mismatch")
+    result = []
+    for method, rows in method_rows.items():
+        for raw in rows:
+            row = dict(raw)
+            try:
+                row["prns"] = tuple(map(int, row["prns"]))
+                row["epoch_ids"] = tuple(map(int, row["epoch_ids"]))
+                row["epoch_prn_support"] = tuple((int(epoch), tuple(map(int, prns)))
+                                                 for epoch, prns in row["epoch_prn_support"])
+                row["score"] = float(row["score"])
+            except (KeyError, TypeError, ValueError):
+                raise ValueError("clean contrast cell support is malformed") from None
+            result.append({**row, "scenario": "cleanStatic", "family": "cleanStatic", "phase": "holdout",
+                           "method": method, "label": False, "phase_start_s": 350., "phase_end_s": 470.})
+    return result, source
+
+
+def _method_rows(data, model, whitener, gamma, geometry, a2_loading, lambdas, ranges):
+    result = {name: [] for name in ("A1", "A2", "A3", "A4", "A5", "Full")}
+    for phase, start, end in ranges:
+        if end - start < 1.2:
+            continue
+        method_sets = {
+            "A1": a1_role_scores(data, model, whitener, start, end),
+            "A2": score_a2_terms(role_a2_terms(data, model, whitener, gamma, a2_loading, start, end), lambdas["A2"]),
+            "A3": score_full_terms(role_full_terms(data, model, whitener, gamma,
+                    GeometryCache(geometry["ephemerides"], geometry["receiver_ecef"], {"code_error_chips", "pll_phase_error_cycles"}), start, end), lambdas["Full"]),
+            "A4": score_full_terms(role_full_terms(data, model, whitener, gamma,
+                    GeometryCache(geometry["ephemerides"], geometry["receiver_ecef"], {"carrier_doppler_hz", "code_frequency_offset_chips_s"}), start, end), lambdas["Full"]),
+            "Full": score_full_terms(role_full_terms(data, model, whitener, gamma,
+                    GeometryCache(geometry["ephemerides"], geometry["receiver_ecef"], VALIDATED), start, end), lambdas["Full"]),
+            "A5": score_a5_terms(role_a5_terms(data, model, whitener, gamma, VALIDATED, start, end), lambdas["A5"]),
+        }
+        for method, rows in method_sets.items():
+            for row in rows:
+                row.pop("state", None) if method != "Full" else None
+                row["phase"] = phase
+                required = {"prns", "epoch_ids", "epoch_prn_support"}
+                if not required <= set(row):
+                    raise RuntimeError(f"{method} scorer omitted authenticated actual support")
+            result[method].extend(rows)
+    return result
+
+
+class _RelationGeometry:
+    def __init__(self, lookup): self.lookup = lookup
+    def loading(self, epoch, prn): return self.lookup.get((int(epoch), int(prn)))
+
+
+def _constant_mask_segments(epochs, prns):
+    by_epoch = {int(epoch): tuple(sorted(map(int, prns[epochs == epoch]))) for epoch in np.unique(epochs)}
+    ordered = sorted(by_epoch); segments = []; start = 0
+    for index in range(1, len(ordered) + 1):
+        if index == len(ordered) or ordered[index] != ordered[index - 1] + 1 or by_epoch[ordered[index]] != by_epoch[ordered[index - 1]]:
+            segments.append((ordered[start:index], by_epoch[ordered[index - 1]])); start = index
+    return segments
+
+
+def _relation_rows(data, model, whitener, gamma, geometry, smoothness, scenario, phase, start_s, end_s):
+    epochs, prns, residual, _ = residual_table(data, model, whitener, start_s, end_s)
+    result = []
+    for segment_number, (segment_epochs, mask) in enumerate(_constant_mask_segments(epochs, prns)):
+        if len(segment_epochs) < 50 or len(mask) < 4: continue
+        residual_lookup = {(int(epoch), int(prn)): value for epoch, prn, value in zip(epochs, prns, residual)}
+        cube = np.stack([[residual_lookup[(epoch, prn)] for epoch in segment_epochs] for prn in mask])
+        los_cube = np.empty((len(mask), len(segment_epochs), 3)); loading_lookup = {}
+        available = True
+        for pi, prn in enumerate(mask):
+            for ti, epoch in enumerate(segment_epochs):
+                physical = geometry.loading(epoch, prn)
+                if physical is None: available = False; break
+                los_cube[pi, ti] = physical[0]; loading_lookup[(epoch, prn)] = physical
+            if not available: break
+        if not available: continue
+        transformed = execute_relation_destructions(cube, los_cube, np.asarray(mask), scenario=scenario, phase=phase,
+                                                     segment_id=f"segment-{segment_number}")
+        flat_epochs = np.repeat(np.asarray(segment_epochs, np.int64), len(mask))
+        flat_prns = np.tile(np.asarray(mask, np.int64), len(segment_epochs))
+        original_z = whitener.transform(np.transpose(cube, (1, 0, 2)).reshape(-1, 10))
+        shifted_z = whitener.transform(np.transpose(transformed["shifted_residual"], (1, 0, 2)).reshape(-1, 10))
+        permutation = np.asarray(transformed["los_permutation"], int)
+        shuffled_lookup = {}
+        for target_index, target_prn in enumerate(mask):
+            source_prn = mask[int(permutation[target_index])]
+            for epoch in segment_epochs:
+                shuffled_lookup[(epoch, target_prn)] = loading_lookup[(epoch, source_prn)]
+        segment_start = max(start_s, segment_epochs[0] * EPOCH_S)
+        segment_end = min(end_s, (segment_epochs[-1] + 1) * EPOCH_S)
+        variants = {
+            "Full": (original_z, _RelationGeometry(loading_lookup)),
+            "LOS_SHUFFLE": (original_z, _RelationGeometry(shuffled_lookup)),
+            "PER_PRN_TEMPORAL_SHIFT": (shifted_z, _RelationGeometry(loading_lookup)),
+        }
+        for method, (z_values, relation_geometry) in variants.items():
+            terms = role_full_terms_from_z(flat_epochs, flat_prns, z_values, model, gamma, relation_geometry, segment_start, segment_end)
+            for row in score_full_terms(terms, smoothness):
+                result.append({**row, "method": method, "phase": phase, "prns": list(mask),
+                               "segment_id": f"segment-{segment_number}",
+                               "transform_seed": transformed["seeds"].get(method),
+                               "preservation": transformed["preservation"].get(method, True)})
+    return result
+
+
+def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identities, clean_identities):
+    artifact = Path(artifact_dir); repo = Path(repo_root)
+    normal = json.loads((artifact / "normal_model_summary.json").read_text())
+    thresholds = json.loads((artifact / "thresholds.json").read_text())
+    a2_doc = json.loads((artifact / "clean_ablation_report.json").read_text())
+    model, whitener, gamma = reconstruct_normal_model(normal)
+    eps = {int(key): float(value) for key, value in normal["normalization_epsilon_by_prn"].items()}
+    lambdas = {"Full": float(normal["lambda_selected"]), "A2": float(a2_doc["methods"]["A2"]["lambda"]),
+               "A5": float(json.loads((artifact / "clean_a5_report.json").read_text())["lambda"])}
+    scenario_inventory = {row["id"]: row for row in inventory["scenario_inventory"]}
+    score_rows, state_rows, scenario_rows, unavailable, relation_rows = [], [], [], [], []
+    for scenario in ("DS3", "DS4", "DS7", "DS8"):
+        identity = manifest_identities[scenario]; manifest_path = Path(identity["path"])
+        gate.register_pinned(manifest_path, expected_sha256=identity["sha256"], expected_size=identity["size_bytes"],
+                             kind="RECEIVER_MANIFEST")
+        manifest = gate.authenticate_manifest(manifest_path, scenario=scenario, phase="all_frozen_phases",
+                                              purpose="receiver output identities")
+        child_paths = [manifest_path.parent / row["path"] for row in manifest["files"]]
+        tracking_paths = sorted(path for path in child_paths if path.name.startswith("epl_tracking_ch_") and path.suffix == ".mat")
+        observables = [path for path in child_paths if path.name == "observables.mat"]
+        nmea = [path for path in child_paths if path.suffix.lower() == ".nmea"]
+        ephemeris = [path for path in child_paths if "ephemeris" in path.name.lower() and path.suffix.lower() == ".xml"]
+        if not tracking_paths or len(observables) != 1 or len(nmea) != 1 or len(ephemeris) != 1:
+            raise RuntimeError(f"authenticated receiver manifest is incomplete: {scenario}")
+        data = load_receiver_tracking(tracking_paths, epsilons=eps, gate=gate, scenario=scenario)
+        end_s = float((data.epoch.max() + 1) * .02)
+        ranges = _ranges(scenario, end_s)
+        phase_bounds = {name: (start, end) for name, start, end in ranges}
+        try:
+            geometry = protected_geometry_preflight(gate=gate, observables_path=observables[0], nmea_path=nmea[0],
+                                                    ephemeris_path=ephemeris[0], scenario=scenario, tracked_prns=data.prn)
+        except Exception as exc:
+            unavailable.append({"scenario": scenario, "reason": "UNAVAILABLE_GEOMETRY", "detail": str(exc)}); continue
+        methods = _method_rows(data, model, whitener, gamma, geometry, np.asarray(a2_doc["methods"]["A2"]["loading"]), lambdas, ranges)
+        relation_geometry = GeometryCache(geometry["ephemerides"], geometry["receiver_ecef"], VALIDATED)
+        for relation_phase, relation_start, relation_end in ranges:
+            if relation_phase != "pre_onset_replay" and relation_end - relation_start >= 1.2:
+                relation_rows.extend({**row, "scenario": scenario, "label": relation_phase in {"transition", "established"},
+                                      "phase_start_s": relation_start, "phase_end_s": relation_end,
+                                      "epoch_ids": tuple(range(round(row["window_start_s"] / EPOCH_S), round(row["availability_s"] / EPOCH_S))),
+                                      "epoch_prn_support": tuple((epoch, tuple(row["prns"])) for epoch in
+                                                                 range(round(row["window_start_s"] / EPOCH_S), round(row["availability_s"] / EPOCH_S)))} for row in
+                                     _relation_rows(data, model, whitener, gamma, relation_geometry, lambdas["Full"],
+                                                    scenario, relation_phase, relation_start, relation_end))
+        unavailable.append({"scenario": scenario, "method": "A0", "reason": "UNAVAILABLE_EXACT_ADAPTER"})
+        for method, rows in methods.items():
+            threshold_key = "A0_B0" if method == "A0" else method
+            q99 = float(thresholds[threshold_key]["q99"])
+            for row in rows:
+                record = {"scenario": scenario, "family": "DS7_DS8" if scenario in {"DS7", "DS8"} else scenario,
+                          "phase": row["phase"], "method": method, "window_start_s": row["window_start_s"],
+                          "availability_s": row["availability_s"], "score": row["score"], "threshold_q99": q99,
+                          "alarm_q99": bool(row["score"] > q99), "tracked_n": len(row.get("prns", [])) or None,
+                          "effective_dof": row.get("effective_dof"), "penalty": row.get("penalty"),
+                          "likelihood_improvement_twice": row.get("likelihood_improvement_twice"),
+                          "prns": tuple(row.get("prns", ())), "epoch_ids": tuple(row.get("epoch_ids", ())),
+                          "epoch_prn_support": tuple(row.get("epoch_prn_support", ())),
+                          "label": row["phase"] in {"transition", "established"},
+                          "phase_start_s": phase_bounds[row["phase"]][0], "phase_end_s": phase_bounds[row["phase"]][1],
+                          "prns_json": json.dumps(list(row.get("prns", ())), separators=(",", ":")),
+                          "epoch_ids_json": json.dumps(list(row.get("epoch_ids", ())), separators=(",", ":")),
+                          "epoch_prn_support_json": json.dumps(list(row.get("epoch_prn_support", ())), separators=(",", ":"))}
+                score_rows.append(record)
+                if method == "Full" and "state" in row:
+                    state = np.asarray(row["state"], float).reshape(-1, 8)
+                    for index, vector in enumerate(state):
+                        state_rows.append({"scenario": scenario, "phase": row["phase"], "window_start_s": row["window_start_s"],
+                                           "epoch_offset": index, **{f"state_{j}": value for j, value in enumerate(vector)}})
+        for method, rows in methods.items():
+            pre = [row["score"] for row in rows if row["phase"].startswith("pre_")]
+            attack = [row["score"] for row in rows if row["phase"] in {"transition", "established"}]
+            metric = discrimination_metrics(pre, attack)
+            alarm = score_metrics(rows, threshold=float(thresholds["A0_B0" if method == "A0" else method]["q99"]))
+            scenario_rows.append({"scenario": scenario, "method": method, **metric, **alarm,
+                                  "pre_onset_fpr": float(np.mean(np.asarray(pre) > float(thresholds["A0_B0" if method == "A0" else method]["q99"]))) if pre else None})
+    unavailable.extend([{"scenario": "DS5", "reason": "UNAVAILABLE_OOD"}, {"scenario": "DS6", "reason": "UNAVAILABLE_OOD"},
+                        {"method": "GCMR", "reason": "UNAVAILABLE_EXACT_ADAPTER"}, {"method": "M1", "reason": "UNAVAILABLE"},
+                        {"method": "FixedComplex9", "reason": "UNAVAILABLE"}])
+    score_fields = ["scenario", "family", "phase", "method", "window_start_s", "availability_s", "score", "threshold_q99",
+                    "alarm_q99", "tracked_n", "effective_dof", "penalty", "likelihood_improvement_twice", "prns_json", "epoch_ids_json", "epoch_prn_support_json",
+                    "label", "phase_start_s", "phase_end_s"]
+    write_csv(artifact / "per_epoch_scores.csv", score_rows, score_fields)
+    write_csv(artifact / "shared_state_estimates.csv", state_rows,
+              ["scenario", "phase", "window_start_s", "epoch_offset", *[f"state_{j}" for j in range(8)]])
+    write_csv(artifact / "scenario_metrics.csv", scenario_rows,
+              ["scenario", "method", "roc_auc", "low_fpr_pauc", "pr_auc", "windows", "alarm_ratio", "persistent_alarm_ratio", "first_persistent_alarm_s", "pre_onset_fpr"])
+    full_by = {row["scenario"]: row for row in scenario_rows if row["method"] == "Full"}
+    clean_fpr = float(json.loads((artifact / "clean_only_report.json").read_text())["holdout_fpr"]["Full"]["q99"])
+    external_fpr = {scenario: full_by[scenario]["pre_onset_fpr"] for scenario in ("DS3", "DS4")
+                    if scenario in full_by and full_by[scenario]["pre_onset_fpr"] is not None}
+    clean_contrast_rows, clean_contrast_source = load_clean_contrast_rows(artifact, clean_identities)
+    bootstrap_source = clean_contrast_rows + [row for row in score_rows if row["scenario"] in {"DS3", "DS4", "DS7", "DS8"}
+                                               and row["phase"] != "pre_onset_replay"]
+    bootstrap_reports = {}
+    for comparator in ("A1", "A2"):
+        bootstrap_reports[f"Full-{comparator}"] = paired_block_bootstrap(bootstrap_source, "Full", comparator)
+    relation_reports = {}
+    for destruction in ("LOS_SHUFFLE", "PER_PRN_TEMPORAL_SHIFT"):
+        report = paired_block_bootstrap(relation_rows, "Full", destruction)
+        paired = exact_contrast_support(relation_rows, ("Full", destruction))
+        losses = []
+        cells = sorted({("DS7_DS8" if row["scenario"] in {"DS7", "DS8"} else row["scenario"], row["phase"]) for row in paired})
+        for family, phase in cells:
+            cell_rows = [row for row in paired if ("DS7_DS8" if row["scenario"] in {"DS7", "DS8"} else row["scenario"]) == family and row["phase"] == phase]
+            material = lambda method: [{**row, "score": row["scores"][method], "logical_cell": f"{'positive' if row['label'] else 'negative'}:{family}:{phase}"} for row in cell_rows]
+            full_pauc = scenario_phase_balanced_pauc(material("Full")); destroyed_pauc = scenario_phase_balanced_pauc(material(destruction))
+            losses.append((full_pauc - destroyed_pauc) / max(abs(full_pauc), 1e-12))
+        if not losses: raise RuntimeError(f"mandatory relation support unavailable: {destruction}")
+        relation_reports[destruction] = {"lcb": report["lcb_95"], "interval_95": report["interval_95"],
+                                         "median_relative_loss": float(np.median(losses)), "replicates": report["replicates"]}
+    persistence = {}
+    per_scenario_persistence = {}
+    for scenario in ("DS3", "DS7", "DS8"):
+        rows = sorted([row for row in score_rows if row["scenario"] == scenario and row["method"] == "Full"
+                       and row["phase"] == "established"], key=lambda row: row["availability_s"])
+        if not rows: raise RuntimeError(f"mandatory established persistence unavailable: {scenario}")
+        flags = scheduled_persistence(rows, threshold=float(thresholds["Full"]["q99"]))
+        first = next((row["availability_s"] for row, flag in zip(rows, flags) if flag), None)
+        if first is None: delay = float("inf")
+        else: delay = float(first) - float(rows[0]["phase_start_s"])
+        per_scenario_persistence[scenario] = {"ratio": float(np.mean(flags)), "delay_s": delay}
+    persistence["DS3"] = per_scenario_persistence["DS3"]
+    persistence["DS7_DS8"] = {"ratio": min(per_scenario_persistence[name]["ratio"] for name in ("DS7", "DS8")),
+                               "delay_s": max(per_scenario_persistence[name]["delay_s"] for name in ("DS7", "DS8"))}
+    controls = json.loads((artifact / "physical_controls.json").read_text())
+    control_evidence = controls.get("results")
+    if not isinstance(control_evidence, list) or not control_evidence:
+        raise RuntimeError("mandatory generated control score evidence is absent")
+    shared_support = exact_contrast_support(bootstrap_source, ("Full", "A5"))
+    if not shared_support: raise RuntimeError("Full/A5 exact support is absent")
+    def paired_pauc(method):
+        rows = [{**row, "score": row["scores"][method],
+                 "logical_cell": f"{'positive' if row['label'] else 'negative'}:{'DS7_DS8' if row['scenario'] in {'DS7', 'DS8'} else row['scenario']}:{row['phase']}"}
+                for row in shared_support]
+        return scenario_phase_balanced_pauc(rows)
+    support_keys = {(row["scenario"], row["phase"], row["availability_s"], tuple(row["prns"])) for row in shared_support}
+    full_edf = [row["effective_dof"] for row in bootstrap_source if row["method"] == "Full" and
+                (row["scenario"], row["phase"], row["availability_s"], tuple(row["prns"])) in support_keys]
+    a5_edf = [row["effective_dof"] for row in bootstrap_source if row["method"] == "A5" and
+              (row["scenario"], row["phase"], row["availability_s"], tuple(row["prns"])) in support_keys]
+    shared = {"full_pauc": paired_pauc("Full"), "a5_pauc": paired_pauc("A5"),
+              "full_median_edf": float(np.median(full_edf)), "a5_median_edf": float(np.median(a5_edf))}
+    evidence = {"clean_holdout_fpr": clean_fpr, "clean_contrast_source": clean_contrast_source,
+                "external_pre_fpr": external_fpr,
+                "incremental_lcb": {name: row["lcb_95"] for name, row in bootstrap_reports.items()},
+                "destruction": relation_reports, "persistence": persistence, "controls": control_evidence, "shared": shared}
+    gates = compute_scientific_gates(evidence); verdict = scientific_verdict(gates)
+    write_csv(artifact / "ablation_metrics.csv", [{"contrast": row["id"], "status": row["status"]} for row in gates], ["contrast", "status"])
+    write_csv(artifact / "external_static_fpr.csv", [{"scenario": "cleanStatic_holdout", "fpr_q99": clean_fpr},
+              *[{"scenario": scenario, "fpr_q99": value} for scenario, value in sorted(external_fpr.items())]], ["scenario", "fpr_q99"])
+    interval_rows = [{"contrast": name, "replicates": report["replicates"], "lcb_95": report["lcb_95"],
+                      "ci_low": report["interval_95"][0], "ci_high": report["interval_95"][1]}
+                     for name, report in sorted(bootstrap_reports.items())]
+    interval_rows += [{"contrast": f"Full-{name}", "replicates": report["replicates"], "lcb_95": report["lcb"],
+                       "ci_low": report["interval_95"][0], "ci_high": report["interval_95"][1]}
+                      for name, report in sorted(relation_reports.items())]
+    write_csv(artifact / "bootstrap_intervals.csv", interval_rows, ["contrast", "replicates", "lcb_95", "ci_low", "ci_high"])
+    canonical_write_json(artifact / "relation_destruction_metrics.json",
+                         {"schema": "gnss-doppler-lab.gcspo-stage0.relation-destruction.v2",
+                          "results": relation_reports, "transforms_executed": True,
+                          "preservation_assertions": all(row.get("preservation") is True for row in relation_rows),
+                          "seeds": sorted({row["transform_seed"] for row in relation_rows if row.get("transform_seed") is not None}),
+                          "numpy_version": np.__version__,
+                          "rows": [{key: value for key, value in row.items() if key not in {"state", "terms"}}
+                                   for row in relation_rows]})
+    controls["alarm_behavior_evaluated"] = True; controls["gate_status"] = next(row["status"] for row in gates if row["id"] == "G5_CONTROLS")
+    canonical_write_json(artifact / "physical_controls.json", controls)
+    plots = artifact / "plots"; plots.mkdir(exist_ok=True)
+    write_csv(plots / "full_score_numeric_sidecar.csv", [row for row in score_rows if row["method"] == "Full"], score_fields)
+    canonical_write_json(artifact / "final_verdict.json", {"schema": "gnss-doppler-lab.gcspo-stage0.final-verdict.v2",
+                         "verdict": verdict, "scientific_status": "VALID_SCIENCE", "protected_run_count": 1,
+                         "gates": gates, "evidence": evidence, "unavailable": unavailable})
+    return verdict
