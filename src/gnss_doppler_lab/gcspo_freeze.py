@@ -31,10 +31,16 @@ def build_freeze_record(*, target_commit, config_sha256, implementation_files, c
 
 
 def build_review_candidate_record(*, target_commit, config_sha256, implementation_files,
-                                  clean_files, rejected_freeze_commit):
+                                  clean_files, rejected_freeze_commit,
+                                  prior_rejected_freeze_commits=()):
     """Build a non-self-referential repair freeze awaiting independent rereview."""
     if len(target_commit) != 40 or len(rejected_freeze_commit) != 40 or target_commit == rejected_freeze_commit:
         raise ValueError("repair target/rejected freeze identity is incomplete")
+    rejected = [rejected_freeze_commit, *prior_rejected_freeze_commits]
+    if (any(not isinstance(value, str) or len(value) != 40 for value in rejected) or
+            len(rejected) != len(set(rejected)) or target_commit in rejected):
+        raise ValueError("rejected freeze ancestry binding is incomplete")
+
     if len(config_sha256) != 64:
         raise ValueError("repair config identity is incomplete")
     implementation = sorted((_identity(path) for path in implementation_files), key=lambda row: row["path"])
@@ -46,7 +52,8 @@ def build_review_candidate_record(*, target_commit, config_sha256, implementatio
             "config_sha256": config_sha256, "implementation_files": implementation,
             "clean_scientific_artifacts": clean,
             "review_evidence": {"status": "REPAIRS_COMPLETE_AWAITING_REREVIEW",
-                                "rejected_freeze_commit": rejected_freeze_commit},
+                                "rejected_freeze_commit": rejected_freeze_commit,
+                                "rejected_freeze_commits": rejected},
             "manifest_excludes_self": True, "protected_access_authorized": False}
 
 
@@ -58,7 +65,11 @@ def verify_review_candidate_record(record, *, target_commit):
     if record.get("protected_access_authorized") is not False or record.get("manifest_excludes_self") is not True:
         raise ValueError("repair freeze access/self-reference contract mismatch")
     review = record.get("review_evidence", {})
-    if review.get("status") != "REPAIRS_COMPLETE_AWAITING_REREVIEW" or len(str(review.get("rejected_freeze_commit", ""))) != 40:
+    rejected = review.get("rejected_freeze_commits")
+    if (review.get("status") != "REPAIRS_COMPLETE_AWAITING_REREVIEW" or
+            not isinstance(rejected, list) or not rejected or len(rejected) != len(set(rejected)) or
+            any(not isinstance(value, str) or len(value) != 40 for value in rejected) or
+            review.get("rejected_freeze_commit") != rejected[0]):
         raise ValueError("repair freeze review evidence mismatch")
     _verify_rows(record.get("implementation_files"), "implementation")
     _verify_rows(record.get("clean_scientific_artifacts"), "clean artifact")

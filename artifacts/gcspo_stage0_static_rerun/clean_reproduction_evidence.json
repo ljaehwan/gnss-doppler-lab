@@ -1,16 +1,21 @@
 {
-  "schema": "gnss-doppler-lab.gcspo-stage0.clean-reproduction-evidence.v1",
-  "scratch_roots": ["content-addressed by reproduction_run_1.json", "content-addressed by reproduction_run_2.json"],
+  "schema": "gnss-doppler-lab.gcspo-stage0.clean-reproduction-evidence.v2",
+  "source_freeze_sha": "b34180109648368f72316b5a783363887e340c28",
+  "accepted_run_ids": ["a5-round3-run-1-b341801", "a5-round3-run-2-b341801"],
+  "scratch_roots": ["/tmp/gcspo-round3-a5-run-1-b341801-Kkpm0i",
+                    "/tmp/gcspo-round3-a5-run-2-b341801-l2y14Y"],
+  "durable_bundles": ["reproductions/a5-round3-run-1-b341801",
+                      "reproductions/a5-round3-run-2-b341801"],
   "comparison": {
-    "status": "BYTE_IDENTICAL",
-    "runtime_canonicalization": ["preflight_report.json:started_utc", "preflight_report.json:finished_utc"],
+    "status": "BYTE_IDENTICAL_OUTPUT_SNAPSHOTS",
+    "runtime_canonicalization": [],
     "scientific_files": {
       "normal_model_summary.json": "4110b6b870db95bb12c1154a29b61250fcd3f914a6042e5306d9389568e4beec",
       "thresholds.json": "034c265b6de4188db8b577855d9a30e9a144e83255002105004a576123d15e7f",
       "clean_only_report.json": "cd8eb2564f6b7724f5967ea6137d3cf59e897a5ef25e9b990f08a16f2d829fa8",
       "physical_controls.json": "e1e14890e06151ccac41df29c6d77b8d1b41ee1394864e8e5fc0ade6dc504681",
       "clean_ablation_report.json": "d5695d659ac414c34eeb9304af0b4cf4ed3b542d01e9a9b6063961b9e3727eb9",
-      "clean_a5_report.json": "dddea8b407e610764e5cacc08a7b921973b69e5e9c43ab71a43e81f7978a4f2e",
+      "clean_a5_report.json": "a2d902d9c8d4ac8b07d38bff7b31da560772b3bb5040823e3d10ba62d0045c7a",
       "clean_b0_report.json": "c8bcef756a461cc1d4d1f094d30ce3f5873cd449d2ac30fe8600ebf0e6ae1146"
     }
   },

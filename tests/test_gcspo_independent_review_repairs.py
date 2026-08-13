@@ -179,7 +179,7 @@ def test_committed_reproduction_manifests_are_self_authenticating_and_verifier_c
 
     result = verify_reproduction_manifests(ARTIFACT)
     assert result["status"] == "PASS" and result["run_count"] == 2
-    assert result["comparison"] == "BYTE_IDENTICAL_AFTER_EXPLICIT_TIMESTAMP_CANONICALIZATION"
+    assert result["comparison"] == "BYTE_IDENTICAL_OUTPUT_SNAPSHOTS"
     verifier = (ROOT / "src/gnss_doppler_lab/gcspo_verify.py").read_text()
     assert "verify_reproduction_manifests(artifact)" in verifier
 
@@ -188,7 +188,7 @@ def test_committed_reproduction_manifests_are_self_authenticating_and_verifier_c
                  "thresholds.json"):
         (tmp_path / name).write_bytes((ARTIFACT / name).read_bytes())
     bad = json.loads((tmp_path / "reproduction_run_2.json").read_text())
-    bad["scientific_files"]["clean_a5_report.json"]["sha256"] = "0" * 64
+    bad["output_bundle"]["files"]["clean_a5_report.json"]["sha256"] = "0" * 64
     (tmp_path / "reproduction_run_2.json").write_text(json.dumps(bad) + "\n")
     with pytest.raises(ValueError, match="reproduction|scientific|identity"):
         verify_reproduction_manifests(tmp_path)

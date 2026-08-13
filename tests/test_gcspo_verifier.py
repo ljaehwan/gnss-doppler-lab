@@ -40,8 +40,11 @@ def test_clean_ready_report_does_not_require_final_manifest(tmp_path):
     with pytest.raises(FileNotFoundError):
         module._artifact_manifest_sha(tmp_path, "final")
 
-def test_clean_ready_verifier_requires_all_methods_and_zero_access(tmp_path):
-    from gnss_doppler_lab.gcspo_verify import verify_clean_ready
+def test_clean_ready_verifier_requires_all_methods_and_zero_access(tmp_path, monkeypatch):
+    import gnss_doppler_lab.gcspo_verify as verify
+
+    monkeypatch.setattr(verify, "verify_reproduction_manifests", lambda _root: {"status": "PASS"})
+    verify_clean_ready = verify.verify_clean_ready
 
     (tmp_path / "clean_only_report.json").write_text(json.dumps({
         "run_status": "CLEAN_ONLY_PASS", "protected_attack_rows_read": False,
