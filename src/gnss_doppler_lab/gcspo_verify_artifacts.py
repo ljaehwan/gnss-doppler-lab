@@ -8,8 +8,10 @@ from pathlib import Path
 
 import numpy as np
 
-from .gcspo_statistics import (exact_contrast_support, paired_block_bootstrap,
-                               scenario_phase_balanced_pauc, scheduled_persistence)
+from .gcspo_statistics import (RELATION_POLICY, exact_contrast_support, paired_block_bootstrap,
+                               paired_score_loss_bootstrap, scenario_phase_balanced_pauc,
+                               scheduled_persistence)
+from .gcspo_capabilities import validate_preaccess_capabilities
 
 
 def _csv(path):
@@ -36,7 +38,8 @@ def _score_rows(path):
 
 def independently_load_clean_contrast_rows(root, identities):
     """Independently authenticate and reconstruct the cleanStatic negative cell."""
-    root = Path(root).resolve(); required = ("clean_only_report.json", "clean_ablation_report.json", "clean_a5_report.json")
+    root = Path(root).resolve(); required = ("clean_only_report.json", "clean_ablation_report.json",
+                                             "clean_a5_report.json", "clean_reproduction_evidence.json")
     identity_map = {str(Path(row.get("path", "")).resolve()): row for row in identities if isinstance(row, dict)}
     documents, source = {}, {}
     for name in required:
@@ -48,7 +51,7 @@ def independently_load_clean_contrast_rows(root, identities):
             raise ValueError(f"clean contrast identity mismatch: {name}")
         documents[name] = json.loads(path.read_text())
         source[name] = {"sha256": digest, "size_bytes": size}
-    clean, ablation, a5 = (documents[name] for name in required)
+    clean, ablation, a5, reproduction = (documents[name] for name in required)
     expected_status = ((clean, "CLEAN_ONLY_PASS"), (ablation, "CLEAN_ABLATIONS_PASS"), (a5, "CLEAN_A5_PASS"))
     if any(doc.get("run_status") != status or doc.get("attack_access_count") != 0 or
            doc.get("protected_attack_rows_read") is not False for doc, status in expected_status):
@@ -58,8 +61,12 @@ def independently_load_clean_contrast_rows(root, identities):
                   "A2": ablation["methods"]["A2"]["holdout"], "A5": a5["holdout"]}
     except (KeyError, TypeError):
         raise ValueError("clean contrast cell is missing") from None
-    if any(len(rows) != 238 for rows in inputs.values()):
+    expected_count = reproduction.get("counts", {}).get("clean_contrast_holdout_windows")
+    if isinstance(expected_count, bool) or not isinstance(expected_count, int) or expected_count < 1:
+        raise ValueError("clean contrast expected count binding is absent")
+    if any(len(rows) != expected_count for rows in inputs.values()):
         raise ValueError("clean contrast cell count mismatch")
+    source["clean_reproduction_evidence.json"]["expected_holdout_windows"] = expected_count
     result = []
     for method, rows in inputs.items():
         for raw in rows:
@@ -85,6 +92,46 @@ def _paired_pauc(paired, method):
     return scenario_phase_balanced_pauc(rows)
 
 
+def reconstruct_relation_evidence(document, *, scenarios=None, capabilities=None):
+    """Reconstruct the evaluator's scenario-specific paired score-loss policy."""
+    relation_rows = document.get("rows")
+    if not isinstance(relation_rows, list) or not relation_rows:
+        raise ValueError("relation score rows are absent")
+    selected = tuple(RELATION_POLICY) if scenarios is None else tuple(scenarios)
+    unavailable = {} if capabilities is None else capabilities.get("unavailable", {})
+    available = set(selected) if capabilities is None else set(capabilities.get("available", {}))
+    results = {"policy": RELATION_POLICY, "scenario_results": {}}
+    for scenario in selected:
+        policy = RELATION_POLICY[scenario]
+        if scenario not in available:
+            disposition = unavailable.get(scenario, {})
+            results["scenario_results"][scenario] = {
+                "status": disposition.get("status", "UNAVAILABLE"), "primary": policy["primary"],
+                "mandatory": False, "reason": disposition.get("reason", "CAPABILITY_UNAVAILABLE")}
+            continue
+        rows = [row for row in relation_rows if row.get("scenario") == scenario]
+        established = any(row.get("phase") == "established" for row in rows)
+        if policy["requires_established"] and not established:
+            results["scenario_results"][scenario] = {
+                "status": "LIMITED_TRANSITION_ONLY", "primary": policy["primary"],
+                "mandatory": False, "reason": "AUTHENTICATED_ESTABLISHED_PULL_OFF_COVERAGE_ABSENT"}
+            continue
+        try:
+            report = paired_score_loss_bootstrap(rows, "Full", policy["primary"])
+        except ValueError as exc:
+            results["scenario_results"][scenario] = {
+                "status": "UNAVAILABLE", "primary": policy["primary"],
+                "mandatory": scenario in {"DS3", "DS7", "DS8"}, "reason": str(exc)}
+            continue
+        results["scenario_results"][scenario] = {
+            "status": "AVAILABLE", "primary": policy["primary"],
+            "mandatory": scenario in {"DS3", "DS7", "DS8"},
+            "lcb": report["lcb_95"], "interval_95": report["interval_95"],
+            "median_relative_loss": report["median_relative_loss"],
+            "replicates": report["replicates"], "contrast": report["contrast"]}
+    return results
+
+
 def reconstruct_final_evidence(root):
     root = Path(root); scores = _score_rows(root / "per_epoch_scores.csv")
     freeze = json.loads((root / "implementation_manifest.json").read_text())
@@ -94,23 +141,10 @@ def reconstruct_final_evidence(root):
     incremental = {f"Full-{method}": paired_block_bootstrap(source, "Full", method)["lcb_95"]
                    for method in ("A1", "A2")}
     relation_document = json.loads((root / "relation_destruction_metrics.json").read_text())
-    relation_rows = relation_document.get("rows")
-    if not isinstance(relation_rows, list) or not relation_rows: raise ValueError("relation score rows are absent")
-    destruction = {}
-    for method in ("LOS_SHUFFLE", "PER_PRN_TEMPORAL_SHIFT"):
-        bootstrap = paired_block_bootstrap(relation_rows, "Full", method)
-        paired = exact_contrast_support(relation_rows, ("Full", method)); losses = []
-        cells = sorted({("DS7_DS8" if row["scenario"] in {"DS7", "DS8"} else row["scenario"], row["phase"])
-                        for row in paired})
-        for family, phase in cells:
-            cell = [row for row in paired if ("DS7_DS8" if row["scenario"] in {"DS7", "DS8"} else row["scenario"]) == family
-                    and row["phase"] == phase]
-            full, altered = _paired_pauc(cell, "Full"), _paired_pauc(cell, method)
-            losses.append((full - altered) / max(abs(full), 1e-12))
-        destruction[method] = {"lcb": bootstrap["lcb_95"], "interval_95": bootstrap["interval_95"],
-                               "median_relative_loss": float(np.median(losses)), "replicates": 2000}
+    capabilities = validate_preaccess_capabilities(json.loads((root / "protected_capabilities.json").read_text()))
+    destruction = reconstruct_relation_evidence(relation_document, capabilities=capabilities)
     persistence = {}; individual = {}
-    for scenario in ("DS3", "DS7", "DS8"):
+    for scenario in tuple(name for name in ("DS3", "DS7", "DS8") if name in capabilities["available"]):
         rows = sorted([row for row in scores if row["scenario"] == scenario and row["method"] == "Full"
                        and row["phase"] == "established"], key=lambda row: row["availability_s"])
         if not rows: raise ValueError(f"persistence rows absent: {scenario}")
@@ -118,9 +152,12 @@ def reconstruct_final_evidence(root):
         first = next((row["availability_s"] for row, flag in zip(rows, flags) if flag), None)
         individual[scenario] = {"ratio": float(np.mean(flags)),
                                 "delay_s": float("inf") if first is None else first - rows[0]["phase_start_s"]}
+    family = [name for name in ("DS7", "DS8") if name in individual]
+    if "DS3" not in individual or not family: raise ValueError("mandatory persistence capability is absent")
     persistence["DS3"] = individual["DS3"]
-    persistence["DS7_DS8"] = {"ratio": min(individual[name]["ratio"] for name in ("DS7", "DS8")),
-                               "delay_s": max(individual[name]["delay_s"] for name in ("DS7", "DS8"))}
+    persistence["DS7_DS8"] = {"ratio": min(individual[name]["ratio"] for name in family),
+                               "delay_s": max(individual[name]["delay_s"] for name in family),
+                               "available_members": family}
     external = {row["scenario"]: float(row["fpr_q99"]) for row in _csv(root / "external_static_fpr.csv")}
     clean_fpr = external.pop("cleanStatic_holdout")
     controls = json.loads((root / "physical_controls.json").read_text()).get("results")

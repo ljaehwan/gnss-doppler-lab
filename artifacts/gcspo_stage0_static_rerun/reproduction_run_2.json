@@ -1,0 +1,20 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.reproduction-run.v1",
+  "run_id": "a5-segment-repair-run-2",
+  "source_freeze_sha": "857efeec5bdc9ab2657fe1b848ca45846f9f25ff",
+  "commands": ["python scripts/run_gcspo_clean_a5.py --artifact-dir <fresh-scratch-run-2> --workers 1"],
+  "config_identities": {
+    "config.json": {"sha256": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad", "size_bytes": 37865},
+    "run_gcspo_clean_a5.py": {"sha256": "a820f66453f7f6bc7033be126e340714cd7f97e97fe98a6721bbe71c403460c6"},
+    "gcspo_a5.py": {"sha256": "e8d995744f161b5d64ebc42f83680b022f186e56fdeedfba75df96865b613a91"}
+  },
+  "dependencies": {"python": "3.12.3", "numpy": "2.5.1", "scipy": "1.18.0", "pandas": "3.0.5", "h5py": "3.16.0", "torch": "2.13.0+cu130", "numeric_backend": "CUDA float64 generalized symmetric eigensystem with CPU fallback"},
+  "runtime_canonicalization": ["preflight_report.json:started_utc", "preflight_report.json:finished_utc"],
+  "scientific_files": {
+    "clean_a5_report.json": {"sha256": "dddea8b407e610764e5cacc08a7b921973b69e5e9c43ab71a43e81f7978a4f2e", "size_bytes": 5894289},
+    "thresholds.json": {"sha256": "034c265b6de4188db8b577855d9a30e9a144e83255002105004a576123d15e7f", "size_bytes": 918},
+    "clean_b0_report.json": {"sha256": "c8bcef756a461cc1d4d1f094d30ce3f5873cd449d2ac30fe8600ebf0e6ae1146", "size_bytes": 147582}
+  },
+  "boundary_and_reset_evidence": {"b0_half_open_test": "test_b0_scheduled_windows_are_exactly_half_open_with_boundary_epsilon_and_reuse", "a5_gap_reset_test": "test_a5_reacquisition_forms_independent_segments_and_preserves_actual_support", "dependency_trace": "A5 state segmentation changes only clean_a5_report.json and thresholds.json:A5; Full/A1-A4/controls/B0 remain byte-pinned"},
+  "comparison": {"peer_run_id": "a5-segment-repair-run-1", "result": "BYTE_IDENTICAL_AFTER_EXPLICIT_TIMESTAMP_CANONICALIZATION"}
+}

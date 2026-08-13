@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 
-EXPECTED = 238
+EXPECTED = 237
 
 
 def _score_rows(offset):
@@ -53,6 +53,9 @@ def _fixture(root, *, a2_count=EXPECTED, include_a5=True):
         "holdout": _score_rows(3),
     }
     documents = {"clean_only_report.json": clean, "clean_ablation_report.json": ablation}
+    documents["clean_reproduction_evidence.json"] = {
+        "counts": {"clean_contrast_holdout_windows": EXPECTED}
+    }
     if include_a5:
         documents["clean_a5_report.json"] = a5
     for name, document in documents.items():

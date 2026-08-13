@@ -30,6 +30,41 @@ def build_freeze_record(*, target_commit, config_sha256, implementation_files, c
             "manifest_excludes_self": True}
 
 
+def build_review_candidate_record(*, target_commit, config_sha256, implementation_files,
+                                  clean_files, rejected_freeze_commit):
+    """Build a non-self-referential repair freeze awaiting independent rereview."""
+    if len(target_commit) != 40 or len(rejected_freeze_commit) != 40 or target_commit == rejected_freeze_commit:
+        raise ValueError("repair target/rejected freeze identity is incomplete")
+    if len(config_sha256) != 64:
+        raise ValueError("repair config identity is incomplete")
+    implementation = sorted((_identity(path) for path in implementation_files), key=lambda row: row["path"])
+    clean = sorted((_identity(path) for path in clean_files), key=lambda row: row["path"])
+    if not implementation or not clean:
+        raise ValueError("repair freeze file sets are incomplete")
+    return {"schema": "gnss-doppler-lab.gcspo-stage0.implementation-freeze.v3",
+            "validity_state": "AWAITING_INDEPENDENT_REREVIEW", "target_commit": target_commit,
+            "config_sha256": config_sha256, "implementation_files": implementation,
+            "clean_scientific_artifacts": clean,
+            "review_evidence": {"status": "REPAIRS_COMPLETE_AWAITING_REREVIEW",
+                                "rejected_freeze_commit": rejected_freeze_commit},
+            "manifest_excludes_self": True, "protected_access_authorized": False}
+
+
+def verify_review_candidate_record(record, *, target_commit):
+    if record.get("schema") != "gnss-doppler-lab.gcspo-stage0.implementation-freeze.v3":
+        raise ValueError("repair freeze schema mismatch")
+    if record.get("validity_state") != "AWAITING_INDEPENDENT_REREVIEW" or record.get("target_commit") != target_commit:
+        raise ValueError("repair freeze target/state mismatch")
+    if record.get("protected_access_authorized") is not False or record.get("manifest_excludes_self") is not True:
+        raise ValueError("repair freeze access/self-reference contract mismatch")
+    review = record.get("review_evidence", {})
+    if review.get("status") != "REPAIRS_COMPLETE_AWAITING_REREVIEW" or len(str(review.get("rejected_freeze_commit", ""))) != 40:
+        raise ValueError("repair freeze review evidence mismatch")
+    _verify_rows(record.get("implementation_files"), "implementation")
+    _verify_rows(record.get("clean_scientific_artifacts"), "clean artifact")
+    return True
+
+
 def _verify_rows(rows, kind):
     if not isinstance(rows, list) or not rows: raise ValueError(f"{kind} freeze set is empty")
     paths = [row.get("path") for row in rows]

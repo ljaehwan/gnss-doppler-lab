@@ -241,6 +241,27 @@ class AccessGate:
         return {**payload, "_normalized_files": rows,
                 "_manifest_adapter": adapted["adapter"]}
 
+    def register_sidecar_children(self, root_manifest, children):
+        """Register immutable sidecar children without opening their bytes."""
+        canonical, capability = self._capability(root_manifest)
+        if capability["kind"] != "RECEIVER_MANIFEST" or capability["source"] != "PINNED":
+            raise PermissionError("sidecar root manifest must be inventory-pinned")
+        parsed = []
+        for row in children:
+            child = Path(row["canonical_path"]).resolve(strict=True)
+            if canonical.parent not in child.parents:
+                raise ValueError("sidecar child escapes authenticated root")
+            info = os.lstat(child)
+            if not stat.S_ISREG(info.st_mode) or stat.S_ISLNK(info.st_mode):
+                raise PermissionError("sidecar child must be a regular non-symlink file")
+            self._allow[str(child)] = {"expected_sha256": row["sha256"].lower(),
+                                       "expected_size": int(row["size_bytes"]),
+                                       "kind": child.suffix.upper().lstrip(".") or "FILE",
+                                       "registered_dev": info.st_dev, "registered_ino": info.st_ino,
+                                       "source": f"IMMUTABLE_CAPABILITY_SIDECAR:{canonical}"}
+            parsed.append(child)
+        return tuple(parsed)
+
     def authorize(self, path, *, scenario, phase, expected_sha256, expected_size):
         """Compatibility shim: register a pinned identity; bytes remain unexposed."""
         canonical = self.register_pinned(path, expected_sha256=expected_sha256, expected_size=expected_size, kind="PINNED_FILE")

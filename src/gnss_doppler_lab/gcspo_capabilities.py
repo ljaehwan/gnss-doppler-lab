@@ -7,6 +7,7 @@ import re
 
 
 SCHEMA = "gnss-doppler-lab.gcspo-stage0.capability-sidecar.v1"
+PREACCESS_SCHEMA = "gnss-doppler-lab.gcspo-stage0.preaccess-capabilities.v1"
 SCENARIOS = {"DS3", "DS4", "DS7", "DS8"}
 _SHA256 = re.compile(r"[0-9a-f]{64}")
 
@@ -167,3 +168,55 @@ def validate_capability_sidecar(document):
         return {"status": "UNAVAILABLE", "reason": "DS4_METHOD_A_SOURCE_IDENTITY_NOT_INDEPENDENTLY_PROVEN"}
     return {"status": "AVAILABLE", "scenario": scenario, "child_count": len(children),
             "field_count": len(fields), "manifest_adapter": root["adapter"]}
+
+
+def validate_preaccess_capabilities(document):
+    """Validate every scenario disposition before any protected claim/read."""
+    doc = _mapping(document, "preaccess capability contract")
+    if set(doc) != {"schema", "metadata_sources", "field_contracts", "scenarios", "access_audit"} or doc.get("schema") != PREACCESS_SCHEMA:
+        raise ValueError("preaccess capability contract schema/keys mismatch")
+    audit = _mapping(doc["access_audit"], "preaccess access audit")
+    if audit != {"protected_payload_rows_opened": 0, "protected_payload_bytes_opened": 0}:
+        raise ValueError("preaccess capability construction used protected payload bytes")
+    sources = doc["metadata_sources"]
+    if not isinstance(sources, list) or not sources:
+        raise ValueError("capability metadata source identities are absent")
+    for source in sources:
+        source = _mapping(source, "capability metadata source")
+        _absolute(source.get("canonical_path"), "capability metadata source")
+        _sha(source.get("sha256"), "capability metadata source")
+        _size(source.get("size_bytes"), "capability metadata source")
+    contracts = _mapping(doc["field_contracts"], "field contracts")
+    scenarios = _mapping(doc["scenarios"], "scenario capabilities")
+    if set(scenarios) != SCENARIOS:
+        raise ValueError("scenario capability set mismatch")
+    available, unavailable = {}, {}
+    for scenario in sorted(SCENARIOS):
+        entry = _mapping(scenarios[scenario], f"{scenario} capability")
+        status = entry.get("status")
+        if status == "AVAILABLE":
+            if set(entry) != {"status", "sidecar"}:
+                raise ValueError(f"{scenario} available capability keys mismatch")
+            compact = _mapping(entry["sidecar"], f"{scenario} sidecar")
+            contract_name = compact.get("field_contract")
+            contract = _mapping(contracts.get(contract_name), f"{scenario} field contract")
+            expanded = {key: value for key, value in compact.items() if key != "field_contract"}
+            expanded["producer"] = contract.get("producer")
+            expanded["fields"] = contract.get("fields")
+            result = validate_capability_sidecar(expanded)
+            if result.get("status") != "AVAILABLE":
+                raise ValueError(f"{scenario} declared available but sidecar is unavailable")
+            available[scenario] = {"sidecar": expanded, "validation": result,
+                                   "manifest_identity": {"path": expanded["root_manifest"]["canonical_path"],
+                                                         "sha256": expanded["root_manifest"]["sha256"],
+                                                         "size_bytes": expanded["root_manifest"]["size_bytes"]}}
+        elif status in {"LIMITED", "LIMITED_TRANSITION_ONLY", "UNAVAILABLE"}:
+            if set(entry) != {"status", "reason"} or not isinstance(entry.get("reason"), str) or not entry["reason"]:
+                raise ValueError(f"{scenario} unavailable capability reason is absent")
+            unavailable[scenario] = dict(entry)
+        else:
+            raise ValueError(f"{scenario} capability status is invalid")
+    if "DS3" not in available:
+        raise ValueError("DS3 core manifest/timeline capability is unavailable")
+    return {"status": "PASS", "available": available, "unavailable": unavailable,
+            "metadata_source_count": len(sources)}

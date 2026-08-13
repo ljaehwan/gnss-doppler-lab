@@ -1,15 +1,19 @@
 """Fail-closed clean and final artifact verification for GCSPO Stage-0."""
 from __future__ import annotations
 
+import hashlib
 import json
+import re
 from pathlib import Path
 
 from .gcspo_verify_artifacts import reconstruct_final_evidence
 from .gcspo_verify_reconstruct import validate_access_ledger, verify_evidence_document
 from .gcspo_artifacts import FROZEN_HASHES, VALID_SCIENCE_REQUIRED, sha256_file, verify_artifact_manifest
+from .gcspo_freeze import verify_review_candidate_record
 
 METHODS = {"A0", "A1", "A2", "A3", "A4", "A5", "Full"}
 FINAL_REQUIRED = set(VALID_SCIENCE_REQUIRED)
+_HEX64 = re.compile(r"[0-9a-f]{64}")
 
 
 def _json(root: Path, name: str):
@@ -50,7 +54,62 @@ def verify_clean_ready(root: str | Path):
     allowed = recovery.get("tolerance", {}).get("maximum_scaled_state_error")
     if not isinstance(observed, (int, float)) or not isinstance(allowed, (int, float)) or observed > allowed:
         raise ValueError("synthetic recovery tolerance mismatch")
+    verify_reproduction_manifests(artifact)
+    candidate = artifact / "implementation_manifest.json"
+    if candidate.is_file():
+        record = json.loads(candidate.read_text())
+        verify_review_candidate_record(record, target_commit=record.get("target_commit"))
     return {"schema": "gnss-doppler-lab.gcspo-stage0.verifier-report.v1", "phase": "clean-ready", "status": "PASS"}
+
+
+def verify_reproduction_manifests(root: str | Path):
+    """Authenticate two durable, content-addressed clean reproduction records."""
+    artifact = Path(root); documents = []
+    required = {"schema", "run_id", "source_freeze_sha", "commands", "config_identities",
+                "dependencies", "runtime_canonicalization", "scientific_files",
+                "boundary_and_reset_evidence", "comparison"}
+    for index in (1, 2):
+        path = artifact / f"reproduction_run_{index}.json"
+        if not path.is_file(): raise ValueError("reproduction manifest is absent")
+        doc = json.loads(path.read_text())
+        if set(doc) != required or doc.get("schema") != "gnss-doppler-lab.gcspo-stage0.reproduction-run.v1":
+            raise ValueError("reproduction manifest schema/keys mismatch")
+        if doc.get("run_id") != f"a5-segment-repair-run-{index}" or len(str(doc.get("source_freeze_sha", ""))) != 40:
+            raise ValueError("reproduction run/source identity mismatch")
+        if not isinstance(doc.get("commands"), list) or not doc["commands"]:
+            raise ValueError("reproduction commands are absent")
+        if doc.get("runtime_canonicalization") != ["preflight_report.json:started_utc",
+                                                     "preflight_report.json:finished_utc"]:
+            raise ValueError("reproduction runtime canonicalization changed")
+        files = doc.get("scientific_files")
+        if not isinstance(files, dict) or not files:
+            raise ValueError("reproduction scientific identities are absent")
+        for name, identity in files.items():
+            if not isinstance(name, str) or set(identity) != {"sha256", "size_bytes"}:
+                raise ValueError("reproduction scientific identity is malformed")
+            if _HEX64.fullmatch(str(identity["sha256"])) is None or isinstance(identity["size_bytes"], bool) or identity["size_bytes"] <= 0:
+                raise ValueError("reproduction scientific identity is incomplete")
+        evidence = doc.get("boundary_and_reset_evidence", {})
+        if evidence.get("b0_half_open_test") != "test_b0_scheduled_windows_are_exactly_half_open_with_boundary_epsilon_and_reuse":
+            raise ValueError("B0 boundary reproduction evidence is absent")
+        if evidence.get("a5_gap_reset_test") != "test_a5_reacquisition_forms_independent_segments_and_preserves_actual_support":
+            raise ValueError("A5 gap/reset reproduction evidence is absent")
+        documents.append(doc)
+    first, second = documents
+    if first["scientific_files"] != second["scientific_files"]:
+        raise ValueError("reproduction scientific identities differ")
+    expected_comparison = "BYTE_IDENTICAL_AFTER_EXPLICIT_TIMESTAMP_CANONICALIZATION"
+    if any(doc["comparison"] != {"peer_run_id": documents[1 - index]["run_id"], "result": expected_comparison}
+           for index, doc in enumerate(documents)):
+        raise ValueError("reproduction comparison result mismatch")
+    for name, identity in first["scientific_files"].items():
+        path = artifact / name
+        if not path.is_file() or path.stat().st_size != identity["size_bytes"]:
+            raise ValueError(f"reproduction canonical identity absent: {name}")
+        if hashlib.sha256(path.read_bytes()).hexdigest() != identity["sha256"]:
+            raise ValueError(f"reproduction canonical scientific identity mismatch: {name}")
+    return {"status": "PASS", "run_count": 2, "comparison": expected_comparison,
+            "scientific_files": first["scientific_files"]}
 
 
 def verify_final(root: str | Path, *, strict: bool = False):
@@ -61,6 +120,7 @@ def verify_final(root: str | Path, *, strict: bool = False):
     ledger = artifact / "access_ledger.jsonl"
     records = [json.loads(line) for line in ledger.read_text().splitlines() if line.strip()] if ledger.is_file() else []
     validate_access_ledger(records)
+    verify_reproduction_manifests(artifact)
     reconstructed = reconstruct_final_evidence(artifact)
     if verdict.get("evidence") != reconstructed: raise ValueError("reported evidence differs from artifact reconstruction")
     verify_evidence_document(verdict)

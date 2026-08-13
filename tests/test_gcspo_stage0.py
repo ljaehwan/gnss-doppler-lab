@@ -293,7 +293,7 @@ def test_frozen_files_have_contract_sha256():
     rerun = {
         "artifacts/gcspo_stage0_static_rerun/README.md": "eea2e10885d66bfc762f33b2e25147ab07b1bbceace505078e8770e4cdc18ac2",
         "artifacts/gcspo_stage0_static_rerun/config.json": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad",
-        "artifacts/gcspo_stage0_static_rerun/data_inventory.json": "4faffaede28119f7655da25b44129b09e76f1bb49ec5169861b6336abaea3631",
+        "artifacts/gcspo_stage0_static_rerun/data_inventory.json": "e9ea155af1d98820e3556c6214abe541ca511dd53ecc978c1afc6351a161e22e",
         "artifacts/gcspo_stage0_static_rerun/preregistration.json": "715e11965854f785487e9d2c747718747c1d31cdd8603696ea7af126a45a70da",
         "artifacts/gcspo_stage0_static_rerun/source_commit.json": "34a0eab36e4cbf6b16cf0a7075bc3c8a61008c34b9962cf584e04d4fa9f80b72",
         "docs/GCSPO_STAGE0.md": "3ff447ee62e32c16249bd34a0b134d27d1040b0e78e01cb753b24de3b6db6fa0",
@@ -332,7 +332,7 @@ def test_manifest_is_sorted_recursive_and_excludes_only_contract_cycle(tmp_path)
         verify_artifact_manifest(tmp_path, manifest)
 
 
-def test_valid_manifest_packaging_quarantines_clean_intermediates(tmp_path):
+def test_valid_manifest_packaging_keeps_authenticated_clean_science_and_quarantines_scratch(tmp_path):
     from gnss_doppler_lab.gcspo_artifacts import prepare_valid_artifact_manifest
     from gnss_doppler_lab.gcspo_verify import FINAL_REQUIRED
 
@@ -345,14 +345,13 @@ def test_valid_manifest_packaging_quarantines_clean_intermediates(tmp_path):
     plots.mkdir()
     (plots / "numeric_sidecar.csv").write_text("score\n1\n")
     (tmp_path / "implementation_manifest.json").write_text("{}\n")
-    (tmp_path / "clean_only_report.json").write_text("clean intermediate\n")
     (tmp_path / "b0_clean_recomputed").mkdir()
     (tmp_path / "b0_clean_recomputed/scratch.csv").write_text("scratch\n")
 
     manifest = prepare_valid_artifact_manifest(tmp_path)
     paths = {row["path"] for row in manifest["files"]}
     assert "implementation_manifest.json" in paths and "plots/numeric_sidecar.csv" in paths
-    assert not (tmp_path / "clean_only_report.json").exists()
+    assert "clean_only_report.json" in paths
     assert not (tmp_path / "b0_clean_recomputed").exists()
     runner = (Path(__file__).parents[1] / "scripts/run_gcspo_stage0.py").read_text()
     assert "prepare_valid_artifact_manifest(args.artifact_dir)" in runner

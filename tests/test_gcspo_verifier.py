@@ -14,6 +14,9 @@ def test_final_required_set_matches_frozen_contract_exactly():
         "relation_destruction_metrics.json", "physical_controls.json", "bootstrap_intervals.csv",
         "final_verdict.json", "access_ledger.jsonl", "artifact_manifest_sha256.json",
         "verifier_report.json", "fresh_clone_verifier_report.json",
+        "clean_only_report.json", "clean_ablation_report.json", "clean_a5_report.json",
+        "clean_b0_report.json", "clean_reproduction_evidence.json",
+        "reproduction_run_1.json", "reproduction_run_2.json", "protected_capabilities.json",
     }
 
 
@@ -53,6 +56,10 @@ def test_clean_ready_verifier_requires_all_methods_and_zero_access(tmp_path):
             "tolerance": {"maximum_scaled_state_error": 1e-5},
         },
     }))
+    canonical = Path(__file__).parents[1] / "artifacts/gcspo_stage0_static_rerun"
+    for name in ("reproduction_run_1.json", "reproduction_run_2.json",
+                 "clean_a5_report.json", "clean_b0_report.json", "thresholds.json"):
+        (tmp_path / name).write_bytes((canonical / name).read_bytes())
     assert verify_clean_ready(tmp_path)["status"] == "PASS"
     doc = json.loads((tmp_path / "clean_only_report.json").read_text())
     doc["all_methods"].remove("A5")

@@ -1,0 +1,17 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.freeze-repair-evidence.v1",
+  "rejected_freeze_commit": "857efeec5bdc9ab2657fe1b848ca45846f9f25ff",
+  "authoritative_instruction": "/home/ubuntu/.local/share/hermes-prompts/gcspo-freeze-repair-after-independent-review.md",
+  "red": {"command": "python -m pytest -q tests/test_gcspo_independent_review_repairs.py", "collected": 6, "failed": 6, "exit_code": 1,
+          "blockers": ["preaccess capabilities", "clean contrast count", "protected B0 integration", "final packaging/reconstruction", "A5 gap resets", "durable reproduction manifests"]},
+  "green": {"independent_review_repairs": "7 passed", "gcspo_suite": "140 passed", "clean_ready_verifier": "PASS", "frozen_verifier": "PASS",
+            "full_suite": "581 passed, 6 failed",
+            "full_failure_classification": "PRE_EXISTING_BASELINE_DEFECT: scripts/train_peak_floor_temporal_autoencoder.py is absent at required merge base 461eb4dc7bb794e719295daf028f6811658ba37f while the importing script and failing tests are present"},
+  "a5_reproduction": {"status": "BYTE_IDENTICAL", "run_1": "reproduction_run_1.json", "run_2": "reproduction_run_2.json",
+                      "lambda": 100.0, "validation_windows": 117, "calibration_windows": 237, "holdout_windows": 237,
+                      "clean_a5_sha256": "dddea8b407e610764e5cacc08a7b921973b69e5e9c43ab71a43e81f7978a4f2e",
+                      "thresholds_sha256": "034c265b6de4188db8b577855d9a30e9a144e83255002105004a576123d15e7f"},
+  "protected_payload_rows_opened": 0,
+  "protected_payload_bytes_opened": 0,
+  "protected_evaluation_executed": false
+}

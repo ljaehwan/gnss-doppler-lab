@@ -2,11 +2,14 @@
 from __future__ import annotations
 
 import json
+import importlib.util
 from pathlib import Path
+import sys
 
 import numpy as np
 
 from .gcspo_a5 import role_a5_terms, score_a5_terms
+from .gcspo_b0 import build_protected_scheduled_node_table
 from .gcspo_ablations import role_a2_terms, score_a2_terms
 from .gcspo_artifacts import canonical_write_json, sha256_file
 from .gcspo_clean import EPOCH_S, a1_role_scores, residual_table
@@ -32,8 +35,8 @@ def _ranges(scenario, end_s):
     return tuple((name, start, end_s if final is None else min(final, end_s)) for name, start, final in STATIC_PHASES[scenario] if start < end_s)
 
 
-CLEAN_CONTRAST_COUNT = 238
-_CLEAN_CONTRAST_FILES = ("clean_only_report.json", "clean_ablation_report.json", "clean_a5_report.json")
+_CLEAN_CONTRAST_FILES = ("clean_only_report.json", "clean_ablation_report.json",
+                         "clean_a5_report.json", "clean_reproduction_evidence.json")
 
 
 def load_clean_contrast_rows(root, identities):
@@ -47,7 +50,7 @@ def load_clean_contrast_rows(root, identities):
             raise ValueError(f"clean contrast identity mismatch: {name}")
         documents[name] = json.loads(path.read_text())
         source[name] = {"sha256": identity["sha256"], "size_bytes": identity["size_bytes"]}
-    clean, ablation, a5 = (documents[name] for name in _CLEAN_CONTRAST_FILES)
+    clean, ablation, a5, reproduction = (documents[name] for name in _CLEAN_CONTRAST_FILES)
     statuses = ((clean, "CLEAN_ONLY_PASS"), (ablation, "CLEAN_ABLATIONS_PASS"), (a5, "CLEAN_A5_PASS"))
     if any(doc.get("run_status") != status or doc.get("attack_access_count") != 0 or
            doc.get("protected_attack_rows_read") is not False for doc, status in statuses):
@@ -57,8 +60,12 @@ def load_clean_contrast_rows(root, identities):
                        "A2": ablation["methods"]["A2"]["holdout"], "A5": a5["holdout"]}
     except (KeyError, TypeError):
         raise ValueError("clean contrast cell is missing") from None
-    if any(len(rows) != CLEAN_CONTRAST_COUNT for rows in method_rows.values()):
+    expected_count = reproduction.get("counts", {}).get("clean_contrast_holdout_windows")
+    if isinstance(expected_count, bool) or not isinstance(expected_count, int) or expected_count < 1:
+        raise ValueError("clean contrast expected count binding is absent")
+    if any(len(rows) != expected_count for rows in method_rows.values()):
         raise ValueError("clean contrast cell count mismatch")
+    source["clean_reproduction_evidence.json"]["expected_holdout_windows"] = expected_count
     result = []
     for method, rows in method_rows.items():
         for raw in rows:
@@ -74,6 +81,89 @@ def load_clean_contrast_rows(root, identities):
             result.append({**row, "scenario": "cleanStatic", "family": "cleanStatic", "phase": "holdout",
                            "method": method, "label": False, "phase_start_s": 350., "phase_end_s": 470.})
     return result, source
+
+
+def validate_clean_contrast_preaccess(root, identities):
+    """Authenticate the complete clean contrast before a protected attempt exists."""
+    rows, source = load_clean_contrast_rows(root, identities)
+    methods = {row["method"] for row in rows}
+    if methods != {"Full", "A1", "A2", "A5"}:
+        raise ValueError("clean contrast method set mismatch")
+    return {"status": "PASS", "rows": len(rows), "source": source}
+
+
+def integrate_protected_b0(methods, b0_rows, *, score_column):
+    """Attach A0/B0 only where actual B0 and Full epoch/PRN support is exact."""
+    full_by = {(row.get("phase"), float(row["window_start_s"])): row
+               for row in methods.get("Full", [])}
+    grouped = {}
+    for row in b0_rows:
+        grouped.setdefault((row.get("phase"), float(row["window_start_s"])), []).append(row)
+    a0 = []
+    for key, group in sorted(grouped.items(), key=lambda item: (str(item[0][0]), item[0][1])):
+        full = full_by.get(key)
+        if full is None: continue
+        if "prn" in group[0]:
+            combined = {}
+            for row in group:
+                prn = int(str(row["prn"]).lstrip("Gg"))
+                for epoch, values in row["epoch_prn_support"]:
+                    combined.setdefault(int(epoch), set()).update(map(int, values or (prn,)))
+            support = tuple((epoch, tuple(sorted(values))) for epoch, values in sorted(combined.items()))
+            score = float(np.mean([float(row[score_column]) for row in group]))
+        else:
+            support = tuple((int(epoch), tuple(map(int, values)))
+                            for epoch, values in group[0]["epoch_prn_support"])
+            score = float(group[0][score_column])
+        full_support = tuple((int(epoch), tuple(map(int, values)))
+                             for epoch, values in full["epoch_prn_support"])
+        if support != full_support: continue
+        a0.append({"window_start_s": float(full["window_start_s"]),
+                   "availability_s": float(full["availability_s"]), "score": score,
+                   "prns": list(map(int, full["prns"])), "epoch_ids": tuple(map(int, full["epoch_ids"])),
+                   "epoch_prn_support": full_support,
+                   **({"phase": full["phase"]} if "phase" in full else {})})
+    return {**methods, "A0": a0}
+
+
+def _load_script(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec); sys.modules[name] = module
+    if spec.loader is None: raise ImportError(path)
+    spec.loader.exec_module(module)
+    return module
+
+
+def score_protected_b0(*, tracking_paths, gate, scenario, roles, methods, thresholds,
+                       artifact, repo):
+    """Execute frozen B0 and bind its event scores to exact Full support."""
+    pd = __import__("pandas")
+    work = artifact / "b0_protected_recomputed" / scenario
+    work.mkdir(parents=True, exist_ok=True)
+    node = build_protected_scheduled_node_table(tracking_paths, gate=gate, scenario=scenario, roles=roles)
+    node_path = work / "scheduled_node_windows.csv"; node.to_csv(node_path, index=False)
+    scorer = _load_script(f"gcspo_b0_scorer_{scenario}", repo / "scripts/score_texbat_prn_node_gru.py")
+    model_dir = repo / "artifacts/ai_morph_gru_cleanStatic_q70_frame"
+    scorer.score_node_csv(node_path, model_dir, work, scenario, onset_s=None,
+                          output_prefix="gcspo_b0", dataset_prefix="TEXBAT")
+    prn_path, _, _ = scorer.score_output_paths(work, scenario, "gcspo_b0")
+    prn = pd.read_csv(prn_path)
+    support = node[["run_id", "prn", "window_start_s", "phase", "epoch_ids_json"]]
+    prn = prn.merge(support, on=["run_id", "prn", "window_start_s"], validate="one_to_one")
+    gate_module = _load_script(f"gcspo_b0_gate_{scenario}", repo / "scripts/eval_btail_support_gate.py")
+    events = gate_module.build_event_scores(prn, thresholds["A0_B0"]["node_thresholds"], alpha=.75)
+    event_score = {(str(row.run_id), float(row.window_start_s)): float(getattr(row, gate_module.FINAL_SCORE))
+                   for row in events.itertuples(index=False)}
+    rows = []
+    for row in prn.itertuples(index=False):
+        epochs = tuple(map(int, json.loads(row.epoch_ids_json)))
+        numeric_prn = int(str(row.prn).lstrip("Gg"))
+        rows.append({"phase": row.phase, "window_start_s": float(row.window_start_s),
+                     "availability_s": float(row.window_start_s) + 1., "prn": numeric_prn,
+                     "event_score": event_score[(str(row.run_id), float(row.window_start_s))],
+                     "epoch_ids": epochs,
+                     "epoch_prn_support": tuple((epoch, (numeric_prn,)) for epoch in epochs)})
+    return integrate_protected_b0(methods, rows, score_column="event_score")
 
 
 def _method_rows(data, model, whitener, gamma, geometry, a2_loading, lambdas, ranges,
@@ -166,7 +256,8 @@ def _relation_rows(data, model, whitener, gamma, geometry, smoothness, scenario,
     return result
 
 
-def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identities, clean_identities):
+def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identities, clean_identities,
+                 capabilities):
     artifact = Path(artifact_dir); repo = Path(repo_root)
     normal = json.loads((artifact / "normal_model_summary.json").read_text())
     thresholds = json.loads((artifact / "thresholds.json").read_text())
@@ -179,14 +270,18 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
     lambdas = {"Full": float(normal["lambda_selected"]), "A2": float(a2_doc["methods"]["A2"]["lambda"]),
                "A5": float(json.loads((artifact / "clean_a5_report.json").read_text())["lambda"])}
     scenario_inventory = {row["id"]: row for row in inventory["scenario_inventory"]}
-    score_rows, state_rows, scenario_rows, unavailable, relation_rows = [], [], [], [], []
-    for scenario in ("DS3", "DS4", "DS7", "DS8"):
+    score_rows, state_rows, scenario_rows, relation_rows = [], [], [], []
+    unavailable = [{"scenario": scenario, **row}
+                   for scenario, row in sorted(capabilities["unavailable"].items())]
+    available_scenarios = tuple(sorted(capabilities["available"]))
+    for scenario in available_scenarios:
         identity = manifest_identities[scenario]; manifest_path = Path(identity["path"])
         gate.register_pinned(manifest_path, expected_sha256=identity["sha256"], expected_size=identity["size_bytes"],
                              kind="RECEIVER_MANIFEST")
-        manifest = gate.authenticate_manifest(manifest_path, scenario=scenario, phase="all_frozen_phases",
-                                              purpose="receiver output identities")
-        child_paths = [manifest_path.parent / row["path"] for row in manifest.get("_normalized_files", ())]
+        gate.read_json(manifest_path, scenario=scenario, phase="all_frozen_phases",
+                       purpose="receiver root manifest identity")
+        sidecar = capabilities["available"][scenario]["sidecar"]
+        child_paths = list(gate.register_sidecar_children(manifest_path, sidecar["children"]))
         tracking_paths = sorted(path for path in child_paths if path.name.startswith("epl_tracking_ch_") and path.suffix == ".mat")
         observables = [path for path in child_paths if path.name == "observables.mat"]
         nmea = [path for path in child_paths if path.suffix.lower() == ".nmea"]
@@ -204,6 +299,9 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
             unavailable.append({"scenario": scenario, "reason": "UNAVAILABLE_GEOMETRY", "detail": str(exc)}); continue
         methods = _method_rows(data, model, whitener, gamma, geometry, np.asarray(a2_doc["methods"]["A2"]["loading"]), lambdas, ranges,
                                validated_rows)
+        methods = score_protected_b0(tracking_paths=tracking_paths, gate=gate, scenario=scenario,
+                                     roles={name: (start, end) for name, start, end in ranges},
+                                     methods=methods, thresholds=thresholds, artifact=artifact, repo=repo)
         relation_geometry = GeometryCache(geometry["ephemerides"], geometry["receiver_ecef"], validated_rows)
         for relation_phase, relation_start, relation_end in ranges:
             if relation_phase != "pre_onset_replay" and relation_end - relation_start >= 1.2:
@@ -270,6 +368,12 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
         bootstrap_reports[f"Full-{comparator}"] = paired_block_bootstrap(bootstrap_source, "Full", comparator)
     relation_reports = {"policy": RELATION_POLICY, "scenario_results": {}}
     for scenario, policy in RELATION_POLICY.items():
+        if scenario not in available_scenarios:
+            disposition = capabilities["unavailable"].get(scenario, {})
+            relation_reports["scenario_results"][scenario] = {
+                "status": disposition.get("status", "UNAVAILABLE"), "primary": policy["primary"],
+                "mandatory": False, "reason": disposition.get("reason", "CAPABILITY_UNAVAILABLE")}
+            continue
         scenario_relation = [row for row in relation_rows if row["scenario"] == scenario]
         established = any(row["phase"] == "established" for row in scenario_relation)
         if policy["requires_established"] and not established:
@@ -292,7 +396,7 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
             "contrast": report["contrast"]}
     persistence = {}
     per_scenario_persistence = {}
-    for scenario in ("DS3", "DS7", "DS8"):
+    for scenario in tuple(name for name in ("DS3", "DS7", "DS8") if name in available_scenarios):
         rows = sorted([row for row in score_rows if row["scenario"] == scenario and row["method"] == "Full"
                        and row["phase"] == "established"], key=lambda row: row["availability_s"])
         if not rows: raise RuntimeError(f"mandatory established persistence unavailable: {scenario}")
@@ -301,9 +405,15 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
         if first is None: delay = float("inf")
         else: delay = float(first) - float(rows[0]["phase_start_s"])
         per_scenario_persistence[scenario] = {"ratio": float(np.mean(flags)), "delay_s": delay}
+    if "DS3" not in per_scenario_persistence:
+        raise RuntimeError("mandatory DS3 persistence unavailable")
+    family_members = [name for name in ("DS7", "DS8") if name in per_scenario_persistence]
+    if not family_members:
+        raise RuntimeError("mandatory DS7/DS8 family persistence unavailable")
     persistence["DS3"] = per_scenario_persistence["DS3"]
-    persistence["DS7_DS8"] = {"ratio": min(per_scenario_persistence[name]["ratio"] for name in ("DS7", "DS8")),
-                               "delay_s": max(per_scenario_persistence[name]["delay_s"] for name in ("DS7", "DS8"))}
+    persistence["DS7_DS8"] = {"ratio": min(per_scenario_persistence[name]["ratio"] for name in family_members),
+                               "delay_s": max(per_scenario_persistence[name]["delay_s"] for name in family_members),
+                               "available_members": family_members}
     controls = json.loads((artifact / "physical_controls.json").read_text())
     control_evidence = controls.get("results")
     if not isinstance(control_evidence, list) or not control_evidence:

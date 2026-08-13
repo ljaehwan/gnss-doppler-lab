@@ -19,9 +19,12 @@ from gnss_doppler_lab.gcspo_clean import run_clean_a1
 from gnss_doppler_lab.gcspo_clean_controls import run_clean_control_evidence
 from gnss_doppler_lab.gcspo_core import AccessGate
 from gnss_doppler_lab.gcspo_evaluate import run_one_shot
+from gnss_doppler_lab.gcspo_evaluate import validate_clean_contrast_preaccess
+from gnss_doppler_lab.gcspo_capabilities import validate_preaccess_capabilities
 from gnss_doppler_lab.gcspo_core import empirical_threshold
 from gnss_doppler_lab.gcspo_freeze import (claim_protected_attempt, live_remote_snapshot,
-                                               validate_protected_manifest_inventory, verify_freeze_record)
+                                               validate_protected_manifest_inventory, verify_freeze_record,
+                                               verify_review_candidate_record)
 from gnss_doppler_lab.gcspo_transfer import (prove_closed_loop_transfer,
                                               prove_synthetic_physical_recovery)
 from gnss_doppler_lab.gcspo_full import GeometryCache, geometry_preflight, role_full_terms, score_full_terms, select_full_lambda
@@ -75,12 +78,22 @@ def protected(args):
     if not freeze_path.is_file(): raise PermissionError("VALID_FOR_PROTECTED_ACCESS not reached: implementation freeze is absent")
     freeze = json.loads(freeze_path.read_text())
     local = _git("rev-parse", "HEAD")
+    if freeze.get("validity_state") == "AWAITING_INDEPENDENT_REREVIEW":
+        verify_review_candidate_record(freeze, target_commit=freeze.get("target_commit"))
+        raise PermissionError("VALID_FOR_PROTECTED_ACCESS not reached: independent rereview is pending")
     verify_freeze_record(freeze, target_commit=local)
     snapshot = live_remote_snapshot(ROOT, "origin", "research/gcspo-stage0-static-rerun")
     if not snapshot["synchronized"]:
         raise PermissionError("VALID_FOR_PROTECTED_ACCESS not reached: live remote exact sync missing")
     inventory = json.loads((args.artifact_dir / "data_inventory.json").read_text())
-    manifest_identities = validate_protected_manifest_inventory(inventory)
+    capabilities = validate_preaccess_capabilities(
+        json.loads((args.artifact_dir / "protected_capabilities.json").read_text()))
+    manifest_identities = validate_protected_manifest_inventory(
+        inventory, required=tuple(capabilities["available"]))
+    for scenario, capability in capabilities["available"].items():
+        if manifest_identities[scenario] != capability["manifest_identity"]:
+            raise ValueError(f"{scenario} inventory/capability manifest identity mismatch")
+    validate_clean_contrast_preaccess(args.artifact_dir, freeze["clean_scientific_artifacts"])
     claim_protected_attempt(args.artifact_dir.parent / f".{args.artifact_dir.name}.protected_run_started.json",
                             {"target_commit": local, "live_remote_sha": snapshot["remote_sha"]})
     gate = AccessGate(args.artifact_dir / "access_ledger.jsonl")
@@ -88,7 +101,7 @@ def protected(args):
     gate.set_remote_sync(local_sha=local, remote_sha=snapshot["remote_sha"], ahead=0, behind=0, clean=True)
     verdict = run_one_shot(artifact_dir=args.artifact_dir, repo_root=ROOT, inventory=inventory, gate=gate,
                            manifest_identities=manifest_identities,
-                           clean_identities=freeze["clean_scientific_artifacts"])
+                           clean_identities=freeze["clean_scientific_artifacts"], capabilities=capabilities)
     prepare_valid_artifact_manifest(args.artifact_dir)
     print(f"PROTECTED_ONE_SHOT_PASS verdict={verdict}", flush=True)
     return 0

@@ -4,7 +4,7 @@
     "protected_payload_bytes_opened": 0,
     "protected_payload_rows_opened": 0,
     "protected_evaluation_executed": false,
-    "metadata_manifest_bytes_read": 9714,
+    "metadata_manifest_bytes_read": 24228,
     "official_document_bytes_read": 9125244
   },
   "official_documents": [
@@ -27,8 +27,8 @@
   ],
   "scenarios": {
     "DS3": {
-      "status": "LIMITED",
-      "core_evaluation": "UNAVAILABLE_PREFREEZE",
+      "status": "AVAILABLE",
+      "core_evaluation": "AVAILABLE_AFTER_INDEPENDENT_REREVIEW_AND_EXACT_REMOTE_SYNC",
       "producer": "GNSS-SDR patched complex9",
       "producer_source_identity": "receiver source hashes in source_commit.json",
       "receiver_manifest": {
@@ -45,7 +45,7 @@
         "byte_zero": 0,
         "sample_rate_hz": 25000000
       },
-      "reason": "AUTHENTICATED_OBSERVABLES_NMEA_EPHEMERIS_CHILD_BINDINGS_AND_EXACT_OFFICIAL_TIMELINE_LINKAGE_ABSENT"
+      "reason": "IMMUTABLE_METADATA_SIDECAR_BINDS_MANIFEST_TRACKING_OBSERVABLES_NMEA_EPHEMERIS_SOURCE_AND_TIMELINE"
     },
     "DS4": {
       "status": "LIMITED_TRANSITION_ONLY",
@@ -69,8 +69,8 @@
       "reason": "METHOD_A_SOURCE_SIGN_UNIT_CADENCE_AND_CHILD_IDENTITIES_NOT_INDEPENDENTLY_PROVEN; ESTABLISHED_PULL_OFF_COVERAGE_NOT_AUTHENTICATED"
     },
     "DS7": {
-      "status": "LIMITED",
-      "core_evaluation": "UNAVAILABLE_PREFREEZE",
+      "status": "AVAILABLE",
+      "core_evaluation": "AVAILABLE_AFTER_INDEPENDENT_REREVIEW_AND_EXACT_REMOTE_SYNC",
       "producer": "GNSS-SDR patched complex9",
       "producer_source_identity": "receiver source hashes in source_commit.json",
       "receiver_manifest": {
@@ -87,7 +87,7 @@
         "byte_zero": 0,
         "sample_rate_hz": 25000000
       },
-      "reason": "RECEIVER_MANIFEST_HAS_NO_CHILD_HASH_SIZE_BINDINGS_AND_RX_NMEA_GPS_TIMELINE_LINKAGE_IS_NOT_AUTHENTICATED"
+      "reason": "IMMUTABLE_METADATA_SIDECAR_BINDS_SEALED_EXPORT_TRACKING_IDENTITIES_AND_GEOMETRY_TIMELINE_CHILDREN"
     },
     "DS8": {
       "status": "UNAVAILABLE",
@@ -112,5 +112,5 @@
     }
   },
   "core_independence_rule": "A missing optional scenario never suppresses another scenario with a valid authenticated sidecar.",
-  "overall_status": "FAIL_CLOSED_PREFREEZE_TIMELINE_AND_CAPABILITY_BINDINGS_INCOMPLETE"
+  "overall_status": "READY_FOR_INDEPENDENT_REREVIEW_WITH_DS4_LIMITED_AND_DS8_UNAVAILABLE"
 }

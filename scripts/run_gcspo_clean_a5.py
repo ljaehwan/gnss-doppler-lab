@@ -13,7 +13,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from gnss_doppler_lab.gcspo_a5 import a5_prior_precision, role_a5_terms
+from gnss_doppler_lab.gcspo_a5 import a5_spectral_scores, role_a5_terms
 from gnss_doppler_lab.gcspo_artifacts import canonical_write_json
 from gnss_doppler_lab.gcspo_clean import run_clean_a1
 from gnss_doppler_lab.gcspo_core import empirical_threshold
@@ -22,17 +22,14 @@ from gnss_doppler_lab.gcspo_full import _score_terms
 _ROWS = None
 
 
-def _objective(smoothness):
-    values = []
-    for row in _ROWS:
-        prior = a5_prior_precision(prn_count=len(row["prns"]), smoothness=float(smoothness))
-        values.append(_score_terms(row["terms"], prior)["gcv"])
-    return float(smoothness), float(np.mean(values))
+def _grid_objective(index_and_grid):
+    index, grid = index_and_grid; row = _ROWS[index]
+    return [score["gcv"] for score in a5_spectral_scores(row["terms"], row["state_segments"], grid)]
 
 
 def _score_index(index_and_smoothness):
     index, smoothness = index_and_smoothness; row = _ROWS[index]
-    score = _score_terms(row["terms"], a5_prior_precision(prn_count=len(row["prns"]), smoothness=float(smoothness)))
+    score = a5_spectral_scores(row["terms"], row["state_segments"], (smoothness,))[0]
     score.pop("state")
     return {key: row[key] for key in ("window_start_s", "availability_s", "prns", "epoch_ids", "epoch_prn_support")} | score
 
@@ -68,8 +65,11 @@ def main():
     _ROWS = role_a5_terms(clean["data"], clean["model"], clean["whitener"], clean["gamma"], validated, 150, 210)
     if len(_ROWS) < 100: raise ValueError("A5 has fewer than 100 common validation windows")
     validation_windows = len(_ROWS)
-    with _pool(args.workers) as pool: raw_objectives = pool.map(_objective, list(map(float, config["lambda_selection"]["grid"])), chunksize=1)
-    objectives = [{"lambda": value, "mean_gcv": objective} for value, objective in raw_objectives]
+    grid = list(map(float, config["lambda_selection"]["grid"]))
+    with _pool(args.workers) as pool:
+        per_window = pool.map(_grid_objective, [(index, grid) for index in range(len(_ROWS))], chunksize=1)
+    objectives = [{"lambda": value, "mean_gcv": float(np.mean([row[index] for row in per_window]))}
+                  for index, value in enumerate(grid)]
     selected = _choose(objectives)
     print(f"A5_LAMBDA_PASS windows={len(_ROWS)} lambda={selected}", flush=True)
     _ROWS = role_a5_terms(clean["data"], clean["model"], clean["whitener"], clean["gamma"], validated, 220, 340)

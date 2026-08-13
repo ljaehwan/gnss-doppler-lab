@@ -121,3 +121,42 @@ def build_scheduled_node_table(receiver_root: str | Path, roles: dict[str, tuple
     if frame.duplicated(["run_id", "window_start_s", "prn"]).any():
         raise ValueError("duplicate scheduled B0 node rows")
     return frame.sort_values(["run_id", "prn", "window_start_s"]).reset_index(drop=True)
+
+
+def build_protected_scheduled_node_table(paths, *, gate, scenario,
+                                         roles: dict[str, tuple[float, float]]):
+    """Build B0 nodes through the protected gate and retain exact epoch support."""
+    pd = _pandas(); rows = []
+    datasets = ("PRN", "PRN_start_sample_count", *TAP_FIELDS)
+    for path in map(Path, paths):
+        values = {name: np.asarray(value).reshape(-1) for name, value in
+                  gate.read_h5(path, datasets=datasets, scenario=scenario,
+                               phase="all_frozen_phases", purpose="protected B0 nine-tap rows").items()}
+        length = len(values["PRN"])
+        if any(len(value) != length for value in values.values()):
+            raise ValueError("protected B0 tracking MAT shape mismatch")
+        prn = values["PRN"].astype(int)
+        sample = values["PRN_start_sample_count"].astype(np.int64)
+        time = sample.astype(np.float64) / SAMPLE_RATE_HZ
+        taps = np.column_stack([values[name].astype(float) for name in TAP_FIELDS])
+        finite = np.isfinite(time) & np.isfinite(taps).all(axis=1) & (taps[:, 4] >= 0)
+        prn, sample, time, taps = prn[finite], sample[finite], time[finite], taps[finite]
+        for role, (role_start, role_end) in roles.items():
+            for sat in sorted(set(prn[(time >= role_start) & (time < role_end)])):
+                sat_mask = prn == sat
+                for start in np.arange(role_start, role_end - .5, .5):
+                    mask = sat_mask & (time >= start) & (time < start + 1.0)
+                    if int(mask.sum()) < 4: continue
+                    epoch_ids = tuple(sorted(set(map(int, sample[mask] // (SAMPLE_RATE_HZ // 50)))))
+                    normalized = taps[mask] / (taps[mask, 4, None] + EPSILON)
+                    row = {"run_id": f"{scenario}-{role}", "prn": f"G{int(sat):02d}",
+                           "window_bin_s": float(start + .5), "window_start_s": float(start),
+                           "window_end_s": float(start + 1.), "window_mid_s": float(start + .5),
+                           "phase": role, "epoch_ids_json": __import__("json").dumps(epoch_ids, separators=(",", ":"))}
+                    row.update({f"tap_{name}_rel_prompt_mean": float(np.mean(normalized[:, index]))
+                                for index, name in enumerate(TAP_NAMES)})
+                    rows.append(row)
+    frame = pd.DataFrame(rows)
+    if frame.empty or frame.duplicated(["run_id", "window_start_s", "prn"]).any():
+        raise RuntimeError("protected B0 scheduled node table is empty or duplicated")
+    return frame.sort_values(["run_id", "prn", "window_start_s"]).reset_index(drop=True)

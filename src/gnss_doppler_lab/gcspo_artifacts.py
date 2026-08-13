@@ -31,6 +31,9 @@ VALID_SCIENCE_REQUIRED = {
     "relation_destruction_metrics.json", "physical_controls.json", "bootstrap_intervals.csv",
     "final_verdict.json", "access_ledger.jsonl", "artifact_manifest_sha256.json",
     "verifier_report.json", "fresh_clone_verifier_report.json",
+    "clean_only_report.json", "clean_ablation_report.json", "clean_a5_report.json",
+    "clean_b0_report.json", "clean_reproduction_evidence.json",
+    "reproduction_run_1.json", "reproduction_run_2.json", "protected_capabilities.json",
 }
 VALID_ADDITIONS = {
     "implementation_manifest.json", "data_manifest.json", "run_manifest.json", "file_access_trace.jsonl",
@@ -39,7 +42,7 @@ VALID_ADDITIONS = {
 FROZEN_HASHES = {
     "README.md": "eea2e10885d66bfc762f33b2e25147ab07b1bbceace505078e8770e4cdc18ac2",
     "config.json": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad",
-    "data_inventory.json": "4faffaede28119f7655da25b44129b09e76f1bb49ec5169861b6336abaea3631",
+    "data_inventory.json": "e9ea155af1d98820e3556c6214abe541ca511dd53ecc978c1afc6351a161e22e",
     "preregistration.json": "715e11965854f785487e9d2c747718747c1d31cdd8603696ea7af126a45a70da",
     "source_commit.json": "34a0eab36e4cbf6b16cf0a7075bc3c8a61008c34b9962cf584e04d4fa9f80b72",
 }
