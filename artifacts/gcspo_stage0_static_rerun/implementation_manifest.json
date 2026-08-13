@@ -1,39 +1,255 @@
 {
   "clean_scientific_artifacts": [
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/capability_status.json", "sha256": "11a566c44aca06db725049dfca7838295507f17d3180e89e578ed8d6fdb0f026", "size_bytes": 5301},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/clean_a5_report.json", "sha256": "dddea8b407e610764e5cacc08a7b921973b69e5e9c43ab71a43e81f7978a4f2e", "size_bytes": 5894289},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/clean_ablation_report.json", "sha256": "d5695d659ac414c34eeb9304af0b4cf4ed3b542d01e9a9b6063961b9e3727eb9", "size_bytes": 22477878},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/clean_b0_report.json", "sha256": "c8bcef756a461cc1d4d1f094d30ce3f5873cd449d2ac30fe8600ebf0e6ae1146", "size_bytes": 147582},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/clean_only_report.json", "sha256": "cd8eb2564f6b7724f5967ea6137d3cf59e897a5ef25e9b990f08a16f2d829fa8", "size_bytes": 19452065},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/clean_reproduction_evidence.json", "sha256": "43353284bdec6312f87c3f6553945f253c3fddc785baf16f16533b22283a7041", "size_bytes": 2634},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/config.json", "sha256": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad", "size_bytes": 37865},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/data_inventory.json", "sha256": "e9ea155af1d98820e3556c6214abe541ca511dd53ecc978c1afc6351a161e22e", "size_bytes": 26970},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/freeze_repair_evidence.json", "sha256": "3a744db79dad3054fd4e840f805f5d3bea6d0b4010a94883ba30b261bce3b471", "size_bytes": 1622},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/normal_model_summary.json", "sha256": "4110b6b870db95bb12c1154a29b61250fcd3f914a6042e5306d9389568e4beec", "size_bytes": 44729},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/preflight_report.json", "sha256": "072df2a083e03d4343fa7e4339b1cbd3e4d22f35c6c4fd60d0bed79b83884b42", "size_bytes": 10131},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/protected_capabilities.json", "sha256": "b1301990e5240a3528a1d74495668a4e9be6d13e75d5d18a47fdfda47fcf21cc", "size_bytes": 16014},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/reproduction_run_1.json", "sha256": "069e15a943c1ab6f2f9f2546fc0969132d05e03f148b7311efffb7cfea46864e", "size_bytes": 1896},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/reproduction_run_2.json", "sha256": "340afb92aa7a269743af287dd373f613981220db8bf536c956df878fac27183b", "size_bytes": 1896},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/thresholds.json", "sha256": "034c265b6de4188db8b577855d9a30e9a144e83255002105004a576123d15e7f", "size_bytes": 918}
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/capability_status.json",
+      "sha256": "11a566c44aca06db725049dfca7838295507f17d3180e89e578ed8d6fdb0f026",
+      "size_bytes": 5301
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/clean_a5_report.json",
+      "sha256": "a2d902d9c8d4ac8b07d38bff7b31da560772b3bb5040823e3d10ba62d0045c7a",
+      "size_bytes": 5894302
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/clean_ablation_report.json",
+      "sha256": "d5695d659ac414c34eeb9304af0b4cf4ed3b542d01e9a9b6063961b9e3727eb9",
+      "size_bytes": 22477878
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/clean_b0_report.json",
+      "sha256": "c8bcef756a461cc1d4d1f094d30ce3f5873cd449d2ac30fe8600ebf0e6ae1146",
+      "size_bytes": 147582
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/clean_only_report.json",
+      "sha256": "cd8eb2564f6b7724f5967ea6137d3cf59e897a5ef25e9b990f08a16f2d829fa8",
+      "size_bytes": 19452065
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/clean_reproduction_evidence.json",
+      "sha256": "f7f1f69a752accdad09e4a61c8ddbf780b7d074fa229bdda25da2da8e3f3acb1",
+      "size_bytes": 2864
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/config.json",
+      "sha256": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad",
+      "size_bytes": 37865
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/data_inventory.json",
+      "sha256": "e9ea155af1d98820e3556c6214abe541ca511dd53ecc978c1afc6351a161e22e",
+      "size_bytes": 26970
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/freeze_repair_evidence.json",
+      "sha256": "3a744db79dad3054fd4e840f805f5d3bea6d0b4010a94883ba30b261bce3b471",
+      "size_bytes": 1622
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/implementation_resolution.json",
+      "sha256": "78f767ee6fe8f27a3142f593aef9fd5b4c011bbc2294f87ed75232752bb80179",
+      "size_bytes": 712
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/normal_model_summary.json",
+      "sha256": "4110b6b870db95bb12c1154a29b61250fcd3f914a6042e5306d9389568e4beec",
+      "size_bytes": 44729
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/physical_controls.json",
+      "sha256": "e1e14890e06151ccac41df29c6d77b8d1b41ee1394864e8e5fc0ade6dc504681",
+      "size_bytes": 439926
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/preflight_report.json",
+      "sha256": "072df2a083e03d4343fa7e4339b1cbd3e4d22f35c6c4fd60d0bed79b83884b42",
+      "size_bytes": 10131
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/prefreeze_repair_evidence.json",
+      "sha256": "21a40cdd4a366bd3f1f4efca00836ce509200d4405504eaf7322c44155037356",
+      "size_bytes": 3106
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/preregistration.json",
+      "sha256": "715e11965854f785487e9d2c747718747c1d31cdd8603696ea7af126a45a70da",
+      "size_bytes": 48524
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/protected_capabilities.json",
+      "sha256": "b1301990e5240a3528a1d74495668a4e9be6d13e75d5d18a47fdfda47fcf21cc",
+      "size_bytes": 16014
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/receiver_source_snapshot.json",
+      "sha256": "51071f02b974fe8f6010f2c087275c49c2e3e8cbb358fc7f6eddbcb00c76ac38",
+      "size_bytes": 1540
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/reproduction_run_1.json",
+      "sha256": "4828dfef7d86ad0e877082e8c129f77413b4b16a8182ecdf95513d2d4d2f180f",
+      "size_bytes": 4039
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/reproduction_run_2.json",
+      "sha256": "ad008046ad469f1687ea078d9d2bc39c1a7fef631116784dfeeb568dfaea8053",
+      "size_bytes": 4039
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/reproductions/a5-round3-run-1-b341801/clean_a5_report.json",
+      "sha256": "a2d902d9c8d4ac8b07d38bff7b31da560772b3bb5040823e3d10ba62d0045c7a",
+      "size_bytes": 5894302
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/reproductions/a5-round3-run-1-b341801/thresholds.json",
+      "sha256": "034c265b6de4188db8b577855d9a30e9a144e83255002105004a576123d15e7f",
+      "size_bytes": 918
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/reproductions/a5-round3-run-2-b341801/clean_a5_report.json",
+      "sha256": "a2d902d9c8d4ac8b07d38bff7b31da560772b3bb5040823e3d10ba62d0045c7a",
+      "size_bytes": 5894302
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/reproductions/a5-round3-run-2-b341801/thresholds.json",
+      "sha256": "034c265b6de4188db8b577855d9a30e9a144e83255002105004a576123d15e7f",
+      "size_bytes": 918
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/round3_red_junit.xml",
+      "sha256": "98f397506ca51c5d96dd5a85e5e25d1c6aaeebd3ed315e3830631246f805a488",
+      "size_bytes": 10270
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/round3_red_report.json",
+      "sha256": "bef22b1222b71146e81328b28ce4c116c0d2a2a4b2ee4e341bd47ad5bf7dcc7c",
+      "size_bytes": 4437
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/round3_repair_evidence.json",
+      "sha256": "f9fa81bacc88f64ec367bab8ca758c1aa4bb0e336f21eeeaf26b69d359eb162f",
+      "size_bytes": 5613
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/round3_verifier_evidence.json",
+      "sha256": "618ccdf380bf538e74c320e8f94159542528a6c290a08961a2fc9a5979c611ce",
+      "size_bytes": 1009
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/source_commit.json",
+      "sha256": "34a0eab36e4cbf6b16cf0a7075bc3c8a61008c34b9962cf584e04d4fa9f80b72",
+      "size_bytes": 6001
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/thresholds.json",
+      "sha256": "034c265b6de4188db8b577855d9a30e9a144e83255002105004a576123d15e7f",
+      "size_bytes": 918
+    }
   ],
   "config_sha256": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad",
   "implementation_files": [
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/scripts/run_gcspo_clean_a5.py", "sha256": "a820f66453f7f6bc7033be126e340714cd7f97e97fe98a6721bbe71c403460c6", "size_bytes": 4856},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/scripts/run_gcspo_stage0.py", "sha256": "007b82411dd188fe5e441df1ca4eb21828d466eabb8afd47fcf99476b370d5d0", "size_bytes": 15194},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_a5.py", "sha256": "e8d995744f161b5d64ebc42f83680b022f186e56fdeedfba75df96865b613a91", "size_bytes": 10272},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_access.py", "sha256": "225faae5a970ec52456ff156c4a95264d5af5148048f901ccb78ad8acc42250b", "size_bytes": 16497},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_artifacts.py", "sha256": "0e13b49ddbbe112c0b75908ca2a94507c746e88ee74c02896a179ab4c1fe8935", "size_bytes": 13719},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_b0.py", "sha256": "71fd58817d32a73bac9118acda4c308e85f01490ad1ccc0e25e7ba6a517b3d58", "size_bytes": 8624},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_capabilities.py", "sha256": "d8e4abf089b57786e21a87c9f17b3720377c884a9ea461a4e433fe1d9fe82e20", "size_bytes": 12588},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_evaluate.py", "sha256": "c27c1bdc382668e0394c96179286a8021fc819fa52a379bbe7966d1304839c71", "size_bytes": 32941},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_freeze.py", "sha256": "34fc572bcf2ceb567d7f7f55c894f26ebfe9544938988345f7f839e1287a2799", "size_bytes": 10268},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_verify.py", "sha256": "51caa49c18c3f5d0dd750b417e8ba6272de9cba65bfb43d5ff8d3346b2ece494", "size_bytes": 8449},
-    {"path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_verify_artifacts.py", "sha256": "a31acd5d4c6a0ff14d6506e561b33f37d4bcaeeb88b006d20518587a816f2806", "size_bytes": 10912}
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/scripts/run_gcspo_clean_a5.py",
+      "sha256": "a820f66453f7f6bc7033be126e340714cd7f97e97fe98a6721bbe71c403460c6",
+      "size_bytes": 4856
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/scripts/run_gcspo_stage0.py",
+      "sha256": "007b82411dd188fe5e441df1ca4eb21828d466eabb8afd47fcf99476b370d5d0",
+      "size_bytes": 15194
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/scripts/verify_gcspo_fresh_clone.py",
+      "sha256": "df59862297b7e5490be9d3c0ec84d97f4ccf55b71f4d6974c45bc3c3f70237e0",
+      "size_bytes": 3944
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/scripts/verify_gcspo_stage0.py",
+      "sha256": "8031e2a56d0a7d30bd3ba618d3f541ff2121ddaa5819000e7a0918f9ff38c213",
+      "size_bytes": 2406
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_a5.py",
+      "sha256": "82bd131d36de3376920325585339c5d688c07551a8b57b8ace1fe27c06f7ac0a",
+      "size_bytes": 10892
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_access.py",
+      "sha256": "ce776ae558caa77e97a5b78ac415226175311536f3d7266832dbbe50ced7d4c1",
+      "size_bytes": 19996
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_b0.py",
+      "sha256": "5cadd259271095836f28b312ac3a7bb0ee08f9024c851bf178fb171a899e0503",
+      "size_bytes": 8885
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_capabilities.py",
+      "sha256": "8f5df04b4f229e4eadef73d560b68cf392b2cc62e0a30bd27a4c3394fbb42e5f",
+      "size_bytes": 14421
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_evaluate.py",
+      "sha256": "b9080936c4a23b980c1c37f87bd06295971d910ca46544e09793877e696da51f",
+      "size_bytes": 38193
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_freeze.py",
+      "sha256": "14587e7da9120396eeb5c3c1762845580ea04d31b5b0b9c97e4743f3042dfe6b",
+      "size_bytes": 11319
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_statistics.py",
+      "sha256": "5f17d6f4113937bbcfe91c6bde3ef1a2087e2672004ca72520f61f4db08ed05b",
+      "size_bytes": 20310
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_verify.py",
+      "sha256": "889daaf634ed67283d83edc8e245dfb0ffb55e8cc9db6b3e2ee0c1d26eb84399",
+      "size_bytes": 13069
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_verify_artifacts.py",
+      "sha256": "77844c98614cb9301e20e97e4961b3dc7c73284332f9eb47944f3d0bc601ec8e",
+      "size_bytes": 11325
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_verify_reconstruct.py",
+      "sha256": "f5ed8f296562257b74a2fc1160c5c8deb3ca5c2dbae7b9bc030c2668a8c8e59e",
+      "size_bytes": 6685
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/tests/test_gcspo_evaluator.py",
+      "sha256": "faef9928dbfccf49052c2f2ea8da73305ece417371abc541a82c806f218958c7",
+      "size_bytes": 12354
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/tests/test_gcspo_independent_review_repairs.py",
+      "sha256": "a8df4f20e0af209c3152d184cd853401d120972e2fc47fa3f337b4ee9c63f9d9",
+      "size_bytes": 12024
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/tests/test_gcspo_round3_freeze_repairs.py",
+      "sha256": "00a0652d9a4ce8ef4e34754b764f66691b77757d84a3c8c6a4baaa22da996345",
+      "size_bytes": 15921
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/tests/test_gcspo_verifier.py",
+      "sha256": "7605d4f04aa1335cc933c9d3e56e62b68e31f433f4fe9fa6aa02919baed4a8a1",
+      "size_bytes": 11838
+    }
   ],
   "manifest_excludes_self": true,
   "protected_access_authorized": false,
-  "review_evidence": {"rejected_freeze_commit": "857efeec5bdc9ab2657fe1b848ca45846f9f25ff", "status": "REPAIRS_COMPLETE_AWAITING_REREVIEW"},
+  "review_evidence": {
+    "rejected_freeze_commit": "5cbc3dffa1ebee40cd1707702b4b4f9402d61792",
+    "rejected_freeze_commits": [
+      "5cbc3dffa1ebee40cd1707702b4b4f9402d61792",
+      "857efeec5bdc9ab2657fe1b848ca45846f9f25ff"
+    ],
+    "status": "REPAIRS_COMPLETE_AWAITING_REREVIEW"
+  },
   "schema": "gnss-doppler-lab.gcspo-stage0.implementation-freeze.v3",
-  "target_commit": "a24230c0f3280133e811be1b2c69ad6eb9c9b294",
+  "target_commit": "ca8846443b8909edcdc76017a75bde08f7dc9abd",
   "validity_state": "AWAITING_INDEPENDENT_REREVIEW"
 }

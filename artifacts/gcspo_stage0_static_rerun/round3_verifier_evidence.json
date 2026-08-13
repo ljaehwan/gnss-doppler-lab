@@ -1,0 +1,28 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.round3-verifier-evidence.v1",
+  "target_commit": "ca8846443b8909edcdc76017a75bde08f7dc9abd",
+  "protected_access": false,
+  "results": [
+    {
+      "id": "review_candidate",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python -c verify_review_candidate_record(..., target_commit=ca8846443b8909edcdc76017a75bde08f7dc9abd)",
+      "status": "PASS"
+    },
+    {
+      "id": "frozen_artifacts",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python -c verify_frozen(artifacts/gcspo_stage0_static_rerun)",
+      "status": "PASS",
+      "frozen_files": 5
+    },
+    {
+      "id": "clean_ready",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python -c verify_clean_ready(artifacts/gcspo_stage0_static_rerun)",
+      "status": "PASS"
+    }
+  ],
+  "protected_payload_rows_opened": 0,
+  "protected_payload_bytes_opened": 0,
+  "protected_attempt_claimed": false,
+  "access_ledger_created": false,
+  "protected_marker_created": false
+}
