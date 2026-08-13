@@ -21,7 +21,7 @@ def _artifact_manifest_sha(artifact_dir, phase):
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--artifact-dir", type=Path, default=ROOT / "artifacts/gcspo_stage0_static")
+    parser.add_argument("--artifact-dir", type=Path, default=ROOT / "artifacts/gcspo_stage0_static_rerun")
     parser.add_argument("--mode", choices=("full",))
     parser.add_argument("--phase", choices=("clean-ready", "final"))
     args = parser.parse_args()

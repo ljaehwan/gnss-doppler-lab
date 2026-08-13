@@ -1,0 +1,366 @@
+{
+  "attack_access_count": 0,
+  "checks": [
+    {
+      "id": "frozen_config",
+      "status": "PASS"
+    },
+    {
+      "id": "receiver_source_semantics",
+      "status": "PASS"
+    },
+    {
+      "id": "synthetic_physical_recovery",
+      "maximum_scaled_state_error": 2.950377417574947e-11,
+      "status": "PASS"
+    },
+    {
+      "id": "clean_geometry_time_alignment",
+      "status": "PASS"
+    },
+    {
+      "id": "mandatory_full_available",
+      "status": "PASS"
+    },
+    {
+      "id": "lambda_minimum_windows",
+      "observed": 117,
+      "status": "PASS"
+    },
+    {
+      "id": "control_generation",
+      "status": "PASS"
+    },
+    {
+      "id": "protected_access_count_zero",
+      "status": "PASS"
+    }
+  ],
+  "closed_loop_transfer": {
+    "analytic_tolerance": {
+      "atol": 1e-12,
+      "rtol": 1e-09
+    },
+    "checks": {
+      "cadence": "PASS",
+      "equation": "PASS",
+      "loop_path": "PASS",
+      "sign": "PASS",
+      "source_hash": "PASS",
+      "var_coefficient_hash": "PASS",
+      "wrap_linear_range": "PASS"
+    },
+    "expected_source_hashes": {
+      "src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc": "6d2db43fea2728acc35fb29b4cb5027b62be442b8966108bf6b955d5b95f486c",
+      "src/algorithms/tracking/libs/tracking_discriminators.cc": "00cb68a02fdd3ab51395e4af2e758060a7e299a76a68424c37fcf6cba38f69ec"
+    },
+    "expected_var_sha256": "5b99cbe317ef26948e96bdd20c682da0081b7353650f17a5279cccce3da08d13",
+    "method_availability": {
+      "A3": true,
+      "A4": true,
+      "Full": true
+    },
+    "observed_source_hashes": {
+      "src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc": "6d2db43fea2728acc35fb29b4cb5027b62be442b8966108bf6b955d5b95f486c",
+      "src/algorithms/tracking/libs/tracking_discriminators.cc": "00cb68a02fdd3ab51395e4af2e758060a7e299a76a68424c37fcf6cba38f69ec"
+    },
+    "observed_var_sha256": "5b99cbe317ef26948e96bdd20c682da0081b7353650f17a5279cccce3da08d13",
+    "overall_status": "PASS",
+    "rows": [
+      {
+        "maximum_oracle_error": 0.0,
+        "row": "code_error_chips",
+        "source_sign_negative": true,
+        "status": "PASS",
+        "unproved_loading": null
+      },
+      {
+        "maximum_oracle_error": 0.0,
+        "row": "pll_phase_error_cycles",
+        "source_sign_negative": true,
+        "status": "PASS",
+        "unproved_loading": null
+      },
+      {
+        "maximum_oracle_error": 0.0,
+        "row": "carrier_doppler_hz",
+        "source_sign_negative": true,
+        "status": "PASS",
+        "unproved_loading": null
+      },
+      {
+        "maximum_oracle_error": 0.0,
+        "row": "code_frequency_offset_chips_s",
+        "source_sign_negative": true,
+        "status": "PASS",
+        "unproved_loading": null
+      }
+    ],
+    "schema": "gnss-doppler-lab.gcspo-stage0.closed-loop-transfer-preflight.v1",
+    "validated_rows": [
+      "code_error_chips",
+      "pll_phase_error_cycles",
+      "carrier_doppler_hz",
+      "code_frequency_offset_chips_s"
+    ],
+    "var_transfer_application_count": 1,
+    "vector_contract": {
+      "epochs": 50,
+      "range_impulse_epoch": 10,
+      "rate_ramp_start_epoch": 10
+    }
+  },
+  "config_sha256": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad",
+  "finished_utc": "2026-08-13T17:15:09.546378Z",
+  "geometry": {
+    "configured_tow0_s": 477900.0,
+    "ephemeris_alignment": {
+      "decoded_snapshot_available": true,
+      "decoded_snapshot_relation": "after_recording_start_allowed_offline_oracle",
+      "decoded_snapshot_tow_s": [
+        478356.0,
+        478356.0,
+        478356.0,
+        478356.0,
+        478356.0,
+        478182.0,
+        478356.0,
+        478356.0,
+        478356.0,
+        478356.0,
+        478356.0,
+        478356.0
+      ],
+      "fit_interval_flag_by_prn": {
+        "3": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "10": 0,
+        "11": 0,
+        "13": 0,
+        "16": 0,
+        "19": 0,
+        "20": 0,
+        "23": 0,
+        "30": 0
+      },
+      "full_gps_week": 2729,
+      "health_by_prn": {
+        "3": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "10": 0,
+        "11": 0,
+        "13": 0,
+        "16": 0,
+        "19": 0,
+        "20": 0,
+        "23": 0,
+        "30": 0
+      },
+      "max_toe_age_s": 7200.0,
+      "recording_start_tow_s": 477900.0,
+      "toc_available_prns": [
+        3,
+        6,
+        7,
+        8,
+        10,
+        11,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "toe_age_s_by_prn": {
+        "3": 4500.0,
+        "6": 4500.0,
+        "7": 4500.0,
+        "8": 4500.0,
+        "10": 4500.0,
+        "11": 4500.0,
+        "13": 4500.0,
+        "16": 4500.0,
+        "19": 4500.0,
+        "20": 4500.0,
+        "23": 4500.0,
+        "30": 4500.0
+      },
+      "week_modulus": 1024
+    },
+    "ephemeris_health": {
+      "excluded_ephemeris_health_by_prn": {},
+      "excluded_tracking_prns": [
+        12,
+        29,
+        31
+      ],
+      "health_acceptance_rule": "SV_health == 0",
+      "healthy_ephemeris_prns": [
+        3,
+        6,
+        7,
+        8,
+        10,
+        11,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "healthy_tracked_prns": [
+        3,
+        6,
+        7,
+        8,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "tracked_prns_without_ephemeris": [
+        12,
+        29,
+        31
+      ]
+    },
+    "full_gps_week": 2729,
+    "nmea_sample_count": 700,
+    "overall_status": "PASS",
+    "receiver_llh": [
+      30.287539035833333,
+      -97.73571809500001,
+      174.20350000000002
+    ],
+    "recording_start_rx_time_s": 477900.0
+  },
+  "overall_status": "PASS",
+  "protected_attack_rows_read": false,
+  "receiver_semantics": {
+    "dirty_source_interpretation": "permitted for byte-pinned existing outputs; exact replay remains unavailable",
+    "field_semantics": {
+      "carr_error_hz": "cycles",
+      "carrier_doppler_hz": "Hz NCO state",
+      "code_error_chips": "chips",
+      "code_freq_chips": "chips/s NCO state"
+    },
+    "integration": {
+      "base_integration_s": 0.001,
+      "scientific_epoch_s": 0.02
+    },
+    "overall_status": "PASS",
+    "schema": "gnss-doppler-lab.gcspo-stage0.receiver-semantic-preflight.v1",
+    "source_equations": {
+      "cadence_1ms_base": true,
+      "carrier_aiding": true,
+      "carrier_nco": true,
+      "code_nco": true,
+      "costas_cycles": true,
+      "dll_chips": true,
+      "tap_order": true
+    },
+    "source_snapshot": {
+      "files": [
+        {
+          "expected_sha256": "00cb68a02fdd3ab51395e4af2e758060a7e299a76a68424c37fcf6cba38f69ec",
+          "observed_sha256": "00cb68a02fdd3ab51395e4af2e758060a7e299a76a68424c37fcf6cba38f69ec",
+          "path": "/home/ubuntu/build-gnss-sdr-complex9/src/algorithms/tracking/libs/tracking_discriminators.cc",
+          "status": "PASS"
+        },
+        {
+          "expected_sha256": "6d2db43fea2728acc35fb29b4cb5027b62be442b8966108bf6b955d5b95f486c",
+          "observed_sha256": "6d2db43fea2728acc35fb29b4cb5027b62be442b8966108bf6b955d5b95f486c",
+          "path": "/home/ubuntu/build-gnss-sdr-complex9/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "status": "PASS"
+        },
+        {
+          "expected_sha256": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+          "observed_sha256": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+          "path": "/home/ubuntu/build-gnss-sdr-complex9/build-complex/src/main/gnss-sdr",
+          "status": "PASS"
+        }
+      ],
+      "git_diff_sha256": "51da8449a56af9088695f81c09c1752139b48e2fbe9f621f85abafcab93681ea",
+      "git_head": "1ddd4562723040fd66cb334b578a5b69455625f4",
+      "git_status": [
+        " M src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+        " M src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.h",
+        " M src/algorithms/tracking/libs/dll_pll_conf.cc",
+        " M src/algorithms/tracking/libs/dll_pll_conf.h",
+        "?? build-complex/"
+      ],
+      "source_root": "/home/ubuntu/build-gnss-sdr-complex9",
+      "source_tree_clean": false
+    },
+    "synthetic_vectors": {
+      "range_impulse": {
+        "code_error_chips": -3.412360693877403e-05,
+        "pll_phase_error_cycles": -0.052550354685707276,
+        "rho_m": 0.01,
+        "sign": "negative"
+      },
+      "rate_ramp": {
+        "carrier_aiding_ratio": 0.0006493506493506494,
+        "carrier_doppler_hz": -0.005255035468570727,
+        "code_frequency_offset_chips_s": -3.4123606938770956e-06,
+        "rhodot_m_s": 0.001
+      }
+    },
+    "validated_rows": [
+      "code_error_chips",
+      "pll_phase_error_cycles",
+      "carrier_doppler_hz",
+      "code_frequency_offset_chips_s"
+    ],
+    "wrap_linear_range_cycles": [
+      -0.25,
+      0.25
+    ]
+  },
+  "schema": "gnss-doppler-lab.gcspo-stage0.preflight-report.v1",
+  "started_utc": "2026-08-13T16:28:04.157732Z",
+  "synthetic_physical_recovery": {
+    "failure_reason": null,
+    "geometry": {
+      "available": true,
+      "condition_number": 1.732050807568877,
+      "rank": 4
+    },
+    "maximum_scaled_state_error": 2.950377417574947e-11,
+    "overall_status": "PASS",
+    "recovered_state_sha256": "4486845aba0fc3b53eb8b20f0c52b61db92d98911b48149b824cde5e2d150b37",
+    "schema": "gnss-doppler-lab.gcspo-stage0.synthetic-physical-recovery.v1",
+    "solver_effective_dof": 399.9999999999785,
+    "solver_n_obs": 2000,
+    "solver_rank": 400,
+    "source_sign_expected": -1.0,
+    "source_sign_observed": -1.0,
+    "state_order": [
+      "p_x_m",
+      "p_y_m",
+      "p_z_m",
+      "b_m",
+      "v_x_m_s",
+      "v_y_m_s",
+      "v_z_m_s",
+      "bdot_m_s"
+    ],
+    "tolerance": {
+      "maximum_condition_number": 10000.0,
+      "maximum_scaled_state_error": 1e-05
+    },
+    "truth_state_sha256": "b3b7d3ad5f10e1a5b30de34e8ca3bfab259d47ddbbcb57a97c76c5a0debdbf24",
+    "unit_scale_expected": 1.0,
+    "unit_scale_observed": 1.0,
+    "var_transfer_application_count": 1
+  }
+}

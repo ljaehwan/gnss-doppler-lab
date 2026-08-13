@@ -45,7 +45,14 @@ def test_clean_ready_verifier_requires_all_methods_and_zero_access(tmp_path):
         "attack_access_count": 0, "all_methods": ["A0", "A1", "A2", "A3", "A4", "A5", "Full"],
         "deterministic_rerun": "PASS",
     }))
-    (tmp_path / "preflight_report.json").write_text(json.dumps({"overall_status": "PASS", "attack_access_count": 0}))
+    (tmp_path / "preflight_report.json").write_text(json.dumps({
+        "overall_status": "PASS", "attack_access_count": 0,
+        "synthetic_physical_recovery": {
+            "overall_status": "PASS", "var_transfer_application_count": 1,
+            "maximum_scaled_state_error": 1e-9,
+            "tolerance": {"maximum_scaled_state_error": 1e-5},
+        },
+    }))
     assert verify_clean_ready(tmp_path)["status"] == "PASS"
     doc = json.loads((tmp_path / "clean_only_report.json").read_text())
     doc["all_methods"].remove("A5")

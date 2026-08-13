@@ -61,7 +61,7 @@ def test_live_remote_sha_not_stale_tracking_ref_and_exact_sync_required(tmp_path
     (" M tracked.py\n", "", False),
     ("", "!! src/pkg/shadow.py\n", False),
     ("", "!! config.runtime.json\n", False),
-    ("", "!! artifacts/gcspo_stage0_static/clean_only_report.json\n", True),
+    ("", "!! artifacts/gcspo_stage0_static_rerun/clean_only_report.json\n", True),
     ("", "", True),
 ])
 def test_live_remote_requires_full_status_and_rejects_runtime_relevant_ignored(

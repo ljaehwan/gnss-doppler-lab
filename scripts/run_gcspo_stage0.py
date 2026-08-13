@@ -22,10 +22,11 @@ from gnss_doppler_lab.gcspo_evaluate import run_one_shot
 from gnss_doppler_lab.gcspo_core import empirical_threshold
 from gnss_doppler_lab.gcspo_freeze import (claim_protected_attempt, live_remote_snapshot,
                                                validate_protected_manifest_inventory, verify_freeze_record)
-from gnss_doppler_lab.gcspo_transfer import prove_closed_loop_transfer
+from gnss_doppler_lab.gcspo_transfer import (prove_closed_loop_transfer,
+                                              prove_synthetic_physical_recovery)
 from gnss_doppler_lab.gcspo_full import GeometryCache, geometry_preflight, role_full_terms, score_full_terms, select_full_lambda
 
-CONFIG_SHA = "919353cbf66230df506a9eb672d366dc61450b6637003f470939c0d3c91ee30e"
+CONFIG_SHA = "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad"
 DEFAULT_CLEAN_ROOT = Path("/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9")
 
 
@@ -33,7 +34,7 @@ def _parse():
     parser = argparse.ArgumentParser()
     parser.add_argument("--phase", required=True, choices=("clean-only", "protected"))
     parser.add_argument("--config", required=True, type=Path)
-    parser.add_argument("--artifact-dir", type=Path, default=ROOT / "artifacts/gcspo_stage0_static")
+    parser.add_argument("--artifact-dir", type=Path, default=ROOT / "artifacts/gcspo_stage0_static_rerun")
     parser.add_argument("--receiver-source", type=Path, default=Path("/home/ubuntu/build-gnss-sdr-complex9"))
     parser.add_argument("--clean-root", type=Path, default=DEFAULT_CLEAN_ROOT)
     return parser.parse_args()
@@ -75,7 +76,7 @@ def protected(args):
     freeze = json.loads(freeze_path.read_text())
     local = _git("rev-parse", "HEAD")
     verify_freeze_record(freeze, target_commit=local)
-    snapshot = live_remote_snapshot(ROOT, "origin", "research/gcspo-stage0-phase2-implementation")
+    snapshot = live_remote_snapshot(ROOT, "origin", "research/gcspo-stage0-static-rerun")
     if not snapshot["synchronized"]:
         raise PermissionError("VALID_FOR_PROTECTED_ACCESS not reached: live remote exact sync missing")
     inventory = json.loads((args.artifact_dir / "data_inventory.json").read_text())
@@ -109,6 +110,10 @@ def clean_only(args):
                                              expected_var_sha256=_hash_array(clean["model"].coefficients))
     if closed_loop["overall_status"] != "PASS" or not closed_loop["method_availability"]["Full"]:
         raise RuntimeError("closed-loop transfer proof failed; protected access remains sealed")
+    recovery = prove_synthetic_physical_recovery(clean["model"], clean["whitener"], clean["gamma"])
+    if recovery["overall_status"] != "PASS":
+        raise RuntimeError("end-to-end synthetic physical recovery failed; protected access remains sealed")
+    print(f"SYNTHETIC_PHYSICAL_RECOVERY_PASS error={recovery['maximum_scaled_state_error']}", flush=True)
     geometry = geometry_preflight(args.clean_root, tracked_prns=clean["data"].prn)
     validated_rows = set(closed_loop["validated_rows"])
     cache = GeometryCache(geometry["ephemerides"], geometry["receiver_ecef"], validated_rows)
@@ -131,6 +136,8 @@ def clean_only(args):
         raise RuntimeError(f"clean control generation/semantics failed: {controls['failures'][:5]}")
     preflight_checks = [
         {"id": "frozen_config", "status": "PASS"}, {"id": "receiver_source_semantics", "status": semantic["overall_status"]},
+        {"id": "synthetic_physical_recovery", "status": recovery["overall_status"],
+         "maximum_scaled_state_error": recovery["maximum_scaled_state_error"]},
         {"id": "clean_geometry_time_alignment", "status": geometry["report"]["overall_status"]},
         {"id": "mandatory_full_available", "status": "PASS"}, {"id": "lambda_minimum_windows", "status": "PASS", "observed": len(validation_terms)},
         {"id": "control_generation", "status": controls["overall_status"]}, {"id": "protected_access_count_zero", "status": "PASS"},
@@ -143,7 +150,8 @@ def clean_only(args):
     })
     canonical_write_json(args.artifact_dir / "preflight_report.json", {
         "schema": "gnss-doppler-lab.gcspo-stage0.preflight-report.v1", "started_utc": started, "finished_utc": utc_now(),
-        "config_sha256": CONFIG_SHA, "receiver_semantics": semantic, "closed_loop_transfer": closed_loop, "geometry": geometry["report"], "checks": preflight_checks,
+        "config_sha256": CONFIG_SHA, "receiver_semantics": semantic, "closed_loop_transfer": closed_loop,
+        "synthetic_physical_recovery": recovery, "geometry": geometry["report"], "checks": preflight_checks,
         "overall_status": "PASS", "protected_attack_rows_read": False, "attack_access_count": 0,
     })
     canonical_write_json(args.artifact_dir / "normal_model_summary.json", {
@@ -153,6 +161,12 @@ def clean_only(args):
         "whitener_location": clean["whitener"].location.tolist(), "whitener_covariance": clean["whitener"].covariance.tolist(),
         "whitener_inverse_sqrt": clean["whitener"].inverse_sqrt.tolist(), "gamma": clean["gamma"].tolist(),
         "lambda_selected": selected_lambda, "lambda_objectives": lambda_objectives, "lambda_validation_windows": len(validation_terms),
+        "validated_rows": sorted(validated_rows),
+        "optional_method_capabilities": {
+            "M1": {"status": "UNAVAILABLE", "reason": "AUTHENTICATED_CHECKPOINT_ABSENT"},
+            "Fixed9": {"status": "LIMITED", "reason": "OPTIONAL_RERUN_INPUT_NOT_BOUND"},
+            "GCMR": {"status": "LIMITED", "reason": "OPTIONAL_EXACT_SUPPORT_ADAPTER_NOT_BOUND"}
+        },
         "normalization_epsilon_by_prn": {str(k): v for k, v in sorted(clean["data"].epsilons.items())},
     })
     canonical_write_json(args.artifact_dir / "thresholds.json", {

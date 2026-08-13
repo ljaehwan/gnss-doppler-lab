@@ -90,7 +90,9 @@ def test_method_rows_preserve_native_geometry_and_continuous_prn_support(monkeyp
     methods = evaluate._method_rows(object(), object(), object(), object(),
                                     {"ephemerides": {}, "receiver_ecef": np.zeros(3)},
                                     np.zeros(10), {"A2": 1., "A5": 1., "Full": 1.},
-                                    (("transition", 0., 1.2),))
+                                    (("transition", 0., 1.2),),
+                                    {"code_error_chips", "pll_phase_error_cycles",
+                                     "carrier_doppler_hz", "code_frequency_offset_chips_s"})
     assert methods["A1"][0]["prns"] == [3, 7, 11, 19, 23]
     assert methods["Full"][0]["prns"] == [3, 7, 11, 19]
     scientific = [{**item, "scenario": "DS3", "method": method,

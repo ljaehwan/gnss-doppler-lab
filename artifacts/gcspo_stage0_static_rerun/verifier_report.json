@@ -1,0 +1,20 @@
+{
+  "artifact_manifest_sha256": null,
+  "checks": [
+    {
+      "id": "semantic_reconstruction",
+      "status": "PASS"
+    }
+  ],
+  "command": "--phase clean-ready",
+  "commit": "7e841735facf6108b0fc50550bd839da85690026",
+  "config_sha256": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad",
+  "evidence_commit": "7e841735facf6108b0fc50550bd839da85690026",
+  "exit_code": 0,
+  "finished_utc": "2026-08-13T20:10:34.207615Z",
+  "overall_status": "PASS",
+  "schema": "gnss-doppler-lab.gcspo-stage0.verifier-report.v2",
+  "started_utc": "2026-08-13T20:10:34.016349Z",
+  "target_commit": "7e841735facf6108b0fc50550bd839da85690026",
+  "verified_run_status": "CLEAN_ONLY_PASS"
+}

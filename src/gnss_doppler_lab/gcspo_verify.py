@@ -25,7 +25,7 @@ def verify_frozen(root: str | Path):
     if observed != FROZEN_HASHES:
         raise ValueError("frozen artifact checksum mismatch")
     doc_hash = sha256_file(artifact.parents[1] / "docs/GCSPO_STAGE0.md")
-    if doc_hash != "d5cb40d436b55cd58cff3063e018b19b4f8296f5af5e96331b77af663324314f":
+    if doc_hash != "3ff447ee62e32c16249bd34a0b134d27d1040b0e78e01cb753b24de3b6db6fa0":
         raise ValueError("frozen GCSPO document checksum mismatch")
     return observed
 
@@ -41,6 +41,15 @@ def verify_clean_ready(root: str | Path):
         raise ValueError("clean-only methods are incomplete")
     if clean.get("deterministic_rerun") != "PASS":
         raise ValueError("deterministic rerun is not PASS")
+    recovery = preflight.get("synthetic_physical_recovery")
+    if not isinstance(recovery, dict) or recovery.get("overall_status") != "PASS":
+        raise ValueError("synthetic physical recovery proof is not PASS")
+    if recovery.get("var_transfer_application_count") != 1:
+        raise ValueError("synthetic recovery VAR transfer count mismatch")
+    observed = recovery.get("maximum_scaled_state_error")
+    allowed = recovery.get("tolerance", {}).get("maximum_scaled_state_error")
+    if not isinstance(observed, (int, float)) or not isinstance(allowed, (int, float)) or observed > allowed:
+        raise ValueError("synthetic recovery tolerance mismatch")
     return {"schema": "gnss-doppler-lab.gcspo-stage0.verifier-report.v1", "phase": "clean-ready", "status": "PASS"}
 
 

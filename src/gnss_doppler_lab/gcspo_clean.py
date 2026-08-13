@@ -66,7 +66,9 @@ def load_cleanstatic_mat(receiver_root, *, start_s=30., end_s=470.):
             for name in Q_FIELDS: chunks[name].append(_read_vector(handle, name)[mask])
     columns = {name: np.concatenate(parts) for name, parts in chunks.items()}
     denominator = np.sqrt(sum(columns[name].astype(float) ** 2 for name in Q_FIELDS[:6]))
-    train_mask = (columns["sample"] >= 30 * SAMPLE_RATE_HZ) & (columns["sample"] < 210 * SAMPLE_RATE_HZ) & (denominator > 0)
+    # The normalization scale is a fitted model parameter.  The [140,150)
+    # guard and [150,210) validation roles must never influence it.
+    train_mask = (columns["sample"] >= 30 * SAMPLE_RATE_HZ) & (columns["sample"] < 140 * SAMPLE_RATE_HZ) & (denominator > 0)
     epsilons = {}
     for prn in sorted(set(columns["prn"][train_mask])):
         values = denominator[train_mask & (columns["prn"] == prn)]
@@ -152,8 +154,8 @@ def select_shared_var_ridge(train_histories, train_targets, validation_histories
 
 def window_endpoints(start_s, end_s):
     first = math.ceil((float(start_s) - 1 + 1e-12) / .5) * .5 + 1
-    endpoint = np.arange(first, float(end_s) + 1e-12, .5)
-    return endpoint[(endpoint - 1 >= start_s - 1e-12) & (endpoint <= end_s + 1e-12)]
+    endpoint = np.arange(first, float(end_s), .5)
+    return endpoint[(endpoint - 1 >= start_s - 1e-12) & (endpoint < end_s)]
 
 
 def residual_table(data, model, whitener, start_s, end_s):

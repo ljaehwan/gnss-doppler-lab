@@ -102,3 +102,73 @@ def prove_closed_loop_transfer(source_root, model, *, expected_source_hashes, ex
             "vector_contract": {"epochs": 50, "range_impulse_epoch": 10, "rate_ramp_start_epoch": 10},
             "analytic_tolerance": {"atol": 1e-12, "rtol": 1e-9}, "var_transfer_application_count": 1,
             "rows": row_reports, "validated_rows": validated, "method_availability": availability}
+
+
+def prove_synthetic_physical_recovery(model, whitener, gamma, *, source_sign=-1.0,
+                                      unit_scale=1.0, degenerate_geometry=False):
+    """Exercise the actual Full normal equations on a known physical trajectory.
+
+    Synthetic innovations are generated with the source-proved receiver sign,
+    have the fitted VAR transfer applied exactly once, and are then passed to
+    the same whitening, common covariance, geometry, prior, and shared solver
+    used by scoring.  Mutation arguments exist only for fail-closed tests.
+    """
+    from .gcspo_core import build_state_prior_precision, geometry_observability
+    from .gcspo_full import _score_terms, _window_normal_terms
+
+    tolerance = {"maximum_scaled_state_error": 1e-5,
+                 "maximum_condition_number": 10_000.0}
+    if source_sign not in (-1.0, 1.0) or not np.isfinite(unit_scale) or unit_scale <= 0:
+        raise ValueError("invalid synthetic physical mutation")
+    base = np.asarray([[1., 1., 1.], [1., -1., -1.], [-1., 1., -1.], [-1., -1., 1.]]) / np.sqrt(3.)
+    los = np.tile(base[0], (4, 1)) if degenerate_geometry else base
+    observable = geometry_observability(los)
+    report = {
+        "schema": "gnss-doppler-lab.gcspo-stage0.synthetic-physical-recovery.v1",
+        "state_order": ["p_x_m", "p_y_m", "p_z_m", "b_m", "v_x_m_s", "v_y_m_s", "v_z_m_s", "bdot_m_s"],
+        "source_sign_expected": -1.0, "source_sign_observed": float(source_sign),
+        "unit_scale_expected": 1.0, "unit_scale_observed": float(unit_scale),
+        "var_transfer_application_count": 1, "geometry": observable,
+        "tolerance": tolerance, "maximum_scaled_state_error": None,
+    }
+    if not observable["available"]:
+        return {**report, "overall_status": "FAIL", "failure_reason": "GEOMETRY_RANK_OR_CONDITION"}
+
+    epoch_ids = tuple(range(50)); prns_by_epoch = {epoch: [1, 2, 3, 4] for epoch in epoch_ids}
+    initial = np.asarray([.010, -.008, .006, .004, .0010, -.0007, .0005, .0003])
+    states = np.empty((50, 8), dtype=float)
+    for epoch in epoch_ids:
+        states[epoch] = initial
+        states[epoch, :4] += epoch * .02 * initial[4:]
+
+    class SyntheticGeometry:
+        def loading(self, epoch, prn):
+            row = los[int(prn) - 1]
+            return row, build_physical_loading(row, validated_rows=set(ROWS))
+
+    geometry = SyntheticGeometry()
+    direct = {prn: np.stack([geometry.loading(epoch, prn)[1] @ states[epoch]
+                             for epoch in epoch_ids]) for prn in (1, 2, 3, 4)}
+    transferred = {prn: apply_var_transfer(values[:, :, None], model.coefficients)[:, :, 0]
+                   for prn, values in direct.items()}
+    factor = -float(source_sign) * float(unit_scale)
+    z_lookup = {(epoch, prn): whitener.inverse_sqrt @ (factor * transferred[prn][epoch])
+                for epoch in epoch_ids for prn in (1, 2, 3, 4)}
+    terms = _window_normal_terms(epoch_ids, prns_by_epoch, z_lookup, geometry, model,
+                                 whitener, np.asarray(gamma, dtype=float))
+    if terms is None:
+        return {**report, "overall_status": "FAIL", "failure_reason": "FULL_TERMS_UNAVAILABLE"}
+    solved = _score_terms(terms, build_state_prior_precision(epoch_count=50, smoothness=1e-12))
+    recovered = np.asarray(solved["state"], dtype=float).reshape(50, 8)
+    scales = np.maximum(np.max(np.abs(states), axis=0), 1e-12)
+    error = float(np.max(np.abs(recovered - states) / scales))
+    passed = (source_sign == -1.0 and unit_scale == 1.0
+              and observable["condition_number"] <= tolerance["maximum_condition_number"]
+              and error <= tolerance["maximum_scaled_state_error"])
+    return {**report, "overall_status": "PASS" if passed else "FAIL",
+            "failure_reason": None if passed else "STATE_SIGN_SCALE_RECOVERY",
+            "maximum_scaled_state_error": error,
+            "recovered_state_sha256": _array_sha(recovered),
+            "truth_state_sha256": _array_sha(states),
+            "solver_effective_dof": solved["effective_dof"],
+            "solver_rank": solved["rank"], "solver_n_obs": solved["n_obs"]}

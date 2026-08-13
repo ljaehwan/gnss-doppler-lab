@@ -4,7 +4,7 @@
 
 GCSPO (Geometry-Constrained Shared Pull-Off Observer) is a linear/statistical Stage-0 experiment. Its question is narrow: after a normal-only one-step dynamics model, do the *signed* innovations across satellites admit a materially better common position/clock and velocity/clock-drift explanation than H0, even after penalizing the shared state's effective degrees of freedom?
 
-Phase 1 contains no detector implementation and no attack result. The authoritative machine-readable contract is under `artifacts/gcspo_stage0_static/`.
+Phase 1 contains no detector implementation and no attack result. The authoritative machine-readable contract is under `artifacts/gcspo_stage0_static_rerun/`.
 
 ## What the receiver actually exposes
 

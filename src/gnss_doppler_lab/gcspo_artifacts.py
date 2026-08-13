@@ -37,11 +37,11 @@ VALID_ADDITIONS = {
 }
 
 FROZEN_HASHES = {
-    "README.md": "cb24096d8160e0ebea1e78aec416ba3abdd678940d2d829ebf2c4ad351bda8df",
-    "config.json": "919353cbf66230df506a9eb672d366dc61450b6637003f470939c0d3c91ee30e",
+    "README.md": "eea2e10885d66bfc762f33b2e25147ab07b1bbceace505078e8770e4cdc18ac2",
+    "config.json": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad",
     "data_inventory.json": "4faffaede28119f7655da25b44129b09e76f1bb49ec5169861b6336abaea3631",
-    "preregistration.json": "2390fddb2048db9c333dbb9d7a7bae1c3a174fa59a144902cf9743ad21501a03",
-    "source_commit.json": "38215e854859dd18816625d089bac5ff8d1e7378882abdd42d70ce19c8e895d3",
+    "preregistration.json": "715e11965854f785487e9d2c747718747c1d31cdd8603696ea7af126a45a70da",
+    "source_commit.json": "34a0eab36e4cbf6b16cf0a7075bc3c8a61008c34b9962cf584e04d4fa9f80b72",
 }
 
 

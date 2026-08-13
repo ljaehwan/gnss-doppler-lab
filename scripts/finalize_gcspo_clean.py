@@ -20,7 +20,7 @@ SCIENTIFIC = (
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--artifact-dir", type=Path, default=ROOT / "artifacts/gcspo_stage0_static")
+    parser.add_argument("--artifact-dir", type=Path, default=ROOT / "artifacts/gcspo_stage0_static_rerun")
     parser.add_argument("--baseline", type=Path, required=True)
     args = parser.parse_args()
     observed = {name: sha256_file(args.artifact_dir / name) for name in SCIENTIFIC}

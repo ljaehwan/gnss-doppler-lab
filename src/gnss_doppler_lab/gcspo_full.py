@@ -9,7 +9,7 @@ import h5py
 import numpy as np
 from scipy.linalg import cho_factor, cho_solve
 
-from .gcspo_clean import EPOCH_S, residual_table, window_endpoints
+from .gcspo_clean import EPOCH_S, Q_FIELDS, residual_table, window_endpoints
 from .gcspo_core import build_physical_loading, build_state_prior_precision, common_epoch_covariance, geometry_observability
 from .gcspo_ephemeris import parse_ephemeris_handle
 from .gcmr_geometry import (ephemeris_health_selection, parse_gnss_sdr_gps_ephemeris_xml,
@@ -18,6 +18,7 @@ from .trajectory import llh_to_ecef
 
 GPS_UTC_LEAP_OFFSET_S = 18
 TOW0_S = 477900.0
+FULL_INPUT_COORDINATES = Q_FIELDS
 
 
 def _valid_sentence(line):
@@ -145,7 +146,11 @@ def _window_normal_terms(epoch_ids, prns_by_epoch, z_lookup, geometry, model, wh
         for prn in prns:
             physical = geometry.loading(epoch, prn)
             if physical is None: continue
-            los, current_b = physical; los_rows.append(los); observations.append(z_lookup[(int(epoch), int(prn))])
+            los, current_b = physical
+            observation = np.asarray(z_lookup[(int(epoch), int(prn))], dtype=float)
+            if observation.shape != (len(FULL_INPUT_COORDINATES),):
+                raise ValueError("Full requires all ten ordered signed innovation coordinates")
+            los_rows.append(los); observations.append(observation)
             design = np.zeros((10, total_state)); design[:, index * 8:(index + 1) * 8] = current_b
             for lag, coefficient in enumerate(model.coefficients, start=1):
                 prior_epoch = int(epoch) - lag

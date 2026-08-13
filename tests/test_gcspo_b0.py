@@ -48,7 +48,7 @@ def test_b0_role_filter_requires_wholly_contained_windows():
         "prn": [1, 1, 1, 1],
     })
     got = role_filter(frame, 220.0, 340.0)
-    assert got.window_start_s.tolist() == [220.0, 339.0]
+    assert got.window_start_s.tolist() == [220.0]
 
 
 

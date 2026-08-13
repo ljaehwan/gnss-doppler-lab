@@ -212,13 +212,14 @@ class AccessGate:
         return self.consume(path, scenario=scenario, phase=phase, purpose=purpose, consumer=parse, operation="READ_HDF5")
 
     def authenticate_manifest(self, path, *, scenario, phase, purpose):
+        from .gcspo_capabilities import adapt_manifest_children
+
         canonical, capability = self._capability(path)
         if capability["kind"] not in {"RECEIVER_MANIFEST", "TRACKING_MANIFEST"} or capability["source"] != "PINNED":
             raise PermissionError("manifest root must be inventory-pinned")
         payload = self.read_json(canonical, scenario=scenario, phase=phase, purpose=purpose)
-        rows = payload.get("files") if isinstance(payload, dict) else None
-        if not isinstance(rows, list) or not rows:
-            raise ValueError("authenticated manifest has no child identities")
+        adapted = adapt_manifest_children(payload)
+        rows = adapted["files"]
         parsed = []
         for row in rows:
             if not isinstance(row, dict) or not isinstance(row.get("path"), str) or len(str(row.get("sha256", ""))) != 64 or not isinstance(row.get("size_bytes"), int) or row["size_bytes"] <= 0:
@@ -237,7 +238,8 @@ class AccessGate:
                                        "registered_dev": info.st_dev, "registered_ino": info.st_ino,
                                        "source": f"AUTHENTICATED_MANIFEST:{canonical}"}
             parsed.append(child)
-        return payload
+        return {**payload, "_normalized_files": rows,
+                "_manifest_adapter": adapted["adapter"]}
 
     def authorize(self, path, *, scenario, phase, expected_sha256, expected_size):
         """Compatibility shim: register a pinned identity; bytes remain unexposed."""

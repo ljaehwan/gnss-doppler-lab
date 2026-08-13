@@ -1,0 +1,47 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.prefreeze-repair-evidence.v1",
+  "contract_sha256": "90f602136ae3b4dc4e69f7971d9453213de9abd0a9bc0dcccf2c64897dfbc551",
+  "red": {
+    "command": "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_gcspo_prefreeze_repairs.py",
+    "exit_code": 1,
+    "collected": 10,
+    "failed": 10,
+    "note": "An earlier collection syntax error in the newly written test was corrected and is explicitly excluded from RED evidence.",
+    "failures": [
+      "rerun artifact root absent and old branch binding present",
+      "normalization epsilon changed when guard/validation values changed",
+      "Full signed input coordinate contract absent",
+      "end-to-end synthetic physical recovery gate absent",
+      "phase endpoint 150.0 admitted into [110,150)",
+      "scenario-specific relation policy and single-class paired loss absent",
+      "B0 protected exact-support adapter absent",
+      "capability/source/timeline sidecar validator absent",
+      "hard-coded validated rows and placeholder availability present",
+      "clean-ready verifier did not consume recovery proof"
+    ]
+  },
+  "green": {
+    "focused_command": "/home/ubuntu/projects/gnss-doppler-r2c-stage0-fix-clean/.venv/bin/python -m pytest -q tests/test_gcspo_prefreeze_repairs.py",
+    "focused_result": "10 passed",
+    "gcspo_command": "/home/ubuntu/projects/gnss-doppler-r2c-stage0-fix-clean/.venv/bin/python -m pytest -q tests/test_gcspo*.py",
+    "gcspo_result": "133 passed",
+    "full_command": "/home/ubuntu/projects/gnss-doppler-r2c-stage0-fix-clean/.venv/bin/python -m pytest -q",
+    "full_result": "574 passed, 6 failed",
+    "full_failure_classification": "PRE_EXISTING_BASELINE_DEFECT: all six failures import scripts/train_peak_floor_temporal_autoencoder.py, which is absent at required merge base 461eb4dc7bb794e719295daf028f6811658ba37f while the importing script and failing tests are present",
+    "clean_ready_verifier": "PASS"
+  },
+  "finding_to_test": [
+    {"finding": 1, "test": "test_rerun_artifact_and_branch_isolation_keeps_legacy_tree_immutable"},
+    {"finding": 2, "test": "test_normalization_epsilon_uses_only_train_fit_not_guard_or_validation"},
+    {"finding": 3, "test": "test_signed_epl_coordinates_and_equal_norm_directions_reach_full_observer"},
+    {"finding": 4, "test": "test_end_to_end_synthetic_recovery_is_fail_closed_for_sign_units_and_rank"},
+    {"finding": 5, "test": "test_half_open_real_scorer_excludes_phase_endpoint"},
+    {"finding": 6, "test": "test_scenario_relation_policy_and_single_class_score_loss_contrast"},
+    {"finding": 7, "test": "test_b0_protected_exact_support_adapter_executes_without_entering_full_design"},
+    {"finding": 8, "test": "test_capability_sidecar_schema_binds_source_children_and_timeline"},
+    {"finding": 9, "test": "test_evaluator_has_no_hardcoded_validated_rows_or_placeholder_availability"},
+    {"finding": 10, "test": "test_canonical_json_rejects_nan_and_clean_ready_requires_recovery_proof"}
+  ],
+  "protected_payload_rows_opened": 0,
+  "protected_payload_bytes_opened": 0
+}

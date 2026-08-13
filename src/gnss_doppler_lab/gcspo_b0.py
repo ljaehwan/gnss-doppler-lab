@@ -33,7 +33,7 @@ def role_filter(frame, start_s: float, end_s: float):
     ends = pd.to_numeric(frame["window_end_s"], errors="raise")
     if not np.isfinite(starts).all() or not np.isfinite(ends).all():
         raise ValueError("B0 role timestamps must be finite")
-    return frame.loc[(starts >= start_s) & (ends <= end_s)].copy().reset_index(drop=True)
+    return frame.loc[(starts >= start_s) & (ends < end_s)].copy().reset_index(drop=True)
 
 
 def exact_common_support(b0_prn, full_windows):
@@ -61,6 +61,23 @@ def exact_common_support(b0_prn, full_windows):
     return b0, full
 
 
+def adapt_b0_exact_support(b0_prn, full_windows, *, score_column):
+    """Aggregate executable B0 PRN scores only on exact Full window support."""
+    if score_column not in b0_prn.columns:
+        raise ValueError("B0 score column is absent")
+    b0, full = exact_common_support(b0_prn, full_windows)
+    full_support = {float(row.window_start_s): list(map(_prn_number, row.prns))
+                    for row in full.itertuples(index=False)}
+    rows = []
+    for start, group in b0.groupby("window_start_s", sort=True):
+        value = group[score_column].to_numpy(dtype=float)
+        if not np.all(np.isfinite(value)):
+            raise ValueError("B0 exact-support score is nonfinite")
+        rows.append({"window_start_s": float(start), "prns": full_support[float(start)],
+                     "score": float(np.mean(value))})
+    return rows
+
+
 def build_scheduled_node_table(receiver_root: str | Path, roles: dict[str, tuple[float, float]]):
     """Derive the frozen nine prompt-normalized means on the global 0.5-s schedule.
 
@@ -86,7 +103,7 @@ def build_scheduled_node_table(receiver_root: str | Path, roles: dict[str, tuple
         for role, (role_start, role_end) in roles.items():
             for sat in sorted(set(prn[(time >= role_start) & (time < role_end)])):
                 sat_mask = prn == sat
-                for start in np.arange(role_start, role_end - 1.0 + 1e-12, .5):
+                for start in np.arange(role_start, role_end - .5, .5):
                     mask = sat_mask & (time >= start) & (time < start + 1.0)
                     if int(mask.sum()) < 4:
                         continue

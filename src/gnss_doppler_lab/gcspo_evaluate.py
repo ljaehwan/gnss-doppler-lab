@@ -13,7 +13,8 @@ from .gcspo_clean import EPOCH_S, a1_role_scores, residual_table
 from .gcspo_full import (GeometryCache, geometry_preflight, protected_geometry_preflight, role_full_terms, role_full_terms_from_z,
                          score_full_terms)
 from .gcspo_statistics import (compute_scientific_gates, exact_contrast_support, execute_relation_destructions, paired_block_bootstrap,
-                               primary_pauc_rows, scenario_phase_balanced_pauc, scheduled_persistence)
+                               paired_score_loss_bootstrap, primary_pauc_rows,
+                               RELATION_POLICY, scenario_phase_balanced_pauc, scheduled_persistence)
 from .gcspo_protected import (discrimination_metrics, load_receiver_tracking, phase_rows,
                               reconstruct_normal_model, scientific_verdict, score_metrics, write_csv)
 
@@ -23,7 +24,6 @@ STATIC_PHASES = {
     "DS7": (("pre_onset_replay", 0., 110.), ("transition", 110., 150.), ("established", 150., None)),
     "DS8": (("pre_onset_replay", 0., 110.), ("transition", 110., 150.), ("established", 150., None)),
 }
-VALIDATED = {"code_error_chips", "pll_phase_error_cycles", "carrier_doppler_hz", "code_frequency_offset_chips_s"}
 
 
 def _ranges(scenario, end_s):
@@ -76,7 +76,9 @@ def load_clean_contrast_rows(root, identities):
     return result, source
 
 
-def _method_rows(data, model, whitener, gamma, geometry, a2_loading, lambdas, ranges):
+def _method_rows(data, model, whitener, gamma, geometry, a2_loading, lambdas, ranges,
+                 validated_rows):
+    validated_rows = set(validated_rows)
     result = {name: [] for name in ("A1", "A2", "A3", "A4", "A5", "Full")}
     for phase, start, end in ranges:
         if end - start < 1.2:
@@ -85,12 +87,14 @@ def _method_rows(data, model, whitener, gamma, geometry, a2_loading, lambdas, ra
             "A1": a1_role_scores(data, model, whitener, start, end),
             "A2": score_a2_terms(role_a2_terms(data, model, whitener, gamma, a2_loading, start, end), lambdas["A2"]),
             "A3": score_full_terms(role_full_terms(data, model, whitener, gamma,
-                    GeometryCache(geometry["ephemerides"], geometry["receiver_ecef"], {"code_error_chips", "pll_phase_error_cycles"}), start, end), lambdas["Full"]),
+                    GeometryCache(geometry["ephemerides"], geometry["receiver_ecef"],
+                                  validated_rows & {"code_error_chips", "pll_phase_error_cycles"}), start, end), lambdas["Full"]),
             "A4": score_full_terms(role_full_terms(data, model, whitener, gamma,
-                    GeometryCache(geometry["ephemerides"], geometry["receiver_ecef"], {"carrier_doppler_hz", "code_frequency_offset_chips_s"}), start, end), lambdas["Full"]),
+                    GeometryCache(geometry["ephemerides"], geometry["receiver_ecef"],
+                                  validated_rows & {"carrier_doppler_hz", "code_frequency_offset_chips_s"}), start, end), lambdas["Full"]),
             "Full": score_full_terms(role_full_terms(data, model, whitener, gamma,
-                    GeometryCache(geometry["ephemerides"], geometry["receiver_ecef"], VALIDATED), start, end), lambdas["Full"]),
-            "A5": score_a5_terms(role_a5_terms(data, model, whitener, gamma, VALIDATED, start, end), lambdas["A5"]),
+                    GeometryCache(geometry["ephemerides"], geometry["receiver_ecef"], validated_rows), start, end), lambdas["Full"]),
+            "A5": score_a5_terms(role_a5_terms(data, model, whitener, gamma, validated_rows, start, end), lambdas["A5"]),
         }
         for method, rows in method_sets.items():
             for row in rows:
@@ -168,6 +172,9 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
     thresholds = json.loads((artifact / "thresholds.json").read_text())
     a2_doc = json.loads((artifact / "clean_ablation_report.json").read_text())
     model, whitener, gamma = reconstruct_normal_model(normal)
+    validated_rows = set(normal.get("validated_rows", ()))
+    if not validated_rows:
+        raise RuntimeError("source-verified field inventory is absent from the frozen normal model")
     eps = {int(key): float(value) for key, value in normal["normalization_epsilon_by_prn"].items()}
     lambdas = {"Full": float(normal["lambda_selected"]), "A2": float(a2_doc["methods"]["A2"]["lambda"]),
                "A5": float(json.loads((artifact / "clean_a5_report.json").read_text())["lambda"])}
@@ -179,7 +186,7 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
                              kind="RECEIVER_MANIFEST")
         manifest = gate.authenticate_manifest(manifest_path, scenario=scenario, phase="all_frozen_phases",
                                               purpose="receiver output identities")
-        child_paths = [manifest_path.parent / row["path"] for row in manifest["files"]]
+        child_paths = [manifest_path.parent / row["path"] for row in manifest.get("_normalized_files", ())]
         tracking_paths = sorted(path for path in child_paths if path.name.startswith("epl_tracking_ch_") and path.suffix == ".mat")
         observables = [path for path in child_paths if path.name == "observables.mat"]
         nmea = [path for path in child_paths if path.suffix.lower() == ".nmea"]
@@ -195,8 +202,9 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
                                                     ephemeris_path=ephemeris[0], scenario=scenario, tracked_prns=data.prn)
         except Exception as exc:
             unavailable.append({"scenario": scenario, "reason": "UNAVAILABLE_GEOMETRY", "detail": str(exc)}); continue
-        methods = _method_rows(data, model, whitener, gamma, geometry, np.asarray(a2_doc["methods"]["A2"]["loading"]), lambdas, ranges)
-        relation_geometry = GeometryCache(geometry["ephemerides"], geometry["receiver_ecef"], VALIDATED)
+        methods = _method_rows(data, model, whitener, gamma, geometry, np.asarray(a2_doc["methods"]["A2"]["loading"]), lambdas, ranges,
+                               validated_rows)
+        relation_geometry = GeometryCache(geometry["ephemerides"], geometry["receiver_ecef"], validated_rows)
         for relation_phase, relation_start, relation_end in ranges:
             if relation_phase != "pre_onset_replay" and relation_end - relation_start >= 1.2:
                 relation_rows.extend({**row, "scenario": scenario, "label": relation_phase in {"transition", "established"},
@@ -206,7 +214,6 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
                                                                  range(round(row["window_start_s"] / EPOCH_S), round(row["availability_s"] / EPOCH_S)))} for row in
                                      _relation_rows(data, model, whitener, gamma, relation_geometry, lambdas["Full"],
                                                     scenario, relation_phase, relation_start, relation_end))
-        unavailable.append({"scenario": scenario, "method": "A0", "reason": "UNAVAILABLE_EXACT_ADAPTER"})
         for method, rows in methods.items():
             threshold_key = "A0_B0" if method == "A0" else method
             q99 = float(thresholds[threshold_key]["q99"])
@@ -237,9 +244,12 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
             alarm = score_metrics(rows, threshold=float(thresholds["A0_B0" if method == "A0" else method]["q99"]))
             scenario_rows.append({"scenario": scenario, "method": method, **metric, **alarm,
                                   "pre_onset_fpr": float(np.mean(np.asarray(pre) > float(thresholds["A0_B0" if method == "A0" else method]["q99"]))) if pre else None})
-    unavailable.extend([{"scenario": "DS5", "reason": "UNAVAILABLE_OOD"}, {"scenario": "DS6", "reason": "UNAVAILABLE_OOD"},
-                        {"method": "GCMR", "reason": "UNAVAILABLE_EXACT_ADAPTER"}, {"method": "M1", "reason": "UNAVAILABLE"},
-                        {"method": "FixedComplex9", "reason": "UNAVAILABLE"}])
+    optional = normal.get("optional_method_capabilities", {})
+    for method in ("M1", "Fixed9", "GCMR"):
+        capability = optional.get(method, {})
+        if capability.get("status") != "AVAILABLE":
+            unavailable.append({"method": method, "status": capability.get("status", "UNAVAILABLE"),
+                                "reason": capability.get("reason", "AUTHENTICATED_INPUT_OR_CHECKPOINT_ABSENT")})
     score_fields = ["scenario", "family", "phase", "method", "window_start_s", "availability_s", "score", "threshold_q99",
                     "alarm_q99", "tracked_n", "effective_dof", "penalty", "likelihood_improvement_twice", "prns_json", "epoch_ids_json", "epoch_prn_support_json",
                     "label", "phase_start_s", "phase_end_s"]
@@ -258,20 +268,28 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
     bootstrap_reports = {}
     for comparator in ("A1", "A2"):
         bootstrap_reports[f"Full-{comparator}"] = paired_block_bootstrap(bootstrap_source, "Full", comparator)
-    relation_reports = {}
-    for destruction in ("LOS_SHUFFLE", "PER_PRN_TEMPORAL_SHIFT"):
-        report = paired_block_bootstrap(relation_rows, "Full", destruction)
-        paired = exact_contrast_support(relation_rows, ("Full", destruction))
-        losses = []
-        cells = sorted({("DS7_DS8" if row["scenario"] in {"DS7", "DS8"} else row["scenario"], row["phase"]) for row in paired})
-        for family, phase in cells:
-            cell_rows = [row for row in paired if ("DS7_DS8" if row["scenario"] in {"DS7", "DS8"} else row["scenario"]) == family and row["phase"] == phase]
-            material = lambda method: [{**row, "score": row["scores"][method], "logical_cell": f"{'positive' if row['label'] else 'negative'}:{family}:{phase}"} for row in cell_rows]
-            full_pauc = scenario_phase_balanced_pauc(material("Full")); destroyed_pauc = scenario_phase_balanced_pauc(material(destruction))
-            losses.append((full_pauc - destroyed_pauc) / max(abs(full_pauc), 1e-12))
-        if not losses: raise RuntimeError(f"mandatory relation support unavailable: {destruction}")
-        relation_reports[destruction] = {"lcb": report["lcb_95"], "interval_95": report["interval_95"],
-                                         "median_relative_loss": float(np.median(losses)), "replicates": report["replicates"]}
+    relation_reports = {"policy": RELATION_POLICY, "scenario_results": {}}
+    for scenario, policy in RELATION_POLICY.items():
+        scenario_relation = [row for row in relation_rows if row["scenario"] == scenario]
+        established = any(row["phase"] == "established" for row in scenario_relation)
+        if policy["requires_established"] and not established:
+            relation_reports["scenario_results"][scenario] = {
+                "status": "LIMITED_TRANSITION_ONLY", "primary": policy["primary"],
+                "mandatory": False, "reason": "AUTHENTICATED_ESTABLISHED_PULL_OFF_COVERAGE_ABSENT"}
+            continue
+        primary = policy["primary"]
+        try:
+            report = paired_score_loss_bootstrap(scenario_relation, "Full", primary)
+        except ValueError as exc:
+            relation_reports["scenario_results"][scenario] = {
+                "status": "UNAVAILABLE", "primary": primary, "mandatory": scenario in {"DS3", "DS7", "DS8"},
+                "reason": str(exc)}
+            continue
+        relation_reports["scenario_results"][scenario] = {
+            "status": "AVAILABLE", "primary": primary, "mandatory": scenario in {"DS3", "DS7", "DS8"},
+            "lcb": report["lcb_95"], "interval_95": report["interval_95"],
+            "median_relative_loss": report["median_relative_loss"], "replicates": report["replicates"],
+            "contrast": report["contrast"]}
     persistence = {}
     per_scenario_persistence = {}
     for scenario in ("DS3", "DS7", "DS8"):
@@ -317,7 +335,8 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
                      for name, report in sorted(bootstrap_reports.items())]
     interval_rows += [{"contrast": f"Full-{name}", "replicates": report["replicates"], "lcb_95": report["lcb"],
                        "ci_low": report["interval_95"][0], "ci_high": report["interval_95"][1]}
-                      for name, report in sorted(relation_reports.items())]
+                      for name, report in sorted(relation_reports["scenario_results"].items())
+                      if report.get("status") == "AVAILABLE"]
     write_csv(artifact / "bootstrap_intervals.csv", interval_rows, ["contrast", "replicates", "lcb_95", "ci_low", "ci_high"])
     canonical_write_json(artifact / "relation_destruction_metrics.json",
                          {"schema": "gnss-doppler-lab.gcspo-stage0.relation-destruction.v2",

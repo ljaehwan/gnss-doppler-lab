@@ -49,7 +49,7 @@ def _event_scores(gate, prn, node_thresholds):
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--artifact-dir", type=Path, default=ROOT / "artifacts/gcspo_stage0_static")
+    parser.add_argument("--artifact-dir", type=Path, default=ROOT / "artifacts/gcspo_stage0_static_rerun")
     parser.add_argument("--clean-root", type=Path, default=Path("/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9"))
     args = parser.parse_args()
     pd = _pandas()

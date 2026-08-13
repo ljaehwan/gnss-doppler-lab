@@ -16,13 +16,14 @@ from gnss_doppler_lab.gcspo_artifacts import canonical_write_json, FROZEN_HASHES
 from gnss_doppler_lab.gcspo_fresh_clone import clone_exact
 from gnss_doppler_lab.gcspo_verify import verify_final
 
+DEFAULT_ARTIFACT_RELATIVE = Path("artifacts/gcspo_stage0_static_rerun")
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", choices=("full",), default="full")
     parser.add_argument("--repo-url", required=True)
     parser.add_argument("--commit", required=True)
-    parser.add_argument("--artifact-dir", type=Path, required=True)
+    parser.add_argument("--artifact-dir", type=Path, default=DEFAULT_ARTIFACT_RELATIVE)
     parser.add_argument("--clean-root", type=Path)
     args = parser.parse_args(); started = utc_now()
     if args.artifact_dir.is_absolute(): raise ValueError("artifact dir must be repository-relative")

@@ -255,7 +255,7 @@ def test_bootstrap_endpoint_assignment_and_nearest_rank_percentiles():
 
 
 def test_ds7_ds8_are_one_family_in_frozen_preregistration():
-    path = Path(__file__).parents[1] / "artifacts/gcspo_stage0_static/preregistration.json"
+    path = Path(__file__).parents[1] / "artifacts/gcspo_stage0_static_rerun/preregistration.json"
     frozen = json.loads(path.read_text())
     assert frozen["timelines"]["DS7"]["post_110_family"] == frozen["timelines"]["DS8"]["post_110_family"]
     assert "DS7 pre-110 TRAINING_REPLAY_DESCRIPTIVE" in frozen["primary_pooled_static_contrast"]["excluded_negative"]
@@ -283,15 +283,23 @@ def test_access_gate_rejects_directories_globs_and_prior_results(tmp_path):
 
 def test_frozen_files_have_contract_sha256():
     root = Path(__file__).parents[1]
-    expected = {
+    legacy = {
         "artifacts/gcspo_stage0_static/README.md": "cb24096d8160e0ebea1e78aec416ba3abdd678940d2d829ebf2c4ad351bda8df",
         "artifacts/gcspo_stage0_static/config.json": "919353cbf66230df506a9eb672d366dc61450b6637003f470939c0d3c91ee30e",
         "artifacts/gcspo_stage0_static/data_inventory.json": "4faffaede28119f7655da25b44129b09e76f1bb49ec5169861b6336abaea3631",
         "artifacts/gcspo_stage0_static/preregistration.json": "2390fddb2048db9c333dbb9d7a7bae1c3a174fa59a144902cf9743ad21501a03",
         "artifacts/gcspo_stage0_static/source_commit.json": "38215e854859dd18816625d089bac5ff8d1e7378882abdd42d70ce19c8e895d3",
-        "docs/GCSPO_STAGE0.md": "d5cb40d436b55cd58cff3063e018b19b4f8296f5af5e96331b77af663324314f",
     }
-    assert {rel: hashlib.sha256((root / rel).read_bytes()).hexdigest() for rel in expected} == expected
+    rerun = {
+        "artifacts/gcspo_stage0_static_rerun/README.md": "eea2e10885d66bfc762f33b2e25147ab07b1bbceace505078e8770e4cdc18ac2",
+        "artifacts/gcspo_stage0_static_rerun/config.json": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad",
+        "artifacts/gcspo_stage0_static_rerun/data_inventory.json": "4faffaede28119f7655da25b44129b09e76f1bb49ec5169861b6336abaea3631",
+        "artifacts/gcspo_stage0_static_rerun/preregistration.json": "715e11965854f785487e9d2c747718747c1d31cdd8603696ea7af126a45a70da",
+        "artifacts/gcspo_stage0_static_rerun/source_commit.json": "34a0eab36e4cbf6b16cf0a7075bc3c8a61008c34b9962cf584e04d4fa9f80b72",
+        "docs/GCSPO_STAGE0.md": "3ff447ee62e32c16249bd34a0b134d27d1040b0e78e01cb753b24de3b6db6fa0",
+    }
+    assert {rel: hashlib.sha256((root / rel).read_bytes()).hexdigest() for rel in legacy} == legacy
+    assert {rel: hashlib.sha256((root / rel).read_bytes()).hexdigest() for rel in rerun} == rerun
 
 
 def test_receiver_semantic_preflight_is_source_hash_bound_and_proves_requested_rows(tmp_path):
@@ -352,7 +360,7 @@ def test_valid_manifest_packaging_quarantines_clean_intermediates(tmp_path):
 
 def test_invalid_run_exact_set_has_zero_attack_access_and_no_verdict(tmp_path):
     from gnss_doppler_lab.gcspo_artifacts import write_fail_closed_invalid, verify_invalid_artifacts
-    frozen_root = Path(__file__).parents[1] / "artifacts/gcspo_stage0_static"
+    frozen_root = Path(__file__).parents[1] / "artifacts/gcspo_stage0_static_rerun"
     for name in ("README.md", "config.json", "data_inventory.json", "preregistration.json", "source_commit.json"):
         (tmp_path / name).write_bytes((frozen_root / name).read_bytes())
     (tmp_path / "clean_only_report.json").write_text("clean intermediate\n")
@@ -367,7 +375,7 @@ def test_invalid_run_exact_set_has_zero_attack_access_and_no_verdict(tmp_path):
 
 def test_preaccess_invalid_cannot_erase_a_started_access_ledger(tmp_path):
     from gnss_doppler_lab.gcspo_artifacts import write_fail_closed_invalid
-    frozen_root = Path(__file__).parents[1] / "artifacts/gcspo_stage0_static"
+    frozen_root = Path(__file__).parents[1] / "artifacts/gcspo_stage0_static_rerun"
     for name in ("README.md", "config.json", "data_inventory.json", "preregistration.json", "source_commit.json"):
         (tmp_path / name).write_bytes((frozen_root / name).read_bytes())
     ledger = tmp_path / "access_ledger.jsonl"
@@ -384,7 +392,7 @@ def test_preaccess_failure_handler_writes_exact_invalid_without_running_protecte
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(module)
-    frozen_root = root / "artifacts/gcspo_stage0_static"
+    frozen_root = root / "artifacts/gcspo_stage0_static_rerun"
     for name in ("README.md", "config.json", "data_inventory.json", "preregistration.json", "source_commit.json"):
         (tmp_path / name).write_bytes((frozen_root / name).read_bytes())
 
@@ -441,7 +449,7 @@ def test_clean_ridge_selection_uses_validation_and_larger_relative_tie():
 
 def test_frozen_window_endpoints_are_right_end_anchored_and_contained():
     from gnss_doppler_lab.gcspo_clean import window_endpoints
-    assert window_endpoints(220, 222).tolist() == pytest.approx([221, 221.5, 222])
+    assert window_endpoints(220, 222).tolist() == pytest.approx([221, 221.5])
     assert window_endpoints(220.1, 222.1).tolist() == pytest.approx([221.5, 222])
 
 

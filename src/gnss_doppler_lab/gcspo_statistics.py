@@ -10,6 +10,17 @@ from .gcspo_core import (block_index, content_seed, los_derangement,
                          nearest_rank_percentile, temporal_desynchronization,
                          weighted_low_fpr_pauc)
 
+RELATION_POLICY = {
+    "DS3": {"primary": "PER_PRN_TEMPORAL_SHIFT", "diagnostic": "LOS_SHUFFLE",
+            "requires_established": False, "scenario_kind": "TIME_PUSH"},
+    "DS4": {"primary": "LOS_SHUFFLE", "diagnostic": "PER_PRN_TEMPORAL_SHIFT",
+            "requires_established": True, "scenario_kind": "POSITION_PUSH"},
+    "DS7": {"primary": "PER_PRN_TEMPORAL_SHIFT", "diagnostic": "LOS_SHUFFLE",
+            "requires_established": False, "scenario_kind": "TIME_PUSH"},
+    "DS8": {"primary": "PER_PRN_TEMPORAL_SHIFT", "diagnostic": "LOS_SHUFFLE",
+            "requires_established": False, "scenario_kind": "TIME_PUSH"},
+}
+
 
 def phase_contained(row, phase_start, phase_end):
     """The full window and right endpoint must be inside a half-open phase."""
@@ -181,6 +192,53 @@ def paired_block_bootstrap(rows, first_method, second_method, *, replicates=2000
             "family_coupled": True, "first_replicate_family_draws": first_family_draws}
 
 
+def paired_score_loss_bootstrap(rows, first_method, second_method, *, replicates=2000, seed=23):
+    """Paired score-loss contrast for a single-class relation cell.
+
+    Relation controls test whether destroying the preregistered relation lowers
+    the Full score.  This is deliberately not a binary pAUC calculation and
+    therefore remains valid when a scenario/phase contains only attack rows.
+    """
+    if replicates != 2000 or seed != 23:
+        raise ValueError("frozen relation bootstrap requires 2000 replicates and seed 23")
+    paired = exact_contrast_support(rows, (first_method, second_method))
+    if not paired:
+        raise ValueError("relation score-loss support is empty")
+    blocks = {}
+    for row in paired:
+        index = _bootstrap_eligible(row)
+        if index is None:
+            continue
+        key = (str(row["scenario"]), str(row["phase"]), int(index))
+        blocks.setdefault(key, []).append(row)
+    if not blocks:
+        raise ValueError("relation score-loss has no eligible blocks")
+    rng = np.random.Generator(np.random.PCG64(seed))
+    keys = sorted(blocks); values = np.empty(replicates, dtype=float)
+    raw_losses = []
+    for row in paired:
+        first, second = row["scores"][first_method], row["scores"][second_method]
+        raw_losses.append((first - second) / max(abs(first), 1e-12))
+    for replicate in range(replicates):
+        sampled = []
+        by_cell = {}
+        for key in keys:
+            by_cell.setdefault(key[:2], []).append(key)
+        for cell in sorted(by_cell):
+            candidates = by_cell[cell]
+            for draw in rng.integers(0, len(candidates), size=len(candidates)):
+                sampled.extend(blocks[candidates[int(draw)]])
+        losses = [(row["scores"][first_method] - row["scores"][second_method]) /
+                  max(abs(row["scores"][first_method]), 1e-12) for row in sampled]
+        values[replicate] = float(np.median(losses))
+    return {"replicates": replicates, "seed": seed, "values": values,
+            "lcb_95": nearest_rank_percentile(values, .05),
+            "interval_95": [nearest_rank_percentile(values, .025),
+                            nearest_rank_percentile(values, .975)],
+            "median_relative_loss": float(np.median(raw_losses)),
+            "contrast": "PAIRED_SCORE_LOSS_NOT_BINARY_PAUC"}
+
+
 def execute_relation_destructions(residual, los, prns, *, scenario, phase, segment_id):
     residual, los, prns = np.asarray(residual, float), np.asarray(los, float), np.asarray(prns, int)
     order = np.argsort(prns); residual, los, prns = residual[order], los[order], prns[order]
@@ -211,10 +269,25 @@ def compute_scientific_gates(evidence):
     incremental = evidence["incremental_lcb"]
     g2 = set(incremental) == {"Full-A1", "Full-A2"} and all(value > 0 for value in incremental.values())
     destruction = evidence["destruction"]
-    required_destructions = {"LOS_SHUFFLE", "PER_PRN_TEMPORAL_SHIFT"}
-    g3 = set(destruction) == required_destructions and all(
-        destruction[name]["lcb"] > 0 and destruction[name]["median_relative_loss"] >= .25
-        for name in required_destructions)
+    if "scenario_results" in destruction:
+        scenarios = destruction["scenario_results"]
+        ds3 = scenarios.get("DS3", {})
+        family = [scenarios.get(name, {}) for name in ("DS7", "DS8")]
+        required = [ds3] + [row for row in family if row.get("status") == "AVAILABLE"]
+        g3 = (ds3.get("status") == "AVAILABLE" and len(required) >= 2
+              and all(row.get("lcb", -math.inf) > 0
+                      and row.get("median_relative_loss", -math.inf) >= .25
+                      for row in required))
+        ds4 = scenarios.get("DS4", {})
+        if ds4.get("status") == "AVAILABLE":
+            g3 = g3 and ds4.get("lcb", -math.inf) > 0 and ds4.get("median_relative_loss", -math.inf) >= .25
+        elif ds4.get("status") != "LIMITED_TRANSITION_ONLY":
+            g3 = False
+    else:
+        required_destructions = {"LOS_SHUFFLE", "PER_PRN_TEMPORAL_SHIFT"}
+        g3 = set(destruction) == required_destructions and all(
+            destruction[name]["lcb"] > 0 and destruction[name]["median_relative_loss"] >= .25
+            for name in required_destructions)
     persistence = evidence["persistence"]
     g4 = set(persistence) >= {"DS3", "DS7_DS8"} and all(
         persistence[name]["ratio"] >= .5 and persistence[name]["delay_s"] <= 10
