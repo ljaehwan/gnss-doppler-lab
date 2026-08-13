@@ -83,22 +83,34 @@ def a5_spectral_scores(terms, state_segments, smoothnesses):
         eigenvalues, vectors = eigh(h, prior, check_finite=False, driver="gvd")
         projected = vectors.T @ vector
     scale = max(float(np.max(np.abs(eigenvalues))), 1.0)
-    if float(np.min(eigenvalues)) < -1e-9 * scale:
+    negative_tolerance = 1e-9 * scale
+    if float(np.min(eigenvalues)) < -negative_tolerance:
         raise ValueError("A5 normal matrix is not positive semidefinite")
-    eigenvalues = np.maximum(eigenvalues, 0.0)
-    rank = int(min(nobs, np.count_nonzero(eigenvalues > 0.0)))
+    zero_tolerance = 64 * np.finfo(np.float64).eps * scale
+    eigenvalues = np.where(eigenvalues > zero_tolerance, eigenvalues, 0.0)
+    rank = int(min(nobs, np.count_nonzero(eigenvalues)))
+    if use_cuda:
+        accepted_eigenvalues_t = torch.as_tensor(eigenvalues, dtype=torch.float64, device=device)
     result = []
     for smoothness in map(float, smoothnesses):
         if smoothness <= 0: raise ValueError("invalid A5 spectral smoothness")
         if use_cuda:
-            weights_t = projected_t / (eigenvalues_t + smoothness)
+            weights_t = projected_t / (accepted_eigenvalues_t + smoothness)
             state_t = torch.linalg.solve_triangular(
                 lower.T, (eigenvectors_t @ weights_t)[:, None], upper=True)[:, 0]
             state = state_t.cpu().numpy()
         else:
             weights = projected / (eigenvalues + smoothness)
             state = vectors @ weights
-        rss = float(yty - 2 * state @ vector + state @ h @ state)
+        linear = 2 * float(state @ vector)
+        quadratic = float(state @ h @ state)
+        rss = float(yty - linear + quadratic)
+        rss_scale = max(abs(float(yty)), abs(linear), abs(quadratic), 1.0)
+        rss_tolerance = 64 * np.finfo(np.float64).eps * rss_scale
+        if rss < -rss_tolerance:
+            raise ValueError("A5 negative RSS exceeds scale-aware roundoff tolerance")
+        if rss < 0:
+            rss = 0.0
         improvement = float(yty - rss)
         edf = float(np.sum(eigenvalues / (eigenvalues + smoothness)))
         if edf < -1e-7 or edf > rank + 1e-7 or rank > nobs:

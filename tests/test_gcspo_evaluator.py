@@ -191,8 +191,16 @@ def test_all_six_gates_are_computed_from_numeric_evidence():
     evidence = {
         "clean_holdout_fpr": .01, "external_pre_fpr": {"DS3": .04},
         "incremental_lcb": {"Full-A1": .1, "Full-A2": .01},
-        "destruction": {name: {"lcb": .01, "median_relative_loss": .3}
-                        for name in ("LOS_SHUFFLE", "PER_PRN_TEMPORAL_SHIFT")},
+        "destruction": {
+            "policy": {}, "required_available_scenarios": ["DS3", "DS7"],
+            "scenario_results": {
+                scenario: {"status": "AVAILABLE", "mandatory": True, "lcb": .01,
+                           "median_relative_loss": .3, "replicates": 2000,
+                           "contrast": "PAIRED_SCORE_LOSS_NOT_BINARY_PAUC"}
+                for scenario in ("DS3", "DS7")
+            } | {"DS4": {"status": "LIMITED_TRANSITION_ONLY", "mandatory": False},
+                 "DS8": {"status": "UNAVAILABLE", "mandatory": False}},
+        },
         "persistence": {"DS3": {"ratio": .5, "delay_s": 10.},
                         "DS7_DS8": {"ratio": .8, "delay_s": 2.}},
         "controls": [{"id": "COMMON_GAIN", "persistent_alarm_ratio": .1,

@@ -114,12 +114,18 @@ class AccessGate:
             self._deny(candidate, "PATH_NOT_REGULAR"); raise PermissionError("protected directories/non-regular files are forbidden")
         return candidate.resolve(strict=True), info
 
-    def register_pinned(self, path, *, expected_sha256, expected_size, kind):
+    def register_pinned(self, path, *, expected_sha256, expected_size, kind,
+                        preclaim_dev=None, preclaim_ino=None):
         if self.state != "VALID_FOR_PROTECTED_ACCESS":
             self._deny(path, "GATE_NOT_READY"); raise PermissionError("remote implementation freeze is not exactly synchronized" if self._preflight else "VALID_FOR_PROTECTED_ACCESS not reached")
         canonical, info = self._validate_candidate(path)
         if len(expected_sha256) != 64 or isinstance(expected_size, bool) or expected_size <= 0 or not kind:
             self._deny(canonical, "INVALID_EXPECTED_IDENTITY"); raise ValueError("expected protected identity is incomplete")
+        if info.st_size != int(expected_size):
+            raise ValueError("protected declared size mismatch before claim")
+        if (preclaim_dev is not None or preclaim_ino is not None) and (
+                info.st_dev != preclaim_dev or info.st_ino != preclaim_ino):
+            raise RuntimeError("protected pinned identity replaced after preclaim check")
         self._allow[str(canonical)] = {"expected_sha256": expected_sha256.lower(), "expected_size": int(expected_size),
                                        "kind": str(kind), "registered_dev": info.st_dev, "registered_ino": info.st_ino,
                                        "source": "PINNED"}
@@ -127,13 +133,33 @@ class AccessGate:
 
     def _capability(self, path):
         candidate = Path(path)
-        try: canonical = candidate.resolve(strict=True)
-        except OSError as exc:
-            self._deny(candidate, "UNREGISTERED_OR_MISSING"); raise PermissionError("manifest-derived identity is absent") from exc
-        capability = self._allow.get(str(canonical))
+        registered_path = Path(os.path.abspath(candidate))
+        capability = self._allow.get(str(registered_path))
         if capability is None:
-            self._deny(canonical, "UNREGISTERED_PATH"); raise PermissionError("manifest-derived identity is absent")
-        return canonical, capability
+            self._deny(candidate, "UNREGISTERED_PATH"); raise PermissionError("manifest-derived identity is absent")
+        return registered_path, capability
+
+    @staticmethod
+    def _metadata_precheck(canonical, capability):
+        """Authenticate child identity metadata without opening protected bytes."""
+        try:
+            info = os.lstat(canonical)
+        except OSError as exc:
+            raise RuntimeError("protected registered identity missing before claim") from exc
+        if stat.S_ISLNK(info.st_mode) or not stat.S_ISREG(info.st_mode):
+            raise RuntimeError("protected registered identity type changed before claim")
+        try:
+            resolved = canonical.resolve(strict=True)
+        except OSError as exc:
+            raise RuntimeError("protected registered identity missing before claim") from exc
+        if resolved != canonical:
+            raise RuntimeError("protected registered identity path changed before claim")
+        registered = (int(capability["registered_dev"]), int(capability["registered_ino"]))
+        if (info.st_dev, info.st_ino) != registered:
+            raise RuntimeError("protected registered identity replaced before claim")
+        if info.st_size != int(capability["expected_size"]):
+            raise ValueError("protected declared size mismatch before claim")
+        return info
 
     def consume(self, path, *, scenario, phase, purpose, consumer: Callable[[object], T], operation="READ") -> T:
         if self.state != "VALID_FOR_PROTECTED_ACCESS":
@@ -143,6 +169,7 @@ class AccessGate:
             self._deny(path, "INVALID_CLASSIFICATION", scenario=scenario, phase=phase, purpose=purpose)
             raise ValueError("protected access classification is incomplete")
         canonical, capability = self._capability(path)
+        registered = self._metadata_precheck(canonical, capability)
         expected_size = int(capability["expected_size"]); byte_range = f"[0,{expected_size})"
         common = self._base_record("PRE", path=canonical, scenario=scenario, phase=phase, purpose=purpose,
                                    access_counter=self._next_access_counter(), operation=operation,
@@ -153,10 +180,18 @@ class AccessGate:
         descriptor = None; observed_sha = None; observed_size = None
         try:
             before = os.lstat(canonical)
+            if (before.st_dev, before.st_ino, before.st_size) != (registered.st_dev, registered.st_ino, expected_size):
+                self._append({**{**common, "record_type": "POST"}, "observed_sha256": None,
+                              "observed_size": before.st_size, "outcome": "PATH_REPLACED"})
+                raise RuntimeError("protected path replaced after preclaim check")
             flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0)
             descriptor = os.open(canonical, flags)
             opened = os.fstat(descriptor)
-            if not stat.S_ISREG(opened.st_mode) or (before.st_dev, before.st_ino) != (opened.st_dev, opened.st_ino):
+            if (not stat.S_ISREG(opened.st_mode) or
+                    (before.st_dev, before.st_ino, expected_size) !=
+                    (opened.st_dev, opened.st_ino, opened.st_size)):
+                self._append({**{**common, "record_type": "POST"}, "observed_sha256": None,
+                              "observed_size": opened.st_size, "outcome": "PATH_REPLACED"})
                 raise RuntimeError("protected path replaced before open")
             digest = hashlib.sha256(); observed_size = 0
             while True:
@@ -182,6 +217,11 @@ class AccessGate:
                 self._append({**{**common, "record_type": "POST"}, "observed_sha256": observed_sha,
                               "observed_size": observed_size, "outcome": "PATH_REPLACED"})
                 raise RuntimeError("protected path replaced during read")
+            if after_fd.st_size != expected_size:
+                self._append({**{**common, "record_type": "POST"}, "observed_sha256": observed_sha,
+                              "observed_size": after_fd.st_size,
+                              "outcome": "IDENTITY_MISMATCH"})
+                raise RuntimeError("protected descriptor size changed during read")
             self._append({**{**common, "record_type": "POST"}, "observed_sha256": observed_sha,
                           "observed_size": observed_size, "outcome": "SUCCESS"})
             return result
@@ -233,6 +273,8 @@ class AccessGate:
             info = os.lstat(child)
             if not stat.S_ISREG(info.st_mode) or stat.S_ISLNK(info.st_mode):
                 raise PermissionError("manifest child must be a regular non-symlink file")
+            if info.st_size != row["size_bytes"]:
+                raise ValueError("manifest child declared size mismatch before claim")
             self._allow[str(child)] = {"expected_sha256": row["sha256"].lower(), "expected_size": row["size_bytes"],
                                        "kind": Path(row["path"]).suffix.upper().lstrip(".") or "FILE",
                                        "registered_dev": info.st_dev, "registered_ino": info.st_ino,
@@ -248,12 +290,23 @@ class AccessGate:
             raise PermissionError("sidecar root manifest must be inventory-pinned")
         parsed = []
         for row in children:
-            child = Path(row["canonical_path"]).resolve(strict=True)
+            if (not isinstance(row, dict) or not isinstance(row.get("canonical_path"), str) or
+                    len(str(row.get("sha256", ""))) != 64 or
+                    isinstance(row.get("size_bytes"), bool) or
+                    not isinstance(row.get("size_bytes"), int) or row["size_bytes"] <= 0):
+                raise ValueError("sidecar child identity is incomplete")
+            candidate = Path(row["canonical_path"])
+            info = os.lstat(candidate)
+            if stat.S_ISLNK(info.st_mode) or not stat.S_ISREG(info.st_mode):
+                raise PermissionError("sidecar child must be a regular non-symlink file")
+            child = candidate.resolve(strict=True)
             if canonical.parent not in child.parents:
                 raise ValueError("sidecar child escapes authenticated root")
-            info = os.lstat(child)
-            if not stat.S_ISREG(info.st_mode) or stat.S_ISLNK(info.st_mode):
-                raise PermissionError("sidecar child must be a regular non-symlink file")
+            if info.st_size != row["size_bytes"]:
+                raise ValueError("sidecar child declared size mismatch before claim")
+            if (info.st_dev, info.st_ino) != (row.get("_preclaim_dev", info.st_dev),
+                                              row.get("_preclaim_ino", info.st_ino)):
+                raise RuntimeError("sidecar child replaced after preclaim check")
             self._allow[str(child)] = {"expected_sha256": row["sha256"].lower(),
                                        "expected_size": int(row["size_bytes"]),
                                        "kind": child.suffix.upper().lstrip(".") or "FILE",

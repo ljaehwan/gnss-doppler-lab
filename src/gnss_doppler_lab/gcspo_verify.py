@@ -1,6 +1,7 @@
 """Fail-closed clean and final artifact verification for GCSPO Stage-0."""
 from __future__ import annotations
 
+from datetime import datetime, timezone
 import hashlib
 import json
 import re
@@ -62,54 +63,141 @@ def verify_clean_ready(root: str | Path):
     return {"schema": "gnss-doppler-lab.gcspo-stage0.verifier-report.v1", "phase": "clean-ready", "status": "PASS"}
 
 
+def _timestamp(value, label):
+    if not isinstance(value, str) or not value.endswith("Z"):
+        raise ValueError(f"reproduction {label} timestamp is not canonical UTC")
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise ValueError(f"reproduction {label} timestamp is invalid") from exc
+    if parsed.tzinfo != timezone.utc:
+        raise ValueError(f"reproduction {label} timestamp is not UTC")
+    return parsed
+
+
+def _identity(path, identity, label):
+    path = Path(path)
+    if (not path.is_file() or not isinstance(identity, dict) or
+            set(identity) != {"sha256", "size_bytes"} or
+            _HEX64.fullmatch(str(identity.get("sha256", ""))) is None or
+            isinstance(identity.get("size_bytes"), bool) or
+            not isinstance(identity.get("size_bytes"), int) or identity["size_bytes"] <= 0):
+        raise ValueError(f"reproduction {label} identity is incomplete")
+    payload = path.read_bytes()
+    if len(payload) != identity["size_bytes"] or hashlib.sha256(payload).hexdigest() != identity["sha256"]:
+        raise ValueError(f"reproduction {label} identity mismatch")
+    return payload
+
+
+def _identity_map(rows, *, root, label):
+    if not isinstance(rows, dict) or not rows:
+        raise ValueError(f"reproduction {label} identities are absent")
+    observed = {}
+    for name, row in rows.items():
+        if not isinstance(name, str) or not isinstance(row, dict) or set(row) != {"path", "sha256", "size_bytes"}:
+            raise ValueError(f"reproduction {label} identity is malformed")
+        path = Path(row["path"])
+        if not path.is_absolute():
+            path = root / path
+        identity = {"sha256": row["sha256"], "size_bytes": row["size_bytes"]}
+        _identity(path, identity, f"{label}:{name}")
+        observed[name] = identity
+    return observed
+
+
 def verify_reproduction_manifests(root: str | Path):
-    """Authenticate two durable, content-addressed clean reproduction records."""
-    artifact = Path(root); documents = []
-    required = {"schema", "run_id", "source_freeze_sha", "commands", "config_identities",
-                "dependencies", "runtime_canonicalization", "scientific_files",
-                "boundary_and_reset_evidence", "comparison"}
+    """Prove two separate successful A5 executions and their durable outputs."""
+    artifact = Path(root).resolve(); repo = artifact.parents[1]
+    documents = []
+    required = {"schema", "run_id", "started_utc", "finished_utc", "source_freeze_sha",
+                "starting_git", "command", "scratch_root", "environment",
+                "source_identities", "input_identities", "output_bundle", "execution",
+                "runtime_canonicalization", "canonical_promotion", "peer_comparison",
+                "failed_attempts", "unchanged_dependency_identities"}
     for index in (1, 2):
         path = artifact / f"reproduction_run_{index}.json"
-        if not path.is_file(): raise ValueError("reproduction manifest is absent")
+        if not path.is_file():
+            raise ValueError("reproduction manifest is absent")
         doc = json.loads(path.read_text())
-        if set(doc) != required or doc.get("schema") != "gnss-doppler-lab.gcspo-stage0.reproduction-run.v1":
+        if set(doc) != required or doc.get("schema") != "gnss-doppler-lab.gcspo-stage0.reproduction-run.v2":
             raise ValueError("reproduction manifest schema/keys mismatch")
-        if doc.get("run_id") != f"a5-segment-repair-run-{index}" or len(str(doc.get("source_freeze_sha", ""))) != 40:
-            raise ValueError("reproduction run/source identity mismatch")
-        if not isinstance(doc.get("commands"), list) or not doc["commands"]:
-            raise ValueError("reproduction commands are absent")
-        if doc.get("runtime_canonicalization") != ["preflight_report.json:started_utc",
-                                                     "preflight_report.json:finished_utc"]:
-            raise ValueError("reproduction runtime canonicalization changed")
-        files = doc.get("scientific_files")
-        if not isinstance(files, dict) or not files:
-            raise ValueError("reproduction scientific identities are absent")
-        for name, identity in files.items():
-            if not isinstance(name, str) or set(identity) != {"sha256", "size_bytes"}:
-                raise ValueError("reproduction scientific identity is malformed")
-            if _HEX64.fullmatch(str(identity["sha256"])) is None or isinstance(identity["size_bytes"], bool) or identity["size_bytes"] <= 0:
-                raise ValueError("reproduction scientific identity is incomplete")
-        evidence = doc.get("boundary_and_reset_evidence", {})
-        if evidence.get("b0_half_open_test") != "test_b0_scheduled_windows_are_exactly_half_open_with_boundary_epsilon_and_reuse":
-            raise ValueError("B0 boundary reproduction evidence is absent")
-        if evidence.get("a5_gap_reset_test") != "test_a5_reacquisition_forms_independent_segments_and_preserves_actual_support":
-            raise ValueError("A5 gap/reset reproduction evidence is absent")
-        documents.append(doc)
+        if not isinstance(doc.get("run_id"), str) or not doc["run_id"]:
+            raise ValueError("reproduction run identity is absent")
+        if _timestamp(doc["started_utc"], "start") >= _timestamp(doc["finished_utc"], "finish"):
+            raise ValueError("reproduction execution did not finish after start")
+        source_sha = str(doc.get("source_freeze_sha", ""))
+        git = doc.get("starting_git")
+        if (len(source_sha) != 40 or not isinstance(git, dict) or
+                git != {"sha": source_sha, "branch": "research/gcspo-stage0-static-rerun",
+                        "clean": True, "status_porcelain": []}):
+            raise ValueError("reproduction starting Git identity/clean status mismatch")
+        command = doc.get("command")
+        scratch = doc.get("scratch_root")
+        if (not isinstance(command, str) or not command or not isinstance(scratch, str) or
+                scratch not in command or "<" in command or ">" in command or
+                "PLACEHOLDER" in command.upper()):
+            raise ValueError("reproduction exact command/scratch root is invalid")
+        environment = doc.get("environment")
+        if not isinstance(environment, dict) or not environment.get("python_executable") or not environment.get("packages"):
+            raise ValueError("reproduction environment identity is incomplete")
+        _identity_map(doc["source_identities"], root=repo, label="source")
+        _identity_map(doc["input_identities"], root=artifact, label="input")
+        unchanged = _identity_map(doc["unchanged_dependency_identities"], root=artifact,
+                                  label="unchanged dependency")
+        needed = {"Full_A1", "A2_A3_A4", "B0", "controls"}
+        if not needed <= set(unchanged):
+            raise ValueError("Full/A1-A4/B0/control dependency authentication is incomplete")
+        execution = doc.get("execution")
+        if execution != {"exit_status": 0, "status": "ACCEPTED", "completed": True}:
+            raise ValueError("reproduction execution was not separately completed and accepted")
+        failed = doc.get("failed_attempts")
+        if (not isinstance(failed, dict) or set(failed) != {"count", "dispositions"} or
+                failed["count"] != len(failed["dispositions"])):
+            raise ValueError("reproduction failed-attempt disposition is incomplete")
+        if doc.get("runtime_canonicalization") != []:
+            raise ValueError("reproduction canonicalization includes unapproved runtime fields")
+        bundle = doc.get("output_bundle")
+        if not isinstance(bundle, dict) or set(bundle) != {"path", "files"}:
+            raise ValueError("reproduction durable output bundle is malformed")
+        bundle_path = (artifact / bundle["path"]).resolve()
+        if artifact not in bundle_path.parents or not bundle_path.is_dir():
+            raise ValueError("reproduction durable output bundle is absent")
+        output_payloads = {}
+        for name, identity in bundle["files"].items():
+            output_payloads[name] = _identity(bundle_path / name, identity, f"bundle:{name}")
+        if set(output_payloads) != {"clean_a5_report.json", "thresholds.json"}:
+            raise ValueError("reproduction output bundle file set mismatch")
+        promotion = doc.get("canonical_promotion")
+        if (not isinstance(promotion, dict) or
+                set(promotion) != {"status", "files"} or
+                promotion["status"] != "BYTE_IDENTICAL_TO_BOTH_ACCEPTED_RUNS" or
+                promotion["files"] != bundle["files"]):
+            raise ValueError("reproduction canonical promotion binding mismatch")
+        documents.append({"doc": doc, "bundle_path": bundle_path,
+                          "payloads": output_payloads})
     first, second = documents
-    if first["scientific_files"] != second["scientific_files"]:
-        raise ValueError("reproduction scientific identities differ")
-    expected_comparison = "BYTE_IDENTICAL_AFTER_EXPLICIT_TIMESTAMP_CANONICALIZATION"
-    if any(doc["comparison"] != {"peer_run_id": documents[1 - index]["run_id"], "result": expected_comparison}
-           for index, doc in enumerate(documents)):
-        raise ValueError("reproduction comparison result mismatch")
-    for name, identity in first["scientific_files"].items():
-        path = artifact / name
-        if not path.is_file() or path.stat().st_size != identity["size_bytes"]:
-            raise ValueError(f"reproduction canonical identity absent: {name}")
-        if hashlib.sha256(path.read_bytes()).hexdigest() != identity["sha256"]:
-            raise ValueError(f"reproduction canonical scientific identity mismatch: {name}")
-    return {"status": "PASS", "run_count": 2, "comparison": expected_comparison,
-            "scientific_files": first["scientific_files"]}
+    run_ids = [row["doc"]["run_id"] for row in documents]
+    scratch_roots = [row["doc"]["scratch_root"] for row in documents]
+    bundle_paths = [str(row["bundle_path"]) for row in documents]
+    if len(set(run_ids)) != 2 or len(set(scratch_roots)) != 2 or len(set(bundle_paths)) != 2:
+        raise ValueError("reproduction runs lack separate IDs/scratch roots/output locations")
+    expected = "BYTE_IDENTICAL_OUTPUT_SNAPSHOTS"
+    for index, row in enumerate(documents):
+        peer = row["doc"]["peer_comparison"]
+        if peer != {"peer_run_id": documents[1 - index]["doc"]["run_id"],
+                    "result": expected,
+                    "files": ["clean_a5_report.json", "thresholds.json"]}:
+            raise ValueError("reproduction peer comparison binding mismatch")
+    if first["payloads"] != second["payloads"]:
+        raise ValueError("reproduction output snapshots are not byte-identical")
+    for name, payload in first["payloads"].items():
+        canonical = artifact / name
+        if canonical.read_bytes() != payload:
+            raise ValueError(f"canonical promoted output differs from accepted runs: {name}")
+    return {"status": "PASS", "run_count": 2, "comparison": expected,
+            "run_ids": run_ids, "scratch_roots": scratch_roots,
+            "bundle_paths": bundle_paths, "canonical_bound_to_both_runs": True,
+            "scientific_files": first["doc"]["output_bundle"]["files"]}
 
 
 def verify_final(root: str | Path, *, strict: bool = False):

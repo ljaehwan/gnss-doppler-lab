@@ -8,9 +8,9 @@ from pathlib import Path
 
 import numpy as np
 
-from .gcspo_statistics import (RELATION_POLICY, exact_contrast_support, paired_block_bootstrap,
+from .gcspo_statistics import (RELATION_POLICY, exact_b0_full_contrast, exact_contrast_support, paired_block_bootstrap,
                                paired_score_loss_bootstrap, scenario_phase_balanced_pauc,
-                               scheduled_persistence)
+                               scheduled_persistence, validate_mandatory_relation_evidence)
 from .gcspo_capabilities import validate_preaccess_capabilities
 
 
@@ -100,7 +100,9 @@ def reconstruct_relation_evidence(document, *, scenarios=None, capabilities=None
     selected = tuple(RELATION_POLICY) if scenarios is None else tuple(scenarios)
     unavailable = {} if capabilities is None else capabilities.get("unavailable", {})
     available = set(selected) if capabilities is None else set(capabilities.get("available", {}))
-    results = {"policy": RELATION_POLICY, "scenario_results": {}}
+    required = sorted(available & {"DS3", "DS7", "DS8"})
+    results = {"policy": RELATION_POLICY, "required_available_scenarios": required,
+               "scenario_results": {}}
     for scenario in selected:
         policy = RELATION_POLICY[scenario]
         if scenario not in available:
@@ -129,8 +131,8 @@ def reconstruct_relation_evidence(document, *, scenarios=None, capabilities=None
             "lcb": report["lcb_95"], "interval_95": report["interval_95"],
             "median_relative_loss": report["median_relative_loss"],
             "replicates": report["replicates"], "contrast": report["contrast"]}
+    validate_mandatory_relation_evidence(results, required_scenarios=required)
     return results
-
 
 def reconstruct_final_evidence(root):
     root = Path(root); scores = _score_rows(root / "per_epoch_scores.csv")
@@ -170,7 +172,8 @@ def reconstruct_final_evidence(root):
               (row["scenario"], row["phase"], row["availability_s"], tuple(row["prns"])) in support_keys]
     shared = {"full_pauc": _paired_pauc(shared_support, "Full"), "a5_pauc": _paired_pauc(shared_support, "A5"),
               "full_median_edf": float(np.median(full_edf)), "a5_median_edf": float(np.median(a5_edf))}
+    b0_exact = exact_b0_full_contrast(scores, required_scenarios=sorted(set(capabilities["available"]) & {"DS3", "DS7", "DS8"}))
     return {"clean_holdout_fpr": clean_fpr, "clean_contrast_source": clean_source,
             "external_pre_fpr": external,
-            "incremental_lcb": incremental, "destruction": destruction,
-            "persistence": persistence, "controls": controls, "shared": shared}
+            "incremental_lcb": incremental, "b0_exact_support": b0_exact,
+            "destruction": destruction, "persistence": persistence, "controls": controls, "shared": shared}

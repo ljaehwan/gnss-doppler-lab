@@ -130,9 +130,13 @@ def _runtime_relevant_ignored(status):
         in_runtime_tree = path.startswith("src/") or path.startswith("scripts/")
         root_runtime_file = len(candidate.parts) == 1 and (candidate.suffix.lower() in root_suffixes or
                                                           candidate.name in {".env", "sitecustomize.py", "usercustomize.py"})
+        generated_residue = (candidate.name == ".pytest_cache" or
+                             "__pycache__" in candidate.parts or candidate.suffix.lower() == ".pyc" or
+                             (len(candidate.parts) == 1 and candidate.name.startswith("iq.bin.") and
+                              candidate.suffix == ".tmp"))
         config_resource = ("config" in candidate.name.lower() and candidate.suffix.lower() in root_suffixes
                            and not path.startswith("artifacts/"))
-        if in_runtime_tree or root_runtime_file or config_resource: relevant.append(line)
+        if in_runtime_tree or root_runtime_file or generated_residue or config_resource: relevant.append(line)
     return relevant
 
 

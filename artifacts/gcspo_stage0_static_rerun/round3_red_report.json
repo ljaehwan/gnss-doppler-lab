@@ -1,0 +1,76 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.round3-red-evidence.v1",
+  "status": "RED_CONFIRMED",
+  "production_snapshot_commit": "5cbc3dffa1ebee40cd1707702b4b4f9402d61792",
+  "production_snapshot_statement": "The round-3 test file was newly introduced in the working tree and executed against unchanged 5cbc3df production code; these tests did not exist at 5cbc3df.",
+  "test_file": {
+    "path": "tests/test_gcspo_round3_freeze_repairs.py",
+    "sha256": "00a0652d9a4ce8ef4e34754b764f66691b77757d84a3c8c6a4baaa22da996345"
+  },
+  "production_file_sha256": {
+    "src/gnss_doppler_lab/gcspo_access.py": "225faae5a970ec52456ff156c4a95264d5af5148048f901ccb78ad8acc42250b",
+    "src/gnss_doppler_lab/gcspo_b0.py": "71fd58817d32a73bac9118acda4c308e85f01490ad1ccc0e25e7ba6a517b3d58",
+    "src/gnss_doppler_lab/gcspo_evaluate.py": "c27c1bdc382668e0394c96179286a8021fc819fa52a379bbe7966d1304839c71",
+    "src/gnss_doppler_lab/gcspo_statistics.py": "a66fd0f2bb7fae4ef6ade58e808c9babea844e85d4ac8b6cd7319214e6d484f5",
+    "src/gnss_doppler_lab/gcspo_a5.py": "e8d995744f161b5d64ebc42f83680b022f186e56fdeedfba75df96865b613a91",
+    "src/gnss_doppler_lab/gcspo_verify.py": "51caa49c18c3f5d0dd750b417e8ba6272de9cba65bfb43d5ff8d3346b2ece494",
+    "src/gnss_doppler_lab/gcspo_verify_artifacts.py": "a31acd5d4c6a0ff14d6506e561b33f37d4bcaeeb88b006d20518587a816f2806",
+    "src/gnss_doppler_lab/gcspo_verify_reconstruct.py": "f5ed8f296562257b74a2fc1160c5c8deb3ca5c2dbae7b9bc030c2668a8c8e59e",
+    "src/gnss_doppler_lab/gcspo_freeze.py": "34fc572bcf2ceb567d7f7f55c894f26ebfe9544938988345f7f839e1287a2799"
+  },
+  "command": "env PYTHONDONTWRITEBYTECODE=1 TMPDIR=/tmp/gcspo-round3-red-tmp PYTHONPATH=src ../gnss-doppler-lab/.venv/bin/python -m pytest -p no:cacheprovider tests/test_gcspo_round3_freeze_repairs.py -vv --tb=short --junitxml=/tmp/gcspo-round3-red-junit.xml",
+  "environment": {
+    "python": "3.12.3",
+    "pytest": "9.1.1",
+    "torch": "2.13.0+cu130",
+    "cuda_available": true
+  },
+  "started_local": "2026-08-14T07:19:39.358727+09:00",
+  "collected": 21,
+  "failed": 15,
+  "passed": 6,
+  "skipped": 0,
+  "failed_test_ids": [
+    "test_sidecar_size_mismatch_fails_before_claim_ledger_or_child_read",
+    "test_registered_child_replacement_is_rejected_preclaim_even_when_bytes_match",
+    "test_child_toctou_between_precheck_and_open_closes_claim_without_science",
+    "test_protected_b0_rejects_empty_partial_duplicate_missing_and_unsupported_support",
+    "test_protected_b0_exact_support_succeeds_and_all_mandatory_methods_are_nonempty",
+    "test_protected_b0_builder_rejects_non_access_gate_even_with_synthetic_rows",
+    "test_reconstruction_rejects_missing_mandatory_ds7_relation_evidence",
+    "test_final_evidence_validation_cannot_package_missing_relation_as_valid_no_go",
+    "test_a5_exact_reviewer_negative_mode_cpu_cuda_parity",
+    "test_a5_materially_negative_rss_fails_closed_on_both_backends",
+    "test_a5_scale_aware_roundoff_rss_is_nonnegative_and_backend_identical[-1e-15]",
+    "test_reproduction_evidence_authenticates_two_distinct_durable_executions",
+    "test_runtime_hygiene_marks_all_generated_residue_relevant[.pytest_cache/]",
+    "test_runtime_hygiene_marks_all_generated_residue_relevant[tests/__pycache__/]",
+    "test_runtime_hygiene_marks_all_generated_residue_relevant[iq.bin.synthetic.tmp]"
+  ],
+  "passed_test_ids": [
+    "test_a5_cpu_cuda_near_zero_and_rank_boundary_parity[-5e-16]",
+    "test_a5_cpu_cuda_near_zero_and_rank_boundary_parity[0.0]",
+    "test_a5_cpu_cuda_near_zero_and_rank_boundary_parity[5e-16]",
+    "test_a5_cpu_cuda_near_zero_and_rank_boundary_parity[5e-10]",
+    "test_a5_scale_aware_roundoff_rss_is_nonnegative_and_backend_identical[1e-15]",
+    "test_runtime_hygiene_marks_all_generated_residue_relevant[src/gnss_doppler_lab/cache.pyc]"
+  ],
+  "reviewer_adversarial_observation": {
+    "generalized_lambda_min": -9e-10,
+    "generalized_lambda_max": 1.0,
+    "cpu_state": [10.0, 0.0],
+    "cpu_rss": 71.0,
+    "cpu_score": 26.004267729441743,
+    "cuda_state": [99.99999999999994, 0.0],
+    "cuda_rss": -999.9999999999989,
+    "cuda_score": 1097.0042677294407
+  },
+  "junit": {
+    "path": "artifacts/gcspo_stage0_static_rerun/round3_red_junit.xml",
+    "sha256": "98f397506ca51c5d96dd5a85e5e25d1c6aaeebd3ed315e3830631246f805a488",
+    "size_bytes": 10270
+  },
+  "protected_payload_rows_opened": 0,
+  "protected_payload_bytes_opened": 0,
+  "protected_attempt_claimed": false
+}

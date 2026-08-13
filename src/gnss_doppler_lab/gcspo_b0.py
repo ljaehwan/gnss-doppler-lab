@@ -126,9 +126,16 @@ def build_scheduled_node_table(receiver_root: str | Path, roles: dict[str, tuple
 def build_protected_scheduled_node_table(paths, *, gate, scenario,
                                          roles: dict[str, tuple[float, float]]):
     """Build B0 nodes through the protected gate and retain exact epoch support."""
+    from .gcspo_access import AccessGate
+
+    if not isinstance(gate, AccessGate):
+        raise TypeError("protected B0 requires an AccessGate")
+    paths = tuple(map(Path, paths))
+    if not paths:
+        raise ValueError("protected B0 authenticated inputs are empty")
     pd = _pandas(); rows = []
     datasets = ("PRN", "PRN_start_sample_count", *TAP_FIELDS)
-    for path in map(Path, paths):
+    for path in paths:
         values = {name: np.asarray(value).reshape(-1) for name, value in
                   gate.read_h5(path, datasets=datasets, scenario=scenario,
                                phase="all_frozen_phases", purpose="protected B0 nine-tap rows").items()}

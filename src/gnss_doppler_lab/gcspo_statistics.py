@@ -20,6 +20,13 @@ RELATION_POLICY = {
     "DS8": {"primary": "PER_PRN_TEMPORAL_SHIFT", "diagnostic": "LOS_SHUFFLE",
             "requires_established": False, "scenario_kind": "TIME_PUSH"},
 }
+MANDATORY_RELATION_SCENARIOS = {"DS3", "DS7", "DS8"}
+PROTECTED_REQUIRED_PHASES = {
+    "DS3": ("pre_onset", "transition", "established"),
+    "DS4": ("pre_onset", "transition", "established"),
+    "DS7": ("pre_onset_replay", "transition", "established"),
+    "DS8": ("pre_onset_replay", "transition", "established"),
+}
 
 
 def phase_contained(row, phase_start, phase_end):
@@ -97,6 +104,62 @@ def exact_contrast_support(rows: Iterable[dict], methods):
                          "phase_end_s": float(reference.get("phase_end_s", math.inf)),
                          "scores": {method: float(bucket[method]["score"]) for method in methods}})
     return result
+
+
+def exact_b0_full_contrast(rows, *, required_scenarios):
+    """Independently require and contrast A0/B0 and Full on identical support."""
+    rows = list(rows); result = {}
+    for scenario in tuple(required_scenarios):
+        phases = PROTECTED_REQUIRED_PHASES.get(scenario)
+        if phases is None:
+            raise ValueError(f"unsupported mandatory scenario for A0/B0: {scenario}")
+        selected = [row for row in rows if row.get("scenario") == scenario and
+                    row.get("method") in {"A0", "Full"}]
+        paired = exact_contrast_support(selected, ("Full", "A0"))
+        phase_results = {}
+        for phase in phases:
+            full = [row for row in selected if row.get("phase") == phase and row.get("method") == "Full"]
+            a0 = [row for row in selected if row.get("phase") == phase and row.get("method") == "A0"]
+            common = [row for row in paired if row["phase"] == phase]
+            if not full or not a0 or len(full) != len(a0) or len(common) != len(full):
+                raise ValueError(f"mandatory {scenario}/{phase} A0/B0 exact support is incomplete")
+            differences = np.asarray([row["scores"]["Full"] - row["scores"]["A0"]
+                                      for row in common], dtype=float)
+            if not np.isfinite(differences).all():
+                raise ValueError("A0/B0 exact-support contrast is nonfinite")
+            phase_results[phase] = {
+                "windows": len(common),
+                "mean_full_minus_a0": float(np.mean(differences)),
+                "median_full_minus_a0": float(np.median(differences)),
+            }
+        result[scenario] = phase_results
+    if not result:
+        raise ValueError("mandatory A0/B0 exact-support scenarios are empty")
+    return {"contrast": "PAIRED_FULL_MINUS_A0_ON_EXACT_NATIVE_SUPPORT",
+            "scenario_phase_results": result}
+
+
+def validate_mandatory_relation_evidence(destruction, *, required_scenarios=None):
+    """Reject unavailable/malformed primary relation evidence as invalid science."""
+    scenarios = destruction.get("scenario_results") if isinstance(destruction, dict) else None
+    if not isinstance(scenarios, dict):
+        raise ValueError("mandatory relation scenario results are absent")
+    if required_scenarios is None:
+        required_scenarios = destruction.get("required_available_scenarios")
+    if not isinstance(required_scenarios, (list, tuple, set)) or not required_scenarios:
+        raise ValueError("mandatory relation scenario binding is absent")
+    required = tuple(sorted(set(required_scenarios)))
+    for scenario in required:
+        row = scenarios.get(scenario)
+        if scenario not in MANDATORY_RELATION_SCENARIOS or not isinstance(row, dict):
+            raise ValueError(f"mandatory relation evidence absent: {scenario}")
+        numeric = (row.get("lcb"), row.get("median_relative_loss"))
+        if (row.get("status") != "AVAILABLE" or row.get("mandatory") is not True or
+                row.get("contrast") != "PAIRED_SCORE_LOSS_NOT_BINARY_PAUC" or
+                row.get("replicates") != 2000 or
+                any(not isinstance(value, (int, float)) or not math.isfinite(value) for value in numeric)):
+            raise ValueError(f"mandatory relation evidence invalid: {scenario}")
+    return {"status": "PASS", "required_scenarios": list(required)}
 
 
 def _logical_cell(row):
@@ -269,6 +332,7 @@ def compute_scientific_gates(evidence):
     incremental = evidence["incremental_lcb"]
     g2 = set(incremental) == {"Full-A1", "Full-A2"} and all(value > 0 for value in incremental.values())
     destruction = evidence["destruction"]
+    validate_mandatory_relation_evidence(destruction)
     if "scenario_results" in destruction:
         scenarios = destruction["scenario_results"]
         ds3 = scenarios.get("DS3", {})

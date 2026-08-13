@@ -157,8 +157,16 @@ def test_verifier_recomputes_gates_and_rejects_placeholder_or_semantic_mutation(
     evidence = {
         "clean_holdout_fpr": .01, "external_pre_fpr": {"DS3": .04},
         "incremental_lcb": {"Full-A1": .1, "Full-A2": .1},
-        "destruction": {name: {"lcb": .1, "median_relative_loss": .3}
-                        for name in ("LOS_SHUFFLE", "PER_PRN_TEMPORAL_SHIFT")},
+        "destruction": {
+            "policy": {}, "required_available_scenarios": ["DS3", "DS7"],
+            "scenario_results": {
+                scenario: {"status": "AVAILABLE", "mandatory": True, "lcb": .1,
+                           "median_relative_loss": .3, "replicates": 2000,
+                           "contrast": "PAIRED_SCORE_LOSS_NOT_BINARY_PAUC"}
+                for scenario in ("DS3", "DS7")
+            } | {"DS4": {"status": "LIMITED_TRANSITION_ONLY", "mandatory": False},
+                 "DS8": {"status": "UNAVAILABLE", "mandatory": False}},
+        },
         "persistence": {"DS3": {"ratio": .6, "delay_s": 2.}, "DS7_DS8": {"ratio": .6, "delay_s": 2.}},
         "controls": [{"id": "COMMON_GAIN", "persistent_alarm_ratio": 0., "max_consecutive_alarms": 0},
                      {"id": "CLOCK_DRIFT", "specificity_ratio": 0.}],

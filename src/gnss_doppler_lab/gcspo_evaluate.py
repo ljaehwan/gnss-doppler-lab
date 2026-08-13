@@ -15,9 +15,11 @@ from .gcspo_artifacts import canonical_write_json, sha256_file
 from .gcspo_clean import EPOCH_S, a1_role_scores, residual_table
 from .gcspo_full import (GeometryCache, geometry_preflight, protected_geometry_preflight, role_full_terms, role_full_terms_from_z,
                          score_full_terms)
-from .gcspo_statistics import (compute_scientific_gates, exact_contrast_support, execute_relation_destructions, paired_block_bootstrap,
+from .gcspo_statistics import (compute_scientific_gates, exact_b0_full_contrast,
+                               exact_contrast_support, execute_relation_destructions, paired_block_bootstrap,
                                paired_score_loss_bootstrap, primary_pauc_rows,
-                               RELATION_POLICY, scenario_phase_balanced_pauc, scheduled_persistence)
+                               RELATION_POLICY, scenario_phase_balanced_pauc, scheduled_persistence,
+                               validate_mandatory_relation_evidence)
 from .gcspo_protected import (discrimination_metrics, load_receiver_tracking, phase_rows,
                               reconstruct_normal_model, scientific_verdict, score_metrics, write_csv)
 
@@ -92,38 +94,127 @@ def validate_clean_contrast_preaccess(root, identities):
     return {"status": "PASS", "rows": len(rows), "source": source}
 
 
+def _native_support(row):
+    try:
+        epochs = tuple(map(int, row["epoch_ids"]))
+        prns = tuple(map(int, row["prns"]))
+        support = tuple((int(epoch), tuple(map(int, values)))
+                        for epoch, values in row["epoch_prn_support"])
+    except (KeyError, TypeError, ValueError):
+        raise ValueError("protected method native support is malformed") from None
+    if (not epochs or tuple(epoch for epoch, _ in support) != epochs or
+            epochs != tuple(sorted(set(epochs))) or
+            any(not values or values != tuple(sorted(set(values))) for _, values in support)):
+        raise ValueError("protected method native support is malformed")
+    union = tuple(sorted(set().union(*(set(values) for _, values in support))))
+    if prns != union:
+        raise ValueError("protected method native support is malformed")
+    return epochs, prns, support
+
+
 def integrate_protected_b0(methods, b0_rows, *, score_column):
-    """Attach A0/B0 only where actual B0 and Full epoch/PRN support is exact."""
-    full_by = {(row.get("phase"), float(row["window_start_s"])): row
-               for row in methods.get("Full", [])}
+    """Attach A0/B0 only when every Full event has exact native B0 support."""
+    full_rows = list(methods.get("Full", ()))
+    b0_rows = list(b0_rows)
+    if not full_rows or not b0_rows:
+        raise ValueError("protected B0/Full exact support is empty")
+    full_by = {}
+    for row in full_rows:
+        key = (row.get("phase"), float(row["window_start_s"]))
+        if key in full_by:
+            raise ValueError("duplicate Full window on protected exact support")
+        _native_support(row)
+        full_by[key] = row
     grouped = {}
+    seen_prn = set()
     for row in b0_rows:
-        grouped.setdefault((row.get("phase"), float(row["window_start_s"])), []).append(row)
+        if score_column not in row:
+            raise ValueError("protected B0 score column is absent")
+        try:
+            score = float(row[score_column])
+            key = (row.get("phase"), float(row["window_start_s"]))
+        except (TypeError, ValueError):
+            raise ValueError("protected B0 join/score is malformed") from None
+        if not np.isfinite(score):
+            raise ValueError("protected B0 score is nonfinite")
+        if "prn" in row:
+            try:
+                prn = int(str(row["prn"]).lstrip("Gg"))
+                epochs = tuple(map(int, row["epoch_ids"]))
+                support = tuple((int(epoch), tuple(map(int, values)))
+                                for epoch, values in row["epoch_prn_support"])
+            except (KeyError, TypeError, ValueError):
+                raise ValueError("protected B0 native support is malformed") from None
+            identity = (*key, prn)
+            if identity in seen_prn:
+                raise ValueError("duplicate B0 window/PRN scientific row")
+            seen_prn.add(identity)
+            if (not epochs or tuple(epoch for epoch, _ in support) != epochs or
+                    any(values != (prn,) for _, values in support)):
+                raise ValueError("protected B0 native support is malformed")
+        grouped.setdefault(key, []).append(row)
+    if set(grouped) != set(full_by):
+        raise ValueError("protected B0/Full unsupported join or partial support")
     a0 = []
-    for key, group in sorted(grouped.items(), key=lambda item: (str(item[0][0]), item[0][1])):
-        full = full_by.get(key)
-        if full is None: continue
+    for key in sorted(full_by, key=lambda value: (str(value[0]), value[1])):
+        full, group = full_by[key], grouped[key]
+        if any(("prn" in row) != ("prn" in group[0]) for row in group):
+            raise ValueError("protected B0 support representation is mixed")
         if "prn" in group[0]:
             combined = {}
             for row in group:
-                prn = int(str(row["prn"]).lstrip("Gg"))
                 for epoch, values in row["epoch_prn_support"]:
-                    combined.setdefault(int(epoch), set()).update(map(int, values or (prn,)))
+                    combined.setdefault(int(epoch), set()).update(map(int, values))
             support = tuple((epoch, tuple(sorted(values))) for epoch, values in sorted(combined.items()))
             score = float(np.mean([float(row[score_column]) for row in group]))
         else:
+            if len(group) != 1:
+                raise ValueError("duplicate aggregated B0 scientific row")
             support = tuple((int(epoch), tuple(map(int, values)))
                             for epoch, values in group[0]["epoch_prn_support"])
             score = float(group[0][score_column])
-        full_support = tuple((int(epoch), tuple(map(int, values)))
-                             for epoch, values in full["epoch_prn_support"])
-        if support != full_support: continue
+        _, _, full_support = _native_support(full)
+        if support != full_support:
+            raise ValueError("protected B0/Full exact native support mismatch")
         a0.append({"window_start_s": float(full["window_start_s"]),
                    "availability_s": float(full["availability_s"]), "score": score,
                    "prns": list(map(int, full["prns"])), "epoch_ids": tuple(map(int, full["epoch_ids"])),
                    "epoch_prn_support": full_support,
                    **({"phase": full["phase"]} if "phase" in full else {})})
+    if not a0:
+        raise ValueError("protected A0 has zero usable windows")
     return {**methods, "A0": a0}
+
+
+def validate_protected_method_support(methods, *, required_phases):
+    """Require every mandatory method/phase on Full's exact native support."""
+    expected = ("A0", "A1", "A2", "A3", "A4", "A5", "Full")
+    if set(methods) != set(expected):
+        raise ValueError("protected mandatory method set is incomplete")
+    phases = tuple(required_phases)
+    if not phases or len(phases) != len(set(phases)):
+        raise ValueError("protected mandatory phase set is invalid")
+    supports = {}; counts = {}
+    for method in expected:
+        rows = list(methods[method]); by_phase = {phase: set() for phase in phases}
+        for row in rows:
+            phase = row.get("phase")
+            if phase not in by_phase:
+                raise ValueError(f"{method} emitted an unsupported protected phase")
+            epochs, prns, support = _native_support(row)
+            identity = (float(row["window_start_s"]), float(row["availability_s"]),
+                        epochs, prns, support)
+            if identity in by_phase[phase]:
+                raise ValueError(f"duplicate {method} protected support row")
+            by_phase[phase].add(identity)
+        if any(not by_phase[phase] for phase in phases):
+            raise ValueError(f"{method} silently empty on a mandatory protected phase")
+        supports[method] = by_phase
+        counts[method] = {phase: len(by_phase[phase]) for phase in phases}
+    for method in expected[:-1]:
+        if supports[method] != supports["Full"]:
+            raise ValueError(f"{method}/Full exact native support mismatch")
+    return {"methods": list(expected), "phase_counts": counts}
 
 
 def _load_script(name, path):
@@ -276,8 +367,10 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
     available_scenarios = tuple(sorted(capabilities["available"]))
     for scenario in available_scenarios:
         identity = manifest_identities[scenario]; manifest_path = Path(identity["path"])
+        binding = capabilities["available"][scenario]["manifest_binding"]
         gate.register_pinned(manifest_path, expected_sha256=identity["sha256"], expected_size=identity["size_bytes"],
-                             kind="RECEIVER_MANIFEST")
+                             kind="RECEIVER_MANIFEST", preclaim_dev=binding["dev"],
+                             preclaim_ino=binding["ino"])
         gate.read_json(manifest_path, scenario=scenario, phase="all_frozen_phases",
                        purpose="receiver root manifest identity")
         sidecar = capabilities["available"][scenario]["sidecar"]
@@ -302,6 +395,8 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
         methods = score_protected_b0(tracking_paths=tracking_paths, gate=gate, scenario=scenario,
                                      roles={name: (start, end) for name, start, end in ranges},
                                      methods=methods, thresholds=thresholds, artifact=artifact, repo=repo)
+        validate_protected_method_support(
+            methods, required_phases=tuple(name for name, _start, _end in ranges))
         relation_geometry = GeometryCache(geometry["ephemerides"], geometry["receiver_ecef"], validated_rows)
         for relation_phase, relation_start, relation_end in ranges:
             if relation_phase != "pre_onset_replay" and relation_end - relation_start >= 1.2:
@@ -366,7 +461,9 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
     bootstrap_reports = {}
     for comparator in ("A1", "A2"):
         bootstrap_reports[f"Full-{comparator}"] = paired_block_bootstrap(bootstrap_source, "Full", comparator)
-    relation_reports = {"policy": RELATION_POLICY, "scenario_results": {}}
+    required_relation = sorted(set(available_scenarios) & {"DS3", "DS7", "DS8"})
+    relation_reports = {"policy": RELATION_POLICY, "required_available_scenarios": required_relation,
+                        "scenario_results": {}}
     for scenario, policy in RELATION_POLICY.items():
         if scenario not in available_scenarios:
             disposition = capabilities["unavailable"].get(scenario, {})
@@ -394,6 +491,7 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
             "lcb": report["lcb_95"], "interval_95": report["interval_95"],
             "median_relative_loss": report["median_relative_loss"], "replicates": report["replicates"],
             "contrast": report["contrast"]}
+    validate_mandatory_relation_evidence(relation_reports, required_scenarios=required_relation)
     persistence = {}
     per_scenario_persistence = {}
     for scenario in tuple(name for name in ("DS3", "DS7", "DS8") if name in available_scenarios):
@@ -432,10 +530,12 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
               (row["scenario"], row["phase"], row["availability_s"], tuple(row["prns"])) in support_keys]
     shared = {"full_pauc": paired_pauc("Full"), "a5_pauc": paired_pauc("A5"),
               "full_median_edf": float(np.median(full_edf)), "a5_median_edf": float(np.median(a5_edf))}
+    b0_exact = exact_b0_full_contrast(score_rows, required_scenarios=required_relation)
+
     evidence = {"clean_holdout_fpr": clean_fpr, "clean_contrast_source": clean_contrast_source,
                 "external_pre_fpr": external_fpr,
                 "incremental_lcb": {name: row["lcb_95"] for name, row in bootstrap_reports.items()},
-                "destruction": relation_reports, "persistence": persistence, "controls": control_evidence, "shared": shared}
+                "b0_exact_support": b0_exact, "destruction": relation_reports, "persistence": persistence, "controls": control_evidence, "shared": shared}
     gates = compute_scientific_gates(evidence); verdict = scientific_verdict(gates)
     write_csv(artifact / "ablation_metrics.csv", [{"contrast": row["id"], "status": row["status"]} for row in gates], ["contrast", "status"])
     write_csv(artifact / "external_static_fpr.csv", [{"scenario": "cleanStatic_holdout", "fpr_q99": clean_fpr},

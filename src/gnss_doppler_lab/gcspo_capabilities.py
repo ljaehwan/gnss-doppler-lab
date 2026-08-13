@@ -2,8 +2,11 @@
 from __future__ import annotations
 
 import math
+import os
+from pathlib import Path
 from pathlib import PurePath
 import re
+import stat
 
 
 SCHEMA = "gnss-doppler-lab.gcspo-stage0.capability-sidecar.v1"
@@ -170,6 +173,35 @@ def validate_capability_sidecar(document):
             "field_count": len(fields), "manifest_adapter": root["adapter"]}
 
 
+def precheck_capability_metadata(document):
+    """lstat and bind every declared receiver child before an attempt claim."""
+    root = document["root_manifest"]
+    root_path = Path(root["canonical_path"])
+    root_info = os.lstat(root_path)
+    if stat.S_ISLNK(root_info.st_mode) or not stat.S_ISREG(root_info.st_mode):
+        raise PermissionError("root manifest must be a regular non-symlink file")
+    root_canonical = root_path.resolve(strict=True)
+    if root_canonical != root_path or root_info.st_size != root["size_bytes"]:
+        raise ValueError("root manifest path/size identity mismatch before claim")
+    bound_children = []
+    for child in document["children"]:
+        child_path = Path(child["canonical_path"])
+        child_info = os.lstat(child_path)
+        if stat.S_ISLNK(child_info.st_mode) or not stat.S_ISREG(child_info.st_mode):
+            raise PermissionError("capability child must be a regular non-symlink file")
+        canonical = child_path.resolve(strict=True)
+        if canonical != child_path or root_canonical.parent not in canonical.parents:
+            raise ValueError("capability child escapes canonical manifest root")
+        if child_info.st_size != child["size_bytes"]:
+            raise ValueError("capability child declared size mismatch before claim")
+        bound_children.append({**child, "_preclaim_dev": child_info.st_dev,
+                               "_preclaim_ino": child_info.st_ino})
+    return {
+        "root": {"dev": root_info.st_dev, "ino": root_info.st_ino},
+        "children": bound_children,
+    }
+
+
 def validate_preaccess_capabilities(document):
     """Validate every scenario disposition before any protected claim/read."""
     doc = _mapping(document, "preaccess capability contract")
@@ -206,10 +238,13 @@ def validate_preaccess_capabilities(document):
             result = validate_capability_sidecar(expanded)
             if result.get("status") != "AVAILABLE":
                 raise ValueError(f"{scenario} declared available but sidecar is unavailable")
-            available[scenario] = {"sidecar": expanded, "validation": result,
+            binding = precheck_capability_metadata(expanded)
+            bound_sidecar = {**expanded, "children": binding["children"]}
+            available[scenario] = {"sidecar": bound_sidecar, "validation": result,
                                    "manifest_identity": {"path": expanded["root_manifest"]["canonical_path"],
                                                          "sha256": expanded["root_manifest"]["sha256"],
-                                                         "size_bytes": expanded["root_manifest"]["size_bytes"]}}
+                                                         "size_bytes": expanded["root_manifest"]["size_bytes"]},
+                                   "manifest_binding": binding["root"]}
         elif status in {"LIMITED", "LIMITED_TRANSITION_ONLY", "UNAVAILABLE"}:
             if set(entry) != {"status", "reason"} or not isinstance(entry.get("reason"), str) or not entry["reason"]:
                 raise ValueError(f"{scenario} unavailable capability reason is absent")
