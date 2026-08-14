@@ -189,6 +189,12 @@ def _committed_document(name: str) -> dict:
                 "gcspo-stage0-successor-7be48c4411644ff3a9ec41c7701dfa01")
     document = json.loads((artifact / name).read_text())
     if name == "review_handoff.json":
+        document["red_green"] = {
+            "red": json.loads((artifact / "red_report.json").read_text()),
+            "green": json.loads((artifact / "green_report.json").read_text()),
+        }
+        document["repair_scope"] = (
+            "PYTHON_IMPORT_RESOLUTION_EXACT_DOCUMENT_SCHEMA_AND_CANONICAL_ARTIFACT_ROOT_ONLY")
         document["prior_independent_rejection"] = {
             "wrapper_commit": "078a8c5739c92e877763583ce2ca23dad4f433f9",
             "target_commit": "1bfc3d2b64ad43a9db78081f3abc482bdf5d022f",

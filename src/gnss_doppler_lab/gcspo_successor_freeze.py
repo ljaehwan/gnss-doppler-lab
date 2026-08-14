@@ -626,6 +626,87 @@ def verify_handoff_protected_state(handoff: dict) -> None:
     if "latest_independent_rejection" in record:
         _verify_rejection(record["latest_independent_rejection"],
                           "review handoff latest independent rejection")
+    if record["repair_scope"] != (
+            "PYTHON_IMPORT_RESOLUTION_EXACT_DOCUMENT_SCHEMA_AND_CANONICAL_ARTIFACT_ROOT_ONLY"):
+        raise ValueError("review handoff repair scope value mismatch")
+    if (record["invocation_id"] != INVOCATION_ID or record["nonce"] != INVOCATION_NONCE or
+            record["predecessor_freeze_commit"] != PREDECESSOR_FREEZE_COMMIT or
+            record["invalid_evidence_commit"] != INVALID_EVIDENCE_COMMIT or
+            record["independent_review_command"] != (
+                "python3 scripts/verify_gcspo_successor_freeze.py "
+                "--expected-wrapper-commit ")):
+        raise ValueError("review handoff immutable value contract mismatch")
+    expected_coverage = {
+        "total_rows": 69,
+        "stale_rows_required_and_present": list(STALE_CROSS_GENERATION_PATHS),
+        "later_gcspo_rows_required_and_present": list(LATER_GCSPO_PATHS),
+        "required_direct_internal_dependencies": list(REQUIRED_INTERNAL_DEPENDENCY_PATHS),
+        "internal_import_closure_paths": [
+            "src/gnss_doppler_lab/__init__.py",
+            "src/gnss_doppler_lab/gcmr_geometry.py",
+            "src/gnss_doppler_lab/trajectory.py",
+        ],
+        "missing_rows": 0, "extra_rows": 0,
+    }
+    if record["manifest_coverage"] != expected_coverage:
+        raise ValueError("review handoff manifest coverage value contract mismatch")
+    red = record["red_green"]["red"]
+    expected_red_values = {
+        "schema": "gnss-doppler-lab.gcspo-stage0.successor-blocker-red.v3",
+        "phase": "RED", "baseline_wrapper_commit": SECOND_REJECTED_WRAPPER_COMMIT,
+        "baseline_target_commit": SECOND_REJECTED_TARGET_COMMIT,
+        "independent_review_verdict": "REJECT",
+        "command": ("/home/ubuntu/.venvs/cmte-a2/bin/python -m pytest -q "
+                    "tests/test_gcspo_successor_manifest.py"),
+        "exit_code": 1, "passed": 48, "failed": 15,
+        "reproduced": {
+            "package_init_valid_rejected": 1, "package_init_missing_accepted": 1,
+            "manifest_size_type_mutations_accepted": ["float", "bool"],
+            "handoff_mutations_accepted": 7,
+            "artifact_root_aliases_accepted": [
+                "external_symlink", "traversal", "absolute", "dot_alias"],
+            "total_adversarial_failures": 15,
+            "tamper_classes": ["resolution", "bool-as-int", "float-as-int",
+                "boolean-value-flip", "extra", "missing", "type", "path-alias"],
+        },
+        "protected_access_count": 0, "protected_marker_present": False,
+        "protected_ledger_size_bytes": 0, "push_performed": False,
+    }
+    if red != expected_red_values:
+        raise ValueError("review handoff RED exact value contract mismatch")
+    green = record["red_green"]["green"]
+    expected_commands = {
+        "focused": ("/home/ubuntu/.venvs/cmte-a2/bin/python -m pytest -q "
+                    "tests/test_gcspo_successor_manifest.py", 63, False),
+        "relevant": ("/home/ubuntu/.venvs/cmte-a2/bin/python -m pytest -q "
+                    "tests/test_gcspo_successor_manifest.py tests/test_gcspo_freeze.py "
+                    "tests/test_gcspo_round4_freeze_repairs.py tests/test_gcspo_verifier.py "
+                    "tests/test_gcspo_stage0.py", 141, True),
+        "all_gcspo": ("/home/ubuntu/.venvs/cmte-a2/bin/python -m pytest -q "
+                    "tests/test_gcspo*.py", 337, True),
+    }
+    for key, (command, passed, has_root) in expected_commands.items():
+        expected_result = {"command": command, "passed": passed, "failed": 0, "exit_code": 0}
+        if has_root:
+            expected_result["execution_root"] = (
+                "isolated detached worktree with immutable committed package fixture; "
+                "authoritative invalid root untouched")
+        if green[key] != expected_result:
+            raise ValueError(f"review handoff GREEN {key} exact value contract mismatch")
+    if green["adversarial_rejections"] != {
+            "python_import_cases": 2, "manifest_size_type_mutations": 2,
+            "handoff_recursive_schema_mutations": 7, "artifact_root_aliases": 4,
+            "total_second_review_regressions": 15,
+            "prior_protected_mutation_rejections": 275,
+            "tamper_classes": ["resolution", "bool-as-int", "float-as-int",
+                "boolean-value-flip", "extra", "missing", "type", "path-alias"],
+            "status": "PASS_FAIL_CLOSED"} or green["target_manifest_validation"] != {
+            "implementation_rows": 69,
+            "internal_import_closure_paths": expected_coverage["internal_import_closure_paths"],
+            "required_direct_dependencies_present": list(REQUIRED_INTERNAL_DEPENDENCY_PATHS),
+            "missing": 0, "extra": 0, "status": "PASS"} or green["repair_scope"] != (
+            "PYTHON_IMPORT_RESOLUTION_EXACT_DOCUMENT_SCHEMA_AND_CANONICAL_ARTIFACT_ROOT_ONLY"):
+        raise ValueError("review handoff GREEN exact value contract mismatch")
 
 def build_successor_manifest(repo: str | Path, *, target_commit: str, invocation_id: str,
                              nonce: str, predecessor_freeze_commit: str,
@@ -828,6 +909,13 @@ def verify_successor_freeze(repo: str | Path, artifact_root: str | Path,
             raise ValueError(f"target ancestry mismatch: {ancestor}")
     if _tree_bytes(root, target, CONTROL_RELATIVE) != control_path.read_bytes():
         raise ValueError("control evidence changed after preregistration target")
+    if _tree_bytes(root, SECOND_REJECTED_TARGET_COMMIT, CONTROL_RELATIVE) != control_path.read_bytes():
+        raise ValueError("immutable successor control bytes changed from rejected target")
+    for key, name in (("red", "red_report.json"), ("green", "green_report.json")):
+        target_report = strict_json_bytes(
+            _tree_bytes(root, target, f"{ARTIFACT_RELATIVE}/{name}"), f"target {key} report")
+        if handoff["red_green"][key] != target_report:
+            raise ValueError(f"review handoff {key} report differs from target evidence")
     changes = _run(root, "diff-tree", "--no-commit-id", "--name-only", "-r",
                    expected_wrapper_commit).splitlines()
     if sorted(changes) != sorted([MANIFEST_RELATIVE, HANDOFF_RELATIVE]):
