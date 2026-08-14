@@ -1,0 +1,74 @@
+{
+  "allowed_engineering_repairs": [
+    "replace B0 equals Full key-set precondition with audited exact intersection after frozen B0 warm-up",
+    "preserve all Full standalone rows and scores",
+    "compare B0 versus Full only on exactly matching phase/window/availability/native epoch-PRN support",
+    "if no exact common support mark B0 UNAVAILABLE_ON_COMMON_SUPPORT without copying historical attack performance",
+    "repair control aggregation boolean logic only without changing score or threshold",
+    "artifact packaging and final verdict schema"
+  ],
+  "base_commit": "57271e526e9e346c8d4d7626b006c5a88166f1be",
+  "created_at_utc": "2026-08-14T16:22:31.256859+00:00",
+  "decision_contract": {
+    "GO_FOR_NEURAL_STAGE1_possible": false,
+    "clean_failure_verdict": "NO_GO_FROZEN_STAGE0",
+    "clean_fpr_gate_limit": 0.01,
+    "known_full_q99_fpr": 0.07172995780590717,
+    "physics_evidence_if_incomplete": "INCONCLUSIVE",
+    "primary_failure_reason": "CLEAN_FPR_GATE_FAILURE"
+  },
+  "forbidden": [
+    "nearest-neighbor scientific join",
+    "post-hoc tolerance change",
+    "silent mismatch-row deletion",
+    "threshold/lambda/ridge search",
+    "feature/model/score changes",
+    "copy historical attack performance"
+  ],
+  "invocation": {
+    "id": "gcspo-stage0-r1-frozen-completion-0acca83b5245429b",
+    "nonce": "97109aa102565cb9a5b7c8864ea766c4780b525c1be190dc56129b69f92a1535",
+    "same_invocation_retry": false
+  },
+  "namespace": {
+    "artifact_root": "artifacts/gcspo_stage0_r1_frozen_completion",
+    "ledger_path": "artifacts/gcspo_stage0_r1_frozen_completion/access_ledger.jsonl",
+    "marker_path": "artifacts/gcspo_stage0_r1_frozen_completion/.protected_run_started.json"
+  },
+  "predecessor_failure": {
+    "path": "config/gcspo_successor_failures/gcspo-stage0-successor-launch-77e586dfdb50a008ed2f0b31052e33bb700e191641e7ffbb4845860df15cf48e/failure_metadata.json",
+    "rerun_permitted": false,
+    "sha256": "4c99a88428c92c4d522c04f2a798ce949623e5c68ff364bff8340eb3306e6331"
+  },
+  "scenarios": {
+    "DS4": "TRANSITION_ONLY only if source identity and geometry provenance verify",
+    "DS8": "only if authenticated observables available",
+    "core": [
+      "DS3",
+      "DS7"
+    ]
+  },
+  "schema": "gnss-doppler-lab.gcspo-stage0-r1-frozen-completion.preregistration.v1",
+  "scientific_freeze": {
+    "config_sha256": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad",
+    "hash_manifest": "artifacts/gcspo_stage0_r1_frozen_completion/frozen_science_hashes.json",
+    "no_change_to_equations_features_predictor_whitening_shared_state_bic_dof_scores_lambda_ridge_clean_roles_thresholds_timeline_prn_selection_pooling_labels_b0_controls": true
+  },
+  "status": "PREREGISTERED_BEFORE_IMPLEMENTATION",
+  "support_contract": {
+    "b0_common_support_is_exact_intersection": true,
+    "diagnostic_nearest_time_delta_may_be_reported_but_not_used_for_join": true,
+    "full_standalone_support_preserved": true,
+    "join_keys": [
+      "scenario",
+      "phase",
+      "window_start_s",
+      "availability_s",
+      "epoch_ids",
+      "epoch_prn_support"
+    ],
+    "timestamp_tolerance_s": 0.0,
+    "warmup_context_not_scored": true
+  },
+  "time_budget_hours": 4
+}

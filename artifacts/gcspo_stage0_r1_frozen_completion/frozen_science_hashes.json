@@ -1,0 +1,37 @@
+{
+  "base_commit": "57271e526e9e346c8d4d7626b006c5a88166f1be",
+  "frozen_scientific_code": {
+    "artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
+    "artifacts/ai_morph_gru_cleanStatic_q70_frame/validation_prn_node_scores.csv": "09224edf1e23246ffdd4deadf137982cd69bfa1c0e213fc5e7b6da9dac9b932d",
+    "scripts/eval_btail_support_gate.py": "1bb353101d1a98a8bd6a6feaa72757829669f718f3e2e2d497e64422177c5e10",
+    "scripts/score_texbat_prn_node_gru.py": "433760ea7bde8d9094c84887fa04962846f72690c3a81668f84445fa58f03bd1",
+    "src/gnss_doppler_lab/gcspo_a5.py": "38ce8820b1bbe39ea609a1542f4581896f17619a6416c1f193f4efe9b6d42624",
+    "src/gnss_doppler_lab/gcspo_ablations.py": "e10e243cb33645192624b558569026127d8a85588097fb4fcce8a8f4ea325d2a",
+    "src/gnss_doppler_lab/gcspo_b0.py": "5cadd259271095836f28b312ac3a7bb0ee08f9024c851bf178fb171a899e0503",
+    "src/gnss_doppler_lab/gcspo_clean.py": "64abc04a6e5ea3fb6d476f51e505f54eb9c20894759fe04f2fd49179ccd4a957",
+    "src/gnss_doppler_lab/gcspo_core.py": "18c5878303cabfcf7d25edc4471ce36d9ee6af64361c572ce9707bfabb35a0d8",
+    "src/gnss_doppler_lab/gcspo_full.py": "d1da456933a89204e1bdb01a84db57949376e1c639ebd257e1f7fdd1e30157a5",
+    "src/gnss_doppler_lab/gcspo_protected.py": "5d4e1b3f53bec4e138e3b36f2e226eeac2eb8fe0fa3df6bde57d92b6478b6a0a",
+    "src/gnss_doppler_lab/gcspo_statistics.py": "5f17d6f4113937bbcfe91c6bde3ef1a2087e2672004ca72520f61f4db08ed05b"
+  },
+  "original_preregistration": {
+    "path": "artifacts/gcspo_stage0_successor_launch/gcspo-stage0-successor-launch-77e586dfdb50a008ed2f0b31052e33bb700e191641e7ffbb4845860df15cf48e/preregistration.json",
+    "sha256": "715e11965854f785487e9d2c747718747c1d31cdd8603696ea7af126a45a70da"
+  },
+  "pipeline_baseline_for_scoped_change_audit": {
+    "scripts/run_gcspo_stage0_successor.py": "88fd5a262b5f47c88a0adfed3ed4e9104f3a2a79a66383dc45e8182c247550d8",
+    "src/gnss_doppler_lab/gcspo_evaluate.py": "1c8bfd5e4210e66847159bd536471d727cb64e8771a0b83ec3a2d02d6e50e332",
+    "src/gnss_doppler_lab/gcspo_successor_launch.py": "444d2c0892b0cd735c1aa8d7b342818db34285e68d4de292c20d540fef942d32"
+  },
+  "policy": {
+    "pipeline_changes_allowed_only_for_exact_support_and_control_aggregation": true,
+    "scientific_code_must_remain_byte_identical": true,
+    "thresholds_features_models_lambdas_ridges_timelines_labels_unchanged": true
+  },
+  "recorded_at_utc": "2026-08-14T16:22:31.256859+00:00",
+  "schema": "gnss-doppler-lab.gcspo-stage0-r1-frozen-completion.science-hashes.v1",
+  "scientific_configuration": {
+    "path": "artifacts/gcspo_stage0_successor_launch/gcspo-stage0-successor-launch-77e586dfdb50a008ed2f0b31052e33bb700e191641e7ffbb4845860df15cf48e/config.json",
+    "sha256": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "artifact_root": "artifacts/gcspo_stage0_r1_frozen_completion",
+  "base_commit": "57271e526e9e346c8d4d7626b006c5a88166f1be",
+  "base_ref": "origin/research/gcspo-stage0-exact-support-successor",
+  "base_tip_changed": false,
+  "branch": "research/gcspo-stage0-r1-frozen-completion",
+  "expected_base_commit": "57271e526e9e346c8d4d7626b006c5a88166f1be",
+  "invocation_id": "gcspo-stage0-r1-frozen-completion-0acca83b5245429b",
+  "nonce": "97109aa102565cb9a5b7c8864ea766c4780b525c1be190dc56129b69f92a1535",
+  "original_preregistration_sha256": "715e11965854f785487e9d2c747718747c1d31cdd8603696ea7af126a45a70da",
+  "predecessor_failure_metadata": {
+    "path": "config/gcspo_successor_failures/gcspo-stage0-successor-launch-77e586dfdb50a008ed2f0b31052e33bb700e191641e7ffbb4845860df15cf48e/failure_metadata.json",
+    "rerun_permitted": false,
+    "sha256": "4c99a88428c92c4d522c04f2a798ce949623e5c68ff364bff8340eb3306e6331"
+  },
+  "recorded_at_utc": "2026-08-14T16:22:31.256859+00:00",
+  "schema": "gnss-doppler-lab.gcspo-stage0-r1-frozen-completion.source.v1",
+  "scientific_configuration_sha256": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad"
+}
