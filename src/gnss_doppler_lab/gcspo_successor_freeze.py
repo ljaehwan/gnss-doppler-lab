@@ -268,7 +268,15 @@ def verify_successor_freeze(repo: str | Path, artifact_root: str | Path,
     if observed_names != expected_names:
         raise ValueError("invalid artifact root exact-set contract mismatch")
     expected_old = preservation.get("identities")
-    observed_old = [_file_identity(p) for p in sorted(old.rglob("*")) if p.is_file()]
+    observed_old = []
+    for expected in expected_old if isinstance(expected_old, list) else ():
+        relative = expected.get("path")
+        if not isinstance(relative, str):
+            raise ValueError("invalid artifact root identity row is malformed")
+        path = root / relative
+        payload = path.read_bytes() if path.is_file() and not path.is_symlink() else b""
+        observed_old.append({"path": relative, "sha256": hashlib.sha256(payload).hexdigest(),
+                             "size_bytes": len(payload)})
     if observed_old != expected_old:
         raise ValueError("invalid artifact root identity contract mismatch")
     config = artifact / "config.json"
