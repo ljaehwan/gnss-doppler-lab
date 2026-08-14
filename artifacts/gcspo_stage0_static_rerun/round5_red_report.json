@@ -1,0 +1,36 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.round5-red-report.v1",
+  "phase": "RED",
+  "production_state": "EXACT_REJECTED_ROUND4_WRAPPER",
+  "rejected_commit": "5795133c4cefe4e0aa6363c2b04f03ed739ea847",
+  "test_file": "tests/test_gcspo_round5_witnessed_provenance.py",
+  "test_sha256": "b60c406b5a044de4784ab67a924908e17216b8e2dd92a80ddfa17e211a2a9f46",
+  "junit_file": "artifacts/gcspo_stage0_static_rerun/round5_red_junit.xml",
+  "junit_sha256": "6d5414e65c379d73261d836795c48dcca02f14a332d95bd98be3bedb2113c254",
+  "command": "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_gcspo_round5_witnessed_provenance.py --junitxml=artifacts/gcspo_stage0_static_rerun/round5_red_junit.xml",
+  "exit_code": 1,
+  "counts": {
+    "collected": 21,
+    "passed": 0,
+    "failed": 21
+  },
+  "failure_cause": "The exact rejected production has no externally signed controller-witness verifier and exposes no verify_witnessed_runs entry point.",
+  "required_red_behaviors": {
+    "prepared_signature_precedes_launch": "FAIL",
+    "pinned_external_key_identity_namespace": "FAIL",
+    "canonical_signed_json": "FAIL",
+    "nonce_in_child_argv_and_receipt": "FAIL",
+    "copied_bundle_rejection": "FAIL",
+    "receipt_and_signature_replay_rejection": "FAIL",
+    "completed_signature_follows_exit": "FAIL",
+    "argv_source_backend_output_transcript_binding": "FAIL",
+    "successful_exit_required": "FAIL",
+    "preexisting_output_rejection": "FAIL"
+  },
+  "synthetic_only": true,
+  "ephemeral_private_keys_location": "/tmp/pytest-of-ubuntu",
+  "real_controller_private_key_accessed": false,
+  "protected_payload_rows_opened": 0,
+  "protected_payload_bytes_opened": 0,
+  "attack_authorized": false
+}

@@ -251,12 +251,15 @@ def _synthetic_completed_runs(tmp_path: Path):
 
 
 def test_causal_provenance_and_full_workload_cpu_cuda_parity_pass_synthetic(tmp_path):
-    from gnss_doppler_lab.gcspo_provenance import (compare_full_a5_runs,
-                                                   verify_causal_runs)
+    from gnss_doppler_lab.gcspo_provenance import (compare_full_a5_runs, verify_causal_runs,
+                                                   verify_round4_unsigned_runs)
 
     repo, source_commit, roots = _synthetic_completed_runs(tmp_path)
-    verified = verify_causal_runs(roots, repo_root=repo, source_commit=source_commit,
-                                  challenge_path="challenge.json")
+    with pytest.raises(ValueError, match="Round-4 unsigned.*rejected"):
+        verify_causal_runs(roots, repo_root=repo, source_commit=source_commit,
+                           challenge_path="challenge.json")
+    verified = verify_round4_unsigned_runs(roots, repo_root=repo, source_commit=source_commit,
+                                           challenge_path="challenge.json")
     report = compare_full_a5_runs(verified)
     assert report["status"] == "PASS"
     assert report["same_backend"] == "BYTE_IDENTICAL"

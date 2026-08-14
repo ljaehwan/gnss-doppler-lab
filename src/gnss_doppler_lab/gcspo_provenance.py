@@ -10,8 +10,22 @@ import shutil
 import subprocess
 
 
+WITNESS_IDENTITY = "gcspo-controller-witness"
+WITNESS_NAMESPACE = "gnss-gcspo-controller-witness-v1"
+BOUNDED_TRUST_ASSUMPTION = (
+    "Independence is attested only under the bounded assumption that the external "
+    "Hermes controller private key remains outside the VM and that the controller "
+    "directly launches and observes each exact command; this is not hardware attestation."
+)
+
+
 def _canonical(document):
     return json.dumps(document, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
+
+
+def canonical_json_bytes(document):
+    """The only accepted/signed witness-envelope byte representation."""
+    return _canonical(document) + b"\n"
 
 
 def _identity(path, *, allow_empty=True):
@@ -216,7 +230,7 @@ def _load_completed(path):
     return document
 
 
-def verify_causal_runs(evidence_roots, *, repo_root, source_commit, challenge_path):
+def verify_round4_unsigned_runs(evidence_roots, *, repo_root, source_commit, challenge_path):
     repo = Path(repo_root).resolve(strict=True)
     challenge, relative, challenge_identity, source = _challenge(
         repo, source_commit, challenge_path)
@@ -261,6 +275,12 @@ def verify_causal_runs(evidence_roots, *, repo_root, source_commit, challenge_pa
     if sorted(row["prepared"]["backend"] for row in verified) != ["cpu", "cuda", "cuda"]:
         raise ValueError("provenance backend run count mismatch")
     return {"source_commit": source_commit, "challenge": challenge, "runs": verified}
+
+
+def verify_causal_runs(*_args, **_kwargs):
+    """Round-4 writer-authored records are historical and never accepted."""
+    raise ValueError("provenance Round-4 unsigned writer-authored runs are rejected; "
+                     "externally signed Round-5 witness chains are required")
 
 
 def _walk_numeric(first, second, path=""):
@@ -344,4 +364,12 @@ def compare_full_a5_runs(verified):
             "tolerance": tolerance,
         },
     }
+
+
+
+def verify_witnessed_runs(evidence_roots, *, repo_root, source_commit, challenge_path):
+    """Public signed-only Round-5 acceptance entry point."""
+    from .gcspo_witness import verify_witnessed_runs as implementation
+    return implementation(evidence_roots, repo_root=repo_root,
+                          source_commit=source_commit, challenge_path=challenge_path)
 

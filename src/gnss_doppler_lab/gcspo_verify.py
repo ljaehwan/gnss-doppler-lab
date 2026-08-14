@@ -12,6 +12,7 @@ from .gcspo_verify_artifacts import reconstruct_final_evidence
 from .gcspo_verify_reconstruct import validate_access_ledger, verify_evidence_document
 from .gcspo_artifacts import FROZEN_HASHES, VALID_SCIENCE_REQUIRED, sha256_file, verify_artifact_manifest
 from .gcspo_provenance import compare_full_a5_runs, verify_causal_runs
+from .gcspo_round5_verify import verify_round5_a5
 from .gcspo_freeze import verify_review_candidate_record
 
 METHODS = {"A0", "A1", "A2", "A3", "A4", "A5", "Full"}
@@ -58,7 +59,9 @@ def verify_clean_ready(root: str | Path):
     if not isinstance(observed, (int, float)) or not isinstance(allowed, (int, float)) or observed > allowed:
         raise ValueError("synthetic recovery tolerance mismatch")
     verify_reproduction_manifests(artifact)
-    if (artifact / "round4_a5_provenance.json").is_file():
+    if (artifact / "round5_a5_provenance.json").is_file():
+        verify_round5_a5(artifact)
+    elif (artifact / "round4_a5_provenance.json").is_file():
         verify_round4_a5(artifact)
     candidate = artifact / "implementation_manifest.json"
     if candidate.is_file():

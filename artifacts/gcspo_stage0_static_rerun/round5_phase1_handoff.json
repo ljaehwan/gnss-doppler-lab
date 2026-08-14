@@ -1,0 +1,75 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.round5-phase1-controller-handoff.v1",
+  "state": "READY_FOR_CONTROLLER_WITNESSED_ROUND5_RUNS",
+  "challenge_source_commit": "RESOLVE_AS_GIT_REV_PARSE_HEAD_OF_THE_COMMIT_CONTAINING_THIS_FILE",
+  "challenge_file": "artifacts/gcspo_stage0_static_rerun/a5_round5_challenges.json",
+  "challenge_sha256": "2b76b3c9ec50eb4ed9b922cded6b2ddb878dd307f175e810850590f78c64fc59",
+  "witness_schemas": "artifacts/gcspo_stage0_static_rerun/a5_round5_witness_schemas.json",
+  "public_key": {
+    "path": "config/gnss_gcspo_witness_ed25519.pub",
+    "fingerprint": "SHA256:L+STBb5P7+DDfilvAZUxV2eHGYZGfMQf4aDbXSsNi0c",
+    "identity": "gcspo-controller-witness",
+    "namespace": "gnss-gcspo-controller-witness-v1"
+  },
+  "controller_commands": [
+    [
+      "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+      "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/scripts/run_gcspo_a5_witnessed.py",
+      "--prepared-envelope",
+      "/tmp/gnss-gcspo-round5-controller/round5-cuda-1.prepared.json",
+      "--prepared-signature",
+      "/tmp/gnss-gcspo-round5-controller/round5-cuda-1.prepared.json.sig",
+      "--challenge-file",
+      "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/a5_round5_challenges.json"
+    ],
+    [
+      "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+      "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/scripts/run_gcspo_a5_witnessed.py",
+      "--prepared-envelope",
+      "/tmp/gnss-gcspo-round5-controller/round5-cuda-2.prepared.json",
+      "--prepared-signature",
+      "/tmp/gnss-gcspo-round5-controller/round5-cuda-2.prepared.json.sig",
+      "--challenge-file",
+      "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/a5_round5_challenges.json"
+    ],
+    [
+      "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+      "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/scripts/run_gcspo_a5_witnessed.py",
+      "--prepared-envelope",
+      "/tmp/gnss-gcspo-round5-controller/round5-cpu-1.prepared.json",
+      "--prepared-signature",
+      "/tmp/gnss-gcspo-round5-controller/round5-cpu-1.prepared.json.sig",
+      "--challenge-file",
+      "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/a5_round5_challenges.json"
+    ]
+  ],
+  "fresh_roots": {
+    "round5-cuda-1": {
+      "scratch": "/tmp/gnss-gcspo-round5/round5-cuda-1-scratch",
+      "output": "/tmp/gnss-gcspo-round5/round5-cuda-1-scratch/output",
+      "evidence": "/tmp/gnss-gcspo-round5/round5-cuda-1-evidence"
+    },
+    "round5-cuda-2": {
+      "scratch": "/tmp/gnss-gcspo-round5/round5-cuda-2-scratch",
+      "output": "/tmp/gnss-gcspo-round5/round5-cuda-2-scratch/output",
+      "evidence": "/tmp/gnss-gcspo-round5/round5-cuda-2-evidence"
+    },
+    "round5-cpu-1": {
+      "scratch": "/tmp/gnss-gcspo-round5/round5-cpu-1-scratch",
+      "output": "/tmp/gnss-gcspo-round5/round5-cpu-1-scratch/output",
+      "evidence": "/tmp/gnss-gcspo-round5/round5-cpu-1-evidence"
+    }
+  },
+  "tests": {
+    "red": "21 failed, 0 passed against exact rejected 5795133c4cefe4e0aa6363c2b04f03ed739ea847",
+    "focused_green": "41 passed, 0 failed",
+    "all_gcspo": "202 passed, 0 failed"
+  },
+  "real_witnessed_runs_launched": 0,
+  "controller_signatures_created_in_vm": 0,
+  "protected_access_authorized": false,
+  "protected_payload_rows_opened": 0,
+  "protected_payload_bytes_opened": 0,
+  "attack_run_count": 0,
+  "push_performed": false
+}

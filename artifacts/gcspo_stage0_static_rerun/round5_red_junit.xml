@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="21" skipped="0" tests="21" time="2.123" timestamp="2026-08-14T12:20:07.028591+09:00" hostname="gnss-lab"><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_valid_external_controller_chains_pass" time="0.081"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_valid_external_controller0')
+
+    def test_valid_external_controller_chains_pass(tmp_path):
+        fixture = _make_fixture(tmp_path)
+&gt;       verified = _verify(fixture)
+                   ^^^^^^^^^^^^^^^^
+
+tests/test_gcspo_round5_witnessed_provenance.py:247: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_valid_external_controller0/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_valid_external_controller0/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_prepared_signed_after_observed_process_start_is_rejected" time="0.086"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_prepared_signed_after_obs0')
+
+    def test_prepared_signed_after_observed_process_start_is_rejected(tmp_path):
+        fixture = _make_fixture(tmp_path)
+        root = fixture["roots"][0]
+        completed = json.loads((root / "completed.json").read_text())
+        _mutate_signed(root / "prepared.json", fixture["private"],
+                       lambda doc: doc.update(prepared_signed_utc=completed["observed_process_start_utc"]))
+        _mutate_signed(root / "completed.json", fixture["private"], lambda doc: doc.update(
+            prepared_envelope=_identity(root / "prepared.json"),
+            prepared_signature=_identity(root / "prepared.json.sig")))
+        with pytest.raises(ValueError, match="PREPARED|ordering|late"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:262: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_prepared_signed_after_obs0/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_prepared_signed_after_obs0/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_untrusted_prepared_envelopes_are_rejected[unsigned]" time="0.080"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_untrusted_prepared_envelo0')
+mode = 'unsigned'
+
+    @pytest.mark.parametrize("mode", ["unsigned", "wrong_key", "wrong_namespace", "self_signed"])
+    def test_untrusted_prepared_envelopes_are_rejected(tmp_path, mode):
+        fixture = _make_fixture(tmp_path)
+        root = fixture["roots"][0]
+        signature = root / "prepared.json.sig"
+        if mode == "unsigned":
+            signature.unlink()
+        else:
+            wrong_private, wrong_public, _ = _key(tmp_path, f"wrong-{mode}")
+            signature.unlink()
+            _sign(root / "prepared.json", wrong_private,
+                  "wrong-namespace" if mode == "wrong_namespace" else NAMESPACE)
+            if mode == "self_signed":
+                shutil.copy2(wrong_public, root / "self_authored_controller.pub")
+        with pytest.raises(ValueError, match="signature|controller|namespace|pinned"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:280: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_untrusted_prepared_envelo0/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_untrusted_prepared_envelo0/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_untrusted_prepared_envelopes_are_rejected[wrong_key]" time="0.089"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_untrusted_prepared_envelo1')
+mode = 'wrong_key'
+
+    @pytest.mark.parametrize("mode", ["unsigned", "wrong_key", "wrong_namespace", "self_signed"])
+    def test_untrusted_prepared_envelopes_are_rejected(tmp_path, mode):
+        fixture = _make_fixture(tmp_path)
+        root = fixture["roots"][0]
+        signature = root / "prepared.json.sig"
+        if mode == "unsigned":
+            signature.unlink()
+        else:
+            wrong_private, wrong_public, _ = _key(tmp_path, f"wrong-{mode}")
+            signature.unlink()
+            _sign(root / "prepared.json", wrong_private,
+                  "wrong-namespace" if mode == "wrong_namespace" else NAMESPACE)
+            if mode == "self_signed":
+                shutil.copy2(wrong_public, root / "self_authored_controller.pub")
+        with pytest.raises(ValueError, match="signature|controller|namespace|pinned"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:280: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_untrusted_prepared_envelo1/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_untrusted_prepared_envelo1/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_untrusted_prepared_envelopes_are_rejected[wrong_namespace]" time="0.091"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_untrusted_prepared_envelo2')
+mode = 'wrong_namespace'
+
+    @pytest.mark.parametrize("mode", ["unsigned", "wrong_key", "wrong_namespace", "self_signed"])
+    def test_untrusted_prepared_envelopes_are_rejected(tmp_path, mode):
+        fixture = _make_fixture(tmp_path)
+        root = fixture["roots"][0]
+        signature = root / "prepared.json.sig"
+        if mode == "unsigned":
+            signature.unlink()
+        else:
+            wrong_private, wrong_public, _ = _key(tmp_path, f"wrong-{mode}")
+            signature.unlink()
+            _sign(root / "prepared.json", wrong_private,
+                  "wrong-namespace" if mode == "wrong_namespace" else NAMESPACE)
+            if mode == "self_signed":
+                shutil.copy2(wrong_public, root / "self_authored_controller.pub")
+        with pytest.raises(ValueError, match="signature|controller|namespace|pinned"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:280: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_untrusted_prepared_envelo2/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_untrusted_prepared_envelo2/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_untrusted_prepared_envelopes_are_rejected[self_signed]" time="0.102"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_untrusted_prepared_envelo3')
+mode = 'self_signed'
+
+    @pytest.mark.parametrize("mode", ["unsigned", "wrong_key", "wrong_namespace", "self_signed"])
+    def test_untrusted_prepared_envelopes_are_rejected(tmp_path, mode):
+        fixture = _make_fixture(tmp_path)
+        root = fixture["roots"][0]
+        signature = root / "prepared.json.sig"
+        if mode == "unsigned":
+            signature.unlink()
+        else:
+            wrong_private, wrong_public, _ = _key(tmp_path, f"wrong-{mode}")
+            signature.unlink()
+            _sign(root / "prepared.json", wrong_private,
+                  "wrong-namespace" if mode == "wrong_namespace" else NAMESPACE)
+            if mode == "self_signed":
+                shutil.copy2(wrong_public, root / "self_authored_controller.pub")
+        with pytest.raises(ValueError, match="signature|controller|namespace|pinned"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:280: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_untrusted_prepared_envelo3/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_untrusted_prepared_envelo3/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_noncanonical_or_modified_json_after_signing_is_rejected" time="0.075"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_noncanonical_or_modified_0')
+
+    def test_noncanonical_or_modified_json_after_signing_is_rejected(tmp_path):
+        fixture = _make_fixture(tmp_path)
+        path = fixture["roots"][0] / "prepared.json"
+        path.write_bytes(path.read_bytes() + b" ")
+        with pytest.raises(ValueError, match="canonical|signature"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:288: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_noncanonical_or_modified_0/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_noncanonical_or_modified_0/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_nonce_must_enter_actual_child_invocation_and_receipt[argv]" time="0.109"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_nonce_must_enter_actual_c0')
+location = 'argv'
+
+    @pytest.mark.parametrize("location", ["argv", "receipt"])
+    def test_nonce_must_enter_actual_child_invocation_and_receipt(tmp_path, location):
+        fixture = _make_fixture(tmp_path)
+        root = fixture["roots"][0]
+        if location == "argv":
+            _mutate_signed(root / "prepared.json", fixture["private"],
+                           lambda doc: doc["argv"].remove(doc["nonce"]))
+            _mutate_signed(root / "completed.json", fixture["private"], lambda doc: (
+                doc.update(argv=json.loads((root / "prepared.json").read_text())["argv"],
+                           prepared_envelope=_identity(root / "prepared.json"),
+                           prepared_signature=_identity(root / "prepared.json.sig"))))
+        else:
+            receipt = root / "execution_receipt.json"
+            document = json.loads(receipt.read_text())
+            document.pop("nonce")
+            _write(receipt, document)
+            _mutate_signed(root / "completed.json", fixture["private"],
+                           lambda doc: doc.update(execution_receipt=_identity(receipt)))
+        with pytest.raises(ValueError, match="nonce|argv|receipt"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:310: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_nonce_must_enter_actual_c0/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_nonce_must_enter_actual_c0/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_nonce_must_enter_actual_child_invocation_and_receipt[receipt]" time="0.092"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_nonce_must_enter_actual_c1')
+location = 'receipt'
+
+    @pytest.mark.parametrize("location", ["argv", "receipt"])
+    def test_nonce_must_enter_actual_child_invocation_and_receipt(tmp_path, location):
+        fixture = _make_fixture(tmp_path)
+        root = fixture["roots"][0]
+        if location == "argv":
+            _mutate_signed(root / "prepared.json", fixture["private"],
+                           lambda doc: doc["argv"].remove(doc["nonce"]))
+            _mutate_signed(root / "completed.json", fixture["private"], lambda doc: (
+                doc.update(argv=json.loads((root / "prepared.json").read_text())["argv"],
+                           prepared_envelope=_identity(root / "prepared.json"),
+                           prepared_signature=_identity(root / "prepared.json.sig"))))
+        else:
+            receipt = root / "execution_receipt.json"
+            document = json.loads(receipt.read_text())
+            document.pop("nonce")
+            _write(receipt, document)
+            _mutate_signed(root / "completed.json", fixture["private"],
+                           lambda doc: doc.update(execution_receipt=_identity(receipt)))
+        with pytest.raises(ValueError, match="nonce|argv|receipt"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:310: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_nonce_must_enter_actual_c1/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_nonce_must_enter_actual_c1/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_copied_cuda_bundle_with_invented_signed_metadata_is_rejected" time="0.084"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_copied_cuda_bundle_with_i0')
+
+    def test_copied_cuda_bundle_with_invented_signed_metadata_is_rejected(tmp_path):
+        fixture = _make_fixture(tmp_path)
+        first, second = fixture["roots"][:2]
+        shutil.rmtree(second / "bundle")
+        shutil.copytree(first / "bundle", second / "bundle")
+        completed_path = second / "completed.json"
+        _mutate_signed(completed_path, fixture["private"], lambda doc: doc.update(
+            backend_truth=_identity(second / "bundle/a5_backend_truth.json"),
+            scientific_outputs={name: _identity(second / "bundle" / name) for name in OUTPUT_NAMES}))
+        with pytest.raises(ValueError, match="receipt|output|replay|independ"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:323: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_copied_cuda_bundle_with_i0/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_copied_cuda_bundle_with_i0/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_replayed_receipt_or_signature_is_rejected[execution_receipt.json]" time="0.074"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_replayed_receipt_or_signa0')
+artifact = 'execution_receipt.json'
+
+    @pytest.mark.parametrize("artifact", ["execution_receipt.json", "prepared.json.sig", "completed.json.sig"])
+    def test_replayed_receipt_or_signature_is_rejected(tmp_path, artifact):
+        fixture = _make_fixture(tmp_path)
+        first, second = fixture["roots"][:2]
+        shutil.copy2(first / artifact, second / artifact)
+        with pytest.raises(ValueError, match="signature|receipt|replay|duplicate"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:332: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_replayed_receipt_or_signa0/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_replayed_receipt_or_signa0/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_replayed_receipt_or_signature_is_rejected[prepared.json.sig]" time="0.074"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_replayed_receipt_or_signa1')
+artifact = 'prepared.json.sig'
+
+    @pytest.mark.parametrize("artifact", ["execution_receipt.json", "prepared.json.sig", "completed.json.sig"])
+    def test_replayed_receipt_or_signature_is_rejected(tmp_path, artifact):
+        fixture = _make_fixture(tmp_path)
+        first, second = fixture["roots"][:2]
+        shutil.copy2(first / artifact, second / artifact)
+        with pytest.raises(ValueError, match="signature|receipt|replay|duplicate"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:332: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_replayed_receipt_or_signa1/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_replayed_receipt_or_signa1/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_replayed_receipt_or_signature_is_rejected[completed.json.sig]" time="0.073"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_replayed_receipt_or_signa2')
+artifact = 'completed.json.sig'
+
+    @pytest.mark.parametrize("artifact", ["execution_receipt.json", "prepared.json.sig", "completed.json.sig"])
+    def test_replayed_receipt_or_signature_is_rejected(tmp_path, artifact):
+        fixture = _make_fixture(tmp_path)
+        first, second = fixture["roots"][:2]
+        shutil.copy2(first / artifact, second / artifact)
+        with pytest.raises(ValueError, match="signature|receipt|replay|duplicate"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:332: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_replayed_receipt_or_signa2/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_replayed_receipt_or_signa2/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_completed_signature_predating_process_end_is_rejected" time="0.083"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_completed_signature_preda0')
+
+    def test_completed_signature_predating_process_end_is_rejected(tmp_path):
+        fixture = _make_fixture(tmp_path)
+        path = fixture["roots"][0] / "completed.json"
+        _mutate_signed(path, fixture["private"], lambda doc: doc.update(
+            completed_signed_utc=doc["observed_process_end_utc"]))
+        with pytest.raises(ValueError, match="COMPLETED|ordering|early"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:341: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_completed_signature_preda0/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_completed_signature_preda0/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_signed_chain_mismatches_are_rejected[argv]" time="0.083"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_signed_chain_mismatches_a0')
+field = 'argv'
+
+    @pytest.mark.parametrize("field", ["argv", "source", "backend", "output", "transcript"])
+    def test_signed_chain_mismatches_are_rejected(tmp_path, field):
+        fixture = _make_fixture(tmp_path)
+        root = fixture["roots"][0]
+        path = root / "completed.json"
+        def change(doc):
+            if field == "argv":
+                doc["argv"] = [*doc["argv"], "--invented"]
+            elif field == "source":
+                doc["source_commit"] = "f" * 40
+            elif field == "backend":
+                doc["backend"] = "cpu"
+            elif field == "output":
+                doc["scientific_outputs"]["clean_a5_report.json"]["sha256"] = "0" * 64
+            else:
+                doc["stdout"]["sha256"] = "0" * 64
+        _mutate_signed(path, fixture["private"], change)
+        with pytest.raises(ValueError, match="argv|source|backend|output|transcript|identity|chain"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:362: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_signed_chain_mismatches_a0/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_signed_chain_mismatches_a0/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_signed_chain_mismatches_are_rejected[source]" time="0.083"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_signed_chain_mismatches_a1')
+field = 'source'
+
+    @pytest.mark.parametrize("field", ["argv", "source", "backend", "output", "transcript"])
+    def test_signed_chain_mismatches_are_rejected(tmp_path, field):
+        fixture = _make_fixture(tmp_path)
+        root = fixture["roots"][0]
+        path = root / "completed.json"
+        def change(doc):
+            if field == "argv":
+                doc["argv"] = [*doc["argv"], "--invented"]
+            elif field == "source":
+                doc["source_commit"] = "f" * 40
+            elif field == "backend":
+                doc["backend"] = "cpu"
+            elif field == "output":
+                doc["scientific_outputs"]["clean_a5_report.json"]["sha256"] = "0" * 64
+            else:
+                doc["stdout"]["sha256"] = "0" * 64
+        _mutate_signed(path, fixture["private"], change)
+        with pytest.raises(ValueError, match="argv|source|backend|output|transcript|identity|chain"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:362: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_signed_chain_mismatches_a1/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_signed_chain_mismatches_a1/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_signed_chain_mismatches_are_rejected[backend]" time="0.082"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_signed_chain_mismatches_a2')
+field = 'backend'
+
+    @pytest.mark.parametrize("field", ["argv", "source", "backend", "output", "transcript"])
+    def test_signed_chain_mismatches_are_rejected(tmp_path, field):
+        fixture = _make_fixture(tmp_path)
+        root = fixture["roots"][0]
+        path = root / "completed.json"
+        def change(doc):
+            if field == "argv":
+                doc["argv"] = [*doc["argv"], "--invented"]
+            elif field == "source":
+                doc["source_commit"] = "f" * 40
+            elif field == "backend":
+                doc["backend"] = "cpu"
+            elif field == "output":
+                doc["scientific_outputs"]["clean_a5_report.json"]["sha256"] = "0" * 64
+            else:
+                doc["stdout"]["sha256"] = "0" * 64
+        _mutate_signed(path, fixture["private"], change)
+        with pytest.raises(ValueError, match="argv|source|backend|output|transcript|identity|chain"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:362: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_signed_chain_mismatches_a2/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_signed_chain_mismatches_a2/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_signed_chain_mismatches_are_rejected[output]" time="0.080"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_signed_chain_mismatches_a3')
+field = 'output'
+
+    @pytest.mark.parametrize("field", ["argv", "source", "backend", "output", "transcript"])
+    def test_signed_chain_mismatches_are_rejected(tmp_path, field):
+        fixture = _make_fixture(tmp_path)
+        root = fixture["roots"][0]
+        path = root / "completed.json"
+        def change(doc):
+            if field == "argv":
+                doc["argv"] = [*doc["argv"], "--invented"]
+            elif field == "source":
+                doc["source_commit"] = "f" * 40
+            elif field == "backend":
+                doc["backend"] = "cpu"
+            elif field == "output":
+                doc["scientific_outputs"]["clean_a5_report.json"]["sha256"] = "0" * 64
+            else:
+                doc["stdout"]["sha256"] = "0" * 64
+        _mutate_signed(path, fixture["private"], change)
+        with pytest.raises(ValueError, match="argv|source|backend|output|transcript|identity|chain"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:362: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_signed_chain_mismatches_a3/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_signed_chain_mismatches_a3/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_signed_chain_mismatches_are_rejected[transcript]" time="0.081"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_signed_chain_mismatches_a4')
+field = 'transcript'
+
+    @pytest.mark.parametrize("field", ["argv", "source", "backend", "output", "transcript"])
+    def test_signed_chain_mismatches_are_rejected(tmp_path, field):
+        fixture = _make_fixture(tmp_path)
+        root = fixture["roots"][0]
+        path = root / "completed.json"
+        def change(doc):
+            if field == "argv":
+                doc["argv"] = [*doc["argv"], "--invented"]
+            elif field == "source":
+                doc["source_commit"] = "f" * 40
+            elif field == "backend":
+                doc["backend"] = "cpu"
+            elif field == "output":
+                doc["scientific_outputs"]["clean_a5_report.json"]["sha256"] = "0" * 64
+            else:
+                doc["stdout"]["sha256"] = "0" * 64
+        _mutate_signed(path, fixture["private"], change)
+        with pytest.raises(ValueError, match="argv|source|backend|output|transcript|identity|chain"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:362: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_signed_chain_mismatches_a4/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_signed_chain_mismatches_a4/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_nonzero_exit_is_rejected" time="0.080"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_nonzero_exit_is_rejected0')
+
+    def test_nonzero_exit_is_rejected(tmp_path):
+        fixture = _make_fixture(tmp_path)
+        path = fixture["roots"][0] / "completed.json"
+        _mutate_signed(path, fixture["private"],
+                       lambda doc: doc.update(status="FAILED", observed_exit_code=7))
+        with pytest.raises(ValueError, match="exit|COMPLETED|success"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:371: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_nonzero_exit_is_rejected0/controller'), 'repo': PosixPath(...und5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_nonzero_exit_is_rejected0/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase><testcase classname="tests.test_gcspo_round5_witnessed_provenance" name="test_preexisting_output_assertion_is_rejected" time="0.090"><failure message="ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)">tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_preexisting_output_assert0')
+
+    def test_preexisting_output_assertion_is_rejected(tmp_path):
+        fixture = _make_fixture(tmp_path)
+        root = fixture["roots"][0]
+        _mutate_signed(root / "prepared.json", fixture["private"], lambda doc:
+                       doc["prelaunch_assertions"].update(output_root_absent=False))
+        _mutate_signed(root / "completed.json", fixture["private"], lambda doc: doc.update(
+            prepared_envelope=_identity(root / "prepared.json"),
+            prepared_signature=_identity(root / "prepared.json.sig")))
+        with pytest.raises(ValueError, match="pre-existing|prelaunch|absent"):
+&gt;           _verify(fixture)
+
+tests/test_gcspo_round5_witnessed_provenance.py:383: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fixture = {'private': PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_preexisting_output_assert0/controller'), 'repo': PosixPath...nd5-cuda-2'), PosixPath('/tmp/pytest-of-ubuntu/pytest-39/test_preexisting_output_assert0/evidence-round5-cpu-1')], ...}
+
+    def _verify(fixture):
+&gt;       from gnss_doppler_lab.gcspo_provenance import verify_witnessed_runs
+E       ImportError: cannot import name 'verify_witnessed_runs' from 'gnss_doppler_lab.gcspo_provenance' (/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/src/gnss_doppler_lab/gcspo_provenance.py)
+
+tests/test_gcspo_round5_witnessed_provenance.py:232: ImportError</failure></testcase></testsuite></testsuites>
