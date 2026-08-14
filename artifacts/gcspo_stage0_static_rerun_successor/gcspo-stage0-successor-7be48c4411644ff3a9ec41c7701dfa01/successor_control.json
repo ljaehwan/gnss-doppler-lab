@@ -1,0 +1,131 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.successor-invocation-control.v1",
+  "state": "IMMUTABLY_PREREGISTERED_MANIFEST_REPAIR_ONLY",
+  "commit_binding": "COMMIT_CONTAINING_THIS_DOCUMENT",
+  "invocation": {
+    "invocation_id": "gcspo-stage0-successor-7be48c4411644ff3a9ec41c7701dfa01",
+    "nonce": "c8b66154edba6ce2fc2418d97186a1c452ab8a3ac68afb8f040eedd25c6d23c3",
+    "same_invocation_retry": false,
+    "new_identity_required": true
+  },
+  "ancestry": {
+    "approved_predecessor_freeze_commit": "0ab94567938234ca925f0bb8fbaece41e7d5e4a3",
+    "failed_invocation_evidence_commit": "58943724ea278b754d388ec2dca0f3666ed6c8a2",
+    "failed_invocation_archive": "/tmp/gcspo-stage0-static-rerun-invalid-0ab9456/",
+    "failed_target_commit": "0ab94567938234ca925f0bb8fbaece41e7d5e4a3"
+  },
+  "repair_scope": {
+    "only": "deterministic regeneration and strict verification of the cross-generation implementation manifest against an approved successor target Git tree",
+    "required_detection": [
+      "stale_row",
+      "missing_row",
+      "extra_row",
+      "hash_mismatch",
+      "size_mismatch",
+      "post_target_source_change",
+      "working_tree_shadow",
+      "wrapper_parent_mismatch"
+    ],
+    "forbidden_changes": [
+      "baseline_or_scientific_code",
+      "config",
+      "preregistration",
+      "thresholds",
+      "scoring",
+      "gates",
+      "tolerances",
+      "clean_scientific_outputs",
+      "signed_evidence_bytes"
+    ]
+  },
+  "frozen_inputs": {
+    "config_sha256": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad",
+    "preregistration_sha256": "715e11965854f785487e9d2c747718747c1d31cdd8603696ea7af126a45a70da"
+  },
+  "failed_invocation_preservation": {
+    "artifact_root": "artifacts/gcspo_stage0_static_rerun",
+    "exact_regular_file_set": [
+      "README.md",
+      "access_ledger.jsonl",
+      "artifact_manifest_sha256.json",
+      "config.json",
+      "data_inventory.json",
+      "invalid_run.json",
+      "preregistration.json",
+      "source_commit.json"
+    ],
+    "identities": [
+      {
+        "path": "artifacts/gcspo_stage0_static_rerun/README.md",
+        "sha256": "eea2e10885d66bfc762f33b2e25147ab07b1bbceace505078e8770e4cdc18ac2",
+        "size_bytes": 4446
+      },
+      {
+        "path": "artifacts/gcspo_stage0_static_rerun/access_ledger.jsonl",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      {
+        "path": "artifacts/gcspo_stage0_static_rerun/artifact_manifest_sha256.json",
+        "sha256": "2db770abe734875200df668bd88523c0c55c2a2d7bbe66baee0ecd215252ada3",
+        "size_bytes": 1177
+      },
+      {
+        "path": "artifacts/gcspo_stage0_static_rerun/config.json",
+        "sha256": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad",
+        "size_bytes": 37865
+      },
+      {
+        "path": "artifacts/gcspo_stage0_static_rerun/data_inventory.json",
+        "sha256": "e9ea155af1d98820e3556c6214abe541ca511dd53ecc978c1afc6351a161e22e",
+        "size_bytes": 26970
+      },
+      {
+        "path": "artifacts/gcspo_stage0_static_rerun/invalid_run.json",
+        "sha256": "658784baae959bd5c53c6e1c97c0f12f9c3c86c4970e6eae5d6f9ebe33ce61ef",
+        "size_bytes": 579
+      },
+      {
+        "path": "artifacts/gcspo_stage0_static_rerun/preregistration.json",
+        "sha256": "715e11965854f785487e9d2c747718747c1d31cdd8603696ea7af126a45a70da",
+        "size_bytes": 48524
+      },
+      {
+        "path": "artifacts/gcspo_stage0_static_rerun/source_commit.json",
+        "sha256": "34a0eab36e4cbf6b16cf0a7075bc3c8a61008c34b9962cf584e04d4fa9f80b72",
+        "size_bytes": 6001
+      }
+    ],
+    "overwrite_forbidden": true
+  },
+  "prior_protected_state": {
+    "protected_access_count": 0,
+    "protected_rows_opened": 0,
+    "protected_bytes_opened": 0,
+    "marker_path": "artifacts/.gcspo_stage0_static_rerun.protected_run_started.json",
+    "marker_present": false,
+    "ledger_path": "artifacts/gcspo_stage0_static_rerun/access_ledger.jsonl",
+    "ledger_present": true,
+    "ledger_size_bytes": 0,
+    "final_verdict_present": false
+  },
+  "successor_namespace": {
+    "artifact_root": "artifacts/gcspo_stage0_static_rerun_successor/gcspo-stage0-successor-7be48c4411644ff3a9ec41c7701dfa01",
+    "marker_path": "artifacts/gcspo_stage0_static_rerun_successor/.gcspo-stage0-successor-7be48c4411644ff3a9ec41c7701dfa01.protected_run_started.json",
+    "marker_present": false,
+    "ledger_path": "artifacts/gcspo_stage0_static_rerun_successor/gcspo-stage0-successor-7be48c4411644ff3a9ec41c7701dfa01/access_ledger.jsonl",
+    "ledger_size_bytes": 0,
+    "protected_access_authorized": false
+  },
+  "commit_topology": {
+    "successor_target": "future approved target commit containing verifier implementation and tests",
+    "freeze_wrapper": "immediate child of successor target containing implementation_manifest.json and review handoff",
+    "self_reference_rule": "target SHA is literal only in wrapper; wrapper-bound documents use COMMIT_CONTAINING_THIS_DOCUMENT"
+  },
+  "prohibitions": {
+    "protected_evaluation": true,
+    "protected_entrypoint": true,
+    "private_signing_key_search": true,
+    "push": true
+  }
+}
