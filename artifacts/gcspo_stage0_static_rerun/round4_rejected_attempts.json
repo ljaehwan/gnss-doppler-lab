@@ -1,0 +1,15 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.round4-rejected-attempts.v1",
+  "protected_payload_rows_opened": 0,
+  "protected_payload_bytes_opened": 0,
+  "attempts": [
+    {"id": "round4-cuda-1", "source_commit": "e32f3ab09a10deabc41253b1efe937c1e288e466", "disposition": "PREPARED_ONLY_CUDA_UNAVAILABLE_AFTER_FORK"},
+    {"id": "round4b-cuda-1", "source_commit": "e9155c1ef05bcf6cacc4df8ea671cce05567b666", "disposition": "PREPARED_ONLY_CUDA_LATE_INITIALIZATION"},
+    {"id": "round4c-cuda-1", "source_commit": "0d4aa32df11a2c196c8c7320ba38fe19b5f89b77", "disposition": "PREPARED_ONLY_VENV_SYMLINK_RESOLVED"},
+    {"id": "round4d", "source_commit": "59097c5805854518e6b8e35f2f015d56aee7e5da", "disposition": "THREE_RUNS_REJECTED_ORIGINAL_TOLERANCE"},
+    {"id": "round4e", "source_commit": "66a50d0f721dc4fcabb785e5e316b2bd2bc9a7a1", "disposition": "THREE_RUNS_CLEAN_PARITY_PILOT_REJECTED_ORIGINAL_TOLERANCE"},
+    {"id": "round4f", "source_commit": "8106e0ac967addd27f2b1024407f113cb57c3678", "disposition": "THREE_RUNS_REJECTED_VERIFIER_BACKEND_LABEL_ORDER"},
+    {"id": "round4g", "source_commit": "d0d97c61f7afa5095262fa6f0f6ee4dc6a6e5635", "disposition": "ACCEPTED_FINAL_CAUSAL_PARITY_EVIDENCE"}
+  ]
+}
+

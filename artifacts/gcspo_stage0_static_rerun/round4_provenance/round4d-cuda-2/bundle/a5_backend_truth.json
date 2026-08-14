@@ -1,0 +1,9 @@
+{
+  "cuda_available": true,
+  "cuda_version": "13.0",
+  "device": "NVIDIA RTX A6000",
+  "requested": "cuda",
+  "resolved": "cuda",
+  "schema": "gnss-doppler-lab.gcspo-stage0.a5-backend-truth.v1",
+  "torch_version": "2.13.0+cu130"
+}
