@@ -1,0 +1,410 @@
+{
+  "access_gate_identity": "COMMIT_CONTAINING_THIS_DOCUMENT",
+  "clean_bundle_manifest_sha256": "961a753ebf7eae085fe5162cc7d038cc20c294ce230bfd01854bea9951eefe80",
+  "control_path": "config/gcspo_successor_launch/gcspo-stage0-successor-launch-77e586dfdb50a008ed2f0b31052e33bb700e191641e7ffbb4845860df15cf48e/launch_control.json",
+  "invocation_id": "gcspo-stage0-successor-launch-77e586dfdb50a008ed2f0b31052e33bb700e191641e7ffbb4845860df15cf48e",
+  "nonce": "023a99334eaf7c08d8f74a14fda7da363e77d0c54b605582e9a976437ce623a3",
+  "receipt_path": "config/gcspo_successor_launch/gcspo-stage0-successor-launch-77e586dfdb50a008ed2f0b31052e33bb700e191641e7ffbb4845860df15cf48e/independent_review_receipt.json",
+  "runtime_files": [
+    {
+      "path": "artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt",
+      "sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
+      "size_bytes": 545490
+    },
+    {
+      "path": "artifacts/ai_morph_gru_cleanStatic_q70_frame/validation_prn_node_scores.csv",
+      "sha256": "09224edf1e23246ffdd4deadf137982cd69bfa1c0e213fc5e7b6da9dac9b932d",
+      "size_bytes": 39867
+    },
+    {
+      "path": "config/gnss_gcspo_witness_ed25519.pub",
+      "sha256": "65e682ac56f3e248937595b27572fa3acf6e54fdb77d268cd9004b5dd8946d9c",
+      "size_bytes": 106
+    },
+    {
+      "path": "scripts/build_gcspo_round8_package.py",
+      "sha256": "e490cda23d8258513711116cecff562b89bff60d602a4a99a81ff4199bcc4392",
+      "size_bytes": 12504
+    },
+    {
+      "path": "scripts/build_gcspo_successor_freeze.py",
+      "sha256": "b8f0286963885ca01574ee46df5a2023c6ebb7f12d0dc6cb83b592afa7dd440b",
+      "size_bytes": 6390
+    },
+    {
+      "path": "scripts/eval_btail_support_gate.py",
+      "sha256": "1bb353101d1a98a8bd6a6feaa72757829669f718f3e2e2d497e64422177c5e10",
+      "size_bytes": 14093
+    },
+    {
+      "path": "scripts/finalize_gcspo_clean.py",
+      "sha256": "5ded831041e8e0eb38282729d849afa22b37f6c22b2cd8ac1646068e98135416",
+      "size_bytes": 2031
+    },
+    {
+      "path": "scripts/finalize_gcspo_successor_authorization.py",
+      "sha256": "054f4b25a6bac293cbbcff4d6bb71d68fbf7fe1279f5797a80029f6a2abee5cb",
+      "size_bytes": 2269
+    },
+    {
+      "path": "scripts/run_gcspo_a5_causal.py",
+      "sha256": "8377f7e18f1b63f30627b9c13132ffd0afe085773ce02c6057f261aa686460a7",
+      "size_bytes": 3891
+    },
+    {
+      "path": "scripts/run_gcspo_a5_witnessed.py",
+      "sha256": "8923b3a682529d9d42beb16a33402e285a780d3a8114dab13d86079f255e9e0b",
+      "size_bytes": 7617
+    },
+    {
+      "path": "scripts/run_gcspo_clean_a5.py",
+      "sha256": "b2a8b240ebad269d8564443f17a15f553227f20d30de31529a7c30ce79b52992",
+      "size_bytes": 10578
+    },
+    {
+      "path": "scripts/run_gcspo_clean_ablations.py",
+      "sha256": "9b5fa14d0757845455cca8d8eb417c4f0eefd020c39fd59e2da35136759d09a0",
+      "size_bytes": 4454
+    },
+    {
+      "path": "scripts/run_gcspo_clean_b0.py",
+      "sha256": "1697adda70f260514cffec9053eb21c144c2e62937f9461e1406eb1839418f49",
+      "size_bytes": 5681
+    },
+    {
+      "path": "scripts/run_gcspo_stage0.py",
+      "sha256": "afb4dc885d9db7697ca00e290216b3a05d3e746da21ad3611dc54b2b4c48500c",
+      "size_bytes": 15271
+    },
+    {
+      "path": "scripts/run_gcspo_stage0_successor.py",
+      "sha256": "88fd5a262b5f47c88a0adfed3ed4e9104f3a2a79a66383dc45e8182c247550d8",
+      "size_bytes": 6442
+    },
+    {
+      "path": "scripts/score_texbat_prn_node_gru.py",
+      "sha256": "433760ea7bde8d9094c84887fa04962846f72690c3a81668f84445fa58f03bd1",
+      "size_bytes": 17814
+    },
+    {
+      "path": "scripts/train_prn_node_gru.py",
+      "sha256": "b1bbfe29dfaa2116d63f4b0a3914c1fc68642543bc4c727ac15e00b601d67727",
+      "size_bytes": 10846
+    },
+    {
+      "path": "scripts/verify_gcspo_fresh_clone.py",
+      "sha256": "df59862297b7e5490be9d3c0ec84d97f4ccf55b71f4d6974c45bc3c3f70237e0",
+      "size_bytes": 3944
+    },
+    {
+      "path": "scripts/verify_gcspo_round6_freeze.py",
+      "sha256": "6de909a057c8717affd8980c65efd6dbc984270ab48c47598f65de2639c0c374",
+      "size_bytes": 887
+    },
+    {
+      "path": "scripts/verify_gcspo_round8_freeze.py",
+      "sha256": "825afa98f7403750a969b11e8c7733b83d93e608f7991e81aba23fab361fdb6f",
+      "size_bytes": 873
+    },
+    {
+      "path": "scripts/verify_gcspo_stage0.py",
+      "sha256": "8031e2a56d0a7d30bd3ba618d3f541ff2121ddaa5819000e7a0918f9ff38c213",
+      "size_bytes": 2406
+    },
+    {
+      "path": "scripts/verify_gcspo_successor_freeze.py",
+      "sha256": "c23fc3c63121039c99310ce20e7aa5b7a2453e0c158f9955ace40fd557e9437e",
+      "size_bytes": 709
+    },
+    {
+      "path": "scripts/verify_gcspo_successor_launch.py",
+      "sha256": "e7827ee8e5f0a22fc3a058b7c871557420c0c3f7eab15335589ef5de77aba076",
+      "size_bytes": 879
+    },
+    {
+      "path": "src/gnss_doppler_lab/__init__.py",
+      "sha256": "a492870425f669f9b6bc02087ac7257e3951fe6a2d9e4da4ed475b6156adf65b",
+      "size_bytes": 32
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcmr_geometry.py",
+      "sha256": "781b66b8c485f4a656da3ed4ce82726f47f47a94cc4ea702eeab727708208921",
+      "size_bytes": 18698
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo.py",
+      "sha256": "ff553489d69b8ee8a4f362434777d0e3465bf8b6384c14aa169b2abe54656b55",
+      "size_bytes": 65
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_a5.py",
+      "sha256": "38ce8820b1bbe39ea609a1542f4581896f17619a6416c1f193f4efe9b6d42624",
+      "size_bytes": 11328
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_ablations.py",
+      "sha256": "e10e243cb33645192624b558569026127d8a85588097fb4fcce8a8f4ea325d2a",
+      "size_bytes": 4519
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_access.py",
+      "sha256": "119148a85d1386944828ae5c2c0ebd60f6c3209e79ed73143a3b8dbd7476f3fa",
+      "size_bytes": 20246
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_artifacts.py",
+      "sha256": "0e13b49ddbbe112c0b75908ca2a94507c746e88ee74c02896a179ab4c1fe8935",
+      "size_bytes": 13719
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_b0.py",
+      "sha256": "5cadd259271095836f28b312ac3a7bb0ee08f9024c851bf178fb171a899e0503",
+      "size_bytes": 8885
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_capabilities.py",
+      "sha256": "8f5df04b4f229e4eadef73d560b68cf392b2cc62e0a30bd27a4c3394fbb42e5f",
+      "size_bytes": 14421
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_clean.py",
+      "sha256": "64abc04a6e5ea3fb6d476f51e505f54eb9c20894759fe04f2fd49179ccd4a957",
+      "size_bytes": 12256
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_clean_controls.py",
+      "sha256": "6eab1e8d90b23f256671ac4eb354d159cfa499ff718044152f2df848e74fa50a",
+      "size_bytes": 7851
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_control_grid.py",
+      "sha256": "41b68e24eb2f2de86bea6557fe0e16add4deb24a0420a81958129abeb86cfafb",
+      "size_bytes": 3895
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_controls.py",
+      "sha256": "3a387b5709a5c7fa6f44f8decf37b7869ad91f8201c572399965ad2da67dd8bd",
+      "size_bytes": 9960
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_core.py",
+      "sha256": "18c5878303cabfcf7d25edc4471ce36d9ee6af64361c572ce9707bfabb35a0d8",
+      "size_bytes": 21045
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_ephemeris.py",
+      "sha256": "cf0119fdf69beb15d2c168ee5525e70b4dd6a84ffd551a270c585966f2ab65a8",
+      "size_bytes": 2569
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_evaluate.py",
+      "sha256": "1c8bfd5e4210e66847159bd536471d727cb64e8771a0b83ec3a2d02d6e50e332",
+      "size_bytes": 38314
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_freeze.py",
+      "sha256": "2c1a9f8001a8fa9ec0226abbc28e1cfb010f5ae87533a660619db7aa1e5fc965",
+      "size_bytes": 14585
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_fresh_clone.py",
+      "sha256": "dc6f75ed0b06777570848364477d137f14c88a71cb1c19dbaf0e3b9f025cdc68",
+      "size_bytes": 1020
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_full.py",
+      "sha256": "d1da456933a89204e1bdb01a84db57949376e1c639ebd257e1f7fdd1e30157a5",
+      "size_bytes": 15760
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_protected.py",
+      "sha256": "5d4e1b3f53bec4e138e3b36f2e226eeac2eb8fe0fa3df6bde57d92b6478b6a0a",
+      "size_bytes": 6952
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_provenance.py",
+      "sha256": "cff569e660937b8b03929523683dfb9f3e0cc209af4be2bfea3fce81b89c6b57",
+      "size_bytes": 18878
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_round5_verify.py",
+      "sha256": "363cc8d9f05b9ba8d85d0b2dcec7a6ab6124d89bb968566479295f84faf751d6",
+      "size_bytes": 1862
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_round6_verify.py",
+      "sha256": "9e1381226df9f5e402ca5aa8bcdbef68a633d3538c11cb85337288681eba9a08",
+      "size_bytes": 24368
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_round8_verify.py",
+      "sha256": "7c24a3182f25edb07fbc5779d0a8073dc592999510ce2e6b76bcc8422fc2e943",
+      "size_bytes": 10817
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_statistics.py",
+      "sha256": "5f17d6f4113937bbcfe91c6bde3ef1a2087e2672004ca72520f61f4db08ed05b",
+      "size_bytes": 20310
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_successor_freeze.py",
+      "sha256": "3b54b34ae0c1b6365745b0fd38f89cd36a6b8fd06baac5da5d671a79b680662a",
+      "size_bytes": 54397
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_successor_launch.py",
+      "sha256": "444d2c0892b0cd735c1aa8d7b342818db34285e68d4de292c20d540fef942d32",
+      "size_bytes": 38770
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_transfer.py",
+      "sha256": "9f629aa4c04489b59d9f50bc49615f406ea7c4ff192c718db4d48849380817de",
+      "size_bytes": 10419
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_verify.py",
+      "sha256": "2d37a7504c7703bd70d06db566d4f1d43596238a87e0eb106c3d4ed55cb9c884",
+      "size_bytes": 16857
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_verify_artifacts.py",
+      "sha256": "77844c98614cb9301e20e97e4961b3dc7c73284332f9eb47944f3d0bc601ec8e",
+      "size_bytes": 11325
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_verify_reconstruct.py",
+      "sha256": "f5ed8f296562257b74a2fc1160c5c8deb3ca5c2dbae7b9bc030c2668a8c8e59e",
+      "size_bytes": 6685
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcspo_witness.py",
+      "sha256": "1b081b85562d62f20ccb7862db96bc68af6d741887177d7232a2e262d4e4aee2",
+      "size_bytes": 26209
+    },
+    {
+      "path": "src/gnss_doppler_lab/trajectory.py",
+      "sha256": "c95fdd8fb513d3d800c8ace3a433063673f26eddc20315e229d234d28267227b",
+      "size_bytes": 12723
+    },
+    {
+      "path": "tests/test_gcspo_access.py",
+      "sha256": "2d94e8e2c5f65b0ed614503ad5c84034b2eba5915d43598b31688ae8a7a6c2b1",
+      "size_bytes": 5798
+    },
+    {
+      "path": "tests/test_gcspo_b0.py",
+      "sha256": "609620119cfdd1900e25b9280d4937a05f82a32c5957bb84652209a85add6360",
+      "size_bytes": 5121
+    },
+    {
+      "path": "tests/test_gcspo_clean_contrast.py",
+      "sha256": "03ab221122908f2470d7a761cc8f8a93645d035331a9cc9039e11658835729ec",
+      "size_bytes": 4502
+    },
+    {
+      "path": "tests/test_gcspo_controls.py",
+      "sha256": "7401cca57e5277bdc9eb8330b108c37bf640bcaf45757e81765269fc6c1f680d",
+      "size_bytes": 7071
+    },
+    {
+      "path": "tests/test_gcspo_evaluator.py",
+      "sha256": "faef9928dbfccf49052c2f2ea8da73305ece417371abc541a82c806f218958c7",
+      "size_bytes": 12354
+    },
+    {
+      "path": "tests/test_gcspo_freeze.py",
+      "sha256": "17949dac862c1767b43d4e11cf9270ef9de1405994697d9cc93b04a19846a8bb",
+      "size_bytes": 5256
+    },
+    {
+      "path": "tests/test_gcspo_identity.py",
+      "sha256": "c06b66bbff7a3c7c68ce1ff17c37771a5199fed9fd1159c106087db8ef415b6b",
+      "size_bytes": 2568
+    },
+    {
+      "path": "tests/test_gcspo_independent_review_repairs.py",
+      "sha256": "a8df4f20e0af209c3152d184cd853401d120972e2fc47fa3f337b4ee9c63f9d9",
+      "size_bytes": 12024
+    },
+    {
+      "path": "tests/test_gcspo_prefreeze_repairs.py",
+      "sha256": "27f6b6f552f8291fd9a347f9ee9f70ab17c15c8eede9ef82b3cfc6e91582e7a6",
+      "size_bytes": 11745
+    },
+    {
+      "path": "tests/test_gcspo_protected.py",
+      "sha256": "35f7d91352d7346c3bbcff29506ba1990d94683fc816af56e99fd977ccda3430",
+      "size_bytes": 5525
+    },
+    {
+      "path": "tests/test_gcspo_round3_freeze_repairs.py",
+      "sha256": "00a0652d9a4ce8ef4e34754b764f66691b77757d84a3c8c6a4baaa22da996345",
+      "size_bytes": 15921
+    },
+    {
+      "path": "tests/test_gcspo_round4_freeze_repairs.py",
+      "sha256": "591218290ca8850804d983863e2f7309ae0479e081a011a3576531ba3c51efa0",
+      "size_bytes": 15363
+    },
+    {
+      "path": "tests/test_gcspo_round4_run_repair.py",
+      "sha256": "959980caa52296b6a12c5d31fbd06c7f03ed4d05d960b8f370d509b2f4ff3e8e",
+      "size_bytes": 3291
+    },
+    {
+      "path": "tests/test_gcspo_round5_child_receipt.py",
+      "sha256": "8b178a46d4749089e4e00097a87bc1c3265fdb5172d391d8fd37a89d8ac136bc",
+      "size_bytes": 5980
+    },
+    {
+      "path": "tests/test_gcspo_round5_witnessed_provenance.py",
+      "sha256": "f03923cefce7075bd93d923a5b514fb4de26ee6107b9fd073f8a2f1b75f515d2",
+      "size_bytes": 19730
+    },
+    {
+      "path": "tests/test_gcspo_round6_phase2.py",
+      "sha256": "dd8b801661fe9f3fc998dcc108e9a0a70a7176cf6d73b3a8ca7b8a72f5b25345",
+      "size_bytes": 5608
+    },
+    {
+      "path": "tests/test_gcspo_round6_successor.py",
+      "sha256": "6750cb47260e98a7de2eabcfe07ab9d98bd440d1ca9b601adfd183f779ce57e7",
+      "size_bytes": 4067
+    },
+    {
+      "path": "tests/test_gcspo_round8_repairs.py",
+      "sha256": "543d4253335588838975beab5ba5803f2acea8df696301a9e5a9271ec6c36b87",
+      "size_bytes": 13040
+    },
+    {
+      "path": "tests/test_gcspo_stage0.py",
+      "sha256": "92ab0e2bad11499843ac620f347b177e67d1a54a70d68fae5db15f1e0742a9a0",
+      "size_bytes": 24627
+    },
+    {
+      "path": "tests/test_gcspo_successor_launch.py",
+      "sha256": "6c347d481d0f64d1df3f96ff3aedfd5b84da314a40b8bf05f66458ac4a51c294",
+      "size_bytes": 16850
+    },
+    {
+      "path": "tests/test_gcspo_successor_manifest.py",
+      "sha256": "fa950f185468f2cf33bb3a10e3b860af0c25d6e552ba2bb8c284f24f04734bbd",
+      "size_bytes": 24681
+    },
+    {
+      "path": "tests/test_gcspo_transfer.py",
+      "sha256": "8cd9be0a6eff8d3014c8e57928de4169c3d6822263cdfebe11c5032de46cf6b7",
+      "size_bytes": 5342
+    },
+    {
+      "path": "tests/test_gcspo_verifier.py",
+      "sha256": "c58691ee2de8cbb5cdd1823634e88cc79313235bfa5ca15e7452b5875a6c61be",
+      "size_bytes": 11977
+    }
+  ],
+  "runtime_manifest_sha256": "142472e0c8011b8b835e4592290db64b82dfd10487547de4d92e3f84efb2fe3a",
+  "schema": "gnss-doppler-lab.gcspo-stage0.successor-execution-freeze.v1",
+  "state": "VALID_FOR_PROTECTED_ACCESS",
+  "target_commit": "83743af6657a677ce8568744b4b0cdab94f89837",
+  "wrapper_commit_binding": "COMMIT_CONTAINING_THIS_DOCUMENT"
+}

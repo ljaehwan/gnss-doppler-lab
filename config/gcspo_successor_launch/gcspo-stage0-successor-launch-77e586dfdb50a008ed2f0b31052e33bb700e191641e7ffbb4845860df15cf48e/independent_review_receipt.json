@@ -1,0 +1,14 @@
+{
+  "evidence": {
+    "command": "independent-read-only-review target=83743af6657a677ce8568744b4b0cdab94f89837",
+    "findings": [],
+    "passed": 1,
+    "sha256": "82f1366a66f44fab14a1d729d8e5fe6f57e260ed34cdb02fec3aa84aa5e2e885"
+  },
+  "invocation_id": "gcspo-stage0-successor-launch-77e586dfdb50a008ed2f0b31052e33bb700e191641e7ffbb4845860df15cf48e",
+  "nonce": "023a99334eaf7c08d8f74a14fda7da363e77d0c54b605582e9a976437ce623a3",
+  "reviewer": "independent-gpt-5.6-sol",
+  "schema": "gnss-doppler-lab.gcspo-stage0.successor-independent-review-receipt.v1",
+  "state": "APPROVED",
+  "target_commit": "83743af6657a677ce8568744b4b0cdab94f89837"
+}
