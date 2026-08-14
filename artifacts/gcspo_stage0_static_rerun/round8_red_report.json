@@ -1,0 +1,40 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.round8-repair-red-evidence.v1",
+  "status": "EXPECTED_RED_CONFIRMED",
+  "exact_rejected_head": "b54383b799f47fd1a849126d3f21fe6c643eb209",
+  "production_files_modified_before_red": false,
+  "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/pytest -q -p no:cacheprovider tests/test_gcspo_round8_repairs.py --junitxml=/tmp/gcspo-round8-red.xml",
+  "result": {
+    "passed": 0,
+    "failed": 28,
+    "duration_seconds": 47.33
+  },
+  "runtime_evidence": {
+    "junit": {
+      "path": "/tmp/gcspo-round8-red.xml",
+      "sha256": "4a8c8eb9437e8d56c6e7664b953e88d27e6457a6266026629ebf3a2100d23cb4",
+      "size_bytes": 35435
+    },
+    "console": {
+      "path": "/tmp/gcspo-round8-red.txt",
+      "sha256": "40f059136ec0adaca948d71d83284c6d5d60f34e5f69282e9940c29e0bd316c5",
+      "size_bytes": 34163
+    }
+  },
+  "coverage": {
+    "boolean_leaf_cases": 9,
+    "empty_or_nested_empty_cases": 5,
+    "same_required_field_omission_cases": 1,
+    "unexpected_numeric_coverage_cases": 1,
+    "duplicate_package_metadata_cases": 3,
+    "duplicate_scientific_or_backend_cases": 3,
+    "duplicate_challenge_cases": 1,
+    "duplicate_freeze_audit_handoff_cases": 4,
+    "duplicate_historical_manifest_cases": 1
+  },
+  "protected_access_authorized": false,
+  "protected_rows_opened": 0,
+  "protected_bytes_opened": 0,
+  "attack_run_count": 0,
+  "push_performed": false
+}
