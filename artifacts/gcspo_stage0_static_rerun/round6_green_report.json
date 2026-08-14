@@ -1,0 +1,89 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.round6-green-report.v1",
+  "phase": "GREEN",
+  "round5_challenge_source_commit": "a9a6f03a8fe984ee75c15fbcf81f7c04c5ab2e46",
+  "challenge_source_commit_binding": "THE_GIT_COMMIT_CONTAINING_THIS_REPORT_AND_A5_ROUND6_CHALLENGES_JSON",
+  "red": {
+    "report": "round6_red_report.json",
+    "report_sha256": "095d6947e593f3ad7e6f2be467ad028d62556dc718d7b8124d83a8d5e52699a0",
+    "junit": "round6_red_junit.xml",
+    "junit_sha256": "18c486b69846e8c5cd885ab7a6a4b7c2598eb79f6bb463cbc19ffff58b61b778",
+    "source_commit": "a9a6f03a8fe984ee75c15fbcf81f7c04c5ab2e46",
+    "failed": 1,
+    "passed": 0
+  },
+  "test_files": {
+    "tests/test_gcspo_round5_child_receipt.py": "8b178a46d4749089e4e00097a87bc1c3265fdb5172d391d8fd37a89d8ac136bc",
+    "tests/test_gcspo_round5_witnessed_provenance.py": "f03923cefce7075bd93d923a5b514fb4de26ee6107b9fd073f8a2f1b75f515d2",
+    "tests/test_gcspo_round6_successor.py": "6750cb47260e98a7de2eabcfe07ab9d98bd440d1ca9b601adfd183f779ce57e7"
+  },
+  "focused": {
+    "status": "PASS",
+    "passed": 28,
+    "failed": 0,
+    "junit": "round6_green_junit.xml",
+    "junit_sha256": "fec7861a7d89e8a73ce22c78e35851aab6135fa756a36b1f10e26da6b096c9cb"
+  },
+  "all_gcspo": {
+    "status": "PASS",
+    "passed": 208,
+    "failed": 0,
+    "junit": "round6_all_gcspo_junit.xml",
+    "junit_sha256": "b198861e4701be4b4f2587eb90c52f7083bf96bed1e1dda6720588d825d8c587"
+  },
+  "repair": {
+    "production_file": "scripts/run_gcspo_clean_a5.py",
+    "scope": "execution receipt writer only",
+    "serializer": "gcspo_provenance.canonical_json_bytes",
+    "exclusive_create": true,
+    "scientific_writer_changed": false,
+    "scientific_outputs_in_receipt_comparison": [
+      "clean_a5_report.json",
+      "thresholds.json",
+      "a5_numeric_trace.json",
+      "a5_backend_truth.json"
+    ],
+    "execution_receipt_excluded_from_scientific_comparison": true
+  },
+  "protocol": {
+    "challenge_sha256": "f088e3687ca6c23c6764e197b0034a91d97be3aaa2952fbecce5e655f2cac012",
+    "witness_schemas_sha256": "dd41bfe1d4a7018cdcee32420ef99c5ef29cccb072a5f8e67c5bd27aa9db6b4a",
+    "pinned_public_key_sha256": "65e682ac56f3e248937595b27572fa3acf6e54fdb77d268cd9004b5dd8946d9c",
+    "public_key_fingerprint": "SHA256:L+STBb5P7+DDfilvAZUxV2eHGYZGfMQf4aDbXSsNi0c",
+    "controller_identity": "gcspo-controller-witness",
+    "signature_namespace": "gnss-gcspo-controller-witness-v1",
+    "real_controller_private_key_present": false,
+    "real_controller_signatures_created": false,
+    "real_witnessed_runs_launched": 0
+  },
+  "round5_runtime_failure": {
+    "report": "round5_runtime_failure.json",
+    "report_sha256": "f087ba6d963c9a2e7317efc3f22b53ca88e0355379616e178e50016c5b488822",
+    "status": "REJECTED_UNSIGNED_FAIL_CLOSED",
+    "roots_preserved_unmodified": true,
+    "retrospective_acceptance": false,
+    "excluded_from_round6": true
+  },
+  "preserved_scientific_and_tolerance_hashes": {
+    "src/gnss_doppler_lab/gcspo_a5.py": "38ce8820b1bbe39ea609a1542f4581896f17619a6416c1f193f4efe9b6d42624",
+    "src/gnss_doppler_lab/gcspo_artifacts.py": "0e13b49ddbbe112c0b75908ca2a94507c746e88ee74c02896a179ab4c1fe8935",
+    "src/gnss_doppler_lab/gcspo_clean.py": "64abc04a6e5ea3fb6d476f51e505f54eb9c20894759fe04f2fd49179ccd4a957",
+    "src/gnss_doppler_lab/gcspo_core.py": "18c5878303cabfcf7d25edc4471ce36d9ee6af64361c572ce9707bfabb35a0d8",
+    "src/gnss_doppler_lab/gcspo_full.py": "d1da456933a89204e1bdb01a84db57949376e1c639ebd257e1f7fdd1e30157a5",
+    "artifacts/gcspo_stage0_static_rerun/a5_round4_clean_parity_pilot.json": "6433d6481c5fc09115e1e1e3d59d9f86075a171d35661965f5a78bd4c7038eb6",
+    "artifacts/gcspo_stage0_static_rerun/config.json": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad",
+    "artifacts/gcspo_stage0_static_rerun/thresholds.json": "034c265b6de4188db8b577855d9a30e9a144e83255002105004a576123d15e7f"
+  },
+  "tolerance": {
+    "absolute": 0.00001,
+    "relative": 0.00000001,
+    "status": "PRESERVED_UNCHANGED_FROM_ROUND4"
+  },
+  "protected_access_authorized": false,
+  "protected_marker_present": false,
+  "protected_ledger_present": false,
+  "protected_payload_rows_opened": 0,
+  "protected_payload_bytes_opened": 0,
+  "attack_run_count": 0,
+  "push_performed": false
+}

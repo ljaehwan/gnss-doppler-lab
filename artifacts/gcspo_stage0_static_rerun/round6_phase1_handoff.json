@@ -1,0 +1,87 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.round6-phase1-controller-handoff.v1",
+  "state": "READY_FOR_CONTROLLER_WITNESSED_ROUND6_RUNS",
+  "challenge_source_commit": "RESOLVE_AS_GIT_REV_PARSE_HEAD_OF_THE_COMMIT_CONTAINING_THIS_FILE",
+  "challenge_file": "artifacts/gcspo_stage0_static_rerun/a5_round6_challenges.json",
+  "challenge_sha256": "f088e3687ca6c23c6764e197b0034a91d97be3aaa2952fbecce5e655f2cac012",
+  "witness_schemas": "artifacts/gcspo_stage0_static_rerun/a5_round6_witness_schemas.json",
+  "public_key": {
+    "path": "config/gnss_gcspo_witness_ed25519.pub",
+    "fingerprint": "SHA256:L+STBb5P7+DDfilvAZUxV2eHGYZGfMQf4aDbXSsNi0c",
+    "identity": "gcspo-controller-witness",
+    "namespace": "gnss-gcspo-controller-witness-v1"
+  },
+  "controller_commands": [
+    [
+      "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+      "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/scripts/run_gcspo_a5_witnessed.py",
+      "--prepared-envelope",
+      "/tmp/gnss-gcspo-round6-controller/round6-cuda-1.prepared.json",
+      "--prepared-signature",
+      "/tmp/gnss-gcspo-round6-controller/round6-cuda-1.prepared.json.sig",
+      "--challenge-file",
+      "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/a5_round6_challenges.json"
+    ],
+    [
+      "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+      "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/scripts/run_gcspo_a5_witnessed.py",
+      "--prepared-envelope",
+      "/tmp/gnss-gcspo-round6-controller/round6-cuda-2.prepared.json",
+      "--prepared-signature",
+      "/tmp/gnss-gcspo-round6-controller/round6-cuda-2.prepared.json.sig",
+      "--challenge-file",
+      "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/a5_round6_challenges.json"
+    ],
+    [
+      "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+      "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/scripts/run_gcspo_a5_witnessed.py",
+      "--prepared-envelope",
+      "/tmp/gnss-gcspo-round6-controller/round6-cpu-1.prepared.json",
+      "--prepared-signature",
+      "/tmp/gnss-gcspo-round6-controller/round6-cpu-1.prepared.json.sig",
+      "--challenge-file",
+      "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/a5_round6_challenges.json"
+    ]
+  ],
+  "fresh_roots": {
+    "round6-cuda-1": {
+      "scratch": "/tmp/gnss-gcspo-round6/round6-cuda-1-scratch",
+      "output": "/tmp/gnss-gcspo-round6/round6-cuda-1-scratch/output",
+      "evidence": "/tmp/gnss-gcspo-round6/round6-cuda-1-evidence",
+      "nonce": "653434d2f58dd3b45bfd04d7e628a4243b29f393fe0656d4bd177ed17b148f05"
+    },
+    "round6-cuda-2": {
+      "scratch": "/tmp/gnss-gcspo-round6/round6-cuda-2-scratch",
+      "output": "/tmp/gnss-gcspo-round6/round6-cuda-2-scratch/output",
+      "evidence": "/tmp/gnss-gcspo-round6/round6-cuda-2-evidence",
+      "nonce": "3872afb5ef2229130a0b831a29195a97b9d790eafb78012f443dbfcae01a8f18"
+    },
+    "round6-cpu-1": {
+      "scratch": "/tmp/gnss-gcspo-round6/round6-cpu-1-scratch",
+      "output": "/tmp/gnss-gcspo-round6/round6-cpu-1-scratch/output",
+      "evidence": "/tmp/gnss-gcspo-round6/round6-cpu-1-evidence",
+      "nonce": "c0182f0a315b0d6868111a303c59b8644394a584cf6e319461eacfe2840a7afb"
+    }
+  },
+  "tests": {
+    "red": "1 failed, 0 passed against exact a9a6f03a8fe984ee75c15fbcf81f7c04c5ab2e46",
+    "focused_green": "28 passed, 0 failed",
+    "all_gcspo": "208 passed, 0 failed"
+  },
+  "real_witnessed_runs_launched": 0,
+  "controller_signatures_created_in_vm": 0,
+  "protected_access_authorized": false,
+  "protected_payload_rows_opened": 0,
+  "protected_payload_bytes_opened": 0,
+  "attack_run_count": 0,
+  "push_performed": false,
+  "failed_round5": {
+    "report": "artifacts/gcspo_stage0_static_rerun/round5_runtime_failure.json",
+    "status": "REJECTED_UNSIGNED_FAIL_CLOSED",
+    "roots_preserved_unmodified": true,
+    "retrospective_acceptance": false,
+    "excluded_from_round6": true
+  },
+  "protected_marker_present": false,
+  "protected_ledger_present": false
+}

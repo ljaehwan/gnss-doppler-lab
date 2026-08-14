@@ -4,13 +4,24 @@ from __future__ import annotations
 import importlib.util
 import json
 from pathlib import Path
+import subprocess
 import sys
 
 
-def _module():
+ROUND5_SOURCE_COMMIT = "a9a6f03a8fe984ee75c15fbcf81f7c04c5ab2e46"
+SCIENTIFIC_OUTPUT_NAMES = (
+    "clean_a5_report.json",
+    "thresholds.json",
+    "a5_numeric_trace.json",
+    "a5_backend_truth.json",
+)
+
+
+def _module(source_path=None):
     root = Path(__file__).parents[1]
+    path = source_path or root / "scripts/run_gcspo_clean_a5.py"
     spec = importlib.util.spec_from_file_location(
-        "gcspo_round5_clean_a5_child", root / "scripts/run_gcspo_clean_a5.py")
+        f"gcspo_clean_a5_child_{id(path)}", path)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(module)
@@ -79,3 +90,49 @@ def test_witness_arguments_enter_actual_child_receipt_without_changing_scientifi
     }
     for name in document["scientific_outputs"]:
         assert (plain / name).read_bytes() == (witnessed / name).read_bytes()
+
+
+def test_real_child_receipt_is_exact_compact_canonical_json_plus_lf(
+        tmp_path, monkeypatch):
+    """The verifier must accept the exact receipt emitted by the child path."""
+    assert str(tmp_path).startswith("/tmp/")
+    challenge = tmp_path / "challenge.json"
+    challenge.write_text("{}\n")
+    receipt = tmp_path / "execution_receipt.json"
+    module = _module()
+    _run_synthetic(module, monkeypatch, tmp_path / "witnessed", challenge, receipt)
+
+    from gnss_doppler_lab.gcspo_witness import _canonical_document
+
+    document = json.loads(receipt.read_text())
+    assert _canonical_document(receipt, "execution receipt") == document
+    expected = json.dumps(
+        document, sort_keys=True, separators=(",", ":"), allow_nan=False,
+    ).encode() + b"\n"
+    assert receipt.read_bytes() == expected
+
+
+def test_all_scientific_output_bytes_match_exact_round5_source_commit(
+        tmp_path, monkeypatch):
+    """The receipt-only repair cannot alter any scientific serialization path."""
+    assert str(tmp_path).startswith("/tmp/")
+    root = Path(__file__).parents[1]
+    baseline_source = tmp_path / "run_gcspo_clean_a5_round5.py"
+    baseline_source.write_bytes(subprocess.run(
+        ["git", "show", f"{ROUND5_SOURCE_COMMIT}:scripts/run_gcspo_clean_a5.py"],
+        cwd=root, check=True, capture_output=True,
+    ).stdout)
+    challenge = tmp_path / "challenge.json"
+    challenge.write_text("{}\n")
+
+    baseline = tmp_path / "baseline"
+    _run_synthetic(_module(baseline_source), monkeypatch, baseline, challenge)
+    current = tmp_path / "current"
+    receipt = tmp_path / "execution_receipt.json"
+    _run_synthetic(_module(), monkeypatch, current, challenge, receipt)
+
+    document = json.loads(receipt.read_text())
+    assert set(document["scientific_outputs"]) == set(SCIENTIFIC_OUTPUT_NAMES)
+    assert receipt.name not in document["scientific_outputs"]
+    for name in SCIENTIFIC_OUTPUT_NAMES:
+        assert (current / name).read_bytes() == (baseline / name).read_bytes()

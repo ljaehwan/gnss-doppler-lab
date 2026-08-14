@@ -1,0 +1,59 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.round5-runtime-failure.v1",
+  "status": "REJECTED_UNSIGNED_FAIL_CLOSED",
+  "challenge_source_commit": "a9a6f03a8fe984ee75c15fbcf81f7c04c5ab2e46",
+  "run_id": "round5-cuda-1",
+  "nonce": "a55e32c665f3d7cdb574adf742a6c5c4e7a9d4761c0c3ea2d9a73f46b9509a31",
+  "external_wrapper": {
+    "start_utc": "2026-08-14T03:55:55.790747Z",
+    "exit_utc": "2026-08-14T04:01:33.480596Z",
+    "observed_exit_code": 0,
+    "full_clean_cuda_calculation_completed": true
+  },
+  "execution_receipt": {
+    "actual": {
+      "size_bytes": 2430,
+      "sha256": "cf7801d904c760d86fa642740811039af1e1f2d92fdb7d5d6bff4670a55ede55"
+    },
+    "required_compact_canonical_lf": {
+      "size_bytes": 2082,
+      "sha256": "e853071a2737ea17634745a545ae54f2976bfe6716e15e0026fb50c54b8d5721"
+    },
+    "first_mismatch": {
+      "location": "immediately after opening object byte",
+      "actual_byte": "LF",
+      "required_byte": "first canonical key"
+    },
+    "verifier_result": "REJECTED_NOT_EXACT_CANONICAL_JSON"
+  },
+  "root_cause": {
+    "writer": "scripts/run_gcspo_clean_a5.py used gcspo_artifacts.canonical_write_json for execution_receipt.json",
+    "actual_serialization": "json.dumps(sort_keys=True, indent=2) plus LF",
+    "required_serialization": "canonical_json_bytes(sort_keys=True, separators=(',', ':'), allow_nan=False) plus LF",
+    "scientific_writer_change_allowed": false
+  },
+  "completion": {
+    "completed_envelope_exists": false,
+    "completed_signature_exists": false,
+    "retrospective_signature_allowed": false,
+    "retrospective_acceptance_allowed": false
+  },
+  "immutable_failed_vm_roots": [
+    "/tmp/gnss-gcspo-round5/round5-cuda-1-scratch",
+    "/tmp/gnss-gcspo-round5/round5-cuda-1-evidence",
+    "/tmp/gnss-gcspo-round5-controller"
+  ],
+  "pre_repair_root_snapshot": {
+    "paths_sizes_mtimes_sha256": "3edf202c6e7a5638ff37f98250efa8caa041a8bbc19829366dba02113e37602d",
+    "file_identity_manifest_sha256": "745170872462b0c0b90657341c31a8172c6803eb2579523733614352481aa4a9"
+  },
+  "external_controller_copy_preserved_outside_vm": true,
+  "private_signing_key_requested": false,
+  "private_signing_key_accessed": false,
+  "protected_marker_present": false,
+  "protected_ledger_present": false,
+  "protected_payload_rows_opened": 0,
+  "protected_payload_bytes_opened": 0,
+  "attack_run_count": 0,
+  "push_performed": false
+}

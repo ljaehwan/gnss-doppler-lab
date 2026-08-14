@@ -298,6 +298,21 @@ def test_noncanonical_or_modified_json_after_signing_is_rejected(tmp_path):
         _verify(fixture)
 
 
+def test_pretty_round5_execution_receipt_remains_rejected_even_if_resigned(tmp_path):
+    fixture = _make_fixture(tmp_path)
+    root = fixture["roots"][0]
+    receipt = root / "execution_receipt.json"
+    document = json.loads(receipt.read_text())
+    receipt.write_text(json.dumps(document, sort_keys=True, indent=2) + "\n")
+    _mutate_signed(
+        root / "completed.json",
+        fixture["private"],
+        lambda completed: completed.update(execution_receipt=_identity(receipt)),
+    )
+    with pytest.raises(ValueError, match="execution receipt.*canonical"):
+        _verify(fixture)
+
+
 @pytest.mark.parametrize("location", ["argv", "receipt"])
 def test_nonce_must_enter_actual_child_invocation_and_receipt(tmp_path, location):
     fixture = _make_fixture(tmp_path)

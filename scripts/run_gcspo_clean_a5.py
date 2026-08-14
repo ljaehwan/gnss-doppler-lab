@@ -21,6 +21,7 @@ from gnss_doppler_lab.gcspo_artifacts import canonical_write_json
 from gnss_doppler_lab.gcspo_clean import run_clean_a1
 from gnss_doppler_lab.gcspo_core import empirical_threshold
 from gnss_doppler_lab.gcspo_full import _score_terms
+from gnss_doppler_lab.gcspo_provenance import canonical_json_bytes
 
 _ROWS = None
 _BACKEND = None
@@ -35,6 +36,16 @@ def _identity(path):
     if not payload:
         raise ValueError(f"execution receipt refuses empty file: {path}")
     return {"sha256": hashlib.sha256(payload).hexdigest(), "size_bytes": len(payload)}
+
+
+def _write_execution_receipt(path, document):
+    path = Path(path)
+    payload = canonical_json_bytes(document)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("xb") as handle:
+        handle.write(payload)
+        handle.flush()
+        os.fsync(handle.fileno())
 
 
 def _process_identity():
@@ -183,7 +194,7 @@ def main():
                               for name in output_names}
         child_finished_utc = _utc_now()
         transcript_bytes = ("\n".join(transcript_events) + "\n").encode()
-        canonical_write_json(args.execution_receipt, {
+        _write_execution_receipt(args.execution_receipt, {
             "schema": "gnss-doppler-lab.gcspo-stage0.a5-execution-receipt.v1",
             "run_id": args.run_id, "nonce": args.nonce,
             "process_identity": process_identity,
