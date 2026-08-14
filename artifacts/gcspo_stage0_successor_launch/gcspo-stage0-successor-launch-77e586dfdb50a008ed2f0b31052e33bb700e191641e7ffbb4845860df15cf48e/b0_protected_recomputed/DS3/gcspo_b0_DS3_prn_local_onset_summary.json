@@ -1,0 +1,148 @@
+{
+  "checkpoint_provenance": {
+    "checkpoint_sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
+    "node_feature_columns": [
+      "tap_E4_rel_prompt_mean",
+      "tap_E3_rel_prompt_mean",
+      "tap_E2_rel_prompt_mean",
+      "tap_E_rel_prompt_mean",
+      "tap_P_rel_prompt_mean",
+      "tap_L_rel_prompt_mean",
+      "tap_L2_rel_prompt_mean",
+      "tap_L3_rel_prompt_mean",
+      "tap_L4_rel_prompt_mean"
+    ]
+  },
+  "clean_metrics_max_pfa0_1_q999": {
+    "any_false_positive": true,
+    "false_positive_exceedance_rate": 0.15831435079726652,
+    "false_positive_flags": 139,
+    "threshold": 2.6779066314697273,
+    "windows": 878
+  },
+  "clean_metrics_max_pfa0_5_q995": {
+    "any_false_positive": true,
+    "false_positive_exceedance_rate": 0.1674259681093394,
+    "false_positive_flags": 147,
+    "threshold": 2.3321437692642224,
+    "windows": 878
+  },
+  "clean_metrics_max_pfa10_q90": {
+    "any_false_positive": true,
+    "false_positive_exceedance_rate": 0.8109339407744874,
+    "false_positive_flags": 712,
+    "threshold": 0.30063047707080837,
+    "windows": 878
+  },
+  "clean_metrics_max_pfa1_q99": {
+    "any_false_positive": true,
+    "false_positive_exceedance_rate": 0.18109339407744876,
+    "false_positive_flags": 159,
+    "threshold": 1.9537145757675163,
+    "windows": 878
+  },
+  "clean_metrics_max_pfa5_q95": {
+    "any_false_positive": true,
+    "false_positive_exceedance_rate": 0.7072892938496583,
+    "false_positive_flags": 621,
+    "threshold": 0.3718581959605216,
+    "windows": 878
+  },
+  "clean_metrics_top3_pfa0_1_q999": {
+    "any_false_positive": true,
+    "false_positive_exceedance_rate": 0.13895216400911162,
+    "false_positive_flags": 122,
+    "threshold": 2.6779066314697273,
+    "windows": 878
+  },
+  "clean_metrics_top3_pfa0_5_q995": {
+    "any_false_positive": true,
+    "false_positive_exceedance_rate": 0.14578587699316628,
+    "false_positive_flags": 128,
+    "threshold": 2.3321437692642224,
+    "windows": 878
+  },
+  "clean_metrics_top3_pfa10_q90": {
+    "any_false_positive": true,
+    "false_positive_exceedance_rate": 0.7608200455580866,
+    "false_positive_flags": 668,
+    "threshold": 0.30063047707080837,
+    "windows": 878
+  },
+  "clean_metrics_top3_pfa1_q99": {
+    "any_false_positive": true,
+    "false_positive_exceedance_rate": 0.1492027334851936,
+    "false_positive_flags": 131,
+    "threshold": 1.9537145757675163,
+    "windows": 878
+  },
+  "clean_metrics_top3_pfa5_q95": {
+    "any_false_positive": true,
+    "false_positive_exceedance_rate": 0.5842824601366743,
+    "false_positive_flags": 513,
+    "threshold": 0.3718581959605216,
+    "windows": 878
+  },
+  "dataset": "TEXBAT",
+  "evaluation": {
+    "kind": "clean_negative_control"
+  },
+  "event_score_csv": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-launch-adapter/artifacts/gcspo_stage0_successor_launch/gcspo-stage0-successor-launch-77e586dfdb50a008ed2f0b31052e33bb700e191641e7ffbb4845860df15cf48e/b0_protected_recomputed/DS3/gcspo_b0_DS3_prn_local_event_scores.csv",
+  "model": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-launch-adapter/artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt",
+  "node_csv": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-launch-adapter/artifacts/gcspo_stage0_successor_launch/gcspo-stage0-successor-launch-77e586dfdb50a008ed2f0b31052e33bb700e191641e7ffbb4845860df15cf48e/b0_protected_recomputed/DS3/scheduled_node_windows.csv",
+  "normal_prn_thresholds": {
+    "pfa0_1_q999": 2.6779066314697273,
+    "pfa0_5_q995": 2.3321437692642224,
+    "pfa10_q90": 0.30063047707080837,
+    "pfa1_q99": 1.9537145757675163,
+    "pfa5_q95": 0.3718581959605216
+  },
+  "prn_score_csv": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-launch-adapter/artifacts/gcspo_stage0_successor_launch/gcspo-stage0-successor-launch-77e586dfdb50a008ed2f0b31052e33bb700e191641e7ffbb4845860df15cf48e/b0_protected_recomputed/DS3/gcspo_b0_DS3_prn_local_scores.csv",
+  "rows": {
+    "event_windows": 878,
+    "prn_scores": 9371
+  },
+  "scenario": "DS3",
+  "schema": "gnss-doppler-lab.texbat-prn-local-node-only-summary",
+  "score_summary": {
+    "prn_node_rmse_max": {
+      "50%": 0.4716242253780365,
+      "90%": 3.9874107837677,
+      "95%": 4.3208527803421015,
+      "99%": 4.529707932472229,
+      "count": 878.0,
+      "max": 9.161613464355469,
+      "mean": 1.1135218422647761,
+      "min": 0.08382798731327057,
+      "std": 1.394805381377968
+    },
+    "prn_node_rmse_mean": {
+      "50%": 0.29901431839574466,
+      "90%": 2.0064338466525093,
+      "95%": 2.679455608319152,
+      "99%": 3.2323909797271093,
+      "count": 878.0,
+      "max": 3.3985967106289334,
+      "mean": 0.563646634158188,
+      "min": 0.05088749546557665,
+      "std": 0.7821713859498884
+    },
+    "prn_node_rmse_top3_mean": {
+      "50%": 0.39193542301654816,
+      "90%": 3.812398989995321,
+      "95%": 4.150568707784017,
+      "99%": 4.458229765892029,
+      "count": 878.0,
+      "max": 5.4901658693949384,
+      "mean": 0.9096065019282118,
+      "min": 0.07846851150194804,
+      "std": 1.2644694743406215
+    }
+  },
+  "timing_contract": {
+    "interpretation": "scores timestamped at frozen window start become available one full window later",
+    "score_time_field": "window_start_s",
+    "window_availability_offset_s": 1.0,
+    "window_duration_s": 1.0
+  }
+}
