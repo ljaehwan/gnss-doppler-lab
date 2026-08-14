@@ -1,9 +1,9 @@
 {
   "schema": "gnss-doppler-lab.gcspo-stage0.successor-implementation-freeze.v1",
   "state": "READY_FOR_FRESH_INDEPENDENT_READ_ONLY_REVIEW",
-  "target_commit": "9121843f1d4835884af91883369dca62848c8dcd",
+  "target_commit": "1aa3838d6d9635c026d746e313e63b87d3711daf",
   "wrapper_commit_binding": "COMMIT_CONTAINING_THIS_DOCUMENT",
-  "wrapper_parent_sha": "9121843f1d4835884af91883369dca62848c8dcd",
+  "wrapper_parent_sha": "1aa3838d6d9635c026d746e313e63b87d3711daf",
   "invocation_id": "gcspo-stage0-successor-7be48c4411644ff3a9ec41c7701dfa01",
   "nonce": "c8b66154edba6ce2fc2418d97186a1c452ab8a3ac68afb8f040eedd25c6d23c3",
   "same_invocation_retry": false,
@@ -101,8 +101,8 @@
     },
     {
       "path": "scripts/build_gcspo_successor_freeze.py",
-      "sha256": "230b97878798ebc34d1e98c95e71f699b530f4816da9745a02c2d32e82c2eb0b",
-      "size_bytes": 5939
+      "sha256": "aa2ed61b458de12a79c83b5e8845fe621751cc48c7012f26769e03893ab8f804",
+      "size_bytes": 6557
     },
     {
       "path": "scripts/finalize_gcspo_clean.py",
@@ -161,8 +161,8 @@
     },
     {
       "path": "scripts/verify_gcspo_successor_freeze.py",
-      "sha256": "640e4b7737fe8127829e150589a76f9595b6d966217fea6a32b5451071d13c6d",
-      "size_bytes": 716
+      "sha256": "c23fc3c63121039c99310ce20e7aa5b7a2453e0c158f9955ace40fd557e9437e",
+      "size_bytes": 709
     },
     {
       "path": "src/gnss_doppler_lab/__init__.py",
@@ -291,8 +291,8 @@
     },
     {
       "path": "src/gnss_doppler_lab/gcspo_successor_freeze.py",
-      "sha256": "eb325e7b9ce8fc9b49e6e9f23b5c51172ed778b885161998a2d8bdb8f0a6cb04",
-      "size_bytes": 26550
+      "sha256": "431b220d7d6ee3a23c5c8358a09017356fffd83cc8bc2f4871f6e47b01ccf8c2",
+      "size_bytes": 49567
     },
     {
       "path": "src/gnss_doppler_lab/gcspo_transfer.py",
@@ -421,8 +421,8 @@
     },
     {
       "path": "tests/test_gcspo_successor_manifest.py",
-      "sha256": "0b2b713e56995b8488d887f5e6d5185bed57a4874f5ebe25a2caf384959e146d",
-      "size_bytes": 12641
+      "sha256": "52d7f9b2a98052cfb24bb8b574fca6bc4bde513c9b964ae28a058a1e34b0c12a",
+      "size_bytes": 17848
     },
     {
       "path": "tests/test_gcspo_transfer.py",
