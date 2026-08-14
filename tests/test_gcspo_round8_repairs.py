@@ -285,3 +285,65 @@ def test_public_freeze_verifier_rejects_duplicate_historical_manifest(monkeypatc
     monkeypatch.setattr(subprocess, "run", changed_run)
     with pytest.raises(ValueError, match="duplicate"):
         round6_verify.verify_round6_freeze(ARTIFACT, ROUND7_FREEZE)
+
+
+@pytest.mark.parametrize(
+    "relative",
+    [
+        "round8_audit_report.json",
+        "round8_evidence_manifest.json",
+        "round8_freeze_manifest.json",
+        "round8_green_report.json",
+        "round8_red_report.json",
+        "round8_repair_review_handoff.json",
+    ],
+)
+def test_public_round8_freeze_verifier_rejects_duplicate_general_json(
+        monkeypatch, relative):
+    from gnss_doppler_lab import gcspo_round8_verify
+
+    target = ARTIFACT / relative
+    original_text = Path.read_text
+    original_git = gcspo_round8_verify._git
+    head = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=ROOT, check=True,
+        text=True, capture_output=True,
+    ).stdout.strip()
+
+    def changed_text(path, *args, **kwargs):
+        text = original_text(path, *args, **kwargs)
+        return _duplicate_schema_member(text) if path == target else text
+
+    def changed_git(repo, *arguments, text=True):
+        if arguments and arguments[0] == "status":
+            return ""
+        return original_git(repo, *arguments, text=text)
+
+    monkeypatch.setattr(Path, "read_text", changed_text)
+    monkeypatch.setattr(gcspo_round8_verify, "_git", changed_git)
+    with pytest.raises(ValueError, match="duplicate"):
+        gcspo_round8_verify.verify_round8_freeze(ARTIFACT, head)
+
+
+def test_public_round8_freeze_verifier_rejects_duplicate_historical_round7_manifest(
+        monkeypatch):
+    from gnss_doppler_lab import gcspo_round8_verify
+
+    original_git = gcspo_round8_verify._git
+    head = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=ROOT, check=True,
+        text=True, capture_output=True,
+    ).stdout.strip()
+
+    def changed_git(repo, *arguments, text=True):
+        if arguments and arguments[0] == "status":
+            return ""
+        result = original_git(repo, *arguments, text=text)
+        if (arguments and arguments[0] == "show" and
+                "round7_freeze_manifest.json" in arguments[1]):
+            return _duplicate_schema_member(result)
+        return result
+
+    monkeypatch.setattr(gcspo_round8_verify, "_git", changed_git)
+    with pytest.raises(ValueError, match="duplicate"):
+        gcspo_round8_verify.verify_round8_freeze(ARTIFACT, head)

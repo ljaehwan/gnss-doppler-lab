@@ -1,0 +1,74 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.round8-repair-green-evidence.v1",
+  "phase": "ROUND8_SUCCESSOR_PREFREEZE_GREEN",
+  "repair_parent_sha": "40a4dc4cff94aa47875a83a9187e0959096e3f0f",
+  "rejected_round7_freeze_sha": "b54383b799f47fd1a849126d3f21fe6c643eb209",
+  "tests": {
+    "targeted_malformed": {
+      "passed": 49,
+      "failed": 0,
+      "skipped": 0,
+      "junit": "artifacts/gcspo_stage0_static_rerun/round8_targeted_junit.xml",
+      "junit_sha256": "3eada9b17a101590c1c7369db47eff82976a57443d95ee1ecb27fb49e8e7c02a",
+      "junit_size_bytes": 7958
+    },
+    "focused": {
+      "passed": 94,
+      "failed": 0,
+      "skipped": 0,
+      "junit": "artifacts/gcspo_stage0_static_rerun/round8_focused_junit.xml",
+      "junit_sha256": "3c28c738f9b0f8052fb86f8e5e3b95279967a186ae2f33d037af64f413207f56",
+      "junit_size_bytes": 14419
+    },
+    "all_gcspo": {
+      "passed": 274,
+      "failed": 0,
+      "skipped": 0,
+      "junit": "artifacts/gcspo_stage0_static_rerun/round8_all_gcspo_junit.xml",
+      "junit_sha256": "1641f234e4801e709b9dd1425933d1e4a4634c7d5034635f80b6c8ed701c2a39",
+      "junit_size_bytes": 40647
+    }
+  },
+  "strict_malformed_probe_count": 49,
+  "strict_malformed_failed_open": 0,
+  "signature_and_package_verification": {
+    "status": "PASS",
+    "signature_count": 6,
+    "evidence_file_count": 33,
+    "external_package_identity_count": 33,
+    "run_count": 3,
+    "backends": [
+      "cuda",
+      "cuda",
+      "cpu"
+    ],
+    "independence": "EXTERNALLY_WITNESSED"
+  },
+  "numeric_trace_contract": {
+    "expected_numeric_field_count": 789115,
+    "expected_numeric_path_sha256": "8eb32c0ab02bd1a6188d9ec98ab90f5f9983a82dcc44f7aad492ae23e7b75b6f",
+    "path_digest_encoding": "SHA256_OF_SEQUENCE_OF_UINT64_BE_LENGTH_PLUS_COMPACT_UTF8_JSON_PATH_TOKENS",
+    "coverage_requirement": "POSITIVE_AND_EXACT_COUNT_AND_EXACT_PATH_DIGEST"
+  },
+  "parity": {
+    "same_backend": "BYTE_IDENTICAL",
+    "cpu_cuda": "WITHIN_PREREGISTERED_TOLERANCE",
+    "numeric_field_count": 789115,
+    "numeric_path_sha256": "8eb32c0ab02bd1a6188d9ec98ab90f5f9983a82dcc44f7aad492ae23e7b75b6f",
+    "maximum_absolute_delta": 5.760082785855047e-06,
+    "maximum_relative_delta": 7.291690239802362e-08,
+    "tolerance_violations": 0,
+    "absolute_tolerance": 1e-05,
+    "relative_tolerance": 1e-08,
+    "or_rule_preserved": true
+  },
+  "protected": {
+    "authorized": false,
+    "marker_present": false,
+    "ledger_present": false,
+    "rows_opened": 0,
+    "bytes_opened": 0
+  },
+  "attack_run_count": 0,
+  "push_performed": false
+}
