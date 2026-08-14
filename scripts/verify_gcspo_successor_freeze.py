@@ -16,7 +16,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--expected-wrapper-commit", required=True)
     args = parser.parse_args()
-    result = verify_successor_freeze(ROOT, ROOT / ARTIFACT_RELATIVE, args.expected_wrapper_commit)
+    result = verify_successor_freeze(ROOT, ARTIFACT_RELATIVE, args.expected_wrapper_commit)
     print(json.dumps(result, sort_keys=True, separators=(",", ":"), allow_nan=False))
     return 0
 

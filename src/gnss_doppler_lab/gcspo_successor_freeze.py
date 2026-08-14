@@ -23,6 +23,8 @@ HANDOFF_RELATIVE = f"{ARTIFACT_RELATIVE}/review_handoff.json"
 INVALID_ROOT_RELATIVE = "artifacts/gcspo_stage0_static_rerun"
 REJECTED_WRAPPER_COMMIT = "078a8c5739c92e877763583ce2ca23dad4f433f9"
 REJECTED_TARGET_COMMIT = "1bfc3d2b64ad43a9db78081f3abc482bdf5d022f"
+SECOND_REJECTED_WRAPPER_COMMIT = "34462807a2029a0979c9e65162246b799406c562"
+SECOND_REJECTED_TARGET_COMMIT = "9121843f1d4835884af91883369dca62848c8dcd"
 REQUIRED_INTERNAL_DEPENDENCY_PATHS = (
     "src/gnss_doppler_lab/gcmr_geometry.py",
     "src/gnss_doppler_lab/trajectory.py",
@@ -47,6 +49,7 @@ HANDOFF_KEYS = frozenset({
     "invalid_evidence_commit", "repair_scope", "config_sha256", "preregistration_sha256",
     "red_green", "manifest_coverage", "protected", "prior_independent_rejection",
     "invalid_artifact_root_preserved", "push_performed", "independent_review_command",
+    "latest_independent_rejection",
 })
 
 STALE_CROSS_GENERATION_PATHS = (
@@ -139,23 +142,54 @@ def _resolve_internal_module(module: str, modules: dict[str, str]) -> str | None
     return None
 
 
-def _absolute_from_module(current: str | None, level: int, module: str | None) -> str | None:
+def _absolute_from_module(current: str | None, current_is_package: bool,
+                          level: int, module: str | None) -> str | None:
     if level == 0:
         return module
     if current is None:
         raise ValueError("relative import outside an internal package module")
-    package_parts = current.split(".")[:-1]
-    if level > len(package_parts):
+    package = current if current_is_package else current.rpartition(".")[0]
+    package_parts = package.split(".") if package else []
+    parents = level - 1
+    if parents >= len(package_parts):
         raise ValueError("relative internal import escapes package")
-    base = package_parts[:len(package_parts) - level + 1]
+    base = package_parts[:len(package_parts) - parents]
     if module:
         base.extend(module.split("."))
     return ".".join(base)
 
 
+def _statically_exported_names(payload: bytes, relative: str) -> set[str]:
+    try:
+        tree = ast.parse(payload, filename=relative)
+    except (SyntaxError, ValueError) as exc:
+        raise ValueError(f"cannot parse Python import graph at target: {relative}") from exc
+    names: set[str] = set()
+    for node in tree.body:
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            names.add(node.name)
+        elif isinstance(node, (ast.Assign, ast.AnnAssign)):
+            targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+            for target in targets:
+                for child in ast.walk(target):
+                    if isinstance(child, ast.Name):
+                        names.add(child.id)
+        elif isinstance(node, ast.Import):
+            for alias in node.names:
+                names.add(alias.asname or alias.name.split(".")[0])
+        elif isinstance(node, ast.ImportFrom) and node.module is not None:
+            for alias in node.names:
+                if alias.name != "*":
+                    names.add(alias.asname or alias.name)
+    return names
+
+
 def _internal_import_paths(relative: str, payload: bytes,
-                           modules: dict[str, str]) -> set[str]:
+                           modules: dict[str, str], packages: set[str],
+                           package_names: set[str],
+                           exports: dict[str, set[str]]) -> set[str]:
     current = _module_name(relative)
+    current_is_package = bool(current is not None and current in packages)
     try:
         tree = ast.parse(payload, filename=relative)
     except (SyntaxError, ValueError) as exc:
@@ -170,23 +204,34 @@ def _internal_import_paths(relative: str, payload: bytes,
                 elif alias.name == PACKAGE_NAME or alias.name.startswith(PACKAGE_NAME + "."):
                     raise ValueError(f"unresolved internal import in {relative}: {alias.name}")
         elif isinstance(node, ast.ImportFrom):
-            base = _absolute_from_module(current, node.level, node.module)
+            base = _absolute_from_module(current, current_is_package, node.level, node.module)
             if base is None:
                 continue
+            internal = base == PACKAGE_NAME or base.startswith(PACKAGE_NAME + ".")
+            if not internal:
+                continue
             base_path = _resolve_internal_module(base, modules)
-            alias_paths = {
-                resolved for alias in node.names if alias.name != "*"
-                for resolved in [_resolve_internal_module(f"{base}.{alias.name}", modules)]
-                if resolved is not None
-            }
             if base_path is not None:
                 dependencies.add(base_path)
-            dependencies.update(alias_paths)
-            if ((base == PACKAGE_NAME or base.startswith(PACKAGE_NAME + ".")) and
-                    base_path is None and not alias_paths):
+            elif base not in package_names:
                 raise ValueError(f"unresolved internal import in {relative}: {base}")
+            for alias in node.names:
+                if alias.name == "*":
+                    if base_path is None:
+                        raise ValueError(
+                            f"unresolved internal import in {relative}: {base}.*")
+                    continue
+                candidate = f"{base}.{alias.name}"
+                candidate_path = _resolve_internal_module(candidate, modules)
+                if candidate_path is not None:
+                    dependencies.add(candidate_path)
+                elif base in package_names:
+                    if base not in packages or alias.name not in exports.get(base, set()):
+                        raise ValueError(
+                            f"unresolved internal import in {relative}: {candidate}")
+                # A name imported from an ordinary module is a symbol, not a
+                # candidate module dependency, and is deliberately not rejected.
     return dependencies
-
 
 def _implementation_scope_at_commit(repo: Path, target_commit: str) -> tuple[list[str], list[str]]:
     check = subprocess.run(["git", "cat-file", "-e", f"{target_commit}^{{commit}}"],
@@ -197,10 +242,24 @@ def _implementation_scope_at_commit(repo: Path, target_commit: str) -> tuple[lis
     base_paths = sorted(path for path in names if _in_scope(path))
     if not base_paths or len(base_paths) != len(set(base_paths)):
         raise ValueError("deterministic implementation scope is empty or duplicated")
-    modules = {
-        module: path for path in names
-        for module in [_module_name(path)] if module is not None
-    }
+    modules: dict[str, str] = {}
+    packages: set[str] = set()
+    exports: dict[str, set[str]] = {}
+    for path in names:
+        module = _module_name(path)
+        if module is None:
+            continue
+        if module in modules:
+            raise ValueError(f"duplicate internal module path in target Git tree: {module}")
+        modules[module] = path
+        payload = _tree_bytes(repo, target_commit, path)
+        exports[module] = _statically_exported_names(payload, path)
+        if path.endswith("/__init__.py"):
+            packages.add(module)
+    package_names = set(packages)
+    for module in modules:
+        parts = module.split(".")
+        package_names.update(".".join(parts[:index]) for index in range(1, len(parts)))
     selected = set(base_paths)
     pending = sorted(path for path in selected if path.endswith(".py"))
     parsed: set[str] = set()
@@ -210,7 +269,7 @@ def _implementation_scope_at_commit(repo: Path, target_commit: str) -> tuple[lis
             continue
         parsed.add(relative)
         for dependency in sorted(_internal_import_paths(
-                relative, _tree_bytes(repo, target_commit, relative), modules)):
+                relative, _tree_bytes(repo, target_commit, relative), modules, packages, package_names, exports)):
             if dependency not in selected:
                 selected.add(dependency)
                 pending.append(dependency)
@@ -228,32 +287,134 @@ def internal_dependency_paths_at_commit(repo: str | Path, target_commit: str) ->
     root = Path(repo).resolve(strict=True)
     return _implementation_scope_at_commit(root, target_commit)[1]
 
-def _verify_exact_record(value: object, expected: dict, label: str) -> None:
-    if not isinstance(value, dict) or set(value) != set(expected):
+def _require_exact_keys(value: object, keys: set[str] | frozenset[str], label: str) -> dict:
+    if type(value) is not dict or set(value) != set(keys):
         raise ValueError(f"{label} exact schema/key set mismatch")
+    return value
+
+
+def _require_exact_type(value: object, expected_type: type, label: str) -> None:
+    if type(value) is not expected_type:
+        raise ValueError(f"{label} exact type mismatch")
+
+
+def _require_int(value: object, label: str, *, minimum: int = 0) -> None:
+    _require_exact_type(value, int, label)
+    if value < minimum:
+        raise ValueError(f"{label} value is invalid")
+
+
+def _require_string(value: object, label: str, *, length: int | None = None) -> None:
+    _require_exact_type(value, str, label)
+    if length is not None and len(value) != length:
+        raise ValueError(f"{label} length is invalid")
+
+
+def _require_string_list(value: object, label: str) -> None:
+    _require_exact_type(value, list, label)
+    for index, item in enumerate(value):
+        _require_string(item, f"{label}[{index}]")
+
+
+def _verify_exact_record(value: object, expected: dict, label: str) -> None:
+    record = _require_exact_keys(value, set(expected), label)
     for key, expected_value in expected.items():
-        observed = value[key]
+        observed = record[key]
         if type(observed) is not type(expected_value) or observed != expected_value:
             raise ValueError(f"{label} type/value mismatch: {key}")
 
 
+def _verify_identity_rows(rows: object, label: str) -> None:
+    _require_exact_type(rows, list, label)
+    for index, row in enumerate(rows):
+        record = _require_exact_keys(row, {"path", "sha256", "size_bytes"},
+                                     f"{label}[{index}]")
+        _require_string(record["path"], f"{label}[{index}].path")
+        _require_string(record["sha256"], f"{label}[{index}].sha256", length=64)
+        _require_int(record["size_bytes"], f"{label}[{index}].size_bytes")
+
+
 def verify_manifest_protected_state(manifest: dict) -> None:
-    if not isinstance(manifest, dict) or set(manifest) != MANIFEST_KEYS:
-        raise ValueError("successor manifest exact schema/key set mismatch")
-    _verify_exact_record(
-        {key: manifest[key] for key in (
-            "protected_access_authorized", "protected_access_count",
-            "protected_marker_present", "protected_ledger_size_bytes")},
-        {"protected_access_authorized": False, "protected_access_count": 0,
-         "protected_marker_present": False, "protected_ledger_size_bytes": 0},
-        "successor manifest protected state",
-    )
+    record = _require_exact_keys(manifest, MANIFEST_KEYS, "successor manifest")
+    fixed = {
+        "schema": SCHEMA,
+        "state": "READY_FOR_FRESH_INDEPENDENT_READ_ONLY_REVIEW",
+        "wrapper_commit_binding": "COMMIT_CONTAINING_THIS_DOCUMENT",
+        "same_invocation_retry": False,
+        "scope_policy":
+            "EXACT_SORTED_GIT_TREE_GCSPO_ROOTS_PLUS_TRANSITIVE_INTERNAL_PYTHON_IMPORT_CLOSURE",
+        "manifest_excludes_self": True,
+        "protected_access_authorized": False,
+        "protected_access_count": 0,
+        "protected_marker_present": False,
+        "protected_ledger_size_bytes": 0,
+    }
+    for key, expected in fixed.items():
+        if type(record[key]) is not type(expected) or record[key] != expected:
+            raise ValueError(f"successor manifest schema type/value mismatch: {key}")
+    for key in ("target_commit", "wrapper_parent_sha",
+                "predecessor_freeze_commit", "invalid_evidence_commit"):
+        _require_string(record[key], f"successor manifest {key}", length=40)
+    for key in ("nonce", "config_sha256", "preregistration_sha256"):
+        _require_string(record[key], f"successor manifest {key}", length=64)
+    _require_string(record["invocation_id"], "successor manifest invocation_id")
+    _require_string_list(record["implementation_paths"],
+                         "successor manifest implementation_paths")
+    _require_string_list(record["internal_import_closure_paths"],
+                         "successor manifest internal_import_closure_paths")
+    _verify_identity_rows(record["files"], "successor manifest files")
 
 
 def verify_control_protected_state(control: dict) -> None:
-    if not isinstance(control, dict) or set(control) != CONTROL_KEYS:
-        raise ValueError("successor control exact schema/key set mismatch")
-    _verify_exact_record(control.get("prior_protected_state"), {
+    record = _require_exact_keys(control, CONTROL_KEYS, "successor control")
+    fixed_top = {
+        "schema": CONTROL_SCHEMA,
+        "state": "IMMUTABLY_PREREGISTERED_MANIFEST_REPAIR_ONLY",
+        "commit_binding": "COMMIT_CONTAINING_THIS_DOCUMENT",
+    }
+    for key, expected in fixed_top.items():
+        if type(record[key]) is not str or record[key] != expected:
+            raise ValueError(f"successor control type/value mismatch: {key}")
+    _verify_exact_record(record["invocation"], {
+        "invocation_id": INVOCATION_ID, "nonce": INVOCATION_NONCE,
+        "same_invocation_retry": False, "new_identity_required": True,
+    }, "successor control invocation")
+    ancestry = _require_exact_keys(record["ancestry"], {
+        "approved_predecessor_freeze_commit", "failed_invocation_evidence_commit",
+        "failed_invocation_archive", "failed_target_commit",
+    }, "successor control ancestry")
+    _verify_exact_record(ancestry, {
+        "approved_predecessor_freeze_commit": PREDECESSOR_FREEZE_COMMIT,
+        "failed_invocation_evidence_commit": INVALID_EVIDENCE_COMMIT,
+        "failed_invocation_archive": "/tmp/gcspo-stage0-static-rerun-invalid-0ab9456/",
+        "failed_target_commit": PREDECESSOR_FREEZE_COMMIT,
+    }, "successor control ancestry")
+    repair = _require_exact_keys(record["repair_scope"],
+        {"only", "required_detection", "forbidden_changes"},
+        "successor control repair scope")
+    _require_string(repair["only"], "successor control repair scope only")
+    _require_string_list(repair["required_detection"],
+                         "successor control required detection")
+    _require_string_list(repair["forbidden_changes"],
+                         "successor control forbidden changes")
+    _verify_exact_record(record["frozen_inputs"], {
+        "config_sha256": CONFIG_SHA256,
+        "preregistration_sha256": PREREGISTRATION_SHA256,
+    }, "successor control frozen inputs")
+    preservation = _require_exact_keys(record["failed_invocation_preservation"], {
+        "artifact_root", "exact_regular_file_set", "identities",
+        "overwrite_forbidden",
+    }, "successor control failed invocation preservation")
+    if preservation["artifact_root"] != INVALID_ROOT_RELATIVE or type(
+            preservation["artifact_root"]) is not str:
+        raise ValueError("successor control preservation artifact root type/value mismatch")
+    _require_string_list(preservation["exact_regular_file_set"],
+                         "successor control preserved file set")
+    _verify_identity_rows(preservation["identities"],
+                          "successor control preserved identities")
+    if preservation["overwrite_forbidden"] is not True:
+        raise ValueError("successor control overwrite prohibition mismatch")
+    _verify_exact_record(record["prior_protected_state"], {
         "protected_access_count": 0, "protected_rows_opened": 0,
         "protected_bytes_opened": 0,
         "marker_path": "artifacts/.gcspo_stage0_static_rerun.protected_run_started.json",
@@ -262,25 +423,213 @@ def verify_control_protected_state(control: dict) -> None:
         "ledger_present": True, "ledger_size_bytes": 0,
         "final_verdict_present": False,
     }, "successor control prior protected state")
-    _verify_exact_record(control.get("successor_namespace"), {
+    _verify_exact_record(record["successor_namespace"], {
         "artifact_root": ARTIFACT_RELATIVE,
-        "marker_path": (
-            "artifacts/gcspo_stage0_static_rerun_successor/."
-            f"{INVOCATION_ID}.protected_run_started.json"),
+        "marker_path": ("artifacts/gcspo_stage0_static_rerun_successor/."
+                        f"{INVOCATION_ID}.protected_run_started.json"),
         "marker_present": False,
         "ledger_path": f"{ARTIFACT_RELATIVE}/access_ledger.jsonl",
         "ledger_size_bytes": 0, "protected_access_authorized": False,
     }, "successor control namespace protected state")
+    topology = _require_exact_keys(record["commit_topology"], {
+        "successor_target", "freeze_wrapper", "self_reference_rule"},
+        "successor control commit topology")
+    for key, value in topology.items():
+        _require_string(value, f"successor control commit topology {key}")
+    _verify_exact_record(record["prohibitions"], {
+        "protected_evaluation": True, "protected_entrypoint": True,
+        "private_signing_key_search": True, "push": True,
+    }, "successor control prohibitions")
+
+
+def _verify_test_result(value: object, label: str, *, execution_root: bool) -> None:
+    keys = {"command", "passed", "failed", "exit_code"}
+    if execution_root:
+        keys.add("execution_root")
+    record = _require_exact_keys(value, keys, label)
+    _require_string(record["command"], f"{label} command")
+    for key in ("passed", "failed", "exit_code"):
+        _require_int(record[key], f"{label} {key}")
+    if execution_root:
+        _require_string(record["execution_root"], f"{label} execution_root")
+
+
+def _verify_red_report(value: object) -> None:
+    record = _require_exact_keys(value, {
+        "schema", "phase", "baseline_wrapper_commit", "baseline_target_commit",
+        "independent_review_verdict", "command", "exit_code", "passed",
+        "failed", "reproduced", "protected_access_count",
+        "protected_marker_present", "protected_ledger_size_bytes", "push_performed",
+    }, "review handoff RED report")
+    if record["schema"] not in {
+            "gnss-doppler-lab.gcspo-stage0.successor-blocker-red.v2",
+            "gnss-doppler-lab.gcspo-stage0.successor-blocker-red.v3"} or type(
+                record["schema"]) is not str:
+        raise ValueError("review handoff RED report schema mismatch")
+    for key, expected in {"phase": "RED", "independent_review_verdict": "REJECT",
+                          "protected_access_count": 0,
+                          "protected_marker_present": False,
+                          "protected_ledger_size_bytes": 0,
+                          "push_performed": False}.items():
+        if type(record[key]) is not type(expected) or record[key] != expected:
+            raise ValueError(f"review handoff RED report type/value mismatch: {key}")
+    for key in ("baseline_wrapper_commit", "baseline_target_commit"):
+        _require_string(record[key], f"review handoff RED {key}", length=40)
+    _require_string(record["command"], "review handoff RED command")
+    for key in ("exit_code", "passed", "failed"):
+        _require_int(record[key], f"review handoff RED {key}")
+    reproduced = record["reproduced"]
+    if record["schema"].endswith("v2"):
+        r = _require_exact_keys(reproduced, {"deterministic_closure_set_missing",
+            "post_target_internal_dependency_mutations_accepted",
+            "protected_manifest_tamper_variants_accepted", "protected_tamper_classes"},
+            "review handoff RED reproduced v2")
+        _require_int(r["deterministic_closure_set_missing"], "RED closure count")
+        _require_int(r["protected_manifest_tamper_variants_accepted"],
+                     "RED protected tamper count")
+        _require_string_list(r["post_target_internal_dependency_mutations_accepted"],
+                             "RED post-target paths")
+        _require_string_list(r["protected_tamper_classes"], "RED tamper classes")
+    else:
+        r = _require_exact_keys(reproduced, {"package_init_valid_rejected",
+            "package_init_missing_accepted", "manifest_size_type_mutations_accepted",
+            "handoff_mutations_accepted", "artifact_root_aliases_accepted",
+            "total_adversarial_failures", "tamper_classes"},
+            "review handoff RED reproduced v3")
+        for key in ("package_init_valid_rejected", "package_init_missing_accepted",
+                    "handoff_mutations_accepted", "total_adversarial_failures"):
+            _require_int(r[key], f"RED reproduced {key}")
+        for key in ("manifest_size_type_mutations_accepted",
+                    "artifact_root_aliases_accepted", "tamper_classes"):
+            _require_string_list(r[key], f"RED reproduced {key}")
+
+
+def _verify_green_report(value: object) -> None:
+    record = _require_exact_keys(value, {
+        "schema", "phase", "target_commit_binding", "focused", "relevant",
+        "all_gcspo", "adversarial_rejections", "target_manifest_validation",
+        "repair_scope", "scientific_files_changed", "config_sha256",
+        "preregistration_sha256", "protected_access_count",
+        "protected_marker_present", "protected_ledger_size_bytes", "push_performed",
+    }, "review handoff GREEN report")
+    if record["schema"] not in {
+            "gnss-doppler-lab.gcspo-stage0.successor-blocker-green.v2",
+            "gnss-doppler-lab.gcspo-stage0.successor-blocker-green.v3"} or type(
+                record["schema"]) is not str:
+        raise ValueError("review handoff GREEN report schema mismatch")
+    for key, expected in {"phase": "GREEN_TESTED_TARGET",
+                          "target_commit_binding": "COMMIT_CONTAINING_THIS_DOCUMENT",
+                          "scientific_files_changed": False,
+                          "config_sha256": CONFIG_SHA256,
+                          "preregistration_sha256": PREREGISTRATION_SHA256,
+                          "protected_access_count": 0,
+                          "protected_marker_present": False,
+                          "protected_ledger_size_bytes": 0,
+                          "push_performed": False}.items():
+        if type(record[key]) is not type(expected) or record[key] != expected:
+            raise ValueError(f"review handoff GREEN type/value mismatch: {key}")
+    _require_string(record["repair_scope"], "review handoff GREEN repair scope")
+    _verify_test_result(record["focused"], "review handoff focused", execution_root=False)
+    _verify_test_result(record["relevant"], "review handoff relevant", execution_root=True)
+    _verify_test_result(record["all_gcspo"], "review handoff all GCSPO", execution_root=True)
+    adversarial = record["adversarial_rejections"]
+    if record["schema"].endswith("v2"):
+        a = _require_exact_keys(adversarial, {"post_target_internal_dependency_mutations",
+            "manifest_protected_state_mutations", "control_protected_state_mutations",
+            "handoff_protected_state_mutations", "tamper_classes", "status"},
+            "review handoff GREEN adversarial v2")
+        for key in ("post_target_internal_dependency_mutations",
+                    "manifest_protected_state_mutations",
+                    "control_protected_state_mutations",
+                    "handoff_protected_state_mutations"):
+            _require_int(a[key], f"GREEN adversarial {key}")
+    else:
+        a = _require_exact_keys(adversarial, {"python_import_cases",
+            "manifest_size_type_mutations", "handoff_recursive_schema_mutations",
+            "artifact_root_aliases", "total_second_review_regressions",
+            "prior_protected_mutation_rejections", "tamper_classes", "status"}, "review handoff GREEN adversarial v3")
+        for key in ("python_import_cases", "manifest_size_type_mutations",
+                    "handoff_recursive_schema_mutations", "artifact_root_aliases",
+                    "total_second_review_regressions",
+                    "prior_protected_mutation_rejections"):
+            _require_int(a[key], f"GREEN adversarial {key}")
+    _require_string_list(a["tamper_classes"], "GREEN tamper classes")
+    if a["status"] != "PASS_FAIL_CLOSED" or type(a["status"]) is not str:
+        raise ValueError("GREEN adversarial status mismatch")
+    validation = _require_exact_keys(record["target_manifest_validation"], {
+        "implementation_rows", "internal_import_closure_paths",
+        "required_direct_dependencies_present", "missing", "extra", "status"},
+        "review handoff GREEN target manifest validation")
+    for key in ("implementation_rows", "missing", "extra"):
+        _require_int(validation[key], f"GREEN target validation {key}")
+    _require_string_list(validation["internal_import_closure_paths"],
+                         "GREEN closure paths")
+    _require_string_list(validation["required_direct_dependencies_present"],
+                         "GREEN direct dependencies")
+    if validation["status"] != "PASS" or type(validation["status"]) is not str:
+        raise ValueError("GREEN target validation status mismatch")
+
+
+def _verify_rejection(value: object, label: str) -> None:
+    record = _require_exact_keys(value, {"wrapper_commit", "target_commit", "verdict",
+                                        "blocking_findings"}, label)
+    _require_string(record["wrapper_commit"], f"{label} wrapper", length=40)
+    _require_string(record["target_commit"], f"{label} target", length=40)
+    if record["verdict"] != "REJECT" or type(record["verdict"]) is not str:
+        raise ValueError(f"{label} verdict mismatch")
+    _require_string_list(record["blocking_findings"], f"{label} findings")
 
 
 def verify_handoff_protected_state(handoff: dict) -> None:
-    if not isinstance(handoff, dict) or set(handoff) != HANDOFF_KEYS:
+    old_keys = HANDOFF_KEYS - {"latest_independent_rejection"}
+    keys = set(handoff) if type(handoff) is dict else set()
+    if keys not in (set(old_keys), set(HANDOFF_KEYS)):
         raise ValueError("review handoff exact schema/key set mismatch")
-    _verify_exact_record(handoff.get("protected"), {
+    record = handoff
+    fixed = {
+        "schema": HANDOFF_SCHEMA,
+        "state": "READY_FOR_FRESH_INDEPENDENT_READ_ONLY_REVIEW",
+        "wrapper_commit_binding": "COMMIT_CONTAINING_THIS_DOCUMENT",
+        "same_invocation_retry": False,
+        "config_sha256": CONFIG_SHA256,
+        "preregistration_sha256": PREREGISTRATION_SHA256,
+        "invalid_artifact_root_preserved": True, "push_performed": False,
+    }
+    for key, expected in fixed.items():
+        if type(record[key]) is not type(expected) or record[key] != expected:
+            raise ValueError(f"review handoff schema type/value mismatch: {key}")
+    for key in ("wrapper_parent_sha", "target_commit", "predecessor_freeze_commit",
+                "invalid_evidence_commit"):
+        _require_string(record[key], f"review handoff {key}", length=40)
+    _require_string(record["invocation_id"], "review handoff invocation_id")
+    _require_string(record["nonce"], "review handoff nonce", length=64)
+    _require_string(record["repair_scope"], "review handoff repair_scope")
+    _require_string(record["independent_review_command"],
+                    "review handoff independent review command")
+    red_green = _require_exact_keys(record["red_green"], {"red", "green"},
+                                    "review handoff red/green")
+    _verify_red_report(red_green["red"]); _verify_green_report(red_green["green"])
+    coverage = _require_exact_keys(record["manifest_coverage"], {
+        "total_rows", "stale_rows_required_and_present",
+        "later_gcspo_rows_required_and_present",
+        "required_direct_internal_dependencies", "internal_import_closure_paths",
+        "missing_rows", "extra_rows"}, "review handoff manifest coverage")
+    for key in ("total_rows", "missing_rows", "extra_rows"):
+        _require_int(coverage[key], f"review handoff manifest coverage {key}")
+    for key in ("stale_rows_required_and_present",
+                "later_gcspo_rows_required_and_present",
+                "required_direct_internal_dependencies",
+                "internal_import_closure_paths"):
+        _require_string_list(coverage[key], f"review handoff manifest coverage {key}")
+    _verify_exact_record(record["protected"], {
         "access_count": 0, "marker_present": False,
         "ledger_size_bytes": 0, "authorized": False,
     }, "review handoff protected state")
-
+    _verify_rejection(record["prior_independent_rejection"],
+                      "review handoff prior independent rejection")
+    if "latest_independent_rejection" in record:
+        _verify_rejection(record["latest_independent_rejection"],
+                          "review handoff latest independent rejection")
 
 def build_successor_manifest(repo: str | Path, *, target_commit: str, invocation_id: str,
                              nonce: str, predecessor_freeze_commit: str,
@@ -390,16 +739,55 @@ def _file_identity(path: Path) -> dict:
             "size_bytes": len(payload)}
 
 
+
+def _canonical_artifact_directory(root: Path, artifact_root: str | Path) -> Path:
+    if not isinstance(artifact_root, (str, Path)):
+        raise ValueError("artifact root canonical path contract requires a path string")
+    spelling = str(artifact_root)
+    if spelling != ARTIFACT_RELATIVE:
+        raise ValueError(
+            f"artifact root canonical repo-relative spelling must be exactly {ARTIFACT_RELATIVE}")
+    relative = Path(spelling)
+    if relative.is_absolute() or any(part in {"", ".", ".."} for part in relative.parts):
+        raise ValueError("artifact root canonical path contains a forbidden alias component")
+    expected = root.joinpath(*relative.parts)
+    current = root
+    for part in relative.parts:
+        current = current / part
+        if current.is_symlink():
+            raise ValueError("artifact root canonical path contains a symlink component")
+    if not expected.is_dir() or expected.resolve(strict=True) != expected:
+        raise ValueError("artifact root canonical directory is absent or aliased")
+    return expected
+
+
+def _require_regular_file(root: Path, path: Path, label: str) -> None:
+    try:
+        relative = path.relative_to(root)
+    except ValueError as exc:
+        raise ValueError(f"{label} escapes repository root") from exc
+    current = root
+    for part in relative.parts:
+        current = current / part
+        if current.is_symlink():
+            raise ValueError(f"{label} has a symlink component")
+    if not path.is_file():
+        raise ValueError(f"{label} is not a regular file")
+
 def verify_successor_freeze(repo: str | Path, artifact_root: str | Path,
                             expected_wrapper_commit: str) -> dict:
     root = Path(repo).resolve(strict=True)
-    artifact = Path(artifact_root).resolve(strict=True)
+    artifact = _canonical_artifact_directory(root, artifact_root)
     head = _run(root, "rev-parse", "HEAD").strip()
     if head != expected_wrapper_commit:
         raise ValueError("review HEAD does not equal expected wrapper commit")
     control_path = artifact / "successor_control.json"
     manifest_path = artifact / "implementation_manifest.json"
     handoff_path = artifact / "review_handoff.json"
+    for path, label in ((control_path, "successor control"),
+                        (manifest_path, "implementation manifest"),
+                        (handoff_path, "review handoff")):
+        _require_regular_file(root, path, label)
     control = strict_json_bytes(control_path.read_bytes(), "successor control")
     manifest = strict_json_bytes(manifest_path.read_bytes(), "implementation manifest")
     handoff = strict_json_bytes(handoff_path.read_bytes(), "review handoff")
@@ -467,10 +855,32 @@ def verify_successor_freeze(repo: str | Path, artifact_root: str | Path,
     if subprocess.run(["git", "merge-base", "--is-ancestor", REJECTED_WRAPPER_COMMIT, target],
                       cwd=root, capture_output=True).returncode:
         raise ValueError("rejected wrapper is not preserved in target ancestry")
+    if handoff.get("latest_independent_rejection") != {
+            "wrapper_commit": SECOND_REJECTED_WRAPPER_COMMIT,
+            "target_commit": SECOND_REJECTED_TARGET_COMMIT,
+            "verdict": "REJECT",
+            "blocking_findings": [
+                "PACKAGE_INIT_RELATIVE_IMPORT_RESOLUTION_FAIL_OPEN",
+                "DOCUMENT_SCHEMA_AND_PRIMITIVE_TYPE_FAIL_OPEN",
+                "ARTIFACT_ROOT_CANONICAL_PATH_FAIL_OPEN",
+            ]}:
+        raise ValueError("latest independent rejection evidence mismatch")
+    if subprocess.run(["git", "merge-base", "--is-ancestor",
+                       SECOND_REJECTED_WRAPPER_COMMIT, target],
+                      cwd=root, capture_output=True).returncode:
+        raise ValueError("latest rejected wrapper is not preserved in target ancestry")
     old = root / INVALID_ROOT_RELATIVE
+    current = root
+    for part in Path(INVALID_ROOT_RELATIVE).parts:
+        current = current / part
+        if current.is_symlink():
+            raise ValueError("invalid artifact root contains a symlink component")
     preservation = control.get("failed_invocation_preservation", {})
     expected_names = preservation.get("exact_regular_file_set")
-    observed_names = sorted(p.relative_to(old).as_posix() for p in old.rglob("*") if p.is_file())
+    old_entries = list(old.rglob("*"))
+    if any(path.is_symlink() for path in old_entries):
+        raise ValueError("invalid artifact root contains a symlink entry")
+    observed_names = sorted(p.relative_to(old).as_posix() for p in old_entries if p.is_file())
     if observed_names != expected_names:
         raise ValueError("invalid artifact root exact-set contract mismatch")
     expected_old = preservation.get("identities")
@@ -487,6 +897,10 @@ def verify_successor_freeze(repo: str | Path, artifact_root: str | Path,
         raise ValueError("invalid artifact root identity contract mismatch")
     config = artifact / "config.json"
     prereg = artifact / "preregistration.json"
+    ledger = artifact / "access_ledger.jsonl"
+    for path, label in ((config, "successor config"), (prereg, "successor preregistration"),
+                        (ledger, "successor access ledger")):
+        _require_regular_file(root, path, label)
     if (_file_identity(config)["sha256"] != CONFIG_SHA256 or
             _file_identity(prereg)["sha256"] != PREREGISTRATION_SHA256):
         raise ValueError("successor config/preregistration immutable hash mismatch")

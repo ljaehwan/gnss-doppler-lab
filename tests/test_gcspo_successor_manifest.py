@@ -8,11 +8,13 @@ import subprocess
 import pytest
 
 from gnss_doppler_lab.gcspo_successor_freeze import (
+    ARTIFACT_RELATIVE,
     build_successor_manifest,
     implementation_paths_at_commit,
     verify_control_protected_state,
     verify_handoff_protected_state,
     verify_successor_manifest,
+    verify_successor_freeze,
 )
 
 
@@ -297,3 +299,119 @@ def test_wrapper_immediate_parent_must_be_target(tmp_path):
             manifest, repo, expected_target_commit=target,
             wrapper_commit=_git(repo, "rev-parse", "HEAD"),
         )
+
+
+# Adversarial regressions from the second independent review.  These tests were
+# first run against rejected wrapper 34462807a2029a0979c9e65162246b799406c562.
+
+def _commit_package_import_case(repo: Path, init_source: str) -> str:
+    files = {
+        "src/gnss_doppler_lab/__init__.py": "",
+        "src/gnss_doppler_lab/gcspo_entry.py":
+            "from gnss_doppler_lab import subpkg as imported_subpkg\n",
+        "src/gnss_doppler_lab/subpkg/__init__.py": init_source,
+        "src/gnss_doppler_lab/subpkg/module.py":
+            "from .peer import alias_value\nalias_value = 1\n",
+        "src/gnss_doppler_lab/subpkg/peer.py":
+            "from . import module\nalias_value = 1\n",
+    }
+    for relative, payload in files.items():
+        path = repo / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(payload)
+    _git(repo, "add", ".")
+    _git(repo, "commit", "-qm", "package import case")
+    return _git(repo, "rev-parse", "HEAD")
+
+
+def test_package_init_relative_from_module_alias_and_cycle_resolve(tmp_path):
+    repo = tmp_path / "package-repo"
+    repo.mkdir()
+    _git(repo, "init", "-q")
+    _git(repo, "config", "user.email", "imports@test.invalid")
+    _git(repo, "config", "user.name", "Import Test")
+    target = _commit_package_import_case(repo, "from .module import value\n")
+    paths = implementation_paths_at_commit(repo, target)
+    assert "src/gnss_doppler_lab/subpkg/__init__.py" in paths
+    assert "src/gnss_doppler_lab/subpkg/module.py" in paths
+    assert "src/gnss_doppler_lab/subpkg/peer.py" in paths
+
+
+def test_package_init_unresolved_from_dot_alias_fails_closed(tmp_path):
+    repo = tmp_path / "missing-repo"
+    repo.mkdir()
+    _git(repo, "init", "-q")
+    _git(repo, "config", "user.email", "imports@test.invalid")
+    _git(repo, "config", "user.name", "Import Test")
+    target = _commit_package_import_case(repo, "from . import definitely_missing\n")
+    with pytest.raises(ValueError, match="unresolved internal import"):
+        implementation_paths_at_commit(repo, target)
+
+
+@pytest.mark.parametrize("invalid_size", [1.0, True])
+def test_manifest_size_bytes_exact_int_rejects_float_and_bool(tmp_path, invalid_size):
+    repo, _ = _repo(tmp_path)
+    tiny = repo / "scripts/gcspo_tiny.py"
+    tiny.write_bytes(b"x")
+    _git(repo, "add", ".")
+    _git(repo, "commit", "-qm", "one-byte implementation fixture")
+    target = _git(repo, "rev-parse", "HEAD")
+    manifest = _manifest(repo, target)
+    row = next(row for row in manifest["files"] if row["path"] == "scripts/gcspo_tiny.py")
+    row["size_bytes"] = invalid_size
+    with pytest.raises(ValueError, match="row|schema|type|size"):
+        verify_successor_manifest(manifest, repo, expected_target_commit=target)
+
+
+@pytest.mark.parametrize("mutation", [
+    "push_flip", "retry_flip", "preserved_flip", "coverage_extra",
+    "coverage_missing", "coverage_type", "coverage_bool_as_int",
+])
+def test_handoff_complete_recursive_schema_rejects_adversarial_mutations(mutation):
+    handoff = _committed_document("review_handoff.json")
+    if mutation == "push_flip":
+        handoff["push_performed"] = True
+    elif mutation == "retry_flip":
+        handoff["same_invocation_retry"] = True
+    elif mutation == "preserved_flip":
+        handoff["invalid_artifact_root_preserved"] = False
+    elif mutation == "coverage_extra":
+        handoff["manifest_coverage"]["unexpected"] = 0
+    elif mutation == "coverage_missing":
+        handoff["manifest_coverage"].pop("missing_rows")
+    elif mutation == "coverage_type":
+        handoff["manifest_coverage"]["total_rows"] = 69.0
+    elif mutation == "coverage_bool_as_int":
+        handoff["manifest_coverage"]["missing_rows"] = False
+    else:
+        raise AssertionError(mutation)
+    with pytest.raises(ValueError, match="handoff|schema|type|value|contract"):
+        verify_handoff_protected_state(handoff)
+
+
+@pytest.mark.parametrize("alias_kind", [
+    "external_symlink", "traversal", "absolute", "dot_alias",
+])
+def test_successor_artifact_root_requires_exact_canonical_repo_relative_spelling(
+        tmp_path, alias_kind):
+    source_repo = Path(__file__).parents[1]
+    baseline = "34462807a2029a0979c9e65162246b799406c562"
+    worktree = tmp_path / "clean-baseline"
+    _git(source_repo, "worktree", "add", "--detach", str(worktree), baseline)
+    try:
+        real = worktree / ARTIFACT_RELATIVE
+        if alias_kind == "external_symlink":
+            alias = tmp_path / "external-artifact-alias"
+            alias.symlink_to(real, target_is_directory=True)
+        elif alias_kind == "traversal":
+            alias = "artifacts/../artifacts/" + ARTIFACT_RELATIVE.removeprefix("artifacts/")
+        elif alias_kind == "absolute":
+            alias = str(real)
+        elif alias_kind == "dot_alias":
+            alias = "./" + ARTIFACT_RELATIVE
+        else:
+            raise AssertionError(alias_kind)
+        with pytest.raises(ValueError, match="artifact root.*canonical|canonical.*artifact root"):
+            verify_successor_freeze(worktree, alias, baseline)
+    finally:
+        _git(source_repo, "worktree", "remove", "--force", str(worktree))

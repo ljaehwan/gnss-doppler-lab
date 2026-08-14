@@ -23,11 +23,14 @@ from gnss_doppler_lab.gcspo_successor_freeze import (
     PREREGISTRATION_SHA256,
     REJECTED_TARGET_COMMIT,
     REJECTED_WRAPPER_COMMIT,
+    SECOND_REJECTED_TARGET_COMMIT,
+    SECOND_REJECTED_WRAPPER_COMMIT,
     REQUIRED_INTERNAL_DEPENDENCY_PATHS,
     STALE_CROSS_GENERATION_PATHS,
     build_successor_manifest,
     strict_json_bytes,
     verify_control_protected_state,
+    verify_handoff_protected_state,
 )
 
 
@@ -93,7 +96,7 @@ def main() -> int:
         "same_invocation_retry": False,
         "predecessor_freeze_commit": PREDECESSOR_FREEZE_COMMIT,
         "invalid_evidence_commit": INVALID_EVIDENCE_COMMIT,
-        "repair_scope": "INTERNAL_IMPORT_CLOSURE_AND_PROTECTED_STATE_VERIFICATION_ONLY",
+        "repair_scope": "PYTHON_IMPORT_RESOLUTION_EXACT_DOCUMENT_SCHEMA_AND_CANONICAL_ARTIFACT_ROOT_ONLY",
         "config_sha256": CONFIG_SHA256,
         "preregistration_sha256": PREREGISTRATION_SHA256,
         "red_green": {"red": red, "green": green},
@@ -116,11 +119,22 @@ def main() -> int:
                 "PROTECTED_STATE_SCHEMA_TYPE_VALUE_NOT_STRICT",
             ],
         },
+        "latest_independent_rejection": {
+            "wrapper_commit": SECOND_REJECTED_WRAPPER_COMMIT,
+            "target_commit": SECOND_REJECTED_TARGET_COMMIT,
+            "verdict": "REJECT",
+            "blocking_findings": [
+                "PACKAGE_INIT_RELATIVE_IMPORT_RESOLUTION_FAIL_OPEN",
+                "DOCUMENT_SCHEMA_AND_PRIMITIVE_TYPE_FAIL_OPEN",
+                "ARTIFACT_ROOT_CANONICAL_PATH_FAIL_OPEN",
+            ],
+        },
         "invalid_artifact_root_preserved": True,
         "push_performed": False,
         "independent_review_command":
             "python3 scripts/verify_gcspo_successor_freeze.py --expected-wrapper-commit $(git rev-parse HEAD)",
     }
+    verify_handoff_protected_state(handoff)
     _write(artifact / "implementation_manifest.json", manifest)
     _write(artifact / "review_handoff.json", handoff)
     print(json.dumps({"status": "BUILT", "target_commit": target,
