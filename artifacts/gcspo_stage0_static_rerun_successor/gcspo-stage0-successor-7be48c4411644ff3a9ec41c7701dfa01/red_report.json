@@ -1,37 +1,33 @@
 {
-  "schema": "gnss-doppler-lab.gcspo-stage0.successor-blocker-red.v3",
+  "schema": "gnss-doppler-lab.gcspo-stage0.successor-blocker-red.v4",
   "phase": "RED",
-  "baseline_wrapper_commit": "34462807a2029a0979c9e65162246b799406c562",
-  "baseline_target_commit": "9121843f1d4835884af91883369dca62848c8dcd",
+  "baseline_wrapper_commit": "da5a3c1ecea0aa440c08bb6b3700974996f4ccac",
+  "baseline_target_commit": "ec60cc3bade6ac024a415be01c0a02e717a8244f",
   "independent_review_verdict": "REJECT",
   "command": "/home/ubuntu/.venvs/cmte-a2/bin/python -m pytest -q tests/test_gcspo_successor_manifest.py",
   "exit_code": 1,
-  "passed": 48,
-  "failed": 15,
+  "passed": 64,
+  "failed": 9,
   "reproduced": {
-    "package_init_valid_rejected": 1,
-    "package_init_missing_accepted": 1,
-    "manifest_size_type_mutations_accepted": [
-      "float",
-      "bool"
+    "fully_qualified_import_closure_failures": [
+      "regular_package_initializers_omitted",
+      "mixed_namespace_regular_initializer_omitted",
+      "from_import_parent_initializer_omitted",
+      "direct_package_parent_initializer_omitted",
+      "initializer_relative_import_cycle_not_traversed"
     ],
-    "handoff_mutations_accepted": 7,
-    "artifact_root_aliases_accepted": [
-      "external_symlink",
-      "traversal",
-      "absolute",
-      "dot_alias"
+    "post_target_initializer_mutations_accepted": [
+      "src/gnss_doppler_lab/__init__.py",
+      "src/gnss_doppler_lab/subpkg/__init__.py",
+      "src/gnss_doppler_lab/subpkg/hidden.py"
     ],
-    "total_adversarial_failures": 15,
+    "existing_initializer_missing_dependency_accepted": 1,
+    "valid_namespace_case_passed": 1,
+    "total_failures": 9,
     "tamper_classes": [
-      "resolution",
-      "bool-as-int",
-      "float-as-int",
-      "boolean-value-flip",
-      "extra",
-      "missing",
-      "type",
-      "path-alias"
+      "runtime-closure-omission",
+      "initializer-transitive-omission",
+      "post-target-hidden-mutation"
     ]
   },
   "protected_access_count": 0,

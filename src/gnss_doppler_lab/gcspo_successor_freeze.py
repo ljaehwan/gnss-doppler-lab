@@ -25,6 +25,8 @@ REJECTED_WRAPPER_COMMIT = "078a8c5739c92e877763583ce2ca23dad4f433f9"
 REJECTED_TARGET_COMMIT = "1bfc3d2b64ad43a9db78081f3abc482bdf5d022f"
 SECOND_REJECTED_WRAPPER_COMMIT = "34462807a2029a0979c9e65162246b799406c562"
 SECOND_REJECTED_TARGET_COMMIT = "9121843f1d4835884af91883369dca62848c8dcd"
+LATEST_REJECTED_WRAPPER_COMMIT = "da5a3c1ecea0aa440c08bb6b3700974996f4ccac"
+LATEST_REJECTED_TARGET_COMMIT = "ec60cc3bade6ac024a415be01c0a02e717a8244f"
 REQUIRED_INTERNAL_DEPENDENCY_PATHS = (
     "src/gnss_doppler_lab/gcmr_geometry.py",
     "src/gnss_doppler_lab/trajectory.py",
@@ -184,6 +186,19 @@ def _statically_exported_names(payload: bytes, relative: str) -> set[str]:
     return names
 
 
+def _regular_package_initializer_paths(module: str,
+                                       modules: dict[str, str]) -> tuple[str, ...]:
+    # Existing regular-package initializers, in Python prefix load order.
+    # Missing prefixes are namespace packages and contribute no required file.
+    parts = module.split(".")
+    initializers: list[str] = []
+    for index in range(1, len(parts) + 1):
+        path = modules.get(".".join(parts[:index]))
+        if path is not None and path.endswith("/__init__.py"):
+            initializers.append(path)
+    return tuple(initializers)
+
+
 def _internal_import_paths(relative: str, payload: bytes,
                            modules: dict[str, str], packages: set[str],
                            package_names: set[str],
@@ -195,13 +210,22 @@ def _internal_import_paths(relative: str, payload: bytes,
     except (SyntaxError, ValueError) as exc:
         raise ValueError(f"cannot parse Python import graph at target: {relative}") from exc
     dependencies: set[str] = set()
+
+    def add_initializers(module: str) -> None:
+        dependencies.update(_regular_package_initializer_paths(module, modules))
+
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
             for alias in node.names:
+                internal = (alias.name == PACKAGE_NAME or
+                            alias.name.startswith(PACKAGE_NAME + "."))
+                if not internal:
+                    continue
+                add_initializers(alias.name)
                 resolved = _resolve_internal_module(alias.name, modules)
                 if resolved is not None:
                     dependencies.add(resolved)
-                elif alias.name == PACKAGE_NAME or alias.name.startswith(PACKAGE_NAME + "."):
+                elif alias.name not in package_names:
                     raise ValueError(f"unresolved internal import in {relative}: {alias.name}")
         elif isinstance(node, ast.ImportFrom):
             base = _absolute_from_module(current, current_is_package, node.level, node.module)
@@ -210,6 +234,7 @@ def _internal_import_paths(relative: str, payload: bytes,
             internal = base == PACKAGE_NAME or base.startswith(PACKAGE_NAME + ".")
             if not internal:
                 continue
+            add_initializers(base)
             base_path = _resolve_internal_module(base, modules)
             if base_path is not None:
                 dependencies.add(base_path)
@@ -224,13 +249,16 @@ def _internal_import_paths(relative: str, payload: bytes,
                 candidate = f"{base}.{alias.name}"
                 candidate_path = _resolve_internal_module(candidate, modules)
                 if candidate_path is not None:
+                    add_initializers(candidate)
                     dependencies.add(candidate_path)
+                elif candidate in package_names:
+                    # A namespace package is valid; add existing regular prefixes only.
+                    add_initializers(candidate)
                 elif base in package_names:
                     if base not in packages or alias.name not in exports.get(base, set()):
                         raise ValueError(
                             f"unresolved internal import in {relative}: {candidate}")
-                # A name imported from an ordinary module is a symbol, not a
-                # candidate module dependency, and is deliberately not rejected.
+                # A name from an ordinary module is a symbol, not a module dependency.
     return dependencies
 
 def _implementation_scope_at_commit(repo: Path, target_commit: str) -> tuple[list[str], list[str]]:
@@ -461,9 +489,8 @@ def _verify_red_report(value: object) -> None:
         "failed", "reproduced", "protected_access_count",
         "protected_marker_present", "protected_ledger_size_bytes", "push_performed",
     }, "review handoff RED report")
-    if record["schema"] not in {
-            "gnss-doppler-lab.gcspo-stage0.successor-blocker-red.v2",
-            "gnss-doppler-lab.gcspo-stage0.successor-blocker-red.v3"} or type(
+    if record["schema"] != (
+            "gnss-doppler-lab.gcspo-stage0.successor-blocker-red.v4") or type(
                 record["schema"]) is not str:
         raise ValueError("review handoff RED report schema mismatch")
     for key, expected in {"phase": "RED", "independent_review_verdict": "REJECT",
@@ -478,30 +505,18 @@ def _verify_red_report(value: object) -> None:
     _require_string(record["command"], "review handoff RED command")
     for key in ("exit_code", "passed", "failed"):
         _require_int(record[key], f"review handoff RED {key}")
-    reproduced = record["reproduced"]
-    if record["schema"].endswith("v2"):
-        r = _require_exact_keys(reproduced, {"deterministic_closure_set_missing",
-            "post_target_internal_dependency_mutations_accepted",
-            "protected_manifest_tamper_variants_accepted", "protected_tamper_classes"},
-            "review handoff RED reproduced v2")
-        _require_int(r["deterministic_closure_set_missing"], "RED closure count")
-        _require_int(r["protected_manifest_tamper_variants_accepted"],
-                     "RED protected tamper count")
-        _require_string_list(r["post_target_internal_dependency_mutations_accepted"],
-                             "RED post-target paths")
-        _require_string_list(r["protected_tamper_classes"], "RED tamper classes")
-    else:
-        r = _require_exact_keys(reproduced, {"package_init_valid_rejected",
-            "package_init_missing_accepted", "manifest_size_type_mutations_accepted",
-            "handoff_mutations_accepted", "artifact_root_aliases_accepted",
-            "total_adversarial_failures", "tamper_classes"},
-            "review handoff RED reproduced v3")
-        for key in ("package_init_valid_rejected", "package_init_missing_accepted",
-                    "handoff_mutations_accepted", "total_adversarial_failures"):
-            _require_int(r[key], f"RED reproduced {key}")
-        for key in ("manifest_size_type_mutations_accepted",
-                    "artifact_root_aliases_accepted", "tamper_classes"):
-            _require_string_list(r[key], f"RED reproduced {key}")
+    reproduced = _require_exact_keys(record["reproduced"], {
+        "fully_qualified_import_closure_failures",
+        "post_target_initializer_mutations_accepted",
+        "existing_initializer_missing_dependency_accepted",
+        "valid_namespace_case_passed", "total_failures", "tamper_classes",
+    }, "review handoff RED reproduced v4")
+    for key in ("existing_initializer_missing_dependency_accepted",
+                "valid_namespace_case_passed", "total_failures"):
+        _require_int(reproduced[key], f"RED reproduced {key}")
+    for key in ("fully_qualified_import_closure_failures",
+                "post_target_initializer_mutations_accepted", "tamper_classes"):
+        _require_string_list(reproduced[key], f"RED reproduced {key}")
 
 
 def _verify_green_report(value: object) -> None:
@@ -512,9 +527,8 @@ def _verify_green_report(value: object) -> None:
         "preregistration_sha256", "protected_access_count",
         "protected_marker_present", "protected_ledger_size_bytes", "push_performed",
     }, "review handoff GREEN report")
-    if record["schema"] not in {
-            "gnss-doppler-lab.gcspo-stage0.successor-blocker-green.v2",
-            "gnss-doppler-lab.gcspo-stage0.successor-blocker-green.v3"} or type(
+    if record["schema"] != (
+            "gnss-doppler-lab.gcspo-stage0.successor-blocker-green.v4") or type(
                 record["schema"]) is not str:
         raise ValueError("review handoff GREEN report schema mismatch")
     for key, expected in {"phase": "GREEN_TESTED_TARGET",
@@ -532,29 +546,17 @@ def _verify_green_report(value: object) -> None:
     _verify_test_result(record["focused"], "review handoff focused", execution_root=False)
     _verify_test_result(record["relevant"], "review handoff relevant", execution_root=True)
     _verify_test_result(record["all_gcspo"], "review handoff all GCSPO", execution_root=True)
-    adversarial = record["adversarial_rejections"]
-    if record["schema"].endswith("v2"):
-        a = _require_exact_keys(adversarial, {"post_target_internal_dependency_mutations",
-            "manifest_protected_state_mutations", "control_protected_state_mutations",
-            "handoff_protected_state_mutations", "tamper_classes", "status"},
-            "review handoff GREEN adversarial v2")
-        for key in ("post_target_internal_dependency_mutations",
-                    "manifest_protected_state_mutations",
-                    "control_protected_state_mutations",
-                    "handoff_protected_state_mutations"):
-            _require_int(a[key], f"GREEN adversarial {key}")
-    else:
-        a = _require_exact_keys(adversarial, {"python_import_cases",
-            "manifest_size_type_mutations", "handoff_recursive_schema_mutations",
-            "artifact_root_aliases", "total_second_review_regressions",
-            "prior_protected_mutation_rejections", "tamper_classes", "status"}, "review handoff GREEN adversarial v3")
-        for key in ("python_import_cases", "manifest_size_type_mutations",
-                    "handoff_recursive_schema_mutations", "artifact_root_aliases",
-                    "total_second_review_regressions",
-                    "prior_protected_mutation_rejections"):
-            _require_int(a[key], f"GREEN adversarial {key}")
-    _require_string_list(a["tamper_classes"], "GREEN tamper classes")
-    if a["status"] != "PASS_FAIL_CLOSED" or type(a["status"]) is not str:
+    adversarial = _require_exact_keys(record["adversarial_rejections"], {
+        "package_initializer_import_cases", "post_target_initializer_mutations",
+        "total_latest_review_regressions", "tamper_classes", "status",
+    }, "review handoff GREEN adversarial v4")
+    for key in ("package_initializer_import_cases",
+                "post_target_initializer_mutations",
+                "total_latest_review_regressions"):
+        _require_int(adversarial[key], f"GREEN adversarial {key}")
+    _require_string_list(adversarial["tamper_classes"], "GREEN tamper classes")
+    if adversarial["status"] != "PASS_FAIL_CLOSED" or type(
+            adversarial["status"]) is not str:
         raise ValueError("GREEN adversarial status mismatch")
     validation = _require_exact_keys(record["target_manifest_validation"], {
         "implementation_rows", "internal_import_closure_paths",
@@ -567,7 +569,7 @@ def _verify_green_report(value: object) -> None:
     _require_string_list(validation["required_direct_dependencies_present"],
                          "GREEN direct dependencies")
     if validation["status"] != "PASS" or type(validation["status"]) is not str:
-        raise ValueError("GREEN target validation status mismatch")
+        raise ValueError("review handoff GREEN target validation status mismatch")
 
 
 def _verify_rejection(value: object, label: str) -> None:
@@ -626,8 +628,7 @@ def verify_handoff_protected_state(handoff: dict) -> None:
     if "latest_independent_rejection" in record:
         _verify_rejection(record["latest_independent_rejection"],
                           "review handoff latest independent rejection")
-    if record["repair_scope"] != (
-            "PYTHON_IMPORT_RESOLUTION_EXACT_DOCUMENT_SCHEMA_AND_CANONICAL_ARTIFACT_ROOT_ONLY"):
+    if record["repair_scope"] != "PACKAGE_INITIALIZER_RUNTIME_CLOSURE_ONLY":
         raise ValueError("review handoff repair scope value mismatch")
     if (record["invocation_id"] != INVOCATION_ID or record["nonce"] != INVOCATION_NONCE or
             record["predecessor_freeze_commit"] != PREDECESSOR_FREEZE_COMMIT or
@@ -652,22 +653,30 @@ def verify_handoff_protected_state(handoff: dict) -> None:
         raise ValueError("review handoff manifest coverage value contract mismatch")
     red = record["red_green"]["red"]
     expected_red_values = {
-        "schema": "gnss-doppler-lab.gcspo-stage0.successor-blocker-red.v3",
-        "phase": "RED", "baseline_wrapper_commit": SECOND_REJECTED_WRAPPER_COMMIT,
-        "baseline_target_commit": SECOND_REJECTED_TARGET_COMMIT,
+        "schema": "gnss-doppler-lab.gcspo-stage0.successor-blocker-red.v4",
+        "phase": "RED", "baseline_wrapper_commit": LATEST_REJECTED_WRAPPER_COMMIT,
+        "baseline_target_commit": LATEST_REJECTED_TARGET_COMMIT,
         "independent_review_verdict": "REJECT",
         "command": ("/home/ubuntu/.venvs/cmte-a2/bin/python -m pytest -q "
                     "tests/test_gcspo_successor_manifest.py"),
-        "exit_code": 1, "passed": 48, "failed": 15,
+        "exit_code": 1, "passed": 64, "failed": 9,
         "reproduced": {
-            "package_init_valid_rejected": 1, "package_init_missing_accepted": 1,
-            "manifest_size_type_mutations_accepted": ["float", "bool"],
-            "handoff_mutations_accepted": 7,
-            "artifact_root_aliases_accepted": [
-                "external_symlink", "traversal", "absolute", "dot_alias"],
-            "total_adversarial_failures": 15,
-            "tamper_classes": ["resolution", "bool-as-int", "float-as-int",
-                "boolean-value-flip", "extra", "missing", "type", "path-alias"],
+            "fully_qualified_import_closure_failures": [
+                "regular_package_initializers_omitted",
+                "mixed_namespace_regular_initializer_omitted",
+                "from_import_parent_initializer_omitted",
+                "direct_package_parent_initializer_omitted",
+                "initializer_relative_import_cycle_not_traversed",
+            ],
+            "post_target_initializer_mutations_accepted": [
+                "src/gnss_doppler_lab/__init__.py",
+                "src/gnss_doppler_lab/subpkg/__init__.py",
+                "src/gnss_doppler_lab/subpkg/hidden.py",
+            ],
+            "existing_initializer_missing_dependency_accepted": 1,
+            "valid_namespace_case_passed": 1, "total_failures": 9,
+            "tamper_classes": ["runtime-closure-omission",
+                "initializer-transitive-omission", "post-target-hidden-mutation"],
         },
         "protected_access_count": 0, "protected_marker_present": False,
         "protected_ledger_size_bytes": 0, "push_performed": False,
@@ -677,13 +686,13 @@ def verify_handoff_protected_state(handoff: dict) -> None:
     green = record["red_green"]["green"]
     expected_commands = {
         "focused": ("/home/ubuntu/.venvs/cmte-a2/bin/python -m pytest -q "
-                    "tests/test_gcspo_successor_manifest.py", 63, False),
+                    "tests/test_gcspo_successor_manifest.py", 73, False),
         "relevant": ("/home/ubuntu/.venvs/cmte-a2/bin/python -m pytest -q "
                     "tests/test_gcspo_successor_manifest.py tests/test_gcspo_freeze.py "
                     "tests/test_gcspo_round4_freeze_repairs.py tests/test_gcspo_verifier.py "
-                    "tests/test_gcspo_stage0.py", 141, True),
+                    "tests/test_gcspo_stage0.py", 151, True),
         "all_gcspo": ("/home/ubuntu/.venvs/cmte-a2/bin/python -m pytest -q "
-                    "tests/test_gcspo*.py", 337, True),
+                    "tests/test_gcspo*.py", 347, True),
     }
     for key, (command, passed, has_root) in expected_commands.items():
         expected_result = {"command": command, "passed": passed, "failed": 0, "exit_code": 0}
@@ -694,18 +703,17 @@ def verify_handoff_protected_state(handoff: dict) -> None:
         if green[key] != expected_result:
             raise ValueError(f"review handoff GREEN {key} exact value contract mismatch")
     if green["adversarial_rejections"] != {
-            "python_import_cases": 2, "manifest_size_type_mutations": 2,
-            "handoff_recursive_schema_mutations": 7, "artifact_root_aliases": 4,
-            "total_second_review_regressions": 15,
-            "prior_protected_mutation_rejections": 275,
-            "tamper_classes": ["resolution", "bool-as-int", "float-as-int",
-                "boolean-value-flip", "extra", "missing", "type", "path-alias"],
+            "package_initializer_import_cases": 7,
+            "post_target_initializer_mutations": 3,
+            "total_latest_review_regressions": 10,
+            "tamper_classes": ["runtime-closure-omission",
+                "initializer-transitive-omission", "post-target-hidden-mutation"],
             "status": "PASS_FAIL_CLOSED"} or green["target_manifest_validation"] != {
             "implementation_rows": 69,
             "internal_import_closure_paths": expected_coverage["internal_import_closure_paths"],
             "required_direct_dependencies_present": list(REQUIRED_INTERNAL_DEPENDENCY_PATHS),
             "missing": 0, "extra": 0, "status": "PASS"} or green["repair_scope"] != (
-            "PYTHON_IMPORT_RESOLUTION_EXACT_DOCUMENT_SCHEMA_AND_CANONICAL_ARTIFACT_ROOT_ONLY"):
+            "PACKAGE_INITIALIZER_RUNTIME_CLOSURE_ONLY"):
         raise ValueError("review handoff GREEN exact value contract mismatch")
 
 def build_successor_manifest(repo: str | Path, *, target_commit: str, invocation_id: str,
@@ -940,17 +948,15 @@ def verify_successor_freeze(repo: str | Path, artifact_root: str | Path,
                       cwd=root, capture_output=True).returncode:
         raise ValueError("rejected wrapper is not preserved in target ancestry")
     if handoff.get("latest_independent_rejection") != {
-            "wrapper_commit": SECOND_REJECTED_WRAPPER_COMMIT,
-            "target_commit": SECOND_REJECTED_TARGET_COMMIT,
+            "wrapper_commit": LATEST_REJECTED_WRAPPER_COMMIT,
+            "target_commit": LATEST_REJECTED_TARGET_COMMIT,
             "verdict": "REJECT",
             "blocking_findings": [
-                "PACKAGE_INIT_RELATIVE_IMPORT_RESOLUTION_FAIL_OPEN",
-                "DOCUMENT_SCHEMA_AND_PRIMITIVE_TYPE_FAIL_OPEN",
-                "ARTIFACT_ROOT_CANONICAL_PATH_FAIL_OPEN",
+                "PACKAGE_INITIALIZER_RUNTIME_CLOSURE_MISSING",
             ]}:
         raise ValueError("latest independent rejection evidence mismatch")
     if subprocess.run(["git", "merge-base", "--is-ancestor",
-                       SECOND_REJECTED_WRAPPER_COMMIT, target],
+                       LATEST_REJECTED_WRAPPER_COMMIT, target],
                       cwd=root, capture_output=True).returncode:
         raise ValueError("latest rejected wrapper is not preserved in target ancestry")
     old = root / INVALID_ROOT_RELATIVE

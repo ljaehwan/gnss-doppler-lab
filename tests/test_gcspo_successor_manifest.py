@@ -194,7 +194,7 @@ def _committed_document(name: str) -> dict:
             "green": json.loads((artifact / "green_report.json").read_text()),
         }
         document["repair_scope"] = (
-            "PYTHON_IMPORT_RESOLUTION_EXACT_DOCUMENT_SCHEMA_AND_CANONICAL_ARTIFACT_ROOT_ONLY")
+            "PACKAGE_INITIALIZER_RUNTIME_CLOSURE_ONLY")
         document["prior_independent_rejection"] = {
             "wrapper_commit": "078a8c5739c92e877763583ce2ca23dad4f433f9",
             "target_commit": "1bfc3d2b64ad43a9db78081f3abc482bdf5d022f",
@@ -205,13 +205,11 @@ def _committed_document(name: str) -> dict:
             ],
         }
         document["latest_independent_rejection"] = {
-            "wrapper_commit": "34462807a2029a0979c9e65162246b799406c562",
-            "target_commit": "9121843f1d4835884af91883369dca62848c8dcd",
+            "wrapper_commit": "da5a3c1ecea0aa440c08bb6b3700974996f4ccac",
+            "target_commit": "ec60cc3bade6ac024a415be01c0a02e717a8244f",
             "verdict": "REJECT",
             "blocking_findings": [
-                "PACKAGE_INIT_RELATIVE_IMPORT_RESOLUTION_FAIL_OPEN",
-                "DOCUMENT_SCHEMA_AND_PRIMITIVE_TYPE_FAIL_OPEN",
-                "ARTIFACT_ROOT_CANONICAL_PATH_FAIL_OPEN",
+                "PACKAGE_INITIALIZER_RUNTIME_CLOSURE_MISSING",
             ],
         }
     return document
@@ -431,3 +429,139 @@ def test_successor_artifact_root_requires_exact_canonical_repo_relative_spelling
             verify_successor_freeze(worktree, alias, baseline)
     finally:
         _git(source_repo, "worktree", "remove", "--force", str(worktree))
+
+
+# Adversarial regressions from the latest independent review.  These tests were
+# first run against rejected wrapper da5a3c1ecea0aa440c08bb6b3700974996f4ccac.
+
+def _initializer_closure_repo(tmp_path: Path, *, entry_source: str,
+                              top_init: str | None = "",
+                              subpkg_init: str | None = "from . import hidden\n",
+                              nested: str = "subpkg") -> tuple[Path, str]:
+    repo = tmp_path / "initializer-closure-repo"
+    repo.mkdir()
+    _git(repo, "init", "-q")
+    _git(repo, "config", "user.email", "initializer@test.invalid")
+    _git(repo, "config", "user.name", "Initializer Test")
+    files = {
+        "src/gnss_doppler_lab/gcspo_entry.py": entry_source,
+        f"src/gnss_doppler_lab/{nested}/module.py": "VALUE = 1\n",
+        f"src/gnss_doppler_lab/{nested}/hidden.py": "HIDDEN = 1\n",
+    }
+    if top_init is not None:
+        files["src/gnss_doppler_lab/__init__.py"] = top_init
+    if subpkg_init is not None:
+        files[f"src/gnss_doppler_lab/{nested}/__init__.py"] = subpkg_init
+    for relative, payload in files.items():
+        path = repo / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(payload)
+    _git(repo, "add", ".")
+    _git(repo, "commit", "-qm", "initializer closure target")
+    return repo, _git(repo, "rev-parse", "HEAD")
+
+
+def test_fully_qualified_import_includes_regular_initializers_and_their_transitive_imports(
+        tmp_path):
+    repo, target = _initializer_closure_repo(
+        tmp_path, entry_source="import gnss_doppler_lab.subpkg.module\n")
+    manifest = _manifest(repo, target)
+    assert manifest["internal_import_closure_paths"] == [
+        "src/gnss_doppler_lab/__init__.py",
+        "src/gnss_doppler_lab/subpkg/__init__.py",
+        "src/gnss_doppler_lab/subpkg/hidden.py",
+        "src/gnss_doppler_lab/subpkg/module.py",
+    ]
+
+
+def test_namespace_levels_need_no_initializer_but_lower_regular_initializer_runs(tmp_path):
+    nested = "namespace/regular"
+    repo, target = _initializer_closure_repo(
+        tmp_path,
+        entry_source="import gnss_doppler_lab.namespace.regular.module\n",
+        top_init=None, nested=nested,
+    )
+    closure = _manifest(repo, target)["internal_import_closure_paths"]
+    assert closure == [
+        "src/gnss_doppler_lab/namespace/regular/__init__.py",
+        "src/gnss_doppler_lab/namespace/regular/hidden.py",
+        "src/gnss_doppler_lab/namespace/regular/module.py",
+    ]
+    assert "src/gnss_doppler_lab/__init__.py" not in closure
+    assert "src/gnss_doppler_lab/namespace/__init__.py" not in closure
+
+
+def test_missing_initializers_are_namespace_not_unresolved_internal_imports(tmp_path):
+    repo, target = _initializer_closure_repo(
+        tmp_path, entry_source="import gnss_doppler_lab.subpkg.module\n",
+        top_init=None, subpkg_init=None)
+    assert _manifest(repo, target)["internal_import_closure_paths"] == [
+        "src/gnss_doppler_lab/subpkg/module.py",
+    ]
+
+
+@pytest.mark.parametrize("entry_source", [
+    "from gnss_doppler_lab.subpkg import module as imported_module\n",
+    "import gnss_doppler_lab.subpkg\n",
+])
+def test_from_import_and_direct_package_import_include_runtime_initializers(
+        tmp_path, entry_source):
+    repo, target = _initializer_closure_repo(tmp_path, entry_source=entry_source)
+    closure = _manifest(repo, target)["internal_import_closure_paths"]
+    assert "src/gnss_doppler_lab/__init__.py" in closure
+    assert "src/gnss_doppler_lab/subpkg/__init__.py" in closure
+    assert "src/gnss_doppler_lab/subpkg/hidden.py" in closure
+    if "module" in entry_source:
+        assert "src/gnss_doppler_lab/subpkg/module.py" in closure
+
+
+def test_relative_initializer_imports_and_initializer_cycle_terminate(tmp_path):
+    repo, target = _initializer_closure_repo(
+        tmp_path, entry_source="import gnss_doppler_lab.subpkg.module\n",
+        top_init="from .subpkg import module\n",
+        subpkg_init="from . import hidden\nfrom .. import cycle_peer\n")
+    peer = repo / "src/gnss_doppler_lab/cycle_peer.py"
+    peer.write_text("import gnss_doppler_lab.subpkg.module\n")
+    _git(repo, "add", ".")
+    _git(repo, "commit", "-qm", "initializer cycle")
+    target = _git(repo, "rev-parse", "HEAD")
+    closure = _manifest(repo, target)["internal_import_closure_paths"]
+    assert "src/gnss_doppler_lab/cycle_peer.py" in closure
+    assert len(closure) == len(set(closure))
+
+
+def test_existing_initializer_missing_internal_dependency_fails_closed(tmp_path):
+    repo, target = _initializer_closure_repo(
+        tmp_path, entry_source="import gnss_doppler_lab.subpkg.module\n",
+        subpkg_init="from . import definitely_missing\n")
+    with pytest.raises(ValueError, match="unresolved internal import"):
+        implementation_paths_at_commit(repo, target)
+
+
+@pytest.mark.parametrize("relative", [
+    "src/gnss_doppler_lab/__init__.py",
+    "src/gnss_doppler_lab/subpkg/__init__.py",
+    "src/gnss_doppler_lab/subpkg/hidden.py",
+])
+def test_post_target_initializer_and_hidden_mutations_fail_closed(tmp_path, relative):
+    repo, target = _initializer_closure_repo(
+        tmp_path, entry_source="import gnss_doppler_lab.subpkg.module\n")
+    entry = repo / "src/gnss_doppler_lab/gcspo_entry.py"
+    entry.write_text(entry.read_text() +
+                     "import gnss_doppler_lab.gcmr_geometry\n"
+                     "import gnss_doppler_lab.trajectory\n")
+    for name in ("gcmr_geometry.py", "trajectory.py"):
+        (repo / "src/gnss_doppler_lab" / name).write_text("VALUE = 1\n")
+    _git(repo, "add", ".")
+    _git(repo, "commit", "-qm", "required verifier dependencies")
+    target = _git(repo, "rev-parse", "HEAD")
+    manifest = _manifest(repo, target)
+    path = repo / relative
+    path.write_text(path.read_text() + "MUTATED = True\n")
+    _git(repo, "add", ".")
+    _git(repo, "commit", "-qm", "post-target initializer closure mutation")
+    with pytest.raises(ValueError, match="post-target.*source|implementation"):
+        verify_successor_manifest(
+            manifest, repo, expected_target_commit=target,
+            wrapper_commit=_git(repo, "rev-parse", "HEAD"),
+        )
