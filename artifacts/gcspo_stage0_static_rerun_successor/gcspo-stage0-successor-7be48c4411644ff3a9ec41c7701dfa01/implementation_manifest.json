@@ -1,9 +1,9 @@
 {
   "schema": "gnss-doppler-lab.gcspo-stage0.successor-implementation-freeze.v1",
   "state": "READY_FOR_FRESH_INDEPENDENT_READ_ONLY_REVIEW",
-  "target_commit": "1bfc3d2b64ad43a9db78081f3abc482bdf5d022f",
+  "target_commit": "9121843f1d4835884af91883369dca62848c8dcd",
   "wrapper_commit_binding": "COMMIT_CONTAINING_THIS_DOCUMENT",
-  "wrapper_parent_sha": "1bfc3d2b64ad43a9db78081f3abc482bdf5d022f",
+  "wrapper_parent_sha": "9121843f1d4835884af91883369dca62848c8dcd",
   "invocation_id": "gcspo-stage0-successor-7be48c4411644ff3a9ec41c7701dfa01",
   "nonce": "c8b66154edba6ce2fc2418d97186a1c452ab8a3ac68afb8f040eedd25c6d23c3",
   "same_invocation_retry": false,
@@ -11,7 +11,7 @@
   "invalid_evidence_commit": "58943724ea278b754d388ec2dca0f3666ed6c8a2",
   "config_sha256": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad",
   "preregistration_sha256": "715e11965854f785487e9d2c747718747c1d31cdd8603696ea7af126a45a70da",
-  "scope_policy": "EXACT_SORTED_GIT_LS_TREE_GCSPO_SCRIPTS_LIBRARY_TESTS_AND_WITNESS_PUBLIC_KEY",
+  "scope_policy": "EXACT_SORTED_GIT_TREE_GCSPO_ROOTS_PLUS_TRANSITIVE_INTERNAL_PYTHON_IMPORT_CLOSURE",
   "implementation_paths": [
     "config/gnss_gcspo_witness_ed25519.pub",
     "scripts/build_gcspo_round8_package.py",
@@ -28,6 +28,8 @@
     "scripts/verify_gcspo_round8_freeze.py",
     "scripts/verify_gcspo_stage0.py",
     "scripts/verify_gcspo_successor_freeze.py",
+    "src/gnss_doppler_lab/__init__.py",
+    "src/gnss_doppler_lab/gcmr_geometry.py",
     "src/gnss_doppler_lab/gcspo.py",
     "src/gnss_doppler_lab/gcspo_a5.py",
     "src/gnss_doppler_lab/gcspo_ablations.py",
@@ -57,6 +59,7 @@
     "src/gnss_doppler_lab/gcspo_verify_artifacts.py",
     "src/gnss_doppler_lab/gcspo_verify_reconstruct.py",
     "src/gnss_doppler_lab/gcspo_witness.py",
+    "src/gnss_doppler_lab/trajectory.py",
     "tests/test_gcspo_access.py",
     "tests/test_gcspo_b0.py",
     "tests/test_gcspo_clean_contrast.py",
@@ -80,6 +83,11 @@
     "tests/test_gcspo_transfer.py",
     "tests/test_gcspo_verifier.py"
   ],
+  "internal_import_closure_paths": [
+    "src/gnss_doppler_lab/__init__.py",
+    "src/gnss_doppler_lab/gcmr_geometry.py",
+    "src/gnss_doppler_lab/trajectory.py"
+  ],
   "files": [
     {
       "path": "config/gnss_gcspo_witness_ed25519.pub",
@@ -93,8 +101,8 @@
     },
     {
       "path": "scripts/build_gcspo_successor_freeze.py",
-      "sha256": "6cb4901e83e0eab77c294c89a0b6f6016f6aa3af3b363edf654f46a79558c137",
-      "size_bytes": 4997
+      "sha256": "230b97878798ebc34d1e98c95e71f699b530f4816da9745a02c2d32e82c2eb0b",
+      "size_bytes": 5939
     },
     {
       "path": "scripts/finalize_gcspo_clean.py",
@@ -155,6 +163,16 @@
       "path": "scripts/verify_gcspo_successor_freeze.py",
       "sha256": "640e4b7737fe8127829e150589a76f9595b6d966217fea6a32b5451071d13c6d",
       "size_bytes": 716
+    },
+    {
+      "path": "src/gnss_doppler_lab/__init__.py",
+      "sha256": "a492870425f669f9b6bc02087ac7257e3951fe6a2d9e4da4ed475b6156adf65b",
+      "size_bytes": 32
+    },
+    {
+      "path": "src/gnss_doppler_lab/gcmr_geometry.py",
+      "sha256": "781b66b8c485f4a656da3ed4ce82726f47f47a94cc4ea702eeab727708208921",
+      "size_bytes": 18698
     },
     {
       "path": "src/gnss_doppler_lab/gcspo.py",
@@ -273,8 +291,8 @@
     },
     {
       "path": "src/gnss_doppler_lab/gcspo_successor_freeze.py",
-      "sha256": "6a03d85dd0c43a1675aad20924fb50a240f424479c79e6d0ce2486f02f9b2423",
-      "size_bytes": 16684
+      "sha256": "eb325e7b9ce8fc9b49e6e9f23b5c51172ed778b885161998a2d8bdb8f0a6cb04",
+      "size_bytes": 26550
     },
     {
       "path": "src/gnss_doppler_lab/gcspo_transfer.py",
@@ -300,6 +318,11 @@
       "path": "src/gnss_doppler_lab/gcspo_witness.py",
       "sha256": "1b081b85562d62f20ccb7862db96bc68af6d741887177d7232a2e262d4e4aee2",
       "size_bytes": 26209
+    },
+    {
+      "path": "src/gnss_doppler_lab/trajectory.py",
+      "sha256": "c95fdd8fb513d3d800c8ace3a433063673f26eddc20315e229d234d28267227b",
+      "size_bytes": 12723
     },
     {
       "path": "tests/test_gcspo_access.py",
@@ -398,8 +421,8 @@
     },
     {
       "path": "tests/test_gcspo_successor_manifest.py",
-      "sha256": "dfadba3632d5b069e87ed486353eb277ec73c2507118562f4de1a2ea93156083",
-      "size_bytes": 4251
+      "sha256": "0b2b713e56995b8488d887f5e6d5185bed57a4874f5ebe25a2caf384959e146d",
+      "size_bytes": 12641
     },
     {
       "path": "tests/test_gcspo_transfer.py",
