@@ -556,8 +556,12 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
                           "numpy_version": np.__version__,
                           "rows": [{key: value for key, value in row.items() if key not in {"state", "terms"}}
                                    for row in relation_rows]})
-    controls["alarm_behavior_evaluated"] = True; controls["gate_status"] = next(row["status"] for row in gates if row["id"] == "G5_CONTROLS")
-    canonical_write_json(artifact / "physical_controls.json", controls)
+    canonical_write_json(artifact / "protected_control_status.json", {
+        "schema": "gnss-doppler-lab.gcspo-stage0.protected-control-status.v1",
+        "alarm_behavior_evaluated": True,
+        "gate_status": next(row["status"] for row in gates if row["id"] == "G5_CONTROLS"),
+        "physical_controls_immutable": True,
+    })
     plots = artifact / "plots"; plots.mkdir(exist_ok=True)
     write_csv(plots / "full_score_numeric_sidecar.csv", [row for row in score_rows if row["method"] == "Full"], score_fields)
     canonical_write_json(artifact / "final_verdict.json", {"schema": "gnss-doppler-lab.gcspo-stage0.final-verdict.v2",

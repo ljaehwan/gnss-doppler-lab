@@ -17,6 +17,10 @@ from .gcspo_freeze import verify_review_candidate_record
 
 METHODS = {"A0", "A1", "A2", "A3", "A4", "A5", "Full"}
 FINAL_REQUIRED = set(VALID_SCIENCE_REQUIRED)
+SUCCESSOR_FINAL_ADDITIONS = {
+    "launch_provenance.json", "protected_run_provenance.json",
+    "protected_control_status.json",
+}
 _HEX64 = re.compile(r"[0-9a-f]{64}")
 
 
@@ -269,6 +273,10 @@ def verify_final(root: str | Path, *, strict: bool = False):
     ledger = artifact / "access_ledger.jsonl"
     records = [json.loads(line) for line in ledger.read_text().splitlines() if line.strip()] if ledger.is_file() else []
     validate_access_ledger(records)
+    if (artifact / "launch_provenance.json").is_file():
+        from .gcspo_successor_launch import verify_final_authorization_binding
+        repo = artifact.resolve(strict=True).parents[2]
+        verify_final_authorization_binding(repo, artifact, records)
     verify_reproduction_manifests(artifact)
     reconstructed = reconstruct_final_evidence(artifact)
     if verdict.get("evidence") != reconstructed: raise ValueError("reported evidence differs from artifact reconstruction")
@@ -276,8 +284,11 @@ def verify_final(root: str | Path, *, strict: bool = False):
     if strict:
         actual = {path.relative_to(artifact).as_posix() for path in artifact.rglob("*") if path.is_file()}
         missing = sorted((FINAL_REQUIRED - {"verifier_report.json", "fresh_clone_verifier_report.json"}) - actual)
-        allowed = FINAL_REQUIRED | {"implementation_manifest.json", "data_manifest.json", "run_manifest.json", "file_access_trace.jsonl"}
-        extras = sorted(path for path in actual if path not in allowed and not path.startswith("plots/"))
+        allowed = (FINAL_REQUIRED | SUCCESSOR_FINAL_ADDITIONS |
+                   {"implementation_manifest.json", "data_manifest.json", "run_manifest.json",
+                    "file_access_trace.jsonl"})
+        extras = sorted(path for path in actual if path not in allowed and
+                        not path.startswith("plots/") and not path.startswith("reproductions/"))
         if missing or extras:
             raise ValueError(f"final artifact exact-set mismatch: missing={missing} extras={extras}")
         if not any(path.startswith("plots/") for path in actual): raise ValueError("final artifact plots are absent")

@@ -1,0 +1,56 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.reproduction-run.v2",
+  "run_id": "a5-round3-run-1-b341801",
+  "started_utc": "2026-08-13T22:44:43.127071Z",
+  "finished_utc": "2026-08-13T22:50:57.268111Z",
+  "source_freeze_sha": "b34180109648368f72316b5a783363887e340c28",
+  "starting_git": {
+    "sha": "b34180109648368f72316b5a783363887e340c28",
+    "branch": "research/gcspo-stage0-static-rerun",
+    "clean": true,
+    "status_porcelain": []
+  },
+  "command": "env PYTHONDONTWRITEBYTECODE=1 TMPDIR=/tmp/gcspo-round3-a5-run-1-b341801-Kkpm0i/tmp PYTHONPATH=src ../gnss-doppler-lab/.venv/bin/python scripts/run_gcspo_clean_a5.py --artifact-dir /tmp/gcspo-round3-a5-run-1-b341801-Kkpm0i/artifact --clean-root /home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9 --workers 1",
+  "scratch_root": "/tmp/gcspo-round3-a5-run-1-b341801-Kkpm0i",
+  "environment": {
+    "python_executable": "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+    "python": "3.12.3",
+    "packages": {"numpy": "2.5.1", "scipy": "1.18.0", "pandas": "3.0.5", "h5py": "3.16.0", "torch": "2.13.0+cu130"},
+    "backend": "CUDA_FLOAT64",
+    "cuda_available": true
+  },
+  "source_identities": {
+    "run_gcspo_clean_a5.py": {"path": "scripts/run_gcspo_clean_a5.py", "sha256": "a820f66453f7f6bc7033be126e340714cd7f97e97fe98a6721bbe71c403460c6", "size_bytes": 4856},
+    "gcspo_a5.py": {"path": "src/gnss_doppler_lab/gcspo_a5.py", "sha256": "82bd131d36de3376920325585339c5d688c07551a8b57b8ace1fe27c06f7ac0a", "size_bytes": 10892},
+    "gcspo_clean.py": {"path": "src/gnss_doppler_lab/gcspo_clean.py", "sha256": "64abc04a6e5ea3fb6d476f51e505f54eb9c20894759fe04f2fd49179ccd4a957", "size_bytes": 12256},
+    "gcspo_core.py": {"path": "src/gnss_doppler_lab/gcspo_core.py", "sha256": "18c5878303cabfcf7d25edc4471ce36d9ee6af64361c572ce9707bfabb35a0d8", "size_bytes": 21045}
+  },
+  "input_identities": {
+    "config.json": {"path": "config.json", "sha256": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad", "size_bytes": 37865},
+    "clean_dataset_manifest": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/manifest.json", "sha256": "ced3722a7b560fc0efce5f347c7e09cd81e7a660969a17c8a85bb56c9e11e30a", "size_bytes": 17145}
+  },
+  "unchanged_dependency_identities": {
+    "Full_A1": {"path": "clean_only_report.json", "sha256": "cd8eb2564f6b7724f5967ea6137d3cf59e897a5ef25e9b990f08a16f2d829fa8", "size_bytes": 19452065},
+    "A2_A3_A4": {"path": "clean_ablation_report.json", "sha256": "d5695d659ac414c34eeb9304af0b4cf4ed3b542d01e9a9b6063961b9e3727eb9", "size_bytes": 22477878},
+    "B0": {"path": "clean_b0_report.json", "sha256": "c8bcef756a461cc1d4d1f094d30ce3f5873cd449d2ac30fe8600ebf0e6ae1146", "size_bytes": 147582},
+    "controls": {"path": "physical_controls.json", "sha256": "e1e14890e06151ccac41df29c6d77b8d1b41ee1394864e8e5fc0ade6dc504681", "size_bytes": 439926}
+  },
+  "output_bundle": {
+    "path": "reproductions/a5-round3-run-1-b341801",
+    "files": {
+      "clean_a5_report.json": {"sha256": "a2d902d9c8d4ac8b07d38bff7b31da560772b3bb5040823e3d10ba62d0045c7a", "size_bytes": 5894302},
+      "thresholds.json": {"sha256": "034c265b6de4188db8b577855d9a30e9a144e83255002105004a576123d15e7f", "size_bytes": 918}
+    }
+  },
+  "execution": {"exit_status": 0, "status": "ACCEPTED", "completed": true},
+  "runtime_canonicalization": [],
+  "canonical_promotion": {
+    "status": "BYTE_IDENTICAL_TO_BOTH_ACCEPTED_RUNS",
+    "files": {
+      "clean_a5_report.json": {"sha256": "a2d902d9c8d4ac8b07d38bff7b31da560772b3bb5040823e3d10ba62d0045c7a", "size_bytes": 5894302},
+      "thresholds.json": {"sha256": "034c265b6de4188db8b577855d9a30e9a144e83255002105004a576123d15e7f", "size_bytes": 918}
+    }
+  },
+  "peer_comparison": {"peer_run_id": "a5-round3-run-2-b341801", "result": "BYTE_IDENTICAL_OUTPUT_SNAPSHOTS", "files": ["clean_a5_report.json", "thresholds.json"]},
+  "failed_attempts": {"count": 0, "dispositions": []}
+}

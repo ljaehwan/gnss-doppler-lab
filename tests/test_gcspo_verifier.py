@@ -59,7 +59,9 @@ def test_clean_ready_verifier_requires_all_methods_and_zero_access(tmp_path, mon
             "tolerance": {"maximum_scaled_state_error": 1e-5},
         },
     }))
-    canonical = Path(__file__).parents[1] / "artifacts/gcspo_stage0_static_rerun"
+    canonical = (Path(__file__).parents[1] /
+                 "artifacts/gcspo_stage0_successor_launch" /
+                 "gcspo-stage0-successor-launch-77e586dfdb50a008ed2f0b31052e33bb700e191641e7ffbb4845860df15cf48e")
     for name in ("reproduction_run_1.json", "reproduction_run_2.json",
                  "clean_a5_report.json", "clean_b0_report.json", "thresholds.json"):
         (tmp_path / name).write_bytes((canonical / name).read_bytes())
