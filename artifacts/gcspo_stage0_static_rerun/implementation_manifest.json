@@ -716,8 +716,8 @@
     },
     {
       "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/round4_red_report.json",
-      "sha256": "efe5d95ddaa0e24194a6a949156e2b76989ee5350ec55f78d9307e6c502cc089",
-      "size_bytes": 1061
+      "sha256": "46cf7f6192d69c66dc58a79037ea2b6919f01814878659cc26b55b1a1fadec73",
+      "size_bytes": 1063
     },
     {
       "path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-static-rerun/artifacts/gcspo_stage0_static_rerun/round4_rejected_attempts.json",
@@ -857,6 +857,6 @@
     "status": "REPAIRS_COMPLETE_AWAITING_REREVIEW"
   },
   "schema": "gnss-doppler-lab.gcspo-stage0.implementation-freeze.v3",
-  "target_commit": "b040363a86ebbe0622e8578082a201886cca03b7",
+  "target_commit": "32e1300692d37e46afc45c970280d78c4beabe25",
   "validity_state": "AWAITING_INDEPENDENT_REREVIEW"
 }
