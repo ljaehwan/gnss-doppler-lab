@@ -2,8 +2,8 @@
   "schema": "gnss-doppler-lab.gcspo-stage0.successor-freeze-review-handoff.v1",
   "state": "READY_FOR_FRESH_INDEPENDENT_READ_ONLY_REVIEW",
   "wrapper_commit_binding": "COMMIT_CONTAINING_THIS_DOCUMENT",
-  "wrapper_parent_sha": "ae0928b5d06af861f2fee1058a2ba272d13c13f4",
-  "target_commit": "ae0928b5d06af861f2fee1058a2ba272d13c13f4",
+  "wrapper_parent_sha": "1bfc3d2b64ad43a9db78081f3abc482bdf5d022f",
+  "target_commit": "1bfc3d2b64ad43a9db78081f3abc482bdf5d022f",
   "invocation_id": "gcspo-stage0-successor-7be48c4411644ff3a9ec41c7701dfa01",
   "nonce": "c8b66154edba6ce2fc2418d97186a1c452ab8a3ac68afb8f040eedd25c6d23c3",
   "same_invocation_retry": false,
@@ -53,7 +53,8 @@
         "passed": 282,
         "failed": 0,
         "exit_code": 0,
-        "execution_root": "isolated detached worktree at implementation commit with quarantined preaccess package plus five immutable frozen inputs as test fixture; authoritative invalid root untouched"
+        "execution_root": "isolated detached worktree at implementation commit with quarantined preaccess package plus five immutable frozen inputs as test fixture; authoritative invalid root untouched",
+        "execution_target": "3bf3b45b9f5c6d7503ce108251447d4ff38e88aa"
       },
       "target_manifest_validation": {
         "implementation_rows": 66,
@@ -62,6 +63,19 @@
         "missing": 0,
         "extra": 0,
         "status": "PASS"
+      },
+      "strict_verifier_development": {
+        "initial_wrapper": "719122611e68f2f35f651d76b0b76fe817d79569",
+        "initial_failure": "invalid artifact root identity contract mismatch due absolute-versus-repository-relative comparison",
+        "repair": "compare immutable repository-relative control rows without changing evidence",
+        "focused_after_repair": {
+          "passed": 8,
+          "failed": 0
+        },
+        "all_gcspo_after_repair": {
+          "passed": 282,
+          "failed": 0
+        }
       }
     }
   },
