@@ -1,9 +1,9 @@
 {
   "schema": "gnss-doppler-lab.gcspo-stage0.successor-implementation-freeze.v1",
   "state": "READY_FOR_FRESH_INDEPENDENT_READ_ONLY_REVIEW",
-  "target_commit": "ec60cc3bade6ac024a415be01c0a02e717a8244f",
+  "target_commit": "13945ba1b53d40ad70ccdbbf318ec898b66644e2",
   "wrapper_commit_binding": "COMMIT_CONTAINING_THIS_DOCUMENT",
-  "wrapper_parent_sha": "ec60cc3bade6ac024a415be01c0a02e717a8244f",
+  "wrapper_parent_sha": "13945ba1b53d40ad70ccdbbf318ec898b66644e2",
   "invocation_id": "gcspo-stage0-successor-7be48c4411644ff3a9ec41c7701dfa01",
   "nonce": "c8b66154edba6ce2fc2418d97186a1c452ab8a3ac68afb8f040eedd25c6d23c3",
   "same_invocation_retry": false,
@@ -101,8 +101,8 @@
     },
     {
       "path": "scripts/build_gcspo_successor_freeze.py",
-      "sha256": "aa2ed61b458de12a79c83b5e8845fe621751cc48c7012f26769e03893ab8f804",
-      "size_bytes": 6557
+      "sha256": "b8f0286963885ca01574ee46df5a2023c6ebb7f12d0dc6cb83b592afa7dd440b",
+      "size_bytes": 6390
     },
     {
       "path": "scripts/finalize_gcspo_clean.py",
@@ -291,8 +291,8 @@
     },
     {
       "path": "src/gnss_doppler_lab/gcspo_successor_freeze.py",
-      "sha256": "40c1238278b21de96d1e338943266f8925324ec901e8a6f3b63a14c9ba0c2a2c",
-      "size_bytes": 54910
+      "sha256": "3b54b34ae0c1b6365745b0fd38f89cd36a6b8fd06baac5da5d671a79b680662a",
+      "size_bytes": 54397
     },
     {
       "path": "src/gnss_doppler_lab/gcspo_transfer.py",
@@ -421,8 +421,8 @@
     },
     {
       "path": "tests/test_gcspo_successor_manifest.py",
-      "sha256": "9370fab38e1eb233f642666b14ee491c6cae250d7c882ad7309797e9d2061c49",
-      "size_bytes": 18662
+      "sha256": "fa950f185468f2cf33bb3a10e3b860af0c25d6e552ba2bb8c284f24f04734bbd",
+      "size_bytes": 24681
     },
     {
       "path": "tests/test_gcspo_transfer.py",
