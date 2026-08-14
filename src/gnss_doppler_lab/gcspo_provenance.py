@@ -317,9 +317,9 @@ def compare_full_a5_runs(verified):
             raise ValueError(f"CPU/CUDA threshold parity tolerance exceeded: {name}")
     cuda_trace = json.loads((cuda[0]["output_dir"] / "a5_numeric_trace.json").read_text())
     cpu_trace = json.loads((cpu[0]["output_dir"] / "a5_numeric_trace.json").read_text())
+    cuda_trace.pop("backend", None); cpu_trace.pop("backend", None)
     pairs = _walk_numeric(cuda_trace, cpu_trace)
     maximum_absolute = 0.0
-    cuda_trace.pop("backend", None); cpu_trace.pop("backend", None)
     maximum_relative = 0.0
     maximum_field = None
     for field, left, right in pairs:

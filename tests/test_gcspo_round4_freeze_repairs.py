@@ -228,7 +228,8 @@ def _synthetic_completed_runs(tmp_path: Path):
         (output / "clean_a5_report.json").write_text(json.dumps(scientific, sort_keys=True) + "\n")
         (output / "thresholds.json").write_text(json.dumps({"A5": scientific["thresholds"]}, sort_keys=True) + "\n")
         (output / "a5_numeric_trace.json").write_text(json.dumps({
-            "lambda": 100.0, "lambda_objectives": scientific["lambda_objectives"],
+            "backend": backend, "lambda": 100.0,
+            "lambda_objectives": scientific["lambda_objectives"],
             "calibration": [{**scientific["calibration"][0], "state": [1.0, 2.0]}],
             "holdout": [{**scientific["holdout"][0], "state": [2.0, 3.0]}],
         }, sort_keys=True) + "\n")
