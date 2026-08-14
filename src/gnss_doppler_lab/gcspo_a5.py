@@ -72,8 +72,9 @@ def a5_spectral_scores(terms, state_segments, smoothnesses, *, backend=None):
     if backend == "cuda" and not cuda_available:
         raise RuntimeError("A5 CUDA backend requested but CUDA is unavailable")
     use_cuda = cuda_available if backend in {None, "auto"} else backend == "cuda"
-    if use_cuda:
-        device = "cuda"
+    use_torch = use_cuda or backend == "cpu"
+    if use_torch:
+        device = "cuda" if use_cuda else "cpu"
         th = torch.as_tensor(h, dtype=torch.float64, device=device)
         tp = torch.as_tensor(prior, dtype=torch.float64, device=device)
         tv = torch.as_tensor(vector, dtype=torch.float64, device=device)
@@ -94,12 +95,12 @@ def a5_spectral_scores(terms, state_segments, smoothnesses, *, backend=None):
     zero_tolerance = 64 * np.finfo(np.float64).eps * scale
     eigenvalues = np.where(eigenvalues > zero_tolerance, eigenvalues, 0.0)
     rank = int(min(nobs, np.count_nonzero(eigenvalues)))
-    if use_cuda:
+    if use_torch:
         accepted_eigenvalues_t = torch.as_tensor(eigenvalues, dtype=torch.float64, device=device)
     result = []
     for smoothness in map(float, smoothnesses):
         if smoothness <= 0: raise ValueError("invalid A5 spectral smoothness")
-        if use_cuda:
+        if use_torch:
             weights_t = projected_t / (accepted_eigenvalues_t + smoothness)
             state_t = torch.linalg.solve_triangular(
                 lower.T, (eigenvectors_t @ weights_t)[:, None], upper=True)[:, 0]

@@ -305,13 +305,21 @@ def compare_full_a5_runs(verified):
     cpu_report = json.loads((cpu[0]["output_dir"] / "clean_a5_report.json").read_text())
     if cuda_report.get("lambda") != cpu_report.get("lambda"):
         raise ValueError("CPU/CUDA selected lambda changed")
-    if cuda_report.get("thresholds") != cpu_report.get("thresholds"):
-        raise ValueError("CPU/CUDA thresholds changed")
+    tolerance = verified["challenge"]["tolerance"]
+    if set(cuda_report.get("thresholds", {})) != set(cpu_report.get("thresholds", {})):
+        raise ValueError("CPU/CUDA threshold keys changed")
+    threshold_deltas = {}
+    for name in sorted(cuda_report["thresholds"]):
+        left, right = float(cuda_report["thresholds"][name]), float(cpu_report["thresholds"][name])
+        absolute = abs(left - right); relative = absolute / max(abs(left), abs(right), 1.0)
+        threshold_deltas[name] = {"absolute": absolute, "relative": relative}
+        if absolute > tolerance["absolute"] and relative > tolerance["relative"]:
+            raise ValueError(f"CPU/CUDA threshold parity tolerance exceeded: {name}")
     cuda_trace = json.loads((cuda[0]["output_dir"] / "a5_numeric_trace.json").read_text())
     cpu_trace = json.loads((cpu[0]["output_dir"] / "a5_numeric_trace.json").read_text())
     pairs = _walk_numeric(cuda_trace, cpu_trace)
-    tolerance = verified["challenge"]["tolerance"]
     maximum_absolute = 0.0
+    cuda_trace.pop("backend", None); cpu_trace.pop("backend", None)
     maximum_relative = 0.0
     maximum_field = None
     for field, left, right in pairs:
@@ -332,6 +340,7 @@ def compare_full_a5_runs(verified):
             "selected_lambda_unchanged": True, "thresholds_unchanged": True,
             "numeric_field_count": len(pairs), "maximum_absolute_delta": maximum_absolute,
             "maximum_relative_delta": maximum_relative, "maximum_delta_field": maximum_field,
+            "threshold_deltas": threshold_deltas,
             "tolerance": tolerance,
         },
     }

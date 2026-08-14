@@ -57,3 +57,18 @@ def test_causal_launcher_preserves_virtualenv_symlink_path(tmp_path):
     observed = module._python_command_path(launcher)
     assert observed == str(launcher.absolute())
     assert observed != str(launcher.resolve())
+
+def test_explicit_cpu_uses_same_torch_float64_algorithm_as_explicit_cuda(monkeypatch):
+    import numpy as np
+    import torch
+    import gnss_doppler_lab.gcspo_a5 as a5
+
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: False)
+    monkeypatch.setattr(a5, "eigh", lambda *_args, **_kwargs: (_ for _ in ()).throw(
+        AssertionError("explicit CPU must not use the backend-dependent SciPy solver")))
+    terms = (np.eye(2), np.asarray([0.5, 0.25]), 2.0, 20)
+    segments = [{"prn": 1, "epoch_ids": (0,), "state_start": 0, "state_stop": 2}]
+    result = a5.a5_spectral_scores(terms, segments, (1.0,), backend="cpu")[0]
+    assert result["state"].shape == (2,)
+    assert result["rank"] == 2
+    assert np.isfinite(result["score"])
