@@ -1,0 +1,122 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.round7-repair-evidence.v1",
+  "phase": "REPAIR_GREEN_PREFREEZE",
+  "writer_base_sha": "c525b8d1db7b1d7c5955af805900366a87a5a877",
+  "rejected_freeze_sha": "532c4dd014432b787553b199a93f01ddaa294c01",
+  "signed_execution_source_sha": "9774fe1048e467808b53769f94a717507fac5a38",
+  "prior_rejected_receipt_freeze_sha": "a9a6f03a8fe984ee75c15fbcf81f7c04c5ab2e46",
+  "red": {
+    "exact_rejected_freeze": {
+      "tree_sha": "532c4dd014432b787553b199a93f01ddaa294c01",
+      "failed": 3,
+      "passed": 209,
+      "exit_code": 1,
+      "junit_runtime_path": "/tmp/gnss-gcspo-round7-rejected-all.xml",
+      "junit_sha256": "52e33305c6d2031543930537e8ccd27ec9471ecbcaeae898456fa88aefc4f4ff",
+      "console_runtime_path": "/tmp/gnss-gcspo-round7-rejected-all.txt",
+      "console_sha256": "af92f24def482371693bb684f65370da9e1967edb31953e221a15eccba0bb145"
+    },
+    "initial_nonfinite_regressions": {
+      "failed": 9,
+      "deselected": 4,
+      "exit_code": 1,
+      "junit_runtime_path": "/tmp/gnss-gcspo-round7-nonfinite-red.xml",
+      "junit_sha256": "5baa4418549b958e9afff1a2b30e8859e4917ec332c786d3290b1d650bf3b6b1",
+      "console_runtime_path": "/tmp/gnss-gcspo-round7-nonfinite-red.txt",
+      "console_sha256": "c0d985702ad4b37cc48927b36e03957ab87c44b7cdc409e9545c189e449e9fab"
+    },
+    "explicit_derived_metric_regressions": {
+      "failed": 4,
+      "deselected": 13,
+      "exit_code": 1,
+      "junit_runtime_path": "/tmp/gnss-gcspo-round7-derived-red.xml",
+      "junit_sha256": "f63c1413497decd4366228aa5fa1bcf8e44558bb7a8fb16a613453f9c1d286e9",
+      "console_runtime_path": "/tmp/gnss-gcspo-round7-derived-red.txt",
+      "console_sha256": "cf5d79ae6a9b915c988f9b2ced6fa1aa05b716751c4a47cab4e63f91f9da1f56"
+    }
+  },
+  "green": {
+    "targeted_strict_finite": {
+      "passed": 13,
+      "failed": 0,
+      "deselected": 4,
+      "exit_code": 0,
+      "junit_runtime_path": "/tmp/gnss-gcspo-round7-nonfinite-green.xml",
+      "junit_sha256": "660c14ff2efed5733395d99a1bc38bb9fd352ea9eb9be576e7266b43702ee828",
+      "console_runtime_path": "/tmp/gnss-gcspo-round7-nonfinite-green.txt",
+      "console_sha256": "f63ee0395989f1e152554b3d1c9a436cfe01c1edf3d3f5a87cb69cab47622fce"
+    },
+    "focused": {
+      "passed": 45,
+      "failed": 0,
+      "exit_code": 0,
+      "junit_runtime_path": "/tmp/gnss-gcspo-round7-focused-green.xml",
+      "junit_sha256": "e34cd7d858f9f0a6b2589a63fc5ce78548712566867eae6a4b1ae73186a8b9db",
+      "console_runtime_path": "/tmp/gnss-gcspo-round7-focused-green.txt",
+      "console_sha256": "5f049f3cf1555520ecf83aeb3a9c245022c8d87aa09baff5f99bf95a63ec49ba"
+    },
+    "all_gcspo": {
+      "passed": 225,
+      "failed": 0,
+      "exit_code": 0,
+      "junit_runtime_path": "/tmp/gnss-gcspo-round7-all-green.xml",
+      "junit_sha256": "7c8b1e2a337b240a8da3193c014c14dce0dff1038eca85b703afa9e1c4eead99",
+      "console_runtime_path": "/tmp/gnss-gcspo-round7-all-green.txt",
+      "console_sha256": "a4cae4258602e479b1b8e5c28d1b9cc999eb9974a278bdb855fb40394afd8c2b"
+    },
+    "synthetic_probes": {
+      "status": "PASS",
+      "probe_count": 12,
+      "rejected_count": 12,
+      "runtime_path": "/tmp/gnss-gcspo-round7-synthetic-probes.txt",
+      "sha256": "f289be61e5d9ba7b14bb133aa972f194fbb49ca3c0ff4d903d2e9ccb681daaa7"
+    },
+    "packaged_signature_provenance": {
+      "status": "PASS",
+      "evidence_file_count": 33,
+      "run_count": 3,
+      "backend_truth": [
+        "cuda",
+        "cuda",
+        "cpu"
+      ],
+      "runtime_path": "/tmp/gnss-gcspo-round7-packaged-provenance-precommit.txt",
+      "sha256": "b772bfee147699b215139858dfb88ca4c2980d5d6009cf86ee9fe5427c9e9767"
+    }
+  },
+  "repair": {
+    "readme_sha256": "eea2e10885d66bfc762f33b2e25147ab07b1bbceace505078e8770e4cdc18ac2",
+    "verifier_sha256": "f3eccf9ddab6c83bbf7ed58696cb1f5e4bd4da7bfe09c7d55c72400e3e4094e0",
+    "test_sha256": "dd8b801661fe9f3fc998dcc108e9a0a70a7176cf6d73b3a8ca7b8a72f5b25345",
+    "strict_json_parse_constant_rejection": true,
+    "finite_compared_numeric_values_required": true,
+    "finite_derived_delta_required": true,
+    "finite_derived_absolute_required": true,
+    "finite_derived_scale_required": true,
+    "finite_derived_relative_required": true,
+    "bool_numeric_rejected": true,
+    "structure_key_length_mismatch_behavior_preserved": true,
+    "scientific_outputs_changed": false,
+    "signed_evidence_changed": false,
+    "configuration_changed": false,
+    "thresholds_changed": false,
+    "scoring_changed": false,
+    "gate_scope_changed": false,
+    "tolerance_values_changed": false,
+    "tolerance_or_semantics_changed": false,
+    "field_eligibility_changed": false
+  },
+  "scientific_scope": {
+    "gate": "cleanStatic-only",
+    "cleanDynamic": "OOD_DIAGNOSIS_NOT_GATE_EVIDENCE"
+  },
+  "protected": {
+    "execution_authorized": false,
+    "marker_present": false,
+    "ledger_present": false,
+    "rows_opened": 0,
+    "bytes_opened": 0
+  },
+  "attack_run_count": 0,
+  "push_performed": false
+}

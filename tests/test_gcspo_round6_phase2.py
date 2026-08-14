@@ -2,10 +2,12 @@
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 
 import pytest
 
+from gnss_doppler_lab import gcspo_round6_verify as round6_verify
 from gnss_doppler_lab.gcspo_round6_verify import (
     SOURCE_COMMIT, compare_round6_a5_runs, verify_round6_a5,
 )
@@ -13,6 +15,11 @@ from gnss_doppler_lab.gcspo_round6_verify import (
 
 ROOT = Path(__file__).parents[1]
 ARTIFACT = ROOT / "artifacts/gcspo_stage0_static_rerun"
+
+
+@pytest.fixture(scope="module")
+def witnessed_round6_runs():
+    return verify_round6_a5(ARTIFACT)["witnessed"]
 
 
 def test_packaged_round6_signed_chains_and_parity_reconstruct():
@@ -63,6 +70,65 @@ def test_round6_parity_fails_closed_on_tolerance_excess(monkeypatch):
     monkeypatch.setattr(Path, "read_text", changed)
     with pytest.raises(ValueError, match="tolerance|mismatch"):
         compare_round6_a5_runs(verified)
+
+
+@pytest.mark.parametrize("constant", ["NaN", "Infinity", "-Infinity"])
+def test_round6_json_loader_rejects_nonstandard_nonfinite_constants(tmp_path, constant):
+    document = tmp_path / "synthetic.json"
+    document.write_text('{"value":' + constant + '}')
+    with pytest.raises(ValueError, match="non-finite JSON constant"):
+        round6_verify._load(document)
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), float("-inf")])
+def test_round6_numeric_pair_rejects_nonfinite_compared_values(value):
+    with pytest.raises(ValueError, match="non-finite numeric value"):
+        list(round6_verify._numeric_pairs(value, 0.0, "synthetic.value"))
+
+
+def test_round6_threshold_comparison_rejects_bool(monkeypatch, witnessed_round6_runs):
+    cpu = next(
+        row for row in witnessed_round6_runs["runs"]
+        if row["prepared"]["backend"] == "cpu"
+    )
+    original = Path.read_text
+
+    def changed(path, *args, **kwargs):
+        text = original(path, *args, **kwargs)
+        if path == cpu["output_dir"] / "clean_a5_report.json":
+            document = json.loads(text)
+            document["thresholds"][next(iter(document["thresholds"]))] = True
+            return json.dumps(document)
+        return text
+
+    monkeypatch.setattr(Path, "read_text", changed)
+    with pytest.raises(ValueError, match="bool|numeric"):
+        compare_round6_a5_runs(witnessed_round6_runs)
+
+
+def test_round6_comparison_rejects_overflow_derived_nonfinite():
+    with pytest.raises(ValueError, match="derived delta"):
+        round6_verify._comparison_metrics(1e308, -1e308, "synthetic.overflow")
+
+
+@pytest.mark.parametrize(
+    ("name", "value"),
+    [
+        ("delta", float("nan")),
+        ("absolute value", float("inf")),
+        ("scale", float("-inf")),
+        ("relative value", float("nan")),
+    ],
+)
+def test_round6_rejects_each_nonfinite_derived_metric(name, value):
+    with pytest.raises(ValueError, match=f"derived {name}"):
+        round6_verify._finite_derived(value, name, "synthetic.derived")
+
+
+def test_round6_comparison_metrics_are_strictly_finite():
+    metrics = round6_verify._comparison_metrics(3.0, -1.0, "synthetic.finite")
+    assert metrics == {"delta": 4.0, "absolute": 4.0, "scale": 3.0, "relative": 4.0 / 3.0}
+    assert all(math.isfinite(value) for value in metrics.values())
 
 
 def test_round5_unsigned_failure_remains_excluded_from_round6_freeze():

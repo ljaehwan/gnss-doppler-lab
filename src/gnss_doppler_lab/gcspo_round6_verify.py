@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 from pathlib import Path
 import subprocess
 
@@ -26,10 +27,41 @@ def _identity(path: Path) -> dict[str, int | str]:
 
 
 def _load(path: Path) -> dict:
-    document = json.loads(path.read_text())
+    def reject_constant(value: str):
+        raise ValueError(f"non-finite JSON constant is forbidden: {value}")
+
+    document = json.loads(path.read_text(), parse_constant=reject_constant)
     if not isinstance(document, dict):
         raise ValueError(f"round-6 document is not an object: {path}")
     return document
+
+
+def _finite_number(value, path: str) -> float:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise ValueError(f"CPU/CUDA numeric value is not a number at {path}")
+    try:
+        result = float(value)
+    except (OverflowError, TypeError, ValueError) as exc:
+        raise ValueError(f"CPU/CUDA numeric value is not finite at {path}") from exc
+    if not math.isfinite(result):
+        raise ValueError(f"CPU/CUDA non-finite numeric value at {path}")
+    return result
+
+
+def _finite_derived(value: float, name: str, path: str) -> float:
+    if not math.isfinite(value):
+        raise ValueError(f"CPU/CUDA non-finite derived {name} at {path}")
+    return value
+
+
+def _comparison_metrics(left, right, path: str) -> dict[str, float]:
+    left = _finite_number(left, f"{path}.left")
+    right = _finite_number(right, f"{path}.right")
+    delta = _finite_derived(left - right, "delta", path)
+    absolute = _finite_derived(abs(delta), "absolute value", path)
+    scale = _finite_derived(max(abs(left), abs(right), 1.0), "scale", path)
+    relative = _finite_derived(absolute / scale, "relative value", path)
+    return {"delta": delta, "absolute": absolute, "scale": scale, "relative": relative}
 
 
 def _numeric_pairs(first, second, path=""):
@@ -38,7 +70,7 @@ def _numeric_pairs(first, second, path=""):
             raise ValueError(f"CPU/CUDA nonnumeric mismatch at {path}")
         return
     if isinstance(first, (int, float)) and isinstance(second, (int, float)):
-        yield path, float(first), float(second)
+        yield path, _finite_number(first, f"{path}.left"), _finite_number(second, f"{path}.right")
         return
     if type(first) is not type(second):
         raise ValueError(f"CPU/CUDA structure mismatch at {path}")
@@ -74,19 +106,23 @@ def compare_round6_a5_runs(verified: dict) -> dict:
 
     cuda_report = _load(cuda[0]["output_dir"] / "clean_a5_report.json")
     cpu_report = _load(cpu[0]["output_dir"] / "clean_a5_report.json")
-    if cuda_report.get("lambda") != cpu_report.get("lambda"):
+    cuda_lambda = _finite_number(cuda_report.get("lambda"), "clean_a5_report.lambda.cuda")
+    cpu_lambda = _finite_number(cpu_report.get("lambda"), "clean_a5_report.lambda.cpu")
+    if cuda_lambda != cpu_lambda:
         raise ValueError("CPU/CUDA selected lambda changed")
     tolerance = verified["challenge"]["tolerance"]
+    absolute_tolerance = _finite_number(tolerance.get("absolute"), "challenge.tolerance.absolute")
+    relative_tolerance = _finite_number(tolerance.get("relative"), "challenge.tolerance.relative")
     if set(cuda_report.get("thresholds", {})) != set(cpu_report.get("thresholds", {})):
         raise ValueError("CPU/CUDA threshold keys changed")
     threshold_deltas = {}
     for name in sorted(cuda_report["thresholds"]):
-        left = float(cuda_report["thresholds"][name])
-        right = float(cpu_report["thresholds"][name])
-        absolute = abs(left - right)
-        relative = absolute / max(abs(left), abs(right), 1.0)
+        left = _finite_number(cuda_report["thresholds"][name], f"thresholds.{name}.cuda")
+        right = _finite_number(cpu_report["thresholds"][name], f"thresholds.{name}.cpu")
+        metrics = _comparison_metrics(left, right, f"thresholds.{name}")
+        absolute, relative = metrics["absolute"], metrics["relative"]
         threshold_deltas[name] = {"absolute": absolute, "relative": relative}
-        if absolute > tolerance["absolute"] and relative > tolerance["relative"]:
+        if absolute > absolute_tolerance and relative > relative_tolerance:
             raise ValueError(f"CPU/CUDA threshold parity tolerance exceeded: {name}")
 
     cuda_trace = _load(cuda[0]["output_dir"] / "a5_numeric_trace.json")
@@ -99,12 +135,12 @@ def compare_round6_a5_runs(verified: dict) -> dict:
     maximum_field = None
     for field, left, right in _numeric_pairs(cuda_trace, cpu_trace):
         numeric_field_count += 1
-        absolute = abs(left - right)
-        relative = absolute / max(abs(left), abs(right), 1.0)
+        metrics = _comparison_metrics(left, right, field)
+        absolute, relative = metrics["absolute"], metrics["relative"]
         if absolute > maximum_absolute:
             maximum_absolute, maximum_field = absolute, field
         maximum_relative = max(maximum_relative, relative)
-        if absolute > tolerance["absolute"] and relative > tolerance["relative"]:
+        if absolute > absolute_tolerance and relative > relative_tolerance:
             raise ValueError(f"CPU/CUDA parity tolerance exceeded at {field}")
     return {
         "schema": "gnss-doppler-lab.gcspo-stage0.round6-a5-parity.v1",
