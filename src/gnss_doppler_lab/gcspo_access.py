@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
@@ -193,18 +194,21 @@ class AccessGate:
                 self._append({**{**common, "record_type": "POST"}, "observed_sha256": None,
                               "observed_size": opened.st_size, "outcome": "PATH_REPLACED"})
                 raise RuntimeError("protected path replaced before open")
-            digest = hashlib.sha256(); observed_size = 0
+            digest = hashlib.sha256(); observed_size = 0; chunks = []
             while True:
                 block = os.read(descriptor, 1 << 20)
                 if not block: break
-                digest.update(block); observed_size += len(block)
+                digest.update(block); observed_size += len(block); chunks.append(block)
             observed_sha = digest.hexdigest()
             if observed_sha != capability["expected_sha256"] or observed_size != expected_size:
                 self._append({**{**common, "record_type": "POST"}, "observed_sha256": observed_sha,
                               "observed_size": observed_size, "outcome": "IDENTITY_MISMATCH"})
                 raise ValueError("protected identity mismatch before exposure")
+            snapshot = b"".join(chunks)
+            if len(snapshot) != observed_size or hashlib.sha256(snapshot).hexdigest() != observed_sha:
+                raise RuntimeError("authenticated immutable snapshot construction failed")
             os.lseek(descriptor, 0, os.SEEK_SET)
-            with os.fdopen(os.dup(descriptor), "rb", closefd=True) as handle:
+            with io.BytesIO(snapshot) as handle:
                 try: result = consumer(handle)
                 except Exception as exc:
                     self._append({**{**common, "record_type": "POST"}, "observed_sha256": observed_sha,

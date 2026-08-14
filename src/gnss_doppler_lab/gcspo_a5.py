@@ -58,15 +58,20 @@ def a5_segment_prior_precision(state_segments, *, smoothness=1.0):
     return float(smoothness) * operator.T @ operator
 
 
-def a5_spectral_scores(terms, state_segments, smoothnesses):
+def a5_spectral_scores(terms, state_segments, smoothnesses, *, backend=None):
     """Evaluate an A5 lambda grid from one exact generalized eigendecomposition."""
     h, vector, yty, nobs = terms
     prior = a5_segment_prior_precision(state_segments, smoothness=1.0)
+    if backend not in {None, "auto", "cpu", "cuda"}:
+        raise ValueError("A5 backend must be auto, cpu, or cuda")
     try:
         import torch
-        use_cuda = torch.cuda.is_available()
+        cuda_available = bool(torch.cuda.is_available())
     except ImportError:
-        use_cuda = False
+        cuda_available = False
+    if backend == "cuda" and not cuda_available:
+        raise RuntimeError("A5 CUDA backend requested but CUDA is unavailable")
+    use_cuda = cuda_available if backend in {None, "auto"} else backend == "cuda"
     if use_cuda:
         device = "cuda"
         th = torch.as_tensor(h, dtype=torch.float64, device=device)

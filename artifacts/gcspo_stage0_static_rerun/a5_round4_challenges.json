@@ -1,0 +1,45 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.a5-challenges.v1",
+  "purpose": "Fresh causal full-workload A5 CUDA reproducibility and CPU/CUDA parity",
+  "protected_data_access": false,
+  "tolerance": {
+    "absolute": 1e-08,
+    "relative": 1e-10
+  },
+  "tolerance_rationale": "Float64 CPU/CUDA eigensolver comparison: absolute guard covers near-zero cancellation while relative guard scales scientific score, RSS, GCV, EDF, and state magnitudes; both guards were fixed before these clean-only runs.",
+  "scientific_comparison": [
+    "selected_lambda",
+    "lambda_objectives",
+    "thresholds",
+    "calibration_scores_states_rank_edf_rss_gcv",
+    "holdout_scores_states_rank_edf_rss_gcv"
+  ],
+  "source_files": [
+    "scripts/run_gcspo_a5_causal.py",
+    "scripts/run_gcspo_clean_a5.py",
+    "src/gnss_doppler_lab/gcspo_a5.py",
+    "src/gnss_doppler_lab/gcspo_artifacts.py",
+    "src/gnss_doppler_lab/gcspo_clean.py",
+    "src/gnss_doppler_lab/gcspo_core.py",
+    "src/gnss_doppler_lab/gcspo_full.py",
+    "src/gnss_doppler_lab/gcspo_provenance.py"
+  ],
+  "runs": [
+    {
+      "id": "round4-cuda-1",
+      "nonce": "d444b6d674e83b02a5bc8e20162706ee448654545c4abbb461fc6b79c4cef50e",
+      "backend": "cuda"
+    },
+    {
+      "id": "round4-cuda-2",
+      "nonce": "5b986fcb9b80a981787047c5ff7f156f4980f6e53e98ef6822075d5a81da25aa",
+      "backend": "cuda"
+    },
+    {
+      "id": "round4-cpu-1",
+      "nonce": "7e73b5ba1ecdbff318864ac8f5510184cae6f51f72473e9b2f9008d9dd9b1899",
+      "backend": "cpu"
+    }
+  ]
+}
+

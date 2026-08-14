@@ -79,7 +79,8 @@ def protected(args):
     freeze = json.loads(freeze_path.read_text())
     local = _git("rev-parse", "HEAD")
     if freeze.get("validity_state") == "AWAITING_INDEPENDENT_REREVIEW":
-        verify_review_candidate_record(freeze, target_commit=freeze.get("target_commit"))
+        verify_review_candidate_record(freeze, target_commit=freeze.get("target_commit"),
+                                       repo_root=ROOT, wrapper_commit=local)
         raise PermissionError("VALID_FOR_PROTECTED_ACCESS not reached: independent rereview is pending")
     verify_freeze_record(freeze, target_commit=local)
     snapshot = live_remote_snapshot(ROOT, "origin", "research/gcspo-stage0-static-rerun")

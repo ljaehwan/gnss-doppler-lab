@@ -6,10 +6,12 @@ import hashlib
 import json
 import re
 from pathlib import Path
+import subprocess
 
 from .gcspo_verify_artifacts import reconstruct_final_evidence
 from .gcspo_verify_reconstruct import validate_access_ledger, verify_evidence_document
 from .gcspo_artifacts import FROZEN_HASHES, VALID_SCIENCE_REQUIRED, sha256_file, verify_artifact_manifest
+from .gcspo_provenance import compare_full_a5_runs, verify_causal_runs
 from .gcspo_freeze import verify_review_candidate_record
 
 METHODS = {"A0", "A1", "A2", "A3", "A4", "A5", "Full"}
@@ -56,10 +58,16 @@ def verify_clean_ready(root: str | Path):
     if not isinstance(observed, (int, float)) or not isinstance(allowed, (int, float)) or observed > allowed:
         raise ValueError("synthetic recovery tolerance mismatch")
     verify_reproduction_manifests(artifact)
+    if (artifact / "round4_a5_provenance.json").is_file():
+        verify_round4_a5(artifact)
     candidate = artifact / "implementation_manifest.json"
     if candidate.is_file():
         record = json.loads(candidate.read_text())
-        verify_review_candidate_record(record, target_commit=record.get("target_commit"))
+        repo = artifact.parents[1]
+        head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=repo, check=True,
+                              text=True, capture_output=True).stdout.strip()
+        verify_review_candidate_record(record, target_commit=record.get("target_commit"),
+                                       repo_root=repo, wrapper_commit=head)
     return {"schema": "gnss-doppler-lab.gcspo-stage0.verifier-report.v1", "phase": "clean-ready", "status": "PASS"}
 
 
@@ -104,6 +112,28 @@ def _identity_map(rows, *, root, label):
         observed[name] = identity
     return observed
 
+def _git_identity_map(rows, *, repo, commit, label):
+    if not isinstance(rows, dict) or not rows:
+        raise ValueError(f"reproduction {label} identities are absent")
+    observed = {}
+    for name, row in rows.items():
+        if not isinstance(row, dict) or set(row) != {"path", "sha256", "size_bytes"}:
+            raise ValueError(f"reproduction {label} identity is malformed")
+        relative = Path(row["path"])
+        if relative.is_absolute() or ".." in relative.parts:
+            raise ValueError(f"reproduction {label} Git path is invalid")
+        result = subprocess.run(["git", "show", f"{commit}:{relative.as_posix()}"], cwd=repo,
+                                capture_output=True)
+        if result.returncode != 0:
+            raise ValueError(f"reproduction {label} source is absent from Git tree")
+        identity = {"sha256": hashlib.sha256(result.stdout).hexdigest(),
+                    "size_bytes": len(result.stdout)}
+        if identity != {"sha256": row["sha256"], "size_bytes": row["size_bytes"]}:
+            raise ValueError(f"reproduction {label} Git identity mismatch")
+        observed[name] = identity
+    return observed
+
+
 
 def verify_reproduction_manifests(root: str | Path):
     """Prove two separate successful A5 executions and their durable outputs."""
@@ -140,7 +170,7 @@ def verify_reproduction_manifests(root: str | Path):
         environment = doc.get("environment")
         if not isinstance(environment, dict) or not environment.get("python_executable") or not environment.get("packages"):
             raise ValueError("reproduction environment identity is incomplete")
-        _identity_map(doc["source_identities"], root=repo, label="source")
+        _git_identity_map(doc["source_identities"], repo=repo, commit=source_sha, label="source")
         _identity_map(doc["input_identities"], root=artifact, label="input")
         unchanged = _identity_map(doc["unchanged_dependency_identities"], root=artifact,
                                   label="unchanged dependency")
@@ -180,6 +210,7 @@ def verify_reproduction_manifests(root: str | Path):
     scratch_roots = [row["doc"]["scratch_root"] for row in documents]
     bundle_paths = [str(row["bundle_path"]) for row in documents]
     if len(set(run_ids)) != 2 or len(set(scratch_roots)) != 2 or len(set(bundle_paths)) != 2:
+
         raise ValueError("reproduction runs lack separate IDs/scratch roots/output locations")
     expected = "BYTE_IDENTICAL_OUTPUT_SNAPSHOTS"
     for index, row in enumerate(documents):
@@ -198,6 +229,33 @@ def verify_reproduction_manifests(root: str | Path):
             "run_ids": run_ids, "scratch_roots": scratch_roots,
             "bundle_paths": bundle_paths, "canonical_bound_to_both_runs": True,
             "scientific_files": first["doc"]["output_bundle"]["files"]}
+
+
+def verify_round4_a5(root: str | Path):
+    artifact = Path(root).resolve()
+    repo = artifact.parents[1]
+    index = _json(artifact, "round4_a5_provenance.json")
+    if index.get("schema") != "gnss-doppler-lab.gcspo-stage0.round4-a5-provenance-index.v1":
+        raise ValueError("round-4 A5 provenance index schema mismatch")
+    source_commit = index.get("source_commit")
+    challenge_path = index.get("challenge_path")
+    evidence = index.get("evidence_roots")
+    if (not isinstance(source_commit, str) or len(source_commit) != 40 or
+            not isinstance(challenge_path, str) or not isinstance(evidence, list) or len(evidence) != 3):
+        raise ValueError("round-4 A5 provenance index is incomplete")
+    roots = []
+    for relative in evidence:
+        path = (repo / relative).resolve(strict=True)
+        if repo not in path.parents:
+            raise ValueError("round-4 A5 evidence path escapes repository")
+        roots.append(path)
+    verified = verify_causal_runs(roots, repo_root=repo, source_commit=source_commit,
+                                  challenge_path=challenge_path)
+    parity = compare_full_a5_runs(verified)
+    parity_path = (repo / index.get("parity_report", "")).resolve(strict=True)
+    if repo not in parity_path.parents or json.loads(parity_path.read_text()) != parity:
+        raise ValueError("round-4 A5 parity report differs from reconstruction")
+    return {"status": "PASS", "causal": verified, "parity": parity}
 
 
 def verify_final(root: str | Path, *, strict: bool = False):

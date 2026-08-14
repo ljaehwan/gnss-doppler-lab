@@ -54,16 +54,20 @@ def build_review_candidate_record(*, target_commit, config_sha256, implementatio
             "review_evidence": {"status": "REPAIRS_COMPLETE_AWAITING_REREVIEW",
                                 "rejected_freeze_commit": rejected_freeze_commit,
                                 "rejected_freeze_commits": rejected},
-            "manifest_excludes_self": True, "protected_access_authorized": False}
+            "manifest_excludes_self": True, "protected_access_authorized": False,
+            "delivery_state": "ATTACK_NOT_AUTHORIZED_UNTIL_CONTROLLER_NONFORCE_PUSH_AND_EXACT_REMOTE_SYNC"}
 
 
-def verify_review_candidate_record(record, *, target_commit):
+def verify_review_candidate_record(record, *, target_commit, repo_root=None, wrapper_commit=None):
     if record.get("schema") != "gnss-doppler-lab.gcspo-stage0.implementation-freeze.v3":
         raise ValueError("repair freeze schema mismatch")
     if record.get("validity_state") != "AWAITING_INDEPENDENT_REREVIEW" or record.get("target_commit") != target_commit:
         raise ValueError("repair freeze target/state mismatch")
     if record.get("protected_access_authorized") is not False or record.get("manifest_excludes_self") is not True:
         raise ValueError("repair freeze access/self-reference contract mismatch")
+    if record.get("delivery_state") != "ATTACK_NOT_AUTHORIZED_UNTIL_CONTROLLER_NONFORCE_PUSH_AND_EXACT_REMOTE_SYNC":
+        raise ValueError("repair freeze controller delivery precondition mismatch")
+
     review = record.get("review_evidence", {})
     rejected = review.get("rejected_freeze_commits")
     if (review.get("status") != "REPAIRS_COMPLETE_AWAITING_REREVIEW" or
@@ -73,7 +77,45 @@ def verify_review_candidate_record(record, *, target_commit):
         raise ValueError("repair freeze review evidence mismatch")
     _verify_rows(record.get("implementation_files"), "implementation")
     _verify_rows(record.get("clean_scientific_artifacts"), "clean artifact")
+    if repo_root is not None:
+        root = Path(repo_root).resolve(strict=True)
+        _verify_target_tree_rows(record.get("implementation_files"), "implementation", root, target_commit)
+        _verify_target_tree_rows(record.get("clean_scientific_artifacts"), "clean artifact", root, target_commit)
+        if wrapper_commit is not None:
+            parent = subprocess.run(["git", "rev-parse", f"{wrapper_commit}^"], cwd=root, check=True,
+                                    text=True, capture_output=True).stdout.strip()
+            if parent != target_commit:
+                raise ValueError("review wrapper immediate parent does not equal manifest target")
+
     return True
+
+def _git_tree_payload(repo_root, target_commit, absolute_path):
+    path = Path(absolute_path).resolve(strict=False)
+    try:
+        relative = path.relative_to(repo_root).as_posix()
+    except ValueError as exc:
+        raise ValueError(f"Git target tree row escapes repository: {path}") from exc
+    if relative == "artifacts/gcspo_stage0_static_rerun/implementation_manifest.json":
+        raise ValueError("implementation manifest must explicitly exclude itself")
+    result = subprocess.run(["git", "show", f"{target_commit}:{relative}"], cwd=repo_root,
+                            capture_output=True)
+    if result.returncode != 0:
+        raise ValueError(f"row absent from declared Git target tree: {relative}")
+    return result.stdout
+
+
+def _verify_target_tree_rows(rows, kind, repo_root, target_commit):
+    exists = subprocess.run(["git", "cat-file", "-e", f"{target_commit}^{{commit}}"],
+                            cwd=repo_root, capture_output=True)
+    if exists.returncode:
+        raise ValueError("declared Git target commit is absent")
+    for row in rows:
+        payload = _git_tree_payload(repo_root, target_commit, row["path"])
+        observed = {"path": row["path"], "sha256": hashlib.sha256(payload).hexdigest(),
+                    "size_bytes": len(payload)}
+        if observed != row:
+            raise ValueError(f"{kind} target Git tree identity mismatch: {row['path']}")
+
 
 
 def _verify_rows(rows, kind):
@@ -160,16 +202,29 @@ def live_remote_snapshot(repo_root, remote, branch):
     remote_sha = query[0].split()[0]
     local_sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, check=True,
                                text=True, capture_output=True).stdout.strip()
+    try:
+        symbolic = subprocess.run(["git", "symbolic-ref", "--short"], cwd=root, check=True,
+                                  text=True, capture_output=True).stdout.strip()
+    except subprocess.CalledProcessError:
+        symbolic = subprocess.run(["git", "symbolic-ref", "--short", "HEAD"], cwd=root, check=True,
+                                  text=True, capture_output=True).stdout.strip()
+    counts = subprocess.run(["git", "rev-list", "--left-right", "--count",
+                             f"{local_sha}...{remote_sha}"], cwd=root, check=True,
+                            text=True, capture_output=True).stdout.strip().split()
+    if len(counts) != 2:
+        raise ValueError("live remote ahead/behind count is malformed")
+    ahead, behind = map(int, counts)
     status = subprocess.run(["git", "status", "--porcelain=v1", "--untracked-files=all"], cwd=root,
                             check=True, text=True, capture_output=True).stdout.strip()
     ignored = subprocess.run(["git", "status", "--porcelain=v1", "--untracked-files=all", "--ignored"], cwd=root,
                              check=True, text=True, capture_output=True).stdout.strip()
     runtime_ignored = _runtime_relevant_ignored(ignored)
     fully_clean = not status and not runtime_ignored
-    synchronized = len(remote_sha) == 40 and remote_sha == local_sha and fully_clean
+    synchronized = (len(remote_sha) == 40 and remote_sha == local_sha and symbolic == branch and
+                    ahead == 0 and behind == 0 and fully_clean)
     return {"query": "git ls-remote", "remote": remote, "branch": branch,
-            "local_sha": local_sha, "remote_sha": remote_sha, "ahead": 0 if synchronized else None,
-            "behind": 0 if synchronized else None, "tracked_source_clean": fully_clean,
+            "symbolic_branch": symbolic, "local_sha": local_sha, "remote_sha": remote_sha,
+            "ahead": ahead, "behind": behind, "tracked_source_clean": fully_clean,
             "git_status": status.splitlines(), "runtime_relevant_ignored": runtime_ignored,
             "synchronized": synchronized}
 
