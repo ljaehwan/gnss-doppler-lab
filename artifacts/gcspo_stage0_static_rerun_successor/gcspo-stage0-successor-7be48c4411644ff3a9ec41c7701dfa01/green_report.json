@@ -25,7 +25,8 @@
     "passed": 282,
     "failed": 0,
     "exit_code": 0,
-    "execution_root": "isolated detached worktree at implementation commit with quarantined preaccess package plus five immutable frozen inputs as test fixture; authoritative invalid root untouched"
+    "execution_root": "isolated detached worktree at implementation commit with quarantined preaccess package plus five immutable frozen inputs as test fixture; authoritative invalid root untouched",
+    "execution_target": "3bf3b45b9f5c6d7503ce108251447d4ff38e88aa"
   },
   "target_manifest_validation": {
     "implementation_rows": 66,
@@ -34,5 +35,18 @@
     "missing": 0,
     "extra": 0,
     "status": "PASS"
+  },
+  "strict_verifier_development": {
+    "initial_wrapper": "719122611e68f2f35f651d76b0b76fe817d79569",
+    "initial_failure": "invalid artifact root identity contract mismatch due absolute-versus-repository-relative comparison",
+    "repair": "compare immutable repository-relative control rows without changing evidence",
+    "focused_after_repair": {
+      "passed": 8,
+      "failed": 0
+    },
+    "all_gcspo_after_repair": {
+      "passed": 282,
+      "failed": 0
+    }
   }
 }
