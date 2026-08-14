@@ -1,52 +1,62 @@
 {
-  "schema": "gnss-doppler-lab.gcspo-stage0.successor-manifest-green.v1",
-  "phase": "GREEN_APPROVED_TARGET",
+  "schema": "gnss-doppler-lab.gcspo-stage0.successor-blocker-green.v2",
+  "phase": "GREEN_TESTED_TARGET",
+  "target_commit_binding": "COMMIT_CONTAINING_THIS_DOCUMENT",
   "focused": {
-    "command": "python3 -m pytest -q tests/test_gcspo_successor_manifest.py",
-    "passed": 8,
+    "command": "/home/ubuntu/.venvs/cmte-a2/bin/python -m pytest -q tests/test_gcspo_successor_manifest.py",
+    "passed": 48,
     "failed": 0,
     "exit_code": 0
   },
-  "existing_relevant": {
-    "command": "/home/ubuntu/.venvs/cmte-a2/bin/python -m pytest -q tests/test_gcspo_freeze.py tests/test_gcspo_round4_freeze_repairs.py tests/test_gcspo_verifier.py tests/test_gcspo_stage0.py",
-    "passed": 78,
+  "relevant": {
+    "command": "/home/ubuntu/.venvs/cmte-a2/bin/python -m pytest -q tests/test_gcspo_successor_manifest.py tests/test_gcspo_freeze.py tests/test_gcspo_round4_freeze_repairs.py tests/test_gcspo_verifier.py tests/test_gcspo_stage0.py",
+    "passed": 126,
     "failed": 0,
     "exit_code": 0,
-    "execution_root": "isolated detached worktree with preserved preaccess package test fixture; authoritative invalid root untouched"
+    "execution_root": "isolated detached worktree with immutable committed package fixture; authoritative invalid root untouched"
   },
-  "repair_scope": "STALE_CROSS_GENERATION_IMPLEMENTATION_MANIFEST_ONLY",
-  "scientific_files_changed": false,
-  "protected_access_count": 0,
-  "protected_marker_present": false,
-  "protected_ledger_size_bytes": 0,
-  "push_performed": false,
   "all_gcspo": {
     "command": "/home/ubuntu/.venvs/cmte-a2/bin/python -m pytest -q tests/test_gcspo*.py",
-    "passed": 282,
+    "passed": 322,
     "failed": 0,
     "exit_code": 0,
-    "execution_root": "isolated detached worktree at implementation commit with quarantined preaccess package plus five immutable frozen inputs as test fixture; authoritative invalid root untouched",
-    "execution_target": "3bf3b45b9f5c6d7503ce108251447d4ff38e88aa"
+    "execution_root": "isolated detached worktree with immutable committed package fixture; authoritative invalid root untouched"
+  },
+  "adversarial_rejections": {
+    "post_target_internal_dependency_mutations": 3,
+    "manifest_protected_state_mutations": 11,
+    "control_protected_state_mutations": 12,
+    "handoff_protected_state_mutations": 12,
+    "tamper_classes": [
+      "bool",
+      "missing",
+      "extra",
+      "type",
+      "value"
+    ],
+    "status": "PASS_FAIL_CLOSED"
   },
   "target_manifest_validation": {
-    "implementation_rows": 66,
-    "stale_required_present": 4,
-    "later_gcspo_required_present": 13,
+    "implementation_rows": 69,
+    "internal_import_closure_paths": [
+      "src/gnss_doppler_lab/__init__.py",
+      "src/gnss_doppler_lab/gcmr_geometry.py",
+      "src/gnss_doppler_lab/trajectory.py"
+    ],
+    "required_direct_dependencies_present": [
+      "src/gnss_doppler_lab/gcmr_geometry.py",
+      "src/gnss_doppler_lab/trajectory.py"
+    ],
     "missing": 0,
     "extra": 0,
     "status": "PASS"
   },
-  "strict_verifier_development": {
-    "initial_wrapper": "719122611e68f2f35f651d76b0b76fe817d79569",
-    "initial_failure": "invalid artifact root identity contract mismatch due absolute-versus-repository-relative comparison",
-    "repair": "compare immutable repository-relative control rows without changing evidence",
-    "focused_after_repair": {
-      "passed": 8,
-      "failed": 0
-    },
-    "all_gcspo_after_repair": {
-      "passed": 282,
-      "failed": 0
-    }
-  }
+  "repair_scope": "INTERNAL_IMPORT_CLOSURE_AND_PROTECTED_STATE_VERIFICATION_ONLY",
+  "scientific_files_changed": false,
+  "config_sha256": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad",
+  "preregistration_sha256": "715e11965854f785487e9d2c747718747c1d31cdd8603696ea7af126a45a70da",
+  "protected_access_count": 0,
+  "protected_marker_present": false,
+  "protected_ledger_size_bytes": 0,
+  "push_performed": false
 }

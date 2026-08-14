@@ -21,9 +21,13 @@ from gnss_doppler_lab.gcspo_successor_freeze import (
     LATER_GCSPO_PATHS,
     PREDECESSOR_FREEZE_COMMIT,
     PREREGISTRATION_SHA256,
+    REJECTED_TARGET_COMMIT,
+    REJECTED_WRAPPER_COMMIT,
+    REQUIRED_INTERNAL_DEPENDENCY_PATHS,
     STALE_CROSS_GENERATION_PATHS,
     build_successor_manifest,
     strict_json_bytes,
+    verify_control_protected_state,
 )
 
 
@@ -53,6 +57,7 @@ def main() -> int:
         raise SystemExit("builder requires a clean target worktree")
     artifact = ROOT / ARTIFACT_RELATIVE
     control = strict_json_bytes((artifact / "successor_control.json").read_bytes(), "control")
+    verify_control_protected_state(control)
     if (control.get("invocation", {}).get("invocation_id") != INVOCATION_ID or
             control.get("invocation", {}).get("nonce") != INVOCATION_NONCE or
             control.get("invocation", {}).get("same_invocation_retry") is not False):
@@ -72,6 +77,9 @@ def main() -> int:
     required = set(STALE_CROSS_GENERATION_PATHS) | set(LATER_GCSPO_PATHS)
     if not required.issubset(manifest["implementation_paths"]):
         raise SystemExit("stale/later GCSPO path coverage is incomplete")
+    if not set(REQUIRED_INTERNAL_DEPENDENCY_PATHS).issubset(
+            manifest["internal_import_closure_paths"]):
+        raise SystemExit("required direct internal dependency closure is incomplete")
     red = strict_json_bytes((artifact / "red_report.json").read_bytes(), "RED report")
     green = strict_json_bytes((artifact / "green_report.json").read_bytes(), "GREEN report")
     handoff = {
@@ -85,7 +93,7 @@ def main() -> int:
         "same_invocation_retry": False,
         "predecessor_freeze_commit": PREDECESSOR_FREEZE_COMMIT,
         "invalid_evidence_commit": INVALID_EVIDENCE_COMMIT,
-        "repair_scope": "STALE_CROSS_GENERATION_IMPLEMENTATION_MANIFEST_ONLY",
+        "repair_scope": "INTERNAL_IMPORT_CLOSURE_AND_PROTECTED_STATE_VERIFICATION_ONLY",
         "config_sha256": CONFIG_SHA256,
         "preregistration_sha256": PREREGISTRATION_SHA256,
         "red_green": {"red": red, "green": green},
@@ -93,10 +101,21 @@ def main() -> int:
             "total_rows": len(manifest["files"]),
             "stale_rows_required_and_present": list(STALE_CROSS_GENERATION_PATHS),
             "later_gcspo_rows_required_and_present": list(LATER_GCSPO_PATHS),
+            "required_direct_internal_dependencies": list(REQUIRED_INTERNAL_DEPENDENCY_PATHS),
+            "internal_import_closure_paths": manifest["internal_import_closure_paths"],
             "missing_rows": 0, "extra_rows": 0,
         },
         "protected": {"access_count": 0, "marker_present": False,
                          "ledger_size_bytes": 0, "authorized": False},
+        "prior_independent_rejection": {
+            "wrapper_commit": REJECTED_WRAPPER_COMMIT,
+            "target_commit": REJECTED_TARGET_COMMIT,
+            "verdict": "REJECT",
+            "blocking_findings": [
+                "TRANSITIVE_INTERNAL_IMPORT_CLOSURE_MISSING",
+                "PROTECTED_STATE_SCHEMA_TYPE_VALUE_NOT_STRICT",
+            ],
+        },
         "invalid_artifact_root_preserved": True,
         "push_performed": False,
         "independent_review_command":
