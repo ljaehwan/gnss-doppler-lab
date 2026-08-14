@@ -1,0 +1,154 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.round7-successor-audit.v1",
+  "state": "READY_FOR_FRESH_INDEPENDENT_READ_ONLY_REVIEW",
+  "final_freeze_sha_binding": "COMMIT_CONTAINING_THIS_REPORT",
+  "freeze_parent_sha": "093cb0d8456f0bdf795e0a9833693d58e6e54bbd",
+  "audit_lineage": [
+    {
+      "commit": "a9a6f03a8fe984ee75c15fbcf81f7c04c5ab2e46",
+      "role": "PRIOR_REJECTED_RECEIPT_FREEZE"
+    },
+    {
+      "commit": "9774fe1048e467808b53769f94a717507fac5a38",
+      "role": "IMMUTABLE_SIGNED_EXECUTION_SOURCE"
+    },
+    {
+      "commit": "532c4dd014432b787553b199a93f01ddaa294c01",
+      "role": "INDEPENDENTLY_REJECTED_ROUND6_FREEZE"
+    },
+    {
+      "commit": "c525b8d1db7b1d7c5955af805900366a87a5a877",
+      "role": "SUCCESSOR_WRITER_CLEAN_BASE"
+    },
+    {
+      "commit": "093cb0d8456f0bdf795e0a9833693d58e6e54bbd",
+      "role": "AUDITABLE_REPAIR_COMMIT"
+    },
+    {
+      "commit": "COMMIT_CONTAINING_THIS_REPORT",
+      "role": "ROUND7_SUCCESSOR_PACKAGING_FREEZE"
+    }
+  ],
+  "independent_rejection": {
+    "verdict": "INDEPENDENT_REVIEW_REJECT",
+    "artifact": "artifacts/gcspo_stage0_static_rerun/round6_independent_review_rejection.json",
+    "historical_212_pass_claim": "SUPERSEDED_REJECTED_FALSE_FOR_EXACT_FREEZE",
+    "exact_reproduction": {
+      "failed": 3,
+      "passed": 209
+    }
+  },
+  "findings_repaired": [
+    {
+      "id": "ROUND6-F1-EXACT-FREEZE-ALL-TEST-CLAIM",
+      "severity": "HIGH",
+      "repair": "README restored to frozen bytes; explanatory text moved to evidence-only Round-7 notes; successor test and freeze evidence regenerated.",
+      "readme_sha256": "eea2e10885d66bfc762f33b2e25147ab07b1bbceace505078e8770e4cdc18ac2",
+      "status": "REPAIRED"
+    },
+    {
+      "id": "ROUND6-F2-CPU-CUDA-NONFINITE-FAIL-OPEN",
+      "severity": "MEDIUM",
+      "repair": "Strict parse_constant rejection plus finite numeric and derived delta/absolute/scale/relative checks; bool numeric coercion rejected.",
+      "regressions": {
+        "strict_json_constants": [
+          "NaN",
+          "Infinity",
+          "-Infinity"
+        ],
+        "direct_compared_values": [
+          "NaN",
+          "positive Infinity",
+          "negative Infinity"
+        ],
+        "derived_values": [
+          "delta",
+          "absolute value",
+          "scale",
+          "relative value",
+          "overflow-derived delta"
+        ],
+        "bool_numeric": "REJECTED"
+      },
+      "status": "REPAIRED"
+    }
+  ],
+  "red_green": {
+    "evidence": "artifacts/gcspo_stage0_static_rerun/round7_repair_evidence.json",
+    "targeted_red": {
+      "initial_failed": 9,
+      "explicit_derived_failed": 4
+    },
+    "targeted_green": {
+      "failed": 0,
+      "passed": 13
+    },
+    "focused_green": {
+      "failed": 0,
+      "passed": 45,
+      "junit": "artifacts/gcspo_stage0_static_rerun/round7_focused_junit.xml"
+    },
+    "all_gcspo_green": {
+      "failed": 0,
+      "passed": 225,
+      "junit": "artifacts/gcspo_stage0_static_rerun/round7_all_gcspo_junit.xml"
+    },
+    "synthetic_malformed_nonfinite_probes": {
+      "failed_open": 0,
+      "rejected": 12
+    }
+  },
+  "signed_evidence": {
+    "source_commit": "9774fe1048e467808b53769f94a717507fac5a38",
+    "external_roots_changed": false,
+    "packaged_evidence_file_count": 33,
+    "packaged_files_byte_match_immutable_external_roots": 33,
+    "prepared_completed_signature_count": 6,
+    "signature_verification": "PASS",
+    "public_key_fingerprint": "SHA256:L+STBb5P7+DDfilvAZUxV2eHGYZGfMQf4aDbXSsNi0c",
+    "backends": [
+      "cuda",
+      "cuda",
+      "cpu"
+    ],
+    "independence": "EXTERNALLY_WITNESSED"
+  },
+  "numerical_reconstruction": {
+    "same_backend": "BYTE_IDENTICAL",
+    "cpu_cuda": "WITHIN_PREREGISTERED_TOLERANCE",
+    "numeric_field_count": 789115,
+    "maximum_absolute_delta": 0.000005760082785855047,
+    "maximum_relative_delta": 7.291690239802362e-8,
+    "tolerance_violations": 0,
+    "absolute_tolerance": 0.00001,
+    "relative_tolerance": 1e-8,
+    "or_semantics": "absolute_exceeds_AND_relative_exceeds",
+    "tolerance_status": "PRESERVED_UNCHANGED_FROM_ROUND4"
+  },
+  "scope_and_change_control": {
+    "gate": "cleanStatic-only",
+    "cleanDynamic": "OOD_DIAGNOSIS_NOT_GATE_EVIDENCE",
+    "scientific_outputs_changed": false,
+    "signed_evidence_changed": false,
+    "configuration_changed": false,
+    "thresholds_changed": false,
+    "scoring_changed": false,
+    "gate_scope_changed": false,
+    "field_eligibility_changed": false
+  },
+  "round5_unsigned_evidence": {
+    "status": "REJECTED_UNSIGNED_FAIL_CLOSED",
+    "excluded": true,
+    "replayable": false,
+    "retrospective_signature": false
+  },
+  "protected": {
+    "access_authorized": false,
+    "marker_present": false,
+    "ledger_present": false,
+    "rows_opened": 0,
+    "bytes_opened": 0
+  },
+  "attack_run_count": 0,
+  "push_performed": false
+}

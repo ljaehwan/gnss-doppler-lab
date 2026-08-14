@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify one exact Round-6 packaging freeze read-only."""
+"""Verify the exact Round-7 successor to the rejected Round-6 freeze read-only."""
 from __future__ import annotations
 
 import argparse

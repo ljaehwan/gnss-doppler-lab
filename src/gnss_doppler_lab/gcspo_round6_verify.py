@@ -11,6 +11,9 @@ from .gcspo_provenance import verify_witnessed_runs
 
 
 SOURCE_COMMIT = "9774fe1048e467808b53769f94a717507fac5a38"
+SUCCESSOR_BASE_COMMIT = "c525b8d1db7b1d7c5955af805900366a87a5a877"
+REJECTED_FREEZE_COMMIT = "532c4dd014432b787553b199a93f01ddaa294c01"
+REPAIR_COMMIT = "093cb0d8456f0bdf795e0a9833693d58e6e54bbd"
 CHALLENGE_PATH = "artifacts/gcspo_stage0_static_rerun/a5_round6_challenges.json"
 RUN_IDS = ("round6-cuda-1", "round6-cuda-2", "round6-cpu-1")
 EVIDENCE_FILES = (
@@ -182,6 +185,38 @@ def _verify_evidence_manifest(artifact: Path, manifest_path: Path) -> dict:
     return manifest
 
 
+def _verify_successor_evidence_manifest(artifact: Path) -> dict:
+    manifest = _load(artifact / "round7_evidence_manifest.json")
+    if (manifest.get("schema") !=
+            "gnss-doppler-lab.gcspo-stage0.round7-successor-evidence-manifest.v1" or
+            manifest.get("source_commit") != SOURCE_COMMIT or
+            manifest.get("rejected_freeze_commit") != REJECTED_FREEZE_COMMIT or
+            manifest.get("repair_commit") != REPAIR_COMMIT or
+            manifest.get("manifest_excludes_self") is not True):
+        raise ValueError("round-7 successor evidence manifest contract mismatch")
+    signed = manifest.get("signed_evidence", {})
+    signed_path = artifact.parents[1] / str(signed.get("manifest_path"))
+    if (signed.get("file_count") != 33 or signed.get("bytes_changed") is not False or
+            _identity(signed_path) != {
+                "sha256": signed.get("manifest_sha256"),
+                "size_bytes": signed.get("manifest_size_bytes"),
+            }):
+        raise ValueError("round-7 signed evidence manifest identity mismatch")
+    rows = manifest.get("files")
+    if not isinstance(rows, list):
+        raise ValueError("round-7 successor evidence file list is malformed")
+    paths = [row.get("path") for row in rows]
+    if paths != sorted(paths) or len(paths) != len(set(paths)):
+        raise ValueError("round-7 successor evidence paths are not sorted/unique")
+    repo = artifact.parents[1]
+    for row in rows:
+        path = (repo / str(row.get("path"))).resolve(strict=True)
+        if repo not in path.parents or _identity(path) != {
+                "sha256": row.get("sha256"), "size_bytes": row.get("size_bytes")}:
+            raise ValueError(f"round-7 successor evidence hash mismatch: {row.get('path')}")
+    return manifest
+
+
 def verify_round6_a5(artifact_root: str | Path) -> dict:
     artifact = Path(artifact_root).resolve(strict=True)
     repo = artifact.parents[1]
@@ -225,39 +260,99 @@ def verify_round6_freeze(artifact_root: str | Path, expected_freeze_commit: str)
     if subprocess.run(["git", "status", "--porcelain", "--untracked-files=all"], cwd=repo,
                       check=True, text=True, capture_output=True).stdout:
         raise ValueError("round-6 review worktree is not clean")
-    manifest_path = artifact / "round6_freeze_manifest.json"
+    manifest_path = artifact / "round7_freeze_manifest.json"
     manifest = _load(manifest_path)
-    if (manifest.get("schema") != "gnss-doppler-lab.gcspo-stage0.round6-packaging-freeze.v1" or
-            manifest.get("state") != "READY_FOR_SINGLE_INDEPENDENT_READ_ONLY_REVIEW" or
+    manifest_relative = "artifacts/gcspo_stage0_static_rerun/round7_freeze_manifest.json"
+    if (manifest.get("schema") != "gnss-doppler-lab.gcspo-stage0.round7-successor-freeze.v1" or
+            manifest.get("state") != "READY_FOR_FRESH_INDEPENDENT_READ_ONLY_REVIEW" or
             manifest.get("source_commit") != SOURCE_COMMIT or
+            manifest.get("successor_base_commit") != SUCCESSOR_BASE_COMMIT or
+            manifest.get("rejected_freeze_commit") != REJECTED_FREEZE_COMMIT or
+            manifest.get("freeze_parent_sha") != REPAIR_COMMIT or
             manifest.get("manifest_excludes_self") is not True or
+            manifest.get("self_binding_exclusions") != [manifest_relative] or
             manifest.get("protected_access_authorized") is not False):
-        raise ValueError("round-6 packaging freeze contract mismatch")
+        raise ValueError("round-7 successor freeze contract mismatch")
+    parent = subprocess.run(
+        ["git", "rev-parse", f"{expected_freeze_commit}^"], cwd=repo,
+        check=True, text=True, capture_output=True,
+    ).stdout.strip()
+    if parent != REPAIR_COMMIT:
+        raise ValueError("round-7 successor freeze parent mismatch")
+    for ancestor in (SUCCESSOR_BASE_COMMIT, REJECTED_FREEZE_COMMIT, SOURCE_COMMIT):
+        if subprocess.run(
+                ["git", "merge-base", "--is-ancestor", ancestor, expected_freeze_commit],
+                cwd=repo).returncode:
+            raise ValueError(f"round-7 successor ancestry mismatch: {ancestor}")
     committed_manifest = subprocess.run(
-        ["git", "show", f"{expected_freeze_commit}:artifacts/gcspo_stage0_static_rerun/round6_freeze_manifest.json"],
+        ["git", "show", f"{expected_freeze_commit}:{manifest_relative}"],
         cwd=repo, check=True, capture_output=True,
     ).stdout
     if manifest_path.read_bytes() != committed_manifest:
-        raise ValueError("round-6 freeze manifest is not from expected commit")
+        raise ValueError("round-7 freeze manifest is not from expected commit")
     rows = manifest.get("files")
     if not isinstance(rows, list) or not rows:
         raise ValueError("round-6 packaging freeze file set is empty")
     paths = [row.get("path") for row in rows]
     if paths != sorted(paths) or len(paths) != len(set(paths)):
-        raise ValueError("round-6 packaging freeze paths are not sorted/unique")
+        raise ValueError("round-7 packaging freeze paths are not sorted/unique")
+    changes = subprocess.run(
+        ["git", "diff", "--name-only", SUCCESSOR_BASE_COMMIT, expected_freeze_commit],
+        cwd=repo, check=True, text=True, capture_output=True,
+    ).stdout.splitlines()
+    successor_changes = sorted(set(changes) - {manifest_relative})
+    if manifest.get("successor_change_paths") != successor_changes:
+        raise ValueError("round-7 successor change coverage differs from exact Git diff")
+    if not set(successor_changes).issubset(paths):
+        raise ValueError("round-7 successor changes are not all freeze-manifest members")
+    rejected_manifest = json.loads(subprocess.run(
+        ["git", "show", f"{REJECTED_FREEZE_COMMIT}:artifacts/gcspo_stage0_static_rerun/round6_freeze_manifest.json"],
+        cwd=repo, check=True, text=True, capture_output=True,
+    ).stdout)
+    prior_paths = {row["path"] for row in rejected_manifest["files"]}
+    carried_lineage = {
+        "artifacts/gcspo_stage0_static_rerun/round6_freeze_manifest.json",
+        "artifacts/gcspo_stage0_static_rerun/round6_phase2_review_handoff.json",
+    }
+    required_paths = sorted(prior_paths | set(successor_changes) | carried_lineage)
+    if paths != required_paths:
+        raise ValueError("round-7 freeze file set is not the required predecessor/change union")
     for row in rows:
         path = (repo / str(row.get("path"))).resolve(strict=True)
         if repo not in path.parents or _identity(path) != {
                 "sha256": row.get("sha256"), "size_bytes": row.get("size_bytes")}:
-            raise ValueError(f"round-6 freeze hash mismatch: {row.get('path')}")
+            raise ValueError(f"round-7 freeze hash mismatch: {row.get('path')}")
         committed = subprocess.run(["git", "show", f"{expected_freeze_commit}:{row['path']}"],
                                    cwd=repo, check=True, capture_output=True).stdout
         if path.read_bytes() != committed:
-            raise ValueError(f"round-6 freeze file is not from expected commit: {row['path']}")
+            raise ValueError(f"round-7 freeze file is not from expected commit: {row['path']}")
+    rejection = _load(artifact / "round6_independent_review_rejection.json")
+    if (rejection.get("verdict") != "INDEPENDENT_REVIEW_REJECT" or
+            rejection.get("reviewed_freeze_sha") != REJECTED_FREEZE_COMMIT or
+            rejection.get("historical_all_test_claim", {}).get("disposition") !=
+            "SUPERSEDED_REJECTED_FALSE_FOR_EXACT_FREEZE"):
+        raise ValueError("round-6 independent rejection is not preserved exactly")
+    handoff = _load(artifact / "round7_repair_review_handoff.json")
+    if (handoff.get("schema") != "gnss-doppler-lab.gcspo-stage0.round7-repair-review-handoff.v1" or
+            handoff.get("state") != "READY_FOR_FRESH_INDEPENDENT_READ_ONLY_REVIEW" or
+            handoff.get("freeze_parent_sha") != REPAIR_COMMIT or
+            handoff.get("final_freeze_sha_binding") != "COMMIT_CONTAINING_THIS_HANDOFF"):
+        raise ValueError("round-7 repair handoff binding mismatch")
+    if _identity(artifact / "README.md")["sha256"] != \
+            "eea2e10885d66bfc762f33b2e25147ab07b1bbceace505078e8770e4cdc18ac2":
+        raise ValueError("round-7 frozen README identity mismatch")
+    marker = artifact.parent / f".{artifact.name}.protected_run_started.json"
+    if marker.exists() or (artifact / "access_ledger.jsonl").exists():
+        raise ValueError("round-7 protected marker or ledger exists")
+    successor_evidence = _verify_successor_evidence_manifest(artifact)
     result = verify_round6_a5(artifact)
     return {
         "status": "PASS", "freeze_commit": expected_freeze_commit,
         "source_commit": SOURCE_COMMIT,
+        "freeze_parent_sha": parent,
+        "successor_change_file_count": len(successor_changes),
+        "freeze_file_count": len(rows),
+        "successor_evidence_file_count": len(successor_evidence["files"]),
         "evidence_file_count": len(result["manifest"]["files"]),
         "run_count": len(result["witnessed"]["runs"]),
         "independence": result["witnessed"]["independence"],
