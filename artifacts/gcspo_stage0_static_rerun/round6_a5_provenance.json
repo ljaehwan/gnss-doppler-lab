@@ -1,0 +1,14 @@
+{
+  "challenge_path": "artifacts/gcspo_stage0_static_rerun/a5_round6_challenges.json",
+  "evidence_manifest": "artifacts/gcspo_stage0_static_rerun/round6_evidence_manifest.json",
+  "evidence_roots": [
+    "artifacts/gcspo_stage0_static_rerun/round6_provenance/round6-cuda-1",
+    "artifacts/gcspo_stage0_static_rerun/round6_provenance/round6-cuda-2",
+    "artifacts/gcspo_stage0_static_rerun/round6_provenance/round6-cpu-1"
+  ],
+  "external_roots_preserved_immutable": true,
+  "omitted_controller_intermediate": "completion_observation.json is not signed, is not referenced by a signed envelope, and is not required for public reconstruction",
+  "parity_report": "artifacts/gcspo_stage0_static_rerun/round6_a5_parity.json",
+  "schema": "gnss-doppler-lab.gcspo-stage0.round6-a5-provenance-index.v1",
+  "source_commit": "9774fe1048e467808b53769f94a717507fac5a38"
+}

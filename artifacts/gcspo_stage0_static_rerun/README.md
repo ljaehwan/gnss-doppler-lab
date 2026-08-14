@@ -1,4 +1,19 @@
-# GCSPO Stage-0 static rerun — pre-freeze
+# GCSPO Stage-0 static rerun
+
+Round 6 packages three clean-static full-workload reproductions created and
+signed by the external controller against source commit
+`9774fe1048e467808b53769f94a717507fac5a38`. The bounded public package is
+indexed by `round6_a5_provenance.json`, hashed by
+`round6_evidence_manifest.json`, compared in `round6_a5_parity.json`, and
+summarized in `round6_audit_report.json`. The package is ready for one
+independent read-only review; it does not authorize protected access.
+
+The two CUDA runs are byte-identical. The CPU run is within the unchanged
+Round-4 preregistered absolute/relative tolerances. `cleanStatic` alone is gate
+evidence; `cleanDynamic` remains OOD diagnosis. Round-5's unsigned failed root
+remains rejected, immutable, and excluded.
+
+## Historical preregistration checkpoint
 
 This directory is the isolated rerun root. The legacy
 `artifacts/gcspo_stage0_static/` package remains byte-identical and is not a
