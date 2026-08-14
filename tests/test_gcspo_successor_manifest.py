@@ -198,6 +198,16 @@ def _committed_document(name: str) -> dict:
                 "PROTECTED_STATE_SCHEMA_TYPE_VALUE_NOT_STRICT",
             ],
         }
+        document["latest_independent_rejection"] = {
+            "wrapper_commit": "34462807a2029a0979c9e65162246b799406c562",
+            "target_commit": "9121843f1d4835884af91883369dca62848c8dcd",
+            "verdict": "REJECT",
+            "blocking_findings": [
+                "PACKAGE_INIT_RELATIVE_IMPORT_RESOLUTION_FAIL_OPEN",
+                "DOCUMENT_SCHEMA_AND_PRIMITIVE_TYPE_FAIL_OPEN",
+                "ARTIFACT_ROOT_CANONICAL_PATH_FAIL_OPEN",
+            ],
+        }
     return document
 
 

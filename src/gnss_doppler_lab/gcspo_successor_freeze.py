@@ -581,11 +581,7 @@ def _verify_rejection(value: object, label: str) -> None:
 
 
 def verify_handoff_protected_state(handoff: dict) -> None:
-    old_keys = HANDOFF_KEYS - {"latest_independent_rejection"}
-    keys = set(handoff) if type(handoff) is dict else set()
-    if keys not in (set(old_keys), set(HANDOFF_KEYS)):
-        raise ValueError("review handoff exact schema/key set mismatch")
-    record = handoff
+    record = _require_exact_keys(handoff, HANDOFF_KEYS, "review handoff")
     fixed = {
         "schema": HANDOFF_SCHEMA,
         "state": "READY_FOR_FRESH_INDEPENDENT_READ_ONLY_REVIEW",
