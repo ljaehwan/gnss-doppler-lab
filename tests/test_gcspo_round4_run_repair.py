@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import importlib.util
 from pathlib import Path
+import sys
+from types import SimpleNamespace
 
 
 def test_one_worker_a5_scoring_runs_in_launch_process_without_pool(monkeypatch):
@@ -21,3 +23,24 @@ def test_one_worker_a5_scoring_runs_in_launch_process_without_pool(monkeypatch):
         {"index": 1, "lambda": 100.0},
     ]
 
+
+def test_cuda_backend_is_initialized_and_attested_before_workload(monkeypatch):
+    root = Path(__file__).parents[1]
+    spec = importlib.util.spec_from_file_location(
+        "gcspo_clean_a5_runner_backend", root / "scripts/run_gcspo_clean_a5.py")
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    initialized = []
+    cuda = SimpleNamespace(
+        is_available=lambda: True,
+        init=lambda: initialized.append(True),
+        get_device_name=lambda _index: "Synthetic GPU",
+    )
+    fake_torch = SimpleNamespace(cuda=cuda, __version__="test", version=SimpleNamespace(cuda="test"))
+    monkeypatch.setitem(sys.modules, "torch", fake_torch)
+    assert module._backend_truth("cuda") == {
+        "requested": "cuda", "resolved": "cuda", "cuda_available": True,
+        "device": "Synthetic GPU", "torch_version": "test", "cuda_version": "test",
+    }
+    assert initialized == [True]

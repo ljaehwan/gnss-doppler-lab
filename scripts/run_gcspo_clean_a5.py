@@ -54,6 +54,25 @@ def score_parallel(rows, smoothness, workers):
     with _pool(workers) as pool: return pool.map(_score_index, [(index, smoothness) for index in range(len(rows))], chunksize=1)
 
 
+def _backend_truth(requested):
+    import torch
+
+    available = bool(torch.cuda.is_available())
+    resolved = "cuda" if requested == "auto" and available else ("cpu" if requested == "auto" else requested)
+    if resolved == "cuda" and not available:
+        raise RuntimeError("A5 CUDA backend requested but CUDA is unavailable before computation")
+    if resolved == "cuda":
+        torch.cuda.init()
+        device = torch.cuda.get_device_name(0)
+    else:
+        device = "cpu"
+    return {
+        "requested": requested, "resolved": resolved,
+        "cuda_available": available, "device": device,
+        "torch_version": torch.__version__, "cuda_version": torch.version.cuda,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--artifact-dir", type=Path, default=ROOT / "artifacts/gcspo_stage0_static_rerun")
@@ -63,6 +82,8 @@ def main():
     parser.add_argument("--numeric-trace", action="store_true")
     args = parser.parse_args()
     if args.workers < 1 or args.workers > 4: raise ValueError("workers must be in [1,4]")
+    backend_truth = _backend_truth(args.backend)
+    print(f"A5_BACKEND_PASS requested={args.backend} resolved={backend_truth['resolved']} device={backend_truth['device']}", flush=True)
     config = json.loads((args.artifact_dir / "config.json").read_text())
     clean = run_clean_a1(args.clean_root, ridge_grid=config["h0_predictor"]["ridge_grid"])
     validated = {"code_error_chips", "pll_phase_error_cycles", "carrier_doppler_hz", "code_frequency_offset_chips_s"}
@@ -99,20 +120,14 @@ def main():
     canonical_write_json(threshold_path, payload)
     print(f"A5_CLEAN_PASS calibration={len(calibration)} holdout={len(holdout)}", flush=True)
     if args.numeric_trace:
-        import torch
-        available = bool(torch.cuda.is_available())
-        resolved = "cuda" if args.backend == "auto" and available else ("cpu" if args.backend == "auto" else args.backend)
-        device = torch.cuda.get_device_name(0) if resolved == "cuda" else "cpu"
         canonical_write_json(args.artifact_dir / "a5_numeric_trace.json", {
             "schema": "gnss-doppler-lab.gcspo-stage0.a5-numeric-trace.v1",
-            "backend": resolved, "lambda": selected, "lambda_objectives": objectives,
+            "backend": backend_truth["resolved"], "lambda": selected, "lambda_objectives": objectives,
             "thresholds": thresholds, "calibration": calibration_trace, "holdout": holdout_trace,
         })
         canonical_write_json(args.artifact_dir / "a5_backend_truth.json", {
             "schema": "gnss-doppler-lab.gcspo-stage0.a5-backend-truth.v1",
-            "requested": args.backend, "resolved": resolved,
-            "cuda_available": available, "device": device,
-            "torch_version": torch.__version__, "cuda_version": torch.version.cuda,
+            **backend_truth,
         })
     return 0
 
