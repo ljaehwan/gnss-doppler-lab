@@ -26,18 +26,18 @@
   ],
   "runs": [
     {
-      "id": "round4-cuda-1",
-      "nonce": "d444b6d674e83b02a5bc8e20162706ee448654545c4abbb461fc6b79c4cef50e",
+      "id": "round4b-cuda-1",
+      "nonce": "e2189cc4ef904cd7cfd4b81459c55fbe5f7130ff8f9e265e86a0cc831d4ff6cb",
       "backend": "cuda"
     },
     {
-      "id": "round4-cuda-2",
-      "nonce": "5b986fcb9b80a981787047c5ff7f156f4980f6e53e98ef6822075d5a81da25aa",
+      "id": "round4b-cuda-2",
+      "nonce": "8ee5db6aae5de6f542d266343b04fdd352782099806e072bfbb150062d97df1c",
       "backend": "cuda"
     },
     {
-      "id": "round4-cpu-1",
-      "nonce": "7e73b5ba1ecdbff318864ac8f5510184cae6f51f72473e9b2f9008d9dd9b1899",
+      "id": "round4b-cpu-1",
+      "nonce": "7eaeb39bfdd0302be74d44dcdcc2ae0ecdee4ce04c925eddd020faf3844a425d",
       "backend": "cpu"
     }
   ]

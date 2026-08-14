@@ -49,6 +49,8 @@ def _choose(objectives):
 
 def score_parallel(rows, smoothness, workers):
     global _ROWS; _ROWS = rows
+    if workers == 1:
+        return [_score_index((index, smoothness)) for index in range(len(rows))]
     with _pool(workers) as pool: return pool.map(_score_index, [(index, smoothness) for index in range(len(rows))], chunksize=1)
 
 
@@ -70,8 +72,11 @@ def main():
     if len(_ROWS) < 100: raise ValueError("A5 has fewer than 100 common validation windows")
     validation_windows = len(_ROWS)
     grid = list(map(float, config["lambda_selection"]["grid"]))
-    with _pool(args.workers) as pool:
-        per_window = pool.map(_grid_objective, [(index, grid) for index in range(len(_ROWS))], chunksize=1)
+    if args.workers == 1:
+        per_window = [_grid_objective((index, grid)) for index in range(len(_ROWS))]
+    else:
+        with _pool(args.workers) as pool:
+            per_window = pool.map(_grid_objective, [(index, grid) for index in range(len(_ROWS))], chunksize=1)
     objectives = [{"lambda": value, "mean_gcv": float(np.mean([row[index] for row in per_window]))}
                   for index, value in enumerate(grid)]
     selected = _choose(objectives)
