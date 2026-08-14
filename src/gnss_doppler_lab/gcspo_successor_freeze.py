@@ -634,7 +634,7 @@ def verify_handoff_protected_state(handoff: dict) -> None:
             record["invalid_evidence_commit"] != INVALID_EVIDENCE_COMMIT or
             record["independent_review_command"] != (
                 "python3 scripts/verify_gcspo_successor_freeze.py "
-                "--expected-wrapper-commit ")):
+                "--expected-wrapper-commit $(git rev-parse HEAD)")):
         raise ValueError("review handoff immutable value contract mismatch")
     expected_coverage = {
         "total_rows": 69,
