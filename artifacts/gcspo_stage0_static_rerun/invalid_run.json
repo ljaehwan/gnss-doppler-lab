@@ -1,0 +1,19 @@
+{
+  "attack_access_count": 0,
+  "config_sha256": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad",
+  "failed_checks": [
+    {
+      "error_type": "ValueError",
+      "id": "protected_preflight",
+      "status": "FAIL"
+    }
+  ],
+  "failed_utc": "2026-08-14T06:58:55.262634Z",
+  "reason_codes": [
+    "PREACCESS_PREFLIGHT_FAILED"
+  ],
+  "run_status": "INVALID_EXPERIMENT_NO_ATTACK_ACCESS",
+  "schema": "gnss-doppler-lab.gcspo-stage0.invalid-run.v1",
+  "started_utc": "2026-08-14T06:58:55.262614Z",
+  "target_commit": "0ab94567938234ca925f0bb8fbaece41e7d5e4a3"
+}
