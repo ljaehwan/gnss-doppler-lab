@@ -1,0 +1,103 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.successor-freeze-review-handoff.v1",
+  "state": "READY_FOR_FRESH_INDEPENDENT_READ_ONLY_REVIEW",
+  "wrapper_commit_binding": "COMMIT_CONTAINING_THIS_DOCUMENT",
+  "wrapper_parent_sha": "ae0928b5d06af861f2fee1058a2ba272d13c13f4",
+  "target_commit": "ae0928b5d06af861f2fee1058a2ba272d13c13f4",
+  "invocation_id": "gcspo-stage0-successor-7be48c4411644ff3a9ec41c7701dfa01",
+  "nonce": "c8b66154edba6ce2fc2418d97186a1c452ab8a3ac68afb8f040eedd25c6d23c3",
+  "same_invocation_retry": false,
+  "predecessor_freeze_commit": "0ab94567938234ca925f0bb8fbaece41e7d5e4a3",
+  "invalid_evidence_commit": "58943724ea278b754d388ec2dca0f3666ed6c8a2",
+  "repair_scope": "STALE_CROSS_GENERATION_IMPLEMENTATION_MANIFEST_ONLY",
+  "config_sha256": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad",
+  "preregistration_sha256": "715e11965854f785487e9d2c747718747c1d31cdd8603696ea7af126a45a70da",
+  "red_green": {
+    "red": {
+      "schema": "gnss-doppler-lab.gcspo-stage0.successor-manifest-red.v1",
+      "phase": "RED",
+      "command": "python3 -m pytest -q tests/test_gcspo_successor_manifest.py",
+      "exit_code": 2,
+      "collected_errors": 1,
+      "passed": 0,
+      "failure": "ModuleNotFoundError: No module named gnss_doppler_lab.gcspo_successor_freeze",
+      "stale_cross_generation_manifest_reproduced": true,
+      "protected_access_count": 0,
+      "protected_marker_present": false,
+      "protected_ledger_size_bytes": 0
+    },
+    "green": {
+      "schema": "gnss-doppler-lab.gcspo-stage0.successor-manifest-green.v1",
+      "phase": "GREEN_APPROVED_TARGET",
+      "focused": {
+        "command": "python3 -m pytest -q tests/test_gcspo_successor_manifest.py",
+        "passed": 8,
+        "failed": 0,
+        "exit_code": 0
+      },
+      "existing_relevant": {
+        "command": "/home/ubuntu/.venvs/cmte-a2/bin/python -m pytest -q tests/test_gcspo_freeze.py tests/test_gcspo_round4_freeze_repairs.py tests/test_gcspo_verifier.py tests/test_gcspo_stage0.py",
+        "passed": 78,
+        "failed": 0,
+        "exit_code": 0,
+        "execution_root": "isolated detached worktree with preserved preaccess package test fixture; authoritative invalid root untouched"
+      },
+      "repair_scope": "STALE_CROSS_GENERATION_IMPLEMENTATION_MANIFEST_ONLY",
+      "scientific_files_changed": false,
+      "protected_access_count": 0,
+      "protected_marker_present": false,
+      "protected_ledger_size_bytes": 0,
+      "push_performed": false,
+      "all_gcspo": {
+        "command": "/home/ubuntu/.venvs/cmte-a2/bin/python -m pytest -q tests/test_gcspo*.py",
+        "passed": 282,
+        "failed": 0,
+        "exit_code": 0,
+        "execution_root": "isolated detached worktree at implementation commit with quarantined preaccess package plus five immutable frozen inputs as test fixture; authoritative invalid root untouched"
+      },
+      "target_manifest_validation": {
+        "implementation_rows": 66,
+        "stale_required_present": 4,
+        "later_gcspo_required_present": 13,
+        "missing": 0,
+        "extra": 0,
+        "status": "PASS"
+      }
+    }
+  },
+  "manifest_coverage": {
+    "total_rows": 66,
+    "stale_rows_required_and_present": [
+      "scripts/run_gcspo_clean_a5.py",
+      "src/gnss_doppler_lab/gcspo_provenance.py",
+      "src/gnss_doppler_lab/gcspo_verify.py",
+      "tests/test_gcspo_round4_freeze_repairs.py"
+    ],
+    "later_gcspo_rows_required_and_present": [
+      "scripts/build_gcspo_round8_package.py",
+      "scripts/run_gcspo_a5_witnessed.py",
+      "scripts/verify_gcspo_round6_freeze.py",
+      "scripts/verify_gcspo_round8_freeze.py",
+      "src/gnss_doppler_lab/gcspo_round5_verify.py",
+      "src/gnss_doppler_lab/gcspo_round6_verify.py",
+      "src/gnss_doppler_lab/gcspo_round8_verify.py",
+      "src/gnss_doppler_lab/gcspo_witness.py",
+      "tests/test_gcspo_round5_child_receipt.py",
+      "tests/test_gcspo_round5_witnessed_provenance.py",
+      "tests/test_gcspo_round6_phase2.py",
+      "tests/test_gcspo_round6_successor.py",
+      "tests/test_gcspo_round8_repairs.py"
+    ],
+    "missing_rows": 0,
+    "extra_rows": 0
+  },
+  "protected": {
+    "access_count": 0,
+    "marker_present": false,
+    "ledger_size_bytes": 0,
+    "authorized": false
+  },
+  "invalid_artifact_root_preserved": true,
+  "push_performed": false,
+  "independent_review_command": "python3 scripts/verify_gcspo_successor_freeze.py --expected-wrapper-commit $(git rev-parse HEAD)"
+}
