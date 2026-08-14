@@ -14,7 +14,11 @@ SOURCE_COMMIT = "9774fe1048e467808b53769f94a717507fac5a38"
 SUCCESSOR_BASE_COMMIT = "c525b8d1db7b1d7c5955af805900366a87a5a877"
 REJECTED_FREEZE_COMMIT = "532c4dd014432b787553b199a93f01ddaa294c01"
 REPAIR_COMMIT = "093cb0d8456f0bdf795e0a9833693d58e6e54bbd"
+ROUND7_REJECTED_FREEZE_COMMIT = "b54383b799f47fd1a849126d3f21fe6c643eb209"
 CHALLENGE_PATH = "artifacts/gcspo_stage0_static_rerun/a5_round6_challenges.json"
+NUMERIC_TRACE_SCHEMA = "gnss-doppler-lab.gcspo-stage0.a5-numeric-trace.v1"
+EXPECTED_NUMERIC_FIELD_COUNT = 789115
+EXPECTED_NUMERIC_PATH_SHA256 = "8eb32c0ab02bd1a6188d9ec98ab90f5f9983a82dcc44f7aad492ae23e7b75b6f"
 RUN_IDS = ("round6-cuda-1", "round6-cuda-2", "round6-cpu-1")
 EVIDENCE_FILES = (
     "prepared.json", "prepared.json.sig", "completed.json", "completed.json.sig",
@@ -29,14 +33,42 @@ def _identity(path: Path) -> dict[str, int | str]:
     return {"sha256": hashlib.sha256(payload).hexdigest(), "size_bytes": len(payload)}
 
 
-def _load(path: Path) -> dict:
-    def reject_constant(value: str):
-        raise ValueError(f"non-finite JSON constant is forbidden: {value}")
+def _reject_constant(value: str):
+    raise ValueError(f"non-finite JSON constant is forbidden: {value}")
 
-    document = json.loads(path.read_text(), parse_constant=reject_constant)
-    if not isinstance(document, dict):
-        raise ValueError(f"round-6 document is not an object: {path}")
+
+def _reject_duplicate_keys(pairs):
+    document = {}
+    for key, value in pairs:
+        if key in document:
+            raise ValueError(f"duplicate JSON object key is forbidden: {key!r}")
+        document[key] = value
     return document
+
+
+def strict_json_loads(payload: str | bytes, *, label: str = "JSON input"):
+    """Load standard JSON while rejecting non-finite constants and duplicate keys."""
+    try:
+        return json.loads(
+            payload,
+            parse_constant=_reject_constant,
+            object_pairs_hook=_reject_duplicate_keys,
+        )
+    except UnicodeDecodeError as exc:
+        raise ValueError(f"{label} is not UTF-8 JSON") from exc
+
+
+def strict_json_load(path: str | Path, *, require_object: bool = True):
+    path = Path(path)
+    document = strict_json_loads(path.read_text(encoding="utf-8"), label=str(path))
+    if require_object and not isinstance(document, dict):
+        raise ValueError(f"JSON document is not an object: {path}")
+    return document
+
+
+def _load(path: Path) -> dict:
+    """Compatibility alias for the single strict verifier JSON loader."""
+    return strict_json_load(path)
 
 
 def _finite_number(value, path: str) -> float:
@@ -67,30 +99,68 @@ def _comparison_metrics(left, right, path: str) -> dict[str, float]:
     return {"delta": delta, "absolute": absolute, "scale": scale, "relative": relative}
 
 
-def _numeric_pairs(first, second, path=""):
+def _numeric_trace_pairs(first, second, path="", path_tokens=()):
     if isinstance(first, bool) or isinstance(second, bool):
-        if first != second:
-            raise ValueError(f"CPU/CUDA nonnumeric mismatch at {path}")
-        return
+        raise ValueError(f"CPU/CUDA boolean numeric-trace leaf is forbidden at {path or '<root>'}")
     if isinstance(first, (int, float)) and isinstance(second, (int, float)):
-        yield path, _finite_number(first, f"{path}.left"), _finite_number(second, f"{path}.right")
+        yield (
+            path,
+            path_tokens,
+            _finite_number(first, f"{path}.left"),
+            _finite_number(second, f"{path}.right"),
+        )
         return
     if type(first) is not type(second):
         raise ValueError(f"CPU/CUDA structure mismatch at {path}")
     if isinstance(first, dict):
+        if not first:
+            raise ValueError(f"CPU/CUDA empty numeric-trace object is forbidden at {path or '<root>'}")
         if set(first) != set(second):
             raise ValueError(f"CPU/CUDA keys mismatch at {path}")
         for key in sorted(first):
-            yield from _numeric_pairs(first[key], second[key], f"{path}.{key}" if path else key)
+            if not isinstance(key, str):
+                raise ValueError(f"CPU/CUDA non-string JSON key at {path or '<root>'}")
+            child = f"{path}.{key}" if path else key
+            yield from _numeric_trace_pairs(
+                first[key], second[key], child, path_tokens + (("key", key),))
         return
     if isinstance(first, list):
+        if not first:
+            raise ValueError(f"CPU/CUDA empty numeric-trace list is forbidden at {path or '<root>'}")
         if len(first) != len(second):
             raise ValueError(f"CPU/CUDA length mismatch at {path}")
         for index, (left, right) in enumerate(zip(first, second)):
-            yield from _numeric_pairs(left, right, f"{path}[{index}]")
+            yield from _numeric_trace_pairs(
+                left, right, f"{path}[{index}]", path_tokens + (("index", index),))
         return
-    if first != second:
-        raise ValueError(f"CPU/CUDA nonnumeric mismatch at {path}")
+    if (path_tokens == (("key", "schema"),) and
+            first == second == NUMERIC_TRACE_SCHEMA):
+        return
+    raise ValueError(f"CPU/CUDA unsupported nonnumeric numeric-trace leaf at {path or '<root>'}")
+
+
+def _numeric_pairs(first, second, path=""):
+    """Compatibility view of the strict trace traversal used by older tests."""
+    for field, _tokens, left, right in _numeric_trace_pairs(first, second, path):
+        yield field, left, right
+
+
+def _update_numeric_path_digest(digest, path_tokens) -> None:
+    encoded = json.dumps(
+        path_tokens, ensure_ascii=False, separators=(",", ":"), allow_nan=False,
+    ).encode("utf-8")
+    digest.update(len(encoded).to_bytes(8, "big"))
+    digest.update(encoded)
+
+
+def _normalized_numeric_trace(document: dict, *, backend: str, label: str) -> dict:
+    if document.get("backend") != backend:
+        raise ValueError(f"{label} numeric trace backend field is missing or changed")
+    if document.get("schema") != NUMERIC_TRACE_SCHEMA:
+        raise ValueError(f"{label} numeric trace schema is missing or changed")
+    normalized = dict(document)
+    del normalized["backend"]
+    return normalized
 
 
 def compare_round6_a5_runs(verified: dict) -> dict:
@@ -128,16 +198,22 @@ def compare_round6_a5_runs(verified: dict) -> dict:
         if absolute > absolute_tolerance and relative > relative_tolerance:
             raise ValueError(f"CPU/CUDA threshold parity tolerance exceeded: {name}")
 
-    cuda_trace = _load(cuda[0]["output_dir"] / "a5_numeric_trace.json")
-    cpu_trace = _load(cpu[0]["output_dir"] / "a5_numeric_trace.json")
-    cuda_trace.pop("backend", None)
-    cpu_trace.pop("backend", None)
+    cuda_trace = _normalized_numeric_trace(
+        _load(cuda[0]["output_dir"] / "a5_numeric_trace.json"),
+        backend="cuda", label="CUDA",
+    )
+    cpu_trace = _normalized_numeric_trace(
+        _load(cpu[0]["output_dir"] / "a5_numeric_trace.json"),
+        backend="cpu", label="CPU",
+    )
     numeric_field_count = 0
+    numeric_path_digest = hashlib.sha256()
     maximum_absolute = 0.0
     maximum_relative = 0.0
     maximum_field = None
-    for field, left, right in _numeric_pairs(cuda_trace, cpu_trace):
+    for field, path_tokens, left, right in _numeric_trace_pairs(cuda_trace, cpu_trace):
         numeric_field_count += 1
+        _update_numeric_path_digest(numeric_path_digest, path_tokens)
         metrics = _comparison_metrics(left, right, field)
         absolute, relative = metrics["absolute"], metrics["relative"]
         if absolute > maximum_absolute:
@@ -145,6 +221,17 @@ def compare_round6_a5_runs(verified: dict) -> dict:
         maximum_relative = max(maximum_relative, relative)
         if absolute > absolute_tolerance and relative > relative_tolerance:
             raise ValueError(f"CPU/CUDA parity tolerance exceeded at {field}")
+    observed_numeric_path_sha256 = numeric_path_digest.hexdigest()
+    if numeric_field_count != EXPECTED_NUMERIC_FIELD_COUNT:
+        raise ValueError(
+            "CPU/CUDA numeric coverage count mismatch: "
+            f"expected {EXPECTED_NUMERIC_FIELD_COUNT}, observed {numeric_field_count}"
+        )
+    if observed_numeric_path_sha256 != EXPECTED_NUMERIC_PATH_SHA256:
+        raise ValueError(
+            "CPU/CUDA numeric path/schema digest mismatch: "
+            f"expected {EXPECTED_NUMERIC_PATH_SHA256}, observed {observed_numeric_path_sha256}"
+        )
     return {
         "schema": "gnss-doppler-lab.gcspo-stage0.round6-a5-parity.v1",
         "status": "PASS", "source_commit": verified["source_commit"],
@@ -155,6 +242,10 @@ def compare_round6_a5_runs(verified: dict) -> dict:
             "selected_lambda_unchanged": True,
             "threshold_keys_unchanged": True,
             "numeric_field_count": numeric_field_count,
+            "expected_numeric_field_count": EXPECTED_NUMERIC_FIELD_COUNT,
+            "numeric_path_sha256": observed_numeric_path_sha256,
+            "expected_numeric_path_sha256": EXPECTED_NUMERIC_PATH_SHA256,
+            "numeric_coverage_status": "EXACT_CONTRACT_MATCH",
             "maximum_absolute_delta": maximum_absolute,
             "maximum_relative_delta": maximum_relative,
             "maximum_delta_field": maximum_field,
@@ -234,6 +325,14 @@ def verify_round6_a5(artifact_root: str | Path) -> dict:
         if repo not in path.parents:
             raise ValueError("round-6 signed A5 evidence path escapes repository")
         roots.append(path)
+    # General JSON is decoded once under the strict duplicate/non-finite contract
+    # before legacy signed-envelope verification. Signed PREPARED/COMPLETED and
+    # receipt files still receive their independent exact canonical-byte checks.
+    strict_json_load(repo / CHALLENGE_PATH)
+    for root in roots:
+        for name in EVIDENCE_FILES:
+            if name.endswith(".json"):
+                strict_json_load(root / name)
     manifest_relative = index.get("evidence_manifest")
     manifest_path = (repo / str(manifest_relative)).resolve(strict=True)
     if repo not in manifest_path.parents:
@@ -260,6 +359,26 @@ def verify_round6_freeze(artifact_root: str | Path, expected_freeze_commit: str)
     if subprocess.run(["git", "status", "--porcelain", "--untracked-files=all"], cwd=repo,
                       check=True, text=True, capture_output=True).stdout:
         raise ValueError("round-6 review worktree is not clean")
+    for name in (
+        "round6_a5_parity.json",
+        "round6_a5_provenance.json",
+        "round6_audit_report.json",
+        "round6_evidence_manifest.json",
+        "round6_freeze_manifest.json",
+        "round6_independent_review_rejection.json",
+        "round6_phase1_handoff.json",
+        "round6_phase2_review_handoff.json",
+        "round7_audit_report.json",
+        "round7_evidence_manifest.json",
+        "round7_freeze_manifest.json",
+        "round7_repair_evidence.json",
+        "round7_repair_review_handoff.json",
+    ):
+        strict_json_load(artifact / name)
+    rejected_manifest = strict_json_loads(subprocess.run(
+        ["git", "show", f"{REJECTED_FREEZE_COMMIT}:artifacts/gcspo_stage0_static_rerun/round6_freeze_manifest.json"],
+        cwd=repo, check=True, text=True, capture_output=True,
+    ).stdout, label="historical round-6 freeze manifest")
     manifest_path = artifact / "round7_freeze_manifest.json"
     manifest = _load(manifest_path)
     manifest_relative = "artifacts/gcspo_stage0_static_rerun/round7_freeze_manifest.json"
@@ -305,10 +424,6 @@ def verify_round6_freeze(artifact_root: str | Path, expected_freeze_commit: str)
         raise ValueError("round-7 successor change coverage differs from exact Git diff")
     if not set(successor_changes).issubset(paths):
         raise ValueError("round-7 successor changes are not all freeze-manifest members")
-    rejected_manifest = json.loads(subprocess.run(
-        ["git", "show", f"{REJECTED_FREEZE_COMMIT}:artifacts/gcspo_stage0_static_rerun/round6_freeze_manifest.json"],
-        cwd=repo, check=True, text=True, capture_output=True,
-    ).stdout)
     prior_paths = {row["path"] for row in rejected_manifest["files"]}
     carried_lineage = {
         "artifacts/gcspo_stage0_static_rerun/round6_freeze_manifest.json",

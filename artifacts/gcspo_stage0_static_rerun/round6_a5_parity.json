@@ -8,7 +8,11 @@
     "maximum_absolute_delta": 5.760082785855047e-06,
     "maximum_delta_field": "holdout[5].score",
     "maximum_relative_delta": 7.291690239802362e-08,
+    "expected_numeric_field_count": 789115,
+    "expected_numeric_path_sha256": "8eb32c0ab02bd1a6188d9ec98ab90f5f9983a82dcc44f7aad492ae23e7b75b6f",
+    "numeric_coverage_status": "EXACT_CONTRACT_MATCH",
     "numeric_field_count": 789115,
+    "numeric_path_sha256": "8eb32c0ab02bd1a6188d9ec98ab90f5f9983a82dcc44f7aad492ae23e7b75b6f",
     "selected_lambda_unchanged": true,
     "status": "WITHIN_PREREGISTERED_TOLERANCE",
     "threshold_deltas": {
