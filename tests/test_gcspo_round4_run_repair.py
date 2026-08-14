@@ -44,3 +44,16 @@ def test_cuda_backend_is_initialized_and_attested_before_workload(monkeypatch):
         "device": "Synthetic GPU", "torch_version": "test", "cuda_version": "test",
     }
     assert initialized == [True]
+
+def test_causal_launcher_preserves_virtualenv_symlink_path(tmp_path):
+    root = Path(__file__).parents[1]
+    spec = importlib.util.spec_from_file_location(
+        "gcspo_causal_runner", root / "scripts/run_gcspo_a5_causal.py")
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    launcher = tmp_path / "venv-python"
+    launcher.symlink_to(Path(sys.executable).resolve())
+    observed = module._python_command_path(launcher)
+    assert observed == str(launcher.absolute())
+    assert observed != str(launcher.resolve())

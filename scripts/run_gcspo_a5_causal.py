@@ -16,6 +16,11 @@ sys.path.insert(0, str(ROOT / "src"))
 from gnss_doppler_lab.gcspo_provenance import complete_run, prepare_run, utc_now
 
 
+def _python_command_path(value):
+    """Keep a venv launcher path intact; resolving its symlink loses site-packages."""
+    return str(Path(value).absolute())
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-commit", required=True)
@@ -34,7 +39,7 @@ def main() -> int:
 
     output = args.scratch_root / "output"
     command = [
-        str(Path(args.python).resolve()), str((ROOT / "scripts/run_gcspo_clean_a5.py").resolve()),
+        _python_command_path(args.python), str((ROOT / "scripts/run_gcspo_clean_a5.py").resolve()),
         "--artifact-dir", str(output.resolve()), "--clean-root", str(args.clean_root.resolve()),
         "--workers", "1", "--backend", args.backend, "--numeric-trace",
     ]
