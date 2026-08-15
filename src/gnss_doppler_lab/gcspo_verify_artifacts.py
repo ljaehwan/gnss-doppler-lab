@@ -4,6 +4,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import os
 from pathlib import Path
 
 import numpy as np
@@ -40,16 +41,31 @@ def independently_load_clean_contrast_rows(root, identities):
     """Independently authenticate and reconstruct the cleanStatic negative cell."""
     root = Path(root).resolve(); required = ("clean_only_report.json", "clean_ablation_report.json",
                                              "clean_a5_report.json", "clean_reproduction_evidence.json")
-    identity_map = {str(Path(row.get("path", "")).resolve()): row for row in identities if isinstance(row, dict)}
+
+    def identity_path(row):
+        candidate = Path(row.get("path", ""))
+        return (candidate if candidate.is_absolute() else root / candidate).resolve()
+
+    identity_map = {str(identity_path(row)): row for row in identities if isinstance(row, dict)}
+    sealed_map = json.loads(os.environ.get("GCSPO_R1_SEALED_FD_MAP", "{}"))
+    snapshot = Path(os.environ["GCSPO_R1_RUNTIME_SNAPSHOT"]).resolve() if sealed_map else None
     documents, source = {}, {}
     for name in required:
         path = (root / name).resolve(); identity = identity_map.get(str(path))
-        if not path.is_file() or identity is None:
+        read_path = path
+        if snapshot is not None:
+            relative = path.relative_to(snapshot).as_posix()
+            descriptor = sealed_map.get(relative)
+            if descriptor is None:
+                raise ValueError(f"clean contrast sealed identity absent: {name}")
+            read_path = Path(f"/proc/self/fd/{int(descriptor)}")
+        if identity is None or (snapshot is None and not path.is_file()):
             raise ValueError(f"clean contrast identity absent: {name}")
-        digest = hashlib.sha256(path.read_bytes()).hexdigest(); size = path.stat().st_size
+        payload = read_path.read_bytes()
+        digest = hashlib.sha256(payload).hexdigest(); size = len(payload)
         if digest != identity.get("sha256") or size != identity.get("size_bytes"):
             raise ValueError(f"clean contrast identity mismatch: {name}")
-        documents[name] = json.loads(path.read_text())
+        documents[name] = json.loads(payload)
         source[name] = {"sha256": digest, "size_bytes": size}
     clean, ablation, a5, reproduction = (documents[name] for name in required)
     expected_status = ((clean, "CLEAN_ONLY_PASS"), (ablation, "CLEAN_ABLATIONS_PASS"), (a5, "CLEAN_A5_PASS"))
@@ -134,6 +150,20 @@ def reconstruct_relation_evidence(document, *, scenarios=None, capabilities=None
     validate_mandatory_relation_evidence(results, required_scenarios=required)
     return results
 
+def _exact_b0_for_artifact(root: Path, rows: list[dict], required: list[str]):
+    preregistration = root / "completion_preregistration.json"
+    try:
+        preregistration.lstat()
+    except FileNotFoundError:
+        return exact_b0_full_contrast(rows, required_scenarios=required)
+    from .gcspo_r1_runner import verify_effective_preregistration
+    from .gcspo_r1_support import r1_support_adapter_scope
+
+    verify_effective_preregistration(root)
+    with r1_support_adapter_scope():
+        return exact_b0_full_contrast(rows, required_scenarios=required)
+
+
 def reconstruct_final_evidence(root):
     root = Path(root); scores = _score_rows(root / "per_epoch_scores.csv")
     freeze = json.loads((root / "implementation_manifest.json").read_text())
@@ -172,7 +202,7 @@ def reconstruct_final_evidence(root):
               (row["scenario"], row["phase"], row["availability_s"], tuple(row["prns"])) in support_keys]
     shared = {"full_pauc": _paired_pauc(shared_support, "Full"), "a5_pauc": _paired_pauc(shared_support, "A5"),
               "full_median_edf": float(np.median(full_edf)), "a5_median_edf": float(np.median(a5_edf))}
-    b0_exact = exact_b0_full_contrast(scores, required_scenarios=sorted(set(capabilities["available"]) & {"DS3", "DS7", "DS8"}))
+    b0_exact = _exact_b0_for_artifact(root, scores, sorted(set(capabilities["available"]) & {"DS3", "DS7", "DS8"}))
     return {"clean_holdout_fpr": clean_fpr, "clean_contrast_source": clean_source,
             "external_pre_fpr": external,
             "incremental_lcb": incremental, "b0_exact_support": b0_exact,

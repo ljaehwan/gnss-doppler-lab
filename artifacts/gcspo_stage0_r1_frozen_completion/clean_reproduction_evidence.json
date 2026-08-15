@@ -1,0 +1,63 @@
+{
+  "schema": "gnss-doppler-lab.gcspo-stage0.clean-reproduction-evidence.v2",
+  "source_freeze_sha": "b34180109648368f72316b5a783363887e340c28",
+  "accepted_run_ids": ["a5-round3-run-1-b341801", "a5-round3-run-2-b341801"],
+  "scratch_roots": ["/tmp/gcspo-round3-a5-run-1-b341801-Kkpm0i",
+                    "/tmp/gcspo-round3-a5-run-2-b341801-l2y14Y"],
+  "durable_bundles": ["reproductions/a5-round3-run-1-b341801",
+                      "reproductions/a5-round3-run-2-b341801"],
+  "comparison": {
+    "status": "BYTE_IDENTICAL_OUTPUT_SNAPSHOTS",
+    "runtime_canonicalization": [],
+    "scientific_files": {
+      "normal_model_summary.json": "4110b6b870db95bb12c1154a29b61250fcd3f914a6042e5306d9389568e4beec",
+      "thresholds.json": "034c265b6de4188db8b577855d9a30e9a144e83255002105004a576123d15e7f",
+      "clean_only_report.json": "cd8eb2564f6b7724f5967ea6137d3cf59e897a5ef25e9b990f08a16f2d829fa8",
+      "physical_controls.json": "e1e14890e06151ccac41df29c6d77b8d1b41ee1394864e8e5fc0ade6dc504681",
+      "clean_ablation_report.json": "d5695d659ac414c34eeb9304af0b4cf4ed3b542d01e9a9b6063961b9e3727eb9",
+      "clean_a5_report.json": "a2d902d9c8d4ac8b07d38bff7b31da560772b3bb5040823e3d10ba62d0045c7a",
+      "clean_b0_report.json": "c8bcef756a461cc1d4d1f094d30ce3f5873cd449d2ac30fe8600ebf0e6ae1146"
+    }
+  },
+  "selection": {
+    "shared_var_ridge": 10.0,
+    "shared_var_coefficient_sha256": "5b99cbe317ef26948e96bdd20c682da0081b7353650f17a5279cccce3da08d13",
+    "full_lambda": 100.0,
+    "a2_lambda": 100.0,
+    "a5_lambda": 100.0,
+    "a5_threshold_q99": -4615.297843730405,
+    "a5_threshold_q995": -4580.011152126862,
+    "full_threshold_q99": -1942.747871032354,
+    "full_threshold_q995": -1926.8027680519062,
+    "b0_threshold_q99": 1.5536241677134872,
+    "b0_threshold_q995": 1.5610965459526978
+  },
+  "counts": {
+    "clean_contrast_holdout_windows": 237,
+    "aggregated_prn_epochs": 227341,
+    "lambda_validation_windows": 117,
+    "full_calibration_windows": 237,
+    "full_holdout_windows": 237,
+    "a1_calibration_windows": 237,
+    "a1_holdout_windows": 237,
+    "a2_a3_a4_a5_calibration_windows_each": 237,
+    "a2_a3_a4_a5_holdout_windows_each": 237,
+    "b0_exact_support_calibration_windows": 112,
+    "b0_exact_support_holdout_windows": 204
+  },
+  "holdout_fpr": {
+    "Full": {"q99": 0.07172995780590717, "q995": 0.06751054852320675},
+    "A1": {"q99": 0.12658227848101267, "q995": 0.09282700421940929},
+    "B0": {"q99": 0.12745098039215685, "q995": 0.11764705882352941}
+  },
+  "synthetic_recovery": {
+    "maximum_scaled_state_error": 2.950377417574947e-11,
+    "maximum_scaled_state_error_tolerance": 1e-5,
+    "geometry_rank": 4,
+    "geometry_condition_number": 1.732050807568877,
+    "var_transfer_application_count": 1,
+    "status": "PASS"
+  },
+  "protected_payload_rows_opened": 0,
+  "protected_payload_bytes_opened": 0
+}
