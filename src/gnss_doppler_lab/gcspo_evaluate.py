@@ -1,8 +1,10 @@
 """Delivered one-shot evaluator for protected static TEXBAT receiver outputs."""
 from __future__ import annotations
 
+import hashlib
 import json
 import importlib.util
+import os
 from pathlib import Path
 import sys
 
@@ -43,14 +45,18 @@ _CLEAN_CONTRAST_FILES = ("clean_only_report.json", "clean_ablation_report.json",
 
 def load_clean_contrast_rows(root, identities):
     """Load the frozen cleanStatic negative cell from byte-pinned clean evidence."""
-    root = Path(root).resolve()
-    by_path = {str(Path(row.get("path", "")).resolve()): row for row in identities if isinstance(row, dict)}
+    root = Path(root).absolute()
+    by_path = {str(Path(row.get("path", "")).absolute()): row for row in identities if isinstance(row, dict)}
     documents, source = {}, {}
     for name in _CLEAN_CONTRAST_FILES:
-        path = (root / name).resolve(); identity = by_path.get(str(path))
-        if identity is None or identity.get("sha256") != sha256_file(path) or identity.get("size_bytes") != path.stat().st_size:
+        path = (root / name).absolute(); identity = by_path.get(str(path))
+        if identity is None:
             raise ValueError(f"clean contrast identity mismatch: {name}")
-        documents[name] = json.loads(path.read_text())
+        payload = _sealed_runtime_path(path).read_bytes()
+        if (identity.get("sha256") != hashlib.sha256(payload).hexdigest() or
+                identity.get("size_bytes") != len(payload)):
+            raise ValueError(f"clean contrast identity mismatch: {name}")
+        documents[name] = json.loads(payload)
         source[name] = {"sha256": identity["sha256"], "size_bytes": identity["size_bytes"]}
     clean, ablation, a5, reproduction = (documents[name] for name in _CLEAN_CONTRAST_FILES)
     statuses = ((clean, "CLEAN_ONLY_PASS"), (ablation, "CLEAN_ABLATIONS_PASS"), (a5, "CLEAN_A5_PASS"))
@@ -217,7 +223,48 @@ def validate_protected_method_support(methods, *, required_phases):
     return {"methods": list(expected), "phase_counts": counts}
 
 
+def _sealed_runtime_path(path: Path) -> Path:
+    snapshot = os.environ.get("GCSPO_R1_RUNTIME_SNAPSHOT")
+    raw = os.environ.get("GCSPO_R1_SEALED_FD_MAP")
+    if not snapshot or not raw:
+        return Path(path)
+    relative = Path(path).absolute().relative_to(Path(snapshot).absolute()).as_posix()
+    descriptor = json.loads(raw).get(relative)
+    if descriptor is None:
+        raise ValueError(f"runtime file is absent from sealed reviewed snapshot: {relative}")
+    return Path(f"/proc/self/fd/{int(descriptor)}")
+
+
 def _load_script(name, path):
+    path = Path(path)
+    sealed = _sealed_runtime_path(path)
+    if sealed != path:
+        source = sealed.read_bytes()
+        if path.name == "score_texbat_prn_node_gru.py":
+            frozen = (
+                b'spec = importlib.util.spec_from_file_location("train_prn_node_gru", str(ROOT / "scripts/train_prn_node_gru.py"))\n'
+                b'train_mod = importlib.util.module_from_spec(spec)\n'
+                b'sys.modules[spec.name] = train_mod\n'
+                b'spec.loader.exec_module(train_mod)\n'
+            )
+            adapted = (
+                b'_train_path = ROOT / "scripts/train_prn_node_gru.py"\n'
+                b'_mapping = json.loads(__import__("os").environ["GCSPO_R1_SEALED_FD_MAP"])\n'
+                b'_relative = _train_path.resolve().relative_to(Path(__import__("os").environ["GCSPO_R1_RUNTIME_SNAPSHOT"]).resolve()).as_posix()\n'
+                b'_train_source = Path(f"/proc/self/fd/{int(_mapping[_relative])}").read_bytes()\n'
+                b'train_mod = importlib.util.module_from_spec(importlib.util.spec_from_loader("train_prn_node_gru", loader=None))\n'
+                b'train_mod.__file__ = str(_train_path)\n'
+                b'sys.modules["train_prn_node_gru"] = train_mod\n'
+                b'exec(compile(_train_source, str(_train_path), "exec"), train_mod.__dict__)\n'
+            )
+            if source.count(frozen) != 1:
+                raise ValueError("frozen scorer loader adapter anchor mismatch")
+            source = source.replace(frozen, adapted)
+        module = importlib.util.module_from_spec(importlib.util.spec_from_loader(name, loader=None))
+        module.__file__ = str(path)
+        sys.modules[name] = module
+        exec(compile(source, str(path), "exec"), module.__dict__)
+        return module
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec); sys.modules[name] = module
     if spec.loader is None: raise ImportError(path)
@@ -235,6 +282,14 @@ def score_protected_b0(*, tracking_paths, gate, scenario, roles, methods, thresh
     node_path = work / "scheduled_node_windows.csv"; node.to_csv(node_path, index=False)
     scorer = _load_script(f"gcspo_b0_scorer_{scenario}", repo / "scripts/score_texbat_prn_node_gru.py")
     model_dir = repo / "artifacts/ai_morph_gru_cleanStatic_q70_frame"
+    checkpoint_path = _sealed_runtime_path(model_dir / "prn_local_gru_predictor.pt")
+    validation_path = _sealed_runtime_path(model_dir / "validation_prn_node_scores.csv")
+    load_checkpoint = scorer.load_checkpoint
+    load_validation = scorer.load_validation_prn_scores
+    checkpoint_provenance = scorer.checkpoint_provenance
+    scorer.load_checkpoint = lambda _ignored: load_checkpoint(checkpoint_path)
+    scorer.load_validation_prn_scores = lambda _ignored: load_validation(validation_path)
+    scorer.checkpoint_provenance = lambda _ignored, columns: checkpoint_provenance(checkpoint_path, columns)
     scorer.score_node_csv(node_path, model_dir, work, scenario, onset_s=None,
                           output_prefix="gcspo_b0", dataset_prefix="TEXBAT")
     prn_path, _, _ = scorer.score_output_paths(work, scenario, "gcspo_b0")
@@ -347,24 +402,71 @@ def _relation_rows(data, model, whitener, gamma, geometry, smoothness, scenario,
     return result
 
 
-def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identities, clean_identities,
-                 capabilities):
-    artifact = Path(artifact_dir); repo = Path(repo_root)
-    normal = json.loads((artifact / "normal_model_summary.json").read_text())
-    thresholds = json.loads((artifact / "thresholds.json").read_text())
-    a2_doc = json.loads((artifact / "clean_ablation_report.json").read_text())
+def artifact_support_adapter_scope(artifact_dir: str | Path):
+    """Return a no-op scope for baseline artifacts or the validated scoped R1 adapter."""
+    artifact = Path(artifact_dir)
+    preregistration = artifact / "completion_preregistration.json"
+    try:
+        preregistration.lstat()
+    except FileNotFoundError:
+        from contextlib import nullcontext
+        return nullcontext(False)
+    from .gcspo_r1_runner import verify_effective_preregistration
+    from .gcspo_r1_support import r1_support_adapter_scope
+
+    verify_effective_preregistration(artifact)
+    return r1_support_adapter_scope()
+
+
+def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identities,
+                 clean_identities, capabilities, input_artifact_dir=None):
+    input_artifact_dir = artifact_dir if input_artifact_dir is None else input_artifact_dir
+    with artifact_support_adapter_scope(input_artifact_dir) as r1_boundary:
+        return _run_one_shot_impl(
+            artifact_dir=artifact_dir, input_artifact_dir=input_artifact_dir,
+            repo_root=repo_root, inventory=inventory,
+            gate=gate, manifest_identities=manifest_identities,
+            clean_identities=clean_identities, capabilities=capabilities,
+            r1_boundary=bool(r1_boundary),
+        )
+
+
+def _run_one_shot_impl(*, artifact_dir, input_artifact_dir, repo_root, inventory, gate,
+                       manifest_identities, clean_identities, capabilities, r1_boundary=False):
+    artifact = Path(artifact_dir); inputs = Path(input_artifact_dir); repo = Path(repo_root)
+    normal = json.loads(_sealed_runtime_path(inputs / "normal_model_summary.json").read_text())
+    thresholds = json.loads(_sealed_runtime_path(inputs / "thresholds.json").read_text())
+    a2_doc = json.loads(_sealed_runtime_path(inputs / "clean_ablation_report.json").read_text())
     model, whitener, gamma = reconstruct_normal_model(normal)
     validated_rows = set(normal.get("validated_rows", ()))
     if not validated_rows:
         raise RuntimeError("source-verified field inventory is absent from the frozen normal model")
     eps = {int(key): float(value) for key, value in normal["normalization_epsilon_by_prn"].items()}
     lambdas = {"Full": float(normal["lambda_selected"]), "A2": float(a2_doc["methods"]["A2"]["lambda"]),
-               "A5": float(json.loads((artifact / "clean_a5_report.json").read_text())["lambda"])}
+               "A5": float(json.loads(_sealed_runtime_path(inputs / "clean_a5_report.json").read_text())["lambda"])}
     scenario_inventory = {row["id"]: row for row in inventory["scenario_inventory"]}
-    score_rows, state_rows, scenario_rows, relation_rows = [], [], [], []
     unavailable = [{"scenario": scenario, **row}
                    for scenario, row in sorted(capabilities["unavailable"].items())]
     available_scenarios = tuple(sorted(capabilities["available"]))
+    if r1_boundary:
+        if set(manifest_identities) != set(available_scenarios):
+            raise ValueError("R1 evaluator scenario/path identity set mismatch")
+        seen_manifest_paths, seen_manifest_objects = set(), set()
+        for scenario in available_scenarios:
+            identity = manifest_identities[scenario]
+            if (type(identity) is not dict or
+                    set(identity) != {"scenario", "path", "sha256", "size_bytes", "binding"} or
+                    identity["scenario"] != scenario or
+                    identity["binding"] != capabilities["available"][scenario]["manifest_binding"] or
+                    {key: identity[key] for key in ("path", "sha256", "size_bytes")} !=
+                    capabilities["available"][scenario]["manifest_identity"]):
+                raise ValueError(f"R1 evaluator scenario relabel/identity mismatch: {scenario}")
+            pinned = (identity["binding"]["dev"], identity["binding"]["ino"])
+            if identity["path"] in seen_manifest_paths or pinned in seen_manifest_objects:
+                raise ValueError("R1 evaluator rejects manifest path/object reuse across scenarios")
+            seen_manifest_paths.add(identity["path"])
+            seen_manifest_objects.add(pinned)
+    score_rows, state_rows, scenario_rows, relation_rows = [], [], [], []
     for scenario in available_scenarios:
         identity = manifest_identities[scenario]; manifest_path = Path(identity["path"])
         binding = capabilities["available"][scenario]["manifest_binding"]
@@ -452,10 +554,10 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
     write_csv(artifact / "scenario_metrics.csv", scenario_rows,
               ["scenario", "method", "roc_auc", "low_fpr_pauc", "pr_auc", "windows", "alarm_ratio", "persistent_alarm_ratio", "first_persistent_alarm_s", "pre_onset_fpr"])
     full_by = {row["scenario"]: row for row in scenario_rows if row["method"] == "Full"}
-    clean_fpr = float(json.loads((artifact / "clean_only_report.json").read_text())["holdout_fpr"]["Full"]["q99"])
+    clean_fpr = float(json.loads(_sealed_runtime_path(inputs / "clean_only_report.json").read_text())["holdout_fpr"]["Full"]["q99"])
     external_fpr = {scenario: full_by[scenario]["pre_onset_fpr"] for scenario in ("DS3", "DS4")
                     if scenario in full_by and full_by[scenario]["pre_onset_fpr"] is not None}
-    clean_contrast_rows, clean_contrast_source = load_clean_contrast_rows(artifact, clean_identities)
+    clean_contrast_rows, clean_contrast_source = load_clean_contrast_rows(inputs, clean_identities)
     bootstrap_source = clean_contrast_rows + [row for row in score_rows if row["scenario"] in {"DS3", "DS4", "DS7", "DS8"}
                                                and row["phase"] != "pre_onset_replay"]
     bootstrap_reports = {}
@@ -512,7 +614,7 @@ def run_one_shot(*, artifact_dir, repo_root, inventory, gate, manifest_identitie
     persistence["DS7_DS8"] = {"ratio": min(per_scenario_persistence[name]["ratio"] for name in family_members),
                                "delay_s": max(per_scenario_persistence[name]["delay_s"] for name in family_members),
                                "available_members": family_members}
-    controls = json.loads((artifact / "physical_controls.json").read_text())
+    controls = json.loads(_sealed_runtime_path(inputs / "physical_controls.json").read_text())
     control_evidence = controls.get("results")
     if not isinstance(control_evidence, list) or not control_evidence:
         raise RuntimeError("mandatory generated control score evidence is absent")

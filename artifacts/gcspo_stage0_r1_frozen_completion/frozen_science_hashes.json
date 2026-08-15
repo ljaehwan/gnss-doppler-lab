@@ -1,4 +1,19 @@
 {
+  "audited_artifacts": {
+    "physical_controls_audit": {
+      "input_path": "artifacts/gcspo_stage0_r1_frozen_completion/physical_controls.json",
+      "input_sha256": "e1e14890e06151ccac41df29c6d77b8d1b41ee1394864e8e5fc0ade6dc504681",
+      "path": "artifacts/gcspo_stage0_r1_frozen_completion/physical_controls_audit.json",
+      "provenance": "EXACT_WORKTREE_BYTES_INTENTIONALLY_COMMITTED_DURING_R1_REPAIR_NOT_RECOMPUTED",
+      "sha256": "12250c1be04128e96eaeb97301768535730bda097d8670ae388fc8cc898412e9",
+      "size_bytes": 19744
+    },
+    "physical_controls_audit_receipt": {
+      "path": "artifacts/gcspo_stage0_r1_frozen_completion/physical_controls_audit_receipt.json",
+      "sha256": "13db129bce8b6ec0e13f9f82607b595810a078def06b3a0eb43441af4cf91725",
+      "size_bytes": 765
+    }
+  },
   "base_commit": "57271e526e9e346c8d4d7626b006c5a88166f1be",
   "frozen_scientific_code": {
     "artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
@@ -27,6 +42,17 @@
     "pipeline_changes_allowed_only_for_exact_support_and_control_aggregation": true,
     "scientific_code_must_remain_byte_identical": true,
     "thresholds_features_models_lambdas_ridges_timelines_labels_unchanged": true
+  },
+  "r1_preregistration": {
+    "amendment": {
+      "path": "artifacts/gcspo_stage0_r1_frozen_completion/completion_preregistration_amendment.json",
+      "sha256": "34bfb0e81b3d3b4c99bc234bb6d0f0afbeaf8578b1d4fc3096ba8e050b02b27e"
+    },
+    "base": {
+      "path": "artifacts/gcspo_stage0_r1_frozen_completion/completion_preregistration.json",
+      "sha256": "fb810c3e1548f0375c853805e1451666690b5dff5775698d000f324e0dfb63e7"
+    },
+    "effective_status": "BASE_PREREGISTRATION_PLUS_POST_IMPLEMENTATION_AMENDMENT"
   },
   "recorded_at_utc": "2026-08-14T16:22:31.256859+00:00",
   "schema": "gnss-doppler-lab.gcspo-stage0-r1-frozen-completion.science-hashes.v1",

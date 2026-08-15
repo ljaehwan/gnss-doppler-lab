@@ -97,9 +97,9 @@ def test_r1_rejects_aggregated_b0_with_inconsistent_declared_native_support():
         integrate_protected_b0_r1(_methods(), [malformed], score_column="event_score")
 
 
-def test_r1_install_patches_evaluator_and_independent_verifier_contracts():
+def test_r1_adapter_scope_patches_and_restores_all_four_bindings():
     from gnss_doppler_lab import gcspo_evaluate, gcspo_verify_artifacts
-    from gnss_doppler_lab.gcspo_r1_support import install_r1_support_adapter
+    from gnss_doppler_lab.gcspo_r1_support import r1_support_adapter_scope
 
     originals = (
         gcspo_evaluate.integrate_protected_b0,
@@ -107,17 +107,27 @@ def test_r1_install_patches_evaluator_and_independent_verifier_contracts():
         gcspo_evaluate.exact_b0_full_contrast,
         gcspo_verify_artifacts.exact_b0_full_contrast,
     )
-    try:
-        install_r1_support_adapter()
+    with r1_support_adapter_scope():
         assert gcspo_evaluate.integrate_protected_b0 is integrate_protected_b0_r1
         assert gcspo_evaluate.validate_protected_method_support is validate_protected_method_support_r1
         assert gcspo_evaluate.exact_b0_full_contrast is exact_b0_full_contrast_r1
         assert gcspo_verify_artifacts.exact_b0_full_contrast is exact_b0_full_contrast_r1
-    finally:
-        (gcspo_evaluate.integrate_protected_b0,
-         gcspo_evaluate.validate_protected_method_support,
-         gcspo_evaluate.exact_b0_full_contrast,
-         gcspo_verify_artifacts.exact_b0_full_contrast) = originals
+    assert (
+        gcspo_evaluate.integrate_protected_b0,
+        gcspo_evaluate.validate_protected_method_support,
+        gcspo_evaluate.exact_b0_full_contrast,
+        gcspo_verify_artifacts.exact_b0_full_contrast,
+    ) == originals
+
+    with pytest.raises(RuntimeError, match="forced"):
+        with r1_support_adapter_scope():
+            raise RuntimeError("forced")
+    assert (
+        gcspo_evaluate.integrate_protected_b0,
+        gcspo_evaluate.validate_protected_method_support,
+        gcspo_evaluate.exact_b0_full_contrast,
+        gcspo_verify_artifacts.exact_b0_full_contrast,
+    ) == originals
 
 
 def test_r1_rejects_near_availability_in_b0_join():
@@ -138,3 +148,13 @@ def test_r1_rejects_noncanonical_prn_local_epoch_order():
 
     with pytest.raises(ValueError, match="native support is malformed"):
         integrate_protected_b0_r1(_methods(), malformed, score_column="event_score")
+
+
+def test_r1_per_prn_event_score_requires_bit_exact_equality_and_preserves_score():
+    rows = _b0_prn_rows(6.0, score=2.5)
+    methods = integrate_protected_b0_r1(_methods(), rows, score_column="event_score")
+    assert methods["A0"][0]["score"] == 2.5
+
+    rows[-1]["event_score"] = 2.5 + 5e-13
+    with pytest.raises(ValueError, match="differs across PRN"):
+        integrate_protected_b0_r1(_methods(), rows, score_column="event_score")

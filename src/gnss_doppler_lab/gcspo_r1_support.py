@@ -7,6 +7,7 @@ native support for every B0/Full comparison.
 """
 from __future__ import annotations
 
+from contextlib import contextmanager
 from typing import Iterable
 
 import numpy as np
@@ -87,9 +88,9 @@ def integrate_protected_b0_r1(methods, b0_rows, *, score_column):
                     combined.setdefault(int(epoch), set()).update(map(int, values))
             support = tuple((epoch, tuple(sorted(values))) for epoch, values in sorted(combined.items()))
             scores = [float(row[score_column]) for row in group]
-            if max(scores) - min(scores) > 1e-12:
+            if any(score != scores[0] for score in scores[1:]):
                 raise ValueError("protected B0 event score differs across PRN rows")
-            score = float(np.mean(scores))
+            score = scores[0]
         else:
             if len(group) != 1:
                 raise ValueError("duplicate aggregated B0 scientific row")
@@ -177,12 +178,28 @@ def exact_b0_full_contrast_r1(rows: Iterable[dict], *, required_scenarios):
             "scenario_phase_results": result}
 
 
-def install_r1_support_adapter():
-    """Install the preregistered adapter into the frozen evaluator namespace."""
+@contextmanager
+def r1_support_adapter_scope():
+    """Temporarily bind all R1 adapters and restore every binding in ``finally``."""
     from . import gcspo_evaluate as evaluator
     from . import gcspo_verify_artifacts as verifier
-    evaluator.integrate_protected_b0 = integrate_protected_b0_r1
-    evaluator.validate_protected_method_support = validate_protected_method_support_r1
-    evaluator.exact_b0_full_contrast = exact_b0_full_contrast_r1
-    verifier.exact_b0_full_contrast = exact_b0_full_contrast_r1
-    return evaluator
+
+    originals = (
+        evaluator.integrate_protected_b0,
+        evaluator.validate_protected_method_support,
+        evaluator.exact_b0_full_contrast,
+        verifier.exact_b0_full_contrast,
+    )
+    try:
+        evaluator.integrate_protected_b0 = integrate_protected_b0_r1
+        evaluator.validate_protected_method_support = validate_protected_method_support_r1
+        evaluator.exact_b0_full_contrast = exact_b0_full_contrast_r1
+        verifier.exact_b0_full_contrast = exact_b0_full_contrast_r1
+        yield evaluator
+    finally:
+        (
+            evaluator.integrate_protected_b0,
+            evaluator.validate_protected_method_support,
+            evaluator.exact_b0_full_contrast,
+            verifier.exact_b0_full_contrast,
+        ) = originals

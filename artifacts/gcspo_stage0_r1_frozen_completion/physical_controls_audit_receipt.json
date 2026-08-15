@@ -1,0 +1,14 @@
+{
+  "audit_artifact": {
+    "path": "artifacts/gcspo_stage0_r1_frozen_completion/physical_controls_audit.json",
+    "sha256": "12250c1be04128e96eaeb97301768535730bda097d8670ae388fc8cc898412e9",
+    "size_bytes": 19744
+  },
+  "audited_source": {
+    "path": "artifacts/gcspo_stage0_r1_frozen_completion/physical_controls.json",
+    "sha256": "e1e14890e06151ccac41df29c6d77b8d1b41ee1394864e8e5fc0ade6dc504681"
+  },
+  "recorded_at_utc": "2026-08-15T01:34:36+00:00",
+  "schema": "gnss-doppler-lab.gcspo-stage0-r1.physical-controls-audit-receipt.v1",
+  "statement": "Exact previously generated worktree bytes were intentionally added during R1 repair and were not recomputed from protected inputs; this receipt makes no claim that those bytes were already committed."
+}

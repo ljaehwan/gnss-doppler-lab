@@ -1,0 +1,33 @@
+{
+  "amendment_id": "gcspo-stage0-r1-support-identity-correction-1",
+  "correction": {
+    "amended_value": [
+      "scenario",
+      "phase",
+      "window_start_s",
+      "availability_s",
+      "prns",
+      "epoch_ids",
+      "epoch_prn_support"
+    ],
+    "original_value": [
+      "scenario",
+      "phase",
+      "window_start_s",
+      "availability_s",
+      "epoch_ids",
+      "epoch_prn_support"
+    ],
+    "path": "support_contract.join_keys",
+    "rationale": "Bind both aggregate PRN identity and native epoch-by-PRN support in every exact R1 contrast join."
+  },
+  "created_at_utc": "2026-08-15T01:34:36+00:00",
+  "original_preregistration": {
+    "path": "artifacts/gcspo_stage0_r1_frozen_completion/completion_preregistration.json",
+    "sha256": "fb810c3e1548f0375c853805e1451666690b5dff5775698d000f324e0dfb63e7"
+  },
+  "previous_amendment_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "reason": "Independent review found that prns was omitted from the declared exact identity dimensions; this append-only correction also reaffirms epoch_prn_support and does not claim preregistration-before-implementation for amended content.",
+  "schema": "gnss-doppler-lab.gcspo-stage0-r1.preregistration-amendment.v1",
+  "status": "POST_IMPLEMENTATION_GOVERNANCE_AMENDMENT_NOT_PREREGISTERED_CONTENT"
+}
