@@ -1,0 +1,59 @@
+{
+  "schema": "gnss-doppler-lab.b0-cs-stage0-preregistration.v1",
+  "frozen_at_utc": "2026-08-15T16:06:28Z",
+  "branch": "research/b0-cs-stage0-static",
+  "base_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "model": "B0-CS",
+  "question": "Can scalar Paper-B0 residuals support dependence-aware variable-PRN receiver aggregation and empirically block-calibrated low-FPR sequential evidence?",
+  "config_path": "artifacts/b0_cs_stage0_static/config.json",
+  "pre_attack_assertions": {
+    "attack_iq_opened": false,
+    "attack_node_tables_opened": false,
+    "attack_scores_opened": false,
+    "attack_outcomes_used_for_selection": false,
+    "allowed_prior_access": [
+      "TASK.md scenario metadata",
+      "tracked TEXBAT public scenario manifest",
+      "historical B0 repository summary",
+      "CMTE and CMTE-A2 implementation and preregistration survey",
+      "cleanStatic-only manifests, schemas, and data"
+    ]
+  },
+  "frozen_choices": [
+    "stable tracking rule",
+    "chronological 50/15/20/15 split and 6 s guards",
+    "one-second causal prompt-normalized nine-tap feature contract",
+    "Paper-B0 architecture and all optimizer/training hyperparameters",
+    "lagged C/N0 train-tertile and tracked-count nuisance rules",
+    "minimum calibration-block rule and deterministic merge order",
+    "power betting function",
+    "minimum four-PRN arithmetic-mean aggregation",
+    "clean-only IAT-dependent block rule with 2 s default",
+    "e-CUSUM recurrence and alpha=0.01 threshold",
+    "all ablations and the three-epoch simple comparator",
+    "control magnitudes",
+    "10 s paired block bootstrap with 2000 repetitions",
+    "scenario family grouping and official timeline mapping",
+    "GO criteria and allowed final verdict vocabulary"
+  ],
+  "clean_freeze_required_before_attack": {
+    "checkpoint": true,
+    "standardizer": true,
+    "linear_ar": true,
+    "cn0_edges": true,
+    "stratum_merges": true,
+    "iat_and_block_seconds": true,
+    "calibration_values": true,
+    "thresholds": true,
+    "clean_holdout_unopened_until_freeze": true,
+    "clean_freeze_record": "artifacts/b0_cs_stage0_static/clean_freeze.json"
+  },
+  "failure_policy": "Any missing source, lineage, duration, support, runtime, or verification produces structured UNAVAILABLE or LIMITED output; no substitute is selected from attack outcomes.",
+  "validity_claim": "EMPIRICALLY_BLOCK_CALIBRATED; no distribution-free or anytime-valid claim under arbitrary temporal dependence.",
+  "allowed_verdicts": [
+    "GO_WCL_B0_CS",
+    "B0_ONLY_STRONG_BUT_METHOD_WEAK",
+    "PIVOT_TO_PROVENANCE_EVALUATION_PAPER",
+    "NO_PAPER_READY_EVIDENCE"
+  ]
+}

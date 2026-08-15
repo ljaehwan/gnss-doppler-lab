@@ -1,0 +1,12 @@
+{
+  "schema": "gnss-doppler-lab.b0-cs-source-commit.v1",
+  "branch": "research/b0-cs-stage0-static",
+  "base_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "historical_b0_checkpoint_sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
+  "clean_source_sha256": "fcd1d378c28e79fe4a550b65fc1208cde3c8fb334db11406a07fed4d90fba237",
+  "comparison_commits": {
+    "CMTE": "d19115e48f8859330ae05bbab59c0ffd5f3d2004",
+    "CMTE_A2": "1537c958f7e82a83a32cd40a7d5c22a1328b3cf8",
+    "hybrid_sequential_conformal": "f361690026db74f5ef4e6d34d082e67c2a7bd59f"
+  }
+}

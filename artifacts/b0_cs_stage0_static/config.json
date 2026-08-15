@@ -1,0 +1,120 @@
+{
+  "schema": "gnss-doppler-lab.b0-cs-stage0-config.v1",
+  "model_name": "B0-CS",
+  "status": "PREREGISTERED_PRE_ATTACK",
+  "base_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "source": {
+    "clean_npz": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.npz",
+    "clean_npz_sha256": "fcd1d378c28e79fe4a550b65fc1208cde3c8fb334db11406a07fed4d90fba237",
+    "clean_manifest": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.manifest.json",
+    "clean_manifest_sha256": "2424331f3fdb403cfa4610082ed36022abe180383bd08b5732d6aba834427eca",
+    "sample_rate_hz": 25000000,
+    "sample_format": "interleaved_int16_iq",
+    "bytes_per_complex_sample": 4
+  },
+  "features": {
+    "tap_order": ["E4", "E3", "E2", "E", "P", "L", "L2", "L3", "L4"],
+    "prompt_normalization": "per_raw_epoch_hypot_tap_divided_by_max(hypot_prompt,1e-8), then 1 s causal window mean",
+    "zero_low_prompt_rule": "raw epochs with prompt magnitude <=1e-8 are invalid; a node window requires >=1 valid raw epoch and finite output",
+    "window_seconds": 1.0,
+    "stride_seconds": 0.5,
+    "cn0_context": "median cn0_db_hz over [window_start-1s, window_start), never current window"
+  },
+  "stable_tracking": {
+    "rule": "earliest 20 consecutive 0.5 s receiver epochs with at least 4 valid PRNs",
+    "observed_clean_start_window_bin_s": 0.5,
+    "observed_min_prns_after_start": 7
+  },
+  "split": {
+    "ratios": {"train": 0.50, "validation": 0.15, "calibration": 0.20, "holdout": 0.15},
+    "guard_seconds": 6.0,
+    "guard_epochs": 12,
+    "allocation": "Hamilton largest remainder over eligible receiver epochs after reserving three guards; ties role order train,validation,calibration,holdout",
+    "history_reset": ["role", "physical_recording", "segment", "channel", "cadence_gap"],
+    "target_role_exactly_once": true
+  },
+  "paper_b0": {
+    "seq_len": 12,
+    "epochs": 40,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "hidden_dim": 128,
+    "embedding_dim": 128,
+    "dropout": 0.05,
+    "optimizer": "AdamW",
+    "loss": "mean squared error over batch and 9 outputs",
+    "gradient_clip": 1.0,
+    "checkpoint_selection": "strict minimum chronological validation loss; earliest epoch on exact tie",
+    "standardizer": "feature mean and population std from train only; std<1e-6 becomes 1",
+    "seed": 11,
+    "prn_identity_input": false
+  },
+  "linear_ar": {
+    "history": 12,
+    "input": "flattened standardized 12x9 PRN-local history",
+    "output": "next standardized 9-tap vector",
+    "ridge_alpha": 0.001,
+    "fit": "cleanStatic train only"
+  },
+  "nuisance": {
+    "cn0_edges": "train-only tertiles of lagged C/N0",
+    "tracked_count_bins": [[4, 6], [7, 9], [10, null]],
+    "prn_stratum": false,
+    "minimum_nonoverlapping_calibration_blocks": 20,
+    "merge_order": "exact stratum; adjacent C/N0 pair preferring lower pair for middle; all C/N0 preserving tracked-count; global"
+  },
+  "evidence": {
+    "prn_pvalue": "(1 + count(calibration_residual >= query_residual))/(M+1)",
+    "bet": "0.5*p^-0.5",
+    "minimum_valid_prns": 4,
+    "set_aggregation": "arithmetic mean e-value",
+    "set_score": "log(mean_e + 1e-12)",
+    "validity_label": "EMPIRICALLY_BLOCK_CALIBRATED"
+  },
+  "temporal": {
+    "block_rule": "non-overlapping 2 s blocks; if clean-train integrated autocorrelation time exceeds 2 s, use the smallest integer multiple of 0.5 s strictly greater than that IAT",
+    "default_block_seconds": 2.0,
+    "block_score": "maximum set score",
+    "block_pvalue": "inclusive upper-tail finite-sample rank",
+    "block_bet": "0.5*p^-0.5",
+    "cusum": "C_b=max(1,C_(b-1))*e_b, C_0=1",
+    "alpha": 0.01,
+    "alarm_threshold": 100.0,
+    "store_quantiles": [0.99, 0.995]
+  },
+  "ablations": {
+    "H0": "Historical-B0 exact frozen checkpoint and exact historical gate",
+    "A0": "Paper-B0 receiver median + 1.4826*MAD residual",
+    "A1": "Paper-B0 with exact q50/q70/q80 binomial-tail and EWMA075 semantics recalibrated on Paper-B0 calibration only",
+    "A2": "Paper-B0 A0 receiver score with calibration higher-q99 and no sequential accumulation",
+    "A3": "B0-CS global PRN residual calibration without nuisance conditioning",
+    "A4": "B0-CS nuisance-conditioned set score with calibration higher-q99 and no temporal accumulation",
+    "Full": "nuisance-conditioned PRN e-mean, block calibration, sequential evidence",
+    "Linear-AR": "fixed clean-only linear AR plus Full calibration",
+    "SimpleConsecutive": "Paper-B0 A0 higher-q99 with 3 consecutive receiver epochs"
+  },
+  "bootstrap": {"block_seconds": 10.0, "repetitions": 2000, "seed": 20260816, "ds7_ds8_one_family": true},
+  "controls": {
+    "seed": 20260817,
+    "noise_scales": [0.5, 1.0, 2.0],
+    "common_gain_scales": [0.5, 2.0],
+    "prompt_global_amplitude_scales": [0.5, 2.0],
+    "cn0_decrease_db": -6.0,
+    "single_prn_disturbance_scale": 2.0,
+    "clock_like_drift_endpoint": 0.02,
+    "multipath_noise_scale": 0.02,
+    "consecutive_alarm_epochs": 3,
+    "raw_iq_awgn": "run only if receiver recalculation inputs/executable/lineage are verified; otherwise UNAVAILABLE"
+  },
+  "timelines_seconds": {
+    "DS1": {"signal_onset": 125.0},
+    "DS2": {"signal_onset": 110.1},
+    "DS3": {"signal_onset": 118.9, "pull_off": 195.0},
+    "DS4": {"signal_onset": 113.8, "pull_off": 225.0},
+    "DS7": {"signal_onset": 110.0, "time_push": 150.0},
+    "DS8": {"signal_onset": 110.0, "time_push": 150.0}
+  },
+  "random_seeds": [11, 20260816, 20260817],
+  "attack_outcome_selection": false
+}
