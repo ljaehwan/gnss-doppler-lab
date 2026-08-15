@@ -1,0 +1,35 @@
+{
+  "b0_only_event_count": 3,
+  "b0_total_event_count": 503,
+  "common_support_coverage": 0.7429643527204502,
+  "exact_common_event_count": 396,
+  "full_only_event_count": 33,
+  "full_total_event_count": 533,
+  "mismatch_counts_by_cause": {
+    "B0_WINDOW_WITHOUT_FULL_EVENT": 3,
+    "EPOCH_PRN_SUPPORT_MISMATCH": 104,
+    "FULL_WINDOW_WITHOUT_B0_EVENT": 33
+  },
+  "phase_counts": {
+    "established": {
+      "b0_total": 229,
+      "exact_common": 184,
+      "full_total": 239
+    },
+    "pre_onset_replay": {
+      "b0_total": 207,
+      "exact_common": 146,
+      "full_total": 217
+    },
+    "transition": {
+      "b0_total": 67,
+      "exact_common": 66,
+      "full_total": 77
+    }
+  },
+  "r2_fix": "retain only rows whose complete epoch+PRN+window support is identical and explicitly inventory every mismatch",
+  "root_cause_previous_abort": "legacy integration required equality of all B0 and Full scheduler keys before common-support accounting",
+  "scenario": "DS7",
+  "status": "AVAILABLE_ON_EXACT_COMMON_SUPPORT",
+  "support_mismatch_event_count": 104
+}

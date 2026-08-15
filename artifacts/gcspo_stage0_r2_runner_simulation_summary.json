@@ -4,6 +4,16 @@
   "clean_full_fpr_q99": 0.07172995780590717,
   "clean_full_fpr_q995": 0.06751054852320675,
   "controls": "FAIL",
+  "delivery": {
+    "ahead": 0,
+    "behind": 0,
+    "current_remote_branch": "research/gcspo-stage0-r2-runner-simulation",
+    "current_remote_commit_sha": "2912d0f657151d84131eb0f31b5a6b613dee610f",
+    "evidence_bundle": "artifacts/gcspo_stage0_r2_runner_simulation_evidence",
+    "evidence_bundle_commit_sha": "PENDING_COMMIT",
+    "initial_push_attempt": "failed due missing credentials",
+    "later_delivery": "succeeded"
+  },
   "ds3": {
     "b0_exact_common": 643,
     "full_events": 907,
@@ -16,11 +26,11 @@
     "full_pre_onset_treatment": "REPLAY_EXCLUDED_FROM_EXTERNAL_FPR",
     "full_roc_auc": 0.5991366738610512
   },
+  "initial_result_commit": "2fe4c4d3f72ad4d071287b741f92bcb8d31e37c0",
   "latest_required_runner_phases_all_succeeded": true,
   "neural_stage1_allowed": false,
   "paper_model_continuation": "NOT_WORTH_CONTINUING_AS_THE_CURRENT_DETECTOR_PAPER_MODEL",
-  "push_status": "BLOCKED_MISSING_GITHUB_HTTPS_CREDENTIALS",
-  "initial_result_commit": "2fe4c4d3f72ad4d071287b741f92bcb8d31e37c0",
+  "push_status": "DELIVERED_AFTER_INITIAL_CREDENTIAL_BLOCKER",
   "shared_pull_off_physical_hypothesis": "INCOMPLETE",
   "verdict": "EVALUATION_INCOMPLETE_SOURCE_OR_SUPPORT"
 }

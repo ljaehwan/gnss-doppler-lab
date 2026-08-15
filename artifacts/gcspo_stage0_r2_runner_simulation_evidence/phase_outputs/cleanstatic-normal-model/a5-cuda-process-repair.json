@@ -1,0 +1,12 @@
+{
+  "cause": "PyTorch CUDA cannot be initialized in forked multiprocessing children",
+  "failed_runner_attempt": "20260815T104035Z-gcspo-r2-cleanstatic-normal-model",
+  "preserved_completed_outputs": [
+    "clean_only_report.json",
+    "clean_ablation_report.json",
+    "physical_controls.json"
+  ],
+  "repair": "execute identical frozen A5 spectral computations in one CUDA process",
+  "scientific_change": false,
+  "status": "IMPLEMENTATION_REPAIR"
+}

@@ -1,0 +1,577 @@
+{
+  "all_required_latest_successful": true,
+  "failed_attempts_preserved": [
+    {
+      "exit_code": 1,
+      "phase": "gcspo-r2-cleanstatic-normal-model",
+      "run_id": "20260815T103959Z-gcspo-r2-cleanstatic-normal-model",
+      "status": "failed"
+    },
+    {
+      "exit_code": 1,
+      "phase": "gcspo-r2-cleanstatic-normal-model",
+      "run_id": "20260815T104035Z-gcspo-r2-cleanstatic-normal-model",
+      "status": "failed"
+    },
+    {
+      "exit_code": 1,
+      "phase": "gcspo-r2-ds3-evaluation",
+      "run_id": "20260815T115002Z-gcspo-r2-ds3-evaluation",
+      "status": "failed"
+    }
+  ],
+  "required_phases": {
+    "cleanstatic-normal-model": {
+      "artifact_phase_outputs": [
+        {
+          "exists": true,
+          "path": "phase_outputs/cleanstatic-normal-model/a5-cuda-process-repair.json",
+          "size_bytes": 453
+        },
+        {
+          "exists": true,
+          "path": "phase_outputs/cleanstatic-normal-model/config-byte-repair.json",
+          "size_bytes": 326
+        },
+        {
+          "exists": true,
+          "path": "phase_outputs/cleanstatic-normal-model/summary.json",
+          "size_bytes": 1268
+        }
+      ],
+      "contract_command_exists": true,
+      "contract_repository_path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "copied_files": [
+        {
+          "path": "runner_runs/20260815T114407Z-gcspo-r2-cleanstatic-normal-model/contract.json",
+          "sha256": "3547e5d04fcede346e5205675876d283fc606fe87199e1aa6e3b2bd0e95b626f",
+          "size_bytes": 409
+        },
+        {
+          "path": "runner_runs/20260815T114407Z-gcspo-r2-cleanstatic-normal-model/env.json",
+          "sha256": "9d755a48350cb77373f89ecf57df712c3f72ecfb1e2054842437c96a740c1b7a",
+          "size_bytes": 833
+        },
+        {
+          "path": "runner_runs/20260815T114407Z-gcspo-r2-cleanstatic-normal-model/git.json",
+          "sha256": "c3a73b78cfdfdde38dd6b7edd4590f233f3b64ae8620b785ee516ad0b149cd4b",
+          "size_bytes": 463
+        },
+        {
+          "path": "runner_runs/20260815T114407Z-gcspo-r2-cleanstatic-normal-model/heartbeat.json",
+          "sha256": "1584ef98ed8c638a3f2183ac835c235d5ff269c779fdffe1e55b81220e320a68",
+          "size_bytes": 131
+        },
+        {
+          "path": "runner_runs/20260815T114407Z-gcspo-r2-cleanstatic-normal-model/status.json",
+          "sha256": "2546b2b65b5687c5a726d681355531751affe99dad3735c471d19a461fe4525a",
+          "size_bytes": 405
+        },
+        {
+          "path": "runner_runs/20260815T114407Z-gcspo-r2-cleanstatic-normal-model/result_manifest.json",
+          "sha256": "1ea60b476d165fbd925864f01f1211fb3fd93f6a608de3364b7e5daaad929366",
+          "size_bytes": 111
+        }
+      ],
+      "exit_code": 0,
+      "final_heartbeat_exists": true,
+      "latest_successful_run_id": "20260815T114407Z-gcspo-r2-cleanstatic-normal-model",
+      "logs": [
+        {
+          "bundle_path": "runner_runs/20260815T114407Z-gcspo-r2-cleanstatic-normal-model/stdout.log",
+          "encoding": "identity",
+          "name": "stdout.log",
+          "sha256": "2dce20a74051fbecf73b4fd6352a067ec33547db727a9e574f416ab8f22bc83f",
+          "size_bytes": 6098
+        },
+        {
+          "bundle_path": "runner_runs/20260815T114407Z-gcspo-r2-cleanstatic-normal-model/stderr.log",
+          "encoding": "identity",
+          "name": "stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ],
+      "phase": "gcspo-r2-cleanstatic-normal-model",
+      "phase_terminal_evidence_ok": true,
+      "prior_failed_attempt_count": 2,
+      "status": "succeeded"
+    },
+    "ds3-evaluation": {
+      "artifact_phase_outputs": [
+        {
+          "exists": true,
+          "path": "phase_outputs/ds3-evaluation/access_ledger.jsonl",
+          "size_bytes": 3202
+        },
+        {
+          "exists": true,
+          "path": "phase_outputs/ds3-evaluation/common_support_inventory.csv",
+          "size_bytes": 562
+        },
+        {
+          "exists": true,
+          "path": "phase_outputs/ds3-evaluation/exact_support_audit.json",
+          "size_bytes": 1065
+        },
+        {
+          "exists": true,
+          "path": "phase_outputs/ds3-evaluation/per_epoch_scores.csv",
+          "size_bytes": 14291486
+        },
+        {
+          "exists": true,
+          "path": "phase_outputs/ds3-evaluation/protected_access_ledger_attempt_000.jsonl",
+          "size_bytes": 44327
+        },
+        {
+          "exists": true,
+          "path": "phase_outputs/ds3-evaluation/shared_state_estimates.csv",
+          "size_bytes": 9482299
+        },
+        {
+          "exists": true,
+          "path": "phase_outputs/ds3-evaluation/summary.json",
+          "size_bytes": 2702
+        }
+      ],
+      "contract_command_exists": true,
+      "contract_repository_path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "copied_files": [
+        {
+          "path": "runner_runs/20260815T122709Z-gcspo-r2-ds3-evaluation/contract.json",
+          "sha256": "e2b65137b67a00db2e3f0e7bf2d77b1a5e43d9afb685f0d116746e2532abb6ac",
+          "size_bytes": 379
+        },
+        {
+          "path": "runner_runs/20260815T122709Z-gcspo-r2-ds3-evaluation/env.json",
+          "sha256": "203b0fb03002f90bfec2e904675c6d0cb69d6abf9b7d23771b5ce630c692e9ab",
+          "size_bytes": 833
+        },
+        {
+          "path": "runner_runs/20260815T122709Z-gcspo-r2-ds3-evaluation/git.json",
+          "sha256": "d21d31c6b94c913b1493ba435514dab4a6806c6721a3465a933b9050f40c59c4",
+          "size_bytes": 517
+        },
+        {
+          "path": "runner_runs/20260815T122709Z-gcspo-r2-ds3-evaluation/heartbeat.json",
+          "sha256": "9a80f38d7312a04794a62502ea049e02d5ec5e35905765459013a4c4e51aa9b3",
+          "size_bytes": 121
+        },
+        {
+          "path": "runner_runs/20260815T122709Z-gcspo-r2-ds3-evaluation/status.json",
+          "sha256": "89fae82ce8dca907e0b2a8c64bed05ba3ee3cd6ea96bf7ca35f5e40a963d0dc9",
+          "size_bytes": 385
+        },
+        {
+          "path": "runner_runs/20260815T122709Z-gcspo-r2-ds3-evaluation/result_manifest.json",
+          "sha256": "7a66c17886ec6c961a25d4fb78d44d68f6e130c789f033d3a41a2018b6c98ef1",
+          "size_bytes": 101
+        }
+      ],
+      "exit_code": 0,
+      "final_heartbeat_exists": true,
+      "latest_successful_run_id": "20260815T122709Z-gcspo-r2-ds3-evaluation",
+      "logs": [
+        {
+          "bundle_path": "runner_runs/20260815T122709Z-gcspo-r2-ds3-evaluation/stdout.log",
+          "encoding": "identity",
+          "name": "stdout.log",
+          "sha256": "4d496305a475b6bb580904f81975aed6627b45e4411c89f42cf12ddfb6614825",
+          "size_bytes": 5055
+        },
+        {
+          "bundle_path": "runner_runs/20260815T122709Z-gcspo-r2-ds3-evaluation/stderr.log",
+          "encoding": "identity",
+          "name": "stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ],
+      "phase": "gcspo-r2-ds3-evaluation",
+      "phase_terminal_evidence_ok": true,
+      "prior_failed_attempt_count": 1,
+      "status": "succeeded"
+    },
+    "ds4-ds8-conditional-evaluation": {
+      "artifact_phase_outputs": [
+        {
+          "exists": true,
+          "path": "phase_outputs/ds4-ds8-conditional-evaluation/conditional_dispositions.json",
+          "size_bytes": 702
+        },
+        {
+          "exists": true,
+          "path": "phase_outputs/ds4-ds8-conditional-evaluation/replay_overlap_audit.json",
+          "size_bytes": 770
+        },
+        {
+          "exists": true,
+          "path": "phase_outputs/ds4-ds8-conditional-evaluation/unavailable_scenarios.csv",
+          "size_bytes": 317
+        }
+      ],
+      "contract_command_exists": true,
+      "contract_repository_path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "copied_files": [
+        {
+          "path": "runner_runs/20260815T122658Z-gcspo-r2-ds4-ds8-conditional-evaluation/contract.json",
+          "sha256": "48a9d8ff6426a42cfbe3cbe8bd3f7dcb9ec7d812cfdf11289ca88e99f2287f69",
+          "size_bytes": 427
+        },
+        {
+          "path": "runner_runs/20260815T122658Z-gcspo-r2-ds4-ds8-conditional-evaluation/env.json",
+          "sha256": "a26467770ceeceb04e24b363fa604f544be2b08575e7ab190d551187b43f47da",
+          "size_bytes": 833
+        },
+        {
+          "path": "runner_runs/20260815T122658Z-gcspo-r2-ds4-ds8-conditional-evaluation/git.json",
+          "sha256": "468ecb3f977a4fa115812e8d3fd1c3c8bd50a6fbe3aa8ee99b3118567e894efb",
+          "size_bytes": 517
+        },
+        {
+          "path": "runner_runs/20260815T122658Z-gcspo-r2-ds4-ds8-conditional-evaluation/heartbeat.json",
+          "sha256": "3ed11433cf467ece1e1dadbd84613672784fe1ad57b83ea57a3d2fa07b6ec30f",
+          "size_bytes": 137
+        },
+        {
+          "path": "runner_runs/20260815T122658Z-gcspo-r2-ds4-ds8-conditional-evaluation/status.json",
+          "sha256": "74cd11a9b611352f667501d34446c77db27ed9c5db87fe0bb9f99c0ae0c3a90c",
+          "size_bytes": 417
+        },
+        {
+          "path": "runner_runs/20260815T122658Z-gcspo-r2-ds4-ds8-conditional-evaluation/result_manifest.json",
+          "sha256": "10c1264068e313de78ef803fcf611fbfd136c1f31189f0a61d6887cb9091f7c8",
+          "size_bytes": 117
+        }
+      ],
+      "exit_code": 0,
+      "final_heartbeat_exists": true,
+      "latest_successful_run_id": "20260815T122658Z-gcspo-r2-ds4-ds8-conditional-evaluation",
+      "logs": [
+        {
+          "bundle_path": "runner_runs/20260815T122658Z-gcspo-r2-ds4-ds8-conditional-evaluation/stdout.log",
+          "encoding": "identity",
+          "name": "stdout.log",
+          "sha256": "ce60cd1c9e285e0fa3e7608239c6e8d9cbf106b5519f638149bd5c29003d5b86",
+          "size_bytes": 644
+        },
+        {
+          "bundle_path": "runner_runs/20260815T122658Z-gcspo-r2-ds4-ds8-conditional-evaluation/stderr.log",
+          "encoding": "identity",
+          "name": "stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ],
+      "phase": "gcspo-r2-ds4-ds8-conditional-evaluation",
+      "phase_terminal_evidence_ok": true,
+      "prior_failed_attempt_count": 0,
+      "status": "succeeded"
+    },
+    "ds7-evaluation": {
+      "artifact_phase_outputs": [
+        {
+          "exists": true,
+          "path": "phase_outputs/ds7-evaluation/common_support_inventory.csv",
+          "size_bytes": 595
+        },
+        {
+          "exists": true,
+          "path": "phase_outputs/ds7-evaluation/exact_support_audit.json",
+          "size_bytes": 1067
+        },
+        {
+          "exists": true,
+          "path": "phase_outputs/ds7-evaluation/per_epoch_scores.csv",
+          "size_bytes": 8277103
+        },
+        {
+          "exists": true,
+          "path": "phase_outputs/ds7-evaluation/protected_access_ledger_attempt_000.jsonl",
+          "size_bytes": 43965
+        },
+        {
+          "exists": true,
+          "path": "phase_outputs/ds7-evaluation/shared_state_estimates.csv",
+          "size_bytes": 5625305
+        },
+        {
+          "exists": true,
+          "path": "phase_outputs/ds7-evaluation/summary.json",
+          "size_bytes": 2742
+        }
+      ],
+      "contract_command_exists": true,
+      "contract_repository_path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "copied_files": [
+        {
+          "path": "runner_runs/20260815T130230Z-gcspo-r2-ds7-evaluation/contract.json",
+          "sha256": "00a7d11ec8c6a8550658d05c64c05213651f5afa6e4160f53668a2a9a65dcbfd",
+          "size_bytes": 379
+        },
+        {
+          "path": "runner_runs/20260815T130230Z-gcspo-r2-ds7-evaluation/env.json",
+          "sha256": "2f8845d303eba70711faceba2070016fb29c19172c1058f9d9fb3aaf65115099",
+          "size_bytes": 833
+        },
+        {
+          "path": "runner_runs/20260815T130230Z-gcspo-r2-ds7-evaluation/git.json",
+          "sha256": "98fd86e9dcd055f64943587009f6ef34706c6e3687b588611ca0e4f339411680",
+          "size_bytes": 517
+        },
+        {
+          "path": "runner_runs/20260815T130230Z-gcspo-r2-ds7-evaluation/heartbeat.json",
+          "sha256": "bffd65dfdeb018fd37866bfdb321023a65a79f1d5db9e68cfe7b68076bbd3b01",
+          "size_bytes": 121
+        },
+        {
+          "path": "runner_runs/20260815T130230Z-gcspo-r2-ds7-evaluation/status.json",
+          "sha256": "cc39072e0eddb059f5aa5fce3236f7f02bff1ff431a3512adf204784a9758c4c",
+          "size_bytes": 385
+        },
+        {
+          "path": "runner_runs/20260815T130230Z-gcspo-r2-ds7-evaluation/result_manifest.json",
+          "sha256": "872149ec17bffeea6a89a36530718199d0928ad2106d1fbd27c4f76dbb58d4e3",
+          "size_bytes": 101
+        }
+      ],
+      "exit_code": 0,
+      "final_heartbeat_exists": true,
+      "latest_successful_run_id": "20260815T130230Z-gcspo-r2-ds7-evaluation",
+      "logs": [
+        {
+          "bundle_path": "runner_runs/20260815T130230Z-gcspo-r2-ds7-evaluation/stdout.log",
+          "encoding": "identity",
+          "name": "stdout.log",
+          "sha256": "3b92bd1e9e48d70ed0c1f0ba489583c6f1828e3ef8ceaca75ae3074ef5176c45",
+          "size_bytes": 5020
+        },
+        {
+          "bundle_path": "runner_runs/20260815T130230Z-gcspo-r2-ds7-evaluation/stderr.log",
+          "encoding": "identity",
+          "name": "stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ],
+      "phase": "gcspo-r2-ds7-evaluation",
+      "phase_terminal_evidence_ok": true,
+      "prior_failed_attempt_count": 0,
+      "status": "succeeded"
+    },
+    "final-statistics-plots-verification": {
+      "artifact_phase_outputs": [
+        {
+          "exists": true,
+          "path": "phase_outputs/final-statistics-plots-verification/verification.json",
+          "size_bytes": 663
+        }
+      ],
+      "contract_command_exists": true,
+      "contract_repository_path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "copied_files": [
+        {
+          "path": "runner_runs/20260815T135623Z-gcspo-r2-final-statistics-plots-verification/contract.json",
+          "sha256": "36a5dd3a0093e0739736817cb1f275de3213425772a2541184641d54c0377210",
+          "size_bytes": 442
+        },
+        {
+          "path": "runner_runs/20260815T135623Z-gcspo-r2-final-statistics-plots-verification/env.json",
+          "sha256": "de3adfb8f920e53a56586838877734c5bfe1bb65a889e736f6e50aafd096186b",
+          "size_bytes": 833
+        },
+        {
+          "path": "runner_runs/20260815T135623Z-gcspo-r2-final-statistics-plots-verification/git.json",
+          "sha256": "d989192bf80dcb6b02f2852555b63c79efb5b6c36bd9f762ce9561605bdcdc65",
+          "size_bytes": 517
+        },
+        {
+          "path": "runner_runs/20260815T135623Z-gcspo-r2-final-statistics-plots-verification/heartbeat.json",
+          "sha256": "a75bf8507ecf73e35a484b73f18e24cd3af1c8d0a6cc3a074f73e08a44f9c15b",
+          "size_bytes": 142
+        },
+        {
+          "path": "runner_runs/20260815T135623Z-gcspo-r2-final-statistics-plots-verification/status.json",
+          "sha256": "bc40047508e63b573a948c06c17d177638b41be8ba794cfce2c4e5fe2a11361d",
+          "size_bytes": 427
+        },
+        {
+          "path": "runner_runs/20260815T135623Z-gcspo-r2-final-statistics-plots-verification/result_manifest.json",
+          "sha256": "78bd64c94859ffdf9e5f595cc44c6c3c026d6937e9836f92ab5503d73c9a50ca",
+          "size_bytes": 122
+        }
+      ],
+      "exit_code": 0,
+      "final_heartbeat_exists": true,
+      "latest_successful_run_id": "20260815T135623Z-gcspo-r2-final-statistics-plots-verification",
+      "logs": [
+        {
+          "bundle_path": "runner_runs/20260815T135623Z-gcspo-r2-final-statistics-plots-verification/stdout.log",
+          "encoding": "identity",
+          "name": "stdout.log",
+          "sha256": "3aaf10bd6c9199b350756f43521095479032b476d0a5dac8049adeb5abe22d1a",
+          "size_bytes": 75
+        },
+        {
+          "bundle_path": "runner_runs/20260815T135623Z-gcspo-r2-final-statistics-plots-verification/stderr.log",
+          "encoding": "identity",
+          "name": "stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ],
+      "phase": "gcspo-r2-final-statistics-plots-verification",
+      "phase_terminal_evidence_ok": true,
+      "prior_failed_attempt_count": 0,
+      "status": "succeeded"
+    },
+    "preflight": {
+      "artifact_phase_outputs": [
+        {
+          "exists": true,
+          "path": "phase_outputs/preflight/preflight.json",
+          "size_bytes": 538
+        }
+      ],
+      "contract_command_exists": true,
+      "contract_repository_path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "copied_files": [
+        {
+          "path": "runner_runs/20260815T103944Z-gcspo-r2-preflight/contract.json",
+          "sha256": "b692194e9bba1cbf1efff30600af305507f8c2c0da47df05f8dabd89df4a5634",
+          "size_bytes": 364
+        },
+        {
+          "path": "runner_runs/20260815T103944Z-gcspo-r2-preflight/env.json",
+          "sha256": "c243cd7f992f5263f0c9734b6ea2068ec149942fbcc4833b81afce80b39f805a",
+          "size_bytes": 833
+        },
+        {
+          "path": "runner_runs/20260815T103944Z-gcspo-r2-preflight/git.json",
+          "sha256": "e74055e557cbdf5b55cbcdaecb8fe521118d0237beec3166e70d3d364e2a47ec",
+          "size_bytes": 463
+        },
+        {
+          "path": "runner_runs/20260815T103944Z-gcspo-r2-preflight/heartbeat.json",
+          "sha256": "3034c5116a1898a21f22c89e60518b3d6c279b1788846301883877c615bd0ec0",
+          "size_bytes": 116
+        },
+        {
+          "path": "runner_runs/20260815T103944Z-gcspo-r2-preflight/status.json",
+          "sha256": "5b38ab59519e6f913f9e0c35d44f6885c76492ddfe8191996ee310bae944d215",
+          "size_bytes": 375
+        },
+        {
+          "path": "runner_runs/20260815T103944Z-gcspo-r2-preflight/result_manifest.json",
+          "sha256": "9d88aa9497bf61d36b7bab195ef99a6ae5e09da8b3f4d5ea0542acbf8d7b0169",
+          "size_bytes": 96
+        }
+      ],
+      "exit_code": 0,
+      "final_heartbeat_exists": true,
+      "latest_successful_run_id": "20260815T103944Z-gcspo-r2-preflight",
+      "logs": [
+        {
+          "bundle_path": "runner_runs/20260815T103944Z-gcspo-r2-preflight/stdout.log",
+          "encoding": "identity",
+          "name": "stdout.log",
+          "sha256": "dabbc93d319ecb55633b990818b45401a017aa2614cddf01039a43a8658c2fa9",
+          "size_bytes": 51
+        },
+        {
+          "bundle_path": "runner_runs/20260815T103944Z-gcspo-r2-preflight/stderr.log",
+          "encoding": "identity",
+          "name": "stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ],
+      "phase": "gcspo-r2-preflight",
+      "phase_terminal_evidence_ok": true,
+      "prior_failed_attempt_count": 0,
+      "status": "succeeded"
+    },
+    "relation-destruction-physical-controls": {
+      "artifact_phase_outputs": [
+        {
+          "exists": true,
+          "path": "phase_outputs/relation-destruction-physical-controls/protected_access_ledger_attempt_000.jsonl",
+          "size_bytes": 22238
+        },
+        {
+          "exists": true,
+          "path": "phase_outputs/relation-destruction-physical-controls/protected_access_ledger_attempt_001.jsonl",
+          "size_bytes": 22057
+        },
+        {
+          "exists": true,
+          "path": "phase_outputs/relation-destruction-physical-controls/relation_rows.csv",
+          "size_bytes": 8003023
+        },
+        {
+          "exists": true,
+          "path": "phase_outputs/relation-destruction-physical-controls/summary.json",
+          "size_bytes": 104
+        }
+      ],
+      "contract_command_exists": true,
+      "contract_repository_path": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "copied_files": [
+        {
+          "path": "runner_runs/20260815T132347Z-gcspo-r2-relation-destruction-physical-controls/contract.json",
+          "sha256": "05e486bf5dea4b84977a0fc87fd90de91294acf157ed0852bb0fb97b8dfb9682",
+          "size_bytes": 451
+        },
+        {
+          "path": "runner_runs/20260815T132347Z-gcspo-r2-relation-destruction-physical-controls/env.json",
+          "sha256": "3328bbbf9b535a1f7839bd8309fbcc59f721a7896c10d23d032f165f2147408c",
+          "size_bytes": 833
+        },
+        {
+          "path": "runner_runs/20260815T132347Z-gcspo-r2-relation-destruction-physical-controls/git.json",
+          "sha256": "6d2def4eaa62a6f482aec32c38556d6a8225725700821c12ccffeb7f69eec179",
+          "size_bytes": 517
+        },
+        {
+          "path": "runner_runs/20260815T132347Z-gcspo-r2-relation-destruction-physical-controls/heartbeat.json",
+          "sha256": "c0668a625604096a34b883784f43fb8a2e824c63494c9ec7e41ae79ca142ffff",
+          "size_bytes": 145
+        },
+        {
+          "path": "runner_runs/20260815T132347Z-gcspo-r2-relation-destruction-physical-controls/status.json",
+          "sha256": "819769893ed48064d76a39b373d01ba07818e5056364ee8ccae42b4301851e89",
+          "size_bytes": 433
+        },
+        {
+          "path": "runner_runs/20260815T132347Z-gcspo-r2-relation-destruction-physical-controls/result_manifest.json",
+          "sha256": "50db7701846d0eb203d4f679cb981308bb7178abfa3236c704b8ba75c215c668",
+          "size_bytes": 125
+        }
+      ],
+      "exit_code": 0,
+      "final_heartbeat_exists": true,
+      "latest_successful_run_id": "20260815T132347Z-gcspo-r2-relation-destruction-physical-controls",
+      "logs": [
+        {
+          "bundle_path": "runner_runs/20260815T132347Z-gcspo-r2-relation-destruction-physical-controls/stdout.log",
+          "encoding": "identity",
+          "name": "stdout.log",
+          "sha256": "83ac356b8bb5e63305c4784cef45008b436754ac12637ffba54e6cd6cfa8274a",
+          "size_bytes": 56
+        },
+        {
+          "bundle_path": "runner_runs/20260815T132347Z-gcspo-r2-relation-destruction-physical-controls/stderr.log",
+          "encoding": "identity",
+          "name": "stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ],
+      "phase": "gcspo-r2-relation-destruction-physical-controls",
+      "phase_terminal_evidence_ok": true,
+      "prior_failed_attempt_count": 0,
+      "status": "succeeded"
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "B0": "AVAILABLE_ON_EXACT_COMMON_SUPPORT",
+  "end_s": 270.56,
+  "geometry": {
+    "configured_tow0_s": 477900.0,
+    "ephemeris_alignment": {
+      "decoded_snapshot_available": true,
+      "decoded_snapshot_relation": "after_recording_start_allowed_offline_oracle",
+      "decoded_snapshot_tow_s": [
+        478146.0,
+        478146.0,
+        478146.0,
+        478032.0,
+        478146.0,
+        478146.0,
+        478146.0,
+        478146.0,
+        478146.0,
+        478146.0,
+        478146.0
+      ],
+      "fit_interval_flag_by_prn": {
+        "3": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "10": 0,
+        "13": 0,
+        "16": 0,
+        "19": 0,
+        "20": 0,
+        "23": 0,
+        "30": 0
+      },
+      "full_gps_week": 2729,
+      "health_by_prn": {
+        "3": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "10": 0,
+        "13": 0,
+        "16": 0,
+        "19": 0,
+        "20": 0,
+        "23": 0,
+        "30": 0
+      },
+      "max_toe_age_s": 7200.0,
+      "recording_start_tow_s": 477900.0,
+      "toc_available_prns": [
+        3,
+        6,
+        7,
+        8,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "toe_age_s_by_prn": {
+        "3": 4500.0,
+        "6": 4500.0,
+        "7": 4500.0,
+        "8": 4500.0,
+        "10": 4500.0,
+        "13": 4500.0,
+        "16": 4500.0,
+        "19": 4500.0,
+        "20": 4500.0,
+        "23": 4500.0,
+        "30": 4500.0
+      },
+      "week_modulus": 1024
+    },
+    "ephemeris_health": {
+      "excluded_ephemeris_health_by_prn": {},
+      "excluded_tracking_prns": [
+        29
+      ],
+      "health_acceptance_rule": "SV_health == 0",
+      "healthy_ephemeris_prns": [
+        3,
+        6,
+        7,
+        8,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "healthy_tracked_prns": [
+        3,
+        6,
+        7,
+        8,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "tracked_prns_without_ephemeris": [
+        29
+      ]
+    },
+    "full_gps_week": 2729,
+    "nmea_sample_count": 700,
+    "overall_status": "PASS",
+    "receiver_llh": [
+      30.28753907,
+      -97.73571808916667,
+      174.20350000000002
+    ],
+    "recording_start_rx_time_s": 477900.0
+  },
+  "ranges": [
+    [
+      "pre_onset_replay",
+      0.0,
+      110.0
+    ],
+    [
+      "transition",
+      110.0,
+      150.0
+    ],
+    [
+      "established",
+      150.0,
+      270.56
+    ]
+  ],
+  "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9",
+  "rows": 3594,
+  "scenario": "DS7",
+  "state_rows": 26650,
+  "status": "SUCCEEDED"
+}

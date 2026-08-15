@@ -1,0 +1,7 @@
+{
+  "cause": "preflight canonical JSON serialization changed the frozen byte identity",
+  "failed_runner_attempt": "20260815T103959Z-gcspo-r2-cleanstatic-normal-model",
+  "restored_sha256": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad",
+  "scientific_change": false,
+  "status": "IMPLEMENTATION_REPAIR"
+}

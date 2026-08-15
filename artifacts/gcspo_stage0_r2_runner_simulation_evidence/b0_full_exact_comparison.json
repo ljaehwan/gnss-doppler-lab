@@ -1,0 +1,67 @@
+{
+  "scenarios": {
+    "DS3": {
+      "phases": {
+        "established": {
+          "B0_alarm_rate_q99": 1.0,
+          "B0_mean_score": 17.06234623531452,
+          "Full_alarm_rate_q99": 0.5894736842105263,
+          "Full_mean_score": -1874.7648732692346,
+          "status": "AVAILABLE_ON_EXACT_COMMON_SUPPORT",
+          "windows": 475
+        },
+        "pre_onset": {
+          "B0_alarm_rate_q99": 0.3273809523809524,
+          "B0_mean_score": 1.3721946633798645,
+          "Full_alarm_rate_q99": 0.02976190476190476,
+          "Full_mean_score": -2048.782498829633,
+          "status": "AVAILABLE_ON_EXACT_COMMON_SUPPORT",
+          "windows": 168
+        },
+        "pre_onset_replay": {
+          "status": "UNAVAILABLE_ON_COMMON_SUPPORT"
+        },
+        "transition": {
+          "status": "UNAVAILABLE_ON_COMMON_SUPPORT"
+        }
+      },
+      "status": "AVAILABLE_ON_EXACT_COMMON_SUPPORT",
+      "windows": 643
+    },
+    "DS7": {
+      "phases": {
+        "established": {
+          "B0_alarm_rate_q99": 0.967391304347826,
+          "B0_mean_score": 12.31794458820146,
+          "Full_alarm_rate_q99": 0.29347826086956524,
+          "Full_mean_score": -1965.47294035417,
+          "status": "AVAILABLE_ON_EXACT_COMMON_SUPPORT",
+          "windows": 184
+        },
+        "pre_onset": {
+          "status": "UNAVAILABLE_ON_COMMON_SUPPORT"
+        },
+        "pre_onset_replay": {
+          "B0_alarm_rate_q99": 0.1506849315068493,
+          "B0_mean_score": 1.0821789144223597,
+          "Full_alarm_rate_q99": 0.14383561643835616,
+          "Full_mean_score": -1881.3087543957909,
+          "status": "AVAILABLE_ON_EXACT_COMMON_SUPPORT",
+          "windows": 146
+        },
+        "transition": {
+          "B0_alarm_rate_q99": 0.9090909090909091,
+          "B0_mean_score": 2.504600374134306,
+          "Full_alarm_rate_q99": 0.2878787878787879,
+          "Full_mean_score": -1961.6503985207924,
+          "status": "AVAILABLE_ON_EXACT_COMMON_SUPPORT",
+          "windows": 66
+        }
+      },
+      "status": "AVAILABLE_ON_EXACT_COMMON_SUPPORT",
+      "windows": 396
+    }
+  },
+  "schema": "gnss-doppler-lab.gcspo.stage0-r2.b0-full-exact-comparison.v1",
+  "strict_rule": "complete epoch+PRN+window support identity"
+}

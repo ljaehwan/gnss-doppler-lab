@@ -1,0 +1,345 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "90179d1407cff6408c5349679aa950382fb7f8c037ae43f0af552f7f4e242df7",
+      "size_bytes": 337
+    },
+    {
+      "path": "ablation_metrics.csv",
+      "sha256": "0c829930030bf13fe290637a2a60414f1dc97f28032ef1b77315c88b4b3d5c29",
+      "size_bytes": 1941
+    },
+    {
+      "path": "b0_full_exact_comparison.json",
+      "sha256": "8272209fcb3867e36444ce4aae6da018ebc77d59b9173ee98b15f5d8304b4e06",
+      "size_bytes": 2246
+    },
+    {
+      "path": "b0_recomputed/DS3/gcspo_r2_b0_DS3_prn_local_event_scores.csv",
+      "sha256": "e73d55defbfa6e3bd735dfc9231c780213f42c41d116e4cc2509b8008093e422",
+      "size_bytes": 148698
+    },
+    {
+      "path": "b0_recomputed/DS3/gcspo_r2_b0_DS3_prn_local_onset_summary.json",
+      "sha256": "f393ee95ec9f9172fe4ffc91939c6e73b8b9eefd4c45711a2178c539840857b2",
+      "size_bytes": 4985
+    },
+    {
+      "path": "b0_recomputed/DS3/gcspo_r2_b0_DS3_prn_local_score_vs_time.png",
+      "sha256": "e6355f241fff36dae43da37ba46283055f4385a8d13ace3ea64568f32b8ca6d4",
+      "size_bytes": 173369
+    },
+    {
+      "path": "b0_recomputed/DS3/gcspo_r2_b0_DS3_prn_local_scores.csv",
+      "sha256": "9941f1f5f1a74edf7af529db83231605ef626ac3c75fa69ea7c86322ef64c733",
+      "size_bytes": 798596
+    },
+    {
+      "path": "b0_recomputed/DS3/scheduled_node_windows.csv",
+      "sha256": "16f615d6dbe0f12baa0da825a5514fb1a101676589e1f8ba0a68ea0f9cae7865",
+      "size_bytes": 4811231
+    },
+    {
+      "path": "b0_recomputed/DS7/gcspo_r2_b0_DS7_prn_local_event_scores.csv",
+      "sha256": "edc6ad51ea5ab22db10e1d3e622f46d7fb82d724149f920a9211eba30416496b",
+      "size_bytes": 87211
+    },
+    {
+      "path": "b0_recomputed/DS7/gcspo_r2_b0_DS7_prn_local_onset_summary.json",
+      "sha256": "e677421ccd25cb15487cb433bb03e517a1fc028e056c761243ffd81bea978da9",
+      "size_bytes": 4950
+    },
+    {
+      "path": "b0_recomputed/DS7/gcspo_r2_b0_DS7_prn_local_score_vs_time.png",
+      "sha256": "1dd4bd14145ea5eab556e9fa25f3282ce100ec7e92525335382ae32f3c0248b0",
+      "size_bytes": 180826
+    },
+    {
+      "path": "b0_recomputed/DS7/gcspo_r2_b0_DS7_prn_local_scores.csv",
+      "sha256": "1678321d30398d5c404f3384531f99a5cba63f78a86fc4f6b093a88f5a975eed",
+      "size_bytes": 452559
+    },
+    {
+      "path": "b0_recomputed/DS7/scheduled_node_windows.csv",
+      "sha256": "ca7d5727ef172b90351de1190e73896ee3f895150fc1747f3f222bea7e441b81",
+      "size_bytes": 2684152
+    },
+    {
+      "path": "bootstrap_intervals.csv",
+      "sha256": "3b4e5c2646cb55d23a0696257faef42facb0a9dbd42f494ce1b0ca6069d15b0e",
+      "size_bytes": 657
+    },
+    {
+      "path": "clean_a5_report.json",
+      "sha256": "a2d902d9c8d4ac8b07d38bff7b31da560772b3bb5040823e3d10ba62d0045c7a",
+      "size_bytes": 5894302
+    },
+    {
+      "path": "clean_ablation_report.json",
+      "sha256": "c12dc353079381d97a7d23b60ed4f060b2b2bf64e33214eb57b1e999db60723c",
+      "size_bytes": 22477854
+    },
+    {
+      "path": "clean_b0_report.json",
+      "sha256": "c8bcef756a461cc1d4d1f094d30ce3f5873cd449d2ac30fe8600ebf0e6ae1146",
+      "size_bytes": 147582
+    },
+    {
+      "path": "clean_only_report.json",
+      "sha256": "c5df9c13142a1983a82dff7c20378d7967c170d7ce7705093f7c5122ca3d2927",
+      "size_bytes": 19451241
+    },
+    {
+      "path": "clean_reproduction_check.json",
+      "sha256": "b5a1e3b3ceea5d05b16b731d9d8b4e8af1a4b5d38c924eaf5fe94bcd178e7e93",
+      "size_bytes": 641
+    },
+    {
+      "path": "common_support_inventory.csv",
+      "sha256": "4b92b0b3153a8ca2b062a746b2fe709d4c6d7e88b65d938879d1e845f32e9902",
+      "size_bytes": 1065
+    },
+    {
+      "path": "config.json",
+      "sha256": "0db816116b95b41db8b7af7379cd7411cc52d43b6428ae00ab02d6ccac19f4ad",
+      "size_bytes": 37865
+    },
+    {
+      "path": "data_inventory.json",
+      "sha256": "7e1f8eeaaa60872b985cfabea1f055ee421056fea2956a5fb73c8d357b0361c1",
+      "size_bytes": 17242
+    },
+    {
+      "path": "exact_support_audit.json",
+      "sha256": "a2c513570c70351bc66f70082bc1aaedfb10195b329ee41d2fee67b18cf06fdb",
+      "size_bytes": 309491
+    },
+    {
+      "path": "external_static_fpr.csv",
+      "sha256": "a0ac88c27eedbf46460de6c528efe524c0a11a4ea805590ecee0a55e036e3389",
+      "size_bytes": 358
+    },
+    {
+      "path": "final_verdict.json",
+      "sha256": "dabf85c977d9de0aa8500e93b7b5f5df1fd82f3d96b9282f088c702536ef5ff6",
+      "size_bytes": 2961
+    },
+    {
+      "path": "implementation_resolution.json",
+      "sha256": "78f767ee6fe8f27a3142f593aef9fd5b4c011bbc2294f87ed75232752bb80179",
+      "size_bytes": 712
+    },
+    {
+      "path": "infrastructure_blocker.json",
+      "sha256": "07e070801ab968f5c1b795217227e0cef17a2a4e33ff8678e1f6c42b308e9131",
+      "size_bytes": 455
+    },
+    {
+      "path": "normal_model_summary.json",
+      "sha256": "4110b6b870db95bb12c1154a29b61250fcd3f914a6042e5306d9389568e4beec",
+      "size_bytes": 44729
+    },
+    {
+      "path": "per_epoch_scores.csv",
+      "sha256": "7acaf86d145d685dad0d013bf67f07f9ea01625db2936dfd69519552aad0d2a3",
+      "size_bytes": 22568332
+    },
+    {
+      "path": "phase_outputs/cleanstatic-normal-model/a5-cuda-process-repair.json",
+      "sha256": "fe05cc3fc72f144cadb15a735cbbf9394410011d222d509a33f12d51aff524dd",
+      "size_bytes": 453
+    },
+    {
+      "path": "phase_outputs/cleanstatic-normal-model/config-byte-repair.json",
+      "sha256": "d361dba110f3d3ae7db8d1b4f40f2e5065d174b084148d0f7cdd79f90a0a2fc2",
+      "size_bytes": 326
+    },
+    {
+      "path": "phase_outputs/cleanstatic-normal-model/summary.json",
+      "sha256": "b2d8077a9d3e2e083fccc4b54b46aaba5b0806ffec57ee558edb36e854f8ab19",
+      "size_bytes": 1268
+    },
+    {
+      "path": "phase_outputs/ds3-evaluation/access_ledger.jsonl",
+      "sha256": "63286ea3e5e8d0363e10b1893123c29a61ef38596a38f09681af81769aade9b1",
+      "size_bytes": 3202
+    },
+    {
+      "path": "phase_outputs/ds3-evaluation/common_support_inventory.csv",
+      "sha256": "c46de0c0329a647b061fd54442bc485acf62991fcdd1a5de48b39a7e549a767f",
+      "size_bytes": 562
+    },
+    {
+      "path": "phase_outputs/ds3-evaluation/exact_support_audit.json",
+      "sha256": "0d018bde7ae8245656fab6ad23ebc12925f7092bb7b25afce443fccaf01ae426",
+      "size_bytes": 1065
+    },
+    {
+      "path": "phase_outputs/ds3-evaluation/per_epoch_scores.csv",
+      "sha256": "0199708a3694ef7fe68638d2fa0380249ea558f6c723e1780c3322f8b5faeca8",
+      "size_bytes": 14291486
+    },
+    {
+      "path": "phase_outputs/ds3-evaluation/protected_access_ledger_attempt_000.jsonl",
+      "sha256": "199a589e2077fafe063d37e05d6d98f2b2524e1761959c118a7af80484613f73",
+      "size_bytes": 44327
+    },
+    {
+      "path": "phase_outputs/ds3-evaluation/shared_state_estimates.csv",
+      "sha256": "a840bba8c152a33171d3e32858ffc59d453640ece28edcfc1dbae4c1380d0ee0",
+      "size_bytes": 9482299
+    },
+    {
+      "path": "phase_outputs/ds3-evaluation/summary.json",
+      "sha256": "e4d716634577334901eb68d8ac29cf23ff9c2eb8639587bfb6081873753ed1d1",
+      "size_bytes": 2702
+    },
+    {
+      "path": "phase_outputs/ds4-ds8-conditional-evaluation/conditional_dispositions.json",
+      "sha256": "303932cb94147e08d3f23b5ed0efdb06302eb4e4e1be8179f4da08374f0e8a0d",
+      "size_bytes": 702
+    },
+    {
+      "path": "phase_outputs/ds4-ds8-conditional-evaluation/replay_overlap_audit.json",
+      "sha256": "9240049586f64917141f9cae3c97f46d64c2f91fdcaf5d8399cb88108a291eb8",
+      "size_bytes": 770
+    },
+    {
+      "path": "phase_outputs/ds4-ds8-conditional-evaluation/unavailable_scenarios.csv",
+      "sha256": "f584f9ebb70cf0caed9fe086f44fe387d532685092a46477bff9154a8a3b6827",
+      "size_bytes": 317
+    },
+    {
+      "path": "phase_outputs/ds7-evaluation/common_support_inventory.csv",
+      "sha256": "437922c0063645ee663babe8215839a5fd79127d113e71dccf403fa9ee658f94",
+      "size_bytes": 595
+    },
+    {
+      "path": "phase_outputs/ds7-evaluation/exact_support_audit.json",
+      "sha256": "9c459138e068a16f568c3f352a79ceedefa1d65c6d727b521a08815960eb30f5",
+      "size_bytes": 1067
+    },
+    {
+      "path": "phase_outputs/ds7-evaluation/per_epoch_scores.csv",
+      "sha256": "bbf863b26f9b14fd5ac705622e82d0854505a3d4b02e72d89b7ddfab003b8e7a",
+      "size_bytes": 8277103
+    },
+    {
+      "path": "phase_outputs/ds7-evaluation/protected_access_ledger_attempt_000.jsonl",
+      "sha256": "2216d504d8c9848f1367fa9bfcf502528adff7d7cd572bac6e676ab3210d63bd",
+      "size_bytes": 43965
+    },
+    {
+      "path": "phase_outputs/ds7-evaluation/shared_state_estimates.csv",
+      "sha256": "e695f22fb9d887591c8a7db6a4defe63d851b3679866203deb730c842061d3bb",
+      "size_bytes": 5625305
+    },
+    {
+      "path": "phase_outputs/ds7-evaluation/summary.json",
+      "sha256": "910e50f76cec717c2e68db9da61bf10d49a5d0a021b82ec12b1ef76ac8ca0638",
+      "size_bytes": 2742
+    },
+    {
+      "path": "phase_outputs/final-statistics-plots-verification/verification.json",
+      "sha256": "4fcb1fcd07b51639086c183ae043f2a9db31f3aec46c09b7ce1d5d0e9c6ace3f",
+      "size_bytes": 663
+    },
+    {
+      "path": "phase_outputs/preflight/preflight.json",
+      "sha256": "a22e29aa52ecf853867a4def8c5b60f26bdaf26b40d0e15e62e2a6124465ed05",
+      "size_bytes": 538
+    },
+    {
+      "path": "phase_outputs/relation-destruction-physical-controls/protected_access_ledger_attempt_000.jsonl",
+      "sha256": "149c2c3c62e4c51ea3fd2d3117a70c19e7dc7b73b46d7bd79c0219461c68da74",
+      "size_bytes": 22238
+    },
+    {
+      "path": "phase_outputs/relation-destruction-physical-controls/protected_access_ledger_attempt_001.jsonl",
+      "sha256": "198710d3c9e8ae0c763faa633720ba76d5429eef6bde68fe00bf167a34237faa",
+      "size_bytes": 22057
+    },
+    {
+      "path": "phase_outputs/relation-destruction-physical-controls/relation_rows.csv",
+      "sha256": "48d1b9194dc4668cb73540f77d7d03630511281d621995dbccb198189018867e",
+      "size_bytes": 8003023
+    },
+    {
+      "path": "phase_outputs/relation-destruction-physical-controls/summary.json",
+      "sha256": "edcd5f381cd292eb24c3b72ce65b0b722632a66c75a6498c93dafbfc2e0f428a",
+      "size_bytes": 104
+    },
+    {
+      "path": "physical_controls.json",
+      "sha256": "e1e14890e06151ccac41df29c6d77b8d1b41ee1394864e8e5fc0ade6dc504681",
+      "size_bytes": 439926
+    },
+    {
+      "path": "physical_controls_audit.json",
+      "sha256": "47c6211bd6e1c5918dc0c4efac76d52e6535aeda5f1f63d50ea0bcf15d917713",
+      "size_bytes": 2792
+    },
+    {
+      "path": "plots/ds3_full_score.png",
+      "sha256": "1d9cbd7c7ccdcee5bfe46ba936675031da9732c8e07504c66c2c57855218c733",
+      "size_bytes": 87692
+    },
+    {
+      "path": "plots/ds7_full_score.png",
+      "sha256": "0bd9ba05d2068ec3888a32829404677b610ca0dcb739583a7f57f5081beababa",
+      "size_bytes": 77019
+    },
+    {
+      "path": "plots/shared_state_position.png",
+      "sha256": "d246d213e15d6f79f8bd8c36f1a73412d1c30ab9b0be41dee4c0f3515135fd6b",
+      "size_bytes": 71530
+    },
+    {
+      "path": "preflight_report.json",
+      "sha256": "5e91f69039d79aff56f302286ca80b50240f4ef97670c1642352f3140d8d7ea9",
+      "size_bytes": 10131
+    },
+    {
+      "path": "receiver_source_snapshot.json",
+      "sha256": "51071f02b974fe8f6010f2c087275c49c2e3e8cbb358fc7f6eddbcb00c76ac38",
+      "size_bytes": 1540
+    },
+    {
+      "path": "relation_destruction_metrics.json",
+      "sha256": "48fcf7bb911700eaf49549e1c1d26b19f91e30b29dc56866c1360a04d2e13631",
+      "size_bytes": 1540
+    },
+    {
+      "path": "run_inventory.json",
+      "sha256": "7dff5173e23ed1077b12d7d7adcbbf2dd25cffbcb094ed0eadae08085481c4d8",
+      "size_bytes": 24765
+    },
+    {
+      "path": "scenario_metrics.csv",
+      "sha256": "00f7669910594a2c80aa326b424b7c444ec1160fe1c00f33056e4cd8e364a362",
+      "size_bytes": 2713
+    },
+    {
+      "path": "shared_state_estimates.csv",
+      "sha256": "a871fd59bdba9daf8b4932bd436749efc7796d64ce8874ad642e6e7fd3b7738c",
+      "size_bytes": 15107426
+    },
+    {
+      "path": "shared_state_onset_summary.json",
+      "sha256": "995c37ed37d6ce8a6e4e88ef56604cdc68f479728242b7336b667b02eb1973dd",
+      "size_bytes": 1772
+    },
+    {
+      "path": "source_commit.json",
+      "sha256": "bd48fc5ad9d7ed80d87e710058a6d3434f215a8a32ca7ea3085e9e5fe3d832b3",
+      "size_bytes": 3868
+    },
+    {
+      "path": "thresholds.json",
+      "sha256": "034c265b6de4188db8b577855d9a30e9a144e83255002105004a576123d15e7f",
+      "size_bytes": 918
+    }
+  ],
+  "schema": "gnss-doppler-lab.gcspo.stage0-r2.artifact-manifest.v1"
+}

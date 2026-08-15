@@ -1,0 +1,20 @@
+{
+  "absolute_difference": {
+    "B0_q99": 4.901960784314818e-05,
+    "Full_q99": 2.9957805907171453e-05,
+    "Full_q99_5": 1.0548523206740934e-05
+  },
+  "historical_targets_not_used_as_inputs": {
+    "B0_q99": 0.1275,
+    "Full_q99": 0.0717,
+    "Full_q99_5": 0.0675
+  },
+  "observed": {
+    "B0_q99": 0.12745098039215685,
+    "Full_q99": 0.07172995780590717,
+    "Full_q99_5": 0.06751054852320675
+  },
+  "schema": "gnss-doppler-lab.gcspo.stage0-r2.clean-reproduction.v1",
+  "source": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9",
+  "status": "RECOMPUTED_INDEPENDENTLY"
+}

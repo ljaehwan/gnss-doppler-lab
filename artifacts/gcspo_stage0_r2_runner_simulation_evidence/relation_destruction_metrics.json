@@ -1,0 +1,59 @@
+{
+  "DS4": {
+    "reason": "SOURCE_UNAVAILABLE",
+    "status": "UNAVAILABLE"
+  },
+  "DS8": {
+    "reason": "AUTHENTICATED_OBSERVABLES_ABSENT",
+    "status": "UNAVAILABLE"
+  },
+  "preservation_assertions": true,
+  "results": {
+    "DS3": {
+      "LOS_SHUFFLE": {
+        "interval_95": [
+          0.03603158516114387,
+          0.04796704243011441
+        ],
+        "lcb_95": 0.03702847750360067,
+        "median_relative_loss": 0.04041346180208474,
+        "replicates": 2000,
+        "status": "AVAILABLE"
+      },
+      "PER_PRN_TEMPORAL_SHIFT": {
+        "interval_95": [
+          -0.014546002818264708,
+          0.0034009780091718293
+        ],
+        "lcb_95": -0.013567801537405258,
+        "median_relative_loss": -0.003303336888917039,
+        "replicates": 2000,
+        "status": "AVAILABLE"
+      }
+    },
+    "DS7": {
+      "LOS_SHUFFLE": {
+        "interval_95": [
+          0.03600702311744576,
+          0.048450073170217274
+        ],
+        "lcb_95": 0.03801106868294516,
+        "median_relative_loss": 0.04253522323596571,
+        "replicates": 2000,
+        "status": "AVAILABLE"
+      },
+      "PER_PRN_TEMPORAL_SHIFT": {
+        "interval_95": [
+          -0.02109555773120152,
+          0.011468985723395497
+        ],
+        "lcb_95": -0.019051664842997484,
+        "median_relative_loss": -0.003064957731537248,
+        "replicates": 2000,
+        "status": "AVAILABLE"
+      }
+    }
+  },
+  "schema": "gnss-doppler-lab.gcspo.stage0-r2.relation-destruction.v1",
+  "status": "PARTIAL_CORE_SCENARIOS_DS3_DS7"
+}

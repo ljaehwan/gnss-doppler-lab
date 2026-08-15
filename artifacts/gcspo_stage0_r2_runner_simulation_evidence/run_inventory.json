@@ -1,0 +1,500 @@
+{
+  "attempts": [
+    {
+      "artifacts": [
+        "phase_outputs/preflight/preflight.json"
+      ],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "preflight"
+      ],
+      "created_at": "2026-08-15T10:39:44+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T10:39:48+00:00",
+      "exit_code": 0,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T103944Z-gcspo-r2-preflight/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T103944Z-gcspo-r2-preflight/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T103944Z-gcspo-r2-preflight/stdout.log"
+      },
+      "phase": "gcspo-r2-preflight",
+      "run_id": "20260815T103944Z-gcspo-r2-preflight",
+      "started_at": "2026-08-15T10:39:44+00:00",
+      "status": "succeeded"
+    },
+    {
+      "artifacts": [],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "cleanstatic-normal-model"
+      ],
+      "created_at": "2026-08-15T10:39:59+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T10:40:03+00:00",
+      "exit_code": 1,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T103959Z-gcspo-r2-cleanstatic-normal-model/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T103959Z-gcspo-r2-cleanstatic-normal-model/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T103959Z-gcspo-r2-cleanstatic-normal-model/stdout.log"
+      },
+      "phase": "gcspo-r2-cleanstatic-normal-model",
+      "run_id": "20260815T103959Z-gcspo-r2-cleanstatic-normal-model",
+      "started_at": "2026-08-15T10:39:59+00:00",
+      "status": "failed"
+    },
+    {
+      "artifacts": [],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "cleanstatic-normal-model"
+      ],
+      "created_at": "2026-08-15T10:40:35+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T11:43:05+00:00",
+      "exit_code": 1,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T104035Z-gcspo-r2-cleanstatic-normal-model/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T104035Z-gcspo-r2-cleanstatic-normal-model/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T104035Z-gcspo-r2-cleanstatic-normal-model/stdout.log"
+      },
+      "phase": "gcspo-r2-cleanstatic-normal-model",
+      "run_id": "20260815T104035Z-gcspo-r2-cleanstatic-normal-model",
+      "started_at": "2026-08-15T10:40:35+00:00",
+      "status": "failed"
+    },
+    {
+      "artifacts": [],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "ds4-ds8-conditional-evaluation"
+      ],
+      "created_at": "2026-08-15T10:46:21+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T10:46:28+00:00",
+      "exit_code": 0,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T104621Z-gcspo-r2-ds4-ds8-conditional-evaluation/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T104621Z-gcspo-r2-ds4-ds8-conditional-evaluation/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T104621Z-gcspo-r2-ds4-ds8-conditional-evaluation/stdout.log"
+      },
+      "phase": "gcspo-r2-ds4-ds8-conditional-evaluation",
+      "run_id": "20260815T104621Z-gcspo-r2-ds4-ds8-conditional-evaluation",
+      "started_at": "2026-08-15T10:46:21+00:00",
+      "status": "succeeded"
+    },
+    {
+      "artifacts": [
+        "phase_outputs/cleanstatic-normal-model/a5-cuda-process-repair.json",
+        "phase_outputs/cleanstatic-normal-model/config-byte-repair.json",
+        "phase_outputs/cleanstatic-normal-model/summary.json"
+      ],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "cleanstatic-normal-model"
+      ],
+      "created_at": "2026-08-15T11:44:07+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T11:49:46+00:00",
+      "exit_code": 0,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T114407Z-gcspo-r2-cleanstatic-normal-model/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T114407Z-gcspo-r2-cleanstatic-normal-model/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T114407Z-gcspo-r2-cleanstatic-normal-model/stdout.log"
+      },
+      "phase": "gcspo-r2-cleanstatic-normal-model",
+      "run_id": "20260815T114407Z-gcspo-r2-cleanstatic-normal-model",
+      "started_at": "2026-08-15T11:44:07+00:00",
+      "status": "succeeded"
+    },
+    {
+      "artifacts": [],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "ds3-evaluation"
+      ],
+      "created_at": "2026-08-15T11:50:02+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T12:25:20+00:00",
+      "exit_code": 1,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T115002Z-gcspo-r2-ds3-evaluation/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T115002Z-gcspo-r2-ds3-evaluation/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T115002Z-gcspo-r2-ds3-evaluation/stdout.log"
+      },
+      "phase": "gcspo-r2-ds3-evaluation",
+      "run_id": "20260815T115002Z-gcspo-r2-ds3-evaluation",
+      "started_at": "2026-08-15T11:50:02+00:00",
+      "status": "failed"
+    },
+    {
+      "artifacts": [
+        "phase_outputs/ds4-ds8-conditional-evaluation/conditional_dispositions.json",
+        "phase_outputs/ds4-ds8-conditional-evaluation/replay_overlap_audit.json",
+        "phase_outputs/ds4-ds8-conditional-evaluation/unavailable_scenarios.csv"
+      ],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "ds4-ds8-conditional-evaluation"
+      ],
+      "created_at": "2026-08-15T12:26:58+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T12:27:01+00:00",
+      "exit_code": 0,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T122658Z-gcspo-r2-ds4-ds8-conditional-evaluation/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T122658Z-gcspo-r2-ds4-ds8-conditional-evaluation/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T122658Z-gcspo-r2-ds4-ds8-conditional-evaluation/stdout.log"
+      },
+      "phase": "gcspo-r2-ds4-ds8-conditional-evaluation",
+      "run_id": "20260815T122658Z-gcspo-r2-ds4-ds8-conditional-evaluation",
+      "started_at": "2026-08-15T12:26:58+00:00",
+      "status": "succeeded"
+    },
+    {
+      "artifacts": [
+        "phase_outputs/ds3-evaluation/access_ledger.jsonl",
+        "phase_outputs/ds3-evaluation/common_support_inventory.csv",
+        "phase_outputs/ds3-evaluation/exact_support_audit.json",
+        "phase_outputs/ds3-evaluation/per_epoch_scores.csv",
+        "phase_outputs/ds3-evaluation/protected_access_ledger_attempt_000.jsonl",
+        "phase_outputs/ds3-evaluation/shared_state_estimates.csv",
+        "phase_outputs/ds3-evaluation/summary.json"
+      ],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "ds3-evaluation"
+      ],
+      "created_at": "2026-08-15T12:27:09+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T13:02:08+00:00",
+      "exit_code": 0,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T122709Z-gcspo-r2-ds3-evaluation/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T122709Z-gcspo-r2-ds3-evaluation/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T122709Z-gcspo-r2-ds3-evaluation/stdout.log"
+      },
+      "phase": "gcspo-r2-ds3-evaluation",
+      "run_id": "20260815T122709Z-gcspo-r2-ds3-evaluation",
+      "started_at": "2026-08-15T12:27:09+00:00",
+      "status": "succeeded"
+    },
+    {
+      "artifacts": [
+        "phase_outputs/ds7-evaluation/common_support_inventory.csv",
+        "phase_outputs/ds7-evaluation/exact_support_audit.json",
+        "phase_outputs/ds7-evaluation/per_epoch_scores.csv",
+        "phase_outputs/ds7-evaluation/protected_access_ledger_attempt_000.jsonl",
+        "phase_outputs/ds7-evaluation/shared_state_estimates.csv",
+        "phase_outputs/ds7-evaluation/summary.json"
+      ],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "ds7-evaluation"
+      ],
+      "created_at": "2026-08-15T13:02:30+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T13:23:18+00:00",
+      "exit_code": 0,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T130230Z-gcspo-r2-ds7-evaluation/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T130230Z-gcspo-r2-ds7-evaluation/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T130230Z-gcspo-r2-ds7-evaluation/stdout.log"
+      },
+      "phase": "gcspo-r2-ds7-evaluation",
+      "run_id": "20260815T130230Z-gcspo-r2-ds7-evaluation",
+      "started_at": "2026-08-15T13:02:30+00:00",
+      "status": "succeeded"
+    },
+    {
+      "artifacts": [
+        "phase_outputs/relation-destruction-physical-controls/protected_access_ledger_attempt_000.jsonl",
+        "phase_outputs/relation-destruction-physical-controls/protected_access_ledger_attempt_001.jsonl",
+        "phase_outputs/relation-destruction-physical-controls/relation_rows.csv",
+        "phase_outputs/relation-destruction-physical-controls/summary.json"
+      ],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "relation-destruction-physical-controls"
+      ],
+      "created_at": "2026-08-15T13:23:47+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T13:51:51+00:00",
+      "exit_code": 0,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T132347Z-gcspo-r2-relation-destruction-physical-controls/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T132347Z-gcspo-r2-relation-destruction-physical-controls/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T132347Z-gcspo-r2-relation-destruction-physical-controls/stdout.log"
+      },
+      "phase": "gcspo-r2-relation-destruction-physical-controls",
+      "run_id": "20260815T132347Z-gcspo-r2-relation-destruction-physical-controls",
+      "started_at": "2026-08-15T13:23:47+00:00",
+      "status": "succeeded"
+    },
+    {
+      "artifacts": [],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "final-statistics-plots-verification"
+      ],
+      "created_at": "2026-08-15T13:52:01+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T13:53:51+00:00",
+      "exit_code": 0,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T135201Z-gcspo-r2-final-statistics-plots-verification/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T135201Z-gcspo-r2-final-statistics-plots-verification/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T135201Z-gcspo-r2-final-statistics-plots-verification/stdout.log"
+      },
+      "phase": "gcspo-r2-final-statistics-plots-verification",
+      "run_id": "20260815T135201Z-gcspo-r2-final-statistics-plots-verification",
+      "started_at": "2026-08-15T13:52:01+00:00",
+      "status": "succeeded"
+    },
+    {
+      "artifacts": [
+        "phase_outputs/final-statistics-plots-verification/verification.json"
+      ],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "final-statistics-plots-verification"
+      ],
+      "created_at": "2026-08-15T13:56:23+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T13:58:13+00:00",
+      "exit_code": 0,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T135623Z-gcspo-r2-final-statistics-plots-verification/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T135623Z-gcspo-r2-final-statistics-plots-verification/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T135623Z-gcspo-r2-final-statistics-plots-verification/stdout.log"
+      },
+      "phase": "gcspo-r2-final-statistics-plots-verification",
+      "run_id": "20260815T135623Z-gcspo-r2-final-statistics-plots-verification",
+      "started_at": "2026-08-15T13:56:23+00:00",
+      "status": "succeeded"
+    }
+  ],
+  "missing_phases": [],
+  "phases": [
+    {
+      "artifacts": [
+        "phase_outputs/preflight/preflight.json"
+      ],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "preflight"
+      ],
+      "created_at": "2026-08-15T10:39:44+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T10:39:48+00:00",
+      "exit_code": 0,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T103944Z-gcspo-r2-preflight/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T103944Z-gcspo-r2-preflight/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T103944Z-gcspo-r2-preflight/stdout.log"
+      },
+      "phase": "gcspo-r2-preflight",
+      "run_id": "20260815T103944Z-gcspo-r2-preflight",
+      "started_at": "2026-08-15T10:39:44+00:00",
+      "status": "succeeded"
+    },
+    {
+      "artifacts": [
+        "phase_outputs/cleanstatic-normal-model/a5-cuda-process-repair.json",
+        "phase_outputs/cleanstatic-normal-model/config-byte-repair.json",
+        "phase_outputs/cleanstatic-normal-model/summary.json"
+      ],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "cleanstatic-normal-model"
+      ],
+      "created_at": "2026-08-15T11:44:07+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T11:49:46+00:00",
+      "exit_code": 0,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T114407Z-gcspo-r2-cleanstatic-normal-model/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T114407Z-gcspo-r2-cleanstatic-normal-model/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T114407Z-gcspo-r2-cleanstatic-normal-model/stdout.log"
+      },
+      "phase": "gcspo-r2-cleanstatic-normal-model",
+      "run_id": "20260815T114407Z-gcspo-r2-cleanstatic-normal-model",
+      "started_at": "2026-08-15T11:44:07+00:00",
+      "status": "succeeded"
+    },
+    {
+      "artifacts": [
+        "phase_outputs/ds3-evaluation/access_ledger.jsonl",
+        "phase_outputs/ds3-evaluation/common_support_inventory.csv",
+        "phase_outputs/ds3-evaluation/exact_support_audit.json",
+        "phase_outputs/ds3-evaluation/per_epoch_scores.csv",
+        "phase_outputs/ds3-evaluation/protected_access_ledger_attempt_000.jsonl",
+        "phase_outputs/ds3-evaluation/shared_state_estimates.csv",
+        "phase_outputs/ds3-evaluation/summary.json"
+      ],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "ds3-evaluation"
+      ],
+      "created_at": "2026-08-15T12:27:09+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T13:02:08+00:00",
+      "exit_code": 0,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T122709Z-gcspo-r2-ds3-evaluation/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T122709Z-gcspo-r2-ds3-evaluation/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T122709Z-gcspo-r2-ds3-evaluation/stdout.log"
+      },
+      "phase": "gcspo-r2-ds3-evaluation",
+      "run_id": "20260815T122709Z-gcspo-r2-ds3-evaluation",
+      "started_at": "2026-08-15T12:27:09+00:00",
+      "status": "succeeded"
+    },
+    {
+      "artifacts": [
+        "phase_outputs/ds7-evaluation/common_support_inventory.csv",
+        "phase_outputs/ds7-evaluation/exact_support_audit.json",
+        "phase_outputs/ds7-evaluation/per_epoch_scores.csv",
+        "phase_outputs/ds7-evaluation/protected_access_ledger_attempt_000.jsonl",
+        "phase_outputs/ds7-evaluation/shared_state_estimates.csv",
+        "phase_outputs/ds7-evaluation/summary.json"
+      ],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "ds7-evaluation"
+      ],
+      "created_at": "2026-08-15T13:02:30+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T13:23:18+00:00",
+      "exit_code": 0,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T130230Z-gcspo-r2-ds7-evaluation/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T130230Z-gcspo-r2-ds7-evaluation/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T130230Z-gcspo-r2-ds7-evaluation/stdout.log"
+      },
+      "phase": "gcspo-r2-ds7-evaluation",
+      "run_id": "20260815T130230Z-gcspo-r2-ds7-evaluation",
+      "started_at": "2026-08-15T13:02:30+00:00",
+      "status": "succeeded"
+    },
+    {
+      "artifacts": [
+        "phase_outputs/ds4-ds8-conditional-evaluation/conditional_dispositions.json",
+        "phase_outputs/ds4-ds8-conditional-evaluation/replay_overlap_audit.json",
+        "phase_outputs/ds4-ds8-conditional-evaluation/unavailable_scenarios.csv"
+      ],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "ds4-ds8-conditional-evaluation"
+      ],
+      "created_at": "2026-08-15T12:26:58+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T12:27:01+00:00",
+      "exit_code": 0,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T122658Z-gcspo-r2-ds4-ds8-conditional-evaluation/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T122658Z-gcspo-r2-ds4-ds8-conditional-evaluation/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T122658Z-gcspo-r2-ds4-ds8-conditional-evaluation/stdout.log"
+      },
+      "phase": "gcspo-r2-ds4-ds8-conditional-evaluation",
+      "run_id": "20260815T122658Z-gcspo-r2-ds4-ds8-conditional-evaluation",
+      "started_at": "2026-08-15T12:26:58+00:00",
+      "status": "succeeded"
+    },
+    {
+      "artifacts": [
+        "phase_outputs/relation-destruction-physical-controls/protected_access_ledger_attempt_000.jsonl",
+        "phase_outputs/relation-destruction-physical-controls/protected_access_ledger_attempt_001.jsonl",
+        "phase_outputs/relation-destruction-physical-controls/relation_rows.csv",
+        "phase_outputs/relation-destruction-physical-controls/summary.json"
+      ],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "relation-destruction-physical-controls"
+      ],
+      "created_at": "2026-08-15T13:23:47+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T13:51:51+00:00",
+      "exit_code": 0,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T132347Z-gcspo-r2-relation-destruction-physical-controls/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T132347Z-gcspo-r2-relation-destruction-physical-controls/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T132347Z-gcspo-r2-relation-destruction-physical-controls/stdout.log"
+      },
+      "phase": "gcspo-r2-relation-destruction-physical-controls",
+      "run_id": "20260815T132347Z-gcspo-r2-relation-destruction-physical-controls",
+      "started_at": "2026-08-15T13:23:47+00:00",
+      "status": "succeeded"
+    },
+    {
+      "artifacts": [
+        "phase_outputs/final-statistics-plots-verification/verification.json"
+      ],
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_gcspo_stage0_r2.py",
+        "--phase",
+        "final-statistics-plots-verification"
+      ],
+      "created_at": "2026-08-15T13:56:23+00:00",
+      "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+      "ended_at": "2026-08-15T13:58:13+00:00",
+      "exit_code": 0,
+      "logs": {
+        "heartbeat": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T135623Z-gcspo-r2-final-statistics-plots-verification/heartbeat.json",
+        "stderr": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T135623Z-gcspo-r2-final-statistics-plots-verification/stderr.log",
+        "stdout": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260815T135623Z-gcspo-r2-final-statistics-plots-verification/stdout.log"
+      },
+      "phase": "gcspo-r2-final-statistics-plots-verification",
+      "run_id": "20260815T135623Z-gcspo-r2-final-statistics-plots-verification",
+      "started_at": "2026-08-15T13:56:23+00:00",
+      "status": "succeeded"
+    }
+  ],
+  "required_phases": [
+    "gcspo-r2-preflight",
+    "gcspo-r2-cleanstatic-normal-model",
+    "gcspo-r2-ds3-evaluation",
+    "gcspo-r2-ds7-evaluation",
+    "gcspo-r2-ds4-ds8-conditional-evaluation",
+    "gcspo-r2-relation-destruction-physical-controls",
+    "gcspo-r2-final-statistics-plots-verification"
+  ],
+  "schema": "gnss-doppler-lab.gcspo-stage0-r2.run-inventory.v1",
+  "updated_utc": "2026-08-15T14:00:40Z"
+}

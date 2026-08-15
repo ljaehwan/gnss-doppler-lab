@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+    "scripts/run_gcspo_stage0_r2.py",
+    "--phase",
+    "ds7-evaluation"
+  ],
+  "created_at": "2026-08-15T13:02:30+00:00",
+  "cwd": "/home/ubuntu/projects/gnss-doppler-gcspo-stage0-r2-runner-simulation",
+  "name": "gcspo-r2-ds7-evaluation",
+  "run_id": "20260815T130230Z-gcspo-r2-ds7-evaluation"
+}

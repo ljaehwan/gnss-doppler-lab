@@ -1,0 +1,26 @@
+{
+  "empty": [],
+  "missing": [],
+  "required_files": [
+    "README.md",
+    "config.json",
+    "source_commit.json",
+    "run_inventory.json",
+    "data_inventory.json",
+    "clean_reproduction_check.json",
+    "thresholds.json",
+    "exact_support_audit.json",
+    "common_support_inventory.csv",
+    "scenario_metrics.csv",
+    "ablation_metrics.csv",
+    "per_epoch_scores.csv",
+    "shared_state_estimates.csv",
+    "external_static_fpr.csv",
+    "relation_destruction_metrics.json",
+    "physical_controls_audit.json",
+    "bootstrap_intervals.csv",
+    "final_verdict.json"
+  ],
+  "status": "PASS",
+  "verdict": "EVALUATION_INCOMPLETE_SOURCE_OR_SUPPORT"
+}

@@ -1,0 +1,771 @@
+{
+  "checks": [
+    {
+      "actual": "ad6bbcd34c3889aa393d8699eec4e48c2dcc59095a5a0e3e632442b0bc7205cd",
+      "expected": "ad6bbcd34c3889aa393d8699eec4e48c2dcc59095a5a0e3e632442b0bc7205cd",
+      "name": "source manifest sha256",
+      "status": "PASS",
+      "tolerance": null
+    },
+    {
+      "actual": 68,
+      "expected": 68,
+      "name": "source file count",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": "PASS",
+      "expected": "PASS",
+      "name": "source integrity status",
+      "status": "PASS",
+      "tolerance": null
+    },
+    {
+      "actual": 0.07172995780590717,
+      "expected": 0.07172995780590717,
+      "name": "cleanStatic Full q99 holdout FPR",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 0.06751054852320675,
+      "expected": 0.06751054852320675,
+      "name": "cleanStatic Full q99.5 holdout FPR",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 0.12745098039215685,
+      "expected": 0.12745098039215685,
+      "name": "cleanStatic B0 q99 holdout FPR",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": -1942.747871032354,
+      "expected": -1942.747871032354,
+      "name": "Full q99 calibration threshold",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": -1926.8027680519062,
+      "expected": -1926.8027680519062,
+      "name": "Full q99.5 calibration threshold",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 1.5536241677134872,
+      "expected": 1.5536241677134872,
+      "name": "B0 q99 calibration threshold",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 237,
+      "expected": 237,
+      "name": "Full holdout row count",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 204,
+      "expected": 204,
+      "name": "B0 holdout row count",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 0.8267983789260385,
+      "expected": 0.8267983789260385,
+      "name": "DS3 Full roc_auc",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 0.004654255319148937,
+      "expected": 0.004654255319148937,
+      "name": "DS3 Full low_fpr_pauc",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 0.856045579149652,
+      "expected": 0.856045579149652,
+      "name": "DS3 Full pr_auc",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 0.14893617021276595,
+      "expected": 0.14893617021276595,
+      "name": "DS3 Full pre_onset_fpr_q99",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 0.6220238095238095,
+      "expected": 0.6220238095238095,
+      "name": "DS3 Full attack_detection_rate_q99",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 0.6778523489932886,
+      "expected": 0.6778523489932886,
+      "name": "DS3 Full transition_detection_rate_q99",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 0.6061185468451242,
+      "expected": 0.6061185468451242,
+      "name": "DS3 Full established_detection_rate_q99",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 1.5999999999999943,
+      "expected": 1.5999999999999943,
+      "name": "DS3 Full first_alarm_delay_from_onset_s",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": -74.5,
+      "expected": -74.5,
+      "name": "DS3 Full first_alarm_delay_from_pull_off_s",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 122.5,
+      "expected": 122.5,
+      "name": "DS3 Full first_persistent_alarm_s",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 0.515986769570011,
+      "expected": 0.515986769570011,
+      "name": "DS3 Full persistent_alarm_ratio",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 907,
+      "expected": 907,
+      "name": "DS3 Full events",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 0.5991366738610512,
+      "expected": 0.5991366738610512,
+      "name": "DS7 Full roc_auc",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 0.0,
+      "expected": 0.0,
+      "name": "DS7 Full low_fpr_pauc",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 0.5917355205278749,
+      "expected": 0.5917355205278749,
+      "name": "DS7 Full pr_auc",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 0.3087557603686636,
+      "expected": 0.3087557603686636,
+      "name": "DS7 Full pre_onset_fpr_q99",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 0.29430379746835444,
+      "expected": 0.29430379746835444,
+      "name": "DS7 Full attack_detection_rate_q99",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 0.24675324675324675,
+      "expected": 0.24675324675324675,
+      "name": "DS7 Full transition_detection_rate_q99",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 0.30962343096234307,
+      "expected": 0.30962343096234307,
+      "name": "DS7 Full established_detection_rate_q99",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 21.5,
+      "expected": 21.5,
+      "name": "DS7 Full first_alarm_delay_from_onset_s",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": -18.5,
+      "expected": -18.5,
+      "name": "DS7 Full first_alarm_delay_from_pull_off_s",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 139.5,
+      "expected": 139.5,
+      "name": "DS7 Full first_persistent_alarm_s",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 0.24765478424015008,
+      "expected": 0.24765478424015008,
+      "name": "DS7 Full persistent_alarm_ratio",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 533,
+      "expected": 533,
+      "name": "DS7 Full events",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 907,
+      "expected": 907,
+      "name": "DS3 Full events expected",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 0.14893617021276595,
+      "expected": 0.14893617021276595,
+      "name": "DS3 Full pre-onset FPR expected",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 0.8267983789260385,
+      "expected": 0.8267983789260385,
+      "name": "DS3 Full ROC-AUC expected",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 533,
+      "expected": 533,
+      "name": "DS7 Full events expected",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 0.5991366738610512,
+      "expected": 0.5991366738610512,
+      "name": "DS7 Full ROC-AUC expected",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": "REPLAY_EXCLUDED_FROM_EXTERNAL_FPR",
+      "expected": "REPLAY_EXCLUDED_FROM_EXTERNAL_FPR",
+      "name": "DS7 pre-110 replay exclusion",
+      "status": "PASS",
+      "tolerance": null
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "name": "complete epoch+PRN+window identity malformed rows",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 643,
+      "expected": 643,
+      "name": "DS3 B0 exact-common",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 396,
+      "expected": 396,
+      "name": "DS7 B0 exact-common",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 643,
+      "expected": 643,
+      "name": "DS3 A0 method_total",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 907,
+      "expected": 907,
+      "name": "DS3 Full total",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "name": "DS3 A0 method_only",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 264,
+      "expected": 264,
+      "name": "DS3 A0 full_only",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 396,
+      "expected": 396,
+      "name": "DS7 A0 method_total",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 533,
+      "expected": 533,
+      "name": "DS7 Full total",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "name": "DS7 A0 method_only",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 137,
+      "expected": 137,
+      "name": "DS7 A0 full_only",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": "AVAILABLE",
+      "expected": "AVAILABLE",
+      "name": "DS3 LOS shuffle status",
+      "status": "PASS",
+      "tolerance": null
+    },
+    {
+      "actual": -0.013567801537405258,
+      "expected": -0.013567801537405258,
+      "name": "DS3 temporal desync LCB",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 18,
+      "expected": 18,
+      "name": "EMPIRICAL_NOISE blocks_with_persistent_alarm",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 17,
+      "expected": 17,
+      "name": "EMPIRICAL_NOISE max_consecutive_alarms",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 0.7647058823529411,
+      "expected": 0.7647058823529411,
+      "name": "EMPIRICAL_NOISE max_persistent_alarm_ratio",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 3,
+      "expected": 3,
+      "name": "ONE_PRN_DISTURBANCE blocks_with_persistent_alarm",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 17,
+      "expected": 17,
+      "name": "ONE_PRN_DISTURBANCE max_consecutive_alarms",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 0.7647058823529411,
+      "expected": 0.7647058823529411,
+      "name": "ONE_PRN_DISTURBANCE max_persistent_alarm_ratio",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": 12,
+      "expected": 12,
+      "name": "PRN_DROP_ONLY blocks_with_persistent_alarm",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 17,
+      "expected": 17,
+      "name": "PRN_DROP_ONLY max_consecutive_alarms",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": 0.7647058823529411,
+      "expected": 0.7647058823529411,
+      "name": "PRN_DROP_ONLY max_persistent_alarm_ratio",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": "FAIL",
+      "expected": "FAIL",
+      "name": "physical controls false alarm status",
+      "status": "PASS",
+      "tolerance": null
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner all required latest successful",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": "succeeded",
+      "expected": "succeeded",
+      "name": "runner preflight status",
+      "status": "PASS",
+      "tolerance": null
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "name": "runner preflight exit_code",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner preflight heartbeat",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner preflight command",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner preflight terminal evidence",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": "succeeded",
+      "expected": "succeeded",
+      "name": "runner cleanstatic-normal-model status",
+      "status": "PASS",
+      "tolerance": null
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "name": "runner cleanstatic-normal-model exit_code",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner cleanstatic-normal-model heartbeat",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner cleanstatic-normal-model command",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner cleanstatic-normal-model terminal evidence",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": "succeeded",
+      "expected": "succeeded",
+      "name": "runner ds3-evaluation status",
+      "status": "PASS",
+      "tolerance": null
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "name": "runner ds3-evaluation exit_code",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner ds3-evaluation heartbeat",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner ds3-evaluation command",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner ds3-evaluation terminal evidence",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": "succeeded",
+      "expected": "succeeded",
+      "name": "runner ds7-evaluation status",
+      "status": "PASS",
+      "tolerance": null
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "name": "runner ds7-evaluation exit_code",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner ds7-evaluation heartbeat",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner ds7-evaluation command",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner ds7-evaluation terminal evidence",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": "succeeded",
+      "expected": "succeeded",
+      "name": "runner ds4-ds8-conditional-evaluation status",
+      "status": "PASS",
+      "tolerance": null
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "name": "runner ds4-ds8-conditional-evaluation exit_code",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner ds4-ds8-conditional-evaluation heartbeat",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner ds4-ds8-conditional-evaluation command",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner ds4-ds8-conditional-evaluation terminal evidence",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": "succeeded",
+      "expected": "succeeded",
+      "name": "runner relation-destruction-physical-controls status",
+      "status": "PASS",
+      "tolerance": null
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "name": "runner relation-destruction-physical-controls exit_code",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner relation-destruction-physical-controls heartbeat",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner relation-destruction-physical-controls command",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner relation-destruction-physical-controls terminal evidence",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": "succeeded",
+      "expected": "succeeded",
+      "name": "runner final-statistics-plots-verification status",
+      "status": "PASS",
+      "tolerance": null
+    },
+    {
+      "actual": 0,
+      "expected": 0,
+      "name": "runner final-statistics-plots-verification exit_code",
+      "status": "PASS",
+      "tolerance": 0
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner final-statistics-plots-verification heartbeat",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner final-statistics-plots-verification command",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "name": "runner final-statistics-plots-verification terminal evidence",
+      "status": "PASS",
+      "tolerance": 1e-09
+    },
+    {
+      "actual": "none identified",
+      "expected": "none identified",
+      "name": "provenance metric effect",
+      "status": "PASS",
+      "tolerance": null
+    },
+    {
+      "actual": "weakened",
+      "expected": "weakened",
+      "name": "provenance claim",
+      "status": "PASS",
+      "tolerance": null
+    },
+    {
+      "actual": "not independently demonstrated at execution time",
+      "expected": "not independently demonstrated at execution time",
+      "name": "live remote sync",
+      "status": "PASS",
+      "tolerance": null
+    }
+  ],
+  "checks_failed": 0,
+  "checks_total": 103,
+  "evidence_dir": "artifacts/gcspo_stage0_r2_runner_simulation_evidence",
+  "failed_checks": [],
+  "final_evidence_judgement": "EVIDENCE_VERIFIED",
+  "recomputed_metrics": {
+    "DS3": {
+      "attack_detection_rate_q99": 0.6220238095238095,
+      "attack_events": 672,
+      "established_detection_rate_q99": 0.6061185468451242,
+      "first_alarm_delay_from_onset_s": 1.5999999999999943,
+      "first_alarm_delay_from_pull_off_s": -74.5,
+      "first_persistent_alarm_s": 122.5,
+      "full_events": 907,
+      "low_fpr_pauc": 0.004654255319148937,
+      "persistent_alarm_ratio": 0.515986769570011,
+      "pr_auc": 0.856045579149652,
+      "pre_onset_events": 235,
+      "pre_onset_fpr_q99": 0.14893617021276595,
+      "roc_auc": 0.8267983789260385,
+      "transition_detection_rate_q99": 0.6778523489932886
+    },
+    "DS7": {
+      "attack_detection_rate_q99": 0.29430379746835444,
+      "attack_events": 316,
+      "established_detection_rate_q99": 0.30962343096234307,
+      "first_alarm_delay_from_onset_s": 21.5,
+      "first_alarm_delay_from_pull_off_s": -18.5,
+      "first_persistent_alarm_s": 139.5,
+      "full_events": 533,
+      "low_fpr_pauc": 0.0,
+      "persistent_alarm_ratio": 0.24765478424015008,
+      "pr_auc": 0.5917355205278749,
+      "pre_onset_events": 217,
+      "pre_onset_fpr_q99": 0.3087557603686636,
+      "roc_auc": 0.5991366738610512,
+      "transition_detection_rate_q99": 0.24675324675324675
+    }
+  },
+  "schema": "gnss-doppler-lab.gcspo-stage0-r2.independent-evidence-verification.v1",
+  "science_verdict_preserved": {
+    "detector": "NO-GO under current configuration",
+    "neural_stage1": "not allowed",
+    "paper_model_continuation": "not recommended",
+    "shared_pull_off_physics": "incomplete"
+  }
+}

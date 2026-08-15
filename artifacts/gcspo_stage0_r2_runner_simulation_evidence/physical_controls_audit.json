@@ -1,0 +1,103 @@
+{
+  "aggregate": [
+    {
+      "blocks_with_persistent_alarm": 36,
+      "id": "CLOCK_DRIFT",
+      "max_consecutive_alarms": 17,
+      "max_persistent_alarm_ratio": 0.7647058823529411,
+      "rows": 36
+    },
+    {
+      "blocks_with_persistent_alarm": 0,
+      "id": "CN0_METADATA_EXCLUSION_INVARIANCE",
+      "max_consecutive_alarms": 0,
+      "max_persistent_alarm_ratio": 0.0,
+      "rows": 36
+    },
+    {
+      "blocks_with_persistent_alarm": 0,
+      "id": "COMMON_GAIN",
+      "max_consecutive_alarms": 0,
+      "max_persistent_alarm_ratio": 0.0,
+      "rows": 48
+    },
+    {
+      "blocks_with_persistent_alarm": 18,
+      "id": "EMPIRICAL_NOISE",
+      "max_consecutive_alarms": 17,
+      "max_persistent_alarm_ratio": 0.7647058823529411,
+      "rows": 36
+    },
+    {
+      "blocks_with_persistent_alarm": 0,
+      "id": "INDEPENDENT_MULTIPATH_LIKE",
+      "max_consecutive_alarms": 0,
+      "max_persistent_alarm_ratio": 0.0,
+      "rows": 36
+    },
+    {
+      "blocks_with_persistent_alarm": 3,
+      "id": "ONE_PRN_DISTURBANCE",
+      "max_consecutive_alarms": 17,
+      "max_persistent_alarm_ratio": 0.7647058823529411,
+      "rows": 36
+    },
+    {
+      "blocks_with_persistent_alarm": 12,
+      "id": "PRN_DROP_ONLY",
+      "max_consecutive_alarms": 17,
+      "max_persistent_alarm_ratio": 0.7647058823529411,
+      "rows": 36
+    },
+    {
+      "blocks_with_persistent_alarm": 0,
+      "id": "PROMPT_AMPLITUDE",
+      "max_consecutive_alarms": 0,
+      "max_persistent_alarm_ratio": 0.0,
+      "rows": 48
+    }
+  ],
+  "contradictory_high_alarm_controls": [
+    {
+      "blocks_with_persistent_alarm": 18,
+      "id": "EMPIRICAL_NOISE",
+      "max_consecutive_alarms": 17,
+      "max_persistent_alarm_ratio": 0.7647058823529411,
+      "rows": 36
+    },
+    {
+      "blocks_with_persistent_alarm": 3,
+      "id": "ONE_PRN_DISTURBANCE",
+      "max_consecutive_alarms": 17,
+      "max_persistent_alarm_ratio": 0.7647058823529411,
+      "rows": 36
+    },
+    {
+      "blocks_with_persistent_alarm": 12,
+      "id": "PRN_DROP_ONLY",
+      "max_consecutive_alarms": 17,
+      "max_persistent_alarm_ratio": 0.7647058823529411,
+      "rows": 36
+    }
+  ],
+  "explicit_focus": [
+    {
+      "blocks_with_persistent_alarm": 18,
+      "id": "EMPIRICAL_NOISE",
+      "max_consecutive_alarms": 17,
+      "max_persistent_alarm_ratio": 0.7647058823529411,
+      "rows": 36
+    },
+    {
+      "blocks_with_persistent_alarm": 12,
+      "id": "PRN_DROP_ONLY",
+      "max_consecutive_alarms": 17,
+      "max_persistent_alarm_ratio": 0.7647058823529411,
+      "rows": 36
+    }
+  ],
+  "generation_overall_status": "PASS",
+  "generation_pass_is_not_false_alarm_pass": true,
+  "schema": "gnss-doppler-lab.gcspo.stage0-r2.physical-controls-audit.v1",
+  "scientific_false_alarm_status": "FAIL"
+}

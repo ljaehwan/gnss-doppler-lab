@@ -1,0 +1,59 @@
+{
+  "phase_summaries": [
+    {
+      "clock_median_m": 0.0011151562725020528,
+      "drift_median_m_s": 0.05568427383621822,
+      "phase": "pre_onset",
+      "position_median_m": 0.0024493684094099386,
+      "samples": 11750,
+      "scenario": "DS3",
+      "velocity_median_m_s": 0.13353946154665908
+    },
+    {
+      "clock_median_m": 0.0016714365416858827,
+      "drift_median_m_s": 0.07128405038591527,
+      "phase": "transition",
+      "position_median_m": 0.0032741964059811064,
+      "samples": 7450,
+      "scenario": "DS3",
+      "velocity_median_m_s": 0.18255245306147783
+    },
+    {
+      "clock_median_m": 0.0014583692218766682,
+      "drift_median_m_s": 0.06147069952121663,
+      "phase": "established",
+      "position_median_m": 0.0031714479301150717,
+      "samples": 26150,
+      "scenario": "DS3",
+      "velocity_median_m_s": 0.15184646956329545
+    },
+    {
+      "clock_median_m": 0.0013231814809529139,
+      "drift_median_m_s": 0.07459440980748061,
+      "phase": "pre_onset_replay",
+      "position_median_m": 0.0026378686802694356,
+      "samples": 10850,
+      "scenario": "DS7",
+      "velocity_median_m_s": 0.14952139034292833
+    },
+    {
+      "clock_median_m": 0.0012864267898582082,
+      "drift_median_m_s": 0.05266635841880561,
+      "phase": "transition",
+      "position_median_m": 0.0028395544991663187,
+      "samples": 3850,
+      "scenario": "DS7",
+      "velocity_median_m_s": 0.13655904464898794
+    },
+    {
+      "clock_median_m": 0.0013810069615150283,
+      "drift_median_m_s": 0.059531401591478225,
+      "phase": "established",
+      "position_median_m": 0.002937251221172268,
+      "samples": 11950,
+      "scenario": "DS7",
+      "velocity_median_m_s": 0.14121407161548868
+    }
+  ],
+  "status": "AVAILABLE_DS3_DS7"
+}

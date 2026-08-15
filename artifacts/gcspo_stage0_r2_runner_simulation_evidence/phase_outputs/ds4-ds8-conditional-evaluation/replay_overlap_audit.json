@@ -1,0 +1,21 @@
+{
+  "DS7": {
+    "rows": 234650,
+    "sha256": "f729b6c930fa3ae0efcd406c452b276d6dd10606cef2477662b76bcdc70df076",
+    "tracking_prefix_s": 110.0
+  },
+  "DS8": {
+    "rows": 221004,
+    "sha256": "8eea9d7d82505a85f58966a7a74a98e8929d940785b2001a8efb2b7f1b757b2b",
+    "tracking_prefix_s": 110.0
+  },
+  "cleanStatic": {
+    "rows": 242376,
+    "sha256": "09a27734861393bb2bda128513560f22f689c0e1430319adb5b07979c08ddb23",
+    "tracking_prefix_s": 110.0
+  },
+  "cleanStatic_equals_DS7": false,
+  "cleanStatic_equals_DS8": false,
+  "independent_normal_evidence_rule": "DS7/DS8 pre-110 is excluded regardless of receiver-output digest equality because authenticated prior metadata binds the raw replay",
+  "scope": "receiver-provided signed tracking fields through 110 s"
+}

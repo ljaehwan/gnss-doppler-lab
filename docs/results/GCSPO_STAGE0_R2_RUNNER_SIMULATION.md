@@ -70,7 +70,29 @@ preregistered physics study after authenticated DS4/DS8 inputs are available.
 
 ## Delivery status
 
-The result was committed locally as `2fe4c4d3f72ad4d071287b741f92bcb8d31e37c0`.
-Push to `origin` was attempted but the environment has no GitHub HTTPS
-credentials and no `gh` command.  The exact blocker is recorded in
+The initial result was committed locally as `2fe4c4d3f72ad4d071287b741f92bcb8d31e37c0`.
+The initial push attempt failed because the environment had no GitHub HTTPS
+credentials and no `gh` command; that historical blocker remains recorded in
 `infrastructure_blocker.json` under the SSD artifact root.
+
+Later delivery succeeded after GitHub HTTPS credentials were configured for the
+research delivery environment.  The current remote branch is
+`research/gcspo-stage0-r2-runner-simulation`; before adding the evidence bundle,
+local and remote both pointed at
+`2912d0f657151d84131eb0f31b5a6b613dee610f` with ahead/behind `0/0`.
+
+Git delivery status is tracked separately from the scientific verdict in
+`artifacts/gcspo_stage0_r2_runner_simulation_evidence/delivery_status.json`.
+The evidence bundle commit SHA is reported after commit creation; the scientific
+results and detector verdict above are not changed by delivery status updates.
+
+## Verifiable evidence bundle
+
+A compact evidence bundle is stored under
+`artifacts/gcspo_stage0_r2_runner_simulation_evidence/`.  It preserves the SSD
+manifest identity, copies or deterministically gzips small/essential evidence
+files, includes seven-phase runner terminal evidence, records provenance caveats,
+and provides `scripts/verify_gcspo_r2_evidence.py` plus pytest coverage for
+independent recomputation from CSV/JSON evidence.  The bundle verification
+judgement is `EVIDENCE_VERIFIED`; this means the evidence is internally
+verifiable, not that the detector is a GO.

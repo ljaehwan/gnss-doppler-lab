@@ -1,0 +1,30 @@
+{
+  "access_gate_remote_sync_sets_local_and_remote_to_freeze_sha_without_live_remote_lookup": true,
+  "audited_file": "src/gnss_doppler_lab/gcspo_r2_runner.py",
+  "audited_file_sha256_current": "246e7c9ba5310cf7973c2936f2af8817f7953da33e83caccbcadba6d2fdb4260",
+  "current_head": "2912d0f657151d84131eb0f31b5a6b613dee610f",
+  "execution_dirty_status": "UNVERIFIED",
+  "execution_head": "UNVERIFIED",
+  "execution_working_diff_sha256": "UNVERIFIED",
+  "final_commit_contains_same_runner_file": "UNVERIFIED",
+  "live_remote_sync": "not independently demonstrated at execution time",
+  "metric_effect": "none identified",
+  "provenance_claim": "weakened",
+  "source_commit_preflight": {
+    "DS4": {
+      "reason": "AUTHENTICATED_RECEIVER_ROOT_IS_OUTSIDE_THE_TASK_ALLOWED_WORKTREE_AND_NEW_SSD_ARTIFACT_SCOPE; coverage to 225 s and output checksums are not established",
+      "scenario": "DS4",
+      "status": "UNAVAILABLE",
+      "treatment": "TRANSITION_ONLY_SOURCE_UNAVAILABLE"
+    },
+    "DS8": "UNAVAILABLE_AUTHENTICATED_OBSERVABLES",
+    "manifest_status": {
+      "DS3": "PASS",
+      "DS7": "PASS",
+      "DS8": "PASS",
+      "cleanStatic": "PASS"
+    },
+    "source_semantics": "PASS",
+    "status": "PASS_WITH_DECLARED_SOURCE_LIMITATIONS"
+  }
+}

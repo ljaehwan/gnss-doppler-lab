@@ -1,0 +1,358 @@
+{
+  "DS4": {
+    "candidate_tracking_file_count": 0,
+    "reason": "AUTHENTICATED_RECEIVER_SIGNED_TRACKING_AND_GEOMETRY_SOURCE_ABSENT; legacy derived score CSVs are not admissible inputs",
+    "scenario": "DS4",
+    "searched_candidate_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds4-graph-input",
+    "status": "UNAVAILABLE",
+    "timeline": {
+      "onset_s": 113.8,
+      "pull_off_s": 225.0
+    },
+    "treatment": "TRANSITION_ONLY_SOURCE_UNAVAILABLE"
+  },
+  "DS8_authenticated_observables": "UNAVAILABLE",
+  "DS8_rule": "Do not estimate or generate missing authenticated observables",
+  "created_utc": "2026-08-15T10:39:47Z",
+  "receiver_fields": [
+    {
+      "field": "I_E,Q_E,I_P,Q_P,I_L,Q_L",
+      "role": "score",
+      "status": "USED_SIGNED_COMPLEX"
+    },
+    {
+      "field": "code_error_chips",
+      "role": "code/DLL",
+      "status": "USED_VAR_RESIDUAL"
+    },
+    {
+      "field": "carr_error_hz",
+      "role": "PLL cycles",
+      "status": "USED_VAR_RESIDUAL"
+    },
+    {
+      "field": "carrier_doppler_hz",
+      "role": "carrier rate",
+      "status": "USED_VAR_RESIDUAL"
+    },
+    {
+      "field": "code_freq_chips",
+      "role": "code rate",
+      "status": "USED_OFFSET_VAR_RESIDUAL"
+    },
+    {
+      "field": "CN0_SNV_dB_Hz",
+      "role": "diagnostic/control",
+      "status": "NUISANCE_ONLY"
+    },
+    {
+      "field": "carrier_lock_test",
+      "role": "diagnostic",
+      "status": "NUISANCE_ONLY"
+    },
+    {
+      "field": "PRN",
+      "role": "metadata",
+      "status": "GROUPING_ONLY"
+    }
+  ],
+  "schema": "gnss-doppler-lab.gcspo-stage0-r2.data-inventory.v1",
+  "sources": {
+    "DS3": {
+      "expected_manifest_sha256": "15dd02b97dd4d5ca63002160c642e66282d6ba3e5ee43d206607a2c51388f225",
+      "manifest": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/manifest.json",
+        "sha256": "15dd02b97dd4d5ca63002160c642e66282d6ba3e5ee43d206607a2c51388f225",
+        "size_bytes": 4742
+      },
+      "manifest_status": "PASS",
+      "observables_status": "AVAILABLE",
+      "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9",
+      "scenario": "DS3",
+      "tracking_files": [
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/raw/epl_tracking_ch_0.mat",
+          "sha256": "412ec34aba088e9cb6d7e307e769c3b0d4c15a8e782a6152be325bbd9d727da5",
+          "size_bytes": 8212934
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/raw/epl_tracking_ch_1.mat",
+          "sha256": "5d66182464ffbbc9361ab3b1997b9df6e6cee51364021839282bc83109a710bd",
+          "size_bytes": 9309021
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/raw/epl_tracking_ch_10.mat",
+          "sha256": "25297382944aefffbcb76e1e27a0fdceb07b0602bdb48a12603e22b45943cd04",
+          "size_bytes": 11291256
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/raw/epl_tracking_ch_2.mat",
+          "sha256": "dfd7bb2fb02de0e936ab9cd5e793c197944548a0c749cdcb699486b4d65f65df",
+          "size_bytes": 5274210
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/raw/epl_tracking_ch_3.mat",
+          "sha256": "3562edf64279ad27bc3089de7bd69de6299a6aa8106afe21df5101cc24db7d23",
+          "size_bytes": 8054783
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/raw/epl_tracking_ch_4.mat",
+          "sha256": "bf4b9bf7ad833045d5be91119033cd12466bd6265f40bfaae24010356af1d73c",
+          "size_bytes": 5251500
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/raw/epl_tracking_ch_5.mat",
+          "sha256": "aa1bdffb91597d5e9244c8110216bee84b33f385ea0eccfb3d343f800aecfac9",
+          "size_bytes": 6943475
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/raw/epl_tracking_ch_6.mat",
+          "sha256": "b8fc6b674020e39ff5de2a030cb26f1eaf2352d9e94e716d7d5434435898a689",
+          "size_bytes": 11144170
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/raw/epl_tracking_ch_7.mat",
+          "sha256": "a0e9c681e3bdddc89461d8766cd57897f7473b075c461f7a043f55976dc85daa",
+          "size_bytes": 8385738
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/raw/epl_tracking_ch_8.mat",
+          "sha256": "5049a64e4e7ee818c0756174c872e29074d5b93c09e0f2d150236bff78639005",
+          "size_bytes": 9558418
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/raw/epl_tracking_ch_9.mat",
+          "sha256": "3906474870b4eb8d81c0c1f80060306d5999c72cf6698a66595e532379c5f767",
+          "size_bytes": 9686763
+        }
+      ]
+    },
+    "DS7": {
+      "expected_manifest_sha256": "46cc88456d6985463377cf972a37e3e5cbc663079619b77263b125cd5d65644d",
+      "manifest": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/manifest.json",
+        "sha256": "46cc88456d6985463377cf972a37e3e5cbc663079619b77263b125cd5d65644d",
+        "size_bytes": 1969
+      },
+      "manifest_status": "PASS",
+      "observables_status": "AVAILABLE",
+      "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9",
+      "scenario": "DS7",
+      "tracking_files": [
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/raw/epl_tracking_ch_0.mat",
+          "sha256": "0d6e47f9a4f9da2419e10f3dc65e923acd026ba53dcf95f2f593a116e340fcdc",
+          "size_bytes": 3919980
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/raw/epl_tracking_ch_1.mat",
+          "sha256": "a0fbd4edaa61c0df84fde94dbc7f22b5f91a3a255d5a8741bbf7182d7079f1ef",
+          "size_bytes": 6037821
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/raw/epl_tracking_ch_10.mat",
+          "sha256": "b12cc27d24fdb8d7917dc5b1c5e13d360c752265476307e046b1b1ce191f7650",
+          "size_bytes": 3881533
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/raw/epl_tracking_ch_2.mat",
+          "sha256": "3d4794066d0db873d0058d0192d0bfbd5dd9c73458111eee960c13cf707c0522",
+          "size_bytes": 3920097
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/raw/epl_tracking_ch_3.mat",
+          "sha256": "6031653d81f7cb1fcf65b64b3604949c99cda12d06a39e949b441383b0d8a877",
+          "size_bytes": 3966622
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/raw/epl_tracking_ch_4.mat",
+          "sha256": "3fefc6a5bb2262a079df359c973faa187045f319f750d64e1c05d50c028b566a",
+          "size_bytes": 3912328
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/raw/epl_tracking_ch_5.mat",
+          "sha256": "4c386e280df9f5c38e00db43fe3e946820b8220504122067540d4e7ce907111b",
+          "size_bytes": 3942476
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/raw/epl_tracking_ch_6.mat",
+          "sha256": "f7f01aad6775ec30cf732b01c5076c122376f9569d7d7ccab29c69206264b58f",
+          "size_bytes": 3927367
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/raw/epl_tracking_ch_7.mat",
+          "sha256": "79b24c3e332c0b830c4719f448c2802a301820f9c3ab0e12f9cfbf6831c097cf",
+          "size_bytes": 12486860
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/raw/epl_tracking_ch_8.mat",
+          "sha256": "0ece56f16ca7d83bff9cc108b476131b0453fe9d95474a096c5a359dc6bb9cc6",
+          "size_bytes": 3895661
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/raw/epl_tracking_ch_9.mat",
+          "sha256": "e4f197d1221961512a700c0d8b396de4c7504758808ea5dc06cd1b4d5442210b",
+          "size_bytes": 3905637
+        }
+      ]
+    },
+    "DS8": {
+      "expected_manifest_sha256": "2acb11c8e2e5b3f704cbde057d60d771cb6f75316320611d5d93b7c1001aa7e9",
+      "manifest": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/manifest.json",
+        "sha256": "2acb11c8e2e5b3f704cbde057d60d771cb6f75316320611d5d93b7c1001aa7e9",
+        "size_bytes": 2039
+      },
+      "manifest_status": "PASS",
+      "observables_status": "UNAVAILABLE",
+      "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver",
+      "scenario": "DS8",
+      "tracking_files": [
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/raw/epl_tracking_ch_0.mat",
+          "sha256": "ba77e39fbbb3993e1e83a4321428faa31c8a994f24c0f666128d7b6e632ca4dd",
+          "size_bytes": 5382464
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/raw/epl_tracking_ch_1.mat",
+          "sha256": "c7fe167a58ae1684c2535d5b511bad061a7cb889b09910250c965136faf1fca4",
+          "size_bytes": 14548077
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/raw/epl_tracking_ch_10.mat",
+          "sha256": "99efde5cecd585448838d16938688e5e32235b587dd1890a3f68fb3c421b0e7f",
+          "size_bytes": 5348364
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/raw/epl_tracking_ch_2.mat",
+          "sha256": "035a2dfa889f8a29ecafc5d44e842cbccbbe0c557982896d099aae2da997cff5",
+          "size_bytes": 5399982
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/raw/epl_tracking_ch_3.mat",
+          "sha256": "08e7a2b57ace03bb324e21a7082a61d00d8265779e28bfcfa08060fd5f12b3fe",
+          "size_bytes": 5391102
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/raw/epl_tracking_ch_4.mat",
+          "sha256": "2effa1210059adcf84ef162316a9caa3277791e44e4e44ba399602b93103012d",
+          "size_bytes": 7370087
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/raw/epl_tracking_ch_5.mat",
+          "sha256": "bae62c3a11ad7d498752c10c4cd151856a1187dd9d1e91bb1207ced3ee61bd26",
+          "size_bytes": 5419524
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/raw/epl_tracking_ch_6.mat",
+          "sha256": "defdb58902b7de1f72b7279937ecf2241a65a23de300ddee91c5abed287b6a05",
+          "size_bytes": 5406203
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/raw/epl_tracking_ch_7.mat",
+          "sha256": "2eee49461d48877dcd319afbb6171dc82c940f289b1dbbb24199bed92086b10b",
+          "size_bytes": 5364645
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/raw/epl_tracking_ch_8.mat",
+          "sha256": "80c1b40d269a480dad5530f75ae571bdd11e47568a6503b4a3d847fbc2d17ad2",
+          "size_bytes": 5360928
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/raw/epl_tracking_ch_9.mat",
+          "sha256": "e3934eb28a7464dfb7869e5d883bd6943f9d97c203814c0653b7242d90b4cd7a",
+          "size_bytes": 5450907
+        }
+      ]
+    },
+    "cleanStatic": {
+      "expected_manifest_sha256": "ced3722a7b560fc0efce5f347c7e09cd81e7a660969a17c8a85bb56c9e11e30a",
+      "manifest": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/manifest.json",
+        "sha256": "ced3722a7b560fc0efce5f347c7e09cd81e7a660969a17c8a85bb56c9e11e30a",
+        "size_bytes": 17145
+      },
+      "manifest_status": "PASS",
+      "observables_status": "AVAILABLE",
+      "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9",
+      "scenario": "cleanStatic",
+      "tracking_files": [
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_0.mat",
+          "sha256": "baeb235408145cc1654a94d1e1c6f8fd0fc9adac5e5cff8a292dc348b959a213",
+          "size_bytes": 5489015
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_1.mat",
+          "sha256": "26c55e6043c2e319e08c0b1d4fdbdaa44696d042f0f343ffc4e2041f09521f11",
+          "size_bytes": 5443161
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_10.mat",
+          "sha256": "8951dcd30665ae0faeca381910cfaa06c2ea03bf077d219dc96c62e00a4ec0e1",
+          "size_bytes": 28880639
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_2.mat",
+          "sha256": "2683991662c6c4d552ec6d0d2969c9c0291fd6abdeb9e3e3be3eb4c53343f3dc",
+          "size_bytes": 5447271
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_3.mat",
+          "sha256": "413d837e707101f6d1664d808b93f4060f7b194ebdc260aeac68b0de996fea6c",
+          "size_bytes": 5886168
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_4.mat",
+          "sha256": "45f79e885715b3c99262302d6c33124029fc07bab6a2d3bb45e76eeaeda151cf",
+          "size_bytes": 5432894
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_5.mat",
+          "sha256": "38c90c1e47e9c19097f5fe8c24f9f07f53e88ca8e730393807b7e023a8b9a3e8",
+          "size_bytes": 5472174
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_6.mat",
+          "sha256": "c7fb92cbb29be0ba26207d336d811e68441bffa6b029a134f503a9de7cb0000e",
+          "size_bytes": 5457352
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_7.mat",
+          "sha256": "df48b0ed3cdacd5a00587cd2a664650d0c2b1bd8b63fa07fa74e78857ec2b94a",
+          "size_bytes": 5410435
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_8.mat",
+          "sha256": "dd64b65894472fb9fe7f2bb925c7ff8d41311f533889e3293b1809e4b8f176c4",
+          "size_bytes": 5396492
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/raw/epl_tracking_ch_9.mat",
+          "sha256": "66feb6c4180a8a8dc1d32047b6505858d7795b49b432b907c91941a49c727ae2",
+          "size_bytes": 5473646
+        }
+      ]
+    }
+  },
+  "static_timelines": {
+    "DS3": {
+      "onset_s": 118.9,
+      "pull_off_s": 195.0
+    },
+    "DS4": {
+      "onset_s": 113.8,
+      "pull_off_s": 225.0
+    },
+    "DS7": {
+      "family": "DS7_DS8",
+      "onset_s": 110.0,
+      "pull_off_s": 150.0
+    },
+    "DS8": {
+      "family": "DS7_DS8",
+      "onset_s": 110.0,
+      "pull_off_s": 150.0
+    }
+  }
+}

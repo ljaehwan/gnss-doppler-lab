@@ -1,0 +1,3 @@
+scenario,status,reason,treatment,family
+DS4,UNAVAILABLE,AUTHENTICATED_RECEIVER_SIGNED_TRACKING_AND_GEOMETRY_SOURCE_ABSENT; legacy derived score CSVs are not admissible inputs,TRANSITION_ONLY_SOURCE_UNAVAILABLE,
+DS8,UNAVAILABLE,AUTHENTICATED_OBSERVABLES_ABSENT; geometry must not be estimated or generated,,DS7_DS8

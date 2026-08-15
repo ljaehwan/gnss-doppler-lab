@@ -1,0 +1,94 @@
+{
+  "base_commit": "57271e526e9e346c8d4d7626b006c5a88166f1be",
+  "branch": "research/gcspo-stage0-r2-runner-simulation",
+  "dirty_status": "?? scripts/run_gcspo_stage0_r2.py\n?? src/gnss_doppler_lab/gcspo_r2_runner.py\n?? tests/test_gcspo_r2_runner.py",
+  "exact_receiver_rerun": {
+    "reason": "patched receiver source/build is byte-pinned for existing outputs but is not a clean immutable build snapshot",
+    "status": "UNAVAILABLE"
+  },
+  "head_at_preflight": "57271e526e9e346c8d4d7626b006c5a88166f1be",
+  "receiver_semantics": {
+    "dirty_source_interpretation": "permitted for byte-pinned existing outputs; exact replay remains unavailable",
+    "field_semantics": {
+      "carr_error_hz": "cycles",
+      "carrier_doppler_hz": "Hz NCO state",
+      "code_error_chips": "chips",
+      "code_freq_chips": "chips/s NCO state"
+    },
+    "integration": {
+      "base_integration_s": 0.001,
+      "scientific_epoch_s": 0.02
+    },
+    "overall_status": "PASS",
+    "schema": "gnss-doppler-lab.gcspo-stage0.receiver-semantic-preflight.v1",
+    "source_equations": {
+      "cadence_1ms_base": true,
+      "carrier_aiding": true,
+      "carrier_nco": true,
+      "code_nco": true,
+      "costas_cycles": true,
+      "dll_chips": true,
+      "tap_order": true
+    },
+    "source_snapshot": {
+      "files": [
+        {
+          "expected_sha256": "00cb68a02fdd3ab51395e4af2e758060a7e299a76a68424c37fcf6cba38f69ec",
+          "observed_sha256": "00cb68a02fdd3ab51395e4af2e758060a7e299a76a68424c37fcf6cba38f69ec",
+          "path": "/home/ubuntu/build-gnss-sdr-complex9/src/algorithms/tracking/libs/tracking_discriminators.cc",
+          "status": "PASS"
+        },
+        {
+          "expected_sha256": "6d2db43fea2728acc35fb29b4cb5027b62be442b8966108bf6b955d5b95f486c",
+          "observed_sha256": "6d2db43fea2728acc35fb29b4cb5027b62be442b8966108bf6b955d5b95f486c",
+          "path": "/home/ubuntu/build-gnss-sdr-complex9/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "status": "PASS"
+        },
+        {
+          "expected_sha256": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+          "observed_sha256": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+          "path": "/home/ubuntu/build-gnss-sdr-complex9/build-complex/src/main/gnss-sdr",
+          "status": "PASS"
+        }
+      ],
+      "git_diff_sha256": "51da8449a56af9088695f81c09c1752139b48e2fbe9f621f85abafcab93681ea",
+      "git_head": "1ddd4562723040fd66cb334b578a5b69455625f4",
+      "git_status": [
+        " M src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+        " M src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.h",
+        " M src/algorithms/tracking/libs/dll_pll_conf.cc",
+        " M src/algorithms/tracking/libs/dll_pll_conf.h",
+        "?? build-complex/"
+      ],
+      "source_root": "/home/ubuntu/build-gnss-sdr-complex9",
+      "source_tree_clean": false
+    },
+    "synthetic_vectors": {
+      "range_impulse": {
+        "code_error_chips": -3.412360693877403e-05,
+        "pll_phase_error_cycles": -0.052550354685707276,
+        "rho_m": 0.01,
+        "sign": "negative"
+      },
+      "rate_ramp": {
+        "carrier_aiding_ratio": 0.0006493506493506494,
+        "carrier_doppler_hz": -0.005255035468570727,
+        "code_frequency_offset_chips_s": -3.4123606938770956e-06,
+        "rhodot_m_s": 0.001
+      }
+    },
+    "validated_rows": [
+      "code_error_chips",
+      "pll_phase_error_cycles",
+      "carrier_doppler_hz",
+      "code_frequency_offset_chips_s"
+    ],
+    "wrap_linear_range_cycles": [
+      -0.25,
+      0.25
+    ]
+  },
+  "remote_base_commit": "57271e526e9e346c8d4d7626b006c5a88166f1be",
+  "schema": "gnss-doppler-lab.gcspo.stage0-r2.source-commit.v1",
+  "working_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

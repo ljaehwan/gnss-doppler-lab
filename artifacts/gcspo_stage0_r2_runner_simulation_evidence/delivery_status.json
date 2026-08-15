@@ -1,0 +1,94 @@
+{
+  "ahead": 0,
+  "behind": 0,
+  "current_local_commit_sha": "2912d0f657151d84131eb0f31b5a6b613dee610f",
+  "current_remote_branch": "research/gcspo-stage0-r2-runner-simulation",
+  "current_remote_commit_sha": "2912d0f657151d84131eb0f31b5a6b613dee610f",
+  "evidence_bundle_commit_sha": "PENDING_COMMIT",
+  "initial_push_attempt": "failed due missing credentials",
+  "later_delivery": "succeeded",
+  "science_verdict_is_separate": true,
+  "scientific_verdict": {
+    "controls": "FAIL",
+    "core_executable_results": {
+      "DS3": "AVAILABLE",
+      "DS4": "UNAVAILABLE",
+      "DS7": "AVAILABLE",
+      "DS8": "UNAVAILABLE"
+    },
+    "criteria": [
+      {
+        "criterion": "cleanStatic holdout q99 FPR <= 1%",
+        "id": 1,
+        "status": "FAIL",
+        "value": 0.07172995780590717
+      },
+      {
+        "criterion": "external static worst-run FPR <= 5%",
+        "id": 2,
+        "reason": "DS3 alone exceeds 5%; DS4 is additionally unavailable and DS7 replay is excluded",
+        "status": "FAIL",
+        "value": 0.14893617021276595
+      },
+      {
+        "criterion": "Full vs B0/Fixed9",
+        "id": 3,
+        "reason": "DS3 transition has no exact B0 support; on DS7 exact support B0 detects earlier and discriminates better; Fixed9 exact rerun is unavailable",
+        "status": "FAIL"
+      },
+      {
+        "criterion": "Full beats A2 and A5 in at least two families",
+        "id": 4,
+        "reason": "paired 10-second bootstrap lower bounds are nonpositive for both Full-A2 and Full-A5",
+        "status": "FAIL"
+      },
+      {
+        "criterion": "relation destruction reduces score in at least two families",
+        "id": 5,
+        "reason": "LOS shuffle diagnostic reduces score in DS3/DS7, but the frozen primary temporal-desynchronization control for both time-push families does not",
+        "status": "FAIL"
+      },
+      {
+        "criterion": "controls show no persistent false alarms",
+        "id": 6,
+        "status": "FAIL"
+      },
+      {
+        "criterion": "not explained by total energy or one feature",
+        "id": 7,
+        "reason": "A1 strongly outperforms Full on DS7 and feature-family ablations do not establish Full-specific evidence",
+        "status": "FAIL"
+      },
+      {
+        "criterion": "shared state plausible after onset/pull-off",
+        "id": 8,
+        "reason": "DS3/DS7 state magnitudes change only modestly and inconsistently across onset/pull-off phases",
+        "status": "FAIL"
+      }
+    ],
+    "detector_deployment_verdict": "EVALUATION_INCOMPLETE_SOURCE_OR_SUPPORT",
+    "incomplete_reasons": [
+      {
+        "item": "DS4",
+        "reason": "authenticated receiver-level signed tracking and geometry source absent; legacy derived scores are inadmissible"
+      },
+      {
+        "item": "DS8",
+        "reason": "authenticated observables absent; geometry cannot be generated"
+      },
+      {
+        "item": "receiver_exact_rerun",
+        "reason": "immutable patched receiver source/build snapshot absent"
+      },
+      {
+        "item": "Fixed9/M1/GCMR",
+        "reason": "exact same-support authenticated adapters/checkpoints unavailable"
+      }
+    ],
+    "neural_stage1_allowed": false,
+    "paper_model_continuation": "NOT_WORTH_CONTINUING_AS_THE_CURRENT_DETECTOR_PAPER_MODEL; preserve only the LOS-shuffle geometry diagnostic for a separately preregistered hypothesis study",
+    "schema": "gnss-doppler-lab.gcspo.stage0-r2.final-verdict.v1",
+    "shared_pull_off_physical_hypothesis": "INCOMPLETE",
+    "verdict": "EVALUATION_INCOMPLETE_SOURCE_OR_SUPPORT"
+  }
+}

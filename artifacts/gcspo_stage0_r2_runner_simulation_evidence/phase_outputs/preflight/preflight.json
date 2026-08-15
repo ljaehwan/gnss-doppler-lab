@@ -1,0 +1,17 @@
+{
+  "DS4": {
+    "reason": "AUTHENTICATED_RECEIVER_ROOT_IS_OUTSIDE_THE_TASK_ALLOWED_WORKTREE_AND_NEW_SSD_ARTIFACT_SCOPE; coverage to 225 s and output checksums are not established",
+    "scenario": "DS4",
+    "status": "UNAVAILABLE",
+    "treatment": "TRANSITION_ONLY_SOURCE_UNAVAILABLE"
+  },
+  "DS8": "UNAVAILABLE_AUTHENTICATED_OBSERVABLES",
+  "manifest_status": {
+    "DS3": "PASS",
+    "DS7": "PASS",
+    "DS8": "PASS",
+    "cleanStatic": "PASS"
+  },
+  "source_semantics": "PASS",
+  "status": "PASS_WITH_DECLARED_SOURCE_LIMITATIONS"
+}
