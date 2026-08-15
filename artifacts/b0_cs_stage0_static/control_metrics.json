@@ -1,0 +1,187 @@
+{
+  "controls": [
+    {
+      "alarm_fraction": 0.0,
+      "b0_cs_set_score_mean": -0.11779331301825308,
+      "b0_score_change": 0.0,
+      "b0_score_mean": 0.07076750537902368,
+      "control": "common_gain_scaling_0.5x",
+      "expected_physical_effect": "No change after prompt normalization.",
+      "max_consecutive_alarms": 0,
+      "persistent_alarm_fraction": 0.0,
+      "status": "AVAILABLE",
+      "validity": "analytic prompt-normalization invariance"
+    },
+    {
+      "alarm_fraction": 0.0,
+      "b0_cs_set_score_mean": -0.11779331301825308,
+      "b0_score_change": 0.0,
+      "b0_score_mean": 0.07076750537902368,
+      "control": "prompt_global_amplitude_0.5x",
+      "expected_physical_effect": "No change when all taps and prompt scale together.",
+      "max_consecutive_alarms": 0,
+      "persistent_alarm_fraction": 0.0,
+      "status": "AVAILABLE",
+      "validity": "analytic prompt-normalization invariance"
+    },
+    {
+      "alarm_fraction": 0.0,
+      "b0_cs_set_score_mean": -0.11779331301825308,
+      "b0_score_change": 0.0,
+      "b0_score_mean": 0.07076750537902368,
+      "control": "common_gain_scaling_2.0x",
+      "expected_physical_effect": "No change after prompt normalization.",
+      "max_consecutive_alarms": 0,
+      "persistent_alarm_fraction": 0.0,
+      "status": "AVAILABLE",
+      "validity": "analytic prompt-normalization invariance"
+    },
+    {
+      "alarm_fraction": 0.0,
+      "b0_cs_set_score_mean": -0.11779331301825308,
+      "b0_score_change": 0.0,
+      "b0_score_mean": 0.07076750537902368,
+      "control": "prompt_global_amplitude_2.0x",
+      "expected_physical_effect": "No change when all taps and prompt scale together.",
+      "max_consecutive_alarms": 0,
+      "persistent_alarm_fraction": 0.0,
+      "status": "AVAILABLE",
+      "validity": "analytic prompt-normalization invariance"
+    },
+    {
+      "alarm_fraction": 0.0,
+      "b0_cs_set_score_mean": -0.619456157156507,
+      "b0_score_change": -0.03538375268951184,
+      "b0_score_mean": 0.03538375268951184,
+      "control": "empirical_clean_residual_noise_0.5x",
+      "expected_physical_effect": "Residual scale changes monotonically.",
+      "max_consecutive_alarms": 0,
+      "persistent_alarm_fraction": 0.0,
+      "status": "AVAILABLE",
+      "validity": "feature/residual-level"
+    },
+    {
+      "alarm_fraction": 0.0,
+      "b0_cs_set_score_mean": -0.11779331301825308,
+      "b0_score_change": 0.0,
+      "b0_score_mean": 0.07076750537902368,
+      "control": "empirical_clean_residual_noise_1.0x",
+      "expected_physical_effect": "Residual scale changes monotonically.",
+      "max_consecutive_alarms": 0,
+      "persistent_alarm_fraction": 0.0,
+      "status": "AVAILABLE",
+      "validity": "feature/residual-level"
+    },
+    {
+      "alarm_fraction": 0.8095238095238095,
+      "b0_cs_set_score_mean": 1.2605695990783485,
+      "b0_score_change": 0.07076750537902368,
+      "b0_score_mean": 0.14153501075804736,
+      "control": "empirical_clean_residual_noise_2.0x",
+      "expected_physical_effect": "Residual scale changes monotonically.",
+      "max_consecutive_alarms": 17,
+      "persistent_alarm_fraction": 0.8095238095238095,
+      "status": "AVAILABLE",
+      "validity": "feature/residual-level"
+    },
+    {
+      "alarm_fraction": 0.0,
+      "b0_cs_set_score_mean": -0.4823683027590769,
+      "b0_score_change": 0.0,
+      "b0_score_mean": 0.07076750537902368,
+      "control": "cn0_decrease_6db",
+      "expected_physical_effect": "Nuisance stratum may change; detector residual is unchanged.",
+      "max_consecutive_alarms": 0,
+      "persistent_alarm_fraction": 0.0,
+      "status": "AVAILABLE",
+      "validity": "feature/residual-level"
+    },
+    {
+      "alarm_fraction": 0.0,
+      "b0_cs_set_score_mean": -0.19236267553994338,
+      "b0_score_change": -0.0038640859185317677,
+      "b0_score_mean": 0.06690341946049191,
+      "control": "prn_drop",
+      "expected_physical_effect": "Lower variable-cardinality set remains valid when N>=4.",
+      "max_consecutive_alarms": 0,
+      "persistent_alarm_fraction": 0.0,
+      "status": "AVAILABLE",
+      "validity": "feature/residual-level"
+    },
+    {
+      "alarm_fraction": 0.0,
+      "b0_cs_set_score_mean": -0.1497750574636137,
+      "b0_score_change": -0.0011389367042503318,
+      "b0_score_mean": 0.06962856867477335,
+      "control": "prn_add",
+      "expected_physical_effect": "A neutral synthetic PRN should not dominate the mean.",
+      "max_consecutive_alarms": 0,
+      "persistent_alarm_fraction": 0.0,
+      "status": "AVAILABLE",
+      "validity": "feature/residual-level"
+    },
+    {
+      "alarm_fraction": 0.6190476190476191,
+      "b0_cs_set_score_mean": 0.2047025120723907,
+      "b0_score_change": 0.004550608583818935,
+      "b0_score_mean": 0.07531811396284262,
+      "control": "single_prn_disturbance",
+      "expected_physical_effect": "Mean aggregation limits one-PRN influence.",
+      "max_consecutive_alarms": 13,
+      "persistent_alarm_fraction": 0.6190476190476191,
+      "status": "AVAILABLE",
+      "validity": "feature/residual-level"
+    },
+    {
+      "alarm_fraction": 0.0,
+      "b0_cs_set_score_mean": 0.09732777015064839,
+      "b0_score_change": 0.010000000000000009,
+      "b0_score_mean": 0.08076750537902369,
+      "control": "receiver_clock_like_drift",
+      "expected_physical_effect": "Small common causal drift may mildly increase residuals.",
+      "max_consecutive_alarms": 0,
+      "persistent_alarm_fraction": 0.0,
+      "status": "AVAILABLE",
+      "validity": "feature/residual-level"
+    },
+    {
+      "alarm_fraction": 0.0,
+      "b0_cs_set_score_mean": -0.0009921153782353619,
+      "b0_score_change": 5.306771196446347e-05,
+      "b0_score_mean": 0.07082057309098815,
+      "control": "prn_independent_multipath_like",
+      "expected_physical_effect": "Independent disturbances should not create persistent receiver-wide evidence.",
+      "max_consecutive_alarms": 0,
+      "persistent_alarm_fraction": 0.0,
+      "status": "AVAILABLE",
+      "validity": "feature/residual-level"
+    },
+    {
+      "alarm_fraction": 0.0,
+      "b0_cs_set_score_mean": -0.4212210353061344,
+      "b0_score_change": -0.022082336016202186,
+      "b0_score_mean": 0.048685169362821495,
+      "control": "low_lock_masking",
+      "expected_physical_effect": "Masking suppresses invalid PRNs and may suppress N<4 epochs.",
+      "max_consecutive_alarms": 0,
+      "persistent_alarm_fraction": 0.0,
+      "status": "AVAILABLE",
+      "validity": "feature/residual-level"
+    },
+    {
+      "details": {
+        "control": "raw_iq_awgn_with_tracking_recalculation"
+      },
+      "reason": "Raw-IQ AWGN with receiver CAF/tracking recalculation was not run because no sealed recalculation campaign and executable receipt were supplied.",
+      "status": "UNAVAILABLE"
+    },
+    {
+      "details": {
+        "control": "tracking_reacquisition"
+      },
+      "reason": "No authenticated reacquisition event annotations exist in the clean source.",
+      "status": "UNAVAILABLE"
+    }
+  ],
+  "schema": "gnss-doppler-lab.b0-cs-controls.v1"
+}

@@ -1,0 +1,301 @@
+{
+  "DS7_DS8_pre110_overlap_audit": {
+    "details": {
+      "family_grouping": "DS7 and DS8 are one family, never independent confirmations"
+    },
+    "reason": "Both family members failed frozen end-to-end input eligibility before scoring; no pre-110 overlap result is inferred.",
+    "status": "UNAVAILABLE"
+  },
+  "attack_access_after_clean_freeze": true,
+  "attack_sources": {
+    "DS1": {
+      "common_support": {
+        "common_rows": 9225,
+        "exact_common_epoch_prn_support": true,
+        "input_rows": [
+          9225,
+          9225,
+          9225
+        ],
+        "key_columns": [
+          "physical_recording_id",
+          "window_bin_s",
+          "prn"
+        ],
+        "output_rows": [
+          9225,
+          9225,
+          9225
+        ],
+        "schema": "gnss-doppler-lab.b0-cs-common-support.v1"
+      },
+      "conversion": {
+        "cn0_context": "strictly lagged median over preceding one second",
+        "dropped_short_or_unlagged_windows": 19,
+        "feature_columns": [
+          "tap_E4_rel_prompt_mean",
+          "tap_E3_rel_prompt_mean",
+          "tap_E2_rel_prompt_mean",
+          "tap_E_rel_prompt_mean",
+          "tap_P_rel_prompt_mean",
+          "tap_L_rel_prompt_mean",
+          "tap_L2_rel_prompt_mean",
+          "tap_L3_rel_prompt_mean",
+          "tap_L4_rel_prompt_mean"
+        ],
+        "gaps_detected": 8693,
+        "input_raw_epochs": 497577,
+        "low_prompt_raw_epochs": 0,
+        "node_rows": 9453,
+        "prn_count": 18,
+        "prn_identity_input": false,
+        "recording_id": "DS1",
+        "sample_and_byte_lineage_preserved": true,
+        "schema": "gnss-doppler-lab.b0-cs-node-conversion.v1",
+        "source_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds1.npz",
+        "source_sha256": "b24d947c83890dbfa1c801bfbcb72e1fd192dd66509e927eb5afb8118902b072"
+      },
+      "kind": "attack",
+      "manifest": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds1.manifest.json",
+      "manifest_sha256": "7be224f13002f8c4de03d833d2987547a750068b181debe2592b9f745c5c651f",
+      "npz": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds1.npz",
+      "npz_sha256": "b24d947c83890dbfa1c801bfbcb72e1fd192dd66509e927eb5afb8118902b072",
+      "status": "AVAILABLE"
+    },
+    "DS2": {
+      "common_support": {
+        "common_rows": 8202,
+        "exact_common_epoch_prn_support": true,
+        "input_rows": [
+          8202,
+          8202,
+          8202
+        ],
+        "key_columns": [
+          "physical_recording_id",
+          "window_bin_s",
+          "prn"
+        ],
+        "output_rows": [
+          8202,
+          8202,
+          8202
+        ],
+        "schema": "gnss-doppler-lab.b0-cs-common-support.v1"
+      },
+      "conversion": {
+        "cn0_context": "strictly lagged median over preceding one second",
+        "dropped_short_or_unlagged_windows": 18,
+        "feature_columns": [
+          "tap_E4_rel_prompt_mean",
+          "tap_E3_rel_prompt_mean",
+          "tap_E2_rel_prompt_mean",
+          "tap_E_rel_prompt_mean",
+          "tap_P_rel_prompt_mean",
+          "tap_L_rel_prompt_mean",
+          "tap_L2_rel_prompt_mean",
+          "tap_L3_rel_prompt_mean",
+          "tap_L4_rel_prompt_mean"
+        ],
+        "gaps_detected": 33000,
+        "input_raw_epochs": 474168,
+        "low_prompt_raw_epochs": 0,
+        "node_rows": 8418,
+        "prn_count": 15,
+        "prn_identity_input": false,
+        "recording_id": "DS2",
+        "sample_and_byte_lineage_preserved": true,
+        "schema": "gnss-doppler-lab.b0-cs-node-conversion.v1",
+        "source_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds2.npz",
+        "source_sha256": "dae0f245cbb107febd220c6de33b9a279a2bad356cb0ba772daf9418bc75d7c9"
+      },
+      "kind": "attack",
+      "manifest": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds2.manifest.json",
+      "manifest_sha256": "15066dacfd4e1ef88fc35df5c323c67b3e1dc1420003de90707340c9982a5595",
+      "npz": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds2.npz",
+      "npz_sha256": "dae0f245cbb107febd220c6de33b9a279a2bad356cb0ba772daf9418bc75d7c9",
+      "status": "AVAILABLE"
+    },
+    "DS3": {
+      "common_support": {
+        "common_rows": 3250,
+        "exact_common_epoch_prn_support": true,
+        "input_rows": [
+          3250,
+          3250,
+          3250
+        ],
+        "key_columns": [
+          "physical_recording_id",
+          "window_bin_s",
+          "prn"
+        ],
+        "output_rows": [
+          3250,
+          3250,
+          3250
+        ],
+        "schema": "gnss-doppler-lab.b0-cs-common-support.v1"
+      },
+      "conversion": {
+        "cn0_context": "strictly lagged median over preceding one second",
+        "dropped_short_or_unlagged_windows": 27,
+        "feature_columns": [
+          "tap_E4_rel_prompt_mean",
+          "tap_E3_rel_prompt_mean",
+          "tap_E2_rel_prompt_mean",
+          "tap_E_rel_prompt_mean",
+          "tap_P_rel_prompt_mean",
+          "tap_L_rel_prompt_mean",
+          "tap_L2_rel_prompt_mean",
+          "tap_L3_rel_prompt_mean",
+          "tap_L4_rel_prompt_mean"
+        ],
+        "gaps_detected": 154896,
+        "input_raw_epochs": 616599,
+        "low_prompt_raw_epochs": 0,
+        "node_rows": 3574,
+        "prn_count": 18,
+        "prn_identity_input": false,
+        "recording_id": "DS3",
+        "sample_and_byte_lineage_preserved": true,
+        "schema": "gnss-doppler-lab.b0-cs-node-conversion.v1",
+        "source_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds3.npz",
+        "source_sha256": "38eb5842dfec306d99bf0c5d61df6cffcb6faa25ed63721cafa8e3c3776f9b3e"
+      },
+      "kind": "attack",
+      "manifest": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds3.manifest.json",
+      "manifest_sha256": "01de5f689a543da2107b0258f95cfff68b0c1a2c9a4cfeb37724b8a32a6074a8",
+      "npz": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds3.npz",
+      "npz_sha256": "38eb5842dfec306d99bf0c5d61df6cffcb6faa25ed63721cafa8e3c3776f9b3e",
+      "status": "AVAILABLE"
+    },
+    "DS4": {
+      "details": {
+        "required_fields": [
+          "complex_iq",
+          "cn0_db_hz",
+          "sample_count",
+          "prn",
+          "channel",
+          "segment_index",
+          "time_s"
+        ]
+      },
+      "kind": "attack",
+      "reason": "No compatible complex nine-tap NPZ with cn0_db_hz and raw sample/byte lineage was found in the available artifact inventory.",
+      "status": "UNAVAILABLE"
+    },
+    "DS7": {
+      "kind": "attack",
+      "manifest_sha256": "8dec0643850c9d545b3980ea45bf2c3b9081cd2e314e208faab6bc51fa6e8959",
+      "missing_fields": [
+        "cn0_db_hz"
+      ],
+      "npz": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/exports/ds7.npz",
+      "npz_sha256": "d0e6da4e27d51e3e96abf2ef7786501124072f28667671e4e40da756eb35f3c8",
+      "observed_fields": [
+        "channel",
+        "complex_iq",
+        "prn",
+        "sample_count",
+        "segment_index",
+        "time_s"
+      ],
+      "reason": "Located complex nine-tap input omits cn0_db_hz required by the pre-attack frozen nuisance-conditioned pipeline.",
+      "status": "UNAVAILABLE"
+    },
+    "DS8": {
+      "kind": "attack",
+      "manifest_sha256": "53b240d1c5ecd79c0802840575de5f00ca02131ca449c1cdd9cae30ea6c6f01d",
+      "missing_fields": [
+        "cn0_db_hz"
+      ],
+      "npz": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/exports/ds8.npz",
+      "npz_sha256": "d1973fa150b7b4e7359df4827f36ce60289f206e9db11c1ac2bc1fd33a0df533",
+      "observed_fields": [
+        "channel",
+        "complex_iq",
+        "prn",
+        "sample_count",
+        "segment_index",
+        "time_s"
+      ],
+      "reason": "Located complex nine-tap input omits cn0_db_hz required by the pre-attack frozen nuisance-conditioned pipeline.",
+      "status": "UNAVAILABLE"
+    }
+  },
+  "cleanStatic": {
+    "conversion": {
+      "cn0_context": "strictly lagged median over preceding one second",
+      "dropped_short_or_unlagged_windows": 22,
+      "feature_columns": [
+        "tap_E4_rel_prompt_mean",
+        "tap_E3_rel_prompt_mean",
+        "tap_E2_rel_prompt_mean",
+        "tap_E_rel_prompt_mean",
+        "tap_P_rel_prompt_mean",
+        "tap_L_rel_prompt_mean",
+        "tap_L2_rel_prompt_mean",
+        "tap_L3_rel_prompt_mean",
+        "tap_L4_rel_prompt_mean"
+      ],
+      "gaps_detected": 5186,
+      "input_raw_epochs": 553639,
+      "low_prompt_raw_epochs": 0,
+      "node_rows": 9897,
+      "prn_count": 19,
+      "prn_identity_input": false,
+      "recording_id": "cleanStatic",
+      "sample_and_byte_lineage_preserved": true,
+      "schema": "gnss-doppler-lab.b0-cs-node-conversion.v1",
+      "source_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.npz",
+      "source_sha256": "fcd1d378c28e79fe4a550b65fc1208cde3c8fb334db11406a07fed4d90fba237"
+    },
+    "lagged_cn0_available": true,
+    "node_rows": 9897,
+    "prns": [
+      "G01",
+      "G03",
+      "G06",
+      "G07",
+      "G08",
+      "G10",
+      "G11",
+      "G12",
+      "G13",
+      "G16",
+      "G18",
+      "G19",
+      "G20",
+      "G23",
+      "G24",
+      "G25",
+      "G29",
+      "G30",
+      "G31"
+    ],
+    "raw_sample_lineage_available": true,
+    "receiver_epochs": 958,
+    "source_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.manifest.json",
+    "source_manifest_sha256": "2424331f3fdb403cfa4610082ed36022abe180383bd08b5732d6aba834427eca",
+    "status": "AVAILABLE",
+    "time_range_s": [
+      0.54025756,
+      480.12360144
+    ]
+  },
+  "clean_freeze_sha256": "5a1b5f84c79744a3c614d752751f811fd563fac8daad21f9ef69d2d1fc96e38a",
+  "external_static_normal": {
+    "details": {
+      "candidate_manifest_sha256": "0c66fa3d9ea1bb6ad41745ec3f712b08fb40d8ed69942905459e97ca339d5d10",
+      "candidate_npz_sha256": "bc0540cb0464bdbeafb13d096829b2f72f85a70cf15453484d19be22320cbe7d",
+      "rejected_candidate": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/rc9-real-clean-domain-poc1/exports/cleanStatic.npz",
+      "rejection_reason": "Receiver replay uses the same TEXBAT cleanStatic raw IQ source as development, SHA-256 dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9; it is not source-distinct.",
+      "source_dependent_evidence": "DS3 pre-onset only; DS4 unavailable"
+    },
+    "reason": "No compatible source-distinct static normal sequence was available; deployment-level FPR claims are forbidden.",
+    "status": "UNAVAILABLE"
+  },
+  "schema": "gnss-doppler-lab.b0-cs-data-inventory.v1"
+}

@@ -1,0 +1,29 @@
+{
+  "calibration_scoring": {
+    "examples": 1764,
+    "runtime_per_epoch_seconds": 1.2980396817110968e-06,
+    "runtime_seconds": 0.002289741998538375
+  },
+  "clean_phase_total_seconds": 10.660433379991446,
+  "device": "cuda:0",
+  "historical_holdout_scoring": {
+    "examples": 1259,
+    "runtime_per_epoch_seconds": 1.5130317796759953e-06,
+    "runtime_seconds": 0.001904907010612078
+  },
+  "holdout_scoring": {
+    "examples": 1259,
+    "runtime_per_epoch_seconds": 1.8827784001106742e-06,
+    "runtime_seconds": 0.0023704180057393387
+  },
+  "parameter_count": 134793,
+  "python": "3.12.3",
+  "schema": "gnss-doppler-lab.b0-cs-runtime.v1",
+  "torch": "2.13.0+cu130",
+  "train_scoring": {
+    "examples": 4592,
+    "runtime_per_epoch_seconds": 1.3551842333069104e-06,
+    "runtime_seconds": 0.006223005999345332
+  },
+  "training_seconds": 4.355665469003725
+}

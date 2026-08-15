@@ -1,0 +1,23 @@
+{
+  "A3_no_nuisance_ablation": {
+    "attack_outcome_retuning": false,
+    "reason": "The frozen reporting implementation applies np.unique after concatenating merged global calibration entries. This avoids repeated merged pools but also collapses genuine tied residual multiplicities, so A3 metrics are descriptive and are not used for the Full verdict.",
+    "status": "LIMITED"
+  },
+  "full_method": {
+    "forbidden_claims": [
+      "arbitrary-dependence distribution-free validity",
+      "anytime validity",
+      "deployment-level false-positive stability",
+      "independent DS7/DS8 confirmation"
+    ],
+    "status": "EMPIRICALLY_BLOCK_CALIBRATED"
+  },
+  "schema": "gnss-doppler-lab.b0-cs-validity-limitations.v1",
+  "unavailable_inputs": [
+    "DS4",
+    "DS7",
+    "DS8",
+    "source-distinct static normal"
+  ]
+}

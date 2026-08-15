@@ -1,0 +1,112 @@
+{
+  "architecture": "PaperB0GRU",
+  "attack_inputs_read": false,
+  "best_epoch": 36,
+  "best_validation_loss": 0.010168362948562172,
+  "calibration_excluded_from_predictor": true,
+  "checkpoint_selection": "strict minimum chronological validation loss; earliest exact tie",
+  "checkpoint_selection_role": "validation",
+  "config": {
+    "batch_size": 256,
+    "dropout": 0.05,
+    "embedding_dim": 128,
+    "epochs": 40,
+    "hidden_dim": 128,
+    "learning_rate": 0.001,
+    "seed": 11,
+    "seq_len": 12,
+    "weight_decay": 0.0001
+  },
+  "device": "cuda",
+  "feature_columns": [
+    "tap_E4_rel_prompt_mean",
+    "tap_E3_rel_prompt_mean",
+    "tap_E2_rel_prompt_mean",
+    "tap_E_rel_prompt_mean",
+    "tap_P_rel_prompt_mean",
+    "tap_L_rel_prompt_mean",
+    "tap_L2_rel_prompt_mean",
+    "tap_L3_rel_prompt_mean",
+    "tap_L4_rel_prompt_mean"
+  ],
+  "holdout_excluded_from_predictor": true,
+  "normal_only": true,
+  "parameter_count": 134793,
+  "peak_cuda_memory_bytes": 86789120,
+  "role_history_audits": {
+    "calibration": {
+      "cadence_seconds": 0.5,
+      "causal_no_lookahead": true,
+      "examples": 1764,
+      "first_target_index_is_seq_len": true,
+      "gaps_detected": 0,
+      "reset_dimensions": [
+        "role",
+        "physical_recording_id",
+        "segment",
+        "channel",
+        "prn",
+        "cadence_gap"
+      ],
+      "seq_len": 12,
+      "short_chunks_dropped": 1
+    },
+    "holdout": {
+      "cadence_seconds": 0.5,
+      "causal_no_lookahead": true,
+      "examples": 1259,
+      "first_target_index_is_seq_len": true,
+      "gaps_detected": 0,
+      "reset_dimensions": [
+        "role",
+        "physical_recording_id",
+        "segment",
+        "channel",
+        "prn",
+        "cadence_gap"
+      ],
+      "seq_len": 12,
+      "short_chunks_dropped": 1
+    },
+    "train": {
+      "cadence_seconds": 0.5,
+      "causal_no_lookahead": true,
+      "examples": 4592,
+      "first_target_index_is_seq_len": true,
+      "gaps_detected": 0,
+      "reset_dimensions": [
+        "role",
+        "physical_recording_id",
+        "segment",
+        "channel",
+        "prn",
+        "cadence_gap"
+      ],
+      "seq_len": 12,
+      "short_chunks_dropped": 0
+    },
+    "validation": {
+      "cadence_seconds": 0.5,
+      "causal_no_lookahead": true,
+      "examples": 1277,
+      "first_target_index_is_seq_len": true,
+      "gaps_detected": 0,
+      "reset_dimensions": [
+        "role",
+        "physical_recording_id",
+        "segment",
+        "channel",
+        "prn",
+        "cadence_gap"
+      ],
+      "seq_len": 12,
+      "short_chunks_dropped": 0
+    }
+  },
+  "standardizer_fit_role": "train",
+  "torch_version": "2.13.0+cu130",
+  "train_rows": 4796,
+  "training_runtime_seconds": 4.355665469003725,
+  "uses_prn_identity": false,
+  "validation_rows": 1421
+}

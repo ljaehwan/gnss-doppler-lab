@@ -1,0 +1,24 @@
+{
+  "attack_inputs_read": false,
+  "block_seconds": 3.0,
+  "calibrator_state_sha256": "6d2f7f6416a5449d8cd60cc2d1305a931942493f8486f909b5a1c09680cfb53a",
+  "clean_source_sha256": "fcd1d378c28e79fe4a550b65fc1208cde3c8fb334db11406a07fed4d90fba237",
+  "cn0_edges": [
+    46.865200678507485,
+    49.7940476735433
+  ],
+  "config_and_code_hashes": {
+    "config_sha256": "4a29c6d7b19d36aacf5a46df66a0f7ce10e5e90af27faf95fd5bfb3a80f1370d",
+    "experiment_implementation_sha256": "a5693ccdc90c09a4b64b8f5807a99e528770982aefe4f4a6003b6d1b2e6d2ddf",
+    "implementation_sha256": "dfc2db82d9936e3a570711d688f2d3fb4842fb4ae0cd16c013bbf76e8040c1db",
+    "preregistration_sha256": "71bc4a678948bd3fad3e634f1cf8e6a4e47c679960bb70676b4a27904220a7d1",
+    "runner_sha256": "40820b02bc0b5b012e46c3d1844b79b507b747e1e398f81ca6d3040d3b2f6d22"
+  },
+  "git_head_at_freeze": "48c1e43803d9c5ead657ddd4b4b30cb6f48632ce",
+  "linear_ar_state_sha256": "d01438a4c9f53ce2b71b3fc3a2cc8cf3e25f5a90fcf5e264d7060de80e668932",
+  "paper_b0_model_sha256": "5f79eea3881f697e7becb8d1b454387e7e99c4d3e3f0e564f7ef2f890fee004b",
+  "preregistration_statement": "Any missing source, lineage, duration, support, runtime, or verification produces structured UNAVAILABLE or LIMITED output; no substitute is selected from attack outcomes.",
+  "schema": "gnss-doppler-lab.b0-cs-clean-freeze.v1",
+  "status": "FROZEN_BEFORE_ATTACK_ACCESS",
+  "thresholds_sha256": "cb87c8cbb8096e39db5b08a49e1421c6f8809c9ef782f8420cd905a362d03900"
+}

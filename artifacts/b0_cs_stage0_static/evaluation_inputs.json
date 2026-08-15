@@ -1,0 +1,23 @@
+{
+  "DS1": {
+    "kind": "attack",
+    "npz": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds1.npz",
+    "npz_sha256": "b24d947c83890dbfa1c801bfbcb72e1fd192dd66509e927eb5afb8118902b072",
+    "manifest": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds1.manifest.json",
+    "manifest_sha256": "7be224f13002f8c4de03d833d2987547a750068b181debe2592b9f745c5c651f"
+  },
+  "DS2": {
+    "kind": "attack",
+    "npz": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds2.npz",
+    "npz_sha256": "dae0f245cbb107febd220c6de33b9a279a2bad356cb0ba772daf9418bc75d7c9",
+    "manifest": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds2.manifest.json",
+    "manifest_sha256": "15066dacfd4e1ef88fc35df5c323c67b3e1dc1420003de90707340c9982a5595"
+  },
+  "DS3": {
+    "kind": "attack",
+    "npz": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds3.npz",
+    "npz_sha256": "38eb5842dfec306d99bf0c5d61df6cffcb6faa25ed63721cafa8e3c3776f9b3e",
+    "manifest": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds3.manifest.json",
+    "manifest_sha256": "01de5f689a543da2107b0258f95cfff68b0c1a2c9a4cfeb37724b8a32a6074a8"
+  }
+}

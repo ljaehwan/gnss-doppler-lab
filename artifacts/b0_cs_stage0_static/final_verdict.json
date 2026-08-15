@@ -1,0 +1,22 @@
+{
+  "attack_outcome_retuning": false,
+  "criteria": {
+    "clean_holdout_fpr_requirement": true,
+    "controls_no_persistent_alarm": false,
+    "core_full_scenarios_available": [
+      "DS3"
+    ],
+    "external_source_distinct_static_normal_available": false,
+    "go_blockers": [
+      "no source-distinct compatible static normal sequence",
+      "persistent alarms in one or more available controls",
+      "DS4 and DS7/DS8-family Full results unavailable under the frozen input contract",
+      "Full did not beat the simple consecutive threshold in two core families",
+      "GRU-versus-Linear-AR significance in two core families not established"
+    ],
+    "go_possible": false
+  },
+  "recommended_next_action": "Acquire one sealed source-distinct 20\u201330 minute static receiver capture and evaluate once without recalibration.",
+  "schema": "gnss-doppler-lab.b0-cs-final-verdict.v1",
+  "verdict": "PIVOT_TO_PROVENANCE_EVALUATION_PAPER"
+}

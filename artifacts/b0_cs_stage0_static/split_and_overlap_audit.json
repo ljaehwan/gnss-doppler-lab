@@ -1,0 +1,99 @@
+{
+  "allocation": "Hamilton largest remainder; role-order tie break",
+  "attack_labels_used": false,
+  "calibrator_threshold_roles": [
+    "calibration"
+  ],
+  "checkpoint_selection_roles": [
+    "validation"
+  ],
+  "guard_epochs": 12,
+  "guard_seconds": 6.0,
+  "no_raw_sample_or_byte_interval_overlap": true,
+  "no_target_epoch_overlap": true,
+  "normal_only": true,
+  "predictor_fit_roles": [
+    "train"
+  ],
+  "ratios": {
+    "calibration": 0.2,
+    "holdout": 0.15,
+    "train": 0.5,
+    "validation": 0.15
+  },
+  "raw_sample_and_byte_ranges": {
+    "calibration": {
+      "raw_byte_end_exclusive": 40519200832,
+      "raw_byte_start": 31179128508,
+      "raw_sample_end_exclusive": 10129800208,
+      "raw_sample_start": 7794782127
+    },
+    "holdout": {
+      "raw_byte_end_exclusive": 48013877420,
+      "raw_byte_start": 41029125748,
+      "raw_sample_end_exclusive": 12003469355,
+      "raw_sample_start": 10257281437
+    },
+    "train": {
+      "raw_byte_end_exclusive": 23169168204,
+      "raw_byte_start": 54064192,
+      "raw_sample_end_exclusive": 5792292051,
+      "raw_sample_start": 13516048
+    },
+    "validation": {
+      "raw_byte_end_exclusive": 30669182316,
+      "raw_byte_start": 23679130848,
+      "raw_sample_end_exclusive": 7667295579,
+      "raw_sample_start": 5919782712
+    }
+  },
+  "role_content_sha256": {
+    "calibration": "da177ea2ac2100ff131f320efbaaf61d0f030f46cd0709222be254b484a56166",
+    "holdout": "f2c6d4d4d30f590acafd556eb2f10bb0dc8a11d8e72881b63330c39fb788e72b",
+    "train": "6c79bc8997e247e3fbfa214eca63f3c0db39950121a244d54ae2877d828c591f",
+    "validation": "3cbe7325a609345b49aef2cf6a601c40b7ac59ceccfeec2196d6e807a2053e09"
+  },
+  "roles": {
+    "calibration": {
+      "first_window_bin_s": 312.5,
+      "last_window_bin_s": 404.5,
+      "node_rows": 1910,
+      "target_epochs": 185
+    },
+    "holdout": {
+      "first_window_bin_s": 411.0,
+      "last_window_bin_s": 479.5,
+      "node_rows": 1390,
+      "target_epochs": 138
+    },
+    "train": {
+      "first_window_bin_s": 1.0,
+      "last_window_bin_s": 231.0,
+      "node_rows": 4796,
+      "target_epochs": 461
+    },
+    "validation": {
+      "first_window_bin_s": 237.5,
+      "last_window_bin_s": 306.0,
+      "node_rows": 1421,
+      "target_epochs": 138
+    }
+  },
+  "schema": "gnss-doppler-lab.b0-cs-split-audit.v1",
+  "sealed_evaluation_roles": [
+    "holdout"
+  ],
+  "stable_rule": {
+    "consecutive_epochs": 20,
+    "minimum_prns": 4
+  },
+  "stable_tracking_start_window_bin_s": 1.0,
+  "target_epoch_overlap_counts": {
+    "calibration:holdout": 0,
+    "train:calibration": 0,
+    "train:holdout": 0,
+    "train:validation": 0,
+    "validation:calibration": 0,
+    "validation:holdout": 0
+  }
+}

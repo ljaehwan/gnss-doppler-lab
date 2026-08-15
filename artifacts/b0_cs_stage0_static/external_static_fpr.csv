@@ -1,0 +1,5 @@
+scenario,method,status,reason,false_positive_rate,worst_run_external_fpr,evidence_class,independent_normal_evidence
+DS3_pre_onset,Full,AVAILABLE,Frozen Full score evaluated before official 118.9 s signal onset.,0.0,0.0,source-dependent external-run pre-onset,false
+DS4_pre_onset,Full,UNAVAILABLE,No compatible frozen-schema DS4 input was available.,,,source-dependent external-run pre-onset,false
+DS7_DS8_pre_onset,Full,UNAVAILABLE,Located family inputs omit cn0_db_hz; raw-overlap eligibility could not be completed.,,,conditional candidate only,false
+source_distinct_static_normal,Full,UNAVAILABLE,No compatible source-distinct 20-30 minute static sequence was supplied; same-source TEXBAT replay excluded.,,,independent normal,false

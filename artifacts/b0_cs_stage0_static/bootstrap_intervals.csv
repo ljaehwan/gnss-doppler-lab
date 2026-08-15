@@ -1,0 +1,6 @@
+scenario,comparison,status,repetitions,block_seconds,estimate,ci_lower,ci_upper,reason
+DS1,Full-A0 normalized pAUC at FPR<=5%,AVAILABLE,2000,10,0.008849557522123908,0.0,0.030927835051546285,
+DS2,Full-A0 normalized pAUC at FPR<=5%,AVAILABLE,2000,10,0.0012423935091278038,0.0,0.023814285714285715,
+DS3,Full-A0 normalized pAUC at FPR<=5%,AVAILABLE,2000,10,0.0,0.0,0.0,
+DS4,Full-A0 normalized pAUC at FPR<=5%,UNAVAILABLE,0,10,,,,Scenario scores unavailable because no compatible frozen-schema input exists.
+DS7_DS8_family,Full-A0 normalized pAUC at FPR<=5%,UNAVAILABLE,0,10,,,,Family scores unavailable because both located inputs omit frozen nuisance field cn0_db_hz.

@@ -1,0 +1,190 @@
+{
+  "anytime_valid_claim": false,
+  "block_rule": "non-overlapping 2 s blocks; if clean-train integrated autocorrelation time exceeds 2 s, use the smallest integer multiple of 0.5 s strictly greater than that IAT",
+  "block_score_q99": 0.7240073738777332,
+  "block_score_q995": 0.7240073738777332,
+  "calibration_blocks": 29,
+  "clean_train_iat": {
+    "iat_epochs": 5.9232735322039725,
+    "iat_seconds": 2.9616367661019862,
+    "positive_lags": 14
+  },
+  "cn0_edges_train_only": [
+    46.865200678507485,
+    49.7940476735433
+  ],
+  "distribution_free_under_arbitrary_temporal_dependence": false,
+  "schema": "gnss-doppler-lab.b0-cs-calibration-summary.v1",
+  "selected_block_seconds": 3.0,
+  "strata": {
+    "block_seconds": 3.0,
+    "cn0_edges": [
+      46.865200678507485,
+      49.7940476735433
+    ],
+    "entries": {
+      "cn00_n0": {
+        "calibration_n": 1764,
+        "merge_level": "global",
+        "minimum_block_rule_satisfied": true,
+        "minimum_pvalue": 0.0005665722379603399,
+        "nonoverlapping_block_count": 29,
+        "query_cn0_bin": 0,
+        "query_count_bin": 0,
+        "source_cn0_bins": [
+          0,
+          1,
+          2
+        ],
+        "source_count_bins": [
+          0,
+          1,
+          2
+        ]
+      },
+      "cn00_n1": {
+        "calibration_n": 1764,
+        "merge_level": "global",
+        "minimum_block_rule_satisfied": true,
+        "minimum_pvalue": 0.0005665722379603399,
+        "nonoverlapping_block_count": 29,
+        "query_cn0_bin": 0,
+        "query_count_bin": 1,
+        "source_cn0_bins": [
+          0,
+          1,
+          2
+        ],
+        "source_count_bins": [
+          0,
+          1,
+          2
+        ]
+      },
+      "cn00_n2": {
+        "calibration_n": 595,
+        "merge_level": "exact",
+        "minimum_block_rule_satisfied": true,
+        "minimum_pvalue": 0.0016778523489932886,
+        "nonoverlapping_block_count": 29,
+        "query_cn0_bin": 0,
+        "query_count_bin": 2,
+        "source_cn0_bins": [
+          0
+        ],
+        "source_count_bins": [
+          2
+        ]
+      },
+      "cn01_n0": {
+        "calibration_n": 1764,
+        "merge_level": "global",
+        "minimum_block_rule_satisfied": true,
+        "minimum_pvalue": 0.0005665722379603399,
+        "nonoverlapping_block_count": 29,
+        "query_cn0_bin": 1,
+        "query_count_bin": 0,
+        "source_cn0_bins": [
+          0,
+          1,
+          2
+        ],
+        "source_count_bins": [
+          0,
+          1,
+          2
+        ]
+      },
+      "cn01_n1": {
+        "calibration_n": 1764,
+        "merge_level": "global",
+        "minimum_block_rule_satisfied": true,
+        "minimum_pvalue": 0.0005665722379603399,
+        "nonoverlapping_block_count": 29,
+        "query_cn0_bin": 1,
+        "query_count_bin": 1,
+        "source_cn0_bins": [
+          0,
+          1,
+          2
+        ],
+        "source_count_bins": [
+          0,
+          1,
+          2
+        ]
+      },
+      "cn01_n2": {
+        "calibration_n": 587,
+        "merge_level": "exact",
+        "minimum_block_rule_satisfied": true,
+        "minimum_pvalue": 0.0017006802721088435,
+        "nonoverlapping_block_count": 29,
+        "query_cn0_bin": 1,
+        "query_count_bin": 2,
+        "source_cn0_bins": [
+          1
+        ],
+        "source_count_bins": [
+          2
+        ]
+      },
+      "cn02_n0": {
+        "calibration_n": 1764,
+        "merge_level": "global",
+        "minimum_block_rule_satisfied": true,
+        "minimum_pvalue": 0.0005665722379603399,
+        "nonoverlapping_block_count": 29,
+        "query_cn0_bin": 2,
+        "query_count_bin": 0,
+        "source_cn0_bins": [
+          0,
+          1,
+          2
+        ],
+        "source_count_bins": [
+          0,
+          1,
+          2
+        ]
+      },
+      "cn02_n1": {
+        "calibration_n": 1764,
+        "merge_level": "global",
+        "minimum_block_rule_satisfied": true,
+        "minimum_pvalue": 0.0005665722379603399,
+        "nonoverlapping_block_count": 29,
+        "query_cn0_bin": 2,
+        "query_count_bin": 1,
+        "source_cn0_bins": [
+          0,
+          1,
+          2
+        ],
+        "source_count_bins": [
+          0,
+          1,
+          2
+        ]
+      },
+      "cn02_n2": {
+        "calibration_n": 582,
+        "merge_level": "exact",
+        "minimum_block_rule_satisfied": true,
+        "minimum_pvalue": 0.0017152658662092624,
+        "nonoverlapping_block_count": 29,
+        "query_cn0_bin": 2,
+        "query_count_bin": 2,
+        "source_cn0_bins": [
+          2
+        ],
+        "source_count_bins": [
+          2
+        ]
+      }
+    },
+    "minimum_blocks": 20,
+    "prn_identity_stratum": false
+  },
+  "validity": "EMPIRICALLY_BLOCK_CALIBRATED"
+}

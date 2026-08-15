@@ -1,0 +1,24 @@
+{
+  "schema": "gnss-doppler-lab.b0-cs-verification-summary.v1",
+  "focused_tests": {
+    "command": "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_b0_dependence_calibrated.py tests/test_b0_cs_support.py tests/test_verify_b0_cs_stage0.py tests/test_btail_support_gate.py tests/test_score_texbat_prn_node_gru.py",
+    "passed": 65,
+    "failed": 0,
+    "result": "PASS"
+  },
+  "full_repository_tests": {
+    "command": "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q",
+    "passed": 460,
+    "failed": 6,
+    "result": "FAIL_WITH_UNRELATED_PREEXISTING_MISSING_FILE",
+    "reason": "All six failures are in peak-floor contrastive-predictive tests and arise because existing scripts/train_peak_floor_contrastive_predictive.py imports absent existing file scripts/train_peak_floor_temporal_autoencoder.py. The out-of-scope legacy implementation was not changed."
+  },
+  "pre_manifest_verifier": "PASS",
+  "runner_runs": [
+    {"run_id": "20260815T162404Z-b0-cs-clean-freeze", "status": "succeeded", "exit_code": 0},
+    {"run_id": "20260815T162742Z-b0-cs-ds123-evaluation", "status": "failed", "exit_code": 1, "reason": "Torch weights_only loader rejected benign TorchVersion metadata before any metrics were produced."},
+    {"run_id": "20260815T162835Z-b0-cs-ds123-evaluation-safe-load", "status": "succeeded", "exit_code": 0},
+    {"run_id": "20260815T163122Z-b0-cs-physical-controls-bootstrap-finalize", "status": "succeeded", "exit_code": 0},
+    {"run_id": "20260815T163542Z-b0-cs-availability-provenance-report", "status": "succeeded", "exit_code": 0}
+  ]
+}
