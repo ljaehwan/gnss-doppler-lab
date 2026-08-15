@@ -1,0 +1,24 @@
+{
+  "artifact_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/gcspo_stage0_r2_runner_simulation",
+  "branch": "research/gcspo-stage0-r2-runner-simulation",
+  "clean_full_fpr_q99": 0.07172995780590717,
+  "clean_full_fpr_q995": 0.06751054852320675,
+  "controls": "FAIL",
+  "ds3": {
+    "b0_exact_common": 643,
+    "full_events": 907,
+    "full_pre_onset_fpr_q99": 0.14893617021276595,
+    "full_roc_auc": 0.8267983789260385
+  },
+  "ds7": {
+    "b0_exact_common": 396,
+    "full_events": 533,
+    "full_pre_onset_treatment": "REPLAY_EXCLUDED_FROM_EXTERNAL_FPR",
+    "full_roc_auc": 0.5991366738610512
+  },
+  "latest_required_runner_phases_all_succeeded": true,
+  "neural_stage1_allowed": false,
+  "paper_model_continuation": "NOT_WORTH_CONTINUING_AS_THE_CURRENT_DETECTOR_PAPER_MODEL",
+  "shared_pull_off_physical_hypothesis": "INCOMPLETE",
+  "verdict": "EVALUATION_INCOMPLETE_SOURCE_OR_SUPPORT"
+}
