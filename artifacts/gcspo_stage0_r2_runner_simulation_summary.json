@@ -19,6 +19,8 @@
   "latest_required_runner_phases_all_succeeded": true,
   "neural_stage1_allowed": false,
   "paper_model_continuation": "NOT_WORTH_CONTINUING_AS_THE_CURRENT_DETECTOR_PAPER_MODEL",
+  "push_status": "BLOCKED_MISSING_GITHUB_HTTPS_CREDENTIALS",
+  "initial_result_commit": "2fe4c4d3f72ad4d071287b741f92bcb8d31e37c0",
   "shared_pull_off_physical_hypothesis": "INCOMPLETE",
   "verdict": "EVALUATION_INCOMPLETE_SOURCE_OR_SUPPORT"
 }

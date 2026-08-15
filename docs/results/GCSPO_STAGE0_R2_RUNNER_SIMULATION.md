@@ -67,3 +67,10 @@ preserved in the runner registry and `run_inventory.json`.
 This frozen detector is not worth continuing as the current paper model.  The
 LOS-shuffle geometry diagnostic may be retained only for a separately
 preregistered physics study after authenticated DS4/DS8 inputs are available.
+
+## Delivery status
+
+The result was committed locally as `2fe4c4d3f72ad4d071287b741f92bcb8d31e37c0`.
+Push to `origin` was attempted but the environment has no GitHub HTTPS
+credentials and no `gh` command.  The exact blocker is recorded in
+`infrastructure_blocker.json` under the SSD artifact root.
