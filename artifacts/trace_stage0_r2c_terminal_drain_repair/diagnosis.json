@@ -1,0 +1,97 @@
+{
+  "attack_performance_read_or_computed": false,
+  "candidate_cause_audit": {
+    "action_next_interval_availability_at_last_sample": {
+      "disposition": "NOT_THE_FAILURE",
+      "evidence": "The rep3-only quality pair is fully causal: row t [1124913011,1124938011) supplies action_next_t and row t+1 [1124938011,1124963011) supplies complex_t+1. Both are wholly inside the declared cleanStatic end-exclusive sample 1125000000. The target row's prospective next interval would also end at 1124988011, inside the source boundary."
+    },
+    "channel_stop_condition_off_by_one": {
+      "disposition": "NOT_A_DETERMINISTIC_ARITHMETIC_OFF_BY_ONE",
+      "evidence": "All ten channels use the same source limit. Only channel 0 differs, and its rep3-only interval is 36989 samples before the source boundary rather than crossing it. The channel-local interval arithmetic and common rows are bit exact."
+    },
+    "end_of_source_flush_drain_ordering": {
+      "disposition": "DOMINANT",
+      "evidence": "Gnss_Sdr_Valve pushes command_event(200,0) immediately after copying the configured sample count. ControlThread handles action 0 by setting stop_ and then calls GNSSFlowgraph::stop(), which stops channels and the GNU Radio top block instead of allowing natural EOS to drain buffered downstream samples."
+    },
+    "final_quality_gate_timing": {
+      "disposition": "CONSEQUENCE_NOT_CAUSE",
+      "evidence": "The rep3-only pair passes the unchanged quality gate using row-t CN0 47.8690299987793 dB-Hz and carrier lock 0.9836689233779907. Its target row is absent from rep4 before the quality adapter runs."
+    },
+    "partial_interval_emission_policy": {
+      "disposition": "NOT_THE_FAILURE",
+      "evidence": "Every compared record has a 25000-sample interval. The extra target interval is complete and remains inside the source-bound range; no partial native record was serialized."
+    },
+    "prn_channel_specific_terminal_behavior": {
+      "disposition": "OBSERVED_SCHEDULER_VICTIM",
+      "evidence": "cleanStatic receiver channel 0 / PRN 19 has 14998 native rows in rep3-r1 and 14997 in rep4-r1. Channels 1 through 9 each have 14998 rows in both replays."
+    },
+    "runner_scheduler_nondeterminism_versus_receiver_logic": {
+      "disposition": "GNU_RADIO_CONTROL_PLANE_STOP_RACE",
+      "evidence": "Durable runner invocations used identical raw IQ, executable, config, handoff, and sample range. All 149979 common physical rows are bit exact and common TRACE score error is zero. The only difference is whether one buffered channel work call finishes before the immediate control-plane stop."
+    }
+  },
+  "created_at": "2026-08-16T21:01:45+09:00",
+  "diagnosis_label": "FILE_SOURCE_STOP_PREEMPTS_TERMINAL_CHANNEL_DRAIN",
+  "exact_mismatch": {
+    "block_key": {
+      "block_start_s": 44.5,
+      "rep3_pair_count": 4980,
+      "rep4_pair_count": 4979,
+      "tracked_prn_count": 10
+    },
+    "dataset": "TEXBAT.cleanStatic",
+    "extra_native_record": {
+      "action_next_interval_length_samples": 25000,
+      "channel": 0,
+      "loop_sequence": 14997,
+      "prn": 19,
+      "raw_interval_end_sample": 1124963011,
+      "raw_interval_start_sample": 1124938011,
+      "tracking_session_id": 1
+    },
+    "extra_quality_pair": {
+      "action_source_raw_interval": [
+        1124913011,
+        1124938011
+      ],
+      "channel": 0,
+      "cn0_db_hz_at_source": 47.8690299987793,
+      "lock_at_source": 0.9836689233779907,
+      "prn": 19,
+      "target_raw_interval": [
+        1124938011,
+        1124963011
+      ],
+      "target_timestamp_s": 44.99752044
+    },
+    "raw_source_end_exclusive": 1125000000,
+    "rep3_native_row_count_channel_0": 14998,
+    "rep3_quality_pair_count": 148968,
+    "rep3_replay": "rep3-r1",
+    "rep4_native_row_count_channel_0": 14997,
+    "rep4_quality_pair_count": 148967,
+    "rep4_replay": "rep4-r1"
+  },
+  "input_bindings": {
+    "parent_metrics": {
+      "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/rep3_rep4_reproduction_metrics.json",
+      "sha256": "e0c8d975c512911ad83a97124bc41ef8459aa6e989b629901d258769fde7b7db"
+    },
+    "parent_replay_inventory": {
+      "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/replay_inventory.json",
+      "sha256": "72bc68e2390f9048544d3b85cd0fa61057214e5f8489c6fb5b89eb06b85dd31c"
+    },
+    "rep3_manifest": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/manifest.json",
+      "sha256": "0c180efc9569f23527ad8c7da03f2801eb9b72de29dbed9d7620179d8679c850"
+    },
+    "rep4_manifest": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/manifest.json",
+      "sha256": "ebaac01913e3744f0e485b1076acc46097051abf2f0a7c808492cba012d920d7"
+    }
+  },
+  "phase_b_status": "NOT_AUTHORIZED",
+  "schema": "gnss-doppler-lab.trace-r2c-terminal-diagnosis.v1",
+  "status": "COMPLETE_BEFORE_RECEIVER_REPAIR",
+  "task_base_commit": "187ea86aa5fdf2b0ed300f5cb1b210c0b42b6fff"
+}

@@ -1,0 +1,47 @@
+{
+  "attack_data_used_for_repair_selection": false,
+  "attack_performance_read_or_computed": false,
+  "created_at": "2026-08-16T21:01:45+09:00",
+  "diagnosis_binding": {
+    "diagnosis_label": "FILE_SOURCE_STOP_PREEMPTS_TERMINAL_CHANNEL_DRAIN",
+    "path": "artifacts/trace_stage0_r2c_terminal_drain_repair/diagnosis.json"
+  },
+  "evaluation_code_change_authorized": false,
+  "frozen_phase_a": {
+    "action_mapping_mismatch_maximum": 0,
+    "minimum_stable_quality_common_epochs": 1000,
+    "minimum_valid_prns_same_epoch": 4,
+    "native_cadence_fraction_minimum": 0.99,
+    "physical_common_rows_must_be_bit_exact": true,
+    "quality_carrier_lock_min": 0.85,
+    "quality_cn0_min_db_hz": 28.0,
+    "raw_source_and_timeline_binding_must_pass": true,
+    "replays": [
+      "TEXBAT.cleanStatic.rep3",
+      "TEXBAT.cleanStatic.rep4",
+      "TEXBAT.DS3.smoke",
+      "OAKBAT.OS3.smoke"
+    ],
+    "terminal_row_counts_per_prn_channel_must_match": true,
+    "threshold_crossings_and_alarms_must_match": true,
+    "trace_score_absolute_tolerance": 1e-12,
+    "whole_replay_canonical_semantic_hash_must_match": true,
+    "whole_replay_row_set_must_match": true
+  },
+  "implementation_scope": [
+    "add an opt-in finite-file terminal-drain mode to the receiver input valve",
+    "on configured source exhaustion, return natural GNU Radio end-of-stream and request a drain action instead of the immediate STOP action",
+    "handle the drain action by waiting for natural flowgraph completion before normal shutdown",
+    "enable the mode identically in all frozen R2c cleanStatic, DS3, and OS3 receiver configs",
+    "preserve the R2b handoff restore, TRACE schema-v2 serialization, causal action mapping, score adapter, and evaluator unchanged"
+  ],
+  "phase_b_authorization_rule": "Authorize Phase B only if every unchanged frozen Phase A source, executable/config/patch/handoff hash, cadence, causal, support, whole-row-set, terminal-count, semantic-hash, score, block-key, threshold-crossing, alarm, raw-timeline, and action-mapping gate passes.",
+  "phase_b_status_at_preregistration": "SEALED_NOT_AUTHORIZED",
+  "repair_strategy": "OPT_IN_NATURAL_EOS_FLOWGRAPH_DRAIN",
+  "row_closure_policy": "Do not filter or suppress native rows or TRACE pairs post hoc. The finite source closes at its already frozen source-bound end sample. After the last configured item is copied, propagate GNU Radio WORK_DONE and wait for every downstream block to consume all schedulable buffered input before stopping channels. The unchanged adapter then forms only naturally emitted, fully linked causal pairs.",
+  "success_prediction": "With identical input count and channel initial state, natural EOS propagation leaves each tracking block with a deterministic terminal buffer smaller than its forecast requirement. rep3 and rep4 should therefore emit identical per-PRN/channel terminal rows without changing any common physical value.",
+  "schema": "gnss-doppler-lab.trace-r2c-repair-preregistration.v1",
+  "source_range_or_duration_change_authorized": false,
+  "task_base_commit": "187ea86aa5fdf2b0ed300f5cb1b210c0b42b6fff",
+  "trace_math_threshold_tolerance_window_or_gate_changes_authorized": false
+}
