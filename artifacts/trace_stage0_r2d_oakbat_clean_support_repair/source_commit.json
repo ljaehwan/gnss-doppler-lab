@@ -1,7 +1,9 @@
 {
   "freeze_commit": "TO_BE_RECORDED_AFTER_SUPPORT_FREEZE_COMMIT",
   "parent_r2c_commit": "70a3ed273b5d396f6befe06f7aba8d8a3304cd65",
-  "preregistration_commit": "TO_BE_RECORDED_AFTER_PREREGISTRATION_COMMIT",
+  "preregistration_commit": "4d6c3a290d6d83b0aa2352de16954d21a94b9fab",
+  "receiver_executable_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+  "receiver_patch_sha256": "81b680bfae682fa92743fca53ce30ae09790383d008841d6eae3a25407442540",
   "research_branch": "research/trace-stage0-r2d-oakbat-clean-support-repair",
   "schema": "gnss-doppler-lab.trace-r2d-source-freeze.v1",
   "task_base_commit": "70a3ed273b5d396f6befe06f7aba8d8a3304cd65"
