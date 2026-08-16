@@ -1,0 +1,40 @@
+{
+  "attack_performance_read_or_computed": false,
+  "diagnosis_label": "OAKBAT_OS3_HANDOFF_INCOMPATIBLE_WITH_CLEANSTATIC",
+  "phase_a_authorization_rule": "Repeat unchanged R2c Phase A and authorize Phase B only if every inherited gate passes.",
+  "phase_b_mapping_change": {
+    "OAKBAT.OS3": "Unchanged R2c OS3 handoff at 90 s.",
+    "OAKBAT.OS4": "Unchanged R2c OS3-family handoff at 90 s.",
+    "OAKBAT.cleanStatic": "Use the new cleanStatic-specific handoff at zero source skip."
+  },
+  "phase_b_stop_rule": "Fail closed before attack scoring if the repaired OAKBAT clean audit is non-chronological, has an empty role, or violates minimum support.",
+  "prohibited": [
+    "using cleanDynamic or attack data for clean support",
+    "selecting a handoff by TRACE score, quality outcome, or attack outcome",
+    "loosening any split, support, score, or alarm gate",
+    "post-hoc filtering to manufacture a passing clean split"
+  ],
+  "repair_strategy": "CLEANSTATIC_SPECIFIC_NORMAL_ONLY_TARGET_ALIGNED_HANDOFF",
+  "schema": "gnss-doppler-lab.trace-r2d-repair-preregistration.v1",
+  "status": "SEALED_BEFORE_SUPPORT_ACQUISITION",
+  "support_acquisition": {
+    "attack_data_used": false,
+    "bounded_duration_s": 45.0,
+    "dataset": "OAKBAT.cleanStatic",
+    "quality_or_score_used_for_selection": false,
+    "raw_iq_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+    "raw_seconds_to_skip": 0.0,
+    "selection_guard_s": 30.0,
+    "selection_rule": "For each physical native channel file, choose the first causal native row whose raw interval starts at or after 30.0 s; retain only its PRN and exact action-used state; require at least four contiguous output channels."
+  },
+  "task_base_commit": "70a3ed273b5d396f6befe06f7aba8d8a3304cd65",
+  "unchanged": [
+    "R2c natural terminal-drain receiver semantics and executable",
+    "TEXBAT and OAKBAT OS3/OS4 raw IQ sources and hashes",
+    "TEXBAT and OAKBAT OS3/OS4 handoffs and source ranges",
+    "Phase A replay set and every Phase A gate",
+    "TRACE features, score formula, thresholds, windows, tolerances, block keys, controls, alarm gates, and GO/NO-GO criteria",
+    "45/20/15/20 chronological clean split with 5 s guards",
+    "minimum four-PRN support and cleanStatic-only calibration"
+  ]
+}

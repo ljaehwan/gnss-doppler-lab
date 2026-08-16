@@ -1,0 +1,170 @@
+{
+  "attack_data_read_or_scored": false,
+  "failure_label": "OAKBAT_CLEAN_SPLIT_EMPTY",
+  "historical_clean_receiver_summary": {
+    "evidence": "Authenticated cleanStatic acquisition has eleven channel tracks extending to approximately 479.9 s with a clean-specific PRN/channel state.",
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/q-comet-oakbat-complex9/cleanstatic/receiver/cleanstatic-complex9/tracking_summary.csv",
+    "sha256": "6a2ea61ccf97dab88d93fdffbaf950651ff94e0929a283b63a3e71dfaa075cd9"
+  },
+  "native_dump_files": [
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/dumps/phase_b/oakbat_cleanstatic/rep1/trace_native_1ms_ch_0.bin",
+      "prns": [
+        27
+      ],
+      "raw_start_max": 554998880,
+      "raw_start_min": 475003754,
+      "record_count": 16000
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/dumps/phase_b/oakbat_cleanstatic/rep1/trace_native_1ms_ch_1.bin",
+      "prns": [
+        21
+      ],
+      "raw_start_max": 554996085,
+      "raw_start_min": 475000939,
+      "record_count": 16000
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/dumps/phase_b/oakbat_cleanstatic/rep1/trace_native_1ms_ch_10.bin",
+      "prns": [
+        10
+      ],
+      "raw_start_max": 555000023,
+      "raw_start_min": 475000087,
+      "record_count": 16001
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/dumps/phase_b/oakbat_cleanstatic/rep1/trace_native_1ms_ch_2.bin",
+      "prns": [
+        11
+      ],
+      "raw_start_max": 555001044,
+      "raw_start_min": 475001161,
+      "record_count": 16001
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/dumps/phase_b/oakbat_cleanstatic/rep1/trace_native_1ms_ch_3.bin",
+      "prns": [
+        18
+      ],
+      "raw_start_max": 555000132,
+      "raw_start_min": 475004935,
+      "record_count": 16000
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/dumps/phase_b/oakbat_cleanstatic/rep1/trace_native_1ms_ch_4.bin",
+      "prns": [
+        20
+      ],
+      "raw_start_max": 554997984,
+      "raw_start_min": 475002964,
+      "record_count": 16000
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/dumps/phase_b/oakbat_cleanstatic/rep1/trace_native_1ms_ch_5.bin",
+      "prns": [
+        24
+      ],
+      "raw_start_max": 554996522,
+      "raw_start_min": 475001415,
+      "record_count": 16000
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/dumps/phase_b/oakbat_cleanstatic/rep1/trace_native_1ms_ch_6.bin",
+      "prns": [
+        25
+      ],
+      "raw_start_max": 555001704,
+      "raw_start_min": 475001866,
+      "record_count": 16001
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/dumps/phase_b/oakbat_cleanstatic/rep1/trace_native_1ms_ch_7.bin",
+      "prns": [
+        14
+      ],
+      "raw_start_max": 555003885,
+      "raw_start_min": 475003989,
+      "record_count": 16001
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/dumps/phase_b/oakbat_cleanstatic/rep1/trace_native_1ms_ch_8.bin",
+      "prns": [
+        8
+      ],
+      "raw_start_max": 554997286,
+      "raw_start_min": 475002223,
+      "record_count": 16000
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/dumps/phase_b/oakbat_cleanstatic/rep1/trace_native_1ms_ch_9.bin",
+      "prns": [
+        15
+      ],
+      "raw_start_max": 554997188,
+      "raw_start_min": 475002046,
+      "record_count": 16000
+    }
+  ],
+  "parent_handoff_path": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair/artifacts/trace_stage0_r2c_terminal_drain_repair/handoffs/oakbat_os3.csv",
+  "parent_handoff_sha256": "9a546a42775450bbe076784b737aa7d2888ae637ddeb3769ee2ee3d4ce6f064c",
+  "parent_receiver_exit_code": 0,
+  "parent_replay_validation": {
+    "all_dump_files_have_physical_records": true,
+    "expected_dump_file_count": 11,
+    "minimum_physical_dump_files_required": 4,
+    "observed_dump_file_count": 11,
+    "physical_dump_file_count": 11,
+    "record_counts": [
+      16000,
+      16000,
+      16001,
+      16001,
+      16000,
+      16000,
+      16000,
+      16001,
+      16001,
+      16000,
+      16000
+    ],
+    "status": "PASS"
+  },
+  "parent_seconds_to_skip": 90.0,
+  "quality_common_support": {
+    "all_native_pair_count": 43,
+    "chronological_boundaries_s": [
+      95.0530672,
+      95.06686719999999,
+      95.07721719999999
+    ],
+    "duration_s": 0.06900000000000261,
+    "guard_s": 5.0,
+    "role_pair_counts": {
+      "calibration": 0,
+      "covariance_validation": 0,
+      "holdout": 0,
+      "train": 0
+    },
+    "selected_pair_count": 43,
+    "time_end_s": 95.0910172,
+    "time_start_s": 95.0220172,
+    "unique_prns": [
+      10,
+      11,
+      27
+    ]
+  },
+  "raw_iq": {
+    "ctime_ns": 1785200321000000000,
+    "device": 49,
+    "inode": 3062,
+    "mtime_ns": 1785200321000000000,
+    "path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+    "sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+    "size_bytes": 9600000000
+  },
+  "schema": "gnss-doppler-lab.trace-r2d-oakbat-clean-support-audit.v1",
+  "status": "FAIL_CONFIRMED"
+}

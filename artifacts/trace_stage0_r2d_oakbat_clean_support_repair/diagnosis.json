@@ -1,0 +1,30 @@
+{
+  "attack_performance_read_or_computed": false,
+  "diagnosis_label": "OAKBAT_OS3_HANDOFF_INCOMPATIBLE_WITH_CLEANSTATIC",
+  "evidence": {
+    "parent_role_pair_counts": {
+      "calibration": 0,
+      "covariance_validation": 0,
+      "holdout": 0,
+      "train": 0
+    },
+    "parent_selected_duration_s": 0.06900000000000261,
+    "parent_selected_pairs": 43,
+    "parent_selected_unique_prns": [
+      10,
+      11,
+      27
+    ],
+    "parent_support_audit": "oakbat_clean_support_audit.json"
+  },
+  "failure_label": "OAKBAT_CLEAN_SPLIT_EMPTY",
+  "not_causes": {
+    "raw_file_truncation": "The authenticated cleanStatic source is 9.6 GB / 480 s and its hash matches the frozen source binding.",
+    "receiver_process_failure": "The R2c receiver exited 0 and emitted eleven non-empty native dump files.",
+    "terminal_drain": "R2c natural EOS drain remains enabled and is preserved unchanged.",
+    "trace_scoring_or_split_implementation": "The scorer correctly failed closed after the frozen split roles were empty."
+  },
+  "root_cause": "R2c reused the OAKBAT.OS3 target-aligned handoff and 90 s skip for OAKBAT.cleanStatic. The authenticated clean recording has a different clean-specific PRN/channel tracking state. The receiver therefore emitted physical files but lost quality/common support before the unchanged guarded chronological roles could be populated.",
+  "schema": "gnss-doppler-lab.trace-r2d-oakbat-clean-diagnosis.v1",
+  "status": "COMPLETE_BEFORE_REPAIR"
+}
