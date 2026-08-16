@@ -23,6 +23,7 @@ SCENARIOS = {
         "fs": 25_000_000,
         "raw_offset": 0,
         "onset_s": None,
+        "guard_s": 30.0,
         "raw_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
         "base_config": Path("/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/receiver.conf"),
         "source": Path("/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep1"),
@@ -32,6 +33,7 @@ SCENARIOS = {
         "fs": 25_000_000,
         "raw_offset": 2_250_000_000,
         "onset_s": 118.9,
+        "guard_s": 5.0,
         "raw_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
         "base_config": Path("/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/receiver.conf"),
         "source": Path("/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_ds3/rep1"),
@@ -41,6 +43,7 @@ SCENARIOS = {
         "fs": 5_000_000,
         "raw_offset": 450_000_000,
         "onset_s": 120.0,
+        "guard_s": 5.0,
         "raw_sha256": "2a3c3c5cf1accaa287fe14181e43070903500e0250c69e3c335f91c89c0cdc6c",
         "base_config": Path("/home/ubuntu/ssd_data/gnss-early-detection/artifacts/q-comet-oakbat-complex9/os3/receiver/os3-complex9/receiver.conf"),
         "source": Path("/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/oakbat_os3/rep1"),
@@ -56,10 +59,10 @@ def main() -> int:
     args.output.mkdir(parents=True, exist_ok=True)
     manifest = {
         "schema": "gnss-doppler-lab.trace-r2a-frozen-handoff-manifest.v1",
-        "procedure": "For each preserved pre-onset R2 channel, fix its first acquired PRN and grid Doppler; defer tracking to 30 s into the replay at the same 1 ms code-epoch residue and reset residual code/carrier phase by an explicit convention. The 30 s boundary is fixed from the failed rep3 handoff-start audit, before any physical TRACE values were evaluated.",
+        "procedure": "For each preserved pre-onset R2 channel, fix its first acquired PRN and grid Doppler; defer tracking to a family/scenario guard boundary at the same 1 ms code-epoch residue and reset residual code/carrier phase by an explicit convention. cleanStatic uses 30 s after its failed 5 s acquisition-completion audit. DS3/OS3 retain their preserved R2 90 s slice and 5 s guard, whose source rows prove acquisition before spoof onset. No physical TRACE or attack score selected a guard.",
         "handoff_kind": "deterministic_tracking_start_from_preserved_pre_onset_acquisition_result",
         "preserved_schema_limitation": "The R2 native tracking schema did not serialize the acquisition test statistic or original acquisition-engine sample stamp. They are therefore marked unavailable rather than inferred or fabricated. The repair freezes the observable acquisition result (channel, PRN, acquisition-grid Doppler, and code-epoch residue) and an explicit deterministic first-tracking-sample/phase convention.",
-        "guard_s_from_replay_start": 30.0,
+        "guard_s_by_scenario": {name: spec["guard_s"] for name, spec in SCENARIOS.items()},
         "scenarios": {},
     }
     for name, spec in SCENARIOS.items():
@@ -74,7 +77,7 @@ def main() -> int:
             absolute_start = int(first["raw_interval_start_sample"])
             source_relative_start = absolute_start - int(spec["raw_offset"])
             code_epoch_residue = source_relative_start % int(round(int(spec["fs"]) * 0.001))
-            target = int(30.0 * int(spec["fs"])) + code_epoch_residue
+            target = int(float(spec["guard_s"]) * int(spec["fs"])) + code_epoch_residue
             pre_onset = spec["onset_s"] is None or absolute_start / int(spec["fs"]) < float(spec["onset_s"])
             if not pre_onset:
                 raise ValueError(f"{name} channel {int(first['channel'])}: source handoff is not pre-onset")
@@ -128,6 +131,7 @@ def main() -> int:
             "handoff_sha256": sha256_file(target_path),
             "fixed_channel_prn_map": {str(row["channel"]): row["prn"] for row in rows},
             "all_source_rows_pre_onset": True,
+            "guard_s_from_replay_start": spec["guard_s"],
             "raw_iq_sha256": spec["raw_sha256"],
             "source_receiver_config_sha256": sha256_file(spec["base_config"]),
             "receiver_repair_binding": "Completed in preregistration.json with receiver executable and patch SHA-256 before replay.",

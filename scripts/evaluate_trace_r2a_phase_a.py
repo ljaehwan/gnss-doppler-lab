@@ -128,18 +128,20 @@ def score_reproduction(first_dir: Path, second_dir: Path) -> dict[str, object]:
 
 
 def main() -> int:
-    selected_rep3 = replay_dir("TEXBAT.cleanStatic.rep3")
-    initial_rep3 = selected_rep3.parent / "rep3"
     prior_failed_attempts = []
-    if selected_rep3 != initial_rep3 and (initial_rep3 / "manifest.json").exists():
-        prior_failed_attempts.append(
-            {
-                "path": str(initial_rep3),
-                "manifest": json.loads((initial_rep3 / "manifest.json").read_text()),
-                "scientific_status": "FAIL_FROZEN_HANDOFF_TARGET_MISSED",
-                "reason": "The 5 s target preceded completion of at least one fixed-PRN acquisition; the attempt was preserved and no semantic gate was evaluated from it.",
-            }
-        )
+    for key, (_, slug, repetition, _) in SCENARIOS.items():
+        selected = replay_dir(key)
+        initial = SSD / "dumps/phase_a" / slug / f"rep{repetition}"
+        if selected != initial and (initial / "manifest.json").exists():
+            prior_failed_attempts.append(
+                {
+                    "scenario_key": key,
+                    "path": str(initial),
+                    "manifest": json.loads((initial / "manifest.json").read_text()),
+                    "scientific_status": "FAIL_FROZEN_HANDOFF_TARGET_OR_SLICE_AUDIT",
+                    "reason": "The preserved attempt exposed a handoff target/slice defect and was excluded before semantic evaluation; the selected retry was separately refrozen and pushed.",
+                }
+            )
     manifests = {key: json.loads((replay_dir(key) / "manifest.json").read_text()) for key in SCENARIOS}
     validations = {
         key: validate_dump_files(sorted(replay_dir(key).glob("trace_native_1ms_ch_*.bin")), expected_scenario_id=value[0], minimum_prns=4)

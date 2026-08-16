@@ -11,14 +11,15 @@ ARTIFACT = ROOT / "artifacts/trace_stage0_r2a_reproducibility_repair"
 
 def test_phase_a_handoffs_have_fixed_unique_channel_prn_and_pre_onset_sources():
     manifest = json.loads((ARTIFACT / "handoffs/manifest.json").read_text())
-    assert manifest["guard_s_from_replay_start"] == 30.0
+    assert manifest["guard_s_by_scenario"] == {"OAKBAT.OS3": 5.0, "TEXBAT.DS3": 5.0, "TEXBAT.cleanStatic": 30.0}
     for scenario in manifest["scenarios"].values():
         assert scenario["all_source_rows_pre_onset"] is True
         with Path(scenario["handoff_path"]).open(newline="") as stream:
             rows = list(csv.DictReader(stream))
         assert sorted(int(row["channel"]) for row in rows) == list(range(11))
         assert len({int(row["prn"]) for row in rows}) == 11
-        assert all(int(row["first_raw_interval_start_sample"]) >= 5_000_000 * 30 for row in rows)
+        minimum = int(scenario["guard_s_from_replay_start"] * 5_000_000)
+        assert all(int(row["first_raw_interval_start_sample"]) >= minimum for row in rows)
         assert all(row["code_phase_convention"] == "residual_code_phase_chips_and_samples_zero_at_first_interval" for row in rows)
         assert all(row["carrier_phase_convention"].startswith("residual_carrier_phase_zero") for row in rows)
         assert all(row["acquisition_sample_stamp"] == "UNAVAILABLE_IN_PRESERVED_R2_RELEASE_SCHEMA" for row in rows)

@@ -3,11 +3,11 @@
     "phase_a": {
       "OAKBAT.OS3": {
         "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/oakbat_os3.conf",
-        "sha256": "84ed0b1156bb4596ab2020d62c1d02d7413969993d44a9420225400312287595"
+        "sha256": "e066d060471abcb41764b99269c1a383182856970fc695f95075894681c08e63"
       },
       "TEXBAT.DS3": {
         "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/texbat_ds3.conf",
-        "sha256": "a8335516a92cedfdaec73327aaee383ed3fd46659b3788f021ec4255bc1cb285"
+        "sha256": "a68bb22e4f5007bc12c4137e8c33aec069d6a32d3f597067b9edff1217081042"
       },
       "TEXBAT.cleanStatic": {
         "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/texbat_cleanstatic.conf",
@@ -17,23 +17,23 @@
     "phase_b": {
       "OAKBAT.OS3": {
         "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/phase_b/oakbat_os3.conf",
-        "sha256": "c545c65514b23107d2b1b38b696b2c792694831f6ae56cc693813f5e73ec70c4"
+        "sha256": "6a3360c7d72570c2c42ec4791edf4282aed9790c7cbe1ad53d523de245fbcb17"
       },
       "OAKBAT.OS4": {
         "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/phase_b/oakbat_os4.conf",
-        "sha256": "62c067eeae8ab9734a01780559124d5fec5442a41cd120143135406ab016927f"
+        "sha256": "86f360981b110d7e62314fdd3fd1d6c4481d93e9c3dd0a344513984a6b10a24e"
       },
       "OAKBAT.cleanStatic": {
         "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/phase_b/oakbat_cleanstatic.conf",
-        "sha256": "a77260e5b051d19eed0d72ae2aeaaf2ec5eabd1b99b45dd5320b8f9b6fbefee4"
+        "sha256": "42e9f0571e044e86ff39c88d8ec5b437ae13334ce43a2143507ca9662925d3b0"
       },
       "TEXBAT.DS3": {
         "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/phase_b/texbat_ds3.conf",
-        "sha256": "1a9b15b3d2b76b5e997e267749b8726b5cb2b5cf166358e26ad2159bdef33a71"
+        "sha256": "025f49b95e9bea42eaff38554876a0487c48ce4fc8494a19c29dce29e2a605e3"
       },
       "TEXBAT.DS7": {
         "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/phase_b/texbat_ds7.conf",
-        "sha256": "c12ec8c72e80b37b04ac156368f7795a3c50d41ba229d8e949cfce85fd34b671"
+        "sha256": "ac9aff6899ffc4cc7e8281ccf240e00e4e91ddb0026ae7409f5ed1a433020d35"
       },
       "TEXBAT.cleanStatic": {
         "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/phase_b/texbat_cleanstatic.conf",
