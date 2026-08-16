@@ -1,0 +1,45 @@
+{
+  "DS1": {
+    "onset_s": 100.0,
+    "role": "boundary"
+  },
+  "DS3": {
+    "pull_off_s": 195.0,
+    "role": "development",
+    "signal_onset_s": 118.9
+  },
+  "DS7": {
+    "held": [
+      130.0,
+      150.0
+    ],
+    "injection_s": 110.0,
+    "role": "development",
+    "time_push_s": 150.0,
+    "transition": [
+      110.0,
+      130.0
+    ]
+  },
+  "OS1": {
+    "onset_s": 120.0,
+    "role": "boundary"
+  },
+  "OS3": {
+    "onset_s": 120.0,
+    "role": "confirmation",
+    "transition": [
+      120.0,
+      130.0
+    ]
+  },
+  "OS4": {
+    "onset_s": 120.0,
+    "role": "confirmation",
+    "transition": [
+      120.0,
+      130.0
+    ]
+  },
+  "schema": "gnss-doppler-lab.trace-timeline-inventory.v1"
+}

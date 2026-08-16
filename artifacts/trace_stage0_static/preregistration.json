@@ -1,0 +1,12 @@
+{
+  "attack_data_used_for_selection": false,
+  "baselines": ["A0", "A1", "A2", "A3", "A4", "B0_exact_or_UNAVAILABLE"],
+  "confirmation_scenarios": ["OS3", "OS4"],
+  "development_scenarios": ["DS3", "DS7"],
+  "frozen_claim_scope": "static matched-power/coherent authentic plus counterfeit coexistence and carry-off",
+  "frozen_score": "median pooled Mahalanobis energy of signed seven-interior-tap complex innovation",
+  "normal_training": {"OAKBAT": ["cleanStatic"], "TEXBAT": ["cleanStatic"]},
+  "primary_alarm": "q99 and actual 3 consecutive non-overlapping 0.5 s blocks",
+  "schema": "gnss-doppler-lab.trace-preregistration.v1",
+  "wording": "Configuration frozen before this TRACE evaluation."
+}

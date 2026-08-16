@@ -1,0 +1,221 @@
+{
+  "attack_scores_computed": false,
+  "blocking_issue": "GNSS-SDR changes the retained nine-tap dump to 20 ms navigation-bit accumulation after synchronization. The contract requires native 1 ms innovation and >=4 PRNs; OS3 and OS4 contain no native 1 ms post-onset row pairs.",
+  "cadence_audit": {
+    "DS1": {
+      "maximum_post_onset_native_prns_in_0p5s_block": 1,
+      "minimum_prns_required": 4,
+      "native_1ms_pair_count_total": 264583,
+      "post_onset_native_1ms_pair_count": 81202,
+      "post_onset_native_prns": [
+        1,
+        5,
+        8,
+        9,
+        12,
+        29
+      ],
+      "post_onset_row_count": 270722,
+      "same_prn_interval_sample_counts": {
+        "24999": 3950,
+        "25000": 251192,
+        "25001": 9441,
+        "499999": 57623,
+        "500000": 103142,
+        "500001": 70968,
+        "500002": 1242
+      },
+      "sample_rate_hz": 25000000.0
+    },
+    "DS3": {
+      "maximum_post_onset_native_prns_in_0p5s_block": 3,
+      "minimum_prns_required": 4,
+      "native_1ms_pair_count_total": 390054,
+      "post_onset_native_1ms_pair_count": 152717,
+      "post_onset_native_prns": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        18,
+        20,
+        24,
+        30,
+        32
+      ],
+      "post_onset_row_count": 327757,
+      "same_prn_interval_sample_counts": {
+        "1124999": 1,
+        "1125002": 1,
+        "1225000": 1,
+        "139650054": 1,
+        "24999": 5013,
+        "25000": 374900,
+        "25001": 10141,
+        "499998": 1,
+        "499999": 59497,
+        "500000": 101336,
+        "500001": 64586,
+        "500002": 1098
+      },
+      "sample_rate_hz": 25000000.0
+    },
+    "DS7": {
+      "maximum_post_onset_native_prns_in_0p5s_block": 1,
+      "minimum_prns_required": 4,
+      "native_1ms_pair_count_total": 221650,
+      "post_onset_native_1ms_pair_count": 34642,
+      "post_onset_native_prns": [
+        11,
+        25,
+        29
+      ],
+      "post_onset_row_count": 117093,
+      "same_prn_interval_sample_counts": {
+        "12760420": 1,
+        "24999": 3804,
+        "25000": 211111,
+        "25001": 6735,
+        "499999": 32254,
+        "500000": 58088,
+        "500001": 39069,
+        "500002": 668
+      },
+      "sample_rate_hz": 25000000.0
+    },
+    "OAKBAT.cleanStatic": {
+      "maximum_post_onset_native_prns_in_0p5s_block": null,
+      "minimum_prns_required": 4,
+      "native_1ms_pair_count_total": 209538,
+      "post_onset_native_1ms_pair_count": null,
+      "post_onset_native_prns": null,
+      "post_onset_row_count": null,
+      "same_prn_interval_sample_counts": {
+        "100000": 218567,
+        "100001": 15050,
+        "235041": 1,
+        "430002": 1,
+        "4999": 910,
+        "5000": 207882,
+        "5001": 746,
+        "99999": 19789
+      },
+      "sample_rate_hz": 5000000.0
+    },
+    "OS1": {
+      "maximum_post_onset_native_prns_in_0p5s_block": 5,
+      "minimum_prns_required": 4,
+      "native_1ms_pair_count_total": 282712,
+      "post_onset_native_1ms_pair_count": 62736,
+      "post_onset_native_prns": [
+        8,
+        12,
+        14,
+        15,
+        31
+      ],
+      "post_onset_row_count": 257564,
+      "same_prn_interval_sample_counts": {
+        "100000": 214028,
+        "100001": 17139,
+        "239992": 1,
+        "265007": 1,
+        "269993": 1,
+        "269998": 1,
+        "270002": 1,
+        "270045": 1,
+        "310006": 1,
+        "420000": 1,
+        "425061": 1,
+        "435010": 1,
+        "4999": 1523,
+        "5000": 280398,
+        "5001": 791,
+        "99999": 18565
+      },
+      "sample_rate_hz": 5000000.0
+    },
+    "OS3": {
+      "maximum_post_onset_native_prns_in_0p5s_block": 0,
+      "minimum_prns_required": 4,
+      "native_1ms_pair_count_total": 262856,
+      "post_onset_native_1ms_pair_count": 0,
+      "post_onset_native_prns": [],
+      "post_onset_row_count": 197974,
+      "same_prn_interval_sample_counts": {
+        "100000": 215385,
+        "100001": 23537,
+        "235001": 1,
+        "235073": 1,
+        "244958": 1,
+        "245002": 1,
+        "425001": 1,
+        "440007": 1,
+        "4999": 990,
+        "5000": 260731,
+        "5001": 1135,
+        "99999": 11824
+      },
+      "sample_rate_hz": 5000000.0
+    },
+    "OS4": {
+      "maximum_post_onset_native_prns_in_0p5s_block": 0,
+      "minimum_prns_required": 4,
+      "native_1ms_pair_count_total": 258220,
+      "post_onset_native_1ms_pair_count": 0,
+      "post_onset_native_prns": [],
+      "post_onset_row_count": 197975,
+      "same_prn_interval_sample_counts": {
+        "100000": 213674,
+        "100001": 20477,
+        "234952": 1,
+        "239971": 1,
+        "239992": 1,
+        "240001": 1,
+        "245045": 1,
+        "455000": 1,
+        "4999": 1112,
+        "5000": 256097,
+        "5001": 1011,
+        "99999": 16819
+      },
+      "sample_rate_hz": 5000000.0
+    },
+    "cleanStatic": {
+      "maximum_post_onset_native_prns_in_0p5s_block": null,
+      "minimum_prns_required": 4,
+      "native_1ms_pair_count_total": 315320,
+      "post_onset_native_1ms_pair_count": null,
+      "post_onset_native_prns": null,
+      "post_onset_row_count": null,
+      "same_prn_interval_sample_counts": {
+        "24999": 4069,
+        "25000": 302524,
+        "25001": 8727,
+        "499999": 57059,
+        "500000": 106125,
+        "500001": 73850,
+        "500002": 1263
+      },
+      "sample_rate_hz": 25000000.0
+    }
+  },
+  "reason": "TRACKER_ACTION_ALIGNMENT_UNRESOLVED",
+  "receiver_source_evidence": {
+    "correlation_then_action": "dll_pll_veml_tracking.cc:1923-1968",
+    "narrow_accumulation": "dll_pll_veml_tracking.cc:2108-2159",
+    "stamp_and_consume": "dll_pll_veml_tracking.cc:1483-1519 and 2199"
+  },
+  "source_row_mapping": "verified only for each emitted row: correlation, loop update, next-buffer NCO, then dump",
+  "status": "UNRESOLVED",
+  "synthetic_known_vector_tests": "tests/test_trace_equivariance.py and tests/test_trace_alignment.py",
+  "unresolved_scenarios": [
+    "DS1",
+    "DS3",
+    "DS7",
+    "OS3",
+    "OS4"
+  ]
+}

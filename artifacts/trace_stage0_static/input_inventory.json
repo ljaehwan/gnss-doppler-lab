@@ -1,0 +1,1980 @@
+{
+  "created_at": "2026-08-16T06:12:30.565406+00:00",
+  "datasets": {
+    "OAKBAT": {
+      "OS1": {
+        "epl_complex": true,
+        "first_mat_fields": [
+          "CN0_SNV_dB_Hz",
+          "I_E",
+          "I_E2",
+          "I_E3",
+          "I_E4",
+          "I_L",
+          "I_L2",
+          "I_L3",
+          "I_L4",
+          "I_P",
+          "PRN",
+          "PRN_start_sample_count",
+          "Prompt_I",
+          "Prompt_Q",
+          "Q_E",
+          "Q_E2",
+          "Q_E3",
+          "Q_E4",
+          "Q_L",
+          "Q_L2",
+          "Q_L3",
+          "Q_L4",
+          "Q_P",
+          "abs_E",
+          "abs_E2",
+          "abs_E3",
+          "abs_E4",
+          "abs_L",
+          "abs_L2",
+          "abs_L3",
+          "abs_L4",
+          "abs_P",
+          "abs_VE",
+          "abs_VL",
+          "acc_carrier_phase_rad",
+          "aux1",
+          "aux2",
+          "carr_error_filt_hz",
+          "carr_error_hz",
+          "carrier_doppler_hz",
+          "carrier_doppler_rate_hz",
+          "carrier_lock_test",
+          "code_error_chips",
+          "code_error_filt_chips",
+          "code_freq_chips",
+          "code_freq_rate_chips"
+        ],
+        "first_mat_shapes": {
+          "CN0_SNV_dB_Hz": [
+            52591,
+            1
+          ],
+          "I_E": [
+            52591,
+            1
+          ],
+          "I_E2": [
+            52591,
+            1
+          ],
+          "I_E3": [
+            52591,
+            1
+          ],
+          "I_E4": [
+            52591,
+            1
+          ],
+          "I_L": [
+            52591,
+            1
+          ],
+          "I_L2": [
+            52591,
+            1
+          ],
+          "I_L3": [
+            52591,
+            1
+          ],
+          "I_L4": [
+            52591,
+            1
+          ],
+          "I_P": [
+            52591,
+            1
+          ],
+          "PRN": [
+            52591,
+            1
+          ],
+          "PRN_start_sample_count": [
+            52591,
+            1
+          ],
+          "Prompt_I": [
+            52591,
+            1
+          ],
+          "Prompt_Q": [
+            52591,
+            1
+          ],
+          "Q_E": [
+            52591,
+            1
+          ],
+          "Q_E2": [
+            52591,
+            1
+          ],
+          "Q_E3": [
+            52591,
+            1
+          ],
+          "Q_E4": [
+            52591,
+            1
+          ],
+          "Q_L": [
+            52591,
+            1
+          ],
+          "Q_L2": [
+            52591,
+            1
+          ],
+          "Q_L3": [
+            52591,
+            1
+          ],
+          "Q_L4": [
+            52591,
+            1
+          ],
+          "Q_P": [
+            52591,
+            1
+          ],
+          "abs_E": [
+            52591,
+            1
+          ],
+          "abs_E2": [
+            52591,
+            1
+          ],
+          "abs_E3": [
+            52591,
+            1
+          ],
+          "abs_E4": [
+            52591,
+            1
+          ],
+          "abs_L": [
+            52591,
+            1
+          ],
+          "abs_L2": [
+            52591,
+            1
+          ],
+          "abs_L3": [
+            52591,
+            1
+          ],
+          "abs_L4": [
+            52591,
+            1
+          ],
+          "abs_P": [
+            52591,
+            1
+          ],
+          "abs_VE": [
+            52591,
+            1
+          ],
+          "abs_VL": [
+            52591,
+            1
+          ],
+          "acc_carrier_phase_rad": [
+            52591,
+            1
+          ],
+          "aux1": [
+            52591,
+            1
+          ],
+          "aux2": [
+            52591,
+            1
+          ],
+          "carr_error_filt_hz": [
+            52591,
+            1
+          ],
+          "carr_error_hz": [
+            52591,
+            1
+          ],
+          "carrier_doppler_hz": [
+            52591,
+            1
+          ],
+          "carrier_doppler_rate_hz": [
+            52591,
+            1
+          ],
+          "carrier_lock_test": [
+            52591,
+            1
+          ],
+          "code_error_chips": [
+            52591,
+            1
+          ],
+          "code_error_filt_chips": [
+            52591,
+            1
+          ],
+          "code_freq_chips": [
+            52591,
+            1
+          ],
+          "code_freq_rate_chips": [
+            52591,
+            1
+          ]
+        },
+        "full_complex_9tap": true,
+        "mat_count": 11,
+        "missing_contract_fields": [],
+        "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/q-comet-oakbat-complex9/os1/receiver/os1-complex9",
+        "sample_rate_hz": 5000000
+      },
+      "OS3": {
+        "epl_complex": true,
+        "first_mat_fields": [
+          "CN0_SNV_dB_Hz",
+          "I_E",
+          "I_E2",
+          "I_E3",
+          "I_E4",
+          "I_L",
+          "I_L2",
+          "I_L3",
+          "I_L4",
+          "I_P",
+          "PRN",
+          "PRN_start_sample_count",
+          "Prompt_I",
+          "Prompt_Q",
+          "Q_E",
+          "Q_E2",
+          "Q_E3",
+          "Q_E4",
+          "Q_L",
+          "Q_L2",
+          "Q_L3",
+          "Q_L4",
+          "Q_P",
+          "abs_E",
+          "abs_E2",
+          "abs_E3",
+          "abs_E4",
+          "abs_L",
+          "abs_L2",
+          "abs_L3",
+          "abs_L4",
+          "abs_P",
+          "abs_VE",
+          "abs_VL",
+          "acc_carrier_phase_rad",
+          "aux1",
+          "aux2",
+          "carr_error_filt_hz",
+          "carr_error_hz",
+          "carrier_doppler_hz",
+          "carrier_doppler_rate_hz",
+          "carrier_lock_test",
+          "code_error_chips",
+          "code_error_filt_chips",
+          "code_freq_chips",
+          "code_freq_rate_chips"
+        ],
+        "first_mat_shapes": {
+          "CN0_SNV_dB_Hz": [
+            52465,
+            1
+          ],
+          "I_E": [
+            52465,
+            1
+          ],
+          "I_E2": [
+            52465,
+            1
+          ],
+          "I_E3": [
+            52465,
+            1
+          ],
+          "I_E4": [
+            52465,
+            1
+          ],
+          "I_L": [
+            52465,
+            1
+          ],
+          "I_L2": [
+            52465,
+            1
+          ],
+          "I_L3": [
+            52465,
+            1
+          ],
+          "I_L4": [
+            52465,
+            1
+          ],
+          "I_P": [
+            52465,
+            1
+          ],
+          "PRN": [
+            52465,
+            1
+          ],
+          "PRN_start_sample_count": [
+            52465,
+            1
+          ],
+          "Prompt_I": [
+            52465,
+            1
+          ],
+          "Prompt_Q": [
+            52465,
+            1
+          ],
+          "Q_E": [
+            52465,
+            1
+          ],
+          "Q_E2": [
+            52465,
+            1
+          ],
+          "Q_E3": [
+            52465,
+            1
+          ],
+          "Q_E4": [
+            52465,
+            1
+          ],
+          "Q_L": [
+            52465,
+            1
+          ],
+          "Q_L2": [
+            52465,
+            1
+          ],
+          "Q_L3": [
+            52465,
+            1
+          ],
+          "Q_L4": [
+            52465,
+            1
+          ],
+          "Q_P": [
+            52465,
+            1
+          ],
+          "abs_E": [
+            52465,
+            1
+          ],
+          "abs_E2": [
+            52465,
+            1
+          ],
+          "abs_E3": [
+            52465,
+            1
+          ],
+          "abs_E4": [
+            52465,
+            1
+          ],
+          "abs_L": [
+            52465,
+            1
+          ],
+          "abs_L2": [
+            52465,
+            1
+          ],
+          "abs_L3": [
+            52465,
+            1
+          ],
+          "abs_L4": [
+            52465,
+            1
+          ],
+          "abs_P": [
+            52465,
+            1
+          ],
+          "abs_VE": [
+            52465,
+            1
+          ],
+          "abs_VL": [
+            52465,
+            1
+          ],
+          "acc_carrier_phase_rad": [
+            52465,
+            1
+          ],
+          "aux1": [
+            52465,
+            1
+          ],
+          "aux2": [
+            52465,
+            1
+          ],
+          "carr_error_filt_hz": [
+            52465,
+            1
+          ],
+          "carr_error_hz": [
+            52465,
+            1
+          ],
+          "carrier_doppler_hz": [
+            52465,
+            1
+          ],
+          "carrier_doppler_rate_hz": [
+            52465,
+            1
+          ],
+          "carrier_lock_test": [
+            52465,
+            1
+          ],
+          "code_error_chips": [
+            52465,
+            1
+          ],
+          "code_error_filt_chips": [
+            52465,
+            1
+          ],
+          "code_freq_chips": [
+            52465,
+            1
+          ],
+          "code_freq_rate_chips": [
+            52465,
+            1
+          ]
+        },
+        "full_complex_9tap": true,
+        "mat_count": 11,
+        "missing_contract_fields": [],
+        "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/q-comet-oakbat-complex9/os3/receiver/os3-complex9",
+        "sample_rate_hz": 5000000
+      },
+      "OS4": {
+        "epl_complex": true,
+        "first_mat_fields": [
+          "CN0_SNV_dB_Hz",
+          "I_E",
+          "I_E2",
+          "I_E3",
+          "I_E4",
+          "I_L",
+          "I_L2",
+          "I_L3",
+          "I_L4",
+          "I_P",
+          "PRN",
+          "PRN_start_sample_count",
+          "Prompt_I",
+          "Prompt_Q",
+          "Q_E",
+          "Q_E2",
+          "Q_E3",
+          "Q_E4",
+          "Q_L",
+          "Q_L2",
+          "Q_L3",
+          "Q_L4",
+          "Q_P",
+          "abs_E",
+          "abs_E2",
+          "abs_E3",
+          "abs_E4",
+          "abs_L",
+          "abs_L2",
+          "abs_L3",
+          "abs_L4",
+          "abs_P",
+          "abs_VE",
+          "abs_VL",
+          "acc_carrier_phase_rad",
+          "aux1",
+          "aux2",
+          "carr_error_filt_hz",
+          "carr_error_hz",
+          "carrier_doppler_hz",
+          "carrier_doppler_rate_hz",
+          "carrier_lock_test",
+          "code_error_chips",
+          "code_error_filt_chips",
+          "code_freq_chips",
+          "code_freq_rate_chips"
+        ],
+        "first_mat_shapes": {
+          "CN0_SNV_dB_Hz": [
+            52547,
+            1
+          ],
+          "I_E": [
+            52547,
+            1
+          ],
+          "I_E2": [
+            52547,
+            1
+          ],
+          "I_E3": [
+            52547,
+            1
+          ],
+          "I_E4": [
+            52547,
+            1
+          ],
+          "I_L": [
+            52547,
+            1
+          ],
+          "I_L2": [
+            52547,
+            1
+          ],
+          "I_L3": [
+            52547,
+            1
+          ],
+          "I_L4": [
+            52547,
+            1
+          ],
+          "I_P": [
+            52547,
+            1
+          ],
+          "PRN": [
+            52547,
+            1
+          ],
+          "PRN_start_sample_count": [
+            52547,
+            1
+          ],
+          "Prompt_I": [
+            52547,
+            1
+          ],
+          "Prompt_Q": [
+            52547,
+            1
+          ],
+          "Q_E": [
+            52547,
+            1
+          ],
+          "Q_E2": [
+            52547,
+            1
+          ],
+          "Q_E3": [
+            52547,
+            1
+          ],
+          "Q_E4": [
+            52547,
+            1
+          ],
+          "Q_L": [
+            52547,
+            1
+          ],
+          "Q_L2": [
+            52547,
+            1
+          ],
+          "Q_L3": [
+            52547,
+            1
+          ],
+          "Q_L4": [
+            52547,
+            1
+          ],
+          "Q_P": [
+            52547,
+            1
+          ],
+          "abs_E": [
+            52547,
+            1
+          ],
+          "abs_E2": [
+            52547,
+            1
+          ],
+          "abs_E3": [
+            52547,
+            1
+          ],
+          "abs_E4": [
+            52547,
+            1
+          ],
+          "abs_L": [
+            52547,
+            1
+          ],
+          "abs_L2": [
+            52547,
+            1
+          ],
+          "abs_L3": [
+            52547,
+            1
+          ],
+          "abs_L4": [
+            52547,
+            1
+          ],
+          "abs_P": [
+            52547,
+            1
+          ],
+          "abs_VE": [
+            52547,
+            1
+          ],
+          "abs_VL": [
+            52547,
+            1
+          ],
+          "acc_carrier_phase_rad": [
+            52547,
+            1
+          ],
+          "aux1": [
+            52547,
+            1
+          ],
+          "aux2": [
+            52547,
+            1
+          ],
+          "carr_error_filt_hz": [
+            52547,
+            1
+          ],
+          "carr_error_hz": [
+            52547,
+            1
+          ],
+          "carrier_doppler_hz": [
+            52547,
+            1
+          ],
+          "carrier_doppler_rate_hz": [
+            52547,
+            1
+          ],
+          "carrier_lock_test": [
+            52547,
+            1
+          ],
+          "code_error_chips": [
+            52547,
+            1
+          ],
+          "code_error_filt_chips": [
+            52547,
+            1
+          ],
+          "code_freq_chips": [
+            52547,
+            1
+          ],
+          "code_freq_rate_chips": [
+            52547,
+            1
+          ]
+        },
+        "full_complex_9tap": true,
+        "mat_count": 11,
+        "missing_contract_fields": [],
+        "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/q-comet-oakbat-complex9/os4/receiver/os4-complex9",
+        "sample_rate_hz": 5000000
+      },
+      "cleanStatic": {
+        "epl_complex": true,
+        "first_mat_fields": [
+          "CN0_SNV_dB_Hz",
+          "I_E",
+          "I_E2",
+          "I_E3",
+          "I_E4",
+          "I_L",
+          "I_L2",
+          "I_L3",
+          "I_L4",
+          "I_P",
+          "PRN",
+          "PRN_start_sample_count",
+          "Prompt_I",
+          "Prompt_Q",
+          "Q_E",
+          "Q_E2",
+          "Q_E3",
+          "Q_E4",
+          "Q_L",
+          "Q_L2",
+          "Q_L3",
+          "Q_L4",
+          "Q_P",
+          "abs_E",
+          "abs_E2",
+          "abs_E3",
+          "abs_E4",
+          "abs_L",
+          "abs_L2",
+          "abs_L3",
+          "abs_L4",
+          "abs_P",
+          "abs_VE",
+          "abs_VL",
+          "acc_carrier_phase_rad",
+          "aux1",
+          "aux2",
+          "carr_error_filt_hz",
+          "carr_error_hz",
+          "carrier_doppler_hz",
+          "carrier_doppler_rate_hz",
+          "carrier_lock_test",
+          "code_error_chips",
+          "code_error_filt_chips",
+          "code_freq_chips",
+          "code_freq_rate_chips"
+        ],
+        "first_mat_shapes": {
+          "CN0_SNV_dB_Hz": [
+            52400,
+            1
+          ],
+          "I_E": [
+            52400,
+            1
+          ],
+          "I_E2": [
+            52400,
+            1
+          ],
+          "I_E3": [
+            52400,
+            1
+          ],
+          "I_E4": [
+            52400,
+            1
+          ],
+          "I_L": [
+            52400,
+            1
+          ],
+          "I_L2": [
+            52400,
+            1
+          ],
+          "I_L3": [
+            52400,
+            1
+          ],
+          "I_L4": [
+            52400,
+            1
+          ],
+          "I_P": [
+            52400,
+            1
+          ],
+          "PRN": [
+            52400,
+            1
+          ],
+          "PRN_start_sample_count": [
+            52400,
+            1
+          ],
+          "Prompt_I": [
+            52400,
+            1
+          ],
+          "Prompt_Q": [
+            52400,
+            1
+          ],
+          "Q_E": [
+            52400,
+            1
+          ],
+          "Q_E2": [
+            52400,
+            1
+          ],
+          "Q_E3": [
+            52400,
+            1
+          ],
+          "Q_E4": [
+            52400,
+            1
+          ],
+          "Q_L": [
+            52400,
+            1
+          ],
+          "Q_L2": [
+            52400,
+            1
+          ],
+          "Q_L3": [
+            52400,
+            1
+          ],
+          "Q_L4": [
+            52400,
+            1
+          ],
+          "Q_P": [
+            52400,
+            1
+          ],
+          "abs_E": [
+            52400,
+            1
+          ],
+          "abs_E2": [
+            52400,
+            1
+          ],
+          "abs_E3": [
+            52400,
+            1
+          ],
+          "abs_E4": [
+            52400,
+            1
+          ],
+          "abs_L": [
+            52400,
+            1
+          ],
+          "abs_L2": [
+            52400,
+            1
+          ],
+          "abs_L3": [
+            52400,
+            1
+          ],
+          "abs_L4": [
+            52400,
+            1
+          ],
+          "abs_P": [
+            52400,
+            1
+          ],
+          "abs_VE": [
+            52400,
+            1
+          ],
+          "abs_VL": [
+            52400,
+            1
+          ],
+          "acc_carrier_phase_rad": [
+            52400,
+            1
+          ],
+          "aux1": [
+            52400,
+            1
+          ],
+          "aux2": [
+            52400,
+            1
+          ],
+          "carr_error_filt_hz": [
+            52400,
+            1
+          ],
+          "carr_error_hz": [
+            52400,
+            1
+          ],
+          "carrier_doppler_hz": [
+            52400,
+            1
+          ],
+          "carrier_doppler_rate_hz": [
+            52400,
+            1
+          ],
+          "carrier_lock_test": [
+            52400,
+            1
+          ],
+          "code_error_chips": [
+            52400,
+            1
+          ],
+          "code_error_filt_chips": [
+            52400,
+            1
+          ],
+          "code_freq_chips": [
+            52400,
+            1
+          ],
+          "code_freq_rate_chips": [
+            52400,
+            1
+          ]
+        },
+        "full_complex_9tap": true,
+        "mat_count": 11,
+        "missing_contract_fields": [],
+        "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/q-comet-oakbat-complex9/cleanstatic/receiver/cleanstatic-complex9",
+        "sample_rate_hz": 5000000
+      }
+    },
+    "TEXBAT": {
+      "DS1": {
+        "epl_complex": true,
+        "first_mat_fields": [
+          "CN0_SNV_dB_Hz",
+          "I_E",
+          "I_E2",
+          "I_E3",
+          "I_E4",
+          "I_L",
+          "I_L2",
+          "I_L3",
+          "I_L4",
+          "I_P",
+          "PRN",
+          "PRN_start_sample_count",
+          "Prompt_I",
+          "Prompt_Q",
+          "Q_E",
+          "Q_E2",
+          "Q_E3",
+          "Q_E4",
+          "Q_L",
+          "Q_L2",
+          "Q_L3",
+          "Q_L4",
+          "Q_P",
+          "abs_E",
+          "abs_E2",
+          "abs_E3",
+          "abs_E4",
+          "abs_L",
+          "abs_L2",
+          "abs_L3",
+          "abs_L4",
+          "abs_P",
+          "abs_VE",
+          "abs_VL",
+          "acc_carrier_phase_rad",
+          "aux1",
+          "aux2",
+          "carr_error_filt_hz",
+          "carr_error_hz",
+          "carrier_doppler_hz",
+          "carrier_doppler_rate_hz",
+          "carrier_lock_test",
+          "code_error_chips",
+          "code_error_filt_chips",
+          "code_freq_chips",
+          "code_freq_rate_chips"
+        ],
+        "first_mat_shapes": {
+          "CN0_SNV_dB_Hz": [
+            34695,
+            1
+          ],
+          "I_E": [
+            34695,
+            1
+          ],
+          "I_E2": [
+            34695,
+            1
+          ],
+          "I_E3": [
+            34695,
+            1
+          ],
+          "I_E4": [
+            34695,
+            1
+          ],
+          "I_L": [
+            34695,
+            1
+          ],
+          "I_L2": [
+            34695,
+            1
+          ],
+          "I_L3": [
+            34695,
+            1
+          ],
+          "I_L4": [
+            34695,
+            1
+          ],
+          "I_P": [
+            34695,
+            1
+          ],
+          "PRN": [
+            34695,
+            1
+          ],
+          "PRN_start_sample_count": [
+            34695,
+            1
+          ],
+          "Prompt_I": [
+            34695,
+            1
+          ],
+          "Prompt_Q": [
+            34695,
+            1
+          ],
+          "Q_E": [
+            34695,
+            1
+          ],
+          "Q_E2": [
+            34695,
+            1
+          ],
+          "Q_E3": [
+            34695,
+            1
+          ],
+          "Q_E4": [
+            34695,
+            1
+          ],
+          "Q_L": [
+            34695,
+            1
+          ],
+          "Q_L2": [
+            34695,
+            1
+          ],
+          "Q_L3": [
+            34695,
+            1
+          ],
+          "Q_L4": [
+            34695,
+            1
+          ],
+          "Q_P": [
+            34695,
+            1
+          ],
+          "abs_E": [
+            34695,
+            1
+          ],
+          "abs_E2": [
+            34695,
+            1
+          ],
+          "abs_E3": [
+            34695,
+            1
+          ],
+          "abs_E4": [
+            34695,
+            1
+          ],
+          "abs_L": [
+            34695,
+            1
+          ],
+          "abs_L2": [
+            34695,
+            1
+          ],
+          "abs_L3": [
+            34695,
+            1
+          ],
+          "abs_L4": [
+            34695,
+            1
+          ],
+          "abs_P": [
+            34695,
+            1
+          ],
+          "abs_VE": [
+            34695,
+            1
+          ],
+          "abs_VL": [
+            34695,
+            1
+          ],
+          "acc_carrier_phase_rad": [
+            34695,
+            1
+          ],
+          "aux1": [
+            34695,
+            1
+          ],
+          "aux2": [
+            34695,
+            1
+          ],
+          "carr_error_filt_hz": [
+            34695,
+            1
+          ],
+          "carr_error_hz": [
+            34695,
+            1
+          ],
+          "carrier_doppler_hz": [
+            34695,
+            1
+          ],
+          "carrier_doppler_rate_hz": [
+            34695,
+            1
+          ],
+          "carrier_lock_test": [
+            34695,
+            1
+          ],
+          "code_error_chips": [
+            34695,
+            1
+          ],
+          "code_error_filt_chips": [
+            34695,
+            1
+          ],
+          "code_freq_chips": [
+            34695,
+            1
+          ],
+          "code_freq_rate_chips": [
+            34695,
+            1
+          ]
+        },
+        "full_complex_9tap": true,
+        "mat_count": 11,
+        "missing_contract_fields": [],
+        "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds1-complex9",
+        "sample_rate_hz": 25000000
+      },
+      "DS3": {
+        "epl_complex": true,
+        "first_mat_fields": [
+          "CN0_SNV_dB_Hz",
+          "I_E",
+          "I_E2",
+          "I_E3",
+          "I_E4",
+          "I_L",
+          "I_L2",
+          "I_L3",
+          "I_L4",
+          "I_P",
+          "PRN",
+          "PRN_start_sample_count",
+          "Prompt_I",
+          "Prompt_Q",
+          "Q_E",
+          "Q_E2",
+          "Q_E3",
+          "Q_E4",
+          "Q_L",
+          "Q_L2",
+          "Q_L3",
+          "Q_L4",
+          "Q_P",
+          "abs_E",
+          "abs_E2",
+          "abs_E3",
+          "abs_E4",
+          "abs_L",
+          "abs_L2",
+          "abs_L3",
+          "abs_L4",
+          "abs_P",
+          "abs_VE",
+          "abs_VL",
+          "acc_carrier_phase_rad",
+          "aux1",
+          "aux2",
+          "carr_error_filt_hz",
+          "carr_error_hz",
+          "carrier_doppler_hz",
+          "carrier_doppler_rate_hz",
+          "carrier_lock_test",
+          "code_error_chips",
+          "code_error_filt_chips",
+          "code_freq_chips",
+          "code_freq_rate_chips"
+        ],
+        "first_mat_shapes": {
+          "CN0_SNV_dB_Hz": [
+            54874,
+            1
+          ],
+          "I_E": [
+            54874,
+            1
+          ],
+          "I_E2": [
+            54874,
+            1
+          ],
+          "I_E3": [
+            54874,
+            1
+          ],
+          "I_E4": [
+            54874,
+            1
+          ],
+          "I_L": [
+            54874,
+            1
+          ],
+          "I_L2": [
+            54874,
+            1
+          ],
+          "I_L3": [
+            54874,
+            1
+          ],
+          "I_L4": [
+            54874,
+            1
+          ],
+          "I_P": [
+            54874,
+            1
+          ],
+          "PRN": [
+            54874,
+            1
+          ],
+          "PRN_start_sample_count": [
+            54874,
+            1
+          ],
+          "Prompt_I": [
+            54874,
+            1
+          ],
+          "Prompt_Q": [
+            54874,
+            1
+          ],
+          "Q_E": [
+            54874,
+            1
+          ],
+          "Q_E2": [
+            54874,
+            1
+          ],
+          "Q_E3": [
+            54874,
+            1
+          ],
+          "Q_E4": [
+            54874,
+            1
+          ],
+          "Q_L": [
+            54874,
+            1
+          ],
+          "Q_L2": [
+            54874,
+            1
+          ],
+          "Q_L3": [
+            54874,
+            1
+          ],
+          "Q_L4": [
+            54874,
+            1
+          ],
+          "Q_P": [
+            54874,
+            1
+          ],
+          "abs_E": [
+            54874,
+            1
+          ],
+          "abs_E2": [
+            54874,
+            1
+          ],
+          "abs_E3": [
+            54874,
+            1
+          ],
+          "abs_E4": [
+            54874,
+            1
+          ],
+          "abs_L": [
+            54874,
+            1
+          ],
+          "abs_L2": [
+            54874,
+            1
+          ],
+          "abs_L3": [
+            54874,
+            1
+          ],
+          "abs_L4": [
+            54874,
+            1
+          ],
+          "abs_P": [
+            54874,
+            1
+          ],
+          "abs_VE": [
+            54874,
+            1
+          ],
+          "abs_VL": [
+            54874,
+            1
+          ],
+          "acc_carrier_phase_rad": [
+            54874,
+            1
+          ],
+          "aux1": [
+            54874,
+            1
+          ],
+          "aux2": [
+            54874,
+            1
+          ],
+          "carr_error_filt_hz": [
+            54874,
+            1
+          ],
+          "carr_error_hz": [
+            54874,
+            1
+          ],
+          "carrier_doppler_hz": [
+            54874,
+            1
+          ],
+          "carrier_doppler_rate_hz": [
+            54874,
+            1
+          ],
+          "carrier_lock_test": [
+            54874,
+            1
+          ],
+          "code_error_chips": [
+            54874,
+            1
+          ],
+          "code_error_filt_chips": [
+            54874,
+            1
+          ],
+          "code_freq_chips": [
+            54874,
+            1
+          ],
+          "code_freq_rate_chips": [
+            54874,
+            1
+          ]
+        },
+        "full_complex_9tap": true,
+        "mat_count": 11,
+        "missing_contract_fields": [],
+        "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9",
+        "sample_rate_hz": 25000000
+      },
+      "DS7": {
+        "epl_complex": true,
+        "first_mat_fields": [
+          "CN0_SNV_dB_Hz",
+          "I_E",
+          "I_E2",
+          "I_E3",
+          "I_E4",
+          "I_L",
+          "I_L2",
+          "I_L3",
+          "I_L4",
+          "I_P",
+          "PRN",
+          "PRN_start_sample_count",
+          "Prompt_I",
+          "Prompt_Q",
+          "Q_E",
+          "Q_E2",
+          "Q_E3",
+          "Q_E4",
+          "Q_L",
+          "Q_L2",
+          "Q_L3",
+          "Q_L4",
+          "Q_P",
+          "abs_E",
+          "abs_E2",
+          "abs_E3",
+          "abs_E4",
+          "abs_L",
+          "abs_L2",
+          "abs_L3",
+          "abs_L4",
+          "abs_P",
+          "abs_VE",
+          "abs_VL",
+          "acc_carrier_phase_rad",
+          "aux1",
+          "aux2",
+          "carr_error_filt_hz",
+          "carr_error_hz",
+          "carrier_doppler_hz",
+          "carrier_doppler_rate_hz",
+          "carrier_lock_test",
+          "code_error_chips",
+          "code_error_filt_chips",
+          "code_freq_chips",
+          "code_freq_rate_chips"
+        ],
+        "first_mat_shapes": {
+          "CN0_SNV_dB_Hz": [
+            25780,
+            1
+          ],
+          "I_E": [
+            25780,
+            1
+          ],
+          "I_E2": [
+            25780,
+            1
+          ],
+          "I_E3": [
+            25780,
+            1
+          ],
+          "I_E4": [
+            25780,
+            1
+          ],
+          "I_L": [
+            25780,
+            1
+          ],
+          "I_L2": [
+            25780,
+            1
+          ],
+          "I_L3": [
+            25780,
+            1
+          ],
+          "I_L4": [
+            25780,
+            1
+          ],
+          "I_P": [
+            25780,
+            1
+          ],
+          "PRN": [
+            25780,
+            1
+          ],
+          "PRN_start_sample_count": [
+            25780,
+            1
+          ],
+          "Prompt_I": [
+            25780,
+            1
+          ],
+          "Prompt_Q": [
+            25780,
+            1
+          ],
+          "Q_E": [
+            25780,
+            1
+          ],
+          "Q_E2": [
+            25780,
+            1
+          ],
+          "Q_E3": [
+            25780,
+            1
+          ],
+          "Q_E4": [
+            25780,
+            1
+          ],
+          "Q_L": [
+            25780,
+            1
+          ],
+          "Q_L2": [
+            25780,
+            1
+          ],
+          "Q_L3": [
+            25780,
+            1
+          ],
+          "Q_L4": [
+            25780,
+            1
+          ],
+          "Q_P": [
+            25780,
+            1
+          ],
+          "abs_E": [
+            25780,
+            1
+          ],
+          "abs_E2": [
+            25780,
+            1
+          ],
+          "abs_E3": [
+            25780,
+            1
+          ],
+          "abs_E4": [
+            25780,
+            1
+          ],
+          "abs_L": [
+            25780,
+            1
+          ],
+          "abs_L2": [
+            25780,
+            1
+          ],
+          "abs_L3": [
+            25780,
+            1
+          ],
+          "abs_L4": [
+            25780,
+            1
+          ],
+          "abs_P": [
+            25780,
+            1
+          ],
+          "abs_VE": [
+            25780,
+            1
+          ],
+          "abs_VL": [
+            25780,
+            1
+          ],
+          "acc_carrier_phase_rad": [
+            25780,
+            1
+          ],
+          "aux1": [
+            25780,
+            1
+          ],
+          "aux2": [
+            25780,
+            1
+          ],
+          "carr_error_filt_hz": [
+            25780,
+            1
+          ],
+          "carr_error_hz": [
+            25780,
+            1
+          ],
+          "carrier_doppler_hz": [
+            25780,
+            1
+          ],
+          "carrier_doppler_rate_hz": [
+            25780,
+            1
+          ],
+          "carrier_lock_test": [
+            25780,
+            1
+          ],
+          "code_error_chips": [
+            25780,
+            1
+          ],
+          "code_error_filt_chips": [
+            25780,
+            1
+          ],
+          "code_freq_chips": [
+            25780,
+            1
+          ],
+          "code_freq_rate_chips": [
+            25780,
+            1
+          ]
+        },
+        "full_complex_9tap": true,
+        "mat_count": 11,
+        "missing_contract_fields": [],
+        "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9",
+        "sample_rate_hz": 25000000
+      },
+      "cleanStatic": {
+        "epl_complex": true,
+        "first_mat_fields": [
+          "CN0_SNV_dB_Hz",
+          "I_E",
+          "I_E2",
+          "I_E3",
+          "I_E4",
+          "I_L",
+          "I_L2",
+          "I_L3",
+          "I_L4",
+          "I_P",
+          "PRN",
+          "PRN_start_sample_count",
+          "Prompt_I",
+          "Prompt_Q",
+          "Q_E",
+          "Q_E2",
+          "Q_E3",
+          "Q_E4",
+          "Q_L",
+          "Q_L2",
+          "Q_L3",
+          "Q_L4",
+          "Q_P",
+          "abs_E",
+          "abs_E2",
+          "abs_E3",
+          "abs_E4",
+          "abs_L",
+          "abs_L2",
+          "abs_L3",
+          "abs_L4",
+          "abs_P",
+          "abs_VE",
+          "abs_VL",
+          "acc_carrier_phase_rad",
+          "aux1",
+          "aux2",
+          "carr_error_filt_hz",
+          "carr_error_hz",
+          "carrier_doppler_hz",
+          "carrier_doppler_rate_hz",
+          "carrier_lock_test",
+          "code_error_chips",
+          "code_error_filt_chips",
+          "code_freq_chips",
+          "code_freq_rate_chips"
+        ],
+        "first_mat_shapes": {
+          "CN0_SNV_dB_Hz": [
+            35798,
+            1
+          ],
+          "I_E": [
+            35798,
+            1
+          ],
+          "I_E2": [
+            35798,
+            1
+          ],
+          "I_E3": [
+            35798,
+            1
+          ],
+          "I_E4": [
+            35798,
+            1
+          ],
+          "I_L": [
+            35798,
+            1
+          ],
+          "I_L2": [
+            35798,
+            1
+          ],
+          "I_L3": [
+            35798,
+            1
+          ],
+          "I_L4": [
+            35798,
+            1
+          ],
+          "I_P": [
+            35798,
+            1
+          ],
+          "PRN": [
+            35798,
+            1
+          ],
+          "PRN_start_sample_count": [
+            35798,
+            1
+          ],
+          "Prompt_I": [
+            35798,
+            1
+          ],
+          "Prompt_Q": [
+            35798,
+            1
+          ],
+          "Q_E": [
+            35798,
+            1
+          ],
+          "Q_E2": [
+            35798,
+            1
+          ],
+          "Q_E3": [
+            35798,
+            1
+          ],
+          "Q_E4": [
+            35798,
+            1
+          ],
+          "Q_L": [
+            35798,
+            1
+          ],
+          "Q_L2": [
+            35798,
+            1
+          ],
+          "Q_L3": [
+            35798,
+            1
+          ],
+          "Q_L4": [
+            35798,
+            1
+          ],
+          "Q_P": [
+            35798,
+            1
+          ],
+          "abs_E": [
+            35798,
+            1
+          ],
+          "abs_E2": [
+            35798,
+            1
+          ],
+          "abs_E3": [
+            35798,
+            1
+          ],
+          "abs_E4": [
+            35798,
+            1
+          ],
+          "abs_L": [
+            35798,
+            1
+          ],
+          "abs_L2": [
+            35798,
+            1
+          ],
+          "abs_L3": [
+            35798,
+            1
+          ],
+          "abs_L4": [
+            35798,
+            1
+          ],
+          "abs_P": [
+            35798,
+            1
+          ],
+          "abs_VE": [
+            35798,
+            1
+          ],
+          "abs_VL": [
+            35798,
+            1
+          ],
+          "acc_carrier_phase_rad": [
+            35798,
+            1
+          ],
+          "aux1": [
+            35798,
+            1
+          ],
+          "aux2": [
+            35798,
+            1
+          ],
+          "carr_error_filt_hz": [
+            35798,
+            1
+          ],
+          "carr_error_hz": [
+            35798,
+            1
+          ],
+          "carrier_doppler_hz": [
+            35798,
+            1
+          ],
+          "carrier_doppler_rate_hz": [
+            35798,
+            1
+          ],
+          "carrier_lock_test": [
+            35798,
+            1
+          ],
+          "code_error_chips": [
+            35798,
+            1
+          ],
+          "code_error_filt_chips": [
+            35798,
+            1
+          ],
+          "code_freq_chips": [
+            35798,
+            1
+          ],
+          "code_freq_rate_chips": [
+            35798,
+            1
+          ]
+        },
+        "full_complex_9tap": true,
+        "mat_count": 11,
+        "missing_contract_fields": [],
+        "receiver_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9",
+        "sample_rate_hz": 25000000
+      }
+    }
+  },
+  "feature_contract": [
+    "I_E4",
+    "Q_E4",
+    "I_E3",
+    "Q_E3",
+    "I_E2",
+    "Q_E2",
+    "I_E",
+    "Q_E",
+    "I_P",
+    "Q_P",
+    "I_L",
+    "Q_L",
+    "I_L2",
+    "Q_L2",
+    "I_L3",
+    "Q_L3",
+    "I_L4",
+    "Q_L4",
+    "Prompt_I",
+    "Prompt_Q",
+    "code_error_chips",
+    "code_error_filt_chips",
+    "carr_error_hz",
+    "carr_error_filt_hz",
+    "carrier_doppler_hz",
+    "code_freq_chips",
+    "aux1",
+    "PRN_start_sample_count",
+    "PRN",
+    "CN0_SNV_dB_Hz",
+    "carrier_lock_test"
+  ],
+  "same_feature_contract_texbat_oakbat": true,
+  "schema": "gnss-doppler-lab.trace-input-inventory.v1"
+}
