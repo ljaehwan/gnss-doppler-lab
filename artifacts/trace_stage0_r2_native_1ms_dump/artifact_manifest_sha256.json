@@ -18,10 +18,12 @@
     "receiver_build_manifest.json": "d3180504634e7d77aaafe03e83e16c9c5a88379bbe2062cbf771ab1ed2df4bc4",
     "receiver_patch.diff": "087da6343c1455bbdb420f697b05de168b464dbe4472bb6ad15eb488aa48fa2d",
     "receiver_source_provenance.json": "d7738cf777b339e6a1a0ed3d827bd983baf2046837a7bdc3174bfd4b3667a3ad",
-    "replay_inventory.json": "9ce95eeff204ac11e5b0266180fb150a443fcb828bcc046d807993025f9c5ec7",
+    "replay_inventory.json": "1ab279e277ee7f585378a00c246cfa974b935ff07f7358aded9cf6d354466bc8",
+    "runner_runs.json": "a1034a00e74aa76c1955f6eb80bcf50385cf5df71ef40603d2446c03b96914af",
     "scenario_metrics.csv": "a7e0eebc10e42f8b86b8d1471cd15d9ff44c8fb1300b2fcfb01db7e8706a42c3",
     "smoke_replay_results.json": "1e7d3f2e7b00c67ac334781c3bc98adc242379640c861c2ca92040f375f64698",
-    "source_commit.json": "8fc71c9492f6e86f653be510b2a755b145c2137422281395b9ed55a46094a73e",
+    "source_commit.json": "2ab755649541843bcdc610ba6a2206b8f6f3475057d643051e9595e0b69685e5",
+    "test_results.json": "15e8acace8b81f77ffb8f4a4ee91c4866b929120b188ad0f52a5fe8a2d68c6ad",
     "thresholds.json": "a1e840148e711d806e3aef1a2485909bf5c805b09a669b6c7c287fb0a1191e47"
   },
   "schema": "gnss-doppler-lab.trace-r2-artifact-manifest.v1"

@@ -19,7 +19,8 @@
     {"run_id": "20260816T085302Z-trace-r2-final-focused-tests", "status": "PASS_29", "exit_code": 0},
     {"run_id": "20260816T085302Z-trace-r2-final-b0-relevant-tests", "status": "PASS_39", "exit_code": 0},
     {"run_id": "20260816T085302Z-trace-r2-final-full-tests", "status": "FAIL_INHERITED_BASE_MISSING_FILE_470_PASS_6_FAIL", "exit_code": 1},
-    {"run_id": "20260816T085404Z-trace-r2-final-full-tests-excluding-base-missing-file", "status": "PASS_470", "exit_code": 0}
+    {"run_id": "20260816T085404Z-trace-r2-final-full-tests-excluding-base-missing-file", "status": "PASS_470", "exit_code": 0},
+    {"run_id": "20260816T085620Z-trace-r2-final-verifier", "status": "PASS", "exit_code": 0}
   ],
   "schema": "gnss-doppler-lab.trace-r2-runner-runs.v1"
 }
