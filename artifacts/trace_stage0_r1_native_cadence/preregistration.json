@@ -1,0 +1,35 @@
+{
+  "attack_data_used_for_selection": false,
+  "attack_scores_computed": false,
+  "baselines": [
+    "A0",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "Full",
+    "B0-static-retrained"
+  ],
+  "boundary_scenarios": [
+    "DS1",
+    "OS1"
+  ],
+  "core_scenarios": [
+    "DS3",
+    "DS7",
+    "OS3",
+    "OS4"
+  ],
+  "fail_closed_verdict": "NEEDS_TRACE_SPECIFIC_RECEIVER_DUMP",
+  "normal_training": {
+    "OAKBAT": [
+      "cleanStatic"
+    ],
+    "TEXBAT": [
+      "cleanStatic"
+    ]
+  },
+  "route_decision": "Route B because retained 20 ms row mapping is invalid",
+  "schema": "gnss-doppler-lab.trace-r1-preregistration.v1",
+  "wording": "Configuration frozen before this TRACE-R1 evaluation."
+}

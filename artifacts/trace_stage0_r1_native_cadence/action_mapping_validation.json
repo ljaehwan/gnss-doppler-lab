@@ -1,0 +1,77 @@
+{
+  "carrier_handling": {
+    "allowed_context": [
+      "carr_error_hz",
+      "carr_error_filt_hz",
+      "signed Prompt phase innovation if independently verified"
+    ],
+    "full_doppler_phase_rotation_allowed": false,
+    "prompt_reference_removes_global_phase": true,
+    "reason": "Applying 2*pi*carrier_doppler_hz*dt after Prompt-referenced normalization double-applies a removed common phase and cannot reconstruct 19 unobserved updates."
+  },
+  "clean_reconstruction": {
+    "OAKBAT.cleanStatic": {
+      "carrier_global_phase_applied": false,
+      "interpretation": "The row action governs only the next 1 ms buffer. Neither diagnostic bridges the 19 unobserved loop updates to the next retained row.",
+      "mean_complex_mse": {
+        "invalid_row_action_times_20ms_code_only": 0.019448965495474778,
+        "no_change": 0.01976990869336263,
+        "row_action_for_next_1ms_code_only": 0.01975326989687131
+      },
+      "prompt_referenced": true,
+      "role": "clean_only_diagnostic_not_mapping_selection",
+      "sampled_20ms_spaced_pairs": 50000
+    },
+    "TEXBAT.cleanStatic": {
+      "carrier_global_phase_applied": false,
+      "interpretation": "The row action governs only the next 1 ms buffer. Neither diagnostic bridges the 19 unobserved loop updates to the next retained row.",
+      "mean_complex_mse": {
+        "invalid_row_action_times_20ms_code_only": 0.03448473538447965,
+        "no_change": 0.03519860284069695,
+        "row_action_for_next_1ms_code_only": 0.035159575647349235
+      },
+      "prompt_referenced": true,
+      "role": "clean_only_diagnostic_not_mapping_selection",
+      "sampled_20ms_spaced_pairs": 50000
+    }
+  },
+  "field_semantics": {
+    "carr_error_filt_hz": "current completed carrier loop-filter/NCO output in Hz",
+    "carr_error_hz": "current completed carrier phase discriminator in cycles, despite field suffix",
+    "carrier_doppler_hz": "new carrier NCO Doppler applied to the next 1 ms input buffer",
+    "code_error_chips": "current completed loop-boundary discriminator output",
+    "code_error_filt_chips": "current completed loop-filter output",
+    "code_freq_chips": "new code NCO rate applied to the next 1 ms input buffer"
+  },
+  "known_vector_tests": [
+    "tests/test_trace_native_cadence.py"
+  ],
+  "nco_update_cadence": "1_ms_with_20_ms_dump_decimation",
+  "receiver_source_commit": "1ddd4562723040fd66cb334b578a5b69455625f4",
+  "receiver_source_diff_sha256": "51da8449a56af9088695f81c09c1752139b48e2fbe9f621f85abafcab93681ea",
+  "receiver_source_root": "/home/ubuntu/build-gnss-sdr-complex9",
+  "retained_row_t_to_t_plus_1": false,
+  "route": "B",
+  "route_b_feasibility": {
+    "blocking_constraint": "Task scope permits work only in this project worktree; the receiver implementation is a separate dirty detached worktree and cannot be modified or rebuilt in-scope.",
+    "feasible_with_current_retained_dumps": false,
+    "performed": false,
+    "raw_iq_available": true,
+    "required_patch": "emit per-channel complex nine taps and the receiver-applied next-interval actions every native 1 ms, plus loop-boundary/integration flags",
+    "requires_receiver_source_change": true
+  },
+  "sample_stamp": "intended current interval end: nitems_read(0)+new current_prn_length_samples; its +/-sample variation reflects next-buffer length, so use consecutive stamps only for observed row spacing",
+  "schema": "gnss-doppler-lab.trace-action-mapping-validation.v1",
+  "sequence": [
+    "correlate the current 1 ms interval",
+    "accumulate/save correlator and compute DLL/PLL discriminator at the loop boundary",
+    "update tracking filter and NCO",
+    "store code/carrier state for the next 1 ms input buffer",
+    "emit a dump row only when current_data_symbol wraps to zero",
+    "consume one current_prn_length_samples buffer and repeat"
+  ],
+  "source_authenticated": true,
+  "status": "INVALID_FOR_RETAINED_20MS_ROW_TO_NEXT_ROW",
+  "transition_exclusion": "exclude both adjacent pairs at 1 ms<->20 ms transitions; exclude all gaps, reacquisitions, PRN changes, and non-native outliers",
+  "why_invalid": "At default extend_correlation_symbols=1, state 4 runs DLL/PLL and updates the NCO every 1 ms, but log_data is gated by current_data_symbol==0, producing about 20 ms row spacing. Nineteen intervening correlations/actions are not retained."
+}
