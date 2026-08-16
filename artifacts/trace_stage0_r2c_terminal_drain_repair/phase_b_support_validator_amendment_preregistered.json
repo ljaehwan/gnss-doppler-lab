@@ -1,0 +1,29 @@
+{
+  "schema": "gnss-doppler-lab.trace-r2c-phase-b-support-validator-amendment.v1",
+  "created_at": "2026-08-16T22:03:00+09:00",
+  "status": "PREREGISTERED_BEFORE_PHASE_B_SCORING",
+  "phase_a_status": "PASS",
+  "phase_b_authorized": true,
+  "attack_performance_read_or_computed": false,
+  "discovery": {
+    "run_id": "20260816T124201Z-r2c-phase-b-receiver-texbat-r1",
+    "scenario": "TEXBAT.DS7",
+    "configured_dump_file_count": 11,
+    "observed_dump_file_count": 11,
+    "physical_dump_file_count": 10,
+    "header_only_dump_file_count": 1,
+    "launcher_exit_code": 2,
+    "label": "PHASE_B_VALIDATOR_REQUIRES_EVERY_CHANNEL_PHYSICAL"
+  },
+  "authorized_change": "Keep requiring one dump file for every frozen handoff row, but require physical records from at least four dump files, matching the unchanged frozen minimum-PRN support gate used by Phase A and the Phase B scorer.",
+  "retry_policy": "Preserve the failed DS7 directory under a unique attempt name and rerun only DS7. Retain the already passing cleanStatic and DS3 replay directories without recomputation.",
+  "unchanged": [
+    "minimum simultaneous PRN support of four",
+    "raw IQ sources and hashes",
+    "sample skips and source ranges",
+    "receiver executable and patch",
+    "frozen receiver configs and handoffs",
+    "TRACE features, score math, thresholds, tolerances, windows, controls, and alarm gates",
+    "Phase A artifacts and authorization verdict"
+  ]
+}
