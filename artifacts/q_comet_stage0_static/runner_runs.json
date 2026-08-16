@@ -40,13 +40,13 @@
       "heartbeat": {
         "final": false,
         "run_id": "20260816T032510Z-q-comet-stage0-static-codex-orchestrator",
-        "updated_at": "2026-08-16T05:13:35+00:00"
+        "updated_at": "2026-08-16T05:14:32+00:00"
       },
       "logs": {
         "stderr": {
           "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T032510Z-q-comet-stage0-static-codex-orchestrator/stderr.log",
-          "sha256": "42b0c57770508095b0294652101dfcbc315b8ab46c7db36864a8285a649e2d8a",
-          "size_bytes": 38070944
+          "sha256": "f9d18c3e1db7ca065672032787c130126f97672c90b33a4767b54c620c216890",
+          "size_bytes": 39119190
         },
         "stdout": {
           "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T032510Z-q-comet-stage0-static-codex-orchestrator/stdout.log",
@@ -1190,6 +1190,70 @@
         "started_at": "2026-08-16T05:09:57+00:00",
         "status": "succeeded",
         "updated_at": "2026-08-16T05:11:32+00:00"
+      }
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_q_comet.py && /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/verify_q_comet_stage0.py artifacts/q_comet_stage0_static --fresh-clone"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+      "environment": {
+        "captured_at": "2026-08-16T05:13:56+00:00",
+        "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "python": "/usr/bin/python3",
+        "selected_env": {
+          "PATH": "/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.codex/tmp/arg0/codex-arg04l4hOZ:/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:/home/ubuntu/.hermes/hermes-agent/venv/bin:/home/ubuntu/.hermes/node/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin",
+          "PYTHONPATH": "/home/ubuntu/projects/gnss-doppler-runner-minimal-v0/src",
+          "VIRTUAL_ENV": "/home/ubuntu/.hermes/hermes-agent/venv"
+        }
+      },
+      "git": {
+        "branch": "research/q-comet-stage0-static",
+        "captured_at": "2026-08-16T05:13:56+00:00",
+        "head": "39d5ae3a6bd0d93cf093393cf465df9e02b9306e",
+        "repo": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "status_short": "",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static"
+      },
+      "heartbeat": {
+        "final": true,
+        "run_id": "20260816T051356Z-q-comet-verification-push",
+        "updated_at": "2026-08-16T05:14:02+00:00"
+      },
+      "logs": {
+        "stderr": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T051356Z-q-comet-verification-push/stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        "stdout": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T051356Z-q-comet-verification-push/stdout.log",
+          "sha256": "15d191b9375946cd72d0d0f59e8977ff3363724e2c43550bcb6754caf7706b95",
+          "size_bytes": 2113
+        }
+      },
+      "name": "q-comet-verification-push",
+      "produced_artifacts": [
+        "artifacts/q_comet_stage0_static/artifact_manifest_sha256.json",
+        "artifacts/q_comet_stage0_static/verifier_report.json",
+        "artifacts/q_comet_stage0_static/fresh_clone_verifier_report.json"
+      ],
+      "result_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T051356Z-q-comet-verification-push/result_manifest.json",
+      "run_id": "20260816T051356Z-q-comet-verification-push",
+      "status": {
+        "command_pgid": 425791,
+        "command_pid": 425791,
+        "created_at": "2026-08-16T05:13:56+00:00",
+        "ended_at": "2026-08-16T05:14:02+00:00",
+        "exit_code": 0,
+        "name": "q-comet-verification-push",
+        "pid": 425786,
+        "run_id": "20260816T051356Z-q-comet-verification-push",
+        "started_at": "2026-08-16T05:13:56+00:00",
+        "status": "succeeded",
+        "updated_at": "2026-08-16T05:14:02+00:00"
       }
     }
   ],

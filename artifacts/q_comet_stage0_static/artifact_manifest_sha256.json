@@ -49,10 +49,10 @@
     "plots/score_vs_residual_power.png": "f18c56e62088055576ec36e39ea8f532cfe79607f38d1ed17ea116d7a1b059b9",
     "pre_evaluation_freeze.json": "89fc9ae4f0feda4e2eb8d99d5a6dfe54bec5d1cd08f27fb434fa8877c6da1609",
     "relation_destruction_metrics.json": "09813699b6c76dd14b8e6854f0bbdeb2c59d1490e3418c568d53d295008a2a9a",
-    "runner_runs.json": "3ebae48f7f016532c9aa44bac397a7a25dfb626dff68e58cc505cc9ce43dce80",
+    "runner_runs.json": "fd35bbaefff18b13a90b29ed51ee4adf7214d8c8650130a10ca32d7376758c8f",
     "scenario_metrics.csv": "0d9c2e3fb33e82ab2a58862b567091cdff7614dec4e5e11301204be0cd4a6d79",
     "source_binding.json": "f6c785e8877ce3424f5a3a97dd83dfb5b41c06ce8852bcf9f4c0d0a9bdc0b3cb",
-    "source_commit.json": "4ad0912e29752621feaa31712d9a8fd74aab33f4b3f27fa68c0c219e3bd77b6a",
+    "source_commit.json": "ae2170bdfbd24d5caf93e04de01b1932445132b8313759311f25f031cb9c2daf",
     "test_results.json": "ae12d60364d4d41b25dc64c423d3e70dc123c1816769335c4b9428c4d20d586a",
     "texbat_external_fpr.csv": "75096738edf4b817ab3c3f616ea17cfc954d7010afae9bc22ce71b5a36f36c45",
     "texbat_metrics.csv": "e1307d18a22f8726f2dd15f03111d5ef324b51f58ac5636cfdbdb5527087fc5d",
@@ -65,6 +65,6 @@
     "thresholds.json": "9865d30ce28ab59c2fb27bc12deb0cbcf1853aa997e89e61514d3a39c8b006e5",
     "timeline_inventory.json": "8cc64c4d98f844aa7ebeb03e4af00dae5a2e8de36c98c8bb7b992af8771654a5"
   },
-  "manifest_content_sha256": "0ece30c23019dee8eae089dcd29e5008fd58b19fd314428cb0d31a9e7e973c29",
+  "manifest_content_sha256": "0f5bd3b82a379a34f23dc3b5c2d0c9ecaac5d154948355c221c957153556b1f1",
   "schema": "gnss-doppler-lab.q-comet-artifact-manifest.v1"
 }
