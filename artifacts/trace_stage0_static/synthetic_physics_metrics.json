@@ -1,0 +1,51 @@
+{
+  "complex_superposition": true,
+  "control_median_score": 0.00026181353007515907,
+  "control_q99_threshold": 0.00038136605739752733,
+  "direct_magnitude_addition": false,
+  "low_prompt_masked_count": 192,
+  "paired_mean_effect": 2.6690740680724483,
+  "paired_mean_effect_bootstrap_95_ci": [
+    1.4804717698559358,
+    3.721668423429193
+  ],
+  "physics_pass": true,
+  "resolvable_detection_probability": 0.7313368055555556,
+  "schema": "gnss-doppler-lab.trace-synthetic-physics.v1",
+  "seed": 23017,
+  "single_source_control_count": 160,
+  "sweep": {
+    "delay_chips": [
+      0.0,
+      0.05,
+      0.1,
+      0.15000000000000002,
+      0.2,
+      0.25,
+      0.30000000000000004,
+      0.35000000000000003,
+      0.4,
+      0.45,
+      0.5
+    ],
+    "phase_count": 16,
+    "prns": 4,
+    "reference_epochs": 8,
+    "relative_power_db": [
+      -3.0,
+      0.0,
+      3.0
+    ],
+    "residual_doppler_hz": [
+      0.0,
+      10.0,
+      20.0,
+      30.0,
+      40.0,
+      50.0
+    ]
+  },
+  "two_source_count": 101184,
+  "two_source_median_score": 0.0007391142041610667,
+  "wilcoxon_p_greater": 0.0
+}

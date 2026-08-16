@@ -1,0 +1,8 @@
+{
+  "attack_scores_computed": false,
+  "configuration_frozen_before_evaluation": true,
+  "detail": "Frozen input preflight found zero native 1 ms post-onset pairs in OS3 and OS4 and therefore no >=4-PRN confirmation support.",
+  "performance_claimed": false,
+  "reason": "TRACKER_ACTION_ALIGNMENT_UNRESOLVED",
+  "verdict": "INCONCLUSIVE_INPUT_OR_ALIGNMENT"
+}

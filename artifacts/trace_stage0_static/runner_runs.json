@@ -1,0 +1,15 @@
+{
+  "runner_root": "/home/ubuntu/research-context/tasks/trace-stage0-static/runner",
+  "runs": [
+    {"run_id": "20260816T061230Z-trace-phase-a-inventory", "phase": "A_inventory", "status": "succeeded", "exit_code": 0},
+    {"run_id": "20260816T061823Z-trace-phase-a-clean-fit-alignment", "phase": "A_initial_clean_fit", "status": "failed", "exit_code": 1, "reason": "native four-PRN calibration blocks absent under initial full-duration split; replaced before freeze by explicit cadence preflight"},
+    {"run_id": "20260816T062221Z-trace-phase-a-alignment-preflight-r2", "phase": "A_alignment_preflight", "status": "succeeded", "exit_code": 0},
+    {"run_id": "20260816T062315Z-trace-phase-a-full-tests", "phase": "A_repository_tests", "status": "failed", "exit_code": 2, "reason": "collection unavailable because optional pandas/torch dependencies are not installed; focused TRACE tests passed"},
+    {"run_id": "20260816T062413Z-trace-phase-b-frozen-input-preflight", "phase": "B_r1_input_preflight", "status": "succeeded", "exit_code": 0, "freeze_commit": "109402b"},
+    {"run_id": "20260816T062413Z-trace-phase-b-frozen-synthetic", "phase": "B_r1_synthetic", "status": "failed", "exit_code": 1, "freeze_commit": "109402b", "reason": "recorded low-Prompt mask implementation defect"},
+    {"run_id": "20260816T062537Z-trace-phase-b-r2-frozen-input-preflight", "phase": "B_r2_input_preflight", "status": "succeeded", "exit_code": 0, "freeze_commit": "5f327a4"},
+    {"run_id": "20260816T062537Z-trace-phase-b-r2-frozen-synthetic", "phase": "B_r2_synthetic", "status": "succeeded", "exit_code": 0, "freeze_commit": "5f327a4"},
+    {"run_id": "20260816T062601Z-trace-phase-b-r2-finalize-inconclusive", "phase": "B_r2_finalize", "status": "succeeded", "exit_code": 0, "freeze_commit": "5f327a4"}
+  ],
+  "schema": "gnss-doppler-lab.trace-runner-provenance.v1"
+}
