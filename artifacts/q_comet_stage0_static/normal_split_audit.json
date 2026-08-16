@@ -1,0 +1,80 @@
+{
+  "all_disjoint": true,
+  "calibration_reuse": false,
+  "guards_s": {
+    "calibration_a_to_b": 10,
+    "calibration_b_to_holdout": 10,
+    "train_to_calibration_a": 10
+  },
+  "pairwise_overlap": [
+    {
+      "a": "train",
+      "b": "calibration_a",
+      "overlap_bytes": 0
+    },
+    {
+      "a": "train",
+      "b": "calibration_b",
+      "overlap_bytes": 0
+    },
+    {
+      "a": "train",
+      "b": "holdout",
+      "overlap_bytes": 0
+    },
+    {
+      "a": "calibration_a",
+      "b": "calibration_b",
+      "overlap_bytes": 0
+    },
+    {
+      "a": "calibration_a",
+      "b": "holdout",
+      "overlap_bytes": 0
+    },
+    {
+      "a": "calibration_b",
+      "b": "holdout",
+      "overlap_bytes": 0
+    }
+  ],
+  "ranges": [
+    {
+      "byte_end_exclusive": 14000000000,
+      "byte_start": 2000000000,
+      "end_s": 140.0,
+      "role": "train",
+      "sample_end_exclusive": 3500000000,
+      "sample_start": 500000000,
+      "start_s": 20.0
+    },
+    {
+      "byte_end_exclusive": 21000000000,
+      "byte_start": 15000000000,
+      "end_s": 210.0,
+      "role": "calibration_a",
+      "sample_end_exclusive": 5250000000,
+      "sample_start": 3750000000,
+      "start_s": 150.0
+    },
+    {
+      "byte_end_exclusive": 34000000000,
+      "byte_start": 22000000000,
+      "end_s": 340.0,
+      "role": "calibration_b",
+      "sample_end_exclusive": 8500000000,
+      "sample_start": 5500000000,
+      "start_s": 220.0
+    },
+    {
+      "byte_end_exclusive": 47000000000,
+      "byte_start": 35000000000,
+      "end_s": 470.0,
+      "role": "holdout",
+      "sample_end_exclusive": 11750000000,
+      "sample_start": 8750000000,
+      "start_s": 350.0
+    }
+  ],
+  "raw_source": "one cleanStatic recording; ranges are byte-disjoint"
+}

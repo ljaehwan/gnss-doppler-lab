@@ -1,0 +1,184 @@
+{
+  "missing_derived_policy": "DS4 uses preserved source-bound receiver MAT rows; a derived NPZ is not required.",
+  "receiver_fields_inventory": {
+    "common": [
+      "complex I/Q E4,E3,E2,E,P,L,L2,L3,L4",
+      "tap positions 0.125 chips",
+      "PRN",
+      "PRN_start_sample_count/receiver-relative time",
+      "carrier_doppler_hz",
+      "code_freq_chips",
+      "code_error_chips",
+      "carr_error_hz",
+      "CN0_SNV_dB_Hz",
+      "carrier_lock_test"
+    ],
+    "masking_or_conditioning_only": [
+      "CN0_SNV_dB_Hz",
+      "carrier_lock_test"
+    ],
+    "not_direct_scores": [
+      "Prompt power",
+      "C/N0"
+    ],
+    "score_inputs": [
+      "complex I/Q nine taps",
+      "PRN",
+      "sample count/time"
+    ]
+  },
+  "receiver_source": {
+    "binary_path": "/home/ubuntu/build-gnss-sdr-complex9/build-complex/src/main/gnss-sdr",
+    "binary_sha256": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+    "git_commit": "1ddd4562723040fd66cb334b578a5b69455625f4",
+    "path": "/home/ubuntu/build-gnss-sdr-complex9"
+  },
+  "recordings": [
+    {
+      "declared_source_iq_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "derived_declared_sha256": "fcd1d378c28e79fe4a550b65fc1208cde3c8fb334db11406a07fed4d90fba237",
+      "derived_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.npz",
+      "derived_size_bytes": 44157344,
+      "manifest_exists": true,
+      "manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.manifest.json",
+      "manifest_sha256": "2424331f3fdb403cfa4610082ed36022abe180383bd08b5732d6aba834427eca",
+      "receiver_config_sha256": "ce74f719338a8a97021ba10a0c72927e3e44db01120d355b5443fcc559504930",
+      "receiver_executable_sha256": null,
+      "recording": "cleanStatic",
+      "sample_format": null,
+      "sample_rate_hz": 25000000,
+      "tap_count": 9,
+      "tap_spacing_chips": 0.125
+    },
+    {
+      "declared_source_iq_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "derived_declared_sha256": "38eb5842dfec306d99bf0c5d61df6cffcb6faa25ed63721cafa8e3c3776f9b3e",
+      "derived_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds3.npz",
+      "derived_size_bytes": 49195685,
+      "manifest_exists": true,
+      "manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds3.manifest.json",
+      "manifest_sha256": "01de5f689a543da2107b0258f95cfff68b0c1a2c9a4cfeb37724b8a32a6074a8",
+      "receiver_config_sha256": "5aff08f34cacadf18b5ec3ca03be76ec9cfc8393b0ae90c4718a974ac22158c0",
+      "receiver_executable_sha256": null,
+      "recording": "DS3",
+      "sample_format": null,
+      "sample_rate_hz": 25000000,
+      "tap_count": 9,
+      "tap_spacing_chips": 0.125
+    },
+    {
+      "declared_source_iq_sha256": null,
+      "manifest_exists": true,
+      "manifest_path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/ds4/receiver/texbat-ds4-method-a-9tap-external-validation/manifest.json",
+      "manifest_sha256": "d449e439407716610cec1993dc54b64ae660ecf3c18d20a9415abc218267dd63",
+      "receiver_config_sha256": null,
+      "receiver_executable_sha256": null,
+      "recording": "DS4",
+      "sample_format": "ishort_complex_iq",
+      "sample_rate_hz": 25000000,
+      "tap_count": 9,
+      "tap_spacing_chips": 0.125
+    },
+    {
+      "declared_source_iq_sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "derived_declared_sha256": "d0e6da4e27d51e3e96abf2ef7786501124072f28667671e4e40da756eb35f3c8",
+      "derived_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/exports/ds7.npz",
+      "derived_size_bytes": 27091621,
+      "manifest_exists": true,
+      "manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/exports/ds7.manifest.json",
+      "manifest_sha256": "8dec0643850c9d545b3980ea45bf2c3b9081cd2e314e208faab6bc51fa6e8959",
+      "receiver_config_sha256": "9cecb8eb91a5521707e4a1e9bc0c739d4bce2dbfe952293b9e5d13e987c62cf0",
+      "receiver_executable_sha256": null,
+      "recording": "DS7",
+      "sample_format": null,
+      "sample_rate_hz": 25000000,
+      "tap_count": 9,
+      "tap_spacing_chips": 0.125
+    },
+    {
+      "declared_source_iq_sha256": "1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78",
+      "derived_declared_sha256": "d1973fa150b7b4e7359df4827f36ce60289f206e9db11c1ac2bc1fd33a0df533",
+      "derived_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/exports/ds8.npz",
+      "derived_size_bytes": 35783824,
+      "manifest_exists": true,
+      "manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/exports/ds8.manifest.json",
+      "manifest_sha256": "53b240d1c5ecd79c0802840575de5f00ca02131ca449c1cdd9cae30ea6c6f01d",
+      "receiver_config_sha256": "57aaa9d419c0b126ead3c98d1a90a267f3c9c23a37ad4e2f30cab5b6a8202f5a",
+      "receiver_executable_sha256": "6c4512adefcfe49ae7d964c0425b26bfffd8b988ad7f9a0cf6f4b2e30fc5cafb",
+      "recording": "DS8",
+      "resolved_receiver_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/manifest.json",
+      "resolved_receiver_manifest_sha256": "2acb11c8e2e5b3f704cbde057d60d771cb6f75316320611d5d93b7c1001aa7e9",
+      "sample_format": null,
+      "sample_rate_hz": 25000000,
+      "tap_count": 9,
+      "tap_spacing_chips": 0.125
+    },
+    {
+      "declared_source_iq_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "manifest_exists": true,
+      "manifest_path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_9tap_frozen_champion/cleanStatic/receiver/oakbat-cleanStatic-method-a-9tap/manifest.json",
+      "manifest_sha256": "9802568e577f5a02031a00ea042239fa576a57fda3e2b401aeb482203eff73ec",
+      "receiver_config_sha256": "daa77bbcdc2005c5f8482cff64787db761ec35039380e1921b7186b0913c6273",
+      "receiver_executable_sha256": "4c556bcd5dcb227f43f72aa7da2bd6381aee559ac31953ae4f02ad49ee511443",
+      "recording": "cleanStatic",
+      "sample_format": "interleaved_int16_iq",
+      "sample_rate_hz": 5000000,
+      "tap_count": 9,
+      "tap_spacing_chips": 0.125
+    },
+    {
+      "declared_source_iq_sha256": "e9ef8ab33a3e59c5e55b3f6fb9b8bb3ba18aaf380402ae00abbe535858b1deb7",
+      "manifest_exists": true,
+      "manifest_path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os1/receiver/oakbat-os1-method-a-9tap/manifest.json",
+      "manifest_sha256": "df6fa60a6bd5f9e8c25927453164c1f26b318f6eda6fd1040a25e95a62163df9",
+      "receiver_config_sha256": "ace4043135d53eeb2cc34ad4ab5639d17fb320a4b81b1f5499122f6540e86ad6",
+      "receiver_executable_sha256": "4c556bcd5dcb227f43f72aa7da2bd6381aee559ac31953ae4f02ad49ee511443",
+      "recording": "OS1",
+      "sample_format": "interleaved_int16_iq",
+      "sample_rate_hz": 5000000,
+      "tap_count": 9,
+      "tap_spacing_chips": 0.125
+    },
+    {
+      "declared_source_iq_sha256": "17de8e3f54095ad2eafad8a54ca7f5008596936ded35578710dfed17a5b670c1",
+      "manifest_exists": true,
+      "manifest_path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os2/receiver/oakbat-os2-method-a-9tap/manifest.json",
+      "manifest_sha256": "779d52bff18493e12e7966b12b8d0b98a4c816f16d02935f43239bee08d8b1cf",
+      "receiver_config_sha256": "8dfab9d5c44b9e8c66ed472f86886f6c2bd82367a5dfb7a029b28365925b4017",
+      "receiver_executable_sha256": "4c556bcd5dcb227f43f72aa7da2bd6381aee559ac31953ae4f02ad49ee511443",
+      "recording": "OS2",
+      "sample_format": "interleaved_int16_iq",
+      "sample_rate_hz": 5000000,
+      "tap_count": 9,
+      "tap_spacing_chips": 0.125
+    },
+    {
+      "declared_source_iq_sha256": "2a3c3c5cf1accaa287fe14181e43070903500e0250c69e3c335f91c89c0cdc6c",
+      "manifest_exists": true,
+      "manifest_path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os3/receiver/oakbat-os3-method-a-9tap/manifest.json",
+      "manifest_sha256": "76d61850113a8e4ad1de62f78111b444cee2339a84e0fa710d81b8946465569c",
+      "receiver_config_sha256": "298f6dbef8fa1bd66227ae440623ff392ed6ba1443a2f495de9dce427d97c340",
+      "receiver_executable_sha256": "4c556bcd5dcb227f43f72aa7da2bd6381aee559ac31953ae4f02ad49ee511443",
+      "recording": "OS3",
+      "sample_format": "interleaved_int16_iq",
+      "sample_rate_hz": 5000000,
+      "tap_count": 9,
+      "tap_spacing_chips": 0.125
+    },
+    {
+      "declared_source_iq_sha256": "803f3c76bcc618efbc6b394eb536fe61ed8c3e34b1822c0088b4475621bfa8e4",
+      "manifest_exists": true,
+      "manifest_path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/oakbat_cleanstatic_detector_eval_v1/preprocessed/os4/receiver/oakbat-os4-method-a-9tap/manifest.json",
+      "manifest_sha256": "c6f128ed73c61c96f163a5c5d538b0615d3424534ac21c1a582317f074038a0f",
+      "receiver_config_sha256": "3a9a4c38a529e9ef2c2c52ba256014bc337f2c32595a79c996cef49e7bfb4b67",
+      "receiver_executable_sha256": "4c556bcd5dcb227f43f72aa7da2bd6381aee559ac31953ae4f02ad49ee511443",
+      "recording": "OS4",
+      "sample_format": "interleaved_int16_iq",
+      "sample_rate_hz": 5000000,
+      "tap_count": 9,
+      "tap_spacing_chips": 0.125
+    }
+  ],
+  "schema": "gnss-doppler-lab.q-comet-data-inventory.v1",
+  "status": "PREFLIGHT_COMPLETE"
+}

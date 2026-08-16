@@ -1,0 +1,61 @@
+{
+  "attack_inputs_read": false,
+  "methods": {
+    "A1": {
+      "finite_epochs": 238,
+      "q99": 4574481.857698413,
+      "q995": 4615787.813140182
+    },
+    "A2": {
+      "finite_epochs": 238,
+      "q99": 2.9424294656070584,
+      "q995": 3.173659492187772
+    },
+    "A3": {
+      "finite_epochs": 238,
+      "q99": 0.0,
+      "q995": 0.0
+    },
+    "A4": {
+      "finite_epochs": 238,
+      "q99": 161.86576373869468,
+      "q995": 163.06037073785436
+    },
+    "A5": {
+      "finite_epochs": 238,
+      "q99": 0.0,
+      "q995": 0.0
+    },
+    "A6": {
+      "finite_epochs": 239,
+      "q99": 0.0,
+      "q995": 0.0
+    },
+    "A7": {
+      "finite_epochs": 238,
+      "q99": 0.0,
+      "q995": 0.0
+    },
+    "EPL3": {
+      "finite_epochs": 238,
+      "q99": 0.0,
+      "q995": 0.0
+    },
+    "Full": {
+      "finite_epochs": 238,
+      "q99": 0.0,
+      "q995": 0.0
+    },
+    "No-quotient": {
+      "finite_epochs": 238,
+      "q99": 0.0,
+      "q995": 0.0
+    }
+  },
+  "quantiles": {
+    "q99": 0.99,
+    "q995": 0.995
+  },
+  "schema": "gnss-doppler-lab.q-comet-thresholds.v1",
+  "source": "cleanStatic calibration-B only"
+}

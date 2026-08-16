@@ -1,0 +1,33 @@
+{
+  "attack_results_used": false,
+  "config_sha256": "be06d408ba0301ddef2ae49713147f7028acebdc50f96af1d8ca6469c0ef84f1",
+  "freeze_commit_sha": "RECORDED_AFTER_COMMIT_IN_SOURCE_COMMIT_JSON",
+  "freeze_type": "PRE_EVALUATION_CONFIGURATION_FREEZE",
+  "frozen_structure": {
+    "cadence_s": 0.5,
+    "input": "complex 9-tap I/Q",
+    "memory_epochs": 20,
+    "min_prns": 4,
+    "nuisance_policy": {
+      "ideal_triangular_acf": false,
+      "tangents": [
+        "observed local peak amplitude",
+        "common carrier phase/navigation-bit phase",
+        "observed local peak delay derivative",
+        "tap-dependent Doppler phase"
+      ]
+    },
+    "participation": 0.5,
+    "prior_variance": 0.25,
+    "threshold_quantile": 0.99
+  },
+  "normal_model_summary_sha256": "e5d8115472edbe6125552468b529ca55396c610a59112de8bc151cc4c33d29dc",
+  "schema": "gnss-doppler-lab.q-comet-freeze.v1",
+  "selected_predictor": {
+    "kind": "ridge_var",
+    "lags": 2,
+    "ridge": 0.001,
+    "validation_nll": 403.1556311306854
+  },
+  "thresholds_sha256": "9865d30ce28ab59c2fb27bc12deb0cbcf1853aa997e89e61514d3a39c8b006e5"
+}

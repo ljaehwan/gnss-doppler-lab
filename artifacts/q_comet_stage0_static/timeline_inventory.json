@@ -1,0 +1,55 @@
+{
+  "DS4_scope": "transition-only because raw file ends at about 128.2 s; no 225 s pull-off claim",
+  "official_timelines": {
+    "DS3": {
+      "family": "DS3",
+      "onset_s": 118.9,
+      "pull_off_s": 195.0,
+      "transition_end_s": 138.9
+    },
+    "DS4": {
+      "family": "DS4",
+      "onset_s": 113.8,
+      "pull_off_s": null,
+      "transition_end_s": 128.2
+    },
+    "DS7": {
+      "family": "DS7-8",
+      "onset_s": 110.0,
+      "time_push_s": 150.0,
+      "transition_end_s": 130.0
+    },
+    "DS8": {
+      "family": "DS7-8",
+      "onset_s": 110.0,
+      "time_push_s": 150.0,
+      "transition_end_s": 130.0
+    },
+    "OS1": {
+      "family": "OS1",
+      "onset_s": 120.0,
+      "transition_end_s": 140.0
+    },
+    "OS2": {
+      "family": "OS2",
+      "onset_s": 120.0,
+      "transition_end_s": 140.0
+    },
+    "OS3": {
+      "family": "OS3",
+      "onset_s": 120.0,
+      "transition_end_s": 140.0
+    },
+    "OS4": {
+      "family": "OS4",
+      "onset_s": 120.0,
+      "transition_end_s": 140.0
+    }
+  },
+  "receiver_time_origin": "raw sample zero",
+  "sample_count_to_time": {
+    "OAKBAT": "PRN_start_sample_count/5e6",
+    "TEXBAT": "PRN_start_sample_count/25e6"
+  },
+  "schema": "gnss-doppler-lab.q-comet-timeline.v1"
+}

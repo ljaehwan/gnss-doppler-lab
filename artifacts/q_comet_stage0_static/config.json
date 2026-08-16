@@ -1,0 +1,91 @@
+{
+  "attack_results_used_for_configuration": false,
+  "base_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "candidate_selection": "minimum cleanStatic validation likelihood on calibration-A only",
+  "common_onset": {
+    "basis": [
+      "step",
+      "linear_ramp",
+      "first_order_transient_tau_2.5s"
+    ],
+    "deformation_prior_variance": 0.25,
+    "memory_epochs": 20,
+    "memory_s": 10.0,
+    "min_prns": 4,
+    "participation_probability": 0.5,
+    "scan_penalty": "0.5*log(memory_epochs+1)"
+  },
+  "covariance": {
+    "eigenvalue_floor_ratio": 0.0001,
+    "estimator": "Ledoit-Wolf",
+    "source": "calibration-A"
+  },
+  "gap_reset": ">1.5x expected cadence",
+  "normal_source": "TEXBAT cleanStatic only",
+  "nuisance": {
+    "ideal_triangular_acf": false,
+    "tangents": [
+      "observed local peak amplitude",
+      "common carrier phase/navigation-bit phase",
+      "observed local peak delay derivative",
+      "tap-dependent Doppler phase"
+    ]
+  },
+  "observation": {
+    "availability": "last row in bin",
+    "bin_statistic": "complex component mean",
+    "causal_bin_s": 0.5,
+    "receiver_rows": "1 ms complex 9-tap I/Q"
+  },
+  "predictor_candidates": [
+    {
+      "kind": "persistence",
+      "lags": 1,
+      "ridge": 0.0
+    },
+    {
+      "kind": "ridge_var",
+      "lags": 2,
+      "ridge": 0.001
+    },
+    {
+      "kind": "ridge_var",
+      "lags": 2,
+      "ridge": 0.1
+    },
+    {
+      "kind": "ridge_var",
+      "lags": 3,
+      "ridge": 0.1
+    }
+  ],
+  "recording_boundary_reset": true,
+  "schema": "gnss-doppler-lab.q-comet-stage0-config.v1",
+  "splits_s": {
+    "calibration_a": [
+      150.0,
+      210.0
+    ],
+    "calibration_b": [
+      220.0,
+      340.0
+    ],
+    "holdout": [
+      350.0,
+      470.0
+    ],
+    "train": [
+      20.0,
+      140.0
+    ]
+  },
+  "thresholds": {
+    "quantiles": [
+      0.99,
+      0.995
+    ],
+    "source": "calibration-B",
+    "strict_comparison": "score > threshold",
+    "target_fpr": 0.01
+  }
+}
