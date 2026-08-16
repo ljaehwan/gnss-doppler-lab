@@ -1,0 +1,77 @@
+{
+  "action_causal_tuple": "(complex_t, action_computed_for_next_interval_t, complex_t+1)",
+  "action_fields_each": [
+    "code_nco_rate_chips_s",
+    "carrier_doppler_hz",
+    "residual_code_phase_chips",
+    "residual_carrier_phase_rad",
+    "code_phase_step_chips_per_sample",
+    "carrier_phase_step_rad_per_sample",
+    "code_phase_rate_step_chips_per_sample2",
+    "carrier_phase_rate_step_rad_per_sample2",
+    "dll_filter_output_chips_s",
+    "pll_fll_filter_output_hz",
+    "carrier_phase_accumulator_rad",
+    "residual_code_phase_samples",
+    "interval_length_samples"
+  ],
+  "actions": [
+    "action_used_for_current_interval",
+    "action_computed_for_next_interval"
+  ],
+  "binary": {
+    "endianness": "little",
+    "header_size_bytes": 192,
+    "magic": "TRC1MS02",
+    "record_size_bytes": 416,
+    "version": 2
+  },
+  "coherent_integration": "one GPS L1 C/A code period; no extended integration",
+  "complex_taps": [
+    "E4",
+    "E3",
+    "E2",
+    "E",
+    "P",
+    "L",
+    "L2",
+    "L3",
+    "L4"
+  ],
+  "identity_time": [
+    "scenario_id linked by file header",
+    "channel",
+    "prn",
+    "tracking_session_id",
+    "loop_sequence",
+    "action_used_source_loop_sequence",
+    "absolute raw interval start/end sample",
+    "receiver timestamp",
+    "integration duration"
+  ],
+  "navigation_bit_handling": "GPS L1 C/A raw complex taps are not navigation-bit wiped; data-symbol boundary is explicit",
+  "normalization": "none in receiver; Prompt-referenced normalization occurs once in adapter",
+  "phase_convention": "carrier-wiped residual receiver phase; carrier NCO sign follows GNSS-SDR",
+  "schema": "gnss-doppler-lab.trace-native-1ms-schema.v2",
+  "tap_offsets_chips": [
+    -0.5,
+    -0.375,
+    -0.25,
+    -0.125,
+    0.0,
+    0.125,
+    0.25,
+    0.375,
+    0.5
+  ],
+  "tracking_measurements": [
+    "dll_discriminator_chips",
+    "pll_phase_error_cycles",
+    "fll_frequency_error_hz",
+    "code_filter_output_chips_s",
+    "carrier_filter_output_hz",
+    "cn0_db_hz",
+    "carrier_lock_test",
+    "coherent_integration_s"
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "attack_data_used_for_model_or_threshold_selection": false,
+  "comparisons_if_phase_b_runs": [
+    "TRACE Full",
+    "no-action predictor",
+    "zero-action counterfactual",
+    "wrong shifted-action negative control",
+    "shuffled-action TRACE",
+    "action norm only",
+    "complex residual norm only",
+    "fixed complex 9-tap detector",
+    "B0 exact if rerunnable on common native support"
+  ],
+  "core_scenarios": [
+    "TEXBAT.DS3",
+    "TEXBAT.DS7",
+    "OAKBAT.OS3",
+    "OAKBAT.OS4"
+  ],
+  "fail_closed_labels": [
+    "NATIVE_1MS_DUMP_IMPLEMENTATION_INVALID",
+    "ACTION_MAPPING_UNRESOLVED",
+    "INSUFFICIENT_MULTI_PRN_SUPPORT",
+    "RAW_SOURCE_BINDING_FAILED"
+  ],
+  "phase_a_requires_all": [
+    "continuous native approximately 1 ms rows",
+    "at least four valid PRNs at a common epoch in every smoke scenario",
+    "exact next-action to next-row current-action equality and source sequence",
+    "receiver source execution order agreement",
+    "finite nonzero noncopied taps and actions",
+    "raw SHA-256 and absolute sample range binding",
+    "identical schema across three smoke scenarios",
+    "deterministic same-build same-slice reproduction",
+    "safe PRN/channel reassignment boundaries"
+  ],
+  "phase_a_scenarios": [
+    "TEXBAT.cleanStatic",
+    "TEXBAT.DS3",
+    "OAKBAT.OS3"
+  ],
+  "phase_b_gate": "run only if every Phase-A requirement passes",
+  "phase_b_frozen_operationalization": {
+    "alarm_alignment_max_delay_s": 10.0,
+    "bootstrap_repetitions": 999,
+    "bootstrap_unit_s": 10.0,
+    "carry_off_pass": "pre-onset FPR <= 5%, established detection rate >= 0.5, and first post-carry alarm delay in [0, 10] s",
+    "chronological_clean_roles": [
+      "train 45%",
+      "covariance validation 20%",
+      "threshold calibration 15%",
+      "holdout 20%"
+    ],
+    "family_models": "fit ridge, covariance, and thresholds separately on TEXBAT and OAKBAT cleanStatic only",
+    "scenario_action_advantage": "TRACE Full strictly exceeds both no-action and complex-residual baselines in low-FPR pAUC, or has an earlier first post-onset alarm",
+    "shift_shuffle_test": "paired post-onset Wilcoxon one-sided p<0.01 and mean TRACE Full score greater than the wrong-action control"
+  },
+  "performance_verdicts_if_phase_b_runs": [
+    "GO_TRACE_PHYSICAL_HYPOTHESIS",
+    "NO_GO_TRACE_PHYSICAL_HYPOTHESIS"
+  ],
+  "receiver_failure_verdict": "INCONCLUSIVE_INPUT_OR_RECEIVER",
+  "schema": "gnss-doppler-lab.trace-r2-preregistration.v1",
+  "wording": "Configuration and Phase-A gates frozen before native receiver smoke replay."
+}

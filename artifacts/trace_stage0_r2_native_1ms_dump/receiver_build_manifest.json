@@ -1,0 +1,57 @@
+{
+  "build_command": "cmake --build /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-build --target gnss-sdr -j 4",
+  "build_directory": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-build",
+  "built_executable": {
+    "byte_size": 36593608,
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-build/src/main/gnss-sdr",
+    "sha256": "b23867cefa8650e57e037f3b72e4a077a0d90faf4fb6e40aeae3b28c7a45b443",
+    "version_output": "gnss-sdr version 0.0.19"
+  },
+  "compiler": {
+    "cxx": "/usr/bin/c++",
+    "identity": "c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+  },
+  "configure": {
+    "build_type": "Release",
+    "enable_log": true,
+    "enable_system_testing": false,
+    "enable_uhd": true,
+    "enable_unit_testing": true,
+    "enable_unit_testing_extra": false,
+    "enable_zmq": true,
+    "generator": "Ninja",
+    "install_prefix": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-install",
+    "python": "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+    "pythonpath_for_system_mako": "/usr/lib/python3/dist-packages"
+  },
+  "run_ids": [
+    {
+      "outcome": "FAIL_MAKO_SELECTION",
+      "run_id": "20260816T080322Z-trace-r2-receiver-configure"
+    },
+    {
+      "outcome": "PASS",
+      "run_id": "20260816T080421Z-trace-r2-receiver-configure-r1"
+    },
+    {
+      "outcome": "FAIL_CHILD_ENV_AND_SSD_GIT_OWNERSHIP_GUARD",
+      "run_id": "20260816T080501Z-trace-r2-receiver-build"
+    },
+    {
+      "outcome": "PASS",
+      "run_id": "20260816T080724Z-trace-r2-receiver-build-r1"
+    },
+    {
+      "outcome": "PASS_FINAL_SOURCE_RECOMPILED_AND_LINKED",
+      "run_id": "20260816T084130Z-trace-r2-receiver-build-final"
+    }
+  ],
+  "source_binding": {
+    "base_commit": "1ddd4562723040fd66cb334b578a5b69455625f4",
+    "patch_byte_size": 29719,
+    "patch_sha256": "087da6343c1455bbdb420f697b05de168b464dbe4472bb6ad15eb488aa48fa2d",
+    "tracking_object_rebuilt_in_final_run": true
+  },
+  "schema": "gnss-doppler-lab.trace-r2-receiver-build-manifest.v1",
+  "status": "PASS"
+}

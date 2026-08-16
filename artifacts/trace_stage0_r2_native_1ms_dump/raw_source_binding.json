@@ -1,0 +1,82 @@
+{
+  "created_at": "2026-08-16T08:23:32.198289+00:00",
+  "datasets": {
+    "OAKBAT.OS3": {
+      "expected_sha256_from_authenticated_R1": "2a3c3c5cf1accaa287fe14181e43070903500e0250c69e3c335f91c89c0cdc6c",
+      "fresh_sha256": "2a3c3c5cf1accaa287fe14181e43070903500e0250c69e3c335f91c89c0cdc6c",
+      "raw_iq_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/os3.bin",
+      "sample_format": "interleaved_int16_iq",
+      "sample_rate_hz": 5000000,
+      "stable_during_hash": true,
+      "stat_after": {
+        "ctime_ns": 1785201703000000000,
+        "device": 49,
+        "inode": 3065,
+        "mtime_ns": 1785201703000000000,
+        "path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/os3.bin",
+        "size_bytes": 9600000000
+      },
+      "stat_before": {
+        "ctime_ns": 1785201703000000000,
+        "device": 49,
+        "inode": 3065,
+        "mtime_ns": 1785201703000000000,
+        "path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/os3.bin",
+        "size_bytes": 9600000000
+      },
+      "status": "PASS"
+    },
+    "TEXBAT.DS3": {
+      "expected_sha256_from_authenticated_R1": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "fresh_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "raw_iq_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds3.bin",
+      "sample_format": "interleaved_int16_iq",
+      "sample_rate_hz": 25000000,
+      "stable_during_hash": true,
+      "stat_after": {
+        "ctime_ns": 1784563991000000000,
+        "device": 49,
+        "inode": 3091,
+        "mtime_ns": 1784563991000000000,
+        "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds3.bin",
+        "size_bytes": 45785022464
+      },
+      "stat_before": {
+        "ctime_ns": 1784563991000000000,
+        "device": 49,
+        "inode": 3091,
+        "mtime_ns": 1784563991000000000,
+        "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds3.bin",
+        "size_bytes": 45785022464
+      },
+      "status": "PASS"
+    },
+    "TEXBAT.cleanStatic": {
+      "expected_sha256_from_authenticated_R1": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "fresh_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "raw_iq_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "sample_format": "interleaved_int16_iq",
+      "sample_rate_hz": 25000000,
+      "stable_during_hash": true,
+      "stat_after": {
+        "ctime_ns": 1784430845000000000,
+        "device": 49,
+        "inode": 3088,
+        "mtime_ns": 1784430845000000000,
+        "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+        "size_bytes": 48016392192
+      },
+      "stat_before": {
+        "ctime_ns": 1784430845000000000,
+        "device": 49,
+        "inode": 3088,
+        "mtime_ns": 1784430845000000000,
+        "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+        "size_bytes": 48016392192
+      },
+      "status": "PASS"
+    }
+  },
+  "schema": "gnss-doppler-lab.trace-r2-raw-source-binding.v1",
+  "status": "PASS"
+}

@@ -1,0 +1,59 @@
+{
+  "adapter": {
+    "carrier_global_doppler_warp": false,
+    "prompt_epsilon": 1e-12,
+    "schema_only_change": true
+  },
+  "frozen_trace_r1": {
+    "alarm_consecutive_blocks": 3,
+    "block_s": 0.5,
+    "clean_split_ratios": {
+      "calibration": 0.15,
+      "covariance_validation": 0.2,
+      "holdout": 0.2,
+      "train": 0.45
+    },
+    "chronological_role_order": [
+      "train",
+      "covariance_validation",
+      "calibration",
+      "holdout"
+    ],
+    "cn0_min_db_hz": 28.0,
+    "covariance": "LedoitWolf",
+    "guard_s": 5.0,
+    "lock_min": 0.85,
+    "minimum_prns": 4,
+    "pooling": "median",
+    "ridge_alpha": 10.0,
+    "seed": 23017,
+    "threshold_quantiles": [
+      0.99,
+      0.995
+    ],
+    "bootstrap_block_s": 10.0,
+    "bootstrap_repetitions": 999,
+    "carry_off_max_delay_s": 10.0,
+    "carry_off_min_established_detection_rate": 0.5
+  },
+  "native_dump": {
+    "coherent_integration_s": 0.001,
+    "complex_values": "original receiver correlators before Prompt-referenced normalization",
+    "extend_correlation_symbols": 1,
+    "record_size_bytes": 416,
+    "schema_version": 2,
+    "tap_count": 9,
+    "tap_offsets_chips": [
+      -0.5,
+      -0.375,
+      -0.25,
+      -0.125,
+      0.0,
+      0.125,
+      0.25,
+      0.375,
+      0.5
+    ]
+  },
+  "schema": "gnss-doppler-lab.trace-r2-config.v1"
+}

@@ -1,0 +1,42 @@
+{
+  "actual_prior_receiver_worktree": {
+    "base_commit": "1ddd4562723040fd66cb334b578a5b69455625f4",
+    "branch": null,
+    "detached": true,
+    "dirty": true,
+    "dirty_files": [
+      "src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+      "src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.h",
+      "src/algorithms/tracking/libs/dll_pll_conf.cc",
+      "src/algorithms/tracking/libs/dll_pll_conf.h",
+      "build-complex/ (untracked build directory)"
+    ],
+    "existing_complex9_diff_sha256": "51da8449a56af9088695f81c09c1752139b48e2fbe9f621f85abafcab93681ea",
+    "modified_or_cleaned_by_r2": false,
+    "path": "/home/ubuntu/build-gnss-sdr-complex9",
+    "remote_fetch": "https://github.com/gnss-sdr/gnss-sdr.git",
+    "remote_push": "https://github.com/gnss-sdr/gnss-sdr.git"
+  },
+  "base_source": {
+    "commit": "1ddd4562723040fd66cb334b578a5b69455625f4",
+    "git_index_listing_sha256": "5cefa89f57a65e43e2abf5b0bea1fc1820a52618f0a6ba17fc403cd92694e663",
+    "git_tree": "4191a2135f980742d0f3bbcd8b73649f554fa3ae",
+    "remote": "https://github.com/gnss-sdr/gnss-sdr.git"
+  },
+  "clean_r2_worktree": {
+    "branch": "research/trace-stage0-r2-native-1ms-dump",
+    "created_from_exact_base": true,
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source"
+  },
+  "patch": {
+    "artifact": "receiver_patch.diff",
+    "byte_size": 29719,
+    "sha256": "087da6343c1455bbdb420f697b05de168b464dbe4472bb6ad15eb488aa48fa2d"
+  },
+  "schema": "gnss-doppler-lab.trace-r2-receiver-source-provenance.v1",
+  "writable_receiver_remote": {
+    "available": false,
+    "reason": "Only the upstream gnss-sdr HTTPS remote is configured; no authenticated writable fork/remote is available.",
+    "receiver_branch_pushed": false
+  }
+}

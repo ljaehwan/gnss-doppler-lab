@@ -1,0 +1,29 @@
+{
+  "old_20ms_dump_reused_or_interpolated": false,
+  "phase_a": {
+    "OAKBAT.OS3": {
+      "duration_s": 45.0,
+      "raw_start_s": 90.0,
+      "status": "PENDING"
+    },
+    "TEXBAT.DS3": {
+      "duration_s": 45.0,
+      "raw_start_s": 90.0,
+      "status": "PENDING"
+    },
+    "TEXBAT.cleanStatic": {
+      "duration_s": 45.0,
+      "raw_start_s": 0.0,
+      "status": "PENDING"
+    }
+  },
+  "phase_b": {
+    "OAKBAT.OS3": "GATED_ON_PHASE_A",
+    "OAKBAT.OS4": "GATED_ON_PHASE_A",
+    "OAKBAT.cleanStatic": "GATED_ON_PHASE_A",
+    "TEXBAT.DS3": "GATED_ON_PHASE_A",
+    "TEXBAT.DS7": "GATED_ON_PHASE_A",
+    "TEXBAT.cleanStatic": "GATED_ON_PHASE_A"
+  },
+  "schema": "gnss-doppler-lab.trace-r2-replay-inventory.v1"
+}
