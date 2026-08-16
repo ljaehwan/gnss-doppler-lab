@@ -1,0 +1,726 @@
+{
+  "scenarios": {
+    "OAKBAT.OS3": {
+      "all_selected_rows_pre_onset": true,
+      "channel_count": 11,
+      "fixed_channel_prn_map": {
+        "0": 27,
+        "1": 21,
+        "10": 10,
+        "2": 11,
+        "3": 18,
+        "4": 20,
+        "5": 24,
+        "6": 25,
+        "7": 14,
+        "8": 8,
+        "9": 15
+      },
+      "guard_absolute_sample": 475000000,
+      "handoff_path": "artifacts/trace_stage0_r2b_stable_handoff_repair/handoffs/oakbat_os3.csv",
+      "handoff_sha256": "9a546a42775450bbe076784b737aa7d2888ae637ddeb3769ee2ee3d4ce6f064c",
+      "raw_offset_samples": 450000000,
+      "source_channel_map": {
+        "0": 0,
+        "1": 1,
+        "10": 9,
+        "2": 10,
+        "3": 2,
+        "4": 3,
+        "5": 4,
+        "6": 5,
+        "7": 6,
+        "8": 7,
+        "9": 8
+      },
+      "source_files": [
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/oakbat_os3/rep1/trace_native_1ms_ch_0.bin",
+          "selected_absolute_raw_sample": 475003754,
+          "selected_row_index": 4783,
+          "sha256": "0461043c543fea342d924a9ad222ac5fa4df95ec7c95fdbfd4c95b3b4c46621c",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/oakbat_os3/rep1/trace_native_1ms_ch_1.bin",
+          "selected_absolute_raw_sample": 475000939,
+          "selected_row_index": 4875,
+          "sha256": "c77a244132f19220ea884dc2846b8dee27678dd739f6dcd81bd0bd72bfa6d644",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/oakbat_os3/rep1/trace_native_1ms_ch_10.bin",
+          "selected_absolute_raw_sample": 475001161,
+          "selected_row_index": 4959,
+          "sha256": "4c1ee499e353109c7580b5638b4233a0b00c35ba8c15ca941ca5c4350d2d175e",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/oakbat_os3/rep1/trace_native_1ms_ch_2.bin",
+          "selected_absolute_raw_sample": 475004935,
+          "selected_row_index": 4915,
+          "sha256": "dfb2f99d17173318dd2b2a47150805b316c9887b1a9aa30d05ea6db69f0cbf19",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/oakbat_os3/rep1/trace_native_1ms_ch_3.bin",
+          "selected_absolute_raw_sample": 475002964,
+          "selected_row_index": 4875,
+          "sha256": "eeaa674856b23553694b35bf5c7d8e8b4c10df9e96aa27435c1ac274fdd27109",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/oakbat_os3/rep1/trace_native_1ms_ch_4.bin",
+          "selected_absolute_raw_sample": 475001415,
+          "selected_row_index": 4875,
+          "sha256": "8b5251272af43fa7208bb14f70755718c3b2525036a09221604f8ebf2f89306b",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/oakbat_os3/rep1/trace_native_1ms_ch_5.bin",
+          "selected_absolute_raw_sample": 475001866,
+          "selected_row_index": 4831,
+          "sha256": "48502838d12ff58da07b81601ea3d29cf307390fd0c42b02d4838605b177e658",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/oakbat_os3/rep1/trace_native_1ms_ch_6.bin",
+          "selected_absolute_raw_sample": 475003989,
+          "selected_row_index": 4918,
+          "sha256": "64f28d2d9f69b53f6e36e35e002dd4e136aa4397418c66f65a7a0bd2c75b3f2f",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/oakbat_os3/rep1/trace_native_1ms_ch_7.bin",
+          "selected_absolute_raw_sample": 475002223,
+          "selected_row_index": 4959,
+          "sha256": "51a96283f17a4d57cd64fa9022b559feda9f2eab6ed9083b9ab963010e4a8a6d",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/oakbat_os3/rep1/trace_native_1ms_ch_8.bin",
+          "selected_absolute_raw_sample": 475002046,
+          "selected_row_index": 4917,
+          "sha256": "43153385566403477ba5cd611249e35d2c86c7db02c608190c027cbabc96031a",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/oakbat_os3/rep1/trace_native_1ms_ch_9.bin",
+          "selected_absolute_raw_sample": 475000087,
+          "selected_row_index": 4958,
+          "sha256": "1e7619836c36289e79aa551dcf785a3644dba57f93961cd2cf7b2d6dce678909",
+          "status": "SELECTED"
+        }
+      ]
+    },
+    "OAKBAT.OS4": {
+      "attack_outcomes_used": false,
+      "channel_count": 11,
+      "fixed_channel_prn_map": {
+        "0": 15,
+        "1": 25,
+        "10": 10,
+        "2": 11,
+        "3": 18,
+        "4": 24,
+        "5": 12,
+        "6": 21,
+        "7": 20,
+        "8": 8,
+        "9": 14
+      },
+      "handoff_path": "artifacts/trace_stage0_r2e_attack_support_repair/handoffs/oakbat_os4.csv",
+      "handoff_sha256": "3217b1bdf341e81e2e895a0acdd85d561f73a70936246a6ef5ec92fe23d75c13",
+      "onset_absolute_sample": 600000000,
+      "pre_onset_only": true,
+      "raw_offset_samples": 450000000,
+      "scenario_specific": true,
+      "selection_absolute_sample": 475000000,
+      "selection_rule": "For every physical native channel from the scenario's bounded pre-onset support acquisition, select the first causal native row whose absolute raw interval starts at or after 95.0 s; retain its PRN and exact action-used state; map selected rows to contiguous output channels; require at least four rows and require every selected row strictly before frozen onset.",
+      "source_channel_map": {
+        "0": 0,
+        "1": 1,
+        "10": 9,
+        "2": 10,
+        "3": 2,
+        "4": 3,
+        "5": 4,
+        "6": 5,
+        "7": 6,
+        "8": 7,
+        "9": 8
+      },
+      "source_files": [
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/oakbat_os4/rep1/trace_native_1ms_ch_0.bin",
+          "prn": 15,
+          "selected_absolute_raw_sample": 475002180,
+          "sha256": "42832380e08627165b77196bcfaa6abba4df76799ad3d91ce8fea324c2a25a07",
+          "source_channel": 0,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/oakbat_os4/rep1/trace_native_1ms_ch_1.bin",
+          "prn": 25,
+          "selected_absolute_raw_sample": 475002000,
+          "sha256": "fe559a8e7c738f09e85b06cf497b082b0d6ca0e605dc7d53a19ac4b2dd77a48e",
+          "source_channel": 1,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/oakbat_os4/rep1/trace_native_1ms_ch_10.bin",
+          "prn": 11,
+          "selected_absolute_raw_sample": 475001295,
+          "sha256": "d0091aad5877bc71049ceb28d449db7a1de690390139db3937751aa25c9d22b3",
+          "source_channel": 10,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/oakbat_os4/rep1/trace_native_1ms_ch_2.bin",
+          "prn": 18,
+          "selected_absolute_raw_sample": 475000069,
+          "sha256": "4c362317026ba3b1dfcd3aa021f649153200c499eec8113a8444e61b74d820b7",
+          "source_channel": 2,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/oakbat_os4/rep1/trace_native_1ms_ch_3.bin",
+          "prn": 24,
+          "selected_absolute_raw_sample": 475001549,
+          "sha256": "8d361496cf26c3e39828c55691a5f9562a9b889f783eb18ec22ebb894ccf4561",
+          "source_channel": 3,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/oakbat_os4/rep1/trace_native_1ms_ch_4.bin",
+          "prn": 12,
+          "selected_absolute_raw_sample": 475000576,
+          "sha256": "c2a07dfbd201643c60fea859b6e4406dee62cddae017ebc474b4a17167a99edb",
+          "source_channel": 4,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/oakbat_os4/rep1/trace_native_1ms_ch_5.bin",
+          "prn": 21,
+          "selected_absolute_raw_sample": 475001073,
+          "sha256": "707e95d1bceef5a200e591caff8869f966b720ea0521f4042f353cbc54a252f8",
+          "source_channel": 5,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/oakbat_os4/rep1/trace_native_1ms_ch_6.bin",
+          "prn": 20,
+          "selected_absolute_raw_sample": 475003098,
+          "sha256": "c7f7b0d51ff869024be439f1794f4866ae4c197f86460aef4123bdf273361032",
+          "source_channel": 6,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/oakbat_os4/rep1/trace_native_1ms_ch_7.bin",
+          "prn": 8,
+          "selected_absolute_raw_sample": 475002357,
+          "sha256": "d38b6fcd991180066f868b82c71dfc852afa8f6d35c38c908443c880816749f9",
+          "source_channel": 7,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/oakbat_os4/rep1/trace_native_1ms_ch_8.bin",
+          "prn": 14,
+          "selected_absolute_raw_sample": 475004123,
+          "sha256": "a25c12314e55362db716d8e6c1f4a15e39111a0b6b332932ec0b02e21a718672",
+          "source_channel": 8,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/oakbat_os4/rep1/trace_native_1ms_ch_9.bin",
+          "prn": 10,
+          "selected_absolute_raw_sample": 475000220,
+          "sha256": "ac3459f4c1630254c95ef93799e8de513a82d3a8b0a41174cb54637c32e43869",
+          "source_channel": 9,
+          "status": "SELECTED"
+        }
+      ],
+      "trace_scores_used": false
+    },
+    "OAKBAT.cleanStatic": {
+      "attack_data_used": false,
+      "channel_count": 11,
+      "fixed_channel_prn_map": {
+        "0": 21,
+        "1": 27,
+        "10": 10,
+        "2": 11,
+        "3": 24,
+        "4": 20,
+        "5": 18,
+        "6": 14,
+        "7": 12,
+        "8": 8,
+        "9": 25
+      },
+      "guard_absolute_sample": 150000000,
+      "handoff_path": "artifacts/trace_stage0_r2d_oakbat_clean_support_repair/handoffs/oakbat_cleanstatic.csv",
+      "handoff_sha256": "1d3c3227a9825e48ef790503d9f4d6fa89ca040a51791175e2cadc4508730b6d",
+      "normal_only": true,
+      "raw_offset_samples": 0,
+      "selection_rule": "For each physical native channel file, choose the first causal native row whose raw interval starts at or after 30.0 s; retain only its PRN and exact action-used state; require at least four contiguous output channels.",
+      "source_channel_map": {
+        "0": 0,
+        "1": 1,
+        "10": 9,
+        "2": 10,
+        "3": 2,
+        "4": 3,
+        "5": 4,
+        "6": 5,
+        "7": 6,
+        "8": 7,
+        "9": 8
+      },
+      "source_files": [
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/support_acquisition/oakbat_cleanstatic/rep1/trace_native_1ms_ch_0.bin",
+          "prn": 21,
+          "selected_raw_sample": 150002348,
+          "sha256": "8b478ff10e4c9016f4dacbd26b461fbd25ccb777bed12e2d9acc90dae83c0547",
+          "source_channel": 0,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/support_acquisition/oakbat_cleanstatic/rep1/trace_native_1ms_ch_1.bin",
+          "prn": 27,
+          "selected_raw_sample": 150000296,
+          "sha256": "2301bc67bcf1b0f6584ead98fbdb7474b9f9e505215192a8da5bfedfcb57a45b",
+          "source_channel": 1,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/support_acquisition/oakbat_cleanstatic/rep1/trace_native_1ms_ch_10.bin",
+          "prn": 11,
+          "selected_raw_sample": 150003604,
+          "sha256": "547f25a0dafbe1cbb33b6467d461c7bac6c2969b77a3d1fb5a9bfc2190ab8b83",
+          "source_channel": 10,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/support_acquisition/oakbat_cleanstatic/rep1/trace_native_1ms_ch_2.bin",
+          "prn": 24,
+          "selected_raw_sample": 150002952,
+          "sha256": "1b9e6436445076ab00c80d3dcc7a4bf87eb76e2063b0a6df538e0d730401738c",
+          "source_channel": 2,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/support_acquisition/oakbat_cleanstatic/rep1/trace_native_1ms_ch_3.bin",
+          "prn": 20,
+          "selected_raw_sample": 150004781,
+          "sha256": "74912976eba9a1370779ba63c0b06feb69867a32dc31f71832ed9b281cde9d36",
+          "source_channel": 3,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/support_acquisition/oakbat_cleanstatic/rep1/trace_native_1ms_ch_4.bin",
+          "prn": 18,
+          "selected_raw_sample": 150001140,
+          "sha256": "0297dbffa95458756e06d4efb98b325584973e55b3edeee552e30fb31bd7a04c",
+          "source_channel": 4,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/support_acquisition/oakbat_cleanstatic/rep1/trace_native_1ms_ch_5.bin",
+          "prn": 14,
+          "selected_raw_sample": 150001421,
+          "sha256": "ed797eae2d2b0c7c7f51dd7240680e78ca2403515aa798e8e6ed31356d1ee463",
+          "source_channel": 5,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/support_acquisition/oakbat_cleanstatic/rep1/trace_native_1ms_ch_6.bin",
+          "prn": 12,
+          "selected_raw_sample": 150002938,
+          "sha256": "6db4fe3bfc2c16a9088f5005bfdb0c1525fbeec98ed98476beb1d9b7fa740b55",
+          "source_channel": 6,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/support_acquisition/oakbat_cleanstatic/rep1/trace_native_1ms_ch_7.bin",
+          "prn": 8,
+          "selected_raw_sample": 150003995,
+          "sha256": "5e5750aae40160c005c46fe56690c9dccd928239ea222072651a73f54170719c",
+          "source_channel": 7,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/support_acquisition/oakbat_cleanstatic/rep1/trace_native_1ms_ch_8.bin",
+          "prn": 25,
+          "selected_raw_sample": 150004458,
+          "sha256": "0e562afef853f008455cf0859ec5b5af08353c2a9f080f9a200a3f5258756e33",
+          "source_channel": 8,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/support_acquisition/oakbat_cleanstatic/rep1/trace_native_1ms_ch_9.bin",
+          "prn": 10,
+          "selected_raw_sample": 150002318,
+          "sha256": "ed779fb8abfaf84965677fe9428bbea891671184950635b246cabf8e3e83f594",
+          "source_channel": 9,
+          "status": "SELECTED"
+        }
+      ]
+    },
+    "TEXBAT.DS3": {
+      "all_selected_rows_pre_onset": true,
+      "channel_count": 11,
+      "fixed_channel_prn_map": {
+        "0": 19,
+        "1": 30,
+        "10": 17,
+        "2": 10,
+        "3": 3,
+        "4": 8,
+        "5": 16,
+        "6": 6,
+        "7": 7,
+        "8": 13,
+        "9": 23
+      },
+      "guard_absolute_sample": 2375000000,
+      "handoff_path": "artifacts/trace_stage0_r2b_stable_handoff_repair/handoffs/texbat_ds3.csv",
+      "handoff_sha256": "1b630895bcaf0039d7d6764710e4c900b599cf6e2e4da917dc990c63b63b6400",
+      "raw_offset_samples": 2250000000,
+      "source_channel_map": {
+        "0": 0,
+        "1": 1,
+        "10": 9,
+        "2": 10,
+        "3": 2,
+        "4": 3,
+        "5": 4,
+        "6": 5,
+        "7": 6,
+        "8": 7,
+        "9": 8
+      },
+      "source_files": [
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_ds3/rep1/trace_native_1ms_ch_0.bin",
+          "selected_absolute_raw_sample": 2375002838,
+          "selected_row_index": 4919,
+          "sha256": "60c316e859f0947736384cc5c9b905155a05a161a64d4209c93179063ccecb7a",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_ds3/rep1/trace_native_1ms_ch_1.bin",
+          "selected_absolute_raw_sample": 2375010683,
+          "selected_row_index": 2873,
+          "sha256": "cc2242c3fca02ea86b7d1513e3501c502abecb014f15d01d9374f6c95900b4ba",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_ds3/rep1/trace_native_1ms_ch_10.bin",
+          "selected_absolute_raw_sample": 2375000915,
+          "selected_row_index": 1675,
+          "sha256": "3c44726359972e58868c680ecd88ace40fae3f609727d4601443aa93024cc88b",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_ds3/rep1/trace_native_1ms_ch_2.bin",
+          "selected_absolute_raw_sample": 2375005052,
+          "selected_row_index": 4960,
+          "sha256": "4d86e9878c8694ad9fcfa45e2a3992bd41b096f74008b3e09987428ea1af5187",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_ds3/rep1/trace_native_1ms_ch_3.bin",
+          "selected_absolute_raw_sample": 2375021006,
+          "selected_row_index": 3774,
+          "sha256": "4a85ae825f78bbd63245c3881bd2453469e43f0a6594e17fd5f091b55dbeea69",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_ds3/rep1/trace_native_1ms_ch_4.bin",
+          "selected_absolute_raw_sample": 2375001390,
+          "selected_row_index": 4919,
+          "sha256": "5a1bac031491a13504435f4204a5a3b5194b8a9b291525087572eff04dd0c961",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_ds3/rep1/trace_native_1ms_ch_5.bin",
+          "selected_absolute_raw_sample": 2375008850,
+          "selected_row_index": 4960,
+          "sha256": "01ee3a9145d53b6ef1cdafee3679d456a8cc9b31177f323de4c848832f3766ad",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_ds3/rep1/trace_native_1ms_ch_6.bin",
+          "selected_absolute_raw_sample": 2375020560,
+          "selected_row_index": 4961,
+          "sha256": "37e2c248beb5117b5f543f76a3f2865ac4022fb20774d10c03c7ddda1c405062",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_ds3/rep1/trace_native_1ms_ch_7.bin",
+          "selected_absolute_raw_sample": 2375007504,
+          "selected_row_index": 4919,
+          "sha256": "b16ded10e10eed690e6b0d66ecbbf6ec04b746b93efaadff1cdc4821f9ca2f80",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_ds3/rep1/trace_native_1ms_ch_8.bin",
+          "selected_absolute_raw_sample": 2375007705,
+          "selected_row_index": 4877,
+          "sha256": "bfb1f6c3b05f173f3512b4e7aedb2f2ffbb6d70d2a599cedc907ddc7e295fa61",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_ds3/rep1/trace_native_1ms_ch_9.bin",
+          "selected_absolute_raw_sample": 2375013680,
+          "selected_row_index": 4667,
+          "sha256": "fc5b7a251c3fde065323daf38e6bba2cd950c2d74d5ebcc6d8d680f4fc95b26c",
+          "status": "SELECTED"
+        }
+      ]
+    },
+    "TEXBAT.DS7": {
+      "attack_outcomes_used": false,
+      "channel_count": 11,
+      "fixed_channel_prn_map": {
+        "0": 20,
+        "1": 19,
+        "10": 10,
+        "2": 23,
+        "3": 3,
+        "4": 30,
+        "5": 16,
+        "6": 6,
+        "7": 7,
+        "8": 13,
+        "9": 26
+      },
+      "handoff_path": "artifacts/trace_stage0_r2e_attack_support_repair/handoffs/texbat_ds7.csv",
+      "handoff_sha256": "1569f15c7e5824e93f4865413cc807701ea29fd0aceab4267d7acebf2a67a0f1",
+      "onset_absolute_sample": 2750000000,
+      "pre_onset_only": true,
+      "raw_offset_samples": 2250000000,
+      "scenario_specific": true,
+      "selection_absolute_sample": 2375000000,
+      "selection_rule": "For every physical native channel from the scenario's bounded pre-onset support acquisition, select the first causal native row whose absolute raw interval starts at or after 95.0 s; retain its PRN and exact action-used state; map selected rows to contiguous output channels; require at least four rows and require every selected row strictly before frozen onset.",
+      "source_channel_map": {
+        "0": 0,
+        "1": 1,
+        "10": 9,
+        "2": 10,
+        "3": 2,
+        "4": 3,
+        "5": 4,
+        "6": 5,
+        "7": 6,
+        "8": 7,
+        "9": 8
+      },
+      "source_files": [
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/texbat_ds7/rep1/trace_native_1ms_ch_0.bin",
+          "prn": 20,
+          "selected_absolute_raw_sample": 2375010616,
+          "sha256": "aed770b534e441ea470f075c5164e49e2ca04bc84be63777392af54652b3b046",
+          "source_channel": 0,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/texbat_ds7/rep1/trace_native_1ms_ch_1.bin",
+          "prn": 19,
+          "selected_absolute_raw_sample": 2375010949,
+          "sha256": "97e462855896e95d2c4151ef931454dbd83ef95eeb490b14924a7591f00b6930",
+          "source_channel": 1,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/texbat_ds7/rep1/trace_native_1ms_ch_10.bin",
+          "prn": 23,
+          "selected_absolute_raw_sample": 2375015710,
+          "sha256": "47f662017f93e4481f406fcb71f2f7fc344a5b56b5828cbb8dd1671541a13000",
+          "source_channel": 10,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/texbat_ds7/rep1/trace_native_1ms_ch_2.bin",
+          "prn": 3,
+          "selected_absolute_raw_sample": 2375013098,
+          "sha256": "6f47df17c9596f80cbf3223a5a2d8725b7669b2c987a4524f7d889a8ccce48d8",
+          "source_channel": 2,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/texbat_ds7/rep1/trace_native_1ms_ch_3.bin",
+          "prn": 30,
+          "selected_absolute_raw_sample": 2503014358,
+          "sha256": "bec77c12a8122b62c6441294b4ff1de1262f97dc130feedd20d74170350839bf",
+          "source_channel": 3,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/texbat_ds7/rep1/trace_native_1ms_ch_4.bin",
+          "prn": 16,
+          "selected_absolute_raw_sample": 2375009311,
+          "sha256": "6ac2101ac8f48ce09902b1c32e4a3303417c769562a68b8a7170f582dc82399d",
+          "source_channel": 4,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/texbat_ds7/rep1/trace_native_1ms_ch_5.bin",
+          "prn": 6,
+          "selected_absolute_raw_sample": 2375016851,
+          "sha256": "e1f144020c8d928dc6648fdb0633c38cad7ca9360504c17f84167990a88a027b",
+          "source_channel": 5,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/texbat_ds7/rep1/trace_native_1ms_ch_6.bin",
+          "prn": 7,
+          "selected_absolute_raw_sample": 2375003645,
+          "sha256": "9bb8b77d977d592dccb4e34a37a8cd81717e5da1c3ea2ee03fd737d1fbcf3f64",
+          "source_channel": 6,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/texbat_ds7/rep1/trace_native_1ms_ch_7.bin",
+          "prn": 13,
+          "selected_absolute_raw_sample": 2375015588,
+          "sha256": "8f6d5f685decb6b9643a91e59ee02a78e0ef2a05c398ec562be9d577901dc4c3",
+          "source_channel": 7,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/texbat_ds7/rep1/trace_native_1ms_ch_8.bin",
+          "prn": 26,
+          "selected_absolute_raw_sample": 2375016741,
+          "sha256": "517725b75776bb09ea4621b06d4be1e041b1b7eca991cac38c7798eba940f301",
+          "source_channel": 8,
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/support_acquisition/texbat_ds7/rep1/trace_native_1ms_ch_9.bin",
+          "prn": 10,
+          "selected_absolute_raw_sample": 2375008957,
+          "sha256": "cd4d60418ab0fe5f4e9bb1de284e83cb51fe5dc094515fa0635c7a6dbb777553",
+          "source_channel": 9,
+          "status": "SELECTED"
+        }
+      ],
+      "trace_scores_used": false
+    },
+    "TEXBAT.cleanStatic": {
+      "all_selected_rows_pre_onset": true,
+      "channel_count": 10,
+      "fixed_channel_prn_map": {
+        "0": 19,
+        "1": 16,
+        "2": 3,
+        "3": 30,
+        "4": 13,
+        "5": 6,
+        "6": 7,
+        "7": 20,
+        "8": 10,
+        "9": 23
+      },
+      "guard_absolute_sample": 750000000,
+      "handoff_path": "artifacts/trace_stage0_r2b_stable_handoff_repair/handoffs/texbat_cleanstatic.csv",
+      "handoff_sha256": "6bd2b3db921ac1fa91b97ac5cb6fd7444146e07b6d02bec693cc3fc5b9f2ea88",
+      "raw_offset_samples": 0,
+      "source_channel_map": {
+        "0": 0,
+        "1": 10,
+        "2": 2,
+        "3": 3,
+        "4": 4,
+        "5": 5,
+        "6": 6,
+        "7": 7,
+        "8": 8,
+        "9": 9
+      },
+      "source_files": [
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep1/trace_native_1ms_ch_0.bin",
+          "selected_absolute_raw_sample": 750013632,
+          "selected_row_index": 29917,
+          "sha256": "bc3a50f1262a5db0dc1811414e93bc23bc23b1f1886b61118a17859b8bc9cb7b",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep1/trace_native_1ms_ch_1.bin",
+          "sha256": "502070df2d26860ae5c83bf9776603653426281054f5840007cb32bbaa9b210e",
+          "status": "EXCLUDED_NO_TARGET_ALIGNED_ROW"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep1/trace_native_1ms_ch_10.bin",
+          "selected_absolute_raw_sample": 750006413,
+          "selected_row_index": 29919,
+          "sha256": "7b66ffb42138bb1e1ef5d9cfb0150fd12e3dd40fba0e601d71f46e551879495e",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep1/trace_native_1ms_ch_2.bin",
+          "selected_absolute_raw_sample": 750013863,
+          "selected_row_index": 29960,
+          "sha256": "6d034aa9eea3f3a58b5ba3346c52ecc64b388bb9b866ae2ec17f5d2465cd9794",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep1/trace_native_1ms_ch_3.bin",
+          "selected_absolute_raw_sample": 750015161,
+          "selected_row_index": 5212,
+          "sha256": "ccd7427bb4cb7f6a123d623927a9725e4c13724773d1a1faf9aa85dd8300b724",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep1/trace_native_1ms_ch_4.bin",
+          "selected_absolute_raw_sample": 750017465,
+          "selected_row_index": 29920,
+          "sha256": "02321734634cf74084b33342e9f7d658f0c581def0b435687461008baed94452",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep1/trace_native_1ms_ch_5.bin",
+          "selected_absolute_raw_sample": 750016289,
+          "selected_row_index": 29961,
+          "sha256": "480c90a2b83fa609078a71886bb5bd902b563714b4235f53c5d7156f65c77fb1",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep1/trace_native_1ms_ch_6.bin",
+          "selected_absolute_raw_sample": 750005556,
+          "selected_row_index": 29960,
+          "sha256": "435aadc035d3f895248448083ba27e3ed8f2b0a8f09c30f502a55cf16e99907f",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep1/trace_native_1ms_ch_7.bin",
+          "selected_absolute_raw_sample": 750007554,
+          "selected_row_index": 27505,
+          "sha256": "15fe5de4d194510162f9dd36bcf13d4fd6010ce04e0af9e520ce49f045b85627",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep1/trace_native_1ms_ch_8.bin",
+          "selected_absolute_raw_sample": 750009589,
+          "selected_row_index": 29710,
+          "sha256": "6dab19b79c981ab602d350d3f4f22ec747e626ddd48c9094d9f384b443c29ef8",
+          "status": "SELECTED"
+        },
+        {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep1/trace_native_1ms_ch_9.bin",
+          "selected_absolute_raw_sample": 750015238,
+          "selected_row_index": 29878,
+          "sha256": "203e43d5a0fabf9fe810c2e63b07910ef749a5002a99c65cc0b4dc2ab06f2ca0",
+          "status": "SELECTED"
+        }
+      ]
+    }
+  },
+  "schema": "gnss-doppler-lab.trace-r2e-handoff-manifest.v1",
+  "selection_rule": "first preserved R2 rep1 row at or after the preregistered guard; no quality or attack outcome used",
+  "state_kind": "exact_target_aligned_action_used"
+}
