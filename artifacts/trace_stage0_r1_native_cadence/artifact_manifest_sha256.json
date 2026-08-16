@@ -1,6 +1,6 @@
 {
   "files": {
-    "README.md": "4486b64cfb3b4ab8eb87428b758c6bcd42776c76235be3e61617485bd45697d2",
+    "README.md": "4f8637bc022d2dd6c6054e1f2f45532f8251da8729717dd3548d64e06129f1b1",
     "ablation_metrics.csv": "1b9db21f9c65bb4ab8e12b4570adc257fc64cf07d41c1c818706c2dac85295fb",
     "action_mapping_validation.json": "223ddca4e27fac04c2a4343598ad541203b73a0cc5a25af1738fdd71728fd416",
     "action_shuffle_metrics.json": "048d5034c456b7f5353d114b2682d6501197de2ac9b4ba19f2e9076542d5d10d",
@@ -18,12 +18,12 @@
     "per_epoch_scores.csv.gz": "f3627035a47e237b170ffabedf0591b17c78686f1ae48fc3cc05b652fb4f21d3",
     "physical_controls.json": "27b2dce273e3e45b48c03fbaf846161824095c6e8db19d0eca06004365ad64f1",
     "preregistration.json": "38fc8187dae3918fdbd44c6f00def4bd0e7e93fb476eb5c4e517bf3b2ad136cf",
-    "runner_runs.json": "f7d2c43b2b9c6e7ef563b350cbbfea917722ca3edccc73e565fe9f3367d28c98",
+    "runner_runs.json": "55c324ea848b6b2c2d94d3694335cb3e2f161ce823c1e5aace37a3728ee0c66d",
     "scenario_metrics.csv": "70d2e988ab18f758450c62e160d358e02678c0ca0e0c3ab47b5f75a9136b6508",
     "source_binding.json": "51aab5e594a3a4799ae057297add48f1211b8a168bb97f3e5a64acabee81b6de",
-    "source_commit.json": "cb7aa9abd907d5f9785e286dcb83b508c70922e2b02708a0647eecbedd3425ec",
+    "source_commit.json": "a6a1e1ac7355aa9d9da812e9bdef902aa616ed3c8354ca46b4961e1c8b0594ee",
     "synthetic_physics_metrics.json": "9718b5aff4928bb235ebb6fc2c850e393e2b2af738d9721e39274e886867da2b",
-    "test_results.json": "bd631b398c08d788ef99ba595c71ac5db6693c48b19dd4b244378af57cd2550b",
+    "test_results.json": "a720ed80f076bb73b431ae0bc8189205703930c34626875b292a1f3633a5caee",
     "thresholds.json": "06f5f4100e9928db3f0656825be9a18219e941921f48d5ef48191a349807e5a3"
   },
   "schema": "gnss-doppler-lab.trace-r1-artifact-manifest.v1"

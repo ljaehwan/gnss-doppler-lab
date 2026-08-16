@@ -37,3 +37,12 @@ recommended next action is to generate authenticated native-1ms receiver dumps
 with complex nine taps, applied next-buffer code/carrier actions, sample stamps,
 C/N0, lock, integration interval, and loop-boundary flags, then rerun the frozen
 R1 protocol from Phase A.
+
+## Commits and verification
+
+- Preregistration freeze: `c4099cc837190c67c1bbc97781858594a95c4983`
+- Result commit: `c282bd278760aefe29e4275e15cf90e74f4a78e4`
+- Fresh-clone result verifier: PASS
+- Final verification tip: the commit containing this report; its exact SHA is
+  recorded in the task-level final self-report because a commit cannot contain
+  its own content-derived SHA.

@@ -20,7 +20,11 @@
     "status": "FAIL_INHERITED_MISSING_BASE_FILE"
   },
   "fresh_clone": {
-    "status": "PENDING"
+    "commit": "c282bd278760aefe29e4275e15cf90e74f4a78e4",
+    "remote_branch": "research/trace-stage0-r1-native-cadence",
+    "runner_run_id": "20260816T073610Z-trace-r1-result-fresh-clone-verifier",
+    "status": "PASS",
+    "verifier": "scripts/verify_trace_stage0_r1.py --phase final"
   },
   "schema": "gnss-doppler-lab.trace-r1-test-results.v1"
 }
