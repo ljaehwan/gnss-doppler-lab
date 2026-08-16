@@ -8,8 +8,13 @@
     "R2d and preserved parent artifact checksums",
     "fresh-clone verification"
   ],
-  "durable_test_runs": [],
-  "focused_test_count": 54,
+  "durable_test_runs": [
+    "20260816T150451Z-r2d-artifact-verifier",
+    "20260816T150451Z-r2d-focused-tests",
+    "20260816T150451Z-r2d-parent-verifier",
+    "20260816T150537Z-r2d-fresh-clone-verifier"
+  ],
+  "focused_test_count": 53,
   "schema": "gnss-doppler-lab.trace-r2d-test-results.v1",
-  "status": "IN_PROGRESS"
+  "status": "PASS"
 }
