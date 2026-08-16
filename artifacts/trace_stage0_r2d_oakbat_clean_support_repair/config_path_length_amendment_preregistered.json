@@ -1,0 +1,27 @@
+{
+  "attack_data_read_or_scored": false,
+  "authorized_change": "Mirror the already frozen handoff bytes under the shorter R2d SSD root and regenerate only Tracking_1C.trace_handoff_filename values.",
+  "evidence": {
+    "configuration_key_length": 35,
+    "full_handoff_path": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair/artifacts/trace_stage0_r2d_oakbat_clean_support_repair/handoffs/texbat_cleanstatic.csv",
+    "full_handoff_path_length": 166,
+    "full_ini_line_length": 201,
+    "observed_dump_file_count": 0,
+    "receiver_error_path": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair/artifacts/trace_stage0_r2d_oakbat_clean_support_repair/handoffs/texbat_cleanstatic.c",
+    "receiver_error_path_length": 164,
+    "receiver_exit_code": 0
+  },
+  "failure_label": "GNSS_SDR_INI_LINE_TRUNCATES_R2D_HANDOFF_PATH",
+  "failure_run_id": "20260816T135409Z-r2d-phase-a-cleanstatic-rep3",
+  "preservation": "Rename and retain the failed rep3 directory and durable run; rerun the exact rep3 role only after the path mirror/config freeze passes.",
+  "required_identity": "Every mirrored handoff SHA-256 must equal its committed R2d artifact counterpart before any replay.",
+  "schema": "gnss-doppler-lab.trace-r2d-config-path-amendment.v1",
+  "status": "PREREGISTERED_BEFORE_PHASE_A_RETRY",
+  "unchanged": [
+    "receiver executable and R2c terminal-drain patch",
+    "handoff CSV bytes and state selection",
+    "raw IQ sources, hashes, sample ranges, and replay durations",
+    "TRACE scoring, gates, windows, tolerances, clean split, controls, and alarm policy",
+    "Phase A and Phase B scientific contracts"
+  ]
+}
