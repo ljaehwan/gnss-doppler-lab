@@ -1,0 +1,18 @@
+{
+  "build_command": "cmake --build <R2b receiver-build> --target gnss-sdr -j 4",
+  "receiver_base_commit": "1ddd4562723040fd66cb334b578a5b69455625f4",
+  "receiver_build_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-build",
+  "receiver_executable": {
+    "byte_size": 36602256,
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-build/src/main/gnss-sdr",
+    "sha256": "1e14879ffeb10a8824b06ba983aad3cb5a3a51ec9e1118d33c4ff0a79798e845"
+  },
+  "receiver_repair_diff": {
+    "byte_size": 39861,
+    "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/receiver_repair.diff",
+    "sha256": "69f00c99d916889da86348edd7ac29674af162d635ffa3346e7b1bd8687badf8"
+  },
+  "receiver_source_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-source-r1",
+  "schema": "gnss-doppler-lab.trace-r2b-receiver-build-manifest.v1",
+  "status": "PASS"
+}

@@ -1,0 +1,54 @@
+{
+  "canonical_key": [
+    "dataset",
+    "prn",
+    "raw_interval_start_sample",
+    "raw_interval_end_sample"
+  ],
+  "causal_gate": {
+    "action_value_mapping_mismatch_count": 0,
+    "consume_span_mismatch_count": 0,
+    "finite_failure_count": 0,
+    "repeated_placeholder_row_count": 0,
+    "sequence_mismatch_count": 0,
+    "zero_action_row_count": 0,
+    "zero_tap_row_count": 0
+  },
+  "decision_gate": {
+    "alarm_decision_identical": true,
+    "metadata_only_differences_must_be_separately_proven": true,
+    "physical_semantic_match_required": true,
+    "threshold_crossing_identical": true,
+    "threshold_policy": "clean calibration q99 (q99.5 also reported), frozen R2 policy",
+    "whole_file_sha_match_required": false
+  },
+  "frozen_before_rep3": true,
+  "metadata_excluded_from_physical_identity": [
+    "channel",
+    "tracking_session_id",
+    "file_order",
+    "local_loop_sequence"
+  ],
+  "phase_b_authorization": "Only if every Phase-A source, causal, semantic, score, support, action-mapping, and raw-timeline condition passes.",
+  "schema": "gnss-doppler-lab.trace-r2b-semantic-reproduction-contract.v1",
+  "semantic_tolerances": {
+    "basis": "Same executable, CPU, explicit scalar serialization, fixed PRN/Doppler/raw-start handoff, and fixed floating reduction order should be bitwise deterministic; the 1e-12 derived-score allowance only covers deterministic float64 recomputation order in the evaluator.",
+    "float32_complex_taps_absolute": 0.0,
+    "float64_actions_and_state_absolute": 0.0,
+    "integer_fields": "exact",
+    "trace_score_absolute": 1e-12,
+    "trace_score_relative": 0.0
+  },
+  "source_gate": {
+    "raw_iq_sha256_identical": true,
+    "raw_sample_range_identical": true,
+    "receiver_config_sha256_identical": true,
+    "receiver_executable_sha256_identical": true,
+    "receiver_patch_sha256_identical": true
+  },
+  "stable_normal_region": {
+    "minimum_common_epoch_count": 1000,
+    "minimum_common_prns_per_rounded_ms_epoch": 4,
+    "quality": "valid_tracking=1, cn0_db_hz>=28, carrier_lock_test>=0.85, prompt finite/nonzero"
+  }
+}

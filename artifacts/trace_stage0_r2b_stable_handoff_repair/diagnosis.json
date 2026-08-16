@@ -1,0 +1,86 @@
+{
+  "schema": "gnss-doppler-lab.trace-r2b-support-collapse-diagnosis.v1",
+  "created_at": "2026-08-16T20:02:15+09:00",
+  "status": "COMPLETE_BEFORE_RECEIVER_REPAIR",
+  "dominant_failure_label": "DEFERRED_HANDOFF_CODE_PHASE_STATE_MISMATCH",
+  "dominant_reason": "R2a moved each preserved first tracking interval to a 30 s cleanStatic guard while retaining only the original nominal 1 ms sample residue, acquisition-grid carrier Doppler, and zero residual code/carrier phase. The receiver therefore started a nominal-rate local code at a future raw sample instead of restoring the code NCO and residual phase actually aligned to that sample. Carrier-aided code Doppler predicts 7.76 to 54.40 chips of unmodeled code drift across the eleven cleanStatic channels. The resulting nine-tap peak was at Prompt for only 9.02% of rows and at an outer tap for 35.70% of rows, while median carrier-lock tests collapsed from approximately 0.89-0.99 on ten supported R2 PRNs to approximately -0.01-0.08 in R2a.",
+  "reproduced_parent_failure": {
+    "r2a_phase_a_status": "FAIL",
+    "r2a_failure_label": "INSUFFICIENT_MULTI_PRN_SUPPORT",
+    "common_canonical_physical_rows": 164925,
+    "exact_physical_bit_match_ratio": 1.0,
+    "quality_filtered_common_causal_pairs": 79,
+    "stable_quality_common_at_least_4_prn_epochs": 0,
+    "frozen_minimum_epochs": 1000,
+    "phase_b_authorized": false
+  },
+  "cleanstatic_comparison": {
+    "r2_rep1_quality_rows_sum": 384707,
+    "r2a_rep3_selected_quality_rows_sum": 79,
+    "quality_definition": "valid_tracking == 1 and cn0_db_hz >= 28 and carrier_lock_test >= 0.85",
+    "r2a_mean_prompt_is_largest_tap_fraction": 0.09016532840523504,
+    "r2a_mean_outer_E4_or_L4_is_largest_tap_fraction": 0.3569675836451246,
+    "predicted_unmodeled_code_drift_chips_absolute_min": 7.76051948051948,
+    "predicted_unmodeled_code_drift_chips_absolute_max": 54.39818181818182,
+    "drift_calculation": "carrier_doppler_hz * 1023000 / 1575420000 * (future_target_sample - preserved_first_sample) / 25000000",
+    "interpretation": "The prompt-to-outer-tap displacement and lock collapse are the expected signature of starting the local C/A code at the wrong physical code phase; longer PLL/DLL warm-up cannot pull in a tens-of-chips initialization error with the frozen narrow nine-tap geometry."
+  },
+  "candidate_cause_audit": {
+    "bad_handoff_time_or_guard_selection": {
+      "disposition": "CONTRIBUTING",
+      "evidence": "The 30 s guard is not intrinsically invalid, but relocating an old acquisition result to it without propagating receiver state creates the mismatch."
+    },
+    "unstable_acquisition_to_tracking_state_initialization": {
+      "disposition": "DOMINANT",
+      "evidence": "The R2a handoff branch explicitly resets code NCO to 1023000 chips/s and both residual code phases to zero at the future target."
+    },
+    "code_or_carrier_residual_convention_mismatch": {
+      "disposition": "DOMINANT_CODE_CONVENTION_AND_POSSIBLE_SECONDARY_CARRIER_CONVENTION",
+      "evidence": "The code epoch residue was copied but the code-Doppler-integrated phase was not. Absolute carrier accumulator was synthesized from grid Doppler rather than restored from the target-aligned receiver state."
+    },
+    "doppler_or_frequency_initialization_mismatch": {
+      "disposition": "SECONDARY",
+      "evidence": "R2a retained the coarse acquisition-grid carrier Doppler. Those same grid values acquired and tracked ten cleanStatic PRNs in R2, so frequency alone does not explain the support collapse, but restoring the target-aligned filtered Doppler is safer."
+    },
+    "pll_or_dll_warmup_transient": {
+      "disposition": "SECONDARY_NOT_DOMINANT",
+      "evidence": "R2a produced about 15 s per channel after the 30 s guard yet never recovered stable lock on most PRNs. Filter and smoother warm-up should still be reset and audited after a physically aligned state restore."
+    },
+    "prn_or_channel_subset_selection": {
+      "disposition": "NOT_DOMINANT",
+      "evidence": "The same fixed map contains ten PRNs with substantial R2 quality support; R2a collapsed nearly all of them simultaneously."
+    },
+    "missing_receiver_internal_state_in_r2_schema": {
+      "disposition": "PARTIAL_BUT_NOT_YET_BLOCKING",
+      "evidence": "R2 schema v2 preserves target-aligned code/carrier NCO rates, residual code/carrier phases, filter outputs, accumulator, and interval length, but not full loop input histories or CN0/lock smoother histories. The repair will restore all preserved action state and deliberately re-warm unavailable histories without fabricating them."
+    },
+    "true_receiver_limitation_requiring_fresh_instrumentation": {
+      "disposition": "NOT_ESTABLISHED",
+      "evidence": "The original R2 receiver tracks the same raw source and PRNs with strong support. Fresh instrumentation becomes required only if the preregistered target-aligned state restore still fails Phase A."
+    }
+  },
+  "input_bindings": {
+    "r2a_metrics": {
+      "path": "artifacts/trace_stage0_r2a_reproducibility_repair/rep3_rep4_reproduction_metrics.json",
+      "sha256": "ab3f3cd95aa9fb448634beeeb4a4cbf0b309c58b3e7fe186241c94cb64d7a014"
+    },
+    "r2a_cleanstatic_handoff": {
+      "path": "artifacts/trace_stage0_r2a_reproducibility_repair/handoffs/texbat_cleanstatic.csv",
+      "sha256": "68f9f6cb24ea3663f7a32cdefd8464af9580dc970c18595db4cae5cc98d849f8"
+    },
+    "r2a_receiver_patch": {
+      "path": "artifacts/trace_stage0_r2a_reproducibility_repair/receiver_repair.diff",
+      "sha256": "53bfd4f0fbe7b4c039b3e7248bd98c918a48a955a60d24156573e24f0d1b8d8c"
+    },
+    "r2_rep1_manifest": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep1/manifest.json",
+      "sha256": "ed4f6a7495f2e151853fbf36050f1e66e9e2c136de53e3f29bebaf3169aa83be"
+    },
+    "r2a_selected_rep3_manifest": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/manifest.json",
+      "sha256": "e126181e16047fd0758db7dccf906d66388b76987838e172e5f4412d642af9b7"
+    }
+  },
+  "attack_performance_read_or_computed": false,
+  "phase_b_status": "NOT_AUTHORIZED"
+}

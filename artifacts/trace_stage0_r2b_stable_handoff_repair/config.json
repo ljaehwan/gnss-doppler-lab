@@ -1,0 +1,92 @@
+{
+  "frozen_receiver_configs": {
+    "phase_a": {
+      "OAKBAT.OS3": {
+        "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/frozen_configs/oakbat_os3.conf",
+        "sha256": "24329104281208005e7f39b363bb4bf021c2d91af4493a4cc76ba1c2ecb46707"
+      },
+      "TEXBAT.DS3": {
+        "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/frozen_configs/texbat_ds3.conf",
+        "sha256": "3e0841920d56878c4ef4fbe669025ca2924dd808086aed6a26c042470b586e7e"
+      },
+      "TEXBAT.cleanStatic": {
+        "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/frozen_configs/texbat_cleanstatic.conf",
+        "sha256": "5835b4257557f622e95b39878700c20021fe53820d5031dd8b81302b3c7b17c6"
+      }
+    },
+    "phase_b": {
+      "OAKBAT.OS3": {
+        "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/frozen_configs/phase_b/oakbat_os3.conf",
+        "sha256": "4be225704a45e2a487bcd6b18a8caf07b7fb9ea053aded6243c50b617c54d06d"
+      },
+      "OAKBAT.OS4": {
+        "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/frozen_configs/phase_b/oakbat_os4.conf",
+        "sha256": "3607cb0491766273929dc8bd033703ce3c695a264d8de4e3a6a2357bfe6b8d55"
+      },
+      "OAKBAT.cleanStatic": {
+        "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/frozen_configs/phase_b/oakbat_cleanstatic.conf",
+        "sha256": "dbb9b351c003384752d0f49572dc3d2e804ee09e39fdf542024de647f220d871"
+      },
+      "TEXBAT.DS3": {
+        "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/frozen_configs/phase_b/texbat_ds3.conf",
+        "sha256": "62c08bb97cfb09e1ec93c2d446dae66b455cc693fef08ce796e439d0ca95f2ea"
+      },
+      "TEXBAT.DS7": {
+        "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/frozen_configs/phase_b/texbat_ds7.conf",
+        "sha256": "a4ec0f14d2cbff2900b4981886c69d09e252e004d47792ac844846fad65b3823"
+      },
+      "TEXBAT.cleanStatic": {
+        "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/frozen_configs/phase_b/texbat_cleanstatic.conf",
+        "sha256": "8a472a23154c4b962ff543e2ab40ad6d9d80a0af6bcafd7c842c23910a4f2a70"
+      }
+    }
+  },
+  "frozen_trace_r2_score_policy": {
+    "alarm_consecutive_blocks": 3,
+    "block_s": 0.5,
+    "bootstrap_block_s": 10.0,
+    "bootstrap_repetitions": 999,
+    "carry_off_max_delay_s": 10.0,
+    "carry_off_min_established_detection_rate": 0.5,
+    "chronological_role_order": [
+      "train",
+      "covariance_validation",
+      "calibration",
+      "holdout"
+    ],
+    "clean_split_ratios": {
+      "calibration": 0.15,
+      "covariance_validation": 0.2,
+      "holdout": 0.2,
+      "train": 0.45
+    },
+    "cn0_min_db_hz": 28.0,
+    "covariance": "LedoitWolf",
+    "guard_s": 5.0,
+    "lock_min": 0.85,
+    "minimum_prns": 4,
+    "pooling": "median",
+    "ridge_alpha": 10.0,
+    "seed": 23017,
+    "threshold_quantiles": [
+      0.99,
+      0.995
+    ]
+  },
+  "native_dump_schema": {
+    "header_bytes": 192,
+    "integration_s": 0.001,
+    "record_bytes": 416,
+    "tap_count": 9,
+    "version": 2
+  },
+  "schema": "gnss-doppler-lab.trace-r2b-config.v1",
+  "semantic_tolerances": {
+    "basis": "Same executable, CPU, explicit scalar serialization, fixed PRN/Doppler/raw-start handoff, and fixed floating reduction order should be bitwise deterministic; the 1e-12 derived-score allowance only covers deterministic float64 recomputation order in the evaluator.",
+    "float32_complex_taps_absolute": 0.0,
+    "float64_actions_and_state_absolute": 0.0,
+    "integer_fields": "exact",
+    "trace_score_absolute": 1e-12,
+    "trace_score_relative": 0.0
+  }
+}

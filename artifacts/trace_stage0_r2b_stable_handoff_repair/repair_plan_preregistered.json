@@ -1,0 +1,96 @@
+{
+  "schema": "gnss-doppler-lab.trace-r2b-repair-preregistration.v1",
+  "created_at": "2026-08-16T20:02:15+09:00",
+  "diagnosis_binding": {
+    "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/diagnosis.json",
+    "dominant_failure_label": "DEFERRED_HANDOFF_CODE_PHASE_STATE_MISMATCH"
+  },
+  "repair_strategy": "TARGET_ALIGNED_PRESERVED_ACTION_STATE_RESTORE",
+  "selection_rule": "For every frozen PRN with preserved R2 rep1 support reaching the unchanged guard, select the first native row whose raw_interval_start_sample is at or after that boundary. Exclude a PRN if no target-aligned row exists, remap eligible rows to contiguous receiver channels, and require at least four eligible PRNs. Use rows independent of CN0, lock, tap shape, TRACE score, or attack outcome. Preserve exact action_used state and raw interval start; do not relocate state.",
+  "feasibility_amendment_before_receiver_implementation": {
+    "created_at": "2026-08-16T20:07:30+09:00",
+    "trigger": "The deterministic derivation found that cleanStatic source channel 1 / PRN 17 ended before the 30 s guard, so no target-aligned state exists.",
+    "decision": "Exclude only source channels lacking any row at the preregistered target, record exclusions in the handoff manifest, and set the receiver channel count to the eligible subset. This is based on source availability, not quality or attack outcome.",
+    "fabricated_or_extrapolated_state": false
+  },
+  "scenario_guards": {
+    "TEXBAT.cleanStatic": {
+      "replay_seconds_to_skip": 0.0,
+      "guard_s_from_replay_start": 30.0,
+      "absolute_guard_sample": 750000000,
+      "sample_rate_hz": 25000000
+    },
+    "TEXBAT.DS3": {
+      "replay_seconds_to_skip": 90.0,
+      "guard_s_from_replay_start": 5.0,
+      "absolute_guard_sample": 2375000000,
+      "sample_rate_hz": 25000000,
+      "must_remain_before_frozen_spoof_onset_sample": 2500000000
+    },
+    "OAKBAT.OS3": {
+      "replay_seconds_to_skip": 90.0,
+      "guard_s_from_replay_start": 5.0,
+      "absolute_guard_sample": 475000000,
+      "sample_rate_hz": 5000000,
+      "must_remain_before_frozen_spoof_onset_sample": 600000000
+    }
+  },
+  "preserved_state_fields": [
+    "raw_interval_start_sample",
+    "prn",
+    "channel",
+    "action_used_code_nco_rate_chips_s",
+    "action_used_carrier_doppler_hz",
+    "action_used_residual_code_phase_chips",
+    "action_used_residual_carrier_phase_rad",
+    "action_used_code_phase_step_chips_per_sample",
+    "action_used_carrier_phase_step_rad_per_sample",
+    "action_used_code_phase_rate_step_chips_per_sample2",
+    "action_used_carrier_phase_rate_step_rad_per_sample2",
+    "action_used_dll_filter_output_chips_s",
+    "action_used_pll_fll_filter_output_hz",
+    "action_used_carrier_phase_accumulator_rad",
+    "action_used_residual_code_phase_samples",
+    "action_used_interval_length_samples"
+  ],
+  "unavailable_state_policy": {
+    "fields": [
+      "full DLL input/output history",
+      "full PLL/FLL internal history beyond serialized output",
+      "CN0 smoother history",
+      "carrier-lock smoother history"
+    ],
+    "policy": "Reset unavailable histories, initialize loop filters from serialized outputs where supported, mark the handoff pull-in/transitory, and allow the unchanged frozen quality gate to decide. Do not infer or fabricate missing history."
+  },
+  "implementation_scope": [
+    "extend the handoff CSV schema and parser to require the complete preserved action state",
+    "initialize correlator code/carrier NCO and residual state from the exact target-aligned row",
+    "initialize DLL and PLL/FLL filters from serialized target-aligned outputs",
+    "keep fixed channel/PRN assignment and exact-target fail-closed behavior",
+    "retain TRACE schema v2 serialization and causal action mapping unchanged"
+  ],
+  "frozen_phase_a": {
+    "replays": [
+      "TEXBAT.cleanStatic.repA",
+      "TEXBAT.cleanStatic.repB",
+      "TEXBAT.DS3.smoke",
+      "OAKBAT.OS3.smoke"
+    ],
+    "native_cadence_fraction_minimum": 0.99,
+    "minimum_valid_prns_same_epoch": 4,
+    "minimum_stable_quality_common_epochs": 1000,
+    "quality_cn0_min_db_hz": 28.0,
+    "quality_carrier_lock_min": 0.85,
+    "physical_common_rows_must_be_bit_exact": true,
+    "trace_score_absolute_tolerance": 1e-12,
+    "threshold_crossings_and_alarms_must_match": true,
+    "action_mapping_mismatch_maximum": 0,
+    "raw_source_and_timeline_binding_must_pass": true,
+    "placeholders_or_fabricated_state_forbidden": true
+  },
+  "phase_b_authorization_rule": "Authorize Phase B only if every frozen Phase A source, executable/config/patch/handoff hash, cadence, support, semantic, score/alarm, causal/action-mapping, raw-timeline, and no-fabrication gate passes.",
+  "trace_math_threshold_tolerance_or_window_changes_authorized": false,
+  "attack_data_used_for_repair_selection": false,
+  "attack_performance_read_or_computed": false,
+  "phase_b_status_at_preregistration": "SEALED_NOT_AUTHORIZED"
+}

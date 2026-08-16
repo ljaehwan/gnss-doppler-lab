@@ -19,6 +19,7 @@ ARTIFACT = ROOT / "artifacts/trace_stage0_r2a_reproducibility_repair"
 SSD_ROOT = Path("/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair")
 RECEIVER = SSD_ROOT / "receiver-build/src/main/gnss-sdr"
 HANDOFF_ROOT = ARTIFACT / "handoffs"
+RELEASE = "r2a"
 
 SCENARIOS = {
     "TEXBAT.cleanStatic": {
@@ -153,7 +154,8 @@ def frozen_config_text(name: str) -> str:
         "SignalSource.filename": str(spec["raw"]),
         "SignalSource.seconds_to_skip": str(skip_s),
         "SignalSource.samples": str(source_items),
-        "Channels.in_acquisition": "11",
+        "Channels_1C.count": str(len(rows)),
+        "Channels.in_acquisition": str(len(rows)),
         "Tracking_1C.dump": "false",
         "Tracking_1C.dump_mat": "false",
         "Tracking_1C.tap_count": "9",
@@ -181,7 +183,8 @@ def frozen_phase_b_config_text(name: str) -> str:
         "SignalSource.filename": str(spec["raw"]),
         "SignalSource.seconds_to_skip": str(skip_s),
         "SignalSource.samples": "0",
-        "Channels.in_acquisition": "11",
+        "Channels_1C.count": str(len(rows)),
+        "Channels.in_acquisition": str(len(rows)),
         "Tracking_1C.dump": "false",
         "Tracking_1C.dump_mat": "false",
         "Tracking_1C.tap_count": "9",
@@ -217,7 +220,7 @@ def audit_raw() -> int:
     status = "PASS" if all(item["status"] == "PASS" for item in datasets.values()) else "FAIL"
     dump_json(
         ARTIFACT / "raw_source_binding.json",
-        {"schema": "gnss-doppler-lab.trace-r2a-raw-source-binding.v1", "status": status, "datasets": datasets},
+        {"schema": f"gnss-doppler-lab.trace-{RELEASE}-raw-source-binding.v1", "status": status, "datasets": datasets},
     )
     return 0 if status == "PASS" else 2
 
@@ -227,7 +230,7 @@ def run_receiver(name: str, repetition: int, attempt: str | None = None) -> int:
     repetition_directory = f"rep{repetition}" if attempt is None else f"rep{repetition}-{attempt}"
     out = SSD_ROOT / "dumps/phase_a" / spec["slug"] / repetition_directory
     if out.exists() and any(out.iterdir()):
-        raise FileExistsError(f"refusing to overwrite existing R2a replay directory: {out}")
+        raise FileExistsError(f"refusing to overwrite existing {RELEASE} replay directory: {out}")
     out.mkdir(parents=True, exist_ok=True)
     handoff = HANDOFF_ROOT / spec["handoff"]
     build_manifest_path = ARTIFACT / "receiver_build_manifest.json"
@@ -264,14 +267,14 @@ def run_receiver(name: str, repetition: int, attempt: str | None = None) -> int:
         _, records = read_records(Path(item["path"]))
         record_counts.append(len(records))
     replay_validation = {
-        "expected_dump_file_count": 11,
+        "expected_dump_file_count": len(rows),
         "observed_dump_file_count": len(dumps),
-        "all_dump_files_have_physical_records": len(record_counts) == 11 and all(count > 0 for count in record_counts),
+        "all_dump_files_have_physical_records": len(record_counts) == len(rows) and all(count > 0 for count in record_counts),
         "record_counts": record_counts,
     }
     replay_validation["status"] = "PASS" if replay_validation["all_dump_files_have_physical_records"] else "FAIL"
     manifest = {
-        "schema": "gnss-doppler-lab.trace-r2a-receiver-replay.v1",
+        "schema": f"gnss-doppler-lab.trace-{RELEASE}-receiver-replay.v1",
         "scenario_id": name,
         "repetition": repetition,
         "attempt": attempt,
@@ -307,7 +310,7 @@ def run_phase_b_receiver(name: str) -> int:
     spec = PHASE_B_SCENARIOS[name]
     out = SSD_ROOT / "dumps/phase_b" / spec["slug"] / "rep1"
     if out.exists() and any(out.iterdir()):
-        raise FileExistsError(f"refusing to overwrite existing R2a replay directory: {out}")
+        raise FileExistsError(f"refusing to overwrite existing {RELEASE} replay directory: {out}")
     out.mkdir(parents=True, exist_ok=True)
     handoff = HANDOFF_ROOT / spec["phase_b_handoff"]
     rows = handoff_rows(handoff)

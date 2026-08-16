@@ -1,0 +1,181 @@
+{
+  "attack_data_used_for_tolerance_or_repair_selection": false,
+  "phase_a_pass_requires": [
+    "source gate PASS",
+    "causal gate PASS",
+    "semantic reproduction gate PASS",
+    "rep3/rep4 common-support TRACE score within 1e-12",
+    "DS3/OS3 native 1 ms and >=4 PRN support",
+    "action mapping mismatch 0",
+    "raw source/timeline binding PASS"
+  ],
+  "phase_a_replays": [
+    "TEXBAT.cleanStatic.rep3",
+    "TEXBAT.cleanStatic.rep4",
+    "TEXBAT.DS3.smoke",
+    "OAKBAT.OS3.smoke"
+  ],
+  "phase_b_scope_if_authorized": [
+    "TEXBAT.cleanStatic",
+    "TEXBAT.DS3",
+    "TEXBAT.DS7",
+    "OAKBAT.cleanStatic",
+    "OAKBAT.OS3",
+    "OAKBAT.OS4"
+  ],
+  "phase_b_scorer": {
+    "adapter": "scripts/evaluate_trace_r2b_phase_b.py",
+    "frozen_r2_sha256": "7c3e4f759e461c048b58cd7852ca6d78ded3b56e141e23c749c58ed4c814413c",
+    "implementation": "scripts/evaluate_trace_r2_phase_b.py"
+  },
+  "repair_plan": {
+    "attack_data_used_for_repair_selection": false,
+    "attack_performance_read_or_computed": false,
+    "created_at": "2026-08-16T20:02:15+09:00",
+    "diagnosis_binding": {
+      "dominant_failure_label": "DEFERRED_HANDOFF_CODE_PHASE_STATE_MISMATCH",
+      "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/diagnosis.json"
+    },
+    "feasibility_amendment_before_receiver_implementation": {
+      "created_at": "2026-08-16T20:07:30+09:00",
+      "decision": "Exclude only source channels lacking any row at the preregistered target, record exclusions in the handoff manifest, and set the receiver channel count to the eligible subset. This is based on source availability, not quality or attack outcome.",
+      "fabricated_or_extrapolated_state": false,
+      "trigger": "The deterministic derivation found that cleanStatic source channel 1 / PRN 17 ended before the 30 s guard, so no target-aligned state exists."
+    },
+    "frozen_phase_a": {
+      "action_mapping_mismatch_maximum": 0,
+      "minimum_stable_quality_common_epochs": 1000,
+      "minimum_valid_prns_same_epoch": 4,
+      "native_cadence_fraction_minimum": 0.99,
+      "physical_common_rows_must_be_bit_exact": true,
+      "placeholders_or_fabricated_state_forbidden": true,
+      "quality_carrier_lock_min": 0.85,
+      "quality_cn0_min_db_hz": 28.0,
+      "raw_source_and_timeline_binding_must_pass": true,
+      "replays": [
+        "TEXBAT.cleanStatic.repA",
+        "TEXBAT.cleanStatic.repB",
+        "TEXBAT.DS3.smoke",
+        "OAKBAT.OS3.smoke"
+      ],
+      "threshold_crossings_and_alarms_must_match": true,
+      "trace_score_absolute_tolerance": 1e-12
+    },
+    "implementation_scope": [
+      "extend the handoff CSV schema and parser to require the complete preserved action state",
+      "initialize correlator code/carrier NCO and residual state from the exact target-aligned row",
+      "initialize DLL and PLL/FLL filters from serialized target-aligned outputs",
+      "keep fixed channel/PRN assignment and exact-target fail-closed behavior",
+      "retain TRACE schema v2 serialization and causal action mapping unchanged"
+    ],
+    "phase_b_authorization_rule": "Authorize Phase B only if every frozen Phase A source, executable/config/patch/handoff hash, cadence, support, semantic, score/alarm, causal/action-mapping, raw-timeline, and no-fabrication gate passes.",
+    "phase_b_status_at_preregistration": "SEALED_NOT_AUTHORIZED",
+    "preserved_state_fields": [
+      "raw_interval_start_sample",
+      "prn",
+      "channel",
+      "action_used_code_nco_rate_chips_s",
+      "action_used_carrier_doppler_hz",
+      "action_used_residual_code_phase_chips",
+      "action_used_residual_carrier_phase_rad",
+      "action_used_code_phase_step_chips_per_sample",
+      "action_used_carrier_phase_step_rad_per_sample",
+      "action_used_code_phase_rate_step_chips_per_sample2",
+      "action_used_carrier_phase_rate_step_rad_per_sample2",
+      "action_used_dll_filter_output_chips_s",
+      "action_used_pll_fll_filter_output_hz",
+      "action_used_carrier_phase_accumulator_rad",
+      "action_used_residual_code_phase_samples",
+      "action_used_interval_length_samples"
+    ],
+    "repair_strategy": "TARGET_ALIGNED_PRESERVED_ACTION_STATE_RESTORE",
+    "scenario_guards": {
+      "OAKBAT.OS3": {
+        "absolute_guard_sample": 475000000,
+        "guard_s_from_replay_start": 5.0,
+        "must_remain_before_frozen_spoof_onset_sample": 600000000,
+        "replay_seconds_to_skip": 90.0,
+        "sample_rate_hz": 5000000
+      },
+      "TEXBAT.DS3": {
+        "absolute_guard_sample": 2375000000,
+        "guard_s_from_replay_start": 5.0,
+        "must_remain_before_frozen_spoof_onset_sample": 2500000000,
+        "replay_seconds_to_skip": 90.0,
+        "sample_rate_hz": 25000000
+      },
+      "TEXBAT.cleanStatic": {
+        "absolute_guard_sample": 750000000,
+        "guard_s_from_replay_start": 30.0,
+        "replay_seconds_to_skip": 0.0,
+        "sample_rate_hz": 25000000
+      }
+    },
+    "schema": "gnss-doppler-lab.trace-r2b-repair-preregistration.v1",
+    "selection_rule": "For every frozen PRN with preserved R2 rep1 support reaching the unchanged guard, select the first native row whose raw_interval_start_sample is at or after that boundary. Exclude a PRN if no target-aligned row exists, remap eligible rows to contiguous receiver channels, and require at least four eligible PRNs. Use rows independent of CN0, lock, tap shape, TRACE score, or attack outcome. Preserve exact action_used state and raw interval start; do not relocate state.",
+    "trace_math_threshold_tolerance_or_window_changes_authorized": false,
+    "unavailable_state_policy": {
+      "fields": [
+        "full DLL input/output history",
+        "full PLL/FLL internal history beyond serialized output",
+        "CN0 smoother history",
+        "carrier-lock smoother history"
+      ],
+      "policy": "Reset unavailable histories, initialize loop filters from serialized outputs where supported, mark the handoff pull-in/transitory, and allow the unchanged frozen quality gate to decide. Do not infer or fabricate missing history."
+    }
+  },
+  "schema": "gnss-doppler-lab.trace-r2b-preregistration.v1",
+  "scientific_objective": "Restore exact target-aligned receiver state and repeat unchanged frozen Phase A.",
+  "semantic_contract": "semantic_reproduction_contract.json",
+  "source_hashes": {
+    "handoffs": {
+      "OAKBAT.OS3": "9a546a42775450bbe076784b737aa7d2888ae637ddeb3769ee2ee3d4ce6f064c",
+      "TEXBAT.DS3": "1b630895bcaf0039d7d6764710e4c900b599cf6e2e4da917dc990c63b63b6400",
+      "TEXBAT.cleanStatic": "6bd2b3db921ac1fa91b97ac5cb6fd7444146e07b6d02bec693cc3fc5b9f2ea88"
+    },
+    "receiver_configs": {
+      "phase_a": {
+        "OAKBAT.OS3": {
+          "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/frozen_configs/oakbat_os3.conf",
+          "sha256": "24329104281208005e7f39b363bb4bf021c2d91af4493a4cc76ba1c2ecb46707"
+        },
+        "TEXBAT.DS3": {
+          "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/frozen_configs/texbat_ds3.conf",
+          "sha256": "3e0841920d56878c4ef4fbe669025ca2924dd808086aed6a26c042470b586e7e"
+        },
+        "TEXBAT.cleanStatic": {
+          "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/frozen_configs/texbat_cleanstatic.conf",
+          "sha256": "5835b4257557f622e95b39878700c20021fe53820d5031dd8b81302b3c7b17c6"
+        }
+      },
+      "phase_b": {
+        "OAKBAT.OS3": {
+          "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/frozen_configs/phase_b/oakbat_os3.conf",
+          "sha256": "4be225704a45e2a487bcd6b18a8caf07b7fb9ea053aded6243c50b617c54d06d"
+        },
+        "OAKBAT.OS4": {
+          "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/frozen_configs/phase_b/oakbat_os4.conf",
+          "sha256": "3607cb0491766273929dc8bd033703ce3c695a264d8de4e3a6a2357bfe6b8d55"
+        },
+        "OAKBAT.cleanStatic": {
+          "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/frozen_configs/phase_b/oakbat_cleanstatic.conf",
+          "sha256": "dbb9b351c003384752d0f49572dc3d2e804ee09e39fdf542024de647f220d871"
+        },
+        "TEXBAT.DS3": {
+          "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/frozen_configs/phase_b/texbat_ds3.conf",
+          "sha256": "62c08bb97cfb09e1ec93c2d446dae66b455cc693fef08ce796e439d0ca95f2ea"
+        },
+        "TEXBAT.DS7": {
+          "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/frozen_configs/phase_b/texbat_ds7.conf",
+          "sha256": "a4ec0f14d2cbff2900b4981886c69d09e252e004d47792ac844846fad65b3823"
+        },
+        "TEXBAT.cleanStatic": {
+          "path": "artifacts/trace_stage0_r2b_stable_handoff_repair/frozen_configs/phase_b/texbat_cleanstatic.conf",
+          "sha256": "8a472a23154c4b962ff543e2ab40ad6d9d80a0af6bcafd7c842c23910a4f2a70"
+        }
+      }
+    },
+    "receiver_executable_sha256": "1e14879ffeb10a8824b06ba983aad3cb5a3a51ec9e1118d33c4ff0a79798e845",
+    "receiver_patch_sha256": "69f00c99d916889da86348edd7ac29674af162d635ffa3346e7b1bd8687badf8"
+  }
+}
