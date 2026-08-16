@@ -1,0 +1,128 @@
+{
+  "attack_data_used_for_tolerance_or_repair_selection": false,
+  "frozen_components": [
+    "predictor",
+    "action-conditioned transition",
+    "features",
+    "complex normalization",
+    "score",
+    "whitening",
+    "window",
+    "threshold policy",
+    "ablations",
+    "action shuffle",
+    "scenario gate",
+    "GO/NO-GO criteria"
+  ],
+  "phase_a_pass_requires": [
+    "source gate PASS",
+    "causal gate PASS",
+    "semantic reproduction gate PASS",
+    "rep3/rep4 common-support TRACE score within 1e-12",
+    "DS3/OS3 native 1 ms and >=4 PRN support",
+    "action mapping mismatch 0",
+    "raw source/timeline binding PASS"
+  ],
+  "phase_a_replays": [
+    "TEXBAT.cleanStatic.rep3",
+    "TEXBAT.cleanStatic.rep4",
+    "TEXBAT.DS3.smoke",
+    "OAKBAT.OS3.smoke"
+  ],
+  "phase_b_handoff_procedure_if_authorized": "Reuse only the already frozen pre-onset family handoffs: TEXBAT cleanStatic uses its 0 s clean handoff; DS3 and DS7 use the TEXBAT DS3 handoff derived from the 90 s pre-onset slice; OAKBAT cleanStatic, OS3, and OS4 use the OAKBAT OS3 handoff derived from the 90 s pre-onset slice. All Phase-B configs begin at the matching family timeline and were hashed before Phase A. No new acquisition pass, post-onset row, or attack metric may enter handoff selection.",
+  "phase_b_scope_if_authorized": [
+    "TEXBAT.cleanStatic",
+    "TEXBAT.DS3",
+    "TEXBAT.DS7",
+    "OAKBAT.cleanStatic",
+    "OAKBAT.OS3",
+    "OAKBAT.OS4"
+  ],
+  "phase_b_scorer": {
+    "adapter": "scripts/evaluate_trace_r2a_phase_b.py",
+    "adapter_scope": "artifact and dump roots plus Phase-A inventory handoff only; no scoring math",
+    "implementation": "scripts/evaluate_trace_r2_phase_b.py",
+    "sha256": {
+      "frozen_r2_scorer": "7c3e4f759e461c048b58cd7852ca6d78ded3b56e141e23c749c58ed4c814413c",
+      "r2a_path_only_adapter": "63b1c93f51be5c8687546241733dbc9143a0b965b3c161b7d634d52d8191ed16"
+    }
+  },
+  "post_hoc_root_cause_audit_completed_before_repair": true,
+  "receiver_repair": [
+    "retain R2 explicit scalar serialization",
+    "fix channel-to-PRN map",
+    "load pre-onset frozen PRN/Doppler/first-raw-interval handoff",
+    "fail closed if target raw interval is missed"
+  ],
+  "repository_freeze_basis": {
+    "parent_commit": "948658aa7b117a40b102a48193022e6c403cbc00",
+    "tracked_diff_sha256": "aea6aca9fd31098543fc66144e823e2c85a11f80a64cbc1fd996b5ddc22d9f75",
+    "untracked_file_sha256": {}
+  },
+  "schema": "gnss-doppler-lab.trace-r2a-preregistration.v1",
+  "scientific_objective": "Repair cleanStatic receiver reproducibility without changing frozen TRACE scoring or performance gates.",
+  "semantic_contract": "semantic_reproduction_contract.json",
+  "source_hashes": {
+    "handoffs": {
+      "OAKBAT.OS3": "687dac924c23b6364d453ba390a501a828159ce2a8ddd5e2f5144f53063c88ac",
+      "TEXBAT.DS3": "a8c9d51edd3aa8bcd58dd4a9f04061ec31a1d37dafbae33c6551a961cc4d097b",
+      "TEXBAT.cleanStatic": "259c564841d96d8bb98464a5700d90a4b4a2f0a5bd64736af9b044695bd15a7c"
+    },
+    "phase_b_scorer": {
+      "frozen_r2_scorer": "7c3e4f759e461c048b58cd7852ca6d78ded3b56e141e23c749c58ed4c814413c",
+      "r2a_path_only_adapter": "63b1c93f51be5c8687546241733dbc9143a0b965b3c161b7d634d52d8191ed16"
+    },
+    "raw_iq": {
+      "OAKBAT.OS3": "2a3c3c5cf1accaa287fe14181e43070903500e0250c69e3c335f91c89c0cdc6c",
+      "OAKBAT.OS4": "803f3c76bcc618efbc6b394eb536fe61ed8c3e34b1822c0088b4475621bfa8e4",
+      "OAKBAT.cleanStatic": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "TEXBAT.DS3": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "TEXBAT.DS7": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "TEXBAT.cleanStatic": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9"
+    },
+    "receiver_configs": {
+      "phase_a": {
+        "OAKBAT.OS3": {
+          "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/oakbat_os3.conf",
+          "sha256": "e066d060471abcb41764b99269c1a383182856970fc695f95075894681c08e63"
+        },
+        "TEXBAT.DS3": {
+          "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/texbat_ds3.conf",
+          "sha256": "a68bb22e4f5007bc12c4137e8c33aec069d6a32d3f597067b9edff1217081042"
+        },
+        "TEXBAT.cleanStatic": {
+          "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/texbat_cleanstatic.conf",
+          "sha256": "a3b3a9e46119ed0a96ab782f34571d0cd5d7be1d98f911625c6d28d85c6096e7"
+        }
+      },
+      "phase_b": {
+        "OAKBAT.OS3": {
+          "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/phase_b/oakbat_os3.conf",
+          "sha256": "6a3360c7d72570c2c42ec4791edf4282aed9790c7cbe1ad53d523de245fbcb17"
+        },
+        "OAKBAT.OS4": {
+          "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/phase_b/oakbat_os4.conf",
+          "sha256": "86f360981b110d7e62314fdd3fd1d6c4481d93e9c3dd0a344513984a6b10a24e"
+        },
+        "OAKBAT.cleanStatic": {
+          "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/phase_b/oakbat_cleanstatic.conf",
+          "sha256": "42e9f0571e044e86ff39c88d8ec5b437ae13334ce43a2143507ca9662925d3b0"
+        },
+        "TEXBAT.DS3": {
+          "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/phase_b/texbat_ds3.conf",
+          "sha256": "025f49b95e9bea42eaff38554876a0487c48ce4fc8494a19c29dce29e2a605e3"
+        },
+        "TEXBAT.DS7": {
+          "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/phase_b/texbat_ds7.conf",
+          "sha256": "ac9aff6899ffc4cc7e8281ccf240e00e4e91ddb0026ae7409f5ed1a433020d35"
+        },
+        "TEXBAT.cleanStatic": {
+          "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/phase_b/texbat_cleanstatic.conf",
+          "sha256": "0569a90870775649c25ae13c8c6649ebc599faec2f3b8aec8292d7e2026f77c7"
+        }
+      }
+    },
+    "receiver_executable_sha256": "5dbdecec923c064a421804f1dc6a83234ccc247d7811314241aed0b320b8ac19",
+    "receiver_patch_sha256": "53bfd4f0fbe7b4c039b3e7248bd98c918a48a955a60d24156573e24f0d1b8d8c"
+  }
+}

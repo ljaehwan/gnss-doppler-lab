@@ -1,0 +1,96 @@
+{
+  "analysis_designation": "POST_HOC_ROOT_CAUSE_AUDIT",
+  "first_divergence": {
+    "canonical_key": {
+      "dataset": "TEXBAT.cleanStatic",
+      "prn": 6,
+      "raw_interval_end_sample": 1016044,
+      "raw_interval_start_sample": 991044
+    },
+    "metadata_before_after": {
+      "action_used_source_loop_sequence": {
+        "rep1": 18446744073709551615,
+        "rep2": 18446744073709551615
+      },
+      "channel": {
+        "rep1": 5,
+        "rep2": 5
+      },
+      "loop_sequence": {
+        "rep1": 0,
+        "rep2": 0
+      },
+      "tracking_session_id": {
+        "rep1": 1,
+        "rep2": 1
+      }
+    },
+    "physical_differences": [
+      {
+        "absolute_error": 0.2973203287357387,
+        "field": "action_used_carrier_phase_accumulator_rad",
+        "rep1": 0.7433008218393468,
+        "rep2": 0.44598049310360804
+      },
+      {
+        "absolute_error": 0.29732032873573866,
+        "field": "action_next_carrier_phase_accumulator_rad",
+        "rep1": 3.92961841102834,
+        "rep2": 3.632298082292601
+      }
+    ],
+    "receiver_state_before_at_after": [
+      {
+        "canonical_key": {
+          "dataset": "TEXBAT.cleanStatic",
+          "prn": 6,
+          "raw_interval_end_sample": 1016044,
+          "raw_interval_start_sample": 991044
+        },
+        "rep1": {
+          "carrier_doppler_hz": -500.0,
+          "channel": 5,
+          "code_nco_rate_chips_s": 1023000.0,
+          "loop_sequence": 0,
+          "receiver_state": 2,
+          "tracking_session_id": 1
+        },
+        "rep2": {
+          "carrier_doppler_hz": -500.0,
+          "channel": 5,
+          "code_nco_rate_chips_s": 1023000.0,
+          "loop_sequence": 0,
+          "receiver_state": 2,
+          "tracking_session_id": 1
+        }
+      },
+      {
+        "canonical_key": {
+          "dataset": "TEXBAT.cleanStatic",
+          "prn": 6,
+          "raw_interval_end_sample": 1041044,
+          "raw_interval_start_sample": 1016044
+        },
+        "rep1": {
+          "carrier_doppler_hz": -507.1181945800781,
+          "channel": 5,
+          "code_nco_rate_chips_s": 1022999.7396522748,
+          "loop_sequence": 1,
+          "receiver_state": 2,
+          "tracking_session_id": 1
+        },
+        "rep2": {
+          "carrier_doppler_hz": -507.1181945800781,
+          "channel": 5,
+          "code_nco_rate_chips_s": 1022999.7396522748,
+          "loop_sequence": 1,
+          "receiver_state": 2,
+          "tracking_session_id": 1
+        }
+      }
+    ],
+    "rep1_file": "trace_native_1ms_ch_5.bin",
+    "rep2_file": "trace_native_1ms_ch_5.bin"
+  },
+  "schema": "gnss-doppler-lab.trace-r2a-first-divergence.v1"
+}

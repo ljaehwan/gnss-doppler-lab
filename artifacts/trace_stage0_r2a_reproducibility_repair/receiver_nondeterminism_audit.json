@@ -1,0 +1,686 @@
+{
+  "checks": {
+    "acquisition_channel_scheduling": {
+      "config_channels_in_acquisition": "Channels.in_acquisition=11",
+      "evidence": [
+        {
+          "line": 504,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "std::thread tmp_thread(&ChannelInterface::start_acquisition, channels_[i]);"
+        },
+        {
+          "line": 509,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "channels_.at(i)->start_acquisition();"
+        },
+        {
+          "line": 512,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "channels_.at(i)->start_acquisition();"
+        },
+        {
+          "line": 1525,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "channels_.at(i)->set_signal(search_next_signal(gnss_signal_str, is_primary_freq, assistance_available, estimated_doppler, RX_time));"
+        },
+        {
+          "line": 1816,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "bool start_acquisition = false;"
+        },
+        {
+          "line": 1823,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "gnss_signal = search_next_signal(channels_[current_channel]->get_signal().get_signal_str(),"
+        },
+        {
+          "line": 1829,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "start_acquisition = is_primary_freq or assistance_available or !configuration_->property(\"GNSS-SDR.assist_dual_frequency_acq\", multiband_);"
+        },
+        {
+          "line": 1834,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "start_acquisition = true;"
+        },
+        {
+          "line": 1837,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "if (start_acquisition == true)"
+        },
+        {
+          "line": 1857,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "std::thread tmp_thread(&ChannelInterface::start_acquisition, channels_[current_channel]);"
+        },
+        {
+          "line": 1862,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "channels_[current_channel]->start_acquisition();"
+        },
+        {
+          "line": 1865,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "channels_[current_channel]->start_acquisition();"
+        },
+        {
+          "line": 1933,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "acquisition_manager(who);"
+        },
+        {
+          "line": 1952,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "acquisition_manager(who);"
+        },
+        {
+          "line": 1970,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "std::thread tmp_thread(&ChannelInterface::start_acquisition, channels_[who]);"
+        },
+        {
+          "line": 1975,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "channels_[who]->start_acquisition();"
+        },
+        {
+          "line": 1978,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "channels_[who]->start_acquisition();"
+        },
+        {
+          "line": 2098,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "void GNSSFlowgraph::start_acquisition_helper()"
+        },
+        {
+          "line": 2109,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "std::thread tmp_thread(&ChannelInterface::start_acquisition, channels_[i]);"
+        },
+        {
+          "line": 2114,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "channels_.at(i)->start_acquisition();"
+        },
+        {
+          "line": 2117,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "channels_.at(i)->start_acquisition();"
+        },
+        {
+          "line": 2614,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "Gnss_Signal GNSSFlowgraph::search_next_signal(const std::string& searched_signal,"
+        }
+      ],
+      "finding": "R2 enabled all 11 acquisition blocks concurrently; successful/failed PMT messages arrive in scheduler-dependent order and acquisition_manager mutates the shared available-signal list under that event order.",
+      "status": "NONDETERMINISTIC"
+    },
+    "acquisition_success_message_order": {
+      "evidence": [
+        {
+          "line": 339,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/acquisition/gnuradio_blocks/pcps_acquisition.cc",
+          "text": "void pcps_acquisition::send_positive_acquisition()"
+        },
+        {
+          "line": 600,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/acquisition/gnuradio_blocks/pcps_acquisition.cc",
+          "text": "void pcps_acquisition::acquisition_core(uint64_t samp_count)"
+        },
+        {
+          "line": 772,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/acquisition/gnuradio_blocks/pcps_acquisition.cc",
+          "text": "send_positive_acquisition();"
+        },
+        {
+          "line": 789,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/acquisition/gnuradio_blocks/pcps_acquisition.cc",
+          "text": "send_positive_acquisition();"
+        },
+        {
+          "line": 824,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/acquisition/gnuradio_blocks/pcps_acquisition.cc",
+          "text": "send_positive_acquisition();"
+        },
+        {
+          "line": 840,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/acquisition/gnuradio_blocks/pcps_acquisition.cc",
+          "text": "send_positive_acquisition();"
+        },
+        {
+          "line": 997,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/acquisition/gnuradio_blocks/pcps_acquisition.cc",
+          "text": "acquisition_core(d_sample_counter);"
+        },
+        {
+          "line": 1001,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/acquisition/gnuradio_blocks/pcps_acquisition.cc",
+          "text": "gr::thread::thread d_worker(&pcps_acquisition::acquisition_core, this, d_sample_counter);"
+        }
+      ],
+      "finding": "Positive acquisition is emitted from each acquisition block after its FFT search; no sequence barrier sorts successes by channel or sample stamp.",
+      "status": "UNORDERED"
+    },
+    "acquisition_worker_thread_count": {
+      "finding": "The non-FPGA path calls start_acquisition for every enabled channel before the flowgraph runs; GNU Radio schedules acquisition blocks independently.",
+      "status": "ELEVEN_LOGICALLY_CONCURRENT_GNURADIO_BLOCKS"
+    },
+    "channel_reassignment": {
+      "evidence": [
+        {
+          "line": 1933,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "acquisition_manager(who);"
+        },
+        {
+          "line": 1934,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "// push back the old signal AFTER assigning a new one to avoid selecting the same signal"
+        },
+        {
+          "line": 1937,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "push_back_signal(gs);"
+        },
+        {
+          "line": 1952,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "acquisition_manager(who);"
+        }
+      ],
+      "finding": "Failed acquisitions call acquisition_manager before returning the old signal to the list; later assignment therefore depends on event order.",
+      "status": "ENABLED_AND_EVENT_ORDER_DEPENDENT"
+    },
+    "concurrent_file_writer_ordering": {
+      "finding": "Each channel owns a separate stream. Cross-file completion/order may vary but cannot explain physical differences at identical canonical keys.",
+      "status": "REPRESENTATIONAL_ONLY_ACROSS_FILES"
+    },
+    "dump_struct_padding": {
+      "finding": "No native C++ struct is dumped; scalar fields are written explicitly in schema order. Canonical serialization is already satisfied by R2.",
+      "status": "PASS_EXPLICIT_SERIALIZATION"
+    },
+    "fixed_satellite_channel_list": {
+      "finding": "ChannelN.satellite is supported. R2 supplied no entries, so assignments changed across repetitions.",
+      "status": "SUPPORTED_BUT_NOT_USED_BY_R2"
+    },
+    "floating_point_reduction_order": {
+      "finding": "Per-channel FFT/correlator/filter operations have fixed local order. The audit found no shared floating reduction across channels.",
+      "status": "DETERMINISTIC_WITHIN_FIXED_CHANNEL_HANDOFF"
+    },
+    "prn_assignment_order": {
+      "evidence": [
+        {
+          "line": 1400,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "sat = configuration_->property(\"Channel\" + std::to_string(i) + \".satellite\", 0);"
+        },
+        {
+          "line": 1513,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "sat = configuration_->property(\"Channel\" + std::to_string(i) + \".satellite\", 0);"
+        },
+        {
+          "line": 2628,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "result = available_GPS_1C_signals_.front();"
+        },
+        {
+          "line": 2629,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GPS_1C_signals_.pop_front();"
+        },
+        {
+          "line": 2630,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GPS_1C_signals_.push_back(result);"
+        },
+        {
+          "line": 2666,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GPS_2S_signals_.pop_front();"
+        },
+        {
+          "line": 2667,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GPS_2S_signals_.push_back(result);"
+        },
+        {
+          "line": 2704,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GPS_L5_signals_.pop_front();"
+        },
+        {
+          "line": 2705,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GPS_L5_signals_.push_back(result);"
+        },
+        {
+          "line": 2711,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GAL_1B_signals_.pop_front();"
+        },
+        {
+          "line": 2712,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GAL_1B_signals_.push_back(result);"
+        },
+        {
+          "line": 2749,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GAL_5X_signals_.pop_front();"
+        },
+        {
+          "line": 2750,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GAL_5X_signals_.push_back(result);"
+        },
+        {
+          "line": 2787,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GAL_7X_signals_.pop_front();"
+        },
+        {
+          "line": 2788,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GAL_7X_signals_.push_back(result);"
+        },
+        {
+          "line": 2825,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GAL_E6_signals_.pop_front();"
+        },
+        {
+          "line": 2826,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GAL_E6_signals_.push_back(result);"
+        },
+        {
+          "line": 2832,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GLO_1G_signals_.pop_front();"
+        },
+        {
+          "line": 2833,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GLO_1G_signals_.push_back(result);"
+        },
+        {
+          "line": 2839,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GLO_2G_signals_.pop_front();"
+        },
+        {
+          "line": 2840,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GLO_2G_signals_.push_back(result);"
+        },
+        {
+          "line": 2845,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_BDS_B1_signals_.pop_front();"
+        },
+        {
+          "line": 2846,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_BDS_B1_signals_.push_back(result);"
+        },
+        {
+          "line": 2852,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_BDS_B3_signals_.pop_front();"
+        },
+        {
+          "line": 2853,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_BDS_B3_signals_.push_back(result);"
+        },
+        {
+          "line": 2860,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "result = available_GPS_1C_signals_.front();"
+        },
+        {
+          "line": 2861,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GPS_1C_signals_.pop_front();"
+        },
+        {
+          "line": 2862,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "available_GPS_1C_signals_.push_back(result);"
+        }
+      ],
+      "finding": "Initial implicit GPS PRNs are drawn from list front, but unfixed channels are reassigned according to whichever concurrent acquisition event is processed first.",
+      "fixed_satellite_entries_in_r2_config": [],
+      "status": "ORDERED_INITIAL_LIST_BUT_EVENT_ORDER_DEPENDENT_REASSIGNMENT"
+    },
+    "random_seed_usage": {
+      "finding": "The relevant flowgraph/acquisition/tracking source contains no RNG calls; the observed variation is scheduling, not seeded randomness.",
+      "status": "NO_RANDOM_SOURCE_FOUND_IN_RELEVANT_PATH"
+    },
+    "reuse_same_acquisition_handoff": {
+      "finding": "R2 has no persisted handoff reader. R2a must pin channel/PRN, acquisition Doppler convention, and exact first raw tracking interval, and must fail closed if activation arrives after that interval.",
+      "status": "NOT_SUPPORTED_BY_R2_REQUIRES_R2A_REPAIR"
+    },
+    "thread_scheduling_races": {
+      "evidence": [
+        {
+          "line": 494,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "std::lock_guard<std::mutex> lock(signal_list_mutex_);"
+        },
+        {
+          "line": 1887,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "*  -> 200 is the control_thread dispatched by the control_thread apply_action"
+        },
+        {
+          "line": 1904,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "void GNSSFlowgraph::apply_action(unsigned int who, unsigned int what)"
+        },
+        {
+          "line": 1907,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "std::lock_guard<std::mutex> lock(signal_list_mutex_);"
+        },
+        {
+          "line": 1908,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "DLOG(INFO) << \"Received \" << what << \" from \" << who;"
+        },
+        {
+          "line": 2100,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "std::lock_guard<std::mutex> lock(signal_list_mutex_);"
+        },
+        {
+          "line": 2542,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/core/receiver/gnss_flowgraph.cc",
+          "text": "std::lock_guard<std::mutex> lock(signal_list_mutex_);"
+        }
+      ],
+      "finding": "The signal-list mutex prevents memory corruption but serializes whichever event happens to arrive first; it does not impose deterministic event ordering or acquisition sample stamps.",
+      "status": "CAUSAL_SCHEDULING_NONDETERMINISM_CONFIRMED"
+    },
+    "tracking_start_sample_stamp": {
+      "evidence": [
+        {
+          "line": 122,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "d_acq_sample_stamp(0ULL),"
+        },
+        {
+          "line": 720,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "d_acq_sample_stamp = d_acquisition_gnss_synchro->Acq_samplestamp_samples;"
+        },
+        {
+          "line": 1518,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "tmp_long_int = this->nitems_read(0) + static_cast<uint64_t>(d_current_prn_length_samples);"
+        },
+        {
+          "line": 1552,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "tmp_double = static_cast<double>(this->nitems_read(0) + d_current_prn_length_samples);"
+        },
+        {
+          "line": 2011,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "// if (d_trk_parameters.pull_in_time_s < (d_sample_counter - d_acq_sample_stamp) / static_cast<int>(d_trk_parameters.fs_in))"
+        },
+        {
+          "line": 2012,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "if (d_trk_parameters.pull_in_time_s < (this->nitems_read(0) - d_acq_sample_stamp) / static_cast<int>(d_trk_parameters.fs_in))"
+        },
+        {
+          "line": 2031,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "// const int64_t acq_trk_diff_samples = static_cast<int64_t>(d_sample_counter) - static_cast<int64_t>(d_acq_sample_stamp);"
+        },
+        {
+          "line": 2032,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "const int64_t acq_trk_diff_samples = static_cast<int64_t>(this->nitems_read(0)) - static_cast<int64_t>(d_acq_sample_stamp);"
+        },
+        {
+          "line": 2046,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "const int32_t samples_offset = round(d_acq_code_phase_samples);"
+        },
+        {
+          "line": 2047,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "d_acc_carrier_phase_rad -= d_carrier_phase_step_rad * static_cast<double>(samples_offset);"
+        },
+        {
+          "line": 2049,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "// d_sample_counter += samples_offset;  // count for the processed samples"
+        },
+        {
+          "line": 2057,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "consume_each(samples_offset);  // shift input to perform alignment with local replica"
+        },
+        {
+          "line": 2062,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "const uint64_t trace_interval_start_sample = this->nitems_read(0);"
+        },
+        {
+          "line": 2085,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "// if (d_trk_parameters.bit_synchronization_time_limit_s < (d_sample_counter - d_acq_sample_stamp) / static_cast<int>(d_trk_parameters.fs_in))"
+        },
+        {
+          "line": 2086,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "if (d_trk_parameters.bit_synchronization_time_limit_s < (this->nitems_read(0) - d_acq_sample_stamp) / static_cast<int>(d_trk_parameters.fs_in))"
+        },
+        {
+          "line": 2264,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "const uint64_t trace_interval_start_sample = this->nitems_read(0);"
+        },
+        {
+          "line": 2334,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "this->get_tags_in_range(tags_vec, 0, this->nitems_read(0), this->nitems_read(0) + d_current_prn_length_samples);"
+        },
+        {
+          "line": 2341,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "// std::cout << \"ch[\" << d_acquisition_gnss_synchro->Channel_ID << \"] tracking time tag with offset \" << it->offset << \" vs. counter \" << d_sample_counter << \" vs. nread \" << this->nitems_read(0) << \" containing \";"
+        },
+        {
+          "line": 2342,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "// std::cout << \"ch[\" << d_acquisition_gnss_synchro->Channel_ID << \"] tracking time tag with offset \" << it->offset << \" vs. nread \" << this->nitems_read(0) << \" containing \";"
+        },
+        {
+          "line": 2368,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "current_synchro_data.Tracking_sample_counter = this->nitems_read(0);"
+        }
+      ],
+      "finding": "Tracking start uses the acquisition sample stamp plus the tracking block's scheduler-dependent nitems_read value. R2 rep1/rep2 show integer-millisecond first-interval shifts even for identical channel/PRN pairs.",
+      "status": "NONDETERMINISTIC"
+    },
+    "uninitialized_state": {
+      "evidence": [
+        {
+          "line": 86,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "void trace_write_value(std::ofstream &stream, const T &value)"
+        },
+        {
+          "line": 1568,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "TraceActionSnapshot action{};"
+        },
+        {
+          "line": 1590,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, TRACE_SCHEMA_VERSION);"
+        },
+        {
+          "line": 1591,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, TRACE_HEADER_SIZE_BYTES);"
+        },
+        {
+          "line": 1592,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, TRACE_RECORD_SIZE_BYTES);"
+        },
+        {
+          "line": 1593,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, TRACE_ENDIAN_MARKER);"
+        },
+        {
+          "line": 1594,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, d_trk_parameters.fs_in);"
+        },
+        {
+          "line": 1595,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, d_trk_parameters.tap_spacing_chips);"
+        },
+        {
+          "line": 1597,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, coherent_integration_s);"
+        },
+        {
+          "line": 1613,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, offset_chips);"
+        },
+        {
+          "line": 1615,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "const uint32_t reserved = 0U;"
+        },
+        {
+          "line": 1616,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, reserved);"
+        },
+        {
+          "line": 1657,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "const uint8_t reserved = 0U;"
+        },
+        {
+          "line": 1661,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, d_trace_loop_sequence);"
+        },
+        {
+          "line": 1662,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, d_trace_tracking_session_id);"
+        },
+        {
+          "line": 1663,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, d_trace_action_source_sequence);"
+        },
+        {
+          "line": 1664,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, absolute_raw_interval_start_sample);"
+        },
+        {
+          "line": 1665,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, absolute_raw_interval_end_sample);"
+        },
+        {
+          "line": 1666,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, receiver_timestamp_s);"
+        },
+        {
+          "line": 1667,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, integration_duration_s);"
+        },
+        {
+          "line": 1668,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, d_channel);"
+        },
+        {
+          "line": 1669,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, prn);"
+        },
+        {
+          "line": 1670,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, valid_tracking);"
+        },
+        {
+          "line": 1671,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, valid_lock);"
+        },
+        {
+          "line": 1672,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, data_boundary);"
+        },
+        {
+          "line": 1673,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, loop_update_boundary);"
+        },
+        {
+          "line": 1674,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, navigation_bit_wipeoff_applied);"
+        },
+        {
+          "line": 1675,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, pull_in_transitory);"
+        },
+        {
+          "line": 1676,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, receiver_state);"
+        },
+        {
+          "line": 1677,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+          "text": "trace_write_value(d_trace_dump_file, reserved);"
+        }
+      ],
+      "finding": "R2 writes every field explicitly, value-initializes action snapshots and reserved bytes, and emits a fixed 416-byte schema.",
+      "status": "NO_R2_SERIALIZED_PADDING_OR_UNINITIALIZED_RESERVED_BYTES_FOUND"
+    },
+    "wall_clock_or_session_id_in_physical_record": {
+      "finding": "tracking_session_id and local loop sequence remain in the binary row for causal boundaries but are excluded from the canonical physical semantic hash; receiver_timestamp_s is raw-sample-derived.",
+      "status": "SESSION_ID_PRESENT_AS_METADATA_ONLY_NO_WALL_CLOCK"
+    }
+  },
+  "r2_config_sha256": "1b36c2531b9789d07ea99eb404b0cda377e2ebce5a83d450e52300b0a9742e55",
+  "r2_patch_sha256": "087da6343c1455bbdb420f697b05de168b464dbe4472bb6ad15eb488aa48fa2d",
+  "receiver_source_path_read_only": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source",
+  "repair_decision": {
+    "canonical_serialization": "ALREADY_VALID_IN_R2",
+    "deterministic_assignment": "REQUIRED_FIXED_CHANNEL_PRN_MAP",
+    "frozen_acquisition_handoff": "REQUIRED_BECAUSE_SAME_CHANNEL_PRN_STARTS_SHIFTED_ACROSS_R2_REPLAYS"
+  },
+  "root_cause": "Concurrent acquisition and unordered event-driven reassignment/handoff change the acquisition/tracking raw-sample origin. This changes physical loop state and taps, not only metadata.",
+  "schema": "gnss-doppler-lab.trace-r2a-receiver-nondeterminism-audit.v1",
+  "status": "ROOT_CAUSE_IDENTIFIED"
+}

@@ -1,0 +1,18 @@
+{
+  "build_command": "env PYTHONPATH=/usr/lib/python3/dist-packages GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=* cmake --build <R2a receiver-build> --target gnss-sdr -j 4",
+  "receiver_base_commit": "1ddd4562723040fd66cb334b578a5b69455625f4",
+  "receiver_build_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-build",
+  "receiver_executable": {
+    "byte_size": 36602296,
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-build/src/main/gnss-sdr",
+    "sha256": "5dbdecec923c064a421804f1dc6a83234ccc247d7811314241aed0b320b8ac19"
+  },
+  "receiver_repair_diff": {
+    "byte_size": 37159,
+    "path": "artifacts/trace_stage0_r2a_reproducibility_repair/receiver_repair.diff",
+    "sha256": "53bfd4f0fbe7b4c039b3e7248bd98c918a48a955a60d24156573e24f0d1b8d8c"
+  },
+  "receiver_source_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source",
+  "schema": "gnss-doppler-lab.trace-r2a-receiver-build-manifest.v1",
+  "status": "PASS"
+}

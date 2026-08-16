@@ -1,0 +1,8 @@
+{
+  "failure": "Same receiver executable/config/raw slice produced different per-channel hashes and acquisition/tracking timing.",
+  "preserved_verdict": "INCONCLUSIVE_INPUT_OR_RECEIVER",
+  "r2_artifacts_modified": false,
+  "r2_final_verdict_path": "artifacts/trace_stage0_r2_native_1ms_dump/final_verdict.json",
+  "r2_final_verdict_sha256": "208103e01ffa556322f3b82f2cb5a300c70763e5cd62a93e6811d8fa62a5e2ed",
+  "schema": "gnss-doppler-lab.trace-r2a-existing-failure-preservation.v1"
+}

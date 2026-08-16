@@ -1,0 +1,936 @@
+{
+  "acquisition_or_lock_start_deltas": {
+    "10": {
+      "rep1_first_raw_interval_start_sample": 7259892,
+      "rep2_first_raw_interval_start_sample": 18834887,
+      "start_delta_samples_rep2_minus_rep1": 11574995
+    },
+    "13": {
+      "rep1_first_raw_interval_start_sample": 2018342,
+      "rep2_first_raw_interval_start_sample": 2068342,
+      "start_delta_samples_rep2_minus_rep1": 50000
+    },
+    "16": {
+      "rep1_first_raw_interval_start_sample": 2030083,
+      "rep2_first_raw_interval_start_sample": 2030083,
+      "start_delta_samples_rep2_minus_rep1": 0
+    },
+    "17": {
+      "rep1_first_raw_interval_start_sample": 142316430,
+      "rep2_first_raw_interval_start_sample": null,
+      "start_delta_samples_rep2_minus_rep1": null
+    },
+    "19": {
+      "rep1_first_raw_interval_start_sample": 2089879,
+      "rep2_first_raw_interval_start_sample": 2064879,
+      "start_delta_samples_rep2_minus_rep1": -25000
+    },
+    "20": {
+      "rep1_first_raw_interval_start_sample": 61081256,
+      "rep2_first_raw_interval_start_sample": 39806215,
+      "start_delta_samples_rep2_minus_rep1": -21275041
+    },
+    "23": {
+      "rep1_first_raw_interval_start_sample": 3065036,
+      "rep2_first_raw_interval_start_sample": 3090036,
+      "start_delta_samples_rep2_minus_rep1": 25000
+    },
+    "24": {
+      "rep1_first_raw_interval_start_sample": null,
+      "rep2_first_raw_interval_start_sample": 1106600165,
+      "start_delta_samples_rep2_minus_rep1": null
+    },
+    "3": {
+      "rep1_first_raw_interval_start_sample": 1014233,
+      "rep2_first_raw_interval_start_sample": 989233,
+      "start_delta_samples_rep2_minus_rep1": -25000
+    },
+    "30": {
+      "rep1_first_raw_interval_start_sample": 619714885,
+      "rep2_first_raw_interval_start_sample": 322489257,
+      "start_delta_samples_rep2_minus_rep1": -297225628
+    },
+    "6": {
+      "rep1_first_raw_interval_start_sample": 991044,
+      "rep2_first_raw_interval_start_sample": 991044,
+      "start_delta_samples_rep2_minus_rep1": 0
+    },
+    "7": {
+      "rep1_first_raw_interval_start_sample": 1006440,
+      "rep2_first_raw_interval_start_sample": 1006440,
+      "start_delta_samples_rep2_minus_rep1": 0
+    }
+  },
+  "action_correlations": {
+    "action_next_carrier_doppler_hz": 0.999882984957124,
+    "action_next_carrier_phase_accumulator_rad": 0.9295638612478904,
+    "action_next_carrier_phase_rate_step_rad_per_sample2": null,
+    "action_next_carrier_phase_step_rad_per_sample": 0.9998829849571237,
+    "action_next_code_nco_rate_chips_s": 0.9999393500079742,
+    "action_next_code_phase_rate_step_chips_per_sample2": null,
+    "action_next_code_phase_step_chips_per_sample": 0.9999393500079715,
+    "action_next_dll_filter_output_chips_s": 0.9822680036195767,
+    "action_next_interval_length_samples": 0.9682226918591695,
+    "action_next_pll_fll_filter_output_hz": 0.999882984957124,
+    "action_next_residual_carrier_phase_rad": 0.9052305349232262,
+    "action_next_residual_code_phase_chips": 0.9887319821343653,
+    "action_next_residual_code_phase_samples": 0.9887319537963167,
+    "action_used_carrier_doppler_hz": 0.9998829487252121,
+    "action_used_carrier_phase_accumulator_rad": 0.9295629811373816,
+    "action_used_carrier_phase_rate_step_rad_per_sample2": null,
+    "action_used_carrier_phase_step_rad_per_sample": 0.9998829487252135,
+    "action_used_code_nco_rate_chips_s": 0.9999393010593336,
+    "action_used_code_phase_rate_step_chips_per_sample2": null,
+    "action_used_code_phase_step_chips_per_sample": 0.9999393010593368,
+    "action_used_dll_filter_output_chips_s": 0.9822671271406518,
+    "action_used_interval_length_samples": 1.0,
+    "action_used_pll_fll_filter_output_hz": 0.9998828992011318,
+    "action_used_residual_carrier_phase_rad": 0.9052377771680464,
+    "action_used_residual_code_phase_chips": 0.9967476767919309,
+    "action_used_residual_code_phase_samples": 0.9967476685058536
+  },
+  "analysis_designation": "POST_HOC_ROOT_CAUSE_AUDIT",
+  "canonical_key": [
+    "dataset",
+    "prn",
+    "raw_interval_start_sample",
+    "raw_interval_end_sample"
+  ],
+  "canonicalized_semantic_hash_match": false,
+  "case_a_representational_only": false,
+  "case_b_acquisition_start_difference": true,
+  "case_c_true_physical_value_nondeterminism": true,
+  "classification": [
+    "Case B",
+    "Case C"
+  ],
+  "classification_text": "Mixed Case B/C: concurrent acquisition/channel scheduling changed PRN assignment and tracking start samples; the changed handoff then produced true physical tap/action/state differences at identical canonical keys.",
+  "common_at_least_4_prn_epoch_count": 44917,
+  "common_canonical_row_count": 418572,
+  "common_ratio_rep1": 0.9558991785476942,
+  "common_ratio_rep2": 0.9623583725721012,
+  "complex_tap_correlation": {
+    "imag": 0.0008614107337443559,
+    "magnitude": 0.385333684453897,
+    "real": 0.38533272161388427
+  },
+  "dataset": "TEXBAT.cleanStatic",
+  "exact_physical_bit_match_ratio": 0.22962357730569652,
+  "exact_physical_bit_match_row_count": 96114,
+  "field_error_statistics": [
+    {
+      "correlation": 0.3992957279520283,
+      "dtype": "float32",
+      "exact_bit_match_count": 162862,
+      "exact_bit_match_ratio": 0.3890895712087765,
+      "field": "E4_i",
+      "maximum_absolute_error": 10599696.5,
+      "median_absolute_error": 4.0625,
+      "p99_9_absolute_error": 8899740.216
+    },
+    {
+      "correlation": 0.354515285098825,
+      "dtype": "float32",
+      "exact_bit_match_count": 161598,
+      "exact_bit_match_ratio": 0.3860697801095152,
+      "field": "E4_q",
+      "maximum_absolute_error": 9022294.0,
+      "median_absolute_error": 22.375,
+      "p99_9_absolute_error": 5510418.781500051
+    },
+    {
+      "correlation": 0.3944111029827168,
+      "dtype": "float32",
+      "exact_bit_match_count": 163049,
+      "exact_bit_match_ratio": 0.3895363282780501,
+      "field": "E3_i",
+      "maximum_absolute_error": 12597550.5,
+      "median_absolute_error": 4.375,
+      "p99_9_absolute_error": 10655685.621000027
+    },
+    {
+      "correlation": 0.2969958092900169,
+      "dtype": "float32",
+      "exact_bit_match_count": 161563,
+      "exact_bit_match_ratio": 0.3859861624762287,
+      "field": "E3_q",
+      "maximum_absolute_error": 10756503.0,
+      "median_absolute_error": 28.65625,
+      "p99_9_absolute_error": 6840978.510250161
+    },
+    {
+      "correlation": 0.3906352512962573,
+      "dtype": "float32",
+      "exact_bit_match_count": 163465,
+      "exact_bit_match_ratio": 0.3905301835765412,
+      "field": "E2_i",
+      "maximum_absolute_error": 14346876.5,
+      "median_absolute_error": 4.625,
+      "p99_9_absolute_error": 12415957.191500006
+    },
+    {
+      "correlation": 0.2492373384103659,
+      "dtype": "float32",
+      "exact_bit_match_count": 161554,
+      "exact_bit_match_ratio": 0.38596466079909786,
+      "field": "E2_q",
+      "maximum_absolute_error": 12693507.0,
+      "median_absolute_error": 34.96875,
+      "p99_9_absolute_error": 8185996.536750315
+    },
+    {
+      "correlation": 0.3869551684496673,
+      "dtype": "float32",
+      "exact_bit_match_count": 163568,
+      "exact_bit_match_ratio": 0.3907762583259272,
+      "field": "E_i",
+      "maximum_absolute_error": 15934738.5,
+      "median_absolute_error": 5.0,
+      "p99_9_absolute_error": 14185618.953000035
+    },
+    {
+      "correlation": 0.21157865313873359,
+      "dtype": "float32",
+      "exact_bit_match_count": 161549,
+      "exact_bit_match_ratio": 0.3859527154229141,
+      "field": "E_q",
+      "maximum_absolute_error": 14446268.0,
+      "median_absolute_error": 41.25,
+      "p99_9_absolute_error": 9553451.909750286
+    },
+    {
+      "correlation": 0.3842620448954683,
+      "dtype": "float32",
+      "exact_bit_match_count": 163533,
+      "exact_bit_match_ratio": 0.3906926406926407,
+      "field": "P_i",
+      "maximum_absolute_error": 17483674.0,
+      "median_absolute_error": 5.0625,
+      "p99_9_absolute_error": 15761439.691500006
+    },
+    {
+      "correlation": 0.17916624614975485,
+      "dtype": "float32",
+      "exact_bit_match_count": 161550,
+      "exact_bit_match_ratio": 0.38595510449815085,
+      "field": "P_q",
+      "maximum_absolute_error": 15821773.0,
+      "median_absolute_error": 46.890625,
+      "p99_9_absolute_error": 10717794.138500413
+    },
+    {
+      "correlation": 0.3871329643887524,
+      "dtype": "float32",
+      "exact_bit_match_count": 163491,
+      "exact_bit_match_ratio": 0.39059229953269686,
+      "field": "L_i",
+      "maximum_absolute_error": 16226255.5,
+      "median_absolute_error": 5.0,
+      "p99_9_absolute_error": 14195751.227500012
+    },
+    {
+      "correlation": 0.20482775105213574,
+      "dtype": "float32",
+      "exact_bit_match_count": 161559,
+      "exact_bit_match_ratio": 0.3859766061752817,
+      "field": "L_q",
+      "maximum_absolute_error": 14599998.0,
+      "median_absolute_error": 41.21875,
+      "p99_9_absolute_error": 9584138.74950015
+    },
+    {
+      "correlation": 0.38895068279040784,
+      "dtype": "float32",
+      "exact_bit_match_count": 163480,
+      "exact_bit_match_ratio": 0.3905660197050925,
+      "field": "L2_i",
+      "maximum_absolute_error": 14385736.5,
+      "median_absolute_error": 4.625,
+      "p99_9_absolute_error": 12389535.953500086
+    },
+    {
+      "correlation": 0.24549710768180888,
+      "dtype": "float32",
+      "exact_bit_match_count": 161553,
+      "exact_bit_match_ratio": 0.3859622717238611,
+      "field": "L2_q",
+      "maximum_absolute_error": 12597115.0,
+      "median_absolute_error": 35.078125,
+      "p99_9_absolute_error": 8292530.467750026
+    },
+    {
+      "correlation": 0.3913984443001507,
+      "dtype": "float32",
+      "exact_bit_match_count": 163017,
+      "exact_bit_match_ratio": 0.38945987787047387,
+      "field": "L3_i",
+      "maximum_absolute_error": 12602485.5,
+      "median_absolute_error": 4.4375,
+      "p99_9_absolute_error": 10655133.522000013
+    },
+    {
+      "correlation": 0.29536016225052564,
+      "dtype": "float32",
+      "exact_bit_match_count": 161550,
+      "exact_bit_match_ratio": 0.38595510449815085,
+      "field": "L3_q",
+      "maximum_absolute_error": 10966046.0,
+      "median_absolute_error": 28.875,
+      "p99_9_absolute_error": 6996248.6355000865
+    },
+    {
+      "correlation": 0.3956316776624551,
+      "dtype": "float32",
+      "exact_bit_match_count": 162843,
+      "exact_bit_match_ratio": 0.3890441787792781,
+      "field": "L4_i",
+      "maximum_absolute_error": 10387175.5,
+      "median_absolute_error": 4.0,
+      "p99_9_absolute_error": 8875136.966000078
+    },
+    {
+      "correlation": 0.3550766695668875,
+      "dtype": "float32",
+      "exact_bit_match_count": 161573,
+      "exact_bit_match_ratio": 0.3860100532285963,
+      "field": "L4_q",
+      "maximum_absolute_error": 9102646.5,
+      "median_absolute_error": 22.609375,
+      "p99_9_absolute_error": 5677374.8840000555
+    },
+    {
+      "correlation": 0.9942368761765075,
+      "dtype": "float64",
+      "exact_bit_match_count": 161997,
+      "exact_bit_match_ratio": 0.3870230211289814,
+      "field": "dll_discriminator_chips",
+      "maximum_absolute_error": 0.10185992406443885,
+      "median_absolute_error": 1.4323740075961565e-07,
+      "p99_9_absolute_error": 0.04018047049026965
+    },
+    {
+      "correlation": 0.40898493575521794,
+      "dtype": "float64",
+      "exact_bit_match_count": 161590,
+      "exact_bit_match_ratio": 0.3860506675076211,
+      "field": "pll_phase_error_cycles",
+      "maximum_absolute_error": 0.4927361836224487,
+      "median_absolute_error": 6.548562446421352e-07,
+      "p99_9_absolute_error": 0.3541942234815173
+    },
+    {
+      "correlation": null,
+      "dtype": "float64",
+      "exact_bit_match_count": 418572,
+      "exact_bit_match_ratio": 1.0,
+      "field": "fll_frequency_error_hz",
+      "maximum_absolute_error": 0.0,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 0.0
+    },
+    {
+      "correlation": 0.9822680036195767,
+      "dtype": "float64",
+      "exact_bit_match_count": 136869,
+      "exact_bit_match_ratio": 0.3269903385797426,
+      "field": "code_filter_output_chips_s",
+      "maximum_absolute_error": 0.509907677769661,
+      "median_absolute_error": 1.5497207641601562e-06,
+      "p99_9_absolute_error": 0.2429173894524683
+    },
+    {
+      "correlation": 0.999882984957124,
+      "dtype": "float64",
+      "exact_bit_match_count": 262278,
+      "exact_bit_match_ratio": 0.6266018749462459,
+      "field": "carrier_filter_output_hz",
+      "maximum_absolute_error": 187.735107421875,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 178.55113012695313
+    },
+    {
+      "correlation": 0.9959507278373667,
+      "dtype": "float64",
+      "exact_bit_match_count": 137682,
+      "exact_bit_match_ratio": 0.32893265674722627,
+      "field": "cn0_db_hz",
+      "maximum_absolute_error": 51.768035888671875,
+      "median_absolute_error": 9.5367431640625e-05,
+      "p99_9_absolute_error": 0.7625781517028816
+    },
+    {
+      "correlation": 0.48406943444680217,
+      "dtype": "float64",
+      "exact_bit_match_count": 134905,
+      "exact_bit_match_ratio": 0.3222981948147511,
+      "field": "carrier_lock_test",
+      "maximum_absolute_error": 1.9018215537071228,
+      "median_absolute_error": 0.001424252986907959,
+      "p99_9_absolute_error": 1.159622215002784
+    },
+    {
+      "correlation": 1.0,
+      "dtype": "float64",
+      "exact_bit_match_count": 418572,
+      "exact_bit_match_ratio": 1.0,
+      "field": "coherent_integration_s",
+      "maximum_absolute_error": 0.0,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 0.0
+    },
+    {
+      "correlation": 0.9999393010593336,
+      "dtype": "float64",
+      "exact_bit_match_count": 136790,
+      "exact_bit_match_ratio": 0.3268016016360387,
+      "field": "action_used_code_nco_rate_chips_s",
+      "maximum_absolute_error": 0.40994648868218064,
+      "median_absolute_error": 1.5497207641601562e-06,
+      "p99_9_absolute_error": 0.1637336905320465
+    },
+    {
+      "correlation": 0.9998829487252121,
+      "dtype": "float64",
+      "exact_bit_match_count": 262269,
+      "exact_bit_match_ratio": 0.626580373269115,
+      "field": "action_used_carrier_doppler_hz",
+      "maximum_absolute_error": 187.735107421875,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 178.55259570312512
+    },
+    {
+      "correlation": 0.9967476767919309,
+      "dtype": "float64",
+      "exact_bit_match_count": 134833,
+      "exact_bit_match_ratio": 0.3221261813977046,
+      "field": "action_used_residual_code_phase_chips",
+      "maximum_absolute_error": 0.03851398267794195,
+      "median_absolute_error": 3.303652979513849e-07,
+      "p99_9_absolute_error": 0.012472018983529063
+    },
+    {
+      "correlation": 0.9052377771680464,
+      "dtype": "float64",
+      "exact_bit_match_count": 162632,
+      "exact_bit_match_ratio": 0.3885400839043223,
+      "field": "action_used_residual_carrier_phase_rad",
+      "maximum_absolute_error": 6.280496072780807,
+      "median_absolute_error": 1.1444091796875e-05,
+      "p99_9_absolute_error": 5.741132502004508
+    },
+    {
+      "correlation": 0.9999393010593368,
+      "dtype": "float64",
+      "exact_bit_match_count": 136790,
+      "exact_bit_match_ratio": 0.3268016016360387,
+      "field": "action_used_code_phase_step_chips_per_sample",
+      "maximum_absolute_error": 1.6397859549377447e-08,
+      "median_absolute_error": 6.198513924360327e-14,
+      "p99_9_absolute_error": 6.549347622134223e-09
+    },
+    {
+      "correlation": 0.9998829487252135,
+      "dtype": "float64",
+      "exact_bit_match_count": 262269,
+      "exact_bit_match_ratio": 0.626580373269115,
+      "field": "action_used_carrier_phase_step_rad_per_sample",
+      "maximum_absolute_error": 4.71829787437964e-05,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 4.487516183522622e-05
+    },
+    {
+      "correlation": null,
+      "dtype": "float64",
+      "exact_bit_match_count": 418572,
+      "exact_bit_match_ratio": 1.0,
+      "field": "action_used_code_phase_rate_step_chips_per_sample2",
+      "maximum_absolute_error": 0.0,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 0.0
+    },
+    {
+      "correlation": null,
+      "dtype": "float64",
+      "exact_bit_match_count": 418572,
+      "exact_bit_match_ratio": 1.0,
+      "field": "action_used_carrier_phase_rate_step_rad_per_sample2",
+      "maximum_absolute_error": 0.0,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 0.0
+    },
+    {
+      "correlation": 0.9822671271406518,
+      "dtype": "float64",
+      "exact_bit_match_count": 136869,
+      "exact_bit_match_ratio": 0.3269903385797426,
+      "field": "action_used_dll_filter_output_chips_s",
+      "maximum_absolute_error": 0.509907677769661,
+      "median_absolute_error": 1.5497207641601562e-06,
+      "p99_9_absolute_error": 0.2424950636029255
+    },
+    {
+      "correlation": 0.9998828992011318,
+      "dtype": "float64",
+      "exact_bit_match_count": 262269,
+      "exact_bit_match_ratio": 0.626580373269115,
+      "field": "action_used_pll_fll_filter_output_hz",
+      "maximum_absolute_error": 388.0777893066406,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 178.55392041015628
+    },
+    {
+      "correlation": 0.9295629811373816,
+      "dtype": "float64",
+      "exact_bit_match_count": 96114,
+      "exact_bit_match_ratio": 0.22962357730569652,
+      "field": "action_used_carrier_phase_accumulator_rad",
+      "maximum_absolute_error": 318557.49631329434,
+      "median_absolute_error": 1.1298172491951846,
+      "p99_9_absolute_error": 318557.4958319198
+    },
+    {
+      "correlation": 0.9967476685058536,
+      "dtype": "float64",
+      "exact_bit_match_count": 134833,
+      "exact_bit_match_ratio": 0.3221261813977046,
+      "field": "action_used_residual_code_phase_samples",
+      "maximum_absolute_error": 0.9412036829198769,
+      "median_absolute_error": 8.073440767475404e-06,
+      "p99_9_absolute_error": 0.3047907272141272
+    },
+    {
+      "correlation": 1.0,
+      "dtype": "uint64",
+      "exact_bit_match_count": 418572,
+      "exact_bit_match_ratio": 1.0,
+      "field": "action_used_interval_length_samples",
+      "maximum_absolute_error": 0.0,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 0.0
+    },
+    {
+      "correlation": 0.9999393500079742,
+      "dtype": "float64",
+      "exact_bit_match_count": 136790,
+      "exact_bit_match_ratio": 0.3268016016360387,
+      "field": "action_next_code_nco_rate_chips_s",
+      "maximum_absolute_error": 0.4196146276080981,
+      "median_absolute_error": 1.5497207641601562e-06,
+      "p99_9_absolute_error": 0.16342570674792697
+    },
+    {
+      "correlation": 0.999882984957124,
+      "dtype": "float64",
+      "exact_bit_match_count": 262278,
+      "exact_bit_match_ratio": 0.6266018749462459,
+      "field": "action_next_carrier_doppler_hz",
+      "maximum_absolute_error": 187.735107421875,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 178.55113012695313
+    },
+    {
+      "correlation": 0.9887319821343653,
+      "dtype": "float64",
+      "exact_bit_match_count": 134833,
+      "exact_bit_match_ratio": 0.3221261813977046,
+      "field": "action_next_residual_code_phase_chips",
+      "maximum_absolute_error": 0.040919535858471745,
+      "median_absolute_error": 3.303532018564259e-07,
+      "p99_9_absolute_error": 0.03879519362611915
+    },
+    {
+      "correlation": 0.9052305349232262,
+      "dtype": "float64",
+      "exact_bit_match_count": 162632,
+      "exact_bit_match_ratio": 0.3885400839043223,
+      "field": "action_next_residual_carrier_phase_rad",
+      "maximum_absolute_error": 6.280496072780807,
+      "median_absolute_error": 1.1444091796875e-05,
+      "p99_9_absolute_error": 5.740180262684834
+    },
+    {
+      "correlation": 0.9999393500079715,
+      "dtype": "float64",
+      "exact_bit_match_count": 136790,
+      "exact_bit_match_ratio": 0.3268016016360387,
+      "field": "action_next_code_phase_step_chips_per_sample",
+      "maximum_absolute_error": 1.678458510373515e-08,
+      "median_absolute_error": 6.198513924360327e-14,
+      "p99_9_absolute_error": 6.5370282672022895e-09
+    },
+    {
+      "correlation": 0.9998829849571237,
+      "dtype": "float64",
+      "exact_bit_match_count": 262278,
+      "exact_bit_match_ratio": 0.6266018749462459,
+      "field": "action_next_carrier_phase_step_rad_per_sample",
+      "maximum_absolute_error": 4.71829787437964e-05,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 4.487479349575938e-05
+    },
+    {
+      "correlation": null,
+      "dtype": "float64",
+      "exact_bit_match_count": 418572,
+      "exact_bit_match_ratio": 1.0,
+      "field": "action_next_code_phase_rate_step_chips_per_sample2",
+      "maximum_absolute_error": 0.0,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 0.0
+    },
+    {
+      "correlation": null,
+      "dtype": "float64",
+      "exact_bit_match_count": 418572,
+      "exact_bit_match_ratio": 1.0,
+      "field": "action_next_carrier_phase_rate_step_rad_per_sample2",
+      "maximum_absolute_error": 0.0,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 0.0
+    },
+    {
+      "correlation": 0.9822680036195767,
+      "dtype": "float64",
+      "exact_bit_match_count": 136869,
+      "exact_bit_match_ratio": 0.3269903385797426,
+      "field": "action_next_dll_filter_output_chips_s",
+      "maximum_absolute_error": 0.509907677769661,
+      "median_absolute_error": 1.5497207641601562e-06,
+      "p99_9_absolute_error": 0.2429173894524683
+    },
+    {
+      "correlation": 0.999882984957124,
+      "dtype": "float64",
+      "exact_bit_match_count": 262278,
+      "exact_bit_match_ratio": 0.6266018749462459,
+      "field": "action_next_pll_fll_filter_output_hz",
+      "maximum_absolute_error": 187.735107421875,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 178.55113012695313
+    },
+    {
+      "correlation": 0.9295638612478904,
+      "dtype": "float64",
+      "exact_bit_match_count": 96117,
+      "exact_bit_match_ratio": 0.22963074453140678,
+      "field": "action_next_carrier_phase_accumulator_rad",
+      "maximum_absolute_error": 318557.49641035585,
+      "median_absolute_error": 1.1298172491951846,
+      "p99_9_absolute_error": 318557.4958319198
+    },
+    {
+      "correlation": 0.9887319537963167,
+      "dtype": "float64",
+      "exact_bit_match_count": 134833,
+      "exact_bit_match_ratio": 0.3221261813977046,
+      "field": "action_next_residual_code_phase_samples",
+      "maximum_absolute_error": 0.999987885934388,
+      "median_absolute_error": 8.073147910181433e-06,
+      "p99_9_absolute_error": 0.9480740961645118
+    },
+    {
+      "correlation": 0.9682226918591695,
+      "dtype": "uint64",
+      "exact_bit_match_count": 417880,
+      "exact_bit_match_ratio": 0.998346759936164,
+      "field": "action_next_interval_length_samples",
+      "maximum_absolute_error": 1.0,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 1.0
+    },
+    {
+      "correlation": null,
+      "dtype": "uint8",
+      "exact_bit_match_count": 418572,
+      "exact_bit_match_ratio": 1.0,
+      "field": "valid_tracking",
+      "maximum_absolute_error": 0.0,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 0.0
+    },
+    {
+      "correlation": 0.5666540371017448,
+      "dtype": "uint8",
+      "exact_bit_match_count": 398710,
+      "exact_bit_match_ratio": 0.9525481876475254,
+      "field": "valid_lock",
+      "maximum_absolute_error": 1.0,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 1.0
+    },
+    {
+      "correlation": 0.9512001643986713,
+      "dtype": "uint8",
+      "exact_bit_match_count": 417158,
+      "exact_bit_match_ratio": 0.9966218476152251,
+      "field": "data_symbol_boundary",
+      "maximum_absolute_error": 1.0,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 1.0
+    },
+    {
+      "correlation": null,
+      "dtype": "uint8",
+      "exact_bit_match_count": 418572,
+      "exact_bit_match_ratio": 1.0,
+      "field": "loop_update_boundary",
+      "maximum_absolute_error": 0.0,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 0.0
+    },
+    {
+      "correlation": null,
+      "dtype": "uint8",
+      "exact_bit_match_count": 418572,
+      "exact_bit_match_ratio": 1.0,
+      "field": "navigation_bit_wipeoff_applied",
+      "maximum_absolute_error": 0.0,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 0.0
+    },
+    {
+      "correlation": 0.8687767794137212,
+      "dtype": "uint8",
+      "exact_bit_match_count": 396384,
+      "exact_bit_match_ratio": 0.9469911986468278,
+      "field": "pull_in_transitory",
+      "maximum_absolute_error": 1.0,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 1.0
+    },
+    {
+      "correlation": 0.8517134567803802,
+      "dtype": "uint8",
+      "exact_bit_match_count": 390460,
+      "exact_bit_match_ratio": 0.9328383169442772,
+      "field": "receiver_state",
+      "maximum_absolute_error": 2.0,
+      "median_absolute_error": 0.0,
+      "p99_9_absolute_error": 2.0
+    }
+  ],
+  "first_physical_divergence_position": {
+    "dataset": "TEXBAT.cleanStatic",
+    "prn": 6,
+    "raw_interval_end_sample": 1016044,
+    "raw_interval_start_sample": 991044
+  },
+  "interpretation": "Whole-file hash differences are not just channel/file metadata. Identical PRN/raw intervals frequently carry different correlator taps and loop state after acquisition starts moved by integer-millisecond epochs.",
+  "rep1_canonicalized_semantic_sha256": "2de0f5abd81fa5ed9fca30ec60b5d4280e094a8a081f0965c2b8acca07f21f75",
+  "rep1_only_prns": [
+    17
+  ],
+  "rep1_prn_set": [
+    3,
+    6,
+    7,
+    10,
+    13,
+    16,
+    17,
+    19,
+    20,
+    23,
+    30
+  ],
+  "rep1_prn_summary": {
+    "10": {
+      "channels": [
+        8
+      ],
+      "first_raw_interval_start_sample": 7259892,
+      "last_raw_interval_end_sample": 1124959439,
+      "record_count": 44708
+    },
+    "13": {
+      "channels": [
+        4
+      ],
+      "first_raw_interval_start_sample": 2018342,
+      "last_raw_interval_end_sample": 1124967029,
+      "record_count": 44918
+    },
+    "16": {
+      "channels": [
+        10
+      ],
+      "first_raw_interval_start_sample": 2030083,
+      "last_raw_interval_end_sample": 1124957081,
+      "record_count": 44917
+    },
+    "17": {
+      "channels": [
+        1
+      ],
+      "first_raw_interval_start_sample": 142316430,
+      "last_raw_interval_end_sample": 541341096,
+      "record_count": 15961
+    },
+    "19": {
+      "channels": [
+        0
+      ],
+      "first_raw_interval_start_sample": 2089879,
+      "last_raw_interval_end_sample": 1124963011,
+      "record_count": 44915
+    },
+    "20": {
+      "channels": [
+        7
+      ],
+      "first_raw_interval_start_sample": 61081256,
+      "last_raw_interval_end_sample": 1124958261,
+      "record_count": 42503
+    },
+    "23": {
+      "channels": [
+        9
+      ],
+      "first_raw_interval_start_sample": 3065036,
+      "last_raw_interval_end_sample": 1124965343,
+      "record_count": 44876
+    },
+    "3": {
+      "channels": [
+        2
+      ],
+      "first_raw_interval_start_sample": 1014233,
+      "last_raw_interval_end_sample": 1124963682,
+      "record_count": 44958
+    },
+    "30": {
+      "channels": [
+        3
+      ],
+      "first_raw_interval_start_sample": 619714885,
+      "last_raw_interval_end_sample": 1124965952,
+      "record_count": 20210
+    },
+    "6": {
+      "channels": [
+        5
+      ],
+      "first_raw_interval_start_sample": 991044,
+      "last_raw_interval_end_sample": 1124966415,
+      "record_count": 44959
+    },
+    "7": {
+      "channels": [
+        6
+      ],
+      "first_raw_interval_start_sample": 1006440,
+      "last_raw_interval_end_sample": 1124955115,
+      "record_count": 44958
+    }
+  },
+  "rep1_row_count": 437883,
+  "rep2_canonicalized_semantic_sha256": "49474f639555cda225e24cd0ddd9b2ab4b486de8703895085715279fcafdaf20",
+  "rep2_only_prns": [
+    24
+  ],
+  "rep2_prn_set": [
+    3,
+    6,
+    7,
+    10,
+    13,
+    16,
+    19,
+    20,
+    23,
+    24,
+    30
+  ],
+  "rep2_prn_summary": {
+    "10": {
+      "channels": [
+        3
+      ],
+      "first_raw_interval_start_sample": 18834887,
+      "last_raw_interval_end_sample": 1124959439,
+      "record_count": 44245
+    },
+    "13": {
+      "channels": [
+        8
+      ],
+      "first_raw_interval_start_sample": 2068342,
+      "last_raw_interval_end_sample": 1124967029,
+      "record_count": 44916
+    },
+    "16": {
+      "channels": [
+        1
+      ],
+      "first_raw_interval_start_sample": 2030083,
+      "last_raw_interval_end_sample": 1124957081,
+      "record_count": 44917
+    },
+    "19": {
+      "channels": [
+        0
+      ],
+      "first_raw_interval_start_sample": 2064879,
+      "last_raw_interval_end_sample": 1124938011,
+      "record_count": 44915
+    },
+    "20": {
+      "channels": [
+        9
+      ],
+      "first_raw_interval_start_sample": 39806215,
+      "last_raw_interval_end_sample": 1124958261,
+      "record_count": 43406
+    },
+    "23": {
+      "channels": [
+        10
+      ],
+      "first_raw_interval_start_sample": 3090036,
+      "last_raw_interval_end_sample": 1124965343,
+      "record_count": 44875
+    },
+    "24": {
+      "channels": [
+        4
+      ],
+      "first_raw_interval_start_sample": 1106600165,
+      "last_raw_interval_end_sample": 1124950140,
+      "record_count": 734
+    },
+    "3": {
+      "channels": [
+        2
+      ],
+      "first_raw_interval_start_sample": 989233,
+      "last_raw_interval_end_sample": 1124963682,
+      "record_count": 44959
+    },
+    "30": {
+      "channels": [
+        7
+      ],
+      "first_raw_interval_start_sample": 322489257,
+      "last_raw_interval_end_sample": 1124015950,
+      "record_count": 32061
+    },
+    "6": {
+      "channels": [
+        5
+      ],
+      "first_raw_interval_start_sample": 991044,
+      "last_raw_interval_end_sample": 1124941415,
+      "record_count": 44958
+    },
+    "7": {
+      "channels": [
+        6
+      ],
+      "first_raw_interval_start_sample": 1006440,
+      "last_raw_interval_end_sample": 1124955115,
+      "record_count": 44958
+    }
+  },
+  "rep2_row_count": 434944,
+  "schema": "gnss-doppler-lab.trace-r2a-root-cause-audit.v1"
+}
