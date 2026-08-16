@@ -12,9 +12,11 @@
   "durable_test_runs": [
     "20260816T165417Z-r2e-artifact-verifier",
     "20260816T165417Z-r2e-focused-tests",
-    "20260816T165417Z-r2e-parent-verifiers"
+    "20260816T165417Z-r2e-parent-verifiers",
+    "20260816T165540Z-r2e-fresh-clone-verifier",
+    "20260816T165643Z-r2e-artifact-verifier-final"
   ],
   "focused_test_count": 58,
   "schema": "gnss-doppler-lab.trace-r2e-test-results.v1",
-  "status": "IN_PROGRESS"
+  "status": "PASS"
 }
