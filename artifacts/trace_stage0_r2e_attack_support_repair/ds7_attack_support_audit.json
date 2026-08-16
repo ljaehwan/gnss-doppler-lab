@@ -1,142 +1,187 @@
 {
-  "independent_receiver_evidence": {
-    "covers_required_attack_window": true,
-    "maximum_track_end_s": 270.54110244,
-    "tracking_summary_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/tracking_summary.csv",
-    "tracking_summary_sha256": "a7c58bc8b352cf541a5027495d2f3b3c157be36b684e0760634ba8c6b90c0c5e",
+  "failure_label_if_any": null,
+  "frozen_contract": {
+    "block_s": 0.5,
+    "cn0_min_db_hz": 28.0,
+    "lock_min": 0.85,
+    "minimum_prns": 4,
+    "post_onset_required": true
+  },
+  "frozen_support": {
+    "onset_s": 110.0,
+    "post_onset_four_prn_block_count": 322,
+    "pre_onset_four_prn_block_count": 30,
+    "selected_pair_count": 1565411,
+    "time_end_s": 270.5407556,
+    "time_start_s": 95.0211458,
+    "unique_prn_count": 9,
     "unique_prns": [
       3,
       6,
       7,
-      8,
       10,
-      11,
       13,
       16,
       19,
       20,
-      23,
-      25,
-      29,
-      30,
-      32
-    ]
-  },
-  "parent_mapping": {
-    "fixed_channel_prn_map": {
-      "0": 19,
-      "1": 30,
-      "10": 17,
-      "2": 10,
-      "3": 3,
-      "4": 8,
-      "5": 16,
-      "6": 6,
-      "7": 7,
-      "8": 13,
-      "9": 23
-    },
-    "handoff": "texbat_ds3.csv",
-    "handoff_sha256": "1b630895bcaf0039d7d6764710e4c900b599cf6e2e4da917dc990c63b63b6400",
-    "source_skip_s": 90.0
-  },
-  "parent_selected_support": {
-    "onset_s": 110.0,
-    "pair_count": 40,
-    "post_onset_four_prn_block_count": 0,
-    "time_end_s": 95.045354,
-    "time_start_s": 95.0218402,
-    "unique_prns": [
-      6,
-      8,
-      30
+      23
     ],
-    "valid_four_prn_block_count": 0
+    "valid_four_prn_block_count": 352
+  },
+  "parent_failure_audit": {
+    "independent_receiver_evidence": {
+      "covers_required_attack_window": true,
+      "maximum_track_end_s": 270.54110244,
+      "tracking_summary_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/tracking_summary.csv",
+      "tracking_summary_sha256": "a7c58bc8b352cf541a5027495d2f3b3c157be36b684e0760634ba8c6b90c0c5e",
+      "unique_prns": [
+        3,
+        6,
+        7,
+        8,
+        10,
+        11,
+        13,
+        16,
+        19,
+        20,
+        23,
+        25,
+        29,
+        30,
+        32
+      ]
+    },
+    "parent_mapping": {
+      "fixed_channel_prn_map": {
+        "0": 19,
+        "1": 30,
+        "10": 17,
+        "2": 10,
+        "3": 3,
+        "4": 8,
+        "5": 16,
+        "6": 6,
+        "7": 7,
+        "8": 13,
+        "9": 23
+      },
+      "handoff": "texbat_ds3.csv",
+      "handoff_sha256": "1b630895bcaf0039d7d6764710e4c900b599cf6e2e4da917dc990c63b63b6400",
+      "source_skip_s": 90.0
+    },
+    "parent_selected_support": {
+      "onset_s": 110.0,
+      "pair_count": 40,
+      "post_onset_four_prn_block_count": 0,
+      "time_end_s": 95.045354,
+      "time_start_s": 95.0218402,
+      "unique_prns": [
+        6,
+        8,
+        30
+      ],
+      "valid_four_prn_block_count": 0
+    },
+    "performance_claimed": false,
+    "physical_native_files": [
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_0.bin",
+        "raw_start_max": 2775002340,
+        "raw_start_min": 2375002838,
+        "record_count": 16001,
+        "sha256": "4a00d1ec8383a8eba4b3f8cc6dc09fe54a3061fcacff51ae6cecb78c44f6d5c1"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_1.bin",
+        "raw_start_max": 2774986339,
+        "raw_start_min": 2375010683,
+        "record_count": 16000,
+        "sha256": "f0f0f756333646cb560c8d030594429444c0ac040fa96742b23d08e3e8dee8e2"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_10.bin",
+        "raw_start_max": null,
+        "raw_start_min": null,
+        "record_count": 0,
+        "sha256": "1a79c4fe150a5b42bce82dedb867e98029b44ba361925089110be91fbe6da86b"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_2.bin",
+        "raw_start_max": 2775000747,
+        "raw_start_min": 2375000915,
+        "record_count": 16001,
+        "sha256": "ea00f34a751f49390b51b0b3f17cdcb2e415c61654b2306152743b1d18b53bc5"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_3.bin",
+        "raw_start_max": 2775004974,
+        "raw_start_min": 2375005052,
+        "record_count": 16001,
+        "sha256": "8112d3138733883642907f4889357bf206f5a6a0b470bcf5e3439bc6398330c6"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_4.bin",
+        "raw_start_max": 2775020657,
+        "raw_start_min": 2375021006,
+        "record_count": 16001,
+        "sha256": "26180ed06485d4e988d0fac8be01e3acb641080f3f1f23802f34fa1589d82f91"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_5.bin",
+        "raw_start_max": 2774978168,
+        "raw_start_min": 2375001390,
+        "record_count": 16000,
+        "sha256": "8fff98c93e497824800ba1d300ce836f3e188d41cf21e9f443a8cc850ae50f15"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_6.bin",
+        "raw_start_max": 2774983822,
+        "raw_start_min": 2375008850,
+        "record_count": 16000,
+        "sha256": "a3822324dab77c3ff478e4d9d4b32a5e6a8de09939002c13bdb1673873581dd4"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_7.bin",
+        "raw_start_max": 2775020140,
+        "raw_start_min": 2375020560,
+        "record_count": 16001,
+        "sha256": "2812b4d0b076455a9c1e980acbc24920e8c309bfddfef8d2f6bf167a5a80da9c"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_8.bin",
+        "raw_start_max": 2775007039,
+        "raw_start_min": 2375007504,
+        "record_count": 16001,
+        "sha256": "5a53adc42b18559a608b6fc43362e2340b8af9e145866eae681a55309acc243f"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_9.bin",
+        "raw_start_max": 2774982817,
+        "raw_start_min": 2375007705,
+        "record_count": 16000,
+        "sha256": "89eacd30be93426cbbe3b2dd71bd3ff978777ff71d523160cf5e144c3266560a"
+      }
+    ],
+    "repair_is_handoff_only": true,
+    "root_cause": "TEXBAT.DS7 raw IQ has independently demonstrated receiver tracking through the frozen attack window, but R2d reused a different scenario's handoff state. The cross-scenario state produced physical rows without adequate frozen quality/common support.",
+    "scenario": "TEXBAT.DS7",
+    "schema": "gnss-doppler-lab.trace-r2e-attack-support-audit.v1",
+    "status": "FAILURE_CONFIRMED_REPAIRABLE_INPUT_EXISTS",
+    "trace_scores_read_or_computed": false
   },
   "performance_claimed": false,
-  "physical_native_files": [
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_0.bin",
-      "raw_start_max": 2775002340,
-      "raw_start_min": 2375002838,
-      "record_count": 16001,
-      "sha256": "4a00d1ec8383a8eba4b3f8cc6dc09fe54a3061fcacff51ae6cecb78c44f6d5c1"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_1.bin",
-      "raw_start_max": 2774986339,
-      "raw_start_min": 2375010683,
-      "record_count": 16000,
-      "sha256": "f0f0f756333646cb560c8d030594429444c0ac040fa96742b23d08e3e8dee8e2"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_10.bin",
-      "raw_start_max": null,
-      "raw_start_min": null,
-      "record_count": 0,
-      "sha256": "1a79c4fe150a5b42bce82dedb867e98029b44ba361925089110be91fbe6da86b"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_2.bin",
-      "raw_start_max": 2775000747,
-      "raw_start_min": 2375000915,
-      "record_count": 16001,
-      "sha256": "ea00f34a751f49390b51b0b3f17cdcb2e415c61654b2306152743b1d18b53bc5"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_3.bin",
-      "raw_start_max": 2775004974,
-      "raw_start_min": 2375005052,
-      "record_count": 16001,
-      "sha256": "8112d3138733883642907f4889357bf206f5a6a0b470bcf5e3439bc6398330c6"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_4.bin",
-      "raw_start_max": 2775020657,
-      "raw_start_min": 2375021006,
-      "record_count": 16001,
-      "sha256": "26180ed06485d4e988d0fac8be01e3acb641080f3f1f23802f34fa1589d82f91"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_5.bin",
-      "raw_start_max": 2774978168,
-      "raw_start_min": 2375001390,
-      "record_count": 16000,
-      "sha256": "8fff98c93e497824800ba1d300ce836f3e188d41cf21e9f443a8cc850ae50f15"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_6.bin",
-      "raw_start_max": 2774983822,
-      "raw_start_min": 2375008850,
-      "record_count": 16000,
-      "sha256": "a3822324dab77c3ff478e4d9d4b32a5e6a8de09939002c13bdb1673873581dd4"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_7.bin",
-      "raw_start_max": 2775020140,
-      "raw_start_min": 2375020560,
-      "record_count": 16001,
-      "sha256": "2812b4d0b076455a9c1e980acbc24920e8c309bfddfef8d2f6bf167a5a80da9c"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_8.bin",
-      "raw_start_max": 2775007039,
-      "raw_start_min": 2375007504,
-      "record_count": 16001,
-      "sha256": "5a53adc42b18559a608b6fc43362e2340b8af9e145866eae681a55309acc243f"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/texbat_ds7/rep1/trace_native_1ms_ch_9.bin",
-      "raw_start_max": 2774982817,
-      "raw_start_min": 2375007705,
-      "record_count": 16000,
-      "sha256": "89eacd30be93426cbbe3b2dd71bd3ff978777ff71d523160cf5e144c3266560a"
-    }
-  ],
-  "repair_is_handoff_only": true,
-  "root_cause": "TEXBAT.DS7 raw IQ has independently demonstrated receiver tracking through the frozen attack window, but R2d reused a different scenario's handoff state. The cross-scenario state produced physical rows without adequate frozen quality/common support.",
+  "repair": {
+    "handoff_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/handoffs/texbat_ds7.csv",
+    "handoff_sha256": "1569f15c7e5824e93f4865413cc807701ea29fd0aceab4267d7acebf2a67a0f1",
+    "mapping": "scenario-specific preregistered pre-onset target-aligned handoff",
+    "receiver_config_sha256": "4b32b4ced357a767443f182f1da70143d34575dfb55338b5a59ed99ba5f138e5",
+    "receiver_executable_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+    "receiver_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/texbat_ds7/rep1/manifest.json",
+    "receiver_manifest_sha256": "27ff8eed2251580bfd9284fa625f91a852dfbb7d49378e970f20a9ae6256509b"
+  },
   "scenario": "TEXBAT.DS7",
-  "schema": "gnss-doppler-lab.trace-r2e-attack-support-audit.v1",
-  "status": "FAILURE_CONFIRMED_REPAIRABLE_INPUT_EXISTS",
+  "schema": "gnss-doppler-lab.trace-r2e-attack-support-audit.v2",
+  "status": "PASS",
   "trace_scores_read_or_computed": false
 }

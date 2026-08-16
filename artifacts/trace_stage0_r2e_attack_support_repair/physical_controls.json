@@ -1,0 +1,142 @@
+{
+  "OAKBAT": {
+    "cn0_decrease": {
+      "alarm_ratio": 0.0,
+      "basis": "metadata-only limited control",
+      "limited": true,
+      "passed": true
+    },
+    "common_gain_scaling": {
+      "alarm_ratio": 0.0,
+      "basis": "Prompt normalization identity",
+      "passed": true
+    },
+    "empirical_clean_noise_0.5x": {
+      "alarm_ratio": 0.0,
+      "basis": "resampled empirical clean complex residual; no synthetic normalized noise",
+      "passed": true
+    },
+    "empirical_clean_noise_1x": {
+      "alarm_ratio": 0.0,
+      "basis": "resampled empirical clean complex residual; no synthetic normalized noise",
+      "passed": true
+    },
+    "empirical_clean_noise_2x": {
+      "alarm_ratio": 0.9883040935672515,
+      "basis": "resampled empirical clean complex residual; no synthetic normalized noise",
+      "passed": false
+    },
+    "global_carrier_phase_rotation": {
+      "alarm_ratio": 0.0,
+      "basis": "Prompt normalization identity",
+      "passed": true
+    },
+    "independent_multipath_like_distortion": {
+      "passed": false,
+      "reason": "No authenticated physical multipath raw-IQ injection is available; no arbitrary normalized-tap noise was substituted.",
+      "status": "UNAVAILABLE_PHYSICAL_RAW_IQ_CONTROL"
+    },
+    "navigation_bit_boundary": {
+      "alarm_ratio": 0.0,
+      "basis": "sign is a common phase rotation",
+      "limited": true,
+      "passed": true
+    },
+    "one_ms_jitter_normal_loop_action": {
+      "alarm_ratio": 0.0,
+      "basis": "actual receiver dt/action variation retained in holdout",
+      "dt_max_s": 0.0010002,
+      "dt_min_s": 0.0009998,
+      "passed": true
+    },
+    "prn_drop_add": {
+      "basis": "fixed >=4 unique-PRN support and permutation-invariant median; adapter tests cover count/permutation",
+      "passed": true,
+      "structural": true
+    },
+    "prompt_amplitude_change": {
+      "alarm_ratio": 0.0,
+      "basis": "Prompt normalization identity",
+      "passed": true
+    },
+    "receiver_clock_like_drift": {
+      "alarm_ratio": 0.0,
+      "basis": "common carrier phase removed by Prompt reference",
+      "passed": true
+    },
+    "single_prn_disturbance": {
+      "alarm_ratio": 0.9883040935672515,
+      "passed": false
+    }
+  },
+  "TEXBAT": {
+    "cn0_decrease": {
+      "alarm_ratio": 0.32748538011695905,
+      "basis": "metadata-only limited control",
+      "limited": true,
+      "passed": false
+    },
+    "common_gain_scaling": {
+      "alarm_ratio": 0.32748538011695905,
+      "basis": "Prompt normalization identity",
+      "passed": false
+    },
+    "empirical_clean_noise_0.5x": {
+      "alarm_ratio": 0.0,
+      "basis": "resampled empirical clean complex residual; no synthetic normalized noise",
+      "passed": true
+    },
+    "empirical_clean_noise_1x": {
+      "alarm_ratio": 0.10526315789473684,
+      "basis": "resampled empirical clean complex residual; no synthetic normalized noise",
+      "passed": false
+    },
+    "empirical_clean_noise_2x": {
+      "alarm_ratio": 0.9883040935672515,
+      "basis": "resampled empirical clean complex residual; no synthetic normalized noise",
+      "passed": false
+    },
+    "global_carrier_phase_rotation": {
+      "alarm_ratio": 0.32748538011695905,
+      "basis": "Prompt normalization identity",
+      "passed": false
+    },
+    "independent_multipath_like_distortion": {
+      "passed": false,
+      "reason": "No authenticated physical multipath raw-IQ injection is available; no arbitrary normalized-tap noise was substituted.",
+      "status": "UNAVAILABLE_PHYSICAL_RAW_IQ_CONTROL"
+    },
+    "navigation_bit_boundary": {
+      "alarm_ratio": 0.32748538011695905,
+      "basis": "sign is a common phase rotation",
+      "limited": true,
+      "passed": false
+    },
+    "one_ms_jitter_normal_loop_action": {
+      "alarm_ratio": 0.32748538011695905,
+      "basis": "actual receiver dt/action variation retained in holdout",
+      "dt_max_s": 0.00100004,
+      "dt_min_s": 0.00099996,
+      "passed": false
+    },
+    "prn_drop_add": {
+      "basis": "fixed >=4 unique-PRN support and permutation-invariant median; adapter tests cover count/permutation",
+      "passed": true,
+      "structural": true
+    },
+    "prompt_amplitude_change": {
+      "alarm_ratio": 0.32748538011695905,
+      "basis": "Prompt normalization identity",
+      "passed": false
+    },
+    "receiver_clock_like_drift": {
+      "alarm_ratio": 0.32748538011695905,
+      "basis": "common carrier phase removed by Prompt reference",
+      "passed": false
+    },
+    "single_prn_disturbance": {
+      "alarm_ratio": 0.9883040935672515,
+      "passed": false
+    }
+  }
+}

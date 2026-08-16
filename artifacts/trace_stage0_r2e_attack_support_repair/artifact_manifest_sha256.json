@@ -1,0 +1,244 @@
+{
+  "excluded_self_referential_or_mutable_provenance_files": {
+    "artifact_manifest_sha256.json": "self-referential",
+    "runner_runs.json": "updated after verification and push",
+    "test_results.json": "updated after verification",
+    "verifier_output.json": "written by verifier after manifest finalization"
+  },
+  "files": {
+    "README.md": {
+      "byte_size": 726,
+      "sha256": "0b50194d2d90f42d14636bb0a0b171333fe851877bc1a5168072a0082d923cfe"
+    },
+    "ablation_metrics.csv": {
+      "byte_size": 6034,
+      "sha256": "bc3ea28c79fe243753ed63debe6b5d487a6d5975bcd2839102ceaa0f651d9dbe"
+    },
+    "action_mapping_validation.json": {
+      "byte_size": 24923,
+      "sha256": "93a76db903a585055107064db74ba0bdce0a839c4e932fe3f396463e4c959e0b"
+    },
+    "action_shuffle_metrics.json": {
+      "byte_size": 2171,
+      "sha256": "26f0d96ab2aa8027d6a4b3749c138167487dc58080a2e7472f45e10414583b6f"
+    },
+    "bootstrap_intervals.csv": {
+      "byte_size": 1245,
+      "sha256": "bf32bd51176a9eabfd2e9bcc9614068331474606b2f3d87814c4f9cfb3342a69"
+    },
+    "clean_split_audit.json": {
+      "byte_size": 5773,
+      "sha256": "7785ecca60ab792230b13971b85dae8d712cb1539b90f8fcafbd1153c898f434"
+    },
+    "config.json": {
+      "byte_size": 7027,
+      "sha256": "53146ff96f72def2f68e0d6eeb5e6eae3d4211d3b791808c8fb0fa1bd3d0c2de"
+    },
+    "diagnosis.json": {
+      "byte_size": 2167,
+      "sha256": "e5dcd9828a0245adcc2ce6ca758462fc16f9fbde502904dc7f7973497facf9d9"
+    },
+    "ds7_attack_support_audit.json": {
+      "byte_size": 7662,
+      "sha256": "76dafc03d3e52f7f858d70681c5220b883c6b508912ed6cbf38c70ec4e54cb90"
+    },
+    "external_static_fpr.csv": {
+      "byte_size": 186,
+      "sha256": "fcfb286fdfb32523a1ad6711a0bf7a49b72bf72c59e5c216463a8c1501915efd"
+    },
+    "final_verdict.json": {
+      "byte_size": 1854,
+      "sha256": "fa7fd77a10e5a42ad6bfdda373429db62983d2dc71507eb8bf1aaac2c38ee1a3"
+    },
+    "frozen_configs/oakbat_os3.conf": {
+      "byte_size": 2569,
+      "sha256": "43a5ceacae31ea9cbe963607fcece28f9c8ac0d29a1a6a5e479a172fc942a63a"
+    },
+    "frozen_configs/phase_b/oakbat_cleanstatic.conf": {
+      "byte_size": 2612,
+      "sha256": "e5f5553ed0b4dbdcf4b549ec38bc98aaf691b40554f5420932abb13ff7c76381"
+    },
+    "frozen_configs/phase_b/oakbat_os3.conf": {
+      "byte_size": 2561,
+      "sha256": "adfe40e19ab908c2d6371f9d13de28204753e08253cdc6d3ed8f25cf6d28043d"
+    },
+    "frozen_configs/phase_b/oakbat_os4.conf": {
+      "byte_size": 2561,
+      "sha256": "f8cd27d7887af9151661a7e52191f8aaf7fa01da43c740e0193ac5623901a710"
+    },
+    "frozen_configs/phase_b/texbat_cleanstatic.conf": {
+      "byte_size": 2568,
+      "sha256": "f472a0e37677b5c6d0a11ebba594ce30565b43375fe2965b410c2cc5e475dafd"
+    },
+    "frozen_configs/phase_b/texbat_ds3.conf": {
+      "byte_size": 2554,
+      "sha256": "ab63bce45dca6b2d22f0f37c0377264c0d5353744b7e41bcf4735b3c31e0f9ca"
+    },
+    "frozen_configs/phase_b/texbat_ds7.conf": {
+      "byte_size": 2539,
+      "sha256": "4b32b4ced357a767443f182f1da70143d34575dfb55338b5a59ed99ba5f138e5"
+    },
+    "frozen_configs/texbat_cleanstatic.conf": {
+      "byte_size": 2577,
+      "sha256": "5a4568d0e909cd7e82256f1d4d3876f7e4cfdec702d7d6508c1547d000fa2ced"
+    },
+    "frozen_configs/texbat_ds3.conf": {
+      "byte_size": 2563,
+      "sha256": "9c6b3c3bd0352a0a72171f491b08cda6c88aa393b8bd025a575486716350770f"
+    },
+    "handoff_manifest.json": {
+      "byte_size": 33560,
+      "sha256": "c47446e6fabf799f2ce15ed9a1fabadc02db10286123c12a18764b81bbfdc906"
+    },
+    "handoff_path_mirror_manifest.json": {
+      "byte_size": 3026,
+      "sha256": "a59e98a5ea1ee0b02be06a20799b6174b221af9abe8cf01cc959954646f571e7"
+    },
+    "handoffs/manifest.json": {
+      "byte_size": 33560,
+      "sha256": "c47446e6fabf799f2ce15ed9a1fabadc02db10286123c12a18764b81bbfdc906"
+    },
+    "handoffs/oakbat_cleanstatic.csv": {
+      "byte_size": 3040,
+      "sha256": "1d3c3227a9825e48ef790503d9f4d6fa89ca040a51791175e2cadc4508730b6d"
+    },
+    "handoffs/oakbat_os3.csv": {
+      "byte_size": 3038,
+      "sha256": "9a546a42775450bbe076784b737aa7d2888ae637ddeb3769ee2ee3d4ce6f064c"
+    },
+    "handoffs/oakbat_os4.csv": {
+      "byte_size": 3039,
+      "sha256": "3217b1bdf341e81e2e895a0acdd85d561f73a70936246a6ef5ec92fe23d75c13"
+    },
+    "handoffs/texbat_cleanstatic.csv": {
+      "byte_size": 2859,
+      "sha256": "6bd2b3db921ac1fa91b97ac5cb6fd7444146e07b6d02bec693cc3fc5b9f2ea88"
+    },
+    "handoffs/texbat_ds3.csv": {
+      "byte_size": 3083,
+      "sha256": "1b630895bcaf0039d7d6764710e4c900b599cf6e2e4da917dc990c63b63b6400"
+    },
+    "handoffs/texbat_ds7.csv": {
+      "byte_size": 2992,
+      "sha256": "1569f15c7e5824e93f4865413cc807701ea29fd0aceab4267d7acebf2a67a0f1"
+    },
+    "os4_attack_support_audit.json": {
+      "byte_size": 7661,
+      "sha256": "7b275e8f8b275662c0f9d371d6f9821252c21afe0aae5faffd4be9b1c89bfb52"
+    },
+    "per_epoch_scores.csv.gz": {
+      "byte_size": 271249,
+      "sha256": "886c521bd56e974dadeb2c7d8a06e06b075ecdeaece9df4d9a8cd524f440898c"
+    },
+    "per_prn_action_response.csv.gz": {
+      "byte_size": 613849,
+      "sha256": "8fc9f1c32197f541a476d3eaad0158bf27a8eb49fb165d5eae251f1b9c786151"
+    },
+    "phase_a_reproduction_metrics.json": {
+      "byte_size": 30920,
+      "sha256": "1d18092b61a536e3856e53dfa2b2633ba1f47d23f27a256f3927592ea4b19e74"
+    },
+    "phase_b_metrics.json": {
+      "byte_size": 3626,
+      "sha256": "f404bf198e71c395bfab84829f2a45f0a03066799863c46ac44f4e2ef6470c67"
+    },
+    "physical_controls.json": {
+      "byte_size": 4619,
+      "sha256": "3aaa44faca3e1ba63194a34c5bea900cc001db60e6e08a9a48c31e416160da9a"
+    },
+    "plots/oakbat_os3_score_timeline.png": {
+      "byte_size": 68484,
+      "sha256": "00821da09bae3e8fe272c064319d88feb14bf05d30ad53ffd8e2c339fb8b8eaa"
+    },
+    "plots/oakbat_os4_score_timeline.png": {
+      "byte_size": 130923,
+      "sha256": "000f6aae96a65f5e3d1b2f04eb88f7715fca1de9c82fd6cea8654f413b0e49ab"
+    },
+    "plots/rep3_rep4_semantic_reproducibility.png": {
+      "byte_size": 45514,
+      "sha256": "0a25b92048681ca3da26406da7a5ecbb26c54f0c2d79a0fadc0daf416406a3ef"
+    },
+    "plots/replay_by_replay_trace_score_comparison.png": {
+      "byte_size": 59889,
+      "sha256": "8e5b4ae9db88e7db190e7d2f969dc24b11070571d05266925b2c78f10c9412b7"
+    },
+    "plots/texbat_ds3_score_timeline.png": {
+      "byte_size": 56887,
+      "sha256": "6a8aa1a28f700dcb832c28d6ef0543fcfd8fbbe97c5de6e5be374acee97ba658"
+    },
+    "plots/texbat_ds7_score_timeline.png": {
+      "byte_size": 50517,
+      "sha256": "cf27a02d91eb6afc67ced31f7bcdcc228a7d1b5473268649e0f6a263ef5ba41c"
+    },
+    "plots/trace_r2_common_support_comparison.png": {
+      "byte_size": 27760,
+      "sha256": "0a281218bad3ca6e39d7395043dc976c629bc2e254337f5629fc7a542c9bfa7f"
+    },
+    "plots/trace_r2_physical_controls.png": {
+      "byte_size": 108997,
+      "sha256": "b64dd33a3a437a834c42eba373c4fc9be98430e88d59f8c4c3d7ed50d7750d02"
+    },
+    "preregistration.json": {
+      "byte_size": 5791,
+      "sha256": "ce152636bc68f4ce14ba495d1db2b7c83e090ff50b4b591247d4a6f3f55682e4"
+    },
+    "raw_source_binding.json": {
+      "byte_size": 3542,
+      "sha256": "d9e2ad63f2d30d47cc5e66237d6146c49b9960c7d2f0ea41c49605830b887edb"
+    },
+    "receiver_build_manifest.json": {
+      "byte_size": 1122,
+      "sha256": "9465b1d2aea9f22b3618a12c5fe761b1ea05f28e983d32c43a81bbca2bda7e4a"
+    },
+    "receiver_repair.diff": {
+      "byte_size": 47398,
+      "sha256": "81b680bfae682fa92743fca53ce30ae09790383d008841d6eae3a25407442540"
+    },
+    "rep3_rep4_reproduction_metrics.json": {
+      "byte_size": 30920,
+      "sha256": "1d18092b61a536e3856e53dfa2b2633ba1f47d23f27a256f3927592ea4b19e74"
+    },
+    "replay_inventory.json": {
+      "byte_size": 103762,
+      "sha256": "a7eedae3c5974c7329a19aef2f81d06c45eb223bf26e102cae8c40f833a787eb"
+    },
+    "scenario_metrics.csv": {
+      "byte_size": 903,
+      "sha256": "f4de94c33817e357c77aaaecab51e4a4b3151c14b5eac7cbe9c85a8b28d1657b"
+    },
+    "scientific_seal.json": {
+      "byte_size": 494,
+      "sha256": "bc23d5261a3b8b71f06dde02dfb5b547d74198e9d56d3d6cdf673c1424d6b8d8"
+    },
+    "semantic_reproduction_contract.json": {
+      "byte_size": 2278,
+      "sha256": "8da1308e7a5a6d3a7441125138eefeb24bd8f83478a4661d19b0201569b90dcd"
+    },
+    "smoke_replay_results.json": {
+      "byte_size": 30920,
+      "sha256": "1d18092b61a536e3856e53dfa2b2633ba1f47d23f27a256f3927592ea4b19e74"
+    },
+    "source_commit.json": {
+      "byte_size": 474,
+      "sha256": "02061dad76c3f38c7b3c688b93a222f9eff3b885257cdc382b68d1f28374e5d2"
+    },
+    "terminal_row_set_audit.json": {
+      "byte_size": 5814,
+      "sha256": "a3a80b73c1ab56d1d1299988a0cb05a2f177ab4dd778b302299ae7434c9f7a95"
+    },
+    "thresholds.json": {
+      "byte_size": 1795,
+      "sha256": "49108c8a35aa2abbd562ec9620de690b5bc6e1e296998187278de59ad6520e84"
+    },
+    "trace_r2_model_oakbat.npz": {
+      "byte_size": 10477,
+      "sha256": "2d67992e47b9969f185a54d671458264ab190edd38c30a3715ff61abeca76ee6"
+    },
+    "trace_r2_model_texbat.npz": {
+      "byte_size": 10431,
+      "sha256": "cf5b10f67bec0fdec2b169e010e4741e4e7074699efcc81aa6beada35b77f128"
+    }
+  },
+  "hash_algorithm": "SHA-256",
+  "schema": "gnss-doppler-lab.trace-r2e-artifact-manifest.v1"
+}

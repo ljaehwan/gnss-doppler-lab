@@ -1,0 +1,137 @@
+{
+  "attack_data_used": false,
+  "families": {
+    "OAKBAT": {
+      "attack_data_used": false,
+      "byte_overlap": false,
+      "chronological": true,
+      "clean_scenario": "OAKBAT.cleanStatic",
+      "family": "OAKBAT",
+      "family_local_model": true,
+      "guard_s": 5.0,
+      "holdout_q99_fpr": {
+        "TRACE Full": 0.0,
+        "action norm only": 0.0,
+        "complex residual norm only": 0.0,
+        "fixed complex 9-tap detector": 0.0,
+        "no-action predictor": 0.0,
+        "shuffled-action TRACE": 0.0,
+        "wrong shifted-action negative control": 0.0,
+        "zero-action counterfactual": 0.0
+      },
+      "model_bundle": "artifacts/trace_stage0_r2e_attack_support_repair/trace_r2_model_oakbat.npz",
+      "model_bundle_sha256": "2d67992e47b9969f185a54d671458264ab190edd38c30a3715ff61abeca76ee6",
+      "raw_iq_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+      "raw_iq_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "raw_sample_overlap": false,
+      "receiver_dump_manifest": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/oakbat_cleanstatic/rep1/manifest.json",
+      "receiver_dump_manifest_sha256": "45c01ebd4e28a627eb546eff98f5271eb7d1ef07d81fceb5db98a7518537b921",
+      "roles": {
+        "calibration": {
+          "ishort_byte_end_exclusive": 7699244828,
+          "ishort_byte_start_inclusive": 6549477672,
+          "pair_count": 574889,
+          "raw_sample_end_inclusive": 1924811206,
+          "raw_sample_start_inclusive": 1637369418,
+          "time_end_s": 384.9622412,
+          "time_start_s": 327.4738836
+        },
+        "covariance_validation": {
+          "ishort_byte_end_exclusive": 6349469172,
+          "ishort_byte_start_inclusive": 4749765304,
+          "pair_count": 799854,
+          "raw_sample_end_inclusive": 1587367292,
+          "raw_sample_start_inclusive": 1187441326,
+          "time_end_s": 317.4734584,
+          "time_start_s": 237.4882652
+        },
+        "holdout": {
+          "ishort_byte_end_exclusive": 9598957912,
+          "ishort_byte_start_inclusive": 7899251356,
+          "pair_count": 849853,
+          "raw_sample_end_inclusive": 2399739477,
+          "raw_sample_start_inclusive": 1974812839,
+          "time_end_s": 479.9478954,
+          "time_start_s": 394.9625678
+        },
+        "train": {
+          "ishort_byte_end_exclusive": 4549761292,
+          "ishort_byte_start_inclusive": 600421184,
+          "pair_count": 1974666,
+          "raw_sample_end_inclusive": 1137440322,
+          "raw_sample_start_inclusive": 150105296,
+          "time_end_s": 227.4880644,
+          "time_start_s": 30.0210592
+        }
+      }
+    },
+    "TEXBAT": {
+      "attack_data_used": false,
+      "byte_overlap": false,
+      "chronological": true,
+      "clean_scenario": "TEXBAT.cleanStatic",
+      "family": "TEXBAT",
+      "family_local_model": true,
+      "guard_s": 5.0,
+      "holdout_q99_fpr": {
+        "TRACE Full": 0.32748538011695905,
+        "action norm only": 0.005847953216374269,
+        "complex residual norm only": 0.07602339181286549,
+        "fixed complex 9-tap detector": 0.32748538011695905,
+        "no-action predictor": 0.32748538011695905,
+        "shuffled-action TRACE": 0.32748538011695905,
+        "wrong shifted-action negative control": 0.3216374269005848,
+        "zero-action counterfactual": 0.30994152046783624
+      },
+      "model_bundle": "artifacts/trace_stage0_r2e_attack_support_repair/trace_r2_model_texbat.npz",
+      "model_bundle_sha256": "cf5b10f67bec0fdec2b169e010e4741e4e7074699efcc81aa6beada35b77f128",
+      "raw_iq_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "raw_iq_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "raw_sample_overlap": false,
+      "receiver_dump_manifest": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/texbat_cleanstatic/rep1/manifest.json",
+      "receiver_dump_manifest_sha256": "f0561601ff80375268d760e11a44a9f3cc47ed1c169b76a33464d4ca72703f33",
+      "roles": {
+        "calibration": {
+          "ishort_byte_end_exclusive": 38509340980,
+          "ishort_byte_start_inclusive": 32758028040,
+          "pair_count": 572795,
+          "raw_sample_end_inclusive": 9627335244,
+          "raw_sample_start_inclusive": 8189507010,
+          "time_end_s": 385.09340976,
+          "time_start_s": 327.5802804
+        },
+        "covariance_validation": {
+          "ishort_byte_end_exclusive": 31758007844,
+          "ishort_byte_start_inclusive": 23756204416,
+          "pair_count": 798204,
+          "raw_sample_end_inclusive": 7939501960,
+          "raw_sample_start_inclusive": 5939051104,
+          "time_end_s": 317.5800784,
+          "time_start_s": 237.56204416
+        },
+        "holdout": {
+          "ishort_byte_end_exclusive": 48011184216,
+          "ishort_byte_start_inclusive": 39509373700,
+          "pair_count": 846034,
+          "raw_sample_end_inclusive": 12002796053,
+          "raw_sample_start_inclusive": 9877343425,
+          "time_end_s": 480.11184212,
+          "time_start_s": 395.093737
+        },
+        "train": {
+          "ishort_byte_end_exclusive": 22756199032,
+          "ishort_byte_start_inclusive": 3002122220,
+          "pair_count": 1970027,
+          "raw_sample_end_inclusive": 5689049757,
+          "raw_sample_start_inclusive": 750530555,
+          "time_end_s": 227.56199028,
+          "time_start_s": 30.0212222
+        }
+      }
+    }
+  },
+  "pre_onset_data_used": false,
+  "schema": "gnss-doppler-lab.trace-r2-clean-split-audit.v1",
+  "separate_family_models": true,
+  "status": "PASS"
+}

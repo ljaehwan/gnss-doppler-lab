@@ -1,0 +1,12 @@
+{
+  "artifact_root": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2e-attack-support-repair/artifacts/trace_stage0_r2e_attack_support_repair",
+  "durable_run_coverage_valid": true,
+  "final_verdict": "NO_GO_TRACE_PHYSICAL_HYPOTHESIS",
+  "hash_failures": [],
+  "manifest_entry_count": 58,
+  "missing_required_artifacts": [],
+  "phase_b_metrics_computed": true,
+  "schema": "gnss-doppler-lab.trace-r2e-artifact-verification.v1",
+  "scientific_seal_valid": true,
+  "status": "PASS"
+}

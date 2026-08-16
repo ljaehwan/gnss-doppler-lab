@@ -1,9 +1,20 @@
 {
-  "independent_receiver_evidence": {
-    "covers_required_attack_window": true,
-    "maximum_track_end_s": 479.948773,
-    "tracking_summary_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/q-comet-oakbat-complex9/os4/receiver/os4-complex9/tracking_summary.csv",
-    "tracking_summary_sha256": "4ff25f4c9ca1a6bc9e0c0542b227afa753c9782717aee210540615d17119b8c6",
+  "failure_label_if_any": null,
+  "frozen_contract": {
+    "block_s": 0.5,
+    "cn0_min_db_hz": 28.0,
+    "lock_min": 0.85,
+    "minimum_prns": 4,
+    "post_onset_required": true
+  },
+  "frozen_support": {
+    "onset_s": 120.0,
+    "post_onset_four_prn_block_count": 720,
+    "pre_onset_four_prn_block_count": 50,
+    "selected_pair_count": 4074487,
+    "time_end_s": 479.9479432,
+    "time_start_s": 95.0210138,
+    "unique_prn_count": 11,
     "unique_prns": [
       8,
       10,
@@ -16,124 +27,160 @@
       21,
       24,
       25
-    ]
-  },
-  "parent_mapping": {
-    "fixed_channel_prn_map": {
-      "0": 27,
-      "1": 21,
-      "10": 10,
-      "2": 11,
-      "3": 18,
-      "4": 20,
-      "5": 24,
-      "6": 25,
-      "7": 14,
-      "8": 8,
-      "9": 15
-    },
-    "handoff": "oakbat_os3.csv",
-    "handoff_sha256": "9a546a42775450bbe076784b737aa7d2888ae637ddeb3769ee2ee3d4ce6f064c",
-    "source_skip_s": 90.0
-  },
-  "parent_selected_support": {
-    "onset_s": 120.0,
-    "pair_count": 16,
-    "post_onset_four_prn_block_count": 0,
-    "time_end_s": 95.0454092,
-    "time_start_s": 95.0340172,
-    "unique_prns": [
-      10,
-      11,
-      15,
-      20
     ],
-    "valid_four_prn_block_count": 1
+    "valid_four_prn_block_count": 770
+  },
+  "parent_failure_audit": {
+    "independent_receiver_evidence": {
+      "covers_required_attack_window": true,
+      "maximum_track_end_s": 479.948773,
+      "tracking_summary_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/q-comet-oakbat-complex9/os4/receiver/os4-complex9/tracking_summary.csv",
+      "tracking_summary_sha256": "4ff25f4c9ca1a6bc9e0c0542b227afa753c9782717aee210540615d17119b8c6",
+      "unique_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        15,
+        18,
+        20,
+        21,
+        24,
+        25
+      ]
+    },
+    "parent_mapping": {
+      "fixed_channel_prn_map": {
+        "0": 27,
+        "1": 21,
+        "10": 10,
+        "2": 11,
+        "3": 18,
+        "4": 20,
+        "5": 24,
+        "6": 25,
+        "7": 14,
+        "8": 8,
+        "9": 15
+      },
+      "handoff": "oakbat_os3.csv",
+      "handoff_sha256": "9a546a42775450bbe076784b737aa7d2888ae637ddeb3769ee2ee3d4ce6f064c",
+      "source_skip_s": 90.0
+    },
+    "parent_selected_support": {
+      "onset_s": 120.0,
+      "pair_count": 16,
+      "post_onset_four_prn_block_count": 0,
+      "time_end_s": 95.0454092,
+      "time_start_s": 95.0340172,
+      "unique_prns": [
+        10,
+        11,
+        15,
+        20
+      ],
+      "valid_four_prn_block_count": 1
+    },
+    "performance_claimed": false,
+    "physical_native_files": [
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_0.bin",
+        "raw_start_max": 554998867,
+        "raw_start_min": 475003754,
+        "record_count": 16000,
+        "sha256": "0214052742f35dc0ce5e38c7e292f991c508986f24e0a97defa3199cdfde5aaa"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_1.bin",
+        "raw_start_max": 554996050,
+        "raw_start_min": 475000939,
+        "record_count": 16000,
+        "sha256": "ef83ce0ff3d252719185c12def2789a905719ef80e79709a68d80cf4143d8a17"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_10.bin",
+        "raw_start_max": 549585019,
+        "raw_start_min": 475000087,
+        "record_count": 14918,
+        "sha256": "9e2a223056479ba1cbb68c4d5456b5c3970fd4505a8b249f1cb5a08e1e2de7fd"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_2.bin",
+        "raw_start_max": 555001020,
+        "raw_start_min": 475001161,
+        "record_count": 16001,
+        "sha256": "3677fd9aa87a2801e8e66ec6bcd778ba09db951110f570687e0de3666fe1550d"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_3.bin",
+        "raw_start_max": 555000122,
+        "raw_start_min": 475004935,
+        "record_count": 16000,
+        "sha256": "00988c77f808c71bf769929a9e2e8b2d9672dfb4c92205487875b424b8350dc4"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_4.bin",
+        "raw_start_max": 554998017,
+        "raw_start_min": 475002964,
+        "record_count": 16000,
+        "sha256": "00029d822abf199feceeb23f75caa8c18ab36e7152a45b6bbc642d064f624aee"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_5.bin",
+        "raw_start_max": 554996522,
+        "raw_start_min": 475001415,
+        "record_count": 16000,
+        "sha256": "dd97312a335806c223964c5e82d03eb8f8e9514c7901813e3efb018083ceb544"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_6.bin",
+        "raw_start_max": 555001696,
+        "raw_start_min": 475001866,
+        "record_count": 16001,
+        "sha256": "4827bdef95847614a2e24489990456d2eee43329b8ce922910b63989950686f3"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_7.bin",
+        "raw_start_max": 555003931,
+        "raw_start_min": 475003989,
+        "record_count": 16001,
+        "sha256": "68716d5363520a5025f38c824ff0ceddad94c69214b2ba27aad813aa1a6e30fe"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_8.bin",
+        "raw_start_max": 554997286,
+        "raw_start_min": 475002223,
+        "record_count": 16000,
+        "sha256": "7f470be640cfe2eae1841fcb4e3fe01beaf20d7b53783cf49e7aac312611bfdb"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_9.bin",
+        "raw_start_max": 554997209,
+        "raw_start_min": 475002046,
+        "record_count": 16000,
+        "sha256": "55ac80621e767ba3eae169ee447e706c262ad0030b8bcad4a08b6134138a95d2"
+      }
+    ],
+    "repair_is_handoff_only": true,
+    "root_cause": "OAKBAT.OS4 raw IQ has independently demonstrated receiver tracking through the frozen attack window, but R2d reused a different scenario's handoff state. The cross-scenario state produced physical rows without adequate frozen quality/common support.",
+    "scenario": "OAKBAT.OS4",
+    "schema": "gnss-doppler-lab.trace-r2e-attack-support-audit.v1",
+    "status": "FAILURE_CONFIRMED_REPAIRABLE_INPUT_EXISTS",
+    "trace_scores_read_or_computed": false
   },
   "performance_claimed": false,
-  "physical_native_files": [
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_0.bin",
-      "raw_start_max": 554998867,
-      "raw_start_min": 475003754,
-      "record_count": 16000,
-      "sha256": "0214052742f35dc0ce5e38c7e292f991c508986f24e0a97defa3199cdfde5aaa"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_1.bin",
-      "raw_start_max": 554996050,
-      "raw_start_min": 475000939,
-      "record_count": 16000,
-      "sha256": "ef83ce0ff3d252719185c12def2789a905719ef80e79709a68d80cf4143d8a17"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_10.bin",
-      "raw_start_max": 549585019,
-      "raw_start_min": 475000087,
-      "record_count": 14918,
-      "sha256": "9e2a223056479ba1cbb68c4d5456b5c3970fd4505a8b249f1cb5a08e1e2de7fd"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_2.bin",
-      "raw_start_max": 555001020,
-      "raw_start_min": 475001161,
-      "record_count": 16001,
-      "sha256": "3677fd9aa87a2801e8e66ec6bcd778ba09db951110f570687e0de3666fe1550d"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_3.bin",
-      "raw_start_max": 555000122,
-      "raw_start_min": 475004935,
-      "record_count": 16000,
-      "sha256": "00988c77f808c71bf769929a9e2e8b2d9672dfb4c92205487875b424b8350dc4"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_4.bin",
-      "raw_start_max": 554998017,
-      "raw_start_min": 475002964,
-      "record_count": 16000,
-      "sha256": "00029d822abf199feceeb23f75caa8c18ab36e7152a45b6bbc642d064f624aee"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_5.bin",
-      "raw_start_max": 554996522,
-      "raw_start_min": 475001415,
-      "record_count": 16000,
-      "sha256": "dd97312a335806c223964c5e82d03eb8f8e9514c7901813e3efb018083ceb544"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_6.bin",
-      "raw_start_max": 555001696,
-      "raw_start_min": 475001866,
-      "record_count": 16001,
-      "sha256": "4827bdef95847614a2e24489990456d2eee43329b8ce922910b63989950686f3"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_7.bin",
-      "raw_start_max": 555003931,
-      "raw_start_min": 475003989,
-      "record_count": 16001,
-      "sha256": "68716d5363520a5025f38c824ff0ceddad94c69214b2ba27aad813aa1a6e30fe"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_8.bin",
-      "raw_start_max": 554997286,
-      "raw_start_min": 475002223,
-      "record_count": 16000,
-      "sha256": "7f470be640cfe2eae1841fcb4e3fe01beaf20d7b53783cf49e7aac312611bfdb"
-    },
-    {
-      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_b/oakbat_os4/rep1/trace_native_1ms_ch_9.bin",
-      "raw_start_max": 554997209,
-      "raw_start_min": 475002046,
-      "record_count": 16000,
-      "sha256": "55ac80621e767ba3eae169ee447e706c262ad0030b8bcad4a08b6134138a95d2"
-    }
-  ],
-  "repair_is_handoff_only": true,
-  "root_cause": "OAKBAT.OS4 raw IQ has independently demonstrated receiver tracking through the frozen attack window, but R2d reused a different scenario's handoff state. The cross-scenario state produced physical rows without adequate frozen quality/common support.",
+  "repair": {
+    "handoff_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/handoffs/oakbat_os4.csv",
+    "handoff_sha256": "3217b1bdf341e81e2e895a0acdd85d561f73a70936246a6ef5ec92fe23d75c13",
+    "mapping": "scenario-specific preregistered pre-onset target-aligned handoff",
+    "receiver_config_sha256": "f8cd27d7887af9151661a7e52191f8aaf7fa01da43c740e0193ac5623901a710",
+    "receiver_executable_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+    "receiver_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/oakbat_os4/rep1/manifest.json",
+    "receiver_manifest_sha256": "148bacb70993717b5f24a981045b52539cedd327e3a8f1e08097ee010b942c18"
+  },
   "scenario": "OAKBAT.OS4",
-  "schema": "gnss-doppler-lab.trace-r2e-attack-support-audit.v1",
-  "status": "FAILURE_CONFIRMED_REPAIRABLE_INPUT_EXISTS",
+  "schema": "gnss-doppler-lab.trace-r2e-attack-support-audit.v2",
+  "status": "PASS",
   "trace_scores_read_or_computed": false
 }

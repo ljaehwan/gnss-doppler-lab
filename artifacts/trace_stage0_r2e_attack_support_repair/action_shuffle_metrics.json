@@ -1,0 +1,66 @@
+{
+  "all_scenarios_shift_and_shuffle_reduce_significantly": false,
+  "scenarios": {
+    "OAKBAT.OS3": {
+      "scenario": "OAKBAT.OS3",
+      "shifted": {
+        "control_reduces_attack_score_significantly": false,
+        "mean_full_minus_control": -0.10354667555124632,
+        "paired_attack_blocks": 720,
+        "wilcoxon_p_full_greater": 1.0
+      },
+      "shuffled": {
+        "control_reduces_attack_score_significantly": false,
+        "mean_full_minus_control": -0.10957233918876434,
+        "paired_attack_blocks": 720,
+        "wilcoxon_p_full_greater": 1.0
+      }
+    },
+    "OAKBAT.OS4": {
+      "scenario": "OAKBAT.OS4",
+      "shifted": {
+        "control_reduces_attack_score_significantly": false,
+        "mean_full_minus_control": -0.08770950487727097,
+        "paired_attack_blocks": 720,
+        "wilcoxon_p_full_greater": 1.0
+      },
+      "shuffled": {
+        "control_reduces_attack_score_significantly": false,
+        "mean_full_minus_control": -0.2969263523231298,
+        "paired_attack_blocks": 720,
+        "wilcoxon_p_full_greater": 1.0
+      }
+    },
+    "TEXBAT.DS3": {
+      "scenario": "TEXBAT.DS3",
+      "shifted": {
+        "control_reduces_attack_score_significantly": false,
+        "mean_full_minus_control": -0.018353962727302976,
+        "paired_attack_blocks": 678,
+        "wilcoxon_p_full_greater": 1.0
+      },
+      "shuffled": {
+        "control_reduces_attack_score_significantly": false,
+        "mean_full_minus_control": -0.0210038034571121,
+        "paired_attack_blocks": 678,
+        "wilcoxon_p_full_greater": 1.0
+      }
+    },
+    "TEXBAT.DS7": {
+      "scenario": "TEXBAT.DS7",
+      "shifted": {
+        "control_reduces_attack_score_significantly": false,
+        "mean_full_minus_control": -0.037755141049295844,
+        "paired_attack_blocks": 322,
+        "wilcoxon_p_full_greater": 1.0
+      },
+      "shuffled": {
+        "control_reduces_attack_score_significantly": false,
+        "mean_full_minus_control": -0.057244448559599544,
+        "paired_attack_blocks": 322,
+        "wilcoxon_p_full_greater": 1.0
+      }
+    }
+  },
+  "schema": "gnss-doppler-lab.trace-r2-action-negative-controls.v1"
+}

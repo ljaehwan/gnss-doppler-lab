@@ -1,0 +1,182 @@
+{
+  "rep3": {
+    "directory": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_a/texbat_cleanstatic/rep3",
+    "per_prn_channel": [
+      {
+        "channel": 0,
+        "first_raw_interval_start_sample": 750013632,
+        "last_raw_interval_end_sample": 1124963011,
+        "last_raw_interval_start_sample": 1124938011,
+        "prn": 19,
+        "record_count": 14998
+      },
+      {
+        "channel": 1,
+        "first_raw_interval_start_sample": 750006413,
+        "last_raw_interval_end_sample": 1124957081,
+        "last_raw_interval_start_sample": 1124932081,
+        "prn": 16,
+        "record_count": 14998
+      },
+      {
+        "channel": 2,
+        "first_raw_interval_start_sample": 750013863,
+        "last_raw_interval_end_sample": 1124963682,
+        "last_raw_interval_start_sample": 1124938682,
+        "prn": 3,
+        "record_count": 14998
+      },
+      {
+        "channel": 3,
+        "first_raw_interval_start_sample": 750015161,
+        "last_raw_interval_end_sample": 1124965952,
+        "last_raw_interval_start_sample": 1124940952,
+        "prn": 30,
+        "record_count": 14998
+      },
+      {
+        "channel": 4,
+        "first_raw_interval_start_sample": 750017465,
+        "last_raw_interval_end_sample": 1124967029,
+        "last_raw_interval_start_sample": 1124942029,
+        "prn": 13,
+        "record_count": 14998
+      },
+      {
+        "channel": 5,
+        "first_raw_interval_start_sample": 750016289,
+        "last_raw_interval_end_sample": 1124966415,
+        "last_raw_interval_start_sample": 1124941415,
+        "prn": 6,
+        "record_count": 14998
+      },
+      {
+        "channel": 6,
+        "first_raw_interval_start_sample": 750005556,
+        "last_raw_interval_end_sample": 1124955115,
+        "last_raw_interval_start_sample": 1124930115,
+        "prn": 7,
+        "record_count": 14998
+      },
+      {
+        "channel": 7,
+        "first_raw_interval_start_sample": 750007554,
+        "last_raw_interval_end_sample": 1124958261,
+        "last_raw_interval_start_sample": 1124933261,
+        "prn": 20,
+        "record_count": 14998
+      },
+      {
+        "channel": 8,
+        "first_raw_interval_start_sample": 750009589,
+        "last_raw_interval_end_sample": 1124959439,
+        "last_raw_interval_start_sample": 1124934439,
+        "prn": 10,
+        "record_count": 14998
+      },
+      {
+        "channel": 9,
+        "first_raw_interval_start_sample": 750015238,
+        "last_raw_interval_end_sample": 1124965343,
+        "last_raw_interval_start_sample": 1124940343,
+        "prn": 23,
+        "record_count": 14998
+      }
+    ],
+    "row_count": 149980,
+    "row_set_sha256": "56706c2df54631c109c5d833ccc4f05ba89f8f4c6010094a72c357e339502480"
+  },
+  "rep3_only_rows": 0,
+  "rep4": {
+    "directory": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_a/texbat_cleanstatic/rep4",
+    "per_prn_channel": [
+      {
+        "channel": 0,
+        "first_raw_interval_start_sample": 750013632,
+        "last_raw_interval_end_sample": 1124963011,
+        "last_raw_interval_start_sample": 1124938011,
+        "prn": 19,
+        "record_count": 14998
+      },
+      {
+        "channel": 1,
+        "first_raw_interval_start_sample": 750006413,
+        "last_raw_interval_end_sample": 1124957081,
+        "last_raw_interval_start_sample": 1124932081,
+        "prn": 16,
+        "record_count": 14998
+      },
+      {
+        "channel": 2,
+        "first_raw_interval_start_sample": 750013863,
+        "last_raw_interval_end_sample": 1124963682,
+        "last_raw_interval_start_sample": 1124938682,
+        "prn": 3,
+        "record_count": 14998
+      },
+      {
+        "channel": 3,
+        "first_raw_interval_start_sample": 750015161,
+        "last_raw_interval_end_sample": 1124965952,
+        "last_raw_interval_start_sample": 1124940952,
+        "prn": 30,
+        "record_count": 14998
+      },
+      {
+        "channel": 4,
+        "first_raw_interval_start_sample": 750017465,
+        "last_raw_interval_end_sample": 1124967029,
+        "last_raw_interval_start_sample": 1124942029,
+        "prn": 13,
+        "record_count": 14998
+      },
+      {
+        "channel": 5,
+        "first_raw_interval_start_sample": 750016289,
+        "last_raw_interval_end_sample": 1124966415,
+        "last_raw_interval_start_sample": 1124941415,
+        "prn": 6,
+        "record_count": 14998
+      },
+      {
+        "channel": 6,
+        "first_raw_interval_start_sample": 750005556,
+        "last_raw_interval_end_sample": 1124955115,
+        "last_raw_interval_start_sample": 1124930115,
+        "prn": 7,
+        "record_count": 14998
+      },
+      {
+        "channel": 7,
+        "first_raw_interval_start_sample": 750007554,
+        "last_raw_interval_end_sample": 1124958261,
+        "last_raw_interval_start_sample": 1124933261,
+        "prn": 20,
+        "record_count": 14998
+      },
+      {
+        "channel": 8,
+        "first_raw_interval_start_sample": 750009589,
+        "last_raw_interval_end_sample": 1124959439,
+        "last_raw_interval_start_sample": 1124934439,
+        "prn": 10,
+        "record_count": 14998
+      },
+      {
+        "channel": 9,
+        "first_raw_interval_start_sample": 750015238,
+        "last_raw_interval_end_sample": 1124965343,
+        "last_raw_interval_start_sample": 1124940343,
+        "prn": 23,
+        "record_count": 14998
+      }
+    ],
+    "row_count": 149980,
+    "row_set_sha256": "56706c2df54631c109c5d833ccc4f05ba89f8f4c6010094a72c357e339502480"
+  },
+  "rep4_only_rows": 0,
+  "schema": "gnss-doppler-lab.trace-r2c-terminal-row-set-audit.v1",
+  "status": "PASS",
+  "terminal_row_counts_per_prn_channel_identical": true,
+  "whole_replay_row_set_identical": true
+}

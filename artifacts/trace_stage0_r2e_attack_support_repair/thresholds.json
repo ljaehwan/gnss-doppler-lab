@@ -1,0 +1,38 @@
+{
+  "OAKBAT": {
+    "TRACE Full q99": 11.151796102341535,
+    "TRACE Full q995": 11.167592612477176,
+    "action norm only q99": 1.00000001075432,
+    "action norm only q995": 1.0000000107805036,
+    "complex residual norm only q99": 0.11981275395372162,
+    "complex residual norm only q995": 0.11998388790803298,
+    "fixed complex 9-tap detector q99": 11.03876407253426,
+    "fixed complex 9-tap detector q995": 11.073440486083216,
+    "no-action predictor q99": 11.055633735987236,
+    "no-action predictor q995": 11.078450731344432,
+    "shuffled-action TRACE q99": 11.244312241500465,
+    "shuffled-action TRACE q995": 11.256199605043252,
+    "wrong shifted-action negative control q99": 11.253381200903076,
+    "wrong shifted-action negative control q995": 11.279445071531626,
+    "zero-action counterfactual q99": 11.115746596466417,
+    "zero-action counterfactual q995": 11.13510893103218
+  },
+  "TEXBAT": {
+    "TRACE Full q99": 6.200837674932954,
+    "TRACE Full q995": 6.217555683965906,
+    "action norm only q99": 1.0000000053632123,
+    "action norm only q995": 1.000000005373945,
+    "complex residual norm only q99": 0.05480604564232563,
+    "complex residual norm only q995": 0.05600292833312617,
+    "fixed complex 9-tap detector q99": 6.187349332623124,
+    "fixed complex 9-tap detector q995": 6.195968592782393,
+    "no-action predictor q99": 6.181176082776627,
+    "no-action predictor q995": 6.1923134547343,
+    "shuffled-action TRACE q99": 6.217576963964088,
+    "shuffled-action TRACE q995": 6.229679549345175,
+    "wrong shifted-action negative control q99": 6.223255714376498,
+    "wrong shifted-action negative control q995": 6.24076193199567,
+    "zero-action counterfactual q99": 6.214211256383186,
+    "zero-action counterfactual q995": 6.242761429829525
+  }
+}

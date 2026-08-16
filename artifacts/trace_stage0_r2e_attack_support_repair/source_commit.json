@@ -1,9 +1,9 @@
 {
-  "final_commit": "TO_BE_RECORDED_AT_FINALIZATION",
+  "final_commit": "RECORDED_BY_FINAL_BRANCH_HEAD_AND_PUSH_RUN",
   "parent_r2d_commit": "e66619e31a937186e522d8566711436e24f2b99d",
   "preregistration_commit": "9eb2308675a98cd2342c36066553077a57fc089e",
   "research_branch": "research/trace-stage0-r2e-attack-support-repair",
   "schema": "gnss-doppler-lab.trace-r2e-source-freeze.v1",
-  "support_freeze_commit": "TO_BE_RECORDED_AFTER_SUPPORT_FREEZE_COMMIT",
+  "support_freeze_commit": "00f7b6e78a3d494ba4ddced359a1871d3deee49b",
   "task_base_commit": "e66619e31a937186e522d8566711436e24f2b99d"
 }

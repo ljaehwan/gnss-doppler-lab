@@ -1,0 +1,20 @@
+{
+  "coverage": [
+    "R1/R2/R2a/R2b/R2c/R2d inherited TRACE contracts",
+    "R2e preregistered DS7/OS4 pre-onset handoff selection",
+    "unchanged R2c terminal drain and R2d clean support repair",
+    "unchanged Phase-A semantic and whole-row terminal gates",
+    "pre-onset and post-onset frozen four-PRN attack support",
+    "frozen Phase-B metric or fail-closed contracts",
+    "R2e and preserved parent artifact checksums",
+    "fresh-clone verification"
+  ],
+  "durable_test_runs": [
+    "20260816T165417Z-r2e-artifact-verifier",
+    "20260816T165417Z-r2e-focused-tests",
+    "20260816T165417Z-r2e-parent-verifiers"
+  ],
+  "focused_test_count": 58,
+  "schema": "gnss-doppler-lab.trace-r2e-test-results.v1",
+  "status": "IN_PROGRESS"
+}
