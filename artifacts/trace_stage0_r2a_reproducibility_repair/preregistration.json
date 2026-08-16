@@ -56,8 +56,8 @@
     "fail closed if target raw interval is missed or a later reacquisition tries to reuse the past target"
   ],
   "repository_freeze_basis": {
-    "parent_commit": "6e9e4f0c120f73c290e0dfff68b59cadbb0ebb4a",
-    "tracked_diff_sha256": "5793c020c2a3b0bd34918e8dc6c53b510ce54966a9aae76e89d2ad0ae4c31995",
+    "parent_commit": "98ae25f2e38a7ebd9dba26dcce0ae976f2661260",
+    "tracked_diff_sha256": "e4d29e66063b63e991654944aa02a2dd3b61b019ddf80db7b64ae2aa5c21adb7",
     "untracked_file_sha256": {}
   },
   "schema": "gnss-doppler-lab.trace-r2a-preregistration.v1",

@@ -77,6 +77,39 @@ def score_reproduction(first_dir: Path, second_dir: Path) -> dict[str, object]:
     joined = first_frame.merge(second_frame, on=["prn", "sample"], validate="one_to_one")
     i = joined["i"].to_numpy(dtype=np.int64)
     j = joined["j"].to_numpy(dtype=np.int64)
+    quality_epochs = (
+        joined.assign(rounded_ms_epoch=np.rint(joined["sample"].to_numpy(dtype=np.float64) / 25_000.0).astype(np.int64))
+        .groupby("rounded_ms_epoch", sort=False)["prn"]
+        .nunique()
+    )
+    quality_common_epoch_count = int((quality_epochs >= 4).sum())
+    if quality_common_epoch_count < 1000:
+        empty_blocks1 = robust_epoch_blocks(first, np.zeros(len(first.prn)), block_s=0.5, minimum_prns=4)
+        empty_blocks2 = robust_epoch_blocks(second, np.zeros(len(second.prn)), block_s=0.5, minimum_prns=4)
+        return {
+            "score_evaluation_status": "INSUFFICIENT_STABLE_QUALITY_COMMON_SUPPORT",
+            "rep3_pair_count": int(len(first.prn)),
+            "rep4_pair_count": int(len(second.prn)),
+            "common_pair_count": int(len(joined)),
+            "common_pair_ratio_rep3": float(len(joined) / len(first.prn)) if len(first.prn) else 0.0,
+            "common_pair_ratio_rep4": float(len(joined) / len(second.prn)) if len(second.prn) else 0.0,
+            "quality_common_at_least_4_prn_rounded_ms_epoch_count": quality_common_epoch_count,
+            "minimum_quality_common_epoch_count": 1000,
+            "maximum_common_pair_trace_score_absolute_error": None,
+            "trace_score_tolerance": 1e-12,
+            "trace_score_within_tolerance": False,
+            "block_keys_identical": bool(len(empty_blocks1) == len(empty_blocks2) == 0),
+            "maximum_block_trace_score_absolute_error": None,
+            "common_block_count": 0,
+            "q99_threshold_from_rep3": None,
+            "threshold_crossing_and_alarm_identical": False,
+            "train_pair_count": None,
+            "covariance_pair_count": None,
+            "evaluation_pair_count": None,
+            "rep3_blocks": empty_blocks1,
+            "rep4_blocks": empty_blocks2,
+            "common_blocks": pd.DataFrame(columns=["block_start_s", "tracked_prn_count", "pair_count", "score_rep3", "score_rep4"]),
+        }
     tmin, tmax = float(first.time_s.min()), float(first.time_s.max())
     span = tmax - tmin
     train_mask = first.time_s < tmin + 0.60 * span
@@ -105,11 +138,14 @@ def score_reproduction(first_dir: Path, second_dir: Path) -> dict[str, object]:
     block_keys_equal = len(block_join) == len(blocks1) == len(blocks2)
     block_score_error = float(np.max(np.abs(block_join["score_rep3"] - block_join["score_rep4"]))) if len(block_join) else None
     return {
+        "score_evaluation_status": "AVAILABLE",
         "rep3_pair_count": int(len(first.prn)),
         "rep4_pair_count": int(len(second.prn)),
         "common_pair_count": int(len(joined)),
         "common_pair_ratio_rep3": float(len(joined) / len(first.prn)),
         "common_pair_ratio_rep4": float(len(joined) / len(second.prn)),
+        "quality_common_at_least_4_prn_rounded_ms_epoch_count": quality_common_epoch_count,
+        "minimum_quality_common_epoch_count": 1000,
         "maximum_common_pair_trace_score_absolute_error": float(differences.max()) if len(differences) else None,
         "trace_score_tolerance": 1e-12,
         "trace_score_within_tolerance": bool(len(differences) and differences.max() <= 1e-12),
@@ -174,9 +210,10 @@ def main() -> int:
         "repeated_action": sum(value["repeated_action_row_count"] for value in validations.values()),
     }
     causal = {"status": "PASS" if all(value == 0 for value in causal_counts.values()) else "FAIL", "counts": causal_counts}
-    common_epochs = common_epoch_count(joined, 25_000_000, minimum_prns=4)
+    all_record_common_epochs = common_epoch_count(joined, 25_000_000, minimum_prns=4)
+    quality_common_epochs = score["quality_common_at_least_4_prn_rounded_ms_epoch_count"]
     semantic_checks = {
-        "common_epoch_count_at_least_1000": common_epochs >= 1000,
+        "stable_quality_common_epoch_count_at_least_1000": quality_common_epochs >= 1000,
         "all_common_physical_rows_bit_exact": bool(len(exact_rows) and exact_rows.all()),
         "canonical_semantic_hash_identical": canonical_semantic_hash(rep3) == canonical_semantic_hash(rep4),
         "trace_score_within_1e_12": score["trace_score_within_tolerance"],
@@ -188,7 +225,8 @@ def main() -> int:
         "common_canonical_row_count": int(len(joined)),
         "common_ratio_rep3": float(len(joined) / len(rep3.records)),
         "common_ratio_rep4": float(len(joined) / len(rep4.records)),
-        "common_at_least_4_prn_rounded_ms_epoch_count": common_epochs,
+        "all_record_common_at_least_4_prn_rounded_ms_epoch_count": all_record_common_epochs,
+        "stable_quality_common_at_least_4_prn_rounded_ms_epoch_count": quality_common_epochs,
         "exact_physical_bit_match_ratio": float(exact_rows.mean()) if len(exact_rows) else None,
         "metadata_exact_match_ratio": float(metadata_equal.mean()) if len(metadata_equal) else None,
         "metadata_only_difference_proven": bool((~metadata_equal).any() and exact_rows[~metadata_equal].all()),
@@ -229,6 +267,16 @@ def main() -> int:
         }
     raw_timeline_pass = raw_binding["status"] == "PASS" and all(row["status"] == "PASS" for row in raw_timeline.values())
     phase_a_pass = source["status"] == causal["status"] == semantic["status"] == "PASS" and support_pass and raw_timeline_pass
+    if phase_a_pass:
+        failure_verdict = None
+    elif not support_pass or quality_common_epochs < 1000:
+        failure_verdict = "INSUFFICIENT_MULTI_PRN_SUPPORT"
+    elif causal_counts["action_value_mapping_mismatch"]:
+        failure_verdict = "ACTION_MAPPING_INVALID"
+    elif semantic["status"] == "FAIL":
+        failure_verdict = "NATIVE_DUMP_PHYSICAL_VALUES_NONREPRODUCIBLE"
+    else:
+        failure_verdict = "INCONCLUSIVE_RECEIVER_REPRODUCIBILITY"
     payload = {
         "schema": "gnss-doppler-lab.trace-r2a-phase-a-semantic-reproduction.v1",
         "phase_a_status": "PASS" if phase_a_pass else "FAIL",
@@ -238,7 +286,7 @@ def main() -> int:
         "semantic_reproduction_gate": semantic,
         "scenario_support": support,
         "raw_source_timeline_binding": {"status": "PASS" if raw_timeline_pass else "FAIL", "scenarios": raw_timeline},
-        "failure_verdict_if_any": None if phase_a_pass else "INCONCLUSIVE_RECEIVER_REPRODUCIBILITY",
+        "failure_verdict_if_any": failure_verdict,
         "prior_failed_attempts_excluded_from_gate": prior_failed_attempts,
     }
     dump_json("rep3_rep4_reproduction_metrics.json", payload)
@@ -247,18 +295,24 @@ def main() -> int:
     plots = ARTIFACT / "plots"
     plots.mkdir(exist_ok=True)
     fig, axis = plt.subplots(figsize=(7, 4))
-    axis.scatter(common_blocks["score_rep3"], common_blocks["score_rep4"], s=12)
-    low = min(common_blocks["score_rep3"].min(), common_blocks["score_rep4"].min())
-    high = max(common_blocks["score_rep3"].max(), common_blocks["score_rep4"].max())
-    axis.plot([low, high], [low, high], color="black", linewidth=0.8)
+    if len(common_blocks):
+        axis.scatter(common_blocks["score_rep3"], common_blocks["score_rep4"], s=12)
+        low = min(common_blocks["score_rep3"].min(), common_blocks["score_rep4"].min())
+        high = max(common_blocks["score_rep3"].max(), common_blocks["score_rep4"].max())
+        axis.plot([low, high], [low, high], color="black", linewidth=0.8)
+    else:
+        axis.text(0.5, 0.5, "UNAVAILABLE: <1000 stable-quality common epochs", ha="center", va="center", transform=axis.transAxes)
     axis.set(xlabel="rep3 frozen TRACE block score", ylabel="rep4 frozen TRACE block score", title="rep3/rep4 semantic reproducibility")
     fig.tight_layout()
     fig.savefig(plots / "rep3_rep4_semantic_reproducibility.png", dpi=140)
     plt.close(fig)
     fig, axis = plt.subplots(figsize=(9, 3.5))
-    axis.plot(blocks3["block_start_s"], blocks3["score"], label="rep3")
-    axis.plot(blocks4["block_start_s"], blocks4["score"], label="rep4", linestyle="--")
-    axis.legend()
+    if len(blocks3) or len(blocks4):
+        axis.plot(blocks3["block_start_s"], blocks3["score"], label="rep3")
+        axis.plot(blocks4["block_start_s"], blocks4["score"], label="rep4", linestyle="--")
+        axis.legend()
+    else:
+        axis.text(0.5, 0.5, "UNAVAILABLE: no stable-quality >=4-PRN blocks", ha="center", va="center", transform=axis.transAxes)
     axis.set(xlabel="receiver time (s)", ylabel="frozen TRACE block score", title="Replay-by-replay TRACE score")
     fig.tight_layout()
     fig.savefig(plots / "replay_by_replay_trace_score_comparison.png", dpi=140)

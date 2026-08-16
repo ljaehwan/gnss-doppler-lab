@@ -39,12 +39,7 @@ def main() -> int:
         writer = csv.writer(stream)
         writer.writerow(("status", "reason"))
         writer.writerow(("NOT_AUTHORIZED", REASON))
-    semantic = phase_a["semantic_reproduction_gate"]
-    failure_label = (
-        "NATIVE_DUMP_PHYSICAL_VALUES_NONREPRODUCIBLE"
-        if semantic["status"] == "FAIL"
-        else "INCONCLUSIVE_RECEIVER_REPRODUCIBILITY"
-    )
+    failure_label = phase_a.get("failure_verdict_if_any") or "INCONCLUSIVE_RECEIVER_REPRODUCIBILITY"
     dump(
         "final_verdict.json",
         {
