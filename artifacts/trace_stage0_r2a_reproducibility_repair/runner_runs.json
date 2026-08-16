@@ -1,0 +1,795 @@
+{
+  "phase_summary": {
+    "r2a-controls-bootstrap-finalize": {
+      "attempt_run_ids": [
+        "20260816T105012Z-r2a-controls-bootstrap-finalize"
+      ],
+      "selected_run_id": "20260816T105012Z-r2a-controls-bootstrap-finalize",
+      "status": "PASS"
+    },
+    "r2a-phase-a-cleanstatic-rep3": {
+      "attempt_run_ids": [
+        "20260816T103139Z-r2a-phase-a-cleanstatic-rep3",
+        "20260816T103626Z-r2a-phase-a-cleanstatic-rep3-r1"
+      ],
+      "selected_run_id": "20260816T103626Z-r2a-phase-a-cleanstatic-rep3-r1",
+      "status": "PASS"
+    },
+    "r2a-phase-a-cleanstatic-rep4": {
+      "attempt_run_ids": [
+        "20260816T103723Z-r2a-phase-a-cleanstatic-rep4"
+      ],
+      "selected_run_id": "20260816T103723Z-r2a-phase-a-cleanstatic-rep4",
+      "status": "PASS"
+    },
+    "r2a-phase-a-ds3-smoke": {
+      "attempt_run_ids": [
+        "20260816T103843Z-r2a-phase-a-ds3-smoke",
+        "20260816T104253Z-r2a-phase-a-ds3-smoke-r1"
+      ],
+      "selected_run_id": "20260816T104253Z-r2a-phase-a-ds3-smoke-r1",
+      "status": "FAIL"
+    },
+    "r2a-phase-a-os3-smoke": {
+      "attempt_run_ids": [
+        "20260816T104500Z-r2a-phase-a-os3-smoke"
+      ],
+      "selected_run_id": "20260816T104500Z-r2a-phase-a-os3-smoke",
+      "status": "PASS"
+    },
+    "r2a-phase-a-semantic-reproduction-evaluate": {
+      "attempt_run_ids": [
+        "20260816T104606Z-r2a-phase-a-semantic-reproduction-evaluate",
+        "20260816T104925Z-r2a-phase-a-semantic-reproduction-evaluate-r1"
+      ],
+      "selected_run_id": "20260816T104925Z-r2a-phase-a-semantic-reproduction-evaluate-r1",
+      "status": "FAIL"
+    },
+    "r2a-phase-b-oakbat-core": {
+      "attempt_run_ids": [],
+      "reason": "Phase A semantic reproduction did not pass every preregistered source, causal, semantic, score, support, action-mapping, and raw-timeline gate.",
+      "status": "NOT_AUTHORIZED"
+    },
+    "r2a-phase-b-texbat-core": {
+      "attempt_run_ids": [],
+      "reason": "Phase A semantic reproduction did not pass every preregistered source, causal, semantic, score, support, action-mapping, and raw-timeline gate.",
+      "status": "NOT_AUTHORIZED"
+    },
+    "r2a-posthoc-rep1-rep2-root-cause-audit": {
+      "attempt_run_ids": [
+        "20260816T093743Z-r2a-posthoc-rep1-rep2-root-cause-audit",
+        "20260816T094613Z-r2a-posthoc-rep1-rep2-root-cause-audit-r1"
+      ],
+      "selected_run_id": "20260816T094613Z-r2a-posthoc-rep1-rep2-root-cause-audit-r1",
+      "status": "PASS"
+    },
+    "r2a-preflight-base-and-artifact-inventory": {
+      "attempt_run_ids": [
+        "20260816T092912Z-r2a-preflight-base-and-artifact-inventory"
+      ],
+      "selected_run_id": "20260816T092912Z-r2a-preflight-base-and-artifact-inventory",
+      "status": "PASS"
+    },
+    "r2a-preregistration-freeze": {
+      "attempt_run_ids": [
+        "20260816T101335Z-r2a-preregistration-freeze",
+        "20260816T102927Z-r2a-preregistration-freeze-r1",
+        "20260816T103045Z-r2a-preregistration-freeze-r2",
+        "20260816T103539Z-r2a-preregistration-freeze-r3",
+        "20260816T104210Z-r2a-preregistration-freeze-r4",
+        "20260816T104831Z-r2a-preregistration-freeze-r5"
+      ],
+      "selected_run_id": "20260816T104831Z-r2a-preregistration-freeze-r5",
+      "status": "PASS"
+    },
+    "r2a-receiver-nondeterminism-source-audit": {
+      "attempt_run_ids": [
+        "20260816T093841Z-r2a-receiver-nondeterminism-source-audit"
+      ],
+      "selected_run_id": "20260816T093841Z-r2a-receiver-nondeterminism-source-audit",
+      "status": "PASS"
+    },
+    "r2a-repair-canonical-serialization": {
+      "attempt_run_ids": [
+        "20260816T093901Z-r2a-repair-canonical-serialization",
+        "20260816T093927Z-r2a-repair-canonical-serialization-r1"
+      ],
+      "selected_run_id": "20260816T093927Z-r2a-repair-canonical-serialization-r1",
+      "status": "PASS"
+    },
+    "r2a-repair-deterministic-assignment": {
+      "attempt_run_ids": [
+        "20260816T094250Z-r2a-repair-deterministic-assignment",
+        "20260816T095953Z-r2a-repair-deterministic-assignment-r1",
+        "20260816T103430Z-r2a-repair-deterministic-assignment-r2",
+        "20260816T104144Z-r2a-repair-deterministic-assignment-r3"
+      ],
+      "selected_run_id": "20260816T104144Z-r2a-repair-deterministic-assignment-r3",
+      "status": "PASS"
+    },
+    "r2a-repair-frozen-acquisition-handoff": {
+      "attempt_run_ids": [
+        "20260816T094316Z-r2a-repair-frozen-acquisition-handoff",
+        "20260816T094606Z-r2a-repair-frozen-acquisition-handoff-r1",
+        "20260816T101144Z-r2a-repair-frozen-acquisition-handoff-r2"
+      ],
+      "selected_run_id": "20260816T101144Z-r2a-repair-frozen-acquisition-handoff-r2",
+      "status": "PASS"
+    },
+    "r2a-tests-and-fresh-clone-verifier": {
+      "attempt_run_ids": [],
+      "reason": "No durable runner record found.",
+      "status": "UNAVAILABLE"
+    }
+  },
+  "run_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs",
+  "runs": [
+    {
+      "command": [
+        "codex",
+        "exec",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "-C",
+        "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+        "--add-dir",
+        "/home/ubuntu/ssd_data/gnss-early-detection/artifacts",
+        "--add-dir",
+        "/home/ubuntu/projects/gnss-doppler-runner-minimal-v0",
+        "--add-dir",
+        "/home/ubuntu/research-context",
+        "--output-last-message",
+        "/home/ubuntu/research-context/tasks/trace-stage0-r2a-reproducibility-repair/codex_final_message.txt",
+        "-"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": null,
+      "exit_code": null,
+      "name": "trace-stage0-r2a-reproducibility-repair-codex-orchestrator",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T092816Z-trace-stage0-r2a-reproducibility-repair-codex-orchestrator",
+        "schema_version": 1
+      },
+      "run_id": "20260816T092816Z-trace-stage0-r2a-reproducibility-repair-codex-orchestrator",
+      "started_at": "2026-08-16T09:28:16+00:00",
+      "status": "running",
+      "stderr_sha256": "8efcff05004bcaedd2a457e98bc3ada629c80970c11298e62ee2b0b49be84502",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set -euo pipefail; test \"$(git rev-parse HEAD)\" = 948658aa7b117a40b102a48193022e6c403cbc00; test \"$(git rev-parse origin/research/trace-stage0-r2-native-1ms-dump)\" = 948658aa7b117a40b102a48193022e6c403cbc00; test \"$(git branch --show-current)\" = research/trace-stage0-r2a-reproducibility-repair; git status --porcelain=v1; find artifacts/trace_stage0_r2_native_1ms_dump -maxdepth 2 -type f -printf \"%P\\n\" | sort; find /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump -maxdepth 4 -type f -printf \"%P\\n\" | sort"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T09:29:13+00:00",
+      "exit_code": 0,
+      "name": "r2a-preflight-base-and-artifact-inventory",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T092912Z-r2a-preflight-base-and-artifact-inventory",
+        "schema_version": 1
+      },
+      "run_id": "20260816T092912Z-r2a-preflight-base-and-artifact-inventory",
+      "started_at": "2026-08-16T09:29:12+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "446c2d7e0fe7a431cf2c5b8a8a120dfc922aa927742a3bb76dc2144183e514bc"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/audit_trace_r2a_rep1_rep2.py",
+        "--rep1",
+        "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep1",
+        "--rep2",
+        "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep2",
+        "--output",
+        "artifacts/trace_stage0_r2a_reproducibility_repair"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T09:39:06+00:00",
+      "exit_code": 0,
+      "name": "r2a-posthoc-rep1-rep2-root-cause-audit",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T093743Z-r2a-posthoc-rep1-rep2-root-cause-audit",
+        "schema_version": 1
+      },
+      "run_id": "20260816T093743Z-r2a-posthoc-rep1-rep2-root-cause-audit",
+      "started_at": "2026-08-16T09:37:43+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "2a7b05041dd5e228fe4f77baeecd2ff71f6cb661dee7ea11dd06cabb74ca1c6b"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/audit_trace_r2a_receiver.py",
+        "--receiver-source",
+        "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/receiver-source",
+        "--r2-config",
+        "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep1/receiver.conf",
+        "--r2-patch",
+        "artifacts/trace_stage0_r2_native_1ms_dump/receiver_patch.diff",
+        "--output",
+        "artifacts/trace_stage0_r2a_reproducibility_repair/receiver_nondeterminism_audit.json"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T09:38:42+00:00",
+      "exit_code": 0,
+      "name": "r2a-receiver-nondeterminism-source-audit",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T093841Z-r2a-receiver-nondeterminism-source-audit",
+        "schema_version": 1
+      },
+      "run_id": "20260816T093841Z-r2a-receiver-nondeterminism-source-audit",
+      "started_at": "2026-08-16T09:38:41+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "3bc813c8eb81a37253a783215dfedc78fcefcaaac68cc855fbf49d46f3220c87"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set -euo pipefail; mkdir -p /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair; git clone --filter=blob:none https://github.com/gnss-sdr/gnss-sdr.git /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source; git -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source checkout --detach 1ddd4562723040fd66cb334b578a5b69455625f4; git -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source apply /home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair/artifacts/trace_stage0_r2_native_1ms_dump/receiver_patch.diff; git -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source diff --check; git -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source diff --stat"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T09:39:09+00:00",
+      "exit_code": 128,
+      "name": "r2a-repair-canonical-serialization",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T093901Z-r2a-repair-canonical-serialization",
+        "schema_version": 1
+      },
+      "run_id": "20260816T093901Z-r2a-repair-canonical-serialization",
+      "started_at": "2026-08-16T09:39:01+00:00",
+      "status": "failed",
+      "stderr_sha256": "67d23ef1a6095991934d6cbed1df2655b92af72ff07f0837caf41caf1b9e054e",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set -euo pipefail; git -c safe.directory=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source checkout --detach 1ddd4562723040fd66cb334b578a5b69455625f4; git -c safe.directory=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source apply /home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair/artifacts/trace_stage0_r2_native_1ms_dump/receiver_patch.diff; git -c safe.directory=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source diff --check; git -c safe.directory=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source diff --stat"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T09:39:32+00:00",
+      "exit_code": 0,
+      "name": "r2a-repair-canonical-serialization-r1",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T093927Z-r2a-repair-canonical-serialization-r1",
+        "schema_version": 1
+      },
+      "run_id": "20260816T093927Z-r2a-repair-canonical-serialization-r1",
+      "started_at": "2026-08-16T09:39:27+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "74827ea69d1fda9154be2023eb7ffde18e64ffc6089377ccdb85b0be5ff88524",
+      "stdout_sha256": "cfc723291361fb1438378b3bc8fc4b563d7f4ecfbd64ea04fa340cd08adc4e20"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/prepare_trace_r2a_handoffs.py",
+        "--output",
+        "artifacts/trace_stage0_r2a_reproducibility_repair/handoffs"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T09:42:56+00:00",
+      "exit_code": 0,
+      "name": "r2a-repair-deterministic-assignment",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T094250Z-r2a-repair-deterministic-assignment",
+        "schema_version": 1
+      },
+      "run_id": "20260816T094250Z-r2a-repair-deterministic-assignment",
+      "started_at": "2026-08-16T09:42:50+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "664d9e2773592f20ac73bc4cd731f50057f2b19a9ca1d55a3556d566495fe088"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set -euo pipefail; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/prepare_trace_r2a_handoffs.py --output artifacts/trace_stage0_r2a_reproducibility_repair/handoffs --validate-only; env PYTHONPATH=/usr/lib/python3/dist-packages cmake -S /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source -B /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-install -DPYTHON_EXECUTABLE=/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -DPython3_EXECUTABLE=/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -DENABLE_LOG=ON -DENABLE_UHD=ON -DENABLE_ZMQ=ON -DENABLE_UNIT_TESTING=ON -DENABLE_UNIT_TESTING_EXTRA=OFF -DENABLE_SYSTEM_TESTING=OFF -DENABLE_SYSTEM_TESTING_EXTRA=OFF; env GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=* cmake --build /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-build --target gnss-sdr -j 4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T09:44:15+00:00",
+      "exit_code": 1,
+      "name": "r2a-repair-frozen-acquisition-handoff",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T094316Z-r2a-repair-frozen-acquisition-handoff",
+        "schema_version": 1
+      },
+      "run_id": "20260816T094316Z-r2a-repair-frozen-acquisition-handoff",
+      "started_at": "2026-08-16T09:43:16+00:00",
+      "status": "failed",
+      "stderr_sha256": "f9ab33eab67c2a7e5a308d68ee0c239498e478f4283afa8ea3c830c7f7958ab8",
+      "stdout_sha256": "c6c2dac69b17a27c7e4038e722aca0c384d9d86f4fbb572606b20a132d2e59ec"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set -euo pipefail; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/prepare_trace_r2a_handoffs.py --output artifacts/trace_stage0_r2a_reproducibility_repair/handoffs --validate-only; env PYTHONPATH=/usr/lib/python3/dist-packages GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=* cmake --build /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-build --target gnss-sdr -j 4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:11:18+00:00",
+      "exit_code": 0,
+      "name": "r2a-repair-frozen-acquisition-handoff-r1",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T094606Z-r2a-repair-frozen-acquisition-handoff-r1",
+        "schema_version": 1
+      },
+      "run_id": "20260816T094606Z-r2a-repair-frozen-acquisition-handoff-r1",
+      "started_at": "2026-08-16T09:46:06+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "5d37d7d9645043c36ff61593450539120e0d67defeb55609a5e0ab53828d4ef6"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/audit_trace_r2a_rep1_rep2.py",
+        "--rep1",
+        "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep1",
+        "--rep2",
+        "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep2",
+        "--output",
+        "artifacts/trace_stage0_r2a_reproducibility_repair"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T09:48:05+00:00",
+      "exit_code": 0,
+      "name": "r2a-posthoc-rep1-rep2-root-cause-audit-r1",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T094613Z-r2a-posthoc-rep1-rep2-root-cause-audit-r1",
+        "schema_version": 1
+      },
+      "run_id": "20260816T094613Z-r2a-posthoc-rep1-rep2-root-cause-audit-r1",
+      "started_at": "2026-08-16T09:46:13+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "8583297cf03fd732187dec4266e77184ea84ae9719602303bc60bea6faadb524"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/prepare_trace_r2a_handoffs.py",
+        "--output",
+        "artifacts/trace_stage0_r2a_reproducibility_repair/handoffs"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:00:00+00:00",
+      "exit_code": 0,
+      "name": "r2a-repair-deterministic-assignment-r1",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T095953Z-r2a-repair-deterministic-assignment-r1",
+        "schema_version": 1
+      },
+      "run_id": "20260816T095953Z-r2a-repair-deterministic-assignment-r1",
+      "started_at": "2026-08-16T09:59:53+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "af6307cc7f1a1abcd45daf250de45712f171981127290526f9d8633dc07e6ef7"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set -euo pipefail; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/prepare_trace_r2a_handoffs.py --output artifacts/trace_stage0_r2a_reproducibility_repair/handoffs --validate-only; env PYTHONPATH=/usr/lib/python3/dist-packages GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=* cmake --build /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-build --target gnss-sdr -j 4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:12:56+00:00",
+      "exit_code": 0,
+      "name": "r2a-repair-frozen-acquisition-handoff-r2",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T101144Z-r2a-repair-frozen-acquisition-handoff-r2",
+        "schema_version": 1
+      },
+      "run_id": "20260816T101144Z-r2a-repair-frozen-acquisition-handoff-r2",
+      "started_at": "2026-08-16T10:11:44+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "160278aebcb753cee943b1abe266667e370f9c7037832c821b58269078125df0"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set -euo pipefail; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/run_trace_stage0_r2a.py audit-raw; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/freeze_trace_r2a_preregistration.py; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/prepare_trace_r2a_handoffs.py --output artifacts/trace_stage0_r2a_reproducibility_repair/handoffs --validate-only; PYTHONPATH=src /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_trace_alignment.py tests/test_trace_equivariance.py tests/test_trace_native_1ms.py tests/test_trace_native_cadence.py tests/test_trace_r1_verdict.py tests/test_trace_reproducibility.py tests/test_trace_r2a_contract.py; git diff --check; git -c safe.directory=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source diff --check"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:28:33+00:00",
+      "exit_code": 0,
+      "name": "r2a-preregistration-freeze",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T101335Z-r2a-preregistration-freeze",
+        "schema_version": 1
+      },
+      "run_id": "20260816T101335Z-r2a-preregistration-freeze",
+      "started_at": "2026-08-16T10:13:36+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "a3fd35f0bbfb0664aeed8069a72913cda510c9f900edd1d29c33ad0ebb60b0a9"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set -euo pipefail; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/freeze_trace_r2a_preregistration.py; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/prepare_trace_r2a_handoffs.py --output artifacts/trace_stage0_r2a_reproducibility_repair/handoffs --validate-only; PYTHONPATH=src /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_trace_alignment.py tests/test_trace_equivariance.py tests/test_trace_native_1ms.py tests/test_trace_native_cadence.py tests/test_trace_r1_verdict.py tests/test_trace_reproducibility.py tests/test_trace_r2a_contract.py; git diff --check; git -c safe.directory=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source diff --check"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:29:37+00:00",
+      "exit_code": 0,
+      "name": "r2a-preregistration-freeze-r1",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T102927Z-r2a-preregistration-freeze-r1",
+        "schema_version": 1
+      },
+      "run_id": "20260816T102927Z-r2a-preregistration-freeze-r1",
+      "started_at": "2026-08-16T10:29:27+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "cb62e4be59b0b0e106b9c4f20c6cfa84f097c1dd35719ab284bd9f7d0695f758"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set -euo pipefail; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/freeze_trace_r2a_preregistration.py; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/prepare_trace_r2a_handoffs.py --output artifacts/trace_stage0_r2a_reproducibility_repair/handoffs --validate-only; PYTHONPATH=src /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_trace_alignment.py tests/test_trace_equivariance.py tests/test_trace_native_1ms.py tests/test_trace_native_cadence.py tests/test_trace_r1_verdict.py tests/test_trace_reproducibility.py tests/test_trace_r2a_contract.py; git diff --check; git diff --cached --check; git -c safe.directory=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source diff --check"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:30:55+00:00",
+      "exit_code": 0,
+      "name": "r2a-preregistration-freeze-r2",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T103045Z-r2a-preregistration-freeze-r2",
+        "schema_version": 1
+      },
+      "run_id": "20260816T103045Z-r2a-preregistration-freeze-r2",
+      "started_at": "2026-08-16T10:30:45+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e31b823e563f550baedb499a6937e170f381756437e39891e71fdfcfe55992ac"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2a.py",
+        "run-receiver",
+        "--scenario",
+        "TEXBAT.cleanStatic",
+        "--repetition",
+        "3"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:32:25+00:00",
+      "exit_code": 0,
+      "name": "r2a-phase-a-cleanstatic-rep3",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T103139Z-r2a-phase-a-cleanstatic-rep3",
+        "schema_version": 1
+      },
+      "run_id": "20260816T103139Z-r2a-phase-a-cleanstatic-rep3",
+      "started_at": "2026-08-16T10:31:39+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "4102baf11b211a9df09757333bda0bcf96d2f2a49451e041bc929d060585e1d5",
+      "stdout_sha256": "ba3558761ff98429cd7a8160d8445ad4e870910f6353ac273c23621dfed097f8"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/prepare_trace_r2a_handoffs.py",
+        "--output",
+        "artifacts/trace_stage0_r2a_reproducibility_repair/handoffs"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:34:36+00:00",
+      "exit_code": 0,
+      "name": "r2a-repair-deterministic-assignment-r2",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T103430Z-r2a-repair-deterministic-assignment-r2",
+        "schema_version": 1
+      },
+      "run_id": "20260816T103430Z-r2a-repair-deterministic-assignment-r2",
+      "started_at": "2026-08-16T10:34:30+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "64336b545111e74271374f8cb87b09019ebbdb75a2ab2eae1eb74a3a58281e0d"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set -euo pipefail; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/freeze_trace_r2a_preregistration.py; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/prepare_trace_r2a_handoffs.py --output artifacts/trace_stage0_r2a_reproducibility_repair/handoffs --validate-only; PYTHONPATH=src /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_trace_alignment.py tests/test_trace_equivariance.py tests/test_trace_native_1ms.py tests/test_trace_native_cadence.py tests/test_trace_r1_verdict.py tests/test_trace_reproducibility.py tests/test_trace_r2a_contract.py; git diff --check; git -c safe.directory=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source diff --check"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:35:49+00:00",
+      "exit_code": 0,
+      "name": "r2a-preregistration-freeze-r3",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T103539Z-r2a-preregistration-freeze-r3",
+        "schema_version": 1
+      },
+      "run_id": "20260816T103539Z-r2a-preregistration-freeze-r3",
+      "started_at": "2026-08-16T10:35:39+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "2ea3beca7de96bba5e793b2d2c287f36eceb60b9baad1d631172f86a5d06625e"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2a.py",
+        "run-receiver",
+        "--scenario",
+        "TEXBAT.cleanStatic",
+        "--repetition",
+        "3",
+        "--attempt",
+        "r1"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:37:02+00:00",
+      "exit_code": 0,
+      "name": "r2a-phase-a-cleanstatic-rep3-r1",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T103626Z-r2a-phase-a-cleanstatic-rep3-r1",
+        "schema_version": 1
+      },
+      "run_id": "20260816T103626Z-r2a-phase-a-cleanstatic-rep3-r1",
+      "started_at": "2026-08-16T10:36:26+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "a8c7bc34d667f09b48421458de7a93e4f096198a3adb02a9a3c9f6802a7c862b"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2a.py",
+        "run-receiver",
+        "--scenario",
+        "TEXBAT.cleanStatic",
+        "--repetition",
+        "4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:38:11+00:00",
+      "exit_code": 0,
+      "name": "r2a-phase-a-cleanstatic-rep4",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T103723Z-r2a-phase-a-cleanstatic-rep4",
+        "schema_version": 1
+      },
+      "run_id": "20260816T103723Z-r2a-phase-a-cleanstatic-rep4",
+      "started_at": "2026-08-16T10:37:23+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "24e1e8156aae0dfa8f08112ae4dd6f72b65c74f4fa2bb2d4d96a05b3e97bfaea"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2a.py",
+        "run-receiver",
+        "--scenario",
+        "TEXBAT.DS3",
+        "--repetition",
+        "3"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:40:17+00:00",
+      "exit_code": 0,
+      "name": "r2a-phase-a-ds3-smoke",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T103843Z-r2a-phase-a-ds3-smoke",
+        "schema_version": 1
+      },
+      "run_id": "20260816T103843Z-r2a-phase-a-ds3-smoke",
+      "started_at": "2026-08-16T10:38:43+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "fa06cf1e982db0b26f8e49abab1ef1f553be6f033c91d36d0dc8b50f637b998d",
+      "stdout_sha256": "10f4bf5f288344c6cc338effdeee425b2370dbacf0420654563872f28b8a5f18"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/prepare_trace_r2a_handoffs.py",
+        "--output",
+        "artifacts/trace_stage0_r2a_reproducibility_repair/handoffs"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:41:50+00:00",
+      "exit_code": 0,
+      "name": "r2a-repair-deterministic-assignment-r3",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T104144Z-r2a-repair-deterministic-assignment-r3",
+        "schema_version": 1
+      },
+      "run_id": "20260816T104144Z-r2a-repair-deterministic-assignment-r3",
+      "started_at": "2026-08-16T10:41:44+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "2928a3262d9749aa8abaaec65e95bf95ce12ff7cd403a8fa18492256ed110515"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set -euo pipefail; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/freeze_trace_r2a_preregistration.py; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/prepare_trace_r2a_handoffs.py --output artifacts/trace_stage0_r2a_reproducibility_repair/handoffs --validate-only; PYTHONPATH=src /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_trace_alignment.py tests/test_trace_equivariance.py tests/test_trace_native_1ms.py tests/test_trace_native_cadence.py tests/test_trace_r1_verdict.py tests/test_trace_reproducibility.py tests/test_trace_r2a_contract.py; git diff --check; git -c safe.directory=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair/receiver-source diff --check"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:42:20+00:00",
+      "exit_code": 0,
+      "name": "r2a-preregistration-freeze-r4",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T104210Z-r2a-preregistration-freeze-r4",
+        "schema_version": 1
+      },
+      "run_id": "20260816T104210Z-r2a-preregistration-freeze-r4",
+      "started_at": "2026-08-16T10:42:10+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "31d3ba87c4a13d55d8170777cf69134ab273d44ff95fdd073a5fdb1dfa80ecae"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2a.py",
+        "run-receiver",
+        "--scenario",
+        "TEXBAT.DS3",
+        "--repetition",
+        "3",
+        "--attempt",
+        "r1"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:44:08+00:00",
+      "exit_code": 2,
+      "name": "r2a-phase-a-ds3-smoke-r1",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T104253Z-r2a-phase-a-ds3-smoke-r1",
+        "schema_version": 1
+      },
+      "run_id": "20260816T104253Z-r2a-phase-a-ds3-smoke-r1",
+      "started_at": "2026-08-16T10:42:53+00:00",
+      "status": "failed",
+      "stderr_sha256": "0a76bc633426cba7d33b99af584183b807a67a30b4c10c7910fedbf529849db2",
+      "stdout_sha256": "55f053d0d5860791d833945155377ab28d0da50efddd4b1b687abba308b5218d"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2a.py",
+        "run-receiver",
+        "--scenario",
+        "OAKBAT.OS3",
+        "--repetition",
+        "3"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:45:11+00:00",
+      "exit_code": 0,
+      "name": "r2a-phase-a-os3-smoke",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T104500Z-r2a-phase-a-os3-smoke",
+        "schema_version": 1
+      },
+      "run_id": "20260816T104500Z-r2a-phase-a-os3-smoke",
+      "started_at": "2026-08-16T10:45:00+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "1a8c5055ae62cf3fc21eeb272fc0c6a15a0deacaeb74a543502b32c529c02391",
+      "stdout_sha256": "27a73351b1aa24466616b0d9b03d8e41c92e7419ab9b7046910b3e67b6dcc8ba"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_trace_r2a_phase_a.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:46:16+00:00",
+      "exit_code": 1,
+      "name": "r2a-phase-a-semantic-reproduction-evaluate",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T104606Z-r2a-phase-a-semantic-reproduction-evaluate",
+        "schema_version": 1
+      },
+      "run_id": "20260816T104606Z-r2a-phase-a-semantic-reproduction-evaluate",
+      "started_at": "2026-08-16T10:46:07+00:00",
+      "status": "failed",
+      "stderr_sha256": "28209a4da9dc3efb5ea48a46f4a5be2ebbcca75687e0dc83b6e60b27b02b5211",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set -euo pipefail; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/freeze_trace_r2a_preregistration.py; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/prepare_trace_r2a_handoffs.py --output artifacts/trace_stage0_r2a_reproducibility_repair/handoffs --validate-only; PYTHONPATH=src /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_trace_alignment.py tests/test_trace_equivariance.py tests/test_trace_native_1ms.py tests/test_trace_native_cadence.py tests/test_trace_r1_verdict.py tests/test_trace_reproducibility.py tests/test_trace_r2a_contract.py; git diff --check"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:48:41+00:00",
+      "exit_code": 0,
+      "name": "r2a-preregistration-freeze-r5",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T104831Z-r2a-preregistration-freeze-r5",
+        "schema_version": 1
+      },
+      "run_id": "20260816T104831Z-r2a-preregistration-freeze-r5",
+      "started_at": "2026-08-16T10:48:31+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "25a7884c1596d9358cee0a0c35d4903c58892e8304c7ebf2982949410bde4244"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_trace_r2a_phase_a.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:49:50+00:00",
+      "exit_code": 2,
+      "name": "r2a-phase-a-semantic-reproduction-evaluate-r1",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T104925Z-r2a-phase-a-semantic-reproduction-evaluate-r1",
+        "schema_version": 1
+      },
+      "run_id": "20260816T104925Z-r2a-phase-a-semantic-reproduction-evaluate-r1",
+      "started_at": "2026-08-16T10:49:25+00:00",
+      "status": "failed",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "ab3f3cd95aa9fb448634beeeb4a4cbf0b309c58b3e7fe186241c94cb64d7a014"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/finalize_trace_r2a_not_authorized.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2a-reproducibility-repair",
+      "ended_at": "2026-08-16T10:50:13+00:00",
+      "exit_code": 0,
+      "name": "r2a-controls-bootstrap-finalize",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T105012Z-r2a-controls-bootstrap-finalize",
+        "schema_version": 1
+      },
+      "run_id": "20260816T105012Z-r2a-controls-bootstrap-finalize",
+      "started_at": "2026-08-16T10:50:12+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "d74ee8808a5e904aed80cfda12f73337643d54d636a78c883fb8e438d67ac80e"
+    }
+  ],
+  "schema": "gnss-doppler-lab.trace-r2a-runner-runs.v1"
+}

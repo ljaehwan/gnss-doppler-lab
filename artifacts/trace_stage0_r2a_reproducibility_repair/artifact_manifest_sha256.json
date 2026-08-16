@@ -1,0 +1,187 @@
+{
+  "excluded_self_referential_or_run_provenance_files": {
+    "artifact_manifest_sha256.json": "self-referential checksum manifest",
+    "runner_runs.json": "updated after the final durable verifier run",
+    "test_results.json": "updated after the final fresh-clone verifier run"
+  },
+  "files": {
+    "README.md": {
+      "byte_size": 282,
+      "sha256": "06b25efb0d30e200609b9cc5cb22ed72d0ee4654dfdf0b59177c1b80110ff617"
+    },
+    "ablation_metrics.csv": {
+      "byte_size": 242,
+      "sha256": "e7513ed56c6cca0e3c99cd0e2c4b90790b0ef5e61e6f0328f69263d511b6bc00"
+    },
+    "action_mapping_validation.json": {
+      "byte_size": 25835,
+      "sha256": "7812a8d894ba8f10c99ee4b00d7babe840e8f1261285b4795e5c24fd27763caa"
+    },
+    "action_shuffle_metrics.json": {
+      "byte_size": 308,
+      "sha256": "81623a81e5cd5cc6873df1d9ccf653535f563b5002e2af32ffe86e21c0d5ace8"
+    },
+    "bootstrap_intervals.csv": {
+      "byte_size": 247,
+      "sha256": "1234c30e1e40aa61bf4dfb38550d612b6ad51823c3646e9c595bba04121625b7"
+    },
+    "canonical_record_comparison.csv.gz": {
+      "byte_size": 6844282,
+      "sha256": "e840156f2bae15ef1d06fec93a65ee9b4e75b77ee7d6b3be61f2ee64c59d41e0"
+    },
+    "channel_prn_assignment_comparison.csv": {
+      "byte_size": 1385,
+      "sha256": "4c5c26d83472460a2386fbb47b3d96692fdc228472f87515b3c036c29090de96"
+    },
+    "clean_split_audit.json": {
+      "byte_size": 292,
+      "sha256": "c0f2a357368ab4f3674fa0dc668e52554614ce50bbe6f426a7165d366902a9e4"
+    },
+    "config.json": {
+      "byte_size": 3586,
+      "sha256": "02a9b96728873d434bbbda315acf6574bd901bffabd0a67935b4a7ee911a684b"
+    },
+    "final_verdict.json": {
+      "byte_size": 926,
+      "sha256": "acb9ac1151a8c9aa9d3ca00dbfc109ef599ba77073a39b3908620a3cac3c1351"
+    },
+    "first_divergence_analysis.json": {
+      "byte_size": 2661,
+      "sha256": "bc51782f8362bf3547266a58c11a9e5d7639009053718d74332a586f56989337"
+    },
+    "frozen_configs/oakbat_os3.conf": {
+      "byte_size": 2562,
+      "sha256": "e066d060471abcb41764b99269c1a383182856970fc695f95075894681c08e63"
+    },
+    "frozen_configs/phase_b/oakbat_cleanstatic.conf": {
+      "byte_size": 2606,
+      "sha256": "42e9f0571e044e86ff39c88d8ec5b437ae13334ce43a2143507ca9662925d3b0"
+    },
+    "frozen_configs/phase_b/oakbat_os3.conf": {
+      "byte_size": 2554,
+      "sha256": "6a3360c7d72570c2c42ec4791edf4282aed9790c7cbe1ad53d523de245fbcb17"
+    },
+    "frozen_configs/phase_b/oakbat_os4.conf": {
+      "byte_size": 2554,
+      "sha256": "86f360981b110d7e62314fdd3fd1d6c4481d93e9c3dd0a344513984a6b10a24e"
+    },
+    "frozen_configs/phase_b/texbat_cleanstatic.conf": {
+      "byte_size": 2584,
+      "sha256": "0569a90870775649c25ae13c8c6649ebc599faec2f3b8aec8292d7e2026f77c7"
+    },
+    "frozen_configs/phase_b/texbat_ds3.conf": {
+      "byte_size": 2547,
+      "sha256": "025f49b95e9bea42eaff38554876a0487c48ce4fc8494a19c29dce29e2a605e3"
+    },
+    "frozen_configs/phase_b/texbat_ds7.conf": {
+      "byte_size": 2531,
+      "sha256": "ac9aff6899ffc4cc7e8281ccf240e00e4e91ddb0026ae7409f5ed1a433020d35"
+    },
+    "frozen_configs/texbat_cleanstatic.conf": {
+      "byte_size": 2593,
+      "sha256": "a3b3a9e46119ed0a96ab782f34571d0cd5d7be1d98f911625c6d28d85c6096e7"
+    },
+    "frozen_configs/texbat_ds3.conf": {
+      "byte_size": 2556,
+      "sha256": "a68bb22e4f5007bc12c4137e8c33aec069d6a32d3f597067b9edff1217081042"
+    },
+    "handoffs/manifest.json": {
+      "byte_size": 15804,
+      "sha256": "2928a3262d9749aa8abaaec65e95bf95ce12ff7cd403a8fa18492256ed110515"
+    },
+    "handoffs/oakbat_os3.csv": {
+      "byte_size": 3146,
+      "sha256": "687dac924c23b6364d453ba390a501a828159ce2a8ddd5e2f5144f53063c88ac"
+    },
+    "handoffs/texbat_cleanstatic.csv": {
+      "byte_size": 3140,
+      "sha256": "68f9f6cb24ea3663f7a32cdefd8464af9580dc970c18595db4cae5cc98d849f8"
+    },
+    "handoffs/texbat_ds3.csv": {
+      "byte_size": 3163,
+      "sha256": "a8c9d51edd3aa8bcd58dd4a9f04061ec31a1d37dafbae33c6551a961cc4d097b"
+    },
+    "per_epoch_scores.csv.gz": {
+      "byte_size": 189,
+      "sha256": "69a9b36919a89d2f9013a698f0833007598877091d1aef69dd5128f0237b2849"
+    },
+    "physical_controls.json": {
+      "byte_size": 310,
+      "sha256": "afd74501d1cddb525f30fe0e36363237d2a2de69fafc8ad5ad378d48e5167ebb"
+    },
+    "plots/common_raw_sample_tap_action_error.png": {
+      "byte_size": 39854,
+      "sha256": "af9ac55c7bd3c8e4f8bd85b398a52cc362621e38913a6030ef03c509f700ce4d"
+    },
+    "plots/first_divergence.png": {
+      "byte_size": 30842,
+      "sha256": "27376c1c5a225d95feb85b8d61cd5a8406820ec49a24df83152d47ec09755ad8"
+    },
+    "plots/rep1_rep2_acquisition_start_and_prn_assignment.png": {
+      "byte_size": 37362,
+      "sha256": "da8f73acb8dd3bdf442df7b951f6d7763fa7437e7cf7b47c6b15e94d656cf3fb"
+    },
+    "plots/rep3_rep4_semantic_reproducibility.png": {
+      "byte_size": 40613,
+      "sha256": "d5a3c497926ff1586610b16447ec826f1f2f901c3ac5914ab14f93ee7e7075ef"
+    },
+    "plots/replay_by_replay_trace_score_comparison.png": {
+      "byte_size": 37626,
+      "sha256": "56b708d20b4650753ba904d5c571ee0b1ee24bf075448ba5300d4ded1dad49f6"
+    },
+    "preregistration.json": {
+      "byte_size": 6393,
+      "sha256": "7634d7a79f1dc8d3521d8fccd17188d6d975aed40484e680f250d43ab4941427"
+    },
+    "r2_existing_failure_preservation.json": {
+      "byte_size": 486,
+      "sha256": "172d74e820fc055c3333e5447adfaab65822b1e1894bf7f76d68353304628746"
+    },
+    "raw_source_binding.json": {
+      "byte_size": 3542,
+      "sha256": "12581f309f09646c276550a414f7cdac18b537279dd06bc58f048c8c866d5117"
+    },
+    "receiver_build_manifest.json": {
+      "byte_size": 1139,
+      "sha256": "9b781f1f7360cacce109fa92f8f9a21ce209fdf3d56d50a573405298e98aa721"
+    },
+    "receiver_nondeterminism_audit.json": {
+      "byte_size": 40840,
+      "sha256": "3bc813c8eb81a37253a783215dfedc78fcefcaaac68cc855fbf49d46f3220c87"
+    },
+    "receiver_repair.diff": {
+      "byte_size": 37159,
+      "sha256": "53bfd4f0fbe7b4c039b3e7248bd98c918a48a955a60d24156573e24f0d1b8d8c"
+    },
+    "rep1_rep2_root_cause_audit.json": {
+      "byte_size": 30361,
+      "sha256": "8583297cf03fd732187dec4266e77184ea84ae9719602303bc60bea6faadb524"
+    },
+    "rep3_rep4_reproduction_metrics.json": {
+      "byte_size": 38655,
+      "sha256": "ab3f3cd95aa9fb448634beeeb4a4cbf0b309c58b3e7fe186241c94cb64d7a014"
+    },
+    "replay_inventory.json": {
+      "byte_size": 68895,
+      "sha256": "9d6f58daad35effdf99abda27e1b103c271003c096e7b83feb90a7ee5c45e865"
+    },
+    "scenario_metrics.csv": {
+      "byte_size": 242,
+      "sha256": "e7513ed56c6cca0e3c99cd0e2c4b90790b0ef5e61e6f0328f69263d511b6bc00"
+    },
+    "semantic_reproduction_contract.json": {
+      "byte_size": 2092,
+      "sha256": "a03ed636a9279717d5cae3931baee264dd023dfe2c193f13be11c822ce8961f9"
+    },
+    "source_commit.json": {
+      "byte_size": 617,
+      "sha256": "0722cd3474db7f9a989f5d7066a0705b34002a5af5531867b70dfd3e71ecabd2"
+    },
+    "thresholds.json": {
+      "byte_size": 305,
+      "sha256": "e9804bf28b5ce7b68f5360e17b84c418877ba0a634753e7e2283b25cd3df0c12"
+    }
+  },
+  "hash_algorithm": "SHA-256",
+  "schema": "gnss-doppler-lab.trace-r2a-artifact-manifest.v1"
+}

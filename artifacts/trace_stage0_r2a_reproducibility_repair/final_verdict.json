@@ -1,0 +1,20 @@
+{
+  "actual_action_vs_shuffled_no_action": {
+    "reason": "Phase B not authorized.",
+    "status": "UNAVAILABLE"
+  },
+  "attack_metrics_computed": false,
+  "failure_label": "INSUFFICIENT_MULTI_PRN_SUPPORT",
+  "next_action": "Repair or replace the receiver handoff implementation, then repeat the same frozen Phase A without changing TRACE scoring or tolerances.",
+  "normal_fpr": {
+    "reason": "Phase B not authorized; no scientific threshold/FPR evaluation.",
+    "status": "UNAVAILABLE"
+  },
+  "phase_a_passed": false,
+  "phase_b_authorized": false,
+  "phase_b_run": false,
+  "r2_prior_verdict_preserved": "INCONCLUSIVE_INPUT_OR_RECEIVER",
+  "reason": "Phase A did not pass every preregistered source/causal/semantic/support gate; Phase B is NOT_AUTHORIZED and no attack performance was read or computed.",
+  "schema": "gnss-doppler-lab.trace-r2a-final-verdict.v1",
+  "verdict": "INCONCLUSIVE_RECEIVER_REPRODUCIBILITY"
+}

@@ -1,0 +1,26 @@
+{
+  "coverage": [
+    "canonical key/order",
+    "serialization padding and exact scalar layout",
+    "current/next action semantics",
+    "semantic hash",
+    "common-support alignment",
+    "acquisition/tracking handoff",
+    "clean-only calibration",
+    "causal mapping",
+    "PRN permutation invariance",
+    "variable PRN count",
+    "timeline/onset",
+    "deterministic score reproduction",
+    "artifact checksum",
+    "fresh-clone verifier"
+  ],
+  "durable_verifier": {
+    "attempt_run_ids": [],
+    "reason": "No durable runner record found.",
+    "status": "UNAVAILABLE"
+  },
+  "note": "Exact commands, stdout/stderr hashes, exit code, and result manifest are preserved in runner_runs.json and the durable run directory.",
+  "schema": "gnss-doppler-lab.trace-r2a-test-results.v1",
+  "status": "UNAVAILABLE"
+}
