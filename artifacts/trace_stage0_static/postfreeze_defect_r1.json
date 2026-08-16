@@ -1,0 +1,10 @@
+{
+  "affected_freeze_commit": "109402b",
+  "attack_scores_computed": false,
+  "defect": "Synthetic exact equal-power anti-phase Prompt null raised ValueError instead of applying the frozen low-Prompt quality mask.",
+  "discovered_by_runner_run_id": "20260816T062413Z-trace-phase-b-frozen-synthetic",
+  "fix_scope": "Treat invalid current/target Prompt normalization as a masked synthetic sweep point and report the masked count.",
+  "hyperparameters_changed": false,
+  "real_scenario_evaluation_started": false,
+  "schema": "gnss-doppler-lab.trace-postfreeze-defect.v1"
+}

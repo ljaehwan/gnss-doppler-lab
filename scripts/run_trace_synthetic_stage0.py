@@ -22,16 +22,19 @@ def ca_correlation(delay_chips: float) -> np.ndarray:
     return np.maximum(0.0, 1.0 - np.abs(TAP_COORDS_CHIPS - delay_chips)).astype(np.complex128)
 
 
-def normalized(values: np.ndarray) -> np.ndarray:
+def normalized(values: np.ndarray) -> np.ndarray | None:
     out, valid = prompt_normalize(values)
     if not bool(valid):
-        raise ValueError("synthetic Prompt quality failure")
+        return None
     return out
 
 
-def residual_score(current: np.ndarray, target: np.ndarray, action: float) -> float:
-    predicted, valid = warp_complex_taps(normalized(current), action, 0.0)
+def residual_score(current: np.ndarray, target: np.ndarray, action: float) -> float | None:
+    current_normalized = normalized(current)
     actual = normalized(target)
+    if current_normalized is None or actual is None:
+        return None
+    predicted, valid = warp_complex_taps(current_normalized, action, 0.0)
     common = valid & (np.arange(9) > 0) & (np.arange(9) < 8)
     return float(np.mean(np.abs(actual[common] - predicted[common]) ** 2))
 
@@ -49,6 +52,7 @@ def main() -> int:
     controls = []
     two_source = []
     plot_rows = []
+    prompt_masked = 0
     powers = (-3.0, 0.0, 3.0)
     phases = np.linspace(0.0, 2 * np.pi, 16, endpoint=False)
     delays = np.linspace(0.0, 0.5, 11)
@@ -75,6 +79,9 @@ def main() -> int:
                             drift = doppler * dt * 0.001  # small resolvable code/carrier mismatch coupling
                             spoof_next = amplitude * np.exp(1j * (common_phase + phase + 2 * np.pi * doppler * dt)) * ca_correlation(delay - action + drift)
                             score = residual_score(auth + spoof, auth_next + spoof_next, action)
+                            if score is None:
+                                prompt_masked += 1
+                                continue
                             two_source.append(score)
                             plot_rows.append((power_db, phase, delay, doppler, score))
     controls_array = np.asarray(controls)
@@ -97,6 +104,7 @@ def main() -> int:
         "sweep": {"relative_power_db": list(powers), "phase_count": len(phases), "delay_chips": delays.tolist(), "residual_doppler_hz": dopplers.tolist(), "prns": 4, "reference_epochs": 8},
         "single_source_control_count": int(len(controls_array)),
         "two_source_count": int(len(two_array)),
+        "low_prompt_masked_count": prompt_masked,
         "control_median_score": float(np.median(controls_array)),
         "two_source_median_score": float(np.median(two_array)),
         "paired_mean_effect": float(np.mean(differences)),
