@@ -1,0 +1,134 @@
+{
+  "attack_data_used_for_tolerance_or_repair_selection": false,
+  "phase_a_pass_requires": [
+    "source gate PASS",
+    "causal gate PASS",
+    "semantic reproduction gate PASS",
+    "whole replay row set and terminal per-channel counts identical",
+    "rep3/rep4 TRACE score within 1e-12",
+    "block keys, threshold crossings, and alarms identical",
+    "DS3/OS3 native 1 ms and >=4 PRN support",
+    "action mapping mismatch 0",
+    "raw source/timeline binding PASS"
+  ],
+  "phase_a_replays": [
+    "TEXBAT.cleanStatic.rep3",
+    "TEXBAT.cleanStatic.rep4",
+    "TEXBAT.DS3.smoke",
+    "OAKBAT.OS3.smoke"
+  ],
+  "phase_b_scope_if_authorized": [
+    "TEXBAT.cleanStatic",
+    "TEXBAT.DS3",
+    "TEXBAT.DS7",
+    "OAKBAT.cleanStatic",
+    "OAKBAT.OS3",
+    "OAKBAT.OS4"
+  ],
+  "phase_b_scorer": {
+    "adapter": "scripts/evaluate_trace_r2c_phase_b.py",
+    "frozen_r2_sha256": "7c3e4f759e461c048b58cd7852ca6d78ded3b56e141e23c749c58ed4c814413c",
+    "implementation": "scripts/evaluate_trace_r2_phase_b.py"
+  },
+  "repair_plan": {
+    "attack_data_used_for_repair_selection": false,
+    "attack_performance_read_or_computed": false,
+    "created_at": "2026-08-16T21:01:45+09:00",
+    "diagnosis_binding": {
+      "diagnosis_label": "FILE_SOURCE_STOP_PREEMPTS_TERMINAL_CHANNEL_DRAIN",
+      "path": "artifacts/trace_stage0_r2c_terminal_drain_repair/diagnosis.json"
+    },
+    "evaluation_code_change_authorized": false,
+    "frozen_phase_a": {
+      "action_mapping_mismatch_maximum": 0,
+      "minimum_stable_quality_common_epochs": 1000,
+      "minimum_valid_prns_same_epoch": 4,
+      "native_cadence_fraction_minimum": 0.99,
+      "physical_common_rows_must_be_bit_exact": true,
+      "quality_carrier_lock_min": 0.85,
+      "quality_cn0_min_db_hz": 28.0,
+      "raw_source_and_timeline_binding_must_pass": true,
+      "replays": [
+        "TEXBAT.cleanStatic.rep3",
+        "TEXBAT.cleanStatic.rep4",
+        "TEXBAT.DS3.smoke",
+        "OAKBAT.OS3.smoke"
+      ],
+      "terminal_row_counts_per_prn_channel_must_match": true,
+      "threshold_crossings_and_alarms_must_match": true,
+      "trace_score_absolute_tolerance": 1e-12,
+      "whole_replay_canonical_semantic_hash_must_match": true,
+      "whole_replay_row_set_must_match": true
+    },
+    "implementation_scope": [
+      "add an opt-in finite-file terminal-drain mode to the receiver input valve",
+      "on configured source exhaustion, return natural GNU Radio end-of-stream and request a drain action instead of the immediate STOP action",
+      "handle the drain action by waiting for natural flowgraph completion before normal shutdown",
+      "enable the mode identically in all frozen R2c cleanStatic, DS3, and OS3 receiver configs",
+      "preserve the R2b handoff restore, TRACE schema-v2 serialization, causal action mapping, score adapter, and evaluator unchanged"
+    ],
+    "phase_b_authorization_rule": "Authorize Phase B only if every unchanged frozen Phase A source, executable/config/patch/handoff hash, cadence, causal, support, whole-row-set, terminal-count, semantic-hash, score, block-key, threshold-crossing, alarm, raw-timeline, and action-mapping gate passes.",
+    "phase_b_status_at_preregistration": "SEALED_NOT_AUTHORIZED",
+    "repair_strategy": "OPT_IN_NATURAL_EOS_FLOWGRAPH_DRAIN",
+    "row_closure_policy": "Do not filter or suppress native rows or TRACE pairs post hoc. The finite source closes at its already frozen source-bound end sample. After the last configured item is copied, propagate GNU Radio WORK_DONE and wait for every downstream block to consume all schedulable buffered input before stopping channels. The unchanged adapter then forms only naturally emitted, fully linked causal pairs.",
+    "schema": "gnss-doppler-lab.trace-r2c-repair-preregistration.v1",
+    "source_range_or_duration_change_authorized": false,
+    "success_prediction": "With identical input count and channel initial state, natural EOS propagation leaves each tracking block with a deterministic terminal buffer smaller than its forecast requirement. rep3 and rep4 should therefore emit identical per-PRN/channel terminal rows without changing any common physical value.",
+    "task_base_commit": "187ea86aa5fdf2b0ed300f5cb1b210c0b42b6fff",
+    "trace_math_threshold_tolerance_window_or_gate_changes_authorized": false
+  },
+  "schema": "gnss-doppler-lab.trace-r2c-preregistration.v1",
+  "scientific_objective": "Drain finite-source receiver channels deterministically and repeat unchanged frozen Phase A.",
+  "semantic_contract": "semantic_reproduction_contract.json",
+  "source_hashes": {
+    "handoffs": {
+      "OAKBAT.OS3": "9a546a42775450bbe076784b737aa7d2888ae637ddeb3769ee2ee3d4ce6f064c",
+      "TEXBAT.DS3": "1b630895bcaf0039d7d6764710e4c900b599cf6e2e4da917dc990c63b63b6400",
+      "TEXBAT.cleanStatic": "6bd2b3db921ac1fa91b97ac5cb6fd7444146e07b6d02bec693cc3fc5b9f2ea88"
+    },
+    "receiver_configs": {
+      "phase_a": {
+        "OAKBAT.OS3": {
+          "path": "artifacts/trace_stage0_r2c_terminal_drain_repair/frozen_configs/oakbat_os3.conf",
+          "sha256": "e2e169ac7b8a9e2b89fe106608ce4715c90f5a104da0200f59b28eb748323b2c"
+        },
+        "TEXBAT.DS3": {
+          "path": "artifacts/trace_stage0_r2c_terminal_drain_repair/frozen_configs/texbat_ds3.conf",
+          "sha256": "109289f870ceacd1165b6afe9aa00896cbf5482eeb3db869df27bec4c5af49bd"
+        },
+        "TEXBAT.cleanStatic": {
+          "path": "artifacts/trace_stage0_r2c_terminal_drain_repair/frozen_configs/texbat_cleanstatic.conf",
+          "sha256": "207fde7b04a1bf3308a6bf42cd736fe119e28d80c43ea3772ea1cab604ac3568"
+        }
+      },
+      "phase_b": {
+        "OAKBAT.OS3": {
+          "path": "artifacts/trace_stage0_r2c_terminal_drain_repair/frozen_configs/phase_b/oakbat_os3.conf",
+          "sha256": "67d9958a43eddc2743017bcddbda7e55cf1c9e133231850a0c627212614ed063"
+        },
+        "OAKBAT.OS4": {
+          "path": "artifacts/trace_stage0_r2c_terminal_drain_repair/frozen_configs/phase_b/oakbat_os4.conf",
+          "sha256": "561ff1dcd40cb649825dc2be1bd9ed41ce50b1b5eace2a7fab04cff16f42710f"
+        },
+        "OAKBAT.cleanStatic": {
+          "path": "artifacts/trace_stage0_r2c_terminal_drain_repair/frozen_configs/phase_b/oakbat_cleanstatic.conf",
+          "sha256": "acbec210d8f9b9c5f797f1c6c4f895fa0b838a2b7680789fede7b46068dfb033"
+        },
+        "TEXBAT.DS3": {
+          "path": "artifacts/trace_stage0_r2c_terminal_drain_repair/frozen_configs/phase_b/texbat_ds3.conf",
+          "sha256": "b0967c54db87ea430d5c95d10ef2d55d682e1bcd9139694a1163daaabcd869a1"
+        },
+        "TEXBAT.DS7": {
+          "path": "artifacts/trace_stage0_r2c_terminal_drain_repair/frozen_configs/phase_b/texbat_ds7.conf",
+          "sha256": "4b469ce67443a6d30116398dc20dd04c133bb7462aa21ee17c7453c23bd0b74c"
+        },
+        "TEXBAT.cleanStatic": {
+          "path": "artifacts/trace_stage0_r2c_terminal_drain_repair/frozen_configs/phase_b/texbat_cleanstatic.conf",
+          "sha256": "d1f1a8b73e9553965370812ac6d0d744a26b50cc418505403717b7d48b90d46e"
+        }
+      }
+    },
+    "receiver_executable_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+    "receiver_patch_sha256": "81b680bfae682fa92743fca53ce30ae09790383d008841d6eae3a25407442540"
+  }
+}

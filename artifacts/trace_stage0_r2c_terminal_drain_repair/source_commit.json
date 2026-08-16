@@ -1,0 +1,11 @@
+{
+  "freeze_commit": "TO_BE_RECORDED_AFTER_FREEZE_COMMIT",
+  "pinned_parent_commit": "864a1fd62f123bddbaa7358ff109997cd16d0714",
+  "preregistration_commit": "d079e93ff96c574d4e6713ed2077a7f3611d16e3",
+  "receiver_base_commit": "1ddd4562723040fd66cb334b578a5b69455625f4",
+  "receiver_executable_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+  "receiver_patch_sha256": "81b680bfae682fa92743fca53ce30ae09790383d008841d6eae3a25407442540",
+  "research_branch": "research/trace-stage0-r2c-terminal-drain-repair",
+  "schema": "gnss-doppler-lab.trace-r2c-source-freeze.v1",
+  "task_base_commit": "187ea86aa5fdf2b0ed300f5cb1b210c0b42b6fff"
+}
