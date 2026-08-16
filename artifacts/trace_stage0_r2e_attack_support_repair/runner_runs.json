@@ -42,6 +42,13 @@
       "selected_run_id": "20260816T165738Z-r2e-final-commit",
       "status": "PASS"
     },
+    "r2e-final-provenance-commit-push": {
+      "attempt_run_ids": [
+        "20260816T165843Z-r2e-final-provenance-commit-push"
+      ],
+      "selected_run_id": "20260816T165843Z-r2e-final-provenance-commit-push",
+      "status": "PASS"
+    },
     "r2e-focused-tests": {
       "attempt_run_ids": [
         "20260816T165417Z-r2e-focused-tests"
@@ -229,7 +236,7 @@
         "20260816T165821Z-r2e-provenance-finalization-after-push"
       ],
       "selected_run_id": "20260816T165821Z-r2e-provenance-finalization-after-push",
-      "status": "RUNNING"
+      "status": "PASS"
     },
     "r2e-provenance-finalization-after-tests": {
       "attempt_run_ids": [
@@ -1106,8 +1113,8 @@
         "scripts/finalize_trace_r2e_provenance.py"
       ],
       "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2e-attack-support-repair",
-      "ended_at": null,
-      "exit_code": null,
+      "ended_at": "2026-08-16T16:58:22+00:00",
+      "exit_code": 0,
       "name": "r2e-provenance-finalization-after-push",
       "result_manifest": {
         "artifacts": [],
@@ -1116,9 +1123,30 @@
       },
       "run_id": "20260816T165821Z-r2e-provenance-finalization-after-push",
       "started_at": "2026-08-16T16:58:21+00:00",
-      "status": "running",
+      "status": "succeeded",
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      "stdout_sha256": "7001a5702dea01b0c4876a993abe156e91b72d99b8f9d3628d49e64eca8d1d78"
+    },
+    {
+      "command": [
+        "/bin/bash",
+        "-lc",
+        "set -euo pipefail; git add -f artifacts/trace_stage0_r2e_attack_support_repair/runner_runs.json; git diff --cached --check; git commit -m \"record R2e commit and push provenance\"; git push origin research/trace-stage0-r2e-attack-support-repair; git rev-parse HEAD"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2e-attack-support-repair",
+      "ended_at": "2026-08-16T16:58:45+00:00",
+      "exit_code": 0,
+      "name": "r2e-final-provenance-commit-push",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T165843Z-r2e-final-provenance-commit-push",
+        "schema_version": 1
+      },
+      "run_id": "20260816T165843Z-r2e-final-provenance-commit-push",
+      "started_at": "2026-08-16T16:58:43+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "22c2943a9f9b05525fc4ad3e11deb45410705649eda054bac60c60356f9b4643",
+      "stdout_sha256": "169e979a169d4d56aaaaf128d7c61df62ede287e0393e1adfe3e5f18bd17e78e"
     }
   ],
   "schema": "gnss-doppler-lab.trace-r2e-runner-runs.v1"
