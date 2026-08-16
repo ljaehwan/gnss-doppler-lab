@@ -1,0 +1,16 @@
+{
+  "attack_or_scenario_scores_seen": false,
+  "configuration_source_commit": "fdc8a2e",
+  "frozen_files": [
+    "artifacts/trace_stage0_static/config.json",
+    "artifacts/trace_stage0_static/preregistration.json",
+    "src/gnss_doppler_lab/trace_action_warp.py",
+    "src/gnss_doppler_lab/trace_equivariance.py",
+    "scripts/run_trace_stage0.py",
+    "scripts/run_trace_synthetic_stage0.py",
+    "tests/test_trace_equivariance.py",
+    "tests/test_trace_alignment.py"
+  ],
+  "schema": "gnss-doppler-lab.trace-confirmation-freeze.v1",
+  "wording": "Configuration frozen before this TRACE evaluation."
+}
