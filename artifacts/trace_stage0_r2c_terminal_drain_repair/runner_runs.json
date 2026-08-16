@@ -1,0 +1,778 @@
+{
+  "phase_summary": {
+    "r2c-artifact-verifier-final": {
+      "attempt_run_ids": [
+        "20260816T131544Z-r2c-artifact-verifier-final"
+      ],
+      "selected_run_id": "20260816T131544Z-r2c-artifact-verifier-final",
+      "status": "PASS"
+    },
+    "r2c-focused-tests-final": {
+      "attempt_run_ids": [
+        "20260816T131510Z-r2c-focused-tests-final"
+      ],
+      "selected_run_id": "20260816T131510Z-r2c-focused-tests-final",
+      "status": "PASS"
+    },
+    "r2c-focused-tests-prefreeze": {
+      "attempt_run_ids": [
+        "20260816T121143Z-r2c-focused-tests-prefreeze"
+      ],
+      "selected_run_id": "20260816T121143Z-r2c-focused-tests-prefreeze",
+      "status": "PASS"
+    },
+    "r2c-parent-r2b-artifact-verifier": {
+      "attempt_run_ids": [
+        "20260816T131601Z-r2c-parent-r2b-artifact-verifier"
+      ],
+      "selected_run_id": "20260816T131601Z-r2c-parent-r2b-artifact-verifier",
+      "status": "PASS"
+    },
+    "r2c-phase-a-cleanstatic-rep3": {
+      "attempt_run_ids": [
+        "20260816T121742Z-r2c-phase-a-cleanstatic-rep3"
+      ],
+      "selected_run_id": "20260816T121742Z-r2c-phase-a-cleanstatic-rep3",
+      "status": "PASS"
+    },
+    "r2c-phase-a-cleanstatic-rep4": {
+      "attempt_run_ids": [
+        "20260816T121742Z-r2c-phase-a-cleanstatic-rep4"
+      ],
+      "selected_run_id": "20260816T121742Z-r2c-phase-a-cleanstatic-rep4",
+      "status": "PASS"
+    },
+    "r2c-phase-a-ds3-smoke": {
+      "attempt_run_ids": [
+        "20260816T121742Z-r2c-phase-a-ds3-smoke"
+      ],
+      "selected_run_id": "20260816T121742Z-r2c-phase-a-ds3-smoke",
+      "status": "PASS"
+    },
+    "r2c-phase-a-os3-smoke": {
+      "attempt_run_ids": [
+        "20260816T121742Z-r2c-phase-a-os3-smoke"
+      ],
+      "selected_run_id": "20260816T121742Z-r2c-phase-a-os3-smoke",
+      "status": "PASS"
+    },
+    "r2c-phase-a-semantic-evaluate": {
+      "attempt_run_ids": [
+        "20260816T122836Z-r2c-phase-a-semantic-evaluate"
+      ],
+      "selected_run_id": "20260816T122836Z-r2c-phase-a-semantic-evaluate",
+      "status": "PASS"
+    },
+    "r2c-phase-b-finalize-input-inconclusive": {
+      "attempt_run_ids": [
+        "20260816T131414Z-r2c-phase-b-finalize-input-inconclusive"
+      ],
+      "selected_run_id": "20260816T131414Z-r2c-phase-b-finalize-input-inconclusive",
+      "status": "PASS"
+    },
+    "r2c-phase-b-fit-oakbat": {
+      "attempt_run_ids": [
+        "20260816T131141Z-r2c-phase-b-fit-oakbat"
+      ],
+      "selected_run_id": "20260816T131141Z-r2c-phase-b-fit-oakbat",
+      "status": "FAILED"
+    },
+    "r2c-phase-b-fit-texbat": {
+      "attempt_run_ids": [
+        "20260816T131141Z-r2c-phase-b-fit-texbat"
+      ],
+      "selected_run_id": "20260816T131141Z-r2c-phase-b-fit-texbat",
+      "status": "KILLED"
+    },
+    "r2c-phase-b-receiver-oakbat": {
+      "attempt_run_ids": [
+        "20260816T122942Z-r2c-phase-b-receiver-oakbat"
+      ],
+      "selected_run_id": "20260816T122942Z-r2c-phase-b-receiver-oakbat",
+      "status": "KILLED"
+    },
+    "r2c-phase-b-receiver-oakbat-r1": {
+      "attempt_run_ids": [
+        "20260816T130747Z-r2c-phase-b-receiver-oakbat-r1"
+      ],
+      "selected_run_id": "20260816T130747Z-r2c-phase-b-receiver-oakbat-r1",
+      "status": "PASS"
+    },
+    "r2c-phase-b-receiver-texbat": {
+      "attempt_run_ids": [
+        "20260816T122941Z-r2c-phase-b-receiver-texbat"
+      ],
+      "selected_run_id": "20260816T122941Z-r2c-phase-b-receiver-texbat",
+      "status": "FAILED"
+    },
+    "r2c-phase-b-receiver-texbat-ds7-r2": {
+      "attempt_run_ids": [
+        "20260816T130441Z-r2c-phase-b-receiver-texbat-ds7-r2"
+      ],
+      "selected_run_id": "20260816T130441Z-r2c-phase-b-receiver-texbat-ds7-r2",
+      "status": "PASS"
+    },
+    "r2c-phase-b-receiver-texbat-r1": {
+      "attempt_run_ids": [
+        "20260816T124201Z-r2c-phase-b-receiver-texbat-r1"
+      ],
+      "selected_run_id": "20260816T124201Z-r2c-phase-b-receiver-texbat-r1",
+      "status": "FAILED"
+    },
+    "r2c-provenance-before-commit": {
+      "attempt_run_ids": [
+        "20260816T131618Z-r2c-provenance-before-commit"
+      ],
+      "selected_run_id": "20260816T131618Z-r2c-provenance-before-commit",
+      "status": "RUNNING"
+    },
+    "r2c-provenance-before-verifier": {
+      "attempt_run_ids": [
+        "20260816T131535Z-r2c-provenance-before-verifier"
+      ],
+      "selected_run_id": "20260816T131535Z-r2c-provenance-before-verifier",
+      "status": "PASS"
+    },
+    "r2c-provenance-prefinal": {
+      "attempt_run_ids": [
+        "20260816T131455Z-r2c-provenance-prefinal"
+      ],
+      "selected_run_id": "20260816T131455Z-r2c-provenance-prefinal",
+      "status": "PASS"
+    },
+    "r2c-raw-source-binding": {
+      "attempt_run_ids": [
+        "20260816T121127Z-r2c-raw-source-binding"
+      ],
+      "selected_run_id": "20260816T121127Z-r2c-raw-source-binding",
+      "status": "PASS"
+    },
+    "r2c-receiver-build": {
+      "attempt_run_ids": [
+        "20260816T120647Z-r2c-receiver-build"
+      ],
+      "selected_run_id": "20260816T120647Z-r2c-receiver-build",
+      "status": "PASS"
+    },
+    "r2c-receiver-source-setup": {
+      "attempt_run_ids": [
+        "20260816T120349Z-r2c-receiver-source-setup"
+      ],
+      "selected_run_id": "20260816T120349Z-r2c-receiver-source-setup",
+      "status": "FAILED"
+    },
+    "r2c-receiver-source-setup-r1": {
+      "attempt_run_ids": [
+        "20260816T120426Z-r2c-receiver-source-setup-r1"
+      ],
+      "selected_run_id": "20260816T120426Z-r2c-receiver-source-setup-r1",
+      "status": "FAILED"
+    },
+    "r2c-receiver-source-setup-r2": {
+      "attempt_run_ids": [
+        "20260816T120501Z-r2c-receiver-source-setup-r2"
+      ],
+      "selected_run_id": "20260816T120501Z-r2c-receiver-source-setup-r2",
+      "status": "PASS"
+    },
+    "r2c-source-config-handoff-freeze": {
+      "attempt_run_ids": [
+        "20260816T121658Z-r2c-source-config-handoff-freeze"
+      ],
+      "selected_run_id": "20260816T121658Z-r2c-source-config-handoff-freeze",
+      "status": "PASS"
+    }
+  },
+  "run_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/runner-runs",
+  "runs": [
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set -euo pipefail\nmkdir -p /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair\ngit -c safe.directory=* clone --no-local /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-source-r1 /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-source\ngit -c safe.directory=* -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-source reset --hard 1ddd4562723040fd66cb334b578a5b69455625f4\ngit -c safe.directory=* -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-source apply /home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair/artifacts/trace_stage0_r2b_stable_handoff_repair/receiver_repair.diff\ngit -c safe.directory=* -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-source diff --check"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T12:03:50+00:00",
+      "exit_code": 128,
+      "name": "r2c-receiver-source-setup",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T120349Z-r2c-receiver-source-setup",
+        "schema_version": 1
+      },
+      "run_id": "20260816T120349Z-r2c-receiver-source-setup",
+      "started_at": "2026-08-16T12:03:49+00:00",
+      "status": "failed",
+      "stderr_sha256": "35b2d6ad04d574186d2ce8f7d4c0f0a993a1e0e3fd657787dd98103ca13a74f3",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set -euo pipefail\nenv GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=* git clone --no-local /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-source-r1 /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-source\ngit -c safe.directory=* -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-source reset --hard 1ddd4562723040fd66cb334b578a5b69455625f4\ngit -c safe.directory=* -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-source apply /home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair/artifacts/trace_stage0_r2b_stable_handoff_repair/receiver_repair.diff\ngit -c safe.directory=* -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-source diff --check"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T12:04:27+00:00",
+      "exit_code": 128,
+      "name": "r2c-receiver-source-setup-r1",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T120426Z-r2c-receiver-source-setup-r1",
+        "schema_version": 1
+      },
+      "run_id": "20260816T120426Z-r2c-receiver-source-setup-r1",
+      "started_at": "2026-08-16T12:04:26+00:00",
+      "status": "failed",
+      "stderr_sha256": "35b2d6ad04d574186d2ce8f7d4c0f0a993a1e0e3fd657787dd98103ca13a74f3",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set -euo pipefail\ncp -a --reflink=auto /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-source-r1 /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-source\ngit -c safe.directory=* -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-source diff --check\ntest \"$(git -c safe.directory=* -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-source rev-parse HEAD)\" = 1ddd4562723040fd66cb334b578a5b69455625f4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T12:05:12+00:00",
+      "exit_code": 0,
+      "name": "r2c-receiver-source-setup-r2",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T120501Z-r2c-receiver-source-setup-r2",
+        "schema_version": 1
+      },
+      "run_id": "20260816T120501Z-r2c-receiver-source-setup-r2",
+      "started_at": "2026-08-16T12:05:01+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set -euo pipefail\ngit -c safe.directory=* -C /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-source diff --check\nenv PYTHONPATH=/usr/lib/python3/dist-packages cmake -S /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-source -B /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-install -DPYTHON_EXECUTABLE=/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -DPython3_EXECUTABLE=/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -DENABLE_LOG=ON -DENABLE_UHD=ON -DENABLE_ZMQ=ON -DENABLE_UNIT_TESTING=ON -DENABLE_UNIT_TESTING_EXTRA=OFF -DENABLE_SYSTEM_TESTING=OFF -DENABLE_SYSTEM_TESTING_EXTRA=OFF\nenv MAKEFLAGS=-j12 PYTHONPATH=/usr/lib/python3/dist-packages GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=* cmake --build /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-build --target gnss-sdr -j 12"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T12:16:37+00:00",
+      "exit_code": 0,
+      "name": "r2c-receiver-build",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T120647Z-r2c-receiver-build",
+        "schema_version": 1
+      },
+      "run_id": "20260816T120647Z-r2c-receiver-build",
+      "started_at": "2026-08-16T12:06:47+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "f9ab33eab67c2a7e5a308d68ee0c239498e478f4283afa8ea3c830c7f7958ab8",
+      "stdout_sha256": "c4c2a11f4f23228bc746b071a43ad952622f0e701b0fb13d5880df621b43b31c"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2c.py",
+        "audit-raw"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T12:28:04+00:00",
+      "exit_code": 0,
+      "name": "r2c-raw-source-binding",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T121127Z-r2c-raw-source-binding",
+        "schema_version": 1
+      },
+      "run_id": "20260816T121127Z-r2c-raw-source-binding",
+      "started_at": "2026-08-16T12:11:27+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "3dc010a47f7cfac120d571c5893675a4ea6652513a3b69c98b0e6fd1e441ef77"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_trace_native_cadence.py",
+        "tests/test_trace_r1_verdict.py",
+        "tests/test_trace_native_1ms.py",
+        "tests/test_trace_reproducibility.py",
+        "tests/test_trace_r2a_contract.py",
+        "tests/test_trace_r2b_contract.py",
+        "tests/test_trace_alignment.py",
+        "tests/test_trace_equivariance.py",
+        "tests/test_trace_r2c_contract.py",
+        "-k",
+        "not r2c_frozen_configs and not r2c_receiver_patch and not r2c_phase_a and not r2c_verdict"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T12:11:49+00:00",
+      "exit_code": 0,
+      "name": "r2c-focused-tests-prefreeze",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T121143Z-r2c-focused-tests-prefreeze",
+        "schema_version": 1
+      },
+      "run_id": "20260816T121143Z-r2c-focused-tests-prefreeze",
+      "started_at": "2026-08-16T12:11:43+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "5f82410e428abb32fabcf74846e353bcdfceb09b70030ea62f0e8afe47d3245b"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/freeze_trace_r2c.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T12:17:05+00:00",
+      "exit_code": 0,
+      "name": "r2c-source-config-handoff-freeze",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T121658Z-r2c-source-config-handoff-freeze",
+        "schema_version": 1
+      },
+      "run_id": "20260816T121658Z-r2c-source-config-handoff-freeze",
+      "started_at": "2026-08-16T12:16:58+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "86b171d0064b1d045f0719c064e1b975633a4df2836560a45b65a42aa2213a71"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2c.py",
+        "run-receiver",
+        "--scenario",
+        "TEXBAT.cleanStatic",
+        "--repetition",
+        "3"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T12:19:01+00:00",
+      "exit_code": 0,
+      "name": "r2c-phase-a-cleanstatic-rep3",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T121742Z-r2c-phase-a-cleanstatic-rep3",
+        "schema_version": 1
+      },
+      "run_id": "20260816T121742Z-r2c-phase-a-cleanstatic-rep3",
+      "started_at": "2026-08-16T12:17:42+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "5c8408135bd318c0f9d0b6822e09d880c157a95df3f643e1f9cc041bf0362a46"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2c.py",
+        "run-receiver",
+        "--scenario",
+        "TEXBAT.cleanStatic",
+        "--repetition",
+        "4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T12:18:50+00:00",
+      "exit_code": 0,
+      "name": "r2c-phase-a-cleanstatic-rep4",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T121742Z-r2c-phase-a-cleanstatic-rep4",
+        "schema_version": 1
+      },
+      "run_id": "20260816T121742Z-r2c-phase-a-cleanstatic-rep4",
+      "started_at": "2026-08-16T12:17:42+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "ec584a1f5f6927b695d08df7f13154b74e2f8352b2d86b9ef002322bc2736d08"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2c.py",
+        "run-receiver",
+        "--scenario",
+        "TEXBAT.DS3",
+        "--repetition",
+        "3"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T12:19:13+00:00",
+      "exit_code": 0,
+      "name": "r2c-phase-a-ds3-smoke",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T121742Z-r2c-phase-a-ds3-smoke",
+        "schema_version": 1
+      },
+      "run_id": "20260816T121742Z-r2c-phase-a-ds3-smoke",
+      "started_at": "2026-08-16T12:17:42+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "8d98fafb781969e20a55f88344a7d7cc9dd19a470ad34904b470da7ff7d25ac3",
+      "stdout_sha256": "2cbf2b384fb4d67d996c5c3b176295e4338faa77b68508b3d5f98d2d2ef6b0db"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2c.py",
+        "run-receiver",
+        "--scenario",
+        "OAKBAT.OS3",
+        "--repetition",
+        "3"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T12:18:03+00:00",
+      "exit_code": 0,
+      "name": "r2c-phase-a-os3-smoke",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T121742Z-r2c-phase-a-os3-smoke",
+        "schema_version": 1
+      },
+      "run_id": "20260816T121742Z-r2c-phase-a-os3-smoke",
+      "started_at": "2026-08-16T12:17:42+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "9422c91e2273e0d09c64a28e1172e4a658ff7fda135b9cd8778a051e6603fe8c",
+      "stdout_sha256": "2547f0e8fb53d370a0e33aa2ecc86f75f75bd1bb5bfddace8a3e5fa4ade68f0e"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_trace_r2c_phase_a.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T12:29:12+00:00",
+      "exit_code": 0,
+      "name": "r2c-phase-a-semantic-evaluate",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T122836Z-r2c-phase-a-semantic-evaluate",
+        "schema_version": 1
+      },
+      "run_id": "20260816T122836Z-r2c-phase-a-semantic-evaluate",
+      "started_at": "2026-08-16T12:28:36+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "b0a766323bdef4f36e9605bdb26a984d9cbd262f79e48af2a013c2e9772110f6"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2c.py",
+        "run-phase-b-family",
+        "--family",
+        "TEXBAT"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T12:40:20+00:00",
+      "exit_code": 2,
+      "name": "r2c-phase-b-receiver-texbat",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T122941Z-r2c-phase-b-receiver-texbat",
+        "schema_version": 1
+      },
+      "run_id": "20260816T122941Z-r2c-phase-b-receiver-texbat",
+      "started_at": "2026-08-16T12:29:42+00:00",
+      "status": "failed",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "904291acf9e5b64a02c8579c4efb07b66568c01ccd3aa6c465e477943df0c280"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2c.py",
+        "run-phase-b-family",
+        "--family",
+        "OAKBAT"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T12:32:39+00:00",
+      "exit_code": -15,
+      "name": "r2c-phase-b-receiver-oakbat",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T122942Z-r2c-phase-b-receiver-oakbat",
+        "schema_version": 1
+      },
+      "run_id": "20260816T122942Z-r2c-phase-b-receiver-oakbat",
+      "started_at": "2026-08-16T12:29:42+00:00",
+      "status": "killed",
+      "stderr_sha256": "66fa1fd6356b9b92a5a0fa1de1a6104a7efb63a5c92b4a710fbd527f88919038",
+      "stdout_sha256": "a08d3bbca4353dd2436b3fa4b7d424d14f95b28269f34d1ba2eb0d61a3428cc1"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2c.py",
+        "run-phase-b-family",
+        "--family",
+        "TEXBAT"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T13:03:33+00:00",
+      "exit_code": 2,
+      "name": "r2c-phase-b-receiver-texbat-r1",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T124201Z-r2c-phase-b-receiver-texbat-r1",
+        "schema_version": 1
+      },
+      "run_id": "20260816T124201Z-r2c-phase-b-receiver-texbat-r1",
+      "started_at": "2026-08-16T12:42:01+00:00",
+      "status": "failed",
+      "stderr_sha256": "5427e6d3201f9d327ae55181e9a0b30ebc457ea84c3ebc0da78741e4ea463881",
+      "stdout_sha256": "6c2ba4b1c0f9f50d99cb7f9e5d10590aa0d3b91f59ae8546eb0795e6078ced27"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "-c",
+        "import sys; sys.path.insert(0,\"scripts\"); import run_trace_stage0_r2c as r; raise SystemExit(r.driver.run_phase_b_receiver(\"TEXBAT.DS7\"))"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T13:07:30+00:00",
+      "exit_code": 0,
+      "name": "r2c-phase-b-receiver-texbat-ds7-r2",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T130441Z-r2c-phase-b-receiver-texbat-ds7-r2",
+        "schema_version": 1
+      },
+      "run_id": "20260816T130441Z-r2c-phase-b-receiver-texbat-ds7-r2",
+      "started_at": "2026-08-16T13:04:41+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "3963c3c2c05a83b7f6cf01c86ec15e32858b69e5e5c390cfafb383279d5f014b",
+      "stdout_sha256": "3092ace837c88bccc1b58f897a043f18f733f9464b388a3825d1cbddae1a951b"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2c.py",
+        "run-phase-b-family",
+        "--family",
+        "OAKBAT"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T13:11:23+00:00",
+      "exit_code": 0,
+      "name": "r2c-phase-b-receiver-oakbat-r1",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T130747Z-r2c-phase-b-receiver-oakbat-r1",
+        "schema_version": 1
+      },
+      "run_id": "20260816T130747Z-r2c-phase-b-receiver-oakbat-r1",
+      "started_at": "2026-08-16T13:07:47+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "488e69b696da3853fc4700166d1983c84f7e7134ca69ce8415dcb8795cbbb8a0",
+      "stdout_sha256": "72354070ebfd553687659bc07eb9d6d818ef587963372d956ce4cea711286c35"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_trace_r2c_phase_b.py",
+        "fit",
+        "--family",
+        "OAKBAT"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T13:11:44+00:00",
+      "exit_code": 1,
+      "name": "r2c-phase-b-fit-oakbat",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T131141Z-r2c-phase-b-fit-oakbat",
+        "schema_version": 1
+      },
+      "run_id": "20260816T131141Z-r2c-phase-b-fit-oakbat",
+      "started_at": "2026-08-16T13:11:41+00:00",
+      "status": "failed",
+      "stderr_sha256": "ed27deeec6538c8b10abc7a35e37d62dee5fd5ba4933c03cc1a33e0887cf9d8c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_trace_r2c_phase_b.py",
+        "fit",
+        "--family",
+        "TEXBAT"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T13:14:14+00:00",
+      "exit_code": -15,
+      "name": "r2c-phase-b-fit-texbat",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T131141Z-r2c-phase-b-fit-texbat",
+        "schema_version": 1
+      },
+      "run_id": "20260816T131141Z-r2c-phase-b-fit-texbat",
+      "started_at": "2026-08-16T13:11:41+00:00",
+      "status": "killed",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/finalize_trace_r2c_input_inconclusive.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T13:14:15+00:00",
+      "exit_code": 0,
+      "name": "r2c-phase-b-finalize-input-inconclusive",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T131414Z-r2c-phase-b-finalize-input-inconclusive",
+        "schema_version": 1
+      },
+      "run_id": "20260816T131414Z-r2c-phase-b-finalize-input-inconclusive",
+      "started_at": "2026-08-16T13:14:14+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "7e0d85ba547d4c9070af62186607cd52f838e5ffa8bad94d5b2ccdf24f783ff7"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/finalize_trace_r2c_provenance.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T13:14:56+00:00",
+      "exit_code": 0,
+      "name": "r2c-provenance-prefinal",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T131455Z-r2c-provenance-prefinal",
+        "schema_version": 1
+      },
+      "run_id": "20260816T131455Z-r2c-provenance-prefinal",
+      "started_at": "2026-08-16T13:14:55+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "2a7cd910b490f18f42a9a7d019240c0102ac45bdb240d2622f7c26e86a50b58c"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_trace_native_cadence.py",
+        "tests/test_trace_r1_verdict.py",
+        "tests/test_trace_native_1ms.py",
+        "tests/test_trace_reproducibility.py",
+        "tests/test_trace_r2a_contract.py",
+        "tests/test_trace_r2b_contract.py",
+        "tests/test_trace_alignment.py",
+        "tests/test_trace_equivariance.py",
+        "tests/test_trace_r2c_contract.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T13:15:15+00:00",
+      "exit_code": 0,
+      "name": "r2c-focused-tests-final",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T131510Z-r2c-focused-tests-final",
+        "schema_version": 1
+      },
+      "run_id": "20260816T131510Z-r2c-focused-tests-final",
+      "started_at": "2026-08-16T13:15:10+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "c4637ad0ef4079d6ad5b1fe4174a09b2e1fa8f12a41a397823224300276077bf"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/finalize_trace_r2c_provenance.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T13:15:36+00:00",
+      "exit_code": 0,
+      "name": "r2c-provenance-before-verifier",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T131535Z-r2c-provenance-before-verifier",
+        "schema_version": 1
+      },
+      "run_id": "20260816T131535Z-r2c-provenance-before-verifier",
+      "started_at": "2026-08-16T13:15:35+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "2aae6fdd758bf967a0b3ce230b05d13904559a5a086d9c410837ca53263a2e52"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/verify_trace_r2c_artifacts.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T13:15:45+00:00",
+      "exit_code": 0,
+      "name": "r2c-artifact-verifier-final",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T131544Z-r2c-artifact-verifier-final",
+        "schema_version": 1
+      },
+      "run_id": "20260816T131544Z-r2c-artifact-verifier-final",
+      "started_at": "2026-08-16T13:15:44+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "aa2ed84c132d349306285c1afd15f67cc6f944518ffa922864e4a141ec0462a4"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/verify_trace_r2b_artifacts.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T13:16:02+00:00",
+      "exit_code": 0,
+      "name": "r2c-parent-r2b-artifact-verifier",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T131601Z-r2c-parent-r2b-artifact-verifier",
+        "schema_version": 1
+      },
+      "run_id": "20260816T131601Z-r2c-parent-r2b-artifact-verifier",
+      "started_at": "2026-08-16T13:16:01+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "2a92ba43d97b8f67a67cf2b1f2f3bb36b2d59eeae9c3ea29a2d61b79e24fe276"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/finalize_trace_r2c_provenance.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": null,
+      "exit_code": null,
+      "name": "r2c-provenance-before-commit",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T131618Z-r2c-provenance-before-commit",
+        "schema_version": 1
+      },
+      "run_id": "20260816T131618Z-r2c-provenance-before-commit",
+      "started_at": "2026-08-16T13:16:18+00:00",
+      "status": "running",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "schema": "gnss-doppler-lab.trace-r2c-runner-runs.v1"
+}

@@ -1,0 +1,21 @@
+{
+  "actual_action_vs_shuffled_no_action": {
+    "reason": "Phase A passed and Phase B was authorized, but the frozen OAKBAT.cleanStatic receiver replay supplied an empty preregistered chronological clean split. The frozen scorer stopped before attack evaluation; no attack score, normal-FPR claim, action control, AUROC/pAUC, or alarm-delay metric is available.",
+    "status": "UNAVAILABLE"
+  },
+  "attack_metrics_computed": false,
+  "attack_scores_computed": false,
+  "failure_label": "OAKBAT_CLEAN_SPLIT_EMPTY",
+  "hermes_independent_verification_required": true,
+  "next_action": "Repair the frozen OAKBAT clean receiver/handoff support without changing TRACE scoring or gates, repeat Phase A, then repeat the frozen Phase B.",
+  "normal_fpr": {
+    "reason": "Phase A passed and Phase B was authorized, but the frozen OAKBAT.cleanStatic receiver replay supplied an empty preregistered chronological clean split. The frozen scorer stopped before attack evaluation; no attack score, normal-FPR claim, action control, AUROC/pAUC, or alarm-delay metric is available.",
+    "status": "UNAVAILABLE"
+  },
+  "phase_a_passed": true,
+  "phase_b_authorized": true,
+  "phase_b_run": true,
+  "reason": "Phase A passed and Phase B was authorized, but the frozen OAKBAT.cleanStatic receiver replay supplied an empty preregistered chronological clean split. The frozen scorer stopped before attack evaluation; no attack score, normal-FPR claim, action control, AUROC/pAUC, or alarm-delay metric is available.",
+  "schema": "gnss-doppler-lab.trace-r2c-final-verdict.v1",
+  "verdict": "INCONCLUSIVE_INPUT_OR_RECEIVER"
+}

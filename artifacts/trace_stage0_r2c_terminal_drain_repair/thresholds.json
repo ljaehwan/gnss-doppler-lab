@@ -1,0 +1,7 @@
+{
+  "metrics_computed": false,
+  "reason": "Phase A passed and Phase B was authorized, but the frozen OAKBAT.cleanStatic receiver replay supplied an empty preregistered chronological clean split. The frozen scorer stopped before attack evaluation; no attack score, normal-FPR claim, action control, AUROC/pAUC, or alarm-delay metric is available.",
+  "schema": "gnss-doppler-lab.trace-r2c-thresholds.v1",
+  "status": "UNAVAILABLE",
+  "thresholds": {}
+}

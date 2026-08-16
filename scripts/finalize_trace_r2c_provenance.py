@@ -95,7 +95,7 @@ def main() -> int:
                 "schema": "gnss-doppler-lab.trace-r2c-test-results.v1",
                 "status": "PASS" if successful_tests else "FAIL",
                 "durable_test_runs": [run["run_id"] for run in successful_tests],
-                "focused_test_count": 46,
+                "focused_test_count": 47,
                 "coverage": [
                     "R1/R2/R2a/R2b inherited TRACE contracts",
                     "R2c finite-source drain configuration and receiver patch",

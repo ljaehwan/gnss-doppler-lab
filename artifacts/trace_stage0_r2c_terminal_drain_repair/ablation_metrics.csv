@@ -1,0 +1,2 @@
+dataset,scenario,model,status,reason
+UNAVAILABLE,UNAVAILABLE,UNAVAILABLE,UNAVAILABLE,"Phase A passed and Phase B was authorized, but the frozen OAKBAT.cleanStatic receiver replay supplied an empty preregistered chronological clean split. The frozen scorer stopped before attack evaluation; no attack score, normal-FPR claim, action control, AUROC/pAUC, or alarm-delay metric is available."

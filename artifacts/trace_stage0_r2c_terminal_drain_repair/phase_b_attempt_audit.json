@@ -1,0 +1,20 @@
+{
+  "attack_performance_read_or_computed": false,
+  "preserved_external_attempt_labels": [
+    "rep1-validator-failed-20260816T122941Z",
+    "rep1-resource-contention-20260816T122942Z",
+    "rep1-support-validator-failed-20260816T124201Z"
+  ],
+  "preserved_nonselected_run_ids": [
+    "20260816T122941Z-r2c-phase-b-receiver-texbat",
+    "20260816T122942Z-r2c-phase-b-receiver-oakbat"
+  ],
+  "schema": "gnss-doppler-lab.trace-r2c-phase-b-attempt-audit.v1",
+  "scorer_failure_run_id": "20260816T131141Z-r2c-phase-b-fit-oakbat",
+  "selected_receiver_run_ids": [
+    "20260816T124201Z-r2c-phase-b-receiver-texbat-r1",
+    "20260816T130441Z-r2c-phase-b-receiver-texbat-ds7-r2",
+    "20260816T130747Z-r2c-phase-b-receiver-oakbat-r1"
+  ],
+  "status": "INCONCLUSIVE_INPUT_OR_RECEIVER"
+}

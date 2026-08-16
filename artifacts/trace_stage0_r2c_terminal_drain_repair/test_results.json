@@ -1,0 +1,19 @@
+{
+  "coverage": [
+    "R1/R2/R2a/R2b inherited TRACE contracts",
+    "R2c finite-source drain configuration and receiver patch",
+    "native cadence and causal action mapping",
+    "whole replay row-set and per-channel terminal closure",
+    "semantic, block-key, threshold-crossing, and alarm reproduction",
+    "artifact checksums and fresh-clone verification"
+  ],
+  "durable_test_runs": [
+    "20260816T121143Z-r2c-focused-tests-prefreeze",
+    "20260816T131510Z-r2c-focused-tests-final",
+    "20260816T131544Z-r2c-artifact-verifier-final",
+    "20260816T131601Z-r2c-parent-r2b-artifact-verifier"
+  ],
+  "focused_test_count": 47,
+  "schema": "gnss-doppler-lab.trace-r2c-test-results.v1",
+  "status": "PASS"
+}

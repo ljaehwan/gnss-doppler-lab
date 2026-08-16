@@ -1,0 +1,183 @@
+{
+  "excluded_self_referential_or_run_provenance_files": {
+    "artifact_manifest_sha256.json": "self-referential",
+    "runner_runs.json": "updated after verification",
+    "test_results.json": "updated after verification"
+  },
+  "files": {
+    "README.md": {
+      "byte_size": 752,
+      "sha256": "a7f072f9f22d7a2d52a7993d9f4d173af1225139236e7fe3c9b0447d37af494f"
+    },
+    "ablation_metrics.csv": {
+      "byte_size": 392,
+      "sha256": "6d2a2bd6b590c2326591c8c60e52dc0bf9c637801571190e30cbf9e97d84481f"
+    },
+    "action_mapping_validation.json": {
+      "byte_size": 24736,
+      "sha256": "922d1ebb2e191db560fbaacb094c157b1125287eee8a04b9a5ea5a90053f5a19"
+    },
+    "action_shuffle_metrics.json": {
+      "byte_size": 456,
+      "sha256": "39e621d4a8a375f8abfaecca42b5dc2dcb95b3240ca021a72ac946f93f698117"
+    },
+    "bootstrap_intervals.csv": {
+      "byte_size": 397,
+      "sha256": "7b9891c4824d52e3e973076e1143d71d8602f524eb41b01d55e3d89f7542553a"
+    },
+    "clean_split_audit.json": {
+      "byte_size": 550,
+      "sha256": "a26ea9addd78460044ac5386c6526fe8876f989cb24f78780ec70f54dcafa8ee"
+    },
+    "config.json": {
+      "byte_size": 3655,
+      "sha256": "3ae44c897ee62bdb4f162ec5f5a59b916aa2b9dbd6fca020bdb5c51885b82e47"
+    },
+    "diagnosis.json": {
+      "byte_size": 5099,
+      "sha256": "a6691973df09bf132eac6d420d350b88eddfb17ce925f5a010410f2fbb9f40ee"
+    },
+    "final_verdict.json": {
+      "byte_size": 1608,
+      "sha256": "cca1063f07d4ee92ca41a23ac60e397670ea81879bb85dfeb25356038d8d7d5d"
+    },
+    "frozen_configs/oakbat_os3.conf": {
+      "byte_size": 2600,
+      "sha256": "e2e169ac7b8a9e2b89fe106608ce4715c90f5a104da0200f59b28eb748323b2c"
+    },
+    "frozen_configs/phase_b/oakbat_cleanstatic.conf": {
+      "byte_size": 2644,
+      "sha256": "acbec210d8f9b9c5f797f1c6c4f895fa0b838a2b7680789fede7b46068dfb033"
+    },
+    "frozen_configs/phase_b/oakbat_os3.conf": {
+      "byte_size": 2592,
+      "sha256": "67d9958a43eddc2743017bcddbda7e55cf1c9e133231850a0c627212614ed063"
+    },
+    "frozen_configs/phase_b/oakbat_os4.conf": {
+      "byte_size": 2592,
+      "sha256": "561ff1dcd40cb649825dc2be1bd9ed41ce50b1b5eace2a7fab04cff16f42710f"
+    },
+    "frozen_configs/phase_b/texbat_cleanstatic.conf": {
+      "byte_size": 2599,
+      "sha256": "d1f1a8b73e9553965370812ac6d0d744a26b50cc418505403717b7d48b90d46e"
+    },
+    "frozen_configs/phase_b/texbat_ds3.conf": {
+      "byte_size": 2585,
+      "sha256": "b0967c54db87ea430d5c95d10ef2d55d682e1bcd9139694a1163daaabcd869a1"
+    },
+    "frozen_configs/phase_b/texbat_ds7.conf": {
+      "byte_size": 2569,
+      "sha256": "4b469ce67443a6d30116398dc20dd04c133bb7462aa21ee17c7453c23bd0b74c"
+    },
+    "frozen_configs/texbat_cleanstatic.conf": {
+      "byte_size": 2608,
+      "sha256": "207fde7b04a1bf3308a6bf42cd736fe119e28d80c43ea3772ea1cab604ac3568"
+    },
+    "frozen_configs/texbat_ds3.conf": {
+      "byte_size": 2594,
+      "sha256": "109289f870ceacd1165b6afe9aa00896cbf5482eeb3db869df27bec4c5af49bd"
+    },
+    "handoff_manifest.json": {
+      "byte_size": 15770,
+      "sha256": "cfc6bc0c5c10d9a7d56bf6ce2fa81f57296fa2bed7f1a98f711f21490e6ea829"
+    },
+    "handoffs/manifest.json": {
+      "byte_size": 15770,
+      "sha256": "cfc6bc0c5c10d9a7d56bf6ce2fa81f57296fa2bed7f1a98f711f21490e6ea829"
+    },
+    "handoffs/oakbat_os3.csv": {
+      "byte_size": 3038,
+      "sha256": "9a546a42775450bbe076784b737aa7d2888ae637ddeb3769ee2ee3d4ce6f064c"
+    },
+    "handoffs/texbat_cleanstatic.csv": {
+      "byte_size": 2859,
+      "sha256": "6bd2b3db921ac1fa91b97ac5cb6fd7444146e07b6d02bec693cc3fc5b9f2ea88"
+    },
+    "handoffs/texbat_ds3.csv": {
+      "byte_size": 3083,
+      "sha256": "1b630895bcaf0039d7d6764710e4c900b599cf6e2e4da917dc990c63b63b6400"
+    },
+    "per_epoch_scores.csv.gz": {
+      "byte_size": 284,
+      "sha256": "4ca20439bbad1b494f597f1da1bb9521d14d468eb4f9b48621dcf602b147b582"
+    },
+    "phase_b_attempt_audit.json": {
+      "byte_size": 779,
+      "sha256": "e8fac616f153c86e0afa4c527ad88ae49e8acb85cd87a3f0647425ca9f2cd141"
+    },
+    "phase_b_execution_amendment_preregistered.json": {
+      "byte_size": 1422,
+      "sha256": "3a87675cf5a34b6bc6e8d9211e58794e56ec3de2d6fa8528cb6f5a4373304a5f"
+    },
+    "phase_b_support_validator_amendment_preregistered.json": {
+      "byte_size": 1444,
+      "sha256": "05f51e222a6a83119513f9fd6699509a66d8003f329bf55437851d80c583f0c9"
+    },
+    "physical_controls.json": {
+      "byte_size": 458,
+      "sha256": "4d21d192b0618bf320998a8eb6fb7b3677273e03118c399fcba1e45f882c6907"
+    },
+    "plots/rep3_rep4_semantic_reproducibility.png": {
+      "byte_size": 45514,
+      "sha256": "0a25b92048681ca3da26406da7a5ecbb26c54f0c2d79a0fadc0daf416406a3ef"
+    },
+    "plots/replay_by_replay_trace_score_comparison.png": {
+      "byte_size": 59889,
+      "sha256": "8e5b4ae9db88e7db190e7d2f969dc24b11070571d05266925b2c78f10c9412b7"
+    },
+    "preregistration.json": {
+      "byte_size": 7268,
+      "sha256": "a132ec2ad957067d2d953ffcc9c9a6c44c339fb6d95195625f318d340cf62ffb"
+    },
+    "raw_source_binding.json": {
+      "byte_size": 3542,
+      "sha256": "30052ea97458fbf3e6b83a2a18fa20b21ecd1b16632bc51d85cf8eb4ac3a1c7b"
+    },
+    "receiver_build_manifest.json": {
+      "byte_size": 1018,
+      "sha256": "f765755c188b76c9274b43e9a81740ae7749464d0789b5de8132fc952d3cbcde"
+    },
+    "receiver_repair.diff": {
+      "byte_size": 47398,
+      "sha256": "81b680bfae682fa92743fca53ce30ae09790383d008841d6eae3a25407442540"
+    },
+    "rep3_rep4_reproduction_metrics.json": {
+      "byte_size": 30920,
+      "sha256": "4656be1fa5aa0f782964e04faa5541476e6b66e687d8be5930e9060d47b48e79"
+    },
+    "repair_plan_preregistered.json": {
+      "byte_size": 3189,
+      "sha256": "ae27c47d5bf7b8ba163eb9ed1a8a09a5e2ad1ae5a684131c4fe7dfc08a713154"
+    },
+    "replay_inventory.json": {
+      "byte_size": 95385,
+      "sha256": "9d1918c4d319431e3a5b5b1eaacd31e71d2263cabd6e27b8f9e3b3ca85e02d7a"
+    },
+    "scenario_metrics.csv": {
+      "byte_size": 392,
+      "sha256": "6d2a2bd6b590c2326591c8c60e52dc0bf9c637801571190e30cbf9e97d84481f"
+    },
+    "semantic_reproduction_contract.json": {
+      "byte_size": 2228,
+      "sha256": "9a73bacd5601fa3c7b5e2ff9c4dc80a01d918a8f7c20de65d9e20ff170c6f3f1"
+    },
+    "smoke_replay_results.json": {
+      "byte_size": 30920,
+      "sha256": "4656be1fa5aa0f782964e04faa5541476e6b66e687d8be5930e9060d47b48e79"
+    },
+    "source_commit.json": {
+      "byte_size": 742,
+      "sha256": "7351c44a26c67c5db2f4e6323bff11fea27d83f391dfc4da32e395ee00ce42db"
+    },
+    "terminal_row_set_audit.json": {
+      "byte_size": 5814,
+      "sha256": "96b301d1b2e36daeb871ef0f76332802cf777a2e06e9062eff95405133a9c8ed"
+    },
+    "thresholds.json": {
+      "byte_size": 453,
+      "sha256": "d47cd7a296e089e352c0e574f7baf82ade366cbe3e40119156c4d57a81137bed"
+    }
+  },
+  "hash_algorithm": "SHA-256",
+  "schema": "gnss-doppler-lab.trace-r2c-artifact-manifest.v1"
+}
