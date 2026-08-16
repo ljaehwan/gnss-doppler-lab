@@ -1,6 +1,8 @@
 {
   "attack_or_scenario_scores_seen": false,
-  "configuration_source_commit": "fdc8a2e",
+  "configuration_source_commit": "f94cee9",
+  "previous_freeze_commit": "109402b",
+  "revision_reason": "Recorded synthetic low-Prompt masking defect; no hyperparameter, score, threshold, window, or pooling change.",
   "frozen_files": [
     "artifacts/trace_stage0_static/config.json",
     "artifacts/trace_stage0_static/preregistration.json",
@@ -11,6 +13,6 @@
     "tests/test_trace_equivariance.py",
     "tests/test_trace_alignment.py"
   ],
-  "schema": "gnss-doppler-lab.trace-confirmation-freeze.v1",
+  "schema": "gnss-doppler-lab.trace-confirmation-freeze.v2",
   "wording": "Configuration frozen before this TRACE evaluation."
 }

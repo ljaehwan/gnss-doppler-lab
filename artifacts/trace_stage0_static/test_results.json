@@ -9,6 +9,11 @@
     "command": "/usr/bin/python3 scripts/verify_trace_stage0.py --phase prefreeze",
     "passed": true
   },
+  "revision_regression": {
+    "command": "PYTHONPATH=src:scripts /usr/bin/python3 synthetic low-Prompt mask assertion; focused pytest",
+    "focused_result": "14 passed in 0.81s",
+    "low_prompt_mask_regression_passed": true
+  },
   "repository_suite": {
     "command": "/usr/bin/python3 -m pytest -q",
     "result": "COLLECTION_UNAVAILABLE_OPTIONAL_DEPENDENCIES",
