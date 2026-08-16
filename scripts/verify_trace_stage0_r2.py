@@ -35,7 +35,7 @@ REQUIRED = (
     "scenario_metrics.csv", "ablation_metrics.csv", "per_epoch_scores.csv.gz",
     "per_prn_action_response.csv.gz", "external_static_fpr.csv", "action_shuffle_metrics.json",
     "physical_controls.json", "bootstrap_intervals.csv", "final_verdict.json",
-    "artifact_manifest_sha256.json",
+    "artifact_manifest_sha256.json", "runner_runs.json", "test_results.json",
 )
 
 

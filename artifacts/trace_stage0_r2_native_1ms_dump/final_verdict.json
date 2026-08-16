@@ -1,0 +1,15 @@
+{
+  "attack_scores_computed": false,
+  "failure_labels": [
+    "NATIVE_1MS_DUMP_IMPLEMENTATION_INVALID"
+  ],
+  "performance_claimed": false,
+  "phase_a_passed": false,
+  "phase_b_run": false,
+  "reason": "Same final receiver build and authenticated TEXBAT cleanStatic raw slice produced different per-channel dump SHA-256 values and acquisition/session timing across repetitions; the preregistered deterministic-reproduction gate failed. All other Phase-A source-binding, schema, causal, cadence, finite-data, reassignment, and multi-PRN checks passed.",
+  "recommended_next_action": "Resolve the named receiver/source-input failure and rerun Phase A from the frozen preregistration.",
+  "schema": "gnss-doppler-lab.trace-r2-final-verdict.v1",
+  "sci_wcl_claimable": false,
+  "science_claim": "No claim for or against the TRACE physical hypothesis is supported.",
+  "verdict": "INCONCLUSIVE_INPUT_OR_RECEIVER"
+}

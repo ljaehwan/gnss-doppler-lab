@@ -1,0 +1,10 @@
+{
+  "causal_pair_count": 1393517,
+  "causal_sequence_mismatch_count": 0,
+  "causal_value_mismatch_count": 0,
+  "consume_span_mismatch_count": 0,
+  "default_causal_tuple": "(complex_t, action_computed_for_next_interval_t, complex_t+1)",
+  "proof": "exact source sequence, exact action equality, and next-buffer consume-span equality",
+  "schema": "gnss-doppler-lab.trace-r2-action-mapping-validation.v1",
+  "status": "PASS"
+}

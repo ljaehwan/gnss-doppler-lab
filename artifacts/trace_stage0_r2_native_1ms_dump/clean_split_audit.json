@@ -1,0 +1,12 @@
+{
+  "attack_data_used": false,
+  "attack_scores_computed": false,
+  "failure_labels": [
+    "NATIVE_1MS_DUMP_IMPLEMENTATION_INVALID"
+  ],
+  "performance_claimed": false,
+  "raw_sample_or_byte_overlap": null,
+  "reason": "Same final receiver build and authenticated TEXBAT cleanStatic raw slice produced different per-channel dump SHA-256 values and acquisition/session timing across repetitions; the preregistered deterministic-reproduction gate failed. All other Phase-A source-binding, schema, causal, cadence, finite-data, reassignment, and multi-PRN checks passed.",
+  "split_instantiated": false,
+  "status": "UNAVAILABLE"
+}

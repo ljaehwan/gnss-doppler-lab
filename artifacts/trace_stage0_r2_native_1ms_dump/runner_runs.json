@@ -1,0 +1,25 @@
+{
+  "runner_root": "/home/ubuntu/research-context/tasks/trace-stage0-r2-native-1ms-dump/runner",
+  "runs": [
+    {"run_id": "20260816T080322Z-trace-r2-receiver-configure", "status": "FAILED_ENV_MAKO_SELECTION", "exit_code": 1},
+    {"run_id": "20260816T080421Z-trace-r2-receiver-configure-r1", "status": "PASS", "exit_code": 0},
+    {"run_id": "20260816T080501Z-trace-r2-receiver-build", "status": "FAILED_CHILD_ENV_SSD_GIT_OWNERSHIP_GUARD", "exit_code": 1},
+    {"run_id": "20260816T080724Z-trace-r2-receiver-build-r1", "status": "PASS", "exit_code": 0},
+    {"run_id": "20260816T081134Z-trace-r2-phase-a-raw-source-audit", "status": "FAILED_OLD_MOUNT_PATH_ABSENT_NO_BYTES_REPLAYED", "exit_code": 1},
+    {"run_id": "20260816T081240Z-trace-r2-phase-a-raw-source-audit-r1", "status": "PASS_AUTHENTICATED_REMAP", "exit_code": 0},
+    {"run_id": "20260816T084130Z-trace-r2-receiver-build-final", "status": "PASS_FINAL_SOURCE_RECOMPILED", "exit_code": 0},
+    {"run_id": "20260816T084347Z-trace-r2-pre-freeze-tests", "status": "PASS_29", "exit_code": 0},
+    {"run_id": "20260816T084347Z-trace-r2-pre-freeze-verifier", "status": "PASS", "exit_code": 0},
+    {"run_id": "20260816T084452Z-trace-r2-phase-a-clean-rep1", "status": "PASS_RECEIVER", "exit_code": 0},
+    {"run_id": "20260816T084638Z-trace-r2-phase-a-clean-rep2", "status": "PASS_RECEIVER", "exit_code": 0},
+    {"run_id": "20260816T084826Z-trace-r2-phase-a-ds3-rep1", "status": "PASS_RECEIVER", "exit_code": 0},
+    {"run_id": "20260816T084956Z-trace-r2-phase-a-os3-rep1", "status": "PASS_RECEIVER", "exit_code": 0},
+    {"run_id": "20260816T085051Z-trace-r2-phase-a-evaluate", "status": "EXPECTED_GATE_FAIL_NONDETERMINISTIC_REPRODUCTION", "exit_code": 2},
+    {"run_id": "20260816T085130Z-trace-r2-fail-closed-finalize", "status": "PASS", "exit_code": 0},
+    {"run_id": "20260816T085302Z-trace-r2-final-focused-tests", "status": "PASS_29", "exit_code": 0},
+    {"run_id": "20260816T085302Z-trace-r2-final-b0-relevant-tests", "status": "PASS_39", "exit_code": 0},
+    {"run_id": "20260816T085302Z-trace-r2-final-full-tests", "status": "FAIL_INHERITED_BASE_MISSING_FILE_470_PASS_6_FAIL", "exit_code": 1},
+    {"run_id": "20260816T085404Z-trace-r2-final-full-tests-excluding-base-missing-file", "status": "PASS_470", "exit_code": 0}
+  ],
+  "schema": "gnss-doppler-lab.trace-r2-runner-runs.v1"
+}

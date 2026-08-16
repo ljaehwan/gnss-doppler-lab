@@ -1,29 +1,57 @@
 {
+  "external_dump_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps",
   "old_20ms_dump_reused_or_interpolated": false,
   "phase_a": {
-    "OAKBAT.OS3": {
-      "duration_s": 45.0,
-      "raw_start_s": 90.0,
-      "status": "PENDING"
+    "OAKBAT.OS3.rep1": {
+      "dump_file_count": 11,
+      "dump_total_size_bytes": 203405728,
+      "manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/oakbat_os3/rep1/manifest.json",
+      "manifest_sha256": "1ea30ac1daa6564e1b9ef544c0c726d28bde478e08a14f19ac9e397f49b733ed",
+      "raw_sample_range": [450000000, 675000000],
+      "run_id": "20260816T084956Z-trace-r2-phase-a-os3-rep1",
+      "status": "PASS_RECEIVER_AND_VALIDATION"
     },
-    "TEXBAT.DS3": {
-      "duration_s": 45.0,
-      "raw_start_s": 90.0,
-      "status": "PENDING"
+    "TEXBAT.DS3.rep1": {
+      "dump_file_count": 11,
+      "dump_total_size_bytes": 194158880,
+      "manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_ds3/rep1/manifest.json",
+      "manifest_sha256": "75d599f0c7957bec757574eacaf745454ab14b1d0d87fb5a045f5f9b8154774c",
+      "raw_sample_range": [2250000000, 3375000000],
+      "run_id": "20260816T084826Z-trace-r2-phase-a-ds3-rep1",
+      "status": "PASS_RECEIVER_AND_VALIDATION"
     },
-    "TEXBAT.cleanStatic": {
-      "duration_s": 45.0,
-      "raw_start_s": 0.0,
-      "status": "PENDING"
+    "TEXBAT.cleanStatic.rep1": {
+      "dump_file_count": 11,
+      "dump_total_size_bytes": 182161440,
+      "manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep1/manifest.json",
+      "manifest_sha256": "ed4f6a7495f2e151853fbf36050f1e66e9e2c136de53e3f29bebaf3169aa83be",
+      "raw_sample_range": [0, 1125000000],
+      "run_id": "20260816T084452Z-trace-r2-phase-a-clean-rep1",
+      "status": "PASS_RECEIVER_AND_VALIDATION"
+    },
+    "TEXBAT.cleanStatic.rep2": {
+      "dump_file_count": 11,
+      "dump_total_size_bytes": 180938816,
+      "manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2-native-1ms-dump/dumps/phase_a/texbat_cleanstatic/rep2/manifest.json",
+      "manifest_sha256": "ec68c9d4ba541273aabad3f46823ca90b9b16c053400f03ccc00c48811fd13c2",
+      "raw_sample_range": [0, 1125000000],
+      "run_id": "20260816T084638Z-trace-r2-phase-a-clean-rep2",
+      "status": "PASS_RECEIVER_VALIDATION_BUT_NOT_BYTE_IDENTICAL_TO_REP1"
     }
   },
+  "phase_a_decision": {
+    "evaluation_run_id": "20260816T085051Z-trace-r2-phase-a-evaluate",
+    "failure_labels": ["NATIVE_1MS_DUMP_IMPLEMENTATION_INVALID"],
+    "phase_b_authorized": false,
+    "status": "FAIL_CLEAN_REPRODUCTION_HASH_MISMATCH"
+  },
   "phase_b": {
-    "OAKBAT.OS3": "GATED_ON_PHASE_A",
-    "OAKBAT.OS4": "GATED_ON_PHASE_A",
-    "OAKBAT.cleanStatic": "GATED_ON_PHASE_A",
-    "TEXBAT.DS3": "GATED_ON_PHASE_A",
-    "TEXBAT.DS7": "GATED_ON_PHASE_A",
-    "TEXBAT.cleanStatic": "GATED_ON_PHASE_A"
+    "OAKBAT.OS3": "NOT_RUN_PHASE_A_FAILED",
+    "OAKBAT.OS4": "NOT_RUN_PHASE_A_FAILED",
+    "OAKBAT.cleanStatic": "NOT_RUN_PHASE_A_FAILED",
+    "TEXBAT.DS3": "NOT_RUN_PHASE_A_FAILED",
+    "TEXBAT.DS7": "NOT_RUN_PHASE_A_FAILED",
+    "TEXBAT.cleanStatic": "NOT_RUN_PHASE_A_FAILED"
   },
   "schema": "gnss-doppler-lab.trace-r2-replay-inventory.v1"
 }

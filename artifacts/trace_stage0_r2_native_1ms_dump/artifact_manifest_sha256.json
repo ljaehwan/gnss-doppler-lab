@@ -1,0 +1,28 @@
+{
+  "files": {
+    "README.md": "37db41f2523de1769fdd796abb97af32a9aa198a20988124cd4f1f324ca47ef4",
+    "ablation_metrics.csv": "c3b442ce563e25a64c3085bfd15bfe4f617776aaf7aee9c99cdba064ccce9b81",
+    "action_mapping_validation.json": "6b204af47314ef49a4a226c73fab0506758ae905dbdcfa6ed9ef6fd934dc520e",
+    "action_shuffle_metrics.json": "1c02beb61aa78f8f2ae28dede09ef0733d077be49b863bc727ab2b1514fdfede",
+    "bootstrap_intervals.csv": "a56e85bfeecdc289570bb5450945babaa1705a1fe38eb5217b6e904c87978cef",
+    "clean_split_audit.json": "1a1c51aace2d5f01532f37be8bdb9e0cfe6b57082c1cef964d58347a3ca65038",
+    "config.json": "aa71c09a5e5beeccde49243dcfe2c36546ee159642ab5a5429ff2097aa0f20db",
+    "external_static_fpr.csv": "b8d50395ffcc8449c38280c88779e2ae2647f6883a18d9daf623c17a95f47b16",
+    "final_verdict.json": "208103e01ffa556322f3b82f2cb5a300c70763e5cd62a93e6811d8fa62a5e2ed",
+    "native_dump_schema.json": "29d23c34c772552b3f8f52abd7a541087a5ce16f1091b39f32e2abf33aebac81",
+    "per_epoch_scores.csv.gz": "29ef0ec34dd9409cbe8ecf36c557a51ed53d689e8ba405991f88838873a3c6ef",
+    "per_prn_action_response.csv.gz": "d9e0207430e0caea8658a5e22bf08244f341c34e95693d9426fd1cfee910909d",
+    "physical_controls.json": "0c15f8835e0ffbcc393e4890786bac0b7f62ab98ae54104d306a6c9d6f5b2504",
+    "preregistration.json": "801b8b510032300f6e40f4e3b81bb3e8553471c85afb8430062069f69366302f",
+    "raw_source_binding.json": "72d60e55ba576f8678ec697145642f9c420d9057db44361bf58a8d04af06ffef",
+    "receiver_build_manifest.json": "d3180504634e7d77aaafe03e83e16c9c5a88379bbe2062cbf771ab1ed2df4bc4",
+    "receiver_patch.diff": "087da6343c1455bbdb420f697b05de168b464dbe4472bb6ad15eb488aa48fa2d",
+    "receiver_source_provenance.json": "d7738cf777b339e6a1a0ed3d827bd983baf2046837a7bdc3174bfd4b3667a3ad",
+    "replay_inventory.json": "9ce95eeff204ac11e5b0266180fb150a443fcb828bcc046d807993025f9c5ec7",
+    "scenario_metrics.csv": "a7e0eebc10e42f8b86b8d1471cd15d9ff44c8fb1300b2fcfb01db7e8706a42c3",
+    "smoke_replay_results.json": "1e7d3f2e7b00c67ac334781c3bc98adc242379640c861c2ca92040f375f64698",
+    "source_commit.json": "8fc71c9492f6e86f653be510b2a755b145c2137422281395b9ed55a46094a73e",
+    "thresholds.json": "a1e840148e711d806e3aef1a2485909bf5c805b09a669b6c7c287fb0a1191e47"
+  },
+  "schema": "gnss-doppler-lab.trace-r2-artifact-manifest.v1"
+}
