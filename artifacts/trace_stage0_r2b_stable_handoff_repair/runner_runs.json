@@ -42,6 +42,20 @@
       "selected_run_id": "20260816T114125Z-r2b-focused-tests-r1",
       "status": "PASS"
     },
+    "r2b-fresh-clone-verifier": {
+      "attempt_run_ids": [
+        "20260816T114242Z-r2b-fresh-clone-verifier"
+      ],
+      "selected_run_id": "20260816T114242Z-r2b-fresh-clone-verifier",
+      "status": "FAILED"
+    },
+    "r2b-fresh-clone-verifier-r1": {
+      "attempt_run_ids": [
+        "20260816T114329Z-r2b-fresh-clone-verifier-r1"
+      ],
+      "selected_run_id": "20260816T114329Z-r2b-fresh-clone-verifier-r1",
+      "status": "PASS"
+    },
     "r2b-phase-a-cleanstatic-rep3": {
       "attempt_run_ids": [
         "20260816T112855Z-r2b-phase-a-cleanstatic-rep3"
@@ -122,6 +136,13 @@
         "20260816T114048Z-r2b-phase-b-not-authorized-finalize"
       ],
       "selected_run_id": "20260816T114048Z-r2b-phase-b-not-authorized-finalize",
+      "status": "PASS"
+    },
+    "r2b-provenance-finalize": {
+      "attempt_run_ids": [
+        "20260816T114411Z-r2b-provenance-finalize"
+      ],
+      "selected_run_id": "20260816T114411Z-r2b-provenance-finalize",
       "status": "PASS"
     },
     "r2b-raw-source-binding": {
@@ -205,7 +226,7 @@
       "run_id": "20260816T105744Z-trace-stage0-r2b-stable-handoff-repair-codex-orchestrator",
       "started_at": "2026-08-16T10:57:44+00:00",
       "status": "running",
-      "stderr_sha256": "3691f19f9b8e051aef42464c06e88ec32637245b99ecde92a2e83b4fb41a97b9",
+      "stderr_sha256": "953e39ae532ac4526f9f6a7c374a772c2083bc1154305983d31090dd9e6ce172",
       "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
@@ -738,6 +759,68 @@
       "status": "succeeded",
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "stdout_sha256": "5c2f4d29bcbf9bca6e3e722895962f86b953084ec49ba3356ea71b8ce550ae76"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set -euo pipefail\nVERIFY_ROOT=$(mktemp -d /home/ubuntu/ssd_data/gnss-early-detection/artifacts/r2b-fresh-clone.XXXXXX)\ngit clone --no-local /home/ubuntu/projects/gnss-doppler-trace-stage0-r2b-stable-handoff-repair \"$VERIFY_ROOT/repo\"\ngit -C \"$VERIFY_ROOT/repo\" checkout --detach 909d4891e4d5932ff9b4bff8a4b2fcaf5e21f69b\ntest -z \"$(git -C \"$VERIFY_ROOT/repo\" status --porcelain=v1)\"\ncd \"$VERIFY_ROOT/repo\"\n/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_trace_native_cadence.py tests/test_trace_r1_verdict.py tests/test_trace_native_1ms.py tests/test_trace_reproducibility.py tests/test_trace_r2a_contract.py tests/test_trace_r2b_contract.py tests/test_trace_alignment.py tests/test_trace_equivariance.py\n/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/verify_trace_r2b_artifacts.py\n/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/verify_trace_r2a_artifacts.py\ngit diff --exit-code\ntest -z \"$(git status --porcelain=v1)\"\nprintf \"%s\\n\" \"$VERIFY_ROOT/repo\""
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2b-stable-handoff-repair",
+      "ended_at": "2026-08-16T11:43:06+00:00",
+      "exit_code": 128,
+      "name": "r2b-fresh-clone-verifier",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T114242Z-r2b-fresh-clone-verifier",
+        "schema_version": 1
+      },
+      "run_id": "20260816T114242Z-r2b-fresh-clone-verifier",
+      "started_at": "2026-08-16T11:42:42+00:00",
+      "status": "failed",
+      "stderr_sha256": "9fd6fe116fff5ebc0486b2f93b9f0b10f125739d8505c20db0f4baaf14cafef5",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "set -euo pipefail\nVERIFY_ROOT=$(mktemp -d /home/ubuntu/ssd_data/gnss-early-detection/artifacts/r2b-fresh-clone.XXXXXX)\ngit -c safe.directory=* clone --no-local /home/ubuntu/projects/gnss-doppler-trace-stage0-r2b-stable-handoff-repair \"$VERIFY_ROOT/repo\"\ngit -c safe.directory=* -C \"$VERIFY_ROOT/repo\" checkout --detach 909d4891e4d5932ff9b4bff8a4b2fcaf5e21f69b\ntest -z \"$(git -c safe.directory=* -C \"$VERIFY_ROOT/repo\" status --porcelain=v1)\"\ncd \"$VERIFY_ROOT/repo\"\n/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_trace_native_cadence.py tests/test_trace_r1_verdict.py tests/test_trace_native_1ms.py tests/test_trace_reproducibility.py tests/test_trace_r2a_contract.py tests/test_trace_r2b_contract.py tests/test_trace_alignment.py tests/test_trace_equivariance.py\n/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/verify_trace_r2b_artifacts.py\n/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/verify_trace_r2a_artifacts.py\ngit -c safe.directory=* diff --exit-code\ntest -z \"$(git -c safe.directory=* status --porcelain=v1)\"\nprintf \"%s\\n\" \"$VERIFY_ROOT/repo\""
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2b-stable-handoff-repair",
+      "ended_at": "2026-08-16T11:43:59+00:00",
+      "exit_code": 0,
+      "name": "r2b-fresh-clone-verifier-r1",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T114329Z-r2b-fresh-clone-verifier-r1",
+        "schema_version": 1
+      },
+      "run_id": "20260816T114329Z-r2b-fresh-clone-verifier-r1",
+      "started_at": "2026-08-16T11:43:30+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "52e456e82da9fce26cfc4d964d8e311878246b260f9350a5d15d1408fe028b72",
+      "stdout_sha256": "32b65ea2ed1bd8a825aac18cab89ea6120ac8f4354ee856c7dcf972a98a625d8"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/finalize_trace_r2b_provenance.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2b-stable-handoff-repair",
+      "ended_at": "2026-08-16T11:44:12+00:00",
+      "exit_code": 0,
+      "name": "r2b-provenance-finalize",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T114411Z-r2b-provenance-finalize",
+        "schema_version": 1
+      },
+      "run_id": "20260816T114411Z-r2b-provenance-finalize",
+      "started_at": "2026-08-16T11:44:11+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "a6bc3cddf6472bb4998565d79b6f0dba9a69e98af283b15d5bd1062c4ecde615"
     }
   ],
   "schema": "gnss-doppler-lab.trace-r2b-runner-runs.v1"

@@ -9,7 +9,9 @@
     "fresh-clone verifier"
   ],
   "durable_test_runs": [
-    "20260816T112315Z-r2b-focused-tests"
+    "20260816T112315Z-r2b-focused-tests",
+    "20260816T114125Z-r2b-focused-tests-r1",
+    "20260816T114329Z-r2b-fresh-clone-verifier-r1"
   ],
   "focused_test_count": 40,
   "schema": "gnss-doppler-lab.trace-r2b-test-results.v1",

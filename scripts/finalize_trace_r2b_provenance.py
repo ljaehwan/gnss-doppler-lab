@@ -38,7 +38,7 @@ def main() -> int:
     if not phase_a["phase_b_authorized"]:
         phases["r2b-phase-b"] = {"status": "NOT_AUTHORIZED", "attempt_run_ids": [], "reason": "Phase A did not pass every frozen gate."}
     (ARTIFACT / "runner_runs.json").write_text(json.dumps({"schema": "gnss-doppler-lab.trace-r2b-runner-runs.v1", "run_root": str(RUN_ROOT), "phase_summary": phases, "runs": runs}, indent=2, sort_keys=True) + "\n")
-    successful_tests = [run for run in runs if run["name"] in {"r2b-focused-tests", "r2b-fresh-clone-verifier"} and run["status"] == "succeeded"]
+    successful_tests = [run for run in runs if any(run["name"] == base or run["name"].startswith(base + "-r") for base in ("r2b-focused-tests", "r2b-fresh-clone-verifier")) and run["status"] == "succeeded"]
     (ARTIFACT / "test_results.json").write_text(json.dumps({"schema": "gnss-doppler-lab.trace-r2b-test-results.v1", "status": "PASS" if successful_tests else "FAIL", "durable_test_runs": [run["run_id"] for run in successful_tests], "focused_test_count": 40, "coverage": ["R1/R2/R2a inherited TRACE contracts", "target-aligned state extraction", "channel subset availability", "native cadence and causal mapping", "semantic reproduction", "artifact checksum", "fresh-clone verifier"]}, indent=2, sort_keys=True) + "\n")
     files = {}
     for path in sorted(ARTIFACT.rglob("*")):
