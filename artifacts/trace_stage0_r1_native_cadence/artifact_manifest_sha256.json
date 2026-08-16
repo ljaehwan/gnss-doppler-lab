@@ -1,0 +1,30 @@
+{
+  "files": {
+    "README.md": "4486b64cfb3b4ab8eb87428b758c6bcd42776c76235be3e61617485bd45697d2",
+    "ablation_metrics.csv": "1b9db21f9c65bb4ab8e12b4570adc257fc64cf07d41c1c818706c2dac85295fb",
+    "action_mapping_validation.json": "223ddca4e27fac04c2a4343598ad541203b73a0cc5a25af1738fdd71728fd416",
+    "action_shuffle_metrics.json": "048d5034c456b7f5353d114b2682d6501197de2ac9b4ba19f2e9076542d5d10d",
+    "b0_lineage.json": "42b23afa5046176887cc688de5e18ce8f2ecbdf40e426d2613a0a851758f2876",
+    "bootstrap_intervals.csv": "a6288e59b0c90d046545abbd7ad536eb7a927c3262fa726368a0b39304b179cf",
+    "cadence_contract.json": "35fa4a648b13381b21f9bde059709690a48b9dc49bc7cb2fd1741454606fef90",
+    "cadence_support.csv": "39e7cf2d21aa117ba883639d7f12216e9dddb8de09a7b1f0946adddabee58efa",
+    "cadence_transition_by_prn.csv": "99ddb0f33f776274d87f47083d0331196ef6bdf092de03afcfca1a582156a421",
+    "clean_split_audit.json": "44e325febd377023c9c20ccd00c263975fb8be64af2b014d12db64c00434a430",
+    "config.json": "d4522ad5107d715c3b38f108133b35fe101930bf5dda8f3b29a83abf0a859391",
+    "external_static_fpr.csv": "219ffbaec1da7857492fe62dbae05b0f009521d5ef92230fec5e6adfda6e08d8",
+    "final_verdict.json": "36e50c8b6d3ac2d17c7685423a050be712b9eccbf7ac6683b26fba29c94cdada",
+    "input_inventory.json": "1d6f84b83a5ceb95c705bf77b6a647c1aa781ba1e9b795123511b6fe6042f255",
+    "normal_model_summary.json": "6a3a1352d62af9ecf733261dfc08d60f4bf779fa7f1ca5e6fa4cfaa21e6411f7",
+    "per_epoch_scores.csv.gz": "f3627035a47e237b170ffabedf0591b17c78686f1ae48fc3cc05b652fb4f21d3",
+    "physical_controls.json": "27b2dce273e3e45b48c03fbaf846161824095c6e8db19d0eca06004365ad64f1",
+    "preregistration.json": "38fc8187dae3918fdbd44c6f00def4bd0e7e93fb476eb5c4e517bf3b2ad136cf",
+    "runner_runs.json": "f7d2c43b2b9c6e7ef563b350cbbfea917722ca3edccc73e565fe9f3367d28c98",
+    "scenario_metrics.csv": "70d2e988ab18f758450c62e160d358e02678c0ca0e0c3ab47b5f75a9136b6508",
+    "source_binding.json": "51aab5e594a3a4799ae057297add48f1211b8a168bb97f3e5a64acabee81b6de",
+    "source_commit.json": "cb7aa9abd907d5f9785e286dcb83b508c70922e2b02708a0647eecbedd3425ec",
+    "synthetic_physics_metrics.json": "9718b5aff4928bb235ebb6fc2c850e393e2b2af738d9721e39274e886867da2b",
+    "test_results.json": "bd631b398c08d788ef99ba595c71ac5db6693c48b19dd4b244378af57cd2550b",
+    "thresholds.json": "06f5f4100e9928db3f0656825be9a18219e941921f48d5ef48191a349807e5a3"
+  },
+  "schema": "gnss-doppler-lab.trace-r1-artifact-manifest.v1"
+}

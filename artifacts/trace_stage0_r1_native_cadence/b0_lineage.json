@@ -1,0 +1,10 @@
+{
+  "attack_scores_computed": false,
+  "does_not_force_trace_no_go": true,
+  "label": "B0-static-retrained",
+  "performance_claimed": false,
+  "reason": "RETAINED_20MS_ROW_ACTION_MAPPING_INVALID_AND_NATIVE_1MS_DUMP_NOT_GENERATED",
+  "reason_baseline_not_run": "No TRACE common-support attack evaluation exists after the input gate failed.",
+  "rerun": false,
+  "status": "UNAVAILABLE"
+}

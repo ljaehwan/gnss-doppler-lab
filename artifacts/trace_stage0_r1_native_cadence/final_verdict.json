@@ -1,0 +1,39 @@
+{
+  "action_shuffle": "UNAVAILABLE",
+  "actual_20ms_action_mapping_held": false,
+  "attack_scores_computed": false,
+  "clean_holdout_fpr": null,
+  "core_support_audit": {
+    "DS3": {
+      "post_onset_max_valid_prns_per_0p5s_block": 11,
+      "post_onset_valid_20ms_blocks_ge4_prns": 679,
+      "scores_computed": false
+    },
+    "DS7": {
+      "post_onset_max_valid_prns_per_0p5s_block": 11,
+      "post_onset_valid_20ms_blocks_ge4_prns": 322,
+      "scores_computed": false
+    },
+    "OS3": {
+      "post_onset_max_valid_prns_per_0p5s_block": 11,
+      "post_onset_valid_20ms_blocks_ge4_prns": 720,
+      "scores_computed": false
+    },
+    "OS4": {
+      "post_onset_max_valid_prns_per_0p5s_block": 11,
+      "post_onset_valid_20ms_blocks_ge4_prns": 720,
+      "scores_computed": false
+    }
+  },
+  "detection_delay": null,
+  "external_static_fpr": null,
+  "full_a1_a2_b0_comparison": "UNAVAILABLE",
+  "performance_claimed": false,
+  "physical_controls": "UNAVAILABLE",
+  "reason": "The hypothesis remains untested: retained post-sync rows omit 19 intermediate 1 ms receiver actions.",
+  "recommended_next_action": "Generate authenticated native-1ms TRACE receiver dumps with complex nine taps, applied next-buffer actions, and loop-boundary flags, then rerun unchanged R1 from Phase A.",
+  "route": "B",
+  "schema": "gnss-doppler-lab.trace-r1-final-verdict.v1",
+  "trace_hypothesis_worth_pursuing": true,
+  "verdict": "NEEDS_TRACE_SPECIFIC_RECEIVER_DUMP"
+}

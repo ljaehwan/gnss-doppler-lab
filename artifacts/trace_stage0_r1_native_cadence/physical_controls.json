@@ -1,0 +1,19 @@
+{
+  "attack_scores_computed": false,
+  "controls_run": false,
+  "note": "Controls require a fitted predictor and valid action/target pairs; copying scores or metadata-only changes is prohibited.",
+  "performance_claimed": false,
+  "reason": "RETAINED_20MS_ROW_ACTION_MAPPING_INVALID_AND_NATIVE_1MS_DUMP_NOT_GENERATED",
+  "required_controls": [
+    "gain",
+    "phase",
+    "navigation_bit",
+    "residual_noise",
+    "single_prn",
+    "prn_drop_add",
+    "gap_reacquisition",
+    "multipath_like",
+    "normal_drift"
+  ],
+  "status": "UNAVAILABLE"
+}

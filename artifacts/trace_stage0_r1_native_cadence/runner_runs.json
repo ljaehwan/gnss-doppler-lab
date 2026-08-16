@@ -1,0 +1,12 @@
+{
+  "run_ids": [
+    "20260816T072827Z-trace-r1-phase-a-audit",
+    "20260816T073143Z-trace-r1-phase-a-audit-lf",
+    "20260816T073235Z-trace-r1-route-b-finalize",
+    "20260816T073259Z-trace-r1-route-b-finalize-provenance-r1",
+    "20260816T073321Z-trace-r1-full-repository-tests",
+    "20260816T073423Z-trace-r1-focused-and-b0-tests"
+  ],
+  "runner_root": "/home/ubuntu/research-context/tasks/trace-stage0-r1-native-cadence/runner",
+  "schema": "gnss-doppler-lab.trace-r1-runner-provenance.v1"
+}
