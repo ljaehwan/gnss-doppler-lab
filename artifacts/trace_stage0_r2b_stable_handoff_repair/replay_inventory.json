@@ -1,0 +1,1607 @@
+{
+  "phase_a": {
+    "OAKBAT.OS3.smoke": {
+      "manifest": {
+        "attempt": null,
+        "command": [
+          "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-build/src/main/gnss-sdr",
+          "--config_file=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/receiver.conf",
+          "--keyboard=false"
+        ],
+        "dump_files": [
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_0.bin",
+            "sha256": "d609f966a8fade8850c14607a7cff31f348eb6b4b9454b390e1040260c20c530",
+            "size_bytes": 16637280
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_1.bin",
+            "sha256": "03db22bf41b417833ef6bfb503b50ef0a26587ffa82518dc84017806043de679",
+            "size_bytes": 16637696
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_10.bin",
+            "sha256": "5f84eba34b9d4e8b83d1b9aab4405e62827840885056320b872b8257c3228347",
+            "size_bytes": 16638112
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_2.bin",
+            "sha256": "f576636bf31461063c20b9274845f8e638830d1a9ad8fa507e2282a43b8cf320",
+            "size_bytes": 16637696
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_3.bin",
+            "sha256": "32f2ed45483ef0a3b1d30c3824f5308a19b67805fb4146f86c2d7da84fc09bd4",
+            "size_bytes": 16637280
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_4.bin",
+            "sha256": "ceab1c7d3cc0490957d74b84fadfa6c7e899aa69175c8cf5795981a883747995",
+            "size_bytes": 16637280
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_5.bin",
+            "sha256": "7031f19dd738f8f9ae34d4238e9a2c71f9709067fc2d286c5cfb131fdfcc614f",
+            "size_bytes": 16622304
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_6.bin",
+            "sha256": "4c530fc474c933bf03c486060659beb80a234bd960218b9c23d3cd0aa41bde26",
+            "size_bytes": 6656608
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_7.bin",
+            "sha256": "25ba3eca89973d0c6c03ab97294a15b30ecc6e9f3c2af4b9ab564194bbf471de",
+            "size_bytes": 16637696
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_8.bin",
+            "sha256": "1b64a940e4ba281fcab1454fa98609c9298d70d783f68e78ca6e1584f4be43ad",
+            "size_bytes": 16637696
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_9.bin",
+            "sha256": "9578ce1e5a85385ba22fa61227da8b788a948cd8a04adfbddf2e410595201237",
+            "size_bytes": 16637696
+          }
+        ],
+        "ended_at": "2026-08-16T11:30:22.781401+00:00",
+        "exit_code": 0,
+        "fixed_channel_prn_map": {
+          "0": 27,
+          "1": 21,
+          "10": 10,
+          "2": 11,
+          "3": 18,
+          "4": 20,
+          "5": 24,
+          "6": 25,
+          "7": 14,
+          "8": 8,
+          "9": 15
+        },
+        "frozen_handoff_path": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2b-stable-handoff-repair/artifacts/trace_stage0_r2b_stable_handoff_repair/handoffs/oakbat_os3.csv",
+        "frozen_handoff_sha256": "9a546a42775450bbe076784b737aa7d2888ae637ddeb3769ee2ee3d4ce6f064c",
+        "raw_iq": {
+          "ctime_ns": 1785201703000000000,
+          "device": 49,
+          "inode": 3065,
+          "mtime_ns": 1785201703000000000,
+          "path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/os3.bin",
+          "sha256": "2a3c3c5cf1accaa287fe14181e43070903500e0250c69e3c335f91c89c0cdc6c",
+          "size_bytes": 9600000000
+        },
+        "raw_iq_stable_during_run": true,
+        "raw_sample_range": {
+          "duration_s": 45.0,
+          "end_exclusive": 675000000,
+          "seconds_to_skip": 90.0,
+          "start_inclusive": 450000000
+        },
+        "receiver_config_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/receiver.conf",
+        "receiver_config_sha256": "24329104281208005e7f39b363bb4bf021c2d91af4493a4cc76ba1c2ecb46707",
+        "receiver_executable": {
+          "ctime_ns": 1786879646000000000,
+          "device": 49,
+          "inode": 116532,
+          "mtime_ns": 1786879646000000000,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-build/src/main/gnss-sdr",
+          "sha256": "1e14879ffeb10a8824b06ba983aad3cb5a3a51ec9e1118d33c4ff0a79798e845",
+          "size_bytes": 36602256
+        },
+        "receiver_patch_sha256": "69f00c99d916889da86348edd7ac29674af162d635ffa3346e7b1bd8687badf8",
+        "receiver_stable_during_run": true,
+        "repetition": 3,
+        "replay_validation": {
+          "all_dump_files_have_physical_records": true,
+          "expected_dump_file_count": 11,
+          "observed_dump_file_count": 11,
+          "record_counts": [
+            39993,
+            39994,
+            39995,
+            39994,
+            39993,
+            39993,
+            39957,
+            16001,
+            39994,
+            39994,
+            39994
+          ],
+          "status": "PASS"
+        },
+        "scenario_id": "OAKBAT.OS3",
+        "schema": "gnss-doppler-lab.trace-r2b-receiver-replay.v1",
+        "started_at": "2026-08-16T11:30:08.431691+00:00"
+      },
+      "manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/manifest.json",
+      "validation": {
+        "cadence_pair_count": 415891,
+        "causal_pair_count": 415891,
+        "causal_sequence_mismatch_count": 0,
+        "causal_value_mismatch_count": 0,
+        "consume_span_mismatch_count": 0,
+        "current_span_mismatch_count": 0,
+        "duration_mismatch_count": 0,
+        "failure_labels": [],
+        "file_summaries": [
+          {
+            "byte_size": 16637280,
+            "channel_values": [
+              0
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_0.bin",
+            "prn_values": [
+              27
+            ],
+            "record_count": 39993,
+            "sha256": "d609f966a8fade8850c14607a7cff31f348eb6b4b9454b390e1040260c20c530",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 16637696,
+            "channel_values": [
+              1
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_1.bin",
+            "prn_values": [
+              21
+            ],
+            "record_count": 39994,
+            "sha256": "03db22bf41b417833ef6bfb503b50ef0a26587ffa82518dc84017806043de679",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 16638112,
+            "channel_values": [
+              10
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_10.bin",
+            "prn_values": [
+              10
+            ],
+            "record_count": 39995,
+            "sha256": "5f84eba34b9d4e8b83d1b9aab4405e62827840885056320b872b8257c3228347",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 16637696,
+            "channel_values": [
+              2
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_2.bin",
+            "prn_values": [
+              11
+            ],
+            "record_count": 39994,
+            "sha256": "f576636bf31461063c20b9274845f8e638830d1a9ad8fa507e2282a43b8cf320",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 16637280,
+            "channel_values": [
+              3
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_3.bin",
+            "prn_values": [
+              18
+            ],
+            "record_count": 39993,
+            "sha256": "32f2ed45483ef0a3b1d30c3824f5308a19b67805fb4146f86c2d7da84fc09bd4",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 16637280,
+            "channel_values": [
+              4
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_4.bin",
+            "prn_values": [
+              20
+            ],
+            "record_count": 39993,
+            "sha256": "ceab1c7d3cc0490957d74b84fadfa6c7e899aa69175c8cf5795981a883747995",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 16622304,
+            "channel_values": [
+              5
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_5.bin",
+            "prn_values": [
+              24
+            ],
+            "record_count": 39957,
+            "sha256": "7031f19dd738f8f9ae34d4238e9a2c71f9709067fc2d286c5cfb131fdfcc614f",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6656608,
+            "channel_values": [
+              6
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_6.bin",
+            "prn_values": [
+              25
+            ],
+            "record_count": 16001,
+            "sha256": "4c530fc474c933bf03c486060659beb80a234bd960218b9c23d3cd0aa41bde26",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 16637696,
+            "channel_values": [
+              7
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_7.bin",
+            "prn_values": [
+              14
+            ],
+            "record_count": 39994,
+            "sha256": "25ba3eca89973d0c6c03ab97294a15b30ecc6e9f3c2af4b9ab564194bbf471de",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 16637696,
+            "channel_values": [
+              8
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_8.bin",
+            "prn_values": [
+              8
+            ],
+            "record_count": 39994,
+            "sha256": "1b64a940e4ba281fcab1454fa98609c9298d70d783f68e78ca6e1584f4be43ad",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 16637696,
+            "channel_values": [
+              9
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/oakbat_os3/rep3/trace_native_1ms_ch_9.bin",
+            "prn_values": [
+              15
+            ],
+            "record_count": 39994,
+            "sha256": "9578ce1e5a85385ba22fa61227da8b788a948cd8a04adfbddf2e410595201237",
+            "tracking_session_count": 1
+          }
+        ],
+        "finite_failure_count": 0,
+        "maximum_valid_prns_same_rounded_ms_epoch": 11,
+        "minimum_prns_required": 4,
+        "native_cadence_fraction": 1.0,
+        "native_cadence_pair_count": 415891,
+        "reassignment_failure_count": 0,
+        "repeated_action_row_count": 0,
+        "repeated_tap_row_count": 0,
+        "scenario_ids": [
+          "OAKBAT.OS3"
+        ],
+        "schema": "gnss-doppler-lab.trace-native-1ms-validation.v2",
+        "status": "PASS",
+        "timestamp_mismatch_count": 0,
+        "zero_action_row_count": 0,
+        "zero_tap_row_count": 0
+      }
+    },
+    "TEXBAT.DS3.smoke": {
+      "manifest": {
+        "attempt": "r1",
+        "command": [
+          "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-build/src/main/gnss-sdr",
+          "--config_file=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/receiver.conf",
+          "--keyboard=false"
+        ],
+        "dump_files": [
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_0.bin",
+            "sha256": "edfd14db6ba6cdb662ab0745de01a1c5bc98f3e420518f0cdb2396d93c6f40d8",
+            "size_bytes": 16639360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_1.bin",
+            "sha256": "b9cde59c3c7a16a20b54765deec958137730f5711e1925784fd0cf0b8dc0fb56",
+            "size_bytes": 16639360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_10.bin",
+            "sha256": "990bbbbbd1c8c0c13146f7c24eafdb923468ba73adac02572bf9add52eca4959",
+            "size_bytes": 6656608
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_2.bin",
+            "sha256": "59a6c95f29dabef7be980332175500d4d48b07e60b1f37971529f80372880b10",
+            "size_bytes": 16639360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_3.bin",
+            "sha256": "b541f407f98185ec653c62129fe8e8551c0a8c8e946a3fa75dd7b1bb2ed2f6f1",
+            "size_bytes": 16639360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_4.bin",
+            "sha256": "4c480e877235aa4c347d9d565eaa147365c36c5b69f519b689a5a9fe216e7959",
+            "size_bytes": 192
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_5.bin",
+            "sha256": "de644e9570ec8c4b3106bd249c1c2568bdedd3781d4041b94388d9a22b9c2dd3",
+            "size_bytes": 6656192
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_6.bin",
+            "sha256": "fbcbe3ff5bd0f903007762d551106acf998ef23c877a387e61f8b38a2607e379",
+            "size_bytes": 16639360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_7.bin",
+            "sha256": "7d3c997f4db1421eac60552bb4d9cbe33d0fcbb744fed99662c7f1e867ba1ef8",
+            "size_bytes": 12429440
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_8.bin",
+            "sha256": "e44d828973797f96048b789f8a0f8a08114dcdea41ca8f29b596db277d33bfbc",
+            "size_bytes": 16639360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_9.bin",
+            "sha256": "4c29ac4ce46919bcbc68ab6bbfc20c9726829dcc35017fd64be97ce509ea5691",
+            "size_bytes": 16639360
+          }
+        ],
+        "ended_at": "2026-08-16T11:33:32.086480+00:00",
+        "exit_code": 0,
+        "fixed_channel_prn_map": {
+          "0": 19,
+          "1": 30,
+          "10": 17,
+          "2": 10,
+          "3": 3,
+          "4": 8,
+          "5": 16,
+          "6": 6,
+          "7": 7,
+          "8": 13,
+          "9": 23
+        },
+        "frozen_handoff_path": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2b-stable-handoff-repair/artifacts/trace_stage0_r2b_stable_handoff_repair/handoffs/texbat_ds3.csv",
+        "frozen_handoff_sha256": "1b630895bcaf0039d7d6764710e4c900b599cf6e2e4da917dc990c63b63b6400",
+        "raw_iq": {
+          "ctime_ns": 1784563991000000000,
+          "device": 49,
+          "inode": 3091,
+          "mtime_ns": 1784563991000000000,
+          "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds3.bin",
+          "sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+          "size_bytes": 45785022464
+        },
+        "raw_iq_stable_during_run": true,
+        "raw_sample_range": {
+          "duration_s": 45.0,
+          "end_exclusive": 3375000000,
+          "seconds_to_skip": 90.0,
+          "start_inclusive": 2250000000
+        },
+        "receiver_config_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/receiver.conf",
+        "receiver_config_sha256": "3e0841920d56878c4ef4fbe669025ca2924dd808086aed6a26c042470b586e7e",
+        "receiver_executable": {
+          "ctime_ns": 1786879646000000000,
+          "device": 49,
+          "inode": 116532,
+          "mtime_ns": 1786879646000000000,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-build/src/main/gnss-sdr",
+          "sha256": "1e14879ffeb10a8824b06ba983aad3cb5a3a51ec9e1118d33c4ff0a79798e845",
+          "size_bytes": 36602256
+        },
+        "receiver_patch_sha256": "69f00c99d916889da86348edd7ac29674af162d635ffa3346e7b1bd8687badf8",
+        "receiver_stable_during_run": true,
+        "repetition": 3,
+        "replay_validation": {
+          "all_dump_files_have_physical_records": false,
+          "expected_dump_file_count": 11,
+          "minimum_physical_dump_files_required": 4,
+          "observed_dump_file_count": 11,
+          "physical_dump_file_count": 10,
+          "record_counts": [
+            39998,
+            39998,
+            16001,
+            39998,
+            39998,
+            0,
+            16000,
+            39998,
+            29878,
+            39998,
+            39998
+          ],
+          "status": "PASS"
+        },
+        "scenario_id": "TEXBAT.DS3",
+        "schema": "gnss-doppler-lab.trace-r2b-receiver-replay.v1",
+        "started_at": "2026-08-16T11:32:23.687259+00:00"
+      },
+      "manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/manifest.json",
+      "validation": {
+        "cadence_pair_count": 341855,
+        "causal_pair_count": 341855,
+        "causal_sequence_mismatch_count": 0,
+        "causal_value_mismatch_count": 0,
+        "consume_span_mismatch_count": 0,
+        "current_span_mismatch_count": 0,
+        "duration_mismatch_count": 0,
+        "failure_labels": [],
+        "file_summaries": [
+          {
+            "byte_size": 16639360,
+            "channel_values": [
+              0
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_0.bin",
+            "prn_values": [
+              19
+            ],
+            "record_count": 39998,
+            "sha256": "edfd14db6ba6cdb662ab0745de01a1c5bc98f3e420518f0cdb2396d93c6f40d8",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 16639360,
+            "channel_values": [
+              1
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_1.bin",
+            "prn_values": [
+              30
+            ],
+            "record_count": 39998,
+            "sha256": "b9cde59c3c7a16a20b54765deec958137730f5711e1925784fd0cf0b8dc0fb56",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6656608,
+            "channel_values": [
+              10
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_10.bin",
+            "prn_values": [
+              17
+            ],
+            "record_count": 16001,
+            "sha256": "990bbbbbd1c8c0c13146f7c24eafdb923468ba73adac02572bf9add52eca4959",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 16639360,
+            "channel_values": [
+              2
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_2.bin",
+            "prn_values": [
+              10
+            ],
+            "record_count": 39998,
+            "sha256": "59a6c95f29dabef7be980332175500d4d48b07e60b1f37971529f80372880b10",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 16639360,
+            "channel_values": [
+              3
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_3.bin",
+            "prn_values": [
+              3
+            ],
+            "record_count": 39998,
+            "sha256": "b541f407f98185ec653c62129fe8e8551c0a8c8e946a3fa75dd7b1bb2ed2f6f1",
+            "tracking_session_count": 1
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_4.bin",
+            "record_count": 0,
+            "sha256": "4c480e877235aa4c347d9d565eaa147365c36c5b69f519b689a5a9fe216e7959"
+          },
+          {
+            "byte_size": 6656192,
+            "channel_values": [
+              5
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_5.bin",
+            "prn_values": [
+              16
+            ],
+            "record_count": 16000,
+            "sha256": "de644e9570ec8c4b3106bd249c1c2568bdedd3781d4041b94388d9a22b9c2dd3",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 16639360,
+            "channel_values": [
+              6
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_6.bin",
+            "prn_values": [
+              6
+            ],
+            "record_count": 39998,
+            "sha256": "fbcbe3ff5bd0f903007762d551106acf998ef23c877a387e61f8b38a2607e379",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 12429440,
+            "channel_values": [
+              7
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_7.bin",
+            "prn_values": [
+              7
+            ],
+            "record_count": 29878,
+            "sha256": "7d3c997f4db1421eac60552bb4d9cbe33d0fcbb744fed99662c7f1e867ba1ef8",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 16639360,
+            "channel_values": [
+              8
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_8.bin",
+            "prn_values": [
+              13
+            ],
+            "record_count": 39998,
+            "sha256": "e44d828973797f96048b789f8a0f8a08114dcdea41ca8f29b596db277d33bfbc",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 16639360,
+            "channel_values": [
+              9
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3-r1/trace_native_1ms_ch_9.bin",
+            "prn_values": [
+              23
+            ],
+            "record_count": 39998,
+            "sha256": "4c29ac4ce46919bcbc68ab6bbfc20c9726829dcc35017fd64be97ce509ea5691",
+            "tracking_session_count": 1
+          }
+        ],
+        "finite_failure_count": 0,
+        "maximum_valid_prns_same_rounded_ms_epoch": 10,
+        "minimum_prns_required": 4,
+        "native_cadence_fraction": 1.0,
+        "native_cadence_pair_count": 341855,
+        "reassignment_failure_count": 0,
+        "repeated_action_row_count": 0,
+        "repeated_tap_row_count": 0,
+        "scenario_ids": [
+          "TEXBAT.DS3"
+        ],
+        "schema": "gnss-doppler-lab.trace-native-1ms-validation.v2",
+        "status": "PASS",
+        "timestamp_mismatch_count": 0,
+        "zero_action_row_count": 0,
+        "zero_tap_row_count": 0
+      }
+    },
+    "TEXBAT.cleanStatic.rep3": {
+      "manifest": {
+        "attempt": "r1",
+        "command": [
+          "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-build/src/main/gnss-sdr",
+          "--config_file=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/receiver.conf",
+          "--keyboard=false"
+        ],
+        "dump_files": [
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_0.bin",
+            "sha256": "b08c7cb925781f0b786628b0ec0d20f5808eae015bd73808435a66dce6426648",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_1.bin",
+            "sha256": "4bc0fd626c8dca896b404c5d01951cab696775ba6c725d9b94b1329080b60042",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_2.bin",
+            "sha256": "7481e73eaa44bf6fc6a20a48793975351e8804a97a2ae223803807e63db5d90f",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_3.bin",
+            "sha256": "53b65eb499a551d63d8ed54bbcf0eb5439ad89e40d5bf58b172556f14105489f",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_4.bin",
+            "sha256": "e2e0c51ebaf949d597a4c3c881fcf6aca7ba8163aaa496f9db689bb39e5200a7",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_5.bin",
+            "sha256": "e354043abffd826288d22c0942e3a626fbf6c60c24e0c46acd6851f560adbd1b",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_6.bin",
+            "sha256": "712fcdeb32cde143206f75c4361ea3da2a07e7bd600148e99a7de37cbcab0d89",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_7.bin",
+            "sha256": "3108692b4742d476c587657d05b989dac96b3456ad1a15e588e3e2bbf9fd9dfd",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_8.bin",
+            "sha256": "ab555640c401d2a208303f46e90599ec3bd91ec5df84b24a0c63d680502cbf85",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_9.bin",
+            "sha256": "8382b4ee0e59a45518cb028845b58b1372f2598fc5fa9ec26c642d105428022e",
+            "size_bytes": 6239360
+          }
+        ],
+        "ended_at": "2026-08-16T11:39:38.359985+00:00",
+        "exit_code": 0,
+        "fixed_channel_prn_map": {
+          "0": 19,
+          "1": 16,
+          "2": 3,
+          "3": 30,
+          "4": 13,
+          "5": 6,
+          "6": 7,
+          "7": 20,
+          "8": 10,
+          "9": 23
+        },
+        "frozen_handoff_path": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2b-stable-handoff-repair/artifacts/trace_stage0_r2b_stable_handoff_repair/handoffs/texbat_cleanstatic.csv",
+        "frozen_handoff_sha256": "6bd2b3db921ac1fa91b97ac5cb6fd7444146e07b6d02bec693cc3fc5b9f2ea88",
+        "raw_iq": {
+          "ctime_ns": 1784430845000000000,
+          "device": 49,
+          "inode": 3088,
+          "mtime_ns": 1784430845000000000,
+          "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+          "sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+          "size_bytes": 48016392192
+        },
+        "raw_iq_stable_during_run": true,
+        "raw_sample_range": {
+          "duration_s": 45.0,
+          "end_exclusive": 1125000000,
+          "seconds_to_skip": 0.0,
+          "start_inclusive": 0
+        },
+        "receiver_config_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/receiver.conf",
+        "receiver_config_sha256": "5835b4257557f622e95b39878700c20021fe53820d5031dd8b81302b3c7b17c6",
+        "receiver_executable": {
+          "ctime_ns": 1786879646000000000,
+          "device": 49,
+          "inode": 116532,
+          "mtime_ns": 1786879646000000000,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-build/src/main/gnss-sdr",
+          "sha256": "1e14879ffeb10a8824b06ba983aad3cb5a3a51ec9e1118d33c4ff0a79798e845",
+          "size_bytes": 36602256
+        },
+        "receiver_patch_sha256": "69f00c99d916889da86348edd7ac29674af162d635ffa3346e7b1bd8687badf8",
+        "receiver_stable_during_run": true,
+        "repetition": 3,
+        "replay_validation": {
+          "all_dump_files_have_physical_records": true,
+          "expected_dump_file_count": 10,
+          "minimum_physical_dump_files_required": 4,
+          "observed_dump_file_count": 10,
+          "physical_dump_file_count": 10,
+          "record_counts": [
+            14998,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998
+          ],
+          "status": "PASS"
+        },
+        "scenario_id": "TEXBAT.cleanStatic",
+        "schema": "gnss-doppler-lab.trace-r2b-receiver-replay.v1",
+        "started_at": "2026-08-16T11:39:03.100698+00:00"
+      },
+      "manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/manifest.json",
+      "validation": {
+        "cadence_pair_count": 149970,
+        "causal_pair_count": 149970,
+        "causal_sequence_mismatch_count": 0,
+        "causal_value_mismatch_count": 0,
+        "consume_span_mismatch_count": 0,
+        "current_span_mismatch_count": 0,
+        "duration_mismatch_count": 0,
+        "failure_labels": [],
+        "file_summaries": [
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              0
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_0.bin",
+            "prn_values": [
+              19
+            ],
+            "record_count": 14998,
+            "sha256": "b08c7cb925781f0b786628b0ec0d20f5808eae015bd73808435a66dce6426648",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              1
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_1.bin",
+            "prn_values": [
+              16
+            ],
+            "record_count": 14998,
+            "sha256": "4bc0fd626c8dca896b404c5d01951cab696775ba6c725d9b94b1329080b60042",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              2
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_2.bin",
+            "prn_values": [
+              3
+            ],
+            "record_count": 14998,
+            "sha256": "7481e73eaa44bf6fc6a20a48793975351e8804a97a2ae223803807e63db5d90f",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              3
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_3.bin",
+            "prn_values": [
+              30
+            ],
+            "record_count": 14998,
+            "sha256": "53b65eb499a551d63d8ed54bbcf0eb5439ad89e40d5bf58b172556f14105489f",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              4
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_4.bin",
+            "prn_values": [
+              13
+            ],
+            "record_count": 14998,
+            "sha256": "e2e0c51ebaf949d597a4c3c881fcf6aca7ba8163aaa496f9db689bb39e5200a7",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              5
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_5.bin",
+            "prn_values": [
+              6
+            ],
+            "record_count": 14998,
+            "sha256": "e354043abffd826288d22c0942e3a626fbf6c60c24e0c46acd6851f560adbd1b",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              6
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_6.bin",
+            "prn_values": [
+              7
+            ],
+            "record_count": 14998,
+            "sha256": "712fcdeb32cde143206f75c4361ea3da2a07e7bd600148e99a7de37cbcab0d89",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              7
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_7.bin",
+            "prn_values": [
+              20
+            ],
+            "record_count": 14998,
+            "sha256": "3108692b4742d476c587657d05b989dac96b3456ad1a15e588e3e2bbf9fd9dfd",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              8
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_8.bin",
+            "prn_values": [
+              10
+            ],
+            "record_count": 14998,
+            "sha256": "ab555640c401d2a208303f46e90599ec3bd91ec5df84b24a0c63d680502cbf85",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              9
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3-r1/trace_native_1ms_ch_9.bin",
+            "prn_values": [
+              23
+            ],
+            "record_count": 14998,
+            "sha256": "8382b4ee0e59a45518cb028845b58b1372f2598fc5fa9ec26c642d105428022e",
+            "tracking_session_count": 1
+          }
+        ],
+        "finite_failure_count": 0,
+        "maximum_valid_prns_same_rounded_ms_epoch": 10,
+        "minimum_prns_required": 4,
+        "native_cadence_fraction": 1.0,
+        "native_cadence_pair_count": 149970,
+        "reassignment_failure_count": 0,
+        "repeated_action_row_count": 0,
+        "repeated_tap_row_count": 0,
+        "scenario_ids": [
+          "TEXBAT.cleanStatic"
+        ],
+        "schema": "gnss-doppler-lab.trace-native-1ms-validation.v2",
+        "status": "PASS",
+        "timestamp_mismatch_count": 0,
+        "zero_action_row_count": 0,
+        "zero_tap_row_count": 0
+      }
+    },
+    "TEXBAT.cleanStatic.rep4": {
+      "manifest": {
+        "attempt": "r1",
+        "command": [
+          "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-build/src/main/gnss-sdr",
+          "--config_file=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/receiver.conf",
+          "--keyboard=false"
+        ],
+        "dump_files": [
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_0.bin",
+            "sha256": "ca8d48b26e736db5858db99fd05646d7aaf0deb177ce23977840686b27d57b56",
+            "size_bytes": 6238944
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_1.bin",
+            "sha256": "4bc0fd626c8dca896b404c5d01951cab696775ba6c725d9b94b1329080b60042",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_2.bin",
+            "sha256": "7481e73eaa44bf6fc6a20a48793975351e8804a97a2ae223803807e63db5d90f",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_3.bin",
+            "sha256": "53b65eb499a551d63d8ed54bbcf0eb5439ad89e40d5bf58b172556f14105489f",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_4.bin",
+            "sha256": "e2e0c51ebaf949d597a4c3c881fcf6aca7ba8163aaa496f9db689bb39e5200a7",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_5.bin",
+            "sha256": "e354043abffd826288d22c0942e3a626fbf6c60c24e0c46acd6851f560adbd1b",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_6.bin",
+            "sha256": "712fcdeb32cde143206f75c4361ea3da2a07e7bd600148e99a7de37cbcab0d89",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_7.bin",
+            "sha256": "3108692b4742d476c587657d05b989dac96b3456ad1a15e588e3e2bbf9fd9dfd",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_8.bin",
+            "sha256": "ab555640c401d2a208303f46e90599ec3bd91ec5df84b24a0c63d680502cbf85",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_9.bin",
+            "sha256": "8382b4ee0e59a45518cb028845b58b1372f2598fc5fa9ec26c642d105428022e",
+            "size_bytes": 6239360
+          }
+        ],
+        "ended_at": "2026-08-16T11:37:59.118536+00:00",
+        "exit_code": 0,
+        "fixed_channel_prn_map": {
+          "0": 19,
+          "1": 16,
+          "2": 3,
+          "3": 30,
+          "4": 13,
+          "5": 6,
+          "6": 7,
+          "7": 20,
+          "8": 10,
+          "9": 23
+        },
+        "frozen_handoff_path": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2b-stable-handoff-repair/artifacts/trace_stage0_r2b_stable_handoff_repair/handoffs/texbat_cleanstatic.csv",
+        "frozen_handoff_sha256": "6bd2b3db921ac1fa91b97ac5cb6fd7444146e07b6d02bec693cc3fc5b9f2ea88",
+        "raw_iq": {
+          "ctime_ns": 1784430845000000000,
+          "device": 49,
+          "inode": 3088,
+          "mtime_ns": 1784430845000000000,
+          "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+          "sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+          "size_bytes": 48016392192
+        },
+        "raw_iq_stable_during_run": true,
+        "raw_sample_range": {
+          "duration_s": 45.0,
+          "end_exclusive": 1125000000,
+          "seconds_to_skip": 0.0,
+          "start_inclusive": 0
+        },
+        "receiver_config_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/receiver.conf",
+        "receiver_config_sha256": "5835b4257557f622e95b39878700c20021fe53820d5031dd8b81302b3c7b17c6",
+        "receiver_executable": {
+          "ctime_ns": 1786879646000000000,
+          "device": 49,
+          "inode": 116532,
+          "mtime_ns": 1786879646000000000,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-build/src/main/gnss-sdr",
+          "sha256": "1e14879ffeb10a8824b06ba983aad3cb5a3a51ec9e1118d33c4ff0a79798e845",
+          "size_bytes": 36602256
+        },
+        "receiver_patch_sha256": "69f00c99d916889da86348edd7ac29674af162d635ffa3346e7b1bd8687badf8",
+        "receiver_stable_during_run": true,
+        "repetition": 4,
+        "replay_validation": {
+          "all_dump_files_have_physical_records": true,
+          "expected_dump_file_count": 10,
+          "minimum_physical_dump_files_required": 4,
+          "observed_dump_file_count": 10,
+          "physical_dump_file_count": 10,
+          "record_counts": [
+            14997,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998
+          ],
+          "status": "PASS"
+        },
+        "scenario_id": "TEXBAT.cleanStatic",
+        "schema": "gnss-doppler-lab.trace-r2b-receiver-replay.v1",
+        "started_at": "2026-08-16T11:37:22.791592+00:00"
+      },
+      "manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/manifest.json",
+      "validation": {
+        "cadence_pair_count": 149969,
+        "causal_pair_count": 149969,
+        "causal_sequence_mismatch_count": 0,
+        "causal_value_mismatch_count": 0,
+        "consume_span_mismatch_count": 0,
+        "current_span_mismatch_count": 0,
+        "duration_mismatch_count": 0,
+        "failure_labels": [],
+        "file_summaries": [
+          {
+            "byte_size": 6238944,
+            "channel_values": [
+              0
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_0.bin",
+            "prn_values": [
+              19
+            ],
+            "record_count": 14997,
+            "sha256": "ca8d48b26e736db5858db99fd05646d7aaf0deb177ce23977840686b27d57b56",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              1
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_1.bin",
+            "prn_values": [
+              16
+            ],
+            "record_count": 14998,
+            "sha256": "4bc0fd626c8dca896b404c5d01951cab696775ba6c725d9b94b1329080b60042",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              2
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_2.bin",
+            "prn_values": [
+              3
+            ],
+            "record_count": 14998,
+            "sha256": "7481e73eaa44bf6fc6a20a48793975351e8804a97a2ae223803807e63db5d90f",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              3
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_3.bin",
+            "prn_values": [
+              30
+            ],
+            "record_count": 14998,
+            "sha256": "53b65eb499a551d63d8ed54bbcf0eb5439ad89e40d5bf58b172556f14105489f",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              4
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_4.bin",
+            "prn_values": [
+              13
+            ],
+            "record_count": 14998,
+            "sha256": "e2e0c51ebaf949d597a4c3c881fcf6aca7ba8163aaa496f9db689bb39e5200a7",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              5
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_5.bin",
+            "prn_values": [
+              6
+            ],
+            "record_count": 14998,
+            "sha256": "e354043abffd826288d22c0942e3a626fbf6c60c24e0c46acd6851f560adbd1b",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              6
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_6.bin",
+            "prn_values": [
+              7
+            ],
+            "record_count": 14998,
+            "sha256": "712fcdeb32cde143206f75c4361ea3da2a07e7bd600148e99a7de37cbcab0d89",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              7
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_7.bin",
+            "prn_values": [
+              20
+            ],
+            "record_count": 14998,
+            "sha256": "3108692b4742d476c587657d05b989dac96b3456ad1a15e588e3e2bbf9fd9dfd",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              8
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_8.bin",
+            "prn_values": [
+              10
+            ],
+            "record_count": 14998,
+            "sha256": "ab555640c401d2a208303f46e90599ec3bd91ec5df84b24a0c63d680502cbf85",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              9
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4-r1/trace_native_1ms_ch_9.bin",
+            "prn_values": [
+              23
+            ],
+            "record_count": 14998,
+            "sha256": "8382b4ee0e59a45518cb028845b58b1372f2598fc5fa9ec26c642d105428022e",
+            "tracking_session_count": 1
+          }
+        ],
+        "finite_failure_count": 0,
+        "maximum_valid_prns_same_rounded_ms_epoch": 10,
+        "minimum_prns_required": 4,
+        "native_cadence_fraction": 1.0,
+        "native_cadence_pair_count": 149969,
+        "reassignment_failure_count": 0,
+        "repeated_action_row_count": 0,
+        "repeated_tap_row_count": 0,
+        "scenario_ids": [
+          "TEXBAT.cleanStatic"
+        ],
+        "schema": "gnss-doppler-lab.trace-native-1ms-validation.v2",
+        "status": "PASS",
+        "timestamp_mismatch_count": 0,
+        "zero_action_row_count": 0,
+        "zero_tap_row_count": 0
+      }
+    }
+  },
+  "phase_a_decision": {
+    "phase_b_authorized": false,
+    "status": "FAIL"
+  },
+  "prior_failed_attempts": [
+    {
+      "manifest": {
+        "attempt": null,
+        "command": [
+          "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-build/src/main/gnss-sdr",
+          "--config_file=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3/receiver.conf",
+          "--keyboard=false"
+        ],
+        "dump_files": [
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3/trace_native_1ms_ch_0.bin",
+            "sha256": "b08c7cb925781f0b786628b0ec0d20f5808eae015bd73808435a66dce6426648",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3/trace_native_1ms_ch_1.bin",
+            "sha256": "4bc0fd626c8dca896b404c5d01951cab696775ba6c725d9b94b1329080b60042",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3/trace_native_1ms_ch_2.bin",
+            "sha256": "7481e73eaa44bf6fc6a20a48793975351e8804a97a2ae223803807e63db5d90f",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3/trace_native_1ms_ch_3.bin",
+            "sha256": "53b65eb499a551d63d8ed54bbcf0eb5439ad89e40d5bf58b172556f14105489f",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3/trace_native_1ms_ch_4.bin",
+            "sha256": "e2e0c51ebaf949d597a4c3c881fcf6aca7ba8163aaa496f9db689bb39e5200a7",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3/trace_native_1ms_ch_5.bin",
+            "sha256": "e354043abffd826288d22c0942e3a626fbf6c60c24e0c46acd6851f560adbd1b",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3/trace_native_1ms_ch_6.bin",
+            "sha256": "712fcdeb32cde143206f75c4361ea3da2a07e7bd600148e99a7de37cbcab0d89",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3/trace_native_1ms_ch_7.bin",
+            "sha256": "3108692b4742d476c587657d05b989dac96b3456ad1a15e588e3e2bbf9fd9dfd",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3/trace_native_1ms_ch_8.bin",
+            "sha256": "ab555640c401d2a208303f46e90599ec3bd91ec5df84b24a0c63d680502cbf85",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3/trace_native_1ms_ch_9.bin",
+            "sha256": "8382b4ee0e59a45518cb028845b58b1372f2598fc5fa9ec26c642d105428022e",
+            "size_bytes": 6239360
+          }
+        ],
+        "ended_at": "2026-08-16T11:29:37.181888+00:00",
+        "exit_code": 0,
+        "fixed_channel_prn_map": {
+          "0": 19,
+          "1": 16,
+          "2": 3,
+          "3": 30,
+          "4": 13,
+          "5": 6,
+          "6": 7,
+          "7": 20,
+          "8": 10,
+          "9": 23
+        },
+        "frozen_handoff_path": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2b-stable-handoff-repair/artifacts/trace_stage0_r2b_stable_handoff_repair/handoffs/texbat_cleanstatic.csv",
+        "frozen_handoff_sha256": "6bd2b3db921ac1fa91b97ac5cb6fd7444146e07b6d02bec693cc3fc5b9f2ea88",
+        "raw_iq": {
+          "ctime_ns": 1784430845000000000,
+          "device": 49,
+          "inode": 3088,
+          "mtime_ns": 1784430845000000000,
+          "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+          "sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+          "size_bytes": 48016392192
+        },
+        "raw_iq_stable_during_run": true,
+        "raw_sample_range": {
+          "duration_s": 45.0,
+          "end_exclusive": 1125000000,
+          "seconds_to_skip": 0.0,
+          "start_inclusive": 0
+        },
+        "receiver_config_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3/receiver.conf",
+        "receiver_config_sha256": "5835b4257557f622e95b39878700c20021fe53820d5031dd8b81302b3c7b17c6",
+        "receiver_executable": {
+          "ctime_ns": 1786879646000000000,
+          "device": 49,
+          "inode": 116532,
+          "mtime_ns": 1786879646000000000,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-build/src/main/gnss-sdr",
+          "sha256": "1e14879ffeb10a8824b06ba983aad3cb5a3a51ec9e1118d33c4ff0a79798e845",
+          "size_bytes": 36602256
+        },
+        "receiver_patch_sha256": "69f00c99d916889da86348edd7ac29674af162d635ffa3346e7b1bd8687badf8",
+        "receiver_stable_during_run": true,
+        "repetition": 3,
+        "replay_validation": {
+          "all_dump_files_have_physical_records": true,
+          "expected_dump_file_count": 10,
+          "observed_dump_file_count": 10,
+          "record_counts": [
+            14998,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998
+          ],
+          "status": "PASS"
+        },
+        "scenario_id": "TEXBAT.cleanStatic",
+        "schema": "gnss-doppler-lab.trace-r2b-receiver-replay.v1",
+        "started_at": "2026-08-16T11:28:58.157561+00:00"
+      },
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep3",
+      "reason": "The preserved attempt exposed a handoff target/slice defect and was excluded before semantic evaluation; the selected retry was separately refrozen and pushed.",
+      "scenario_key": "TEXBAT.cleanStatic.rep3",
+      "scientific_status": "FAIL_FROZEN_HANDOFF_TARGET_OR_SLICE_AUDIT"
+    },
+    {
+      "manifest": {
+        "attempt": null,
+        "command": [
+          "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-build/src/main/gnss-sdr",
+          "--config_file=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4/receiver.conf",
+          "--keyboard=false"
+        ],
+        "dump_files": [
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4/trace_native_1ms_ch_0.bin",
+            "sha256": "ca8d48b26e736db5858db99fd05646d7aaf0deb177ce23977840686b27d57b56",
+            "size_bytes": 6238944
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4/trace_native_1ms_ch_1.bin",
+            "sha256": "4bc0fd626c8dca896b404c5d01951cab696775ba6c725d9b94b1329080b60042",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4/trace_native_1ms_ch_2.bin",
+            "sha256": "7481e73eaa44bf6fc6a20a48793975351e8804a97a2ae223803807e63db5d90f",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4/trace_native_1ms_ch_3.bin",
+            "sha256": "53b65eb499a551d63d8ed54bbcf0eb5439ad89e40d5bf58b172556f14105489f",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4/trace_native_1ms_ch_4.bin",
+            "sha256": "e2e0c51ebaf949d597a4c3c881fcf6aca7ba8163aaa496f9db689bb39e5200a7",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4/trace_native_1ms_ch_5.bin",
+            "sha256": "e354043abffd826288d22c0942e3a626fbf6c60c24e0c46acd6851f560adbd1b",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4/trace_native_1ms_ch_6.bin",
+            "sha256": "712fcdeb32cde143206f75c4361ea3da2a07e7bd600148e99a7de37cbcab0d89",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4/trace_native_1ms_ch_7.bin",
+            "sha256": "3108692b4742d476c587657d05b989dac96b3456ad1a15e588e3e2bbf9fd9dfd",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4/trace_native_1ms_ch_8.bin",
+            "sha256": "ab555640c401d2a208303f46e90599ec3bd91ec5df84b24a0c63d680502cbf85",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4/trace_native_1ms_ch_9.bin",
+            "sha256": "8382b4ee0e59a45518cb028845b58b1372f2598fc5fa9ec26c642d105428022e",
+            "size_bytes": 6239360
+          }
+        ],
+        "ended_at": "2026-08-16T11:30:55.389932+00:00",
+        "exit_code": 0,
+        "fixed_channel_prn_map": {
+          "0": 19,
+          "1": 16,
+          "2": 3,
+          "3": 30,
+          "4": 13,
+          "5": 6,
+          "6": 7,
+          "7": 20,
+          "8": 10,
+          "9": 23
+        },
+        "frozen_handoff_path": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2b-stable-handoff-repair/artifacts/trace_stage0_r2b_stable_handoff_repair/handoffs/texbat_cleanstatic.csv",
+        "frozen_handoff_sha256": "6bd2b3db921ac1fa91b97ac5cb6fd7444146e07b6d02bec693cc3fc5b9f2ea88",
+        "raw_iq": {
+          "ctime_ns": 1784430845000000000,
+          "device": 49,
+          "inode": 3088,
+          "mtime_ns": 1784430845000000000,
+          "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+          "sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+          "size_bytes": 48016392192
+        },
+        "raw_iq_stable_during_run": true,
+        "raw_sample_range": {
+          "duration_s": 45.0,
+          "end_exclusive": 1125000000,
+          "seconds_to_skip": 0.0,
+          "start_inclusive": 0
+        },
+        "receiver_config_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4/receiver.conf",
+        "receiver_config_sha256": "5835b4257557f622e95b39878700c20021fe53820d5031dd8b81302b3c7b17c6",
+        "receiver_executable": {
+          "ctime_ns": 1786879646000000000,
+          "device": 49,
+          "inode": 116532,
+          "mtime_ns": 1786879646000000000,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-build/src/main/gnss-sdr",
+          "sha256": "1e14879ffeb10a8824b06ba983aad3cb5a3a51ec9e1118d33c4ff0a79798e845",
+          "size_bytes": 36602256
+        },
+        "receiver_patch_sha256": "69f00c99d916889da86348edd7ac29674af162d635ffa3346e7b1bd8687badf8",
+        "receiver_stable_during_run": true,
+        "repetition": 4,
+        "replay_validation": {
+          "all_dump_files_have_physical_records": true,
+          "expected_dump_file_count": 10,
+          "observed_dump_file_count": 10,
+          "record_counts": [
+            14997,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998,
+            14998
+          ],
+          "status": "PASS"
+        },
+        "scenario_id": "TEXBAT.cleanStatic",
+        "schema": "gnss-doppler-lab.trace-r2b-receiver-replay.v1",
+        "started_at": "2026-08-16T11:30:07.677784+00:00"
+      },
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_cleanstatic/rep4",
+      "reason": "The preserved attempt exposed a handoff target/slice defect and was excluded before semantic evaluation; the selected retry was separately refrozen and pushed.",
+      "scenario_key": "TEXBAT.cleanStatic.rep4",
+      "scientific_status": "FAIL_FROZEN_HANDOFF_TARGET_OR_SLICE_AUDIT"
+    },
+    {
+      "manifest": {
+        "attempt": null,
+        "command": [
+          "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-build/src/main/gnss-sdr",
+          "--config_file=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3/receiver.conf",
+          "--keyboard=false"
+        ],
+        "dump_files": [
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3/trace_native_1ms_ch_0.bin",
+            "sha256": "b496697337ddd5fe69f7ec6fe5cdfb3a000d6d8b954f500ea971a5423afb49a8",
+            "size_bytes": 16638944
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3/trace_native_1ms_ch_1.bin",
+            "sha256": "b9cde59c3c7a16a20b54765deec958137730f5711e1925784fd0cf0b8dc0fb56",
+            "size_bytes": 16639360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3/trace_native_1ms_ch_10.bin",
+            "sha256": "4c480e877235aa4c347d9d565eaa147365c36c5b69f519b689a5a9fe216e7959",
+            "size_bytes": 192
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3/trace_native_1ms_ch_2.bin",
+            "sha256": "59a6c95f29dabef7be980332175500d4d48b07e60b1f37971529f80372880b10",
+            "size_bytes": 16639360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3/trace_native_1ms_ch_3.bin",
+            "sha256": "b541f407f98185ec653c62129fe8e8551c0a8c8e946a3fa75dd7b1bb2ed2f6f1",
+            "size_bytes": 16639360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3/trace_native_1ms_ch_4.bin",
+            "sha256": "10f3ca44ebaef96d979b6057388adf9e204ccff135961bdb5f061cb4b901c6c6",
+            "size_bytes": 16639360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3/trace_native_1ms_ch_5.bin",
+            "sha256": "de644e9570ec8c4b3106bd249c1c2568bdedd3781d4041b94388d9a22b9c2dd3",
+            "size_bytes": 6656192
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3/trace_native_1ms_ch_6.bin",
+            "sha256": "fbcbe3ff5bd0f903007762d551106acf998ef23c877a387e61f8b38a2607e379",
+            "size_bytes": 16639360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3/trace_native_1ms_ch_7.bin",
+            "sha256": "7d3c997f4db1421eac60552bb4d9cbe33d0fcbb744fed99662c7f1e867ba1ef8",
+            "size_bytes": 12429440
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3/trace_native_1ms_ch_8.bin",
+            "sha256": "e44d828973797f96048b789f8a0f8a08114dcdea41ca8f29b596db277d33bfbc",
+            "size_bytes": 16639360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3/trace_native_1ms_ch_9.bin",
+            "sha256": "4c29ac4ce46919bcbc68ab6bbfc20c9726829dcc35017fd64be97ce509ea5691",
+            "size_bytes": 16639360
+          }
+        ],
+        "ended_at": "2026-08-16T11:31:34.166926+00:00",
+        "exit_code": 0,
+        "fixed_channel_prn_map": {
+          "0": 19,
+          "1": 30,
+          "10": 17,
+          "2": 10,
+          "3": 3,
+          "4": 8,
+          "5": 16,
+          "6": 6,
+          "7": 7,
+          "8": 13,
+          "9": 23
+        },
+        "frozen_handoff_path": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2b-stable-handoff-repair/artifacts/trace_stage0_r2b_stable_handoff_repair/handoffs/texbat_ds3.csv",
+        "frozen_handoff_sha256": "1b630895bcaf0039d7d6764710e4c900b599cf6e2e4da917dc990c63b63b6400",
+        "raw_iq": {
+          "ctime_ns": 1784563991000000000,
+          "device": 49,
+          "inode": 3091,
+          "mtime_ns": 1784563991000000000,
+          "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds3.bin",
+          "sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+          "size_bytes": 45785022464
+        },
+        "raw_iq_stable_during_run": true,
+        "raw_sample_range": {
+          "duration_s": 45.0,
+          "end_exclusive": 3375000000,
+          "seconds_to_skip": 90.0,
+          "start_inclusive": 2250000000
+        },
+        "receiver_config_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3/receiver.conf",
+        "receiver_config_sha256": "3e0841920d56878c4ef4fbe669025ca2924dd808086aed6a26c042470b586e7e",
+        "receiver_executable": {
+          "ctime_ns": 1786879646000000000,
+          "device": 49,
+          "inode": 116532,
+          "mtime_ns": 1786879646000000000,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/receiver-build/src/main/gnss-sdr",
+          "sha256": "1e14879ffeb10a8824b06ba983aad3cb5a3a51ec9e1118d33c4ff0a79798e845",
+          "size_bytes": 36602256
+        },
+        "receiver_patch_sha256": "69f00c99d916889da86348edd7ac29674af162d635ffa3346e7b1bd8687badf8",
+        "receiver_stable_during_run": true,
+        "repetition": 3,
+        "replay_validation": {
+          "all_dump_files_have_physical_records": false,
+          "expected_dump_file_count": 11,
+          "observed_dump_file_count": 11,
+          "record_counts": [
+            39997,
+            39998,
+            0,
+            39998,
+            39998,
+            39998,
+            16000,
+            39998,
+            29878,
+            39998,
+            39998
+          ],
+          "status": "FAIL"
+        },
+        "scenario_id": "TEXBAT.DS3",
+        "schema": "gnss-doppler-lab.trace-r2b-receiver-replay.v1",
+        "started_at": "2026-08-16T11:30:07.677796+00:00"
+      },
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2b-stable-handoff-repair/dumps/phase_a/texbat_ds3/rep3",
+      "reason": "The preserved attempt exposed a handoff target/slice defect and was excluded before semantic evaluation; the selected retry was separately refrozen and pushed.",
+      "scenario_key": "TEXBAT.DS3.smoke",
+      "scientific_status": "FAIL_FROZEN_HANDOFF_TARGET_OR_SLICE_AUDIT"
+    }
+  ],
+  "schema": "gnss-doppler-lab.trace-r2b-replay-inventory.v1"
+}

@@ -269,10 +269,12 @@ def run_receiver(name: str, repetition: int, attempt: str | None = None) -> int:
     replay_validation = {
         "expected_dump_file_count": len(rows),
         "observed_dump_file_count": len(dumps),
+        "physical_dump_file_count": sum(count > 0 for count in record_counts),
+        "minimum_physical_dump_files_required": 4,
         "all_dump_files_have_physical_records": len(record_counts) == len(rows) and all(count > 0 for count in record_counts),
         "record_counts": record_counts,
     }
-    replay_validation["status"] = "PASS" if replay_validation["all_dump_files_have_physical_records"] else "FAIL"
+    replay_validation["status"] = "PASS" if len(dumps) == len(rows) and replay_validation["physical_dump_file_count"] >= 4 else "FAIL"
     manifest = {
         "schema": f"gnss-doppler-lab.trace-{RELEASE}-receiver-replay.v1",
         "scenario_id": name,

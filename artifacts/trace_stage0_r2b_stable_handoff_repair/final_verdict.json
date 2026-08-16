@@ -1,0 +1,21 @@
+{
+  "actual_action_vs_shuffled_no_action": {
+    "reason": "Phase B not authorized.",
+    "status": "UNAVAILABLE"
+  },
+  "attack_metrics_computed": false,
+  "failure_label": "TERMINAL_ROW_SET_NONREPRODUCIBLE",
+  "evaluator_failure_label": "NATIVE_DUMP_PHYSICAL_VALUES_NONREPRODUCIBLE",
+  "next_action": "Make end-of-source channel draining deterministic without changing TRACE scoring or gates, then repeat the same frozen Phase A.",
+  "normal_fpr": {
+    "reason": "Phase B not authorized; no scientific threshold/FPR evaluation.",
+    "status": "UNAVAILABLE"
+  },
+  "phase_a_passed": false,
+  "phase_b_authorized": false,
+  "phase_b_run": false,
+  "r2_prior_verdict_preserved": "INCONCLUSIVE_INPUT_OR_RECEIVER",
+  "reason": "R2b restored stable multi-PRN support and reproduced every common physical row and common TRACE score exactly, but one replay retained one extra terminal quality pair. Whole-replay hash, block-key, and alarm identity gates therefore failed. Phase B is NOT_AUTHORIZED and no attack performance was read or computed.",
+  "schema": "gnss-doppler-lab.trace-r2b-final-verdict.v1",
+  "verdict": "INCONCLUSIVE_RECEIVER_REPRODUCIBILITY"
+}

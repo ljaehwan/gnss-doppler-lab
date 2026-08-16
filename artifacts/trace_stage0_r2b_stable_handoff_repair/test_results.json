@@ -1,0 +1,17 @@
+{
+  "coverage": [
+    "R1/R2/R2a inherited TRACE contracts",
+    "target-aligned state extraction",
+    "channel subset availability",
+    "native cadence and causal mapping",
+    "semantic reproduction",
+    "artifact checksum",
+    "fresh-clone verifier"
+  ],
+  "durable_test_runs": [
+    "20260816T112315Z-r2b-focused-tests"
+  ],
+  "focused_test_count": 40,
+  "schema": "gnss-doppler-lab.trace-r2b-test-results.v1",
+  "status": "PASS"
+}
