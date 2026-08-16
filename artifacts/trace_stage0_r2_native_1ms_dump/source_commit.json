@@ -1,0 +1,16 @@
+{
+  "base_commit": "ba3355ac6b61f088fa37d579d6af02947ccf34c1",
+  "branch": "research/trace-stage0-r2-native-1ms-dump",
+  "created_before_first_receiver_replay": true,
+  "main_local_before_replay": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "main_origin_before_replay": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "origin_r1_tip_after_fetch": "ba3355ac6b61f088fa37d579d6af02947ccf34c1",
+  "preregistration_freeze_commit": "bde4c16b43193fa6a6eae9b7fc2cb5e4fd4caf4e",
+  "receiver": {
+    "base_commit": "1ddd4562723040fd66cb334b578a5b69455625f4",
+    "binary_sha256": "b23867cefa8650e57e037f3b72e4a077a0d90faf4fb6e40aeae3b28c7a45b443",
+    "patch_sha256": "087da6343c1455bbdb420f697b05de168b464dbe4472bb6ad15eb488aa48fa2d"
+  },
+  "result_commit": null,
+  "schema": "gnss-doppler-lab.trace-r2-source-commit.v1"
+}
