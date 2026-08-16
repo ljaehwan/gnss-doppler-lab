@@ -1,0 +1,54 @@
+{
+  "attack_scores_read_or_computed": false,
+  "diagnosis_label": "CROSS_SCENARIO_ATTACK_HANDOFF_STATE_INCOMPATIBLE",
+  "not_changed": [
+    "authenticated raw IQ sources or hashes",
+    "R2c receiver executable and finite-source terminal drain semantics",
+    "R2d OAKBAT cleanStatic handoff repair",
+    "TRACE scorer, thresholds, gates, windows, tolerances, block keys, controls, and metric semantics"
+  ],
+  "parent_commit": "e66619e31a937186e522d8566711436e24f2b99d",
+  "parent_failure_label": "FROZEN_ATTACK_SUPPORT_INCOMPLETE",
+  "parent_scenario_evidence": {
+    "OAKBAT.OS4": {
+      "attack_onset_s": 120.0,
+      "frozen_metric_attack_detection_rate": null,
+      "frozen_metric_pre_onset_fpr": 0.0,
+      "frozen_metric_valid_epochs": 1,
+      "minimum_prns_per_block": 4,
+      "post_onset_block_count": 0,
+      "selected_quality_common_support_pair_count": 16,
+      "selected_time_end_s": 95.0454092,
+      "selected_time_start_s": 95.0340172,
+      "selected_unique_prn_count": 4,
+      "selected_unique_prns": [
+        10,
+        11,
+        15,
+        20
+      ],
+      "valid_block_count": 1
+    },
+    "TEXBAT.DS7": {
+      "attack_onset_s": 110.0,
+      "frozen_metric_attack_detection_rate": null,
+      "frozen_metric_pre_onset_fpr": null,
+      "frozen_metric_valid_epochs": 0,
+      "minimum_prns_per_block": 4,
+      "post_onset_block_count": 0,
+      "selected_quality_common_support_pair_count": 40,
+      "selected_time_end_s": 95.045354,
+      "selected_time_start_s": 95.0218402,
+      "selected_unique_prn_count": 3,
+      "selected_unique_prns": [
+        6,
+        8,
+        30
+      ],
+      "valid_block_count": 0
+    }
+  },
+  "root_cause_hypothesis": "R2d mapped TEXBAT.DS7 to a DS3-derived handoff and OAKBAT.OS4 to an OS3-derived handoff. Both receiver processes exited successfully and emitted physical native rows, but the selected quality/common support ended before the frozen evaluation windows. Scenario-specific pre-onset tracking state is therefore required for these two attack recordings.",
+  "schema": "gnss-doppler-lab.trace-r2e-attack-support-diagnosis.v1",
+  "status": "PREREGISTERED_FROM_PARENT_EVIDENCE"
+}

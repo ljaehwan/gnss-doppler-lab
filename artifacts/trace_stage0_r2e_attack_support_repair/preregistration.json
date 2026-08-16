@@ -1,0 +1,65 @@
+{
+  "attack_scores_read_or_computed": false,
+  "frozen_phase_b_scorer": {
+    "allowed_adapter_scope": "R2e artifact and SSD paths only",
+    "implementation": "scripts/evaluate_trace_r2_phase_b.py",
+    "sha256": "7c3e4f759e461c048b58cd7852ca6d78ded3b56e141e23c749c58ed4c814413c"
+  },
+  "parent_r2d_commit": "e66619e31a937186e522d8566711436e24f2b99d",
+  "performance_claimed": false,
+  "phase_a_contract": "Inherited unchanged byte-for-byte in semantics from R2d/R2c.",
+  "phase_a_replays": [
+    "TEXBAT.cleanStatic.rep3",
+    "TEXBAT.cleanStatic.rep4",
+    "TEXBAT.DS3.smoke",
+    "OAKBAT.OS3.smoke"
+  ],
+  "phase_b_authorization_rule": "Unchanged Phase A must PASS and repaired DS7/OS4 support validation must show at least one frozen four-PRN block before and after onset.",
+  "phase_b_scope_if_authorized": [
+    "TEXBAT.cleanStatic",
+    "TEXBAT.DS3",
+    "TEXBAT.DS7",
+    "OAKBAT.cleanStatic",
+    "OAKBAT.OS3",
+    "OAKBAT.OS4"
+  ],
+  "phase_b_stop_rule": "Fail closed without a performance claim if either repaired attack path lacks a pre-onset or post-onset four-PRN block under frozen support rules.",
+  "repair_strategy": "SCENARIO_SPECIFIC_PRE_ONSET_TARGET_ALIGNED_HANDOFF",
+  "scenario_repairs": {
+    "OAKBAT.OS4": {
+      "onset_s": 120.0,
+      "parent_handoff": "oakbat_os3.csv",
+      "replacement_handoff": "oakbat_os4.csv",
+      "selection_time_s": 95.0,
+      "source_skip_s": 90.0,
+      "support_duration_s": 15.0
+    },
+    "TEXBAT.DS7": {
+      "onset_s": 110.0,
+      "parent_handoff": "texbat_ds3.csv",
+      "replacement_handoff": "texbat_ds7.csv",
+      "selection_time_s": 95.0,
+      "source_skip_s": 90.0,
+      "support_duration_s": 15.0
+    }
+  },
+  "schema": "gnss-doppler-lab.trace-r2e-preregistration.v1",
+  "scientific_objective": "Repair only frozen DS7/OS4 receiver handoff support, repeat unchanged Phase A, and run the unchanged frozen Phase B if all support gates pass.",
+  "selection_inputs_allowed": [
+    "scenario identity",
+    "native channel presence",
+    "absolute raw interval start",
+    "PRN identity",
+    "exact action-used receiver state"
+  ],
+  "selection_inputs_prohibited": [
+    "TRACE score",
+    "quality-filter outcome",
+    "four-PRN block outcome",
+    "alarm or detection outcome",
+    "post-onset rows"
+  ],
+  "status": "SEALED_BEFORE_REPAIRED_SUPPORT_ACQUISITION_OR_METRIC_EVALUATION",
+  "support_selection_rule": "For every physical native channel from the scenario's bounded pre-onset support acquisition, select the first causal native row whose absolute raw interval starts at or after 95.0 s; retain its PRN and exact action-used state; map selected rows to contiguous output channels; require at least four rows and require every selected row strictly before frozen onset.",
+  "task_base_commit": "e66619e31a937186e522d8566711436e24f2b99d"
+}
