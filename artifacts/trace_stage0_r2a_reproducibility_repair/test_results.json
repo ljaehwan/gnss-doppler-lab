@@ -16,11 +16,13 @@
     "fresh-clone verifier"
   ],
   "durable_verifier": {
-    "attempt_run_ids": [],
-    "reason": "No durable runner record found.",
-    "status": "UNAVAILABLE"
+    "attempt_run_ids": [
+      "20260816T105107Z-r2a-tests-and-fresh-clone-verifier"
+    ],
+    "selected_run_id": "20260816T105107Z-r2a-tests-and-fresh-clone-verifier",
+    "status": "PASS"
   },
   "note": "Exact commands, stdout/stderr hashes, exit code, and result manifest are preserved in runner_runs.json and the durable run directory.",
   "schema": "gnss-doppler-lab.trace-r2a-test-results.v1",
-  "status": "UNAVAILABLE"
+  "status": "PASS"
 }
