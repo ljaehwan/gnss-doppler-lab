@@ -5,6 +5,15 @@
     "failed": 0,
     "result": "14 passed in 0.80s"
   },
+  "fresh_clone": {
+    "branch": "research/trace-stage0-static",
+    "commit": "3901165c920c381211450f96a89162277d99c689",
+    "focused_tests": "14 passed in 0.80s",
+    "final_verifier_passed": true,
+    "remote_ahead_behind": "0/0",
+    "worktree_clean": true,
+    "worktree_path": "/home/ubuntu/research-context/tasks/trace-stage0-static/fresh-clone-3901165"
+  },
   "prefreeze_verifier": {
     "command": "/usr/bin/python3 scripts/verify_trace_stage0.py --phase prefreeze",
     "passed": true
