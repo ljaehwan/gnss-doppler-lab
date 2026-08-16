@@ -56,6 +56,8 @@ def test_r2c_phase_b_dump_count_is_derived_from_frozen_handoff():
     phase_b = source[source.index("def run_phase_b_receiver") : source.index("def main")]
     assert '"expected_dump_file_count": len(rows)' in phase_b
     assert "len(record_counts) == len(rows)" in phase_b
+    assert '"minimum_physical_dump_files_required": 4' in phase_b
+    assert 'replay_validation["physical_dump_file_count"] >= 4' in phase_b
 
 
 def test_r2c_receiver_patch_waits_for_natural_eos_without_row_filtering():
