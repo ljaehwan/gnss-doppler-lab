@@ -14,7 +14,7 @@ RUN_ROOT = Path(
     "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/"
     "trace-stage0-r2d-oakbat-clean-support-repair/runner-runs"
 )
-FREEZE_COMMIT = "ec564b41bb7034d64bb3399ff23cf13c41531522"
+FREEZE_COMMIT = "b23847bb396f6cad4f3d8b9b92ae88ae0e873bd4"
 EXCLUDED = {
     "artifact_manifest_sha256.json": "self-referential",
     "runner_runs.json": "updated after verification",

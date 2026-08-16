@@ -100,3 +100,11 @@ def test_r2d_final_artifacts_are_fail_closed_or_computed():
     else:
         assert verdict["attack_metrics_computed"] is False
         assert metrics["status"] == "UNAVAILABLE"
+        assert verdict["performance_claimed"] is False
+        failure = json.loads((ARTIFACT / "phase_b_support_failure_audit.json").read_text())
+        assert failure["status"] == "FAIL_CLOSED"
+        assert failure["frozen_contract_unchanged"] is True
+        assert failure["performance_claimed"] is False
+        assert failure["scenario_evidence"]["TEXBAT.DS7"]["valid_block_count"] == 0
+        assert failure["scenario_evidence"]["TEXBAT.DS7"]["selected_unique_prn_count"] == 3
+        assert failure["scenario_evidence"]["OAKBAT.OS4"]["post_onset_block_count"] == 0

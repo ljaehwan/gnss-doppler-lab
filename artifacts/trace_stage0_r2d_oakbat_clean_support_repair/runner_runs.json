@@ -1,0 +1,734 @@
+{
+  "phase_summary": {
+    "r2d-config-refreeze-after-path-repair": {
+      "attempt_run_ids": [
+        "20260816T135738Z-r2d-config-refreeze-after-path-repair"
+      ],
+      "selected_run_id": "20260816T135738Z-r2d-config-refreeze-after-path-repair",
+      "status": "PASS"
+    },
+    "r2d-handoff-path-mirror-repair": {
+      "attempt_run_ids": [
+        "20260816T135726Z-r2d-handoff-path-mirror-repair"
+      ],
+      "selected_run_id": "20260816T135726Z-r2d-handoff-path-mirror-repair",
+      "status": "PASS"
+    },
+    "r2d-oakbat-clean-handoff-repair": {
+      "attempt_run_ids": [
+        "20260816T133735Z-r2d-oakbat-clean-handoff-repair"
+      ],
+      "selected_run_id": "20260816T133735Z-r2d-oakbat-clean-handoff-repair",
+      "status": "PASS"
+    },
+    "r2d-oakbat-clean-support-acquisition": {
+      "attempt_run_ids": [
+        "20260816T133609Z-r2d-oakbat-clean-support-acquisition"
+      ],
+      "selected_run_id": "20260816T133609Z-r2d-oakbat-clean-support-acquisition",
+      "status": "PASS"
+    },
+    "r2d-oakbat-clean-support-validation": {
+      "attempt_run_ids": [
+        "20260816T143035Z-r2d-oakbat-clean-support-validation"
+      ],
+      "selected_run_id": "20260816T143035Z-r2d-oakbat-clean-support-validation",
+      "status": "PASS"
+    },
+    "r2d-parent-audit-and-preregistration": {
+      "attempt_run_ids": [
+        "20260816T133542Z-r2d-parent-audit-and-preregistration"
+      ],
+      "selected_run_id": "20260816T133542Z-r2d-parent-audit-and-preregistration",
+      "status": "PASS"
+    },
+    "r2d-path-length-amendment-preregistration": {
+      "attempt_run_ids": [
+        "20260816T135628Z-r2d-path-length-amendment-preregistration"
+      ],
+      "selected_run_id": "20260816T135628Z-r2d-path-length-amendment-preregistration",
+      "status": "PASS"
+    },
+    "r2d-phase-a-cleanstatic-rep3": {
+      "attempt_run_ids": [
+        "20260816T135409Z-r2d-phase-a-cleanstatic-rep3"
+      ],
+      "selected_run_id": "20260816T135409Z-r2d-phase-a-cleanstatic-rep3",
+      "status": "FAILED"
+    },
+    "r2d-phase-a-cleanstatic-rep3-r1": {
+      "attempt_run_ids": [
+        "20260816T135807Z-r2d-phase-a-cleanstatic-rep3-r1"
+      ],
+      "selected_run_id": "20260816T135807Z-r2d-phase-a-cleanstatic-rep3-r1",
+      "status": "PASS"
+    },
+    "r2d-phase-a-cleanstatic-rep4": {
+      "attempt_run_ids": [
+        "20260816T135911Z-r2d-phase-a-cleanstatic-rep4"
+      ],
+      "selected_run_id": "20260816T135911Z-r2d-phase-a-cleanstatic-rep4",
+      "status": "PASS"
+    },
+    "r2d-phase-a-ds3-smoke": {
+      "attempt_run_ids": [
+        "20260816T140009Z-r2d-phase-a-ds3-smoke"
+      ],
+      "selected_run_id": "20260816T140009Z-r2d-phase-a-ds3-smoke",
+      "status": "PASS"
+    },
+    "r2d-phase-a-os3-smoke": {
+      "attempt_run_ids": [
+        "20260816T140139Z-r2d-phase-a-os3-smoke"
+      ],
+      "selected_run_id": "20260816T140139Z-r2d-phase-a-os3-smoke",
+      "status": "PASS"
+    },
+    "r2d-phase-a-semantic-evaluate": {
+      "attempt_run_ids": [
+        "20260816T140215Z-r2d-phase-a-semantic-evaluate"
+      ],
+      "selected_run_id": "20260816T140215Z-r2d-phase-a-semantic-evaluate",
+      "status": "PASS"
+    },
+    "r2d-phase-b-evaluate-ds3": {
+      "attempt_run_ids": [
+        "20260816T144115Z-r2d-phase-b-evaluate-ds3"
+      ],
+      "selected_run_id": "20260816T144115Z-r2d-phase-b-evaluate-ds3",
+      "status": "PASS"
+    },
+    "r2d-phase-b-evaluate-ds7": {
+      "attempt_run_ids": [
+        "20260816T144438Z-r2d-phase-b-evaluate-ds7"
+      ],
+      "selected_run_id": "20260816T144438Z-r2d-phase-b-evaluate-ds7",
+      "status": "PASS"
+    },
+    "r2d-phase-b-evaluate-os3": {
+      "attempt_run_ids": [
+        "20260816T144520Z-r2d-phase-b-evaluate-os3"
+      ],
+      "selected_run_id": "20260816T144520Z-r2d-phase-b-evaluate-os3",
+      "status": "PASS"
+    },
+    "r2d-phase-b-evaluate-os4": {
+      "attempt_run_ids": [
+        "20260816T145313Z-r2d-phase-b-evaluate-os4"
+      ],
+      "selected_run_id": "20260816T145313Z-r2d-phase-b-evaluate-os4",
+      "status": "PASS"
+    },
+    "r2d-phase-b-fail-closed-seal": {
+      "attempt_run_ids": [
+        "20260816T150345Z-r2d-phase-b-fail-closed-seal"
+      ],
+      "selected_run_id": "20260816T150345Z-r2d-phase-b-fail-closed-seal",
+      "status": "PASS"
+    },
+    "r2d-phase-b-finalize": {
+      "attempt_run_ids": [
+        "20260816T145339Z-r2d-phase-b-finalize"
+      ],
+      "selected_run_id": "20260816T145339Z-r2d-phase-b-finalize",
+      "status": "FAILED"
+    },
+    "r2d-phase-b-fit-oakbat": {
+      "attempt_run_ids": [
+        "20260816T143721Z-r2d-phase-b-fit-oakbat"
+      ],
+      "selected_run_id": "20260816T143721Z-r2d-phase-b-fit-oakbat",
+      "status": "PASS"
+    },
+    "r2d-phase-b-fit-texbat": {
+      "attempt_run_ids": [
+        "20260816T143330Z-r2d-phase-b-fit-texbat"
+      ],
+      "selected_run_id": "20260816T143330Z-r2d-phase-b-fit-texbat",
+      "status": "PASS"
+    },
+    "r2d-phase-b-receiver-oakbat": {
+      "attempt_run_ids": [
+        "20260816T142456Z-r2d-phase-b-receiver-oakbat"
+      ],
+      "selected_run_id": "20260816T142456Z-r2d-phase-b-receiver-oakbat",
+      "status": "PASS"
+    },
+    "r2d-phase-b-receiver-texbat": {
+      "attempt_run_ids": [
+        "20260816T140319Z-r2d-phase-b-receiver-texbat"
+      ],
+      "selected_run_id": "20260816T140319Z-r2d-phase-b-receiver-texbat",
+      "status": "PASS"
+    },
+    "r2d-raw-source-binding": {
+      "attempt_run_ids": [
+        "20260816T133835Z-r2d-raw-source-binding"
+      ],
+      "selected_run_id": "20260816T133835Z-r2d-raw-source-binding",
+      "status": "PASS"
+    },
+    "r2d-receiver-config-handoff-freeze": {
+      "attempt_run_ids": [
+        "20260816T133804Z-r2d-receiver-config-handoff-freeze"
+      ],
+      "selected_run_id": "20260816T133804Z-r2d-receiver-config-handoff-freeze",
+      "status": "PASS"
+    }
+  },
+  "run_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/runner-runs",
+  "runs": [
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/preregister_trace_r2d.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T13:35:45+00:00",
+      "exit_code": 0,
+      "name": "r2d-parent-audit-and-preregistration",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T133542Z-r2d-parent-audit-and-preregistration",
+        "schema_version": 1
+      },
+      "run_id": "20260816T133542Z-r2d-parent-audit-and-preregistration",
+      "started_at": "2026-08-16T13:35:42+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "c413edbd54829f21124d762ac91a11a5be241865eb4d15e4cf6b5f438f5f456a"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/acquire_trace_r2d_oakbat_clean_support.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T13:36:27+00:00",
+      "exit_code": 0,
+      "name": "r2d-oakbat-clean-support-acquisition",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T133609Z-r2d-oakbat-clean-support-acquisition",
+        "schema_version": 1
+      },
+      "run_id": "20260816T133609Z-r2d-oakbat-clean-support-acquisition",
+      "started_at": "2026-08-16T13:36:09+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "6fcdd13aac1ad42b007513afed3db13527f2e833113b1dd6471ab627f3f19eb4"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/prepare_trace_r2d_oakbat_clean_handoff.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T13:37:39+00:00",
+      "exit_code": 0,
+      "name": "r2d-oakbat-clean-handoff-repair",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T133735Z-r2d-oakbat-clean-handoff-repair",
+        "schema_version": 1
+      },
+      "run_id": "20260816T133735Z-r2d-oakbat-clean-handoff-repair",
+      "started_at": "2026-08-16T13:37:35+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "92dd9c94f51da074d91dd39e01fccd583910087360472707ab66f88c4ec33e58"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/freeze_trace_r2d.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T13:38:06+00:00",
+      "exit_code": 0,
+      "name": "r2d-receiver-config-handoff-freeze",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T133804Z-r2d-receiver-config-handoff-freeze",
+        "schema_version": 1
+      },
+      "run_id": "20260816T133804Z-r2d-receiver-config-handoff-freeze",
+      "started_at": "2026-08-16T13:38:04+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "27706a9fe1da236cf9aed2b0d4df94547210e1ff91ef44e97d1ddce55f1f8ec7"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2d.py",
+        "audit-raw"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T13:53:34+00:00",
+      "exit_code": 0,
+      "name": "r2d-raw-source-binding",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T133835Z-r2d-raw-source-binding",
+        "schema_version": 1
+      },
+      "run_id": "20260816T133835Z-r2d-raw-source-binding",
+      "started_at": "2026-08-16T13:38:35+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "3dc010a47f7cfac120d571c5893675a4ea6652513a3b69c98b0e6fd1e441ef77"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2d.py",
+        "run-receiver",
+        "--scenario",
+        "TEXBAT.cleanStatic",
+        "--repetition",
+        "3"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T13:55:14+00:00",
+      "exit_code": 2,
+      "name": "r2d-phase-a-cleanstatic-rep3",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T135409Z-r2d-phase-a-cleanstatic-rep3",
+        "schema_version": 1
+      },
+      "run_id": "20260816T135409Z-r2d-phase-a-cleanstatic-rep3",
+      "started_at": "2026-08-16T13:54:09+00:00",
+      "status": "failed",
+      "stderr_sha256": "ecd363a1e24ac0cbfeba8fdeb88a64c7841e1f9bfa3377e28b7a65718df25309",
+      "stdout_sha256": "b108dbade7ba01af76b08902a9a758efab8f3a090a2139b8a28b67a11cae81eb"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/preregister_trace_r2d_path_length_amendment.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T13:56:29+00:00",
+      "exit_code": 0,
+      "name": "r2d-path-length-amendment-preregistration",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T135628Z-r2d-path-length-amendment-preregistration",
+        "schema_version": 1
+      },
+      "run_id": "20260816T135628Z-r2d-path-length-amendment-preregistration",
+      "started_at": "2026-08-16T13:56:28+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "b39456f6c69dbdc910dd898d17f3ace905aa4a7e04518180731911e16a1b69ae"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/repair_trace_r2d_handoff_paths.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T13:57:28+00:00",
+      "exit_code": 0,
+      "name": "r2d-handoff-path-mirror-repair",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T135726Z-r2d-handoff-path-mirror-repair",
+        "schema_version": 1
+      },
+      "run_id": "20260816T135726Z-r2d-handoff-path-mirror-repair",
+      "started_at": "2026-08-16T13:57:26+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "1e4e9cd1b45b1b86b1ffa8b8c424eaae8814c16c9c6f6231ac96e55db55c55bc"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/freeze_trace_r2d.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T13:57:40+00:00",
+      "exit_code": 0,
+      "name": "r2d-config-refreeze-after-path-repair",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T135738Z-r2d-config-refreeze-after-path-repair",
+        "schema_version": 1
+      },
+      "run_id": "20260816T135738Z-r2d-config-refreeze-after-path-repair",
+      "started_at": "2026-08-16T13:57:38+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "27706a9fe1da236cf9aed2b0d4df94547210e1ff91ef44e97d1ddce55f1f8ec7"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2d.py",
+        "run-receiver",
+        "--scenario",
+        "TEXBAT.cleanStatic",
+        "--repetition",
+        "3"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T13:58:45+00:00",
+      "exit_code": 0,
+      "name": "r2d-phase-a-cleanstatic-rep3-r1",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T135807Z-r2d-phase-a-cleanstatic-rep3-r1",
+        "schema_version": 1
+      },
+      "run_id": "20260816T135807Z-r2d-phase-a-cleanstatic-rep3-r1",
+      "started_at": "2026-08-16T13:58:07+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "2a2f33f30a77bb0827d4cf4deb705d8be145efd23a27cc41fd6a44800cf2ced9"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2d.py",
+        "run-receiver",
+        "--scenario",
+        "TEXBAT.cleanStatic",
+        "--repetition",
+        "4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T13:59:48+00:00",
+      "exit_code": 0,
+      "name": "r2d-phase-a-cleanstatic-rep4",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T135911Z-r2d-phase-a-cleanstatic-rep4",
+        "schema_version": 1
+      },
+      "run_id": "20260816T135911Z-r2d-phase-a-cleanstatic-rep4",
+      "started_at": "2026-08-16T13:59:11+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "cfe3089f27a5ed5296a861f5aa01a852129c071a045fcdad093aac80752d0d36"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2d.py",
+        "run-receiver",
+        "--scenario",
+        "TEXBAT.DS3",
+        "--repetition",
+        "3"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T14:01:18+00:00",
+      "exit_code": 0,
+      "name": "r2d-phase-a-ds3-smoke",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T140009Z-r2d-phase-a-ds3-smoke",
+        "schema_version": 1
+      },
+      "run_id": "20260816T140009Z-r2d-phase-a-ds3-smoke",
+      "started_at": "2026-08-16T14:00:09+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "27ee4db9be88d535cbf1b2fe3ac992841c19ad875cbd278f1fb7bbd824417e34",
+      "stdout_sha256": "86d7766332eb088a6c0dfdf820a303cbe54b0a3701e0fe025e5b277abe2277a8"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2d.py",
+        "run-receiver",
+        "--scenario",
+        "OAKBAT.OS3",
+        "--repetition",
+        "3"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T14:01:55+00:00",
+      "exit_code": 0,
+      "name": "r2d-phase-a-os3-smoke",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T140139Z-r2d-phase-a-os3-smoke",
+        "schema_version": 1
+      },
+      "run_id": "20260816T140139Z-r2d-phase-a-os3-smoke",
+      "started_at": "2026-08-16T14:01:39+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "1f5feb1fdf1ded7e9ccc25d1ed9b9473511c52e3a680501b11da0b8dcceb3ba3",
+      "stdout_sha256": "9eacacb8f2d0e26c9d4a36e3fc2f3e18bc32695ef52a4655f56b7b7ea98a8a1a"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_trace_r2d_phase_a.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T14:02:53+00:00",
+      "exit_code": 0,
+      "name": "r2d-phase-a-semantic-evaluate",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T140215Z-r2d-phase-a-semantic-evaluate",
+        "schema_version": 1
+      },
+      "run_id": "20260816T140215Z-r2d-phase-a-semantic-evaluate",
+      "started_at": "2026-08-16T14:02:16+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e630a72c3f5cc30d49ab63a2bb77fd71750c0a177b5ecf4aff858f77d5dc40da"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2d.py",
+        "run-phase-b-family",
+        "--family",
+        "TEXBAT"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T14:24:11+00:00",
+      "exit_code": 0,
+      "name": "r2d-phase-b-receiver-texbat",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T140319Z-r2d-phase-b-receiver-texbat",
+        "schema_version": 1
+      },
+      "run_id": "20260816T140319Z-r2d-phase-b-receiver-texbat",
+      "started_at": "2026-08-16T14:03:19+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "2fa131e71bcd082ae246d708601b491c87fe0a3cdf8e9226804ad25f5a4f4656",
+      "stdout_sha256": "f953558cd383bbb1596990d47da11fd02b5f5fb87576b2940332244bf49e1d73"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_trace_stage0_r2d.py",
+        "run-phase-b-family",
+        "--family",
+        "OAKBAT"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T14:30:03+00:00",
+      "exit_code": 0,
+      "name": "r2d-phase-b-receiver-oakbat",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T142456Z-r2d-phase-b-receiver-oakbat",
+        "schema_version": 1
+      },
+      "run_id": "20260816T142456Z-r2d-phase-b-receiver-oakbat",
+      "started_at": "2026-08-16T14:24:56+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "0b00f8271ef610bf123d1e11cb5619687ced03aab43bd5ef92248cb5a209cb30",
+      "stdout_sha256": "5f206284275bdf02a93884318390288dff6b408c001d8cea6e59bc18c4171a0e"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/audit_trace_r2d_repaired_clean_support.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T14:32:43+00:00",
+      "exit_code": 0,
+      "name": "r2d-oakbat-clean-support-validation",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T143035Z-r2d-oakbat-clean-support-validation",
+        "schema_version": 1
+      },
+      "run_id": "20260816T143035Z-r2d-oakbat-clean-support-validation",
+      "started_at": "2026-08-16T14:30:35+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "52dc01ac46f22beb777ddebdf38811330e80c2efdd240b1468e7f4a0fb7b1d6e"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_trace_r2d_phase_b.py",
+        "fit",
+        "--family",
+        "TEXBAT"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T14:37:08+00:00",
+      "exit_code": 0,
+      "name": "r2d-phase-b-fit-texbat",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T143330Z-r2d-phase-b-fit-texbat",
+        "schema_version": 1
+      },
+      "run_id": "20260816T143330Z-r2d-phase-b-fit-texbat",
+      "started_at": "2026-08-16T14:33:30+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "01d59b006f1305bc4c42d38cb3be5ccdd897fc842ac79d6054f59160c3a8e36c"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_trace_r2d_phase_b.py",
+        "fit",
+        "--family",
+        "OAKBAT"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T14:40:53+00:00",
+      "exit_code": 0,
+      "name": "r2d-phase-b-fit-oakbat",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T143721Z-r2d-phase-b-fit-oakbat",
+        "schema_version": 1
+      },
+      "run_id": "20260816T143721Z-r2d-phase-b-fit-oakbat",
+      "started_at": "2026-08-16T14:37:21+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "607702a63929f1b3352482da4e9bcdce9a0b38b3daa529eda23c1f00a2699da0"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_trace_r2d_phase_b.py",
+        "evaluate",
+        "--scenario",
+        "TEXBAT.DS3"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T14:44:21+00:00",
+      "exit_code": 0,
+      "name": "r2d-phase-b-evaluate-ds3",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T144115Z-r2d-phase-b-evaluate-ds3",
+        "schema_version": 1
+      },
+      "run_id": "20260816T144115Z-r2d-phase-b-evaluate-ds3",
+      "started_at": "2026-08-16T14:41:15+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "d0beade7ed0f8c7ded4f95744bbfd007e44f0521428ff9daf225ca09b05fbb7d"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_trace_r2d_phase_b.py",
+        "evaluate",
+        "--scenario",
+        "TEXBAT.DS7"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T14:44:43+00:00",
+      "exit_code": 0,
+      "name": "r2d-phase-b-evaluate-ds7",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T144438Z-r2d-phase-b-evaluate-ds7",
+        "schema_version": 1
+      },
+      "run_id": "20260816T144438Z-r2d-phase-b-evaluate-ds7",
+      "started_at": "2026-08-16T14:44:39+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "f1cf03c98d6eaa8622da3d8a96344ff8dee8cc87bfa0f1ac1b6fbe88f5b03154"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_trace_r2d_phase_b.py",
+        "evaluate",
+        "--scenario",
+        "OAKBAT.OS3"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T14:52:44+00:00",
+      "exit_code": 0,
+      "name": "r2d-phase-b-evaluate-os3",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T144520Z-r2d-phase-b-evaluate-os3",
+        "schema_version": 1
+      },
+      "run_id": "20260816T144520Z-r2d-phase-b-evaluate-os3",
+      "started_at": "2026-08-16T14:45:21+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "d8f6f476b51f045e86595193732cf6528c8763bc98862891f4dc450190b78e11"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_trace_r2d_phase_b.py",
+        "evaluate",
+        "--scenario",
+        "OAKBAT.OS4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T14:53:17+00:00",
+      "exit_code": 0,
+      "name": "r2d-phase-b-evaluate-os4",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T145313Z-r2d-phase-b-evaluate-os4",
+        "schema_version": 1
+      },
+      "run_id": "20260816T145313Z-r2d-phase-b-evaluate-os4",
+      "started_at": "2026-08-16T14:53:13+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e772dce268cd201d754dfa01cc0c4e618fef3b75b8aeabbb9063899122351f17"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_trace_r2d_phase_b.py",
+        "finalize"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T14:59:45+00:00",
+      "exit_code": 1,
+      "name": "r2d-phase-b-finalize",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T145339Z-r2d-phase-b-finalize",
+        "schema_version": 1
+      },
+      "run_id": "20260816T145339Z-r2d-phase-b-finalize",
+      "started_at": "2026-08-16T14:53:39+00:00",
+      "status": "failed",
+      "stderr_sha256": "15429ddb0efe99e18020d1c797e91939645c654121da35635a6b81727c85314a",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/finalize_trace_r2d_fail_closed.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2d-oakbat-clean-support-repair",
+      "ended_at": "2026-08-16T15:03:49+00:00",
+      "exit_code": 0,
+      "name": "r2d-phase-b-fail-closed-seal",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T150345Z-r2d-phase-b-fail-closed-seal",
+        "schema_version": 1
+      },
+      "run_id": "20260816T150345Z-r2d-phase-b-fail-closed-seal",
+      "started_at": "2026-08-16T15:03:46+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "33a8f605cee4632527f78e159d3b92cb1f6513d84bf6e404b77daadd2a444b5d"
+    }
+  ],
+  "schema": "gnss-doppler-lab.trace-r2d-runner-runs.v1"
+}

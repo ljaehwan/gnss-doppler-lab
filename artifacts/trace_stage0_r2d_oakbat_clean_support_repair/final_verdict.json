@@ -1,0 +1,29 @@
+{
+  "actual_action_vs_shuffled_no_action": {
+    "status": "UNAVAILABLE_INCOMPLETE_PHASE_B"
+  },
+  "attack_metrics_computed": false,
+  "attack_scores_computed": false,
+  "complete_phase_b_metrics_computed": false,
+  "engineering_repair_status": "OAKBAT_CLEAN_SUPPORT_REPAIRED",
+  "failure_label": "FROZEN_ATTACK_SUPPORT_INCOMPLETE",
+  "failure_labels": [
+    "TEXBAT_DS7_FOUR_PRN_BLOCK_SUPPORT_EMPTY",
+    "OAKBAT_OS4_POST_ONSET_BLOCK_SUPPORT_EMPTY"
+  ],
+  "normal_fpr": {
+    "status": "UNAVAILABLE_INCOMPLETE_PHASE_B"
+  },
+  "partial_scenario_diagnostics_computed": true,
+  "performance_claimed": false,
+  "phase_a_passed": true,
+  "phase_b_authorized": true,
+  "phase_b_run": true,
+  "reason": "The OAKBAT clean repair succeeded, but the complete frozen Phase-B metric set is unavailable because two unchanged attack receiver/handoff paths do not cover their preregistered evaluation windows.",
+  "recommended_next_action": "Preregister and repair the frozen TEXBAT DS7 and OAKBAT OS4 attack receiver/handoff support without changing TRACE scoring or gates, then repeat unchanged Phase A and frozen Phase B.",
+  "schema": "gnss-doppler-lab.trace-r2d-final-verdict.v1",
+  "sci_wcl_claimable": false,
+  "science_claim": null,
+  "support_failure_audit": "phase_b_support_failure_audit.json",
+  "verdict": "INCONCLUSIVE_INPUT_OR_RECEIVER"
+}

@@ -14,9 +14,12 @@ REQUIRED = {
     "README.md", "preregistration.json", "source_commit.json", "diagnosis.json",
     "repair_plan_preregistered.json", "oakbat_clean_support_audit.json",
     "receiver_build_manifest.json", "handoff_manifest.json", "config.json",
+    "config_path_length_amendment_preregistered.json",
+    "handoff_path_mirror_manifest.json",
     "semantic_reproduction_contract.json", "raw_source_binding.json",
     "rep3_rep4_reproduction_metrics.json", "terminal_row_set_audit.json",
     "action_mapping_validation.json", "replay_inventory.json", "phase_b_metrics.json",
+    "phase_b_support_failure_audit.json",
     "final_verdict.json", "test_results.json", "runner_runs.json",
     "artifact_manifest_sha256.json",
 }
@@ -65,7 +68,17 @@ def main() -> int:
     if computed:
         scientific = scientific and verdict["attack_metrics_computed"] is True and phase_b["status"] == "AVAILABLE"
     else:
-        scientific = scientific and verdict["attack_metrics_computed"] is False and phase_b["status"] == "UNAVAILABLE" and not verdict.get("performance_claimed", False)
+        support_failure = json.loads((artifact / "phase_b_support_failure_audit.json").read_text())
+        scientific = (
+            scientific
+            and verdict["attack_metrics_computed"] is False
+            and phase_b["status"] == "UNAVAILABLE"
+            and not verdict.get("performance_claimed", False)
+            and not phase_b.get("performance_claimed", False)
+            and support_failure["status"] == "FAIL_CLOSED"
+            and support_failure["frozen_contract_unchanged"] is True
+            and support_failure["performance_claimed"] is False
+        )
     status = "PASS" if not missing and not failures and scientific else "FAIL"
     report = {
         "schema": "gnss-doppler-lab.trace-r2d-artifact-verification.v1",

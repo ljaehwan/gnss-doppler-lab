@@ -1,0 +1,9 @@
+dataset,scenario,comparison,metric,estimate,ci_low,ci_high,bootstrap_unit_s,bootstrap_repetitions
+TEXBAT,DS3,TRACE Full minus no-action predictor,paired_score_difference,0.0845680880020185,0.05709811025330209,0.12285717592903674,10.0,999
+TEXBAT,DS3,TRACE Full minus complex residual norm only,paired_score_difference,14.750060603916046,11.41957745597926,19.08358949012233,10.0,999
+TEXBAT,DS7,TRACE Full minus no-action predictor,paired_score_difference,nan,nan,nan,10.0,999
+TEXBAT,DS7,TRACE Full minus complex residual norm only,paired_score_difference,nan,nan,nan,10.0,999
+OAKBAT,OS3,TRACE Full minus no-action predictor,paired_score_difference,0.11784879234245203,0.11357348473159386,0.12165140438585799,10.0,999
+OAKBAT,OS3,TRACE Full minus complex residual norm only,paired_score_difference,12.551954957970567,12.380359759870279,12.708330928342457,10.0,999
+OAKBAT,OS4,TRACE Full minus no-action predictor,paired_score_difference,736.5407650878415,736.5407650878415,736.5407650878415,10.0,999
+OAKBAT,OS4,TRACE Full minus complex residual norm only,paired_score_difference,1103.3459993383424,1103.3459993383424,1103.3459993383424,10.0,999

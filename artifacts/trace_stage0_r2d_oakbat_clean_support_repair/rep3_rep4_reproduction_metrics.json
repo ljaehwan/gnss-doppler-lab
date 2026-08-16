@@ -1,0 +1,958 @@
+{
+  "causal_gate": {
+    "counts": {
+      "action_value_mapping_mismatch": 0,
+      "consume_span_mismatch": 0,
+      "finite_failure": 0,
+      "repeated_action": 0,
+      "repeated_tap": 0,
+      "sequence_mismatch": 0,
+      "zero_action": 0,
+      "zero_tap": 0
+    },
+    "status": "PASS"
+  },
+  "failure_verdict_if_any": null,
+  "phase_a_status": "PASS",
+  "phase_b_authorized": true,
+  "prior_failed_attempts_excluded_from_gate": [],
+  "raw_source_timeline_binding": {
+    "scenarios": {
+      "OAKBAT.OS3.smoke": {
+        "checks": {
+          "fresh_bound_sha_matches_replay": true,
+          "raw_interval_is_within_manifest_range": true,
+          "source_stable_during_preregistration_hash": true,
+          "source_stable_during_replay": true
+        },
+        "observed_dump_raw_interval": {
+          "end_exclusive": 674994939,
+          "start_inclusive": 475000087
+        },
+        "raw_sample_range": {
+          "duration_s": 45.0,
+          "end_exclusive": 675000000,
+          "seconds_to_skip": 90.0,
+          "start_inclusive": 450000000
+        },
+        "raw_sha256": "2a3c3c5cf1accaa287fe14181e43070903500e0250c69e3c335f91c89c0cdc6c",
+        "status": "PASS"
+      },
+      "TEXBAT.DS3.smoke": {
+        "checks": {
+          "fresh_bound_sha_matches_replay": true,
+          "raw_interval_is_within_manifest_range": true,
+          "source_stable_during_preregistration_hash": true,
+          "source_stable_during_replay": true
+        },
+        "observed_dump_raw_interval": {
+          "end_exclusive": 3374969641,
+          "start_inclusive": 2375000915
+        },
+        "raw_sample_range": {
+          "duration_s": 45.0,
+          "end_exclusive": 3375000000,
+          "seconds_to_skip": 90.0,
+          "start_inclusive": 2250000000
+        },
+        "raw_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+        "status": "PASS"
+      },
+      "TEXBAT.cleanStatic.rep3": {
+        "checks": {
+          "fresh_bound_sha_matches_replay": true,
+          "raw_interval_is_within_manifest_range": true,
+          "source_stable_during_preregistration_hash": true,
+          "source_stable_during_replay": true
+        },
+        "observed_dump_raw_interval": {
+          "end_exclusive": 1124967029,
+          "start_inclusive": 750005556
+        },
+        "raw_sample_range": {
+          "duration_s": 45.0,
+          "end_exclusive": 1125000000,
+          "seconds_to_skip": 0.0,
+          "start_inclusive": 0
+        },
+        "raw_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+        "status": "PASS"
+      },
+      "TEXBAT.cleanStatic.rep4": {
+        "checks": {
+          "fresh_bound_sha_matches_replay": true,
+          "raw_interval_is_within_manifest_range": true,
+          "source_stable_during_preregistration_hash": true,
+          "source_stable_during_replay": true
+        },
+        "observed_dump_raw_interval": {
+          "end_exclusive": 1124967029,
+          "start_inclusive": 750005556
+        },
+        "raw_sample_range": {
+          "duration_s": 45.0,
+          "end_exclusive": 1125000000,
+          "seconds_to_skip": 0.0,
+          "start_inclusive": 0
+        },
+        "raw_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+        "status": "PASS"
+      }
+    },
+    "status": "PASS"
+  },
+  "scenario_support": {
+    "OAKBAT.OS3.smoke": {
+      "causal_pair_count": 415970,
+      "maximum_valid_prns_same_rounded_ms_epoch": 11,
+      "native_cadence_fraction": 1.0,
+      "status": "PASS"
+    },
+    "TEXBAT.DS3.smoke": {
+      "causal_pair_count": 365852,
+      "maximum_valid_prns_same_rounded_ms_epoch": 10,
+      "native_cadence_fraction": 1.0,
+      "status": "PASS"
+    },
+    "TEXBAT.cleanStatic.rep3": {
+      "causal_pair_count": 149970,
+      "maximum_valid_prns_same_rounded_ms_epoch": 10,
+      "native_cadence_fraction": 1.0,
+      "status": "PASS"
+    },
+    "TEXBAT.cleanStatic.rep4": {
+      "causal_pair_count": 149970,
+      "maximum_valid_prns_same_rounded_ms_epoch": 10,
+      "native_cadence_fraction": 1.0,
+      "status": "PASS"
+    }
+  },
+  "schema": "gnss-doppler-lab.trace-r2c-phase-a-semantic-reproduction.v1",
+  "semantic_reproduction_gate": {
+    "all_record_common_at_least_4_prn_rounded_ms_epoch_count": 14999,
+    "checks": {
+      "all_common_physical_rows_bit_exact": true,
+      "canonical_semantic_hash_identical": true,
+      "stable_quality_common_epoch_count_at_least_1000": true,
+      "terminal_row_counts_per_prn_channel_identical": true,
+      "threshold_crossing_and_alarm_identical": true,
+      "trace_score_within_1e_12": true,
+      "whole_replay_row_set_identical": true
+    },
+    "common_canonical_row_count": 149980,
+    "common_ratio_rep3": 1.0,
+    "common_ratio_rep4": 1.0,
+    "exact_physical_bit_match_ratio": 1.0,
+    "field_statistics": [
+      {
+        "correlation": 1.0,
+        "dtype": "float32",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "E4_i",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 0.9999999999999999,
+        "dtype": "float32",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "E4_q",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float32",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "E3_i",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 0.9999999999999999,
+        "dtype": "float32",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "E3_q",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float32",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "E2_i",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float32",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "E2_q",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float32",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "E_i",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float32",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "E_q",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float32",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "P_i",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 0.9999999999999999,
+        "dtype": "float32",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "P_q",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 0.9999999999999998,
+        "dtype": "float32",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "L_i",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float32",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "L_q",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float32",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "L2_i",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float32",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "L2_q",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float32",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "L3_i",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float32",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "L3_q",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float32",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "L4_i",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float32",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "L4_q",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 0.9999999999999998,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "dll_discriminator_chips",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 0.9999999999999998,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "pll_phase_error_cycles",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": null,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "fll_frequency_error_hz",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "code_filter_output_chips_s",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "carrier_filter_output_hz",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 0.9999999999999998,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "cn0_db_hz",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "carrier_lock_test",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": null,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "coherent_integration_s",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_used_code_nco_rate_chips_s",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_used_carrier_doppler_hz",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_used_residual_code_phase_chips",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_used_residual_carrier_phase_rad",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_used_code_phase_step_chips_per_sample",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_used_carrier_phase_step_rad_per_sample",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": null,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_used_code_phase_rate_step_chips_per_sample2",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": null,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_used_carrier_phase_rate_step_rad_per_sample2",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_used_dll_filter_output_chips_s",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_used_pll_fll_filter_output_hz",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_used_carrier_phase_accumulator_rad",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_used_residual_code_phase_samples",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "uint64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_used_interval_length_samples",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_next_code_nco_rate_chips_s",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_next_carrier_doppler_hz",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_next_residual_code_phase_chips",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_next_residual_carrier_phase_rad",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_next_code_phase_step_chips_per_sample",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_next_carrier_phase_step_rad_per_sample",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": null,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_next_code_phase_rate_step_chips_per_sample2",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": null,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_next_carrier_phase_rate_step_rad_per_sample2",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_next_dll_filter_output_chips_s",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_next_pll_fll_filter_output_hz",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_next_carrier_phase_accumulator_rad",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "float64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_next_residual_code_phase_samples",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "uint64",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "action_next_interval_length_samples",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": null,
+        "dtype": "uint8",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "valid_tracking",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 0.9999999999999998,
+        "dtype": "uint8",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "valid_lock",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "uint8",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "data_symbol_boundary",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": null,
+        "dtype": "uint8",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "loop_update_boundary",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": null,
+        "dtype": "uint8",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "navigation_bit_wipeoff_applied",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "uint8",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "pull_in_transitory",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      },
+      {
+        "correlation": 1.0,
+        "dtype": "uint8",
+        "exact_bit_match_count": 149980,
+        "exact_bit_match_ratio": 1.0,
+        "field": "receiver_state",
+        "maximum_absolute_error": 0.0,
+        "median_absolute_error": 0.0,
+        "p99_9_absolute_error": 0.0
+      }
+    ],
+    "metadata_exact_match_ratio": 1.0,
+    "metadata_only_difference_proven": false,
+    "score_reproduction": {
+      "block_keys_identical": true,
+      "common_block_count": 30,
+      "common_pair_count": 148968,
+      "common_pair_ratio_rep3": 1.0,
+      "common_pair_ratio_rep4": 1.0,
+      "covariance_pair_count": 29954,
+      "evaluation_pair_count": 29956,
+      "maximum_block_trace_score_absolute_error": 0.0,
+      "maximum_common_pair_trace_score_absolute_error": 0.0,
+      "minimum_quality_common_epoch_count": 1000,
+      "q99_threshold_from_rep3": 5.839556423436457,
+      "quality_common_at_least_4_prn_rounded_ms_epoch_count": 14977,
+      "rep3_pair_count": 148968,
+      "rep4_pair_count": 148968,
+      "score_evaluation_status": "AVAILABLE",
+      "threshold_crossing_and_alarm_identical": true,
+      "trace_score_tolerance": 1e-12,
+      "trace_score_within_tolerance": true,
+      "train_pair_count": 89058
+    },
+    "stable_quality_common_at_least_4_prn_rounded_ms_epoch_count": 14977,
+    "status": "PASS"
+  },
+  "source_gate": {
+    "checks": {
+      "frozen_handoff_sha256_identical_and_frozen": true,
+      "raw_and_receiver_stable_during_both_runs": true,
+      "raw_iq_sha256_identical": true,
+      "raw_sample_range_identical": true,
+      "receiver_config_sha256_identical_and_frozen": true,
+      "receiver_executable_sha256_identical": true,
+      "receiver_patch_sha256_identical": true
+    },
+    "status": "PASS"
+  },
+  "terminal_row_set_gate": {
+    "rep3": {
+      "directory": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_a/texbat_cleanstatic/rep3",
+      "per_prn_channel": [
+        {
+          "channel": 0,
+          "first_raw_interval_start_sample": 750013632,
+          "last_raw_interval_end_sample": 1124963011,
+          "last_raw_interval_start_sample": 1124938011,
+          "prn": 19,
+          "record_count": 14998
+        },
+        {
+          "channel": 1,
+          "first_raw_interval_start_sample": 750006413,
+          "last_raw_interval_end_sample": 1124957081,
+          "last_raw_interval_start_sample": 1124932081,
+          "prn": 16,
+          "record_count": 14998
+        },
+        {
+          "channel": 2,
+          "first_raw_interval_start_sample": 750013863,
+          "last_raw_interval_end_sample": 1124963682,
+          "last_raw_interval_start_sample": 1124938682,
+          "prn": 3,
+          "record_count": 14998
+        },
+        {
+          "channel": 3,
+          "first_raw_interval_start_sample": 750015161,
+          "last_raw_interval_end_sample": 1124965952,
+          "last_raw_interval_start_sample": 1124940952,
+          "prn": 30,
+          "record_count": 14998
+        },
+        {
+          "channel": 4,
+          "first_raw_interval_start_sample": 750017465,
+          "last_raw_interval_end_sample": 1124967029,
+          "last_raw_interval_start_sample": 1124942029,
+          "prn": 13,
+          "record_count": 14998
+        },
+        {
+          "channel": 5,
+          "first_raw_interval_start_sample": 750016289,
+          "last_raw_interval_end_sample": 1124966415,
+          "last_raw_interval_start_sample": 1124941415,
+          "prn": 6,
+          "record_count": 14998
+        },
+        {
+          "channel": 6,
+          "first_raw_interval_start_sample": 750005556,
+          "last_raw_interval_end_sample": 1124955115,
+          "last_raw_interval_start_sample": 1124930115,
+          "prn": 7,
+          "record_count": 14998
+        },
+        {
+          "channel": 7,
+          "first_raw_interval_start_sample": 750007554,
+          "last_raw_interval_end_sample": 1124958261,
+          "last_raw_interval_start_sample": 1124933261,
+          "prn": 20,
+          "record_count": 14998
+        },
+        {
+          "channel": 8,
+          "first_raw_interval_start_sample": 750009589,
+          "last_raw_interval_end_sample": 1124959439,
+          "last_raw_interval_start_sample": 1124934439,
+          "prn": 10,
+          "record_count": 14998
+        },
+        {
+          "channel": 9,
+          "first_raw_interval_start_sample": 750015238,
+          "last_raw_interval_end_sample": 1124965343,
+          "last_raw_interval_start_sample": 1124940343,
+          "prn": 23,
+          "record_count": 14998
+        }
+      ],
+      "row_count": 149980,
+      "row_set_sha256": "56706c2df54631c109c5d833ccc4f05ba89f8f4c6010094a72c357e339502480"
+    },
+    "rep3_only_rows": 0,
+    "rep4": {
+      "directory": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2d-oakbat-clean-support-repair/dumps/phase_a/texbat_cleanstatic/rep4",
+      "per_prn_channel": [
+        {
+          "channel": 0,
+          "first_raw_interval_start_sample": 750013632,
+          "last_raw_interval_end_sample": 1124963011,
+          "last_raw_interval_start_sample": 1124938011,
+          "prn": 19,
+          "record_count": 14998
+        },
+        {
+          "channel": 1,
+          "first_raw_interval_start_sample": 750006413,
+          "last_raw_interval_end_sample": 1124957081,
+          "last_raw_interval_start_sample": 1124932081,
+          "prn": 16,
+          "record_count": 14998
+        },
+        {
+          "channel": 2,
+          "first_raw_interval_start_sample": 750013863,
+          "last_raw_interval_end_sample": 1124963682,
+          "last_raw_interval_start_sample": 1124938682,
+          "prn": 3,
+          "record_count": 14998
+        },
+        {
+          "channel": 3,
+          "first_raw_interval_start_sample": 750015161,
+          "last_raw_interval_end_sample": 1124965952,
+          "last_raw_interval_start_sample": 1124940952,
+          "prn": 30,
+          "record_count": 14998
+        },
+        {
+          "channel": 4,
+          "first_raw_interval_start_sample": 750017465,
+          "last_raw_interval_end_sample": 1124967029,
+          "last_raw_interval_start_sample": 1124942029,
+          "prn": 13,
+          "record_count": 14998
+        },
+        {
+          "channel": 5,
+          "first_raw_interval_start_sample": 750016289,
+          "last_raw_interval_end_sample": 1124966415,
+          "last_raw_interval_start_sample": 1124941415,
+          "prn": 6,
+          "record_count": 14998
+        },
+        {
+          "channel": 6,
+          "first_raw_interval_start_sample": 750005556,
+          "last_raw_interval_end_sample": 1124955115,
+          "last_raw_interval_start_sample": 1124930115,
+          "prn": 7,
+          "record_count": 14998
+        },
+        {
+          "channel": 7,
+          "first_raw_interval_start_sample": 750007554,
+          "last_raw_interval_end_sample": 1124958261,
+          "last_raw_interval_start_sample": 1124933261,
+          "prn": 20,
+          "record_count": 14998
+        },
+        {
+          "channel": 8,
+          "first_raw_interval_start_sample": 750009589,
+          "last_raw_interval_end_sample": 1124959439,
+          "last_raw_interval_start_sample": 1124934439,
+          "prn": 10,
+          "record_count": 14998
+        },
+        {
+          "channel": 9,
+          "first_raw_interval_start_sample": 750015238,
+          "last_raw_interval_end_sample": 1124965343,
+          "last_raw_interval_start_sample": 1124940343,
+          "prn": 23,
+          "record_count": 14998
+        }
+      ],
+      "row_count": 149980,
+      "row_set_sha256": "56706c2df54631c109c5d833ccc4f05ba89f8f4c6010094a72c357e339502480"
+    },
+    "rep4_only_rows": 0,
+    "schema": "gnss-doppler-lab.trace-r2c-terminal-row-set-audit.v1",
+    "status": "PASS",
+    "terminal_row_counts_per_prn_channel_identical": true,
+    "whole_replay_row_set_identical": true
+  }
+}

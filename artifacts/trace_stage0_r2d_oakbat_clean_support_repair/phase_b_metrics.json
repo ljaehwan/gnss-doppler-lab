@@ -1,0 +1,7 @@
+{
+  "metrics_computed": false,
+  "performance_claimed": false,
+  "reason": "The OAKBAT clean repair succeeded, but the complete frozen Phase-B metric set is unavailable because two unchanged attack receiver/handoff paths do not cover their preregistered evaluation windows.",
+  "schema": "gnss-doppler-lab.trace-r2d-phase-b-metrics.v1",
+  "status": "UNAVAILABLE"
+}
