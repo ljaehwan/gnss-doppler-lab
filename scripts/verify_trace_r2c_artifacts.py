@@ -72,9 +72,20 @@ def main() -> int:
                 audit["rep4_only_rows"] == 0,
                 audit["rep3"]["row_set_sha256"] == audit["rep4"]["row_set_sha256"],
                 verdict["phase_b_run"],
-                verdict["attack_metrics_computed"],
             )
         )
+        if verdict["verdict"] in {
+            "GO_TRACE_PHYSICAL_HYPOTHESIS",
+            "NO_GO_TRACE_PHYSICAL_HYPOTHESIS",
+        }:
+            scientific = scientific and verdict["attack_metrics_computed"]
+        else:
+            scientific = (
+                scientific
+                and verdict["verdict"] == "INCONCLUSIVE_INPUT_OR_RECEIVER"
+                and verdict["attack_metrics_computed"] is False
+                and verdict["normal_fpr"]["status"] == "UNAVAILABLE"
+            )
     else:
         scientific = (
             scientific

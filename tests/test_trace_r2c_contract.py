@@ -95,3 +95,7 @@ def test_r2c_verdict_and_phase_b_metric_availability_are_fail_closed():
         assert verdict["phase_b_run"] is False
         assert verdict["attack_metrics_computed"] is False
         assert verdict["normal_fpr"]["status"] == "UNAVAILABLE"
+    elif verdict["verdict"] == "INCONCLUSIVE_INPUT_OR_RECEIVER":
+        assert verdict["phase_b_run"] is True
+        assert verdict["attack_metrics_computed"] is False
+        assert verdict["normal_fpr"]["status"] == "UNAVAILABLE"
