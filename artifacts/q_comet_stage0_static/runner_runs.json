@@ -1,0 +1,1198 @@
+{
+  "runs": [
+    {
+      "command": [
+        "codex",
+        "exec",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "-C",
+        "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "--add-dir",
+        "/home/ubuntu/ssd_data/gnss-early-detection/artifacts",
+        "--add-dir",
+        "/home/ubuntu/unraid_hdd",
+        "--add-dir",
+        "/home/ubuntu/projects/gnss-doppler-runner-minimal-v0",
+        "--add-dir",
+        "/home/ubuntu/research-context",
+        "--output-last-message",
+        "/home/ubuntu/research-context/tasks/q-comet-stage0-static/codex_final_message.txt",
+        "-"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+      "environment": {
+        "captured_at": "2026-08-16T03:25:10+00:00",
+        "cwd": "/home/ubuntu",
+        "python": "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "selected_env": {
+          "PATH": "/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:/home/ubuntu/.hermes/hermes-agent/venv/bin:/home/ubuntu/.hermes/node/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin",
+          "VIRTUAL_ENV": "/home/ubuntu/.hermes/hermes-agent/venv"
+        }
+      },
+      "git": {
+        "branch": "research/q-comet-stage0-static",
+        "captured_at": "2026-08-16T03:25:10+00:00",
+        "head": "461eb4dc7bb794e719295daf028f6811658ba37f",
+        "repo": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "status_short": "",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static"
+      },
+      "heartbeat": {
+        "final": false,
+        "run_id": "20260816T032510Z-q-comet-stage0-static-codex-orchestrator",
+        "updated_at": "2026-08-16T05:13:35+00:00"
+      },
+      "logs": {
+        "stderr": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T032510Z-q-comet-stage0-static-codex-orchestrator/stderr.log",
+          "sha256": "42b0c57770508095b0294652101dfcbc315b8ab46c7db36864a8285a649e2d8a",
+          "size_bytes": 38070944
+        },
+        "stdout": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T032510Z-q-comet-stage0-static-codex-orchestrator/stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      },
+      "name": "q-comet-stage0-static-codex-orchestrator",
+      "produced_artifacts": [],
+      "result_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T032510Z-q-comet-stage0-static-codex-orchestrator/result_manifest.json",
+      "run_id": "20260816T032510Z-q-comet-stage0-static-codex-orchestrator",
+      "status": {
+        "command_pgid": 401639,
+        "command_pid": 401639,
+        "created_at": "2026-08-16T03:25:10+00:00",
+        "ended_at": null,
+        "exit_code": null,
+        "name": "q-comet-stage0-static-codex-orchestrator",
+        "pid": 401637,
+        "run_id": "20260816T032510Z-q-comet-stage0-static-codex-orchestrator",
+        "started_at": "2026-08-16T03:25:10+00:00",
+        "status": "running",
+        "updated_at": "2026-08-16T03:25:10+00:00"
+      }
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_q_comet_stage0.py",
+        "--phase",
+        "preflight",
+        "--artifact-dir",
+        "artifacts/q_comet_stage0_static"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+      "environment": {
+        "captured_at": "2026-08-16T03:39:37+00:00",
+        "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "python": "/home/ubuntu/.hermes/hermes-agent/venv/bin/python",
+        "selected_env": {
+          "PATH": "/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.codex/tmp/arg0/codex-arg04l4hOZ:/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:/home/ubuntu/.hermes/hermes-agent/venv/bin:/home/ubuntu/.hermes/node/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin",
+          "VIRTUAL_ENV": "/home/ubuntu/.hermes/hermes-agent/venv"
+        }
+      },
+      "git": {
+        "branch": "research/q-comet-stage0-static",
+        "captured_at": "2026-08-16T03:39:37+00:00",
+        "head": "461eb4dc7bb794e719295daf028f6811658ba37f",
+        "repo": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "status_short": "?? docs/Q_COMET_STAGE0.md\n?? scripts/run_q_comet_stage0.py\n?? src/gnss_doppler_lab/q_comet.py\n?? src/gnss_doppler_lab/q_comet_data.py\n?? tests/test_q_comet.py",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static"
+      },
+      "heartbeat": {
+        "final": true,
+        "run_id": "20260816T033937Z-q-comet-source-inventory-preflight",
+        "updated_at": "2026-08-16T03:39:39+00:00"
+      },
+      "logs": {
+        "stderr": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T033937Z-q-comet-source-inventory-preflight/stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        "stdout": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T033937Z-q-comet-source-inventory-preflight/stdout.log",
+          "sha256": "707be5d8283fba8f6d42601d84f1ddc6067c9c547ed173ff957f7b201efe3db4",
+          "size_bytes": 64
+        }
+      },
+      "name": "q-comet-source-inventory-preflight",
+      "produced_artifacts": [
+        "artifacts/q_comet_stage0_static/config.json",
+        "artifacts/q_comet_stage0_static/data_inventory.json",
+        "artifacts/q_comet_stage0_static/source_binding.json",
+        "artifacts/q_comet_stage0_static/timeline_inventory.json",
+        "artifacts/q_comet_stage0_static/normal_split_audit.json",
+        "artifacts/q_comet_stage0_static/source_commit.json"
+      ],
+      "result_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T033937Z-q-comet-source-inventory-preflight/result_manifest.json",
+      "run_id": "20260816T033937Z-q-comet-source-inventory-preflight",
+      "status": {
+        "command_pgid": 404890,
+        "command_pid": 404890,
+        "created_at": "2026-08-16T03:39:37+00:00",
+        "ended_at": "2026-08-16T03:39:39+00:00",
+        "exit_code": 0,
+        "name": "q-comet-source-inventory-preflight",
+        "pid": 404885,
+        "run_id": "20260816T033937Z-q-comet-source-inventory-preflight",
+        "started_at": "2026-08-16T03:39:37+00:00",
+        "status": "succeeded",
+        "updated_at": "2026-08-16T03:39:39+00:00"
+      }
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_q_comet_stage0.py",
+        "--phase",
+        "freeze-normal-config",
+        "--artifact-dir",
+        "artifacts/q_comet_stage0_static"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+      "environment": {
+        "captured_at": "2026-08-16T03:39:48+00:00",
+        "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "python": "/home/ubuntu/.hermes/hermes-agent/venv/bin/python",
+        "selected_env": {
+          "PATH": "/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.codex/tmp/arg0/codex-arg04l4hOZ:/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:/home/ubuntu/.hermes/hermes-agent/venv/bin:/home/ubuntu/.hermes/node/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin",
+          "VIRTUAL_ENV": "/home/ubuntu/.hermes/hermes-agent/venv"
+        }
+      },
+      "git": {
+        "branch": "research/q-comet-stage0-static",
+        "captured_at": "2026-08-16T03:39:48+00:00",
+        "head": "461eb4dc7bb794e719295daf028f6811658ba37f",
+        "repo": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "status_short": "?? docs/Q_COMET_STAGE0.md\n?? scripts/run_q_comet_stage0.py\n?? src/gnss_doppler_lab/q_comet.py\n?? src/gnss_doppler_lab/q_comet_data.py\n?? tests/test_q_comet.py",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static"
+      },
+      "heartbeat": {
+        "final": true,
+        "run_id": "20260816T033948Z-q-comet-freeze-normal-config",
+        "updated_at": "2026-08-16T03:40:20+00:00"
+      },
+      "logs": {
+        "stderr": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T033948Z-q-comet-freeze-normal-config/stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        "stdout": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T033948Z-q-comet-freeze-normal-config/stdout.log",
+          "sha256": "d1cbad338191d1095f5680a72b704e9dba66dc2b7662df2fc9d04b096f4b8725",
+          "size_bytes": 95
+        }
+      },
+      "name": "q-comet-freeze-normal-config",
+      "produced_artifacts": [
+        "artifacts/q_comet_stage0_static/normal_model_summary.json",
+        "artifacts/q_comet_stage0_static/nuisance_projection_validation.json",
+        "artifacts/q_comet_stage0_static/thresholds.json",
+        "artifacts/q_comet_stage0_static/pre_evaluation_freeze.json"
+      ],
+      "result_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T033948Z-q-comet-freeze-normal-config/result_manifest.json",
+      "run_id": "20260816T033948Z-q-comet-freeze-normal-config",
+      "status": {
+        "command_pgid": 405104,
+        "command_pid": 405104,
+        "created_at": "2026-08-16T03:39:48+00:00",
+        "ended_at": "2026-08-16T03:40:20+00:00",
+        "exit_code": 0,
+        "name": "q-comet-freeze-normal-config",
+        "pid": 405099,
+        "run_id": "20260816T033948Z-q-comet-freeze-normal-config",
+        "started_at": "2026-08-16T03:39:48+00:00",
+        "status": "succeeded",
+        "updated_at": "2026-08-16T03:40:20+00:00"
+      }
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_q_comet_stage0.py",
+        "--phase",
+        "preflight",
+        "--artifact-dir",
+        "artifacts/q_comet_stage0_static"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+      "environment": {
+        "captured_at": "2026-08-16T03:43:15+00:00",
+        "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "python": "/home/ubuntu/.hermes/hermes-agent/venv/bin/python",
+        "selected_env": {
+          "PATH": "/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.codex/tmp/arg0/codex-arg04l4hOZ:/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:/home/ubuntu/.hermes/hermes-agent/venv/bin:/home/ubuntu/.hermes/node/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin",
+          "VIRTUAL_ENV": "/home/ubuntu/.hermes/hermes-agent/venv"
+        }
+      },
+      "git": {
+        "branch": "research/q-comet-stage0-static",
+        "captured_at": "2026-08-16T03:43:15+00:00",
+        "head": "461eb4dc7bb794e719295daf028f6811658ba37f",
+        "repo": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "status_short": "?? docs/Q_COMET_STAGE0.md\n?? scripts/run_q_comet_stage0.py\n?? scripts/verify_q_comet_stage0.py\n?? src/gnss_doppler_lab/q_comet.py\n?? src/gnss_doppler_lab/q_comet_data.py\n?? tests/test_q_comet.py",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static"
+      },
+      "heartbeat": {
+        "final": true,
+        "run_id": "20260816T034315Z-q-comet-source-inventory-preflight-r2",
+        "updated_at": "2026-08-16T03:43:18+00:00"
+      },
+      "logs": {
+        "stderr": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T034315Z-q-comet-source-inventory-preflight-r2/stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        "stdout": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T034315Z-q-comet-source-inventory-preflight-r2/stdout.log",
+          "sha256": "707be5d8283fba8f6d42601d84f1ddc6067c9c547ed173ff957f7b201efe3db4",
+          "size_bytes": 64
+        }
+      },
+      "name": "q-comet-source-inventory-preflight-r2",
+      "produced_artifacts": [
+        "artifacts/q_comet_stage0_static/config.json",
+        "artifacts/q_comet_stage0_static/data_inventory.json",
+        "artifacts/q_comet_stage0_static/source_binding.json",
+        "artifacts/q_comet_stage0_static/timeline_inventory.json",
+        "artifacts/q_comet_stage0_static/normal_split_audit.json",
+        "artifacts/q_comet_stage0_static/source_commit.json"
+      ],
+      "result_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T034315Z-q-comet-source-inventory-preflight-r2/result_manifest.json",
+      "run_id": "20260816T034315Z-q-comet-source-inventory-preflight-r2",
+      "status": {
+        "command_pgid": 406195,
+        "command_pid": 406195,
+        "created_at": "2026-08-16T03:43:15+00:00",
+        "ended_at": "2026-08-16T03:43:18+00:00",
+        "exit_code": 0,
+        "name": "q-comet-source-inventory-preflight-r2",
+        "pid": 406174,
+        "run_id": "20260816T034315Z-q-comet-source-inventory-preflight-r2",
+        "started_at": "2026-08-16T03:43:15+00:00",
+        "status": "succeeded",
+        "updated_at": "2026-08-16T03:43:18+00:00"
+      }
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_q_comet_stage0.py",
+        "--phase",
+        "texbat-evaluation",
+        "--artifact-dir",
+        "artifacts/q_comet_stage0_static",
+        "--freeze-commit-sha",
+        "dd1746e63498fa4c611876bd4eb8f5242df211b4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+      "environment": {
+        "captured_at": "2026-08-16T03:43:49+00:00",
+        "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "python": "/home/ubuntu/.hermes/hermes-agent/venv/bin/python",
+        "selected_env": {
+          "PATH": "/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.codex/tmp/arg0/codex-arg04l4hOZ:/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:/home/ubuntu/.hermes/hermes-agent/venv/bin:/home/ubuntu/.hermes/node/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin",
+          "VIRTUAL_ENV": "/home/ubuntu/.hermes/hermes-agent/venv"
+        }
+      },
+      "git": {
+        "branch": "research/q-comet-stage0-static",
+        "captured_at": "2026-08-16T03:43:49+00:00",
+        "head": "dd1746e63498fa4c611876bd4eb8f5242df211b4",
+        "repo": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "status_short": "M artifacts/q_comet_stage0_static/source_commit.json",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static"
+      },
+      "heartbeat": {
+        "final": true,
+        "run_id": "20260816T034349Z-q-comet-texbat-evaluation",
+        "updated_at": "2026-08-16T03:54:40+00:00"
+      },
+      "logs": {
+        "stderr": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T034349Z-q-comet-texbat-evaluation/stderr.log",
+          "sha256": "fd46e53521ae4a3d49fd64ddeee7d48487188fb7e292b951302146995d05c11c",
+          "size_bytes": 1664
+        },
+        "stdout": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T034349Z-q-comet-texbat-evaluation/stdout.log",
+          "sha256": "0c965b39cb9f0142debcdf40936a71905c06f9684d62da8bef066f534a73b716",
+          "size_bytes": 91
+        }
+      },
+      "name": "q-comet-texbat-evaluation",
+      "produced_artifacts": [
+        "artifacts/q_comet_stage0_static/texbat_scores.csv.gz",
+        "artifacts/q_comet_stage0_static/texbat_metrics.csv",
+        "artifacts/q_comet_stage0_static/texbat_onsets.csv",
+        "artifacts/q_comet_stage0_static/texbat_participation.csv.gz",
+        "artifacts/q_comet_stage0_static/texbat_external_fpr.csv",
+        "artifacts/q_comet_stage0_static/texbat_score_diagnostics.csv.gz",
+        "artifacts/q_comet_stage0_static/texbat_prn_bayes_factors.csv.gz",
+        "artifacts/q_comet_stage0_static/texbat_relation_scores.csv.gz",
+        "artifacts/q_comet_stage0_static/relation_destruction_metrics.json"
+      ],
+      "result_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T034349Z-q-comet-texbat-evaluation/result_manifest.json",
+      "run_id": "20260816T034349Z-q-comet-texbat-evaluation",
+      "status": {
+        "command_pgid": 406571,
+        "command_pid": 406571,
+        "created_at": "2026-08-16T03:43:49+00:00",
+        "ended_at": "2026-08-16T03:54:40+00:00",
+        "exit_code": 0,
+        "name": "q-comet-texbat-evaluation",
+        "pid": 406566,
+        "run_id": "20260816T034349Z-q-comet-texbat-evaluation",
+        "started_at": "2026-08-16T03:43:49+00:00",
+        "status": "succeeded",
+        "updated_at": "2026-08-16T03:54:40+00:00"
+      }
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_q_comet_stage0.py",
+        "--phase",
+        "oakbat-confirmation",
+        "--artifact-dir",
+        "artifacts/q_comet_stage0_static",
+        "--freeze-commit-sha",
+        "dd1746e63498fa4c611876bd4eb8f5242df211b4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+      "environment": {
+        "captured_at": "2026-08-16T03:54:59+00:00",
+        "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "python": "/home/ubuntu/.hermes/hermes-agent/venv/bin/python",
+        "selected_env": {
+          "PATH": "/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.codex/tmp/arg0/codex-arg04l4hOZ:/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:/home/ubuntu/.hermes/hermes-agent/venv/bin:/home/ubuntu/.hermes/node/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin",
+          "VIRTUAL_ENV": "/home/ubuntu/.hermes/hermes-agent/venv"
+        }
+      },
+      "git": {
+        "branch": "research/q-comet-stage0-static",
+        "captured_at": "2026-08-16T03:54:59+00:00",
+        "head": "dd1746e63498fa4c611876bd4eb8f5242df211b4",
+        "repo": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "status_short": "M artifacts/q_comet_stage0_static/data_inventory.json\n M artifacts/q_comet_stage0_static/source_binding.json\n M artifacts/q_comet_stage0_static/source_commit.json",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static"
+      },
+      "heartbeat": {
+        "final": true,
+        "run_id": "20260816T035459Z-q-comet-oakbat-confirmation",
+        "updated_at": "2026-08-16T03:55:03+00:00"
+      },
+      "logs": {
+        "stderr": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T035459Z-q-comet-oakbat-confirmation/stderr.log",
+          "sha256": "15ae5f01c63a0ed107ab7ac0d5a5e3c45a09545c6c99c2881a5fd7f92b3b556d",
+          "size_bytes": 2277
+        },
+        "stdout": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T035459Z-q-comet-oakbat-confirmation/stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      },
+      "name": "q-comet-oakbat-confirmation",
+      "produced_artifacts": [],
+      "result_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T035459Z-q-comet-oakbat-confirmation/result_manifest.json",
+      "run_id": "20260816T035459Z-q-comet-oakbat-confirmation",
+      "status": {
+        "command_pgid": 409319,
+        "command_pid": 409319,
+        "created_at": "2026-08-16T03:54:59+00:00",
+        "ended_at": "2026-08-16T03:55:03+00:00",
+        "exit_code": 1,
+        "name": "q-comet-oakbat-confirmation",
+        "pid": 409314,
+        "run_id": "20260816T035459Z-q-comet-oakbat-confirmation",
+        "started_at": "2026-08-16T03:55:00+00:00",
+        "status": "failed",
+        "updated_at": "2026-08-16T03:55:03+00:00"
+      }
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_q_comet_stage0.py",
+        "--phase",
+        "oakbat-confirmation",
+        "--artifact-dir",
+        "artifacts/q_comet_stage0_static",
+        "--freeze-commit-sha",
+        "dd1746e63498fa4c611876bd4eb8f5242df211b4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+      "environment": {
+        "captured_at": "2026-08-16T03:57:16+00:00",
+        "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "python": "/home/ubuntu/.hermes/hermes-agent/venv/bin/python",
+        "selected_env": {
+          "PATH": "/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.codex/tmp/arg0/codex-arg04l4hOZ:/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:/home/ubuntu/.hermes/hermes-agent/venv/bin:/home/ubuntu/.hermes/node/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin",
+          "VIRTUAL_ENV": "/home/ubuntu/.hermes/hermes-agent/venv"
+        }
+      },
+      "git": {
+        "branch": "research/q-comet-stage0-static",
+        "captured_at": "2026-08-16T03:57:16+00:00",
+        "head": "dd1746e63498fa4c611876bd4eb8f5242df211b4",
+        "repo": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "status_short": "M artifacts/q_comet_stage0_static/data_inventory.json\n M artifacts/q_comet_stage0_static/source_binding.json\n M artifacts/q_comet_stage0_static/source_commit.json\n M scripts/run_q_comet_stage0.py",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static"
+      },
+      "heartbeat": {
+        "final": true,
+        "run_id": "20260816T035716Z-q-comet-oakbat-confirmation-r2",
+        "updated_at": "2026-08-16T04:24:11+00:00"
+      },
+      "logs": {
+        "stderr": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T035716Z-q-comet-oakbat-confirmation-r2/stderr.log",
+          "sha256": "fadd2104d115aaee37aaf0ffb33c77eaecfa02e48371828e9b0a50bb9e0a1d9c",
+          "size_bytes": 1664
+        },
+        "stdout": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T035716Z-q-comet-oakbat-confirmation-r2/stdout.log",
+          "sha256": "a1f5f1b773e4310588dc89c35456493d0233ac1dbe410cc953b6aa7f6ac3f0f1",
+          "size_bytes": 93
+        }
+      },
+      "name": "q-comet-oakbat-confirmation-r2",
+      "produced_artifacts": [
+        "artifacts/q_comet_stage0_static/oakbat_scores.csv.gz",
+        "artifacts/q_comet_stage0_static/oakbat_metrics.csv",
+        "artifacts/q_comet_stage0_static/oakbat_onsets.csv",
+        "artifacts/q_comet_stage0_static/oakbat_participation.csv.gz",
+        "artifacts/q_comet_stage0_static/oakbat_score_diagnostics.csv.gz",
+        "artifacts/q_comet_stage0_static/oakbat_prn_bayes_factors.csv.gz",
+        "artifacts/q_comet_stage0_static/cross_dataset_confirmation.json"
+      ],
+      "result_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T035716Z-q-comet-oakbat-confirmation-r2/result_manifest.json",
+      "run_id": "20260816T035716Z-q-comet-oakbat-confirmation-r2",
+      "status": {
+        "command_pgid": 409941,
+        "command_pid": 409941,
+        "created_at": "2026-08-16T03:57:16+00:00",
+        "ended_at": "2026-08-16T04:24:11+00:00",
+        "exit_code": 0,
+        "name": "q-comet-oakbat-confirmation-r2",
+        "pid": 409939,
+        "run_id": "20260816T035716Z-q-comet-oakbat-confirmation-r2",
+        "started_at": "2026-08-16T03:57:16+00:00",
+        "status": "succeeded",
+        "updated_at": "2026-08-16T04:24:11+00:00"
+      }
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_q_comet_stage0.py",
+        "--phase",
+        "controls-bootstrap-report",
+        "--artifact-dir",
+        "artifacts/q_comet_stage0_static",
+        "--freeze-commit-sha",
+        "dd1746e63498fa4c611876bd4eb8f5242df211b4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+      "environment": {
+        "captured_at": "2026-08-16T04:24:28+00:00",
+        "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "python": "/home/ubuntu/.hermes/hermes-agent/venv/bin/python",
+        "selected_env": {
+          "PATH": "/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.codex/tmp/arg0/codex-arg04l4hOZ:/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:/home/ubuntu/.hermes/hermes-agent/venv/bin:/home/ubuntu/.hermes/node/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin",
+          "VIRTUAL_ENV": "/home/ubuntu/.hermes/hermes-agent/venv"
+        }
+      },
+      "git": {
+        "branch": "research/q-comet-stage0-static",
+        "captured_at": "2026-08-16T04:24:28+00:00",
+        "head": "dd1746e63498fa4c611876bd4eb8f5242df211b4",
+        "repo": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "status_short": "M artifacts/q_comet_stage0_static/data_inventory.json\n M artifacts/q_comet_stage0_static/source_binding.json\n M artifacts/q_comet_stage0_static/source_commit.json\n M scripts/run_q_comet_stage0.py",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static"
+      },
+      "heartbeat": {
+        "final": true,
+        "run_id": "20260816T042428Z-q-comet-controls-bootstrap-report",
+        "updated_at": "2026-08-16T04:32:26+00:00"
+      },
+      "logs": {
+        "stderr": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T042428Z-q-comet-controls-bootstrap-report/stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        "stdout": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T042428Z-q-comet-controls-bootstrap-report/stdout.log",
+          "sha256": "9928286f8f912e4c3a5e1c8822bcde9b30cbf05cc878be680b06e130fc3524c5",
+          "size_bytes": 77
+        }
+      },
+      "name": "q-comet-controls-bootstrap-report",
+      "produced_artifacts": [
+        "artifacts/q_comet_stage0_static/physical_controls.json",
+        "artifacts/q_comet_stage0_static/scenario_metrics.csv",
+        "artifacts/q_comet_stage0_static/ablation_metrics.csv",
+        "artifacts/q_comet_stage0_static/per_epoch_scores.csv.gz",
+        "artifacts/q_comet_stage0_static/common_onset_estimates.csv",
+        "artifacts/q_comet_stage0_static/participation_posteriors.csv.gz",
+        "artifacts/q_comet_stage0_static/external_static_fpr.csv",
+        "artifacts/q_comet_stage0_static/bootstrap_intervals.csv",
+        "artifacts/q_comet_stage0_static/final_verdict.json",
+        "artifacts/q_comet_stage0_static/implementation_repairs.json",
+        "artifacts/q_comet_stage0_static/README.md",
+        "artifacts/q_comet_stage0_static/plots/ablation_pauc_delay.png",
+        "artifacts/q_comet_stage0_static/plots/ds3_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/ds4_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/ds7_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/ds8_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/external_static_fpr.png",
+        "artifacts/q_comet_stage0_static/plots/normal_manifold_quotient_residual.png",
+        "artifacts/q_comet_stage0_static/plots/nuisance_projection_validation.png",
+        "artifacts/q_comet_stage0_static/plots/oakbat_confirmation.png",
+        "artifacts/q_comet_stage0_static/plots/official_estimated_onset.png",
+        "artifacts/q_comet_stage0_static/plots/original_vs_desync_score.png",
+        "artifacts/q_comet_stage0_static/plots/os1_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/os2_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/os3_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/os4_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/participation_posterior.png",
+        "artifacts/q_comet_stage0_static/plots/prn_bf_heatmap.png",
+        "artifacts/q_comet_stage0_static/plots/score_vs_residual_power.png"
+      ],
+      "result_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T042428Z-q-comet-controls-bootstrap-report/result_manifest.json",
+      "run_id": "20260816T042428Z-q-comet-controls-bootstrap-report",
+      "status": {
+        "command_pgid": 413935,
+        "command_pid": 413935,
+        "created_at": "2026-08-16T04:24:28+00:00",
+        "ended_at": "2026-08-16T04:32:26+00:00",
+        "exit_code": 0,
+        "name": "q-comet-controls-bootstrap-report",
+        "pid": 413930,
+        "run_id": "20260816T042428Z-q-comet-controls-bootstrap-report",
+        "started_at": "2026-08-16T04:24:28+00:00",
+        "status": "succeeded",
+        "updated_at": "2026-08-16T04:32:26+00:00"
+      }
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_q_comet_stage0.py",
+        "--phase",
+        "ds78-prefix-audit",
+        "--artifact-dir",
+        "artifacts/q_comet_stage0_static",
+        "--freeze-commit-sha",
+        "dd1746e63498fa4c611876bd4eb8f5242df211b4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+      "environment": {
+        "captured_at": "2026-08-16T04:40:47+00:00",
+        "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "python": "/usr/bin/python3",
+        "selected_env": {
+          "PATH": "/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.codex/tmp/arg0/codex-arg04l4hOZ:/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:/home/ubuntu/.hermes/hermes-agent/venv/bin:/home/ubuntu/.hermes/node/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin",
+          "PYTHONPATH": "/home/ubuntu/projects/gnss-doppler-runner-minimal-v0/src",
+          "VIRTUAL_ENV": "/home/ubuntu/.hermes/hermes-agent/venv"
+        }
+      },
+      "git": {
+        "branch": "research/q-comet-stage0-static",
+        "captured_at": "2026-08-16T04:40:47+00:00",
+        "head": "dd1746e63498fa4c611876bd4eb8f5242df211b4",
+        "repo": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "status_short": "M artifacts/q_comet_stage0_static/README.md\n M artifacts/q_comet_stage0_static/data_inventory.json\n M artifacts/q_comet_stage0_static/source_binding.json\n M artifacts/q_comet_stage0_static/source_commit.json\n M scripts/run_q_comet_stage0.py\n M scripts/verify_q_comet_stage0.py\n M src/gnss_doppler_lab/q_comet.py",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static"
+      },
+      "heartbeat": {
+        "final": true,
+        "run_id": "20260816T044047Z-q-comet-ds78-prefix-audit",
+        "updated_at": "2026-08-16T04:44:48+00:00"
+      },
+      "logs": {
+        "stderr": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T044047Z-q-comet-ds78-prefix-audit/stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        "stdout": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T044047Z-q-comet-ds78-prefix-audit/stdout.log",
+          "sha256": "ad3ff48e74a9ade81bae3ea6e400b2f20c6ce1ab533fa8e4e303ca55964c6053",
+          "size_bytes": 87
+        }
+      },
+      "name": "q-comet-ds78-prefix-audit",
+      "produced_artifacts": [
+        "artifacts/q_comet_stage0_static/ds78_byte_identity_audit.json",
+        "artifacts/q_comet_stage0_static/timeline_inventory.json"
+      ],
+      "result_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T044047Z-q-comet-ds78-prefix-audit/result_manifest.json",
+      "run_id": "20260816T044047Z-q-comet-ds78-prefix-audit",
+      "status": {
+        "command_pgid": 416503,
+        "command_pid": 416503,
+        "created_at": "2026-08-16T04:40:47+00:00",
+        "ended_at": "2026-08-16T04:44:48+00:00",
+        "exit_code": 0,
+        "name": "q-comet-ds78-prefix-audit",
+        "pid": 416498,
+        "run_id": "20260816T044047Z-q-comet-ds78-prefix-audit",
+        "started_at": "2026-08-16T04:40:47+00:00",
+        "status": "succeeded",
+        "updated_at": "2026-08-16T04:44:48+00:00"
+      }
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_q_comet_stage0.py",
+        "--phase",
+        "texbat-evaluation",
+        "--artifact-dir",
+        "artifacts/q_comet_stage0_static",
+        "--freeze-commit-sha",
+        "dd1746e63498fa4c611876bd4eb8f5242df211b4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+      "environment": {
+        "captured_at": "2026-08-16T04:40:55+00:00",
+        "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "python": "/usr/bin/python3",
+        "selected_env": {
+          "PATH": "/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.codex/tmp/arg0/codex-arg04l4hOZ:/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:/home/ubuntu/.hermes/hermes-agent/venv/bin:/home/ubuntu/.hermes/node/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin",
+          "PYTHONPATH": "/home/ubuntu/projects/gnss-doppler-runner-minimal-v0/src",
+          "VIRTUAL_ENV": "/home/ubuntu/.hermes/hermes-agent/venv"
+        }
+      },
+      "git": {
+        "branch": "research/q-comet-stage0-static",
+        "captured_at": "2026-08-16T04:40:55+00:00",
+        "head": "dd1746e63498fa4c611876bd4eb8f5242df211b4",
+        "repo": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "status_short": "M artifacts/q_comet_stage0_static/README.md\n M artifacts/q_comet_stage0_static/data_inventory.json\n M artifacts/q_comet_stage0_static/source_binding.json\n M artifacts/q_comet_stage0_static/source_commit.json\n M scripts/run_q_comet_stage0.py\n M scripts/verify_q_comet_stage0.py\n M src/gnss_doppler_lab/q_comet.py",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static"
+      },
+      "heartbeat": {
+        "final": true,
+        "run_id": "20260816T044055Z-q-comet-texbat-evaluation-r2",
+        "updated_at": "2026-08-16T04:47:54+00:00"
+      },
+      "logs": {
+        "stderr": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T044055Z-q-comet-texbat-evaluation-r2/stderr.log",
+          "sha256": "6403328dee07e57135f0dd495d14cfa44e77751940089112d9de361adf8d3023",
+          "size_bytes": 21291
+        },
+        "stdout": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T044055Z-q-comet-texbat-evaluation-r2/stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      },
+      "name": "q-comet-texbat-evaluation-r2",
+      "produced_artifacts": [],
+      "result_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T044055Z-q-comet-texbat-evaluation-r2/result_manifest.json",
+      "run_id": "20260816T044055Z-q-comet-texbat-evaluation-r2",
+      "status": {
+        "command_pgid": 416647,
+        "command_pid": 416647,
+        "created_at": "2026-08-16T04:40:55+00:00",
+        "ended_at": "2026-08-16T04:47:54+00:00",
+        "exit_code": -15,
+        "name": "q-comet-texbat-evaluation-r2",
+        "pid": 416642,
+        "run_id": "20260816T044055Z-q-comet-texbat-evaluation-r2",
+        "started_at": "2026-08-16T04:40:55+00:00",
+        "status": "killed",
+        "updated_at": "2026-08-16T04:47:54+00:00"
+      }
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_q_comet_stage0.py",
+        "--phase",
+        "oakbat-confirmation",
+        "--artifact-dir",
+        "artifacts/q_comet_stage0_static",
+        "--freeze-commit-sha",
+        "dd1746e63498fa4c611876bd4eb8f5242df211b4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+      "environment": {
+        "captured_at": "2026-08-16T04:45:30+00:00",
+        "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "python": "/usr/bin/python3",
+        "selected_env": {
+          "PATH": "/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.codex/tmp/arg0/codex-arg04l4hOZ:/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:/home/ubuntu/.hermes/hermes-agent/venv/bin:/home/ubuntu/.hermes/node/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin",
+          "PYTHONPATH": "/home/ubuntu/projects/gnss-doppler-runner-minimal-v0/src",
+          "VIRTUAL_ENV": "/home/ubuntu/.hermes/hermes-agent/venv"
+        }
+      },
+      "git": {
+        "branch": "research/q-comet-stage0-static",
+        "captured_at": "2026-08-16T04:45:30+00:00",
+        "head": "dd1746e63498fa4c611876bd4eb8f5242df211b4",
+        "repo": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "status_short": "M artifacts/q_comet_stage0_static/README.md\n M artifacts/q_comet_stage0_static/data_inventory.json\n M artifacts/q_comet_stage0_static/source_binding.json\n M artifacts/q_comet_stage0_static/source_commit.json\n M artifacts/q_comet_stage0_static/timeline_inventory.json\n M scripts/run_q_comet_stage0.py\n M scripts/verify_q_comet_stage0.py\n M src/gnss_doppler_lab/q_comet.py\n M tests/test_q_comet.py",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static"
+      },
+      "heartbeat": {
+        "final": true,
+        "run_id": "20260816T044530Z-q-comet-oakbat-confirmation-r3",
+        "updated_at": "2026-08-16T04:47:55+00:00"
+      },
+      "logs": {
+        "stderr": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T044530Z-q-comet-oakbat-confirmation-r3/stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        "stdout": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T044530Z-q-comet-oakbat-confirmation-r3/stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      },
+      "name": "q-comet-oakbat-confirmation-r3",
+      "produced_artifacts": [],
+      "result_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T044530Z-q-comet-oakbat-confirmation-r3/result_manifest.json",
+      "run_id": "20260816T044530Z-q-comet-oakbat-confirmation-r3",
+      "status": {
+        "command_pgid": 418396,
+        "command_pid": 418396,
+        "created_at": "2026-08-16T04:45:30+00:00",
+        "ended_at": "2026-08-16T04:47:55+00:00",
+        "exit_code": -15,
+        "name": "q-comet-oakbat-confirmation-r3",
+        "pid": 418391,
+        "run_id": "20260816T044530Z-q-comet-oakbat-confirmation-r3",
+        "started_at": "2026-08-16T04:45:30+00:00",
+        "status": "killed",
+        "updated_at": "2026-08-16T04:47:55+00:00"
+      }
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_q_comet_stage0.py",
+        "--phase",
+        "oakbat-confirmation",
+        "--artifact-dir",
+        "artifacts/q_comet_stage0_static",
+        "--freeze-commit-sha",
+        "dd1746e63498fa4c611876bd4eb8f5242df211b4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+      "environment": {
+        "captured_at": "2026-08-16T04:48:27+00:00",
+        "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "python": "/usr/bin/python3",
+        "selected_env": {
+          "PATH": "/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.codex/tmp/arg0/codex-arg04l4hOZ:/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:/home/ubuntu/.hermes/hermes-agent/venv/bin:/home/ubuntu/.hermes/node/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin",
+          "PYTHONPATH": "/home/ubuntu/projects/gnss-doppler-runner-minimal-v0/src",
+          "VIRTUAL_ENV": "/home/ubuntu/.hermes/hermes-agent/venv"
+        }
+      },
+      "git": {
+        "branch": "research/q-comet-stage0-static",
+        "captured_at": "2026-08-16T04:48:27+00:00",
+        "head": "dd1746e63498fa4c611876bd4eb8f5242df211b4",
+        "repo": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "status_short": "M artifacts/q_comet_stage0_static/README.md\n M artifacts/q_comet_stage0_static/data_inventory.json\n M artifacts/q_comet_stage0_static/source_binding.json\n M artifacts/q_comet_stage0_static/source_commit.json\n M artifacts/q_comet_stage0_static/timeline_inventory.json\n M scripts/run_q_comet_stage0.py\n M scripts/verify_q_comet_stage0.py\n M src/gnss_doppler_lab/q_comet.py\n M tests/test_q_comet.py",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static"
+      },
+      "heartbeat": {
+        "final": true,
+        "run_id": "20260816T044827Z-q-comet-oakbat-confirmation-r4",
+        "updated_at": "2026-08-16T04:59:08+00:00"
+      },
+      "logs": {
+        "stderr": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T044827Z-q-comet-oakbat-confirmation-r4/stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        "stdout": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T044827Z-q-comet-oakbat-confirmation-r4/stdout.log",
+          "sha256": "a1f5f1b773e4310588dc89c35456493d0233ac1dbe410cc953b6aa7f6ac3f0f1",
+          "size_bytes": 93
+        }
+      },
+      "name": "q-comet-oakbat-confirmation-r4",
+      "produced_artifacts": [
+        "artifacts/q_comet_stage0_static/oakbat_scores.csv.gz",
+        "artifacts/q_comet_stage0_static/oakbat_metrics.csv",
+        "artifacts/q_comet_stage0_static/oakbat_onsets.csv",
+        "artifacts/q_comet_stage0_static/oakbat_participation.csv.gz",
+        "artifacts/q_comet_stage0_static/oakbat_score_diagnostics.csv.gz",
+        "artifacts/q_comet_stage0_static/oakbat_prn_bayes_factors.csv.gz",
+        "artifacts/q_comet_stage0_static/cross_dataset_confirmation.json"
+      ],
+      "result_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T044827Z-q-comet-oakbat-confirmation-r4/result_manifest.json",
+      "run_id": "20260816T044827Z-q-comet-oakbat-confirmation-r4",
+      "status": {
+        "command_pgid": 419344,
+        "command_pid": 419344,
+        "created_at": "2026-08-16T04:48:27+00:00",
+        "ended_at": "2026-08-16T04:59:08+00:00",
+        "exit_code": 0,
+        "name": "q-comet-oakbat-confirmation-r4",
+        "pid": 419339,
+        "run_id": "20260816T044827Z-q-comet-oakbat-confirmation-r4",
+        "started_at": "2026-08-16T04:48:27+00:00",
+        "status": "succeeded",
+        "updated_at": "2026-08-16T04:59:08+00:00"
+      }
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_q_comet_stage0.py",
+        "--phase",
+        "texbat-evaluation",
+        "--artifact-dir",
+        "artifacts/q_comet_stage0_static",
+        "--freeze-commit-sha",
+        "dd1746e63498fa4c611876bd4eb8f5242df211b4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+      "environment": {
+        "captured_at": "2026-08-16T04:48:27+00:00",
+        "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "python": "/usr/bin/python3",
+        "selected_env": {
+          "PATH": "/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.codex/tmp/arg0/codex-arg04l4hOZ:/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:/home/ubuntu/.hermes/hermes-agent/venv/bin:/home/ubuntu/.hermes/node/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin",
+          "PYTHONPATH": "/home/ubuntu/projects/gnss-doppler-runner-minimal-v0/src",
+          "VIRTUAL_ENV": "/home/ubuntu/.hermes/hermes-agent/venv"
+        }
+      },
+      "git": {
+        "branch": "research/q-comet-stage0-static",
+        "captured_at": "2026-08-16T04:48:27+00:00",
+        "head": "dd1746e63498fa4c611876bd4eb8f5242df211b4",
+        "repo": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "status_short": "M artifacts/q_comet_stage0_static/README.md\n M artifacts/q_comet_stage0_static/data_inventory.json\n M artifacts/q_comet_stage0_static/source_binding.json\n M artifacts/q_comet_stage0_static/source_commit.json\n M artifacts/q_comet_stage0_static/timeline_inventory.json\n M scripts/run_q_comet_stage0.py\n M scripts/verify_q_comet_stage0.py\n M src/gnss_doppler_lab/q_comet.py\n M tests/test_q_comet.py",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static"
+      },
+      "heartbeat": {
+        "final": true,
+        "run_id": "20260816T044827Z-q-comet-texbat-evaluation-r3",
+        "updated_at": "2026-08-16T04:55:41+00:00"
+      },
+      "logs": {
+        "stderr": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T044827Z-q-comet-texbat-evaluation-r3/stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        "stdout": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T044827Z-q-comet-texbat-evaluation-r3/stdout.log",
+          "sha256": "0c965b39cb9f0142debcdf40936a71905c06f9684d62da8bef066f534a73b716",
+          "size_bytes": 91
+        }
+      },
+      "name": "q-comet-texbat-evaluation-r3",
+      "produced_artifacts": [
+        "artifacts/q_comet_stage0_static/texbat_scores.csv.gz",
+        "artifacts/q_comet_stage0_static/texbat_metrics.csv",
+        "artifacts/q_comet_stage0_static/texbat_onsets.csv",
+        "artifacts/q_comet_stage0_static/texbat_participation.csv.gz",
+        "artifacts/q_comet_stage0_static/texbat_external_fpr.csv",
+        "artifacts/q_comet_stage0_static/texbat_score_diagnostics.csv.gz",
+        "artifacts/q_comet_stage0_static/texbat_prn_bayes_factors.csv.gz",
+        "artifacts/q_comet_stage0_static/texbat_relation_scores.csv.gz",
+        "artifacts/q_comet_stage0_static/relation_destruction_metrics.json"
+      ],
+      "result_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T044827Z-q-comet-texbat-evaluation-r3/result_manifest.json",
+      "run_id": "20260816T044827Z-q-comet-texbat-evaluation-r3",
+      "status": {
+        "command_pgid": 419334,
+        "command_pid": 419334,
+        "created_at": "2026-08-16T04:48:27+00:00",
+        "ended_at": "2026-08-16T04:55:41+00:00",
+        "exit_code": 0,
+        "name": "q-comet-texbat-evaluation-r3",
+        "pid": 419333,
+        "run_id": "20260816T044827Z-q-comet-texbat-evaluation-r3",
+        "started_at": "2026-08-16T04:48:27+00:00",
+        "status": "succeeded",
+        "updated_at": "2026-08-16T04:55:41+00:00"
+      }
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_q_comet_stage0.py",
+        "--phase",
+        "controls-bootstrap-report",
+        "--artifact-dir",
+        "artifacts/q_comet_stage0_static",
+        "--freeze-commit-sha",
+        "dd1746e63498fa4c611876bd4eb8f5242df211b4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+      "environment": {
+        "captured_at": "2026-08-16T04:59:51+00:00",
+        "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "python": "/usr/bin/python3",
+        "selected_env": {
+          "PATH": "/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.codex/tmp/arg0/codex-arg04l4hOZ:/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:/home/ubuntu/.hermes/hermes-agent/venv/bin:/home/ubuntu/.hermes/node/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin",
+          "PYTHONPATH": "/home/ubuntu/projects/gnss-doppler-runner-minimal-v0/src",
+          "VIRTUAL_ENV": "/home/ubuntu/.hermes/hermes-agent/venv"
+        }
+      },
+      "git": {
+        "branch": "research/q-comet-stage0-static",
+        "captured_at": "2026-08-16T04:59:51+00:00",
+        "head": "dd1746e63498fa4c611876bd4eb8f5242df211b4",
+        "repo": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "status_short": "M artifacts/q_comet_stage0_static/README.md\n M artifacts/q_comet_stage0_static/data_inventory.json\n M artifacts/q_comet_stage0_static/source_binding.json\n M artifacts/q_comet_stage0_static/source_commit.json\n M artifacts/q_comet_stage0_static/timeline_inventory.json\n M scripts/run_q_comet_stage0.py\n M scripts/verify_q_comet_stage0.py\n M src/gnss_doppler_lab/q_comet.py\n M tests/test_q_comet.py",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static"
+      },
+      "heartbeat": {
+        "final": true,
+        "run_id": "20260816T045951Z-q-comet-controls-bootstrap-report-r2",
+        "updated_at": "2026-08-16T05:01:27+00:00"
+      },
+      "logs": {
+        "stderr": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T045951Z-q-comet-controls-bootstrap-report-r2/stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        "stdout": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T045951Z-q-comet-controls-bootstrap-report-r2/stdout.log",
+          "sha256": "9928286f8f912e4c3a5e1c8822bcde9b30cbf05cc878be680b06e130fc3524c5",
+          "size_bytes": 77
+        }
+      },
+      "name": "q-comet-controls-bootstrap-report-r2",
+      "produced_artifacts": [
+        "artifacts/q_comet_stage0_static/physical_controls.json",
+        "artifacts/q_comet_stage0_static/scenario_metrics.csv",
+        "artifacts/q_comet_stage0_static/ablation_metrics.csv",
+        "artifacts/q_comet_stage0_static/per_epoch_scores.csv.gz",
+        "artifacts/q_comet_stage0_static/common_onset_estimates.csv",
+        "artifacts/q_comet_stage0_static/participation_posteriors.csv.gz",
+        "artifacts/q_comet_stage0_static/external_static_fpr.csv",
+        "artifacts/q_comet_stage0_static/bootstrap_intervals.csv",
+        "artifacts/q_comet_stage0_static/final_verdict.json",
+        "artifacts/q_comet_stage0_static/implementation_repairs.json",
+        "artifacts/q_comet_stage0_static/README.md",
+        "artifacts/q_comet_stage0_static/plots/ablation_pauc_delay.png",
+        "artifacts/q_comet_stage0_static/plots/ds3_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/ds4_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/ds7_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/ds8_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/external_static_fpr.png",
+        "artifacts/q_comet_stage0_static/plots/normal_manifold_quotient_residual.png",
+        "artifacts/q_comet_stage0_static/plots/nuisance_projection_validation.png",
+        "artifacts/q_comet_stage0_static/plots/oakbat_confirmation.png",
+        "artifacts/q_comet_stage0_static/plots/official_estimated_onset.png",
+        "artifacts/q_comet_stage0_static/plots/original_vs_desync_score.png",
+        "artifacts/q_comet_stage0_static/plots/os1_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/os2_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/os3_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/os4_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/participation_posterior.png",
+        "artifacts/q_comet_stage0_static/plots/prn_bf_heatmap.png",
+        "artifacts/q_comet_stage0_static/plots/score_vs_residual_power.png"
+      ],
+      "result_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T045951Z-q-comet-controls-bootstrap-report-r2/result_manifest.json",
+      "run_id": "20260816T045951Z-q-comet-controls-bootstrap-report-r2",
+      "status": {
+        "command_pgid": 421827,
+        "command_pid": 421827,
+        "created_at": "2026-08-16T04:59:51+00:00",
+        "ended_at": "2026-08-16T05:01:27+00:00",
+        "exit_code": 0,
+        "name": "q-comet-controls-bootstrap-report-r2",
+        "pid": 421822,
+        "run_id": "20260816T045951Z-q-comet-controls-bootstrap-report-r2",
+        "started_at": "2026-08-16T04:59:51+00:00",
+        "status": "succeeded",
+        "updated_at": "2026-08-16T05:01:27+00:00"
+      }
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_q_comet_stage0.py",
+        "--phase",
+        "texbat-evaluation",
+        "--artifact-dir",
+        "artifacts/q_comet_stage0_static",
+        "--freeze-commit-sha",
+        "dd1746e63498fa4c611876bd4eb8f5242df211b4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+      "environment": {
+        "captured_at": "2026-08-16T05:02:35+00:00",
+        "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "python": "/usr/bin/python3",
+        "selected_env": {
+          "PATH": "/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.codex/tmp/arg0/codex-arg04l4hOZ:/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:/home/ubuntu/.hermes/hermes-agent/venv/bin:/home/ubuntu/.hermes/node/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin",
+          "PYTHONPATH": "/home/ubuntu/projects/gnss-doppler-runner-minimal-v0/src",
+          "VIRTUAL_ENV": "/home/ubuntu/.hermes/hermes-agent/venv"
+        }
+      },
+      "git": {
+        "branch": "research/q-comet-stage0-static",
+        "captured_at": "2026-08-16T05:02:35+00:00",
+        "head": "dd1746e63498fa4c611876bd4eb8f5242df211b4",
+        "repo": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "status_short": "M artifacts/q_comet_stage0_static/README.md\n M artifacts/q_comet_stage0_static/data_inventory.json\n M artifacts/q_comet_stage0_static/source_binding.json\n M artifacts/q_comet_stage0_static/source_commit.json\n M artifacts/q_comet_stage0_static/timeline_inventory.json\n M scripts/run_q_comet_stage0.py\n M scripts/verify_q_comet_stage0.py\n M src/gnss_doppler_lab/q_comet.py\n M tests/test_q_comet.py",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static"
+      },
+      "heartbeat": {
+        "final": true,
+        "run_id": "20260816T050235Z-q-comet-texbat-evaluation-r4",
+        "updated_at": "2026-08-16T05:09:39+00:00"
+      },
+      "logs": {
+        "stderr": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T050235Z-q-comet-texbat-evaluation-r4/stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        "stdout": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T050235Z-q-comet-texbat-evaluation-r4/stdout.log",
+          "sha256": "0c965b39cb9f0142debcdf40936a71905c06f9684d62da8bef066f534a73b716",
+          "size_bytes": 91
+        }
+      },
+      "name": "q-comet-texbat-evaluation-r4",
+      "produced_artifacts": [
+        "artifacts/q_comet_stage0_static/texbat_scores.csv.gz",
+        "artifacts/q_comet_stage0_static/texbat_metrics.csv",
+        "artifacts/q_comet_stage0_static/texbat_onsets.csv",
+        "artifacts/q_comet_stage0_static/texbat_participation.csv.gz",
+        "artifacts/q_comet_stage0_static/texbat_external_fpr.csv",
+        "artifacts/q_comet_stage0_static/texbat_score_diagnostics.csv.gz",
+        "artifacts/q_comet_stage0_static/texbat_prn_bayes_factors.csv.gz",
+        "artifacts/q_comet_stage0_static/texbat_relation_scores.csv.gz",
+        "artifacts/q_comet_stage0_static/relation_destruction_metrics.json"
+      ],
+      "result_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T050235Z-q-comet-texbat-evaluation-r4/result_manifest.json",
+      "run_id": "20260816T050235Z-q-comet-texbat-evaluation-r4",
+      "status": {
+        "command_pgid": 422497,
+        "command_pid": 422497,
+        "created_at": "2026-08-16T05:02:35+00:00",
+        "ended_at": "2026-08-16T05:09:39+00:00",
+        "exit_code": 0,
+        "name": "q-comet-texbat-evaluation-r4",
+        "pid": 422492,
+        "run_id": "20260816T050235Z-q-comet-texbat-evaluation-r4",
+        "started_at": "2026-08-16T05:02:35+00:00",
+        "status": "succeeded",
+        "updated_at": "2026-08-16T05:09:39+00:00"
+      }
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_q_comet_stage0.py",
+        "--phase",
+        "controls-bootstrap-report",
+        "--artifact-dir",
+        "artifacts/q_comet_stage0_static",
+        "--freeze-commit-sha",
+        "dd1746e63498fa4c611876bd4eb8f5242df211b4"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+      "environment": {
+        "captured_at": "2026-08-16T05:09:57+00:00",
+        "cwd": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "python": "/usr/bin/python3",
+        "selected_env": {
+          "PATH": "/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.codex/tmp/arg0/codex-arg04l4hOZ:/usr/local/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:/home/ubuntu/.hermes/hermes-agent/venv/bin:/home/ubuntu/.hermes/node/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin",
+          "PYTHONPATH": "/home/ubuntu/projects/gnss-doppler-runner-minimal-v0/src",
+          "VIRTUAL_ENV": "/home/ubuntu/.hermes/hermes-agent/venv"
+        }
+      },
+      "git": {
+        "branch": "research/q-comet-stage0-static",
+        "captured_at": "2026-08-16T05:09:57+00:00",
+        "head": "dd1746e63498fa4c611876bd4eb8f5242df211b4",
+        "repo": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static",
+        "status_short": "M artifacts/q_comet_stage0_static/README.md\n M artifacts/q_comet_stage0_static/data_inventory.json\n M artifacts/q_comet_stage0_static/source_binding.json\n M artifacts/q_comet_stage0_static/source_commit.json\n M artifacts/q_comet_stage0_static/timeline_inventory.json\n M scripts/run_q_comet_stage0.py\n M scripts/verify_q_comet_stage0.py\n M src/gnss_doppler_lab/q_comet.py\n M tests/test_q_comet.py",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-q-comet-stage0-static"
+      },
+      "heartbeat": {
+        "final": true,
+        "run_id": "20260816T050957Z-q-comet-controls-bootstrap-report-r3",
+        "updated_at": "2026-08-16T05:11:32+00:00"
+      },
+      "logs": {
+        "stderr": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T050957Z-q-comet-controls-bootstrap-report-r3/stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        "stdout": {
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T050957Z-q-comet-controls-bootstrap-report-r3/stdout.log",
+          "sha256": "9928286f8f912e4c3a5e1c8822bcde9b30cbf05cc878be680b06e130fc3524c5",
+          "size_bytes": 77
+        }
+      },
+      "name": "q-comet-controls-bootstrap-report-r3",
+      "produced_artifacts": [
+        "artifacts/q_comet_stage0_static/physical_controls.json",
+        "artifacts/q_comet_stage0_static/scenario_metrics.csv",
+        "artifacts/q_comet_stage0_static/ablation_metrics.csv",
+        "artifacts/q_comet_stage0_static/per_epoch_scores.csv.gz",
+        "artifacts/q_comet_stage0_static/common_onset_estimates.csv",
+        "artifacts/q_comet_stage0_static/participation_posteriors.csv.gz",
+        "artifacts/q_comet_stage0_static/external_static_fpr.csv",
+        "artifacts/q_comet_stage0_static/bootstrap_intervals.csv",
+        "artifacts/q_comet_stage0_static/final_verdict.json",
+        "artifacts/q_comet_stage0_static/implementation_repairs.json",
+        "artifacts/q_comet_stage0_static/README.md",
+        "artifacts/q_comet_stage0_static/plots/ablation_pauc_delay.png",
+        "artifacts/q_comet_stage0_static/plots/ds3_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/ds4_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/ds7_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/ds8_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/external_static_fpr.png",
+        "artifacts/q_comet_stage0_static/plots/normal_manifold_quotient_residual.png",
+        "artifacts/q_comet_stage0_static/plots/nuisance_projection_validation.png",
+        "artifacts/q_comet_stage0_static/plots/oakbat_confirmation.png",
+        "artifacts/q_comet_stage0_static/plots/official_estimated_onset.png",
+        "artifacts/q_comet_stage0_static/plots/original_vs_desync_score.png",
+        "artifacts/q_comet_stage0_static/plots/os1_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/os2_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/os3_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/os4_full_score.png",
+        "artifacts/q_comet_stage0_static/plots/participation_posterior.png",
+        "artifacts/q_comet_stage0_static/plots/prn_bf_heatmap.png",
+        "artifacts/q_comet_stage0_static/plots/score_vs_residual_power.png"
+      ],
+      "result_manifest_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/runs/20260816T050957Z-q-comet-controls-bootstrap-report-r3/result_manifest.json",
+      "run_id": "20260816T050957Z-q-comet-controls-bootstrap-report-r3",
+      "status": {
+        "command_pgid": 424194,
+        "command_pid": 424194,
+        "created_at": "2026-08-16T05:09:57+00:00",
+        "ended_at": "2026-08-16T05:11:32+00:00",
+        "exit_code": 0,
+        "name": "q-comet-controls-bootstrap-report-r3",
+        "pid": 424189,
+        "run_id": "20260816T050957Z-q-comet-controls-bootstrap-report-r3",
+        "started_at": "2026-08-16T05:09:57+00:00",
+        "status": "succeeded",
+        "updated_at": "2026-08-16T05:11:32+00:00"
+      }
+    }
+  ],
+  "schema": "gnss-doppler-lab.q-comet-runner-provenance.v1",
+  "shared_artifact_path_note": "Repeated repair runs overwrite the same declared artifact paths; status/logs identify failed, killed, and final successful attempts, while artifact_manifest_sha256.json authenticates the final files."
+}

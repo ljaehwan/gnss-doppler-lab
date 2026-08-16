@@ -93,6 +93,8 @@ def test_prn_permutation_invariance_and_variable_count():
     perm=InnovationTable(*(np.asarray(getattr(table,name))[order] for name in table.__dataclass_fields__))
     two=score_common_onset(perm,memory_epochs=8,participation=.5,prior_variance=.25)
     assert [x["score"] for x in one]==[x["score"] for x in two]
+    assert [x["prn_log_bf"] for x in one]==[x["prn_log_bf"] for x in two]
+    assert all(set(row["prn_log_bf"])==set(map(str,np.unique(table.prn[table.epoch==row["epoch"]]))) for row in one)
 
 
 def test_less_than_four_prns_is_no_score():
@@ -152,4 +154,3 @@ def test_predictor_selection_and_threshold_deterministic():
 
 def test_artifact_checksum_canonical():
     assert canonical_json_hash({"b":1,"a":2})==hashlib.sha256(b'{"a":2,"b":1}').hexdigest()
-

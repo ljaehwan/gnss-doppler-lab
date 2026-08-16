@@ -1,0 +1,29 @@
+{
+  "criterion_evidence": {
+    "cleanStatic_holdout_fpr": 0.0,
+    "full_over_a3_and_a5_families": [
+      "DS3",
+      "DS7-8"
+    ],
+    "plausible_oakbat_onset_scenarios": 1,
+    "plausible_texbat_onset_families": [],
+    "qualifying_relation_destruction_families": [
+      "DS7-8"
+    ],
+    "worst_external_static_pre_onset_fpr": 0.0
+  },
+  "freeze_commit_sha": "dd1746e63498fa4c611876bd4eb8f5242df211b4",
+  "go_criteria_all_required": true,
+  "go_criteria_met": false,
+  "neural_stage1_implemented": false,
+  "reasons": [
+    "NO_EXACT_COMMON_SUPPORT_PAPER_B0_BENEFIT_EVIDENCE",
+    "SUSTAINED_CORRELATOR_CONTROL_ALARM",
+    "RELATION_DESTRUCTION_CRITERION_NOT_MET",
+    "PLAUSIBLE_TEXBAT_COMMON_ONSET_NOT_REPRODUCED",
+    "OAKBAT_PLAUSIBLE_ONSET_CONFIRMATION_NOT_MET"
+  ],
+  "recommended_next_action": "Stop Q-COMET; retain Stage-0 artifacts as a negative-result record.",
+  "schema": "gnss-doppler-lab.q-comet-verdict.v1",
+  "verdict": "NO_GO_SHARED_ONSET_HYPOTHESIS"
+}

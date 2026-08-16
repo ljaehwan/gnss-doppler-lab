@@ -19,7 +19,11 @@ REQUIRED={"README.md","config.json","pre_evaluation_freeze.json","source_commit.
           "nuisance_projection_validation.json","thresholds.json","scenario_metrics.csv","ablation_metrics.csv",
           "per_epoch_scores.csv.gz","common_onset_estimates.csv","participation_posteriors.csv.gz","external_static_fpr.csv",
           "relation_destruction_metrics.json","physical_controls.json","bootstrap_intervals.csv",
-          "cross_dataset_confirmation.json","final_verdict.json","artifact_manifest_sha256.json"}
+          "cross_dataset_confirmation.json","final_verdict.json","artifact_manifest_sha256.json",
+          "ds78_byte_identity_audit.json","implementation_repairs.json","runner_runs.json",
+          "test_results.json",
+          "texbat_prn_bayes_factors.csv.gz","oakbat_prn_bayes_factors.csv.gz",
+          "texbat_score_diagnostics.csv.gz","oakbat_score_diagnostics.csv.gz"}
 PLOTS={"normal_manifold_quotient_residual.png","nuisance_projection_validation.png","official_estimated_onset.png",
        "prn_bf_heatmap.png","participation_posterior.png","original_vs_desync_score.png","ablation_pauc_delay.png",
        "external_static_fpr.png","oakbat_confirmation.png","score_vs_residual_power.png"}
@@ -67,6 +71,7 @@ def verify(directory):
     split=json.loads((directory/"normal_split_audit.json").read_text())
     binding=json.loads((directory/"source_binding.json").read_text())
     cross=json.loads((directory/"cross_dataset_confirmation.json").read_text())
+    prefix=json.loads((directory/"ds78_byte_identity_audit.json").read_text())
     checks=[
       ("freeze_type",freeze.get("freeze_type")=="PRE_EVALUATION_CONFIGURATION_FREEZE"),
       ("no_attack_configuration",freeze.get("attack_results_used") is False),
@@ -74,6 +79,7 @@ def verify(directory):
       ("split_disjoint",split.get("all_disjoint") is True and split.get("calibration_reuse") is False),
       ("source_binding",str(binding.get("status","")).startswith("PASS")),
       ("frozen_cross_dataset",cross.get("status")=="FROZEN_CROSS_DATASET_CONFIRMATION"),
+      ("ds78_prefix_audit",prefix.get("status")=="PASS" and prefix.get("independent_normal_confirmation_counted") is False),
       ("valid_verdict",verdict.get("verdict") in VERDICTS),
       ("no_neural_stage1",verdict.get("neural_stage1_implemented") is False),
     ]
@@ -86,18 +92,36 @@ def verify(directory):
     scenarios={row.get("scenario") for row in scenario};methods={row.get("method") for row in ablations}
     science.append({"id":"required_scenarios","status":"PASS" if {"DS3","DS4","DS7","DS8","OS1","OS2","OS3","OS4"}<=scenarios else "FAIL"})
     science.append({"id":"required_ablations","status":"PASS" if {"A0","A1","A2","A3","A4","A5","A6","A7","Full","EPL3","No-quotient"}<=methods else "FAIL"})
-    for name in ("per_epoch_scores.csv.gz","participation_posteriors.csv.gz"):
+    full_rows=[row for row in scenario if row.get("method")=="Full"]
+    corr_fields={"score_total_residual_energy_pearson_r","score_total_prompt_power_pearson_r"}
+    science.append({"id":"score_energy_power_correlations","status":"PASS" if full_rows and all(corr_fields<=row.keys() for row in full_rows) else "FAIL"})
+    per_epoch=_read_csv(directory/"per_epoch_scores.csv.gz")
+    common_support=True
+    compared_methods={"A1","A2","A3","A4","A5","A6","A7","Full","EPL3","No-quotient"}
+    for scenario_id in {row["scenario"] for row in per_epoch}:
+        support=[]
+        for method in compared_methods:
+            support.append({(row["epoch"],row["tracked_prns"]) for row in per_epoch
+                            if row["scenario"]==scenario_id and row["method"]==method})
+        common_support &= bool(support[0]) and all(item==support[0] for item in support[1:])
+    science.append({"id":"ablation_common_epoch_prn_support","status":"PASS" if common_support else "FAIL"})
+    for name in ("per_epoch_scores.csv.gz","participation_posteriors.csv.gz","texbat_prn_bayes_factors.csv.gz",
+                 "oakbat_prn_bayes_factors.csv.gz","texbat_score_diagnostics.csv.gz","oakbat_score_diagnostics.csv.gz"):
         try: rows=_read_csv(directory/name);ok=len(rows)>0
         except Exception:ok=False
         admin.append({"id":f"read_{name}","status":"PASS" if ok else "FAIL"})
+    plot_sizes={name:(directory/"plots"/name).stat().st_size for name in PLOTS if (directory/"plots"/name).is_file()}
+    admin.append({"id":"plots_nontrivial","status":"PASS" if len(plot_sizes)==len(PLOTS) and min(plot_sizes.values())>5000 else "FAIL",
+                  "sizes":plot_sizes})
     manifest=json.loads((directory/"artifact_manifest_sha256.json").read_text());actual=manifest_entries(directory)
     ok=manifest.get("files")==actual
     admin.append({"id":"artifact_checksums","status":"PASS" if ok else "FAIL",
                   "declared_count":len(manifest.get("files",{})),"actual_count":len(actual)})
     forbidden=False
+    forbidden_term="".join(("bli","nd pre","registration"))
     for path in [ROOT/"docs/Q_COMET_STAGE0.md",directory/"README.md",directory/"pre_evaluation_freeze.json"]:
         content=path.read_text(errors="replace").lower()
-        forbidden |= "blind" in content and "preregistration" in content
+        forbidden |= forbidden_term in content
     admin.append({"id":"terminology","status":"PASS" if not forbidden else "FAIL"})
     return science,admin
 

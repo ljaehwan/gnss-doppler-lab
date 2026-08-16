@@ -1,0 +1,151 @@
+{
+  "any_sustained_alarm": true,
+  "cleanStatic_holdout_fpr": 0.0,
+  "controls": [
+    {
+      "control": "cleanStatic_holdout",
+      "domain": "correlator",
+      "false_positive_rate": 0.0,
+      "longest_alarm_run_epochs": 0,
+      "sustained_alarm_5s": false
+    },
+    {
+      "control": "gain_0.5",
+      "domain": "correlator",
+      "longest_alarm_run_epochs": 0,
+      "sustained_alarm_5s": false
+    },
+    {
+      "control": "gain_0.75",
+      "domain": "correlator",
+      "longest_alarm_run_epochs": 0,
+      "sustained_alarm_5s": false
+    },
+    {
+      "control": "gain_1.25",
+      "domain": "correlator",
+      "longest_alarm_run_epochs": 1,
+      "sustained_alarm_5s": false
+    },
+    {
+      "control": "gain_2.0",
+      "domain": "correlator",
+      "longest_alarm_run_epochs": 91,
+      "sustained_alarm_5s": true
+    },
+    {
+      "control": "phase_0.5",
+      "domain": "correlator",
+      "longest_alarm_run_epochs": 11,
+      "sustained_alarm_5s": true
+    },
+    {
+      "control": "phase_1.5",
+      "domain": "correlator",
+      "longest_alarm_run_epochs": 71,
+      "sustained_alarm_5s": true
+    },
+    {
+      "control": "navigation_bit_sign_flip",
+      "domain": "correlator",
+      "longest_alarm_run_epochs": 0,
+      "sustained_alarm_5s": false
+    },
+    {
+      "control": "code_recenter_-0.05",
+      "domain": "correlator",
+      "longest_alarm_run_epochs": 9,
+      "sustained_alarm_5s": false
+    },
+    {
+      "control": "code_recenter_0.05",
+      "domain": "correlator",
+      "longest_alarm_run_epochs": 8,
+      "sustained_alarm_5s": false
+    },
+    {
+      "control": "small_doppler_shift",
+      "domain": "correlator",
+      "longest_alarm_run_epochs": 65,
+      "sustained_alarm_5s": true
+    },
+    {
+      "control": "empirical_clean_noise_0.5",
+      "domain": "correlator",
+      "longest_alarm_run_epochs": 0,
+      "sustained_alarm_5s": false
+    },
+    {
+      "control": "empirical_clean_noise_1.0",
+      "domain": "correlator",
+      "longest_alarm_run_epochs": 0,
+      "sustained_alarm_5s": false
+    },
+    {
+      "control": "empirical_clean_noise_2.0",
+      "domain": "correlator",
+      "longest_alarm_run_epochs": 0,
+      "sustained_alarm_5s": false
+    },
+    {
+      "control": "receiver_clock_like_drift",
+      "domain": "correlator",
+      "longest_alarm_run_epochs": 167,
+      "sustained_alarm_5s": true
+    },
+    {
+      "control": "single_prn_disturbance",
+      "domain": "correlator",
+      "longest_alarm_run_epochs": 1,
+      "sustained_alarm_5s": false
+    },
+    {
+      "control": "independent_multipath_like",
+      "domain": "correlator",
+      "longest_alarm_run_epochs": 0,
+      "sustained_alarm_5s": false
+    },
+    {
+      "control": "exact_aligned_counterfeit_expected_undetectable",
+      "domain": "correlator",
+      "longest_alarm_run_epochs": 11,
+      "sustained_alarm_5s": true
+    },
+    {
+      "control": "cn0_drop_metadata_only",
+      "domain": "correlator_or_metadata",
+      "executed": true,
+      "longest_alarm_run_epochs": 0,
+      "note": "C/N0 is excluded from score; support changes, epoch gaps, and segment changes use the frozen reset/support logic.",
+      "sustained_alarm_5s": false
+    },
+    {
+      "control": "prn_drop_add",
+      "domain": "correlator_or_metadata",
+      "executed": true,
+      "longest_alarm_run_epochs": 0,
+      "note": "C/N0 is excluded from score; support changes, epoch gaps, and segment changes use the frozen reset/support logic.",
+      "sustained_alarm_5s": false
+    },
+    {
+      "control": "timestamp_gap",
+      "domain": "correlator_or_metadata",
+      "executed": true,
+      "longest_alarm_run_epochs": 0,
+      "note": "C/N0 is excluded from score; support changes, epoch gaps, and segment changes use the frozen reset/support logic.",
+      "sustained_alarm_5s": false
+    },
+    {
+      "control": "lock_loss_reacquisition",
+      "domain": "correlator_or_metadata",
+      "executed": true,
+      "longest_alarm_run_epochs": 0,
+      "note": "C/N0 is excluded from score; support changes, epoch gaps, and segment changes use the frozen reset/support logic.",
+      "sustained_alarm_5s": false
+    }
+  ],
+  "physical_scope": "correlator-domain controls only; not raw-IQ physical proof",
+  "schema": "gnss-doppler-lab.q-comet-controls.v1",
+  "sustained_definition": "at least 5 s (10 epochs)",
+  "threshold": 0.0
+}

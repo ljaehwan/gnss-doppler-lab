@@ -1,0 +1,292 @@
+{
+  "block_bootstrap_s": 10,
+  "scenarios": [
+    {
+      "desynchronized_mean_post": 1.1284243069915219,
+      "family": "DS3",
+      "original_mean_post": 1.7538972077129324,
+      "paired_block_bootstrap": {
+        "alarm_delay_change_s": {
+          "block_s": 10.0,
+          "ci_high": 115.5,
+          "ci_low": 61.0,
+          "estimate": 83.0,
+          "finite_replicates": 500,
+          "replicates": 500
+        },
+        "pauc_delta": {
+          "block_s": 10.0,
+          "ci_high": 0.07415987639132823,
+          "ci_low": -0.04846378627305463,
+          "estimate": 0.014793321092027911,
+          "finite_replicates": 500,
+          "replicates": 500
+        },
+        "persistent_detection_delta": {
+          "block_s": 10.0,
+          "ci_high": 0.11203880485990572,
+          "ci_low": -0.11922318084537187,
+          "estimate": 0.0,
+          "finite_replicates": 500,
+          "replicates": 500
+        },
+        "score_delta": {
+          "block_s": 10.0,
+          "ci_high": 2.609407629614897,
+          "ci_low": -1.2021120172358244,
+          "estimate": 0.625472900721411,
+          "finite_replicates": 500,
+          "replicates": 500
+        }
+      },
+      "preservation_audit": {
+        "preserves_norms_exactly": true,
+        "preserves_vectors_exactly": true,
+        "seed": 20260816,
+        "shifts": {
+          "1": 2,
+          "10": 448,
+          "13": 493,
+          "16": 626,
+          "18": 15,
+          "19": 571,
+          "20": 315,
+          "23": 185,
+          "24": 13,
+          "3": 126,
+          "30": 163,
+          "32": 33,
+          "4": 5,
+          "5": 25,
+          "6": 101,
+          "7": 500,
+          "8": 664,
+          "9": 23
+        },
+        "tracked_count_and_dimensions_preserved": true
+      },
+      "scenario": "DS3",
+      "score_delta_bootstrap": {
+        "block_s": 10.0,
+        "ci_high": 2.751714961832366,
+        "ci_low": -1.4827047906120319,
+        "estimate": 0.625472900721411,
+        "replicates": 500
+      },
+      "score_drop_fraction": 0.3566189044436772
+    },
+    {
+      "desynchronized_mean_post": 0.0,
+      "family": "DS4",
+      "original_mean_post": 0.0,
+      "paired_block_bootstrap": {
+        "alarm_delay_change_s": {
+          "block_s": 10.0,
+          "ci_high": null,
+          "ci_low": null,
+          "estimate": null,
+          "finite_replicates": 0,
+          "replicates": 500
+        },
+        "pauc_delta": {
+          "block_s": 10.0,
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "estimate": 0.0,
+          "finite_replicates": 443,
+          "replicates": 500
+        },
+        "persistent_detection_delta": {
+          "block_s": 10.0,
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "estimate": 0.0,
+          "finite_replicates": 443,
+          "replicates": 500
+        },
+        "score_delta": {
+          "block_s": 10.0,
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "estimate": 0.0,
+          "finite_replicates": 443,
+          "replicates": 500
+        }
+      },
+      "preservation_audit": {
+        "preserves_norms_exactly": true,
+        "preserves_vectors_exactly": true,
+        "seed": 20260817,
+        "shifts": {
+          "10": 243,
+          "13": 225,
+          "14": 1,
+          "15": 5,
+          "16": 163,
+          "19": 24,
+          "20": 158,
+          "23": 186,
+          "28": 9,
+          "3": 48,
+          "30": 143,
+          "4": 7,
+          "6": 168,
+          "7": 185
+        },
+        "tracked_count_and_dimensions_preserved": true
+      },
+      "scenario": "DS4",
+      "score_delta_bootstrap": {
+        "block_s": 10.0,
+        "ci_high": 0.0,
+        "ci_low": 0.0,
+        "estimate": 0.0,
+        "replicates": 500
+      },
+      "score_drop_fraction": 0.0
+    },
+    {
+      "desynchronized_mean_post": 27.225900388745945,
+      "family": "DS7-8",
+      "original_mean_post": 99.49283579023847,
+      "paired_block_bootstrap": {
+        "alarm_delay_change_s": {
+          "block_s": 10.0,
+          "ci_high": -62.0,
+          "ci_low": -120.0,
+          "estimate": -92.0,
+          "finite_replicates": 500,
+          "replicates": 500
+        },
+        "pauc_delta": {
+          "block_s": 10.0,
+          "ci_high": 0.3461538461538461,
+          "ci_low": 0.10765138663911673,
+          "estimate": 0.22710622710622713,
+          "finite_replicates": 500,
+          "replicates": 500
+        },
+        "persistent_detection_delta": {
+          "block_s": 10.0,
+          "ci_high": 0.21164080459770104,
+          "ci_low": -0.48189547163057095,
+          "estimate": -0.1459627329192547,
+          "finite_replicates": 500,
+          "replicates": 500
+        },
+        "score_delta": {
+          "block_s": 10.0,
+          "ci_high": 164.43890066035183,
+          "ci_low": 1.4146775727800418,
+          "estimate": 72.26693540149255,
+          "finite_replicates": 500,
+          "replicates": 500
+        }
+      },
+      "preservation_audit": {
+        "preserves_norms_exactly": true,
+        "preserves_vectors_exactly": true,
+        "seed": 20260818,
+        "shifts": {
+          "10": 373,
+          "11": 12,
+          "13": 300,
+          "16": 220,
+          "19": 279,
+          "20": 39,
+          "23": 196,
+          "25": 8,
+          "29": 15,
+          "3": 167,
+          "30": 351,
+          "32": 11,
+          "6": 216,
+          "7": 27,
+          "8": 60
+        },
+        "tracked_count_and_dimensions_preserved": true
+      },
+      "scenario": "DS7",
+      "score_delta_bootstrap": {
+        "block_s": 10.0,
+        "ci_high": 162.45184743280535,
+        "ci_low": 2.8070972868452295,
+        "estimate": 72.26693540149255,
+        "replicates": 500
+      },
+      "score_drop_fraction": 0.7263531572650465
+    },
+    {
+      "desynchronized_mean_post": 193.27171054456164,
+      "family": "DS7-8",
+      "original_mean_post": 250.29355153842255,
+      "paired_block_bootstrap": {
+        "alarm_delay_change_s": {
+          "block_s": 10.0,
+          "ci_high": -62.0,
+          "ci_low": -110.0,
+          "estimate": -92.0,
+          "finite_replicates": 500,
+          "replicates": 500
+        },
+        "pauc_delta": {
+          "block_s": 10.0,
+          "ci_high": 0.36090223081342987,
+          "ci_low": 0.13730039569884114,
+          "estimate": 0.24548014846179989,
+          "finite_replicates": 500,
+          "replicates": 500
+        },
+        "persistent_detection_delta": {
+          "block_s": 10.0,
+          "ci_high": -0.1188257575757577,
+          "ci_low": -0.3890465465465465,
+          "estimate": -0.26111111111111107,
+          "finite_replicates": 500,
+          "replicates": 500
+        },
+        "score_delta": {
+          "block_s": 10.0,
+          "ci_high": 149.2097944741207,
+          "ci_low": -22.314185923937888,
+          "estimate": 57.0218409938609,
+          "finite_replicates": 500,
+          "replicates": 500
+        }
+      },
+      "preservation_audit": {
+        "preserves_norms_exactly": true,
+        "preserves_vectors_exactly": true,
+        "seed": 20260819,
+        "shifts": {
+          "10": 30,
+          "11": 94,
+          "13": 477,
+          "14": 24,
+          "16": 143,
+          "19": 674,
+          "20": 406,
+          "23": 749,
+          "25": 1,
+          "3": 608,
+          "30": 647,
+          "32": 79,
+          "6": 612,
+          "7": 319,
+          "8": 81
+        },
+        "tracked_count_and_dimensions_preserved": true
+      },
+      "scenario": "DS8",
+      "score_delta_bootstrap": {
+        "block_s": 10.0,
+        "ci_high": 145.06377728974056,
+        "ci_low": -26.588627544250897,
+        "estimate": 57.0218409938609,
+        "replicates": 500
+      },
+      "score_drop_fraction": 0.22781985649801084
+    }
+  ],
+  "schema": "gnss-doppler-lab.q-comet-relation-destruction.v1"
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "gnss-doppler-lab.q-comet-test-results.v1",
+  "focused": {
+    "command": "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_q_comet.py",
+    "exit_code": 0,
+    "passed": 17,
+    "failed": 0,
+    "status": "PASS"
+  },
+  "full_repository": {
+    "command": "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q",
+    "exit_code": 1,
+    "passed": 458,
+    "failed": 6,
+    "status": "PASS_WITH_PRE_EXISTING_UNRELATED_FAILURES",
+    "failed_tests": [
+      "tests/test_peak_floor_contrastive_predictive.py::test_predictive_pairs_use_only_past_context_and_future_endpoint",
+      "tests/test_peak_floor_contrastive_predictive.py::test_info_nce_prefers_correct_future_pairing",
+      "tests/test_peak_floor_contrastive_predictive.py::test_model_predicts_normalized_future_embedding_from_joint_peak_floor_context",
+      "tests/test_peak_floor_contrastive_predictive.py::test_scoring_timestamp_is_future_endpoint_and_is_causal",
+      "tests/test_peak_floor_contrastive_predictive.py::test_tiny_normal_only_campaign_writes_cpc_artifacts",
+      "tests/test_score_peak_floor_contrastive_predictive.py::test_frozen_cpc_scores_attack_run_without_refitting"
+    ],
+    "common_failure": "FileNotFoundError: scripts/train_peak_floor_temporal_autoencoder.py",
+    "base_sha_evidence": "git ls-tree -r --name-only 461eb4dc7bb794e719295daf028f6811658ba37f contains scripts/train_peak_floor_contrastive_predictive.py but not scripts/train_peak_floor_temporal_autoencoder.py",
+    "q_comet_files_in_traceback": false
+  },
+  "verifier": {
+    "command": "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/verify_q_comet_stage0.py artifacts/q_comet_stage0_static --create-manifest",
+    "overall_status": "PASS",
+    "science_status": "PASS",
+    "administrative_status": "PASS"
+  }
+}

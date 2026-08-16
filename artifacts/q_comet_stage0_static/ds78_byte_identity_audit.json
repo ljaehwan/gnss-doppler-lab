@@ -1,0 +1,36 @@
+{
+  "ds7_pre110_identical_to_cleanStatic": true,
+  "ds8_pre110_identical_to_cleanStatic": true,
+  "independent_normal_confirmation_counted": false,
+  "independent_normal_confirmation_policy": "Any byte-identical pre-110 s prefix is not counted as independent normal confirmation.",
+  "records": [
+    {
+      "file_size_bytes": 48016392192,
+      "path": "/home/ubuntu/unraid_hdd/texbat/raw/cleanStatic.bin",
+      "prefix_bytes": 11000000000,
+      "prefix_duration_s": 110,
+      "prefix_sha256": "f0ba0d3816f21fcad14f71f9bf2087e37c0580e44f2168dfd95ceeeef9de9866",
+      "recording": "cleanStatic"
+    },
+    {
+      "file_size_bytes": 27059290112,
+      "path": "/home/ubuntu/unraid_hdd/texbat/raw/ds7.bin",
+      "prefix_bytes": 11000000000,
+      "prefix_duration_s": 110,
+      "prefix_sha256": "f0ba0d3816f21fcad14f71f9bf2087e37c0580e44f2168dfd95ceeeef9de9866",
+      "recording": "DS7"
+    },
+    {
+      "file_size_bytes": 47000141168,
+      "path": "/home/ubuntu/unraid_hdd/texbat/raw/ds8.bin",
+      "prefix_bytes": 11000000000,
+      "prefix_duration_s": 110,
+      "prefix_sha256": "f0ba0d3816f21fcad14f71f9bf2087e37c0580e44f2168dfd95ceeeef9de9866",
+      "recording": "DS8"
+    }
+  ],
+  "sample_format": "interleaved int16 I/Q (4 bytes/complex sample)",
+  "sample_rate_hz": 25000000,
+  "schema": "gnss-doppler-lab.q-comet-ds78-prefix-audit.v1",
+  "status": "PASS"
+}

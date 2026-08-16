@@ -216,9 +216,10 @@ def score_common_onset(table: InnovationTable, *, memory_epochs: int,
         support = sorted({int(p) for e, p in zip(table.epoch, table.prn) if int(e) == epoch})
         if len(support) < min_prns:
             rows.append({"epoch": epoch, "time_s": time_by_epoch[epoch], "score": NO_SCORE,
-                         "estimated_onset_epoch": None, "tracked_prns": len(support), "participation": NO_SCORE})
+                         "estimated_onset_epoch": None, "tracked_prns": len(support), "participation": NO_SCORE,
+                         "prn_log_bf": {}, "prn_participation_posterior": {}})
             continue
-        best_score, best_k, best_bf = -np.inf, None, None
+        best_score, best_k, best_bf, best_prns = -np.inf, None, None, None
         start_min = max(epoch_values[0], epoch - memory_epochs + 1)
         for onset in range(start_min, epoch + 1):
             terms, bfs = [], []
@@ -232,15 +233,23 @@ def score_common_onset(table: InnovationTable, *, memory_epochs: int,
                 continue
             trial = sum(terms) - (penalty if penalty is not None else 0.5 * math.log(memory_epochs + 1))
             if trial > best_score:
-                best_score, best_k, best_bf = trial, onset, bfs
+                best_score, best_k, best_bf, best_prns = trial, onset, bfs, [
+                    prn for prn in support
+                    if all((e, prn) in lookup for e in range(onset, epoch + 1))
+                ]
         if best_k is None:
             rows.append({"epoch": epoch, "time_s": time_by_epoch[epoch], "score": NO_SCORE,
-                         "estimated_onset_epoch": None, "tracked_prns": len(support), "participation": NO_SCORE})
+                         "estimated_onset_epoch": None, "tracked_prns": len(support), "participation": NO_SCORE,
+                         "prn_log_bf": {}, "prn_participation_posterior": {}})
         else:
             posterior = [1 / (1 + math.exp(np.clip(math.log((1-participation)/participation) - bf, -700, 700))) for bf in best_bf]
             rows.append({"epoch": epoch, "time_s": time_by_epoch[epoch], "score": float(max(0.0, best_score)),
                          "estimated_onset_epoch": int(best_k), "tracked_prns": len(support),
-                         "participation": float(np.mean(posterior))})
+                         "participation": float(np.mean(posterior)),
+                         "prn_log_bf": {str(prn): float(bf) for prn, bf in zip(best_prns, best_bf)},
+                         "prn_participation_posterior": {
+                             str(prn): float(value) for prn, value in zip(best_prns, posterior)
+                         }})
     return rows
 
 

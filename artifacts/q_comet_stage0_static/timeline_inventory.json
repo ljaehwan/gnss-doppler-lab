@@ -1,5 +1,11 @@
 {
   "DS4_scope": "transition-only because raw file ends at about 128.2 s; no 225 s pull-off claim",
+  "DS7_DS8_pre110_byte_identity_audit": {
+    "artifact": "ds78_byte_identity_audit.json",
+    "counted_as_independent_normal_confirmation": false,
+    "ds7_identical_to_cleanStatic": true,
+    "ds8_identical_to_cleanStatic": true
+  },
   "official_timelines": {
     "DS3": {
       "family": "DS3",

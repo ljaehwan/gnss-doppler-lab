@@ -1,0 +1,32 @@
+{
+  "repairs": [
+    {
+      "attack_result_driven": false,
+      "reason": "Legacy DS4 manifest omitted raw-IQ SHA; regenerated from raw IQ with the pinned complex-nine-tap receiver before scoring.",
+      "scope": "DS4 provenance adapter"
+    },
+    {
+      "attack_result_driven": false,
+      "failed_run_id": "20260816T035459Z-q-comet-oakbat-confirmation",
+      "reason": "Legacy Method-A MAT files preserved magnitudes plus Prompt I/Q, not genuine complex I/Q for all nine taps. The first run stopped while loading normal cleanStatic, before OS1-OS4 scoring. Raw IQ was then regenerated with the pinned receiver.",
+      "scope": "OAKBAT receiver adapter"
+    },
+    {
+      "attack_result_driven": false,
+      "reason": "The persistence predictor produces one extra leading target row. A post-evaluation support audit aligned A6 by immutable receiver row index to Full before scoring; Full and its frozen configuration/scores are unchanged.",
+      "scope": "A6 common-support alignment"
+    },
+    {
+      "attack_result_driven": false,
+      "reason": "The first report pass incorrectly populated TEXBAT onset/pre-onset summary files from No-quotient. The selector was corrected to the already-computed Full row; no detector score or configuration changed.",
+      "scope": "Full summary selector"
+    },
+    {
+      "attack_result_driven": false,
+      "reason": "Added per-PRN Bayes-factor export, score-energy/power correlations, DS7/DS8 byte-prefix audit, and data-backed plots without changing Full scores, thresholds, priors, windows, or model selection.",
+      "scope": "evidence diagnostics"
+    }
+  ],
+  "schema": "gnss-doppler-lab.q-comet-post-freeze-repairs.v1",
+  "scientific_configuration_changed": false
+}
