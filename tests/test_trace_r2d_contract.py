@@ -60,12 +60,15 @@ def test_r2d_clean_handoff_is_normal_only_and_raw_time_selected():
 
 def test_r2d_configs_preserve_phase_a_and_only_repair_clean_phase_b_mapping():
     runner = load_script("run_trace_stage0_r2d.py")
+    mirror = json.loads((ARTIFACT / "handoff_path_mirror_manifest.json").read_text())
+    assert mirror["status"] == "PASS"
+    assert mirror["sha256_identity"] is True
     for name in runner.driver.SCENARIOS:
         assert runner.frozen_config_text(name) == (ARTIFACT / f"frozen_configs/{runner.driver.SCENARIOS[name]['slug']}.conf").read_text()
         assert "SignalSource.enable_terminal_drain=true\n" in runner.frozen_config_text(name)
     clean = runner.frozen_phase_b_config_text("OAKBAT.cleanStatic")
     assert "SignalSource.seconds_to_skip=0.0\n" in clean
-    assert "Tracking_1C.trace_handoff_filename=" + str((ARTIFACT / "handoffs/oakbat_cleanstatic.csv").resolve()) in clean
+    assert "Tracking_1C.trace_handoff_filename=" + str((runner.driver.HANDOFF_ROOT / "oakbat_cleanstatic.csv").resolve()) in clean
     for name in ("OAKBAT.OS3", "OAKBAT.OS4"):
         text = runner.frozen_phase_b_config_text(name)
         assert "SignalSource.seconds_to_skip=90.0\n" in text

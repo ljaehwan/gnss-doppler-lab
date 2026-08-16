@@ -16,7 +16,7 @@ driver.RECEIVER = Path(
     "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/"
     "trace-stage0-r2c-terminal-drain-repair/receiver-build/src/main/gnss-sdr"
 )
-driver.HANDOFF_ROOT = driver.ARTIFACT / "handoffs"
+driver.HANDOFF_ROOT = driver.SSD_ROOT / "handoffs"
 driver.RELEASE = "r2d"
 driver.PHASE_B_SCENARIOS["OAKBAT.cleanStatic"]["phase_b_skip_s"] = 0.0
 driver.PHASE_B_SCENARIOS["OAKBAT.cleanStatic"]["phase_b_handoff"] = (

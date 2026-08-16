@@ -36,6 +36,9 @@ def main() -> int:
     clean = handoffs["scenarios"]["OAKBAT.cleanStatic"]
     if not clean["normal_only"] or clean["attack_data_used"]:
         raise ValueError("cleanStatic handoff is not sealed normal-only support")
+    mirror = json.loads((ARTIFACT / "handoff_path_mirror_manifest.json").read_text())
+    if mirror["status"] != "PASS" or not mirror["sha256_identity"]:
+        raise ValueError("short runtime handoff mirror did not pass byte-identity checks")
     frozen = ARTIFACT / "frozen_configs"
     frozen.mkdir(parents=True, exist_ok=True)
     phase_a = {}
@@ -86,6 +89,8 @@ def main() -> int:
         "handoffs": {name: item["handoff_sha256"] for name, item in handoffs["scenarios"].items()},
     }
     prereg["repair_plan"] = plan
+    prereg["config_path_length_amendment"] = "config_path_length_amendment_preregistered.json"
+    prereg["handoff_path_mirror"] = "handoff_path_mirror_manifest.json"
     write("preregistration.json", prereg)
     write("handoff_manifest.json", handoffs)
     parent_config = json.loads((PARENT / "config.json").read_text())
@@ -105,6 +110,7 @@ def main() -> int:
                 "handoff_before": "oakbat_os3.csv",
                 "handoff_after": "oakbat_cleanstatic.csv",
             },
+            "runtime_handoff_path_mirror": mirror,
         },
     )
     write(
