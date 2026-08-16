@@ -51,6 +51,13 @@ def test_r2c_frozen_configs_enable_opt_in_terminal_drain():
         assert "Tracking_1C.trace_dump=true\n" in text
 
 
+def test_r2c_phase_b_dump_count_is_derived_from_frozen_handoff():
+    source = (ROOT / "scripts/run_trace_stage0_r2a.py").read_text()
+    phase_b = source[source.index("def run_phase_b_receiver") : source.index("def main")]
+    assert '"expected_dump_file_count": len(rows)' in phase_b
+    assert "len(record_counts) == len(rows)" in phase_b
+
+
 def test_r2c_receiver_patch_waits_for_natural_eos_without_row_filtering():
     patch = (ARTIFACT / "receiver_repair.diff").read_text()
     assert "SignalSource.enable_terminal_drain" not in patch

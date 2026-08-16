@@ -341,9 +341,9 @@ def run_phase_b_receiver(name: str) -> int:
         _, records = read_records(Path(item["path"]))
         record_counts.append(len(records))
     replay_validation = {
-        "expected_dump_file_count": 11,
+        "expected_dump_file_count": len(rows),
         "observed_dump_file_count": len(dumps),
-        "all_dump_files_have_physical_records": len(record_counts) == 11 and all(count > 0 for count in record_counts),
+        "all_dump_files_have_physical_records": len(record_counts) == len(rows) and all(count > 0 for count in record_counts),
         "record_counts": record_counts,
     }
     replay_validation["status"] = "PASS" if replay_validation["all_dump_files_have_physical_records"] else "FAIL"
