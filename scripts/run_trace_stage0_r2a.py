@@ -13,7 +13,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from gnss_doppler_lab.trace_native_1ms import sha256_file
+from gnss_doppler_lab.trace_native_1ms import read_records, sha256_file
 
 ARTIFACT = ROOT / "artifacts/trace_stage0_r2a_reproducibility_repair"
 SSD_ROOT = Path("/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2a-reproducibility-repair")
@@ -37,8 +37,8 @@ SCENARIOS = {
         "sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
         "fs": 25_000_000,
         "base_config": Path("/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/receiver.conf"),
-        "smoke_skip_s": 90.0,
-        "smoke_duration_s": 45.0,
+        "smoke_skip_s": 60.0,
+        "smoke_duration_s": 75.0,
         "handoff": "texbat_ds3.csv",
     },
     "OAKBAT.OS3": {
@@ -47,8 +47,8 @@ SCENARIOS = {
         "sha256": "2a3c3c5cf1accaa287fe14181e43070903500e0250c69e3c335f91c89c0cdc6c",
         "fs": 5_000_000,
         "base_config": Path("/home/ubuntu/ssd_data/gnss-early-detection/artifacts/q-comet-oakbat-complex9/os3/receiver/os3-complex9/receiver.conf"),
-        "smoke_skip_s": 90.0,
-        "smoke_duration_s": 45.0,
+        "smoke_skip_s": 60.0,
+        "smoke_duration_s": 75.0,
         "handoff": "oakbat_os3.csv",
     },
 }
@@ -61,7 +61,7 @@ PHASE_B_SCENARIOS = {
     },
     "TEXBAT.DS3": {
         **SCENARIOS["TEXBAT.DS3"],
-        "phase_b_skip_s": 90.0,
+        "phase_b_skip_s": 60.0,
         "phase_b_handoff": "texbat_ds3.csv",
     },
     "TEXBAT.DS7": {
@@ -70,7 +70,7 @@ PHASE_B_SCENARIOS = {
         "sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
         "fs": 25_000_000,
         "base_config": Path("/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/receiver.conf"),
-        "phase_b_skip_s": 90.0,
+        "phase_b_skip_s": 60.0,
         "phase_b_handoff": "texbat_ds3.csv",
     },
     "OAKBAT.cleanStatic": {
@@ -79,12 +79,12 @@ PHASE_B_SCENARIOS = {
         "sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
         "fs": 5_000_000,
         "base_config": Path("/home/ubuntu/ssd_data/gnss-early-detection/artifacts/q-comet-oakbat-complex9/cleanstatic/receiver/cleanstatic-complex9/receiver.conf"),
-        "phase_b_skip_s": 90.0,
+        "phase_b_skip_s": 60.0,
         "phase_b_handoff": "oakbat_os3.csv",
     },
     "OAKBAT.OS3": {
         **SCENARIOS["OAKBAT.OS3"],
-        "phase_b_skip_s": 90.0,
+        "phase_b_skip_s": 60.0,
         "phase_b_handoff": "oakbat_os3.csv",
     },
     "OAKBAT.OS4": {
@@ -93,7 +93,7 @@ PHASE_B_SCENARIOS = {
         "sha256": "803f3c76bcc618efbc6b394eb536fe61ed8c3e34b1822c0088b4475621bfa8e4",
         "fs": 5_000_000,
         "base_config": Path("/home/ubuntu/ssd_data/gnss-early-detection/artifacts/q-comet-oakbat-complex9/os4/receiver/os4-complex9/receiver.conf"),
-        "phase_b_skip_s": 90.0,
+        "phase_b_skip_s": 60.0,
         "phase_b_handoff": "oakbat_os3.csv",
     },
 }
@@ -222,9 +222,10 @@ def audit_raw() -> int:
     return 0 if status == "PASS" else 2
 
 
-def run_receiver(name: str, repetition: int) -> int:
+def run_receiver(name: str, repetition: int, attempt: str | None = None) -> int:
     spec = SCENARIOS[name]
-    out = SSD_ROOT / "dumps/phase_a" / spec["slug"] / f"rep{repetition}"
+    repetition_directory = f"rep{repetition}" if attempt is None else f"rep{repetition}-{attempt}"
+    out = SSD_ROOT / "dumps/phase_a" / spec["slug"] / repetition_directory
     if out.exists() and any(out.iterdir()):
         raise FileExistsError(f"refusing to overwrite existing R2a replay directory: {out}")
     out.mkdir(parents=True, exist_ok=True)
@@ -258,10 +259,22 @@ def run_receiver(name: str, repetition: int) -> int:
         {"path": str(path), "size_bytes": path.stat().st_size, "sha256": sha256_file(path)}
         for path in sorted(out.glob("trace_native_1ms_ch_*.bin"))
     ]
+    record_counts = []
+    for item in dumps:
+        _, records = read_records(Path(item["path"]))
+        record_counts.append(len(records))
+    replay_validation = {
+        "expected_dump_file_count": 11,
+        "observed_dump_file_count": len(dumps),
+        "all_dump_files_have_physical_records": len(record_counts) == 11 and all(count > 0 for count in record_counts),
+        "record_counts": record_counts,
+    }
+    replay_validation["status"] = "PASS" if replay_validation["all_dump_files_have_physical_records"] else "FAIL"
     manifest = {
         "schema": "gnss-doppler-lab.trace-r2a-receiver-replay.v1",
         "scenario_id": name,
         "repetition": repetition,
+        "attempt": attempt,
         "started_at": started,
         "ended_at": ended,
         "command": command,
@@ -283,10 +296,11 @@ def run_receiver(name: str, repetition: int) -> int:
             "duration_s": duration_s,
         },
         "dump_files": dumps,
+        "replay_validation": replay_validation,
     }
     dump_json(out / "manifest.json", manifest)
     print(json.dumps(manifest, indent=2, sort_keys=True), flush=True)
-    return completed.returncode
+    return completed.returncode if completed.returncode else (0 if replay_validation["status"] == "PASS" else 2)
 
 
 def run_phase_b_receiver(name: str) -> int:
@@ -317,6 +331,17 @@ def run_phase_b_receiver(name: str) -> int:
         {"path": str(path), "size_bytes": path.stat().st_size, "sha256": sha256_file(path)}
         for path in sorted(out.glob("trace_native_1ms_ch_*.bin"))
     ]
+    record_counts = []
+    for item in dumps:
+        _, records = read_records(Path(item["path"]))
+        record_counts.append(len(records))
+    replay_validation = {
+        "expected_dump_file_count": 11,
+        "observed_dump_file_count": len(dumps),
+        "all_dump_files_have_physical_records": len(record_counts) == 11 and all(count > 0 for count in record_counts),
+        "record_counts": record_counts,
+    }
+    replay_validation["status"] = "PASS" if replay_validation["all_dump_files_have_physical_records"] else "FAIL"
     manifest = {
         "schema": "gnss-doppler-lab.trace-r2a-receiver-replay.v1",
         "scenario_id": name,
@@ -338,10 +363,11 @@ def run_phase_b_receiver(name: str) -> int:
         "raw_iq_stable_during_run": raw_before == raw_after,
         "raw_sample_range": {"start_inclusive": raw_offset, "end_exclusive": None, "seconds_to_skip": skip_s, "duration_s": None},
         "dump_files": dumps,
+        "replay_validation": replay_validation,
     }
     dump_json(out / "manifest.json", manifest)
     print(json.dumps(manifest, indent=2, sort_keys=True), flush=True)
-    return completed.returncode
+    return completed.returncode if completed.returncode else (0 if replay_validation["status"] == "PASS" else 2)
 
 
 def main() -> int:
@@ -351,13 +377,14 @@ def main() -> int:
     replay = sub.add_parser("run-receiver")
     replay.add_argument("--scenario", choices=tuple(SCENARIOS), required=True)
     replay.add_argument("--repetition", type=int, required=True)
+    replay.add_argument("--attempt")
     phase_b = sub.add_parser("run-phase-b-family")
     phase_b.add_argument("--family", choices=("TEXBAT", "OAKBAT"), required=True)
     args = parser.parse_args()
     if args.command == "audit-raw":
         return audit_raw()
     if args.command == "run-receiver":
-        return run_receiver(args.scenario, args.repetition)
+        return run_receiver(args.scenario, args.repetition, args.attempt)
     phase_a_path = ARTIFACT / "rep3_rep4_reproduction_metrics.json"
     if not phase_a_path.exists() or not json.loads(phase_a_path.read_text()).get("phase_b_authorized", False):
         raise RuntimeError("Phase B NOT_AUTHORIZED: preregistered Phase A PASS record is absent")

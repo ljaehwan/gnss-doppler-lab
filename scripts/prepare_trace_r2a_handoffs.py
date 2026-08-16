@@ -56,10 +56,10 @@ def main() -> int:
     args.output.mkdir(parents=True, exist_ok=True)
     manifest = {
         "schema": "gnss-doppler-lab.trace-r2a-frozen-handoff-manifest.v1",
-        "procedure": "For each preserved pre-onset R2 channel, fix its first acquired PRN and grid Doppler; defer tracking to 5 s into the replay at the same 1 ms code-epoch residue and reset residual code/carrier phase by an explicit convention.",
+        "procedure": "For each preserved pre-onset R2 channel, fix its first acquired PRN and grid Doppler; defer tracking to 30 s into the replay at the same 1 ms code-epoch residue and reset residual code/carrier phase by an explicit convention. The 30 s boundary is fixed from the failed rep3 handoff-start audit, before any physical TRACE values were evaluated.",
         "handoff_kind": "deterministic_tracking_start_from_preserved_pre_onset_acquisition_result",
         "preserved_schema_limitation": "The R2 native tracking schema did not serialize the acquisition test statistic or original acquisition-engine sample stamp. They are therefore marked unavailable rather than inferred or fabricated. The repair freezes the observable acquisition result (channel, PRN, acquisition-grid Doppler, and code-epoch residue) and an explicit deterministic first-tracking-sample/phase convention.",
-        "guard_s_from_replay_start": 5.0,
+        "guard_s_from_replay_start": 30.0,
         "scenarios": {},
     }
     for name, spec in SCENARIOS.items():
@@ -74,7 +74,7 @@ def main() -> int:
             absolute_start = int(first["raw_interval_start_sample"])
             source_relative_start = absolute_start - int(spec["raw_offset"])
             code_epoch_residue = source_relative_start % int(round(int(spec["fs"]) * 0.001))
-            target = int(5.0 * int(spec["fs"])) + code_epoch_residue
+            target = int(30.0 * int(spec["fs"])) + code_epoch_residue
             pre_onset = spec["onset_s"] is None or absolute_start / int(spec["fs"]) < float(spec["onset_s"])
             if not pre_onset:
                 raise ValueError(f"{name} channel {int(first['channel'])}: source handoff is not pre-onset")

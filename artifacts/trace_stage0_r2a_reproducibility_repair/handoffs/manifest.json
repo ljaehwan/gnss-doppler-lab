@@ -1,8 +1,8 @@
 {
-  "guard_s_from_replay_start": 5.0,
+  "guard_s_from_replay_start": 30.0,
   "handoff_kind": "deterministic_tracking_start_from_preserved_pre_onset_acquisition_result",
   "preserved_schema_limitation": "The R2 native tracking schema did not serialize the acquisition test statistic or original acquisition-engine sample stamp. They are therefore marked unavailable rather than inferred or fabricated. The repair freezes the observable acquisition result (channel, PRN, acquisition-grid Doppler, and code-epoch residue) and an explicit deterministic first-tracking-sample/phase convention.",
-  "procedure": "For each preserved pre-onset R2 channel, fix its first acquired PRN and grid Doppler; defer tracking to 5 s into the replay at the same 1 ms code-epoch residue and reset residual code/carrier phase by an explicit convention.",
+  "procedure": "For each preserved pre-onset R2 channel, fix its first acquired PRN and grid Doppler; defer tracking to 30 s into the replay at the same 1 ms code-epoch residue and reset residual code/carrier phase by an explicit convention. The 30 s boundary is fixed from the failed rep3 handoff-start audit, before any physical TRACE values were evaluated.",
   "scenarios": {
     "OAKBAT.OS3": {
       "all_source_rows_pre_onset": true,
@@ -20,7 +20,7 @@
         "9": 10
       },
       "handoff_path": "artifacts/trace_stage0_r2a_reproducibility_repair/handoffs/oakbat_os3.csv",
-      "handoff_sha256": "687dac924c23b6364d453ba390a501a828159ce2a8ddd5e2f5144f53063c88ac",
+      "handoff_sha256": "d98fc8386a2e63269eacb0f7d5c73306f386746766485a4f3de63e12d868a3af",
       "phase_conventions": {
         "carrier": "residual_carrier_phase_zero_and_accumulator_minus_doppler_step_times_first_sample",
         "code": "residual_code_phase_chips_and_samples_zero_at_first_interval"
@@ -106,7 +106,7 @@
         "9": 17
       },
       "handoff_path": "artifacts/trace_stage0_r2a_reproducibility_repair/handoffs/texbat_ds3.csv",
-      "handoff_sha256": "a8c9d51edd3aa8bcd58dd4a9f04061ec31a1d37dafbae33c6551a961cc4d097b",
+      "handoff_sha256": "7267d3dce447f26b0980ccc00a3f2baa177344787853f0661d65b3cd03f2885b",
       "phase_conventions": {
         "carrier": "residual_carrier_phase_zero_and_accumulator_minus_doppler_step_times_first_sample",
         "code": "residual_code_phase_chips_and_samples_zero_at_first_interval"
@@ -192,7 +192,7 @@
         "9": 23
       },
       "handoff_path": "artifacts/trace_stage0_r2a_reproducibility_repair/handoffs/texbat_cleanstatic.csv",
-      "handoff_sha256": "259c564841d96d8bb98464a5700d90a4b4a2f0a5bd64736af9b044695bd15a7c",
+      "handoff_sha256": "68f9f6cb24ea3663f7a32cdefd8464af9580dc970c18595db4cae5cc98d849f8",
       "phase_conventions": {
         "carrier": "residual_carrier_phase_zero_and_accumulator_minus_doppler_step_times_first_sample",
         "code": "residual_code_phase_chips_and_samples_zero_at_first_interval"

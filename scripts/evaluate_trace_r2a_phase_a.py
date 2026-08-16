@@ -46,7 +46,9 @@ def dump_json(name: str, value: object) -> None:
 
 def replay_dir(key: str) -> Path:
     _, slug, repetition, _ = SCENARIOS[key]
-    return SSD / "dumps/phase_a" / slug / f"rep{repetition}"
+    parent = SSD / "dumps/phase_a" / slug
+    candidates = sorted(parent.glob(f"rep{repetition}-r*"))
+    return candidates[-1] if candidates else parent / f"rep{repetition}"
 
 
 def source_gate(first_manifest: dict, second_manifest: dict, build: dict, preregistration: dict) -> dict[str, object]:
@@ -126,6 +128,18 @@ def score_reproduction(first_dir: Path, second_dir: Path) -> dict[str, object]:
 
 
 def main() -> int:
+    selected_rep3 = replay_dir("TEXBAT.cleanStatic.rep3")
+    initial_rep3 = selected_rep3.parent / "rep3"
+    prior_failed_attempts = []
+    if selected_rep3 != initial_rep3 and (initial_rep3 / "manifest.json").exists():
+        prior_failed_attempts.append(
+            {
+                "path": str(initial_rep3),
+                "manifest": json.loads((initial_rep3 / "manifest.json").read_text()),
+                "scientific_status": "FAIL_FROZEN_HANDOFF_TARGET_MISSED",
+                "reason": "The 5 s target preceded completion of at least one fixed-PRN acquisition; the attempt was preserved and no semantic gate was evaluated from it.",
+            }
+        )
     manifests = {key: json.loads((replay_dir(key) / "manifest.json").read_text()) for key in SCENARIOS}
     validations = {
         key: validate_dump_files(sorted(replay_dir(key).glob("trace_native_1ms_ch_*.bin")), expected_scenario_id=value[0], minimum_prns=4)
@@ -223,10 +237,11 @@ def main() -> int:
         "scenario_support": support,
         "raw_source_timeline_binding": {"status": "PASS" if raw_timeline_pass else "FAIL", "scenarios": raw_timeline},
         "failure_verdict_if_any": None if phase_a_pass else "INCONCLUSIVE_RECEIVER_REPRODUCIBILITY",
+        "prior_failed_attempts_excluded_from_gate": prior_failed_attempts,
     }
     dump_json("rep3_rep4_reproduction_metrics.json", payload)
     dump_json("action_mapping_validation.json", {"schema": "gnss-doppler-lab.trace-r2a-action-mapping.v1", "status": causal["status"], "scenario_validations": validations, "combined_counts": causal_counts})
-    dump_json("replay_inventory.json", {"schema": "gnss-doppler-lab.trace-r2a-replay-inventory.v1", "phase_a": {key: {"manifest_path": str(replay_dir(key) / "manifest.json"), "manifest": value, "validation": validations[key]} for key, value in manifests.items()}, "phase_a_decision": {"status": payload["phase_a_status"], "phase_b_authorized": phase_a_pass}})
+    dump_json("replay_inventory.json", {"schema": "gnss-doppler-lab.trace-r2a-replay-inventory.v1", "phase_a": {key: {"manifest_path": str(replay_dir(key) / "manifest.json"), "manifest": value, "validation": validations[key]} for key, value in manifests.items()}, "prior_failed_attempts": prior_failed_attempts, "phase_a_decision": {"status": payload["phase_a_status"], "phase_b_authorized": phase_a_pass}})
     plots = ARTIFACT / "plots"
     plots.mkdir(exist_ok=True)
     fig, axis = plt.subplots(figsize=(7, 4))

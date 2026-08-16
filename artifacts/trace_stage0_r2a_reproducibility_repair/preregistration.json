@@ -29,7 +29,7 @@
     "TEXBAT.DS3.smoke",
     "OAKBAT.OS3.smoke"
   ],
-  "phase_b_handoff_procedure_if_authorized": "Reuse only the already frozen pre-onset family handoffs: TEXBAT cleanStatic uses its 0 s clean handoff; DS3 and DS7 use the TEXBAT DS3 handoff derived from the 90 s pre-onset slice; OAKBAT cleanStatic, OS3, and OS4 use the OAKBAT OS3 handoff derived from the 90 s pre-onset slice. All Phase-B configs begin at the matching family timeline and were hashed before Phase A. No new acquisition pass, post-onset row, or attack metric may enter handoff selection.",
+  "phase_b_handoff_procedure_if_authorized": "Reuse only the already frozen pre-onset family handoffs: TEXBAT cleanStatic uses its 0 s clean handoff; DS3 and DS7 use the TEXBAT DS3 handoff derived from the original 90 s pre-onset R2 slice; OAKBAT cleanStatic, OS3, and OS4 use the OAKBAT OS3 handoff derived from the original 90 s pre-onset R2 slice. DS/OS replays begin at 60 s and use the fixed 30 s tracking target, reproducing the 90 s family timeline before every spoof onset. All Phase-B configs were hashed before the repaired Phase A. No new acquisition pass, post-onset row, or attack metric may enter handoff selection.",
   "phase_b_scope_if_authorized": [
     "TEXBAT.cleanStatic",
     "TEXBAT.DS3",
@@ -52,11 +52,12 @@
     "retain R2 explicit scalar serialization",
     "fix channel-to-PRN map",
     "load pre-onset frozen PRN/Doppler/first-raw-interval handoff",
+    "use a 30 s replay-relative target established from the failed rep3 acquisition-completion audit",
     "fail closed if target raw interval is missed"
   ],
   "repository_freeze_basis": {
-    "parent_commit": "948658aa7b117a40b102a48193022e6c403cbc00",
-    "tracked_diff_sha256": "aea6aca9fd31098543fc66144e823e2c85a11f80a64cbc1fd996b5ddc22d9f75",
+    "parent_commit": "287c6f2a61da4b0653e6f48d61ea2d329ab52238",
+    "tracked_diff_sha256": "c0ea2d0ad5c79d73405b5a0310cb5f1ecd5ebeaf2314d45f0012946731c2a0a5",
     "untracked_file_sha256": {}
   },
   "schema": "gnss-doppler-lab.trace-r2a-preregistration.v1",
@@ -64,9 +65,9 @@
   "semantic_contract": "semantic_reproduction_contract.json",
   "source_hashes": {
     "handoffs": {
-      "OAKBAT.OS3": "687dac924c23b6364d453ba390a501a828159ce2a8ddd5e2f5144f53063c88ac",
-      "TEXBAT.DS3": "a8c9d51edd3aa8bcd58dd4a9f04061ec31a1d37dafbae33c6551a961cc4d097b",
-      "TEXBAT.cleanStatic": "259c564841d96d8bb98464a5700d90a4b4a2f0a5bd64736af9b044695bd15a7c"
+      "OAKBAT.OS3": "d98fc8386a2e63269eacb0f7d5c73306f386746766485a4f3de63e12d868a3af",
+      "TEXBAT.DS3": "7267d3dce447f26b0980ccc00a3f2baa177344787853f0661d65b3cd03f2885b",
+      "TEXBAT.cleanStatic": "68f9f6cb24ea3663f7a32cdefd8464af9580dc970c18595db4cae5cc98d849f8"
     },
     "phase_b_scorer": {
       "frozen_r2_scorer": "7c3e4f759e461c048b58cd7852ca6d78ded3b56e141e23c749c58ed4c814413c",
@@ -84,11 +85,11 @@
       "phase_a": {
         "OAKBAT.OS3": {
           "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/oakbat_os3.conf",
-          "sha256": "e066d060471abcb41764b99269c1a383182856970fc695f95075894681c08e63"
+          "sha256": "84ed0b1156bb4596ab2020d62c1d02d7413969993d44a9420225400312287595"
         },
         "TEXBAT.DS3": {
           "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/texbat_ds3.conf",
-          "sha256": "a68bb22e4f5007bc12c4137e8c33aec069d6a32d3f597067b9edff1217081042"
+          "sha256": "a8335516a92cedfdaec73327aaee383ed3fd46659b3788f021ec4255bc1cb285"
         },
         "TEXBAT.cleanStatic": {
           "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/texbat_cleanstatic.conf",
@@ -98,23 +99,23 @@
       "phase_b": {
         "OAKBAT.OS3": {
           "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/phase_b/oakbat_os3.conf",
-          "sha256": "6a3360c7d72570c2c42ec4791edf4282aed9790c7cbe1ad53d523de245fbcb17"
+          "sha256": "c545c65514b23107d2b1b38b696b2c792694831f6ae56cc693813f5e73ec70c4"
         },
         "OAKBAT.OS4": {
           "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/phase_b/oakbat_os4.conf",
-          "sha256": "86f360981b110d7e62314fdd3fd1d6c4481d93e9c3dd0a344513984a6b10a24e"
+          "sha256": "62c067eeae8ab9734a01780559124d5fec5442a41cd120143135406ab016927f"
         },
         "OAKBAT.cleanStatic": {
           "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/phase_b/oakbat_cleanstatic.conf",
-          "sha256": "42e9f0571e044e86ff39c88d8ec5b437ae13334ce43a2143507ca9662925d3b0"
+          "sha256": "a77260e5b051d19eed0d72ae2aeaaf2ec5eabd1b99b45dd5320b8f9b6fbefee4"
         },
         "TEXBAT.DS3": {
           "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/phase_b/texbat_ds3.conf",
-          "sha256": "025f49b95e9bea42eaff38554876a0487c48ce4fc8494a19c29dce29e2a605e3"
+          "sha256": "1a9b15b3d2b76b5e997e267749b8726b5cb2b5cf166358e26ad2159bdef33a71"
         },
         "TEXBAT.DS7": {
           "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/phase_b/texbat_ds7.conf",
-          "sha256": "ac9aff6899ffc4cc7e8281ccf240e00e4e91ddb0026ae7409f5ed1a433020d35"
+          "sha256": "c12ec8c72e80b37b04ac156368f7795a3c50d41ba229d8e949cfce85fd34b671"
         },
         "TEXBAT.cleanStatic": {
           "path": "artifacts/trace_stage0_r2a_reproducibility_repair/frozen_configs/phase_b/texbat_cleanstatic.conf",
