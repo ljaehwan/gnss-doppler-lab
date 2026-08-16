@@ -21,6 +21,20 @@
       "selected_run_id": "20260816T121143Z-r2c-focused-tests-prefreeze",
       "status": "PASS"
     },
+    "r2c-fresh-clone-verifier-final": {
+      "attempt_run_ids": [
+        "20260816T131649Z-r2c-fresh-clone-verifier-final"
+      ],
+      "selected_run_id": "20260816T131649Z-r2c-fresh-clone-verifier-final",
+      "status": "FAILED"
+    },
+    "r2c-fresh-clone-verifier-final-r1": {
+      "attempt_run_ids": [
+        "20260816T131741Z-r2c-fresh-clone-verifier-final-r1"
+      ],
+      "selected_run_id": "20260816T131741Z-r2c-fresh-clone-verifier-final-r1",
+      "status": "PASS"
+    },
     "r2c-parent-r2b-artifact-verifier": {
       "attempt_run_ids": [
         "20260816T131601Z-r2c-parent-r2b-artifact-verifier"
@@ -119,12 +133,19 @@
       "selected_run_id": "20260816T124201Z-r2c-phase-b-receiver-texbat-r1",
       "status": "FAILED"
     },
+    "r2c-provenance-after-fresh-clone": {
+      "attempt_run_ids": [
+        "20260816T131834Z-r2c-provenance-after-fresh-clone"
+      ],
+      "selected_run_id": "20260816T131834Z-r2c-provenance-after-fresh-clone",
+      "status": "RUNNING"
+    },
     "r2c-provenance-before-commit": {
       "attempt_run_ids": [
         "20260816T131618Z-r2c-provenance-before-commit"
       ],
       "selected_run_id": "20260816T131618Z-r2c-provenance-before-commit",
-      "status": "RUNNING"
+      "status": "PASS"
     },
     "r2c-provenance-before-verifier": {
       "attempt_run_ids": [
@@ -759,8 +780,8 @@
         "scripts/finalize_trace_r2c_provenance.py"
       ],
       "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
-      "ended_at": null,
-      "exit_code": null,
+      "ended_at": "2026-08-16T13:16:19+00:00",
+      "exit_code": 0,
       "name": "r2c-provenance-before-commit",
       "result_manifest": {
         "artifacts": [],
@@ -769,6 +790,68 @@
       },
       "run_id": "20260816T131618Z-r2c-provenance-before-commit",
       "started_at": "2026-08-16T13:16:18+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "51e7c8227ebe7935b1cfa92b09bbf290d4a06f4d11e33d159a65ed856380d39d"
+    },
+    {
+      "command": [
+        "/bin/bash",
+        "-lc",
+        "set -euo pipefail; r2c_fresh_dir=$(mktemp -d /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/fresh-clone.XXXXXX); git -c safe.directory=\"*\" clone --no-local /home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair \"$r2c_fresh_dir/repo\"; cd \"$r2c_fresh_dir/repo\"; git checkout --detach 61a829f; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_trace_native_cadence.py tests/test_trace_r1_verdict.py tests/test_trace_native_1ms.py tests/test_trace_reproducibility.py tests/test_trace_r2a_contract.py tests/test_trace_r2b_contract.py tests/test_trace_alignment.py tests/test_trace_equivariance.py tests/test_trace_r2c_contract.py; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/verify_trace_r2c_artifacts.py; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/verify_trace_r2b_artifacts.py; git diff --exit-code; test -z \"$(git status --porcelain)\"; echo \"fresh_clone=$r2c_fresh_dir/repo\""
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T13:17:15+00:00",
+      "exit_code": 128,
+      "name": "r2c-fresh-clone-verifier-final",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T131649Z-r2c-fresh-clone-verifier-final",
+        "schema_version": 1
+      },
+      "run_id": "20260816T131649Z-r2c-fresh-clone-verifier-final",
+      "started_at": "2026-08-16T13:16:49+00:00",
+      "status": "failed",
+      "stderr_sha256": "b312f79bd3db1e059462539f0070177682baceacf22726e3d43722f76dc26811",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/bin/bash",
+        "-lc",
+        "set -euo pipefail; export GIT_CONFIG_COUNT=1; export GIT_CONFIG_KEY_0=safe.directory; export GIT_CONFIG_VALUE_0=\"*\"; r2c_fresh_dir=$(mktemp -d /home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/fresh-clone.XXXXXX); git clone --no-local /home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair \"$r2c_fresh_dir/repo\"; cd \"$r2c_fresh_dir/repo\"; git checkout --detach 61a829f; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_trace_native_cadence.py tests/test_trace_r1_verdict.py tests/test_trace_native_1ms.py tests/test_trace_reproducibility.py tests/test_trace_r2a_contract.py tests/test_trace_r2b_contract.py tests/test_trace_alignment.py tests/test_trace_equivariance.py tests/test_trace_r2c_contract.py; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/verify_trace_r2c_artifacts.py; /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python scripts/verify_trace_r2b_artifacts.py; git diff --exit-code; test -z \"$(git status --porcelain)\"; echo \"fresh_clone=$r2c_fresh_dir/repo\""
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": "2026-08-16T13:18:12+00:00",
+      "exit_code": 0,
+      "name": "r2c-fresh-clone-verifier-final-r1",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T131741Z-r2c-fresh-clone-verifier-final-r1",
+        "schema_version": 1
+      },
+      "run_id": "20260816T131741Z-r2c-fresh-clone-verifier-final-r1",
+      "started_at": "2026-08-16T13:17:41+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "f5475a8e2d1e11a4e28f4d9a3e01a1159d4fc0af5c68a61ee4d287c4760fe552",
+      "stdout_sha256": "d6c01ffe92e9e8fabb88e7efcbddef5b6f2c60cba2e1ae3a5bcff3b7cdd15823"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/finalize_trace_r2c_provenance.py"
+      ],
+      "cwd": "/home/ubuntu/projects/gnss-doppler-trace-stage0-r2c-terminal-drain-repair",
+      "ended_at": null,
+      "exit_code": null,
+      "name": "r2c-provenance-after-fresh-clone",
+      "result_manifest": {
+        "artifacts": [],
+        "run_id": "20260816T131834Z-r2c-provenance-after-fresh-clone",
+        "schema_version": 1
+      },
+      "run_id": "20260816T131834Z-r2c-provenance-after-fresh-clone",
+      "started_at": "2026-08-16T13:18:34+00:00",
       "status": "running",
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
