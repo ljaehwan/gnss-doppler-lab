@@ -210,7 +210,7 @@ def run_clean_all() -> int:
 
 def run_attack_all() -> int:
     for name in ("TEXBAT.DS3", "TEXBAT.DS7", "OAKBAT.OS3", "OAKBAT.OS4"):
-        for loop in ("slow", "fast"):
+        for loop in ("slow", "fast", "identical_left", "identical_right"):
             code = run_receiver(name, loop, "attack", 1)
             if code:
                 return code
