@@ -21,5 +21,14 @@
     "rule": "Use the already-continuous native accumulator directly; do not apply modulo-phase np.unwrap a second time.",
     "reason": "A second unwrap aliases legitimate carrier advance greater than pi per code epoch.",
     "attack_data_used": false
+  },
+  "epoch_reducer_implementation_repair": {
+    "status": "SEALED_BEFORE_SUCCESSFUL_MODEL_FIT_OR_ATTACK_REPLAY",
+    "failed_runner_run_id": "20260817T030155Z-mctd-clean-model-threshold-fit",
+    "reason": "The first implementation used an O(number_of_epochs * number_of_rows) Boolean mask loop and was terminated before producing thresholds.",
+    "repair": "Exactly equivalent one-PRN-per-epoch median pooling using lexicographic grouping and a bounded-width padded matrix.",
+    "scientific_contract_changed": false,
+    "thresholds_produced_by_failed_attempt": false,
+    "attack_data_used": false
   }
 }

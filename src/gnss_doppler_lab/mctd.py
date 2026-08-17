@@ -218,17 +218,30 @@ def mahalanobis_score(values: np.ndarray, model: RobustGaussian) -> np.ndarray:
 
 def epoch_scores(epoch_ms: np.ndarray, prn: np.ndarray, scores: np.ndarray,
                  *, minimum_prns: int = MIN_COMMON_PRNS) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    epochs = np.unique(epoch_ms)
-    out_epoch, out_score, out_n = [], [], []
-    for epoch in epochs:
-        mask = epoch_ms == epoch
-        unique_prns = np.unique(prn[mask])
-        if len(unique_prns) < minimum_prns:
-            continue
-        out_epoch.append(epoch)
-        out_score.append(float(np.median(scores[mask])))
-        out_n.append(len(unique_prns))
-    return np.asarray(out_epoch, dtype=np.int64), np.asarray(out_score), np.asarray(out_n, dtype=np.int64)
+    epoch_ms = np.asarray(epoch_ms, dtype=np.int64)
+    prn = np.asarray(prn, dtype=np.int64)
+    scores = np.asarray(scores, dtype=np.float64)
+    # Enforce one PRN contribution per epoch before vectorized grouping.
+    key_order = np.lexsort((prn, epoch_ms))
+    e0, p0, s0 = epoch_ms[key_order], prn[key_order], scores[key_order]
+    if len(e0) > 1 and np.any((e0[1:] == e0[:-1]) & (p0[1:] == p0[:-1])):
+        raise ValueError("duplicate PRN contribution within an epoch")
+    epochs, counts = np.unique(e0, return_counts=True)
+    if not len(epochs):
+        return epochs.astype(np.int64), np.array([], dtype=float), counts.astype(np.int64)
+    # Sort within epoch by score, place variable groups in a small padded
+    # matrix, and take the row median.  This is mathematically identical to
+    # the previous reducer without O(number_of_epochs * number_of_rows) masks.
+    order = np.lexsort((s0, e0)); sorted_scores = s0[order]
+    sorted_epoch = e0[order]; epochs, counts = np.unique(sorted_epoch, return_counts=True)
+    starts = np.r_[0, np.cumsum(counts)[:-1]]
+    group = np.repeat(np.arange(len(counts)), counts)
+    position = np.arange(len(sorted_scores)) - np.repeat(starts, counts)
+    padded = np.full((len(counts), int(counts.max())), np.nan)
+    padded[group, position] = sorted_scores
+    medians = np.nanmedian(padded, axis=1)
+    valid = counts >= minimum_prns
+    return epochs[valid].astype(np.int64), medians[valid], counts[valid].astype(np.int64)
 
 
 def nonoverlap_blocks(epoch_ms: np.ndarray, scores: np.ndarray, *, block_ms: int = BLOCK_MS,
