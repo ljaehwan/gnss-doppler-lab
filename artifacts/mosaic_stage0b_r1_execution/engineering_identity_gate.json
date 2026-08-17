@@ -1,0 +1,257 @@
+{
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "alignment": {
+        "minimum_four_prns": true,
+        "passed_prns": 5,
+        "per_prn": [
+          {
+            "float_alignment": true,
+            "integer_alignment": true,
+            "max_abs_error": 0.0,
+            "prn": 10,
+            "rows": 14998,
+            "status": "PASS"
+          },
+          {
+            "float_alignment": true,
+            "integer_alignment": true,
+            "max_abs_error": 0.0,
+            "prn": 11,
+            "rows": 14998,
+            "status": "PASS"
+          },
+          {
+            "float_alignment": true,
+            "integer_alignment": true,
+            "max_abs_error": 0.0,
+            "prn": 21,
+            "rows": 14998,
+            "status": "PASS"
+          },
+          {
+            "float_alignment": true,
+            "integer_alignment": true,
+            "max_abs_error": 0.0,
+            "prn": 24,
+            "rows": 14998,
+            "status": "PASS"
+          },
+          {
+            "float_alignment": true,
+            "integer_alignment": true,
+            "max_abs_error": 0.0,
+            "prn": 27,
+            "rows": 14998,
+            "status": "PASS"
+          }
+        ],
+        "status": "PASS"
+      },
+      "identity": {
+        "byte_identity": true,
+        "clipped_sample_count": 0,
+        "output_sha256": "b93380a40fe0083790e74f07bc6e4746e9ec1c1df958d2401c94430bc5123f55",
+        "sample_count": 450000000,
+        "size_bytes": 1800000000,
+        "source_prefix_sha256": "b93380a40fe0083790e74f07bc6e4746e9ec1c1df958d2401c94430bc5123f55"
+      },
+      "raw_deleted_after_receipt": true,
+      "replay": {
+        "config_changed_keys": [
+          "SignalSource.filename"
+        ],
+        "config_sha256": "1d3014fe408e3135499b964109040b692db6fbcdc44a78e515ee27035f4bb06c",
+        "exit_code": 0,
+        "log_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/oakbat_cleanstatic/receiver/receiver.log",
+        "receiver_binary_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+        "runtime_seconds": 8.361351386000024,
+        "status": "PASS",
+        "trace_count": 11,
+        "trace_files": [
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/oakbat_cleanstatic/receiver/trace_native_1ms_ch_0.bin",
+            "sha256": "4ef713eac37560d85ea0e4b8fe01aca5b33eddce51df23e7a1d40f750351156b",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/oakbat_cleanstatic/receiver/trace_native_1ms_ch_1.bin",
+            "sha256": "f7cbf285bffac4d034ee63569094e602f688736dd2e296979958497b8653d40c",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/oakbat_cleanstatic/receiver/trace_native_1ms_ch_10.bin",
+            "sha256": "059ca9a4ba66faf8208318ac2f320e15762c281c01e5a877225cec05e627ed09",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/oakbat_cleanstatic/receiver/trace_native_1ms_ch_2.bin",
+            "sha256": "653c3fbce4c14e4624f5111ad739a5455e8c16532c8ecaf2d2f77e38cc3051bd",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/oakbat_cleanstatic/receiver/trace_native_1ms_ch_3.bin",
+            "sha256": "9493ce9e855df4cd63774f6f3122806d780bb1105ed4b11e1e0ba453b120b3bf",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/oakbat_cleanstatic/receiver/trace_native_1ms_ch_4.bin",
+            "sha256": "e4c4977192b4c86fd927e3ef9bf2a260d360be8b1f24a3ac3c8fd2e1b5abe711",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/oakbat_cleanstatic/receiver/trace_native_1ms_ch_5.bin",
+            "sha256": "44c27c3933e2076f75964f392ab4f4c84bf1a8ce3d1f2ca3a6201cac0d23a8a5",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/oakbat_cleanstatic/receiver/trace_native_1ms_ch_6.bin",
+            "sha256": "54b375a32b97eab622f9f8a74db1b9d5fd8f72c01d376f8a41b663c205dce5e8",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/oakbat_cleanstatic/receiver/trace_native_1ms_ch_7.bin",
+            "sha256": "7a3bc855296f262cbd8c854580a1db9174cae0f94c9327e7b9585f9e9a2e3942",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/oakbat_cleanstatic/receiver/trace_native_1ms_ch_8.bin",
+            "sha256": "b53001b9c2c44dc7d00a6bfc9b03606c5f5fa565daa9aa14323f98dcfa86ab86",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/oakbat_cleanstatic/receiver/trace_native_1ms_ch_9.bin",
+            "sha256": "54397ff4fbe2e24844fe234a66eb57675ab09c353c3bdd353dae899d9bfa13ac",
+            "size_bytes": 6239360
+          }
+        ]
+      },
+      "status": "PASS"
+    },
+    "TEXBAT.cleanStatic": {
+      "alignment": {
+        "minimum_four_prns": true,
+        "passed_prns": 5,
+        "per_prn": [
+          {
+            "float_alignment": true,
+            "integer_alignment": true,
+            "max_abs_error": 0.0,
+            "prn": 3,
+            "rows": 14998,
+            "status": "PASS"
+          },
+          {
+            "float_alignment": true,
+            "integer_alignment": true,
+            "max_abs_error": 0.0,
+            "prn": 13,
+            "rows": 14998,
+            "status": "PASS"
+          },
+          {
+            "float_alignment": true,
+            "integer_alignment": true,
+            "max_abs_error": 0.0,
+            "prn": 16,
+            "rows": 14998,
+            "status": "PASS"
+          },
+          {
+            "float_alignment": true,
+            "integer_alignment": true,
+            "max_abs_error": 0.0,
+            "prn": 19,
+            "rows": 14998,
+            "status": "PASS"
+          },
+          {
+            "float_alignment": true,
+            "integer_alignment": true,
+            "max_abs_error": 0.0,
+            "prn": 30,
+            "rows": 14998,
+            "status": "PASS"
+          }
+        ],
+        "status": "PASS"
+      },
+      "identity": {
+        "byte_identity": true,
+        "clipped_sample_count": 0,
+        "output_sha256": "56323ac1abc6d18afeabe02b4e2236c4cb3401d8f28871e2dbb066a29b761800",
+        "sample_count": 2250000000,
+        "size_bytes": 9000000000,
+        "source_prefix_sha256": "56323ac1abc6d18afeabe02b4e2236c4cb3401d8f28871e2dbb066a29b761800"
+      },
+      "raw_deleted_after_receipt": true,
+      "replay": {
+        "config_changed_keys": [
+          "SignalSource.filename"
+        ],
+        "config_sha256": "eec2c175af1b7daa5cbfc2d114bacf4c7660e7e820ab55ef05851d5c669fdfa2",
+        "exit_code": 0,
+        "log_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/texbat_cleanstatic/receiver/receiver.log",
+        "receiver_binary_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+        "runtime_seconds": 31.047604512998078,
+        "status": "PASS",
+        "trace_count": 10,
+        "trace_files": [
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/texbat_cleanstatic/receiver/trace_native_1ms_ch_0.bin",
+            "sha256": "c4b5f7e04d9a96cb9e5770b54dad7c0b3674281ac7d1a4859924b91ea77d7fc8",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/texbat_cleanstatic/receiver/trace_native_1ms_ch_1.bin",
+            "sha256": "b3a7a9afa644c48328a0295749cf08203da734912a79cecd614b75d219ea1fa8",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/texbat_cleanstatic/receiver/trace_native_1ms_ch_2.bin",
+            "sha256": "228d8db83103674c25db2a80eb1ca2d0470bff372d503b4cec94040fba507fa0",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/texbat_cleanstatic/receiver/trace_native_1ms_ch_3.bin",
+            "sha256": "98e6015ae8473573882b0f0980af1bf244c1759bdfa36398c0002d7bba907bc7",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/texbat_cleanstatic/receiver/trace_native_1ms_ch_4.bin",
+            "sha256": "d2feffd1bbb4c0ce9cd12ca137abc512d168ecc29667e95a2f3b65c923c04325",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/texbat_cleanstatic/receiver/trace_native_1ms_ch_5.bin",
+            "sha256": "e75936eb8b1f9a5d99846db0df864945785834f8026d4585770a922d7c38c489",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/texbat_cleanstatic/receiver/trace_native_1ms_ch_6.bin",
+            "sha256": "2423c92713aabab2a213702d3fdaea75e99fa2ec2cab73b10659e03ded4c86f9",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/texbat_cleanstatic/receiver/trace_native_1ms_ch_7.bin",
+            "sha256": "c1de6fe1c6b7f85c517e771dfeb2fd65a2496bb731ea3187b974e3711ea693d3",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/texbat_cleanstatic/receiver/trace_native_1ms_ch_8.bin",
+            "sha256": "185c114499ec8a8efc6074333cf3f6be55b893640b93960c70a02443331bd46c",
+            "size_bytes": 6239360
+          },
+          {
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/engineering/texbat_cleanstatic/receiver/trace_native_1ms_ch_9.bin",
+            "sha256": "a1eb043e4fd6f3b10003785e80f756c8dd795e51851a49a9093b9278048fdfa2",
+            "size_bytes": 6239360
+          }
+        ]
+      },
+      "status": "PASS"
+    }
+  },
+  "freeze_sha": "913334d87657d75354b7d47546e986dd9f48d58d",
+  "status": "PASS"
+}

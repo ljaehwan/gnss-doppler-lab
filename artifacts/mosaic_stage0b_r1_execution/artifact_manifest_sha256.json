@@ -6,14 +6,119 @@
       "size_bytes": 164
     },
     {
+      "path": "bootstrap_intervals.csv",
+      "sha256": "e90acf376480c7516639fdde7ec60f20c9e1fe553b60d6c936bba37741542729",
+      "size_bytes": 43
+    },
+    {
+      "path": "case_execution_inventory.csv",
+      "sha256": "014822caa64669aafc380b764be0fd0dc08784f56cc92e5dfa26d3b3afe9fe1b",
+      "size_bytes": 13503
+    },
+    {
       "path": "config.json",
       "sha256": "a79a1054eef8fce36f02294090ea97b6a3b771d27a3fed1b40bea99908607a87",
       "size_bytes": 305
     },
     {
+      "path": "control_metrics.csv",
+      "sha256": "0f714487744200251fe3ef005f4de1a5d1af3f4214aece8f2e79f76a0d66c485",
+      "size_bytes": 34
+    },
+    {
+      "path": "engineering_identity_gate.json",
+      "sha256": "bd818e877f27176ceae2f3c4e9bba09ad602c2a24e0b5cd8c4045e9644b56ede",
+      "size_bytes": 11376
+    },
+    {
       "path": "executor_freeze.json",
       "sha256": "46deef124f579eb7c8b4225e34ed13cdbe09817cd1cca6c7ced32951bea2d621",
       "size_bytes": 2062
+    },
+    {
+      "path": "failure_inventory.csv",
+      "sha256": "7164ff95e14a584d8e36efa010901f222ee74210f372999972079146f83f89f8",
+      "size_bytes": 20
+    },
+    {
+      "path": "final_verdict.json",
+      "sha256": "2121f07aa9ebb08fd64c91720b853c6b398c0e9716603df58974fbee59c2fc45",
+      "size_bytes": 206
+    },
+    {
+      "path": "four_prn_metrics.csv",
+      "sha256": "4364af9c5f01b18a5781d24c8f2e5865d5f8cea4d32b2462a7518c72c85a4437",
+      "size_bytes": 934
+    },
+    {
+      "path": "per_epoch_scores.csv.gz",
+      "sha256": "4b816e9213e18c0975b071bd89c8152216de6bb7da39dddfcff1bc7b782a3bce",
+      "size_bytes": 23713
+    },
+    {
+      "path": "plots/clipping_rms_score.txt",
+      "sha256": "23332edbfa83f1d9c66adfd9f0caa2ad1db6151d3f1960ee4e2235ab2b8f589b",
+      "size_bytes": 80
+    },
+    {
+      "path": "plots/controls.txt",
+      "sha256": "23332edbfa83f1d9c66adfd9f0caa2ad1db6151d3f1960ee4e2235ab2b8f589b",
+      "size_bytes": 80
+    },
+    {
+      "path": "plots/delta_bic_grid.txt",
+      "sha256": "23332edbfa83f1d9c66adfd9f0caa2ad1db6151d3f1960ee4e2235ab2b8f589b",
+      "size_bytes": 80
+    },
+    {
+      "path": "plots/four_prn_heatmap.txt",
+      "sha256": "23332edbfa83f1d9c66adfd9f0caa2ad1db6151d3f1960ee4e2235ab2b8f589b",
+      "size_bytes": 80
+    },
+    {
+      "path": "plots/oak_vs_tex.txt",
+      "sha256": "23332edbfa83f1d9c66adfd9f0caa2ad1db6151d3f1960ee4e2235ab2b8f589b",
+      "size_bytes": 80
+    },
+    {
+      "path": "plots/requested_vs_measured_scer.txt",
+      "sha256": "23332edbfa83f1d9c66adfd9f0caa2ad1db6151d3f1960ee4e2235ab2b8f589b",
+      "size_bytes": 80
+    },
+    {
+      "path": "plots/requested_vs_recovered_delay.txt",
+      "sha256": "23332edbfa83f1d9c66adfd9f0caa2ad1db6151d3f1960ee4e2235ab2b8f589b",
+      "size_bytes": 80
+    },
+    {
+      "path": "plots/requested_vs_recovered_doppler.txt",
+      "sha256": "23332edbfa83f1d9c66adfd9f0caa2ad1db6151d3f1960ee4e2235ab2b8f589b",
+      "size_bytes": 80
+    },
+    {
+      "path": "plots/target_vs_nontarget.txt",
+      "sha256": "23332edbfa83f1d9c66adfd9f0caa2ad1db6151d3f1960ee4e2235ab2b8f589b",
+      "size_bytes": 80
+    },
+    {
+      "path": "receiver_replay_inventory.csv",
+      "sha256": "294a994c7e34ef3b843a684d5c3e2423f472e7d8e0ed0f406551ad1b97ffe956",
+      "size_bytes": 4143
+    },
+    {
+      "path": "recovery_metrics.csv",
+      "sha256": "20586da7454ec7227c04fce736b4c2c4e97913d1b6a666b1d6b3feb30e216b28",
+      "size_bytes": 34633
+    },
+    {
+      "path": "runtime_resource_summary.json",
+      "sha256": "3bb4b162c465528a8b5bed19273702464f6f3556798b0136b18a1f95c29cec7a",
+      "size_bytes": 185
+    },
+    {
+      "path": "single_prn_metrics.csv",
+      "sha256": "c8f6d6894ffc93d053c445636b5357803e9470f5459c741a7b58e7856447c856",
+      "size_bytes": 3246
     },
     {
       "path": "source_binding.json",
@@ -24,6 +129,11 @@
       "path": "source_commit.json",
       "sha256": "2cb011b7580880716a5fec324e72f81f90dfc4b6792e888b2fa11fabae57f896",
       "size_bytes": 318
+    },
+    {
+      "path": "target_nontarget_metrics.csv",
+      "sha256": "b98af350351b590b831b54bd090708153487db813ca9bd81b07caa14f64e903a",
+      "size_bytes": 27015
     }
   ],
   "schema": "gnss-doppler-lab.artifact-manifest-sha256.v1"
