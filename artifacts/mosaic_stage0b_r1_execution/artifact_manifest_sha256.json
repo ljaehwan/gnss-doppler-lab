@@ -1,0 +1,30 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "853da6797095aaa7a28b4093a9391e1e0b32cf96d51f2965d6d1571ac763b459",
+      "size_bytes": 164
+    },
+    {
+      "path": "config.json",
+      "sha256": "a79a1054eef8fce36f02294090ea97b6a3b771d27a3fed1b40bea99908607a87",
+      "size_bytes": 305
+    },
+    {
+      "path": "executor_freeze.json",
+      "sha256": "46deef124f579eb7c8b4225e34ed13cdbe09817cd1cca6c7ced32951bea2d621",
+      "size_bytes": 2062
+    },
+    {
+      "path": "source_binding.json",
+      "sha256": "124fd20b639029fcd0f42a7f1cfe4c29cb5d547205be48e2987a139b7224fa9f",
+      "size_bytes": 1449
+    },
+    {
+      "path": "source_commit.json",
+      "sha256": "2cb011b7580880716a5fec324e72f81f90dfc4b6792e888b2fa11fabae57f896",
+      "size_bytes": 318
+    }
+  ],
+  "schema": "gnss-doppler-lab.artifact-manifest-sha256.v1"
+}

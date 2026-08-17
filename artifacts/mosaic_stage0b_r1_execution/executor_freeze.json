@@ -1,0 +1,51 @@
+{
+  "alignment_tolerance": {
+    "float_atol": 1e-06,
+    "float_rtol": 1e-06,
+    "integer_fields": "exact"
+  },
+  "bootstrap": {
+    "ci": 0.95,
+    "resamples": 10000,
+    "seed": 20260818,
+    "unit": "paired_case_within_dataset"
+  },
+  "case_count": 72,
+  "cases_executed": 0,
+  "chunk_samples": 250000,
+  "config_change_allowlist": [
+    "SignalSource.filename"
+  ],
+  "control_policy": {
+    "awgn": "deterministic complex Gaussian at injected residual RMS; seed=20260818+PRN",
+    "collapsed": "frozen delta_tau=0 and delta_f=0 cases",
+    "gain": "identity taps scaled to injected tap RMS",
+    "no_additional_receiver_cases": true
+  },
+  "executor_code_sha256": {
+    "scripts/execute_mosaic_stage0b_r1.py": "78b971ff7124fce757e2052376511ade90cda14af30c9a1769d178069f787e2a",
+    "scripts/verify_mosaic_stage0b_r1_results.py": "40ab0b018daef0c9052b29ffdca02c7f637f7c04369e485cbe2320a7d8427886",
+    "src/gnss_doppler_lab/mosaic_stage0b_r1_execution_metrics.py": "a82f13d6652da2cafe1dddd7d8246a8de2aa5e21ba4950c6ef8a4a5193aadd2c",
+    "src/gnss_doppler_lab/mosaic_stage0b_r1_executor.py": "e211b564d46413d1e1bbebde2cdfc63d5af21afc9474fb8f3637756a2437fdf9",
+    "tests/test_mosaic_stage0b_r1_execution.py": "b0a0807d7c2e8841eec0764b053f2e0288b08063c5b34946dab18e33bafe026f"
+  },
+  "frozen_design_canonical_sha256": "b1a06556f7cd67738274c132f80b0581b20914d971f72f4e4ab0b5efc9a7facf",
+  "full_prefix_replay": true,
+  "quantified_gates": {
+    "bic_control_ci_lower_gt": 0,
+    "clipping_ratio_case_max": 0.001,
+    "clipping_ratio_median_max": 0.0001,
+    "dataset_pooling": false,
+    "observability_definition": "finite target delta_BIC > 0",
+    "permutation_absolute_tolerance": 1e-09,
+    "rms_spearman_abs_lt": 0.5,
+    "target_specificity_ci_lower_gt": 0
+  },
+  "required_base_commit": "3db0e12976b6ff98452096e921cf298be459d0e8",
+  "result_dependent_changes_prohibited": true,
+  "results_viewed": false,
+  "single_gate_before_four_prn": true,
+  "source_prefix_byte_identity_required": true,
+  "status": "PRE_EXECUTION_FREEZE",
+  "worker_count": 1
+}

@@ -1,0 +1,30 @@
+{
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "authorized_interval": [
+        150275296,
+        210202273
+      ],
+      "base_config": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/receiver.conf",
+      "full_prefix_samples": 450000000,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+      "raw_size_bytes": 9600000000,
+      "reference_trace_dir": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1",
+      "sample_rate_hz": 5000000
+    },
+    "TEXBAT.cleanStatic": {
+      "authorized_interval": [
+        817815304,
+        1117517038
+      ],
+      "base_config": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/receiver.conf",
+      "full_prefix_samples": 2250000000,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "raw_size_bytes": 48016392192,
+      "reference_trace_dir": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1",
+      "sample_rate_hz": 25000000
+    }
+  },
+  "preregistration_manifest_sha256": "48f074de5983cc1d5859a29c9b586067321ece734800a7ba284b8d2fd20e19aa",
+  "receiver_binary_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0"
+}
