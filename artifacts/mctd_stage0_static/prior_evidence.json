@@ -7,6 +7,10 @@
       "DS2": 0.9985611510791367,
       "DS3": 0.9970501474926253
     },
+    "multi_prn_binomial_increment": {
+      "status": "QUALITATIVE_ONLY",
+      "reason": "The audited Paper-B0 common-support table establishes approximately 0.997 pAUC for the fixed/signed nine-tap detector, but does not isolate a single portable numeric binomial increment; it is recorded as small rather than invented."
+    },
     "source": "/home/ubuntu/projects/gnss-doppler-b0-cs-stage0-static/artifacts/b0_cs_stage0_static/ablation_metrics.csv",
     "source_sha256": "964a395b2810e545329ab97c287e8bcfa3aa2f9086b279606bc86b78ac11ff27",
     "status": "AVAILABLE"
@@ -14,6 +18,18 @@
   "TRACE_R2e": {
     "DS3_pre_onset_fpr": 0.5625,
     "DS7_pre_onset_fpr": 0.1,
+    "OS3": {
+      "TRACE_Full_pauc": 1.0,
+      "no_action_pauc": 1.0,
+      "shuffled_action_pauc": 1.0,
+      "fixed9_pauc": 1.0
+    },
+    "OS4": {
+      "TRACE_Full_pauc": 1.0,
+      "no_action_pauc": 1.0,
+      "shuffled_action_pauc": 1.0,
+      "fixed9_pauc": 1.0
+    },
     "artifact_commit": "d6609fb8c708e19c4ebd1381357283efb0f3e7f8",
     "interpretation": "OS3/OS4 actual-action, no-action, shuffled-action, and fixed9 results were nearly identical; action shift/shuffle did not reduce attack score, so action-next-peak relation was not supported.",
     "source": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static/artifacts/trace_stage0_r2e_attack_support_repair/final_verdict.json",
