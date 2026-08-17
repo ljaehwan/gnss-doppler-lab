@@ -177,7 +177,11 @@ def fit_clean() -> int:
         thresholds[family] = family_thresholds
         splits[family] = {name: {"row_count": int(mask.sum()),
                                   "time_start_s": float(aligned.time_s[mask].min()),
-                                  "time_end_s": float(aligned.time_s[mask].max())} for name, mask in masks.items()}
+                                  "time_end_s": float(aligned.time_s[mask].max()),
+                                  "slow_raw_sample_start": int(aligned.raw_start_slow[mask].min()),
+                                  "slow_raw_sample_end": int(aligned.raw_start_slow[mask].max()),
+                                  "fast_raw_sample_start": int(aligned.raw_start_fast[mask].min()),
+                                  "fast_raw_sample_end": int(aligned.raw_start_fast[mask].max())} for name, mask in masks.items()}
     dump_json(ARTIFACT / "normal_model_summary.json", {"schema": "gnss-doppler-lab.mctd-normal-summary.v1",
               "attack_data_used": False, "families": summaries})
     dump_json(ARTIFACT / "thresholds.json", {"schema": "gnss-doppler-lab.mctd-thresholds.v1",
