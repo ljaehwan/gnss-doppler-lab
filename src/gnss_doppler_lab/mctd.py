@@ -158,8 +158,10 @@ def align_dump_directories(
     slow, fast, prn, epoch = slow[valid], fast[valid], prn[valid], epoch[valid]
     slow_norm, fast_norm, cn0 = slow_norm[valid], fast_norm[valid], cn0[valid]
 
-    slow_carrier_phase = unwrap_by_prn(prn, epoch, slow["action_next_carrier_phase_accumulator_rad"])
-    fast_carrier_phase = unwrap_by_prn(prn, epoch, fast["action_next_carrier_phase_accumulator_rad"])
+    # The native accumulator is already continuous/unwrapped.  Re-applying
+    # np.unwrap would alias legitimate >pi carrier advance over a code epoch.
+    slow_carrier_phase = slow["action_next_carrier_phase_accumulator_rad"].astype(np.float64)
+    fast_carrier_phase = fast["action_next_carrier_phase_accumulator_rad"].astype(np.float64)
     state = np.column_stack(
         (
             slow["action_next_residual_code_phase_chips"] - fast["action_next_residual_code_phase_chips"],

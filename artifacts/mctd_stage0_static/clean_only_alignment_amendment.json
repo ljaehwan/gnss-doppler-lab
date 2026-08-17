@@ -14,5 +14,12 @@
   },
   "clarification": "Join on exact (PRN, native loop_sequence) from the identical handoff, validate the paired raw starts, assign the pair to the rounded mean raw-IQ millisecond, and retain one causal update per PRN/millisecond.",
   "frozen_effect": "Alignment only; loop bandwidths, features, validity gates, model, thresholds, block pooling, alarm rule, and GO criteria are unchanged.",
-  "attack_scores_computed_before_repair": false
+  "attack_scores_computed_before_repair": false,
+  "carrier_phase_clarification": {
+    "status": "SEALED_BEFORE_MODEL_FIT_OR_ATTACK_REPLAY",
+    "native_field": "action_next_carrier_phase_accumulator_rad",
+    "rule": "Use the already-continuous native accumulator directly; do not apply modulo-phase np.unwrap a second time.",
+    "reason": "A second unwrap aliases legitimate carrier advance greater than pi per code epoch.",
+    "attack_data_used": false
+  }
 }
