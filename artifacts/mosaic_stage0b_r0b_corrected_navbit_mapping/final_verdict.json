@@ -1,0 +1,16 @@
+{
+  "boundary_flag_failure_bits": 5146,
+  "boundary_structure_pass": false,
+  "corrected_prompt_agreement": "6000/6000",
+  "distant_interval_validation": "NOT_PERFORMED",
+  "frozen_navbit_sequence_unchanged": true,
+  "next_action": "Acquire or export authenticated boundary flags covering the pre-sync validated interval, or separately approve and validate a modulo-phase extrapolation contract; do not inject with R0b.",
+  "parity": "200/200",
+  "preamble": "20/20",
+  "stage0b_injection_mapping_ready": false,
+  "stage0b_injection_performed": false,
+  "tow_subframe_continuity": "10/10",
+  "trace_endpoint_transcription_errors": 0,
+  "two_separated_intervals": false,
+  "verdict": "CORRECTED_BOUNDARY_STRUCTURE_FAIL"
+}

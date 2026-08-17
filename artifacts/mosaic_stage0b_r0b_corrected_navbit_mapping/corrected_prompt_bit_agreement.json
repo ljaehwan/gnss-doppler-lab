@@ -1,0 +1,105 @@
+{
+  "agreement_fraction": 1.0,
+  "frozen_bits_changed": false,
+  "validation_report": {
+    "boundary_flag_failure_bits": 5146,
+    "corrected_bits": 6000,
+    "end_boundary_flag_passes": 861,
+    "internal_boundary_failures": 0,
+    "per_prn": [
+      {
+        "bits": 600,
+        "corrected_raw_end_sample_exclusive": 210202273,
+        "corrected_raw_start_sample": 150202318,
+        "dataset": "OAKBAT.cleanStatic",
+        "median_confidence": 1.0,
+        "minimum_confidence": 1.0,
+        "prn": 10
+      },
+      {
+        "bits": 600,
+        "corrected_raw_end_sample_exclusive": 210268519,
+        "corrected_raw_start_sample": 150268604,
+        "dataset": "OAKBAT.cleanStatic",
+        "median_confidence": 1.0,
+        "minimum_confidence": 1.0,
+        "prn": 11
+      },
+      {
+        "bits": 600,
+        "corrected_raw_end_sample_exclusive": 210232455,
+        "corrected_raw_start_sample": 150232349,
+        "dataset": "OAKBAT.cleanStatic",
+        "median_confidence": 1.0,
+        "minimum_confidence": 1.0,
+        "prn": 21
+      },
+      {
+        "bits": 600,
+        "corrected_raw_end_sample_exclusive": 210218035,
+        "corrected_raw_start_sample": 150217952,
+        "dataset": "OAKBAT.cleanStatic",
+        "median_confidence": 1.0,
+        "minimum_confidence": 1.0,
+        "prn": 24
+      },
+      {
+        "bits": 600,
+        "corrected_raw_end_sample_exclusive": 210275378,
+        "corrected_raw_start_sample": 150275296,
+        "dataset": "OAKBAT.cleanStatic",
+        "median_confidence": 1.0,
+        "minimum_confidence": 1.0,
+        "prn": 27
+      },
+      {
+        "bits": 600,
+        "corrected_raw_end_sample_exclusive": 1117538686,
+        "corrected_raw_start_sample": 817538830,
+        "dataset": "TEXBAT.cleanStatic",
+        "median_confidence": 1.0,
+        "minimum_confidence": 1.0,
+        "prn": 3
+      },
+      {
+        "bits": 600,
+        "corrected_raw_end_sample_exclusive": 1117517038,
+        "corrected_raw_start_sample": 817517386,
+        "dataset": "TEXBAT.cleanStatic",
+        "median_confidence": 1.0,
+        "minimum_confidence": 1.0,
+        "prn": 13
+      },
+      {
+        "bits": 600,
+        "corrected_raw_end_sample_exclusive": 1117632068,
+        "corrected_raw_start_sample": 817631534,
+        "dataset": "TEXBAT.cleanStatic",
+        "median_confidence": 1.0,
+        "minimum_confidence": 1.0,
+        "prn": 16
+      },
+      {
+        "bits": 600,
+        "corrected_raw_end_sample_exclusive": 1117638023,
+        "corrected_raw_start_sample": 817638520,
+        "dataset": "TEXBAT.cleanStatic",
+        "median_confidence": 1.0,
+        "minimum_confidence": 1.0,
+        "prn": 19
+      },
+      {
+        "bits": 600,
+        "corrected_raw_end_sample_exclusive": 1117815938,
+        "corrected_raw_start_sample": 817815304,
+        "dataset": "TEXBAT.cleanStatic",
+        "median_confidence": 1.0,
+        "minimum_confidence": 1.0,
+        "prn": 30
+      }
+    ],
+    "previous_boundary_flag_passes": 854,
+    "prompt_agreements": 6000,
+    "start_nonboundary_passes": 6000
+  }
+}

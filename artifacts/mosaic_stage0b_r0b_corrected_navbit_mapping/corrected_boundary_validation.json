@@ -1,0 +1,100 @@
+{
+  "boundary_flag_failure_bits": 5146,
+  "corrected_evidence_canonical_sha256": "723672e222e81b09b4d53556e4cf09c4a168c55dde629301ea4b67f8499153a4",
+  "corrected_mapping_canonical_sha256": "11c49ca7487c281bad744dfc1578f883c24fcee57402786e1bc70ea7ed8ef49c",
+  "end_boundary_flag_passes": 861,
+  "epochs_per_bit": 20,
+  "evidence_rows": 126000,
+  "internal_boundary_failures": 0,
+  "loop_sequence_failures": 0,
+  "preceding_boundary_rows_per_bit": 1,
+  "previous_boundary_flag_passes": 854,
+  "start_nonboundary_passes": 6000,
+  "status": "FAIL",
+  "trace_bounds_failures": 0,
+  "trace_endpoint_transcription_errors": 0,
+  "trace_files": [
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_10.bin",
+      "prn": 10,
+      "record_count": 14998,
+      "sample_rate_hz": 5000000.0,
+      "sha256": "059ca9a4ba66faf8208318ac2f320e15762c281c01e5a877225cec05e627ed09"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_2.bin",
+      "prn": 11,
+      "record_count": 14998,
+      "sample_rate_hz": 5000000.0,
+      "sha256": "653c3fbce4c14e4624f5111ad739a5455e8c16532c8ecaf2d2f77e38cc3051bd"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_0.bin",
+      "prn": 21,
+      "record_count": 14998,
+      "sample_rate_hz": 5000000.0,
+      "sha256": "4ef713eac37560d85ea0e4b8fe01aca5b33eddce51df23e7a1d40f750351156b"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_3.bin",
+      "prn": 24,
+      "record_count": 14998,
+      "sample_rate_hz": 5000000.0,
+      "sha256": "9493ce9e855df4cd63774f6f3122806d780bb1105ed4b11e1e0ba453b120b3bf"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_1.bin",
+      "prn": 27,
+      "record_count": 14998,
+      "sample_rate_hz": 5000000.0,
+      "sha256": "f7cbf285bffac4d034ee63569094e602f688736dd2e296979958497b8653d40c"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_2.bin",
+      "prn": 3,
+      "record_count": 14998,
+      "sample_rate_hz": 25000000.0,
+      "sha256": "228d8db83103674c25db2a80eb1ca2d0470bff372d503b4cec94040fba507fa0"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_4.bin",
+      "prn": 13,
+      "record_count": 14998,
+      "sample_rate_hz": 25000000.0,
+      "sha256": "d2feffd1bbb4c0ce9cd12ca137abc512d168ecc29667e95a2f3b65c923c04325"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_1.bin",
+      "prn": 16,
+      "record_count": 14998,
+      "sample_rate_hz": 25000000.0,
+      "sha256": "b3a7a9afa644c48328a0295749cf08203da734912a79cecd614b75d219ea1fa8"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_0.bin",
+      "prn": 19,
+      "record_count": 14998,
+      "sample_rate_hz": 25000000.0,
+      "sha256": "c4b5f7e04d9a96cb9e5770b54dad7c0b3674281ac7d1a4859924b91ea77d7fc8"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_3.bin",
+      "prn": 30,
+      "record_count": 14998,
+      "sample_rate_hz": 25000000.0,
+      "sha256": "98e6015ae8473573882b0f0980af1bf244c1759bdfa36398c0002d7bba907bc7"
+    }
+  ],
+  "tracking_session_failures": 0,
+  "validated_bits": 6000
+}

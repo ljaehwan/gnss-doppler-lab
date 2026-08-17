@@ -1,0 +1,7 @@
+{
+  "bit_or_polarity_changed": false,
+  "code_nco_rounding_preserved": true,
+  "constant_sample_offset_used": false,
+  "rule": "corrected_start=frozen_start+1; corrected_end=frozen_end+1; endpoints copied from those exact TRACE rows",
+  "source_semantics": "data_symbol_boundary marks END_OF_CURRENT_BIT; following row is START_OF_NEW_BIT"
+}

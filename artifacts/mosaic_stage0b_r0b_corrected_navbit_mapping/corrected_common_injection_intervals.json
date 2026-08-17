@@ -1,0 +1,79 @@
+{
+  "contract": "Injection is prohibited by the R0b boundary verdict. If a later audit supplies direct boundary evidence and authorizes use, it must remain inside this corrected intersection and use a transition-safe start.",
+  "recomputed": {
+    "datasets": {
+      "OAKBAT.cleanStatic": {
+        "all_five_prns_simultaneous": true,
+        "candidate_authorization": "NOT_AUTHORIZED_BOUNDARY_CONTRACT_FAIL",
+        "complete_bits_inside_common_interval": {
+          "10": 599,
+          "11": 598,
+          "21": 598,
+          "24": 598,
+          "27": 599
+        },
+        "corrected_common_raw_end_sample_exclusive": 210202273,
+        "corrected_common_raw_start_sample": 150275296,
+        "duration_samples": 59926977,
+        "duration_seconds": 11.9853954,
+        "included_prns": [
+          10,
+          11,
+          21,
+          24,
+          27
+        ],
+        "minimum_four_prns_simultaneous": true,
+        "safe_injection_start_candidates_first_10": [
+          150280296,
+          150285296,
+          150290296,
+          150295296,
+          150310296,
+          150325296,
+          150340296,
+          150345296,
+          150350296,
+          150355296
+        ],
+        "transition_boundary_count": 1470
+      },
+      "TEXBAT.cleanStatic": {
+        "all_five_prns_simultaneous": true,
+        "candidate_authorization": "NOT_AUTHORIZED_BOUNDARY_CONTRACT_FAIL",
+        "complete_bits_inside_common_interval": {
+          "13": 599,
+          "16": 598,
+          "19": 598,
+          "3": 598,
+          "30": 599
+        },
+        "corrected_common_raw_end_sample_exclusive": 1117517038,
+        "corrected_common_raw_start_sample": 817815304,
+        "duration_samples": 299701734,
+        "duration_seconds": 11.98806936,
+        "included_prns": [
+          3,
+          13,
+          16,
+          19,
+          30
+        ],
+        "minimum_four_prns_simultaneous": true,
+        "safe_injection_start_candidates_first_10": [
+          817840304,
+          817865304,
+          817890304,
+          817915304,
+          817940304,
+          817965304,
+          817990304,
+          818065304,
+          818090304,
+          818165304
+        ],
+        "transition_boundary_count": 1488
+      }
+    }
+  }
+}

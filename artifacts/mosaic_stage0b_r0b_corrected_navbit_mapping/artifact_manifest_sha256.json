@@ -1,0 +1,80 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "b7c5a3755dbb5a2915112faa70036df48030741df0bee592dc5e83e951f72818",
+      "size_bytes": 2452
+    },
+    {
+      "path": "config.json",
+      "sha256": "095946cf162ef3edb6502f1bb102547792222b8093c5c8890b6dd5ca1cd55637",
+      "size_bytes": 385
+    },
+    {
+      "path": "corrected_boundary_validation.json",
+      "sha256": "04c7ca324ec92680cd1d2163263dc733e79d9aff31173a9a243584fae88873ae",
+      "size_bytes": 4448
+    },
+    {
+      "path": "corrected_common_injection_intervals.json",
+      "sha256": "021d8ba2d4ad5842185b123f266c289a7d5773f311fb01a75db5591fe8ba25c6",
+      "size_bytes": 2260
+    },
+    {
+      "path": "corrected_epoch_evidence.csv.gz",
+      "sha256": "a7e0c40d5cc9281c38cceaac0d893db5145b873ea7ef6c67d8e21fa8e13406e0",
+      "size_bytes": 3449329
+    },
+    {
+      "path": "corrected_navbit_sample_mapping.csv.gz",
+      "sha256": "0fe0f37dd5f27aefa894b0481cb869dcafa2dc63977ee7185724d577ee8734b9",
+      "size_bytes": 183533
+    },
+    {
+      "path": "corrected_per_prn_validation.csv",
+      "sha256": "53f9b029fe3c743ee0e13f1f0e7b88001a993f92e2997dee829c39f2f77b2c9c",
+      "size_bytes": 660
+    },
+    {
+      "path": "corrected_prompt_bit_agreement.json",
+      "sha256": "a23cf0a146c990334d00cf3745d8cb31bdb792ecc982bbad6de9fc68d6a43f85",
+      "size_bytes": 3093
+    },
+    {
+      "path": "correction_rule.json",
+      "sha256": "09bb8770b08f074d5f7855ea8ece55abf6d9ae8d1e4191dc0b023f3238894520",
+      "size_bytes": 342
+    },
+    {
+      "path": "final_verdict.json",
+      "sha256": "5b64bf43e2c47afa77a80472788d41a705c2c0e6e5a92add1e2c6c0e00f80ee1",
+      "size_bytes": 721
+    },
+    {
+      "path": "frozen_input_integrity.json",
+      "sha256": "803e246a6b3045899708c0ec20c424f45114373223cf021e583da8b9938020f6",
+      "size_bytes": 426
+    },
+    {
+      "path": "independent_bit_recomputation.json",
+      "sha256": "6ba1a2e40e36a53b653e605df9098a23694f5bbe498b86a1c7de9eb067bd815e",
+      "size_bytes": 5998
+    },
+    {
+      "path": "scope_limitations.json",
+      "sha256": "dc0b65a0ade02ee3998476b05f6d96393ef752e93574e301c9b8bc6b53aafed0",
+      "size_bytes": 237
+    },
+    {
+      "path": "source_commit.json",
+      "sha256": "79bee1412cd04c6af56dc5c5a50bce1cba369669ed9ede47cda5240260014deb",
+      "size_bytes": 329
+    },
+    {
+      "path": "tamper_negative_tests.json",
+      "sha256": "2f2c0485a73e36ddb533f7b69511c74b8a9f59a84fe128ad9e5a0db5c85ad585",
+      "size_bytes": 2532
+    }
+  ],
+  "schema": "gnss-doppler-lab.artifact-manifest-sha256.v1"
+}

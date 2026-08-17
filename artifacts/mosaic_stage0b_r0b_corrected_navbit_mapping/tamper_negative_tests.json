@@ -1,0 +1,73 @@
+{
+  "all_expected_failures_observed": true,
+  "frozen_or_committed_artifact_modified": false,
+  "mutation_medium": "in-memory copies",
+  "tests": [
+    {
+      "expected_failure_label": "CORRECTED_BOUNDARY_STRUCTURE_FAIL",
+      "name": "corrected_start_reverted_to_flag_row",
+      "observed_failure_label": "CORRECTED_BOUNDARY_STRUCTURE_FAIL",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "CORRECTED_BOUNDARY_STRUCTURE_FAIL",
+      "name": "corrected_start_shifted_two_rows",
+      "observed_failure_label": "CORRECTED_BOUNDARY_STRUCTURE_FAIL",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "CORRECTED_BOUNDARY_STRUCTURE_FAIL",
+      "name": "corrected_end_shifted_one_row",
+      "observed_failure_label": "CORRECTED_BOUNDARY_STRUCTURE_FAIL",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "CORRECTED_TRACE_ENDPOINT_MISMATCH",
+      "name": "raw_endpoint_plus_one_sample",
+      "observed_failure_label": "CORRECTED_TRACE_ENDPOINT_MISMATCH",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "CORRECTED_EVIDENCE_DIGEST_MISMATCH",
+      "name": "previous_boundary_flag_changed",
+      "observed_failure_label": "CORRECTED_EVIDENCE_DIGEST_MISMATCH",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "CORRECTED_BOUNDARY_STRUCTURE_FAIL",
+      "name": "tracking_session_changed",
+      "observed_failure_label": "CORRECTED_BOUNDARY_STRUCTURE_FAIL",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "CORRECTED_EVIDENCE_DIGEST_MISMATCH",
+      "name": "single_prompt_sign_changed",
+      "observed_failure_label": "CORRECTED_EVIDENCE_DIGEST_MISMATCH",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "CORRECTED_PROMPT_BIT_MISMATCH",
+      "name": "transmitted_bit_flip",
+      "observed_failure_label": "CORRECTED_PROMPT_BIT_MISMATCH",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "CORRECTED_PROMPT_BIT_MISMATCH",
+      "name": "parity_csv_true_actual_bit_changed",
+      "observed_failure_label": "CORRECTED_PROMPT_BIT_MISMATCH",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "CORRECTED_PROMPT_BIT_MISMATCH",
+      "name": "constant_plus_one_sequence",
+      "observed_failure_label": "CORRECTED_PROMPT_BIT_MISMATCH",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "CORRECTED_COMMON_INTERVAL_INVALID",
+      "name": "common_interval_expanded",
+      "observed_failure_label": "CORRECTED_COMMON_INTERVAL_INVALID",
+      "passed": true
+    }
+  ]
+}

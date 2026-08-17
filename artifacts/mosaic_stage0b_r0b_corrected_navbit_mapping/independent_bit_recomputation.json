@@ -1,0 +1,232 @@
+{
+  "derived_PASS_booleans_trusted": false,
+  "production_decoder_imported": false,
+  "recomputation": {
+    "d29_d30_chain_errors": 0,
+    "parity_valid_words": 200,
+    "per_prn": [
+      {
+        "d29_d30_chain_errors": 0,
+        "dataset": "OAKBAT.cleanStatic",
+        "initial_d29": 0,
+        "initial_d30": 0,
+        "parity_valid_words": 20,
+        "preambles_valid": 2,
+        "prn": 10,
+        "sequence_sha256": "7b1afb830fdb3b15771ba383611af6da1af2410f29082ba75317c580cb7fddc1",
+        "subframe_ids": [
+          1,
+          2
+        ],
+        "tow_seconds": [
+          381636,
+          381642
+        ],
+        "validated_bits": 600,
+        "validated_start_bit_index": 1,
+        "words": 20
+      },
+      {
+        "d29_d30_chain_errors": 0,
+        "dataset": "OAKBAT.cleanStatic",
+        "initial_d29": 1,
+        "initial_d30": 1,
+        "parity_valid_words": 20,
+        "preambles_valid": 2,
+        "prn": 11,
+        "sequence_sha256": "d68fa2d0e72d3d2abd05ab87ba41bcd81af97ec51dac9e0773eeb833c04b8427",
+        "subframe_ids": [
+          1,
+          2
+        ],
+        "tow_seconds": [
+          381636,
+          381642
+        ],
+        "validated_bits": 600,
+        "validated_start_bit_index": 2,
+        "words": 20
+      },
+      {
+        "d29_d30_chain_errors": 0,
+        "dataset": "OAKBAT.cleanStatic",
+        "initial_d29": 0,
+        "initial_d30": 0,
+        "parity_valid_words": 20,
+        "preambles_valid": 2,
+        "prn": 21,
+        "sequence_sha256": "addef89133677348ae2b4bff3ceaa5fc2dd8cd9cb6a9281dd30445b3b3935e60",
+        "subframe_ids": [
+          1,
+          2
+        ],
+        "tow_seconds": [
+          381636,
+          381642
+        ],
+        "validated_bits": 600,
+        "validated_start_bit_index": 2,
+        "words": 20
+      },
+      {
+        "d29_d30_chain_errors": 0,
+        "dataset": "OAKBAT.cleanStatic",
+        "initial_d29": 1,
+        "initial_d30": 1,
+        "parity_valid_words": 20,
+        "preambles_valid": 2,
+        "prn": 24,
+        "sequence_sha256": "57b82646849cfec8be169659b23269614993ab3b47f9c0ed35ad6627e4bd736f",
+        "subframe_ids": [
+          1,
+          2
+        ],
+        "tow_seconds": [
+          381636,
+          381642
+        ],
+        "validated_bits": 600,
+        "validated_start_bit_index": 2,
+        "words": 20
+      },
+      {
+        "d29_d30_chain_errors": 0,
+        "dataset": "OAKBAT.cleanStatic",
+        "initial_d29": 1,
+        "initial_d30": 1,
+        "parity_valid_words": 20,
+        "preambles_valid": 2,
+        "prn": 27,
+        "sequence_sha256": "8e5286a91437b8eb816421ee6c50927a3b4062cea509b25daac14be3df7c59c0",
+        "subframe_ids": [
+          1,
+          2
+        ],
+        "tow_seconds": [
+          381636,
+          381642
+        ],
+        "validated_bits": 600,
+        "validated_start_bit_index": 2,
+        "words": 20
+      },
+      {
+        "d29_d30_chain_errors": 0,
+        "dataset": "TEXBAT.cleanStatic",
+        "initial_d29": 0,
+        "initial_d30": 0,
+        "parity_valid_words": 20,
+        "preambles_valid": 2,
+        "prn": 3,
+        "sequence_sha256": "d9726e2842c02a8a5a044814797ef557a879ec64371f6281f839e08bf4fd8c3b",
+        "subframe_ids": [
+          3,
+          4
+        ],
+        "tow_seconds": [
+          477918,
+          477924
+        ],
+        "validated_bits": 600,
+        "validated_start_bit_index": 135,
+        "words": 20
+      },
+      {
+        "d29_d30_chain_errors": 0,
+        "dataset": "TEXBAT.cleanStatic",
+        "initial_d29": 1,
+        "initial_d30": 1,
+        "parity_valid_words": 20,
+        "preambles_valid": 2,
+        "prn": 13,
+        "sequence_sha256": "82c38369ade72866b3403c402b2c9fd59a9150523be96c84c41ff73284591f2e",
+        "subframe_ids": [
+          3,
+          4
+        ],
+        "tow_seconds": [
+          477918,
+          477924
+        ],
+        "validated_bits": 600,
+        "validated_start_bit_index": 134,
+        "words": 20
+      },
+      {
+        "d29_d30_chain_errors": 0,
+        "dataset": "TEXBAT.cleanStatic",
+        "initial_d29": 1,
+        "initial_d30": 1,
+        "parity_valid_words": 20,
+        "preambles_valid": 2,
+        "prn": 16,
+        "sequence_sha256": "c7de5960e38aeee4de2fe262d51509c922fc2d057b3b9c79f46c91d0ccf4760a",
+        "subframe_ids": [
+          3,
+          4
+        ],
+        "tow_seconds": [
+          477918,
+          477924
+        ],
+        "validated_bits": 600,
+        "validated_start_bit_index": 135,
+        "words": 20
+      },
+      {
+        "d29_d30_chain_errors": 0,
+        "dataset": "TEXBAT.cleanStatic",
+        "initial_d29": 1,
+        "initial_d30": 1,
+        "parity_valid_words": 20,
+        "preambles_valid": 2,
+        "prn": 19,
+        "sequence_sha256": "03b448381d9296288a4bb4f26509ec05924c5ec1c6f14759c5032cecb4940cb2",
+        "subframe_ids": [
+          3,
+          4
+        ],
+        "tow_seconds": [
+          477918,
+          477924
+        ],
+        "validated_bits": 600,
+        "validated_start_bit_index": 135,
+        "words": 20
+      },
+      {
+        "d29_d30_chain_errors": 0,
+        "dataset": "TEXBAT.cleanStatic",
+        "initial_d29": 1,
+        "initial_d30": 1,
+        "parity_valid_words": 20,
+        "preambles_valid": 2,
+        "prn": 30,
+        "sequence_sha256": "6ff2a184bce692277757a5e2715d716c393bce9725ba36ba78f79f364082b31a",
+        "subframe_ids": [
+          3,
+          4
+        ],
+        "tow_seconds": [
+          477918,
+          477924
+        ],
+        "validated_bits": 600,
+        "validated_start_bit_index": 135,
+        "words": 20
+      }
+    ],
+    "preambles_valid": 20,
+    "total_validated_bits": 6000,
+    "total_words": 200,
+    "tow_continuity_valid_prns": 10,
+    "transmitted_bit_distribution": {
+      "0": 3014,
+      "1": 2986
+    },
+    "unique_prn_sequence_hashes": 10,
+    "validated_bits_per_prn": 600,
+    "validated_prns": 10,
+    "words_per_prn": 20
+  }
+}
