@@ -1,0 +1,287 @@
+{
+  "all_completed_successfully": false,
+  "run_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/runner-runs",
+  "runs": [
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_mctd_stage0.py",
+        "run-phase-a-all"
+      ],
+      "command_pgid": 742845,
+      "command_pid": 742845,
+      "created_at": "2026-08-17T02:31:48+00:00",
+      "ended_at": "2026-08-17T02:36:00+00:00",
+      "exit_code": 0,
+      "git": {
+        "branch": "research/mctd-stage0-static",
+        "captured_at": "2026-08-17T02:31:48+00:00",
+        "head": "21561ac6fed096b9169831bdec78d0f8acd7261d",
+        "repo": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static",
+        "status_short": "",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static"
+      },
+      "name": "mctd-phase-a-replays",
+      "pid": 742840,
+      "run_id": "20260817T023148Z-mctd-phase-a-replays",
+      "started_at": "2026-08-17T02:31:48+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "21e5cafb80e43a76048f91d21f5573f0e1555de67204d4850fdb368d2f1a5296",
+      "updated_at": "2026-08-17T02:36:00+00:00"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_mctd_stage0.py",
+        "phase-a"
+      ],
+      "command_pgid": 744941,
+      "command_pid": 744941,
+      "created_at": "2026-08-17T02:36:23+00:00",
+      "ended_at": "2026-08-17T02:36:33+00:00",
+      "exit_code": 0,
+      "git": {
+        "branch": "research/mctd-stage0-static",
+        "captured_at": "2026-08-17T02:36:23+00:00",
+        "head": "21d43071183c5601cf471d410e8f8ea10ea963cb",
+        "repo": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static",
+        "status_short": "",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static"
+      },
+      "name": "mctd-phase-a-evaluation",
+      "pid": 744936,
+      "run_id": "20260817T023623Z-mctd-phase-a-evaluation",
+      "started_at": "2026-08-17T02:36:23+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "bae38be74088d8aa6cf3c68cfd7157062f401a2d8aa9120e4e715a05c44ecc82",
+      "updated_at": "2026-08-17T02:36:33+00:00"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_mctd_stage0.py",
+        "run-clean-all"
+      ],
+      "command_pgid": 745204,
+      "command_pid": 745204,
+      "created_at": "2026-08-17T02:36:46+00:00",
+      "ended_at": "2026-08-17T03:01:26+00:00",
+      "exit_code": 0,
+      "git": {
+        "branch": "research/mctd-stage0-static",
+        "captured_at": "2026-08-17T02:36:46+00:00",
+        "head": "21d43071183c5601cf471d410e8f8ea10ea963cb",
+        "repo": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static",
+        "status_short": "",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static"
+      },
+      "name": "mctd-clean-full-replays",
+      "pid": 745199,
+      "run_id": "20260817T023646Z-mctd-clean-full-replays",
+      "started_at": "2026-08-17T02:36:46+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "8d97abac48b5c7c071e2e08fe7429e1339d734f0124e2f3841ee07399e2b00dc",
+      "stdout_sha256": "73592fd7aa726051c1e8de9afa1ba3d0bd619b04697eb3cc8ad483ef68a538ed",
+      "updated_at": "2026-08-17T03:01:26+00:00"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_mctd_stage0.py",
+        "phase-a"
+      ],
+      "command_pgid": 747142,
+      "command_pid": 747142,
+      "created_at": "2026-08-17T02:42:35+00:00",
+      "ended_at": "2026-08-17T02:42:52+00:00",
+      "exit_code": 0,
+      "git": {
+        "branch": "research/mctd-stage0-static",
+        "captured_at": "2026-08-17T02:42:35+00:00",
+        "head": "a8ef54ee21c9d9ff1d7a42ffa919b3d897645fe3",
+        "repo": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static",
+        "status_short": "",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static"
+      },
+      "name": "mctd-phase-a-evaluation-r1",
+      "pid": 747136,
+      "run_id": "20260817T024235Z-mctd-phase-a-evaluation-r1",
+      "started_at": "2026-08-17T02:42:35+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "759e04dd4619f475d8c72ef86bd064b411d314231f50e733c1e58209b51e0506",
+      "updated_at": "2026-08-17T02:42:52+00:00"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_mctd_stage0.py",
+        "fit-clean"
+      ],
+      "command_pgid": 751277,
+      "command_pid": 751277,
+      "created_at": "2026-08-17T03:01:55+00:00",
+      "ended_at": "2026-08-17T03:10:08+00:00",
+      "exit_code": -15,
+      "git": {
+        "branch": "research/mctd-stage0-static",
+        "captured_at": "2026-08-17T03:01:55+00:00",
+        "head": "eb24def1ec27fdace685d2e08dc3061f75828696",
+        "repo": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static",
+        "status_short": "",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static"
+      },
+      "name": "mctd-clean-model-threshold-fit",
+      "pid": 751272,
+      "run_id": "20260817T030155Z-mctd-clean-model-threshold-fit",
+      "started_at": "2026-08-17T03:01:55+00:00",
+      "status": "killed",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "updated_at": "2026-08-17T03:10:08+00:00"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_mctd_stage0.py",
+        "fit-clean"
+      ],
+      "command_pgid": 753070,
+      "command_pid": 753070,
+      "created_at": "2026-08-17T03:11:02+00:00",
+      "ended_at": "2026-08-17T03:13:59+00:00",
+      "exit_code": 0,
+      "git": {
+        "branch": "research/mctd-stage0-static",
+        "captured_at": "2026-08-17T03:11:02+00:00",
+        "head": "3bebcdeaf2670c13cb9119f7614c0a4364d31eed",
+        "repo": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static",
+        "status_short": "",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static"
+      },
+      "name": "mctd-clean-model-threshold-fit-r1",
+      "pid": 753065,
+      "run_id": "20260817T031102Z-mctd-clean-model-threshold-fit-r1",
+      "started_at": "2026-08-17T03:11:02+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "aa64891214f4a656addb7efa611a0b8367811118df64fea0b4ad83c16490ed3d",
+      "updated_at": "2026-08-17T03:13:59+00:00"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/run_mctd_stage0.py",
+        "run-attack-all"
+      ],
+      "command_pgid": 754069,
+      "command_pid": 754069,
+      "created_at": "2026-08-17T03:15:41+00:00",
+      "ended_at": "2026-08-17T04:11:33+00:00",
+      "exit_code": 0,
+      "git": {
+        "branch": "research/mctd-stage0-static",
+        "captured_at": "2026-08-17T03:15:41+00:00",
+        "head": "8cb597873e3922d57d8573dd431f54fb94e7d249",
+        "repo": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static",
+        "status_short": "",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static"
+      },
+      "name": "mctd-core-attack-replays",
+      "pid": 754064,
+      "run_id": "20260817T031541Z-mctd-core-attack-replays",
+      "started_at": "2026-08-17T03:15:41+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "1929cbe847ee3bbd7e8c1534e7a0f2286a13b073abe1712724dedf88ad3e74d0",
+      "stdout_sha256": "aa5811588e7bf3d5d830b157d67a98fc7c1e23ff0595be0309e59aebf3ff5811",
+      "updated_at": "2026-08-17T04:11:33+00:00"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_mctd_stage0.py",
+        "evaluate-attacks"
+      ],
+      "command_pgid": 756955,
+      "command_pid": 756955,
+      "created_at": "2026-08-17T04:12:10+00:00",
+      "ended_at": "2026-08-17T04:19:46+00:00",
+      "exit_code": -15,
+      "git": {
+        "branch": "research/mctd-stage0-static",
+        "captured_at": "2026-08-17T04:12:10+00:00",
+        "head": "8cb597873e3922d57d8573dd431f54fb94e7d249",
+        "repo": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static",
+        "status_short": "",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static"
+      },
+      "name": "mctd-core-attack-evaluation",
+      "pid": 756950,
+      "run_id": "20260817T041210Z-mctd-core-attack-evaluation",
+      "started_at": "2026-08-17T04:12:10+00:00",
+      "status": "killed",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "updated_at": "2026-08-17T04:19:46+00:00"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_mctd_stage0.py",
+        "evaluate-attacks"
+      ],
+      "command_pgid": 758477,
+      "command_pid": 758477,
+      "created_at": "2026-08-17T04:20:28+00:00",
+      "ended_at": "2026-08-17T04:26:38+00:00",
+      "exit_code": -15,
+      "git": {
+        "branch": "research/mctd-stage0-static",
+        "captured_at": "2026-08-17T04:20:28+00:00",
+        "head": "35cb617b1b83c1cb1c5eee41652b10106df24c93",
+        "repo": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static",
+        "status_short": "",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static"
+      },
+      "name": "mctd-core-attack-evaluation-r1",
+      "pid": 758472,
+      "run_id": "20260817T042028Z-mctd-core-attack-evaluation-r1",
+      "started_at": "2026-08-17T04:20:28+00:00",
+      "status": "killed",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "updated_at": "2026-08-17T04:26:38+00:00"
+    },
+    {
+      "command": [
+        "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+        "scripts/evaluate_mctd_stage0.py",
+        "evaluate-attacks"
+      ],
+      "command_pgid": 759775,
+      "command_pid": 759775,
+      "created_at": "2026-08-17T04:27:05+00:00",
+      "ended_at": "2026-08-17T04:32:45+00:00",
+      "exit_code": 0,
+      "git": {
+        "branch": "research/mctd-stage0-static",
+        "captured_at": "2026-08-17T04:27:05+00:00",
+        "head": "3f744a70bfaba303058874d01ebdc6a8e81570a2",
+        "repo": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static",
+        "status_short": "",
+        "top_level": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static"
+      },
+      "name": "mctd-core-attack-evaluation-r2",
+      "pid": 759770,
+      "run_id": "20260817T042705Z-mctd-core-attack-evaluation-r2",
+      "started_at": "2026-08-17T04:27:05+00:00",
+      "status": "succeeded",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "05b7480db4c1a9428e5b9f2a55d9b3de92eccba5a4573ebbb9c11a2682775258",
+      "updated_at": "2026-08-17T04:32:45+00:00"
+    }
+  ],
+  "schema": "gnss-doppler-lab.mctd-runner-runs.v1"
+}

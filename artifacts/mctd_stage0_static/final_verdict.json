@@ -1,0 +1,51 @@
+{
+  "all_required_controls_pass": false,
+  "attack_metrics_computed": true,
+  "attack_result_retuning": false,
+  "b0_exact": {
+    "reason": "Exact frozen B0 cannot be rerun on native MCTD common support without changing B0; historical CSVs were not copied as MCTD results.",
+    "status": "UNAVAILABLE"
+  },
+  "beats_state_and_tap_family_count": 0,
+  "clean_holdout_fpr_worst": 0.024691358024691357,
+  "configuration_collapse_passed": true,
+  "external_static_fpr_worst": 0.08527131782945736,
+  "family_checks": {
+    "DS3": {
+      "beats_state_and_tap_pass": false,
+      "full_contribution_pass": false,
+      "member_scenarios": [
+        "DS3"
+      ]
+    },
+    "DS7": {
+      "beats_state_and_tap_pass": false,
+      "full_contribution_pass": false,
+      "member_scenarios": [
+        "DS7"
+      ]
+    },
+    "OAKBAT_OS3_OS4": {
+      "beats_state_and_tap_pass": false,
+      "full_contribution_pass": false,
+      "member_scenarios": [
+        "OS3",
+        "OS4"
+      ]
+    }
+  },
+  "full_contribution_family_count": 0,
+  "go": false,
+  "no_go_reasons": [
+    "cleanStatic holdout q99 FPR exceeds 1%",
+    "one or more core attack pre-onset FPRs exceed 5%",
+    "Full does not add the preregistered single-loop pAUC/delay benefit in at least two families",
+    "Full does not beat both state-only and tap-only in at least two families",
+    "required raw-IQ nuisance controls are unavailable and Full pairing destruction is only partial"
+  ],
+  "phase_a_passed": true,
+  "phase_b_run": true,
+  "recommended_next_action": "Stop MCTD Stage-1 and retain this frozen Stage-0 bundle as the negative-result record.",
+  "schema": "gnss-doppler-lab.mctd-final-verdict.v1",
+  "verdict": "NO_GO_MCTD_PHYSICAL_HYPOTHESIS"
+}

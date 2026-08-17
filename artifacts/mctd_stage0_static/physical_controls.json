@@ -1,0 +1,44 @@
+{
+  "all_required_controls_pass": false,
+  "controls": {
+    "cn0_decrease": {
+      "reason": "Requires authenticated raw-IQ attenuation and receiver rerun.",
+      "status": "UNAVAILABLE"
+    },
+    "common_gain_scaling": {
+      "persistent_alarm": false,
+      "status": "NORMALIZATION_INVARIANT_DIAGNOSTIC"
+    },
+    "global_complex_phase_rotation": {
+      "persistent_alarm": false,
+      "status": "NORMALIZATION_INVARIANT_DIAGNOSTIC"
+    },
+    "multipath": {
+      "reason": "No authenticated same-receiver multipath control recording was available.",
+      "status": "UNAVAILABLE"
+    },
+    "navigation_bit_sign_reversal": {
+      "persistent_alarm": false,
+      "status": "NORMALIZATION_INVARIANT_DIAGNOSTIC"
+    },
+    "prn_drop_add": {
+      "status": "LIMITED_FEATURE_SUPPORT_DIAGNOSTIC"
+    },
+    "prompt_amplitude_scaling": {
+      "persistent_alarm": false,
+      "status": "NORMALIZATION_INVARIANT_DIAGNOSTIC"
+    },
+    "raw_iq_awgn_0p5x_1x_2x": {
+      "reason": "No preregistered authenticated perturbed raw-IQ source exists; feature-space Gaussian noise is not substituted.",
+      "status": "UNAVAILABLE"
+    },
+    "receiver_clock_like_drift": {
+      "reason": "Requires a raw-IQ resampling control.",
+      "status": "UNAVAILABLE"
+    },
+    "single_prn_disturbance": {
+      "status": "LIMITED_FEATURE_SUPPORT_DIAGNOSTIC"
+    }
+  },
+  "schema": "gnss-doppler-lab.mctd-physical-controls.v1"
+}

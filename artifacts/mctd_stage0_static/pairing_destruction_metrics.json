@@ -1,0 +1,40 @@
+{
+  "limitation": "The native state/action sequences are receiver-recursive; distribution-preserving repair-free destruction is reported for the complex-tap component only and cannot satisfy the Full GO criterion.",
+  "not_used_for_tuning": true,
+  "schema": "gnss-doppler-lab.mctd-pairing-destruction.v1",
+  "status": "PARTIAL_DIAGNOSTIC",
+  "tests": [
+    {
+      "destroyed_mean": 8299.63504487423,
+      "original_mean": 32.119845633578734,
+      "scenario": "TEXBAT.DS3",
+      "scope": "complex_tap_component",
+      "status": "DIAGNOSTIC_ONLY",
+      "test": "PRN-wise time shift fast sequence"
+    },
+    {
+      "destroyed_mean": 6912.2176969254315,
+      "original_mean": 5.367402594539606,
+      "scenario": "TEXBAT.DS7",
+      "scope": "complex_tap_component",
+      "status": "DIAGNOSTIC_ONLY",
+      "test": "PRN-wise time shift fast sequence"
+    },
+    {
+      "destroyed_mean": 4314.27900466465,
+      "original_mean": 15.855285829056726,
+      "scenario": "OAKBAT.OS3",
+      "scope": "complex_tap_component",
+      "status": "DIAGNOSTIC_ONLY",
+      "test": "PRN-wise time shift fast sequence"
+    },
+    {
+      "destroyed_mean": 10679.919446315456,
+      "original_mean": 550.8031075844639,
+      "scenario": "OAKBAT.OS4",
+      "scope": "complex_tap_component",
+      "status": "DIAGNOSTIC_ONLY",
+      "test": "PRN-wise time shift fast sequence"
+    }
+  ]
+}

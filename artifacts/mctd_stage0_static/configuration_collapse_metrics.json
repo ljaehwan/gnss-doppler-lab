@@ -1,0 +1,34 @@
+{
+  "all_collapse": true,
+  "scenarios": [
+    {
+      "full_attack_mean": 39.34118822056004,
+      "identical_attack_mean": 0.0,
+      "relative_reduction": 1.0,
+      "scenario": "TEXBAT.DS3",
+      "status": "PASS"
+    },
+    {
+      "full_attack_mean": 8.630790680531605,
+      "identical_attack_mean": 0.0,
+      "relative_reduction": 1.0,
+      "scenario": "TEXBAT.DS7",
+      "status": "PASS"
+    },
+    {
+      "full_attack_mean": 21.36025925086809,
+      "identical_attack_mean": 0.0,
+      "relative_reduction": 1.0,
+      "scenario": "OAKBAT.OS3",
+      "status": "PASS"
+    },
+    {
+      "full_attack_mean": 306294432.6205036,
+      "identical_attack_mean": 0.0,
+      "relative_reduction": 1.0,
+      "scenario": "OAKBAT.OS4",
+      "status": "PASS"
+    }
+  ],
+  "schema": "gnss-doppler-lab.mctd-collapse.v1"
+}
