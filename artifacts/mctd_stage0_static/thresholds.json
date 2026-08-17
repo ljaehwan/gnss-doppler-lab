@@ -1,0 +1,88 @@
+{
+  "attack_data_used": false,
+  "primary": "q99",
+  "schema": "gnss-doppler-lab.mctd-thresholds.v1",
+  "sensitivity_only": [
+    "q99_5",
+    "empirical_1pct"
+  ],
+  "status": "FROZEN_CLEAN_ONLY",
+  "thresholds": {
+    "OAKBAT": {
+      "A0": {
+        "calibration_blocks": 809,
+        "empirical_1pct": 15.545011702022004,
+        "q99": 15.545011702022004,
+        "q99_5": 15.560370127861479
+      },
+      "A1": {
+        "calibration_blocks": 809,
+        "empirical_1pct": 15.510446278688113,
+        "q99": 15.510446278688113,
+        "q99_5": 15.565024457682403
+      },
+      "A2": {
+        "calibration_blocks": 809,
+        "empirical_1pct": 2.8839005271315568,
+        "q99": 2.8839005271315568,
+        "q99_5": 2.9750723997750885
+      },
+      "A3": {
+        "calibration_blocks": 809,
+        "empirical_1pct": 20.23895499443504,
+        "q99": 20.23895499443504,
+        "q99_5": 20.58159927327315
+      },
+      "A4": {
+        "calibration_blocks": 809,
+        "empirical_1pct": 3.7125356942693886,
+        "q99": 3.7125356942693886,
+        "q99_5": 3.8313061670734108
+      },
+      "Full": {
+        "calibration_blocks": 809,
+        "empirical_1pct": 24.515080086865055,
+        "q99": 24.515080086865055,
+        "q99_5": 24.852077990049303
+      }
+    },
+    "TEXBAT": {
+      "A0": {
+        "calibration_blocks": 809,
+        "empirical_1pct": 8.51842101915233,
+        "q99": 8.51842101915233,
+        "q99_5": 8.576785032474845
+      },
+      "A1": {
+        "calibration_blocks": 809,
+        "empirical_1pct": 8.42813707015916,
+        "q99": 8.42813707015916,
+        "q99_5": 8.487646529815882
+      },
+      "A2": {
+        "calibration_blocks": 809,
+        "empirical_1pct": 1.660237470904056,
+        "q99": 1.660237470904056,
+        "q99_5": 1.6819298353689223
+      },
+      "A3": {
+        "calibration_blocks": 809,
+        "empirical_1pct": 7.403715118008185,
+        "q99": 7.403715118008185,
+        "q99_5": 7.95958025147022
+      },
+      "A4": {
+        "calibration_blocks": 809,
+        "empirical_1pct": 2.0156042023518843,
+        "q99": 2.0156042023518843,
+        "q99_5": 2.061296550057936
+      },
+      "Full": {
+        "calibration_blocks": 809,
+        "empirical_1pct": 9.866050475520666,
+        "q99": 9.866050475520666,
+        "q99_5": 10.338764969049105
+      }
+    }
+  }
+}

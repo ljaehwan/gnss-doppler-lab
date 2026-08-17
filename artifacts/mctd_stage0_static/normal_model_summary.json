@@ -1,0 +1,118 @@
+{
+  "attack_data_used": false,
+  "families": {
+    "OAKBAT": {
+      "holdout": {
+        "A0": {
+          "blocks": 809,
+          "q99_fpr": 0.009888751545117428
+        },
+        "A1": {
+          "blocks": 809,
+          "q99_fpr": 0.012360939431396786
+        },
+        "A2": {
+          "blocks": 809,
+          "q99_fpr": 0.003708281829419036
+        },
+        "A3": {
+          "blocks": 809,
+          "q99_fpr": 0.006180469715698393
+        },
+        "A4": {
+          "blocks": 809,
+          "q99_fpr": 0.014833127317676144
+        },
+        "Full": {
+          "blocks": 809,
+          "q99_fpr": 0.007416563658838072
+        }
+      },
+      "model_path": "normal_model_oakbat.json",
+      "models": {
+        "A0": {
+          "dimensions": 18,
+          "regularization": 1e-08
+        },
+        "A1": {
+          "dimensions": 18,
+          "regularization": 1e-08
+        },
+        "A2": {
+          "dimensions": 4,
+          "regularization": 1e-08
+        },
+        "A3": {
+          "dimensions": 18,
+          "regularization": 1e-08
+        },
+        "A4": {
+          "dimensions": 5,
+          "regularization": 1e-08
+        },
+        "Full": {
+          "dimensions": 27,
+          "regularization": 1e-08
+        }
+      },
+      "quality_rows": 4389164
+    },
+    "TEXBAT": {
+      "holdout": {
+        "A0": {
+          "blocks": 810,
+          "q99_fpr": 0.29259259259259257
+        },
+        "A1": {
+          "blocks": 810,
+          "q99_fpr": 0.3530864197530864
+        },
+        "A2": {
+          "blocks": 810,
+          "q99_fpr": 0.04691358024691358
+        },
+        "A3": {
+          "blocks": 810,
+          "q99_fpr": 0.024691358024691357
+        },
+        "A4": {
+          "blocks": 810,
+          "q99_fpr": 0.03209876543209877
+        },
+        "Full": {
+          "blocks": 810,
+          "q99_fpr": 0.024691358024691357
+        }
+      },
+      "model_path": "normal_model_texbat.json",
+      "models": {
+        "A0": {
+          "dimensions": 18,
+          "regularization": 1e-08
+        },
+        "A1": {
+          "dimensions": 18,
+          "regularization": 1e-08
+        },
+        "A2": {
+          "dimensions": 4,
+          "regularization": 1e-08
+        },
+        "A3": {
+          "dimensions": 18,
+          "regularization": 1e-08
+        },
+        "A4": {
+          "dimensions": 5,
+          "regularization": 1e-08
+        },
+        "Full": {
+          "dimensions": 27,
+          "regularization": 1e-08
+        }
+      },
+      "quality_rows": 4391005
+    }
+  },
+  "schema": "gnss-doppler-lab.mctd-normal-summary.v1"
+}

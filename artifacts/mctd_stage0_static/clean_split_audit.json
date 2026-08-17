@@ -1,0 +1,87 @@
+{
+  "attack_data_used": false,
+  "chronological": true,
+  "families": {
+    "OAKBAT": {
+      "calibration": {
+        "fast_raw_sample_end": 1970791147,
+        "fast_raw_sample_start": 1566844512,
+        "row_count": 807828,
+        "slow_raw_sample_end": 1970791147,
+        "slow_raw_sample_start": 1566844512,
+        "time_end_s": 394.158,
+        "time_start_s": 313.369
+      },
+      "holdout": {
+        "fast_raw_sample_end": 2399739477,
+        "fast_raw_sample_start": 1995792868,
+        "row_count": 807893,
+        "slow_raw_sample_end": 2399739477,
+        "slow_raw_sample_start": 1995792868,
+        "time_end_s": 479.948,
+        "time_start_s": 399.159
+      },
+      "train": {
+        "fast_raw_sample_end": 1112897277,
+        "fast_raw_sample_start": 254997535,
+        "row_count": 1715619,
+        "slow_raw_sample_end": 1112897277,
+        "slow_raw_sample_start": 254997535,
+        "time_end_s": 222.579,
+        "time_start_s": 51.0
+      },
+      "validation": {
+        "fast_raw_sample_end": 1541842228,
+        "fast_raw_sample_start": 1137898523,
+        "row_count": 807890,
+        "slow_raw_sample_end": 1541842228,
+        "slow_raw_sample_start": 1137898523,
+        "time_end_s": 308.368,
+        "time_start_s": 227.58
+      }
+    },
+    "TEXBAT": {
+      "calibration": {
+        "fast_raw_sample_end": 9857235168,
+        "fast_raw_sample_start": 7836692599,
+        "row_count": 808220,
+        "slow_raw_sample_end": 9857235168,
+        "slow_raw_sample_start": 7836692599,
+        "time_end_s": 394.289,
+        "time_start_s": 313.468
+      },
+      "holdout": {
+        "fast_raw_sample_end": 12002796053,
+        "fast_raw_sample_start": 9982243470,
+        "row_count": 808215,
+        "slow_raw_sample_end": 12002796053,
+        "slow_raw_sample_start": 9982243470,
+        "time_end_s": 480.112,
+        "time_start_s": 399.29
+      },
+      "train": {
+        "fast_raw_sample_end": 5566111993,
+        "fast_raw_sample_start": 1274987763,
+        "row_count": 1716351,
+        "slow_raw_sample_end": 5566111993,
+        "slow_raw_sample_start": 1274987763,
+        "time_end_s": 222.644,
+        "time_start_s": 51.0
+      },
+      "validation": {
+        "fast_raw_sample_end": 7711685908,
+        "fast_raw_sample_start": 5691115270,
+        "row_count": 808230,
+        "slow_raw_sample_end": 7711685908,
+        "slow_raw_sample_start": 5691115270,
+        "time_end_s": 308.467,
+        "time_start_s": 227.645
+      }
+    }
+  },
+  "guard_s": 5.0,
+  "raw_sample_overlap": false,
+  "schema": "gnss-doppler-lab.mctd-clean-split.v1",
+  "status": "PASS",
+  "target_overlap": false
+}
