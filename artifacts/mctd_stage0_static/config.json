@@ -1,0 +1,36 @@
+{
+  "alarm_consecutive_blocks": 3,
+  "attack_data_used": false,
+  "block_ms": 100,
+  "bootstrap_resamples": 999,
+  "bootstrap_width_s": 10.0,
+  "core_scenarios": {
+    "OAKBAT.OS3": {
+      "onset_s": 120.0
+    },
+    "OAKBAT.OS4": {
+      "onset_s": 120.0
+    },
+    "TEXBAT.DS3": {
+      "onset_s": 118.9,
+      "pull_off_s": 195.0
+    },
+    "TEXBAT.DS7": {
+      "onset_s": 110.0,
+      "pull_off_s": 150.0
+    }
+  },
+  "empirical_fpr_target": 0.01,
+  "guard_s": 5.0,
+  "minimum_cn0_db_hz": 20.0,
+  "minimum_common_epochs": 1000,
+  "minimum_common_prns": 4,
+  "minimum_prompt_magnitude": 1e-06,
+  "primary_quantile": 0.99,
+  "prompt_epsilon": 1e-09,
+  "random_seed": 20260817,
+  "schema": "gnss-doppler-lab.mctd-config.v1",
+  "sensitivity_quantiles": [
+    0.995
+  ]
+}

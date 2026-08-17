@@ -1,0 +1,31 @@
+{
+  "alarm": "three true consecutive blocks; reset on gaps",
+  "attack_data_accessed_by_mctd": false,
+  "feature_sets": [
+    "A0",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "Full"
+  ],
+  "freeze_commit": "TO_BE_FILLED_BY_COMMIT",
+  "go_criteria": "TASK.md section 12 unchanged",
+  "loops": {
+    "fast": {
+      "dll_bw_hz": 2.0,
+      "pll_bw_hz": 25.0
+    },
+    "slow": {
+      "dll_bw_hz": 0.5,
+      "pll_bw_hz": 10.0
+    }
+  },
+  "model": "robust median center plus Ledoit-Wolf shrinkage covariance",
+  "phase_b_authorized": false,
+  "pooling": "PRN median then non-overlap 100 ms median",
+  "schema": "gnss-doppler-lab.mctd-preregistration.v1",
+  "status": "SEALED_BEFORE_ATTACK_EVALUATION",
+  "threshold": "dataset-local clean calibration q99"
+}

@@ -1,0 +1,97 @@
+{
+  "datasets": {
+    "OAKBAT.OS3": {
+      "expected_sha256": "2a3c3c5cf1accaa287fe14181e43070903500e0250c69e3c335f91c89c0cdc6c",
+      "fresh_sha256": "2a3c3c5cf1accaa287fe14181e43070903500e0250c69e3c335f91c89c0cdc6c",
+      "raw_iq": {
+        "ctime_ns": 1785201703000000000,
+        "device": 49,
+        "inode": 3065,
+        "mtime_ns": 1785201703000000000,
+        "path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/os3.bin",
+        "size_bytes": 9600000000
+      },
+      "sample_rate_hz": 5000000,
+      "stable_during_hash": true,
+      "status": "PASS"
+    },
+    "OAKBAT.OS4": {
+      "expected_sha256": "803f3c76bcc618efbc6b394eb536fe61ed8c3e34b1822c0088b4475621bfa8e4",
+      "fresh_sha256": "803f3c76bcc618efbc6b394eb536fe61ed8c3e34b1822c0088b4475621bfa8e4",
+      "raw_iq": {
+        "ctime_ns": 1785201422000000000,
+        "device": 49,
+        "inode": 3066,
+        "mtime_ns": 1785201422000000000,
+        "path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/os4.bin",
+        "size_bytes": 9600000000
+      },
+      "sample_rate_hz": 5000000,
+      "stable_during_hash": true,
+      "status": "PASS"
+    },
+    "OAKBAT.cleanStatic": {
+      "expected_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "fresh_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "raw_iq": {
+        "ctime_ns": 1785200321000000000,
+        "device": 49,
+        "inode": 3062,
+        "mtime_ns": 1785200321000000000,
+        "path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+        "size_bytes": 9600000000
+      },
+      "sample_rate_hz": 5000000,
+      "stable_during_hash": true,
+      "status": "PASS"
+    },
+    "TEXBAT.DS3": {
+      "expected_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "fresh_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "raw_iq": {
+        "ctime_ns": 1784563991000000000,
+        "device": 49,
+        "inode": 3091,
+        "mtime_ns": 1784563991000000000,
+        "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds3.bin",
+        "size_bytes": 45785022464
+      },
+      "sample_rate_hz": 25000000,
+      "stable_during_hash": true,
+      "status": "PASS"
+    },
+    "TEXBAT.DS7": {
+      "expected_sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "fresh_sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "raw_iq": {
+        "ctime_ns": 1784771141000000000,
+        "device": 49,
+        "inode": 3095,
+        "mtime_ns": 1784771141000000000,
+        "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds7.bin",
+        "size_bytes": 27059290112
+      },
+      "sample_rate_hz": 25000000,
+      "stable_during_hash": true,
+      "status": "PASS"
+    },
+    "TEXBAT.cleanStatic": {
+      "expected_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "fresh_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "raw_iq": {
+        "ctime_ns": 1784430845000000000,
+        "device": 49,
+        "inode": 3088,
+        "mtime_ns": 1784430845000000000,
+        "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+        "size_bytes": 48016392192
+      },
+      "sample_rate_hz": 25000000,
+      "stable_during_hash": true,
+      "status": "PASS"
+    }
+  },
+  "inherited_read_only": true,
+  "schema": "gnss-doppler-lab.mctd-raw-source-binding.v1",
+  "status": "PASS"
+}

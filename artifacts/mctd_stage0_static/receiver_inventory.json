@@ -1,0 +1,26 @@
+{
+  "inherited_code_modified": false,
+  "loop_bandwidth_configuration": "SUPPORTED_BY_TRACKING_1C.dll_bw_hz/pll_bw_hz",
+  "receiver": {
+    "build_step": "No rebuild; verified byte-identical reuse.",
+    "receiver_base_commit": "1ddd4562723040fd66cb334b578a5b69455625f4",
+    "receiver_build_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-build",
+    "receiver_executable": {
+      "byte_size": 36602584,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-build/src/main/gnss-sdr",
+      "sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0"
+    },
+    "receiver_repair_diff": {
+      "byte_size": 47398,
+      "path": "artifacts/trace_stage0_r2d_oakbat_clean_support_repair/receiver_repair.diff",
+      "sha256": "81b680bfae682fa92743fca53ce30ae09790383d008841d6eae3a25407442540"
+    },
+    "receiver_source_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-source",
+    "schema": "gnss-doppler-lab.trace-r2e-receiver-build-manifest.v1",
+    "status": "PASS_REUSED_BYTE_IDENTICAL_R2C_R2D",
+    "terminal_drain_semantics": "unchanged byte-identical R2c/R2d executable and patch"
+  },
+  "required_native_fields": "AVAILABLE_IN_TRC1MS02",
+  "schema": "gnss-doppler-lab.mctd-receiver-inventory.v1",
+  "status": "PASS"
+}

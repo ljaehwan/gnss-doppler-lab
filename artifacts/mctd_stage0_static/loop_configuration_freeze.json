@@ -1,0 +1,51 @@
+{
+  "attack_data_used": false,
+  "common": {
+    "coherent_integration_ms": 1,
+    "minimum_cn0_db_hz": 20.0,
+    "same_discriminators": true,
+    "same_nav_bit_handling": true,
+    "tap_count": 9,
+    "tap_spacing_chips": 0.125,
+    "tracking_order": 3,
+    "warmup_s": 10.0
+  },
+  "final": {
+    "fast": {
+      "dll_bw_hz": 2.0,
+      "pll_bw_hz": 25.0
+    },
+    "slow": {
+      "dll_bw_hz": 0.5,
+      "pll_bw_hz": 10.0
+    }
+  },
+  "fll": {
+    "reason": "Receiver preserves the same DLL/PLL tracking implementation; no independent FLL bandwidth property is exposed by this configuration.",
+    "status": "NOT_APPLICABLE_SEPARATE_CONFIG"
+  },
+  "freeze_commit": "TO_BE_FILLED_BY_COMMIT",
+  "identical_control": {
+    "left": {
+      "dll_bw_hz": 0.5,
+      "pll_bw_hz": 10.0
+    },
+    "right": {
+      "dll_bw_hz": 0.5,
+      "pll_bw_hz": 10.0
+    }
+  },
+  "requested": {
+    "fast": {
+      "dll_bw_hz": 2.0,
+      "pll_bw_hz": 25.0
+    },
+    "slow": {
+      "dll_bw_hz": 0.5,
+      "pll_bw_hz": 10.0
+    }
+  },
+  "schema": "gnss-doppler-lab.mctd-loop-freeze.v1",
+  "status": "PREREGISTERED_CLEAN_ONLY",
+  "support_reason": "Requested values are directly supported receiver properties; stable support remains a Phase-A gate."
+}

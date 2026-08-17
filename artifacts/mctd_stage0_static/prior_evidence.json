@@ -1,0 +1,26 @@
+{
+  "B0": {
+    "artifact_commit": "f3de06040ae5f2f70a267e035c882756e397ba92",
+    "interpretation": "Signed fixed complex nine-tap morphology carries attack information; the historical multi-PRN binomial aggregation added only a small benefit.",
+    "paper_b0_normalized_pauc_fpr_le_0_05": {
+      "DS1": 0.997032640949555,
+      "DS2": 0.9985611510791367,
+      "DS3": 0.9970501474926253
+    },
+    "source": "/home/ubuntu/projects/gnss-doppler-b0-cs-stage0-static/artifacts/b0_cs_stage0_static/ablation_metrics.csv",
+    "source_sha256": "964a395b2810e545329ab97c287e8bcfa3aa2f9086b279606bc86b78ac11ff27",
+    "status": "AVAILABLE"
+  },
+  "TRACE_R2e": {
+    "DS3_pre_onset_fpr": 0.5625,
+    "DS7_pre_onset_fpr": 0.1,
+    "artifact_commit": "d6609fb8c708e19c4ebd1381357283efb0f3e7f8",
+    "interpretation": "OS3/OS4 actual-action, no-action, shuffled-action, and fixed9 results were nearly identical; action shift/shuffle did not reduce attack score, so action-next-peak relation was not supported.",
+    "source": "/home/ubuntu/projects/gnss-doppler-mctd-stage0-static/artifacts/trace_stage0_r2e_attack_support_repair/final_verdict.json",
+    "source_sha256": "fa7fd77a10e5a42ad6bfdda373429db62983d2dc71507eb8bf1aaac2c38ee1a3",
+    "status": "AVAILABLE",
+    "texbat_clean_holdout_fpr": 0.32748538011695905
+  },
+  "schema": "gnss-doppler-lab.mctd-prior-evidence.v1",
+  "used_as_mctd_results": false
+}
