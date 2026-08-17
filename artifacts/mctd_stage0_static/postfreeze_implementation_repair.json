@@ -1,0 +1,23 @@
+{
+  "schema": "gnss-doppler-lab.mctd-postfreeze-implementation-repair.v1",
+  "status": "SEALED_BEFORE_SUCCESSFUL_ATTACK_SCORING",
+  "failed_runner_run_id": "20260817T041210Z-mctd-core-attack-evaluation",
+  "failure": "PER_PRN_ARTIFACT_SERIALIZATION_QUADRATIC_SCAN",
+  "attack_replays_completed": true,
+  "attack_metrics_or_result_files_emitted_before_repair": false,
+  "repair": "Replace repeated full-array masks used only to serialize per-PRN/block descriptive rows with one lexicographic (block,PRN) grouping pass.",
+  "scientific_contract_changed": false,
+  "unchanged": [
+    "loop bandwidths",
+    "features",
+    "validity gates",
+    "clean models",
+    "thresholds",
+    "epoch and block scores",
+    "common support",
+    "alarm logic",
+    "bootstrap rules",
+    "GO/NO-GO criteria"
+  ],
+  "attack_results_inspected_for_repair": false
+}

@@ -327,16 +327,22 @@ def evaluate_attacks() -> int:
         destruction_rows.append({"scenario": name, "test": "PRN-wise time shift fast sequence",
                                  "scope": "complex_tap_component", "original_mean": float(np.mean(scenario_scores["A3"])),
                                  "destroyed_mean": float(np.mean(shifted_score)), "status": "DIAGNOSTIC_ONLY"})
-        # Compact per-PRN/block divergence summary.
-        for block_value in common:
-            mask_block = aligned.epoch_ms // 100 * 100 == block_value
-            for prn in np.unique(aligned.prn[mask_block]):
-                mask = mask_block & (aligned.prn == prn)
-                prn_rows.append({"dataset": name, "block_start_s": block_value / 1000.0, "prn": int(prn),
-                                 "code_divergence_abs_median": float(np.median(np.abs(aligned.state[mask, 0]))),
-                                 "doppler_divergence_abs_median": float(np.median(np.abs(aligned.state[mask, 2]))),
-                                 "tap_divergence_norm_median": float(np.median(np.linalg.norm(aligned.taps[mask], axis=1))),
-                                 "full_divergence_norm_median": float(np.median(np.linalg.norm(aligned.full[mask], axis=1)))})
+        # Compact per-PRN/block divergence summary.  Group once; never rescan
+        # the full native row array per block.
+        block_id = aligned.epoch_ms // 100 * 100
+        selected = np.isin(block_id, common)
+        idx = np.flatnonzero(selected)
+        order = np.lexsort((aligned.prn[idx], block_id[idx])); idx = idx[order]
+        sorted_block, sorted_prn = block_id[idx], aligned.prn[idx]
+        boundary = np.r_[True, (sorted_block[1:] != sorted_block[:-1]) | (sorted_prn[1:] != sorted_prn[:-1])]
+        starts = np.flatnonzero(boundary); ends = np.r_[starts[1:], len(idx)]
+        for start, end in zip(starts, ends, strict=True):
+            take = idx[start:end]; block_value = int(sorted_block[start]); prn = int(sorted_prn[start])
+            prn_rows.append({"dataset": name, "block_start_s": block_value / 1000.0, "prn": prn,
+                             "code_divergence_abs_median": float(np.median(np.abs(aligned.state[take, 0]))),
+                             "doppler_divergence_abs_median": float(np.median(np.abs(aligned.state[take, 2]))),
+                             "tap_divergence_norm_median": float(np.median(np.linalg.norm(aligned.taps[take], axis=1))),
+                             "full_divergence_norm_median": float(np.median(np.linalg.norm(aligned.full[take], axis=1)))})
 
     write_csv(ARTIFACT / "scenario_metrics.csv", [row for row in metrics if row["model"] == "Full"])
     b0 = {key: None for key in metrics[0]}; b0.update({"dataset": "B0", "scenario": "all", "model": "B0 exact", "status": "UNAVAILABLE"})
