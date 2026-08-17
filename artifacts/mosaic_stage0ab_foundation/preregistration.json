@@ -1,0 +1,17 @@
+{
+  "allowed_verdicts": [
+    "GO_FOR_MOSAIC_NEURAL_STAGE1",
+    "NO_GO_MOSAIC_INJECTOR_PHYSICS",
+    "INCONCLUSIVE_INPUT_OR_ALIGNMENT",
+    "INCONCLUSIVE_INPUT_OR_RECEIVER_UNAVAILABLE",
+    "INCONCLUSIVE_TRACKER_RAW_ALIGNMENT",
+    "INCONCLUSIVE_NAVIGATION_BIT_PROVENANCE"
+  ],
+  "attack_scores_computed": false,
+  "thresholds": {
+    "caf_center_delay_chip_abs": 0.125,
+    "caf_center_doppler_hz_abs": 50,
+    "tap_cosine_median_min": 0.9,
+    "tap_spearman_median_min": 0.9
+  }
+}

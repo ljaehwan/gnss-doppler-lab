@@ -1,0 +1,15 @@
+{
+  "native_trace_schema": "TRACE TRC1MS02 v2",
+  "navigation_bit_provenance": {
+    "reason": "No decoded nav-bit sequence or independently validated 20-ms Prompt sign provenance was found; refusing +1 fallback.",
+    "receiver_nav_wipeoff_flag_rows": 0,
+    "rows_considered": 240,
+    "status": "UNAVAILABLE"
+  },
+  "raw_iq_sample_format_assumption_from_existing_manifest": "interleaved signed int8 complex",
+  "required_fields_present_in_dump_schema": true,
+  "unavailable_fields": [
+    "decoded navigation bit sequence",
+    "receiver replay of MOSAIC injected IQ"
+  ]
+}

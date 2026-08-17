@@ -1,0 +1,10 @@
+{
+  "artifact_root": "/home/ubuntu/projects/gnss-doppler-mosaic-stage0ab-foundation/artifacts/mosaic_stage0ab_foundation",
+  "attack_scenarios_used": false,
+  "datasets": [
+    "TEXBAT.cleanStatic",
+    "OAKBAT.cleanStatic"
+  ],
+  "neural_training": false,
+  "schema": "gnss-doppler-lab.mosaic-stage0ab-config.v1"
+}

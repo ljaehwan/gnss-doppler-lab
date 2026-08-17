@@ -1,0 +1,722 @@
+[
+  {
+    "case_id": "TEXBAT.cleanStatic.single.00",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 0.0,
+    "delta_phi_rad": 0.0,
+    "delta_tau_chips": 0.0,
+    "mode": "single_prn",
+    "rho_db": -10.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.01",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 5.0,
+    "delta_phi_rad": 1.5707963267948966,
+    "delta_tau_chips": -0.05,
+    "mode": "single_prn",
+    "rho_db": 0.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.02",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 25.0,
+    "delta_phi_rad": 3.141592653589793,
+    "delta_tau_chips": 0.05,
+    "mode": "single_prn",
+    "rho_db": -3.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.03",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 50.0,
+    "delta_phi_rad": 4.71238898038469,
+    "delta_tau_chips": -0.1,
+    "mode": "single_prn",
+    "rho_db": -6.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.04",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -5.0,
+    "delta_phi_rad": 0.0,
+    "delta_tau_chips": 0.1,
+    "mode": "single_prn",
+    "rho_db": -10.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.05",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -25.0,
+    "delta_phi_rad": 1.5707963267948966,
+    "delta_tau_chips": -0.25,
+    "mode": "single_prn",
+    "rho_db": 0.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.06",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -50.0,
+    "delta_phi_rad": 3.141592653589793,
+    "delta_tau_chips": 0.25,
+    "mode": "single_prn",
+    "rho_db": -3.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.07",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 0.0,
+    "delta_phi_rad": 4.71238898038469,
+    "delta_tau_chips": 0.0,
+    "mode": "single_prn",
+    "rho_db": -6.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.08",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 5.0,
+    "delta_phi_rad": 0.0,
+    "delta_tau_chips": -0.05,
+    "mode": "single_prn",
+    "rho_db": -10.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.09",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 25.0,
+    "delta_phi_rad": 1.5707963267948966,
+    "delta_tau_chips": 0.05,
+    "mode": "single_prn",
+    "rho_db": 0.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.10",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 50.0,
+    "delta_phi_rad": 3.141592653589793,
+    "delta_tau_chips": -0.1,
+    "mode": "single_prn",
+    "rho_db": -3.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.11",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -5.0,
+    "delta_phi_rad": 4.71238898038469,
+    "delta_tau_chips": 0.1,
+    "mode": "single_prn",
+    "rho_db": -6.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.12",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -25.0,
+    "delta_phi_rad": 0.0,
+    "delta_tau_chips": -0.25,
+    "mode": "single_prn",
+    "rho_db": -10.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.13",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -50.0,
+    "delta_phi_rad": 1.5707963267948966,
+    "delta_tau_chips": 0.25,
+    "mode": "single_prn",
+    "rho_db": 0.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.14",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 0.0,
+    "delta_phi_rad": 3.141592653589793,
+    "delta_tau_chips": 0.0,
+    "mode": "single_prn",
+    "rho_db": -3.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.15",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 5.0,
+    "delta_phi_rad": 4.71238898038469,
+    "delta_tau_chips": -0.05,
+    "mode": "single_prn",
+    "rho_db": -6.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.16",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 25.0,
+    "delta_phi_rad": 0.0,
+    "delta_tau_chips": 0.05,
+    "mode": "single_prn",
+    "rho_db": -10.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.17",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 50.0,
+    "delta_phi_rad": 1.5707963267948966,
+    "delta_tau_chips": -0.1,
+    "mode": "single_prn",
+    "rho_db": 0.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.18",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -5.0,
+    "delta_phi_rad": 3.141592653589793,
+    "delta_tau_chips": 0.1,
+    "mode": "single_prn",
+    "rho_db": -3.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.19",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -25.0,
+    "delta_phi_rad": 4.71238898038469,
+    "delta_tau_chips": -0.25,
+    "mode": "single_prn",
+    "rho_db": -6.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.20",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -50.0,
+    "delta_phi_rad": 0.0,
+    "delta_tau_chips": 0.25,
+    "mode": "single_prn",
+    "rho_db": -10.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.21",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 0.0,
+    "delta_phi_rad": 1.5707963267948966,
+    "delta_tau_chips": 0.0,
+    "mode": "single_prn",
+    "rho_db": 0.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.22",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 5.0,
+    "delta_phi_rad": 3.141592653589793,
+    "delta_tau_chips": -0.05,
+    "mode": "single_prn",
+    "rho_db": -3.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.23",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 25.0,
+    "delta_phi_rad": 4.71238898038469,
+    "delta_tau_chips": 0.05,
+    "mode": "single_prn",
+    "rho_db": -6.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.24",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 50.0,
+    "delta_phi_rad": 0.0,
+    "delta_tau_chips": -0.1,
+    "mode": "single_prn",
+    "rho_db": -10.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.25",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -5.0,
+    "delta_phi_rad": 1.5707963267948966,
+    "delta_tau_chips": 0.1,
+    "mode": "single_prn",
+    "rho_db": 0.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.26",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -25.0,
+    "delta_phi_rad": 3.141592653589793,
+    "delta_tau_chips": -0.25,
+    "mode": "single_prn",
+    "rho_db": -3.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.single.27",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -50.0,
+    "delta_phi_rad": 4.71238898038469,
+    "delta_tau_chips": 0.25,
+    "mode": "single_prn",
+    "rho_db": -6.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.four.00",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -25.0,
+    "delta_phi_rad": 0.0,
+    "delta_tau_chips": -0.05,
+    "mode": "four_prn_diagnostic_after_single_prn_pass_only",
+    "rho_db": -10.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.four.01",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 25.0,
+    "delta_phi_rad": 1.5707963267948966,
+    "delta_tau_chips": 0.05,
+    "mode": "four_prn_diagnostic_after_single_prn_pass_only",
+    "rho_db": -6.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.four.02",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -50.0,
+    "delta_phi_rad": 3.141592653589793,
+    "delta_tau_chips": -0.1,
+    "mode": "four_prn_diagnostic_after_single_prn_pass_only",
+    "rho_db": -3.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.four.03",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 50.0,
+    "delta_phi_rad": 4.71238898038469,
+    "delta_tau_chips": 0.1,
+    "mode": "four_prn_diagnostic_after_single_prn_pass_only",
+    "rho_db": 0.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.four.04",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 0.0,
+    "delta_phi_rad": 0.0,
+    "delta_tau_chips": -0.25,
+    "mode": "four_prn_diagnostic_after_single_prn_pass_only",
+    "rho_db": -10.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.four.05",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -5.0,
+    "delta_phi_rad": 1.5707963267948966,
+    "delta_tau_chips": 0.25,
+    "mode": "four_prn_diagnostic_after_single_prn_pass_only",
+    "rho_db": -6.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.four.06",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 5.0,
+    "delta_phi_rad": 3.141592653589793,
+    "delta_tau_chips": 0.0,
+    "mode": "four_prn_diagnostic_after_single_prn_pass_only",
+    "rho_db": -3.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "TEXBAT.cleanStatic.four.07",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -25.0,
+    "delta_phi_rad": 4.71238898038469,
+    "delta_tau_chips": -0.05,
+    "mode": "four_prn_diagnostic_after_single_prn_pass_only",
+    "rho_db": 0.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.00",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 0.0,
+    "delta_phi_rad": 0.0,
+    "delta_tau_chips": 0.0,
+    "mode": "single_prn",
+    "rho_db": -10.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.01",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 5.0,
+    "delta_phi_rad": 1.5707963267948966,
+    "delta_tau_chips": -0.05,
+    "mode": "single_prn",
+    "rho_db": 0.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.02",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 25.0,
+    "delta_phi_rad": 3.141592653589793,
+    "delta_tau_chips": 0.05,
+    "mode": "single_prn",
+    "rho_db": -3.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.03",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 50.0,
+    "delta_phi_rad": 4.71238898038469,
+    "delta_tau_chips": -0.1,
+    "mode": "single_prn",
+    "rho_db": -6.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.04",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -5.0,
+    "delta_phi_rad": 0.0,
+    "delta_tau_chips": 0.1,
+    "mode": "single_prn",
+    "rho_db": -10.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.05",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -25.0,
+    "delta_phi_rad": 1.5707963267948966,
+    "delta_tau_chips": -0.25,
+    "mode": "single_prn",
+    "rho_db": 0.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.06",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -50.0,
+    "delta_phi_rad": 3.141592653589793,
+    "delta_tau_chips": 0.25,
+    "mode": "single_prn",
+    "rho_db": -3.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.07",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 0.0,
+    "delta_phi_rad": 4.71238898038469,
+    "delta_tau_chips": 0.0,
+    "mode": "single_prn",
+    "rho_db": -6.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.08",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 5.0,
+    "delta_phi_rad": 0.0,
+    "delta_tau_chips": -0.05,
+    "mode": "single_prn",
+    "rho_db": -10.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.09",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 25.0,
+    "delta_phi_rad": 1.5707963267948966,
+    "delta_tau_chips": 0.05,
+    "mode": "single_prn",
+    "rho_db": 0.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.10",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 50.0,
+    "delta_phi_rad": 3.141592653589793,
+    "delta_tau_chips": -0.1,
+    "mode": "single_prn",
+    "rho_db": -3.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.11",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -5.0,
+    "delta_phi_rad": 4.71238898038469,
+    "delta_tau_chips": 0.1,
+    "mode": "single_prn",
+    "rho_db": -6.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.12",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -25.0,
+    "delta_phi_rad": 0.0,
+    "delta_tau_chips": -0.25,
+    "mode": "single_prn",
+    "rho_db": -10.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.13",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -50.0,
+    "delta_phi_rad": 1.5707963267948966,
+    "delta_tau_chips": 0.25,
+    "mode": "single_prn",
+    "rho_db": 0.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.14",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 0.0,
+    "delta_phi_rad": 3.141592653589793,
+    "delta_tau_chips": 0.0,
+    "mode": "single_prn",
+    "rho_db": -3.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.15",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 5.0,
+    "delta_phi_rad": 4.71238898038469,
+    "delta_tau_chips": -0.05,
+    "mode": "single_prn",
+    "rho_db": -6.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.16",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 25.0,
+    "delta_phi_rad": 0.0,
+    "delta_tau_chips": 0.05,
+    "mode": "single_prn",
+    "rho_db": -10.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.17",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 50.0,
+    "delta_phi_rad": 1.5707963267948966,
+    "delta_tau_chips": -0.1,
+    "mode": "single_prn",
+    "rho_db": 0.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.18",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -5.0,
+    "delta_phi_rad": 3.141592653589793,
+    "delta_tau_chips": 0.1,
+    "mode": "single_prn",
+    "rho_db": -3.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.19",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -25.0,
+    "delta_phi_rad": 4.71238898038469,
+    "delta_tau_chips": -0.25,
+    "mode": "single_prn",
+    "rho_db": -6.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.20",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -50.0,
+    "delta_phi_rad": 0.0,
+    "delta_tau_chips": 0.25,
+    "mode": "single_prn",
+    "rho_db": -10.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.21",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 0.0,
+    "delta_phi_rad": 1.5707963267948966,
+    "delta_tau_chips": 0.0,
+    "mode": "single_prn",
+    "rho_db": 0.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.22",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 5.0,
+    "delta_phi_rad": 3.141592653589793,
+    "delta_tau_chips": -0.05,
+    "mode": "single_prn",
+    "rho_db": -3.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.23",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 25.0,
+    "delta_phi_rad": 4.71238898038469,
+    "delta_tau_chips": 0.05,
+    "mode": "single_prn",
+    "rho_db": -6.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.24",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 50.0,
+    "delta_phi_rad": 0.0,
+    "delta_tau_chips": -0.1,
+    "mode": "single_prn",
+    "rho_db": -10.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.25",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -5.0,
+    "delta_phi_rad": 1.5707963267948966,
+    "delta_tau_chips": 0.1,
+    "mode": "single_prn",
+    "rho_db": 0.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.26",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -25.0,
+    "delta_phi_rad": 3.141592653589793,
+    "delta_tau_chips": -0.25,
+    "mode": "single_prn",
+    "rho_db": -3.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.single.27",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -50.0,
+    "delta_phi_rad": 4.71238898038469,
+    "delta_tau_chips": 0.25,
+    "mode": "single_prn",
+    "rho_db": -6.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.four.00",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -25.0,
+    "delta_phi_rad": 0.0,
+    "delta_tau_chips": -0.05,
+    "mode": "four_prn_diagnostic_after_single_prn_pass_only",
+    "rho_db": -10.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.four.01",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 25.0,
+    "delta_phi_rad": 1.5707963267948966,
+    "delta_tau_chips": 0.05,
+    "mode": "four_prn_diagnostic_after_single_prn_pass_only",
+    "rho_db": -6.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.four.02",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -50.0,
+    "delta_phi_rad": 3.141592653589793,
+    "delta_tau_chips": -0.1,
+    "mode": "four_prn_diagnostic_after_single_prn_pass_only",
+    "rho_db": -3.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.four.03",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 50.0,
+    "delta_phi_rad": 4.71238898038469,
+    "delta_tau_chips": 0.1,
+    "mode": "four_prn_diagnostic_after_single_prn_pass_only",
+    "rho_db": 0.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.four.04",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 0.0,
+    "delta_phi_rad": 0.0,
+    "delta_tau_chips": -0.25,
+    "mode": "four_prn_diagnostic_after_single_prn_pass_only",
+    "rho_db": -10.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.four.05",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -5.0,
+    "delta_phi_rad": 1.5707963267948966,
+    "delta_tau_chips": 0.25,
+    "mode": "four_prn_diagnostic_after_single_prn_pass_only",
+    "rho_db": -6.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.four.06",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 5.0,
+    "delta_phi_rad": 3.141592653589793,
+    "delta_tau_chips": 0.0,
+    "mode": "four_prn_diagnostic_after_single_prn_pass_only",
+    "rho_db": -3.0,
+    "view_before_results": true
+  },
+  {
+    "case_id": "OAKBAT.cleanStatic.four.07",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -25.0,
+    "delta_phi_rad": 4.71238898038469,
+    "delta_tau_chips": -0.05,
+    "mode": "four_prn_diagnostic_after_single_prn_pass_only",
+    "rho_db": 0.0,
+    "view_before_results": true
+  }
+]

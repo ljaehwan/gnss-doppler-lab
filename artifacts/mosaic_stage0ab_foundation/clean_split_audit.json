@@ -1,0 +1,19 @@
+{
+  "attack_data_used": false,
+  "chronological_nonoverlap_short_segments": true,
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "raw_overlap_in_sample": false,
+      "raw_sample_max": 152357352,
+      "raw_sample_min": 150102348,
+      "sampled_rows": 120
+    },
+    "TEXBAT.cleanStatic": {
+      "raw_overlap_in_sample": false,
+      "raw_sample_max": 753513626,
+      "raw_sample_min": 750513631,
+      "sampled_rows": 120
+    }
+  },
+  "guard_interval_s": 5.0
+}

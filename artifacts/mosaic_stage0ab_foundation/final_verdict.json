@@ -1,0 +1,11 @@
+{
+  "attack_scores_computed": false,
+  "go": false,
+  "neural_training": false,
+  "reason": "No decoded nav-bit sequence or independently validated 20-ms Prompt sign provenance was found; refusing +1 fallback.",
+  "recommended_next_action": "Obtain decoded/validated cleanStatic navigation-bit provenance and rerun Stage-0A raw re-correlation without changing gates.",
+  "schema": "gnss-doppler-lab.mosaic-stage0ab-final-verdict.v1",
+  "stage0a_pass": false,
+  "stage0b_run": false,
+  "verdict": "INCONCLUSIVE_NAVIGATION_BIT_PROVENANCE"
+}

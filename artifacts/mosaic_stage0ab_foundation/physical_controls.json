@@ -1,0 +1,13 @@
+{
+  "all_required_controls_pass": false,
+  "controls": {
+    "awgn_0p5x_1x_2x": "NOT_RUN",
+    "common_gain_scaling": "NOT_RUN",
+    "global_phase_rotation": "NOT_RUN",
+    "identity_replay": "NOT_RUN",
+    "navigation_bit_sign_reversal": "NOT_RUN",
+    "zero_amplitude": "NOT_RUN"
+  },
+  "reason": "Stage-0B not authorized",
+  "status": "NOT_RUN"
+}

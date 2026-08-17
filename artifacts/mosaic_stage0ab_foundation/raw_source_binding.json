@@ -1,0 +1,46 @@
+{
+  "OAKBAT.cleanStatic": {
+    "raw_manifest_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+    "raw_stat_binding": {
+      "ctime_ns": 1785200321000000000,
+      "device": 49,
+      "exists": true,
+      "inode": 3062,
+      "mtime_ns": 1785200321000000000,
+      "path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+      "size_bytes": 9600000000
+    },
+    "receiver_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+    "receiver_stat_binding": {
+      "ctime_ns": 1786882597000000000,
+      "device": 49,
+      "exists": true,
+      "inode": 201041,
+      "mtime_ns": 1786882597000000000,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-build/src/main/gnss-sdr",
+      "size_bytes": 36602584
+    }
+  },
+  "TEXBAT.cleanStatic": {
+    "raw_manifest_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+    "raw_stat_binding": {
+      "ctime_ns": 1784430845000000000,
+      "device": 49,
+      "exists": true,
+      "inode": 3088,
+      "mtime_ns": 1784430845000000000,
+      "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "size_bytes": 48016392192
+    },
+    "receiver_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+    "receiver_stat_binding": {
+      "ctime_ns": 1786882597000000000,
+      "device": 49,
+      "exists": true,
+      "inode": 201041,
+      "mtime_ns": 1786882597000000000,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-build/src/main/gnss-sdr",
+      "size_bytes": 36602584
+    }
+  }
+}

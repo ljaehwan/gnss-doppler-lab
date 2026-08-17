@@ -1,0 +1,375 @@
+{
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "causal_alignment": {
+        "cadence_pair_count": 164967,
+        "causal_pair_count": 164967,
+        "causal_sequence_mismatch_count": 0,
+        "causal_value_mismatch_count": 0,
+        "consume_span_mismatch_count": 0,
+        "current_span_mismatch_count": 0,
+        "duration_mismatch_count": 0,
+        "failure_labels": [],
+        "file_summaries": [
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              0
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_0.bin",
+            "prn_values": [
+              21
+            ],
+            "record_count": 14998,
+            "sha256": "4ef713eac37560d85ea0e4b8fe01aca5b33eddce51df23e7a1d40f750351156b",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              1
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_1.bin",
+            "prn_values": [
+              27
+            ],
+            "record_count": 14998,
+            "sha256": "f7cbf285bffac4d034ee63569094e602f688736dd2e296979958497b8653d40c",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              10
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_10.bin",
+            "prn_values": [
+              10
+            ],
+            "record_count": 14998,
+            "sha256": "059ca9a4ba66faf8208318ac2f320e15762c281c01e5a877225cec05e627ed09",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              2
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_2.bin",
+            "prn_values": [
+              11
+            ],
+            "record_count": 14998,
+            "sha256": "653c3fbce4c14e4624f5111ad739a5455e8c16532c8ecaf2d2f77e38cc3051bd",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              3
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_3.bin",
+            "prn_values": [
+              24
+            ],
+            "record_count": 14998,
+            "sha256": "9493ce9e855df4cd63774f6f3122806d780bb1105ed4b11e1e0ba453b120b3bf",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              4
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_4.bin",
+            "prn_values": [
+              20
+            ],
+            "record_count": 14998,
+            "sha256": "e4c4977192b4c86fd927e3ef9bf2a260d360be8b1f24a3ac3c8fd2e1b5abe711",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              5
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_5.bin",
+            "prn_values": [
+              18
+            ],
+            "record_count": 14998,
+            "sha256": "44c27c3933e2076f75964f392ab4f4c84bf1a8ce3d1f2ca3a6201cac0d23a8a5",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              6
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_6.bin",
+            "prn_values": [
+              14
+            ],
+            "record_count": 14998,
+            "sha256": "54b375a32b97eab622f9f8a74db1b9d5fd8f72c01d376f8a41b663c205dce5e8",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              7
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_7.bin",
+            "prn_values": [
+              12
+            ],
+            "record_count": 14998,
+            "sha256": "7a3bc855296f262cbd8c854580a1db9174cae0f94c9327e7b9585f9e9a2e3942",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              8
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_8.bin",
+            "prn_values": [
+              8
+            ],
+            "record_count": 14998,
+            "sha256": "b53001b9c2c44dc7d00a6bfc9b03606c5f5fa565daa9aa14323f98dcfa86ab86",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              9
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_9.bin",
+            "prn_values": [
+              25
+            ],
+            "record_count": 14998,
+            "sha256": "54397ff4fbe2e24844fe234a66eb57675ab09c353c3bdd353dae899d9bfa13ac",
+            "tracking_session_count": 1
+          }
+        ],
+        "finite_failure_count": 0,
+        "maximum_valid_prns_same_rounded_ms_epoch": 11,
+        "minimum_prns_required": 4,
+        "native_cadence_fraction": 1.0,
+        "native_cadence_pair_count": 164967,
+        "reassignment_failure_count": 0,
+        "repeated_action_row_count": 0,
+        "repeated_tap_row_count": 0,
+        "scenario_ids": [
+          "MCTD.OAKBAT.cleanStatic.slow.phase_a"
+        ],
+        "schema": "gnss-doppler-lab.trace-native-1ms-validation.v2",
+        "status": "PASS",
+        "timestamp_mismatch_count": 0,
+        "zero_action_row_count": 0,
+        "zero_tap_row_count": 0
+      },
+      "local_raw_recorrelation": {
+        "reason": "Navigation bit/provenance and exact IF/baseband sign contract not sufficient to validate reconstructed complex taps without tuning.",
+        "status": "NOT_RUN_FAIL_CLOSED"
+      },
+      "raw_sample_bounds": {
+        "bad_rows": 0,
+        "raw_complex_samples": 4800000000,
+        "rows_checked": 120,
+        "status": "PASS"
+      },
+      "sample_rate_hz": 5000000.0,
+      "stable_epoch_rows_sampled": 120,
+      "stable_prn_count": 1,
+      "stable_prns_sampled": [
+        21
+      ],
+      "status": "TRACE_SCHEMA_AND_BOUNDS_PASS_RAW_RECORRELATION_NOT_RUN"
+    },
+    "TEXBAT.cleanStatic": {
+      "causal_alignment": {
+        "cadence_pair_count": 149970,
+        "causal_pair_count": 149970,
+        "causal_sequence_mismatch_count": 0,
+        "causal_value_mismatch_count": 0,
+        "consume_span_mismatch_count": 0,
+        "current_span_mismatch_count": 0,
+        "duration_mismatch_count": 0,
+        "failure_labels": [],
+        "file_summaries": [
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              0
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_0.bin",
+            "prn_values": [
+              19
+            ],
+            "record_count": 14998,
+            "sha256": "c4b5f7e04d9a96cb9e5770b54dad7c0b3674281ac7d1a4859924b91ea77d7fc8",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              1
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_1.bin",
+            "prn_values": [
+              16
+            ],
+            "record_count": 14998,
+            "sha256": "b3a7a9afa644c48328a0295749cf08203da734912a79cecd614b75d219ea1fa8",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              2
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_2.bin",
+            "prn_values": [
+              3
+            ],
+            "record_count": 14998,
+            "sha256": "228d8db83103674c25db2a80eb1ca2d0470bff372d503b4cec94040fba507fa0",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              3
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_3.bin",
+            "prn_values": [
+              30
+            ],
+            "record_count": 14998,
+            "sha256": "98e6015ae8473573882b0f0980af1bf244c1759bdfa36398c0002d7bba907bc7",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              4
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_4.bin",
+            "prn_values": [
+              13
+            ],
+            "record_count": 14998,
+            "sha256": "d2feffd1bbb4c0ce9cd12ca137abc512d168ecc29667e95a2f3b65c923c04325",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              5
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_5.bin",
+            "prn_values": [
+              6
+            ],
+            "record_count": 14998,
+            "sha256": "e75936eb8b1f9a5d99846db0df864945785834f8026d4585770a922d7c38c489",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              6
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_6.bin",
+            "prn_values": [
+              7
+            ],
+            "record_count": 14998,
+            "sha256": "2423c92713aabab2a213702d3fdaea75e99fa2ec2cab73b10659e03ded4c86f9",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              7
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_7.bin",
+            "prn_values": [
+              20
+            ],
+            "record_count": 14998,
+            "sha256": "c1de6fe1c6b7f85c517e771dfeb2fd65a2496bb731ea3187b974e3711ea693d3",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              8
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_8.bin",
+            "prn_values": [
+              10
+            ],
+            "record_count": 14998,
+            "sha256": "185c114499ec8a8efc6074333cf3f6be55b893640b93960c70a02443331bd46c",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              9
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_9.bin",
+            "prn_values": [
+              23
+            ],
+            "record_count": 14998,
+            "sha256": "a1eb043e4fd6f3b10003785e80f756c8dd795e51851a49a9093b9278048fdfa2",
+            "tracking_session_count": 1
+          }
+        ],
+        "finite_failure_count": 0,
+        "maximum_valid_prns_same_rounded_ms_epoch": 10,
+        "minimum_prns_required": 4,
+        "native_cadence_fraction": 1.0,
+        "native_cadence_pair_count": 149970,
+        "reassignment_failure_count": 0,
+        "repeated_action_row_count": 0,
+        "repeated_tap_row_count": 0,
+        "scenario_ids": [
+          "MCTD.TEXBAT.cleanStatic.slow.phase_a"
+        ],
+        "schema": "gnss-doppler-lab.trace-native-1ms-validation.v2",
+        "status": "PASS",
+        "timestamp_mismatch_count": 0,
+        "zero_action_row_count": 0,
+        "zero_tap_row_count": 0
+      },
+      "local_raw_recorrelation": {
+        "reason": "Navigation bit/provenance and exact IF/baseband sign contract not sufficient to validate reconstructed complex taps without tuning.",
+        "status": "NOT_RUN_FAIL_CLOSED"
+      },
+      "raw_sample_bounds": {
+        "bad_rows": 0,
+        "raw_complex_samples": 24008196096,
+        "rows_checked": 120,
+        "status": "PASS"
+      },
+      "sample_rate_hz": 25000000.0,
+      "stable_epoch_rows_sampled": 120,
+      "stable_prn_count": 1,
+      "stable_prns_sampled": [
+        19
+      ],
+      "status": "TRACE_SCHEMA_AND_BOUNDS_PASS_RAW_RECORRELATION_NOT_RUN"
+    }
+  },
+  "schema": "gnss-doppler-lab.mosaic-stage0a-alignment.v1",
+  "stage0a_pass": false,
+  "stage0a_structural_trace_alignment_pass": true,
+  "stage0a_terminal_reason": "raw-to-reconstructed complex tap agreement not established; Stage-0B receiver-in-loop not authorized"
+}
