@@ -1,0 +1,94 @@
+{
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "parity_failures": 0,
+      "preamble_detections": 10,
+      "prns": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ],
+      "tow_continuity_failures": 0,
+      "usable_intervals": [
+        {
+          "prn": 10,
+          "raw_end_sample_exclusive": 210197273,
+          "raw_start_sample": 150197318
+        },
+        {
+          "prn": 11,
+          "raw_end_sample_exclusive": 210263519,
+          "raw_start_sample": 150263604
+        },
+        {
+          "prn": 21,
+          "raw_end_sample_exclusive": 210227455,
+          "raw_start_sample": 150227349
+        },
+        {
+          "prn": 24,
+          "raw_end_sample_exclusive": 210213035,
+          "raw_start_sample": 150212952
+        },
+        {
+          "prn": 27,
+          "raw_end_sample_exclusive": 210270378,
+          "raw_start_sample": 150270296
+        }
+      ],
+      "valid_bits_per_prn": 600,
+      "valid_subframes_per_prn": 2,
+      "valid_words": 100,
+      "validated_prns": 5
+    },
+    "TEXBAT.cleanStatic": {
+      "parity_failures": 0,
+      "preamble_detections": 10,
+      "prns": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ],
+      "tow_continuity_failures": 0,
+      "usable_intervals": [
+        {
+          "prn": 3,
+          "raw_end_sample_exclusive": 1117513686,
+          "raw_start_sample": 817513830
+        },
+        {
+          "prn": 13,
+          "raw_end_sample_exclusive": 1117492038,
+          "raw_start_sample": 817492386
+        },
+        {
+          "prn": 16,
+          "raw_end_sample_exclusive": 1117607069,
+          "raw_start_sample": 817606534
+        },
+        {
+          "prn": 19,
+          "raw_end_sample_exclusive": 1117613023,
+          "raw_start_sample": 817613520
+        },
+        {
+          "prn": 30,
+          "raw_end_sample_exclusive": 1117790936,
+          "raw_start_sample": 817790304
+        }
+      ],
+      "valid_bits_per_prn": 600,
+      "valid_subframes_per_prn": 2,
+      "valid_words": 100,
+      "validated_prns": 5
+    }
+  },
+  "injection_coverage_scope": "the two complete consecutive subframes listed per PRN; no claim outside authenticated TRACE ranges",
+  "schema": "gnss-doppler-lab.mosaic-stage0b-r0-coverage.v1",
+  "total_validated_bits": 6000,
+  "total_validated_prns": 10
+}

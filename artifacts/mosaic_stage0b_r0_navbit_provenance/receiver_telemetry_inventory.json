@@ -1,0 +1,303 @@
+{
+  "Prompt_I_unit": "receiver correlator accumulation units",
+  "Prompt_Q_unit": "receiver correlator accumulation units",
+  "available_trace_fields": [
+    {
+      "dtype": "uint64",
+      "name": "loop_sequence"
+    },
+    {
+      "dtype": "uint64",
+      "name": "tracking_session_id"
+    },
+    {
+      "dtype": "uint64",
+      "name": "action_used_source_loop_sequence"
+    },
+    {
+      "dtype": "uint64",
+      "name": "raw_interval_start_sample"
+    },
+    {
+      "dtype": "uint64",
+      "name": "raw_interval_end_sample"
+    },
+    {
+      "dtype": "float64",
+      "name": "receiver_timestamp_s"
+    },
+    {
+      "dtype": "float64",
+      "name": "integration_duration_s"
+    },
+    {
+      "dtype": "uint32",
+      "name": "channel"
+    },
+    {
+      "dtype": "uint32",
+      "name": "prn"
+    },
+    {
+      "dtype": "uint8",
+      "name": "valid_tracking"
+    },
+    {
+      "dtype": "uint8",
+      "name": "valid_lock"
+    },
+    {
+      "dtype": "uint8",
+      "name": "data_symbol_boundary"
+    },
+    {
+      "dtype": "uint8",
+      "name": "loop_update_boundary"
+    },
+    {
+      "dtype": "uint8",
+      "name": "navigation_bit_wipeoff_applied"
+    },
+    {
+      "dtype": "uint8",
+      "name": "pull_in_transitory"
+    },
+    {
+      "dtype": "uint8",
+      "name": "receiver_state"
+    },
+    {
+      "dtype": "uint8",
+      "name": "reserved"
+    },
+    {
+      "dtype": "float32",
+      "name": "E4_i"
+    },
+    {
+      "dtype": "float32",
+      "name": "E4_q"
+    },
+    {
+      "dtype": "float32",
+      "name": "E3_i"
+    },
+    {
+      "dtype": "float32",
+      "name": "E3_q"
+    },
+    {
+      "dtype": "float32",
+      "name": "E2_i"
+    },
+    {
+      "dtype": "float32",
+      "name": "E2_q"
+    },
+    {
+      "dtype": "float32",
+      "name": "E_i"
+    },
+    {
+      "dtype": "float32",
+      "name": "E_q"
+    },
+    {
+      "dtype": "float32",
+      "name": "P_i"
+    },
+    {
+      "dtype": "float32",
+      "name": "P_q"
+    },
+    {
+      "dtype": "float32",
+      "name": "L_i"
+    },
+    {
+      "dtype": "float32",
+      "name": "L_q"
+    },
+    {
+      "dtype": "float32",
+      "name": "L2_i"
+    },
+    {
+      "dtype": "float32",
+      "name": "L2_q"
+    },
+    {
+      "dtype": "float32",
+      "name": "L3_i"
+    },
+    {
+      "dtype": "float32",
+      "name": "L3_q"
+    },
+    {
+      "dtype": "float32",
+      "name": "L4_i"
+    },
+    {
+      "dtype": "float32",
+      "name": "L4_q"
+    },
+    {
+      "dtype": "float64",
+      "name": "dll_discriminator_chips"
+    },
+    {
+      "dtype": "float64",
+      "name": "pll_phase_error_cycles"
+    },
+    {
+      "dtype": "float64",
+      "name": "fll_frequency_error_hz"
+    },
+    {
+      "dtype": "float64",
+      "name": "code_filter_output_chips_s"
+    },
+    {
+      "dtype": "float64",
+      "name": "carrier_filter_output_hz"
+    },
+    {
+      "dtype": "float64",
+      "name": "cn0_db_hz"
+    },
+    {
+      "dtype": "float64",
+      "name": "carrier_lock_test"
+    },
+    {
+      "dtype": "float64",
+      "name": "coherent_integration_s"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_used_code_nco_rate_chips_s"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_used_carrier_doppler_hz"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_used_residual_code_phase_chips"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_used_residual_carrier_phase_rad"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_used_code_phase_step_chips_per_sample"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_used_carrier_phase_step_rad_per_sample"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_used_code_phase_rate_step_chips_per_sample2"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_used_carrier_phase_rate_step_rad_per_sample2"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_used_dll_filter_output_chips_s"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_used_pll_fll_filter_output_hz"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_used_carrier_phase_accumulator_rad"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_used_residual_code_phase_samples"
+    },
+    {
+      "dtype": "uint64",
+      "name": "action_used_interval_length_samples"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_next_code_nco_rate_chips_s"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_next_carrier_doppler_hz"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_next_residual_code_phase_chips"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_next_residual_carrier_phase_rad"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_next_code_phase_step_chips_per_sample"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_next_carrier_phase_step_rad_per_sample"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_next_code_phase_rate_step_chips_per_sample2"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_next_carrier_phase_rate_step_rad_per_sample2"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_next_dll_filter_output_chips_s"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_next_pll_fll_filter_output_hz"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_next_carrier_phase_accumulator_rad"
+    },
+    {
+      "dtype": "float64",
+      "name": "action_next_residual_code_phase_samples"
+    },
+    {
+      "dtype": "uint64",
+      "name": "action_next_interval_length_samples"
+    }
+  ],
+  "decoded_receiver_telemetry_available": false,
+  "observed_receiver_configuration": {
+    "OAKBAT.cleanStatic": {
+      "Observables.dump": false,
+      "TelemetryDecoder_1C.dump": false,
+      "Tracking_1C.trace_dump": true,
+      "receiver_conf": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/receiver.conf"
+    },
+    "TEXBAT.cleanStatic": {
+      "Observables.dump": false,
+      "TelemetryDecoder_1C.dump": false,
+      "Tracking_1C.trace_dump": true,
+      "receiver_conf": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/receiver.conf"
+    }
+  },
+  "primary_navbit_source": "direct_decoding_from_authenticated_1ms_complex_Prompt",
+  "raw_interval_sample_unit": "zero-based complex-sample index; end exclusive; receiver code-NCO rounding preserves observed +/-1-sample joins",
+  "receiver_timestamp_s_unit": "seconds",
+  "trace_record_shape_per_channel": [
+    14998
+  ]
+}

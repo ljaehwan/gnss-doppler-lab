@@ -1,0 +1,276 @@
+{
+  "candidate_only_rule": "Prompt sign is not validated until preamble, all word parity, and TOW continuity pass",
+  "carrier_source": "TRACE complex Prompt with deterministic squared-phase receiver-axis projection",
+  "decision": "DIRECT_DECODE_PATH_B",
+  "files": {
+    "OAKBAT.cleanStatic": {
+      "directory": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1",
+      "files": [
+        {
+          "ctime_ns": 1786934118000000000,
+          "device": 48,
+          "inode": 25,
+          "kind": "receiver_manifest",
+          "mtime_ns": 1786934118000000000,
+          "name": "manifest.json",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/manifest.json",
+          "size_bytes": 4907
+        },
+        {
+          "ctime_ns": 1786934110000000000,
+          "device": 48,
+          "inode": 651,
+          "kind": "receiver_config",
+          "mtime_ns": 1786934110000000000,
+          "name": "receiver.conf",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/receiver.conf",
+          "size_bytes": 2638
+        },
+        {
+          "ctime_ns": 1786934117000000000,
+          "device": 48,
+          "inode": 3107,
+          "kind": "native_trace",
+          "mtime_ns": 1786934117000000000,
+          "name": "trace_native_1ms_ch_0.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_0.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786934117000000000,
+          "device": 48,
+          "inode": 9970,
+          "kind": "native_trace",
+          "mtime_ns": 1786934117000000000,
+          "name": "trace_native_1ms_ch_1.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_1.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786934117000000000,
+          "device": 48,
+          "inode": 9971,
+          "kind": "native_trace",
+          "mtime_ns": 1786934117000000000,
+          "name": "trace_native_1ms_ch_10.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_10.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786934117000000000,
+          "device": 48,
+          "inode": 9972,
+          "kind": "native_trace",
+          "mtime_ns": 1786934117000000000,
+          "name": "trace_native_1ms_ch_2.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_2.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786934117000000000,
+          "device": 48,
+          "inode": 9973,
+          "kind": "native_trace",
+          "mtime_ns": 1786934117000000000,
+          "name": "trace_native_1ms_ch_3.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_3.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786934117000000000,
+          "device": 48,
+          "inode": 9974,
+          "kind": "native_trace",
+          "mtime_ns": 1786934117000000000,
+          "name": "trace_native_1ms_ch_4.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_4.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786934117000000000,
+          "device": 48,
+          "inode": 9975,
+          "kind": "native_trace",
+          "mtime_ns": 1786934117000000000,
+          "name": "trace_native_1ms_ch_5.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_5.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786934117000000000,
+          "device": 48,
+          "inode": 9976,
+          "kind": "native_trace",
+          "mtime_ns": 1786934117000000000,
+          "name": "trace_native_1ms_ch_6.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_6.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786934117000000000,
+          "device": 48,
+          "inode": 9977,
+          "kind": "native_trace",
+          "mtime_ns": 1786934117000000000,
+          "name": "trace_native_1ms_ch_7.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_7.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786934117000000000,
+          "device": 48,
+          "inode": 9978,
+          "kind": "native_trace",
+          "mtime_ns": 1786934117000000000,
+          "name": "trace_native_1ms_ch_8.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_8.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786934117000000000,
+          "device": 48,
+          "inode": 9979,
+          "kind": "native_trace",
+          "mtime_ns": 1786934117000000000,
+          "name": "trace_native_1ms_ch_9.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_9.bin",
+          "size_bytes": 6239360
+        }
+      ]
+    },
+    "TEXBAT.cleanStatic": {
+      "directory": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1",
+      "files": [
+        {
+          "ctime_ns": 1786933938000000000,
+          "device": 48,
+          "inode": 29,
+          "kind": "receiver_manifest",
+          "mtime_ns": 1786933938000000000,
+          "name": "manifest.json",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/manifest.json",
+          "size_bytes": 4611
+        },
+        {
+          "ctime_ns": 1786933909000000000,
+          "device": 48,
+          "inode": 652,
+          "kind": "receiver_config",
+          "mtime_ns": 1786933909000000000,
+          "name": "receiver.conf",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/receiver.conf",
+          "size_bytes": 2595
+        },
+        {
+          "ctime_ns": 1786933938000000000,
+          "device": 48,
+          "inode": 3108,
+          "kind": "native_trace",
+          "mtime_ns": 1786933938000000000,
+          "name": "trace_native_1ms_ch_0.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_0.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786933938000000000,
+          "device": 48,
+          "inode": 9981,
+          "kind": "native_trace",
+          "mtime_ns": 1786933938000000000,
+          "name": "trace_native_1ms_ch_1.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_1.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786933938000000000,
+          "device": 48,
+          "inode": 9982,
+          "kind": "native_trace",
+          "mtime_ns": 1786933938000000000,
+          "name": "trace_native_1ms_ch_2.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_2.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786933938000000000,
+          "device": 48,
+          "inode": 9983,
+          "kind": "native_trace",
+          "mtime_ns": 1786933938000000000,
+          "name": "trace_native_1ms_ch_3.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_3.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786933938000000000,
+          "device": 48,
+          "inode": 9984,
+          "kind": "native_trace",
+          "mtime_ns": 1786933938000000000,
+          "name": "trace_native_1ms_ch_4.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_4.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786933938000000000,
+          "device": 48,
+          "inode": 9985,
+          "kind": "native_trace",
+          "mtime_ns": 1786933938000000000,
+          "name": "trace_native_1ms_ch_5.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_5.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786933938000000000,
+          "device": 48,
+          "inode": 9986,
+          "kind": "native_trace",
+          "mtime_ns": 1786933938000000000,
+          "name": "trace_native_1ms_ch_6.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_6.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786933938000000000,
+          "device": 48,
+          "inode": 9987,
+          "kind": "native_trace",
+          "mtime_ns": 1786933938000000000,
+          "name": "trace_native_1ms_ch_7.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_7.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786933938000000000,
+          "device": 48,
+          "inode": 9988,
+          "kind": "native_trace",
+          "mtime_ns": 1786933938000000000,
+          "name": "trace_native_1ms_ch_8.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_8.bin",
+          "size_bytes": 6239360
+        },
+        {
+          "ctime_ns": 1786933938000000000,
+          "device": 48,
+          "inode": 9989,
+          "kind": "native_trace",
+          "mtime_ns": 1786933938000000000,
+          "name": "trace_native_1ms_ch_9.bin",
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_9.bin",
+          "size_bytes": 6239360
+        }
+      ]
+    }
+  },
+  "global_sign_convention": "receiver Prompt real-axis representative; no outcome-driven polarity trial",
+  "telemetry_priority_A_available": false,
+  "timing_source": "TRACE data_symbol_boundary modulo-20 phase, extended backward only across an uninterrupted authenticated 1-ms record sequence",
+  "validation_sources": [
+    "GPS preamble 10001011",
+    "20 consecutive word parity checks",
+    "HOW TOW +6 seconds",
+    "subframe ID continuity"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "OAKBAT.cleanStatic": {
+    "bytes_per_complex_sample": 4,
+    "expected_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+    "sample_format": "little-endian interleaved signed int16 I/Q",
+    "sample_rate_hz": 5000000,
+    "stage0a_full_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+    "stat": {
+      "ctime_ns": 1785200321000000000,
+      "device": 48,
+      "inode": 11,
+      "mtime_ns": 1785200321000000000,
+      "path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+      "size_bytes": 9600000000
+    },
+    "stat_identity_match": true,
+    "status": "PASS",
+    "verification": "exact Stage-0A stat identity plus inherited full-file SHA-256"
+  },
+  "TEXBAT.cleanStatic": {
+    "bytes_per_complex_sample": 4,
+    "expected_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+    "sample_format": "little-endian interleaved signed int16 I/Q",
+    "sample_rate_hz": 25000000,
+    "stage0a_full_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+    "stat": {
+      "ctime_ns": 1784430845000000000,
+      "device": 48,
+      "inode": 13,
+      "mtime_ns": 1784430845000000000,
+      "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "size_bytes": 48016392192
+    },
+    "stat_identity_match": true,
+    "status": "PASS",
+    "verification": "exact Stage-0A stat identity plus inherited full-file SHA-256"
+  },
+  "overall_status": "PASS",
+  "receiver": {
+    "expected_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+    "observed_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "attack_data_used": false,
+  "boundary_selection": "receiver data_symbol_boundary only; GPS structure diagnostic/validation only",
+  "constant_plus_one_fallback": false,
+  "datasets": [
+    "OAKBAT.cleanStatic",
+    "TEXBAT.cleanStatic"
+  ],
+  "epochs_per_bit": 20,
+  "mkl_num_threads": "4",
+  "model_used": false,
+  "omp_num_threads": "4",
+  "polarity_selection": "fixed receiver Prompt real-axis representative before outcome validation",
+  "schema": "gnss-doppler-lab.mosaic-stage0b-r0-config.v1",
+  "selected_prns": {
+    "OAKBAT.cleanStatic": [
+      10,
+      11,
+      21,
+      24,
+      27
+    ],
+    "TEXBAT.cleanStatic": [
+      3,
+      13,
+      16,
+      19,
+      30
+    ]
+  },
+  "subframes_required": 2,
+  "synthetic_injection_performed": false,
+  "threshold_tuning_performed": false,
+  "words_required": 20,
+  "workers": 1
+}

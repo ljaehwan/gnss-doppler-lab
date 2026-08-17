@@ -1,0 +1,18 @@
+{
+  "checks": {
+    "all_word_parity": true,
+    "minimum_four_prns_each": true,
+    "no_attack_input": true,
+    "no_constant_plus_one_fallback": true,
+    "preamble": true,
+    "raw_source_sha_binding": true,
+    "receiver_sha": true,
+    "tow_continuity": true,
+    "two_consecutive_subframes": true,
+    "two_separated_intervals": true,
+    "unique_receiver_sample_boundary": true
+  },
+  "next_action": "Freeze these sidecars and use only the listed valid intervals in the next Stage-0B receiver-in-the-loop injection task.",
+  "pass": true,
+  "verdict": "STAGE0B_NAVBIT_PROVENANCE_PASS"
+}
