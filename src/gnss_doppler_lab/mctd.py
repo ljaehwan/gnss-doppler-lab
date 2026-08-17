@@ -104,15 +104,15 @@ def _load_dump_directory(path: Path | str) -> tuple[float, np.ndarray]:
     return sample_rates.pop(), np.concatenate(arrays)
 
 
-def _unique_rows(records: np.ndarray, fs: float) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    epochs = nominal_epoch_ms(records["raw_interval_start_sample"], fs)
-    keys = np.rec.fromarrays((records["prn"].astype(np.int64), epochs), names="prn,epoch")
-    order = np.lexsort((records["raw_interval_start_sample"], epochs, records["prn"]))
+def _unique_rows(records: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    sequence = records["loop_sequence"].astype(np.int64)
+    keys = np.rec.fromarrays((records["prn"].astype(np.int64), sequence), names="prn,sequence")
+    order = np.lexsort((records["raw_interval_start_sample"], sequence, records["prn"]))
     sorted_keys = keys[order]
     keep = np.ones(len(order), dtype=bool)
     keep[1:] = sorted_keys[1:] != sorted_keys[:-1]
     chosen = order[keep]
-    return records[chosen], records["prn"][chosen].astype(np.int64), epochs[chosen]
+    return records[chosen], records["prn"][chosen].astype(np.int64), sequence[chosen]
 
 
 def align_dump_directories(
@@ -128,13 +128,25 @@ def align_dump_directories(
     fs_fast, fast = _load_dump_directory(fast_dir)
     if fs_slow != fs_fast:
         raise ValueError("slow/fast sample-rate mismatch")
-    slow, sprn, sepoch = _unique_rows(slow, fs_slow)
-    fast, fprn, fepoch = _unique_rows(fast, fs_fast)
-    skey = np.rec.fromarrays((sprn, sepoch), names="prn,epoch")
-    fkey = np.rec.fromarrays((fprn, fepoch), names="prn,epoch")
+    slow, sprn, ssequence = _unique_rows(slow)
+    fast, fprn, fsequence = _unique_rows(fast)
+    skey = np.rec.fromarrays((sprn, ssequence), names="prn,sequence")
+    fkey = np.rec.fromarrays((fprn, fsequence), names="prn,sequence")
     _, si, fi = np.intersect1d(skey, fkey, assume_unique=True, return_indices=True)
     slow, fast = slow[si], fast[fi]
-    prn, epoch = sprn[si], sepoch[si]
+    prn = sprn[si]
+    mean_raw_start = np.rint(
+        (slow["raw_interval_start_sample"].astype(np.float64)
+         + fast["raw_interval_start_sample"].astype(np.float64)) / 2.0
+    ).astype(np.int64)
+    epoch = nominal_epoch_ms(mean_raw_start, fs_slow)
+    # A code period may straddle a nominal-ms rounding boundary.  Keep exactly
+    # one causal update per PRN/raw-ms key to preserve permutation-invariant
+    # same-epoch pooling without interpolation.
+    epoch_key = np.rec.fromarrays((prn, epoch), names="prn,epoch")
+    _, unique_index = np.unique(epoch_key, return_index=True)
+    unique_index.sort()
+    slow, fast, prn, epoch = slow[unique_index], fast[unique_index], prn[unique_index], epoch[unique_index]
     slow_norm, slow_prompt_ok = prompt_normalize(complex_taps(slow), min_magnitude=min_prompt_magnitude)
     fast_norm, fast_prompt_ok = prompt_normalize(complex_taps(fast), min_magnitude=min_prompt_magnitude)
     valid = slow_prompt_ok & fast_prompt_ok
@@ -266,4 +278,3 @@ def permutation_invariant_score(epoch_ms: np.ndarray, prn: np.ndarray, scores: n
 
 def paired_bootstrap_blocks(times_s: np.ndarray, *, width_s: float = 10.0) -> np.ndarray:
     return np.floor(np.asarray(times_s, dtype=np.float64) / width_s).astype(np.int64)
-

@@ -72,6 +72,16 @@ def source_equality(slug: str) -> dict[str, object]:
             "same_integration_ms": 1, "same_tap_spacing_chips": 0.125, "same_nav_bit_handling": True}
 
 
+def native_missing_rate(path: Path) -> float:
+    values = canonical_rows(path)
+    missing = expected = 0
+    for prn in np.unique(values["prn"]):
+        sequence = np.sort(values["loop_sequence"][values["prn"] == prn].astype(np.int64))
+        if len(sequence) > 1:
+            gaps = np.diff(sequence); missing += int(np.maximum(gaps - 1, 0).sum()); expected += int(gaps.sum())
+    return float(missing / expected) if expected else 0.0
+
+
 def phase_a() -> int:
     datasets = {}
     overall = True
@@ -90,14 +100,15 @@ def phase_a() -> int:
         source = source_equality(slug)
         passed = source["status"] == "PASS" and all(item["status"] == "PASS" for item in deterministic.values()) and stable and collapse
         overall &= passed
-        union_rows = len(canonical_rows(directory(slug, "slow", 1))) + len(canonical_rows(directory(slug, "fast", 1)))
+        raw_rows = len(canonical_rows(directory(slug, "slow", 1))) + len(canonical_rows(directory(slug, "fast", 1)))
         datasets[dataset] = {
             "status": "PASS" if passed else "FAIL", "source_equality": source,
             "deterministic_replay": deterministic,
             "stable_support": {"status": "PASS" if stable else "FAIL", "quality_common_rows": len(aligned.prn),
                                "quality_common_epochs_ge_4_prns": len(epoch), "maximum_common_prns": int(n.max(initial=0)),
                                "common_raw_start_delta_samples_max": int(common_raw_delta.max(initial=0)),
-                               "missing_native_row_rate": 1.0 - 2.0 * len(aligned.prn) / union_rows},
+                               "missing_native_row_rate": max(native_missing_rate(directory(slug, "slow", 1)), native_missing_rate(directory(slug, "fast", 1))),
+                               "quality_exclusion_or_noncommon_rate": 1.0 - 2.0 * len(aligned.prn) / raw_rows},
             "identical_loop_control": {"status": "PASS" if collapse else "FAIL", "common_rows": len(identical.prn),
                                        "maximum_absolute_full_divergence": max_identical,
                                        "collapse_to_numerical_error": collapse, "numerical_error_tolerance": 0.0},

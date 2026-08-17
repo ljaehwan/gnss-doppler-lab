@@ -1,0 +1,18 @@
+{
+  "schema": "gnss-doppler-lab.mctd-clean-only-amendment.v1",
+  "status": "SEALED_CLEAN_ONLY_ALIGNMENT_CLARIFICATION_BEFORE_MODEL_FIT_OR_ATTACK_REPLAY",
+  "attack_data_used": false,
+  "issue": "Independent nominal-millisecond rounding was an ambiguous slow/fast join identity when causal native loop-sequence identity was available.",
+  "evidence": {
+    "dataset": "TEXBAT.cleanStatic Phase-A only",
+    "old_quality_common_rows": 39975,
+    "old_quality_common_epochs_ge_4_prns": 3998,
+    "matched_native_loop_sequence_raw_start_delta_samples_quantile_max": 2,
+    "new_quality_common_rows": 39975,
+    "new_quality_common_epochs_ge_4_prns": 3998,
+    "metric_support_changed": false
+  },
+  "clarification": "Join on exact (PRN, native loop_sequence) from the identical handoff, validate the paired raw starts, assign the pair to the rounded mean raw-IQ millisecond, and retain one causal update per PRN/millisecond.",
+  "frozen_effect": "Alignment only; loop bandwidths, features, validity gates, model, thresholds, block pooling, alarm rule, and GO criteria are unchanged.",
+  "attack_scores_computed_before_repair": false
+}
