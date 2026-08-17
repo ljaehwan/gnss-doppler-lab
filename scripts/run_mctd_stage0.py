@@ -151,7 +151,8 @@ def initialize() -> int:
 
 
 def run_receiver(name: str, loop: str, phase: str, repetition: int) -> int:
-    if phase == "attack" and not json.loads((ARTIFACT / "preregistration.json").read_text()).get("phase_b_authorized"):
+    authorization = ARTIFACT / "phase_b_authorization.json"
+    if phase == "attack" and not (authorization.exists() and json.loads(authorization.read_text()).get("phase_b_authorized")):
         raise RuntimeError("Phase B NOT_AUTHORIZED")
     config_phase = "phase_a" if phase == "phase_a" else "full"
     slug = name.lower().replace(".", "_")
@@ -198,11 +199,31 @@ def run_phase_a_all() -> int:
     return 0
 
 
+def run_clean_all() -> int:
+    for name in ("TEXBAT.cleanStatic", "OAKBAT.cleanStatic"):
+        for loop in ("slow", "fast"):
+            code = run_receiver(name, loop, "clean", 1)
+            if code:
+                return code
+    return 0
+
+
+def run_attack_all() -> int:
+    for name in ("TEXBAT.DS3", "TEXBAT.DS7", "OAKBAT.OS3", "OAKBAT.OS4"):
+        for loop in ("slow", "fast"):
+            code = run_receiver(name, loop, "attack", 1)
+            if code:
+                return code
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("initialize")
     sub.add_parser("run-phase-a-all")
+    sub.add_parser("run-clean-all")
+    sub.add_parser("run-attack-all")
     run = sub.add_parser("run-receiver")
     run.add_argument("--scenario", choices=tuple(SCENARIOS), required=True)
     run.add_argument("--loop", choices=tuple(LOOPS), required=True)
@@ -213,6 +234,10 @@ def main() -> int:
         return initialize()
     if args.command == "run-phase-a-all":
         return run_phase_a_all()
+    if args.command == "run-clean-all":
+        return run_clean_all()
+    if args.command == "run-attack-all":
+        return run_attack_all()
     return run_receiver(args.scenario, args.loop, args.phase, args.repetition)
 
 
