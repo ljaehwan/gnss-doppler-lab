@@ -1,0 +1,49 @@
+{
+  "all_expected_failures_observed": true,
+  "mutation_medium": "in-memory deep copies only",
+  "original_committed_artifact_modified": false,
+  "tests": [
+    {
+      "expected_failure_label": "PARITY_RECOMPUTATION_FAIL",
+      "name": "validated_transmitted_bit_flip",
+      "observed_failure_label": "PARITY_RECOMPUTATION_FAIL",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "DERIVED_WORD_MISMATCH",
+      "name": "derived_transmitted_word_hex_change",
+      "observed_failure_label": "DERIVED_WORD_MISMATCH",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "PARITY_RECOMPUTATION_FAIL",
+      "name": "actual_how_bit_change_tow_csv_unchanged",
+      "observed_failure_label": "PARITY_RECOMPUTATION_FAIL",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "PARITY_RECOMPUTATION_FAIL",
+      "name": "actual_bit_change_parity_csv_still_true",
+      "observed_failure_label": "PARITY_RECOMPUTATION_FAIL",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "PREAMBLE_RECOMPUTATION_FAIL",
+      "name": "preamble_bit_flip",
+      "observed_failure_label": "PREAMBLE_RECOMPUTATION_FAIL",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "RAW_MAPPING_DIGEST_MISMATCH",
+      "name": "sample_start_change",
+      "observed_failure_label": "RAW_MAPPING_DIGEST_MISMATCH",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "CONSTANT_PLUS_ONE_SEQUENCE",
+      "name": "constant_plus_one_sequence",
+      "observed_failure_label": "CONSTANT_PLUS_ONE_SEQUENCE",
+      "passed": true
+    }
+  ]
+}

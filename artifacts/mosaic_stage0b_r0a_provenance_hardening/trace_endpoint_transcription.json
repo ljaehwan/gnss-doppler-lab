@@ -1,0 +1,11 @@
+{
+  "endpoint_mismatch_examples": [],
+  "frozen_mapping_canonical_sha256": "469c20aed431d9912f126372d2f77c72e258597c035bc6330b85be29f58294cb",
+  "important_distinction": "Zero endpoint transcription error only proves faithful copying of chosen TRACE rows; it does not prove that those rows are true NAV-bit starts.",
+  "semantic_mapping_status": "RAW_MAPPING_MISMATCH",
+  "semantic_start_rows_on_end_of_current_bit_flag": 1632,
+  "trace_endpoint_mismatch_count": 0,
+  "trace_endpoint_pairs_compared": 14976,
+  "trace_endpoint_transcription_error_samples": 0,
+  "trace_endpoint_transcription_status": "PASS"
+}

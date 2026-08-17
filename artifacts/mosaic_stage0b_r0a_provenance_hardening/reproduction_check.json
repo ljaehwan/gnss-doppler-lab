@@ -1,0 +1,54 @@
+{
+  "all_prn_sequences_unique": true,
+  "expected": {
+    "oakbat_tow": [
+      381636,
+      381642
+    ],
+    "texbat_tow": [
+      477918,
+      477924
+    ],
+    "total_validated_bits": 6000,
+    "total_words": 200,
+    "transmitted_bit_distribution": {
+      "0": 3014,
+      "1": 2986
+    },
+    "validated_bits_per_prn": 600,
+    "validated_prns": 10,
+    "words_per_prn": 20
+  },
+  "frozen_artifact_checksums_verified": 23,
+  "frozen_artifact_manifest_valid": true,
+  "observed": {
+    "total_validated_bits": 6000,
+    "total_words": 200,
+    "tow_by_dataset": {
+      "OAKBAT.cleanStatic": [
+        [
+          381636,
+          381642
+        ]
+      ],
+      "TEXBAT.cleanStatic": [
+        [
+          477918,
+          477924
+        ]
+      ]
+    },
+    "transmitted_bit_distribution": {
+      "0": 3014,
+      "1": 2986
+    },
+    "unique_prn_sequence_hashes": 10,
+    "validated_bits_per_prn": 600,
+    "validated_prns": 10,
+    "words_per_prn": 20
+  },
+  "raw_source_lineage_status": "PASS",
+  "receiver_lineage_match": true,
+  "receiver_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+  "status": "PASS"
+}

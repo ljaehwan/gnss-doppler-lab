@@ -1,0 +1,70 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "355594f669fb10c528cb2223fc22161dba5708f8e7277d2413294af21cd0b342",
+      "size_bytes": 3229
+    },
+    {
+      "path": "common_injection_intervals.json",
+      "sha256": "efca9289cba31c38a03492088d53592ffecb2fa81ff239bb8087e3c6fb4d488c",
+      "size_bytes": 10006
+    },
+    {
+      "path": "config.json",
+      "sha256": "ec19c3627881d4fe7afb653e50842b543fa538a56d2940c3b138efe46e666f2a",
+      "size_bytes": 516
+    },
+    {
+      "path": "final_verdict.json",
+      "sha256": "cbd19e67ab522c65d7bfdeb5485decce7c5e82809a46eb96c3e9887d4dec2170",
+      "size_bytes": 904
+    },
+    {
+      "path": "independent_bit_recomputation.json",
+      "sha256": "59b4f9f31af1c66643b508f5503a7e59273a3e81c5205c78d2d8b3afbd0779ea",
+      "size_bytes": 6240
+    },
+    {
+      "path": "independent_word_validation.csv",
+      "sha256": "a6e1c8caf5e2604379abfb491f72aeb19fa8a3a884d059af9449cee372ee85b8",
+      "size_bytes": 14094
+    },
+    {
+      "path": "prompt_transition_alignment.csv",
+      "sha256": "6e6c72a9089dac23cfe50b3f3c277ecaa9bdc57e54437b890c80760c53967f17",
+      "size_bytes": 72740
+    },
+    {
+      "path": "receiver_boundary_semantics.json",
+      "sha256": "dd068a01ba8c8d8fe5600ef181a0152eb381348275014f7316282ea58388ac93",
+      "size_bytes": 1622
+    },
+    {
+      "path": "reproduction_check.json",
+      "sha256": "a8244a163d2f9b47b234429c7d94a50942c35c073f5a6d026ac02602fe1337e8",
+      "size_bytes": 1155
+    },
+    {
+      "path": "scope_limitations.json",
+      "sha256": "d857e89a9feb8056b569cdfbaa682a5a0f02ff2be21c07763969d2837650f6f2",
+      "size_bytes": 428
+    },
+    {
+      "path": "source_commit.json",
+      "sha256": "e2e2befe7d351001ba87789752fe426a80b1b784e608880e9b2aee0fcc17c3fe",
+      "size_bytes": 321
+    },
+    {
+      "path": "tamper_negative_tests.json",
+      "sha256": "e57aa846fba62116e2d0b272a1fd2a9f7338a76815e9903c2c0170dc33a2effc",
+      "size_bytes": 1587
+    },
+    {
+      "path": "trace_endpoint_transcription.json",
+      "sha256": "598e1f65522182dfe3744e506cd56d25d01d6da11160889f5cda1aa4ead1c778",
+      "size_bytes": 609
+    }
+  ],
+  "schema": "gnss-doppler-lab.artifact-manifest-sha256.v1"
+}

@@ -1,0 +1,35 @@
+{
+  "authenticated_receiver_source": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-source/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+  "execution_order": [
+    "snapshot raw interval",
+    "correlate current interval",
+    "save current Prompt and increment d_current_data_symbol",
+    "evaluate counter==0 boundary flag",
+    "tracking update",
+    "write current interval TRACE row"
+  ],
+  "flagged_row_meaning": "The flagged TRACE row contains the final 1-ms Prompt integration of the current NAV bit.",
+  "frozen_r0_mapping_rule": "R0 used the flagged row itself as code_epoch_start/raw_start_sample.",
+  "frozen_r0_offset_error_epochs": -1,
+  "independent_nav_symbol_boundary_error_samples_claimed": false,
+  "nav_symbol_boundary_semantics": "END_OF_CURRENT_BIT",
+  "new_bit_start_rule": "The new NAV bit starts at raw_interval_start_sample of the immediately following TRACE row.",
+  "prompt_transition_alignment_status": "PASS",
+  "prompt_transition_rows": 754,
+  "prompt_transitions_on_previous_to_flag_edge": 0,
+  "prompt_transitions_on_source_predicted_flag_to_next_edge": 754,
+  "receiver_source_base_commit": "1ddd4562723040fd66cb334b578a5b69455625f4",
+  "source_line_evidence": {
+    "correlation": 2401,
+    "counter_increment": 1457,
+    "counter_modulo": 1458,
+    "flag": 2403,
+    "prompt_accumulation": 1454,
+    "run_loops": 2415,
+    "save": 2402,
+    "update": 2416,
+    "write": 2418
+  },
+  "source_sha256": "401abc6ec0f20da1d7e7fa4bf089aafe055109b176d0f159458b48f60eac0243",
+  "status": "CONFIRMED_OFF_BY_ONE_EPOCH"
+}

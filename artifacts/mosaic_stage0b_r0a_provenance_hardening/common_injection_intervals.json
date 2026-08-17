@@ -1,0 +1,342 @@
+{
+  "calculation": "intersection = [max(per-PRN starts), min(per-PRN ends)) computed from frozen coverage_summary.json",
+  "contract": "No Stage-0B work may use samples outside this intersection; current R0a verdict additionally prohibits injection everywhere until mapping is corrected in a separately authorized task.",
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "candidate_authorization": "PROVISIONAL_ONLY_NOT_AUTHORIZED_DUE_TO_RAW_MAPPING_MISMATCH",
+      "common_duration_samples": 59926977,
+      "common_duration_seconds": 11.9853954,
+      "common_raw_end_sample_exclusive": 210197273,
+      "common_raw_start_sample": 150270296,
+      "complete_frozen_validated_bits_inside_common_interval": {
+        "10": 599,
+        "11": 598,
+        "21": 598,
+        "24": 598,
+        "27": 599
+      },
+      "included_prns": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ],
+      "per_prn_navbit_boundary_offsets": [
+        {
+          "frozen_boundary_offset_mod_20ms_samples": 97318,
+          "prn": 10,
+          "source_semantic_boundary_offset_mod_20ms_samples": 2318,
+          "source_semantic_shift_samples_at_first_validated_bit": 5000
+        },
+        {
+          "frozen_boundary_offset_mod_20ms_samples": 63604,
+          "prn": 11,
+          "source_semantic_boundary_offset_mod_20ms_samples": 68604,
+          "source_semantic_shift_samples_at_first_validated_bit": 5000
+        },
+        {
+          "frozen_boundary_offset_mod_20ms_samples": 27349,
+          "prn": 21,
+          "source_semantic_boundary_offset_mod_20ms_samples": 32349,
+          "source_semantic_shift_samples_at_first_validated_bit": 5000
+        },
+        {
+          "frozen_boundary_offset_mod_20ms_samples": 12952,
+          "prn": 24,
+          "source_semantic_boundary_offset_mod_20ms_samples": 17952,
+          "source_semantic_shift_samples_at_first_validated_bit": 5000
+        },
+        {
+          "frozen_boundary_offset_mod_20ms_samples": 70296,
+          "prn": 27,
+          "source_semantic_boundary_offset_mod_20ms_samples": 75296,
+          "source_semantic_shift_samples_at_first_validated_bit": 5000
+        }
+      ],
+      "safe_injection_start_candidates_first_10": [
+        150270296,
+        150280296,
+        150285296,
+        150290296,
+        150295296,
+        150310296,
+        150325296,
+        150340296,
+        150345296,
+        150350296
+      ],
+      "transition_boundary_candidate_count": 1470,
+      "transition_boundary_candidates_first_20": [
+        {
+          "frozen_raw_start": 150297318,
+          "prn": 10,
+          "source_semantic_raw_start": 150302318
+        },
+        {
+          "frozen_raw_start": 150597318,
+          "prn": 10,
+          "source_semantic_raw_start": 150602318
+        },
+        {
+          "frozen_raw_start": 150697318,
+          "prn": 10,
+          "source_semantic_raw_start": 150702318
+        },
+        {
+          "frozen_raw_start": 150797318,
+          "prn": 10,
+          "source_semantic_raw_start": 150802318
+        },
+        {
+          "frozen_raw_start": 150997317,
+          "prn": 10,
+          "source_semantic_raw_start": 151002317
+        },
+        {
+          "frozen_raw_start": 151397317,
+          "prn": 10,
+          "source_semantic_raw_start": 151402317
+        },
+        {
+          "frozen_raw_start": 151597317,
+          "prn": 10,
+          "source_semantic_raw_start": 151602317
+        },
+        {
+          "frozen_raw_start": 151797317,
+          "prn": 10,
+          "source_semantic_raw_start": 151802317
+        },
+        {
+          "frozen_raw_start": 151897317,
+          "prn": 10,
+          "source_semantic_raw_start": 151902317
+        },
+        {
+          "frozen_raw_start": 152097317,
+          "prn": 10,
+          "source_semantic_raw_start": 152102317
+        },
+        {
+          "frozen_raw_start": 152297317,
+          "prn": 10,
+          "source_semantic_raw_start": 152302317
+        },
+        {
+          "frozen_raw_start": 152797316,
+          "prn": 10,
+          "source_semantic_raw_start": 152802316
+        },
+        {
+          "frozen_raw_start": 152997316,
+          "prn": 10,
+          "source_semantic_raw_start": 153002316
+        },
+        {
+          "frozen_raw_start": 153097316,
+          "prn": 10,
+          "source_semantic_raw_start": 153102316
+        },
+        {
+          "frozen_raw_start": 153297316,
+          "prn": 10,
+          "source_semantic_raw_start": 153302316
+        },
+        {
+          "frozen_raw_start": 153797315,
+          "prn": 10,
+          "source_semantic_raw_start": 153802315
+        },
+        {
+          "frozen_raw_start": 154197315,
+          "prn": 10,
+          "source_semantic_raw_start": 154202315
+        },
+        {
+          "frozen_raw_start": 154497315,
+          "prn": 10,
+          "source_semantic_raw_start": 154502315
+        },
+        {
+          "frozen_raw_start": 154597315,
+          "prn": 10,
+          "source_semantic_raw_start": 154602315
+        },
+        {
+          "frozen_raw_start": 154797315,
+          "prn": 10,
+          "source_semantic_raw_start": 154802315
+        }
+      ]
+    },
+    "TEXBAT.cleanStatic": {
+      "candidate_authorization": "PROVISIONAL_ONLY_NOT_AUTHORIZED_DUE_TO_RAW_MAPPING_MISMATCH",
+      "common_duration_samples": 299701734,
+      "common_duration_seconds": 11.98806936,
+      "common_raw_end_sample_exclusive": 1117492038,
+      "common_raw_start_sample": 817790304,
+      "complete_frozen_validated_bits_inside_common_interval": {
+        "13": 599,
+        "16": 598,
+        "19": 598,
+        "3": 598,
+        "30": 599
+      },
+      "included_prns": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ],
+      "per_prn_navbit_boundary_offsets": [
+        {
+          "frozen_boundary_offset_mod_20ms_samples": 13830,
+          "prn": 3,
+          "source_semantic_boundary_offset_mod_20ms_samples": 38830,
+          "source_semantic_shift_samples_at_first_validated_bit": 25000
+        },
+        {
+          "frozen_boundary_offset_mod_20ms_samples": 492386,
+          "prn": 13,
+          "source_semantic_boundary_offset_mod_20ms_samples": 17386,
+          "source_semantic_shift_samples_at_first_validated_bit": 25000
+        },
+        {
+          "frozen_boundary_offset_mod_20ms_samples": 106534,
+          "prn": 16,
+          "source_semantic_boundary_offset_mod_20ms_samples": 131534,
+          "source_semantic_shift_samples_at_first_validated_bit": 25000
+        },
+        {
+          "frozen_boundary_offset_mod_20ms_samples": 113520,
+          "prn": 19,
+          "source_semantic_boundary_offset_mod_20ms_samples": 138520,
+          "source_semantic_shift_samples_at_first_validated_bit": 25000
+        },
+        {
+          "frozen_boundary_offset_mod_20ms_samples": 290304,
+          "prn": 30,
+          "source_semantic_boundary_offset_mod_20ms_samples": 315304,
+          "source_semantic_shift_samples_at_first_validated_bit": 25000
+        }
+      ],
+      "safe_injection_start_candidates_first_10": [
+        817790304,
+        817840304,
+        817865304,
+        817890304,
+        817915304,
+        817940304,
+        817965304,
+        817990304,
+        818065304,
+        818090304
+      ],
+      "transition_boundary_candidate_count": 1488,
+      "transition_boundary_candidates_first_20": [
+        {
+          "frozen_raw_start": 818013830,
+          "prn": 3,
+          "source_semantic_raw_start": 818038830
+        },
+        {
+          "frozen_raw_start": 819513829,
+          "prn": 3,
+          "source_semantic_raw_start": 819538829
+        },
+        {
+          "frozen_raw_start": 820013829,
+          "prn": 3,
+          "source_semantic_raw_start": 820038829
+        },
+        {
+          "frozen_raw_start": 820513829,
+          "prn": 3,
+          "source_semantic_raw_start": 820538829
+        },
+        {
+          "frozen_raw_start": 821513828,
+          "prn": 3,
+          "source_semantic_raw_start": 821538828
+        },
+        {
+          "frozen_raw_start": 823513827,
+          "prn": 3,
+          "source_semantic_raw_start": 823538827
+        },
+        {
+          "frozen_raw_start": 824013827,
+          "prn": 3,
+          "source_semantic_raw_start": 824038827
+        },
+        {
+          "frozen_raw_start": 824513827,
+          "prn": 3,
+          "source_semantic_raw_start": 824538827
+        },
+        {
+          "frozen_raw_start": 825013827,
+          "prn": 3,
+          "source_semantic_raw_start": 825038827
+        },
+        {
+          "frozen_raw_start": 825513826,
+          "prn": 3,
+          "source_semantic_raw_start": 825538826
+        },
+        {
+          "frozen_raw_start": 826013826,
+          "prn": 3,
+          "source_semantic_raw_start": 826038826
+        },
+        {
+          "frozen_raw_start": 826513826,
+          "prn": 3,
+          "source_semantic_raw_start": 826538826
+        },
+        {
+          "frozen_raw_start": 827013826,
+          "prn": 3,
+          "source_semantic_raw_start": 827038826
+        },
+        {
+          "frozen_raw_start": 828013825,
+          "prn": 3,
+          "source_semantic_raw_start": 828038825
+        },
+        {
+          "frozen_raw_start": 828513825,
+          "prn": 3,
+          "source_semantic_raw_start": 828538825
+        },
+        {
+          "frozen_raw_start": 831013824,
+          "prn": 3,
+          "source_semantic_raw_start": 831038824
+        },
+        {
+          "frozen_raw_start": 831513824,
+          "prn": 3,
+          "source_semantic_raw_start": 831538824
+        },
+        {
+          "frozen_raw_start": 832513823,
+          "prn": 3,
+          "source_semantic_raw_start": 832538823
+        },
+        {
+          "frozen_raw_start": 833013823,
+          "prn": 3,
+          "source_semantic_raw_start": 833038823
+        },
+        {
+          "frozen_raw_start": 834013822,
+          "prn": 3,
+          "source_semantic_raw_start": 834038822
+        }
+      ]
+    }
+  }
+}

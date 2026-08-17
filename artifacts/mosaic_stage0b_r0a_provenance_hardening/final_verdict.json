@@ -1,0 +1,14 @@
+{
+  "distant_interval_validation": "NOT_PERFORMED",
+  "frozen_mapping_semantically_off_by_one_epoch": true,
+  "nav_symbol_boundary_semantics": "END_OF_CURRENT_BIT",
+  "next_action": "In a separately authorized task, create a corrected versioned mapping shifted to the following TRACE row and independently re-audit it; do not overwrite R0.",
+  "pass_with_scope_limitation": false,
+  "reason": "The frozen sidecar faithfully transcribes its selected TRACE endpoints, but receiver source and 754/754 observed Prompt transitions prove each data_symbol_boundary flag marks the final epoch of the current bit; R0 mapped that row as the first epoch of the next bit.",
+  "scientific_bit_recomputation_pass": true,
+  "stage0b_injection_authorized": false,
+  "trace_endpoint_transcription_pass": true,
+  "two_consecutive_subframes": true,
+  "two_separated_intervals": false,
+  "verdict": "RAW_MAPPING_MISMATCH"
+}

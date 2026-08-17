@@ -1,0 +1,16 @@
+{
+  "attack_data_accessed": false,
+  "boundary_phase_modified": false,
+  "frozen_artifact": "artifacts/mosaic_stage0b_r0_navbit_provenance",
+  "global_polarity_modified": false,
+  "mkl_num_threads": "4",
+  "model_trained": false,
+  "navbit_sequence_modified": false,
+  "omp_num_threads": "4",
+  "raw_prompt_redecoded": false,
+  "receiver_executed": false,
+  "schema": "gnss-doppler-lab.mosaic-stage0b-r0a-provenance-hardening.v1",
+  "synthetic_injection_performed": false,
+  "threshold_set": false,
+  "workers": 1
+}

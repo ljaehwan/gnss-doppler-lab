@@ -1,0 +1,10 @@
+{
+  "distant_interval_validation": "NOT_PERFORMED",
+  "frozen_r0_artifact_modified": false,
+  "model_go": false,
+  "mosaic_detection_hypothesis_go": false,
+  "stage0b_injection_executed": false,
+  "two_consecutive_subframes": true,
+  "two_separated_intervals": false,
+  "validated_temporal_scope": "one contiguous approximately 12-second interval per PRN containing two consecutive subframes whose starts are 6 seconds apart"
+}
