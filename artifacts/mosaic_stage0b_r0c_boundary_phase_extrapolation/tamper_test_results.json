@@ -1,0 +1,79 @@
+{
+  "all_expected_failures_observed": true,
+  "committed_or_frozen_artifact_modified": false,
+  "mutation_medium": "in-memory copies",
+  "tests": [
+    {
+      "expected_failure_label": "BOUNDARY_PHASE_EXTRAPOLATION_FAIL",
+      "name": "phase_plus_one",
+      "observed_failure_label": "BOUNDARY_PHASE_EXTRAPOLATION_FAIL",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "BOUNDARY_PHASE_EXTRAPOLATION_FAIL",
+      "name": "phase_minus_one",
+      "observed_failure_label": "BOUNDARY_PHASE_EXTRAPOLATION_FAIL",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "BOUNDARY_PHASE_EXTRAPOLATION_FAIL",
+      "name": "prn_phase_swap",
+      "observed_failure_label": "BOUNDARY_PHASE_EXTRAPOLATION_FAIL",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "BOUNDARY_PHASE_EXTRAPOLATION_FAIL",
+      "name": "trace_flag_row_deleted",
+      "observed_failure_label": "BOUNDARY_PHASE_EXTRAPOLATION_FAIL",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "INCONCLUSIVE_TRACE_CONTINUITY",
+      "name": "trace_flag_row_duplicated",
+      "observed_failure_label": "INCONCLUSIVE_TRACE_CONTINUITY",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "FROZEN_INPUT_MISMATCH",
+      "name": "raw_endpoint_changed",
+      "observed_failure_label": "FROZEN_INPUT_MISMATCH",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "INCONCLUSIVE_TRACE_CONTINUITY",
+      "name": "unexplained_sample_gap",
+      "observed_failure_label": "INCONCLUSIVE_TRACE_CONTINUITY",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "INCONCLUSIVE_TRACE_CONTINUITY",
+      "name": "tracking_reset",
+      "observed_failure_label": "INCONCLUSIVE_TRACE_CONTINUITY",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "FROZEN_INPUT_MISMATCH",
+      "name": "frozen_bit_flip",
+      "observed_failure_label": "FROZEN_INPUT_MISMATCH",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "FROZEN_INPUT_MISMATCH",
+      "name": "original_mapping_restored",
+      "observed_failure_label": "FROZEN_INPUT_MISMATCH",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "COMMON_INTERVAL_INVALID",
+      "name": "interval_start_expanded_one_sample",
+      "observed_failure_label": "COMMON_INTERVAL_INVALID",
+      "passed": true
+    },
+    {
+      "expected_failure_label": "COMMON_INTERVAL_INVALID",
+      "name": "interval_end_expanded_one_sample",
+      "observed_failure_label": "COMMON_INTERVAL_INVALID",
+      "passed": true
+    }
+  ]
+}

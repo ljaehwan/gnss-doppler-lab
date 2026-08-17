@@ -1,0 +1,17 @@
+{
+  "attack_data_accessed": false,
+  "base_commit": "6e7208480e6420b392a4857d2566dedf42644149",
+  "boundary_flag_semantics": "END_OF_CURRENT_BIT",
+  "corrected_mapping_rule": "R0b exact +1 TRACE row endpoints",
+  "epochs_per_bit": 20,
+  "holdout": "chronological second half of post-sync direct flags",
+  "injection_executed": false,
+  "mkl_num_threads": "4",
+  "model_executed": false,
+  "omp_num_threads": "4",
+  "phase_selection": "chronological first half of post-sync direct flags only",
+  "prompt_nav_used_for_phase_selection": false,
+  "schema": "gnss-doppler-lab.mosaic-stage0b-r0c-boundary-phase-extrapolation.v1",
+  "synthetic_injection_performed": false,
+  "workers": 1
+}

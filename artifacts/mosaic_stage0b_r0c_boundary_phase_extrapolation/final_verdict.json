@@ -1,0 +1,19 @@
+{
+  "corrected_prompt_agreement": "6000/6000",
+  "fit_direct_flags": 819,
+  "fit_phase_matches": 819,
+  "fitted_prns": 10,
+  "frozen_bit_hash_unchanged": true,
+  "holdout_direct_flags": 823,
+  "holdout_phase_matches": 823,
+  "injection_executed": false,
+  "observed_prompt_transition_alignment": "754/754",
+  "outside_validated_intervals_authorized": false,
+  "parity": "200/200",
+  "preamble": "20/20",
+  "scope_limitation": "authorization is limited to the two validated approximately 12-second common intervals; no distant interval validation",
+  "stage0b_injection_authorized_within_validated_intervals": true,
+  "tow_continuity": "10/10",
+  "tracking_continuity_passed_prns": 10,
+  "verdict": "BOUNDARY_PHASE_EXTRAPOLATION_PASS_WITH_SCOPE_LIMITATION"
+}

@@ -1,0 +1,75 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "ef3c43fc3dab50a72b60b377cbed384db972f1253a6da5c654aa9a6d0f19919b",
+      "size_bytes": 2352
+    },
+    {
+      "path": "common_interval_validation.json",
+      "sha256": "0c7d976349ede76b1d62111bf9d8028296d60555d47efb8da4226c0d40b27472",
+      "size_bytes": 884
+    },
+    {
+      "path": "config.json",
+      "sha256": "afd74c6520386ea80558486f4dcdc5cf60284cd9b173c52a6413f905956b6282",
+      "size_bytes": 683
+    },
+    {
+      "path": "corrected_bit_mapping.csv.gz",
+      "sha256": "db7e23761e2bb4314d6f22e990e23c0fb19387ee7476a55a665def7a10af522f",
+      "size_bytes": 185761
+    },
+    {
+      "path": "direct_flag_inventory.csv",
+      "sha256": "03ac9974b96d970cac24b4a265fb4a87289b029bb9f70d573a8e7190fc98389b",
+      "size_bytes": 484931
+    },
+    {
+      "path": "final_verdict.json",
+      "sha256": "b05b7efc40947fc2942e01f99c2b4178961c5c1892d7f1cdc9f48d0e2187e432",
+      "size_bytes": 758
+    },
+    {
+      "path": "frozen_input_hashes.json",
+      "sha256": "a1f2cd2864c2b21b43c2106d7b63804d96efe040f3a7cffdadce9bc9f088b78c",
+      "size_bytes": 670
+    },
+    {
+      "path": "nav_structure_validation.json",
+      "sha256": "1454e0a37d2c8dc6ad866a492f671c801d0492ed36782caf1b538ac8feda5c81",
+      "size_bytes": 6125
+    },
+    {
+      "path": "phase_fit_summary.csv",
+      "sha256": "34f657ef0c96dc6d3fb272cd88684b3795ccde134716596db13ae6b80259604a",
+      "size_bytes": 1628
+    },
+    {
+      "path": "phase_holdout_validation.csv",
+      "sha256": "0796cb318a17a794c098b903942a13873494c16753f1476a89c406d996333d7c",
+      "size_bytes": 635
+    },
+    {
+      "path": "prompt_transition_validation.json",
+      "sha256": "d73d4453be7108dc54d66eba15c87e28a432535212c93b0d843491ab4232319c",
+      "size_bytes": 436
+    },
+    {
+      "path": "source_commit.json",
+      "sha256": "ebc12c035ab0fe3d589d6c6c18733005cf9d707a366fd3b00fc6e6816d1e0446",
+      "size_bytes": 337
+    },
+    {
+      "path": "tamper_test_results.json",
+      "sha256": "6a17597e856763397cb201fde0b880dac7f654adfecd8d2fb85f47495898d02f",
+      "size_bytes": 2549
+    },
+    {
+      "path": "tracking_continuity.csv",
+      "sha256": "2c4e2d04a07b66380187515aaddd31213ee94068ffcec21c29af3adf42ed78b2",
+      "size_bytes": 5403
+    }
+  ],
+  "schema": "gnss-doppler-lab.artifact-manifest-sha256.v1"
+}

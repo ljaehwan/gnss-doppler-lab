@@ -1,0 +1,36 @@
+{
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "authorization": "AUTHORIZED_WITHIN_INTERVAL_ONLY",
+      "common_raw_end_sample_exclusive": 210202273,
+      "common_raw_start_sample": 150275296,
+      "duration_samples": 59926977,
+      "duration_seconds": 11.9853954,
+      "expected_interval_match": true,
+      "included_prns": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ]
+    },
+    "TEXBAT.cleanStatic": {
+      "authorization": "AUTHORIZED_WITHIN_INTERVAL_ONLY",
+      "common_raw_end_sample_exclusive": 1117517038,
+      "common_raw_start_sample": 817815304,
+      "duration_samples": 299701734,
+      "duration_seconds": 11.98806936,
+      "expected_interval_match": true,
+      "included_prns": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ]
+    }
+  },
+  "injection_executed": false,
+  "outside_interval_authorized": false
+}

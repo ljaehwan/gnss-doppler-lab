@@ -1,0 +1,11 @@
+dataset,prn,direct_flags_total,chronological_split_rule,fit_direct_flags,fit_first_trace_row,fit_last_trace_row,fitted_phase_mod20,fit_phase_matches,fit_phase_mismatches,selection_inputs,prompt_nav_used_for_selection,status
+OAKBAT.cleanStatic,10,172,earliest_floor(N/2)_fit_remaining_holdout,86,11559,13259,19,86,0,direct_data_symbol_boundary_flags_only,False,PASS
+OAKBAT.cleanStatic,11,139,earliest_floor(N/2)_fit_remaining_holdout,69,12232,13592,12,69,0,direct_data_symbol_boundary_flags_only,False,PASS
+OAKBAT.cleanStatic,21,183,earliest_floor(N/2)_fit_remaining_holdout,91,11345,13145,5,91,0,direct_data_symbol_boundary_flags_only,False,PASS
+OAKBAT.cleanStatic,24,139,earliest_floor(N/2)_fit_remaining_holdout,69,12222,13582,2,69,0,direct_data_symbol_boundary_flags_only,False,PASS
+OAKBAT.cleanStatic,27,139,earliest_floor(N/2)_fit_remaining_holdout,69,12234,13594,14,69,0,direct_data_symbol_boundary_flags_only,False,PASS
+TEXBAT.cleanStatic,3,174,earliest_floor(N/2)_fit_remaining_holdout,87,11520,13240,0,87,0,direct_data_symbol_boundary_flags_only,False,PASS
+TEXBAT.cleanStatic,13,174,earliest_floor(N/2)_fit_remaining_holdout,87,11519,13239,19,87,0,direct_data_symbol_boundary_flags_only,False,PASS
+TEXBAT.cleanStatic,16,174,earliest_floor(N/2)_fit_remaining_holdout,87,11524,13244,4,87,0,direct_data_symbol_boundary_flags_only,False,PASS
+TEXBAT.cleanStatic,19,174,earliest_floor(N/2)_fit_remaining_holdout,87,11524,13244,4,87,0,direct_data_symbol_boundary_flags_only,False,PASS
+TEXBAT.cleanStatic,30,174,earliest_floor(N/2)_fit_remaining_holdout,87,11531,13251,11,87,0,direct_data_symbol_boundary_flags_only,False,PASS
