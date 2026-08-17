@@ -24,7 +24,7 @@
     "reason": "Receiver preserves the same DLL/PLL tracking implementation; no independent FLL bandwidth property is exposed by this configuration.",
     "status": "NOT_APPLICABLE_SEPARATE_CONFIG"
   },
-  "freeze_commit": "TO_BE_FILLED_BY_COMMIT",
+  "freeze_commit": "e8b1a4c209cd58700bff1ec5042934492af30b8d",
   "identical_control": {
     "left": {
       "dll_bw_hz": 0.5,
