@@ -1,0 +1,136 @@
+{
+  "all_selected_support_evaluated": true,
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "attempted_rows": 235,
+      "complex_cosine_distribution": {
+        "max": 0.9999999999999483,
+        "median": 0.9999999999997439,
+        "min": 0.9999892417408692,
+        "p05": 0.9999999999991521,
+        "p95": 0.999999999999897
+      },
+      "delay_error_distribution_chips": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "doppler_error_distribution_hz": {
+        "max": 6.821210263296962e-12,
+        "median": 5.002220859751105e-12,
+        "min": -5.4569682106375694e-12,
+        "p05": -5.002220859751105e-12,
+        "p95": 6.366462912410498e-12
+      },
+      "gate_pass_fraction": 1.0,
+      "magnitude_spearman_distribution": {
+        "max": 1.0,
+        "median": 1.0,
+        "min": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "prompt_magnitude_ratio_distribution": {
+        "max": 1.002477937765029,
+        "median": 1.0000000343027122,
+        "min": 0.9990766226748738,
+        "p05": 0.9999988041975063,
+        "p95": 1.0000012084549539
+      },
+      "prompt_phase_error_rad_distribution": {
+        "max": 0.002079043133856926,
+        "median": 7.219937337159844e-09,
+        "min": -0.0022811049468781926,
+        "p05": -3.6344900220760917e-07,
+        "p95": 3.7777499890408136e-07
+      },
+      "rejected_rows": 0,
+      "status": "PASS",
+      "time_span_s": 14.9776406,
+      "valid_prns": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ],
+      "valid_reconstructed_rows": 235
+    },
+    "TEXBAT.cleanStatic": {
+      "attempted_rows": 235,
+      "complex_cosine_distribution": {
+        "max": 0.9999999999998055,
+        "median": 0.9999999999986178,
+        "min": 0.9999921613123811,
+        "p05": 0.999999999995255,
+        "p95": 0.9999999999994372
+      },
+      "delay_error_distribution_chips": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "doppler_error_distribution_hz": {
+        "max": 7.73070496506989e-12,
+        "median": -1.7053025658242404e-12,
+        "min": -6.366462912410498e-12,
+        "p05": -5.9117155615240335e-12,
+        "p95": 7.73070496506989e-12
+      },
+      "gate_pass_fraction": 1.0,
+      "magnitude_spearman_distribution": {
+        "max": 1.0,
+        "median": 1.0,
+        "min": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "prompt_magnitude_ratio_distribution": {
+        "max": 1.000117028844329,
+        "median": 0.9999998835114445,
+        "min": 0.997017245971309,
+        "p05": 0.999997407468082,
+        "p95": 1.0000022340987726
+      },
+      "prompt_phase_error_rad_distribution": {
+        "max": 0.0007914539514515738,
+        "median": 9.714120580299111e-10,
+        "min": -0.00011054107932468006,
+        "p05": -7.059773883496859e-07,
+        "p95": 4.491334109613251e-07
+      },
+      "rejected_rows": 0,
+      "status": "PASS",
+      "time_span_s": 14.977424599999999,
+      "valid_prns": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ],
+      "valid_reconstructed_rows": 235
+    }
+  },
+  "frozen_gate": {
+    "complex_tap_cosine_min": 0.9,
+    "delay_center_error_abs_max_chips": 0.125,
+    "doppler_center_error_abs_max_hz": 50.0,
+    "magnitude_spearman_min": 0.9
+  },
+  "metric_definitions": {
+    "complex_tap_cosine": "native versus raw-reconstructed nine-tap vector after one least-squares global complex amplitude per epoch",
+    "delay_center_error_chips": "action_used residual code phase minus its independently dumped residual-sample representation converted with code NCO rate/fs",
+    "doppler_center_error_hz": "action_used carrier Doppler minus carrier phase-step representation converted with fs/(2*pi)",
+    "magnitude_spearman": "Spearman rank correlation of native and fitted reconstructed nine-tap magnitudes"
+  },
+  "overall_rejected_rows": 0,
+  "overall_support_rows": 470,
+  "schema": "gnss-doppler-lab.mosaic-stage0a-r1-alignment-summary.v1",
+  "stage0a_pass": true,
+  "verdict": "STAGE0A_RAW_ALIGNMENT_PASS"
+}

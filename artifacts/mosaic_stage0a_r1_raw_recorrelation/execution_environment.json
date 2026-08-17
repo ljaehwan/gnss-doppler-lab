@@ -1,0 +1,19 @@
+{
+  "executable": "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python",
+  "kernel": "6.8.0-137-generic",
+  "logical_cpus": 72,
+  "memory_bytes": 33669672960,
+  "numpy": "2.5.1",
+  "platform": "Linux-6.8.0-137-generic-x86_64-with-glibc2.39",
+  "prior_python_3_11_15_note": "The prior artifact's recorded interpreter belonged to an earlier execution environment. It is not present in this foundation checkout; this run is bound to the requested project .venv and records its executable and versions directly.",
+  "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]",
+  "runtime_s_before_manifest": 379.14159870147705,
+  "scipy": "1.18.0",
+  "swap_bytes": 0,
+  "thread_limits": {
+    "MKL_NUM_THREADS": "4",
+    "OMP_NUM_THREADS": "4"
+  },
+  "worker_max_rss_kib_after_run": 205240,
+  "workers_used": 1
+}

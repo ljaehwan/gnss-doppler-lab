@@ -1,0 +1,10 @@
+{
+  "attack_data_used": false,
+  "meaning": "Only native complex nine-tap reconstruction from real cleanStatic raw IQ was evaluated.",
+  "recommended_next_action": "Obtain a decoded and independently validated navigation-bit sequence in a separate Stage-0B provenance task.",
+  "schema": "gnss-doppler-lab.mosaic-stage0a-r1-final-verdict.v1",
+  "stage0a_pass": true,
+  "stage0b_go": false,
+  "stage0b_run": false,
+  "verdict": "STAGE0A_RAW_ALIGNMENT_PASS"
+}

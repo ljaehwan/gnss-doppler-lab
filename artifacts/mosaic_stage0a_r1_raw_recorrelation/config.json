@@ -1,0 +1,21 @@
+{
+  "artifact_root": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/mosaic-stage0a-r1-raw-recorrelation/artifacts/mosaic_stage0a_r1_raw_recorrelation",
+  "attack_data_used": false,
+  "datasets": [
+    "OAKBAT.cleanStatic",
+    "TEXBAT.cleanStatic"
+  ],
+  "frozen_gate": {
+    "complex_tap_cosine_min": 0.9,
+    "delay_center_error_abs_max_chips": 0.125,
+    "doppler_center_error_abs_max_hz": 50.0,
+    "magnitude_spearman_min": 0.9
+  },
+  "mkl_num_threads": "4",
+  "neural_model_used": false,
+  "omp_num_threads": "4",
+  "schema": "gnss-doppler-lab.mosaic-stage0a-r1-config.v1",
+  "selection": "legacy Stage-0A deterministic support union 24 equally-spaced stable epochs per target PRN",
+  "stage0b_run": false,
+  "workers": 1
+}

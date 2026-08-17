@@ -1,0 +1,61 @@
+{
+  "alternative_sign_trials": false,
+  "carrier_wipeoff": "exp(-j*(residual_carrier_phase_rad + carrier_phase_step_rad_per_sample*n)); Doppler step=2*pi*f/fs",
+  "code_replica_indexing": "floor(code_phase_step*n + tap_shift - residual_code_phase) modulo 1023",
+  "convention_frozen_from_source_before_metrics": true,
+  "expected_receiver_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+  "input_sample_format": "little-endian interleaved signed int16 I,Q (GNSS-SDR ishort), 4 bytes/complex sample",
+  "prn_start_sample_count_semantics": "TRACE raw_interval_start_sample / legacy PRN_start_sample_count is the absolute zero-based complex-sample index consumed at the start of the current correlation interval",
+  "receiver_configs": {
+    "OAKBAT.cleanStatic": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/receiver.conf",
+      "sha256": "cb036cf2c60a6ec69b0e094a06fa20f74edb095408e8bbf71f41e15984d7f91a"
+    },
+    "TEXBAT.cleanStatic": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/receiver.conf",
+      "sha256": "29ba64240196c43dd78336955f7b77474d3b721e4e17eaf047e237e121c21f5e"
+    }
+  },
+  "receiver_executable": {
+    "ctime_ns": 1786882597000000000,
+    "device": 48,
+    "inode": 18,
+    "mtime_ns": 1786882597000000000,
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-build/src/main/gnss-sdr",
+    "sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+    "size_bytes": 36602584
+  },
+  "receiver_source": {
+    "base_commit": "1ddd4562723040fd66cb334b578a5b69455625f4",
+    "modified_files": [
+      "M src/algorithms/signal_source/adapters/file_source_base.cc",
+      " M src/algorithms/signal_source/adapters/file_source_base.h",
+      " M src/algorithms/signal_source/libs/gnss_sdr_valve.cc",
+      " M src/algorithms/signal_source/libs/gnss_sdr_valve.h",
+      " M src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc",
+      " M src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.h",
+      " M src/algorithms/tracking/libs/dll_pll_conf.cc",
+      " M src/algorithms/tracking/libs/dll_pll_conf.h",
+      " M src/core/receiver/control_thread.cc"
+    ],
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-source",
+    "working_tree_patch_sha256": "81b680bfae682fa92743fca53ce30ae09790383d008841d6eae3a25407442540"
+  },
+  "signal_conditioning": "Ishort_To_Complex -> Pass_Through -> Pass_Through; complex baseband, no IF configured",
+  "state_semantics": {
+    "carrier_phase_accumulator_rad": "continuous accumulated carrier phase; provenance only, not substituted for residual carrier phase",
+    "residual_carrier_phase_rad": "current interval carrier NCO phase used by exp(-j phase)",
+    "residual_code_phase_chips": "remnant code phase subtracted by the VOLK code-index expression for the current interval"
+  },
+  "tap_offsets_chips": [
+    -0.5,
+    -0.375,
+    -0.25,
+    -0.125,
+    0.0,
+    0.125,
+    0.25,
+    0.375,
+    0.5
+  ]
+}
