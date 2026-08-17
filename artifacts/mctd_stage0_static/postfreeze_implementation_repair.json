@@ -1,11 +1,14 @@
 {
   "schema": "gnss-doppler-lab.mctd-postfreeze-implementation-repair.v1",
   "status": "SEALED_BEFORE_SUCCESSFUL_ATTACK_SCORING",
-  "failed_runner_run_id": "20260817T041210Z-mctd-core-attack-evaluation",
+  "failed_runner_run_ids": [
+    "20260817T041210Z-mctd-core-attack-evaluation",
+    "20260817T042028Z-mctd-core-attack-evaluation-r1"
+  ],
   "failure": "PER_PRN_ARTIFACT_SERIALIZATION_QUADRATIC_SCAN",
   "attack_replays_completed": true,
   "attack_metrics_or_result_files_emitted_before_repair": false,
-  "repair": "Replace repeated full-array masks used only to serialize per-PRN/block descriptive rows with one lexicographic (block,PRN) grouping pass.",
+  "repair": "Replace repeated full-array masks used only to serialize per-PRN/block descriptive rows with one lexicographic (block,PRN) grouping pass, and materialize the unchanged Full feature matrix once outside that grouped loop.",
   "scientific_contract_changed": false,
   "unchanged": [
     "loop bandwidths",

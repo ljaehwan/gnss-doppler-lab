@@ -336,13 +336,14 @@ def evaluate_attacks() -> int:
         sorted_block, sorted_prn = block_id[idx], aligned.prn[idx]
         boundary = np.r_[True, (sorted_block[1:] != sorted_block[:-1]) | (sorted_prn[1:] != sorted_prn[:-1])]
         starts = np.flatnonzero(boundary); ends = np.r_[starts[1:], len(idx)]
+        full_matrix = aligned.full
         for start, end in zip(starts, ends, strict=True):
             take = idx[start:end]; block_value = int(sorted_block[start]); prn = int(sorted_prn[start])
             prn_rows.append({"dataset": name, "block_start_s": block_value / 1000.0, "prn": prn,
                              "code_divergence_abs_median": float(np.median(np.abs(aligned.state[take, 0]))),
                              "doppler_divergence_abs_median": float(np.median(np.abs(aligned.state[take, 2]))),
                              "tap_divergence_norm_median": float(np.median(np.linalg.norm(aligned.taps[take], axis=1))),
-                             "full_divergence_norm_median": float(np.median(np.linalg.norm(aligned.full[take], axis=1)))})
+                             "full_divergence_norm_median": float(np.median(np.linalg.norm(full_matrix[take], axis=1)))})
 
     write_csv(ARTIFACT / "scenario_metrics.csv", [row for row in metrics if row["model"] == "Full"])
     b0 = {key: None for key in metrics[0]}; b0.update({"dataset": "B0", "scenario": "all", "model": "B0 exact", "status": "UNAVAILABLE"})
