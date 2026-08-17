@@ -1,0 +1,12 @@
+{
+  "attack_data_accessed": false,
+  "base_commit": "e0993bd6b16628681b52c1abd52cf177af67e10a",
+  "bytes_per_complex_sample": 4,
+  "chunk_streaming": true,
+  "injection_executed": false,
+  "mkl_num_threads": "4",
+  "omp_num_threads": "4",
+  "results_viewed": false,
+  "sample_format": "<i2 interleaved I,Q",
+  "workers": 1
+}

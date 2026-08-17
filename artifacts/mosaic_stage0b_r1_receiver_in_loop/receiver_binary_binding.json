@@ -1,0 +1,17 @@
+{
+  "expected_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+  "observed_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+  "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-build/src/main/gnss-sdr",
+  "receiver_configs": {
+    "OAKBAT.cleanStatic": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/receiver.conf",
+      "sha256": "cb036cf2c60a6ec69b0e094a06fa20f74edb095408e8bbf71f41e15984d7f91a"
+    },
+    "TEXBAT.cleanStatic": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/receiver.conf",
+      "sha256": "29ba64240196c43dd78336955f7b77474d3b721e4e17eaf047e237e121c21f5e"
+    }
+  },
+  "size_bytes": 36602584,
+  "status": "PASS"
+}

@@ -1,0 +1,60 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "1f0f0e3c04b17e6c9483f35297f8442313c989530159a192380f527c928327cd",
+      "size_bytes": 1262
+    },
+    {
+      "path": "case_target_assignment.json",
+      "sha256": "3fb306b284215f8d94b3b90a8e04f99e9543064270ce5710c9c2b36a9f5aad01",
+      "size_bytes": 24186
+    },
+    {
+      "path": "config.json",
+      "sha256": "d8ed23fa41a7d94164a32ad2da843d068e0b6f2b3af22880fab0c1c3b4165c04",
+      "size_bytes": 325
+    },
+    {
+      "path": "execution_status.json",
+      "sha256": "eeb72e9d12b26601116ba91ac0c7493344851056c40adcd84368abc651daa141",
+      "size_bytes": 210
+    },
+    {
+      "path": "frozen_injection_design.json",
+      "sha256": "fb6577430a6354b0cb72f2ab469a5e76b8def44068ed9c3e8e72df140da2c908",
+      "size_bytes": 19307
+    },
+    {
+      "path": "frozen_injection_design_sha256.json",
+      "sha256": "5b7a30db8b8857d0da8bec5cf85c6f69b3de3494a9449b7fba8f5414438f0313",
+      "size_bytes": 362
+    },
+    {
+      "path": "preregistration.json",
+      "sha256": "f78b8adbece7010790155d8188a0022c1f5a02a24e2a2b693d352f65810165ab",
+      "size_bytes": 2360
+    },
+    {
+      "path": "r0c_input_binding.json",
+      "sha256": "8ab54ec2b80b111901e514b36f44527db7714e79ccdab7086c0124529267afcc",
+      "size_bytes": 1261
+    },
+    {
+      "path": "receiver_binary_binding.json",
+      "sha256": "7ecbbb8bcae488ec8ee42a51fbd59a2ad64c660bd466569d99bb9f70b50eefc2",
+      "size_bytes": 921
+    },
+    {
+      "path": "sample_format_validation.json",
+      "sha256": "3d3e5f3c7b2eba035c07218773292da467b5ce325d52590c7cef550d4c87a9a1",
+      "size_bytes": 1657
+    },
+    {
+      "path": "source_commit.json",
+      "sha256": "2044c9cef3222d3896bae04b592dbf5fa6aa709e1e1422bac78de65e14f352a9",
+      "size_bytes": 338
+    }
+  ],
+  "schema": "gnss-doppler-lab.artifact-manifest-sha256.v1"
+}

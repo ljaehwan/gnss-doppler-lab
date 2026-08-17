@@ -1,0 +1,90 @@
+{
+  "authentic_amplitude": "complex least-squares correlation of clean baseline with target-PRN replica",
+  "caf_grid": {
+    "delay_chips": {
+      "start": -0.35,
+      "step": 0.025,
+      "stop": 0.35
+    },
+    "doppler_hz": {
+      "start": -75,
+      "step": 5,
+      "stop": 75
+    }
+  },
+  "case_count": 72,
+  "collapsed_control": {
+    "condition": "delta_tau==0 and delta_f==0",
+    "detection_failure_counts_as_no_go": false,
+    "label": "COLLAPSED_SINGLE_SOURCE_CONTROL"
+  },
+  "future_verdicts": [
+    "GO_FOR_MOSAIC_NEURAL_STAGE1",
+    "INCONCLUSIVE_RECEIVER_IN_LOOP",
+    "NO_GO_MOSAIC_INJECTOR_PHYSICS"
+  ],
+  "go_criteria": [
+    "identity receiver replay",
+    "zero-amplitude byte identity",
+    "actual int16 format",
+    "realized SCER median error <=1 dB",
+    "OAK and TEX residual CAF observability >=75%",
+    "delay sign accuracy >=80%",
+    "delay median absolute error <=0.05 chip",
+    "Doppler sign accuracy >=80%",
+    "Doppler median absolute error <=10 Hz",
+    "injected H1 delta-BIC significantly exceeds identity/gain/AWGN controls",
+    "target PRN evidence exceeds non-target PRN",
+    "not explained by total IQ RMS shortcut",
+    "four-PRN strong cases >=75% recover at least 3/4",
+    "PRN permutation invariance"
+  ],
+  "hypotheses": {
+    "H0": "authentic single-source model",
+    "H1": "authentic + same-PRN second-source model"
+  },
+  "raw_rss_improvement_is_sufficient": false,
+  "realized_scer_error_required": true,
+  "results_seen_before_freeze": false,
+  "schema": "gnss-doppler-lab.mosaic-stage0b-r1-preregistration.v1",
+  "scientific_verdict_generated": false,
+  "scores": [
+    "residual_CAF",
+    "recovered_delay",
+    "recovered_doppler",
+    "H0_RSS",
+    "H1_RSS",
+    "BIC_corrected_likelihood_improvement"
+  ],
+  "spoof_amplitude": "abs(alpha_auth)*10**(rho_db/20)",
+  "state_continuity": [
+    "absolute_raw_sample_index",
+    "code_phase",
+    "carrier_phase",
+    "doppler_phase_accumulation",
+    "NAV_bit_sign"
+  ],
+  "strong_resolvable_subset": {
+    "abs_delta_f_hz_min_or": 25,
+    "abs_delta_tau_chips_min_or": 0.1,
+    "rho_db_min": -6
+  },
+  "time_structure_seconds": {
+    "identity_baseline": [
+      0,
+      2
+    ],
+    "raised_cosine_ramp": [
+      2,
+      4
+    ],
+    "smooth_release": [
+      10,
+      "interval_end"
+    ],
+    "target_hold": [
+      4,
+      10
+    ]
+  }
+}

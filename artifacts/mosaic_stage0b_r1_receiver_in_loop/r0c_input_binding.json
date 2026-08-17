@@ -1,0 +1,40 @@
+{
+  "common_intervals": {
+    "OAKBAT.cleanStatic": {
+      "authorization": "AUTHORIZED_WITHIN_INTERVAL_ONLY",
+      "common_raw_end_sample_exclusive": 210202273,
+      "common_raw_start_sample": 150275296,
+      "duration_samples": 59926977,
+      "duration_seconds": 11.9853954,
+      "expected_interval_match": true,
+      "included_prns": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ]
+    },
+    "TEXBAT.cleanStatic": {
+      "authorization": "AUTHORIZED_WITHIN_INTERVAL_ONLY",
+      "common_raw_end_sample_exclusive": 1117517038,
+      "common_raw_start_sample": 817815304,
+      "duration_samples": 299701734,
+      "duration_seconds": 11.98806936,
+      "expected_interval_match": true,
+      "included_prns": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ]
+    }
+  },
+  "corrected_mapping_sha256": "db7e23761e2bb4314d6f22e990e23c0fb19387ee7476a55a665def7a10af522f",
+  "r0c_manifest_sha256": "4beec873bdfeaf7db43b996e2746b5e89c7f4e735e7adcc09fc27a09b7213707",
+  "r0c_verdict": "BOUNDARY_PHASE_EXTRAPOLATION_PASS_WITH_SCOPE_LIMITATION",
+  "required_branch": "origin/research/mosaic-stage0b-r0c-boundary-phase-extrapolation",
+  "required_commit": "e0993bd6b16628681b52c1abd52cf177af67e10a",
+  "status": "PASS"
+}

@@ -1,0 +1,41 @@
+{
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "bytes_per_complex_sample": 4,
+      "clipped_sample_count": 0,
+      "complex_sample_count": 2400000000,
+      "expected_full_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "inherited_full_sha256_status": "PASS",
+      "iq_ordering": "I_then_Q",
+      "probe_byte_roundtrip": true,
+      "probe_samples": 256,
+      "receiver_signal_source": "Ishort_To_Complex",
+      "sample_format": "little-endian interleaved signed int16 I/Q",
+      "size_bytes": 9600000000,
+      "source_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+      "source_stat_size_match": true,
+      "status": "PASS"
+    },
+    "TEXBAT.cleanStatic": {
+      "bytes_per_complex_sample": 4,
+      "clipped_sample_count": 0,
+      "complex_sample_count": 12004098048,
+      "expected_full_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "inherited_full_sha256_status": "PASS",
+      "iq_ordering": "I_then_Q",
+      "probe_byte_roundtrip": true,
+      "probe_samples": 256,
+      "receiver_signal_source": "Ishort_To_Complex",
+      "sample_format": "little-endian interleaved signed int16 I/Q",
+      "size_bytes": 48016392192,
+      "source_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "source_stat_size_match": true,
+      "status": "PASS"
+    }
+  },
+  "foundation_int8_quantizer_used": false,
+  "input_output_sample_count_preservation_required": true,
+  "production_quantizer": "complex_int16_little_endian_saturating",
+  "status": "PASS",
+  "zero_amplitude_byte_identity_required": true
+}
