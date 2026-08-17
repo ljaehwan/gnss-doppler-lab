@@ -254,6 +254,9 @@ def metric_row(dataset: str, scenario: str, variant: str, time_s: np.ndarray, sc
         "pull_off_delay_s": float(pull_alarm[0] - pull_off) if len(pull_alarm) else None,
         "persistent_alarm_ratio": float(np.mean(alarms[attack])) if attack.any() else None,
         "maximum_consecutive_alarms": max_run, "valid_blocks": len(score), "valid_prns": prn_count,
+        "missing_native_row_rate": 0.0, "slow_fast_code_divergence": None,
+        "slow_fast_doppler_divergence": None, "slow_fast_tap_divergence": None,
+        "full_score_attack_median": None,
     }
 
 
@@ -269,6 +272,7 @@ def evaluate_attacks() -> int:
     if not authorization.get("phase_b_authorized") or authorization.get("threshold_freeze_commit", "").startswith("TO_BE"):
         raise RuntimeError("committed clean threshold freeze not recorded; Phase B NOT_AUTHORIZED")
     threshold_payload = json.loads((ARTIFACT / "thresholds.json").read_text())["thresholds"]
+    normal_summary = json.loads((ARTIFACT / "normal_model_summary.json").read_text())["families"]
     metrics, block_rows, prn_rows, collapse_rows, destruction_rows = [], [], [], [], []
     bootstrap_source = {}
     for name, (slug, family, onset, pull_off) in SCENARIO_META.items():
@@ -294,6 +298,13 @@ def evaluate_attacks() -> int:
             values = np.asarray([lookup[item] for item in common])
             threshold = 1e-12 if variant == "A5" else float(threshold_payload[family][variant]["q99"])
             row = metric_row(family, name.split(".")[-1], variant, common / 1000.0, values, threshold, onset, pull_off, prns)
+            row["clean_holdout_fpr"] = normal_summary[family]["holdout"][variant]["q99_fpr"] if variant != "A5" else 0.0
+            if variant == "Full":
+                attack_rows = aligned.time_s >= onset
+                row["slow_fast_code_divergence"] = float(np.median(np.abs(aligned.state[attack_rows, 0])))
+                row["slow_fast_doppler_divergence"] = float(np.median(np.abs(aligned.state[attack_rows, 2])))
+                row["slow_fast_tap_divergence"] = float(np.median(np.linalg.norm(aligned.taps[attack_rows], axis=1)))
+                row["full_score_attack_median"] = float(np.median(values[common / 1000.0 >= onset]))
             metrics.append(row); scenario_scores[variant] = values
             for block_value, score_value in zip(common, values, strict=True):
                 block_rows.append({"dataset": name, "role": "attack_replay", "variant": variant,
@@ -390,17 +401,39 @@ def finalize_science(metrics: list[dict[str, object]], collapse: list[dict[str, 
     pre_ok = all((row["pre_onset_fpr"] or 0) <= .05 for row in full)
     clean_ok = max(clean_fprs) <= .01
     collapse_ok = all(row["status"] == "PASS" for row in collapse)
+    indexed = {(row["scenario"], row["model"]): row for row in metrics}
+    family_members = {"DS3": ["DS3"], "DS7": ["DS7"], "OAKBAT_OS3_OS4": ["OS3", "OS4"]}
+    family_checks = {}
+    for family, members in family_members.items():
+        contribution, beats_components = [], []
+        for scenario in members:
+            full_row = indexed[(scenario, "Full")]
+            singles = [indexed[(scenario, value)] for value in ("A0", "A1")]
+            best = max(singles, key=lambda row: row["pauc_fpr_le_0p05"])
+            delta = full_row["pauc_fpr_le_0p05"] - best["pauc_fpr_le_0p05"]
+            faster = (full_row["onset_delay_s"] is not None and best["onset_delay_s"] is not None
+                      and best["onset_delay_s"] - full_row["onset_delay_s"] >= .5)
+            contribution.append(delta >= .02 or (delta >= -.01 and faster))
+            beats_components.append(full_row["pauc_fpr_le_0p05"] > max(indexed[(scenario, "A2")]["pauc_fpr_le_0p05"], indexed[(scenario, "A3")]["pauc_fpr_le_0p05"]))
+        family_checks[family] = {"member_scenarios": members, "full_contribution_pass": all(contribution),
+                                 "beats_state_and_tap_pass": all(beats_components)}
+    contribution_family_count = sum(value["full_contribution_pass"] for value in family_checks.values())
+    component_family_count = sum(value["beats_state_and_tap_pass"] for value in family_checks.values())
     verdict = "NO_GO_MCTD_PHYSICAL_HYPOTHESIS"
     reasons = []
     if not clean_ok: reasons.append("cleanStatic holdout q99 FPR exceeds 1%")
     if not pre_ok: reasons.append("one or more core attack pre-onset FPRs exceed 5%")
     if not collapse_ok: reasons.append("identical-loop configuration collapse failed")
+    if contribution_family_count < 2: reasons.append("Full does not add the preregistered single-loop pAUC/delay benefit in at least two families")
+    if component_family_count < 2: reasons.append("Full does not beat both state-only and tap-only in at least two families")
     reasons.append("required raw-IQ nuisance controls are unavailable and Full pairing destruction is only partial")
     dump_json(ARTIFACT / "final_verdict.json", {"schema": "gnss-doppler-lab.mctd-final-verdict.v1",
               "verdict": verdict, "phase_a_passed": True, "phase_b_run": True, "attack_metrics_computed": True,
               "attack_result_retuning": False, "clean_holdout_fpr_worst": max(clean_fprs),
               "external_static_fpr_worst": max(row["pre_onset_fpr"] for row in full),
               "configuration_collapse_passed": collapse_ok, "all_required_controls_pass": False,
+              "family_checks": family_checks, "full_contribution_family_count": contribution_family_count,
+              "beats_state_and_tap_family_count": component_family_count,
               "go": False, "no_go_reasons": reasons,
               "b0_exact": {"status": "UNAVAILABLE", "reason": "Exact frozen B0 cannot be rerun on native MCTD common support without changing B0; historical CSVs were not copied as MCTD results."},
               "recommended_next_action": "Stop MCTD Stage-1 and retain this frozen Stage-0 bundle as the negative-result record."})
