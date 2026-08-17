@@ -46,6 +46,25 @@
     }
   },
   "schema": "gnss-doppler-lab.mctd-loop-freeze.v1",
-  "status": "PREREGISTERED_CLEAN_ONLY",
-  "support_reason": "Requested values are directly supported receiver properties; stable support remains a Phase-A gate."
+  "status": "FROZEN_CLEAN_ONLY_PHASE_A_PASS",
+  "support_reason": "Requested values are directly supported receiver properties and passed both cleanStatic Phase-A gates.",
+  "clean_support_evidence": {
+    "status": "PASS",
+    "source": "phase_a_reproducibility.json",
+    "TEXBAT_cleanStatic": {
+      "quality_common_epochs_ge_4_prns": 3998,
+      "maximum_common_prns": 10,
+      "slow_repeat_bit_exact": true,
+      "fast_repeat_bit_exact": true,
+      "identical_loop_maximum_absolute_full_divergence": 0.0
+    },
+    "OAKBAT_cleanStatic": {
+      "quality_common_epochs_ge_4_prns": 3998,
+      "maximum_common_prns": 10,
+      "slow_repeat_bit_exact": true,
+      "fast_repeat_bit_exact": true,
+      "identical_loop_maximum_absolute_full_divergence": 0.0
+    },
+    "attack_data_used": false
+  }
 }
