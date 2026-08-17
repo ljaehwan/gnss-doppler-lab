@@ -187,10 +187,22 @@ def run_receiver(name: str, loop: str, phase: str, repetition: int) -> int:
     return 0 if manifest["status"] == "PASS" else 2
 
 
+def run_phase_a_all() -> int:
+    for name in ("TEXBAT.cleanStatic", "OAKBAT.cleanStatic"):
+        for loop, repetitions in (("slow", (1, 2)), ("fast", (1, 2)),
+                                  ("identical_left", (1,)), ("identical_right", (1,))):
+            for repetition in repetitions:
+                code = run_receiver(name, loop, "phase_a", repetition)
+                if code:
+                    return code
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("initialize")
+    sub.add_parser("run-phase-a-all")
     run = sub.add_parser("run-receiver")
     run.add_argument("--scenario", choices=tuple(SCENARIOS), required=True)
     run.add_argument("--loop", choices=tuple(LOOPS), required=True)
@@ -199,9 +211,10 @@ def main() -> int:
     args = parser.parse_args()
     if args.command == "initialize":
         return initialize()
+    if args.command == "run-phase-a-all":
+        return run_phase_a_all()
     return run_receiver(args.scenario, args.loop, args.phase, args.repetition)
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
