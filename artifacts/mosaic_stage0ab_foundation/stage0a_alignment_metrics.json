@@ -184,9 +184,13 @@
       },
       "sample_rate_hz": 5000000.0,
       "stable_epoch_rows_sampled": 120,
-      "stable_prn_count": 1,
+      "stable_prn_count": 5,
       "stable_prns_sampled": [
-        21
+        10,
+        11,
+        21,
+        24,
+        27
       ],
       "status": "TRACE_SCHEMA_AND_BOUNDS_PASS_RAW_RECORRELATION_NOT_RUN"
     },
@@ -361,9 +365,13 @@
       },
       "sample_rate_hz": 25000000.0,
       "stable_epoch_rows_sampled": 120,
-      "stable_prn_count": 1,
+      "stable_prn_count": 5,
       "stable_prns_sampled": [
-        19
+        3,
+        13,
+        16,
+        19,
+        30
       ],
       "status": "TRACE_SCHEMA_AND_BOUNDS_PASS_RAW_RECORRELATION_NOT_RUN"
     }

@@ -23,9 +23,14 @@ def stable_epoch_rows(
     recording: str,
     minimum_cn0_db_hz: float = 28.0,
     minimum_lock: float = 0.85,
-    limit: int | None = 200,
+    limit: int | None = 240,
+    max_rows_per_dump: int = 25,
 ) -> MosaicEpochTable:
-    """Extract compact native 1-ms rows keyed by PRN + loop sequence + raw span."""
+    """Extract compact native 1-ms rows keyed by PRN + loop sequence + raw span.
+
+    Rows are sampled across channel dump files before applying the global limit
+    so the compact audit covers multiple PRNs instead of only the first channel.
+    """
     out: list[dict[str, object]] = []
     sample_rates: set[float] = set()
     for path in sorted(Path(dump_dir).glob("trace_native_1ms_ch_*.bin")):
@@ -40,7 +45,10 @@ def stable_epoch_rows(
             & np.isfinite(taps.real).all(axis=1)
             & np.isfinite(taps.imag).all(axis=1)
         )
-        for idx in np.flatnonzero(ok):
+        take = np.flatnonzero(ok)
+        if max_rows_per_dump > 0:
+            take = take[:max_rows_per_dump]
+        for idx in take:
             rec = records[idx]
             tap_list = [[float(v.real), float(v.imag)] for v in taps[idx]]
             out.append({
