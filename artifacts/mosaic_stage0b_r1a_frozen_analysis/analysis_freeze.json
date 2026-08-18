@@ -1,0 +1,59 @@
+{
+  "analysis_kind": "FROZEN_POLICY_COMPLETION",
+  "attack_data_accessed": false,
+  "bootstrap": {
+    "ci": 0.95,
+    "interpretation_label": "DESIGN_CASE_BOOTSTRAP",
+    "resamples": 10000,
+    "seed": 20260818,
+    "unit": "paired_case_within_dataset"
+  },
+  "case_rerun": false,
+  "collapsed_comparison": {
+    "control_cases": "actual frozen single-PRN cases with delta_tau=0 and delta_f=0",
+    "pairing": "for each collapsed case, strong-resolvable injected median at the same dataset and rho_db",
+    "pass": "95% paired bootstrap CI lower bound of resolvable-minus-collapsed delta_BIC > 0"
+  },
+  "controls": {
+    "awgn": "clean reference complex taps plus exactly RMS-normalized deterministic circular complex Gaussian noise; residual RMS from injected target H0; seed=20260818+PRN",
+    "gain": "clean reference complex taps multiplied by one positive-real complex scalar so tap RMS equals injected observed tap RMS",
+    "no_receiver_replay": true,
+    "scope": "all frozen single-PRN cases; strong-resolvable cases used for frozen gates",
+    "support": "same epoch, PRN, taps, CAF grid, and BIC formula as injected case"
+  },
+  "created": "2026-08-18T13:55:46+09:00",
+  "executor_freeze_sha": "913334d87657d75354b7d47546e986dd9f48d58d",
+  "four_prn": {
+    "case_success": "at least 3 of 4 target PRNs satisfy abs(delay error)<=0.05 chip and abs(Doppler error)<=10 Hz",
+    "dataset_gate": "at least 0.75 of strong-resolvable four-PRN cases succeed",
+    "numeric_criterion_source": "artifacts/mosaic_stage0b_r1_receiver_in_loop/preregistration.json go_criteria",
+    "prn_dominance": "a successful case requires recovery on at least three distinct PRNs, so it cannot be attributed to one PRN",
+    "strong_subset": "same frozen strong-resolvable definition"
+  },
+  "gates": {
+    "clipping_maximum_ratio_max": 0.001,
+    "clipping_median_ratio_max": 0.0001,
+    "control_separation_paired_ci_lower_gt": 0,
+    "delay_median_absolute_error_chips_max": 0.05,
+    "delay_sign_accuracy_min": 0.8,
+    "doppler_median_absolute_error_hz_max": 10,
+    "doppler_sign_accuracy_min": 0.8,
+    "measured_scer_median_absolute_error_db_max": 1,
+    "observability_definition": "target delta_BIC > 0",
+    "observability_fraction_min": 0.75,
+    "rms_score_absolute_spearman_max_exclusive": 0.5,
+    "target_specificity_paired_ci_lower_gt": 0
+  },
+  "known_results_viewed": true,
+  "no_new_cases_features_scores_thresholds_caf_grids_or_subsets": true,
+  "per_dataset_no_pooling": true,
+  "physics_recovery_definition": "abs(delay error)<=0.05 chip and abs(Doppler error)<=10 Hz",
+  "required_base_result_sha": "9ae1e1dd1ee4e26d2d5ae3be23f3b644e79a5baa",
+  "rms_shortcut_scope": "absolute Spearman correlation of target delta_BIC and output interval RMS across all 28 single-PRN cases, separately by dataset",
+  "status": "FROZEN_POLICY_COMPLETION",
+  "strong_resolvable": {
+    "abs_delay_chips_min_or": 0.1,
+    "abs_doppler_hz_min_or": 25,
+    "rho_db_min": -6
+  }
+}
