@@ -41,6 +41,11 @@
       "size_bytes": 4367
     },
     {
+      "path": "execution_code_binding.json",
+      "sha256": "997a214f99d493c6eeac44b2c799c03e07922f597b3610bc2b360af8616b13af",
+      "size_bytes": 1910
+    },
+    {
       "path": "extended_nav_mapping.csv.gz",
       "sha256": "a7aed5566b0cc35cbfd7e0e318ea2a7a18b027646770800742035c6b66fab23d",
       "size_bytes": 4929087
@@ -72,8 +77,8 @@
     },
     {
       "path": "preregistration_freeze.json",
-      "sha256": "d1c17f410c01d138de04d7cf6f0c06e891b1c12ad25b6a8dd801ff3ac1427edb",
-      "size_bytes": 1272
+      "sha256": "f9cebe051c8506b6a7c0dc5572e8bad174a2fcfcdd57387614955f83e5ea7337",
+      "size_bytes": 1396
     },
     {
       "path": "prn_coverage.csv",
@@ -116,11 +121,5 @@
       "size_bytes": 448178
     }
   ],
-  "schema": "gnss-doppler-lab.artifact-manifest-sha256.v1",
-  "unavailable_until_execution": [
-    "plots/clean_score_ecdf.png",
-    "plots/injection_roc.png",
-    "plots/control_effects.png",
-    "plots/relation_destruction.png"
-  ]
+  "schema": "gnss-doppler-lab.artifact-manifest-sha256.v1"
 }

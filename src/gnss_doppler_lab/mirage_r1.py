@@ -182,6 +182,19 @@ def design_balance(rows:list[dict[str,object]])->dict[str,object]:
   "strong_cases":sum(bool(r.get("strong_resolvable",r["rho_db"]>=-6 and (abs(r["delay_chips"])>=.25 or abs(r["doppler_hz"])>=2))) for r in rows),"status":"PASS" if max(diffs.values())<=1 else "FAIL"}
 
 
+def nav_signs_for_epochs(mapping_rows:list[dict[str,str]],dataset:str,prn:int,
+                         epoch_raw_starts:Iterable[int])->np.ndarray:
+ rows=[row for row in mapping_rows if row["dataset"]==dataset and int(row["prn"])==int(prn)]
+ if not rows:raise ValueError(f"no authenticated NAV mapping for {dataset} PRN {prn}")
+ starts=np.asarray([int(row["raw_start_sample"]) for row in rows],np.int64)
+ ends=np.asarray([int(row["raw_end_sample_exclusive"]) for row in rows],np.int64)
+ signs=np.asarray([int(row["bit_value_pm1"]) for row in rows],np.int8)
+ query=np.asarray(tuple(epoch_raw_starts),np.int64);indices=np.searchsorted(starts,query,side="right")-1
+ safe=np.maximum(indices,0);valid=(indices>=0)&(query>=starts[safe])&(query<ends[safe])
+ if not np.all(valid):raise ValueError(f"NAV mapping gap at {query[np.flatnonzero(~valid)[0]]}")
+ return signs[indices].astype(np.float64)
+
+
 def canonical_sha(value:object)->str:
  return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(",",":"),allow_nan=False).encode()).hexdigest()
 

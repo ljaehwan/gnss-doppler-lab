@@ -1,0 +1,29 @@
+{
+  "caf_workers_max": 4,
+  "case_score": "median of three nonoverlapping 500 ms Full epochs in the 1.5 s steady interval",
+  "cases_executed": 0,
+  "code_sha256": {
+    "scripts/bind_mirage_r1_execution.py": "c718e2815d9b40a52af0d9ee482c74db73688becaaa84630a13440508ec552be",
+    "scripts/preregister_mirage_r1.py": "1cfef6a2a5a12bdb344364d1bc382bf5ad8f11693084a03f936a0733819f162c",
+    "scripts/run_mirage_r1_full.py": "84d9e111fe1885d2c3c232e8a3f9a42b26fb04d6a6cfe0ba2ac99cef8b94128f",
+    "scripts/verify_mirage_r1_full.py": "e2976c6b19b002b156865682f35c67f0a126ad2f01814e0d38fb005e8d306bd3",
+    "src/gnss_doppler_lab/mirage_r1.py": "b77b4b69764a27cff3670b0fa617ff94be440e5a0ab1653809356d87a41c5858",
+    "src/gnss_doppler_lab/mirage_r1_executor.py": "ab53f1d026994af9a9bb5c44d77638263380398225842b217e0094073656e411",
+    "tests/test_mirage_r1.py": "a54c36d0621e52697b97b0bde2906345d7f0f4e4e3ecdce4c12d635196bc814d",
+    "tests/test_mirage_r1_executor.py": "d7a2a6b7bb0e3965fa8cb0f7d5789dcb14ba303d61d61b2dbd83265b4541a956"
+  },
+  "control_execution": {
+    "authentic": "actual clean raw-IQ recorrelation with original applied tracker state",
+    "awgn_cn0": "actual clean raw-IQ plus deterministic empirical-variance AWGN, recorrelation with applied tracker state",
+    "delay_doppler_drift": "single-source transforms of empirical complex-tap sequences",
+    "gain_phase_matched_collapsed": "exact complex linear transforms of empirically reconstructed taps",
+    "one_prn_drop_add": "multi-PRN aggregation relation controls",
+    "primary": "actual raw-IQ injection, pinned receiver replay, replay-state raw-IQ recorrelation"
+  },
+  "preregistration_commit": "bd27782c54c6f6df603f9a08b831013826d24046",
+  "receiver_replays_max_concurrent": 1,
+  "results_seen": false,
+  "schema": "gnss-doppler-lab.mirage-r1-execution-code-binding.v1",
+  "scientific_results_computed": false,
+  "status": "FROZEN"
+}
