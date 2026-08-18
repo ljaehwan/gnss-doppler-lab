@@ -1,0 +1,122 @@
+{
+  "attack_data_accessed": false,
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "anchor_ranges": [
+        [
+          155275296,
+          157775296
+        ],
+        [
+          162775296,
+          165275296
+        ],
+        [
+          170275296,
+          172775296
+        ],
+        [
+          177775296,
+          180275296
+        ],
+        [
+          185275296,
+          187775296
+        ],
+        [
+          192775296,
+          195275296
+        ]
+      ],
+      "anchor_ranges_nonoverlap": true,
+      "anchor_start_samples": [
+        155275296,
+        162775296,
+        170275296,
+        177775296,
+        185275296,
+        192775296
+      ],
+      "anchors_inside_authorized_interval": true,
+      "authorized_common_interval": [
+        150275296,
+        210202273
+      ],
+      "prns": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ],
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+      "raw_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "raw_size_bytes": 9600000000,
+      "sample_rate_hz": 5000000
+    },
+    "TEXBAT.cleanStatic": {
+      "anchor_ranges": [
+        [
+          842815304,
+          855315304
+        ],
+        [
+          880315304,
+          892815304
+        ],
+        [
+          917815304,
+          930315304
+        ],
+        [
+          955315304,
+          967815304
+        ],
+        [
+          992815304,
+          1005315304
+        ],
+        [
+          1030315304,
+          1042815304
+        ]
+      ],
+      "anchor_ranges_nonoverlap": true,
+      "anchor_start_samples": [
+        842815304,
+        880315304,
+        917815304,
+        955315304,
+        992815304,
+        1030315304
+      ],
+      "anchors_inside_authorized_interval": true,
+      "authorized_common_interval": [
+        817815304,
+        1117517038
+      ],
+      "prns": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ],
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "raw_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "raw_size_bytes": 48016392192,
+      "sample_rate_hz": 25000000
+    }
+  },
+  "metadata_only": true,
+  "nav_mapping": {
+    "manifest_sha256": "4beec873bdfeaf7db43b996e2746b5e89c7f4e735e7adcc09fc27a09b7213707",
+    "mapping_path": "artifacts/mosaic_stage0b_r0c_boundary_phase_extrapolation/corrected_bit_mapping.csv.gz",
+    "mapping_sha256": "db7e23761e2bb4314d6f22e990e23c0fb19387ee7476a55a665def7a10af522f",
+    "outside_common_interval_authorized": false
+  },
+  "receiver": {
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-build/src/main/gnss-sdr",
+    "sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0"
+  }
+}

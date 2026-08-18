@@ -1,0 +1,76 @@
+{
+  "delay_grid_chips": [
+    -0.5,
+    -0.375,
+    -0.25,
+    -0.125,
+    0.0,
+    0.125,
+    0.25,
+    0.375,
+    0.5
+  ],
+  "normalized_frequency_xi": [
+    -2,
+    -1,
+    0,
+    1,
+    2
+  ],
+  "scales": [
+    {
+      "adjacent_minor_shape": [
+        8,
+        4
+      ],
+      "caf_shape": [
+        9,
+        5
+      ],
+      "doppler_offsets_hz": [
+        -100.0,
+        -50.0,
+        0.0,
+        50.0,
+        100.0
+      ],
+      "integration_s": 0.02
+    },
+    {
+      "adjacent_minor_shape": [
+        8,
+        4
+      ],
+      "caf_shape": [
+        9,
+        5
+      ],
+      "doppler_offsets_hz": [
+        -20.0,
+        -10.0,
+        0.0,
+        10.0,
+        20.0
+      ],
+      "integration_s": 0.1
+    },
+    {
+      "adjacent_minor_shape": [
+        8,
+        4
+      ],
+      "caf_shape": [
+        9,
+        5
+      ],
+      "doppler_offsets_hz": [
+        -4.0,
+        -2.0,
+        0.0,
+        2.0,
+        4.0
+      ],
+      "integration_s": 0.5
+    }
+  ]
+}

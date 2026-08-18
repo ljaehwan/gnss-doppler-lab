@@ -1,0 +1,98 @@
+{
+  "schema": "gnss-doppler-lab.mirage-stage0a-preregistration.v1",
+  "model": "MIRAGE: Multi-scale Invariant Rank Analysis of GNSS Echoes",
+  "base_sha": "3db0e12976b6ff98452096e921cf298be459d0e8",
+  "seed": 20260819,
+  "scope": "cleanStatic plus controlled receiver-in-loop injection only",
+  "caf": {
+    "integration_times_s": [0.02, 0.1, 0.5],
+    "delay_grid_chips": [-0.5, -0.375, -0.25, -0.125, 0.0, 0.125, 0.25, 0.375, 0.5],
+    "normalized_frequency_xi": [-2, -1, 0, 1, 2],
+    "doppler_offsets_hz": {
+      "0.02": [-100, -50, 0, 50, 100],
+      "0.1": [-20, -10, 0, 10, 20],
+      "0.5": [-4, -2, 0, 2, 4]
+    },
+    "correlator_queries_per_scale": 45,
+    "adjacent_complex_minors_per_scale": 32,
+    "epsilon": 1e-24
+  },
+  "score": {
+    "minor_transform": "squared normalized complex minor",
+    "train_reference": "per-minor median and 1.4826*MAD with 1e-6 floor",
+    "per_scale": "clean-train empirical right-tail CDF surprise",
+    "per_prn": "maximum of three scale surprises",
+    "full": "median of available PRN node scores",
+    "minimum_full_prns": 4,
+    "primary_threshold": "dataset clean calibration q99",
+    "diagnostic_threshold": "dataset clean calibration q99.5",
+    "threshold_target_fpr": 0.01
+  },
+  "clean_split": {
+    "train_seconds": 3.0,
+    "guard_1_seconds": 10.0,
+    "calibration_seconds": 3.0,
+    "guard_2_seconds": 10.0,
+    "holdout_seconds": 3.0,
+    "required_common_valid_span_seconds": 29.0,
+    "raw_overlap_allowed": false,
+    "ten_second_block_reuse_allowed": false,
+    "selection": "deterministic config-hash schedule"
+  },
+  "injection": {
+    "single_cases_per_dataset": 30,
+    "four_prn_cases_per_dataset": 6,
+    "anchors_per_prn": 6,
+    "anchor_window_seconds": 0.5,
+    "rho_db": [-10, -6, 0],
+    "delay_chips": [-0.5, -0.25, -0.1, 0.1, 0.25, 0.5],
+    "residual_doppler_hz": [0, -2, 2, -5, 5],
+    "relative_phase_rad": [0.0, 1.5707963267948966, 3.141592653589793, 4.71238898038469],
+    "strong": "rho_db >= -6 and (abs(delay)>=0.25 or abs(doppler)>=2)",
+    "receiver_replay_required": true
+  },
+  "bootstrap": {"unit": "10-second-or-anchor-group", "resamples": 10000, "seed": 20260819},
+  "go_gates": {
+    "clean_holdout_q99_fpr_max": 0.015,
+    "worst_clean_segment_fpr_max": 0.05,
+    "strong_single_detection_min": 0.75,
+    "paired_control_ci_lower_strictly_greater_than": 0.0,
+    "strong_four_prn_detection_min": 0.75,
+    "shortcut_abs_spearman_max": 0.3,
+    "single_prn_positive_evidence_max": 0.5,
+    "full_vs_best_scale_detection_margin_min": -0.05,
+    "minimum_positive_scales": 2
+  },
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+      "raw_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "raw_size_bytes": 9600000000,
+      "sample_rate_hz": 5000000,
+      "prns": [10, 11, 21, 24, 27],
+      "authorized_common_interval": [150275296, 210202273]
+    },
+    "TEXBAT.cleanStatic": {
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "raw_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "raw_size_bytes": 48016392192,
+      "sample_rate_hz": 25000000,
+      "prns": [3, 13, 16, 19, 30],
+      "authorized_common_interval": [817815304, 1117517038]
+    }
+  },
+  "receiver": {
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-build/src/main/gnss-sdr",
+    "sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0"
+  },
+  "nav": {
+    "mapping_path": "artifacts/mosaic_stage0b_r0c_boundary_phase_extrapolation/corrected_bit_mapping.csv.gz",
+    "mapping_sha256": "db7e23761e2bb4314d6f22e990e23c0fb19387ee7476a55a665def7a10af522f",
+    "manifest_sha256": "4beec873bdfeaf7db43b996e2746b5e89c7f4e735e7adcc09fc27a09b7213707",
+    "outside_common_interval_authorized": false
+  },
+  "attack_data_accessed": false,
+  "real_attack_evaluation": false,
+  "neural_model_used": false,
+  "result_dependent_changes_prohibited": true
+}

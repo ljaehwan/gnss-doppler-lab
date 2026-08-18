@@ -1,0 +1,31 @@
+{
+  "config_sha256": "7362715d67d953e6b39d8b42767de85a3ff19c743d878074499ba71c29ddd939",
+  "go_gates_frozen": {
+    "clean_holdout_q99_fpr_max": 0.015,
+    "full_vs_best_scale_detection_margin_min": -0.05,
+    "minimum_positive_scales": 2,
+    "paired_control_ci_lower_strictly_greater_than": 0.0,
+    "shortcut_abs_spearman_max": 0.3,
+    "single_prn_positive_evidence_max": 0.5,
+    "strong_four_prn_detection_min": 0.75,
+    "strong_single_detection_min": 0.75,
+    "worst_clean_segment_fpr_max": 0.05
+  },
+  "injection_executed": false,
+  "result_dependent_changes_prohibited": true,
+  "results_viewed": false,
+  "schema": "gnss-doppler-lab.mirage-stage0a-preregistration.v1",
+  "score_frozen": {
+    "diagnostic_threshold": "dataset clean calibration q99.5",
+    "full": "median of available PRN node scores",
+    "minimum_full_prns": 4,
+    "minor_transform": "squared normalized complex minor",
+    "per_prn": "maximum of three scale surprises",
+    "per_scale": "clean-train empirical right-tail CDF surprise",
+    "primary_threshold": "dataset clean calibration q99",
+    "threshold_target_fpr": 0.01,
+    "train_reference": "per-minor median and 1.4826*MAD with 1e-6 floor"
+  },
+  "status": "FROZEN_BEFORE_RESULTS",
+  "support_failure_verdict": "INCONCLUSIVE_INPUT_OR_SUPPORT"
+}

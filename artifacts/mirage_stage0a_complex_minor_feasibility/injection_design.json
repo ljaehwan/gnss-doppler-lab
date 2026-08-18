@@ -1,0 +1,1046 @@
+[
+  {
+    "anchor_index": 0,
+    "anchor_start_sample": 155275296,
+    "case_id": "OAKBAT.cleanStatic.single.p10.a0",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 0,
+    "delta_tau_chips": -0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 0.0,
+    "rho_db": -10,
+    "target_prns": [
+      10
+    ]
+  },
+  {
+    "anchor_index": 1,
+    "anchor_start_sample": 162775296,
+    "case_id": "OAKBAT.cleanStatic.single.p10.a1",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -2,
+    "delta_tau_chips": -0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 1.5707963267948966,
+    "rho_db": -6,
+    "target_prns": [
+      10
+    ]
+  },
+  {
+    "anchor_index": 2,
+    "anchor_start_sample": 170275296,
+    "case_id": "OAKBAT.cleanStatic.single.p10.a2",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 2,
+    "delta_tau_chips": -0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 3.141592653589793,
+    "rho_db": 0,
+    "target_prns": [
+      10
+    ]
+  },
+  {
+    "anchor_index": 3,
+    "anchor_start_sample": 177775296,
+    "case_id": "OAKBAT.cleanStatic.single.p10.a3",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -5,
+    "delta_tau_chips": 0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 4.71238898038469,
+    "rho_db": -10,
+    "target_prns": [
+      10
+    ]
+  },
+  {
+    "anchor_index": 4,
+    "anchor_start_sample": 185275296,
+    "case_id": "OAKBAT.cleanStatic.single.p10.a4",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 5,
+    "delta_tau_chips": 0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 0.0,
+    "rho_db": -6,
+    "target_prns": [
+      10
+    ]
+  },
+  {
+    "anchor_index": 5,
+    "anchor_start_sample": 192775296,
+    "case_id": "OAKBAT.cleanStatic.single.p10.a5",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 0,
+    "delta_tau_chips": 0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 1.5707963267948966,
+    "rho_db": 0,
+    "target_prns": [
+      10
+    ]
+  },
+  {
+    "anchor_index": 0,
+    "anchor_start_sample": 155275296,
+    "case_id": "OAKBAT.cleanStatic.single.p11.a0",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -2,
+    "delta_tau_chips": -0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 3.141592653589793,
+    "rho_db": -10,
+    "target_prns": [
+      11
+    ]
+  },
+  {
+    "anchor_index": 1,
+    "anchor_start_sample": 162775296,
+    "case_id": "OAKBAT.cleanStatic.single.p11.a1",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 2,
+    "delta_tau_chips": -0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 4.71238898038469,
+    "rho_db": -6,
+    "target_prns": [
+      11
+    ]
+  },
+  {
+    "anchor_index": 2,
+    "anchor_start_sample": 170275296,
+    "case_id": "OAKBAT.cleanStatic.single.p11.a2",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -5,
+    "delta_tau_chips": -0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 0.0,
+    "rho_db": 0,
+    "target_prns": [
+      11
+    ]
+  },
+  {
+    "anchor_index": 3,
+    "anchor_start_sample": 177775296,
+    "case_id": "OAKBAT.cleanStatic.single.p11.a3",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 5,
+    "delta_tau_chips": 0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 1.5707963267948966,
+    "rho_db": -10,
+    "target_prns": [
+      11
+    ]
+  },
+  {
+    "anchor_index": 4,
+    "anchor_start_sample": 185275296,
+    "case_id": "OAKBAT.cleanStatic.single.p11.a4",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 0,
+    "delta_tau_chips": 0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 3.141592653589793,
+    "rho_db": -6,
+    "target_prns": [
+      11
+    ]
+  },
+  {
+    "anchor_index": 5,
+    "anchor_start_sample": 192775296,
+    "case_id": "OAKBAT.cleanStatic.single.p11.a5",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -2,
+    "delta_tau_chips": 0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 4.71238898038469,
+    "rho_db": 0,
+    "target_prns": [
+      11
+    ]
+  },
+  {
+    "anchor_index": 0,
+    "anchor_start_sample": 155275296,
+    "case_id": "OAKBAT.cleanStatic.single.p21.a0",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 2,
+    "delta_tau_chips": -0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 0.0,
+    "rho_db": -10,
+    "target_prns": [
+      21
+    ]
+  },
+  {
+    "anchor_index": 1,
+    "anchor_start_sample": 162775296,
+    "case_id": "OAKBAT.cleanStatic.single.p21.a1",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -5,
+    "delta_tau_chips": -0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 1.5707963267948966,
+    "rho_db": -6,
+    "target_prns": [
+      21
+    ]
+  },
+  {
+    "anchor_index": 2,
+    "anchor_start_sample": 170275296,
+    "case_id": "OAKBAT.cleanStatic.single.p21.a2",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 5,
+    "delta_tau_chips": -0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 3.141592653589793,
+    "rho_db": 0,
+    "target_prns": [
+      21
+    ]
+  },
+  {
+    "anchor_index": 3,
+    "anchor_start_sample": 177775296,
+    "case_id": "OAKBAT.cleanStatic.single.p21.a3",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 0,
+    "delta_tau_chips": 0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 4.71238898038469,
+    "rho_db": -10,
+    "target_prns": [
+      21
+    ]
+  },
+  {
+    "anchor_index": 4,
+    "anchor_start_sample": 185275296,
+    "case_id": "OAKBAT.cleanStatic.single.p21.a4",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -2,
+    "delta_tau_chips": 0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 0.0,
+    "rho_db": -6,
+    "target_prns": [
+      21
+    ]
+  },
+  {
+    "anchor_index": 5,
+    "anchor_start_sample": 192775296,
+    "case_id": "OAKBAT.cleanStatic.single.p21.a5",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 2,
+    "delta_tau_chips": 0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 1.5707963267948966,
+    "rho_db": 0,
+    "target_prns": [
+      21
+    ]
+  },
+  {
+    "anchor_index": 0,
+    "anchor_start_sample": 155275296,
+    "case_id": "OAKBAT.cleanStatic.single.p24.a0",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -5,
+    "delta_tau_chips": -0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 3.141592653589793,
+    "rho_db": -10,
+    "target_prns": [
+      24
+    ]
+  },
+  {
+    "anchor_index": 1,
+    "anchor_start_sample": 162775296,
+    "case_id": "OAKBAT.cleanStatic.single.p24.a1",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 5,
+    "delta_tau_chips": -0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 4.71238898038469,
+    "rho_db": -6,
+    "target_prns": [
+      24
+    ]
+  },
+  {
+    "anchor_index": 2,
+    "anchor_start_sample": 170275296,
+    "case_id": "OAKBAT.cleanStatic.single.p24.a2",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 0,
+    "delta_tau_chips": -0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 0.0,
+    "rho_db": 0,
+    "target_prns": [
+      24
+    ]
+  },
+  {
+    "anchor_index": 3,
+    "anchor_start_sample": 177775296,
+    "case_id": "OAKBAT.cleanStatic.single.p24.a3",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -2,
+    "delta_tau_chips": 0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 1.5707963267948966,
+    "rho_db": -10,
+    "target_prns": [
+      24
+    ]
+  },
+  {
+    "anchor_index": 4,
+    "anchor_start_sample": 185275296,
+    "case_id": "OAKBAT.cleanStatic.single.p24.a4",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 2,
+    "delta_tau_chips": 0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 3.141592653589793,
+    "rho_db": -6,
+    "target_prns": [
+      24
+    ]
+  },
+  {
+    "anchor_index": 5,
+    "anchor_start_sample": 192775296,
+    "case_id": "OAKBAT.cleanStatic.single.p24.a5",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -5,
+    "delta_tau_chips": 0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 4.71238898038469,
+    "rho_db": 0,
+    "target_prns": [
+      24
+    ]
+  },
+  {
+    "anchor_index": 0,
+    "anchor_start_sample": 155275296,
+    "case_id": "OAKBAT.cleanStatic.single.p27.a0",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 5,
+    "delta_tau_chips": -0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 0.0,
+    "rho_db": -10,
+    "target_prns": [
+      27
+    ]
+  },
+  {
+    "anchor_index": 1,
+    "anchor_start_sample": 162775296,
+    "case_id": "OAKBAT.cleanStatic.single.p27.a1",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 0,
+    "delta_tau_chips": -0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 1.5707963267948966,
+    "rho_db": -6,
+    "target_prns": [
+      27
+    ]
+  },
+  {
+    "anchor_index": 2,
+    "anchor_start_sample": 170275296,
+    "case_id": "OAKBAT.cleanStatic.single.p27.a2",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -2,
+    "delta_tau_chips": -0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 3.141592653589793,
+    "rho_db": 0,
+    "target_prns": [
+      27
+    ]
+  },
+  {
+    "anchor_index": 3,
+    "anchor_start_sample": 177775296,
+    "case_id": "OAKBAT.cleanStatic.single.p27.a3",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 2,
+    "delta_tau_chips": 0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 4.71238898038469,
+    "rho_db": -10,
+    "target_prns": [
+      27
+    ]
+  },
+  {
+    "anchor_index": 4,
+    "anchor_start_sample": 185275296,
+    "case_id": "OAKBAT.cleanStatic.single.p27.a4",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -5,
+    "delta_tau_chips": 0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 0.0,
+    "rho_db": -6,
+    "target_prns": [
+      27
+    ]
+  },
+  {
+    "anchor_index": 5,
+    "anchor_start_sample": 192775296,
+    "case_id": "OAKBAT.cleanStatic.single.p27.a5",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 5,
+    "delta_tau_chips": 0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 1.5707963267948966,
+    "rho_db": 0,
+    "target_prns": [
+      27
+    ]
+  },
+  {
+    "anchor_index": 0,
+    "anchor_start_sample": 155275296,
+    "case_id": "OAKBAT.cleanStatic.four.a0",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 0,
+    "delta_tau_chips": -0.5,
+    "mode": "simultaneous_four_prn",
+    "relative_phase_rad": 3.141592653589793,
+    "rho_db": -10,
+    "target_prns": [
+      11,
+      21,
+      24,
+      27
+    ]
+  },
+  {
+    "anchor_index": 1,
+    "anchor_start_sample": 162775296,
+    "case_id": "OAKBAT.cleanStatic.four.a1",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -2,
+    "delta_tau_chips": -0.25,
+    "mode": "simultaneous_four_prn",
+    "relative_phase_rad": 4.71238898038469,
+    "rho_db": -6,
+    "target_prns": [
+      10,
+      21,
+      24,
+      27
+    ]
+  },
+  {
+    "anchor_index": 2,
+    "anchor_start_sample": 170275296,
+    "case_id": "OAKBAT.cleanStatic.four.a2",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 2,
+    "delta_tau_chips": -0.1,
+    "mode": "simultaneous_four_prn",
+    "relative_phase_rad": 0.0,
+    "rho_db": 0,
+    "target_prns": [
+      10,
+      11,
+      24,
+      27
+    ]
+  },
+  {
+    "anchor_index": 3,
+    "anchor_start_sample": 177775296,
+    "case_id": "OAKBAT.cleanStatic.four.a3",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": -5,
+    "delta_tau_chips": 0.1,
+    "mode": "simultaneous_four_prn",
+    "relative_phase_rad": 1.5707963267948966,
+    "rho_db": -10,
+    "target_prns": [
+      10,
+      11,
+      21,
+      27
+    ]
+  },
+  {
+    "anchor_index": 4,
+    "anchor_start_sample": 185275296,
+    "case_id": "OAKBAT.cleanStatic.four.a4",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 5,
+    "delta_tau_chips": 0.25,
+    "mode": "simultaneous_four_prn",
+    "relative_phase_rad": 3.141592653589793,
+    "rho_db": -6,
+    "target_prns": [
+      10,
+      11,
+      21,
+      24
+    ]
+  },
+  {
+    "anchor_index": 5,
+    "anchor_start_sample": 192775296,
+    "case_id": "OAKBAT.cleanStatic.four.a5",
+    "dataset": "OAKBAT.cleanStatic",
+    "delta_f_hz": 0,
+    "delta_tau_chips": 0.5,
+    "mode": "simultaneous_four_prn",
+    "relative_phase_rad": 4.71238898038469,
+    "rho_db": 0,
+    "target_prns": [
+      11,
+      21,
+      24,
+      27
+    ]
+  },
+  {
+    "anchor_index": 0,
+    "anchor_start_sample": 842815304,
+    "case_id": "TEXBAT.cleanStatic.single.p3.a0",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 0,
+    "delta_tau_chips": -0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 0.0,
+    "rho_db": -10,
+    "target_prns": [
+      3
+    ]
+  },
+  {
+    "anchor_index": 1,
+    "anchor_start_sample": 880315304,
+    "case_id": "TEXBAT.cleanStatic.single.p3.a1",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -2,
+    "delta_tau_chips": -0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 1.5707963267948966,
+    "rho_db": -6,
+    "target_prns": [
+      3
+    ]
+  },
+  {
+    "anchor_index": 2,
+    "anchor_start_sample": 917815304,
+    "case_id": "TEXBAT.cleanStatic.single.p3.a2",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 2,
+    "delta_tau_chips": -0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 3.141592653589793,
+    "rho_db": 0,
+    "target_prns": [
+      3
+    ]
+  },
+  {
+    "anchor_index": 3,
+    "anchor_start_sample": 955315304,
+    "case_id": "TEXBAT.cleanStatic.single.p3.a3",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -5,
+    "delta_tau_chips": 0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 4.71238898038469,
+    "rho_db": -10,
+    "target_prns": [
+      3
+    ]
+  },
+  {
+    "anchor_index": 4,
+    "anchor_start_sample": 992815304,
+    "case_id": "TEXBAT.cleanStatic.single.p3.a4",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 5,
+    "delta_tau_chips": 0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 0.0,
+    "rho_db": -6,
+    "target_prns": [
+      3
+    ]
+  },
+  {
+    "anchor_index": 5,
+    "anchor_start_sample": 1030315304,
+    "case_id": "TEXBAT.cleanStatic.single.p3.a5",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 0,
+    "delta_tau_chips": 0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 1.5707963267948966,
+    "rho_db": 0,
+    "target_prns": [
+      3
+    ]
+  },
+  {
+    "anchor_index": 0,
+    "anchor_start_sample": 842815304,
+    "case_id": "TEXBAT.cleanStatic.single.p13.a0",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -2,
+    "delta_tau_chips": -0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 3.141592653589793,
+    "rho_db": -10,
+    "target_prns": [
+      13
+    ]
+  },
+  {
+    "anchor_index": 1,
+    "anchor_start_sample": 880315304,
+    "case_id": "TEXBAT.cleanStatic.single.p13.a1",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 2,
+    "delta_tau_chips": -0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 4.71238898038469,
+    "rho_db": -6,
+    "target_prns": [
+      13
+    ]
+  },
+  {
+    "anchor_index": 2,
+    "anchor_start_sample": 917815304,
+    "case_id": "TEXBAT.cleanStatic.single.p13.a2",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -5,
+    "delta_tau_chips": -0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 0.0,
+    "rho_db": 0,
+    "target_prns": [
+      13
+    ]
+  },
+  {
+    "anchor_index": 3,
+    "anchor_start_sample": 955315304,
+    "case_id": "TEXBAT.cleanStatic.single.p13.a3",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 5,
+    "delta_tau_chips": 0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 1.5707963267948966,
+    "rho_db": -10,
+    "target_prns": [
+      13
+    ]
+  },
+  {
+    "anchor_index": 4,
+    "anchor_start_sample": 992815304,
+    "case_id": "TEXBAT.cleanStatic.single.p13.a4",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 0,
+    "delta_tau_chips": 0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 3.141592653589793,
+    "rho_db": -6,
+    "target_prns": [
+      13
+    ]
+  },
+  {
+    "anchor_index": 5,
+    "anchor_start_sample": 1030315304,
+    "case_id": "TEXBAT.cleanStatic.single.p13.a5",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -2,
+    "delta_tau_chips": 0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 4.71238898038469,
+    "rho_db": 0,
+    "target_prns": [
+      13
+    ]
+  },
+  {
+    "anchor_index": 0,
+    "anchor_start_sample": 842815304,
+    "case_id": "TEXBAT.cleanStatic.single.p16.a0",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 2,
+    "delta_tau_chips": -0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 0.0,
+    "rho_db": -10,
+    "target_prns": [
+      16
+    ]
+  },
+  {
+    "anchor_index": 1,
+    "anchor_start_sample": 880315304,
+    "case_id": "TEXBAT.cleanStatic.single.p16.a1",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -5,
+    "delta_tau_chips": -0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 1.5707963267948966,
+    "rho_db": -6,
+    "target_prns": [
+      16
+    ]
+  },
+  {
+    "anchor_index": 2,
+    "anchor_start_sample": 917815304,
+    "case_id": "TEXBAT.cleanStatic.single.p16.a2",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 5,
+    "delta_tau_chips": -0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 3.141592653589793,
+    "rho_db": 0,
+    "target_prns": [
+      16
+    ]
+  },
+  {
+    "anchor_index": 3,
+    "anchor_start_sample": 955315304,
+    "case_id": "TEXBAT.cleanStatic.single.p16.a3",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 0,
+    "delta_tau_chips": 0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 4.71238898038469,
+    "rho_db": -10,
+    "target_prns": [
+      16
+    ]
+  },
+  {
+    "anchor_index": 4,
+    "anchor_start_sample": 992815304,
+    "case_id": "TEXBAT.cleanStatic.single.p16.a4",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -2,
+    "delta_tau_chips": 0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 0.0,
+    "rho_db": -6,
+    "target_prns": [
+      16
+    ]
+  },
+  {
+    "anchor_index": 5,
+    "anchor_start_sample": 1030315304,
+    "case_id": "TEXBAT.cleanStatic.single.p16.a5",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 2,
+    "delta_tau_chips": 0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 1.5707963267948966,
+    "rho_db": 0,
+    "target_prns": [
+      16
+    ]
+  },
+  {
+    "anchor_index": 0,
+    "anchor_start_sample": 842815304,
+    "case_id": "TEXBAT.cleanStatic.single.p19.a0",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -5,
+    "delta_tau_chips": -0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 3.141592653589793,
+    "rho_db": -10,
+    "target_prns": [
+      19
+    ]
+  },
+  {
+    "anchor_index": 1,
+    "anchor_start_sample": 880315304,
+    "case_id": "TEXBAT.cleanStatic.single.p19.a1",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 5,
+    "delta_tau_chips": -0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 4.71238898038469,
+    "rho_db": -6,
+    "target_prns": [
+      19
+    ]
+  },
+  {
+    "anchor_index": 2,
+    "anchor_start_sample": 917815304,
+    "case_id": "TEXBAT.cleanStatic.single.p19.a2",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 0,
+    "delta_tau_chips": -0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 0.0,
+    "rho_db": 0,
+    "target_prns": [
+      19
+    ]
+  },
+  {
+    "anchor_index": 3,
+    "anchor_start_sample": 955315304,
+    "case_id": "TEXBAT.cleanStatic.single.p19.a3",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -2,
+    "delta_tau_chips": 0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 1.5707963267948966,
+    "rho_db": -10,
+    "target_prns": [
+      19
+    ]
+  },
+  {
+    "anchor_index": 4,
+    "anchor_start_sample": 992815304,
+    "case_id": "TEXBAT.cleanStatic.single.p19.a4",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 2,
+    "delta_tau_chips": 0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 3.141592653589793,
+    "rho_db": -6,
+    "target_prns": [
+      19
+    ]
+  },
+  {
+    "anchor_index": 5,
+    "anchor_start_sample": 1030315304,
+    "case_id": "TEXBAT.cleanStatic.single.p19.a5",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -5,
+    "delta_tau_chips": 0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 4.71238898038469,
+    "rho_db": 0,
+    "target_prns": [
+      19
+    ]
+  },
+  {
+    "anchor_index": 0,
+    "anchor_start_sample": 842815304,
+    "case_id": "TEXBAT.cleanStatic.single.p30.a0",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 5,
+    "delta_tau_chips": -0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 0.0,
+    "rho_db": -10,
+    "target_prns": [
+      30
+    ]
+  },
+  {
+    "anchor_index": 1,
+    "anchor_start_sample": 880315304,
+    "case_id": "TEXBAT.cleanStatic.single.p30.a1",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 0,
+    "delta_tau_chips": -0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 1.5707963267948966,
+    "rho_db": -6,
+    "target_prns": [
+      30
+    ]
+  },
+  {
+    "anchor_index": 2,
+    "anchor_start_sample": 917815304,
+    "case_id": "TEXBAT.cleanStatic.single.p30.a2",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -2,
+    "delta_tau_chips": -0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 3.141592653589793,
+    "rho_db": 0,
+    "target_prns": [
+      30
+    ]
+  },
+  {
+    "anchor_index": 3,
+    "anchor_start_sample": 955315304,
+    "case_id": "TEXBAT.cleanStatic.single.p30.a3",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 2,
+    "delta_tau_chips": 0.1,
+    "mode": "single_prn",
+    "relative_phase_rad": 4.71238898038469,
+    "rho_db": -10,
+    "target_prns": [
+      30
+    ]
+  },
+  {
+    "anchor_index": 4,
+    "anchor_start_sample": 992815304,
+    "case_id": "TEXBAT.cleanStatic.single.p30.a4",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -5,
+    "delta_tau_chips": 0.25,
+    "mode": "single_prn",
+    "relative_phase_rad": 0.0,
+    "rho_db": -6,
+    "target_prns": [
+      30
+    ]
+  },
+  {
+    "anchor_index": 5,
+    "anchor_start_sample": 1030315304,
+    "case_id": "TEXBAT.cleanStatic.single.p30.a5",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 5,
+    "delta_tau_chips": 0.5,
+    "mode": "single_prn",
+    "relative_phase_rad": 1.5707963267948966,
+    "rho_db": 0,
+    "target_prns": [
+      30
+    ]
+  },
+  {
+    "anchor_index": 0,
+    "anchor_start_sample": 842815304,
+    "case_id": "TEXBAT.cleanStatic.four.a0",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 0,
+    "delta_tau_chips": -0.5,
+    "mode": "simultaneous_four_prn",
+    "relative_phase_rad": 3.141592653589793,
+    "rho_db": -10,
+    "target_prns": [
+      13,
+      16,
+      19,
+      30
+    ]
+  },
+  {
+    "anchor_index": 1,
+    "anchor_start_sample": 880315304,
+    "case_id": "TEXBAT.cleanStatic.four.a1",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -2,
+    "delta_tau_chips": -0.25,
+    "mode": "simultaneous_four_prn",
+    "relative_phase_rad": 4.71238898038469,
+    "rho_db": -6,
+    "target_prns": [
+      3,
+      16,
+      19,
+      30
+    ]
+  },
+  {
+    "anchor_index": 2,
+    "anchor_start_sample": 917815304,
+    "case_id": "TEXBAT.cleanStatic.four.a2",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 2,
+    "delta_tau_chips": -0.1,
+    "mode": "simultaneous_four_prn",
+    "relative_phase_rad": 0.0,
+    "rho_db": 0,
+    "target_prns": [
+      3,
+      13,
+      19,
+      30
+    ]
+  },
+  {
+    "anchor_index": 3,
+    "anchor_start_sample": 955315304,
+    "case_id": "TEXBAT.cleanStatic.four.a3",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": -5,
+    "delta_tau_chips": 0.1,
+    "mode": "simultaneous_four_prn",
+    "relative_phase_rad": 1.5707963267948966,
+    "rho_db": -10,
+    "target_prns": [
+      3,
+      13,
+      16,
+      30
+    ]
+  },
+  {
+    "anchor_index": 4,
+    "anchor_start_sample": 992815304,
+    "case_id": "TEXBAT.cleanStatic.four.a4",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 5,
+    "delta_tau_chips": 0.25,
+    "mode": "simultaneous_four_prn",
+    "relative_phase_rad": 3.141592653589793,
+    "rho_db": -6,
+    "target_prns": [
+      3,
+      13,
+      16,
+      19
+    ]
+  },
+  {
+    "anchor_index": 5,
+    "anchor_start_sample": 1030315304,
+    "case_id": "TEXBAT.cleanStatic.four.a5",
+    "dataset": "TEXBAT.cleanStatic",
+    "delta_f_hz": 0,
+    "delta_tau_chips": 0.5,
+    "mode": "simultaneous_four_prn",
+    "relative_phase_rad": 4.71238898038469,
+    "rho_db": 0,
+    "target_prns": [
+      13,
+      16,
+      19,
+      30
+    ]
+  }
+]

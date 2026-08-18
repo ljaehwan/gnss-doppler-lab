@@ -1,0 +1,45 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "435ecfc4890911f5884571e753d1efa309f77704c5b824e5f068ef9a7365b4a1",
+      "size_bytes": 152
+    },
+    {
+      "path": "caf_grid.json",
+      "sha256": "ca21a35923a9ef43b16c61b3744862dec9c93658e21f43a6772d676ccd1e1967",
+      "size_bytes": 1001
+    },
+    {
+      "path": "config.json",
+      "sha256": "68b1e0d92c6ab6f29a8566e4dd8a9102df533fb8fa8c859c8538a2e393a6e998",
+      "size_bytes": 4652
+    },
+    {
+      "path": "data_inventory.json",
+      "sha256": "15453afdcde063dc01a9c0b452183ec946025b5e047c8559a32a7ea50619030f",
+      "size_bytes": 2889
+    },
+    {
+      "path": "injection_design.json",
+      "sha256": "4416a30727349a783ce80da262e2833e6079a3a75859a91e5bc2309c4ae49038",
+      "size_bytes": 24153
+    },
+    {
+      "path": "injection_design_sha256.json",
+      "sha256": "c33af8b75b0b94ae16552f45822911a0081afeb3c308617c7bd84c170f78921f",
+      "size_bytes": 219
+    },
+    {
+      "path": "preregistration.json",
+      "sha256": "2df108686b81634702a6f6784ef431d23b3948e0ff87ba10fd6d8151c1a78417",
+      "size_bytes": 1289
+    },
+    {
+      "path": "source_commit.json",
+      "sha256": "718046c9f0d57cdcdc190dc26b18d0bc03dca2307e2311e000760014101dc736",
+      "size_bytes": 320
+    }
+  ],
+  "schema": "gnss-doppler-lab.artifact-manifest-sha256.v1"
+}
