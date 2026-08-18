@@ -1,11 +1,11 @@
 {
   "caf_workers_max": 4,
-  "case_score": "median of three nonoverlapping 500 ms Full epochs in the 1.5 s steady interval",
+  "case_score": "median of all nonoverlapping 500 ms Full epochs completely contained in the 1.5 s steady interval (two under actual TRACE endpoints)",
   "cases_executed": 0,
   "code_sha256": {
     "scripts/bind_mirage_r1_execution.py": "c718e2815d9b40a52af0d9ee482c74db73688becaaa84630a13440508ec552be",
     "scripts/preregister_mirage_r1.py": "1cfef6a2a5a12bdb344364d1bc382bf5ad8f11693084a03f936a0733819f162c",
-    "scripts/run_mirage_r1_full.py": "84d9e111fe1885d2c3c232e8a3f9a42b26fb04d6a6cfe0ba2ac99cef8b94128f",
+    "scripts/run_mirage_r1_full.py": "0391ab699c5ab4717ac15c4bcb479464cfcecb7eeb873ee5fae569acef887721",
     "scripts/verify_mirage_r1_full.py": "e2976c6b19b002b156865682f35c67f0a126ad2f01814e0d38fb005e8d306bd3",
     "src/gnss_doppler_lab/mirage_r1.py": "b77b4b69764a27cff3670b0fa617ff94be440e5a0ab1653809356d87a41c5858",
     "src/gnss_doppler_lab/mirage_r1_executor.py": "a113b0d09dbdf973852f858bce17d06b85ce805fe06ccac8e8aa095fcc28cf62",
@@ -30,6 +30,14 @@
       "reason": "TRACE/NAV audited endpoint adjacency is -1/0/+1 samples; initial renderer rejected the +1 gap sample",
       "scientific_scores_seen": false,
       "scope": "bounds semantics only; no CAF grid, score, design, threshold, injection parameter, or gate changed",
+      "status": "FROZEN_REPAIR"
+    },
+    {
+      "failed_preflight_cases": 1,
+      "id": "steady_actual_endpoint_epoch_count",
+      "reason": "strict actual-endpoint containment yields 1499 TRACE rows in the nominal 1.5 s steady interval",
+      "scientific_scores_persisted": false,
+      "scope": "use the two complete nonoverlapping 500 ms epochs; no boundary crossing, CAF grid, score formula, threshold, design, parameter, or gate change",
       "status": "FROZEN_REPAIR"
     }
   ],

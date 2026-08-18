@@ -14,6 +14,7 @@ import shutil
 import subprocess
 import sys
 import time
+import traceback
 
 import numpy as np
 
@@ -322,7 +323,8 @@ def execute_cases() -> None:
                 one = {p: (taps[p] if p == case["target_prns"][0] else authentic_taps[p]) for p in spec["prns"]}
                 controls["one_prn_secondary_path"] = tap_scores(one, references)
                 sequences = primary["node_sequences"]; prns = sorted(int(p) for p in sequences)
-                drop = [float(np.median([full_score([sequences[str(p)][i] for p in prns if p != gone]) for i in range(3)])) for gone in prns]
+                evaluation_epochs = min(len(v) for v in sequences.values())
+                drop = [float(np.median([full_score([sequences[str(p)][i] for p in prns if p != gone]) for i in range(evaluation_epochs)])) for gone in prns]
                 controls["prn_drop_add"] = {"drop_scores": drop, "add_restores_score": primary["case_score"], "case_score": float(np.median(drop))}
                 result = {"case": case, "attempts": attempts, "injected_iq": receipt, "receiver": replay,
                           "primary": primary, "controls": controls,
@@ -332,7 +334,7 @@ def execute_cases() -> None:
                               for p in sorted(replay_dir.glob("trace_native_1ms_ch_*.bin"))], "status": "PASS"}
                 dump(result_path, result); shutil.rmtree(temp)
             except Exception as exc:
-                error = f"{type(exc).__name__}: {exc}"; dump(root / f"failure_attempt_{attempts}.json", {"error": error})
+                error = f"{type(exc).__name__}: {exc}"; dump(root / f"failure_attempt_{attempts}.json", {"error": error, "traceback": traceback.format_exc()})
         if not result_path.exists(): dump(result_path, {"case": case, "attempts": attempts, "error": error, "status": "FAIL"})
         heartbeat("cases", f"{number}/84 {case['case_id']} {json.loads(result_path.read_text())['status']}")
     update_phase("cases", "COMPLETE")
@@ -441,9 +443,10 @@ def finalize() -> None:
         for result in valid:
             if result["case"]["dataset"] != dataset or result["case"]["mode"] != "simultaneous_four_prn": continue
             sequences = {int(p): v for p, v in result["primary"]["node_sequences"].items()}; prns = sorted(sequences)
-            original = [full_score([sequences[p][i] for p in prns]) for i in range(3)]
-            shifted = [full_score([sequences[p][(i + j) % 3] for j, p in enumerate(prns)]) for i in range(3)]
-            permuted = [full_score([sequences[p][i] for p in reversed(prns)]) for i in range(3)]
+            evaluation_epochs = min(len(v) for v in sequences.values())
+            original = [full_score([sequences[p][i] for p in prns]) for i in range(evaluation_epochs)]
+            shifted = [full_score([sequences[p][(i + j) % evaluation_epochs] for j, p in enumerate(prns)]) for i in range(evaluation_epochs)]
+            permuted = [full_score([sequences[p][i] for p in reversed(prns)]) for i in range(evaluation_epochs)]
             differences.append(float(np.median(original) - np.median(shifted)))
             permutation_errors.append(float(np.max(np.abs(np.asarray(original) - permuted))))
         relation["datasets"][dataset] = {"cases": len(differences), "paired_bootstrap": paired_bootstrap(differences),
