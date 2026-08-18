@@ -1,0 +1,15 @@
+{
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "absolute_spearman": 0.06841817186644773,
+      "pass": true,
+      "threshold": "<0.5"
+    },
+    "TEXBAT.cleanStatic": {
+      "absolute_spearman": 0.2660098522167488,
+      "pass": true,
+      "threshold": "<0.5"
+    }
+  },
+  "pass": true
+}

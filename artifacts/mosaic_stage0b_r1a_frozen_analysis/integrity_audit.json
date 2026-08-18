@@ -1,0 +1,61 @@
+{
+  "checks": {
+    "case_family_counts": {
+      "expected": {
+        "four": 16,
+        "single": 56
+      },
+      "observed": {
+        "four": 16,
+        "single": 56
+      },
+      "pass": true
+    },
+    "case_result_count": {
+      "expected": 72,
+      "observed": 72,
+      "pass": true
+    },
+    "compact_external_score_agreement": {
+      "pass": true,
+      "rows_compared": 360
+    },
+    "dataset_counts": {
+      "expected": {
+        "OAKBAT.cleanStatic": 36,
+        "TEXBAT.cleanStatic": 36
+      },
+      "observed": {
+        "OAKBAT.cleanStatic": 36,
+        "TEXBAT.cleanStatic": 36
+      },
+      "pass": true
+    },
+    "engineering_identity_gate": {
+      "oak_tex_pass": true,
+      "pass": true
+    },
+    "executor_freeze_sha": {
+      "expected": "913334d87657d75354b7d47546e986dd9f48d58d",
+      "pass": true
+    },
+    "iq_sha_size_clipping_receipts": {
+      "pass": true
+    },
+    "receiver_exit_and_status": {
+      "pass": true
+    },
+    "retained_trace_lineage": {
+      "case_trace_receipts": 756,
+      "hashes_recomputed": true,
+      "mismatch_count": 0,
+      "missing_count": 0,
+      "pass": true,
+      "reference_trace_sources_present": true
+    }
+  },
+  "failures": [],
+  "schema": "gnss-doppler-lab.mosaic-stage0b-r1a-integrity-audit.v1",
+  "science_analysis_permitted": true,
+  "status": "PASS"
+}

@@ -1,0 +1,21 @@
+dataset,gate,criterion,pass
+OAKBAT.cleanStatic,single_prn_physics,frozen observability/delay/Doppler/SCER criteria,True
+OAKBAT.cleanStatic,target_specificity,paired CI lower > 0,True
+OAKBAT.cleanStatic,gain_control_separation,paired CI lower > 0,True
+OAKBAT.cleanStatic,awgn_control_separation,paired CI lower > 0,True
+OAKBAT.cleanStatic,collapsed_source_separation,same-rho paired CI lower > 0,True
+OAKBAT.cleanStatic,rms_shortcut,absolute Spearman < 0.5,True
+OAKBAT.cleanStatic,clipping,median <=1e-4 and maximum <=1e-3,True
+OAKBAT.cleanStatic,four_prn_recovery,>=75% strong cases recover >=3/4,True
+OAKBAT.cleanStatic,prn_dominance,same frozen 3-of-4 evidence across distinct PRNs,True
+OAKBAT.cleanStatic,permutation_invariance,absolute difference <=1e-9,True
+TEXBAT.cleanStatic,single_prn_physics,frozen observability/delay/Doppler/SCER criteria,True
+TEXBAT.cleanStatic,target_specificity,paired CI lower > 0,True
+TEXBAT.cleanStatic,gain_control_separation,paired CI lower > 0,True
+TEXBAT.cleanStatic,awgn_control_separation,paired CI lower > 0,True
+TEXBAT.cleanStatic,collapsed_source_separation,same-rho paired CI lower > 0,True
+TEXBAT.cleanStatic,rms_shortcut,absolute Spearman < 0.5,True
+TEXBAT.cleanStatic,clipping,median <=1e-4 and maximum <=1e-3,True
+TEXBAT.cleanStatic,four_prn_recovery,>=75% strong cases recover >=3/4,False
+TEXBAT.cleanStatic,prn_dominance,same frozen 3-of-4 evidence across distinct PRNs,False
+TEXBAT.cleanStatic,permutation_invariance,absolute difference <=1e-9,True

@@ -1,0 +1,20 @@
+{
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "fraction": 0.8,
+      "pass": true,
+      "strong_cases": 5,
+      "strong_cases_with_at_least_three_distinct_recovered_prns": 4,
+      "threshold": ">=0.75"
+    },
+    "TEXBAT.cleanStatic": {
+      "fraction": 0.6,
+      "pass": false,
+      "strong_cases": 5,
+      "strong_cases_with_at_least_three_distinct_recovered_prns": 3,
+      "threshold": ">=0.75"
+    }
+  },
+  "pass": false,
+  "policy": "Frozen >=3-of-4 recovery prevents a successful case from being explained by one PRN"
+}

@@ -1,0 +1,101 @@
+{
+  "ci_interpretation": "DESIGN_CASE_BOOTSTRAP parameter-grid stability only; no generalization claim",
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "clipping": {
+        "maximum_ratio": 0.0,
+        "median_ratio": 0.0,
+        "pass": true
+      },
+      "controls": {
+        "awgn_pass": true,
+        "collapsed_pass": true,
+        "gain_pass": true,
+        "injected_minus_awgn_ci_lower": 610.5167101721,
+        "injected_minus_gain_ci_lower": 619.6645653180955,
+        "resolvable_minus_collapsed_ci_lower": 565.4943739166483
+      },
+      "four_prn": {
+        "all_cases": 8,
+        "frozen_criterion": ">=0.75 of strong cases recover >=3/4 PRNs",
+        "gate_pass": true,
+        "strong_cases": 5,
+        "strong_three_of_four_success_count": 4,
+        "strong_three_of_four_success_rate": 0.8,
+        "target_nontarget_median_separation": 376.662527207518,
+        "three_of_four_success_count": 5,
+        "three_of_four_success_rate": 0.625
+      },
+      "rms_shortcut": {
+        "absolute_spearman": 0.06841817186644773,
+        "pass": true,
+        "threshold": "<0.5"
+      },
+      "single_prn": {
+        "all_cases": 28,
+        "all_physics_recovered_count": 18,
+        "all_physics_recovery_fraction": 0.6428571428571429,
+        "delay_median_absolute_error_chips": 0.0,
+        "delay_sign_accuracy": 0.8666666666666667,
+        "doppler_median_absolute_error_hz": 5.0,
+        "doppler_sign_accuracy": 0.8,
+        "physics_gate_pass": true,
+        "scer_median_absolute_error_db": 0.0004076786534044115,
+        "strong_cases": 15,
+        "strong_observability_fraction": 1.0,
+        "strong_physics_recovered_count": 11,
+        "strong_physics_recovery_fraction": 0.7333333333333333,
+        "target_specificity_ci_lower": 481.611810537917,
+        "target_specificity_gate_pass": true
+      }
+    },
+    "TEXBAT.cleanStatic": {
+      "clipping": {
+        "maximum_ratio": 0.0,
+        "median_ratio": 0.0,
+        "pass": true
+      },
+      "controls": {
+        "awgn_pass": true,
+        "collapsed_pass": true,
+        "gain_pass": true,
+        "injected_minus_awgn_ci_lower": 473.1777419864742,
+        "injected_minus_gain_ci_lower": 482.77779989612253,
+        "resolvable_minus_collapsed_ci_lower": 185.15857198045705
+      },
+      "four_prn": {
+        "all_cases": 8,
+        "frozen_criterion": ">=0.75 of strong cases recover >=3/4 PRNs",
+        "gate_pass": false,
+        "strong_cases": 5,
+        "strong_three_of_four_success_count": 3,
+        "strong_three_of_four_success_rate": 0.6,
+        "target_nontarget_median_separation": 452.413325311034,
+        "three_of_four_success_count": 5,
+        "three_of_four_success_rate": 0.625
+      },
+      "rms_shortcut": {
+        "absolute_spearman": 0.2660098522167488,
+        "pass": true,
+        "threshold": "<0.5"
+      },
+      "single_prn": {
+        "all_cases": 28,
+        "all_physics_recovered_count": 22,
+        "all_physics_recovery_fraction": 0.7857142857142857,
+        "delay_median_absolute_error_chips": 0.0,
+        "delay_sign_accuracy": 0.8666666666666667,
+        "doppler_median_absolute_error_hz": 10.0,
+        "doppler_sign_accuracy": 0.8666666666666667,
+        "physics_gate_pass": true,
+        "scer_median_absolute_error_db": 0.0005615668602310109,
+        "strong_cases": 15,
+        "strong_observability_fraction": 1.0,
+        "strong_physics_recovered_count": 11,
+        "strong_physics_recovery_fraction": 0.7333333333333333,
+        "target_specificity_ci_lower": 409.4617373573605,
+        "target_specificity_gate_pass": true
+      }
+    }
+  }
+}

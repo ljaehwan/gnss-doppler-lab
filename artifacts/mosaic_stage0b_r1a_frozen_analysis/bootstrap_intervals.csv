@@ -1,0 +1,9 @@
+dataset,metric,ci_label,unit,n_pairs,seed,resamples,estimate,ci_lower,ci_upper,threshold,pass
+OAKBAT.cleanStatic,target_minus_median_nontarget_delta_bic,DESIGN_CASE_BOOTSTRAP,paired_case_within_dataset,15,20260818,10000,609.8798383417384,481.611810537917,749.4606532669375,ci_lower>0,True
+OAKBAT.cleanStatic,injected_minus_gain_delta_bic,DESIGN_CASE_BOOTSTRAP,paired_case_within_dataset,15,20260818,10000,734.7525495112097,619.6645653180955,864.091050435395,ci_lower>0,True
+OAKBAT.cleanStatic,injected_minus_awgn_delta_bic,DESIGN_CASE_BOOTSTRAP,paired_case_within_dataset,15,20260818,10000,725.5837889868145,610.5167101721,855.1614086993784,ci_lower>0,True
+OAKBAT.cleanStatic,resolvable_injected_minus_collapsed_delta_bic,DESIGN_CASE_BOOTSTRAP,paired_case_within_dataset,3,20260818,10000,604.9047013280602,565.4943739166483,658.0794580136426,ci_lower>0,True
+TEXBAT.cleanStatic,target_minus_median_nontarget_delta_bic,DESIGN_CASE_BOOTSTRAP,paired_case_within_dataset,15,20260818,10000,761.0471391914897,409.4617373573605,1215.9925564115922,ci_lower>0,True
+TEXBAT.cleanStatic,injected_minus_gain_delta_bic,DESIGN_CASE_BOOTSTRAP,paired_case_within_dataset,15,20260818,10000,820.34167486803,482.77779989612253,1261.060229986937,ci_lower>0,True
+TEXBAT.cleanStatic,injected_minus_awgn_delta_bic,DESIGN_CASE_BOOTSTRAP,paired_case_within_dataset,15,20260818,10000,810.315296281005,473.1777419864742,1250.6733034864926,ci_lower>0,True
+TEXBAT.cleanStatic,resolvable_injected_minus_collapsed_delta_bic,DESIGN_CASE_BOOTSTRAP,paired_case_within_dataset,3,20260818,10000,558.4750658691337,185.15857198045705,965.4533261083998,ci_lower>0,True

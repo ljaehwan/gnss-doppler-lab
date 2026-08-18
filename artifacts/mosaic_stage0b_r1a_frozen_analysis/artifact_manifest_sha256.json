@@ -1,0 +1,145 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "bccaaa3d48aebac73081abb87d9113d60ab223232462dc6a207bc7f132487563",
+      "size_bytes": 1975
+    },
+    {
+      "path": "analysis_freeze.json",
+      "sha256": "7526a1901b98e9046dad5388eab2de971862605ab1ea7517287d13d190b7fd02",
+      "size_bytes": 2971
+    },
+    {
+      "path": "awgn_control_metrics.csv",
+      "sha256": "74921523de4d0346a86791fddcbf8f63eeffa112268e9fc1eb6c29ecb4ec8d3a",
+      "size_bytes": 9557
+    },
+    {
+      "path": "bootstrap_intervals.csv",
+      "sha256": "cd9a47987be71445811b75bb57b7a55081e6fda4f10e3ff885220195bb50d02a",
+      "size_bytes": 1628
+    },
+    {
+      "path": "collapsed_source_metrics.csv",
+      "sha256": "32a8d665a3cadf9337c562d126c00ff7912919a7a9d22a4ffd332dfb4bb3ebb8",
+      "size_bytes": 1455
+    },
+    {
+      "path": "control_metrics.csv",
+      "sha256": "64f5abfd76091947cc601da10286712855e8cbfea4f38003b164826bba470f93",
+      "size_bytes": 19024
+    },
+    {
+      "path": "final_verdict.json",
+      "sha256": "2d035d017502d9cff4b2d792fe436e066b2dfaef100beb328fc9f6bd91a1851b",
+      "size_bytes": 976
+    },
+    {
+      "path": "four_prn_metrics_corrected.csv",
+      "sha256": "763de16da71a3ed1d02161bdbe3b4bef60a6c53d4115322264f22eab74feac17",
+      "size_bytes": 2811
+    },
+    {
+      "path": "gain_control_metrics.csv",
+      "sha256": "eed947ef93c4a8b7df2221305afd12a69595a1cbe47b2a4e7e03735fb308f777",
+      "size_bytes": 9420
+    },
+    {
+      "path": "gate_decision_table.csv",
+      "sha256": "218cb1d7c4f28cdd4e364e696443ef792ea7063d203faca37e8aef9ebfe99782",
+      "size_bytes": 1500
+    },
+    {
+      "path": "integrity_audit.json",
+      "sha256": "7d7da5f699218dc5226293b5ce2a7ad2fd31a95a1e54d8a977c0fd68a7fe0dca",
+      "size_bytes": 1352
+    },
+    {
+      "path": "per_dataset_gate_metrics.json",
+      "sha256": "1156aa1119241777696067575fbc97d25ef210f3844b667412afc7cb5f6fb7b5",
+      "size_bytes": 3614
+    },
+    {
+      "path": "permutation_invariance.json",
+      "sha256": "a981e789ead8a8dff7d24304eea53d6f07120ba6c046836aa50cfd5f72557cea",
+      "size_bytes": 401
+    },
+    {
+      "path": "plots/delta_bic_by_scer.png",
+      "sha256": "aeda097422defd1dff6281f438b737477a1b15c3ccbfce8e2b2b0b03bb40d513",
+      "size_bytes": 51299
+    },
+    {
+      "path": "plots/delta_bic_vs_output_rms.png",
+      "sha256": "17f2b2d0337e87e42880df4ca31763c080cb2615d74099092e342d3bee90bd8d",
+      "size_bytes": 51267
+    },
+    {
+      "path": "plots/injected_vs_controls.png",
+      "sha256": "a60cedbf9b3dadf9a67d7fdab9a148930d2be8dacfe6faf91151a32b03a314db",
+      "size_bytes": 24658
+    },
+    {
+      "path": "plots/oakbat_vs_texbat.png",
+      "sha256": "4e58360be9d5f8f6e86028c70e3bd5eb5b6a1aeae9d911ce432803020e7506c9",
+      "size_bytes": 47492
+    },
+    {
+      "path": "plots/prn_score_dominance.png",
+      "sha256": "f2b1f095ce14c318acd232bca67fec09c37fe08c1a5a6e7c0d5c5ccf63a274fc",
+      "size_bytes": 24162
+    },
+    {
+      "path": "plots/recovery_heatmap.png",
+      "sha256": "afa02aff583b82aa91f5b9698fb1e8d18ff40ec4dc31a24a2cc0a2320ec39d9c",
+      "size_bytes": 33830
+    },
+    {
+      "path": "plots/requested_vs_recovered_delay.png",
+      "sha256": "d5cb2e01c26341280e78bcbfd3ab1d6f8f1077e7ed6c9ecebf9eee1a59906c09",
+      "size_bytes": 57521
+    },
+    {
+      "path": "plots/requested_vs_recovered_doppler.png",
+      "sha256": "a0b1e2066640777ec3efce69eda7f3263a916136d1ac2b912d9f99a9a3f74144",
+      "size_bytes": 66518
+    },
+    {
+      "path": "plots/target_vs_nontarget_delta_bic.png",
+      "sha256": "41384ee8fdb93a14ccb9afafcae8e2d11b740a713215e2e2ceefcd1712b68967",
+      "size_bytes": 58228
+    },
+    {
+      "path": "prn_dominance_audit.json",
+      "sha256": "793c42a01b600fe07956de69451c4dd607a836ac047297dfcfaa433ff9c86a43",
+      "size_bytes": 540
+    },
+    {
+      "path": "rms_shortcut_audit.json",
+      "sha256": "06cb70f3016a5068f593084d2a7fd83d33d835c0493cb858ba14f6a9b6be733b",
+      "size_bytes": 296
+    },
+    {
+      "path": "scer_fidelity.csv",
+      "sha256": "d269ecd008c5722157110115b1782ffad6bd7e838e635e6b8628d8bdef83874f",
+      "size_bytes": 5899
+    },
+    {
+      "path": "single_prn_metrics_corrected.csv",
+      "sha256": "c0444a59287fd4314dcbe65a29237218c6e9cf42230ac6511247666a32d4929d",
+      "size_bytes": 13651
+    },
+    {
+      "path": "source_result_binding.json",
+      "sha256": "abf9527530d4a58b267ab633a77c459a7eefcde9de51c5b97da0967a08140415",
+      "size_bytes": 11813
+    },
+    {
+      "path": "target_nontarget_metrics.csv",
+      "sha256": "c440dd5be4d71cf79814e152924439e6f8774703dae106cb7aa8da77ca54a963",
+      "size_bytes": 6392
+    }
+  ],
+  "schema": "gnss-doppler-lab.artifact-manifest-sha256.v1"
+}

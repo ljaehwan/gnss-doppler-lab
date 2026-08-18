@@ -1,0 +1,9 @@
+case_id,dataset,rho_db,collapsed_target_delta_bic,same_rho_strong_resolvable_median_delta_bic,resolvable_minus_collapsed_delta_bic,comparison_policy
+OAKBAT.cleanStatic.single.00,OAKBAT.cleanStatic,-10.0,41.125291985459626,nan,nan,NOT_ESTIMABLE_NO_STRONG_CASE_AT_RHO; excluded by frozen finite-value bootstrap
+OAKBAT.cleanStatic.single.07,OAKBAT.cleanStatic,-6.0,82.46645898325369,740.5459169968963,658.0794580136426,same-rho median of frozen strong-resolvable single cases
+OAKBAT.cleanStatic.single.14,OAKBAT.cleanStatic,-3.0,53.98316639335826,619.4775403100066,565.4943739166483,same-rho median of frozen strong-resolvable single cases
+OAKBAT.cleanStatic.single.21,OAKBAT.cleanStatic,0.0,77.66108531225473,668.8013573661447,591.1402720538899,same-rho median of frozen strong-resolvable single cases
+TEXBAT.cleanStatic.single.00,TEXBAT.cleanStatic,-10.0,31.212689597625285,nan,nan,NOT_ESTIMABLE_NO_STRONG_CASE_AT_RHO; excluded by frozen finite-value bootstrap
+TEXBAT.cleanStatic.single.07,TEXBAT.cleanStatic,-6.0,28.840245556086302,994.2935716644861,965.4533261083998,same-rho median of frozen strong-resolvable single cases
+TEXBAT.cleanStatic.single.14,TEXBAT.cleanStatic,-3.0,72.22721444396302,597.0405139625072,524.8132995185442,same-rho median of frozen strong-resolvable single cases
+TEXBAT.cleanStatic.single.21,TEXBAT.cleanStatic,0.0,112.16942485840991,297.32799683886697,185.15857198045705,same-rho median of frozen strong-resolvable single cases

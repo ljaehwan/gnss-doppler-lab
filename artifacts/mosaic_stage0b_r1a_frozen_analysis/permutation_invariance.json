@@ -1,0 +1,17 @@
+{
+  "absolute_tolerance": 1e-09,
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "cases_checked": 8,
+      "maximum_difference": 0.0,
+      "pass": true
+    },
+    "TEXBAT.cleanStatic": {
+      "cases_checked": 8,
+      "maximum_difference": 0.0,
+      "pass": true
+    }
+  },
+  "pass": true,
+  "policy": "Independent per-PRN scores and recovered counts must be invariant to target list ordering"
+}

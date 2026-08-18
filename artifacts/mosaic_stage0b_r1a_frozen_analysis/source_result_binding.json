@@ -1,0 +1,300 @@
+{
+  "analysis_freeze_sha": "bf8e6593e38ff861f45ca682fd68b5fccb916820",
+  "base_result_sha": "9ae1e1dd1ee4e26d2d5ae3be23f3b644e79a5baa",
+  "case_rerun": false,
+  "case_results": [
+    {
+      "case_id": "OAKBAT.cleanStatic.four.00",
+      "case_result_sha256": "5d023dbc3d9746b3628fb093763390bac95103ea89eb98dd131002c1efce0d65"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.01",
+      "case_result_sha256": "e2762f8c285e338653cde8a0e98fb7136f8243615bfb56d400c854b0b2500679"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.02",
+      "case_result_sha256": "778a8fb0d665bda169f5075df6e69db9a15c381778bdd8f10c6b5d2dd11eeb8a"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "case_result_sha256": "40d2d9a9381781b958ecf746d12a921e6042fdf215155eee6ead5a566ff627aa"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.04",
+      "case_result_sha256": "50169c4c8385d5c25a847b0a76449b6079ca68b9b33bf8bedfb9a39ab1afb2e9"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.05",
+      "case_result_sha256": "5cca7d6819e8c4754f7cf52f0de80ad2faaff3dd8b14e69958a0f4b5ba9f092a"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.06",
+      "case_result_sha256": "202b014489aca922c35592e97fce0835846a6fde7250322d708d419e2efb229d"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "case_result_sha256": "780d554d926493e29c8066385792ccc023ca300902333e0574778bfdb530b1de"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.00",
+      "case_result_sha256": "b8795a76205586b54bdf3b57166b2d2213d4f5107d248fe0caf70c8740af2a46"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.01",
+      "case_result_sha256": "7d69a1aab5ecaa80707188f13d514e220f591ae71dab42899a3d38d38683e507"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.02",
+      "case_result_sha256": "d0de3d07d1b1312651f08f6946116c7bbbf92d7a2ff73b131591d7121844841d"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.03",
+      "case_result_sha256": "197b088af3fc68dc9a4de33b214415e5ecab4c71e86d43868514be763effdfde"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.04",
+      "case_result_sha256": "f0130dbcb8cccd8326d98f34a2443a67eeda219539205d40d5016f1c8b7290a2"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.05",
+      "case_result_sha256": "d625b848a3728ed3b4884e280dadbc3a8ca95736b10da9a832b6792ba7ecbc08"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.06",
+      "case_result_sha256": "39e34c9091eb20d63305415bab74ee8917101807161fb2c5f373aaa901ec4d1f"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.07",
+      "case_result_sha256": "5cb22bf784819393134404ac49db0348801b99f04f87048dff83029ec0978099"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.08",
+      "case_result_sha256": "e2514a93dc7eb556b459363b44e19afef6044388d05a173a1275ca9713c4a58f"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.09",
+      "case_result_sha256": "6274a5b8548b658e904539d2596a50121c0e87060a791918984cdb78327ef846"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.10",
+      "case_result_sha256": "818e4da76863708008ce85d0975b352d93fb0cdbf7fec876c2bb20548e749e93"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.11",
+      "case_result_sha256": "6b9310fc19dd3d41e40faf727987671299ec678c8ec2338ae16cb951745843ad"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.12",
+      "case_result_sha256": "90a542ea58d43289ad99bc8287a828cbf8782486f5adea2d1bd9674a642c316f"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.13",
+      "case_result_sha256": "5435f09a914f127be068f73447814c3d8ab8aaf562cba791359034564283e6ea"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.14",
+      "case_result_sha256": "292272be81c24816ab44c8091d2cd4d5af0a27b50b7665ad45252fe84608c8ec"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.15",
+      "case_result_sha256": "71fbfa8f99ea56a45e44e419ad7f774c2fa6b4f8a86969c91a23d727d362119e"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.16",
+      "case_result_sha256": "fa2283e13228eb4111db2a589c6b1719176a12accd8d133285ee080b87ef0acf"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.17",
+      "case_result_sha256": "f93152be6b9792480e4184a18edcd473d7b9db4b1b86d997aaccb5feb5a9b7f4"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.18",
+      "case_result_sha256": "c8ad7f47f511af3dac7923ccad198cc7a8100d724f9b421106520653f10f2a4f"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.19",
+      "case_result_sha256": "8dfdee15a839e8f1a8e9c816435abe0657d61e9d23502e3cd15db32596a7554d"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.20",
+      "case_result_sha256": "a7460cd3600edc3cb2bc6286460de82c42e5747bdfe1b9516590ce8b5315ebbe"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.21",
+      "case_result_sha256": "08ca8451047c3d83811d781599015504e247e8c3e15b1bbcc74eaecf017e08a2"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.22",
+      "case_result_sha256": "69db0f343eb03a19968c0f5590811a6067db324a4367bdcd1e89958c548bb18e"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.23",
+      "case_result_sha256": "185ff53f0908878fd6d46aee6f8c67888d096c86e52d9b1c86c467960f9165e5"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.24",
+      "case_result_sha256": "070a323da2bbb8e3add1b8d495083122593c80ff94668e85bd28a36a30cde49d"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.25",
+      "case_result_sha256": "d622b6810ac1ad0120025caea78828d6d98ed81c1ddd9598be20c1c0722dd909"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.26",
+      "case_result_sha256": "08a71e0c450fb9ecc5151c2b96f0bf8824d4303ff9831bca78cae1827c99bec8"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.single.27",
+      "case_result_sha256": "aa0318ceced62c6d9f8c6e7fe544443705408528abc42b010fdf9f5d483f9e99"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.00",
+      "case_result_sha256": "7afc38cacbe7f36aad3a287404fd96681c71c7769eecac0909d4c7d352ff3692"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.01",
+      "case_result_sha256": "1fdd9d7797a235d42dade2592214bd845df1f322604d9892d06255b71b72a24c"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.02",
+      "case_result_sha256": "b30431ee483da537cf1c127f2372d87218162f730b9aa4f2c600f52b4ff2db2f"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "case_result_sha256": "c38e69ab464522efde473d0f531d7a1982a18d02a16f1165c686ad0a94b85569"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.04",
+      "case_result_sha256": "459c652839988dce28f19193beb6f08a605c42f533b3032d381300db604ee9ab"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.05",
+      "case_result_sha256": "432e41b94ac4141e5a1cb7a5222852b70b17418e4b230365811444cbff8be4ee"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.06",
+      "case_result_sha256": "1f814e9537d2a22a0a2da1e86b0af4bce7ce71e830a83802675ecad6ce62e6f1"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "case_result_sha256": "ebe1eab233c3029ee789060a8458aa5de7f24b33a39bcebc0086224fbf3facab"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.00",
+      "case_result_sha256": "22f50c121bb97266a35be1f784c8c59832881e78a5fa7c9057fdc9e48e8394fb"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.01",
+      "case_result_sha256": "e7d98ce82fa03e1fe828efd3ecc10770909a48acaeea017019601cb6b8d88090"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.02",
+      "case_result_sha256": "fe037d871c8dcf640b11a43361438f35f5e9811583d83c5d2d96e67ccbc49767"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.03",
+      "case_result_sha256": "b828a47448de6d28b7fb184128477b2e98f56a9f8d5cc00863ddb129f60e9b49"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.04",
+      "case_result_sha256": "00e72f28f4063630aec5b4df658056ebba912b1f6b840dc36122164ac902f011"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.05",
+      "case_result_sha256": "3a59f5c5153a149091806cff6defbbfd780da47d244b6d67c045ee9be394b055"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.06",
+      "case_result_sha256": "d150ab93f77755d67c51779729d3cd4c23a09c64045903f88ae58fae41369f42"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.07",
+      "case_result_sha256": "df6171f43a5ff6e7805608ac96b36bdb10760c691f6960842e32f0a92dd3f73e"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.08",
+      "case_result_sha256": "64056d8b8cda1827a9e6f8d6c5b6a4ad3fc1169361b445dd33d28fcd36cf829b"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.09",
+      "case_result_sha256": "23a16b47b3d4b79f3ffe94a39f96df85b3bcadc80ba4e211cd80885871bf9fa4"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.10",
+      "case_result_sha256": "2feed5ff01531bf77e97a05265a3df61d4683e78601e5c62afd9fc08776272fc"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.11",
+      "case_result_sha256": "384c82d866fad76a4ced5c3bfb347b91ab0e7ea24ef62f81b6839fcfefe72d02"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.12",
+      "case_result_sha256": "9dbc1f11ce09e4762bc80665cedd2d4a6d292aa167cca33b3233ad7289b207b3"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.13",
+      "case_result_sha256": "f3727aefd55b04328cf2445c58f10b96b072587e1b055fa5811d4851e982c923"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.14",
+      "case_result_sha256": "bba63617949915a22dae90323d3e2fcda12f9e1a4a08d830790a46a16523d728"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.15",
+      "case_result_sha256": "3831bf02a544e087b3c22a9cc228d84873537957c3a66ac4894b4e75790fbdb3"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.16",
+      "case_result_sha256": "02bd933d8c7515de978aaa15f038667cd5b160c2283b9b0bea0388208e1fdbd6"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.17",
+      "case_result_sha256": "26362370fe6d96093f58f02d3b7e5fcadd5f6d0b2372f1ac5b84322fe319f810"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.18",
+      "case_result_sha256": "cefad2401b728b7ed77778bbe07760673f921c9ef2b65a6131a220a31604fedc"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.19",
+      "case_result_sha256": "d8c649c4a84dd0ad31d25a28c5b610863df4f73a5836ecd8c15822b8b78dc606"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.20",
+      "case_result_sha256": "f6207c41f21d8fe5aac05838d9dcdeb8111ca5d9502cd01fa46b6b08118de0b2"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.21",
+      "case_result_sha256": "3ad724922b88ca66560744201c27229f3beabef45a8ccff6c03a3c963e1176cd"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.22",
+      "case_result_sha256": "cdb8aaf7322d086dae5bdeb047eeedaf99837c27a1d8ca6a3a7db254ff50c67c"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.23",
+      "case_result_sha256": "be1a254a033463c335dc0777e286c24ec600e77faf684f220a45c8efc82a920a"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.24",
+      "case_result_sha256": "c8eec83662ae3b05131663753e44fb0a6ec972a33bf466b5a7fc184aa10b5230"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.25",
+      "case_result_sha256": "a5fbf3f7b68e824627757a9c01440d86919aa2d23a6f0fba867f287cb6ec8285"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.26",
+      "case_result_sha256": "45409b35eb046fc17cc69710d7d024bd72a09bc5cde322a04928e4cb985f13fe"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.single.27",
+      "case_result_sha256": "22aef860592682b90b3a1c03aa45f55fc7762e951fdd468a98b17e76435bb142"
+    }
+  ],
+  "executor_freeze_sha": "913334d87657d75354b7d47546e986dd9f48d58d",
+  "external_result_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution",
+  "iq_injection_rerun": false,
+  "receiver_replay_rerun": false,
+  "source_compact_artifact_manifest_sha256": "49028d70ab526bf7f1aeeb9982498820cafccb08d475cdf7fcffe66109458818"
+}

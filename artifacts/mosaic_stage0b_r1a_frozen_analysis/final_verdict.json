@@ -1,0 +1,26 @@
+{
+  "analysis_freeze_sha": "bf8e6593e38ff861f45ca682fd68b5fccb916820",
+  "base_result_sha": "9ae1e1dd1ee4e26d2d5ae3be23f3b644e79a5baa",
+  "case_rerun": false,
+  "executor_freeze_sha": "913334d87657d75354b7d47546e986dd9f48d58d",
+  "gate_values": {
+    "awgn_control_pass": true,
+    "clipping_pass": true,
+    "collapsed_source_pass": true,
+    "control_separation_pass": true,
+    "four_prn_numeric_criterion_defined": true,
+    "gain_control_pass": true,
+    "integrity_pass": true,
+    "multi_prn_recovery_pass": false,
+    "permutation_invariance_pass": true,
+    "physical_hypothesis_pass": false,
+    "prn_dominance_pass": false,
+    "retained_evidence_complete": true,
+    "rms_shortcut_pass": true,
+    "single_prn_physics_pass": true,
+    "target_specificity_pass": true
+  },
+  "logic": "computed by decide_verdict; OAKBAT and TEXBAT must each pass",
+  "schema": "gnss-doppler-lab.mosaic-stage0b-r1a-final-verdict.v1",
+  "verdict": "NO_GO_MOSAIC_MULTI_PRN_RECOVERY"
+}
