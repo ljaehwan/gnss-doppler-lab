@@ -1,0 +1,357 @@
+{
+  "passed": 50,
+  "status": "PASS",
+  "tests": [
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "PARITY_FAIL",
+      "prn": 10,
+      "rejected": true,
+      "test": "validated_bit_flip"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "PARITY_OR_PREAMBLE_FAIL",
+      "prn": 10,
+      "rejected": true,
+      "test": "constant_plus_one"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "ENDPOINT_DIGEST_FAIL",
+      "prn": 10,
+      "rejected": true,
+      "test": "endpoint_plus_one"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "BOUNDARY_END_SEMANTICS_FAIL",
+      "prn": 10,
+      "rejected": true,
+      "test": "boundary_phase_plus_one"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "SEQUENCE_HASH_FAIL",
+      "prn": 10,
+      "rejected": true,
+      "test": "sequence_reversal"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "PARITY_FAIL",
+      "prn": 11,
+      "rejected": true,
+      "test": "validated_bit_flip"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "PARITY_OR_PREAMBLE_FAIL",
+      "prn": 11,
+      "rejected": true,
+      "test": "constant_plus_one"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "ENDPOINT_DIGEST_FAIL",
+      "prn": 11,
+      "rejected": true,
+      "test": "endpoint_plus_one"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "BOUNDARY_END_SEMANTICS_FAIL",
+      "prn": 11,
+      "rejected": true,
+      "test": "boundary_phase_plus_one"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "SEQUENCE_HASH_FAIL",
+      "prn": 11,
+      "rejected": true,
+      "test": "sequence_reversal"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "PARITY_FAIL",
+      "prn": 21,
+      "rejected": true,
+      "test": "validated_bit_flip"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "PARITY_OR_PREAMBLE_FAIL",
+      "prn": 21,
+      "rejected": true,
+      "test": "constant_plus_one"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "ENDPOINT_DIGEST_FAIL",
+      "prn": 21,
+      "rejected": true,
+      "test": "endpoint_plus_one"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "BOUNDARY_END_SEMANTICS_FAIL",
+      "prn": 21,
+      "rejected": true,
+      "test": "boundary_phase_plus_one"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "SEQUENCE_HASH_FAIL",
+      "prn": 21,
+      "rejected": true,
+      "test": "sequence_reversal"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "PARITY_FAIL",
+      "prn": 24,
+      "rejected": true,
+      "test": "validated_bit_flip"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "PARITY_OR_PREAMBLE_FAIL",
+      "prn": 24,
+      "rejected": true,
+      "test": "constant_plus_one"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "ENDPOINT_DIGEST_FAIL",
+      "prn": 24,
+      "rejected": true,
+      "test": "endpoint_plus_one"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "BOUNDARY_END_SEMANTICS_FAIL",
+      "prn": 24,
+      "rejected": true,
+      "test": "boundary_phase_plus_one"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "SEQUENCE_HASH_FAIL",
+      "prn": 24,
+      "rejected": true,
+      "test": "sequence_reversal"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "PARITY_FAIL",
+      "prn": 27,
+      "rejected": true,
+      "test": "validated_bit_flip"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "PARITY_OR_PREAMBLE_FAIL",
+      "prn": 27,
+      "rejected": true,
+      "test": "constant_plus_one"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "ENDPOINT_DIGEST_FAIL",
+      "prn": 27,
+      "rejected": true,
+      "test": "endpoint_plus_one"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "BOUNDARY_END_SEMANTICS_FAIL",
+      "prn": 27,
+      "rejected": true,
+      "test": "boundary_phase_plus_one"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "expected": "SEQUENCE_HASH_FAIL",
+      "prn": 27,
+      "rejected": true,
+      "test": "sequence_reversal"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "PARITY_FAIL",
+      "prn": 3,
+      "rejected": true,
+      "test": "validated_bit_flip"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "PARITY_OR_PREAMBLE_FAIL",
+      "prn": 3,
+      "rejected": true,
+      "test": "constant_plus_one"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "ENDPOINT_DIGEST_FAIL",
+      "prn": 3,
+      "rejected": true,
+      "test": "endpoint_plus_one"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "BOUNDARY_END_SEMANTICS_FAIL",
+      "prn": 3,
+      "rejected": true,
+      "test": "boundary_phase_plus_one"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "SEQUENCE_HASH_FAIL",
+      "prn": 3,
+      "rejected": true,
+      "test": "sequence_reversal"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "PARITY_FAIL",
+      "prn": 13,
+      "rejected": true,
+      "test": "validated_bit_flip"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "PARITY_OR_PREAMBLE_FAIL",
+      "prn": 13,
+      "rejected": true,
+      "test": "constant_plus_one"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "ENDPOINT_DIGEST_FAIL",
+      "prn": 13,
+      "rejected": true,
+      "test": "endpoint_plus_one"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "BOUNDARY_END_SEMANTICS_FAIL",
+      "prn": 13,
+      "rejected": true,
+      "test": "boundary_phase_plus_one"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "SEQUENCE_HASH_FAIL",
+      "prn": 13,
+      "rejected": true,
+      "test": "sequence_reversal"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "PARITY_FAIL",
+      "prn": 16,
+      "rejected": true,
+      "test": "validated_bit_flip"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "PARITY_OR_PREAMBLE_FAIL",
+      "prn": 16,
+      "rejected": true,
+      "test": "constant_plus_one"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "ENDPOINT_DIGEST_FAIL",
+      "prn": 16,
+      "rejected": true,
+      "test": "endpoint_plus_one"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "BOUNDARY_END_SEMANTICS_FAIL",
+      "prn": 16,
+      "rejected": true,
+      "test": "boundary_phase_plus_one"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "SEQUENCE_HASH_FAIL",
+      "prn": 16,
+      "rejected": true,
+      "test": "sequence_reversal"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "PARITY_FAIL",
+      "prn": 19,
+      "rejected": true,
+      "test": "validated_bit_flip"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "PARITY_OR_PREAMBLE_FAIL",
+      "prn": 19,
+      "rejected": true,
+      "test": "constant_plus_one"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "ENDPOINT_DIGEST_FAIL",
+      "prn": 19,
+      "rejected": true,
+      "test": "endpoint_plus_one"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "BOUNDARY_END_SEMANTICS_FAIL",
+      "prn": 19,
+      "rejected": true,
+      "test": "boundary_phase_plus_one"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "SEQUENCE_HASH_FAIL",
+      "prn": 19,
+      "rejected": true,
+      "test": "sequence_reversal"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "PARITY_FAIL",
+      "prn": 30,
+      "rejected": true,
+      "test": "validated_bit_flip"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "PARITY_OR_PREAMBLE_FAIL",
+      "prn": 30,
+      "rejected": true,
+      "test": "constant_plus_one"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "ENDPOINT_DIGEST_FAIL",
+      "prn": 30,
+      "rejected": true,
+      "test": "endpoint_plus_one"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "BOUNDARY_END_SEMANTICS_FAIL",
+      "prn": 30,
+      "rejected": true,
+      "test": "boundary_phase_plus_one"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "expected": "SEQUENCE_HASH_FAIL",
+      "prn": 30,
+      "rejected": true,
+      "test": "sequence_reversal"
+    }
+  ],
+  "total": 50
+}

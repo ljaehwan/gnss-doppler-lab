@@ -1,0 +1,3 @@
+dataset,segment_id,raw_start_sample,raw_end_sample_exclusive,duration_s,valid_prns,valid_prn_count,role_180s_feasible,status
+OAKBAT.cleanStatic,extended_common_0,240275419,2370200740,425.9850642,10;11;21;24;27,5,True,PASS
+TEXBAT.cleanStatic,extended_common_0,1117815937,11917505201,431.98757056,3;13;16;19;30,5,True,PASS

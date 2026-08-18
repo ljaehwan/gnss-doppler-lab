@@ -1,0 +1,76 @@
+{
+  "files": [
+    {
+      "path": "CURRENT_STATE.md",
+      "sha256": "23d8b90f918fcef4636f05b04bef58a82646f2ee763effdbc033be26c8d8bba5",
+      "size_bytes": 102
+    },
+    {
+      "path": "README.md",
+      "sha256": "052ab3a4c3396d8d83a9e92798b98d059271cb0daebc6576246fa382de4568a5",
+      "size_bytes": 361
+    },
+    {
+      "path": "common_support_segments.csv",
+      "sha256": "a6bbad7206facf80ba87aad167690fe9f74c31a8503a20d4d32d48600133650c",
+      "size_bytes": 321
+    },
+    {
+      "path": "data_inventory.json",
+      "sha256": "bce55e1b3728d8d8250001bef72b716440f4426484f606d69dc8d18ce0dac3d8",
+      "size_bytes": 4367
+    },
+    {
+      "path": "extended_nav_mapping.csv.gz",
+      "sha256": "a7aed5566b0cc35cbfd7e0e318ea2a7a18b027646770800742035c6b66fab23d",
+      "size_bytes": 4929087
+    },
+    {
+      "path": "extended_nav_validation.json",
+      "sha256": "05aad0bc9b740c90fc6f136e287afd730ed931afecf35f0535ede930de8898da",
+      "size_bytes": 930
+    },
+    {
+      "path": "prn_coverage.csv",
+      "sha256": "65ea0dac28901b035d67193a229704721aad50d2ef067f9aec7fb4fbeca51115",
+      "size_bytes": 1789
+    },
+    {
+      "path": "raw_endpoint_audit.json",
+      "sha256": "0a11f9b125870f02eebdd92507cc7c2e53c4624fd709ea055f9f6cffd6de97c2",
+      "size_bytes": 4042
+    },
+    {
+      "path": "runner_phase_evidence.json",
+      "sha256": "09b462e15eddec8adb04ff9cae5f37b6aa5f27517299bb9c982c84387db1925b",
+      "size_bytes": 291
+    },
+    {
+      "path": "source_commit.json",
+      "sha256": "bff1bc9efae613092162d0c5561600924cb025211e11dbf097e9ab45770bd7b5",
+      "size_bytes": 259
+    },
+    {
+      "path": "subframe_tow_summary.csv",
+      "sha256": "e157ec4f58647c6a696729f2b9df10a6377b9807e1db452c46cc899778485fe5",
+      "size_bytes": 33352
+    },
+    {
+      "path": "tamper_negative_tests.json",
+      "sha256": "6e9ff66cbe21cc9ec0ea7e255fb4fbc833feace2354e115419a76a2e921f4ce6",
+      "size_bytes": 8576
+    },
+    {
+      "path": "versioned_preregistration_amendment.json",
+      "sha256": "8a19d04cd6a703a00c9eb8815cd13eacb6482b2556760d08217db422d910416d",
+      "size_bytes": 406
+    },
+    {
+      "path": "word_parity_summary.csv",
+      "sha256": "c09e80684599880d681068bd1fce16100aa59c14bd28d53d77acecf5a244c7f9",
+      "size_bytes": 448178
+    }
+  ],
+  "schema": "gnss-doppler-lab.artifact-manifest-sha256.v1",
+  "unavailable": []
+}

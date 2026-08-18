@@ -1,0 +1,38 @@
+{
+  "actual_trace_endpoints_used": true,
+  "corrected_boundary_semantics": "data_symbol_boundary=1 is final epoch of current bit; following TRACE row starts next bit",
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "constant_plus_one_fallback": false,
+      "minimum_300s_each": true,
+      "parity_failures": 0,
+      "parity_valid_words": 3570,
+      "prns": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ],
+      "tow_progression_plus_6": true
+    },
+    "TEXBAT.cleanStatic": {
+      "constant_plus_one_fallback": false,
+      "minimum_300s_each": true,
+      "parity_failures": 0,
+      "parity_valid_words": 3600,
+      "prns": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ],
+      "tow_progression_plus_6": true
+    }
+  },
+  "mapping_rows": 215100,
+  "nominal_20ms_endpoint_arithmetic_used": false,
+  "schema": "gnss-doppler-lab.mirage-r1-extended-nav.v1",
+  "status": "PASS"
+}
