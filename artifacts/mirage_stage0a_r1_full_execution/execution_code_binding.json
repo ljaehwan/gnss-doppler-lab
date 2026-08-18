@@ -8,9 +8,9 @@
     "scripts/run_mirage_r1_full.py": "84d9e111fe1885d2c3c232e8a3f9a42b26fb04d6a6cfe0ba2ac99cef8b94128f",
     "scripts/verify_mirage_r1_full.py": "e2976c6b19b002b156865682f35c67f0a126ad2f01814e0d38fb005e8d306bd3",
     "src/gnss_doppler_lab/mirage_r1.py": "b77b4b69764a27cff3670b0fa617ff94be440e5a0ab1653809356d87a41c5858",
-    "src/gnss_doppler_lab/mirage_r1_executor.py": "ab53f1d026994af9a9bb5c44d77638263380398225842b217e0094073656e411",
+    "src/gnss_doppler_lab/mirage_r1_executor.py": "a113b0d09dbdf973852f858bce17d06b85ce805fe06ccac8e8aa095fcc28cf62",
     "tests/test_mirage_r1.py": "a54c36d0621e52697b97b0bde2906345d7f0f4e4e3ecdce4c12d635196bc814d",
-    "tests/test_mirage_r1_executor.py": "d7a2a6b7bb0e3965fa8cb0f7d5789dcb14ba303d61d61b2dbd83265b4541a956"
+    "tests/test_mirage_r1_executor.py": "5196655b9e24e61c75f889684326035b4d960f05b7074973682c4c7a51976ec8"
   },
   "control_execution": {
     "authentic": "actual clean raw-IQ recorrelation with original applied tracker state",
@@ -23,6 +23,16 @@
   "preregistration_commit": "bd27782c54c6f6df603f9a08b831013826d24046",
   "receiver_replays_max_concurrent": 1,
   "results_seen": false,
+  "runtime_repairs": [
+    {
+      "failed_preflight_cases": 11,
+      "id": "endpoint_plus_one_nco_gap",
+      "reason": "TRACE/NAV audited endpoint adjacency is -1/0/+1 samples; initial renderer rejected the +1 gap sample",
+      "scientific_scores_seen": false,
+      "scope": "bounds semantics only; no CAF grid, score, design, threshold, injection parameter, or gate changed",
+      "status": "FROZEN_REPAIR"
+    }
+  ],
   "schema": "gnss-doppler-lab.mirage-r1-execution-code-binding.v1",
   "scientific_results_computed": false,
   "status": "FROZEN"

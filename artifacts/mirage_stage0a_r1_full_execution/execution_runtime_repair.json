@@ -1,0 +1,12 @@
+{
+  "base_execution_commit": "40f75fe0066ed93d6c926e4b496ef0d8ba589bfe",
+  "failed_case_count_before_repair": 11,
+  "failure": "outside TRACE NCO support",
+  "regression_test": "test_receiver_nco_one_sample_endpoint_variation_only",
+  "repair": "allow position==previous endpoint only; reject any position>endpoint",
+  "root_cause": "renderer used strict exclusive bound and rejected the single sample in audited +1 endpoint adjacency",
+  "schema": "gnss-doppler-lab.mirage-r1-runtime-repair.v1",
+  "scientific_case_scores_computed": false,
+  "score_or_design_changed": false,
+  "status": "FROZEN_PENDING_COMMIT_AND_PUSH"
+}

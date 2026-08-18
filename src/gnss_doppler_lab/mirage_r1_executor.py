@@ -28,6 +28,16 @@ def load_mapping(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(stream))
 
 
+
+
+def support_rows_with_one_sample_extrapolation(starts: np.ndarray, ends: np.ndarray, positions: np.ndarray) -> np.ndarray:
+    """Map samples to TRACE/NAV rows, allowing only the audited +1-sample NCO gap."""
+    rows = np.searchsorted(starts, positions, side="right") - 1
+    safe = np.maximum(rows, 0)
+    if np.any(rows < 0) or np.any(positions > ends[safe]):
+        raise ValueError("sample outside support or exceeds audited one-sample endpoint variation")
+    return rows
+
 def trace_for_prn(directory: Path, prn: int) -> Path:
     matches = []
     for path in sorted(directory.glob("trace_native_1ms_ch_*.bin")):
@@ -135,14 +145,11 @@ class AuthenticatedReplica:
                delta_f_hz: float = 0, phase_rad: float = 0,
                phase_reference_sample: int | None = None) -> np.ndarray:
         positions = int(absolute_start) + np.arange(count, dtype=np.int64)
-        rows = np.searchsorted(self.starts, positions, side="right") - 1
-        safe = np.maximum(rows, 0)
-        if np.any(rows < 0) or np.any(positions >= self.ends[safe]):
-            raise ValueError(f"PRN {self.prn}: outside TRACE NCO support")
-        nav = np.searchsorted(self.nav_starts, positions, side="right") - 1
-        nsafe = np.maximum(nav, 0)
-        if np.any(nav < 0) or np.any(positions >= self.nav_ends[nsafe]):
-            raise ValueError(f"PRN {self.prn}: outside authenticated NAV support")
+        try:
+            rows = support_rows_with_one_sample_extrapolation(self.starts, self.ends, positions)
+            nav = support_rows_with_one_sample_extrapolation(self.nav_starts, self.nav_ends, positions)
+        except ValueError as error:
+            raise ValueError(f"PRN {self.prn}: {error}") from error
         local = positions - self.starts[rows]
         code_phase = (local * self.records["action_used_code_phase_step_chips_per_sample"][rows]
                       - self.records["action_used_residual_code_phase_chips"][rows] + float(delay_chips))

@@ -1,7 +1,8 @@
 import numpy as np
 
 from gnss_doppler_lab.mirage_r1 import nav_signs_for_epochs
-from gnss_doppler_lab.mirage_r1_executor import raised_cosine_envelope, render_receiver_config
+from gnss_doppler_lab.mirage_r1_executor import (raised_cosine_envelope, render_receiver_config,
+    support_rows_with_one_sample_extrapolation)
 
 
 def test_raised_cosine_transient_contract():
@@ -52,3 +53,14 @@ def test_receiver_replay_binding_fails_closed_without_filename(tmp_path):
         assert "allowlist" in str(error)
     else:
         raise AssertionError("missing filename binding must fail")
+
+
+def test_receiver_nco_one_sample_endpoint_variation_only():
+    starts = np.array([100, 121], dtype=np.int64); ends = np.array([120, 140], dtype=np.int64)
+    np.testing.assert_array_equal(support_rows_with_one_sample_extrapolation(starts, ends, np.array([119, 120, 121, 140])), [0, 0, 1, 1])
+    try:
+        support_rows_with_one_sample_extrapolation(starts, ends, np.array([141]))
+    except ValueError as error:
+        assert "one-sample" in str(error)
+    else:
+        raise AssertionError("more than one sample beyond endpoint must fail")
