@@ -53,8 +53,15 @@ def command(*args: str) -> str:
     return subprocess.run(args, check=True, text=True, stdout=subprocess.PIPE).stdout.strip()
 
 
+def json_default(value: object) -> object:
+    if isinstance(value, np.generic):
+        return value.item()
+    raise TypeError(f"not JSON serializable: {type(value).__name__}")
+
+
 def dump_json(name: str, value: object) -> None:
-    (ART / name).write_text(json.dumps(value, indent=2, sort_keys=True, allow_nan=False) + "\n")
+    (ART / name).write_text(json.dumps(value, indent=2, sort_keys=True, allow_nan=False,
+                                      default=json_default) + "\n")
 
 
 def write_csv(name: str, rows: list[dict[str, object]]) -> None:
