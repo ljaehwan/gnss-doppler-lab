@@ -160,8 +160,12 @@ def main() -> None:
             metrics.append(row); projections.append({**row,"fixed_unexplained_residual_energy":fixed_m["unexplained_residual_energy"],"oracle_unexplained_residual_energy":oracle_m["unexplained_residual_energy"]}); oracle.append({"diagnostic_label":"POST_HOC_ORACLE_DIAGNOSTIC",**row})
             for window in (.001,.1,.5,1.,6.):
                 for block,idx in enumerate(segment_indices(times,4.0,window)):
-                    if len(idx)<2: continue
-                    scored=frozen_grid_score(clean[idx],observed[idx],times[idx]-times[idx][0],np.asarray(h.tap_offsets_chips))
+                    if not len(idx): continue
+                    if window == .001:
+                        one_template=triangular_template(h.tap_offsets_chips,np.full(len(idx),case["delta_tau_chips"]),np.zeros(len(idx)))
+                        scored={**diagnostic_projection(clean[idx],observed[idx],one_template),"recovered_delay_chips":case["delta_tau_chips"],"recovered_doppler_hz":case["delta_f_hz"]}
+                    else:
+                        scored=frozen_grid_score(clean[idx],observed[idx],times[idx]-times[idx][0],np.asarray(h.tap_offsets_chips))
                     temporal.append({"diagnostic_label":"POST_HOC_DIAGNOSTIC","case_id":cid,"target_prn":int(prn),"window_seconds":window,"block_index":block,"epochs":len(idx),"delta_bic":scored["delta_bic"],"recovered_delay_chips":scored["recovered_delay_chips"],"recovered_doppler_hz":scored["recovered_doppler_hz"]})
         stability[cid]=case_stability
     # Factorial descriptions use all frozen target outcomes; no inferential p-values.
