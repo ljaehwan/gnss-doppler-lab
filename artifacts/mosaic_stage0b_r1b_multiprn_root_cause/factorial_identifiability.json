@@ -1,0 +1,226 @@
+{
+  "reason": "sparse/aliased frozen design cells; descriptive rates only, with rho and phase jointly structured",
+  "rho_phase_matrix": [
+    {
+      "n": 30,
+      "phase_rad": 0.0,
+      "recovery_rate": 0.6333333333333333,
+      "rho_db": -10.0
+    },
+    {
+      "n": 16,
+      "phase_rad": 1.5707963267948966,
+      "recovery_rate": 0.875,
+      "rho_db": -6.0
+    },
+    {
+      "n": 30,
+      "phase_rad": 3.141592653589793,
+      "recovery_rate": 0.8333333333333334,
+      "rho_db": -3.0
+    },
+    {
+      "n": 16,
+      "phase_rad": 4.71238898038469,
+      "recovery_rate": 0.375,
+      "rho_db": 0.0
+    },
+    {
+      "n": 14,
+      "phase_rad": 1.5707963267948966,
+      "recovery_rate": 0.42857142857142855,
+      "rho_db": 0.0
+    },
+    {
+      "n": 14,
+      "phase_rad": 4.71238898038469,
+      "recovery_rate": 0.7857142857142857,
+      "rho_db": -6.0
+    }
+  ],
+  "tables": {
+    "dataset": [
+      {
+        "dataset": "OAKBAT.cleanStatic",
+        "n": 60,
+        "recovery_rate": 0.6166666666666667
+      },
+      {
+        "dataset": "TEXBAT.cleanStatic",
+        "n": 60,
+        "recovery_rate": 0.7333333333333333
+      }
+    ],
+    "delay_chips": [
+      {
+        "delay_chips": -0.05,
+        "n": 24,
+        "recovery_rate": 0.625
+      },
+      {
+        "delay_chips": 0.05,
+        "n": 16,
+        "recovery_rate": 0.75
+      },
+      {
+        "delay_chips": -0.1,
+        "n": 16,
+        "recovery_rate": 1.0
+      },
+      {
+        "delay_chips": 0.1,
+        "n": 16,
+        "recovery_rate": 0.625
+      },
+      {
+        "delay_chips": -0.25,
+        "n": 16,
+        "recovery_rate": 0.375
+      },
+      {
+        "delay_chips": 0.25,
+        "n": 16,
+        "recovery_rate": 0.8125
+      },
+      {
+        "delay_chips": 0.0,
+        "n": 16,
+        "recovery_rate": 0.5625
+      }
+    ],
+    "doppler_hz": [
+      {
+        "doppler_hz": -25.0,
+        "n": 24,
+        "recovery_rate": 0.625
+      },
+      {
+        "doppler_hz": 25.0,
+        "n": 16,
+        "recovery_rate": 0.75
+      },
+      {
+        "doppler_hz": -50.0,
+        "n": 16,
+        "recovery_rate": 0.875
+      },
+      {
+        "doppler_hz": 50.0,
+        "n": 16,
+        "recovery_rate": 0.75
+      },
+      {
+        "doppler_hz": 0.0,
+        "n": 16,
+        "recovery_rate": 0.1875
+      },
+      {
+        "doppler_hz": -5.0,
+        "n": 16,
+        "recovery_rate": 0.8125
+      },
+      {
+        "doppler_hz": 5.0,
+        "n": 16,
+        "recovery_rate": 0.75
+      }
+    ],
+    "phase_rad": [
+      {
+        "n": 30,
+        "phase_rad": 0.0,
+        "recovery_rate": 0.6333333333333333
+      },
+      {
+        "n": 30,
+        "phase_rad": 1.5707963267948966,
+        "recovery_rate": 0.6666666666666666
+      },
+      {
+        "n": 30,
+        "phase_rad": 3.141592653589793,
+        "recovery_rate": 0.8333333333333334
+      },
+      {
+        "n": 30,
+        "phase_rad": 4.71238898038469,
+        "recovery_rate": 0.5666666666666667
+      }
+    ],
+    "prn": [
+      {
+        "n": 12,
+        "prn": 24,
+        "recovery_rate": 0.8333333333333334
+      },
+      {
+        "n": 12,
+        "prn": 27,
+        "recovery_rate": 0.75
+      },
+      {
+        "n": 12,
+        "prn": 11,
+        "recovery_rate": 0.75
+      },
+      {
+        "n": 12,
+        "prn": 21,
+        "recovery_rate": 0.08333333333333333
+      },
+      {
+        "n": 12,
+        "prn": 10,
+        "recovery_rate": 0.6666666666666666
+      },
+      {
+        "n": 12,
+        "prn": 16,
+        "recovery_rate": 0.9166666666666666
+      },
+      {
+        "n": 12,
+        "prn": 19,
+        "recovery_rate": 0.75
+      },
+      {
+        "n": 12,
+        "prn": 13,
+        "recovery_rate": 0.6666666666666666
+      },
+      {
+        "n": 12,
+        "prn": 30,
+        "recovery_rate": 0.75
+      },
+      {
+        "n": 12,
+        "prn": 3,
+        "recovery_rate": 0.5833333333333334
+      }
+    ],
+    "rho_db": [
+      {
+        "n": 30,
+        "recovery_rate": 0.6333333333333333,
+        "rho_db": -10.0
+      },
+      {
+        "n": 30,
+        "recovery_rate": 0.8333333333333334,
+        "rho_db": -6.0
+      },
+      {
+        "n": 30,
+        "recovery_rate": 0.8333333333333334,
+        "rho_db": -3.0
+      },
+      {
+        "n": 30,
+        "recovery_rate": 0.4,
+        "rho_db": 0.0
+      }
+    ]
+  },
+  "verdict": "INSUFFICIENT_FACTORIAL_IDENTIFIABILITY"
+}

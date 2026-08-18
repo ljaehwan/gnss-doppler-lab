@@ -1,0 +1,44 @@
+{
+  "analysis_freeze_sha": "383111c71bca59305a340639f6f87078fea8f9b1",
+  "base_sha": "7f5431bc68039ec4c2119867226a586533d5e1ac",
+  "executor_freeze_sha": "913334d87657d75354b7d47546e986dd9f48d58d",
+  "hypotheses": {
+    "H1": {
+      "basis": "frozen receiver-frame coordinate tolerance mismatch",
+      "state": "UNSUPPORTED"
+    },
+    "H2": {
+      "basis": "Prompt reduction; rho and phase remain confounded",
+      "state": "INCONCLUSIVE"
+    },
+    "H3": {
+      "basis": "oracle-template projection ratio",
+      "state": "SUPPORTED"
+    },
+    "H4": {
+      "basis": "lock/session stability inventory",
+      "state": "SUPPORTED"
+    },
+    "H5": {
+      "basis": "dominance is not treated as independent when it collapses to 3-of-4 failures",
+      "state": "INCONCLUSIVE"
+    },
+    "H6": {
+      "basis": "pre-fixed window summaries; no detector tuning",
+      "state": "UNSUPPORTED"
+    }
+  },
+  "iq_injection_rerun": false,
+  "oracle_restores_failed_targets": false,
+  "primary_root_cause_verdict": "MIXED_OR_UNIDENTIFIED_ROOT_CAUSE",
+  "prior_r1a_verdict": "NO_GO_MOSAIC_MULTI_PRN_RECOVERY",
+  "prior_r1a_verdict_unchanged": true,
+  "receiver_replay_rerun": false,
+  "recommendation": "Terminate MOSAIC",
+  "recommendation_note": "No corrected-detector performance claim is made on the frozen 72 cases; sealed confirmation is permitted only by the preregistered truth table.",
+  "schema": "gnss-doppler-lab.mosaic-stage0b-r1b-final-root-cause.v1",
+  "secondary_root_causes": [
+    "H3",
+    "H4"
+  ]
+}

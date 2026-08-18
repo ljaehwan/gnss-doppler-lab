@@ -1,0 +1,331 @@
+{
+  "OAKBAT.cleanStatic.four.03": [
+    {
+      "cn0_change_db_median": -11.948816299438477,
+      "common_epochs": 4960,
+      "discriminator_jumps": 596,
+      "lock_loss_epochs": 4960,
+      "missing_epoch_estimate": 1040,
+      "prn": 10,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -12.072429656982422,
+      "common_epochs": 4935,
+      "discriminator_jumps": 621,
+      "lock_loss_epochs": 4935,
+      "missing_epoch_estimate": 1058,
+      "prn": 11,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -12.14737319946289,
+      "common_epochs": 5098,
+      "discriminator_jumps": 586,
+      "lock_loss_epochs": 5098,
+      "missing_epoch_estimate": 902,
+      "prn": 21,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -0.23416519165039062,
+      "common_epochs": 5996,
+      "discriminator_jumps": 1,
+      "lock_loss_epochs": 0,
+      "missing_epoch_estimate": 4,
+      "prn": 24,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -11.941207885742188,
+      "common_epochs": 5092,
+      "discriminator_jumps": 575,
+      "lock_loss_epochs": 5092,
+      "missing_epoch_estimate": 904,
+      "prn": 27,
+      "session_count": 1
+    }
+  ],
+  "OAKBAT.cleanStatic.four.07": [
+    {
+      "cn0_change_db_median": -10.937040328979492,
+      "common_epochs": 5498,
+      "discriminator_jumps": 306,
+      "lock_loss_epochs": 2441,
+      "missing_epoch_estimate": 502,
+      "prn": 10,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -10.986686706542969,
+      "common_epochs": 5499,
+      "discriminator_jumps": 391,
+      "lock_loss_epochs": 2922,
+      "missing_epoch_estimate": 501,
+      "prn": 11,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -0.13393783569335938,
+      "common_epochs": 5987,
+      "discriminator_jumps": 0,
+      "lock_loss_epochs": 0,
+      "missing_epoch_estimate": 13,
+      "prn": 21,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -10.87454605102539,
+      "common_epochs": 5317,
+      "discriminator_jumps": 397,
+      "lock_loss_epochs": 3135,
+      "missing_epoch_estimate": 683,
+      "prn": 24,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -10.92313003540039,
+      "common_epochs": 5533,
+      "discriminator_jumps": 396,
+      "lock_loss_epochs": 3003,
+      "missing_epoch_estimate": 467,
+      "prn": 27,
+      "session_count": 1
+    }
+  ],
+  "TEXBAT.cleanStatic.four.01": [
+    {
+      "cn0_change_db_median": -10.638923645019531,
+      "common_epochs": 5949,
+      "discriminator_jumps": 0,
+      "lock_loss_epochs": 0,
+      "missing_epoch_estimate": 51,
+      "prn": 3,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -0.1973724365234375,
+      "common_epochs": 5994,
+      "discriminator_jumps": 0,
+      "lock_loss_epochs": 0,
+      "missing_epoch_estimate": 6,
+      "prn": 13,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -11.293184280395508,
+      "common_epochs": 5948,
+      "discriminator_jumps": 0,
+      "lock_loss_epochs": 0,
+      "missing_epoch_estimate": 52,
+      "prn": 16,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -9.075347900390625,
+      "common_epochs": 5941,
+      "discriminator_jumps": 0,
+      "lock_loss_epochs": 0,
+      "missing_epoch_estimate": 59,
+      "prn": 19,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -4.470378875732422,
+      "common_epochs": 5775,
+      "discriminator_jumps": 142,
+      "lock_loss_epochs": 3812,
+      "missing_epoch_estimate": 225,
+      "prn": 30,
+      "session_count": 1
+    }
+  ],
+  "TEXBAT.cleanStatic.four.02": [
+    {
+      "cn0_change_db_median": -14.732551574707031,
+      "common_epochs": 5925,
+      "discriminator_jumps": 46,
+      "lock_loss_epochs": 5925,
+      "missing_epoch_estimate": 75,
+      "prn": 3,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -16.329517364501953,
+      "common_epochs": 5847,
+      "discriminator_jumps": 71,
+      "lock_loss_epochs": 5847,
+      "missing_epoch_estimate": 153,
+      "prn": 13,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -0.3556842803955078,
+      "common_epochs": 5992,
+      "discriminator_jumps": 0,
+      "lock_loss_epochs": 0,
+      "missing_epoch_estimate": 8,
+      "prn": 16,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -13.090606689453125,
+      "common_epochs": 5855,
+      "discriminator_jumps": 95,
+      "lock_loss_epochs": 5855,
+      "missing_epoch_estimate": 145,
+      "prn": 19,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -7.050352096557617,
+      "common_epochs": 5000,
+      "discriminator_jumps": 400,
+      "lock_loss_epochs": 5000,
+      "missing_epoch_estimate": 999,
+      "prn": 30,
+      "session_count": 1
+    }
+  ],
+  "TEXBAT.cleanStatic.four.03": [
+    {
+      "cn0_change_db_median": -15.341331481933594,
+      "common_epochs": 281,
+      "discriminator_jumps": 29,
+      "lock_loss_epochs": 208,
+      "missing_epoch_estimate": 5654,
+      "prn": 3,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -16.148235321044922,
+      "common_epochs": 247,
+      "discriminator_jumps": 23,
+      "lock_loss_epochs": 247,
+      "missing_epoch_estimate": 442,
+      "prn": 13,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -15.50284194946289,
+      "common_epochs": 308,
+      "discriminator_jumps": 34,
+      "lock_loss_epochs": 308,
+      "missing_epoch_estimate": 649,
+      "prn": 16,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -0.9344863891601562,
+      "common_epochs": 5992,
+      "discriminator_jumps": 0,
+      "lock_loss_epochs": 0,
+      "missing_epoch_estimate": 8,
+      "prn": 19,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -7.254510879516602,
+      "common_epochs": 98,
+      "discriminator_jumps": 16,
+      "lock_loss_epochs": 98,
+      "missing_epoch_estimate": 415,
+      "prn": 30,
+      "session_count": 1
+    }
+  ],
+  "TEXBAT.cleanStatic.four.05": [
+    {
+      "cn0_change_db_median": -0.17012405395507812,
+      "common_epochs": 5993,
+      "discriminator_jumps": 0,
+      "lock_loss_epochs": 0,
+      "missing_epoch_estimate": 7,
+      "prn": 3,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -2.0812740325927734,
+      "common_epochs": 5746,
+      "discriminator_jumps": 0,
+      "lock_loss_epochs": 0,
+      "missing_epoch_estimate": 254,
+      "prn": 13,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -1.8101463317871094,
+      "common_epochs": 5758,
+      "discriminator_jumps": 0,
+      "lock_loss_epochs": 0,
+      "missing_epoch_estimate": 242,
+      "prn": 16,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -1.181976318359375,
+      "common_epochs": 5748,
+      "discriminator_jumps": 0,
+      "lock_loss_epochs": 0,
+      "missing_epoch_estimate": 252,
+      "prn": 19,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -0.494384765625,
+      "common_epochs": 5721,
+      "discriminator_jumps": 106,
+      "lock_loss_epochs": 4699,
+      "missing_epoch_estimate": 279,
+      "prn": 30,
+      "session_count": 1
+    }
+  ],
+  "TEXBAT.cleanStatic.four.07": [
+    {
+      "cn0_change_db_median": -15.041084289550781,
+      "common_epochs": 2950,
+      "discriminator_jumps": 149,
+      "lock_loss_epochs": 1286,
+      "missing_epoch_estimate": 3050,
+      "prn": 3,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -16.12388038635254,
+      "common_epochs": 1648,
+      "discriminator_jumps": 88,
+      "lock_loss_epochs": 960,
+      "missing_epoch_estimate": 4345,
+      "prn": 13,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -0.7104644775390625,
+      "common_epochs": 5990,
+      "discriminator_jumps": 0,
+      "lock_loss_epochs": 0,
+      "missing_epoch_estimate": 10,
+      "prn": 16,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -13.276500701904297,
+      "common_epochs": 2587,
+      "discriminator_jumps": 121,
+      "lock_loss_epochs": 1478,
+      "missing_epoch_estimate": 3413,
+      "prn": 19,
+      "session_count": 1
+    },
+    {
+      "cn0_change_db_median": -7.118827819824219,
+      "common_epochs": 2090,
+      "discriminator_jumps": 232,
+      "lock_loss_epochs": 2090,
+      "missing_epoch_estimate": 3904,
+      "prn": 30,
+      "session_count": 1
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "90b62387ff3bcac784313a9ecd5e4bc1fd9f9cebddf1fd98e311d3d462f9dfc6",
+      "size_bytes": 619
+    },
+    {
+      "path": "comparator_case_metrics.csv",
+      "sha256": "3170ba2b69a64754de22b4eae2f24dd933b9539eaa6184089c2c8b7cd04e678b",
+      "size_bytes": 8416
+    },
+    {
+      "path": "factorial_identifiability.json",
+      "sha256": "0f9d72ca8a715230dff946c0f25fe2729d465de10cae860dedb156385f5fe766",
+      "size_bytes": 4409
+    },
+    {
+      "path": "failure_case_metrics.csv",
+      "sha256": "a3423be164ab948abb4ca6a48292cf28073039a4c1d0106e69daa27d0707e452",
+      "size_bytes": 3691
+    },
+    {
+      "path": "final_root_cause_verdict.json",
+      "sha256": "0c6832938d8952ce41904541363d1dc03b0ce68223ed433722366074818d2951",
+      "size_bytes": 1516
+    },
+    {
+      "path": "lock_channel_stability.json",
+      "sha256": "32466a2bc9d7dc82820954607d2d770cd858159425860f66b898c476e0d704b4",
+      "size_bytes": 8489
+    },
+    {
+      "path": "oracle_diagnostic_metrics.csv",
+      "sha256": "4ee056b90687e4c83da536fa0d03261564ac09d06ba21e01e49775f9a5cad2af",
+      "size_bytes": 12785
+    },
+    {
+      "path": "phase_cancellation_metrics.csv",
+      "sha256": "ee7e44fa8547cd92bd3d061bf472ee9c6ec0183367aba73384b47a4dd3868087",
+      "size_bytes": 25108139
+    },
+    {
+      "path": "plots/f1_f2_vs_success_comparator.png",
+      "sha256": "9c72ca2cf1874a5c1d8924168e40fcc770147448d2ebc9427fa830ea5a98da67",
+      "size_bytes": 31675
+    },
+    {
+      "path": "plots/fixed_vs_oracle_delta_bic.png",
+      "sha256": "406d852e2052765122044e2eefca8ce2315ef6e5a55dbf7d0053f18ecd8a5dca",
+      "size_bytes": 50981
+    },
+    {
+      "path": "plots/fixed_vs_oracle_projection_ratio.png",
+      "sha256": "f3282962b5af4e58a74bada4d5206d4442e956d8647bb7047529ee334040010b",
+      "size_bytes": 50573
+    },
+    {
+      "path": "plots/prn_baseline_target_score.png",
+      "sha256": "7615f9dad11c3dcd809d01f1221959489a274821acd09108cf68f8d7fc83aea2",
+      "size_bytes": 33916
+    },
+    {
+      "path": "plots/prompt_magnitude_phase_trajectory.png",
+      "sha256": "cacd24319abe37ec639b0df73131bb9fb6ceb58eb0ac0b2c50369bf6ab054584",
+      "size_bytes": 192271
+    },
+    {
+      "path": "plots/reference_vs_injected_tracking_actions.png",
+      "sha256": "03edbf853c69f0737869cf3918a5ef5b11f9f269b0a8e52f25c7858cae2fc379",
+      "size_bytes": 199663
+    },
+    {
+      "path": "plots/requested_vs_receiver_frame_effective_delay.png",
+      "sha256": "7db6806e70f421da3c484b62d05c09bb383dfe8bcc449b4a44ee6c544f7b12b5",
+      "size_bytes": 129903
+    },
+    {
+      "path": "plots/requested_vs_receiver_frame_effective_doppler.png",
+      "sha256": "384c1cc8a0336d4d51f6de1530d92b2ee77e9fc1bad763ffa6e02dd457ac4b51",
+      "size_bytes": 236054
+    },
+    {
+      "path": "plots/rho_phase_recovery_matrix.png",
+      "sha256": "7afb05b7912854bf5d84b38b2db5fa7d4771de57ca8c57cba27e8da59fafc161",
+      "size_bytes": 32307
+    },
+    {
+      "path": "plots/window_length_diagnostic_score.png",
+      "sha256": "60960b593a3fc87acdb8d059e8cb6ad9ce244a29a21944f5bbd74d3438667324",
+      "size_bytes": 41222
+    },
+    {
+      "path": "prn_baseline_dominance.csv",
+      "sha256": "6468f46e807db63a6c481db2e280791d17ce68e4698965b23c8ccf97e1eb39b5",
+      "size_bytes": 3281
+    },
+    {
+      "path": "receiver_frame_trajectories.csv.gz",
+      "sha256": "0c086471bf9a0d8484a9f3639cdefbe44df7af44eee77c44b83bf3539de5d455",
+      "size_bytes": 6316357
+    },
+    {
+      "path": "retained_evidence_inventory.json",
+      "sha256": "0e7009f62a2cd1650f3c19cd7f3a35f9cd1feb6aff523ff20eb3b494e7f7040a",
+      "size_bytes": 42229
+    },
+    {
+      "path": "root_cause_decision_table.csv",
+      "sha256": "00be922120b60419c73eb31c1709828167bc4bc108c187c34729cbd9ffb5a006",
+      "size_bytes": 404
+    },
+    {
+      "path": "root_cause_preregistration.json",
+      "sha256": "8cd7518166f6d4ae1a76762e641b13becad3e54eb9dfd563059369c71dca3d21",
+      "size_bytes": 5419
+    },
+    {
+      "path": "source_binding.json",
+      "sha256": "a07c3190454ad90dde443c9046911d1fc06df482e1b74fef48018e83e6e7da40",
+      "size_bytes": 2796
+    },
+    {
+      "path": "template_projection_metrics.csv",
+      "sha256": "08e4b19cbb0e24015af16e4bc128bddec7e6db1830790c419ff0d3604424f8f3",
+      "size_bytes": 13323
+    },
+    {
+      "path": "temporal_window_diagnostics.csv",
+      "sha256": "116ba7f7c89756cb561768f5eab852c73ecba739a9f97f18e539c3c6a978b1b1",
+      "size_bytes": 11272314
+    },
+    {
+      "path": "tracking_action_differences.csv.gz",
+      "sha256": "46f99d23802c72d32805ee77284c96783ec62fc74d6df455bf5c8b430aa8b56f",
+      "size_bytes": 7140111
+    }
+  ],
+  "schema": "gnss-doppler-lab.mosaic-stage0b-r1b-manifest.v1"
+}

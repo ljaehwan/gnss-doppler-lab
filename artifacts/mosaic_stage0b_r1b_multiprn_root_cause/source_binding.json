@@ -1,0 +1,93 @@
+{
+  "analysis_freeze_sha": "383111c71bca59305a340639f6f87078fea8f9b1",
+  "base_sha": "7f5431bc68039ec4c2119867226a586533d5e1ac",
+  "case_results": [
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "sha256": "c38e69ab464522efde473d0f531d7a1982a18d02a16f1165c686ad0a94b85569"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "sha256": "ebe1eab233c3029ee789060a8458aa5de7f24b33a39bcebc0086224fbf3facab"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.01",
+      "sha256": "1fdd9d7797a235d42dade2592214bd845df1f322604d9892d06255b71b72a24c"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.02",
+      "sha256": "b30431ee483da537cf1c127f2372d87218162f730b9aa4f2c600f52b4ff2db2f"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.05",
+      "sha256": "432e41b94ac4141e5a1cb7a5222852b70b17418e4b230365811444cbff8be4ee"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "sha256": "40d2d9a9381781b958ecf746d12a921e6042fdf215155eee6ead5a566ff627aa"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "sha256": "780d554d926493e29c8066385792ccc023ca300902333e0574778bfdb530b1de"
+    }
+  ],
+  "executor_freeze_sha": "913334d87657d75354b7d47546e986dd9f48d58d",
+  "external_result_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution",
+  "iq_injection_rerun": false,
+  "prior_r1a_verdict": "NO_GO_MOSAIC_MULTI_PRN_RECOVERY",
+  "receiver_replay_rerun": false,
+  "schema": "gnss-doppler-lab.mosaic-stage0b-r1b-source-binding.v1",
+  "single_prn_matches": [
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "case_ids": [
+        "TEXBAT.cleanStatic.single.03"
+      ],
+      "tier": "same_design_index"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "case_ids": [
+        "TEXBAT.cleanStatic.single.07"
+      ],
+      "tier": "same_design_index"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.01",
+      "case_ids": [
+        "TEXBAT.cleanStatic.single.09",
+        "TEXBAT.cleanStatic.single.23"
+      ],
+      "tier": "exactly_one_variable_different"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.02",
+      "case_ids": [
+        "TEXBAT.cleanStatic.single.06",
+        "TEXBAT.cleanStatic.single.10"
+      ],
+      "tier": "exactly_one_variable_different"
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.05",
+      "case_ids": [
+        "TEXBAT.cleanStatic.single.05"
+      ],
+      "tier": "same_design_index"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "case_ids": [
+        "OAKBAT.cleanStatic.single.03"
+      ],
+      "tier": "same_design_index"
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "case_ids": [
+        "OAKBAT.cleanStatic.single.07"
+      ],
+      "tier": "same_design_index"
+    }
+  ]
+}

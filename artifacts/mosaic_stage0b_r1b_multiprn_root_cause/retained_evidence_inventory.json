@@ -1,0 +1,863 @@
+{
+  "items": [
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_0.bin",
+      "sha256": "9a791884e123c3671dad409c42e5d3f15a9a51a34a052ee79b4c0624cde6adea",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_1.bin",
+      "sha256": "5a7eb3437b5cc158a217faa84aaadb4317e7ae6f4db15e2ad9a29673654417b7",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_2.bin",
+      "sha256": "45c7b58f476abf3e0dad40644fbfb5f771c5a5630335cc174a0a3127e5eeb623",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_3.bin",
+      "sha256": "f08c2911389db67dc60a85464d18eabd7eabbd0a9c06245ad0f145eed6b51ec1",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_4.bin",
+      "sha256": "c22293cb6d3278ddb58ac993990d82782ce63b2f29d7dbf133cf88a30aa5662c",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_5.bin",
+      "sha256": "53b50746ad17d61eeec523d220649e932d6e30214c34d165e6a1248474f278bd",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_6.bin",
+      "sha256": "ea1871add343f28e1f5a4d788fe3553b854550dd50babb9926fd32404bf69a88",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_7.bin",
+      "sha256": "7e3780b0585608db52e96be3504f67c83687228193c80a5241e457eccce216c6",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_8.bin",
+      "sha256": "adb22a1358805503c7f370c084dd1ab89dd7acfcc11d826aeca8d4644e23e8b7",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_9.bin",
+      "sha256": "8dd55106ab5a7d9aae74bc8904e3204f4e72cdc01080ef29e4c42dd0e0116eae",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_2.bin",
+      "sha256": "228d8db83103674c25db2a80eb1ca2d0470bff372d503b4cec94040fba507fa0",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_4.bin",
+      "sha256": "d2feffd1bbb4c0ce9cd12ca137abc512d168ecc29667e95a2f3b65c923c04325",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_1.bin",
+      "sha256": "b3a7a9afa644c48328a0295749cf08203da734912a79cecd614b75d219ea1fa8",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_0.bin",
+      "sha256": "c4b5f7e04d9a96cb9e5770b54dad7c0b3674281ac7d1a4859924b91ea77d7fc8",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_3.bin",
+      "sha256": "98e6015ae8473573882b0f0980af1bf244c1759bdfa36398c0002d7bba907bc7",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_0.bin",
+      "sha256": "ed37de4f49bfcaf35e6e2ddfdb53baa9f42628f59023a1585822cc6946f5470b",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_1.bin",
+      "sha256": "d8ae4189512c5a680e13b5d909a733cf81ab8e751108215fe281ea48a5096b30",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_2.bin",
+      "sha256": "2766ee343e45fdb8844111f926e95ab9213fba8ef359337616afee45e49f650f",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_3.bin",
+      "sha256": "093e43a3210b5032df97383574bacba0118e9f8859250881c8cf1bf256a2cbfd",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_4.bin",
+      "sha256": "7d33a3e9e41dd5928fc98cceff2c5035df2f3074724099c241e6d8e081fee0ff",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_5.bin",
+      "sha256": "64758e7b63b851ec368181f96cbe5d45a44737fa71dd64ab2958d05e41c9c21b",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_6.bin",
+      "sha256": "433cdff93dda2c4d6a9f9f6375f231b7bf584a8bc4c7cdfd810d896ffae429a6",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_7.bin",
+      "sha256": "e15b73afe2bbd8b34648115fb49ba12a5cf182b3931b6c10737b292a30f3b13d",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_8.bin",
+      "sha256": "31c0bc455904b22c23689cceea34fddec802417da6a955dcdbb30b956498fcb7",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_9.bin",
+      "sha256": "18d75348b006837e707c326f0ff5da1c0663378a2367e039d2dd6ce13a38a7af",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_2.bin",
+      "sha256": "228d8db83103674c25db2a80eb1ca2d0470bff372d503b4cec94040fba507fa0",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_4.bin",
+      "sha256": "d2feffd1bbb4c0ce9cd12ca137abc512d168ecc29667e95a2f3b65c923c04325",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_1.bin",
+      "sha256": "b3a7a9afa644c48328a0295749cf08203da734912a79cecd614b75d219ea1fa8",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_0.bin",
+      "sha256": "c4b5f7e04d9a96cb9e5770b54dad7c0b3674281ac7d1a4859924b91ea77d7fc8",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_3.bin",
+      "sha256": "98e6015ae8473573882b0f0980af1bf244c1759bdfa36398c0002d7bba907bc7",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.01",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.01/receiver/trace_native_1ms_ch_0.bin",
+      "sha256": "663cbeaeed0163897437cdebbeaf9ace778e664e9d653bcd4de59386b32ebad2",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.01",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.01/receiver/trace_native_1ms_ch_1.bin",
+      "sha256": "10abd4fceb397a0ddfe691d4586a3dde227991b0cf0c54051e8b6c6ca38fcdfb",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.01",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.01/receiver/trace_native_1ms_ch_2.bin",
+      "sha256": "d0236067a23da4bd17ce3ae6054958c9bd6bcaf5e0a5d060f0ed57008efab07b",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.01",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.01/receiver/trace_native_1ms_ch_3.bin",
+      "sha256": "665eebe49264feec94ef941ffb0d90e6f41743db0bef53a0e7384ee1abb05c36",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.01",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.01/receiver/trace_native_1ms_ch_4.bin",
+      "sha256": "510d16076f509b60125703e62ada8ad67c962516d3221aff94a309a80ab75530",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.01",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.01/receiver/trace_native_1ms_ch_5.bin",
+      "sha256": "237e9355e8ad6a64a81897903ef80c24bdd7b76d8b974cbbe79706e209eedd61",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.01",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.01/receiver/trace_native_1ms_ch_6.bin",
+      "sha256": "09af2abf0c49cd88b37e0dfb9779c86b642cb9c671d88fdd93f741343b3b9fa3",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.01",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.01/receiver/trace_native_1ms_ch_7.bin",
+      "sha256": "fa2dc5fbc52fd6bf15fc567eefcd3f4b0632fa92f0f917dae7b54f517ad67b19",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.01",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.01/receiver/trace_native_1ms_ch_8.bin",
+      "sha256": "2ffd2743bbd490c4b56f6ca229db15bbf880d3e98ea4c43f42e2a7770fb40174",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.01",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.01/receiver/trace_native_1ms_ch_9.bin",
+      "sha256": "c04be17e1ea38f2854dd4ef6dcbf50b8237bb95695d2715fc3c40d4bfbb99895",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.01",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_2.bin",
+      "sha256": "228d8db83103674c25db2a80eb1ca2d0470bff372d503b4cec94040fba507fa0",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.01",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_4.bin",
+      "sha256": "d2feffd1bbb4c0ce9cd12ca137abc512d168ecc29667e95a2f3b65c923c04325",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.01",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_1.bin",
+      "sha256": "b3a7a9afa644c48328a0295749cf08203da734912a79cecd614b75d219ea1fa8",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.01",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_0.bin",
+      "sha256": "c4b5f7e04d9a96cb9e5770b54dad7c0b3674281ac7d1a4859924b91ea77d7fc8",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.01",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_3.bin",
+      "sha256": "98e6015ae8473573882b0f0980af1bf244c1759bdfa36398c0002d7bba907bc7",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.02",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.02/receiver/trace_native_1ms_ch_0.bin",
+      "sha256": "43a8c31498ddc97838e590bef83d060a3988268612161f730eb3a098b86bfe88",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.02",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.02/receiver/trace_native_1ms_ch_1.bin",
+      "sha256": "423686be078b0d95e086bd11ecc9b1af515c2ef991af77e15eb2825fc7c01d29",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.02",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.02/receiver/trace_native_1ms_ch_2.bin",
+      "sha256": "ae310e0fe477d322c3ab0299d35d7638094b9ade0f580f2fa1d7ba463e73999f",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.02",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.02/receiver/trace_native_1ms_ch_3.bin",
+      "sha256": "a814760facba1d7976d305d397d6b4ea8e8bbc65d15c4a640b09eaa8c5a38aa9",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.02",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.02/receiver/trace_native_1ms_ch_4.bin",
+      "sha256": "c31f14953f9dc2cb18c36a25068e3474b76ddf3440fdb7dd620d8224bb457eaa",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.02",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.02/receiver/trace_native_1ms_ch_5.bin",
+      "sha256": "49a5821152aa0b46b803bab32de0e828b7683807f11a2cac0d7d7d51c1b96718",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.02",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.02/receiver/trace_native_1ms_ch_6.bin",
+      "sha256": "d57316517db5482c1d901650afd08f3bfdcc9562d0641e21deca6bd8e29b5e79",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.02",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.02/receiver/trace_native_1ms_ch_7.bin",
+      "sha256": "f4f88be9a4676f81fe511618368e90258fe1237757c1caf623db71579a8fb95b",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.02",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.02/receiver/trace_native_1ms_ch_8.bin",
+      "sha256": "b373a2ef6e25c052bd7c7fcf0240ad149e24d4612e5c0e367069dadb0ec9f3a9",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.02",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.02/receiver/trace_native_1ms_ch_9.bin",
+      "sha256": "ba39f8cb7c25863cd94b63fc03b8529809f42d6a5f41e229d3644e03104b3375",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.02",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_2.bin",
+      "sha256": "228d8db83103674c25db2a80eb1ca2d0470bff372d503b4cec94040fba507fa0",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.02",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_4.bin",
+      "sha256": "d2feffd1bbb4c0ce9cd12ca137abc512d168ecc29667e95a2f3b65c923c04325",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.02",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_1.bin",
+      "sha256": "b3a7a9afa644c48328a0295749cf08203da734912a79cecd614b75d219ea1fa8",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.02",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_0.bin",
+      "sha256": "c4b5f7e04d9a96cb9e5770b54dad7c0b3674281ac7d1a4859924b91ea77d7fc8",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.02",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_3.bin",
+      "sha256": "98e6015ae8473573882b0f0980af1bf244c1759bdfa36398c0002d7bba907bc7",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.05",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.05/receiver/trace_native_1ms_ch_0.bin",
+      "sha256": "c98637091b712e03394f02d3078379caad2c0409ffad956e5c6710bd214edd72",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.05",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.05/receiver/trace_native_1ms_ch_1.bin",
+      "sha256": "e6b89119f2442f1cbf93234bd3dd666d25ff4466b7fb8ec815dfbc19248ecf38",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.05",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.05/receiver/trace_native_1ms_ch_2.bin",
+      "sha256": "690094abb16daad4e834b7ec638ed22ca47f04d00707dcd6d3bc1523882b2eca",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.05",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.05/receiver/trace_native_1ms_ch_3.bin",
+      "sha256": "015d901fe7b96883f07b9f032f3943afdba29ea7fc9d814417a649331498d54d",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.05",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.05/receiver/trace_native_1ms_ch_4.bin",
+      "sha256": "7fec93b7f934f50681f070c4c941c058f90519fde65803a6699eb2fad99cb49d",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.05",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.05/receiver/trace_native_1ms_ch_5.bin",
+      "sha256": "489aeed13822f1fb7a048c57d1b5ec12e96c123885a34a9e04b81075f85665c8",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.05",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.05/receiver/trace_native_1ms_ch_6.bin",
+      "sha256": "799b72bc81eefbbc5ebefaf9061363c97bd6115af30aa2be9e33bcea1ee20b94",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.05",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.05/receiver/trace_native_1ms_ch_7.bin",
+      "sha256": "7df00aef0d241999ddc1992c288c38154011cb5245a1b346bbec4e1c8a96896f",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.05",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.05/receiver/trace_native_1ms_ch_8.bin",
+      "sha256": "6be944a1ae96579aa6e7a890eb579a8f567268b6f96ec37d117133a99527fe31",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.05",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/TEXBAT.cleanStatic.four.05/receiver/trace_native_1ms_ch_9.bin",
+      "sha256": "746fcaa59c38847e0daae4f3fc82f14374719cec2cf036f8329ccba73e84a6c8",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.05",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_2.bin",
+      "sha256": "228d8db83103674c25db2a80eb1ca2d0470bff372d503b4cec94040fba507fa0",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.05",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_4.bin",
+      "sha256": "d2feffd1bbb4c0ce9cd12ca137abc512d168ecc29667e95a2f3b65c923c04325",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.05",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_1.bin",
+      "sha256": "b3a7a9afa644c48328a0295749cf08203da734912a79cecd614b75d219ea1fa8",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.05",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_0.bin",
+      "sha256": "c4b5f7e04d9a96cb9e5770b54dad7c0b3674281ac7d1a4859924b91ea77d7fc8",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.05",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_3.bin",
+      "sha256": "98e6015ae8473573882b0f0980af1bf244c1759bdfa36398c0002d7bba907bc7",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_0.bin",
+      "sha256": "8d807b1cc32d793447836ede2dd3a66d2aa5665a29104fa818caf7cc60077659",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_1.bin",
+      "sha256": "b86610a49b342e6af511f89032094ed78a05332e2ff91d69158c0b7a855468e8",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_10.bin",
+      "sha256": "62fb2971bad419a59dfe7d7c9332c124abbe0b2ba1d1dca55502dc7054ba9229",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_2.bin",
+      "sha256": "deed6e45a21ede3032f8464c210fb4000810a16fed4a112b85a79458f715bee5",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_3.bin",
+      "sha256": "65f34ae5a7f0e2b5cb271ff5cb015ab4dbb08b5cb0300b2d8199660abef43860",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_4.bin",
+      "sha256": "c589b9c17818c824c59c3e8dd0b22f001066c5b34e8dcccb15cf7c327341cdd7",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_5.bin",
+      "sha256": "1dc78fb7eda9fb1f1ddbf30ffe568b5f28378537cca2ef3ecf3381a8aa00aad3",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_6.bin",
+      "sha256": "6762d7fbc046704dc69438f3ba71d20afafb8a088a77d7a2cc217b667976cbde",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_7.bin",
+      "sha256": "b1c6f9046769b635d8b8e1ce88aa3297c409f367ea3b2ef28f83fbc03f0570a6",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_8.bin",
+      "sha256": "8288602ec80c036a0a1b8d928d7092d604d21ccacefdc9ddcff1d183135bf88d",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.03/receiver/trace_native_1ms_ch_9.bin",
+      "sha256": "efbd3640ba1a413b9685eaa7a9d05ce5041e7fd32d7ad4ecdb37a06935105ab1",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_10.bin",
+      "sha256": "059ca9a4ba66faf8208318ac2f320e15762c281c01e5a877225cec05e627ed09",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_2.bin",
+      "sha256": "653c3fbce4c14e4624f5111ad739a5455e8c16532c8ecaf2d2f77e38cc3051bd",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_0.bin",
+      "sha256": "4ef713eac37560d85ea0e4b8fe01aca5b33eddce51df23e7a1d40f750351156b",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_3.bin",
+      "sha256": "9493ce9e855df4cd63774f6f3122806d780bb1105ed4b11e1e0ba453b120b3bf",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.03",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_1.bin",
+      "sha256": "f7cbf285bffac4d034ee63569094e602f688736dd2e296979958497b8653d40c",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_0.bin",
+      "sha256": "e6237da60e2062fb9a65c11ce9d09d42e752cc07c9ad52c686e573f0691b497c",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_1.bin",
+      "sha256": "3fbee022021bd60248c34ca00361abb95e78186bc47d5f3119feb912f09f8d4e",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_10.bin",
+      "sha256": "e3810332e23e0f20fe4422158b8b4e497fa49f6fb997723a6f6aa0691f9bff66",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_2.bin",
+      "sha256": "ac4045d34297b41fb6932d1e7a434f9fc0e5543ad472f4154c4a4d4b55adc501",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_3.bin",
+      "sha256": "d6173f58d0c0b35ccf24838ef056cfd6cc13d85a5294d8bd6c746504321b3060",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_4.bin",
+      "sha256": "ea7acb96c5083d6def8f1c9174915f7e441e8bfd5310f6ff90891db086673cb6",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_5.bin",
+      "sha256": "1320bbd81cfd2707206d071187ed210f7ebf98ba7e349d30ad06542e169e5cee",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_6.bin",
+      "sha256": "fae19fbf36ddf8039fd59afdce34d9f11ac4ce28b82150ccf04dbd55a3ed3071",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_7.bin",
+      "sha256": "13ee1438f4301244173b3e621d1693514c0918d89b043c24986b0b086dd17531",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_8.bin",
+      "sha256": "b3a55f690a7ae4d230cdf75c5b6d43b1aff0af28541784e778551665c4a523c7",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "kind": "observed_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution/cases/OAKBAT.cleanStatic.four.07/receiver/trace_native_1ms_ch_9.bin",
+      "sha256": "f389c6c3c1fe1aff629eebdb1fde9ed7810caf91ac4643e3f1d863d70b4de78f",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_10.bin",
+      "sha256": "059ca9a4ba66faf8208318ac2f320e15762c281c01e5a877225cec05e627ed09",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_2.bin",
+      "sha256": "653c3fbce4c14e4624f5111ad739a5455e8c16532c8ecaf2d2f77e38cc3051bd",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_0.bin",
+      "sha256": "4ef713eac37560d85ea0e4b8fe01aca5b33eddce51df23e7a1d40f750351156b",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_3.bin",
+      "sha256": "9493ce9e855df4cd63774f6f3122806d780bb1105ed4b11e1e0ba453b120b3bf",
+      "size_bytes": 6239360,
+      "verified": true
+    },
+    {
+      "case_id": "OAKBAT.cleanStatic.four.07",
+      "kind": "clean_reference_trace",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_1.bin",
+      "sha256": "f7cbf285bffac4d034ee63569094e602f688736dd2e296979958497b8653d40c",
+      "size_bytes": 6239360,
+      "verified": true
+    }
+  ],
+  "raw_iq_receipt_binding": true,
+  "raw_iq_retained": false,
+  "status": "PASS"
+}
