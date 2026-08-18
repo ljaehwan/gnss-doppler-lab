@@ -1,0 +1,28 @@
+{
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "aggregate_prn_positive_fraction": {
+        "10": 0.19326574002556168,
+        "11": 0.26673704189243463,
+        "21": 0.22235753770654745,
+        "24": 0.18721815369935077,
+        "27": 0.13042152667610543
+      },
+      "case_max_single_prn_positive_fraction": 0.6434790012539033,
+      "max_anchor_positive_fraction": 0.16382858721353372,
+      "status": "FAIL"
+    },
+    "TEXBAT.cleanStatic": {
+      "aggregate_prn_positive_fraction": {
+        "13": 0.27043614274274436,
+        "16": 0.20322969281190364,
+        "19": 0.163394490294273,
+        "3": 0.21981264517039725,
+        "30": 0.14312702898068175
+      },
+      "case_max_single_prn_positive_fraction": 0.9973708953386434,
+      "max_anchor_positive_fraction": 0.19957784791827635,
+      "status": "FAIL"
+    }
+  }
+}

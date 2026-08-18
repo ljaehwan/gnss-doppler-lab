@@ -1,0 +1,3 @@
+dataset,train_epochs,calibration_epochs,holdout_epochs,threshold_q99,holdout_fpr,worst_segment_fpr,status
+OAKBAT.cleanStatic,119,59,59,3.132144129043868,0.0,0.0,PASS
+TEXBAT.cleanStatic,119,59,59,3.907010463604603,0.0,0.0,PASS

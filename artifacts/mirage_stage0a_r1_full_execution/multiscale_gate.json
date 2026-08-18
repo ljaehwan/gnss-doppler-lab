@@ -1,0 +1,32 @@
+{
+  "OAKBAT.cleanStatic": {
+    "full_detection": 0.23076923076923078,
+    "full_minus_best_scale": -0.3461538461538461,
+    "positive_effect_scale_count": 3,
+    "scale_detection": [
+      0.5769230769230769,
+      0.038461538461538464,
+      0.0
+    ],
+    "scale_effects": [
+      0.7843671180512822,
+      0.806341385841579,
+      0.22169537115671228
+    ]
+  },
+  "TEXBAT.cleanStatic": {
+    "full_detection": 0.037037037037037035,
+    "full_minus_best_scale": -0.037037037037037035,
+    "positive_effect_scale_count": 3,
+    "scale_detection": [
+      0.037037037037037035,
+      0.07407407407407407,
+      0.0
+    ],
+    "scale_effects": [
+      0.9162791981248811,
+      0.4768313987178032,
+      0.031188421435834682
+    ]
+  }
+}

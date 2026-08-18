@@ -393,7 +393,7 @@ def materialize_results(results, valid, verdict: str, gates) -> None:
     ax.set(xlabel="MIRAGE Full score", ylabel="Empirical CDF", title="Controlled injection scores"); ax.legend(); fig.tight_layout(); fig.savefig(plots / "injection_score_ecdf.png", dpi=160); plt.close(fig)
     controls = list(csv.DictReader((ART / "control_metrics.csv").open()))
     labels = ["collapsed_source", "common_gain_scaling", "empirical_raw_iq_awgn"]
-    fig, ax = plt.subplots(figsize=(8, 4)); ax.boxplot([[float(r["injected_minus_control"]) for r in controls if r["control"] == label] for label in labels], labels=labels)
+    fig, ax = plt.subplots(figsize=(8, 4)); ax.boxplot([[float(r["injected_minus_control"]) for r in controls if r["control"] == label] for label in labels], tick_labels=labels)
     ax.axhline(0, color="black", lw=1); ax.set(ylabel="Injected minus control score", title="Frozen control contrasts"); fig.tight_layout(); fig.savefig(plots / "control_effects.png", dpi=160); plt.close(fig)
     artifact_manifest()
 

@@ -2,6 +2,15 @@
   "base_execution_commit": "40f75fe0066ed93d6c926e4b496ef0d8ba589bfe",
   "failed_case_count_before_repair": 11,
   "failure": "outside TRACE NCO support",
+  "postprocessing_repairs": [
+    {
+      "change": "labels -> tick_labels",
+      "id": "matplotlib_boxplot_keyword",
+      "reason": "installed Matplotlib API compatibility",
+      "scientific_values_recomputed": false,
+      "status": "RECORDED"
+    }
+  ],
   "regression_test": "test_receiver_nco_one_sample_endpoint_variation_only",
   "repair": "allow position==previous endpoint only; reject any position>endpoint",
   "repairs": [
@@ -15,7 +24,7 @@
       "schema": "gnss-doppler-lab.mirage-r1-runtime-repair.v1",
       "scientific_case_scores_computed": false,
       "score_or_design_changed": false,
-      "status": "FROZEN_PENDING_COMMIT_AND_PUSH"
+      "status": "COMMITTED_AT_ab752da8b1885b4441b4835291391cce0c7ab36b"
     },
     {
       "failed_preflight_cases": 1,
@@ -23,12 +32,12 @@
       "reason": "strict actual-endpoint containment yields 1499 TRACE rows in the nominal 1.5 s steady interval",
       "scientific_scores_persisted": false,
       "scope": "use the two complete nonoverlapping 500 ms epochs; no boundary crossing, CAF grid, score formula, threshold, design, parameter, or gate change",
-      "status": "FROZEN_REPAIR"
+      "status": "COMMITTED_AT_45391963b3f25eab4cfa99ca52b357369eff61fa"
     }
   ],
   "root_cause": "renderer used strict exclusive bound and rejected the single sample in audited +1 endpoint adjacency",
   "schema": "gnss-doppler-lab.mirage-r1-runtime-repair.v1",
   "scientific_case_scores_computed": false,
   "score_or_design_changed": false,
-  "status": "FROZEN_PENDING_COMMIT_AND_PUSH"
+  "status": "COMPLETE"
 }

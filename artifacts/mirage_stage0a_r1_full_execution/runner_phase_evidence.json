@@ -1,13 +1,32 @@
 {
   "attack_data_accessed": false,
-  "injection_executed": false,
+  "caf_workers_max": 4,
+  "completed_cases": 84,
+  "execution_tip_sha": "45391963b3f25eab4cfa99ca52b357369eff61fa",
+  "failed_cases": 0,
+  "frozen_execution_sha": "40f75fe0066ed93d6c926e4b496ef0d8ba589bfe",
   "phases": {
-    "alignment": "NOT_RUN",
-    "clean": "NOT_RUN",
-    "controls": "NOT_RUN",
-    "extended_support": "PASS",
-    "preregistration": "FROZEN_PENDING_COMMIT_AND_PUSH",
-    "receiver_in_loop": "NOT_RUN",
-    "verdict": "NOT_RUN"
-  }
+    "alignment": {
+      "status": "PASS",
+      "time": 1787072434.868806
+    },
+    "cases": {
+      "status": "COMPLETE",
+      "time": 1787084504.6112602
+    },
+    "clean": {
+      "status": "PASS",
+      "time": 1787074730.4887824
+    },
+    "finalize": {
+      "status": "PASS",
+      "time": 1787096678.724682
+    }
+  },
+  "pre_result_runtime_repair_commits": [
+    "ab752da8b1885b4441b4835291391cce0c7ab36b",
+    "45391963b3f25eab4cfa99ca52b357369eff61fa"
+  ],
+  "receiver_replays_max_concurrent": 1,
+  "temporary_iq_retained": false
 }

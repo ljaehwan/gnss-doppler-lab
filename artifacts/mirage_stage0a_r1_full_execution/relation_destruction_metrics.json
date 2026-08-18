@@ -1,0 +1,30 @@
+{
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "caf_energy_preserved": true,
+      "cases": 12,
+      "minor_distributions_preserved": true,
+      "paired_bootstrap": {
+        "lower_95": -0.15905639492108525,
+        "mean": 0.01732474538381945,
+        "upper_95": 0.1894752601927043
+      },
+      "per_prn_distributions_preserved": true,
+      "prn_order_permutation_max_error": 0.0,
+      "tracked_prn_count_preserved": true
+    },
+    "TEXBAT.cleanStatic": {
+      "caf_energy_preserved": true,
+      "cases": 12,
+      "minor_distributions_preserved": true,
+      "paired_bootstrap": {
+        "lower_95": -0.1848438791332205,
+        "mean": 0.04125294834587878,
+        "upper_95": 0.2303285775962834
+      },
+      "per_prn_distributions_preserved": true,
+      "prn_order_permutation_max_error": 0.0,
+      "tracked_prn_count_preserved": true
+    }
+  }
+}

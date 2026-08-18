@@ -2,5 +2,10 @@
   "base_branch": "origin/research/mirage-stage0a-complex-minor-feasibility",
   "base_sha": "f227804dd49a4650006d1569cf49ea3edf61092f",
   "branch": "research/mirage-stage0a-r1-full-execution",
-  "generation_sha": "f227804dd49a4650006d1569cf49ea3edf61092f"
+  "endpoint_repair_commit": "ab752da8b1885b4441b4835291391cce0c7ab36b",
+  "executor_binding_commit": "40f75fe0066ed93d6c926e4b496ef0d8ba589bfe",
+  "preregistration_commit": "bd27782c54c6f6df603f9a08b831013826d24046",
+  "result_generation_parent": "45391963b3f25eab4cfa99ca52b357369eff61fa",
+  "steady_epoch_repair_commit": "45391963b3f25eab4cfa99ca52b357369eff61fa",
+  "support_commit": "596f78485a1d17899665cb37d94634cc666e0bdd"
 }

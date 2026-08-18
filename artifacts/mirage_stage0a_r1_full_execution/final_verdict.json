@@ -1,0 +1,61 @@
+{
+  "attack_data_accessed": false,
+  "completed_cases": 84,
+  "failed_cases": 0,
+  "gates": [
+    {
+      "gate": "extended_support",
+      "pass": true
+    },
+    {
+      "gate": "alignment",
+      "pass": true
+    },
+    {
+      "gate": "clean_fpr",
+      "pass": true
+    },
+    {
+      "gate": "invariance",
+      "pass": true
+    },
+    {
+      "gate": "coverage",
+      "pass": true
+    },
+    {
+      "gate": "strong_detection",
+      "pass": false
+    },
+    {
+      "gate": "paired_controls",
+      "pass": true
+    },
+    {
+      "gate": "relation_destruction",
+      "pass": false
+    },
+    {
+      "gate": "prn_dominance",
+      "pass": false
+    },
+    {
+      "gate": "multiscale",
+      "pass": false
+    },
+    {
+      "gate": "anchor_concentration",
+      "pass": true
+    },
+    {
+      "gate": "clipping",
+      "pass": true
+    },
+    {
+      "gate": "rms_cn0_shortcut",
+      "pass": false
+    }
+  ],
+  "neural_model_executed": false,
+  "verdict": "NO_GO_MIRAGE_PHYSICAL_HYPOTHESIS"
+}

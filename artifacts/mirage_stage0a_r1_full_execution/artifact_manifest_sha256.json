@@ -2,13 +2,18 @@
   "files": [
     {
       "path": "CURRENT_STATE.md",
-      "sha256": "0e883a42f34a4369b346be93c73aa8bbecfe63b3a6719ea6268b43f74b09ea74",
-      "size_bytes": 294
+      "sha256": "cbd12f628ec512891d3918df7331084088b6f186370e264dfd5db3a5c0a7c22e",
+      "size_bytes": 196
     },
     {
       "path": "README.md",
-      "sha256": "052ab3a4c3396d8d83a9e92798b98d059271cb0daebc6576246fa382de4568a5",
-      "size_bytes": 361
+      "sha256": "30ca55836a39f8e4bb054c17f502e1c4545f8d5f7c00b32e288599094dcfe8f3",
+      "size_bytes": 1783
+    },
+    {
+      "path": "bootstrap_intervals.csv",
+      "sha256": "9b136559b3d58838e62894a3ff6843b695f2e55bb244beac7b7fdf67cc597a3e",
+      "size_bytes": 667
     },
     {
       "path": "caf_grid.json",
@@ -16,9 +21,19 @@
       "size_bytes": 739
     },
     {
+      "path": "caf_reconstruction_validation.json",
+      "sha256": "02e5a15ed9ebc9fa5ba0c4fd371ae80d7de3d75fcb3e1e0886748770b7caa9ed",
+      "size_bytes": 178286
+    },
+    {
       "path": "case_execution_status.csv",
-      "sha256": "959d1b4baca676f8359ccf6b2176b785e59606489ec609c609149d33efe83cb5",
-      "size_bytes": 7616
+      "sha256": "fec37e569d8b400eb7de5824acec1c7aee7afd51a3460b531ea5895fa538c6b3",
+      "size_bytes": 5600
+    },
+    {
+      "path": "clean_metrics.csv",
+      "sha256": "585fed8dc4b6e0dfdebb75994e94ef6ad1c27bfb22c0bb864d71ef6fed172a94",
+      "size_bytes": 226
     },
     {
       "path": "clean_split_audit.json",
@@ -36,19 +51,24 @@
       "size_bytes": 6252
     },
     {
+      "path": "control_metrics.csv",
+      "sha256": "37bceccd79683b682e78ac7bfb99a4403b1fc70bdfd287f9a2fd883199871fe2",
+      "size_bytes": 95181
+    },
+    {
       "path": "data_inventory.json",
       "sha256": "bce55e1b3728d8d8250001bef72b716440f4426484f606d69dc8d18ce0dac3d8",
       "size_bytes": 4367
     },
     {
       "path": "execution_code_binding.json",
-      "sha256": "de80d123c357b2715563dfa90fe206f7047b817fb6e8cb97a35d2be8f76d2f94",
-      "size_bytes": 2838
+      "sha256": "5ed523a82b296a98b660ae83b71dd3e4a9301a07bceca3879a6ee642ed9ecf5a",
+      "size_bytes": 3122
     },
     {
       "path": "execution_runtime_repair.json",
-      "sha256": "be93744d2cc43fb1e41403d1de01cfa654210953f5df3366bfb10780fe115cdf",
-      "size_bytes": 1765
+      "sha256": "fa571e5eff17c091ba0ba1add03f5e475586ca88ca775f8e7efd893e82d45d16",
+      "size_bytes": 2066
     },
     {
       "path": "extended_nav_mapping.csv.gz",
@@ -59,6 +79,11 @@
       "path": "extended_nav_validation.json",
       "sha256": "05aad0bc9b740c90fc6f136e287afd730ed931afecf35f0535ede930de8898da",
       "size_bytes": 930
+    },
+    {
+      "path": "final_verdict.json",
+      "sha256": "c8ed3f0ce51dcfa5b8b7ac9e6511e48468f7bba4efcf867e8a85c991312974ae",
+      "size_bytes": 1007
     },
     {
       "path": "injection_design.json",
@@ -76,6 +101,41 @@
       "size_bytes": 138
     },
     {
+      "path": "injection_metrics.csv",
+      "sha256": "b5569c535494627dd8f536b35574bee1e2eca663d8207002459a01d9ff6abe89",
+      "size_bytes": 193
+    },
+    {
+      "path": "invariance_validation.json",
+      "sha256": "ee975e0a34d57b05410e5cce1b7be6529322663d5f6fa98c3cc5752ec2eef11e",
+      "size_bytes": 257
+    },
+    {
+      "path": "multiscale_gate.json",
+      "sha256": "e5168979204cd04c986ecf8f6d0db74facb72a039ffad795b1ffb046048177ca",
+      "size_bytes": 737
+    },
+    {
+      "path": "per_case_scores.csv.gz",
+      "sha256": "757c816296b558f5e09e0cec59c10f803206e20b2f8777e9b22e817f40100bd0",
+      "size_bytes": 3817
+    },
+    {
+      "path": "per_epoch_scores.csv.gz",
+      "sha256": "97dfdfcd5d086bc90ec0928233c63ca99b4d70e119f268501f37367164eca282",
+      "size_bytes": 138185
+    },
+    {
+      "path": "plots/control_effects.png",
+      "sha256": "9d0a9fcb860f453099d8b923570e284b05b680456cb6c895a4ab0c31b951a45c",
+      "size_bytes": 35970
+    },
+    {
+      "path": "plots/injection_score_ecdf.png",
+      "sha256": "0cf28e78646d4ac76382db7716d3deb4042eae4144bbe0d7f68c6cde2d47e50d",
+      "size_bytes": 58963
+    },
+    {
       "path": "preregistration.json",
       "sha256": "ad6ccf8f1a3fcff2512f9264dc0238968a918d2cce2f750405d02d34a561dad0",
       "size_bytes": 2880
@@ -91,19 +151,39 @@
       "size_bytes": 1789
     },
     {
+      "path": "prn_dominance.json",
+      "sha256": "d4b3071cdadd69afad4fd6611f08489fef1a9ed6ee2c5f886e005e35f95a0d1b",
+      "size_bytes": 840
+    },
+    {
       "path": "raw_endpoint_audit.json",
       "sha256": "0a11f9b125870f02eebdd92507cc7c2e53c4624fd709ea055f9f6cffd6de97c2",
       "size_bytes": 4042
     },
     {
+      "path": "relation_destruction_metrics.json",
+      "sha256": "f0b1579661dde84781c6974b9b16f7e72f3c7b03a5735fc80e0991dac1690123",
+      "size_bytes": 872
+    },
+    {
       "path": "runner_phase_evidence.json",
-      "sha256": "33243d500cf2adc805332ff4ae0dc9c85fac8c18d853c1d544845c0188078c8b",
-      "size_bytes": 314
+      "sha256": "069323dcb2af1d2d5618c4a61b09f7646054110f47bdc18d9a093e26e59dc444",
+      "size_bytes": 801
+    },
+    {
+      "path": "scale_ablation.csv",
+      "sha256": "0d68e509da423c96ad0b72a933ec42ad164c92badf5a86dcb646a23b21f855b8",
+      "size_bytes": 62817
+    },
+    {
+      "path": "shortcut_audit.json",
+      "sha256": "1489f903556a62e441f665d1c85c1151d686bf84bce0ac390bcfa2b02b520480",
+      "size_bytes": 265
     },
     {
       "path": "source_commit.json",
-      "sha256": "bff1bc9efae613092162d0c5561600924cb025211e11dbf097e9ab45770bd7b5",
-      "size_bytes": 259
+      "sha256": "0b7f68719d8144977c8ae82f12131e507b075be124d559d6fe66431562ccda57",
+      "size_bytes": 626
     },
     {
       "path": "subframe_tow_summary.csv",
@@ -114,6 +194,11 @@
       "path": "tamper_negative_tests.json",
       "sha256": "6e9ff66cbe21cc9ec0ea7e255fb4fbc833feace2354e115419a76a2e921f4ce6",
       "size_bytes": 8576
+    },
+    {
+      "path": "thresholds.json",
+      "sha256": "47e2fbf8093a2733cd074fc7ea2d30bc84882d2fb1e113e996a39a61c4d19eac",
+      "size_bytes": 474
     },
     {
       "path": "versioned_preregistration_amendment.json",

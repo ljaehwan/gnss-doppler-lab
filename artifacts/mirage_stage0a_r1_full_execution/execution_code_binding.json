@@ -5,13 +5,14 @@
   "code_sha256": {
     "scripts/bind_mirage_r1_execution.py": "c718e2815d9b40a52af0d9ee482c74db73688becaaa84630a13440508ec552be",
     "scripts/preregister_mirage_r1.py": "1cfef6a2a5a12bdb344364d1bc382bf5ad8f11693084a03f936a0733819f162c",
-    "scripts/run_mirage_r1_full.py": "0391ab699c5ab4717ac15c4bcb479464cfcecb7eeb873ee5fae569acef887721",
+    "scripts/run_mirage_r1_full.py": "cebcea5fcfc2934b752cd386b8c3e1a2b424aee6be82b87234755d7e568040ab",
     "scripts/verify_mirage_r1_full.py": "e2976c6b19b002b156865682f35c67f0a126ad2f01814e0d38fb005e8d306bd3",
     "src/gnss_doppler_lab/mirage_r1.py": "b77b4b69764a27cff3670b0fa617ff94be440e5a0ab1653809356d87a41c5858",
     "src/gnss_doppler_lab/mirage_r1_executor.py": "a113b0d09dbdf973852f858bce17d06b85ce805fe06ccac8e8aa095fcc28cf62",
     "tests/test_mirage_r1.py": "a54c36d0621e52697b97b0bde2906345d7f0f4e4e3ecdce4c12d635196bc814d",
     "tests/test_mirage_r1_executor.py": "5196655b9e24e61c75f889684326035b4d960f05b7074973682c4c7a51976ec8"
   },
+  "completed_cases": 84,
   "control_execution": {
     "authentic": "actual clean raw-IQ recorrelation with original applied tracker state",
     "awgn_cn0": "actual clean raw-IQ plus deterministic empirical-variance AWGN, recorrelation with applied tracker state",
@@ -20,6 +21,15 @@
     "one_prn_drop_add": "multi-PRN aggregation relation controls",
     "primary": "actual raw-IQ injection, pinned receiver replay, replay-state raw-IQ recorrelation"
   },
+  "postprocessing_repairs": [
+    {
+      "change": "labels -> tick_labels",
+      "id": "matplotlib_boxplot_keyword",
+      "reason": "installed Matplotlib API compatibility",
+      "scientific_values_recomputed": false,
+      "status": "RECORDED"
+    }
+  ],
   "preregistration_commit": "bd27782c54c6f6df603f9a08b831013826d24046",
   "receiver_replays_max_concurrent": 1,
   "results_seen": false,
@@ -42,6 +52,6 @@
     }
   ],
   "schema": "gnss-doppler-lab.mirage-r1-execution-code-binding.v1",
-  "scientific_results_computed": false,
+  "scientific_results_computed": true,
   "status": "FROZEN"
 }
