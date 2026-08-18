@@ -1,0 +1,76 @@
+{
+  "schema": "gnss-doppler-lab.chord-stage0a-preregistration.v1",
+  "model": "CHORD: Channel-Origin Homogeneity Observer for Replay and Deception",
+  "scope": "cleanStatic physical identifiability only; no attack data, labels, thresholds, or AI",
+  "seed": 20260818,
+  "workers": 1,
+  "schedule": {
+    "stable_interval_s": [30.0, 430.0],
+    "cadence_hz": 2.0,
+    "nearest_trace_tolerance_s": 0.002,
+    "minimum_cn0_db_hz": 28.0,
+    "minimum_carrier_lock": 0.85,
+    "require_valid_tracking": true,
+    "require_valid_lock": true,
+    "reject_pull_in_transitory": true,
+    "splits": {
+      "fit": [30.0, 220.0],
+      "guard_1": [220.0, 230.0],
+      "calibration": [230.0, 306.0],
+      "guard_2": [306.0, 316.0],
+      "holdout": [316.0, 430.0]
+    }
+  },
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "prns": [8, 10, 11, 12, 14, 18, 20, 21, 24, 27],
+      "sample_rate_hz": 5000000.0,
+      "raw_size_bytes": 9600000000,
+      "raw_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe"
+    },
+    "TEXBAT.cleanStatic": {
+      "prns": [3, 6, 7, 10, 13, 16, 19, 20, 23, 30],
+      "sample_rate_hz": 25000000.0,
+      "raw_size_bytes": 48016392192,
+      "raw_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9"
+    }
+  },
+  "profile": {
+    "tap_offsets_chips": [-0.5, -0.375, -0.25, -0.125, 0.0, 0.125, 0.25, 0.375, 0.5],
+    "template": "ideal GPS L1 C/A one-source triangular autocorrelation",
+    "tau_grid_chips": [-0.125, 0.125, 0.0025],
+    "complex_covariance_shrinkage": 0.1,
+    "direction_floor": "dataset calibration-split tangent-residual norm q05",
+    "epsilon": 1e-12,
+    "score": "abs(d_a^H d_b)^2"
+  },
+  "pairing": {
+    "lags_s": [1, 5, 10, 30],
+    "negative_match": "same dataset, target epoch, different PRN; deterministic C/N0 and log-residual-norm matching",
+    "bootstrap_block_s": 10,
+    "bootstrap_resamples": 1000
+  },
+  "go_gates": {
+    "full_auc_min": 0.75,
+    "bootstrap_lower_strictly_greater_than": 0.65,
+    "lag_10_auc_min": 0.70,
+    "minimum_prns_with_positive_within_between_effect": 4,
+    "lopo_worst_auc_min": 0.70,
+    "full_minus_best_scalar_auc_min": 0.10,
+    "fingerprint_availability_min": 0.80,
+    "single_prn_dominance_strictly_less_than": 0.40,
+    "invariance_tolerance": 1e-9
+  },
+  "alignment": {
+    "revalidate_prior_anchor_count": 470,
+    "complex_tap_cosine_min": 0.90,
+    "magnitude_spearman_min": 0.90,
+    "delay_center_error_abs_max_chips": 0.125,
+    "doppler_center_error_abs_max_hz": 50.0
+  },
+  "frozen_before_results": true,
+  "attack_data_used": false,
+  "attack_paths_accessed": false,
+  "stage0b_run": false,
+  "ai_model_used": false
+}

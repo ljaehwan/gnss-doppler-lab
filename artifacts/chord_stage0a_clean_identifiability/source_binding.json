@@ -1,0 +1,20 @@
+{
+  "attack_data_used": false,
+  "attack_paths_accessed": false,
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "expected_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "expected_size_bytes": 9600000000,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+      "trace_dir": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/oakbat_cleanstatic/rep1"
+    },
+    "TEXBAT.cleanStatic": {
+      "expected_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "expected_size_bytes": 48016392192,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "trace_dir": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/texbat_cleanstatic/rep1"
+    }
+  },
+  "receiver_expected_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+  "status": "EXPECTED_NOT_HASHED_UNTIL_EVALUATION"
+}

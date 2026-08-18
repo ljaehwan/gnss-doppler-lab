@@ -1,0 +1,138 @@
+{
+  "ai_model_used": false,
+  "alignment": {
+    "complex_tap_cosine_min": 0.9,
+    "delay_center_error_abs_max_chips": 0.125,
+    "doppler_center_error_abs_max_hz": 50.0,
+    "magnitude_spearman_min": 0.9,
+    "revalidate_prior_anchor_count": 470
+  },
+  "attack_data_used": false,
+  "attack_paths_accessed": false,
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "raw_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "raw_size_bytes": 9600000000,
+      "sample_rate_hz": 5000000.0
+    },
+    "TEXBAT.cleanStatic": {
+      "prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "raw_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "raw_size_bytes": 48016392192,
+      "sample_rate_hz": 25000000.0
+    }
+  },
+  "frozen_before_results": true,
+  "generation_head_before_preregistration_commit": "d0421c0e89306debfaa685bc2894dac8bb80c245",
+  "go_gates": {
+    "bootstrap_lower_strictly_greater_than": 0.65,
+    "fingerprint_availability_min": 0.8,
+    "full_auc_min": 0.75,
+    "full_minus_best_scalar_auc_min": 0.1,
+    "invariance_tolerance": 1e-09,
+    "lag_10_auc_min": 0.7,
+    "lopo_worst_auc_min": 0.7,
+    "minimum_prns_with_positive_within_between_effect": 4,
+    "single_prn_dominance_strictly_less_than": 0.4
+  },
+  "holdout_scored": false,
+  "model": "CHORD: Channel-Origin Homogeneity Observer for Replay and Deception",
+  "pairing": {
+    "bootstrap_block_s": 10,
+    "bootstrap_resamples": 1000,
+    "lags_s": [
+      1,
+      5,
+      10,
+      30
+    ],
+    "negative_match": "same dataset, target epoch, different PRN; deterministic C/N0 and log-residual-norm matching"
+  },
+  "profile": {
+    "complex_covariance_shrinkage": 0.1,
+    "direction_floor": "dataset calibration-split tangent-residual norm q05",
+    "epsilon": 1e-12,
+    "score": "abs(d_a^H d_b)^2",
+    "tap_offsets_chips": [
+      -0.5,
+      -0.375,
+      -0.25,
+      -0.125,
+      0.0,
+      0.125,
+      0.25,
+      0.375,
+      0.5
+    ],
+    "tau_grid_chips": [
+      -0.125,
+      0.125,
+      0.0025
+    ],
+    "template": "ideal GPS L1 C/A one-source triangular autocorrelation"
+  },
+  "results_observed": false,
+  "schedule": {
+    "cadence_hz": 2.0,
+    "minimum_carrier_lock": 0.85,
+    "minimum_cn0_db_hz": 28.0,
+    "nearest_trace_tolerance_s": 0.002,
+    "reject_pull_in_transitory": true,
+    "require_valid_lock": true,
+    "require_valid_tracking": true,
+    "splits": {
+      "calibration": [
+        230.0,
+        306.0
+      ],
+      "fit": [
+        30.0,
+        220.0
+      ],
+      "guard_1": [
+        220.0,
+        230.0
+      ],
+      "guard_2": [
+        306.0,
+        316.0
+      ],
+      "holdout": [
+        316.0,
+        430.0
+      ]
+    },
+    "stable_interval_s": [
+      30.0,
+      430.0
+    ]
+  },
+  "schema": "gnss-doppler-lab.chord-stage0a-preregistration.v1",
+  "scope": "cleanStatic physical identifiability only; no attack data, labels, thresholds, or AI",
+  "seed": 20260818,
+  "stage0b_run": false,
+  "workers": 1
+}

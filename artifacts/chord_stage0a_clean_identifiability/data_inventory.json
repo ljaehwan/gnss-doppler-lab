@@ -1,0 +1,60 @@
+{
+  "OAKBAT.cleanStatic": {
+    "eligible_prns": [
+      8,
+      10,
+      11,
+      12,
+      14,
+      18,
+      20,
+      21,
+      24,
+      27
+    ],
+    "missing_prns": [],
+    "scheduled_by_prn": {
+      "10": 777,
+      "11": 777,
+      "12": 777,
+      "14": 777,
+      "18": 778,
+      "20": 777,
+      "21": 778,
+      "24": 777,
+      "27": 778,
+      "8": 777
+    },
+    "scheduled_total": 7773
+  },
+  "TEXBAT.cleanStatic": {
+    "eligible_prns": [
+      3,
+      6,
+      7,
+      10,
+      13,
+      16,
+      19,
+      20,
+      23,
+      30
+    ],
+    "missing_prns": [],
+    "scheduled_by_prn": {
+      "10": 777,
+      "13": 777,
+      "16": 778,
+      "19": 777,
+      "20": 775,
+      "23": 777,
+      "3": 777,
+      "30": 756,
+      "6": 777,
+      "7": 777
+    },
+    "scheduled_total": 7748
+  },
+  "holdout_scored": false,
+  "metadata_only": true
+}
