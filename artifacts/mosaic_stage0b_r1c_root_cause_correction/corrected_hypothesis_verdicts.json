@@ -1,0 +1,35 @@
+{
+  "corrected_root_cause_verdict": "CAUSAL_ROOT_CAUSE_NOT_IDENTIFIED",
+  "over_strong_r1b_judgments": [
+    "H3 SUPPORTED",
+    "H4 SUPPORTED",
+    "H6 UNSUPPORTED"
+  ],
+  "schema": "gnss-doppler-lab.mosaic-stage0b-r1c-hypotheses.v1",
+  "verdicts": {
+    "H1": {
+      "basis": "oracle coordinate and score recheck",
+      "verdict": "PARTIAL_BUT_NOT_RESCUING"
+    },
+    "H2": {
+      "basis": "rho and phase are not factorially separated in the frozen design",
+      "verdict": "INCONCLUSIVE"
+    },
+    "H3": {
+      "basis": "Low oracle projection ratios occur in both failed targets and successful comparators; presence does not establish discrimination or causation.",
+      "verdict": "PRESENT_BUT_NOT_DISCRIMINATIVE"
+    },
+    "H4": {
+      "basis": "Tracking instability was observed, but successful comparators overlap and exact matching is unavailable.",
+      "verdict": "PRESENT_BUT_NOT_DISCRIMINATIVE"
+    },
+    "H5": {
+      "basis": "PRN is confounded with rho, phase, and dataset in the frozen design",
+      "verdict": "INCONCLUSIVE"
+    },
+    "H6": {
+      "basis": "All frozen window lengths are retained, but per-window projection ratios and signal/background separation were not retained, delta-BIC scales with observation count, and 1 ms recovered coordinates were assigned the requested truth rather than searched. A causal dilution contrast cannot be inferred.",
+      "verdict": "NOT_TESTABLE_FROM_RETAINED_EVIDENCE"
+    }
+  }
+}

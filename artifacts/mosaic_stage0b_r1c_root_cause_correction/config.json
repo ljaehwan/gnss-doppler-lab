@@ -1,0 +1,14 @@
+{
+  "bootstrap_replicates": 20000,
+  "bootstrap_seed": 20260818,
+  "case_regeneration": false,
+  "exact_permutation_unit": "target",
+  "iq_injection_rerun": false,
+  "new_cases": false,
+  "new_thresholds": false,
+  "purpose": "scientific correction audit",
+  "receiver_replay_rerun": false,
+  "reproduction_tolerance": 1e-12,
+  "retained_evidence_only": true,
+  "schema": "gnss-doppler-lab.mosaic-stage0b-r1c-config.v1"
+}

@@ -1,0 +1,14 @@
+hypothesis,metric,statistic,observed,p_value_two_sided,permutations,exact,unit
+H3,original_projection_ratio,failure_minus_success_mean,0.022318781830458607,0.005703797008144834,3108105,True,target
+H3,oracle_projection_ratio,failure_minus_success_mean,0.019327151729783144,0.006904528643659078,3108105,True,target
+H3,original_delta_bic,failure_minus_success_mean,-285.71878375278015,0.2726790118094466,3108105,True,target
+H3,oracle_delta_bic,failure_minus_success_mean,-147.23121758586637,0.8160599464947291,3108105,True,target
+H3,oracle_original_projection_gain,failure_minus_success_mean,-0.002991630100675456,0.22653867871259176,3108105,True,target
+H3,oracle_original_delta_bic_gain,failure_minus_success_mean,138.48756616691372,0.26113210461036546,3108105,True,target
+H4,lock_loss_fraction,failure_minus_success_mean,0.21179065615615078,0.19849072022985068,3108105,True,target
+H4,common_support_loss_fraction,failure_minus_success_mean,0.6181401381496262,3.217394521742348e-07,3108105,True,target
+H4,cn0_change_db,failure_minus_success_mean,-4.021907901763916,0.04094906703602356,3108105,True,target
+H4,tracking_session_count,failure_minus_success_mean,0.0,1.0,3108105,True,target
+H4,reacquisition_count,failure_minus_success_mean,-0.625,0.6975571932093672,3108105,True,target
+H4,valid_epoch_fraction,failure_minus_success_mean,-0.2117906561561508,0.19849072022985068,3108105,True,target
+H4,continuous_valid_run_seconds,failure_minus_success_mean,-0.14209999999999995,0.05554220336829033,3108105,True,target

@@ -1,0 +1,16 @@
+{
+  "errors": [],
+  "failed_cases": [
+    "TEXBAT.cleanStatic.four.03",
+    "TEXBAT.cleanStatic.four.07"
+  ],
+  "failure_target_rows": 8,
+  "numeric_rows_cross_checked": 28,
+  "r1a_final_verdict": "NO_GO_MOSAIC_MULTI_PRN_RECOVERY",
+  "r1a_manifest_verified": true,
+  "r1b_manifest_verified": true,
+  "r1b_primary_verdict": "MIXED_OR_UNIDENTIFIED_ROOT_CAUSE",
+  "status": "PASS",
+  "success_comparator_rows": 20,
+  "tolerance": 1e-12
+}

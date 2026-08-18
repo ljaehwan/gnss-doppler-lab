@@ -1,0 +1,67 @@
+{
+  "prn_identity_correction_model_created": false,
+  "prn_level_counts": [
+    {
+      "failed": 2,
+      "prn": 24,
+      "recovered": 10,
+      "targets": 12
+    },
+    {
+      "failed": 3,
+      "prn": 27,
+      "recovered": 9,
+      "targets": 12
+    },
+    {
+      "failed": 3,
+      "prn": 11,
+      "recovered": 9,
+      "targets": 12
+    },
+    {
+      "failed": 11,
+      "prn": 21,
+      "recovered": 1,
+      "targets": 12
+    },
+    {
+      "failed": 4,
+      "prn": 10,
+      "recovered": 8,
+      "targets": 12
+    },
+    {
+      "failed": 1,
+      "prn": 16,
+      "recovered": 11,
+      "targets": 12
+    },
+    {
+      "failed": 3,
+      "prn": 19,
+      "recovered": 9,
+      "targets": 12
+    },
+    {
+      "failed": 4,
+      "prn": 13,
+      "recovered": 8,
+      "targets": 12
+    },
+    {
+      "failed": 3,
+      "prn": 30,
+      "recovered": 9,
+      "targets": 12
+    },
+    {
+      "failed": 5,
+      "prn": 3,
+      "recovered": 7,
+      "targets": 12
+    }
+  ],
+  "reason": "PRN is confounded with rho, phase, and dataset in the frozen design",
+  "verdict": "INCONCLUSIVE"
+}

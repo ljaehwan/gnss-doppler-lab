@@ -1,0 +1,135 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "80f6eb13e77d27c27ae9665d317fbad182c00a43d1f93560c4c6c8572b6ecb16",
+      "size_bytes": 2032
+    },
+    {
+      "path": "bootstrap_intervals.csv",
+      "sha256": "c09cc781ef10e21431376258f57a309aeddafc3dd8cadf91f33902b3f1a736f1",
+      "size_bytes": 1304
+    },
+    {
+      "path": "config.json",
+      "sha256": "f38e6fd6879269c11e56883a5f3b31e09a404f3247afdd21cbb9b77aa3ce638b",
+      "size_bytes": 422
+    },
+    {
+      "path": "corrected_final_recommendation.json",
+      "sha256": "4163c38b2aef1b1f14383b01cd668fb9d42600a0dc3da3056cbdd2276fa02c46",
+      "size_bytes": 690
+    },
+    {
+      "path": "corrected_hypothesis_verdicts.json",
+      "sha256": "750c938582fe489e18926a686575d5844339708dbbe15bc55888c44dc0749e09",
+      "size_bytes": 1459
+    },
+    {
+      "path": "effect_sizes.csv",
+      "sha256": "b5edee412d33616df06a8f8a9388e17e735f6fb96c5fc6abb908326bf85567ad",
+      "size_bytes": 1249
+    },
+    {
+      "path": "failed_vs_successful_metrics.csv",
+      "sha256": "cb45cbaa3b7c9a5f0bd6b6eba2055ee491f67c18dbeffa6599bc6a0a908bebb1",
+      "size_bytes": 13728
+    },
+    {
+      "path": "h1_oracle_recheck.json",
+      "sha256": "1cb063b49ff91650f209de913af2c6440246d28ef1ea3c2e810388f80733d967",
+      "size_bytes": 2730
+    },
+    {
+      "path": "h2_phase_recheck.json",
+      "sha256": "d806b72b13a275634eb2e85a20c2db4ea632925eece271ffc2623276305eb78a",
+      "size_bytes": 709
+    },
+    {
+      "path": "h3_template_discrimination.json",
+      "sha256": "ffff180204495f77a116a20c0716febf3f021359dd9c2f11a5939d381dfa6551",
+      "size_bytes": 11459
+    },
+    {
+      "path": "h4_lock_discrimination.json",
+      "sha256": "4fa960532db7fba151b6a9a8402d045648c406a72cbb9905f7f2577a138efee0",
+      "size_bytes": 9175
+    },
+    {
+      "path": "h5_prn_dominance_recheck.json",
+      "sha256": "dab6bdc9ef2b3c7f9f713cd9c2febcaa0a71a78c39fd23f4acbdbab171f58016",
+      "size_bytes": 1105
+    },
+    {
+      "path": "h6_temporal_dilution.json",
+      "sha256": "f92c8bcaa37d13eec1d2cb18f49d02ab4f19898c1437a9073af304190e686bcc",
+      "size_bytes": 75244
+    },
+    {
+      "path": "original_verdict_preservation.json",
+      "sha256": "1cdcb338dc7863f7c704ae98b33d9f7af22df33587164e071148185c57fdd3c8",
+      "size_bytes": 202
+    },
+    {
+      "path": "paper_safe_claims.md",
+      "sha256": "103aea7cce3bb748d59a000341e0d7b2f95c6cf323407170a27436a10d930622",
+      "size_bytes": 885
+    },
+    {
+      "path": "permutation_tests.csv",
+      "sha256": "25d7d2eadd6a413bf36d1645f5c9c8bc318b9ebe82d7f17507095a1feee04de5",
+      "size_bytes": 1511
+    },
+    {
+      "path": "plots/cn0_change_comparison.png",
+      "sha256": "065d0377a99e8766ffadcdc63b9f8c1f7edbf1a16b1170c769035b0a74674f1a",
+      "size_bytes": 25161
+    },
+    {
+      "path": "plots/common_support_loss_comparison.png",
+      "sha256": "f5f5e920acb932acee7224336b2438f433466e90e9d08eff1e8fd6748d803347",
+      "size_bytes": 24656
+    },
+    {
+      "path": "plots/corrected_hypothesis_verdict_summary.png",
+      "sha256": "019f7763ed72c67fd9f26a03ff16056f93d6da616a6fdc0545f53d33ae868853",
+      "size_bytes": 32681
+    },
+    {
+      "path": "plots/failure_vs_success_oracle_delta_bic_gain.png",
+      "sha256": "e4acb6a494b6c20f42bbe0d89157f334cee7d8ccee1698c059684eba1f4ff90a",
+      "size_bytes": 26710
+    },
+    {
+      "path": "plots/failure_vs_success_projection_ratio.png",
+      "sha256": "da92c74c7a707d249f357472738bca50074c47730e76328dc708cded845e5fb7",
+      "size_bytes": 25187
+    },
+    {
+      "path": "plots/lock_loss_fraction_comparison.png",
+      "sha256": "19c4d3e5b20ce9f9b0f1d810e0f33b4eaa6d75312d8a696f4e0a36add9203a03",
+      "size_bytes": 21271
+    },
+    {
+      "path": "plots/prn_level_recovery_failure.png",
+      "sha256": "fcc0bf5c84b49709da430588abcf7a40a87ef3b0295a69fea55802f7ca3ee22a",
+      "size_bytes": 22584
+    },
+    {
+      "path": "plots/window_length_vs_evidence.png",
+      "sha256": "8046652871dbb802cda7bc4261aeb23aa458ce80decb1a20dfa00b1aa46b64de",
+      "size_bytes": 54660
+    },
+    {
+      "path": "reproduction_check.json",
+      "sha256": "d1dca86f56eec55e69429cb987cc5c05d2dce380da12ac81ba80a352796f96b0",
+      "size_bytes": 435
+    },
+    {
+      "path": "source_commit.json",
+      "sha256": "03fceb2caccd63e873c94323496b5dc8fb172183db799ed2ace6c00f34fb35e8",
+      "size_bytes": 498
+    }
+  ],
+  "schema": "gnss-doppler-lab.mosaic-stage0b-r1c-manifest.v1"
+}

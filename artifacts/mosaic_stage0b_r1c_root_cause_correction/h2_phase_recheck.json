@@ -1,0 +1,28 @@
+{
+  "post_hoc_phase_thresholds_added": false,
+  "reason": "rho and phase are not factorially separated in the frozen design",
+  "rho_phase_descriptive": [
+    {
+      "median_oracle_projection_ratio": 0.0017801549797997634,
+      "n": 8,
+      "phase": 1.5707963267948966,
+      "recovery_rate": 1.0,
+      "rho_db": -6.0
+    },
+    {
+      "median_oracle_projection_ratio": 0.0007985104556837827,
+      "n": 4,
+      "phase": 3.141592653589793,
+      "recovery_rate": 1.0,
+      "rho_db": -3.0
+    },
+    {
+      "median_oracle_projection_ratio": 0.006663585537180538,
+      "n": 16,
+      "phase": 4.71238898038469,
+      "recovery_rate": 0.375,
+      "rho_db": 0.0
+    }
+  ],
+  "verdict": "INCONCLUSIVE"
+}

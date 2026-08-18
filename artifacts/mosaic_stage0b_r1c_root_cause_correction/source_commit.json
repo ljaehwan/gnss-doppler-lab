@@ -1,0 +1,12 @@
+{
+  "inputs": [
+    "artifacts/mosaic_stage0b_r1_execution",
+    "artifacts/mosaic_stage0b_r1a_frozen_analysis",
+    "artifacts/mosaic_stage0b_r1b_multiprn_root_cause",
+    "artifacts/mosaic_stage0b_r1_receiver_in_loop"
+  ],
+  "parent_branch": "research/mosaic-stage0b-r1b-multiprn-root-cause",
+  "required_parent_sha": "664a37ad02eb536673e3dd2ec32668df6218d53e",
+  "result_branch": "research/mosaic-stage0b-r1c-root-cause-correction",
+  "schema": "gnss-doppler-lab.mosaic-stage0b-r1c-source.v1"
+}

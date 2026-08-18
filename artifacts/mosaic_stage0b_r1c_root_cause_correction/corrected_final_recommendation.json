@@ -1,0 +1,17 @@
+{
+  "logic": "computed by decide_recommendation; no unconditional branch",
+  "r1a_verdict": "NO_GO_MOSAIC_MULTI_PRN_RECOVERY",
+  "recommendation": "TERMINATE_MOSAIC_AS_STAGE1_PATH",
+  "recorded_conditions": {
+    "independent_implementation_defect": false,
+    "negative_result_preserved": true,
+    "oracle_consistently_recovers": false,
+    "r1a_no_go": true,
+    "reproduction_pass": true,
+    "stage1_same_cases_prohibited": true,
+    "successful_comparators_not_degraded": false
+  },
+  "schema": "gnss-doppler-lab.mosaic-stage0b-r1c-recommendation.v1",
+  "stage1_authorized": false,
+  "termination_status": "MOSAIC is terminated as a Stage-1 path on the same frozen 72-case bundle."
+}

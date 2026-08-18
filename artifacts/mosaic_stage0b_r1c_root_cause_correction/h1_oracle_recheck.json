@@ -1,0 +1,82 @@
+{
+  "consistent_recovery": false,
+  "failed_targets_restored_by_oracle_coordinates": 3,
+  "global_mosaic_rescue": false,
+  "oracle_diagnostic_is_not_a_new_search": true,
+  "original_failed_targets": 6,
+  "per_target": [
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "delta_bic_gain": -56.109658411704004,
+      "oracle_coordinate_recovery": true,
+      "oracle_improves_projection_and_delta_bic": false,
+      "original_recovery": false,
+      "projection_gain": -0.0038247896298209544,
+      "target_prn": 3
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "delta_bic_gain": -392.20784460176947,
+      "oracle_coordinate_recovery": true,
+      "oracle_improves_projection_and_delta_bic": false,
+      "original_recovery": false,
+      "projection_gain": 0.005708142859001391,
+      "target_prn": 13
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "delta_bic_gain": -12.899516587349353,
+      "oracle_coordinate_recovery": true,
+      "oracle_improves_projection_and_delta_bic": false,
+      "original_recovery": true,
+      "projection_gain": -0.002079479526149536,
+      "target_prn": 16
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.03",
+      "delta_bic_gain": -227.13117112406326,
+      "oracle_coordinate_recovery": true,
+      "oracle_improves_projection_and_delta_bic": false,
+      "original_recovery": false,
+      "projection_gain": -0.026123847723272274,
+      "target_prn": 30
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "delta_bic_gain": -471.2299194484949,
+      "oracle_coordinate_recovery": false,
+      "oracle_improves_projection_and_delta_bic": false,
+      "original_recovery": true,
+      "projection_gain": -0.008716709264450943,
+      "target_prn": 3
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "delta_bic_gain": -369.6640723743476,
+      "oracle_coordinate_recovery": false,
+      "oracle_improves_projection_and_delta_bic": false,
+      "original_recovery": false,
+      "projection_gain": 0.00446505284107059,
+      "target_prn": 13
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "delta_bic_gain": 70.07264849776402,
+      "oracle_coordinate_recovery": false,
+      "oracle_improves_projection_and_delta_bic": true,
+      "original_recovery": false,
+      "projection_gain": 0.004431973883736428,
+      "target_prn": 19
+    },
+    {
+      "case_id": "TEXBAT.cleanStatic.four.07",
+      "delta_bic_gain": -148.67115710442886,
+      "oracle_coordinate_recovery": false,
+      "oracle_improves_projection_and_delta_bic": false,
+      "original_recovery": false,
+      "projection_gain": 0.0041565939270067935,
+      "target_prn": 30
+    }
+  ],
+  "verdict": "PARTIAL_BUT_NOT_RESCUING"
+}

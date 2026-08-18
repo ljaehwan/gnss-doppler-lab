@@ -1,0 +1,395 @@
+{
+  "bootstrap_intervals": [
+    {
+      "confidence": 0.95,
+      "estimate": 0.011707244080545463,
+      "hypothesis": "H3",
+      "lower": 0.0005771068518922507,
+      "metric": "original_projection_ratio",
+      "replicates": 20000,
+      "seed": 20260818,
+      "upper": 0.037971768508705386
+    },
+    {
+      "confidence": 0.95,
+      "estimate": 0.009641797068681453,
+      "hypothesis": "H3",
+      "lower": 0.005495921819002838,
+      "metric": "oracle_projection_ratio",
+      "replicates": 20000,
+      "seed": 20260818,
+      "upper": 0.03428546394358169
+    },
+    {
+      "confidence": 0.95,
+      "estimate": -37.93683051751577,
+      "hypothesis": "H3",
+      "lower": -293.09713838970856,
+      "metric": "original_delta_bic",
+      "replicates": 20000,
+      "seed": 20260818,
+      "upper": 149.2031360893743
+    },
+    {
+      "confidence": 0.95,
+      "estimate": 122.7096966067329,
+      "hypothesis": "H3",
+      "lower": -126.88294829125516,
+      "metric": "oracle_delta_bic",
+      "replicates": 20000,
+      "seed": 20260818,
+      "upper": 453.20650618500076
+    },
+    {
+      "confidence": 0.95,
+      "estimate": 0.0010415275302077009,
+      "hypothesis": "H3",
+      "lower": -0.008712219798542465,
+      "metric": "oracle_original_projection_gain",
+      "replicates": 20000,
+      "seed": 20260818,
+      "upper": 0.00448727411178615
+    },
+    {
+      "confidence": 0.95,
+      "estimate": 157.04793773893834,
+      "hypothesis": "H3",
+      "lower": -74.0306857060641,
+      "metric": "oracle_original_delta_bic_gain",
+      "replicates": 20000,
+      "seed": 20260818,
+      "upper": 333.4214098358352
+    }
+  ],
+  "causal_claim_supported": false,
+  "dataset_separated": {
+    "OAKBAT.cleanStatic": {
+      "failure_target": {
+        "oracle_original_delta_bic_gain": {
+          "n": 0
+        },
+        "oracle_projection_ratio": {
+          "n": 0
+        }
+      },
+      "success_comparator": {
+        "oracle_original_delta_bic_gain": {
+          "max": 334.92617379827425,
+          "mean": -213.59377038804814,
+          "median": -295.6333866682835,
+          "min": -548.577555754222,
+          "n": 8,
+          "q25": -363.6963974231621,
+          "q75": -121.52452156948857
+        },
+        "oracle_projection_ratio": {
+          "max": 0.0073948761699051055,
+          "mean": 0.0025858401600042207,
+          "median": 0.001036914350846567,
+          "min": 7.585473818765672e-05,
+          "n": 8,
+          "q25": 0.00023911708673740497,
+          "q75": 0.005043388753622046
+        }
+      }
+    },
+    "TEXBAT.cleanStatic": {
+      "failure_target": {
+        "oracle_original_delta_bic_gain": {
+          "max": 70.07264849776402,
+          "mean": -200.98008639429918,
+          "median": -187.90116411424606,
+          "min": -471.2299194484949,
+          "n": 8,
+          "q25": -375.30001543120306,
+          "q75": -45.30712295561534
+        },
+        "oracle_projection_ratio": {
+          "max": 0.09975172524391802,
+          "mean": 0.023604395280580857,
+          "median": 0.010616073462673625,
+          "min": 0.005507133284761076,
+          "n": 8,
+          "q25": 0.007828167780368938,
+          "q75": 0.01759949645222972
+        }
+      },
+      "success_comparator": {
+        "oracle_original_delta_bic_gain": {
+          "max": 47.545435558538884,
+          "mean": -423.3835740099894,
+          "median": -355.13969960133545,
+          "min": -969.2332842536271,
+          "n": 12,
+          "q25": -533.5665018581785,
+          "q75": -298.54242335353047
+        },
+        "oracle_projection_ratio": {
+          "max": 0.027770646102875773,
+          "mean": 0.005404845811326706,
+          "median": 0.0009742763939921727,
+          "min": 7.387068034567038e-05,
+          "n": 12,
+          "q25": 0.0005391789242421317,
+          "q75": 0.002734356418200014
+        }
+      }
+    }
+  },
+  "effect_sizes": [
+    {
+      "cliffs_delta": 0.7,
+      "failure_median": 0.01280782396354765,
+      "hypothesis": "H3",
+      "median_difference": 0.011707244080545463,
+      "metric": "original_projection_ratio",
+      "roc_auc_failure_larger": 0.85,
+      "success_median": 0.0011005798830021874
+    },
+    {
+      "cliffs_delta": 0.8125,
+      "failure_median": 0.010616073462673625,
+      "hypothesis": "H3",
+      "median_difference": 0.009641797068681453,
+      "metric": "oracle_projection_ratio",
+      "roc_auc_failure_larger": 0.90625,
+      "success_median": 0.0009742763939921727
+    },
+    {
+      "cliffs_delta": -0.2125,
+      "failure_median": 432.5178213371837,
+      "hypothesis": "H3",
+      "median_difference": -37.93683051751577,
+      "metric": "original_delta_bic",
+      "roc_auc_failure_larger": 0.39375,
+      "success_median": 470.4546518546995
+    },
+    {
+      "cliffs_delta": 0.2375,
+      "failure_median": 201.84965056739748,
+      "hypothesis": "H3",
+      "median_difference": 122.7096966067329,
+      "metric": "oracle_delta_bic",
+      "roc_auc_failure_larger": 0.61875,
+      "success_median": 79.13995396066457
+    },
+    {
+      "cliffs_delta": 0.0,
+      "failure_median": 0.0010385572004286288,
+      "hypothesis": "H3",
+      "median_difference": 0.0010415275302077009,
+      "metric": "oracle_original_projection_gain",
+      "roc_auc_failure_larger": 0.5,
+      "success_median": -2.9703297790721264e-06
+    },
+    {
+      "cliffs_delta": 0.25,
+      "failure_median": -187.90116411424606,
+      "hypothesis": "H3",
+      "median_difference": 157.04793773893834,
+      "metric": "oracle_original_delta_bic_gain",
+      "roc_auc_failure_larger": 0.625,
+      "success_median": -344.9491018531844
+    }
+  ],
+  "failure_target_distributions": {
+    "oracle_delta_bic": {
+      "max": 565.3485941359831,
+      "mean": 271.75843369409995,
+      "median": 201.84965056739748,
+      "min": 5.642553130863234,
+      "n": 8,
+      "q25": 127.50183438494423,
+      "q75": 500.5807081932435
+    },
+    "oracle_original_delta_bic_gain": {
+      "max": 70.07264849776402,
+      "mean": -200.98008639429918,
+      "median": -187.90116411424606,
+      "min": -471.2299194484949,
+      "n": 8,
+      "q25": -375.30001543120306,
+      "q75": -45.30712295561534
+    },
+    "oracle_original_projection_gain": {
+      "max": 0.005708142859001391,
+      "mean": -0.0027478828291098135,
+      "median": 0.0010385572004286288,
+      "min": -0.026123847723272274,
+      "n": 8,
+      "q25": -0.005047769538478452,
+      "q75": 0.004440243623069969
+    },
+    "oracle_projection_ratio": {
+      "max": 0.09975172524391802,
+      "mean": 0.023604395280580857,
+      "median": 0.010616073462673625,
+      "min": 0.005507133284761076,
+      "n": 8,
+      "q25": 0.007828167780368938,
+      "q75": 0.01759949645222972
+    },
+    "original_delta_bic": {
+      "max": 963.0790659103077,
+      "mean": 472.7385200883991,
+      "median": 432.5178213371837,
+      "min": 220.73708653068752,
+      "n": 8,
+      "q25": 309.7070647911187,
+      "q75": 580.3568377867632
+    },
+    "original_projection_ratio": {
+      "max": 0.10183120477006756,
+      "mean": 0.026352278109690673,
+      "median": 0.01280782396354765,
+      "min": 0.0013505393577542826,
+      "n": 8,
+      "q25": 0.003052342434815648,
+      "q75": 0.038074505436364016
+    }
+  },
+  "interpretation": "Low oracle projection ratios occur in both failed targets and successful comparators; presence does not establish discrimination or causation.",
+  "observed": true,
+  "permutation_tests": [
+    {
+      "exact": true,
+      "hypothesis": "H3",
+      "metric": "original_projection_ratio",
+      "observed": 0.022318781830458607,
+      "p_value_two_sided": 0.005703797008144834,
+      "permutations": 3108105,
+      "statistic": "failure_minus_success_mean",
+      "unit": "target"
+    },
+    {
+      "exact": true,
+      "hypothesis": "H3",
+      "metric": "oracle_projection_ratio",
+      "observed": 0.019327151729783144,
+      "p_value_two_sided": 0.006904528643659078,
+      "permutations": 3108105,
+      "statistic": "failure_minus_success_mean",
+      "unit": "target"
+    },
+    {
+      "exact": true,
+      "hypothesis": "H3",
+      "metric": "original_delta_bic",
+      "observed": -285.71878375278015,
+      "p_value_two_sided": 0.2726790118094466,
+      "permutations": 3108105,
+      "statistic": "failure_minus_success_mean",
+      "unit": "target"
+    },
+    {
+      "exact": true,
+      "hypothesis": "H3",
+      "metric": "oracle_delta_bic",
+      "observed": -147.23121758586637,
+      "p_value_two_sided": 0.8160599464947291,
+      "permutations": 3108105,
+      "statistic": "failure_minus_success_mean",
+      "unit": "target"
+    },
+    {
+      "exact": true,
+      "hypothesis": "H3",
+      "metric": "oracle_original_projection_gain",
+      "observed": -0.002991630100675456,
+      "p_value_two_sided": 0.22653867871259176,
+      "permutations": 3108105,
+      "statistic": "failure_minus_success_mean",
+      "unit": "target"
+    },
+    {
+      "exact": true,
+      "hypothesis": "H3",
+      "metric": "oracle_original_delta_bic_gain",
+      "observed": 138.48756616691372,
+      "p_value_two_sided": 0.26113210461036546,
+      "permutations": 3108105,
+      "statistic": "failure_minus_success_mean",
+      "unit": "target"
+    }
+  ],
+  "rho_phase_descriptive": [
+    {
+      "median_oracle_projection_ratio": 0.0017801549797997634,
+      "n": 8,
+      "phase": 1.5707963267948966,
+      "recovery_rate": 1.0,
+      "rho_db": -6.0
+    },
+    {
+      "median_oracle_projection_ratio": 0.0007985104556837827,
+      "n": 4,
+      "phase": 3.141592653589793,
+      "recovery_rate": 1.0,
+      "rho_db": -3.0
+    },
+    {
+      "median_oracle_projection_ratio": 0.006663585537180538,
+      "n": 16,
+      "phase": 4.71238898038469,
+      "recovery_rate": 0.375,
+      "rho_db": 0.0
+    }
+  ],
+  "success_comparator_distributions": {
+    "oracle_delta_bic": {
+      "max": 2895.884666630067,
+      "mean": 418.9896512799663,
+      "median": 79.13995396066457,
+      "min": -16.02649766067043,
+      "n": 20,
+      "q25": 0.7715915233129635,
+      "q75": 347.0307008497184
+    },
+    "oracle_original_delta_bic_gain": {
+      "max": 334.92617379827425,
+      "mean": -339.4676525612129,
+      "median": -344.9491018531844,
+      "min": -969.2332842536271,
+      "n": 20,
+      "q25": -430.35737670981325,
+      "q75": -226.49513761815615
+    },
+    "oracle_original_projection_gain": {
+      "max": 0.0036486547459332686,
+      "mean": 0.00024374727156564253,
+      "median": -2.9703297790721264e-06,
+      "min": -0.0008658564026365346,
+      "n": 20,
+      "q25": -0.00011459547067505581,
+      "q75": 0.00011794243125458372
+    },
+    "oracle_projection_ratio": {
+      "max": 0.027770646102875773,
+      "mean": 0.004277243550797711,
+      "median": 0.0009742763939921727,
+      "min": 7.387068034567038e-05,
+      "n": 20,
+      "q25": 0.00023911708673740497,
+      "q75": 0.0036218005178443122
+    },
+    "original_delta_bic": {
+      "max": 2848.339231071528,
+      "mean": 758.4573038411793,
+      "median": 470.4546518546995,
+      "min": 238.34511572914198,
+      "n": 20,
+      "q25": 384.8721065574791,
+      "q75": 778.251782642561
+    },
+    "original_projection_ratio": {
+      "max": 0.02732454529326059,
+      "mean": 0.004033496279232068,
+      "median": 0.0011005798830021874,
+      "min": 3.3979947723077006e-05,
+      "n": 20,
+      "q25": 0.0007776109656349974,
+      "q75": 0.002759590491293575
+    }
+  },
+  "verdict": "PRESENT_BUT_NOT_DISCRIMINATIVE"
+}

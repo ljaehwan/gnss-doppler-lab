@@ -1,0 +1,357 @@
+{
+  "bootstrap_intervals": [
+    {
+      "confidence": 0.95,
+      "estimate": 0.24525436864498373,
+      "hypothesis": "H4",
+      "lower": -0.3386311025118336,
+      "metric": "lock_loss_fraction",
+      "replicates": 20000,
+      "seed": 20260818,
+      "upper": 0.6613688974881664
+    },
+    {
+      "confidence": 0.95,
+      "estimate": 0.6203227854291072,
+      "hypothesis": "H4",
+      "lower": 0.5216713836477987,
+      "metric": "common_support_loss_fraction",
+      "replicates": 20000,
+      "seed": 20260818,
+      "upper": 0.7468001949317739
+    },
+    {
+      "confidence": 0.95,
+      "estimate": -4.261122703552246,
+      "hypothesis": "H4",
+      "lower": -7.108440399169922,
+      "metric": "cn0_change_db",
+      "replicates": 20000,
+      "seed": 20260818,
+      "upper": 1.906527209280363
+    },
+    {
+      "confidence": 0.95,
+      "estimate": 0.0,
+      "hypothesis": "H4",
+      "lower": 0.0,
+      "metric": "tracking_session_count",
+      "replicates": 20000,
+      "seed": 20260818,
+      "upper": 0.0
+    },
+    {
+      "confidence": 0.95,
+      "estimate": 0.5,
+      "hypothesis": "H4",
+      "lower": 0.0,
+      "metric": "reacquisition_count",
+      "replicates": 20000,
+      "seed": 20260818,
+      "upper": 1.0
+    },
+    {
+      "confidence": 0.95,
+      "estimate": -0.2452543686449837,
+      "hypothesis": "H4",
+      "lower": -0.6613688974881664,
+      "metric": "valid_epoch_fraction",
+      "replicates": 20000,
+      "seed": 20260818,
+      "upper": 0.3386311025118336
+    },
+    {
+      "confidence": 0.95,
+      "estimate": -0.0645,
+      "hypothesis": "H4",
+      "lower": -0.134,
+      "metric": "continuous_valid_run_seconds",
+      "replicates": 20000,
+      "seed": 20260818,
+      "upper": 0.011
+    }
+  ],
+  "effect_sizes": [
+    {
+      "cliffs_delta": 0.2375,
+      "failure_median": 0.8701067615658362,
+      "hypothesis": "H4",
+      "median_difference": 0.24525436864498373,
+      "metric": "lock_loss_fraction",
+      "roc_auc_failure_larger": 0.61875,
+      "success_median": 0.6248523929208525
+    },
+    {
+      "cliffs_delta": 1.0,
+      "failure_median": 0.6647394520957739,
+      "hypothesis": "H4",
+      "median_difference": 0.6203227854291072,
+      "metric": "common_support_loss_fraction",
+      "roc_auc_failure_larger": 1.0,
+      "success_median": 0.04441666666666667
+    },
+    {
+      "cliffs_delta": -0.5625,
+      "failure_median": -15.191207885742188,
+      "hypothesis": "H4",
+      "median_difference": -4.261122703552246,
+      "metric": "cn0_change_db",
+      "roc_auc_failure_larger": 0.21875,
+      "success_median": -10.930085182189941
+    },
+    {
+      "cliffs_delta": 0.0,
+      "failure_median": 1.0,
+      "hypothesis": "H4",
+      "median_difference": 0.0,
+      "metric": "tracking_session_count",
+      "roc_auc_failure_larger": 0.5,
+      "success_median": 1.0
+    },
+    {
+      "cliffs_delta": 0.11875,
+      "failure_median": 0.5,
+      "hypothesis": "H4",
+      "median_difference": 0.5,
+      "metric": "reacquisition_count",
+      "roc_auc_failure_larger": 0.559375,
+      "success_median": 0.0
+    },
+    {
+      "cliffs_delta": -0.2375,
+      "failure_median": 0.1298932384341637,
+      "hypothesis": "H4",
+      "median_difference": -0.2452543686449837,
+      "metric": "valid_epoch_fraction",
+      "roc_auc_failure_larger": 0.38125,
+      "success_median": 0.3751476070791474
+    },
+    {
+      "cliffs_delta": -0.4,
+      "failure_median": 0.005,
+      "hypothesis": "H4",
+      "median_difference": -0.0645,
+      "metric": "continuous_valid_run_seconds",
+      "roc_auc_failure_larger": 0.3,
+      "success_median": 0.0695
+    }
+  ],
+  "failure_target_distributions": {
+    "cn0_change_db": {
+      "max": -7.118827819824219,
+      "mean": -13.22590160369873,
+      "median": -15.191207885742188,
+      "min": -16.148235321044922,
+      "n": 8,
+      "q25": -15.658101558685303,
+      "q75": -11.771003246307373
+    },
+    "common_support_loss_fraction": {
+      "max": 0.952653748946925,
+      "mean": 0.6918485162457764,
+      "median": 0.6647394520957739,
+      "min": 0.5083333333333333,
+      "n": 8,
+      "q25": 0.6233404088050314,
+      "q75": 0.7460011013498855
+    },
+    "continuous_valid_run_seconds": {
+      "max": 0.057,
+      "mean": 0.0115,
+      "median": 0.005,
+      "min": 0.0,
+      "n": 8,
+      "q25": 0.0,
+      "q75": 0.01225
+    },
+    "lock_loss_fraction": {
+      "max": 1.0,
+      "mean": 0.7912485159341547,
+      "median": 0.8701067615658362,
+      "min": 0.4359322033898305,
+      "n": 8,
+      "q25": 0.5797227361602636,
+      "q75": 1.0
+    },
+    "reacquisition_count": {
+      "max": 2.0,
+      "mean": 0.625,
+      "median": 0.5,
+      "min": 0.0,
+      "n": 8,
+      "q25": 0.0,
+      "q75": 1.0
+    },
+    "tracking_session_count": {
+      "max": 1.0,
+      "mean": 1.0,
+      "median": 1.0,
+      "min": 1.0,
+      "n": 8,
+      "q25": 1.0,
+      "q75": 1.0
+    },
+    "valid_epoch_fraction": {
+      "max": 0.5640677966101695,
+      "mean": 0.20875148406584534,
+      "median": 0.1298932384341637,
+      "min": 0.0,
+      "n": 8,
+      "q25": 0.0,
+      "q75": 0.4202772638397364
+    }
+  },
+  "interpretation": "Tracking instability was observed, but successful comparators overlap and exact matching is unavailable.",
+  "matched_subset": {
+    "complete_matching_possible": false,
+    "interpretation": "No exact matched pairs were available; unmatched results cannot establish causality.",
+    "matching_keys": [
+      "dataset",
+      "rho_db",
+      "phase",
+      "target_prn"
+    ],
+    "pairs": []
+  },
+  "permutation_tests": [
+    {
+      "exact": true,
+      "hypothesis": "H4",
+      "metric": "lock_loss_fraction",
+      "observed": 0.21179065615615078,
+      "p_value_two_sided": 0.19849072022985068,
+      "permutations": 3108105,
+      "statistic": "failure_minus_success_mean",
+      "unit": "target"
+    },
+    {
+      "exact": true,
+      "hypothesis": "H4",
+      "metric": "common_support_loss_fraction",
+      "observed": 0.6181401381496262,
+      "p_value_two_sided": 3.217394521742348e-07,
+      "permutations": 3108105,
+      "statistic": "failure_minus_success_mean",
+      "unit": "target"
+    },
+    {
+      "exact": true,
+      "hypothesis": "H4",
+      "metric": "cn0_change_db",
+      "observed": -4.021907901763916,
+      "p_value_two_sided": 0.04094906703602356,
+      "permutations": 3108105,
+      "statistic": "failure_minus_success_mean",
+      "unit": "target"
+    },
+    {
+      "exact": true,
+      "hypothesis": "H4",
+      "metric": "tracking_session_count",
+      "observed": 0.0,
+      "p_value_two_sided": 1.0,
+      "permutations": 3108105,
+      "statistic": "failure_minus_success_mean",
+      "unit": "target"
+    },
+    {
+      "exact": true,
+      "hypothesis": "H4",
+      "metric": "reacquisition_count",
+      "observed": -0.625,
+      "p_value_two_sided": 0.6975571932093672,
+      "permutations": 3108105,
+      "statistic": "failure_minus_success_mean",
+      "unit": "target"
+    },
+    {
+      "exact": true,
+      "hypothesis": "H4",
+      "metric": "valid_epoch_fraction",
+      "observed": -0.2117906561561508,
+      "p_value_two_sided": 0.19849072022985068,
+      "permutations": 3108105,
+      "statistic": "failure_minus_success_mean",
+      "unit": "target"
+    },
+    {
+      "exact": true,
+      "hypothesis": "H4",
+      "metric": "continuous_valid_run_seconds",
+      "observed": -0.14209999999999995,
+      "p_value_two_sided": 0.05554220336829033,
+      "permutations": 3108105,
+      "statistic": "failure_minus_success_mean",
+      "unit": "target"
+    }
+  ],
+  "roc_auc_lock_loss_failure_larger": 0.61875,
+  "success_comparator_distributions": {
+    "cn0_change_db": {
+      "max": -0.494384765625,
+      "mean": -9.203993701934815,
+      "median": -10.930085182189941,
+      "min": -16.329517364501953,
+      "n": 20,
+      "q25": -11.979719638824463,
+      "q75": -6.405358791351318
+    },
+    "common_support_loss_fraction": {
+      "max": 0.17653929584515268,
+      "mean": 0.07370837809615013,
+      "median": 0.04441666666666667,
+      "min": 0.0085,
+      "n": 20,
+      "q25": 0.025166666666666664,
+      "q75": 0.12295833333333334
+    },
+    "continuous_valid_run_seconds": {
+      "max": 0.65,
+      "mean": 0.1536,
+      "median": 0.0695,
+      "min": 0.0,
+      "n": 20,
+      "q25": 0.0,
+      "q75": 0.16625
+    },
+    "lock_loss_fraction": {
+      "max": 1.0,
+      "mean": 0.5794578597780038,
+      "median": 0.6248523929208525,
+      "min": 0.0,
+      "n": 20,
+      "q25": 0.0,
+      "q75": 1.0
+    },
+    "reacquisition_count": {
+      "max": 12.0,
+      "mean": 1.25,
+      "median": 0.0,
+      "min": 0.0,
+      "n": 20,
+      "q25": 0.0,
+      "q75": 1.0
+    },
+    "tracking_session_count": {
+      "max": 1.0,
+      "mean": 1.0,
+      "median": 1.0,
+      "min": 1.0,
+      "n": 20,
+      "q25": 1.0,
+      "q75": 1.0
+    },
+    "valid_epoch_fraction": {
+      "max": 1.0,
+      "mean": 0.42054214022199615,
+      "median": 0.3751476070791474,
+      "min": 0.0,
+      "n": 20,
+      "q25": 0.0,
+      "q75": 1.0
+    }
+  },
+  "target_prns_only": true,
+  "unmatched_overall": true,
+  "verdict": "PRESENT_BUT_NOT_DISCRIMINATIVE"
+}
