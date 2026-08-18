@@ -22,6 +22,8 @@ REQUIRED = {
     "per_block_scores.csv.gz", "per_prn_metrics.csv", "external_static_fpr.csv",
     "control_metrics.json", "bootstrap_intervals.csv", "final_verdict.json",
     "artifact_manifest_sha256.json", "runtime_summary.json",
+    "reproduction_validation.json", "supplemental_metrics.json",
+    "oak_os3_os4_pooled_metrics.json",
 }
 
 
@@ -61,6 +63,15 @@ def main() -> None:
     invariance = json.loads((ARTIFACT / "invariance_tests.json").read_text())
     if not invariance["all_pass"] or not invariance["projector_properties"]["pass"]:
         fail("algebraic invariance failed")
+    reproduction = json.loads((ARTIFACT / "reproduction_validation.json").read_text())
+    if not reproduction["pass"] or not reproduction["final_report_renderer"]["pass"]:
+        fail("deterministic reproduction failed")
+    supplemental = json.loads((ARTIFACT / "supplemental_metrics.json").read_text())
+    if set(supplemental) != {"TEXBAT.DS3", "TEXBAT.DS7", "OAKBAT.OS3", "OAKBAT.OS4"}:
+        fail("supplemental scenario set mismatch")
+    pooled = json.loads((ARTIFACT / "oak_os3_os4_pooled_metrics.json").read_text())
+    if "Full" not in pooled or not 0.0 <= pooled["Full"]["pauc_fpr_le_0_05"] <= 1.0:
+        fail("OAK pooled metrics invalid")
     thresholds = json.loads((ARTIFACT / "thresholds.json").read_text())
     for dataset in ("TEXBAT", "OAKBAT"):
         for method, row in thresholds[dataset]["methods"].items():

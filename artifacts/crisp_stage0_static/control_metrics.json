@@ -1,0 +1,87 @@
+{
+  "algebraic_invariance": {
+    "all_pass": true,
+    "projector_properties": {
+      "hermitian_max_error": 2.7755575615628914e-17,
+      "idempotence_max_error": 1.4599433106648116e-14,
+      "largest_eigenvalue": 0.9999999999999378,
+      "pass": true,
+      "second_largest_abs_eigenvalue": 2.1228771640679373e-16
+    },
+    "seed": 20260818,
+    "tests": {
+      "arbitrary_nonzero_complex_scalar": {
+        "max_abs_error": 2.2315482794965646e-13,
+        "pass": true,
+        "tolerance": 1e-10
+      },
+      "common_doppler_phase_ramp": {
+        "max_abs_error": 5.551115123125783e-16,
+        "pass": true,
+        "tolerance": 1e-10
+      },
+      "gain_0_5": {
+        "max_abs_error": 2.580158309228864e-13,
+        "pass": true,
+        "tolerance": 1e-10
+      },
+      "gain_1": {
+        "max_abs_error": 0.0,
+        "pass": true,
+        "tolerance": 1e-10
+      },
+      "gain_2": {
+        "max_abs_error": 6.405986852087153e-14,
+        "pass": true,
+        "tolerance": 1e-10
+      },
+      "nav_bit_sign": {
+        "max_abs_error": 0.0,
+        "pass": true,
+        "tolerance": 1e-10
+      },
+      "prompt_amplitude_only_scaling": {
+        "max_abs_error": 5.573319583618286e-14,
+        "pass": true,
+        "tolerance": 1e-10
+      },
+      "random_global_phase": {
+        "max_abs_error": 4.440892098500626e-16,
+        "pass": true,
+        "tolerance": 1e-10
+      }
+    }
+  },
+  "cn0_decrease": {
+    "pass": true,
+    "policy": "UNAVAILABLE below frozen 28 dB-Hz support floor"
+  },
+  "code_nco_like_shift": {
+    "conditioned_by_clean_only_context": true
+  },
+  "empirical_clean_noise": {
+    "0.5x": "DIAGNOSTIC",
+    "1x": "DIAGNOSTIC",
+    "2x": "DIAGNOSTIC"
+  },
+  "lock_loss_reacquisition": {
+    "lock_loss": "UNAVAILABLE",
+    "pass": true,
+    "reacquisition": "RESET"
+  },
+  "prn_drop_add": {
+    "fewer_than_four": "UNAVAILABLE",
+    "variable_count_supported": true
+  },
+  "single_prn_disturbance": {
+    "second_largest_aggregation_rejects_one_outlier": true
+  },
+  "synthetic_two_source": {
+    "role": "formula sanity only",
+    "used_for_verdict": false
+  },
+  "timestamp_gap": {
+    "pass": true,
+    "policy": "RESET"
+  }
+}

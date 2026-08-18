@@ -1,0 +1,45 @@
+{
+  "byte_identical_detector_output_count": 6,
+  "byte_identical_detector_outputs": [
+    "scenario_metrics.csv",
+    "ablation_metrics.csv",
+    "external_static_fpr.csv",
+    "control_metrics.json",
+    "bootstrap_intervals.csv",
+    "final_verdict.json"
+  ],
+  "comparison": "second full evaluation from frozen preregistration commit",
+  "detailed_numeric_outputs": {
+    "per_block_scores.csv.gz": {
+      "rows": 854272,
+      "row_and_schema_match": true,
+      "maximum_absolute_difference": 6.927791673660977e-14
+    },
+    "per_epoch_scores.csv.gz": {
+      "rows": 2134062,
+      "row_and_schema_match": true,
+      "maximum_absolute_difference": 4.263256414560601e-14
+    },
+    "per_prn_metrics.csv": {
+      "rows": 65,
+      "row_and_schema_match": true,
+      "maximum_absolute_difference": 6.661338147750939e-16
+    }
+  },
+  "excluded_nondeterministic_administration": [
+    "execution_status.json",
+    "runtime_summary.json",
+    "runner/"
+  ],
+  "final_report_renderer": {
+    "byte_identical_files": 10,
+    "consecutive_runs_compared": 2,
+    "pass": true
+  },
+  "numerical_tolerance": 1e-12,
+  "pass": true,
+  "preregistration_sha": "9a3119fc77ad830f438d723a225274f19c43be90",
+  "result_verdict_match": true,
+  "runs": 2,
+  "schema": "gnss-doppler-lab.crisp-stage0-reproduction.v1"
+}

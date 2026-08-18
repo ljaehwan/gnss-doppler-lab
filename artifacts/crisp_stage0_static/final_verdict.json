@@ -1,0 +1,26 @@
+{
+  "b0_exact_status": "UNAVAILABLE",
+  "core_scenarios": [
+    "TEXBAT.DS3",
+    "TEXBAT.DS7",
+    "OAKBAT.OS3",
+    "OAKBAT.OS4"
+  ],
+  "ds8_status": "UNAVAILABLE",
+  "fixed9_status": "UNAVAILABLE",
+  "go_checks": {
+    "beats_a1_a2": true,
+    "clean_holdout_fpr": true,
+    "conditioning_contribution": true,
+    "controls": true,
+    "core_detection": false,
+    "coverage": true,
+    "external_static_fpr": true,
+    "frozen_preregistration_sha": true,
+    "invariance": true
+  },
+  "preregistration_sha": "9a3119fc77ad830f438d723a225274f19c43be90",
+  "recommended_next_action": "Terminate CRISP as a neural Stage-1 path; do not retune this result.",
+  "result_commit_pending": true,
+  "verdict": "NO_GO_CRISP_PHYSICAL_HYPOTHESIS"
+}
