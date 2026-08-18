@@ -1,0 +1,53 @@
+{
+  "all_pass": true,
+  "projector_properties": {
+    "hermitian_max_error": 2.7755575615628914e-17,
+    "idempotence_max_error": 1.4599433106648116e-14,
+    "largest_eigenvalue": 0.9999999999999378,
+    "pass": true,
+    "second_largest_abs_eigenvalue": 2.1228771640679373e-16
+  },
+  "seed": 20260818,
+  "tests": {
+    "arbitrary_nonzero_complex_scalar": {
+      "max_abs_error": 2.2315482794965646e-13,
+      "pass": true,
+      "tolerance": 1e-10
+    },
+    "common_doppler_phase_ramp": {
+      "max_abs_error": 5.551115123125783e-16,
+      "pass": true,
+      "tolerance": 1e-10
+    },
+    "gain_0_5": {
+      "max_abs_error": 2.580158309228864e-13,
+      "pass": true,
+      "tolerance": 1e-10
+    },
+    "gain_1": {
+      "max_abs_error": 0.0,
+      "pass": true,
+      "tolerance": 1e-10
+    },
+    "gain_2": {
+      "max_abs_error": 6.405986852087153e-14,
+      "pass": true,
+      "tolerance": 1e-10
+    },
+    "nav_bit_sign": {
+      "max_abs_error": 0.0,
+      "pass": true,
+      "tolerance": 1e-10
+    },
+    "prompt_amplitude_only_scaling": {
+      "max_abs_error": 5.573319583618286e-14,
+      "pass": true,
+      "tolerance": 1e-10
+    },
+    "random_global_phase": {
+      "max_abs_error": 4.440892098500626e-16,
+      "pass": true,
+      "tolerance": 1e-10
+    }
+  }
+}

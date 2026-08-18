@@ -1,0 +1,210 @@
+{
+  "attack_rows_read_for_model_or_threshold": 0,
+  "chronological": true,
+  "datasets": {
+    "OAKBAT": {
+      "calibration_sample_count": 150000,
+      "channel_summaries": [
+        {
+          "coverage": 0.9742924706520338,
+          "median_full_score": 0.6827929211414465,
+          "prn": 21,
+          "reset_count": 0,
+          "total_epochs": 449946,
+          "valid_epochs": 438379
+        },
+        {
+          "coverage": 0.9741725136516078,
+          "median_full_score": 0.7993551215493988,
+          "prn": 27,
+          "reset_count": 0,
+          "total_epochs": 449947,
+          "valid_epochs": 438326
+        },
+        {
+          "coverage": 0.9742947502705874,
+          "median_full_score": 0.7774420961449474,
+          "prn": 10,
+          "reset_count": 0,
+          "total_epochs": 449947,
+          "valid_epochs": 438381
+        },
+        {
+          "coverage": 0.974103616648183,
+          "median_full_score": 0.7907470712526626,
+          "prn": 11,
+          "reset_count": 0,
+          "total_epochs": 449947,
+          "valid_epochs": 438295
+        },
+        {
+          "coverage": 0.9744947171438351,
+          "median_full_score": 0.6927901201945803,
+          "prn": 24,
+          "reset_count": 0,
+          "total_epochs": 449946,
+          "valid_epochs": 438470
+        },
+        {
+          "coverage": 0.9742924706520338,
+          "median_full_score": 0.7797428943583559,
+          "prn": 20,
+          "reset_count": 0,
+          "total_epochs": 449946,
+          "valid_epochs": 438379
+        },
+        {
+          "coverage": 0.9741769012281474,
+          "median_full_score": 0.7791373030303563,
+          "prn": 18,
+          "reset_count": 0,
+          "total_epochs": 449946,
+          "valid_epochs": 438327
+        },
+        {
+          "coverage": 0.9743214771484705,
+          "median_full_score": 0.7757026923313768,
+          "prn": 14,
+          "reset_count": 0,
+          "total_epochs": 449948,
+          "valid_epochs": 438394
+        },
+        {
+          "coverage": 0.9741436788251087,
+          "median_full_score": 0.806246793789847,
+          "prn": 12,
+          "reset_count": 0,
+          "total_epochs": 449948,
+          "valid_epochs": 438314
+        },
+        {
+          "coverage": 0.9739190925133239,
+          "median_full_score": 0.9580108654725447,
+          "prn": 8,
+          "reset_count": 0,
+          "total_epochs": 449946,
+          "valid_epochs": 438211
+        },
+        {
+          "coverage": 0.0,
+          "median_full_score": null,
+          "prn": 25,
+          "reset_count": 0,
+          "total_epochs": 16000,
+          "valid_epochs": 0
+        }
+      ],
+      "train_sample_count": 150000
+    },
+    "TEXBAT": {
+      "calibration_sample_count": 150000,
+      "channel_summaries": [
+        {
+          "coverage": 0.9755616379923219,
+          "median_full_score": 0.1584088419545942,
+          "prn": 19,
+          "reset_count": 0,
+          "total_epochs": 450112,
+          "valid_epochs": 439112
+        },
+        {
+          "coverage": 0.9755637510830686,
+          "median_full_score": 0.13184366018785226,
+          "prn": 16,
+          "reset_count": 0,
+          "total_epochs": 450110,
+          "valid_epochs": 439111
+        },
+        {
+          "coverage": 0.9755615836982433,
+          "median_full_score": 0.08684775076218992,
+          "prn": 3,
+          "reset_count": 0,
+          "total_epochs": 450111,
+          "valid_epochs": 439111
+        },
+        {
+          "coverage": 0.9258403501366332,
+          "median_full_score": 2.1769545782296373,
+          "prn": 30,
+          "reset_count": 0,
+          "total_epochs": 450110,
+          "valid_epochs": 416730
+        },
+        {
+          "coverage": 0.9755615836982433,
+          "median_full_score": 0.08041727618511381,
+          "prn": 13,
+          "reset_count": 0,
+          "total_epochs": 450111,
+          "valid_epochs": 439111
+        },
+        {
+          "coverage": 0.9755638053724526,
+          "median_full_score": 0.17671431681567437,
+          "prn": 6,
+          "reset_count": 0,
+          "total_epochs": 450111,
+          "valid_epochs": 439112
+        },
+        {
+          "coverage": 0.9755616379923219,
+          "median_full_score": 0.19220699409124875,
+          "prn": 7,
+          "reset_count": 0,
+          "total_epochs": 450112,
+          "valid_epochs": 439112
+        },
+        {
+          "coverage": 0.9661127279998223,
+          "median_full_score": 1.683063189209817,
+          "prn": 20,
+          "reset_count": 0,
+          "total_epochs": 450110,
+          "valid_epochs": 434857
+        },
+        {
+          "coverage": 0.9745085101230585,
+          "median_full_score": 0.9734138348259702,
+          "prn": 10,
+          "reset_count": 0,
+          "total_epochs": 450111,
+          "valid_epochs": 438637
+        },
+        {
+          "coverage": 0.9755638053724526,
+          "median_full_score": 0.06713393243443266,
+          "prn": 23,
+          "reset_count": 0,
+          "total_epochs": 450111,
+          "valid_epochs": 439112
+        }
+      ],
+      "train_sample_count": 150000
+    }
+  },
+  "guard_seconds_each": 10.0,
+  "raw_sample_overlap": false,
+  "splits": {
+    "calibration": [
+      180.0,
+      310.0
+    ],
+    "guard_1": [
+      170.0,
+      180.0
+    ],
+    "guard_2": [
+      310.0,
+      320.0
+    ],
+    "holdout": [
+      320.0,
+      null
+    ],
+    "train": [
+      30.0,
+      170.0
+    ]
+  }
+}

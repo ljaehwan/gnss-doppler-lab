@@ -1,0 +1,44 @@
+{
+  "alarm_consecutive_blocks": 3,
+  "block_ms": 20,
+  "bootstrap_block_seconds": 10,
+  "bootstrap_resamples": 1000,
+  "bootstrap_seed": 20260818,
+  "clean_split_seconds": {
+    "calibration": [
+      180.0,
+      310.0
+    ],
+    "guard_1": [
+      170.0,
+      180.0
+    ],
+    "guard_2": [
+      310.0,
+      320.0
+    ],
+    "holdout": [
+      320.0,
+      null
+    ],
+    "train": [
+      30.0,
+      170.0
+    ]
+  },
+  "cn0_min_db_hz": 28.0,
+  "energy_floor_rule": "0.5 * clean-train sampled q0.001 tap energy",
+  "energy_sample_stride": 20,
+  "epsilon": 1e-12,
+  "fit_samples_per_channel_per_split": 15000,
+  "lock_min": 0.85,
+  "minimum_receiver_prns": 4,
+  "minimum_valid_epochs_per_prn_block": 10,
+  "native_epoch_ms": 1,
+  "receiver_aggregation": "second_largest_valid_prn_block_score",
+  "ridge_alpha": 0.001,
+  "thresholds": [
+    0.99,
+    0.995
+  ]
+}

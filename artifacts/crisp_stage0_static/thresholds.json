@@ -1,0 +1,108 @@
+{
+  "OAKBAT": {
+    "energy_floor": 1383894819818.362,
+    "methods": {
+      "A0": {
+        "calibration_blocks": 6500,
+        "q99": 0.42631514013079846,
+        "q99_5": 0.44377665906350033,
+        "source": "OAKBAT.cleanStatic calibration only"
+      },
+      "A1": {
+        "calibration_blocks": 6500,
+        "q99": 0.14699761373238934,
+        "q99_5": 0.1501070611146121,
+        "source": "OAKBAT.cleanStatic calibration only"
+      },
+      "A2": {
+        "calibration_blocks": 6500,
+        "q99": 0.22120554025823516,
+        "q99_5": 0.22943404691341449,
+        "source": "OAKBAT.cleanStatic calibration only"
+      },
+      "A3": {
+        "calibration_blocks": 6500,
+        "q99": 0.22023633837425236,
+        "q99_5": 0.22426392219300992,
+        "source": "OAKBAT.cleanStatic calibration only"
+      },
+      "A4": {
+        "calibration_blocks": 6500,
+        "q99": 1.2739504080006838,
+        "q99_5": 1.3194990972917606,
+        "source": "OAKBAT.cleanStatic calibration only"
+      },
+      "A5": {
+        "calibration_blocks": 6500,
+        "q99": 1.1900136231703398,
+        "q99_5": 1.234858536963102,
+        "source": "OAKBAT.cleanStatic calibration only"
+      },
+      "A6": {
+        "calibration_blocks": 6500,
+        "q99": 0.2119056487673659,
+        "q99_5": 0.2152127899086229,
+        "source": "OAKBAT.cleanStatic calibration only"
+      },
+      "Full": {
+        "calibration_blocks": 6500,
+        "q99": 1.2851268101917028,
+        "q99_5": 1.3263305890396329,
+        "source": "OAKBAT.cleanStatic calibration only"
+      }
+    }
+  },
+  "TEXBAT": {
+    "energy_floor": 2869171133678.6455,
+    "methods": {
+      "A0": {
+        "calibration_blocks": 6500,
+        "q99": 0.5734794990684041,
+        "q99_5": 0.6144802508117779,
+        "source": "TEXBAT.cleanStatic calibration only"
+      },
+      "A1": {
+        "calibration_blocks": 6500,
+        "q99": 0.1950913135539556,
+        "q99_5": 0.2024229974276232,
+        "source": "TEXBAT.cleanStatic calibration only"
+      },
+      "A2": {
+        "calibration_blocks": 6500,
+        "q99": 0.2986278298220665,
+        "q99_5": 0.31634243113433047,
+        "source": "TEXBAT.cleanStatic calibration only"
+      },
+      "A3": {
+        "calibration_blocks": 6500,
+        "q99": 0.3106854387182159,
+        "q99_5": 0.3173787274212919,
+        "source": "TEXBAT.cleanStatic calibration only"
+      },
+      "A4": {
+        "calibration_blocks": 6500,
+        "q99": 3.087045359686149,
+        "q99_5": 3.314488976170833,
+        "source": "TEXBAT.cleanStatic calibration only"
+      },
+      "A5": {
+        "calibration_blocks": 6500,
+        "q99": 2.681816927184314,
+        "q99_5": 2.8752822534505156,
+        "source": "TEXBAT.cleanStatic calibration only"
+      },
+      "A6": {
+        "calibration_blocks": 6500,
+        "q99": 0.29994200145832495,
+        "q99_5": 0.30630529784388916,
+        "source": "TEXBAT.cleanStatic calibration only"
+      },
+      "Full": {
+        "calibration_blocks": 6500,
+        "q99": 3.0955904689355855,
+        "q99_5": 3.3346828271022106,
+        "source": "TEXBAT.cleanStatic calibration only"
+      }
+    }
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "attack_scores_viewed": false,
+  "config": {
+    "alarm_consecutive_blocks": 3,
+    "block_ms": 20,
+    "bootstrap_block_seconds": 10,
+    "bootstrap_resamples": 1000,
+    "bootstrap_seed": 20260818,
+    "clean_split_seconds": {
+      "calibration": [
+        180.0,
+        310.0
+      ],
+      "guard_1": [
+        170.0,
+        180.0
+      ],
+      "guard_2": [
+        310.0,
+        320.0
+      ],
+      "holdout": [
+        320.0,
+        null
+      ],
+      "train": [
+        30.0,
+        170.0
+      ]
+    },
+    "cn0_min_db_hz": 28.0,
+    "energy_floor_rule": "0.5 * clean-train sampled q0.001 tap energy",
+    "energy_sample_stride": 20,
+    "epsilon": 1e-12,
+    "fit_samples_per_channel_per_split": 15000,
+    "lock_min": 0.85,
+    "minimum_receiver_prns": 4,
+    "minimum_valid_epochs_per_prn_block": 10,
+    "native_epoch_ms": 1,
+    "receiver_aggregation": "second_largest_valid_prn_block_score",
+    "ridge_alpha": 0.001,
+    "thresholds": [
+      0.99,
+      0.995
+    ]
+  },
+  "created_at": "2026-08-18T11:48:17.944338+00:00",
+  "formula": "P=cc^H/(c^Hc+epsilon); R=P_t-P_t-1; Full=shared ridge conditional innovation with Ledoit-Wolf whitening",
+  "full_representation": "nine-tap projector difference",
+  "go_rules": "verbatim numerical rules from CRISP Stage-0 request",
+  "scenario_roles": {
+    "OAKBAT.OS3": {
+      "dataset": "OAKBAT",
+      "directory": "oakbat_os3/rep1",
+      "onset_s": 120.0,
+      "role": "core"
+    },
+    "OAKBAT.OS4": {
+      "dataset": "OAKBAT",
+      "directory": "oakbat_os4/rep1",
+      "onset_s": 120.0,
+      "role": "core"
+    },
+    "OAKBAT.cleanStatic": {
+      "dataset": "OAKBAT",
+      "directory": "oakbat_cleanstatic/rep1",
+      "role": "clean"
+    },
+    "TEXBAT.DS3": {
+      "dataset": "TEXBAT",
+      "directory": "texbat_ds3/rep1",
+      "onset_s": 118.9,
+      "pull_off_s": 195.0,
+      "role": "core"
+    },
+    "TEXBAT.DS7": {
+      "dataset": "TEXBAT",
+      "directory": "texbat_ds7/rep1",
+      "onset_s": 110.0,
+      "pull_off_s": 150.0,
+      "role": "core_family"
+    },
+    "TEXBAT.cleanStatic": {
+      "dataset": "TEXBAT",
+      "directory": "texbat_cleanstatic/rep1",
+      "role": "clean"
+    }
+  },
+  "status": "CLEAN_ONLY_PREREGISTRATION",
+  "unavailable_inputs": [
+    "TEXBAT.DS8",
+    "TEXBAT.DS1",
+    "TEXBAT.DS2",
+    "TEXBAT.DS4",
+    "OAKBAT.OS1",
+    "OAKBAT.OS2",
+    "TEXBAT.cleanDynamic",
+    "TEXBAT.DS5",
+    "TEXBAT.DS6"
+  ],
+  "wedge_role": "diagnostic_only"
+}

@@ -1,0 +1,75 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "18d82ac1f7c69041f36c715977683da441bb674d7830631698014d7e25f54229",
+      "size_bytes": 202
+    },
+    {
+      "path": "clean_split_audit.json",
+      "sha256": "2ce5450729cc5352800c67f5edd57fc94074caacff7267efa8553426bca18c5d",
+      "size_bytes": 5488
+    },
+    {
+      "path": "config.json",
+      "sha256": "b2e05908171dbb4df369801f6521377ac93583339ad77874aaeae5b081a4baa1",
+      "size_bytes": 866
+    },
+    {
+      "path": "data_inventory.json",
+      "sha256": "2c078f6c7f84445a7e6bea4f2840b860f59987450cfe9f1785e638b61867f9aa",
+      "size_bytes": 40630
+    },
+    {
+      "path": "invariance_tests.json",
+      "sha256": "cdecea150c4dd8f8f910b1fd233064e970a1baba45c6de2421fc5e24df50e35c",
+      "size_bytes": 1287
+    },
+    {
+      "path": "normal_model_summary.json",
+      "sha256": "599d2f3b0404645f3113c1b427f39f309110154dc6d473aeb90be65e020fe1bd",
+      "size_bytes": 1757984
+    },
+    {
+      "path": "preregistration.json",
+      "sha256": "809c279dbe6e99911974c008df4f49c14f5b0478eb706060f08cbd6d3c4d5ede",
+      "size_bytes": 2473
+    },
+    {
+      "path": "runner/preregister.pid",
+      "sha256": "5d122c89b86526f86127b91d517d161c7cdb7231f0708510b39b255e5e0657c6",
+      "size_bytes": 7
+    },
+    {
+      "path": "runner/preregister.stderr.log",
+      "sha256": "d033fccc674461e9be5826abae526cdc286d1b6cd5145f3c20b62ed7520223c3",
+      "size_bytes": 375
+    },
+    {
+      "path": "runner/preregister.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "runner/preregister_attempt1_failure.json",
+      "sha256": "ec9666ae90e5bdd1b74fa345c16b28aa5d8c0483c6b5263b2f3e012da7c25657",
+      "size_bytes": 120
+    },
+    {
+      "path": "source_commit.json",
+      "sha256": "fad89f6f3f7c0c10f28dc5cf6b29a4e176bce6a29601c68c5db2498d9c1aae35",
+      "size_bytes": 260
+    },
+    {
+      "path": "source_lineage.json",
+      "sha256": "cf6e2178027e03d23533f43cb894672c02ea12e158ee7bfa61a7533d0b47d405",
+      "size_bytes": 332
+    },
+    {
+      "path": "thresholds.json",
+      "sha256": "8003f1aab3d0c7ca2104d7617db4375c7e9c0b370f8a1404c265c72cfc85682e",
+      "size_bytes": 3166
+    }
+  ],
+  "schema": "gnss-doppler-lab.crisp-stage0-manifest.v1"
+}
