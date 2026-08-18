@@ -1,0 +1,87 @@
+{
+  "schema": "gnss-doppler-lab.mosaic-stage0b-r1b-root-cause-preregistration.v1",
+  "status": "POST_HOC_ROOT_CAUSE_AUDIT",
+  "created": "2026-08-18T15:15:16+09:00",
+  "known_results_viewed": true,
+  "not_blind_preregistration": true,
+  "required_base_sha": "7f5431bc68039ec4c2119867226a586533d5e1ac",
+  "executor_freeze_sha": "913334d87657d75354b7d47546e986dd9f48d58d",
+  "preserved_r1a_verdict": "NO_GO_MOSAIC_MULTI_PRN_RECOVERY",
+  "external_result_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mosaic-stage0b-r1-execution",
+  "prohibitions": {
+    "iq_injection_rerun": false,
+    "receiver_replay_rerun": false,
+    "new_cases": false,
+    "detector_or_threshold_selection": false,
+    "r1a_relabel_or_rescue": false,
+    "raw_source_modification": false
+  },
+  "cases": {
+    "primary_failures": ["TEXBAT.cleanStatic.four.03", "TEXBAT.cleanStatic.four.07"],
+    "texbat_success_comparators": ["TEXBAT.cleanStatic.four.01", "TEXBAT.cleanStatic.four.02", "TEXBAT.cleanStatic.four.05"],
+    "oakbat_parameter_index_comparators": ["OAKBAT.cleanStatic.four.03", "OAKBAT.cleanStatic.four.07"]
+  },
+  "single_prn_matching": {
+    "scope": "frozen 72-case set, same dataset preferred",
+    "priority": ["exact_parameter_match", "exactly_one_variable_different", "same_design_index"],
+    "rule": "return every case in the first nonempty priority stratum; parameter tuple is rho_db, delta_tau_chips, delta_f_hz, delta_phi_rad"
+  },
+  "analysis_interval": {
+    "hold_seconds_from_authorized_interval_start": [4.0, 10.0],
+    "alignment_key": ["PRN", "raw_interval_start_sample"],
+    "common_support_only": true
+  },
+  "receiver_frame_convention": {
+    "code_coordinate": "local_sample*action_used_code_phase_step_chips_per_sample-action_used_residual_code_phase_chips",
+    "effective_delay_chips": "requested_delay_chips + observed_residual_code_phase_chips - clean_residual_code_phase_chips",
+    "effective_doppler_hz": "requested_doppler_hz + clean_action_used_carrier_doppler_hz - observed_action_used_carrier_doppler_hz",
+    "carrier_phase_residual_rad": "wrap(clean_residual_carrier_phase_rad-observed_residual_carrier_phase_rad + 2*pi*integral(effective_doppler_hz dt))",
+    "positive_delay": "counterfeit code replica is delayed by positive chips relative to clean receiver coordinate",
+    "positive_doppler": "counterfeit phase advances by +2*pi*delta_f*t"
+  },
+  "templates": {
+    "fixed": "triangular nine-tap spatial response at requested delay times exp(+j*2*pi*requested_doppler*t)",
+    "oracle": "same triangular response evaluated once at the frozen receiver-frame effective delay trajectory with carrier phase obtained by trapezoidal integration of effective Doppler",
+    "nuisance": "one fitted complex clean-reference coefficient",
+    "alternative": "one additional fitted complex template coefficient",
+    "bic_real_parameter_counts": {"h0": 2, "h1": 4},
+    "label": "POST_HOC_ORACLE_DIAGNOSTIC"
+  },
+  "projection_ratio": "squared residual projection on the clean-orthogonalized template divided by residual energy and template energy; clipped only for floating-point tolerance to [0,1]",
+  "temporal_windows": {
+    "length_seconds": [0.001, 0.1, 0.5, 1.0, 6.0],
+    "segmentation_origin": "authorized_interval_start+4s",
+    "rule": "half-open wall-clock blocks on exact common epochs; empty blocks omitted; no score or threshold selection",
+    "label": "POST_HOC_DIAGNOSTIC"
+  },
+  "hypotheses": {
+    "H1": "receiver-frame recentering",
+    "H2": "relative phase cancellation; rho and phase confounding retained",
+    "H3": "static-template mismatch",
+    "H4": "receiver lock/channel instability",
+    "H5": "PRN-specific dominance; independence not inferred from 3-of-4 failure alone",
+    "H6": "aggregation/window dilution"
+  },
+  "hypothesis_states": ["SUPPORTED", "UNSUPPORTED", "INCONCLUSIVE"],
+  "oracle_interpretation": {
+    "restore_rule": "oracle coordinate meets frozen recovery tolerances and oracle delta_BIC and projection ratio both exceed fixed requested-coordinate diagnostics for failed targets without degrading success comparator separation",
+    "supported_label": "SCORER_RECEIVER_FRAME_MISMATCH_SUPPORTED",
+    "nonrestore_interpretation": "physical absence, cancellation, or analytic-template mismatch remains possible"
+  },
+  "factorial_rule": "descriptive tables only by rho, phase, delay, Doppler, dataset, PRN, and rho*phase; if cells are sparse or factors are aliased report INSUFFICIENT_FACTORIAL_IDENTIFIABILITY; no causal p-values",
+  "recommendation_truth_table": {
+    "Frozen corrected observer confirmation": "only if oracle clearly restores F1/F2 targets, fixed-to-oracle projection and delta_BIC improve consistently, success comparators are not degraded, and committed R1a gain/AWGN/collapsed control separation remains true",
+    "Terminate MOSAIC": "otherwise, including inseparable causes, oracle failure, instability/baseline dominance, or need for post-hoc score/threshold selection"
+  },
+  "allowed_final_verdicts": [
+    "SCORER_RECEIVER_FRAME_MISMATCH_SUPPORTED",
+    "TRACKING_LOOP_NONLINEARITY_SUPPORTED",
+    "RELATIVE_PHASE_CANCELLATION_SUPPORTED",
+    "ANALYTIC_TEMPLATE_MISMATCH_SUPPORTED",
+    "PRN_SPECIFIC_BASELINE_DOMINANCE_SUPPORTED",
+    "TEMPORAL_AGGREGATION_DILUTION_SUPPORTED",
+    "PHYSICAL_TWO_SOURCE_EVIDENCE_ABSENT",
+    "MIXED_OR_UNIDENTIFIED_ROOT_CAUSE",
+    "ROOT_CAUSE_EVIDENCE_UNAVAILABLE"
+  ]
+}
