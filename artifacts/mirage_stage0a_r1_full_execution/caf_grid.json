@@ -1,0 +1,53 @@
+{
+  "actual_raw_iq_and_applied_tracker_state_required": true,
+  "clean_cadence_ms": 500,
+  "complex_values_preserved": true,
+  "delay_chips": [
+    -0.5,
+    -0.375,
+    -0.25,
+    -0.125,
+    0.0,
+    0.125,
+    0.25,
+    0.375,
+    0.5
+  ],
+  "doppler_hz_by_scale": {
+    "100": [
+      -20.0,
+      -10.0,
+      0.0,
+      10.0,
+      20.0
+    ],
+    "20": [
+      -100.0,
+      -50.0,
+      0.0,
+      50.0,
+      100.0
+    ],
+    "500": [
+      -4.0,
+      -2.0,
+      0.0,
+      2.0,
+      4.0
+    ]
+  },
+  "full_epoch_ms": 500,
+  "integration_scales_ms": [
+    20,
+    100,
+    500
+  ],
+  "normalized_doppler_xi": [
+    -2.0,
+    -1.0,
+    0.0,
+    1.0,
+    2.0
+  ],
+  "subwindows": "causal and ending at the Full epoch endpoint"
+}

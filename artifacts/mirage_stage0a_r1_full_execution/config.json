@@ -1,0 +1,226 @@
+{
+  "attack_data_accessed": false,
+  "case_retries_max": 2,
+  "epsilon_relative": 1e-12,
+  "foundation_commit": "596f78485a1d17899665cb37d94634cc666e0bdd",
+  "heartbeat_seconds": 60,
+  "memory_target_gib": 24,
+  "minor_numeric_floor_relative": 1e-06,
+  "raw_sources": {
+    "OAKBAT.cleanStatic": {
+      "expected_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+      "sample_format": "little-endian interleaved int16 I,Q",
+      "sample_rate_hz": 5000000,
+      "size_bytes": 9600000000
+    },
+    "TEXBAT.cleanStatic": {
+      "expected_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "sample_format": "little-endian interleaved int16 I,Q",
+      "sample_rate_hz": 25000000,
+      "size_bytes": 48016392192
+    }
+  },
+  "receiver": {
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-build/src/main/gnss-sdr",
+    "sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0"
+  },
+  "receiver_replays_max_concurrent": 1,
+  "roles": {
+    "OAKBAT.cleanStatic": {
+      "calibration": {
+        "byte_end_exclusive": 2961101676,
+        "byte_start": 2361101676,
+        "duration_s": 30,
+        "raw_end_sample_exclusive": 740275419,
+        "raw_start_sample": 590275419,
+        "ten_second_blocks": [
+          7,
+          8,
+          9
+        ]
+      },
+      "controlled_injection": {
+        "byte_end_exclusive": 5161101676,
+        "byte_start": 4561101676,
+        "duration_s": 30,
+        "raw_end_sample_exclusive": 1290275419,
+        "raw_start_sample": 1140275419,
+        "ten_second_blocks": [
+          18,
+          19,
+          20
+        ]
+      },
+      "guard_1": {
+        "byte_end_exclusive": 2361101676,
+        "byte_start": 2161101676,
+        "duration_s": 10,
+        "raw_end_sample_exclusive": 590275419,
+        "raw_start_sample": 540275419,
+        "ten_second_blocks": [
+          6
+        ]
+      },
+      "guard_2": {
+        "byte_end_exclusive": 3161101676,
+        "byte_start": 2961101676,
+        "duration_s": 10,
+        "raw_end_sample_exclusive": 790275419,
+        "raw_start_sample": 740275419,
+        "ten_second_blocks": [
+          10
+        ]
+      },
+      "guard_3": {
+        "byte_end_exclusive": 3961101676,
+        "byte_start": 3761101676,
+        "duration_s": 10,
+        "raw_end_sample_exclusive": 990275419,
+        "raw_start_sample": 940275419,
+        "ten_second_blocks": [
+          14
+        ]
+      },
+      "holdout": {
+        "byte_end_exclusive": 3761101676,
+        "byte_start": 3161101676,
+        "duration_s": 30,
+        "raw_end_sample_exclusive": 940275419,
+        "raw_start_sample": 790275419,
+        "ten_second_blocks": [
+          11,
+          12,
+          13
+        ]
+      },
+      "replay_acquisition_preroll_unscored": {
+        "byte_end_exclusive": 4561101676,
+        "byte_start": 3961101676,
+        "duration_s": 30,
+        "raw_end_sample_exclusive": 1140275419,
+        "raw_start_sample": 990275419,
+        "ten_second_blocks": [
+          15,
+          16,
+          17
+        ]
+      },
+      "train": {
+        "byte_end_exclusive": 2161101676,
+        "byte_start": 961101676,
+        "duration_s": 60,
+        "raw_end_sample_exclusive": 540275419,
+        "raw_start_sample": 240275419,
+        "ten_second_blocks": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      }
+    },
+    "TEXBAT.cleanStatic": {
+      "calibration": {
+        "byte_end_exclusive": 14471263748,
+        "byte_start": 11471263748,
+        "duration_s": 30,
+        "raw_end_sample_exclusive": 3617815937,
+        "raw_start_sample": 2867815937,
+        "ten_second_blocks": [
+          7,
+          8,
+          9
+        ]
+      },
+      "controlled_injection": {
+        "byte_end_exclusive": 25471263748,
+        "byte_start": 22471263748,
+        "duration_s": 30,
+        "raw_end_sample_exclusive": 6367815937,
+        "raw_start_sample": 5617815937,
+        "ten_second_blocks": [
+          18,
+          19,
+          20
+        ]
+      },
+      "guard_1": {
+        "byte_end_exclusive": 11471263748,
+        "byte_start": 10471263748,
+        "duration_s": 10,
+        "raw_end_sample_exclusive": 2867815937,
+        "raw_start_sample": 2617815937,
+        "ten_second_blocks": [
+          6
+        ]
+      },
+      "guard_2": {
+        "byte_end_exclusive": 15471263748,
+        "byte_start": 14471263748,
+        "duration_s": 10,
+        "raw_end_sample_exclusive": 3867815937,
+        "raw_start_sample": 3617815937,
+        "ten_second_blocks": [
+          10
+        ]
+      },
+      "guard_3": {
+        "byte_end_exclusive": 19471263748,
+        "byte_start": 18471263748,
+        "duration_s": 10,
+        "raw_end_sample_exclusive": 4867815937,
+        "raw_start_sample": 4617815937,
+        "ten_second_blocks": [
+          14
+        ]
+      },
+      "holdout": {
+        "byte_end_exclusive": 18471263748,
+        "byte_start": 15471263748,
+        "duration_s": 30,
+        "raw_end_sample_exclusive": 4617815937,
+        "raw_start_sample": 3867815937,
+        "ten_second_blocks": [
+          11,
+          12,
+          13
+        ]
+      },
+      "replay_acquisition_preroll_unscored": {
+        "byte_end_exclusive": 22471263748,
+        "byte_start": 19471263748,
+        "duration_s": 30,
+        "raw_end_sample_exclusive": 5617815937,
+        "raw_start_sample": 4867815937,
+        "ten_second_blocks": [
+          15,
+          16,
+          17
+        ]
+      },
+      "train": {
+        "byte_end_exclusive": 10471263748,
+        "byte_start": 4471263748,
+        "duration_s": 60,
+        "raw_end_sample_exclusive": 2617815937,
+        "raw_start_sample": 1117815937,
+        "ten_second_blocks": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      }
+    }
+  },
+  "schema": "gnss-doppler-lab.mirage-r1-config.v1",
+  "scientific_results_computed": false,
+  "temp_storage_limit_gb": 250,
+  "workers_max": 4
+}

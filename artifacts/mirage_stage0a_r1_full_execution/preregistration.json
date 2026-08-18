@@ -1,0 +1,93 @@
+{
+  "ablations": [
+    "E0_total_energy",
+    "E1_magnitude_distortion",
+    "E2_complex_svd_second_energy",
+    "E3_20ms_complex_minor",
+    "E4_100ms_complex_minor",
+    "E5_500ms_complex_minor",
+    "E6_magnitude_minor",
+    "E7_single_prn_node",
+    "Full"
+  ],
+  "alignment_gate": {
+    "center_error_abs_chips_max": 0.125,
+    "center_pass_fraction_min": 0.95,
+    "complex_cosine_median_min": 0.995,
+    "magnitude_spearman_median_min": 0.99,
+    "per_dataset_min": 200,
+    "selected_prn_epochs_min": 500
+  },
+  "case_count": 84,
+  "controls": [
+    "authentic_only",
+    "common_gain_scaling",
+    "global_phase_rotation",
+    "matched_output_rms_gain",
+    "empirical_raw_iq_awgn",
+    "cn0_degradation_3db",
+    "collapsed_source",
+    "single_source_delay_drift",
+    "single_source_doppler_drift",
+    "one_prn_secondary_path",
+    "prn_drop_add"
+  ],
+  "forbidden": [
+    "DS1-DS8",
+    "OS1-OS4",
+    "real_attack_evaluation",
+    "attack_labels",
+    "neural_models",
+    "analytic_triangular_acf_fit",
+    "B0_M1_fusion",
+    "post_result_changes"
+  ],
+  "freeze_label": "MIRAGE_R1_PREREGISTRATION_FREEZE",
+  "go_gates": {
+    "abs_score_cn0_spearman_max": 0.3,
+    "abs_score_rms_spearman_max": 0.3,
+    "clean_holdout_q99_fpr_max": 0.015,
+    "clipping_shortcut_forbidden": true,
+    "full_vs_best_scale_max_loss_fraction": 0.05,
+    "paired_effect_ci_lower_min": 0,
+    "positive_effect_scales_min": 2,
+    "single_prn_contribution_max": 0.5,
+    "strong_four_detection_min_each": 0.75,
+    "strong_single_detection_min_each": 0.75,
+    "valid_case_coverage_min": 0.8,
+    "worst_clean_segment_fpr_max": 0.05
+  },
+  "injection": {
+    "duration_s": 2,
+    "evaluation": "steady only",
+    "pinned_receiver_replay": true,
+    "ramp_s": 0.25,
+    "raw_iq_injection": true,
+    "release_s": 0.25,
+    "replay_tracker_state_recorrelation": true,
+    "steady_s": 1.5
+  },
+  "results_seen_before_freeze": false,
+  "schema": "gnss-doppler-lab.mirage-r1-preregistration.v1",
+  "score": {
+    "full": "unweighted median over currently valid PRNs; minimum four; no PRN identity feature",
+    "minor": "squared relative normalized adjacent complex minors",
+    "node": "maximum over 20/100/500 ms scale surprises",
+    "reference": "clean-train minor-specific median and 1.4826*MAD with relative floor",
+    "tail": "clean-train empirical right-tail surprise per scale"
+  },
+  "statement": "configuration frozen before this MIRAGE controlled evaluation",
+  "thresholds": {
+    "diagnostic": "q99.5",
+    "primary": "dataset-specific clean calibration q99",
+    "target_empirical_fpr": 0.01,
+    "threshold_rescue_forbidden": true
+  },
+  "verdicts": [
+    "GO_FOR_FROZEN_STAGE0B_REAL_STATIC_EVALUATION",
+    "NO_GO_MIRAGE_PHYSICAL_HYPOTHESIS",
+    "INCONCLUSIVE_INPUT_OR_SUPPORT",
+    "INCONCLUSIVE_RAW_RECORRELATION_ALIGNMENT",
+    "INCONCLUSIVE_EXECUTION_FAILURE"
+  ]
+}

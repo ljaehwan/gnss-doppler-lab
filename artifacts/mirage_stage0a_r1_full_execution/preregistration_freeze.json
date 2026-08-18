@@ -1,0 +1,22 @@
+{
+  "branch": "research/mirage-stage0a-r1-full-execution",
+  "code_sha256": {
+    "scripts/preregister_mirage_r1.py": "1cfef6a2a5a12bdb344364d1bc382bf5ad8f11693084a03f936a0733819f162c",
+    "src/gnss_doppler_lab/mirage_r1.py": "a7048427d55e992169963d93e6c05a054c2185a8867b71a5f904f38e4a24749a",
+    "tests/test_mirage_r1.py": "a54c36d0621e52697b97b0bde2906345d7f0f4e4e3ecdce4c12d635196bc814d"
+  },
+  "configuration_sha256": "e08f300d189a555db33d8da145a1022f2e68ab5278ccdf27d64a8426ffa2336d",
+  "design_sha256": "b4d2cfc19b6d0aada1c2fc78c521a0c7b293882e024d4786adeb78f84a88f40b",
+  "freeze_label": "MIRAGE_R1_PREREGISTRATION_FREEZE",
+  "generation_commit": "596f78485a1d17899665cb37d94634cc666e0bdd",
+  "injection_executed": false,
+  "preregistration_sha256": "e74ae59c64dacea0f482d8956bee925ce08bc5ace6a8cf5b033c11dc67a97360",
+  "raw_iq_sha256": {
+    "OAKBAT.cleanStatic": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+    "TEXBAT.cleanStatic": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9"
+  },
+  "receiver_binary_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+  "remote_push_required_before_execution": true,
+  "scientific_results_computed": false,
+  "status": "FROZEN_PENDING_COMMIT_AND_PUSH"
+}

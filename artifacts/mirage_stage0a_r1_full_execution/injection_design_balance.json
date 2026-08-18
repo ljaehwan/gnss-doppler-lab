@@ -1,0 +1,143 @@
+{
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "count_differences": {
+        "delay_chips": 0,
+        "doppler_hz": 1,
+        "phase_rad": 1,
+        "rho_db": 0
+      },
+      "counts": {
+        "delay_chips": {
+          "-0.1": 7,
+          "-0.25": 7,
+          "-0.5": 7,
+          "0.1": 7,
+          "0.25": 7,
+          "0.5": 7
+        },
+        "doppler_hz": {
+          "-2": 9,
+          "-5": 8,
+          "0": 9,
+          "2": 8,
+          "5": 8
+        },
+        "phase_rad": {
+          "0.0": 11,
+          "1.5707963267948966": 11,
+          "3.141592653589793": 10,
+          "4.71238898038469": 10
+        },
+        "rho_db": {
+          "-10": 14,
+          "-6": 14,
+          "0": 14
+        }
+      },
+      "cramers_v": {
+        "delay_chips__doppler_hz": 0.28695168555223693,
+        "delay_chips__phase_rad": 0.2728715347171164,
+        "doppler_hz__phase_rad": 0.2838231060987733,
+        "rho_db__delay_chips": 0.24743582965269673,
+        "rho_db__doppler_hz": 0.25781437890128234,
+        "rho_db__phase_rad": 0.27797972457128467
+      },
+      "delay_power_not_one_to_one": true,
+      "excluded_prn_factor_cramers_v_four": {
+        "delay_chips": 0.6640573937712179,
+        "doppler_hz": 0.6291528696058959,
+        "phase_rad": 0.5270462766947299,
+        "rho_db": 0.5137011669140814
+      },
+      "phase_doppler_not_one_to_one": true,
+      "prn_factor_cramers_v_single": {
+        "delay_chips": 0.48876260995383936,
+        "doppler_hz": 0.32550327333589285,
+        "phase_rad": 0.33333333333333337,
+        "rho_db": 0.4249182927993987
+      },
+      "seed": 20260819,
+      "status": "PASS",
+      "strong_cases": 26,
+      "target_prn_counts": {
+        "10": 6,
+        "11": 6,
+        "21": 6,
+        "24": 6,
+        "27": 6
+      }
+    },
+    "TEXBAT.cleanStatic": {
+      "count_differences": {
+        "delay_chips": 0,
+        "doppler_hz": 1,
+        "phase_rad": 1,
+        "rho_db": 0
+      },
+      "counts": {
+        "delay_chips": {
+          "-0.1": 7,
+          "-0.25": 7,
+          "-0.5": 7,
+          "0.1": 7,
+          "0.25": 7,
+          "0.5": 7
+        },
+        "doppler_hz": {
+          "-2": 9,
+          "-5": 8,
+          "0": 9,
+          "2": 8,
+          "5": 8
+        },
+        "phase_rad": {
+          "0.0": 11,
+          "1.5707963267948966": 11,
+          "3.141592653589793": 10,
+          "4.71238898038469": 10
+        },
+        "rho_db": {
+          "-10": 14,
+          "-6": 14,
+          "0": 14
+        }
+      },
+      "cramers_v": {
+        "delay_chips__doppler_hz": 0.28695168555223693,
+        "delay_chips__phase_rad": 0.2882999880625789,
+        "doppler_hz__phase_rad": 0.28248536209506464,
+        "rho_db__delay_chips": 0.2857142857142857,
+        "rho_db__doppler_hz": 0.28695168555223693,
+        "rho_db__phase_rad": 0.1690308509457033
+      },
+      "delay_power_not_one_to_one": true,
+      "excluded_prn_factor_cramers_v_four": {
+        "delay_chips": 0.5951190357119042,
+        "doppler_hz": 0.5177408189003022,
+        "phase_rad": 0.6770032003863301,
+        "rho_db": 0.6346477588219923
+      },
+      "phase_doppler_not_one_to_one": true,
+      "prn_factor_cramers_v_single": {
+        "delay_chips": 0.3855011168740126,
+        "doppler_hz": 0.4358671342624478,
+        "phase_rad": 0.40335891300231946,
+        "rho_db": 0.3574601764921203
+      },
+      "seed": 20260820,
+      "status": "PASS",
+      "strong_cases": 27,
+      "target_prn_counts": {
+        "13": 6,
+        "16": 6,
+        "19": 6,
+        "3": 6,
+        "30": 6
+      }
+    }
+  },
+  "different_seed_changes_design": true,
+  "same_seed_reproducible": true,
+  "status": "PASS"
+}

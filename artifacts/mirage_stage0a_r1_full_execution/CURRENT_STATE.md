@@ -1,3 +1,3 @@
-# MIRAGE R1 current state
+# MIRAGE Stage-0A R1 current state
 
-EXTENDED_SUPPORT_FOUNDATION_COMPLETE. No clean score or injection has run.
+The extended-support foundation is complete. The R1 configuration, chronological roles, 84-case balanced design, CAF/minor score, controls, and verdict gates are frozen before this MIRAGE controlled evaluation. Scientific scoring and injection have not run.

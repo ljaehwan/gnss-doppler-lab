@@ -1,0 +1,1256 @@
+{
+  "candidate_space_size": 360,
+  "cases": [
+    {
+      "anchor_start_sample": 1178776562,
+      "case_id": "OAKBAT.cleanStatic.r1.00",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.1,
+      "doppler_hz": 0,
+      "mode": "single_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": 0,
+      "strong_resolvable": false,
+      "target_prns": [
+        21
+      ]
+    },
+    {
+      "anchor_start_sample": 1178776562,
+      "case_id": "OAKBAT.cleanStatic.r1.01",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.1,
+      "doppler_hz": 5,
+      "mode": "single_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        10
+      ]
+    },
+    {
+      "anchor_start_sample": 1190776554,
+      "case_id": "OAKBAT.cleanStatic.r1.02",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.1,
+      "doppler_hz": 2,
+      "mode": "single_prn",
+      "phase_rad": 0.0,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        21
+      ]
+    },
+    {
+      "anchor_start_sample": 1190776554,
+      "case_id": "OAKBAT.cleanStatic.r1.03",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.1,
+      "doppler_hz": 5,
+      "mode": "single_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        11
+      ]
+    },
+    {
+      "anchor_start_sample": 1262776502,
+      "case_id": "OAKBAT.cleanStatic.r1.04",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.25,
+      "doppler_hz": 5,
+      "mode": "single_prn",
+      "phase_rad": 0.0,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        27
+      ]
+    },
+    {
+      "anchor_start_sample": 1214776536,
+      "case_id": "OAKBAT.cleanStatic.r1.05",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.5,
+      "doppler_hz": 0,
+      "mode": "single_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        10
+      ]
+    },
+    {
+      "anchor_start_sample": 1202776545,
+      "case_id": "OAKBAT.cleanStatic.r1.06",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.1,
+      "doppler_hz": 2,
+      "mode": "single_prn",
+      "phase_rad": 0.0,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        10
+      ]
+    },
+    {
+      "anchor_start_sample": 1202776545,
+      "case_id": "OAKBAT.cleanStatic.r1.07",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.25,
+      "doppler_hz": -5,
+      "mode": "single_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        24
+      ]
+    },
+    {
+      "anchor_start_sample": 1202776545,
+      "case_id": "OAKBAT.cleanStatic.r1.08",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.1,
+      "doppler_hz": 2,
+      "mode": "single_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        27
+      ]
+    },
+    {
+      "anchor_start_sample": 1142776588,
+      "case_id": "OAKBAT.cleanStatic.r1.09",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.1,
+      "doppler_hz": 5,
+      "mode": "single_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        27
+      ]
+    },
+    {
+      "anchor_start_sample": 1250776511,
+      "case_id": "OAKBAT.cleanStatic.r1.10",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.5,
+      "doppler_hz": 0,
+      "mode": "single_prn",
+      "phase_rad": 0.0,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        24
+      ]
+    },
+    {
+      "anchor_start_sample": 1154776579,
+      "case_id": "OAKBAT.cleanStatic.r1.11",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.25,
+      "doppler_hz": 0,
+      "mode": "single_prn",
+      "phase_rad": 0.0,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        21
+      ]
+    },
+    {
+      "anchor_start_sample": 1178776562,
+      "case_id": "OAKBAT.cleanStatic.r1.12",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.5,
+      "doppler_hz": -2,
+      "mode": "single_prn",
+      "phase_rad": 0.0,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        24
+      ]
+    },
+    {
+      "anchor_start_sample": 1214776536,
+      "case_id": "OAKBAT.cleanStatic.r1.13",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.25,
+      "doppler_hz": -5,
+      "mode": "single_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        10
+      ]
+    },
+    {
+      "anchor_start_sample": 1142776588,
+      "case_id": "OAKBAT.cleanStatic.r1.14",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.5,
+      "doppler_hz": 0,
+      "mode": "single_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        11
+      ]
+    },
+    {
+      "anchor_start_sample": 1274776494,
+      "case_id": "OAKBAT.cleanStatic.r1.15",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.5,
+      "doppler_hz": 2,
+      "mode": "single_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        24
+      ]
+    },
+    {
+      "anchor_start_sample": 1238776519,
+      "case_id": "OAKBAT.cleanStatic.r1.16",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.5,
+      "doppler_hz": -5,
+      "mode": "single_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        27
+      ]
+    },
+    {
+      "anchor_start_sample": 1226776528,
+      "case_id": "OAKBAT.cleanStatic.r1.17",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.1,
+      "doppler_hz": 0,
+      "mode": "single_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": 0,
+      "strong_resolvable": false,
+      "target_prns": [
+        21
+      ]
+    },
+    {
+      "anchor_start_sample": 1274776494,
+      "case_id": "OAKBAT.cleanStatic.r1.18",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.25,
+      "doppler_hz": -2,
+      "mode": "single_prn",
+      "phase_rad": 0.0,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        24
+      ]
+    },
+    {
+      "anchor_start_sample": 1166776571,
+      "case_id": "OAKBAT.cleanStatic.r1.19",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.25,
+      "doppler_hz": 5,
+      "mode": "single_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        27
+      ]
+    },
+    {
+      "anchor_start_sample": 1154776579,
+      "case_id": "OAKBAT.cleanStatic.r1.20",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.1,
+      "doppler_hz": 2,
+      "mode": "single_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        27
+      ]
+    },
+    {
+      "anchor_start_sample": 1238776519,
+      "case_id": "OAKBAT.cleanStatic.r1.21",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.1,
+      "doppler_hz": 2,
+      "mode": "single_prn",
+      "phase_rad": 0.0,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        11
+      ]
+    },
+    {
+      "anchor_start_sample": 1262776502,
+      "case_id": "OAKBAT.cleanStatic.r1.22",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.25,
+      "doppler_hz": -2,
+      "mode": "single_prn",
+      "phase_rad": 0.0,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        21
+      ]
+    },
+    {
+      "anchor_start_sample": 1154776579,
+      "case_id": "OAKBAT.cleanStatic.r1.23",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.5,
+      "doppler_hz": 5,
+      "mode": "single_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        10
+      ]
+    },
+    {
+      "anchor_start_sample": 1166776571,
+      "case_id": "OAKBAT.cleanStatic.r1.24",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.1,
+      "doppler_hz": -2,
+      "mode": "single_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        11
+      ]
+    },
+    {
+      "anchor_start_sample": 1226776528,
+      "case_id": "OAKBAT.cleanStatic.r1.25",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.5,
+      "doppler_hz": -5,
+      "mode": "single_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        24
+      ]
+    },
+    {
+      "anchor_start_sample": 1250776511,
+      "case_id": "OAKBAT.cleanStatic.r1.26",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.5,
+      "doppler_hz": 0,
+      "mode": "single_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        11
+      ]
+    },
+    {
+      "anchor_start_sample": 1190776554,
+      "case_id": "OAKBAT.cleanStatic.r1.27",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.5,
+      "doppler_hz": -5,
+      "mode": "single_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        11
+      ]
+    },
+    {
+      "anchor_start_sample": 1166776571,
+      "case_id": "OAKBAT.cleanStatic.r1.28",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.5,
+      "doppler_hz": -2,
+      "mode": "single_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        10
+      ]
+    },
+    {
+      "anchor_start_sample": 1142776588,
+      "case_id": "OAKBAT.cleanStatic.r1.29",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.1,
+      "doppler_hz": -5,
+      "mode": "single_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        21
+      ]
+    },
+    {
+      "anchor_start_sample": 1142776588,
+      "case_id": "OAKBAT.cleanStatic.r1.30",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.25,
+      "doppler_hz": 2,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        11,
+        21,
+        24,
+        27
+      ]
+    },
+    {
+      "anchor_start_sample": 1154776579,
+      "case_id": "OAKBAT.cleanStatic.r1.31",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.25,
+      "doppler_hz": 5,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        10,
+        21,
+        24,
+        27
+      ]
+    },
+    {
+      "anchor_start_sample": 1166776571,
+      "case_id": "OAKBAT.cleanStatic.r1.32",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.5,
+      "doppler_hz": 5,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 0.0,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        10,
+        11,
+        24,
+        27
+      ]
+    },
+    {
+      "anchor_start_sample": 1178776562,
+      "case_id": "OAKBAT.cleanStatic.r1.33",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.25,
+      "doppler_hz": 2,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        10,
+        21,
+        24,
+        27
+      ]
+    },
+    {
+      "anchor_start_sample": 1190776554,
+      "case_id": "OAKBAT.cleanStatic.r1.34",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.25,
+      "doppler_hz": -5,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 0.0,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        11,
+        21,
+        24,
+        27
+      ]
+    },
+    {
+      "anchor_start_sample": 1202776545,
+      "case_id": "OAKBAT.cleanStatic.r1.35",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.1,
+      "doppler_hz": -2,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        10,
+        11,
+        21,
+        24
+      ]
+    },
+    {
+      "anchor_start_sample": 1214776536,
+      "case_id": "OAKBAT.cleanStatic.r1.36",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.25,
+      "doppler_hz": -2,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        11,
+        21,
+        24,
+        27
+      ]
+    },
+    {
+      "anchor_start_sample": 1226776528,
+      "case_id": "OAKBAT.cleanStatic.r1.37",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.1,
+      "doppler_hz": -2,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        10,
+        11,
+        24,
+        27
+      ]
+    },
+    {
+      "anchor_start_sample": 1238776519,
+      "case_id": "OAKBAT.cleanStatic.r1.38",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.5,
+      "doppler_hz": -2,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        10,
+        21,
+        24,
+        27
+      ]
+    },
+    {
+      "anchor_start_sample": 1250776511,
+      "case_id": "OAKBAT.cleanStatic.r1.39",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.5,
+      "doppler_hz": -5,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        10,
+        11,
+        21,
+        24
+      ]
+    },
+    {
+      "anchor_start_sample": 1262776502,
+      "case_id": "OAKBAT.cleanStatic.r1.40",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": -0.25,
+      "doppler_hz": 0,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        10,
+        11,
+        21,
+        27
+      ]
+    },
+    {
+      "anchor_start_sample": 1274776494,
+      "case_id": "OAKBAT.cleanStatic.r1.41",
+      "dataset": "OAKBAT.cleanStatic",
+      "delay_chips": 0.25,
+      "doppler_hz": 0,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        10,
+        11,
+        21,
+        27
+      ]
+    },
+    {
+      "anchor_start_sample": 5750311655,
+      "case_id": "TEXBAT.cleanStatic.r1.00",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.25,
+      "doppler_hz": 0,
+      "mode": "single_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        19
+      ]
+    },
+    {
+      "anchor_start_sample": 6110311513,
+      "case_id": "TEXBAT.cleanStatic.r1.01",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.25,
+      "doppler_hz": 2,
+      "mode": "single_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        19
+      ]
+    },
+    {
+      "anchor_start_sample": 6290311443,
+      "case_id": "TEXBAT.cleanStatic.r1.02",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.5,
+      "doppler_hz": -2,
+      "mode": "single_prn",
+      "phase_rad": 0.0,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        30
+      ]
+    },
+    {
+      "anchor_start_sample": 6050311537,
+      "case_id": "TEXBAT.cleanStatic.r1.03",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.25,
+      "doppler_hz": 0,
+      "mode": "single_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        3
+      ]
+    },
+    {
+      "anchor_start_sample": 6050311537,
+      "case_id": "TEXBAT.cleanStatic.r1.04",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.1,
+      "doppler_hz": 2,
+      "mode": "single_prn",
+      "phase_rad": 0.0,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        13
+      ]
+    },
+    {
+      "anchor_start_sample": 6290311443,
+      "case_id": "TEXBAT.cleanStatic.r1.05",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.1,
+      "doppler_hz": -2,
+      "mode": "single_prn",
+      "phase_rad": 0.0,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        30
+      ]
+    },
+    {
+      "anchor_start_sample": 5690311679,
+      "case_id": "TEXBAT.cleanStatic.r1.06",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.5,
+      "doppler_hz": -5,
+      "mode": "single_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        3
+      ]
+    },
+    {
+      "anchor_start_sample": 5870311608,
+      "case_id": "TEXBAT.cleanStatic.r1.07",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.1,
+      "doppler_hz": 2,
+      "mode": "single_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        13
+      ]
+    },
+    {
+      "anchor_start_sample": 5810311631,
+      "case_id": "TEXBAT.cleanStatic.r1.08",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.25,
+      "doppler_hz": 2,
+      "mode": "single_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        30
+      ]
+    },
+    {
+      "anchor_start_sample": 6170311490,
+      "case_id": "TEXBAT.cleanStatic.r1.09",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.25,
+      "doppler_hz": 2,
+      "mode": "single_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        16
+      ]
+    },
+    {
+      "anchor_start_sample": 6230311466,
+      "case_id": "TEXBAT.cleanStatic.r1.10",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.5,
+      "doppler_hz": -2,
+      "mode": "single_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        19
+      ]
+    },
+    {
+      "anchor_start_sample": 5630311703,
+      "case_id": "TEXBAT.cleanStatic.r1.11",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.25,
+      "doppler_hz": -2,
+      "mode": "single_prn",
+      "phase_rad": 0.0,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        3
+      ]
+    },
+    {
+      "anchor_start_sample": 5630311703,
+      "case_id": "TEXBAT.cleanStatic.r1.12",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.1,
+      "doppler_hz": -5,
+      "mode": "single_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        19
+      ]
+    },
+    {
+      "anchor_start_sample": 5930311584,
+      "case_id": "TEXBAT.cleanStatic.r1.13",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.25,
+      "doppler_hz": -5,
+      "mode": "single_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        13
+      ]
+    },
+    {
+      "anchor_start_sample": 5990311560,
+      "case_id": "TEXBAT.cleanStatic.r1.14",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.25,
+      "doppler_hz": 5,
+      "mode": "single_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        16
+      ]
+    },
+    {
+      "anchor_start_sample": 5690311679,
+      "case_id": "TEXBAT.cleanStatic.r1.15",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.5,
+      "doppler_hz": 5,
+      "mode": "single_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        13
+      ]
+    },
+    {
+      "anchor_start_sample": 5930311584,
+      "case_id": "TEXBAT.cleanStatic.r1.16",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.5,
+      "doppler_hz": 0,
+      "mode": "single_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        16
+      ]
+    },
+    {
+      "anchor_start_sample": 5810311631,
+      "case_id": "TEXBAT.cleanStatic.r1.17",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.25,
+      "doppler_hz": 2,
+      "mode": "single_prn",
+      "phase_rad": 0.0,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        30
+      ]
+    },
+    {
+      "anchor_start_sample": 5810311631,
+      "case_id": "TEXBAT.cleanStatic.r1.18",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.1,
+      "doppler_hz": 0,
+      "mode": "single_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        16
+      ]
+    },
+    {
+      "anchor_start_sample": 6170311490,
+      "case_id": "TEXBAT.cleanStatic.r1.19",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.5,
+      "doppler_hz": 2,
+      "mode": "single_prn",
+      "phase_rad": 0.0,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        13
+      ]
+    },
+    {
+      "anchor_start_sample": 5870311608,
+      "case_id": "TEXBAT.cleanStatic.r1.20",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.5,
+      "doppler_hz": 0,
+      "mode": "single_prn",
+      "phase_rad": 0.0,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        13
+      ]
+    },
+    {
+      "anchor_start_sample": 5990311560,
+      "case_id": "TEXBAT.cleanStatic.r1.21",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.5,
+      "doppler_hz": 0,
+      "mode": "single_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        3
+      ]
+    },
+    {
+      "anchor_start_sample": 5750311655,
+      "case_id": "TEXBAT.cleanStatic.r1.22",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.1,
+      "doppler_hz": 5,
+      "mode": "single_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        30
+      ]
+    },
+    {
+      "anchor_start_sample": 6110311513,
+      "case_id": "TEXBAT.cleanStatic.r1.23",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.1,
+      "doppler_hz": 0,
+      "mode": "single_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": 0,
+      "strong_resolvable": false,
+      "target_prns": [
+        16
+      ]
+    },
+    {
+      "anchor_start_sample": 5630311703,
+      "case_id": "TEXBAT.cleanStatic.r1.24",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.1,
+      "doppler_hz": -5,
+      "mode": "single_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        19
+      ]
+    },
+    {
+      "anchor_start_sample": 5930311584,
+      "case_id": "TEXBAT.cleanStatic.r1.25",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.25,
+      "doppler_hz": -2,
+      "mode": "single_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        30
+      ]
+    },
+    {
+      "anchor_start_sample": 5750311655,
+      "case_id": "TEXBAT.cleanStatic.r1.26",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.5,
+      "doppler_hz": -2,
+      "mode": "single_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        3
+      ]
+    },
+    {
+      "anchor_start_sample": 6230311466,
+      "case_id": "TEXBAT.cleanStatic.r1.27",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.25,
+      "doppler_hz": 0,
+      "mode": "single_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        16
+      ]
+    },
+    {
+      "anchor_start_sample": 5870311608,
+      "case_id": "TEXBAT.cleanStatic.r1.28",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.1,
+      "doppler_hz": -5,
+      "mode": "single_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        19
+      ]
+    },
+    {
+      "anchor_start_sample": 5690311679,
+      "case_id": "TEXBAT.cleanStatic.r1.29",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.1,
+      "doppler_hz": -5,
+      "mode": "single_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        3
+      ]
+    },
+    {
+      "anchor_start_sample": 5630311703,
+      "case_id": "TEXBAT.cleanStatic.r1.30",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.1,
+      "doppler_hz": -2,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 0.0,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        3,
+        16,
+        19,
+        30
+      ]
+    },
+    {
+      "anchor_start_sample": 5690311679,
+      "case_id": "TEXBAT.cleanStatic.r1.31",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.25,
+      "doppler_hz": 5,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 0.0,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        3,
+        16,
+        19,
+        30
+      ]
+    },
+    {
+      "anchor_start_sample": 5750311655,
+      "case_id": "TEXBAT.cleanStatic.r1.32",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.1,
+      "doppler_hz": -2,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        13,
+        16,
+        19,
+        30
+      ]
+    },
+    {
+      "anchor_start_sample": 5810311631,
+      "case_id": "TEXBAT.cleanStatic.r1.33",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.25,
+      "doppler_hz": 5,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        3,
+        13,
+        19,
+        30
+      ]
+    },
+    {
+      "anchor_start_sample": 5870311608,
+      "case_id": "TEXBAT.cleanStatic.r1.34",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.5,
+      "doppler_hz": -5,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        3,
+        16,
+        19,
+        30
+      ]
+    },
+    {
+      "anchor_start_sample": 5930311584,
+      "case_id": "TEXBAT.cleanStatic.r1.35",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.5,
+      "doppler_hz": -5,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 4.71238898038469,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        3,
+        13,
+        19,
+        30
+      ]
+    },
+    {
+      "anchor_start_sample": 5990311560,
+      "case_id": "TEXBAT.cleanStatic.r1.36",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.5,
+      "doppler_hz": 5,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        3,
+        13,
+        16,
+        19
+      ]
+    },
+    {
+      "anchor_start_sample": 6050311537,
+      "case_id": "TEXBAT.cleanStatic.r1.37",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.1,
+      "doppler_hz": -2,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 1.5707963267948966,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        3,
+        13,
+        16,
+        19
+      ]
+    },
+    {
+      "anchor_start_sample": 6110311513,
+      "case_id": "TEXBAT.cleanStatic.r1.38",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.25,
+      "doppler_hz": 5,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 0.0,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        13,
+        16,
+        19,
+        30
+      ]
+    },
+    {
+      "anchor_start_sample": 6170311490,
+      "case_id": "TEXBAT.cleanStatic.r1.39",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.5,
+      "doppler_hz": 0,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": -10,
+      "strong_resolvable": false,
+      "target_prns": [
+        13,
+        16,
+        19,
+        30
+      ]
+    },
+    {
+      "anchor_start_sample": 6230311466,
+      "case_id": "TEXBAT.cleanStatic.r1.40",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": -0.1,
+      "doppler_hz": 5,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 3.141592653589793,
+      "rho_db": -6,
+      "strong_resolvable": true,
+      "target_prns": [
+        3,
+        13,
+        16,
+        30
+      ]
+    },
+    {
+      "anchor_start_sample": 6290311443,
+      "case_id": "TEXBAT.cleanStatic.r1.41",
+      "dataset": "TEXBAT.cleanStatic",
+      "delay_chips": 0.5,
+      "doppler_hz": 2,
+      "mode": "simultaneous_four_prn",
+      "phase_rad": 0.0,
+      "rho_db": 0,
+      "strong_resolvable": true,
+      "target_prns": [
+        3,
+        13,
+        16,
+        30
+      ]
+    }
+  ],
+  "configuration_frozen_before_this_MIRAGE_controlled_evaluation": true,
+  "schema": "gnss-doppler-lab.mirage-r1-injection-design.v1",
+  "selection": "seeded balanced maximin over factor contingency"
+}

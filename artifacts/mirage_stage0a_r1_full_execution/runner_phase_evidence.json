@@ -1,13 +1,13 @@
 {
-  "completed": [
-    "source_inventory",
-    "direct_boundary_recovery",
-    "parity_preamble_tow",
-    "endpoint_audit",
-    "tamper_tests",
-    "common_support"
-  ],
-  "injection_started": false,
-  "phase": "EXTENDED_SUPPORT_FOUNDATION_COMPLETE",
-  "scientific_scoring_started": false
+  "attack_data_accessed": false,
+  "injection_executed": false,
+  "phases": {
+    "alignment": "NOT_RUN",
+    "clean": "NOT_RUN",
+    "controls": "NOT_RUN",
+    "extended_support": "PASS",
+    "preregistration": "FROZEN_PENDING_COMMIT_AND_PUSH",
+    "receiver_in_loop": "NOT_RUN",
+    "verdict": "NOT_RUN"
+  }
 }
