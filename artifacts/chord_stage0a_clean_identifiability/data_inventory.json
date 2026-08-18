@@ -55,6 +55,27 @@
     },
     "scheduled_total": 7748
   },
-  "holdout_scored": false,
-  "metadata_only": true
+  "alignment": {
+    "OAKBAT.cleanStatic": {
+      "failed": 0,
+      "rows": 7773,
+      "status": "PASS"
+    },
+    "TEXBAT.cleanStatic": {
+      "failed": 0,
+      "rows": 7748,
+      "status": "PASS"
+    }
+  },
+  "anchor_validation": {
+    "expected": 470,
+    "minimums": {
+      "complex_cosine": 0.9999892417408692,
+      "magnitude_spearman": 1.0
+    },
+    "observed": 470,
+    "passed": 470,
+    "status": "PASS"
+  },
+  "metadata_only": false
 }

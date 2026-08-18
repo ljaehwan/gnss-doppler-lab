@@ -1,0 +1,36 @@
+{
+  "destruction": {
+    "OAKBAT.cleanStatic": {
+      "direction_shuffle_expected": "relation destroyed among PRNs at fixed epoch",
+      "label_shuffle_auc": 0.49877686789293324,
+      "tap_order_shuffle_expected": "relation destroyed independently per epoch"
+    },
+    "TEXBAT.cleanStatic": {
+      "direction_shuffle_expected": "relation destroyed among PRNs at fixed epoch",
+      "label_shuffle_auc": 0.5005578640899615,
+      "tap_order_shuffle_expected": "relation destroyed independently per epoch"
+    }
+  },
+  "invariance": {
+    "OAKBAT.cleanStatic": {
+      "gain": 0.0,
+      "global_phase": 0.0,
+      "nav_sign": 0.0,
+      "prompt_scaling": 0.0,
+      "small_delay_refit": 0.00014373600652140141
+    },
+    "TEXBAT.cleanStatic": {
+      "gain": 2.220446049250313e-16,
+      "global_phase": 0.0,
+      "nav_sign": 0.0,
+      "prompt_scaling": 0.0,
+      "small_delay_refit": 0.0006648080777266296
+    }
+  },
+  "max_exact_invariance_delta": 2.220446049250313e-16,
+  "structural": {
+    "prn_drop": "PASS",
+    "prn_permutation": "PASS",
+    "variable_prn_count": "PASS"
+  }
+}

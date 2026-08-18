@@ -1,0 +1,72 @@
+{
+  "ai_model_used": false,
+  "alignment": {
+    "OAKBAT.cleanStatic": {
+      "failed": 0,
+      "rows": 7773,
+      "status": "PASS"
+    },
+    "TEXBAT.cleanStatic": {
+      "failed": 0,
+      "rows": 7748,
+      "status": "PASS"
+    }
+  },
+  "attack_data_used": false,
+  "attack_paths_accessed": false,
+  "gates": {
+    "OAKBAT.cleanStatic": {
+      "availability": true,
+      "ci_lower": false,
+      "dominance": true,
+      "four_prns": true,
+      "full_auc": false,
+      "lag10": false,
+      "lopo": false,
+      "scalar_delta": false
+    },
+    "TEXBAT.cleanStatic": {
+      "availability": true,
+      "ci_lower": false,
+      "dominance": true,
+      "four_prns": true,
+      "full_auc": false,
+      "lag10": false,
+      "lopo": false,
+      "scalar_delta": false
+    }
+  },
+  "preregistration_sha": "52da3cbf718811a58b19b470ef616330b54c9685",
+  "source_binding": "PASS",
+  "split_ok": true,
+  "stage0b_run": false,
+  "summary": {
+    "OAKBAT.cleanStatic": {
+      "availability": 0.9456140350877194,
+      "best_scalar_auc": 0.49907124173132117,
+      "dominance_max": 0.10595303113052977,
+      "full_auc": 0.5039573478305093,
+      "full_minus_best_scalar": 0.004886106099188103,
+      "lag10_auc": 0.5139390828477441,
+      "lag30_auc": 0.5033102222222222,
+      "lopo_worst": 0.5018313063756904,
+      "lower": 0.493233770963191,
+      "positive_prns": 6,
+      "upper": 0.5123904235279405
+    },
+    "TEXBAT.cleanStatic": {
+      "availability": 0.9599118942731277,
+      "best_scalar_auc": 0.6773410287431347,
+      "dominance_max": 0.10259481037924152,
+      "full_auc": 0.5021183182537121,
+      "full_minus_best_scalar": -0.17522271048942262,
+      "lag10_auc": 0.513033068379635,
+      "lag30_auc": 0.4873167736046605,
+      "lopo_worst": 0.49837356118073256,
+      "lower": 0.4942236379999132,
+      "positive_prns": 5,
+      "upper": 0.5092256543959525
+    }
+  },
+  "verdict": "NO_GO_CHORD_CLEAN_IDENTIFIABILITY"
+}

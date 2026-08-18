@@ -1,0 +1,46 @@
+{
+  "OAKBAT.cleanStatic": {
+    "chronological": true,
+    "ranges": {
+      "calibration": {
+        "count": 1520,
+        "raw_end_max": 1527507207,
+        "raw_start_min": 1149998553
+      },
+      "fit": {
+        "count": 3573,
+        "raw_end_max": 1097507298,
+        "raw_start_min": 205000371
+      },
+      "holdout": {
+        "count": 2280,
+        "raw_end_max": 2147505971,
+        "raw_start_min": 1579999494
+      }
+    },
+    "raw_sample_overlap": false,
+    "ten_second_block_overlap": false
+  },
+  "TEXBAT.cleanStatic": {
+    "chronological": true,
+    "ranges": {
+      "calibration": {
+        "count": 1516,
+        "raw_end_max": 7637535935,
+        "raw_start_min": 5749990376
+      },
+      "fit": {
+        "count": 3563,
+        "raw_end_max": 5487537080,
+        "raw_start_min": 1025006903
+      },
+      "holdout": {
+        "count": 2270,
+        "raw_end_max": 10737536214,
+        "raw_start_min": 7899992624
+      }
+    },
+    "raw_sample_overlap": false,
+    "ten_second_block_overlap": false
+  }
+}
