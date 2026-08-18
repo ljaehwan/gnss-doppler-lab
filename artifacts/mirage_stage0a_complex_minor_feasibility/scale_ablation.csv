@@ -1,0 +1,7 @@
+dataset,scale_s,status,reason
+OAKBAT.cleanStatic,0.02,NOT_RUN,validated five-PRN NAV/NCO common intervals are shorter than the preregistered 29 s minimum needed for 3 s train + 10 s guard + 3 s calibration + 10 s guard + 3 s holdout
+OAKBAT.cleanStatic,0.1,NOT_RUN,validated five-PRN NAV/NCO common intervals are shorter than the preregistered 29 s minimum needed for 3 s train + 10 s guard + 3 s calibration + 10 s guard + 3 s holdout
+OAKBAT.cleanStatic,0.5,NOT_RUN,validated five-PRN NAV/NCO common intervals are shorter than the preregistered 29 s minimum needed for 3 s train + 10 s guard + 3 s calibration + 10 s guard + 3 s holdout
+TEXBAT.cleanStatic,0.02,NOT_RUN,validated five-PRN NAV/NCO common intervals are shorter than the preregistered 29 s minimum needed for 3 s train + 10 s guard + 3 s calibration + 10 s guard + 3 s holdout
+TEXBAT.cleanStatic,0.1,NOT_RUN,validated five-PRN NAV/NCO common intervals are shorter than the preregistered 29 s minimum needed for 3 s train + 10 s guard + 3 s calibration + 10 s guard + 3 s holdout
+TEXBAT.cleanStatic,0.5,NOT_RUN,validated five-PRN NAV/NCO common intervals are shorter than the preregistered 29 s minimum needed for 3 s train + 10 s guard + 3 s calibration + 10 s guard + 3 s holdout

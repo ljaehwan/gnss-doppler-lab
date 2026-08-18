@@ -1,0 +1,16 @@
+{
+  "checks": {
+    "common_complex_gain_invariant": true,
+    "equal_magnitude_phase_structure_distinguished": true,
+    "exact_rank1": true,
+    "global_phase_invariant": true,
+    "low_energy_finite": true,
+    "prn_permutation_invariant_aggregator": true,
+    "rank2_nonzero": true,
+    "variable_prn_count": true
+  },
+  "rank1_max_minor": 0.0,
+  "rank2_max_minor": 0.6695340634119863,
+  "rank2_svd_diagnostic": 0.02728047015915039,
+  "status": "PASS"
+}

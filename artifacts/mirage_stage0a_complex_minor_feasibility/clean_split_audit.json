@@ -1,0 +1,52 @@
+{
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "authorized_duration_s": 11.9853954,
+      "authorized_interval": [
+        150275296,
+        210202273
+      ],
+      "chronological_roles_constructible": false,
+      "deficit_seconds": 17.0146046,
+      "guard_seconds_each": 10.0,
+      "included_prns": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ],
+      "minimum_five_prns": true,
+      "required_duration_s": 29.0,
+      "role_seconds_each": 3.0,
+      "status": "FAIL",
+      "valid_500ms_interval_possible": true
+    },
+    "TEXBAT.cleanStatic": {
+      "authorized_duration_s": 11.98806936,
+      "authorized_interval": [
+        817815304,
+        1117517038
+      ],
+      "chronological_roles_constructible": false,
+      "deficit_seconds": 17.01193064,
+      "guard_seconds_each": 10.0,
+      "included_prns": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ],
+      "minimum_five_prns": true,
+      "required_duration_s": 29.0,
+      "role_seconds_each": 3.0,
+      "status": "FAIL",
+      "valid_500ms_interval_possible": true
+    }
+  },
+  "raw_overlap": false,
+  "split_generated": false,
+  "status": "FAIL",
+  "ten_second_block_overlap": false
+}
