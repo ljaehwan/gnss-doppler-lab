@@ -7,6 +7,7 @@
     "OAKBAT.OS4"
   ],
   "ds8_status": "UNAVAILABLE",
+  "experiment_rerun": false,
   "fixed9_status": "UNAVAILABLE",
   "go_checks": {
     "beats_a1_a2": true,
@@ -20,7 +21,10 @@
     "invariance": true
   },
   "preregistration_sha": "9a3119fc77ad830f438d723a225274f19c43be90",
+  "provenance_closure_status": "CLOSED_IN_DESCENDANT_COMMIT",
   "recommended_next_action": "Terminate CRISP as a neural Stage-1 path; do not retune this result.",
-  "result_commit_pending": true,
+  "result_commit_pending": false,
+  "science_metrics_modified": false,
+  "scientific_result_sha": "cd36f1d2a3ab3ca64c85747db1e1463198a966ee",
   "verdict": "NO_GO_CRISP_PHYSICAL_HYPOTHESIS"
 }

@@ -121,3 +121,12 @@ metrics, bootstrap, and verdict. Detailed exports matched row/schema; the final
 report renderer produced ten byte-identical PNGs on two consecutive runs.
 maximum floating difference was `6.93e-14`, below `1e-12`. Runtime/heartbeat
 metadata is excluded. See `reproduction_validation.json`.
+
+## Git/provenance closure
+
+The scientific verdict remains `NO_GO_CRISP_PHYSICAL_HYPOTHESIS`. Its result
+commit is `cd36f1d2a3ab3ca64c85747db1e1463198a966ee`; this administrative closure is
+performed in a descendant commit. The closure artifact intentionally does not
+record its own commit SHA because a Git commit cannot stably contain its own
+hash. No experiment was rerun and no result, threshold, score, metric, or plot
+was recalculated or modified.

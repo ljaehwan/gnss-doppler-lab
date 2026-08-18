@@ -2,8 +2,8 @@
   "files": [
     {
       "path": "README.md",
-      "sha256": "65db802f1bb6e6bae0e3f6f7cb4eb66eaff2980853b6a0575a2b780d7473d70e",
-      "size_bytes": 5646
+      "sha256": "7ceb8f3af9dff0be362e3bf5ce7f524dacb228a27d2535635f39ebb024c77c09",
+      "size_bytes": 6100
     },
     {
       "path": "ablation_metrics.csv",
@@ -42,8 +42,8 @@
     },
     {
       "path": "final_verdict.json",
-      "sha256": "73a81232947ac1d20e15495ab4f490dae70f7d2d599455f14d7449556721fa73",
-      "size_bytes": 739
+      "sha256": "7e88017ccf84276c000397994743758a43af52040c5d2e98ea09b4285ce67760",
+      "size_bytes": 939
     },
     {
       "path": "invariance_tests.json",
@@ -134,6 +134,11 @@
       "path": "reproduction_validation.json",
       "sha256": "a4f235e134163536e01e25469cd415b566173167a263da49b437f6430032fa4f",
       "size_bytes": 1306
+    },
+    {
+      "path": "result_provenance_closure.json",
+      "sha256": "80c264e6afe4f357534bea44a48623477ea1b73b0351d2cecb5a19e0f7c6ed30",
+      "size_bytes": 7842
     },
     {
       "path": "runner/evaluate.exit_code",
