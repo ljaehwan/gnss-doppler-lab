@@ -1,0 +1,5 @@
+dataset,stage,matched_auc,unmatched_auc,matched_nuisance_max_abs_smd,unmatched_nuisance_max_abs_smd
+OAKBAT.cleanStatic,before_receiver_common_removal,0.5121938775510204,0.5151020408163266,1.3418323876600897,1.390968848019877
+OAKBAT.cleanStatic,after_receiver_common_removal,0.561530612244898,0.507576530612245,1.3418323876600897,1.390968848019877
+TEXBAT.cleanStatic,before_receiver_common_removal,0.4773469387755102,0.5124489795918368,1.7744475013739787,1.509523599508999
+TEXBAT.cleanStatic,after_receiver_common_removal,0.5193367346938775,0.5135204081632653,1.7744475013739787,1.509523599508999

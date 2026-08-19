@@ -1,0 +1,48 @@
+{
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "complex_cosine_min": 0.9999892417408692,
+      "magnitude_spearman_min": 1.0,
+      "prior_authenticated_rows": 235,
+      "source_hash_status": "PASS",
+      "status": "PASS"
+    },
+    "TEXBAT.cleanStatic": {
+      "complex_cosine_min": 0.9999921613123811,
+      "magnitude_spearman_min": 1.0,
+      "prior_authenticated_rows": 235,
+      "source_hash_status": "PASS",
+      "status": "PASS"
+    }
+  },
+  "fresh_1ms_smoke": [
+    {
+      "complex_cosine": 0.9999999999998116,
+      "dataset": "OAKBAT.cleanStatic",
+      "magnitude_spearman": 1.0,
+      "prn": 10,
+      "runtime_scope_ms": 1,
+      "status": "PASS"
+    },
+    {
+      "complex_cosine": 0.9999999999979073,
+      "dataset": "TEXBAT.cleanStatic",
+      "magnitude_spearman": 1.0,
+      "prn": 3,
+      "runtime_scope_ms": 1,
+      "status": "PASS"
+    }
+  ],
+  "mathematical_controls": {
+    "gain": "PASS",
+    "global_phase": "PASS",
+    "nav_sign": "PASS"
+  },
+  "overall_status": "PASS",
+  "schema": "gnss-doppler-lab.cinder-stage0a-raw-alignment.v1",
+  "thresholds": {
+    "complex_cosine": 0.99,
+    "magnitude_spearman": 0.99
+  },
+  "zero_control": "PASS"
+}

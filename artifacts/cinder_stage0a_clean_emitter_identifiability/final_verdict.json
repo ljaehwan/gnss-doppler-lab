@@ -1,0 +1,48 @@
+{
+  "attack_data_used": false,
+  "claim": "clean within-dataset transmitter identifiability only; not spoofing detection and not cross-dataset identity",
+  "dataset_primary": {
+    "OAKBAT.cleanStatic": {
+      "best_shortcut_baseline_auc": 1.0,
+      "bootstrap_ci": [
+        0.48342708333333334,
+        0.6391822916666666
+      ],
+      "median_auc": 0.5371173469387756,
+      "worst_seed_auc": 0.5137244897959183
+    },
+    "TEXBAT.cleanStatic": {
+      "best_shortcut_baseline_auc": 1.0,
+      "bootstrap_ci": [
+        0.4272326835538752,
+        0.6054861111111112
+      ],
+      "median_auc": 0.5320408163265307,
+      "worst_seed_auc": 0.5145918367346938
+    }
+  },
+  "failed_gates": [
+    "OAKBAT.cleanStatic: Full-C4 median AUC < 0.70",
+    "OAKBAT.cleanStatic: bootstrap lower bound <= 0.60",
+    "OAKBAT.cleanStatic: baseline margin < 0.10",
+    "OAKBAT.cleanStatic: worst seed < 0.60",
+    "OAKBAT.cleanStatic: sensitivity AUC < 0.65",
+    "TEXBAT.cleanStatic: Full-C4 median AUC < 0.70",
+    "TEXBAT.cleanStatic: bootstrap lower bound <= 0.60",
+    "TEXBAT.cleanStatic: baseline margin < 0.10",
+    "TEXBAT.cleanStatic: worst seed < 0.60",
+    "TEXBAT.cleanStatic: sensitivity AUC < 0.65"
+  ],
+  "independent_parent_blocks": {
+    "calibration": 6,
+    "feature_train": 8,
+    "final_holdout": 8,
+    "metric_train": 8
+  },
+  "neural_model_used": false,
+  "permutation_control_status": "PASS",
+  "recommended_next_action": "Preserve this negative clean-identifiability result; do not build the adaptive emitter-slot model.",
+  "schema": "gnss-doppler-lab.cinder-stage0a-final-verdict.v1",
+  "stage0b_implemented": false,
+  "verdict": "NO_GO_CINDER_CLEAN_IDENTIFIABILITY"
+}

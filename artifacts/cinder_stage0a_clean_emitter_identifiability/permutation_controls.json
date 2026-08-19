@@ -1,0 +1,64 @@
+{
+  "OAKBAT.cleanStatic": {
+    "across_prn_common_only": {
+      "auc": 0.5,
+      "derivation": "within-block replicated robust center has no PRN-distinctive coordinate"
+    },
+    "feature_to_prn": {
+      "median_auc": 0.5031505102040816,
+      "q025": 0.42389987244897964,
+      "q975": 0.5641358418367347,
+      "repetitions": 200,
+      "status": "PASS"
+    },
+    "per_prn_distinctive_removed": {
+      "auc": 0.5,
+      "derivation": "removal leaves the same replicated common-only representation"
+    },
+    "prn_label": {
+      "median_auc": 0.4943112244897959,
+      "q025": 0.4333188775510205,
+      "q975": 0.5623858418367347,
+      "repetitions": 200,
+      "status": "PASS"
+    },
+    "time_block": {
+      "median_auc": 0.5048852040816326,
+      "q025": 0.41688456632653065,
+      "q975": 0.5697857142857142,
+      "repetitions": 200,
+      "status": "PASS"
+    }
+  },
+  "TEXBAT.cleanStatic": {
+    "across_prn_common_only": {
+      "auc": 0.5,
+      "derivation": "within-block replicated robust center has no PRN-distinctive coordinate"
+    },
+    "feature_to_prn": {
+      "median_auc": 0.49799744897959186,
+      "q025": 0.41999872448979597,
+      "q975": 0.566686224489796,
+      "repetitions": 200,
+      "status": "PASS"
+    },
+    "per_prn_distinctive_removed": {
+      "auc": 0.5,
+      "derivation": "removal leaves the same replicated common-only representation"
+    },
+    "prn_label": {
+      "median_auc": 0.5038392857142857,
+      "q025": 0.43690625000000005,
+      "q975": 0.5727914540816327,
+      "repetitions": 200,
+      "status": "PASS"
+    },
+    "time_block": {
+      "median_auc": 0.49873724489795923,
+      "q025": 0.4310133928571428,
+      "q975": 0.5667091836734695,
+      "repetitions": 200,
+      "status": "PASS"
+    }
+  }
+}

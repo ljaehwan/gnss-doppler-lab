@@ -1,0 +1,52 @@
+[
+  {
+    "dataset": "OAKBAT.cleanStatic",
+    "negative_gap_histogram": {
+      "1": 35,
+      "2": 30,
+      "3": 25,
+      "4": 20,
+      "5": 15,
+      "6": 10,
+      "7": 5
+    },
+    "negative_pairs": 140,
+    "positive_gap_histogram": {
+      "1": 35,
+      "2": 30,
+      "3": 25,
+      "4": 20,
+      "5": 15,
+      "6": 10,
+      "7": 5
+    },
+    "positive_pairs": 140,
+    "seed": 2026081901,
+    "unique_parent_blocks": 8
+  },
+  {
+    "dataset": "TEXBAT.cleanStatic",
+    "negative_gap_histogram": {
+      "1": 35,
+      "2": 30,
+      "3": 25,
+      "4": 20,
+      "5": 15,
+      "6": 10,
+      "7": 5
+    },
+    "negative_pairs": 140,
+    "positive_gap_histogram": {
+      "1": 35,
+      "2": 30,
+      "3": 25,
+      "4": 20,
+      "5": 15,
+      "6": 10,
+      "7": 5
+    },
+    "positive_pairs": 140,
+    "seed": 2026081901,
+    "unique_parent_blocks": 8
+  }
+]

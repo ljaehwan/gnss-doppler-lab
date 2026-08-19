@@ -1,0 +1,70 @@
+{
+  "awgn_feature_cosine": {
+    "0.5": 0.9998510430337659,
+    "1.0": 0.9990415820139206,
+    "2.0": 0.9550783611829456
+  },
+  "before_after_common_removal_reported": true,
+  "chronological_holdout": true,
+  "empirical_clean_raw_awgn": {
+    "OAKBAT.cleanStatic": {
+      "0.5": {
+        "feature_cosine": 0.9885632933968399,
+        "noise_sigma": 903.5271773072353
+      },
+      "1.0": {
+        "feature_cosine": 0.8425846470615399,
+        "noise_sigma": 1807.0543546144706
+      },
+      "2.0": {
+        "feature_cosine": 0.1470922237352894,
+        "noise_sigma": 3614.1087092289413
+      }
+    },
+    "TEXBAT.cleanStatic": {
+      "0.5": {
+        "feature_cosine": 0.9935723066474714,
+        "noise_sigma": 883.1014983954151
+      },
+      "1.0": {
+        "feature_cosine": 0.18576608984029427,
+        "noise_sigma": 1766.2029967908302
+      },
+      "2.0": {
+        "feature_cosine": 0.25333463839638587,
+        "noise_sigma": 3532.4059935816604
+      }
+    }
+  },
+  "exact_time_gap_matching": true,
+  "leave_one_prn_out_table": "leave_one_prn_out.csv",
+  "matching_variables": [
+    "C/N0",
+    "C4 norm",
+    "Doppler",
+    "lock"
+  ],
+  "receiver_common_and_matching_table": "receiver_common_and_matching_ablation.csv",
+  "receiver_common_removed_primary": true,
+  "resampling_filter_perturbation": {
+    "OAKBAT.cleanStatic": {
+      "centered_group_delay_chips": 0.0,
+      "feature_cosine": 0.9999785076512038,
+      "fir": [
+        0.02,
+        0.96,
+        0.02
+      ]
+    },
+    "TEXBAT.cleanStatic": {
+      "centered_group_delay_chips": 0.0,
+      "feature_cosine": 0.9999089045755681,
+      "fir": [
+        0.02,
+        0.96,
+        0.02
+      ]
+    }
+  },
+  "time_separation_table": "time_separation_metrics.csv"
+}

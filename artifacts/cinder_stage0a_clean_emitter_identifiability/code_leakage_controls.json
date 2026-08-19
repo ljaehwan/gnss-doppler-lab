@@ -1,0 +1,21 @@
+{
+  "chip_permutation_feature_max_abs": 0.0,
+  "circular_shift_feature_max_abs": 0.0,
+  "different_allowed_prn_replica": "evaluated through B6 and feature-to-PRN shuffle; no raw PRN ID enters feature",
+  "different_allowed_prn_replica_raw_control": {
+    "OAKBAT.cleanStatic": {
+      "different_allowed_replica_prn": 11,
+      "feature_cosine_correct_vs_wrong_replica": 0.989756185086029,
+      "interpretation": "diagnostic only; primary B6 ideal-code feature remains exactly zero",
+      "raw_prn": 10
+    },
+    "TEXBAT.cleanStatic": {
+      "different_allowed_replica_prn": 13,
+      "feature_cosine_correct_vs_wrong_replica": 0.9903143322459372,
+      "interpretation": "diagnostic only; primary B6 ideal-code feature remains exactly zero",
+      "raw_prn": 3
+    }
+  },
+  "ideal_replica_feature_max_abs": 0.0,
+  "status": "PASS"
+}

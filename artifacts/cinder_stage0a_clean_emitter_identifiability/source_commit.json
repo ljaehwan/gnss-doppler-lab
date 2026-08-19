@@ -1,7 +1,9 @@
 {
   "branch": "research/cinder-stage0a-clean-emitter-identifiability",
+  "execution_code_head": "d65b9d3",
   "generation_base_sha": "e0993bd6b16628681b52c1abd52cf177af67e10a",
-  "preregistration_commit": "the first descendant commit containing this immutable file; recorded separately after commit",
+  "preregistration_commit": "b30fa44e8db134158337f34318a2b7bdcc1a530b",
   "raw_recorrelation_ancestor": "d0421c0e89306debfaa685bc2894dac8bb80c245",
-  "required_base_sha": "e0993bd6b16628681b52c1abd52cf177af67e10a"
+  "required_base_sha": "e0993bd6b16628681b52c1abd52cf177af67e10a",
+  "result_commit": "recorded by Git history as the commit adding final artifact; self-hash cannot be embedded"
 }

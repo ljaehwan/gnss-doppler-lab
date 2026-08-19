@@ -1,0 +1,140 @@
+{
+  "gain": {
+    "0.5": 0.0,
+    "0.8": 2.220446049250313e-16,
+    "1.2": 2.220446049250313e-16,
+    "2.0": 0.0
+  },
+  "global_phase": {
+    "0": 0.0,
+    "0.7853981633974483": 1.6653345369377348e-16,
+    "1.5707963267948966": 2.6020852139652106e-18,
+    "3.141592653589793": 2.220446049250313e-16
+  },
+  "nav_sign": {
+    "-1": 0.0,
+    "1": 0.0
+  },
+  "representative_clean_raw_iq": {
+    "OAKBAT.cleanStatic": {
+      "awgn": {
+        "0.5": {
+          "feature_cosine": 0.9885632933968399,
+          "noise_sigma": 903.5271773072353
+        },
+        "1.0": {
+          "feature_cosine": 0.8425846470615399,
+          "noise_sigma": 1807.0543546144706
+        },
+        "2.0": {
+          "feature_cosine": 0.1470922237352894,
+          "noise_sigma": 3614.1087092289413
+        }
+      },
+      "empirical_residual_sigma": 1807.0543546144706,
+      "filter_perturbation": {
+        "centered_group_delay_chips": 0.0,
+        "feature_cosine": 0.9999785076512038,
+        "fir": [
+          0.02,
+          0.96,
+          0.02
+        ]
+      },
+      "float32_numerical_tolerance": 1e-07,
+      "gain_max_abs_error": {
+        "0.5": 0.0,
+        "0.8": 4.847030152244081e-09,
+        "1.2": 3.1067880013405103e-09,
+        "2.0": 0.0
+      },
+      "global_phase_max_abs_error": {
+        "0.0": 0.0,
+        "0.7853981633974483": 4.626932473012629e-09,
+        "1.5707963267948966": 1.096345236817342e-15,
+        "3.141592653589793": 0.0
+      },
+      "nav_sign_max_abs_error": {
+        "-1": 0.0,
+        "1": 0.0
+      },
+      "prn": 10,
+      "raw_sample_span": [
+        177502297,
+        178002297
+      ],
+      "resampling_audit": {
+        "antialias_filter": "source is already band-limited GNSS complex baseband; 5/25 Msps to 4.092 Msps query grid, no additional decimation FIR",
+        "group_delay_source_samples": 0.0,
+        "interpolation": "centered two-tap linear (triangular) interpolation",
+        "maximum_fractional_source_error": 0.0,
+        "out_of_bounds_queries": 0,
+        "output_chip_count": 102300,
+        "output_samples_per_chip": 4,
+        "source_sample_count": 500002
+      },
+      "window_ms": 100
+    },
+    "TEXBAT.cleanStatic": {
+      "awgn": {
+        "0.5": {
+          "feature_cosine": 0.9935723066474714,
+          "noise_sigma": 883.1014983954151
+        },
+        "1.0": {
+          "feature_cosine": 0.18576608984029427,
+          "noise_sigma": 1766.2029967908302
+        },
+        "2.0": {
+          "feature_cosine": 0.25333463839638587,
+          "noise_sigma": 3532.4059935816604
+        }
+      },
+      "empirical_residual_sigma": 1766.2029967908302,
+      "filter_perturbation": {
+        "centered_group_delay_chips": 0.0,
+        "feature_cosine": 0.9999089045755681,
+        "fir": [
+          0.02,
+          0.96,
+          0.02
+        ]
+      },
+      "float32_numerical_tolerance": 1e-07,
+      "gain_max_abs_error": {
+        "0.5": 0.0,
+        "0.8": 1.0575594733275295e-08,
+        "1.2": 1.0285431548129331e-08,
+        "2.0": 0.0
+      },
+      "global_phase_max_abs_error": {
+        "0.0": 0.0,
+        "0.7853981633974483": 8.54694653940058e-09,
+        "1.5707963267948966": 7.216449660063518e-16,
+        "3.141592653589793": 0.0
+      },
+      "nav_sign_max_abs_error": {
+        "-1": 0.0,
+        "1": 0.0
+      },
+      "prn": 3,
+      "raw_sample_span": [
+        887513796,
+        890013795
+      ],
+      "resampling_audit": {
+        "antialias_filter": "source is already band-limited GNSS complex baseband; 5/25 Msps to 4.092 Msps query grid, no additional decimation FIR",
+        "group_delay_source_samples": 0.0,
+        "interpolation": "centered two-tap linear (triangular) interpolation",
+        "maximum_fractional_source_error": 0.0,
+        "out_of_bounds_queries": 0,
+        "output_chip_count": 102300,
+        "output_samples_per_chip": 4,
+        "source_sample_count": 2500001
+      },
+      "window_ms": 100
+    }
+  },
+  "status": "PASS",
+  "tolerance": 1e-09
+}
