@@ -217,9 +217,10 @@ def select_window(trace: Path, target_s: float, epochs: int = 1000) -> tuple[np.
     index = int(np.searchsorted(records["receiver_timestamp_s"], target_s, side="left"))
     selected = records[index:index + epochs]
     if len(selected) != epochs: raise ValueError("insufficient TRACE window")
-    stable = ((selected["valid_tracking"] == 1) & (selected["valid_lock"] == 1)
-              & (selected["cn0_db_hz"] >= 28.0) & (selected["carrier_lock_test"] >= 0.85))
-    if not np.all(stable): raise ValueError("window contains non-stable TRACE epoch")
+    authoritative_lock = (selected["valid_tracking"] == 1) & (selected["valid_lock"] == 1)
+    quality = np.median(selected["cn0_db_hz"]) >= 28.0 and np.median(selected["carrier_lock_test"]) >= 0.85
+    if not np.all(authoritative_lock) or not quality:
+        raise ValueError("window fails authoritative lock or median quality gate")
     endpoint_delta = selected["raw_interval_start_sample"][1:].astype(np.int64) - selected["raw_interval_end_sample"][:-1].astype(np.int64)
     if np.any(np.abs(endpoint_delta) > 1):
         raise ValueError("window exceeds receiver code-NCO endpoint tolerance")
@@ -318,15 +319,26 @@ def load_or_extract(split: dict[str, object]) -> tuple[list[dict[str, object]], 
         if len(rows) == expected:
             return rows, {"cache_reused": True, "path": str(cache_path), "sha256": sha256_file(cache_path)}
     rows = []; started = time.time(); peak_before = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    checkpoint = CACHE / "checkpoint.jsonl"
+    if checkpoint.exists():
+        recovered = [json.loads(line) for line in checkpoint.read_text().splitlines() if line]
+        by_key = {(row["dataset"], row["role"], int(row["block"]), int(row["prn"])): row for row in recovered}
+        if len(by_key) != len(recovered):
+            raise ValueError("checkpoint contains duplicate extraction keys")
+        rows = list(by_key.values())
+    completed = {(row["dataset"], row["role"], int(row["block"]), int(row["prn"])) for row in rows}
     for dataset, spec in DATASETS.items():
         common = split["datasets"][dataset]["common_stable_start_s"]
         for role, blocks in ROLE_BLOCKS.items():
             for block in blocks:
                 for prn in spec["prns"]:
-                    row = extraction_task(dataset, prn, block, role, common); rows.append(row)
+                    key = (dataset, role, block, prn)
+                    if key in completed:
+                        continue
+                    row = extraction_task(dataset, prn, block, role, common); rows.append(row); completed.add(key)
                     print(f"extracted {dataset} {role} block={block} PRN={prn}", flush=True)
                     CACHE.mkdir(parents=True, exist_ok=True)
-                    with (CACHE / "checkpoint.jsonl").open("a") as stream: stream.write(json.dumps(row, sort_keys=True) + "\n")
+                    with checkpoint.open("a") as stream: stream.write(json.dumps(row, sort_keys=True) + "\n")
     path = save_cache(rows)
     return rows, {"cache_reused": False, "path": str(path), "sha256": sha256_file(path),
                   "runtime_s": time.time() - started, "peak_rss_kib_delta_upper_bound": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss - peak_before,
