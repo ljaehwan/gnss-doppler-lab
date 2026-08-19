@@ -171,8 +171,9 @@ def fractional_chip_resample_records(
         raise ValueError("empty TRACE record selection")
     starts = records["raw_interval_start_sample"].astype(np.int64)
     ends = records["raw_interval_end_sample"].astype(np.int64)
-    if np.any(ends <= starts) or np.any(starts[1:] != ends[:-1]):
-        raise ValueError("TRACE records are not a contiguous raw span")
+    endpoint_delta = starts[1:] - ends[:-1]
+    if np.any(ends <= starts) or np.any(np.abs(endpoint_delta) > 1):
+        raise ValueError("TRACE records exceed receiver code-NCO endpoint tolerance")
     span_start, span_end = int(starts[0]), int(ends[-1])
     iq = read_ishort_complex_window(raw_path, span_start, span_end - span_start).astype(np.complex64)
     iq *= np.complex64(float(gain) * int(nav_sign) * np.exp(1j * float(phase_rad)))

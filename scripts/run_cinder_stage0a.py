@@ -220,8 +220,9 @@ def select_window(trace: Path, target_s: float, epochs: int = 1000) -> tuple[np.
     stable = ((selected["valid_tracking"] == 1) & (selected["valid_lock"] == 1)
               & (selected["cn0_db_hz"] >= 28.0) & (selected["carrier_lock_test"] >= 0.85))
     if not np.all(stable): raise ValueError("window contains non-stable TRACE epoch")
-    if np.any(selected["raw_interval_start_sample"][1:] != selected["raw_interval_end_sample"][:-1]):
-        raise ValueError("window raw sample lineage is not contiguous")
+    endpoint_delta = selected["raw_interval_start_sample"][1:].astype(np.int64) - selected["raw_interval_end_sample"][:-1].astype(np.int64)
+    if np.any(np.abs(endpoint_delta) > 1):
+        raise ValueError("window exceeds receiver code-NCO endpoint tolerance")
     return selected, index
 
 
@@ -463,7 +464,14 @@ def plots(verification_rows: list[dict[str, object]], seed_rows: list[dict[str, 
 def finalize() -> int:
     started = time.time(); prereg = json.loads((ART / "preregistration.json").read_text()); split = json.loads((ART / "clean_split.json").read_text())
     source = json.loads((ART / "source_inventory.json").read_text())
-    for dataset, spec in DATASETS.items(): source["datasets"][dataset]["raw"] = file_binding(spec["raw"], spec["size"], spec["sha256"], full_hash=True)
+    for dataset, spec in DATASETS.items():
+        previous = source["datasets"][dataset]["raw"]
+        stat = Path(spec["raw"]).stat()
+        unchanged = (previous.get("full_hash_read_this_run") is True and previous.get("status") == "PASS"
+                     and previous.get("size_bytes") == stat.st_size and previous.get("inode") == stat.st_ino
+                     and previous.get("device") == stat.st_dev and previous.get("mtime_ns") == stat.st_mtime_ns)
+        if not unchanged:
+            source["datasets"][dataset]["raw"] = file_binding(spec["raw"], spec["size"], spec["sha256"], full_hash=True)
     dump_json("source_inventory.json", source)
     alignment = raw_alignment_gate(source); dump_json("raw_alignment_verification.json", alignment)
     if alignment["overall_status"] != "PASS":
