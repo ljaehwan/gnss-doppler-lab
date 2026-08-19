@@ -175,7 +175,9 @@ def fractional_chip_resample_records(
     if np.any(ends <= starts) or np.any(np.abs(endpoint_delta) > 1):
         raise ValueError("TRACE records exceed receiver code-NCO endpoint tolerance")
     span_start, span_end = int(starts[0]), int(ends[-1])
-    iq = read_ishort_complex_window(raw_path, span_start, span_end - span_start).astype(np.complex64)
+    source_samples = Path(raw_path).stat().st_size // 4
+    read_end = min(span_end + 2, source_samples)
+    iq = read_ishort_complex_window(raw_path, span_start, read_end - span_start).astype(np.complex64)
     iq *= np.complex64(float(gain) * int(nav_sign) * np.exp(1j * float(phase_rad)))
     chip_grid = (np.arange(1023, dtype=np.float64)[:, None] + FRACTIONAL_CHIP_COORDS[None, :]).reshape(-1)
     code = receiver_l1ca_code(prn) if code_override is None else np.asarray(code_override, dtype=np.float64)
@@ -188,15 +190,14 @@ def fractional_chip_resample_records(
         step = float(record["action_used_code_phase_step_chips_per_sample"])
         residual = float(record["action_used_residual_code_phase_chips"])
         local = (chip_grid + residual) / step
-        lo = np.floor(local).astype(np.int64)
-        frac = local - lo
-        count = int(ends[row_index] - starts[row_index])
-        bad = (lo < 0) | (lo + 1 >= count)
+        absolute_local = int(starts[row_index] - span_start) + local
+        lo = np.floor(absolute_local).astype(np.int64)
+        frac = absolute_local - lo
+        bad = (lo < 0) | (lo + 1 >= len(iq))
         out_of_bounds += int(bad.sum())
-        lo = np.clip(lo, 0, max(count - 2, 0))
+        lo = np.clip(lo, 0, max(len(iq) - 2, 0))
         frac = np.where(bad, np.clip(frac, 0.0, 1.0), frac)
-        offset = int(starts[row_index] - span_start)
-        values = iq[offset + lo] * (1.0 - frac) + iq[offset + lo + 1] * frac
+        values = iq[lo] * (1.0 - frac) + iq[lo + 1] * frac
         carrier_phase = (
             float(record["action_used_residual_carrier_phase_rad"])
             + float(record["action_used_carrier_phase_step_rad_per_sample"]) * local
@@ -204,9 +205,9 @@ def fractional_chip_resample_records(
         values *= np.exp(-1j * carrier_phase)
         values *= np.repeat(code, 4)
         output[row_index * 1023:(row_index + 1) * 1023] = values.reshape(1023, 4)
-        maximum_fractional_error = max(maximum_fractional_error, float(np.max(np.abs(local - (lo + frac)))))
+        maximum_fractional_error = max(maximum_fractional_error, float(np.max(np.abs(absolute_local - (lo + frac)))))
     return output, ResamplingAudit(
-        source_sample_count=span_end - span_start,
+        source_sample_count=read_end - span_start,
         output_chip_count=len(output),
         output_samples_per_chip=4,
         interpolation="centered two-tap linear (triangular) interpolation",
