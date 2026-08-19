@@ -1,0 +1,102 @@
+{
+  "attack_data_used": false,
+  "bootstrap_repetitions": 2000,
+  "calibration": "threshold maximizing balanced accuracy using calibration split only",
+  "clean_only": true,
+  "datasets": [
+    "OAKBAT.cleanStatic",
+    "TEXBAT.cleanStatic"
+  ],
+  "frozen_before_results": true,
+  "go_gates": {
+    "auc_each": 0.7,
+    "baseline_margin": 0.1,
+    "bootstrap_ci_lower_each_strict": 0.6,
+    "code_only_auc_max": 0.55,
+    "matched_auc": 0.65,
+    "one_sensitivity_auc": 0.65,
+    "permutation_auc_range": [
+      0.45,
+      0.55
+    ],
+    "worst_seed_auc": 0.6
+  },
+  "guards": [
+    8,
+    17,
+    24
+  ],
+  "hypothesis": "same GPS transmitter retains chip-synchronous non-Gaussian C4 residual after listed nuisance quotient",
+  "metric": {
+    "shrinkage": 0.2,
+    "type": "diagonal shrinkage Mahalanobis",
+    "variance_floor": 1e-06
+  },
+  "negative_matching": "same block endpoints/exact time gap; choose deterministically by seed among three lowest standardized C/N0,norm,Doppler,lock costs",
+  "neural_model_used": false,
+  "no_posthoc_retuning": true,
+  "primary_evaluation": "same-PRN vs different-PRN nuisance-matched final-holdout verification after receiver-common removal",
+  "primary_window_ms": 500,
+  "roles": {
+    "calibration": [
+      18,
+      19,
+      20,
+      21,
+      22,
+      23
+    ],
+    "feature_train": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "final_holdout": [
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32
+    ],
+    "metric_train": [
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ]
+  },
+  "schema": "gnss-doppler-lab.cinder-stage0a-preregistration.v1",
+  "seeds": [
+    2026081901,
+    2026081902,
+    2026081903,
+    2026081904,
+    2026081905,
+    2026081906,
+    2026081907,
+    2026081908,
+    2026081909,
+    2026081910
+  ],
+  "sensitivity_window_ms": [
+    100,
+    1000
+  ],
+  "verdicts": [
+    "GO_FOR_CINDER_STAGE0B",
+    "NO_GO_CINDER_CLEAN_IDENTIFIABILITY",
+    "INCONCLUSIVE_INPUT_OR_SAMPLE_SIZE"
+  ]
+}

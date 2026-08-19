@@ -1,0 +1,125 @@
+{
+  "adjacent_train_holdout": false,
+  "chronological": true,
+  "datasets": {
+    "OAKBAT.cleanStatic": {
+      "calibration_blocks": [
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "common_stable_start_s": 31.0,
+      "direct_nav_verified_interval_samples": [
+        150275296,
+        210202273
+      ],
+      "expanded_sign_invariant_scope_s": [
+        31.0,
+        361.0
+      ],
+      "feature_train_blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "final_holdout_blocks": [
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "guard_blocks": [
+        8,
+        17,
+        24
+      ],
+      "independent_holdout_parent_blocks": 8,
+      "metric_train_blocks": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "parent_block_seconds": 10,
+      "scientific_parent_blocks": 30,
+      "scope_separation": "direct interval is used for alignment gate only; scientific split is reported as even-order sign-invariant clean scope"
+    },
+    "TEXBAT.cleanStatic": {
+      "calibration_blocks": [
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "common_stable_start_s": 31.0,
+      "direct_nav_verified_interval_samples": [
+        817815304,
+        1117517038
+      ],
+      "expanded_sign_invariant_scope_s": [
+        31.0,
+        361.0
+      ],
+      "feature_train_blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "final_holdout_blocks": [
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "guard_blocks": [
+        8,
+        17,
+        24
+      ],
+      "independent_holdout_parent_blocks": 8,
+      "metric_train_blocks": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "parent_block_seconds": 10,
+      "scientific_parent_blocks": 30,
+      "scope_separation": "direct interval is used for alignment gate only; scientific split is reported as even-order sign-invariant clean scope"
+    }
+  },
+  "raw_overlap": false,
+  "schema": "gnss-doppler-lab.cinder-stage0a-clean-split.v1",
+  "target_overlap": false
+}

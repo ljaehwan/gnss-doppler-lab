@@ -1,0 +1,98 @@
+{
+  "anti_alias_rationale": "4.092 Msps output grid is below both 5 and 25 Msps band-limited complex sources",
+  "complex_c4_dimension": 30,
+  "contrasts": [
+    "edge: bin0-bin3",
+    "inner: bin1-bin2"
+  ],
+  "cyclic_frequencies_cycles_per_chip": [
+    0.0,
+    0.125,
+    0.25
+  ],
+  "cyclic_frequencies_hz": [
+    0.0,
+    127875.0,
+    255750.0
+  ],
+  "forbidden_feature_inputs": [
+    "PRN",
+    "raw power",
+    "C/N0",
+    "absolute Doppler",
+    "absolute time",
+    "raw code sequence",
+    "channel index"
+  ],
+  "fractional_chip_coordinates": [
+    0.125,
+    0.375,
+    0.625,
+    0.875
+  ],
+  "fractional_samples_per_chip": 4,
+  "interpolation": "two-tap linear query at common fractional-chip coordinate; zero centered group delay",
+  "lag_tuples_chips": [
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      1
+    ],
+    [
+      1,
+      1,
+      2
+    ],
+    [
+      2,
+      1,
+      3
+    ],
+    [
+      4,
+      2,
+      4
+    ]
+  ],
+  "metric": "fixed shrinkage diagonal Mahalanobis, shrinkage=0.2",
+  "metric_variance_floor": 1e-06,
+  "one_nested_window_per_10s_parent_block": true,
+  "optional_diagnostics_not_fused_into_primary": [
+    "PN-SCAT",
+    "C4+PN-SCAT",
+    "CHORD B7"
+  ],
+  "primary_family": "C4 fourth-order cyclic cumulant only",
+  "primary_window_ms": 500,
+  "quotient": "diagonal and first upper diagonal of vv^H/(||v||^2+epsilon)",
+  "real_primary_dimension": 88,
+  "receiver_common_removal": "within each split and parent block, across-PRN coordinatewise median",
+  "schema": "gnss-doppler-lab.cinder-stage0a-feature-contract.v1",
+  "sensitivity_window_ms": [
+    100,
+    1000
+  ],
+  "transition_pattern_equalization": "equal mean over all 8 previous/current/next chip sign classes",
+  "variance_floor": 1e-10,
+  "whitening": "feature-train-only median and 1.4826*MAD; diagonal clean metric",
+  "window_offsets_within_parent_s": {
+    "100": [
+      4.95,
+      5.05
+    ],
+    "1000": [
+      4.5,
+      5.5
+    ],
+    "500": [
+      4.75,
+      5.25
+    ]
+  },
+  "window_overlap": 0.0
+}
