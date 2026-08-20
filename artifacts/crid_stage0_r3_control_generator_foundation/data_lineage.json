@@ -1,0 +1,87 @@
+{
+  "attack_bytes_read": 0,
+  "attack_paths_opened": [],
+  "datasets": {
+    "OAK": {
+      "absolute_end_sample_exclusive": 210202273,
+      "absolute_start_sample": 150275296,
+      "control_bytes": 239707908,
+      "control_complex_samples": 59926977,
+      "dataset": "OAKBAT.cleanStatic",
+      "four_assignment_exclusion_cycle": [
+        27,
+        10,
+        11,
+        21,
+        24
+      ],
+      "sample_rate_hz": 5000000,
+      "single_assignment_cycle": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ],
+      "source_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+      "source_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "source_size_bytes": 9600000000,
+      "validated_prns_sorted": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ]
+    },
+    "TEX": {
+      "absolute_end_sample_exclusive": 1117517038,
+      "absolute_start_sample": 817815304,
+      "control_bytes": 1198806936,
+      "control_complex_samples": 299701734,
+      "dataset": "TEXBAT.cleanStatic",
+      "four_assignment_exclusion_cycle": [
+        30,
+        3,
+        13,
+        16,
+        19
+      ],
+      "sample_rate_hz": 25000000,
+      "single_assignment_cycle": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ],
+      "source_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "source_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "source_size_bytes": 48016392192,
+      "validated_prns_sorted": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ]
+    }
+  },
+  "lineage": {
+    "ca_code": "GPS L1 C/A code generated independently for each target PRN",
+    "common_interval_authorization": "R0c BOUNDARY_PHASE_EXTRAPOLATION_PASS_WITH_SCOPE_LIMITATION",
+    "nav_mapping": "artifacts/mosaic_stage0b_r0c_boundary_phase_extrapolation/corrected_bit_mapping.csv.gz",
+    "nav_mapping_sha256": "db7e23761e2bb4314d6f22e990e23c0fb19387ee7476a55a665def7a10af522f",
+    "nav_scope": "only rows whose corrected absolute raw support contains the requested sample are permitted",
+    "nav_semantics": "R0b corrected +1 TRACE epoch endpoints, data_symbol_boundary marks end of current bit",
+    "outside_common_interval": "forbidden",
+    "receiver_state": "authenticated 1 ms TRACE records used by R0c; action_used code/carrier NCO fields and absolute PRN_start_sample_count"
+  },
+  "schema": "gnss-doppler-lab.crid-r3-data-lineage.v1",
+  "fresh_full_file_sha256": {
+    "OAK": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+    "TEX": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9"
+  },
+  "source_full_hash_status": "PASS",
+  "status": "PASS"
+}

@@ -1,0 +1,18 @@
+{
+  "domains": {
+    "OAK": {
+      "case_count": 33,
+      "nav_values_only_minus_plus_one_or_zero": true,
+      "r0c_mapping_sha256": "db7e23761e2bb4314d6f22e990e23c0fb19387ee7476a55a665def7a10af522f",
+      "status": "PASS"
+    },
+    "TEX": {
+      "case_count": 33,
+      "nav_values_only_minus_plus_one_or_zero": true,
+      "r0c_mapping_sha256": "db7e23761e2bb4314d6f22e990e23c0fb19387ee7476a55a665def7a10af522f",
+      "status": "PASS"
+    }
+  },
+  "schema": "gnss-doppler-lab.crid-r3-nav-continuity.v1",
+  "status": "PASS"
+}

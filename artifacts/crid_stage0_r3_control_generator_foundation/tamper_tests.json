@@ -1,0 +1,114 @@
+{
+  "attack_bytes_read": 0,
+  "passed": 15,
+  "schema": "gnss-doppler-lab.crid-r3-tamper-tests.v1",
+  "status": "PASS",
+  "tests": [
+    {
+      "detected": true,
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS",
+      "tamper": "source_sha_mutation"
+    },
+    {
+      "detected": true,
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS",
+      "tamper": "target_prn_count_mutation"
+    },
+    {
+      "detected": true,
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS",
+      "tamper": "non_target_component"
+    },
+    {
+      "detected": true,
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS",
+      "tamper": "delay_truth_plus_0p05_chip"
+    },
+    {
+      "detected": true,
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS",
+      "tamper": "nonmonotonic_pull_off"
+    },
+    {
+      "detected": true,
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS",
+      "tamper": "power_truth_plus_1_db"
+    },
+    {
+      "detected": true,
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS",
+      "tamper": "nav_sign_flip"
+    },
+    {
+      "detected": true,
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS",
+      "tamper": "chunk_carrier_reset"
+    },
+    {
+      "detected": true,
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS",
+      "tamper": "identity_code_ramp"
+    },
+    {
+      "detected": true,
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS",
+      "tamper": "identity_clock_drift"
+    },
+    {
+      "detected": true,
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS",
+      "tamper": "shared_multipath_phase"
+    },
+    {
+      "detected": true,
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS",
+      "tamper": "truncate_one_complex_sample"
+    },
+    {
+      "detected": true,
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS",
+      "tamper": "int16_clipping_overflow"
+    },
+    {
+      "detected": true,
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS",
+      "tamper": "truth_sidecar_byte_flip"
+    },
+    {
+      "detected": true,
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS",
+      "tamper": "attack_path_sentinel_access"
+    }
+  ],
+  "total": 15
+}

@@ -1,0 +1,16 @@
+{
+  "domains": {
+    "OAK": {
+      "all_output_and_truth_sha_equal": true,
+      "case_count": 33,
+      "status": "PASS"
+    },
+    "TEX": {
+      "all_output_and_truth_sha_equal": true,
+      "case_count": 33,
+      "status": "PASS"
+    }
+  },
+  "schema": "gnss-doppler-lab.crid-r3-determinism.v1",
+  "status": "PASS"
+}

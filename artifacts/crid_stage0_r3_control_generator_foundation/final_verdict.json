@@ -1,0 +1,30 @@
+{
+  "attack_bytes_read": 0,
+  "attack_evaluation_executed": false,
+  "blocking_reason": "Preregistered independent power check used a single-PRN authentic projection, inconsistent with the frozen five-PRN joint complex-LS denominator; changing it after results was not authorized.",
+  "c0_smoke": "PASS",
+  "coverage": {
+    "OAK": {
+      "negative": 15,
+      "positive": 18
+    },
+    "TEX": {
+      "negative": 15,
+      "positive": 18
+    }
+  },
+  "crid_score_computed": false,
+  "deterministic_reproduction": "PASS",
+  "generation_status": "PASS",
+  "independent_correlator": {
+    "failed": 9,
+    "failure_scope": "OAK PRN 21 authentic-amplitude denominator only",
+    "passed": 171,
+    "rows": 180
+  },
+  "next_state": "NOT_AUTHORIZED",
+  "schema": "gnss-doppler-lab.crid-r3-final-verdict.v1",
+  "status": "INCONCLUSIVE",
+  "tamper_tests": "PASS",
+  "verdict": "INCONCLUSIVE_CONTROL_PROVENANCE"
+}

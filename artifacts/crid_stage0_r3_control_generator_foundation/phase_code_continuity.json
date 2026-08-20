@@ -1,0 +1,18 @@
+{
+  "domains": {
+    "OAK": {
+      "positive_cases": 18,
+      "smooth_pull_off_monotonic": true,
+      "status": "PASS",
+      "terminal_delay_reached": true
+    },
+    "TEX": {
+      "positive_cases": 18,
+      "smooth_pull_off_monotonic": true,
+      "status": "PASS",
+      "terminal_delay_reached": true
+    }
+  },
+  "schema": "gnss-doppler-lab.crid-r3-phase-code-continuity.v1",
+  "status": "PASS"
+}

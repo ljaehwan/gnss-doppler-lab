@@ -1,0 +1,1789 @@
+{
+  "cases": [
+    {
+      "case_id": "OAK.negative.bitwise_nav_sign",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.negative.byte_identical",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10,
+        11
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.negative.cn0_reduction",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.negative.common_receiver_clock_drift",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.negative.empirical_awgn_0p5sigma",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.negative.empirical_awgn_1sigma",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.negative.empirical_awgn_2sigma",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.negative.gain",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.negative.global_phase",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.negative.independent_multipath",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10,
+        11,
+        21,
+        24
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.negative.prn_drop_add",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10,
+        11
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 137422
+    },
+    {
+      "case_id": "OAK.negative.single_prn_disturbance",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.negative.single_source_code_ramp",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.negative.single_source_doppler_ramp",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.negative.zero_delay_collapsed_duplicate",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.positive.d050.p+00.four",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10,
+        11,
+        21,
+        24
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.positive.d050.p+00.single",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        27
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 135374
+    },
+    {
+      "case_id": "OAK.positive.d050.p-03.four",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10,
+        11,
+        24,
+        27
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 147327
+    },
+    {
+      "case_id": "OAK.positive.d050.p-03.single",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        21
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.positive.d050.p-06.four",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        11,
+        21,
+        24,
+        27
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.positive.d050.p-06.single",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.positive.d150.p+00.four",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        11,
+        21,
+        24,
+        27
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 137534
+    },
+    {
+      "case_id": "OAK.positive.d150.p+00.single",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.positive.d150.p-03.four",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10,
+        11,
+        21,
+        27
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.positive.d150.p-03.single",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        24
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149617
+    },
+    {
+      "case_id": "OAK.positive.d150.p-06.four",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10,
+        21,
+        24,
+        27
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.positive.d150.p-06.single",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        11
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.positive.d300.p+00.four",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10,
+        21,
+        24,
+        27
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.positive.d300.p+00.single",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        11
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 145248
+    },
+    {
+      "case_id": "OAK.positive.d300.p-03.four",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10,
+        11,
+        21,
+        24
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.positive.d300.p-03.single",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        27
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.positive.d300.p-06.four",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        10,
+        11,
+        24,
+        27
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "OAK.positive.d300.p-06.single",
+      "domain": "OAK",
+      "dump_count": 11,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        21
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        8,
+        10,
+        11,
+        12,
+        14,
+        18,
+        20,
+        21,
+        24,
+        27
+      ],
+      "valid_trace_rows": 149780
+    },
+    {
+      "case_id": "TEX.negative.bitwise_nav_sign",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.negative.byte_identical",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3,
+        13
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.negative.cn0_reduction",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.negative.common_receiver_clock_drift",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.negative.empirical_awgn_0p5sigma",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.negative.empirical_awgn_1sigma",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.negative.empirical_awgn_2sigma",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.negative.gain",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.negative.global_phase",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.negative.independent_multipath",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3,
+        13,
+        16,
+        19
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.negative.prn_drop_add",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3,
+        13
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 137673
+    },
+    {
+      "case_id": "TEX.negative.single_prn_disturbance",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.negative.single_source_code_ramp",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.negative.single_source_doppler_ramp",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.negative.zero_delay_collapsed_duplicate",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.positive.d050.p+00.four",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3,
+        13,
+        16,
+        19
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.positive.d050.p+00.single",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        30
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 144797
+    },
+    {
+      "case_id": "TEX.positive.d050.p-03.four",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3,
+        13,
+        19,
+        30
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.positive.d050.p-03.single",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        16
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.positive.d050.p-06.four",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        13,
+        16,
+        19,
+        30
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.positive.d050.p-06.single",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.positive.d150.p+00.four",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        13,
+        16,
+        19,
+        30
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 145726
+    },
+    {
+      "case_id": "TEX.positive.d150.p+00.single",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.positive.d150.p-03.four",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3,
+        13,
+        16,
+        30
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 140020
+    },
+    {
+      "case_id": "TEX.positive.d150.p-03.single",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        19
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.positive.d150.p-06.four",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3,
+        16,
+        19,
+        30
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.positive.d150.p-06.single",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        13
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.positive.d300.p+00.four",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3,
+        16,
+        19,
+        30
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 147316
+    },
+    {
+      "case_id": "TEX.positive.d300.p+00.single",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        13
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.positive.d300.p-03.four",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3,
+        13,
+        16,
+        19
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.positive.d300.p-03.single",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        30
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 141375
+    },
+    {
+      "case_id": "TEX.positive.d300.p-06.four",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        3,
+        13,
+        19,
+        30
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    },
+    {
+      "case_id": "TEX.positive.d300.p-06.single",
+      "domain": "TEX",
+      "dump_count": 10,
+      "exit_code": 0,
+      "status": "PASS",
+      "target_prns": [
+        16
+      ],
+      "target_tracking_pass": true,
+      "terminal_drain_status": "PASS",
+      "tracked_prns": [
+        3,
+        6,
+        7,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        30
+      ],
+      "valid_trace_rows": 149760
+    }
+  ],
+  "domains": {
+    "OAK": {
+      "cases": 33,
+      "passed": 33,
+      "status": "PASS"
+    },
+    "TEX": {
+      "cases": 33,
+      "passed": 33,
+      "status": "PASS"
+    }
+  },
+  "schema": "gnss-doppler-lab.crid-r3-c0-smoke-validation.v1",
+  "score_computed": false,
+  "status": "PASS"
+}

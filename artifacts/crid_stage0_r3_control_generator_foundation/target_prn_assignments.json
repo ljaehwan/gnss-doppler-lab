@@ -1,0 +1,202 @@
+{
+  "domains": {
+    "OAK": {
+      "four_exact": true,
+      "positive_cases": {
+        "OAK.positive.d050.p+00.four": [
+          10,
+          11,
+          21,
+          24
+        ],
+        "OAK.positive.d050.p+00.single": [
+          27
+        ],
+        "OAK.positive.d050.p-03.four": [
+          10,
+          11,
+          24,
+          27
+        ],
+        "OAK.positive.d050.p-03.single": [
+          21
+        ],
+        "OAK.positive.d050.p-06.four": [
+          11,
+          21,
+          24,
+          27
+        ],
+        "OAK.positive.d050.p-06.single": [
+          10
+        ],
+        "OAK.positive.d150.p+00.four": [
+          11,
+          21,
+          24,
+          27
+        ],
+        "OAK.positive.d150.p+00.single": [
+          10
+        ],
+        "OAK.positive.d150.p-03.four": [
+          10,
+          11,
+          21,
+          27
+        ],
+        "OAK.positive.d150.p-03.single": [
+          24
+        ],
+        "OAK.positive.d150.p-06.four": [
+          10,
+          21,
+          24,
+          27
+        ],
+        "OAK.positive.d150.p-06.single": [
+          11
+        ],
+        "OAK.positive.d300.p+00.four": [
+          10,
+          21,
+          24,
+          27
+        ],
+        "OAK.positive.d300.p+00.single": [
+          11
+        ],
+        "OAK.positive.d300.p-03.four": [
+          10,
+          11,
+          21,
+          24
+        ],
+        "OAK.positive.d300.p-03.single": [
+          27
+        ],
+        "OAK.positive.d300.p-06.four": [
+          10,
+          11,
+          24,
+          27
+        ],
+        "OAK.positive.d300.p-06.single": [
+          21
+        ]
+      },
+      "single_exact": true,
+      "validated_prns": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ]
+    },
+    "TEX": {
+      "four_exact": true,
+      "positive_cases": {
+        "TEX.positive.d050.p+00.four": [
+          3,
+          13,
+          16,
+          19
+        ],
+        "TEX.positive.d050.p+00.single": [
+          30
+        ],
+        "TEX.positive.d050.p-03.four": [
+          3,
+          13,
+          19,
+          30
+        ],
+        "TEX.positive.d050.p-03.single": [
+          16
+        ],
+        "TEX.positive.d050.p-06.four": [
+          13,
+          16,
+          19,
+          30
+        ],
+        "TEX.positive.d050.p-06.single": [
+          3
+        ],
+        "TEX.positive.d150.p+00.four": [
+          13,
+          16,
+          19,
+          30
+        ],
+        "TEX.positive.d150.p+00.single": [
+          3
+        ],
+        "TEX.positive.d150.p-03.four": [
+          3,
+          13,
+          16,
+          30
+        ],
+        "TEX.positive.d150.p-03.single": [
+          19
+        ],
+        "TEX.positive.d150.p-06.four": [
+          3,
+          16,
+          19,
+          30
+        ],
+        "TEX.positive.d150.p-06.single": [
+          13
+        ],
+        "TEX.positive.d300.p+00.four": [
+          3,
+          16,
+          19,
+          30
+        ],
+        "TEX.positive.d300.p+00.single": [
+          13
+        ],
+        "TEX.positive.d300.p-03.four": [
+          3,
+          13,
+          16,
+          19
+        ],
+        "TEX.positive.d300.p-03.single": [
+          30
+        ],
+        "TEX.positive.d300.p-06.four": [
+          3,
+          13,
+          19,
+          30
+        ],
+        "TEX.positive.d300.p-06.single": [
+          16
+        ]
+      },
+      "single_exact": true,
+      "validated_prns": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ]
+    }
+  },
+  "rule": {
+    "case_order": "delay major [0.05,0.15,0.30], then power [-6,-3,0], then mode [single,four]",
+    "four": "for positive case ordinal k within a domain, exclude four_assignment_exclusion_cycle[k mod 5] and target the other four sorted validated PRNs",
+    "negative_primary": "first sorted validated PRN",
+    "negative_secondary": "second sorted validated PRN",
+    "rationale": "outcome-independent lexical rotation covers every validated PRN while preserving exact one/four cardinality",
+    "single": "for positive case ordinal k within a domain, target is single_assignment_cycle[k mod 5]"
+  },
+  "schema": "gnss-doppler-lab.crid-r3-target-assignments.v1",
+  "status": "PASS"
+}
