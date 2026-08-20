@@ -20,7 +20,7 @@ def run_replay(*,receiver:Path,base_config:Path,raw:Path,out:Path,scenario:str,
  values={"SignalSource.filename":str(raw),"SignalSource.seconds_to_skip":skip_s,
   "SignalSource.samples":int(duration_s*fs*2),"SignalSource.repeat":"false",
   "Tracking_1C.dump":"false","Tracking_1C.dump_mat":"false",
-  "Tracking_1C.trace_dump":"true","Tracking_1C.trace_dump_filename":str(out/"trace_native_1ms_ch_"),
+  "Tracking_1C.trace_dump":"true","Tracking_1C.trace_dump_filename":"trace_native_1ms_ch_",
   "Tracking_1C.trace_scenario_id":scenario,"Tracking_1C.trace_raw_sample_offset":int(skip_s*fs),
   "Observables.dump":"false"}
  cfg.write_text(render_receiver_config(base_config.read_text(),receiver_configurations()[config_name],values))

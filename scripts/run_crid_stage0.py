@@ -40,7 +40,7 @@ def git(*args):return subprocess.check_output(["git",*args],cwd=ROOT,text=True).
 def dump(name,value):
  ART.mkdir(parents=True,exist_ok=True);(ART/name).write_text(json.dumps(value,indent=2,sort_keys=True,allow_nan=False)+"\n")
 def science_config():
- return {"schema":"gnss-doppler-lab.crid-stage0-config.v1","model":"CRID-GNSS",
+ return {"schema":"gnss-doppler-lab.crid-stage0-config.v2","model":"CRID-GNSS",
   "configuration_statement":FREEZE_TEXT,"receiver_configurations":receiver_configurations(),
   "fields":FEATURE_NAMES,"cn0_lock_usage":"mask/covariance audit only; forbidden in score",
   "cadence_ms":1,"minimum_configurations":4,"minimum_common_prns":4,

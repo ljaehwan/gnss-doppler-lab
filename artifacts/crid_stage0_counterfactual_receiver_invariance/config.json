@@ -298,7 +298,7 @@
     "method": "TRACE-R2e frozen handoff plus fixed ChannelN.satellite map",
     "same_handoff_all_configs": true
   },
-  "schema": "gnss-doppler-lab.crid-stage0-config.v1",
+  "schema": "gnss-doppler-lab.crid-stage0-config.v2",
   "thresholds": {
     "q99": 0.99,
     "q99_5": 0.995,
