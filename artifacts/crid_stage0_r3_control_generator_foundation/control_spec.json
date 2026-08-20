@@ -1,0 +1,231 @@
+{
+  "schema": "gnss-doppler-lab.crid-r3-control-spec.v1",
+  "status": "CONTROL_DESIGN_FROZEN_PRE_IMPLEMENTATION",
+  "freeze_date_utc": "2026-08-20",
+  "base": {
+    "branch": "origin/research/crid-stage0-r2-frozen-evaluation",
+    "sha": "cce402c6f9326fb265c997d0c9beed6eeb43e496",
+    "work_branch": "research/crid-stage0-r3-control-generator-foundation"
+  },
+  "scope": {
+    "purpose": "clean-only raw-IQ physical-control generator foundation and independent validation",
+    "score_computation": false,
+    "attack_payload_access": false,
+    "phase_a_execution": false,
+    "stage_1": false,
+    "frozen_science_modified": false,
+    "protected": [
+      "CRID C0/C1/C2/C3 settings and handoff PRN map",
+      "CRID features, preprocessing, score, H0/H1, predictor, covariance, threshold and gates",
+      "R1/R2 artifacts",
+      "main branch"
+    ]
+  },
+  "sample_contract": {
+    "format": "little-endian interleaved signed int16 I,Q",
+    "bytes_per_complex_sample": 4,
+    "source_window_policy": "each control input is the exact R0c common interval; output has the same number of complex samples and retains absolute indices in truth",
+    "rounding": "round-to-nearest-even through numpy.rint",
+    "saturation": "clip to [-32768,32767] only after measuring excursions",
+    "clipping_fail_closed": {
+      "maximum_added_clip_fraction": 1e-6,
+      "maximum_total_clip_fraction": 0.0001,
+      "definition": "count of output I or Q scalars outside int16 before clipping divided by 2*complex_sample_count"
+    }
+  },
+  "datasets": {
+    "OAK": {
+      "dataset": "OAKBAT.cleanStatic",
+      "source_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+      "source_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "source_size_bytes": 9600000000,
+      "sample_rate_hz": 5000000,
+      "absolute_start_sample": 150275296,
+      "absolute_end_sample_exclusive": 210202273,
+      "control_complex_samples": 59926977,
+      "control_bytes": 239707908,
+      "validated_prns_sorted": [10, 11, 21, 24, 27],
+      "single_assignment_cycle": [10, 11, 21, 24, 27],
+      "four_assignment_exclusion_cycle": [27, 10, 11, 21, 24]
+    },
+    "TEX": {
+      "dataset": "TEXBAT.cleanStatic",
+      "source_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "source_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "source_size_bytes": 48016392192,
+      "sample_rate_hz": 25000000,
+      "absolute_start_sample": 817815304,
+      "absolute_end_sample_exclusive": 1117517038,
+      "control_complex_samples": 299701734,
+      "control_bytes": 1198806936,
+      "validated_prns_sorted": [3, 13, 16, 19, 30],
+      "single_assignment_cycle": [3, 13, 16, 19, 30],
+      "four_assignment_exclusion_cycle": [30, 3, 13, 16, 19]
+    }
+  },
+  "lineage": {
+    "nav_mapping": "artifacts/mosaic_stage0b_r0c_boundary_phase_extrapolation/corrected_bit_mapping.csv.gz",
+    "nav_mapping_sha256": "db7e23761e2bb4314d6f22e990e23c0fb19387ee7476a55a665def7a10af522f",
+    "nav_semantics": "R0b corrected +1 TRACE epoch endpoints, data_symbol_boundary marks end of current bit",
+    "nav_scope": "only rows whose corrected absolute raw support contains the requested sample are permitted",
+    "receiver_state": "authenticated 1 ms TRACE records used by R0c; action_used code/carrier NCO fields and absolute PRN_start_sample_count",
+    "ca_code": "GPS L1 C/A code generated independently for each target PRN",
+    "common_interval_authorization": "R0c BOUNDARY_PHASE_EXTRAPOLATION_PASS_WITH_SCOPE_LIMITATION",
+    "outside_common_interval": "forbidden"
+  },
+  "target_assignment": {
+    "case_order": "delay major [0.05,0.15,0.30], then power [-6,-3,0], then mode [single,four]",
+    "single": "for positive case ordinal k within a domain, target is single_assignment_cycle[k mod 5]",
+    "four": "for positive case ordinal k within a domain, exclude four_assignment_exclusion_cycle[k mod 5] and target the other four sorted validated PRNs",
+    "negative_primary": "first sorted validated PRN",
+    "negative_secondary": "second sorted validated PRN",
+    "rationale": "outcome-independent lexical rotation covers every validated PRN while preserving exact one/four cardinality"
+  },
+  "amplitude_estimation": {
+    "method": "per-PRN complex least squares alpha=(s^H x)/(s^H s)",
+    "fit_interval": "first 1000 complete 1 ms epochs inside the common interval",
+    "template": "zero-delay authentic PRN C/A*validated-NAV*receiver-NCO carrier replica",
+    "counterfeit_coefficient": "alpha * 10^(relative_power_db/20) * exp(j*phase_offset_rad)",
+    "multi_prn_fit": "all five authenticated templates are fitted jointly before selecting target coefficients",
+    "result_use": "amplitudes are measurements, never used to choose targets or change frozen parameters"
+  },
+  "positive_controls": {
+    "domains": ["OAK", "TEX"],
+    "case_id": "{domain}.positive.d{delay_millchips:03d}.p{power_db:+03d}.{mode}",
+    "cartesian_grid": {
+      "terminal_delay_chips": [0.05, 0.15, 0.3],
+      "relative_power_db": [-6, -3, 0],
+      "target_mode": ["single", "four"]
+    },
+    "cases_per_domain": 18,
+    "total_cases": 36,
+    "phase_seed": "CRID-R3-CONTROL-20260820",
+    "phase_offset_rad": "-pi + 2*pi*u64be(SHA256(phase_seed+'|'+case_id+'|PRN='+decimal_prn)[0:8])/2^64",
+    "doppler_offset_hz": 0.0,
+    "code_rate_offset_chips_per_second_after_pull": 0.0,
+    "amplitude_envelope": {
+      "0_to_0.5_s": "0.5*(1-cos(pi*t/0.5))",
+      "0.5_s_to_T_minus_0.5_s": 1.0,
+      "T_minus_0.5_s_to_T": "0.5*(1+cos(pi*(t-(T-0.5))/0.5))",
+      "outside": 0.0
+    },
+    "delay_function_chips": {
+      "0_to_0.5_s": 0.0,
+      "0.5_to_4.5_s": "terminal_delay*0.5*(1-cos(pi*(t-0.5)/4.0))",
+      "4.5_s_to_T": "terminal_delay",
+      "monotonic": true
+    },
+    "continuity": "one absolute-sample formula; code and carrier accumulators are evaluated from absolute TRACE-row origins, never reset at chunks or NAV rows",
+    "nav": "each target uses its own validated R0c NAV sign; non-targets receive no generated component",
+    "physical_effect": "one or four coherent PRN-selective delayed replicas smoothly pull from zero to the frozen terminal delay while authentic signals remain",
+    "forbidden_shortcuts": [
+      "whole-waveform delay or duplicate",
+      "nominal 20ms*fs NAV boundaries",
+      "shared C/A code or NAV across PRNs",
+      "target selection from observed outcomes",
+      "replacing or deleting authentic samples",
+      "generated energy on non-target PRNs"
+    ]
+  },
+  "negative_controls": {
+    "domains": ["OAK", "TEX"],
+    "cases_per_domain": 15,
+    "total_cases": 30,
+    "seed": "CRID-R3-NEGATIVE-20260820",
+    "controls": [
+      {"id": "byte_identical", "targets": [], "parameters": {}, "effect": "exact source-window copy", "non_identity_required": false},
+      {"id": "gain", "targets": "all waveform", "parameters": {"linear_gain": 0.8}, "effect": "global amplitude scaling", "non_identity_required": true},
+      {"id": "global_phase", "targets": "all waveform", "parameters": {"phase_rad": 0.5235987755982988}, "effect": "global complex rotation", "non_identity_required": true},
+      {"id": "bitwise_nav_sign", "targets": "negative_primary", "parameters": {"operation": "x + alpha*s_auth*(-2) on epochs whose validated NAV sign is -1 only"}, "effect": "bit-dependent sign transformation of one reconstructed PRN, not global pi rotation", "non_identity_required": true},
+      {"id": "empirical_awgn_0p5sigma", "targets": "all waveform", "parameters": {"complex_component_sigma_multiplier": 0.5}, "effect": "seeded complex AWGN", "non_identity_required": true},
+      {"id": "empirical_awgn_1sigma", "targets": "all waveform", "parameters": {"complex_component_sigma_multiplier": 1.0}, "effect": "seeded complex AWGN", "non_identity_required": true},
+      {"id": "empirical_awgn_2sigma", "targets": "all waveform", "parameters": {"complex_component_sigma_multiplier": 2.0}, "effect": "seeded complex AWGN", "non_identity_required": true},
+      {"id": "cn0_reduction", "targets": "all waveform", "parameters": {"requested_reduction_db": 3.0, "added_component_sigma": "empirical noise sigma*sqrt(10^(3/10)-1)"}, "effect": "3 dB empirical C/N0 reduction by independent noise addition", "non_identity_required": true},
+      {"id": "single_source_code_ramp", "targets": "negative_primary", "parameters": {"terminal_delay_chips": 0.05, "delay_function": "same 0.5-to-4.5 s positive pull-off", "replacement": "x + alpha*(s_shifted-s_auth)"}, "effect": "nonzero code-only ramp of one PRN", "non_identity_required": true},
+      {"id": "single_source_doppler_ramp", "targets": "negative_primary", "parameters": {"terminal_doppler_hz": 5.0, "ramp_start_s": 0.5, "ramp_end_s": 4.5, "replacement": "x + alpha*(s_rotated-s_auth)"}, "effect": "nonzero carrier-frequency ramp of one PRN with integrated continuous phase", "non_identity_required": true},
+      {"id": "common_receiver_clock_drift", "targets": "all waveform", "parameters": {"terminal_fractional_sample_offset": 0.25, "ramp_start_s": 0.5, "ramp_end_s": 4.5, "interpolator": "linear adjacent-sample interpolation"}, "effect": "common nonzero time-base warp without changing sample count", "non_identity_required": true},
+      {"id": "prn_drop_add", "targets": ["negative_primary", "negative_secondary"], "parameters": {"drop": "x-alpha_primary*s_primary", "add": "x+alpha_secondary*10^(3/20)*s_secondary"}, "effect": "remove primary PRN estimate and add +3 dB secondary PRN component", "non_identity_required": true},
+      {"id": "single_prn_disturbance", "targets": "negative_primary", "parameters": {"phase_excursion_rad": 0.7853981633974483, "start_s": 4.5, "end_s": 7.5, "edge_s": 0.5, "replacement": "x + alpha*(exp(j*phase(t))-1)*s_auth"}, "effect": "bounded phase disturbance on exactly one PRN", "non_identity_required": true},
+      {"id": "independent_multipath", "targets": "first four sorted validated PRNs", "parameters": {"relative_power_db": -9.0, "delays_chips": [0.07, 0.11, 0.17, 0.23], "phases_rad": [0.2, -0.7, 1.1, -1.9], "dopplers_hz": [0.0, 0.0, 0.0, 0.0]}, "effect": "four PRN-specific independent static echoes", "non_identity_required": true},
+      {"id": "zero_delay_collapsed_duplicate", "targets": "negative_primary", "parameters": {"delay_chips": 0.0, "doppler_hz": 0.0, "relative_power_db": -3.0, "phase_rad": 0.0}, "effect": "zero-delay two-source control algebraically collapsed to a gain-like change on one PRN", "non_identity_required": true}
+    ],
+    "empirical_noise_sigma": "per I/Q component robust sigma = MAD(first_difference(x_component))/(0.6744897501960817*sqrt(2)), evaluated over first 1,000,000 samples of the source window",
+    "awgn_prng": "NumPy PCG64 seeded by u64be(SHA256(seed+'|'+domain+'|'+control_id)[0:8]); standard_normal pairs generated in one fixed 1,000,000-complex-sample chunk sequence",
+    "forbidden_shortcuts": [
+      "identity implementation of code ramp or clock drift",
+      "whole-waveform pi rotation for NAV control",
+      "unverified or implicit PRN target",
+      "shared delay or phase for independent multipath",
+      "describing whole-waveform delay as a PRN-selective replica"
+    ]
+  },
+  "truth_sidecar": {
+    "per_case_json": "case metadata, source/output hashes, target set, LS amplitudes, clipping and bounds",
+    "epoch_binary": "little-endian fixed records at 1 ms cadence for absolute sample index, PRN, complex amplitudes, delay, code rate, carrier phase, Doppler, NAV sign and envelope",
+    "binary_schema": "<q i d d d d d d d b 7x",
+    "binary_sha256_bound": true,
+    "inactive_interval": "outside the exact R0c source window no file samples exist; within the window envelope truth marks inactive edges"
+  },
+  "independent_reference": {
+    "separation": "reference correlator is a distinct module and must not import generator render, envelope, delay, phase or injection functions",
+    "ca_code": "independent shift-register implementation checked against committed PRN chips",
+    "delay_search_chips": [-0.4, 0.4],
+    "delay_step_chips": 0.01,
+    "epoch_stride": 100,
+    "tolerances": {
+      "target_count_exact": true,
+      "non_target_relative_energy_max": 0.01,
+      "terminal_delay_absolute_error_chips_max": 0.025,
+      "pull_off_monotonic_decrease_tolerance_chips": 0.005,
+      "relative_power_error_db_max": 0.75,
+      "nav_boundary_phase_jump_rad_max": 0.2,
+      "chunk_code_discontinuity_chips_max": 0.02,
+      "chunk_carrier_discontinuity_rad_max": 0.05,
+      "gain_relative_error_max": 0.001,
+      "global_phase_error_rad_max": 0.002,
+      "awgn_sigma_relative_error_max": 0.02,
+      "clock_terminal_sample_error_max": 0.02,
+      "absolute_endpoint_error_samples_max": 1,
+      "out_of_bounds_count": 0,
+      "deterministic_sha256_match": true
+    }
+  },
+  "smoke": {
+    "receiver_configuration": "unchanged CRID C0",
+    "source": "each complete control window",
+    "trace_raw_sample_offset": "dataset absolute_start_sample",
+    "required": ["target PRN tracking", "native TRACE", "terminal-drain PASS", "receiver-observed direction agrees with truth"],
+    "forbidden": ["CRID feature extraction", "CRID score", "threshold or alarm evaluation", "C1/C2/C3 replay"]
+  },
+  "tamper_tests": [
+    "source SHA mutation",
+    "target PRN count mutation",
+    "non-target injected component",
+    "delay truth +0.05 chip",
+    "nonmonotonic pull-off",
+    "power truth +1 dB",
+    "NAV sign flip",
+    "chunk carrier reset",
+    "identity code ramp",
+    "identity clock drift",
+    "shared multipath phase",
+    "output truncation by one complex sample",
+    "int16 clipping overflow",
+    "truth sidecar byte flip",
+    "attack path sentinel access"
+  ],
+  "final_gate": {
+    "allowed_verdicts": ["CONTROL_GENERATOR_FOUNDATION_PASS", "CONTROL_GENERATOR_FOUNDATION_FAIL", "INCONCLUSIVE_CONTROL_PROVENANCE"],
+    "pass_requires": [
+      "TEX and OAK negative 15/15",
+      "TEX and OAK positive 18/18",
+      "exact single/four assignment",
+      "smooth pull-off",
+      "independent correlator PASS",
+      "no identity error",
+      "deterministic reproduction",
+      "attack bytes read equals zero"
+    ],
+    "pass_next_state": "READY_FOR_CRID_PHASE_A"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "schema": "gnss-doppler-lab.crid-r3-design-freeze.v1",
+  "status": "CONTROL_DESIGN_FREEZE",
+  "base_sha": "cce402c6f9326fb265c997d0c9beed6eeb43e496",
+  "branch": "research/crid-stage0-r3-control-generator-foundation",
+  "control_spec": "control_spec.json",
+  "control_spec_sha256": "9466d67c4f092b5e78e76eb9dff61116d9d4de62edecdfdefd98ecb0469b7749",
+  "control_results_observed_before_freeze": false,
+  "generator_implementation_started_before_freeze": false,
+  "attack_data_accessed": false,
+  "positive_cases_frozen": 36,
+  "negative_cases_frozen": 30,
+  "notes": "The design is frozen before generator implementation or control materialization. A necessary change must be committed and pushed as a versioned pre-result freeze."
+}
