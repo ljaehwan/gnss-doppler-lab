@@ -1,0 +1,103 @@
+{
+  "attack_payload_bytes_read": 0,
+  "inventory_operation": "os.stat/path.exists only",
+  "rows": [
+    {
+      "dataset": "oakbat_cleanstatic",
+      "family": "OAK_CLEAN",
+      "payload_opened": false,
+      "raw_exists": true,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+      "raw_size_bytes_from_stat_only": 9600000000,
+      "role": "clean_model_calibration_holdout",
+      "sha256_deferred_until_post_freeze": true,
+      "trace_exists_from_stat_only": true,
+      "trace_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/oakbat_cleanstatic"
+    },
+    {
+      "dataset": "oakbat_os3",
+      "family": "OAK_OS3_OS4",
+      "payload_opened": false,
+      "raw_exists": true,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/os3.bin",
+      "raw_size_bytes_from_stat_only": 9600000000,
+      "role": "core_attack",
+      "sha256_deferred_until_post_freeze": true,
+      "trace_exists_from_stat_only": true,
+      "trace_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/oakbat_os3"
+    },
+    {
+      "dataset": "oakbat_os4",
+      "family": "OAK_OS3_OS4",
+      "payload_opened": false,
+      "raw_exists": true,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/os4.bin",
+      "raw_size_bytes_from_stat_only": 9600000000,
+      "role": "core_attack",
+      "sha256_deferred_until_post_freeze": true,
+      "trace_exists_from_stat_only": true,
+      "trace_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/oakbat_os4"
+    },
+    {
+      "dataset": "texbat_cleanstatic",
+      "family": "TEX_CLEAN",
+      "payload_opened": false,
+      "raw_exists": true,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "raw_size_bytes_from_stat_only": 48016392192,
+      "role": "clean_model_calibration_holdout",
+      "sha256_deferred_until_post_freeze": true,
+      "trace_exists_from_stat_only": true,
+      "trace_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/texbat_cleanstatic"
+    },
+    {
+      "dataset": "texbat_ds1",
+      "family": "TEX_DS1",
+      "payload_opened": false,
+      "raw_exists": true,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds1.bin",
+      "raw_size_bytes_from_stat_only": 46170898432,
+      "role": "core_attack",
+      "sha256_deferred_until_post_freeze": true,
+      "trace_exists_from_stat_only": true,
+      "trace_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds1-complex9/raw"
+    },
+    {
+      "dataset": "texbat_ds3",
+      "family": "TEX_DS3",
+      "payload_opened": false,
+      "raw_exists": true,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds3.bin",
+      "raw_size_bytes_from_stat_only": 45785022464,
+      "role": "core_attack",
+      "sha256_deferred_until_post_freeze": true,
+      "trace_exists_from_stat_only": true,
+      "trace_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/texbat_ds3"
+    },
+    {
+      "dataset": "texbat_ds7",
+      "family": "TEX_DS7_DS8",
+      "payload_opened": false,
+      "raw_exists": true,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds7.bin",
+      "raw_size_bytes_from_stat_only": 27059290112,
+      "role": "core_attack",
+      "sha256_deferred_until_post_freeze": true,
+      "trace_exists_from_stat_only": true,
+      "trace_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/texbat_ds7"
+    },
+    {
+      "dataset": "texbat_ds8",
+      "family": "TEX_DS7_DS8",
+      "payload_opened": false,
+      "raw_exists": true,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds8.bin",
+      "raw_size_bytes_from_stat_only": 47000141168,
+      "role": "core_attack",
+      "sha256_deferred_until_post_freeze": true,
+      "trace_exists_from_stat_only": true,
+      "trace_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/raw"
+    }
+  ],
+  "schema": "gnss-doppler-lab.cora-stage0-data-inventory.v1"
+}
