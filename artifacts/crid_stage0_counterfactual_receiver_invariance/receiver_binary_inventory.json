@@ -1,0 +1,13 @@
+{
+  "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-build/src/main/gnss-sdr",
+  "peak_rss_benchmark": {
+    "OAK_kib": 180864,
+    "TEX_kib": 662400,
+    "status": "PASS",
+    "worker_count": 1
+  },
+  "schema": "gnss-doppler-lab.crid-receiver-binary.v1",
+  "sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+  "size_bytes": 36602584,
+  "version": "gnss-sdr version 0.0.19"
+}

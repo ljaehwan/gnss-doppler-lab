@@ -1,0 +1,78 @@
+{
+  "C0": {
+    "Tracking_1C.dll_bw_hz": 1.5,
+    "Tracking_1C.pll_bw_hz": 20.0,
+    "Tracking_1C.tap_spacing_chips": 0.125,
+    "coherent_integration_ms": 1,
+    "description": "native_standard",
+    "discriminators": {
+      "dll": "GNSS-SDR native GPS L1 C/A DLL",
+      "fll": "GNSS-SDR native pull-in FLL",
+      "pll": "GNSS-SDR native GPS L1 C/A PLL"
+    },
+    "extend_correlation_symbols": 1,
+    "fll_enabled": "receiver-native pull-in behavior; no explicit override",
+    "implementation": "GPS_L1_CA_DLL_PLL_Tracking",
+    "item_type": "gr_complex",
+    "loop_order": 3,
+    "name": "C0",
+    "tap_count": 9
+  },
+  "C1": {
+    "Tracking_1C.dll_bw_hz": 1.5,
+    "Tracking_1C.pll_bw_hz": 20.0,
+    "Tracking_1C.tap_spacing_chips": 0.1,
+    "coherent_integration_ms": 1,
+    "description": "narrow_correlator",
+    "discriminators": {
+      "dll": "GNSS-SDR native GPS L1 C/A DLL",
+      "fll": "GNSS-SDR native pull-in FLL",
+      "pll": "GNSS-SDR native GPS L1 C/A PLL"
+    },
+    "extend_correlation_symbols": 1,
+    "fll_enabled": "receiver-native pull-in behavior; no explicit override",
+    "implementation": "GPS_L1_CA_DLL_PLL_Tracking",
+    "item_type": "gr_complex",
+    "loop_order": 3,
+    "name": "C1",
+    "tap_count": 9
+  },
+  "C2": {
+    "Tracking_1C.dll_bw_hz": 0.5,
+    "Tracking_1C.pll_bw_hz": 5.0,
+    "Tracking_1C.tap_spacing_chips": 0.125,
+    "coherent_integration_ms": 1,
+    "description": "slow_narrow_loop",
+    "discriminators": {
+      "dll": "GNSS-SDR native GPS L1 C/A DLL",
+      "fll": "GNSS-SDR native pull-in FLL",
+      "pll": "GNSS-SDR native GPS L1 C/A PLL"
+    },
+    "extend_correlation_symbols": 1,
+    "fll_enabled": "receiver-native pull-in behavior; no explicit override",
+    "implementation": "GPS_L1_CA_DLL_PLL_Tracking",
+    "item_type": "gr_complex",
+    "loop_order": 3,
+    "name": "C2",
+    "tap_count": 9
+  },
+  "C3": {
+    "Tracking_1C.dll_bw_hz": 5.0,
+    "Tracking_1C.pll_bw_hz": 25.0,
+    "Tracking_1C.tap_spacing_chips": 0.125,
+    "coherent_integration_ms": 1,
+    "description": "fast_wide_loop",
+    "discriminators": {
+      "dll": "GNSS-SDR native GPS L1 C/A DLL",
+      "fll": "GNSS-SDR native pull-in FLL",
+      "pll": "GNSS-SDR native GPS L1 C/A PLL"
+    },
+    "extend_correlation_symbols": 1,
+    "fll_enabled": "receiver-native pull-in behavior; no explicit override",
+    "implementation": "GPS_L1_CA_DLL_PLL_Tracking",
+    "item_type": "gr_complex",
+    "loop_order": 3,
+    "name": "C3",
+    "tap_count": 9
+  }
+}

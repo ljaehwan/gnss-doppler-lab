@@ -1,0 +1,307 @@
+{
+  "ablations": {
+    "A0": "C0 residual norm",
+    "A1": "pairwise config spread",
+    "A2": "no dynamics",
+    "A3": "C0+C1",
+    "A4": "C0+C2+C3",
+    "A5": "independent deviation",
+    "Full": "C0+C1+C2+C3 H0/H1"
+  },
+  "alignment": {
+    "coordinate": "absolute raw sample",
+    "gap": "reset predictor; exclude reacquisition",
+    "max_causal_group_delay_ms": 20,
+    "resampling": "past-only integer native-cadence shift"
+  },
+  "bootstrap": {
+    "block_s": 10,
+    "replicates": 2000,
+    "seed": 20260821,
+    "sensitivity_block_s": 30
+  },
+  "cadence_ms": 1,
+  "clean_split": {
+    "calibration": [
+      0.47,
+      0.7
+    ],
+    "guard1": [
+      0.45,
+      0.47
+    ],
+    "guard2": [
+      0.7,
+      0.72
+    ],
+    "holdout": [
+      0.72,
+      1.0
+    ],
+    "train_fraction": [
+      0,
+      0.45
+    ]
+  },
+  "cn0_lock_usage": "mask/covariance audit only; forbidden in score",
+  "configuration_statement": "CRID configuration frozen before this CRID evaluation; TEXBAT/OAKBAT were previously inspected by the broader project.",
+  "covariance": {
+    "eigen_floor": 1e-08,
+    "shrinkage": 0.2,
+    "source": "clean calibration only"
+  },
+  "datasets": {
+    "oak_clean": {
+      "domain": "OAK",
+      "fs": 5000000,
+      "onset": null,
+      "raw": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+      "role": "clean"
+    },
+    "oak_os3": {
+      "domain": "OAK",
+      "family": "OAK_OS3_OS4",
+      "fs": 5000000,
+      "onset": 120.0,
+      "raw": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/os3.bin",
+      "role": "core"
+    },
+    "oak_os4": {
+      "domain": "OAK",
+      "family": "OAK_OS3_OS4",
+      "fs": 5000000,
+      "onset": 120.0,
+      "raw": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/os4.bin",
+      "role": "core"
+    },
+    "tex_clean": {
+      "domain": "TEX",
+      "fs": 25000000,
+      "onset": null,
+      "raw": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "role": "clean"
+    },
+    "tex_ds1": {
+      "domain": "TEX",
+      "family": "TEX_DS1",
+      "fs": 25000000,
+      "onset": 125.0,
+      "raw": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds1.bin",
+      "role": "diagnostic"
+    },
+    "tex_ds3": {
+      "domain": "TEX",
+      "family": "TEX_DS3",
+      "fs": 25000000,
+      "onset": 118.9,
+      "pull_off": 195.0,
+      "raw": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds3.bin",
+      "role": "core"
+    },
+    "tex_ds4": {
+      "domain": "TEX",
+      "family": "TEX_DS4",
+      "fs": 25000000,
+      "onset": 130.0,
+      "raw": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds4.bin",
+      "role": "appendix"
+    },
+    "tex_ds7": {
+      "domain": "TEX",
+      "family": "TEX_DS7_DS8",
+      "fs": 25000000,
+      "onset": 110.0,
+      "raw": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds7.bin",
+      "role": "core",
+      "time_push": 150.0
+    },
+    "tex_ds8": {
+      "domain": "TEX",
+      "family": "TEX_DS7_DS8",
+      "fs": 25000000,
+      "onset": 110.0,
+      "raw": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds8.bin",
+      "role": "core",
+      "time_push": 150.0
+    }
+  },
+  "execution": {
+    "benchmark_peak_rss_kib": 662400,
+    "memory_gib": 31,
+    "reason": "byte-deterministic replay gate; R2c sequential runs",
+    "swap_gib": 0,
+    "worker_count": 1
+  },
+  "fields": [
+    "dll_discriminator_chips",
+    "pll_phase_error_cycles",
+    "fll_frequency_error_hz",
+    "delta_code_filter_output_chips_s",
+    "delta_carrier_filter_output_hz",
+    "prompt_phase_increment_rad",
+    "early_minus_prompt_i",
+    "early_minus_prompt_q",
+    "late_minus_prompt_i",
+    "late_minus_prompt_q"
+  ],
+  "gates": {
+    "clean_holdout_fpr_max": 0.02,
+    "delta_pauc_min": 0.05,
+    "detection_min": 0.7,
+    "external_preonset_fpr_max": 0.05,
+    "pauc_min": 0.8
+  },
+  "hypotheses": {
+    "H0": "z_ic=H_c x_i+epsilon_ic",
+    "H1": "z_ic=H_c x_i+B_c delta_ic+epsilon_ic",
+    "H1_ridge": 0.1,
+    "latent_dimension": 2,
+    "score": "median_i[RSS_H0-RSS_H1-(C-1)q log(Cd)]"
+  },
+  "minimum_common_prns": 4,
+  "minimum_configurations": 4,
+  "model": "CRID-GNSS",
+  "physical_controls": {
+    "negative": [
+      "byte_identical",
+      "gain",
+      "global_phase",
+      "nav_sign",
+      "awgn_0.5sigma",
+      "awgn_1sigma",
+      "awgn_2sigma",
+      "cn0_reduction",
+      "single_source_code_ramp",
+      "single_source_doppler_ramp",
+      "common_clock_drift",
+      "prn_drop_add",
+      "single_prn_disturbance",
+      "independent_multipath",
+      "zero_delay_collapsed_duplicate"
+    ],
+    "positive": {
+      "delays_chip": [
+        0.05,
+        0.15,
+        0.3
+      ],
+      "phase": "seeded",
+      "powers_db": [
+        -6,
+        -3,
+        0
+      ],
+      "prns": [
+        1,
+        4
+      ],
+      "smooth_pull_off": true
+    },
+    "raw_iq_only": true,
+    "seed": 20260820
+  },
+  "pooling": "median over common PRNs",
+  "predictor": {
+    "order": 4,
+    "ridge": 0.001,
+    "type": "shared PRN-agnostic ridge causal FIR"
+  },
+  "prohibited": [
+    "neural model",
+    "attack-label training",
+    "PRN identity",
+    "score fusion",
+    "power/CN0 score",
+    "post-hoc tuning"
+  ],
+  "receiver_configurations": {
+    "C0": {
+      "Tracking_1C.dll_bw_hz": 1.5,
+      "Tracking_1C.pll_bw_hz": 20.0,
+      "Tracking_1C.tap_spacing_chips": 0.125,
+      "coherent_integration_ms": 1,
+      "description": "native_standard",
+      "discriminators": {
+        "dll": "GNSS-SDR native GPS L1 C/A DLL",
+        "fll": "GNSS-SDR native pull-in FLL",
+        "pll": "GNSS-SDR native GPS L1 C/A PLL"
+      },
+      "extend_correlation_symbols": 1,
+      "fll_enabled": "receiver-native pull-in behavior; no explicit override",
+      "implementation": "GPS_L1_CA_DLL_PLL_Tracking",
+      "item_type": "gr_complex",
+      "loop_order": 3,
+      "name": "C0",
+      "tap_count": 9
+    },
+    "C1": {
+      "Tracking_1C.dll_bw_hz": 1.5,
+      "Tracking_1C.pll_bw_hz": 20.0,
+      "Tracking_1C.tap_spacing_chips": 0.1,
+      "coherent_integration_ms": 1,
+      "description": "narrow_correlator",
+      "discriminators": {
+        "dll": "GNSS-SDR native GPS L1 C/A DLL",
+        "fll": "GNSS-SDR native pull-in FLL",
+        "pll": "GNSS-SDR native GPS L1 C/A PLL"
+      },
+      "extend_correlation_symbols": 1,
+      "fll_enabled": "receiver-native pull-in behavior; no explicit override",
+      "implementation": "GPS_L1_CA_DLL_PLL_Tracking",
+      "item_type": "gr_complex",
+      "loop_order": 3,
+      "name": "C1",
+      "tap_count": 9
+    },
+    "C2": {
+      "Tracking_1C.dll_bw_hz": 0.5,
+      "Tracking_1C.pll_bw_hz": 5.0,
+      "Tracking_1C.tap_spacing_chips": 0.125,
+      "coherent_integration_ms": 1,
+      "description": "slow_narrow_loop",
+      "discriminators": {
+        "dll": "GNSS-SDR native GPS L1 C/A DLL",
+        "fll": "GNSS-SDR native pull-in FLL",
+        "pll": "GNSS-SDR native GPS L1 C/A PLL"
+      },
+      "extend_correlation_symbols": 1,
+      "fll_enabled": "receiver-native pull-in behavior; no explicit override",
+      "implementation": "GPS_L1_CA_DLL_PLL_Tracking",
+      "item_type": "gr_complex",
+      "loop_order": 3,
+      "name": "C2",
+      "tap_count": 9
+    },
+    "C3": {
+      "Tracking_1C.dll_bw_hz": 5.0,
+      "Tracking_1C.pll_bw_hz": 25.0,
+      "Tracking_1C.tap_spacing_chips": 0.125,
+      "coherent_integration_ms": 1,
+      "description": "fast_wide_loop",
+      "discriminators": {
+        "dll": "GNSS-SDR native GPS L1 C/A DLL",
+        "fll": "GNSS-SDR native pull-in FLL",
+        "pll": "GNSS-SDR native GPS L1 C/A PLL"
+      },
+      "extend_correlation_symbols": 1,
+      "fll_enabled": "receiver-native pull-in behavior; no explicit override",
+      "implementation": "GPS_L1_CA_DLL_PLL_Tracking",
+      "item_type": "gr_complex",
+      "loop_order": 3,
+      "name": "C3",
+      "tap_count": 9
+    }
+  },
+  "receiver_initialization": {
+    "OAK_handoff": "oakbat_cleanstatic.csv",
+    "TEX_handoff": "texbat_cleanstatic.csv",
+    "method": "TRACE-R2e frozen handoff plus fixed ChannelN.satellite map",
+    "same_handoff_all_configs": true
+  },
+  "schema": "gnss-doppler-lab.crid-stage0-config.v1",
+  "thresholds": {
+    "q99": 0.99,
+    "q99_5": 0.995,
+    "target_fpr": 0.01
+  }
+}
