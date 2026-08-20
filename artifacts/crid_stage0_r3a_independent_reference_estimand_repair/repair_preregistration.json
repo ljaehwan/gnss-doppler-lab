@@ -1,0 +1,124 @@
+{
+  "schema": "gnss-doppler-lab.crid-r3a-repair-preregistration.v1",
+  "status": "POST_R3_RESULT_METHOD_REPAIR_PRE_IMPLEMENTATION",
+  "base_commit": "5ce681307f53f1aa1a2eb665e5ab5e9f8b153031",
+  "branch": "research/crid-stage0-r3a-independent-reference-estimand-repair",
+  "prior_observation_disclosure": {
+    "legacy_reference_pass": 171,
+    "legacy_reference_fail": 9,
+    "legacy_reference_rows": 180,
+    "failure_scope": "OAK PRN 21 only",
+    "recovered_delay": "all exact",
+    "realized_power_bias_db": "approximately 1.02 to 1.11 dB below requested power",
+    "causal_hypothesis": "The generator used a five-PRN joint complex-LS authentic denominator while the validator used a single-PRN projection denominator; these are different estimands."
+  },
+  "intended_power_estimand": {
+    "authentic_alpha": "Simultaneous five-template complex joint-LS coefficient for each authenticated PRN.",
+    "authentic_fit_interval": "First 1000 complete 1 ms epochs beginning at the frozen common-interval absolute_start_sample.",
+    "counterfeit_beta": "Simultaneous five-template complex joint-LS coefficient on the float64/complex128 output-minus-source residual.",
+    "counterfeit_fit_interval": "The legacy terminal-hold support: ten complete 1 ms epochs beginning at offsets 5.0, 5.1, ..., 5.9 seconds from the frozen common-interval absolute_start_sample.",
+    "delay_search": {
+      "minimum_chips": -0.4,
+      "maximum_chips": 0.4,
+      "step_chips": 0.01,
+      "joint_grid_rule": "At each common candidate delay, construct all five independently shifted PRN template columns, solve the 5x5 joint system, and retain each PRN's coefficient at the grid point maximizing that PRN coefficient magnitude."
+    },
+    "relative_power_db": "20*log10(abs(beta_prn)/abs(alpha_prn))",
+    "single_prn_projection_role": "Legacy diagnostic only; never the R3a pass/fail estimand."
+  },
+  "independence_contract": {
+    "forbidden_imports": [
+      "gnss_doppler_lab.crid_control_generator",
+      "generator render functions",
+      "generator injection functions",
+      "generator envelope functions",
+      "generator delay functions",
+      "generator phase functions",
+      "generator amplitude functions"
+    ],
+    "ca_code": "Independent GPS L1 C/A shift-register implementation.",
+    "permitted_shared_inputs": [
+      "authenticated TRACE input",
+      "R0c corrected NAV mapping",
+      "frozen NAV mapping hash",
+      "frozen control specification"
+    ],
+    "reconstruction": "Template matrix, absolute sample coordinates, NAV signs, carrier phase, and code phase are rebuilt inside the reference module.",
+    "accumulation": "Streaming complex128 Gram and RHS accumulation; no full TEX design matrix.",
+    "solver": "Independent numpy.linalg.solve after explicit finite, rank, and condition checks.",
+    "truth_use": "Generator-fitted and truth coefficients are forbidden as solver inputs and allowed only for comparison after solving."
+  },
+  "numerical_contract": {
+    "rank_exact": 5,
+    "finite_required": true,
+    "condition_number_max": 1000000.0,
+    "fail_closed": true,
+    "tolerances": {
+      "target_delay_absolute_error_chips_max": 0.025,
+      "target_relative_power_error_db_max": 0.75,
+      "non_target_relative_energy_max": 0.01
+    },
+    "forbidden_adjustments": [
+      "tolerance expansion",
+      "PRN 21 exception",
+      "dataset-specific correction",
+      "offset subtraction",
+      "result-based row exclusion"
+    ]
+  },
+  "evaluation_set": {
+    "domains": ["OAK", "TEX"],
+    "positive_cases": 36,
+    "prns_per_case": 5,
+    "rows": 180,
+    "delay_chips": [0.05, 0.15, 0.3],
+    "relative_power_db": [-6, -3, 0],
+    "target_modes": ["single", "four"],
+    "legacy_reproduction_required": "Exactly 171 PASS and 9 FAIL, with the same nine OAK PRN 21 failures and numerically identical committed columns.",
+    "joint_results_separate": true,
+    "row_exclusion_allowed": false
+  },
+  "forbidden_scope": {
+    "attack_payload_bytes_read": 0,
+    "crid_score": false,
+    "threshold_or_alarm": false,
+    "phase_a": false,
+    "c1_c2_c3_receiver_replay": false,
+    "control_iq_regeneration": false,
+    "generator_code_modification": false,
+    "existing_r3_artifact_modification": false,
+    "existing_r3_verdict_rewrite": false
+  },
+  "required_tamper_and_regression_tests": [
+    "PRN order permutation invariance",
+    "one-template deletion contract failure",
+    "duplicate-template rank-deficiency fail closed",
+    "NAV sign mutation detection",
+    "raw start sample mutation detection",
+    "source hash mutation detection",
+    "output hash mutation detection",
+    "condition-number limit detection",
+    "generator-module import prohibition",
+    "attack-path access sentinel",
+    "legacy 171/180 reproduction with identical failures",
+    "no OAK PRN 21 exception",
+    "complete row/case/PRN inventory",
+    "artifact byte-flip detection"
+  ],
+  "allowed_verdicts": [
+    "INDEPENDENT_REFERENCE_ESTIMAND_REPAIR_PASS",
+    "INDEPENDENT_REFERENCE_ESTIMAND_REPAIR_FAIL",
+    "INCONCLUSIVE_REFERENCE_PROVENANCE"
+  ],
+  "pass_contract": {
+    "legacy_pass_fail": "171/9",
+    "joint_pass_fail": "180/0",
+    "all_rank": 5,
+    "all_condition_number_at_most": 1000000.0,
+    "deterministic_rerun_hash_match": true,
+    "attack_bytes_read": 0,
+    "tests": "PASS",
+    "next_state": "READY_TO_REPEAT_CRID_PHASE_A"
+  },
+  "preregistration_commit_binding": "The pushed commit SHA is recorded in preregistration_commit.json before implementation begins."
+}
