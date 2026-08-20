@@ -1,0 +1,232 @@
+{
+  "clean_holdout": {
+    "oakbat_cleanstatic": {
+      "cross_prn_time_block_reassignment": {
+        "ci95": [
+          -6.068025219233619,
+          5.727395756170099
+        ],
+        "original_minus_destroyed": -0.09887754235562621,
+        "unchanged": true
+      },
+      "phase_norm_psd_surrogate": {
+        "ci95": [
+          6.440235917574774,
+          14.873990306970418
+        ],
+        "original_minus_destroyed": 10.613802721969146,
+        "unchanged": false
+      },
+      "temporal_desynchronization_1_10s": {
+        "ci95": [
+          -12.421600175874065,
+          -0.6181092018816758
+        ],
+        "original_minus_destroyed": -6.922503509687504,
+        "unchanged": false
+      }
+    },
+    "texbat_cleanstatic": {
+      "cross_prn_time_block_reassignment": {
+        "ci95": [
+          -6.25166259183136,
+          1.4387436824285926
+        ],
+        "original_minus_destroyed": -2.3307536078972464,
+        "unchanged": true
+      },
+      "phase_norm_psd_surrogate": {
+        "ci95": [
+          3.242729051871114,
+          8.026964055560551
+        ],
+        "original_minus_destroyed": 5.645960751874681,
+        "unchanged": false
+      },
+      "temporal_desynchronization_1_10s": {
+        "ci95": [
+          -5.665713931998724,
+          0.07350598256101464
+        ],
+        "original_minus_destroyed": -3.092585634968013,
+        "unchanged": true
+      }
+    }
+  },
+  "datasets": {
+    "oakbat_os3": {
+      "cross_prn_time_block_reassignment": {
+        "ci95": [
+          -8.829270938421597,
+          3.8992833025042524
+        ],
+        "drop_fraction": -0.4918753708889999,
+        "mean_score_drop": -2.4539976489561766,
+        "pass": false
+      },
+      "phase_norm_psd_surrogate": {
+        "ci95": [
+          5.22011145381751,
+          11.04322817088347
+        ],
+        "drop_fraction": 1.6172305021654596,
+        "mean_score_drop": 8.068466292511026,
+        "pass": true
+      },
+      "temporal_desynchronization_1_10s": {
+        "ci95": [
+          -3.407419544274515,
+          3.998408220478109
+        ],
+        "drop_fraction": 0.05413095313232245,
+        "mean_score_drop": 0.27006278334772177,
+        "pass": false
+      }
+    },
+    "oakbat_os4": {
+      "cross_prn_time_block_reassignment": {
+        "ci95": [
+          -0.048124999853326515,
+          12.842646312325417
+        ],
+        "drop_fraction": 0.7203200829428973,
+        "mean_score_drop": 5.935964931982782,
+        "pass": false
+      },
+      "phase_norm_psd_surrogate": {
+        "ci95": [
+          7.0294823716724855,
+          16.96719141751252
+        ],
+        "drop_fraction": 1.4223800003833058,
+        "mean_score_drop": 11.7214527293671,
+        "pass": true
+      },
+      "temporal_desynchronization_1_10s": {
+        "ci95": [
+          -3.7741485031891906,
+          4.933472053708859
+        ],
+        "drop_fraction": 0.049566856132447164,
+        "mean_score_drop": 0.408467189459393,
+        "pass": false
+      }
+    },
+    "texbat_ds1": {
+      "cross_prn_time_block_reassignment": {
+        "ci95": [
+          -0.9035308233930549,
+          23.648832352938754
+        ],
+        "drop_fraction": 0.926737417150493,
+        "mean_score_drop": 8.621723604539646,
+        "pass": false
+      },
+      "phase_norm_psd_surrogate": {
+        "ci95": [
+          4.044742058601905,
+          25.89964982270251
+        ],
+        "drop_fraction": 1.3130822424447381,
+        "mean_score_drop": 12.216008499146664,
+        "pass": true
+      },
+      "temporal_desynchronization_1_10s": {
+        "ci95": [
+          -6.008797294369248,
+          18.765457502177245
+        ],
+        "drop_fraction": 0.459156500882921,
+        "mean_score_drop": 4.271674336849671,
+        "pass": false
+      }
+    },
+    "texbat_ds3": {
+      "cross_prn_time_block_reassignment": {
+        "ci95": [
+          31.93349619456317,
+          79.90044622108768
+        ],
+        "drop_fraction": 0.949848111353698,
+        "mean_score_drop": 54.37634082531583,
+        "pass": true
+      },
+      "phase_norm_psd_surrogate": {
+        "ci95": [
+          37.42337712834627,
+          83.56135202364817
+        ],
+        "drop_fraction": 1.037796793548196,
+        "mean_score_drop": 59.411174775061504,
+        "pass": true
+      },
+      "temporal_desynchronization_1_10s": {
+        "ci95": [
+          33.97078856609276,
+          80.01379734102575
+        ],
+        "drop_fraction": 0.982593659490351,
+        "mean_score_drop": 56.250938526471224,
+        "pass": true
+      }
+    },
+    "texbat_ds7": {
+      "cross_prn_time_block_reassignment": {
+        "ci95": [
+          10.563187211293954,
+          67.89262044928522
+        ],
+        "drop_fraction": 0.992001066764423,
+        "mean_score_drop": 33.511844218865626,
+        "pass": true
+      },
+      "phase_norm_psd_surrogate": {
+        "ci95": [
+          15.10409790565517,
+          71.38701085840307
+        ],
+        "drop_fraction": 1.1385568893577678,
+        "mean_score_drop": 38.4628024997222,
+        "pass": true
+      },
+      "temporal_desynchronization_1_10s": {
+        "ci95": [
+          8.178019465098494,
+          61.30408492779255
+        ],
+        "drop_fraction": 0.8752403960649424,
+        "mean_score_drop": 29.567427687002684,
+        "pass": true
+      }
+    },
+    "texbat_ds8": {
+      "cross_prn_time_block_reassignment": {
+        "ci95": [
+          -0.8888744540680252,
+          3.7506360667550687
+        ],
+        "drop_fraction": 0.7391613224760092,
+        "mean_score_drop": 1.3832001592802943,
+        "pass": false
+      },
+      "phase_norm_psd_surrogate": {
+        "ci95": [
+          3.3177742153817533,
+          6.488748213374148
+        ],
+        "drop_fraction": 2.5655983273544143,
+        "mean_score_drop": 4.801030447803312,
+        "pass": true
+      },
+      "temporal_desynchronization_1_10s": {
+        "ci95": [
+          0.18853953251402544,
+          3.930398866777787
+        ],
+        "drop_fraction": 1.1497859233740981,
+        "mean_score_drop": 2.1516061839138123,
+        "pass": true
+      }
+    }
+  }
+}

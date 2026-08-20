@@ -2,12 +2,12 @@
   "attack_payload_bytes_read": 0,
   "base_sha": "05c1f9f33661ef20584a1db4cdd8fdf7c495b419",
   "branch": "research/cora-stage0-cross-prn-common-origin",
-  "evaluation_permitted": false,
+  "evaluation_permitted": true,
   "expected_first_commit_message": "CORA_STAGE0_CONFIGURATION_FREEZE",
   "frozen_before_attack_payload_read": true,
   "note": "TEXBAT was previously used developmentally; this is not described as a fully blind preregistration.",
-  "remote_freeze_sha": null,
-  "remote_freeze_verified": false,
+  "remote_freeze_sha": "c226b942a82dbd63c6682e76e44b2aefe1c60156",
+  "remote_freeze_verified": true,
   "schema": "gnss-doppler-lab.cora-stage0-configuration-freeze.v1",
   "statement": "Configuration frozen before this CORA evaluation."
 }

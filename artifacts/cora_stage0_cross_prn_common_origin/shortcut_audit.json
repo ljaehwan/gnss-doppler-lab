@@ -1,0 +1,106 @@
+{
+  "PRN_identity_model_input": false,
+  "absolute_doppler_model_input": false,
+  "absolute_time_model_input": false,
+  "correlations": [
+    {
+      "absolute_rho": 0.0386315455134697,
+      "domain": "OAK",
+      "spearman_rho": -0.0386315455134697,
+      "variable": "score_A0"
+    },
+    {
+      "absolute_rho": 0.05137859526722761,
+      "domain": "OAK",
+      "spearman_rho": -0.05137859526722761,
+      "variable": "score_power"
+    },
+    {
+      "absolute_rho": 0.04053693767466662,
+      "domain": "OAK",
+      "spearman_rho": -0.04053693767466662,
+      "variable": "score_cn0"
+    },
+    {
+      "absolute_rho": 0.004558930450295553,
+      "domain": "OAK",
+      "spearman_rho": 0.004558930450295553,
+      "variable": "score_doppler"
+    },
+    {
+      "absolute_rho": 0.03136330588090466,
+      "domain": "OAK",
+      "spearman_rho": 0.03136330588090466,
+      "variable": "score_residual_doppler"
+    },
+    {
+      "absolute_rho": 0.004231199588788199,
+      "domain": "OAK",
+      "spearman_rho": 0.004231199588788199,
+      "variable": "window_start_s"
+    },
+    {
+      "absolute_rho": 0.0,
+      "domain": "OAK",
+      "spearman_rho": 0.0,
+      "variable": "prn_count"
+    },
+    {
+      "absolute_rho": 0.13169403867976917,
+      "domain": "TEX",
+      "spearman_rho": 0.13169403867976917,
+      "variable": "score_A0"
+    },
+    {
+      "absolute_rho": 0.08866944381963426,
+      "domain": "TEX",
+      "spearman_rho": -0.08866944381963426,
+      "variable": "score_power"
+    },
+    {
+      "absolute_rho": 0.11871328198565805,
+      "domain": "TEX",
+      "spearman_rho": 0.11871328198565805,
+      "variable": "score_cn0"
+    },
+    {
+      "absolute_rho": 0.1563650674843663,
+      "domain": "TEX",
+      "spearman_rho": -0.1563650674843663,
+      "variable": "score_doppler"
+    },
+    {
+      "absolute_rho": 0.0611404012844967,
+      "domain": "TEX",
+      "spearman_rho": -0.0611404012844967,
+      "variable": "score_residual_doppler"
+    },
+    {
+      "absolute_rho": 0.10253121647877532,
+      "domain": "TEX",
+      "spearman_rho": -0.10253121647877532,
+      "variable": "window_start_s"
+    },
+    {
+      "absolute_rho": 0.3655705577185469,
+      "domain": "TEX",
+      "spearman_rho": -0.3655705577185469,
+      "variable": "prn_count"
+    }
+  ],
+  "maximum_absolute_spearman": 0.3655705577185469,
+  "pooled_low_fpr_pauc": {
+    "A0": 0.6762462232670416,
+    "A1": 0.5889704934931066,
+    "A2": 0.5025888206074853,
+    "A3": 0.6266260659656209,
+    "A4": 0.5025888206074853,
+    "Full": 0.5260183702394757,
+    "cn0": 0.5168148434480093,
+    "doppler": 0.6417987372761242,
+    "power": 0.6417987372761242
+  },
+  "schema": "gnss-doppler-lab.cora-shortcut-audit.v1",
+  "single_nuisance_matches_or_beats_full": true,
+  "status": "FAIL"
+}

@@ -1,0 +1,34 @@
+{
+  "domains": {
+    "OAK": {
+      "bootstrap_ci95": [
+        357.0171506081605,
+        1327.4740911829767
+      ],
+      "control_scope": "token-domain statistic control on held-out clean raw-derived tokens",
+      "independent_mean": 21.161514219794654,
+      "injection_amplitude_in_clean_whitened_sd": 1.0,
+      "receiver_nuisance_alarm_rate": 0.0,
+      "receiver_nuisance_persistent_alarm": false,
+      "shared_mean": 765.7956914044089,
+      "shared_minus_independent": 744.6341771846143,
+      "significant": true
+    },
+    "TEX": {
+      "bootstrap_ci95": [
+        714.2329284852283,
+        2950.1861712798077
+      ],
+      "control_scope": "token-domain statistic control on held-out clean raw-derived tokens",
+      "independent_mean": 37.3294725872053,
+      "injection_amplitude_in_clean_whitened_sd": 1.0,
+      "receiver_nuisance_alarm_rate": 0.0,
+      "receiver_nuisance_persistent_alarm": false,
+      "shared_mean": 1647.7083501329016,
+      "shared_minus_independent": 1610.3788775456965,
+      "significant": true
+    }
+  },
+  "schema": "gnss-doppler-lab.cora-synthetic.v1",
+  "seed": 20260820
+}

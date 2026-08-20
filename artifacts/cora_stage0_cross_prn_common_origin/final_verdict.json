@@ -1,0 +1,39 @@
+{
+  "B0_fixed9": "UNAVAILABLE_NO_ACTUAL_SAME_SUPPORT_RERUN",
+  "clean_holdout_fpr": {
+    "OAK": 0.04,
+    "TEX": 0.02
+  },
+  "configuration_freeze_sha": "c226b942a82dbd63c6682e76e44b2aefe1c60156",
+  "failed_gates": [
+    "clean_holdout_q99_fpr_le_0_02",
+    "external_preonset_worst_fpr_le_0_05",
+    "two_tex_families",
+    "oak_family",
+    "full_beats_A0_A2_A4_required_families",
+    "attack_relation_destruction",
+    "clean_relation_shuffle_unchanged",
+    "leave_one_prn_out_stable",
+    "shortcut_audit_pass",
+    "B0_evidence_condition"
+  ],
+  "gates": {
+    "B0_evidence_condition": false,
+    "attack_relation_destruction": false,
+    "clean_holdout_q99_fpr_le_0_02": false,
+    "clean_relation_shuffle_unchanged": false,
+    "external_preonset_worst_fpr_le_0_05": false,
+    "full_beats_A0_A2_A4_required_families": false,
+    "leave_one_prn_out_stable": false,
+    "oak_family": false,
+    "receiver_nuisance_no_persistent_alarm": true,
+    "shared_synthetic_significant_both": true,
+    "shortcut_audit_pass": false,
+    "two_tex_families": false
+  },
+  "injection_performed": false,
+  "neural_stage1_permitted": false,
+  "schema": "gnss-doppler-lab.cora-final-verdict.v2",
+  "verdict": "NO_GO_CORA_COMMON_ORIGIN_HYPOTHESIS",
+  "worst_external_preonset_fpr": 0.25
+}

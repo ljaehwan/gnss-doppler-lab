@@ -1,0 +1,172 @@
+{
+  "datasets": {
+    "oakbat_cleanstatic": {
+      "cache_path": "/tmp/cora_stage0_cross_prn_common_origin/oakbat_cleanstatic.npz",
+      "cache_sha256": "0c2dbb0360fe2b9402af6a4d35b4b9b520e7d9e73f2e906ae0625f44241337f7",
+      "deterministic_regeneration_command": "python3 scripts/cora_pipeline.py extract-clean --workers 8",
+      "full_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "full_sha256_read_this_evaluation": true,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+      "raw_sample_count": 2400000000,
+      "raw_size_bytes": 9600000000,
+      "receiver_config_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/oakbat_cleanstatic/rep1/receiver.conf",
+      "receiver_config_sha256": "e5f5553ed0b4dbdcf4b549ec38bc98aaf691b40554f5420932abb13ff7c76381",
+      "sample_format": "little-endian interleaved int16 I,Q",
+      "sample_rate_hz": 5000000.0,
+      "selected_raw_sample_interval": [
+        155154784,
+        2154850984
+      ],
+      "tracker_adapter": "native",
+      "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/oakbat_cleanstatic/rep1"
+    },
+    "oakbat_os3": {
+      "cache_path": "/tmp/cora_stage0_cross_prn_common_origin/oakbat_os3.npz",
+      "cache_sha256": "6a4fbed37d10d5a0c5ac6fc3667b12551a94ea3539b20d7bea56ac65fa075c60",
+      "deterministic_regeneration_command": "python3 scripts/cora_pipeline.py extract-attacks --workers 8",
+      "full_sha256": "2a3c3c5cf1accaa287fe14181e43070903500e0250c69e3c335f91c89c0cdc6c",
+      "full_sha256_read_this_evaluation": true,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/os3.bin",
+      "raw_sample_count": 2400000000,
+      "raw_size_bytes": 9600000000,
+      "receiver_config_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/oakbat_os3/rep1/receiver.conf",
+      "receiver_config_sha256": "adfe40e19ab908c2d6371f9d13de28204753e08253cdc6d3ed8f25cf6d28043d",
+      "sample_format": "little-endian interleaved int16 I,Q",
+      "sample_rate_hz": 5000000.0,
+      "selected_raw_sample_interval": [
+        515155057,
+        1204850165
+      ],
+      "tracker_adapter": "native",
+      "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/oakbat_os3/rep1"
+    },
+    "oakbat_os4": {
+      "cache_path": "/tmp/cora_stage0_cross_prn_common_origin/oakbat_os4.npz",
+      "cache_sha256": "080bd0cf3391758fbcc69a64703d4d29ee915ebbbfb69455908d2ec7a1f481d3",
+      "deterministic_regeneration_command": "python3 scripts/cora_pipeline.py extract-attacks --workers 8",
+      "full_sha256": "803f3c76bcc618efbc6b394eb536fe61ed8c3e34b1822c0088b4475621bfa8e4",
+      "full_sha256_read_this_evaluation": true,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/os4.bin",
+      "raw_sample_count": 2400000000,
+      "raw_size_bytes": 9600000000,
+      "receiver_config_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/oakbat_os4/rep1/receiver.conf",
+      "receiver_config_sha256": "f8cd27d7887af9151661a7e52191f8aaf7fa01da43c740e0193ac5623901a710",
+      "sample_format": "little-endian interleaved int16 I,Q",
+      "sample_rate_hz": 5000000.0,
+      "selected_raw_sample_interval": [
+        495155205,
+        1204850299
+      ],
+      "tracker_adapter": "native",
+      "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/oakbat_os4/rep1"
+    },
+    "texbat_cleanstatic": {
+      "cache_path": "/tmp/cora_stage0_cross_prn_common_origin/texbat_cleanstatic.npz",
+      "cache_sha256": "235bd212cc552fb47b1377b45d146ca47daa1c28ff594f7850240a47c3727a9a",
+      "deterministic_regeneration_command": "python3 scripts/cora_pipeline.py extract-clean --workers 8",
+      "full_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "full_sha256_read_this_evaluation": true,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "raw_sample_count": 12004098048,
+      "raw_size_bytes": 48016392192,
+      "receiver_config_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/texbat_cleanstatic/rep1/receiver.conf",
+      "receiver_config_sha256": "f472a0e37677b5c6d0a11ebba594ce30565b43375fe2965b410c2cc5e475dafd",
+      "sample_format": "little-endian interleaved int16 I,Q",
+      "sample_rate_hz": 25000000.0,
+      "selected_raw_sample_interval": [
+        775781459,
+        10774249510
+      ],
+      "tracker_adapter": "native",
+      "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/texbat_cleanstatic/rep1"
+    },
+    "texbat_ds1": {
+      "cache_path": "/tmp/cora_stage0_cross_prn_common_origin/texbat_ds1.npz",
+      "cache_sha256": "86c5184c6e5dcf3561c9a99d0d701bb50cace985a5fa6c045ba0c3f9538a9bad",
+      "deterministic_regeneration_command": "python3 scripts/cora_pipeline.py extract-attacks --workers 8",
+      "full_sha256": "8c8f4caa41c8a2253688eef47818a445e3a06139b729cf587c03be33e6b6744c",
+      "full_sha256_read_this_evaluation": true,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds1.bin",
+      "raw_sample_count": 11542724608,
+      "raw_size_bytes": 46170898432,
+      "receiver_config_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds1-complex9/receiver.conf",
+      "receiver_config_sha256": "85b773efd9c7bcd56beb49eb3bd5a307f3de5a7cf8330107c4eeead9b90f1da5",
+      "sample_format": "little-endian interleaved int16 I,Q",
+      "sample_rate_hz": 25000000.0,
+      "selected_raw_sample_interval": [
+        2475548166,
+        6174449814
+      ],
+      "tracker_adapter": "legacy",
+      "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds1-complex9/raw"
+    },
+    "texbat_ds3": {
+      "cache_path": "/tmp/cora_stage0_cross_prn_common_origin/texbat_ds3.npz",
+      "cache_sha256": "fc1d6cc9609116fcc4c612e7b2433d5497087bcbcd2ff751d7451997694bb495",
+      "deterministic_regeneration_command": "python3 scripts/cora_pipeline.py extract-attacks --workers 8",
+      "full_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "full_sha256_read_this_evaluation": true,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds3.bin",
+      "raw_sample_count": 11446255616,
+      "raw_size_bytes": 45785022464,
+      "receiver_config_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/texbat_ds3/rep1/receiver.conf",
+      "receiver_config_sha256": "ab63bce45dca6b2d22f0f37c0377264c0d5353744b7e41bcf4735b3c31e0f9ca",
+      "sample_format": "little-endian interleaved int16 I,Q",
+      "sample_rate_hz": 25000000.0,
+      "selected_raw_sample_interval": [
+        2475777672,
+        6024253537
+      ],
+      "tracker_adapter": "native",
+      "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/texbat_ds3/rep1"
+    },
+    "texbat_ds7": {
+      "cache_path": "/tmp/cora_stage0_cross_prn_common_origin/texbat_ds7.npz",
+      "cache_sha256": "eeb34ce2f1bf65052e22d5bdb1eeedb33f42c6821ec3f87486be0c63c5ddd6df",
+      "deterministic_regeneration_command": "python3 scripts/cora_pipeline.py extract-attacks --workers 8",
+      "full_sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "full_sha256_read_this_evaluation": true,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds7.bin",
+      "raw_sample_count": 6764822528,
+      "raw_size_bytes": 27059290112,
+      "receiver_config_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/texbat_ds7/rep1/receiver.conf",
+      "receiver_config_sha256": "4b32b4ced357a767443f182f1da70143d34575dfb55338b5a59ed99ba5f138e5",
+      "sample_format": "little-endian interleaved int16 I,Q",
+      "sample_rate_hz": 25000000.0,
+      "selected_raw_sample_interval": [
+        2525784581,
+        6724253908
+      ],
+      "tracker_adapter": "native",
+      "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/texbat_ds7/rep1"
+    },
+    "texbat_ds8": {
+      "cache_path": "/tmp/cora_stage0_cross_prn_common_origin/texbat_ds8.npz",
+      "cache_sha256": "99386c3471d0cc21115feec73ff76b5fc5aef254560b63ab1de85490bd2e4d33",
+      "deterministic_regeneration_command": "python3 scripts/cora_pipeline.py extract-attacks --workers 8",
+      "full_sha256": "1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78",
+      "full_sha256_read_this_evaluation": true,
+      "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds8.bin",
+      "raw_sample_count": 11750035292,
+      "raw_size_bytes": 47000141168,
+      "receiver_config_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/receiver.conf",
+      "receiver_config_sha256": "57aaa9d419c0b126ead3c98d1a90a267f3c9c23a37ad4e2f30cab5b6a8202f5a",
+      "sample_format": "little-endian interleaved int16 I,Q",
+      "sample_rate_hz": 25000000.0,
+      "selected_raw_sample_interval": [
+        2475513052,
+        6774467206
+      ],
+      "tracker_adapter": "legacy",
+      "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/raw"
+    }
+  },
+  "ds7_ds8_pre110_overlap_audit": {
+    "bytes_each": 11000000000,
+    "counted_as_independent_normal_evidence": false,
+    "ds7_sha256": "f0ba0d3816f21fcad14f71f9bf2087e37c0580e44f2168dfd95ceeeef9de9866",
+    "ds8_sha256": "f0ba0d3816f21fcad14f71f9bf2087e37c0580e44f2168dfd95ceeeef9de9866",
+    "identical": true
+  },
+  "schema": "gnss-doppler-lab.cora-raw-binding.v1"
+}

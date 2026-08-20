@@ -1,8 +1,30 @@
 {
-  "attack_payload_read_before_freeze": false,
   "attack_preonset_used_for_fit_or_calibration": false,
-  "overlap_samples": 0,
-  "schema": "gnss-doppler-lab.cora-stage0-clean-split-audit.v1",
+  "calibration_score_count_per_domain": 50,
+  "chronological_order": true,
+  "conditioner_cross_fit": "even/odd 10-second train blocks",
+  "ds7_ds8_counted_as_independent_normal_evidence": false,
+  "ds7_ds8_pre110_raw_overlap": {
+    "bytes_each": 11000000000,
+    "counted_as_independent_normal_evidence": false,
+    "ds7_sha256": "f0ba0d3816f21fcad14f71f9bf2087e37c0580e44f2168dfd95ceeeef9de9866",
+    "ds8_sha256": "f0ba0d3816f21fcad14f71f9bf2087e37c0580e44f2168dfd95ceeeef9de9866",
+    "identical": true
+  },
+  "guard_intervals_s": [
+    [
+      211.0,
+      221.0
+    ],
+    [
+      321.0,
+      331.0
+    ]
+  ],
+  "holdout_score_count_per_domain": 50,
+  "raw_sample_or_target_window_overlap": false,
+  "same_samples_used_for_fit_and_calibration": false,
+  "schema": "gnss-doppler-lab.cora-clean-split-audit.v2",
   "split": {
     "anchor_s": 31.0,
     "calibration_10s_blocks": [
@@ -68,5 +90,6 @@
       31.0,
       211.0
     ]
-  }
+  },
+  "status": "PASS"
 }

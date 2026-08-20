@@ -1,8 +1,13 @@
 {
   "base_branch": "origin/research/cinder-stage0a-clean-emitter-identifiability",
   "base_sha": "05c1f9f33661ef20584a1db4cdd8fdf7c495b419",
+  "configuration_freeze_commit": "c226b942a82dbd63c6682e76e44b2aefe1c60156",
+  "configuration_freeze_remote_verified": true,
   "main_modified": false,
+  "main_sha_after_evaluation": "461eb4dc7bb794e719295daf028f6811658ba37f",
   "main_sha_at_freeze": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "result_branch": "research/cora-stage0-cross-prn-common-origin",
+  "result_commit_resolution": "commit containing this file on research/cora-stage0-cross-prn-common-origin",
   "schema": "gnss-doppler-lab.cora-stage0-source-commit.v1",
   "working_branch": "research/cora-stage0-cross-prn-common-origin"
 }

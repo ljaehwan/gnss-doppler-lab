@@ -1,103 +1,145 @@
 {
-  "attack_payload_bytes_read": 0,
-  "inventory_operation": "os.stat/path.exists only",
+  "attack_payload_access_started_after_remote_freeze_verification": true,
+  "configuration_freeze_sha": "c226b942a82dbd63c6682e76e44b2aefe1c60156",
+  "optional_ds4_accessed": false,
+  "prohibited_core_data_accessed": [],
   "rows": [
     {
+      "cache_sha256": "0c2dbb0360fe2b9402af6a4d35b4b9b520e7d9e73f2e906ae0625f44241337f7",
       "dataset": "oakbat_cleanstatic",
       "family": "OAK_CLEAN",
-      "payload_opened": false,
-      "raw_exists": true,
+      "full_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "full_sha256_read_after_verified_freeze": true,
       "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
-      "raw_size_bytes_from_stat_only": 9600000000,
+      "raw_sample_count": 2400000000,
+      "raw_size_bytes": 9600000000,
       "role": "clean_model_calibration_holdout",
-      "sha256_deferred_until_post_freeze": true,
-      "trace_exists_from_stat_only": true,
-      "trace_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/oakbat_cleanstatic"
+      "selected_raw_sample_interval": [
+        155154784,
+        2154850984
+      ],
+      "tracker_adapter": "native",
+      "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/oakbat_cleanstatic/rep1"
     },
     {
+      "cache_sha256": "6a4fbed37d10d5a0c5ac6fc3667b12551a94ea3539b20d7bea56ac65fa075c60",
       "dataset": "oakbat_os3",
       "family": "OAK_OS3_OS4",
-      "payload_opened": false,
-      "raw_exists": true,
+      "full_sha256": "2a3c3c5cf1accaa287fe14181e43070903500e0250c69e3c335f91c89c0cdc6c",
+      "full_sha256_read_after_verified_freeze": true,
       "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/os3.bin",
-      "raw_size_bytes_from_stat_only": 9600000000,
+      "raw_sample_count": 2400000000,
+      "raw_size_bytes": 9600000000,
       "role": "core_attack",
-      "sha256_deferred_until_post_freeze": true,
-      "trace_exists_from_stat_only": true,
-      "trace_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/oakbat_os3"
+      "selected_raw_sample_interval": [
+        515155057,
+        1204850165
+      ],
+      "tracker_adapter": "native",
+      "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/oakbat_os3/rep1"
     },
     {
+      "cache_sha256": "080bd0cf3391758fbcc69a64703d4d29ee915ebbbfb69455908d2ec7a1f481d3",
       "dataset": "oakbat_os4",
       "family": "OAK_OS3_OS4",
-      "payload_opened": false,
-      "raw_exists": true,
+      "full_sha256": "803f3c76bcc618efbc6b394eb536fe61ed8c3e34b1822c0088b4475621bfa8e4",
+      "full_sha256_read_after_verified_freeze": true,
       "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/os4.bin",
-      "raw_size_bytes_from_stat_only": 9600000000,
+      "raw_sample_count": 2400000000,
+      "raw_size_bytes": 9600000000,
       "role": "core_attack",
-      "sha256_deferred_until_post_freeze": true,
-      "trace_exists_from_stat_only": true,
-      "trace_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/oakbat_os4"
+      "selected_raw_sample_interval": [
+        495155205,
+        1204850299
+      ],
+      "tracker_adapter": "native",
+      "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/oakbat_os4/rep1"
     },
     {
+      "cache_sha256": "235bd212cc552fb47b1377b45d146ca47daa1c28ff594f7850240a47c3727a9a",
       "dataset": "texbat_cleanstatic",
       "family": "TEX_CLEAN",
-      "payload_opened": false,
-      "raw_exists": true,
+      "full_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "full_sha256_read_after_verified_freeze": true,
       "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
-      "raw_size_bytes_from_stat_only": 48016392192,
+      "raw_sample_count": 12004098048,
+      "raw_size_bytes": 48016392192,
       "role": "clean_model_calibration_holdout",
-      "sha256_deferred_until_post_freeze": true,
-      "trace_exists_from_stat_only": true,
-      "trace_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/texbat_cleanstatic"
+      "selected_raw_sample_interval": [
+        775781459,
+        10774249510
+      ],
+      "tracker_adapter": "native",
+      "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/texbat_cleanstatic/rep1"
     },
     {
+      "cache_sha256": "86c5184c6e5dcf3561c9a99d0d701bb50cace985a5fa6c045ba0c3f9538a9bad",
       "dataset": "texbat_ds1",
       "family": "TEX_DS1",
-      "payload_opened": false,
-      "raw_exists": true,
+      "full_sha256": "8c8f4caa41c8a2253688eef47818a445e3a06139b729cf587c03be33e6b6744c",
+      "full_sha256_read_after_verified_freeze": true,
       "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds1.bin",
-      "raw_size_bytes_from_stat_only": 46170898432,
+      "raw_sample_count": 11542724608,
+      "raw_size_bytes": 46170898432,
       "role": "core_attack",
-      "sha256_deferred_until_post_freeze": true,
-      "trace_exists_from_stat_only": true,
-      "trace_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds1-complex9/raw"
+      "selected_raw_sample_interval": [
+        2475548166,
+        6174449814
+      ],
+      "tracker_adapter": "legacy",
+      "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds1-complex9/raw"
     },
     {
+      "cache_sha256": "fc1d6cc9609116fcc4c612e7b2433d5497087bcbcd2ff751d7451997694bb495",
       "dataset": "texbat_ds3",
       "family": "TEX_DS3",
-      "payload_opened": false,
-      "raw_exists": true,
+      "full_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+      "full_sha256_read_after_verified_freeze": true,
       "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds3.bin",
-      "raw_size_bytes_from_stat_only": 45785022464,
+      "raw_sample_count": 11446255616,
+      "raw_size_bytes": 45785022464,
       "role": "core_attack",
-      "sha256_deferred_until_post_freeze": true,
-      "trace_exists_from_stat_only": true,
-      "trace_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/texbat_ds3"
+      "selected_raw_sample_interval": [
+        2475777672,
+        6024253537
+      ],
+      "tracker_adapter": "native",
+      "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/texbat_ds3/rep1"
     },
     {
+      "cache_sha256": "eeb34ce2f1bf65052e22d5bdb1eeedb33f42c6821ec3f87486be0c63c5ddd6df",
       "dataset": "texbat_ds7",
       "family": "TEX_DS7_DS8",
-      "payload_opened": false,
-      "raw_exists": true,
+      "full_sha256": "d5fb1430d476f68930f3bb0290b80b649f08012eb6b6981d112493528813400e",
+      "full_sha256_read_after_verified_freeze": true,
       "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds7.bin",
-      "raw_size_bytes_from_stat_only": 27059290112,
+      "raw_sample_count": 6764822528,
+      "raw_size_bytes": 27059290112,
       "role": "core_attack",
-      "sha256_deferred_until_post_freeze": true,
-      "trace_exists_from_stat_only": true,
-      "trace_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/texbat_ds7"
+      "selected_raw_sample_interval": [
+        2525784581,
+        6724253908
+      ],
+      "tracker_adapter": "native",
+      "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2e-attack-support-repair/dumps/phase_b/texbat_ds7/rep1"
     },
     {
+      "cache_sha256": "99386c3471d0cc21115feec73ff76b5fc5aef254560b63ab1de85490bd2e4d33",
       "dataset": "texbat_ds8",
       "family": "TEX_DS7_DS8",
-      "payload_opened": false,
-      "raw_exists": true,
+      "full_sha256": "1614d8de6fc8ebc3429def6e9505050c08a3ee8da69c11ecc27a98305f735d78",
+      "full_sha256_read_after_verified_freeze": true,
       "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds8.bin",
-      "raw_size_bytes_from_stat_only": 47000141168,
+      "raw_sample_count": 11750035292,
+      "raw_size_bytes": 47000141168,
       "role": "core_attack",
-      "sha256_deferred_until_post_freeze": true,
-      "trace_exists_from_stat_only": true,
-      "trace_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/raw"
+      "selected_raw_sample_interval": [
+        2475513052,
+        6774467206
+      ],
+      "tracker_adapter": "legacy",
+      "tracker_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/raw"
     }
   ],
-  "schema": "gnss-doppler-lab.cora-stage0-data-inventory.v1"
+  "schema": "gnss-doppler-lab.cora-stage0-data-inventory.v2"
 }
