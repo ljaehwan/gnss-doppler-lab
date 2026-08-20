@@ -1,0 +1,27 @@
+{
+  "verdict": "INCONCLUSIVE_RECEIVER_REPLAY_OR_ALIGNMENT",
+  "freeze_sha": "2bd96157b00df8997b66830894912edb016c067b",
+  "configuration_version": "v2",
+  "attack_data_accessed": false,
+  "neural_stage1_implemented": false,
+  "clean_gates": {
+    "TEX": {
+      "common_epoch_count": 13925,
+      "holdout_fpr_q99": 0.012708150744960562,
+      "status": "PASS"
+    },
+    "OAK": {
+      "common_epoch_count": 14894,
+      "holdout_fpr_q99": 0.00730093543235227,
+      "status": "PASS"
+    },
+    "deterministic_C0": "PASS_BYTE_IDENTICAL_10_OF_10"
+  },
+  "blocking_gate": {
+    "stage": "TEX clean positive raw-IQ control C0",
+    "status": "FAIL_RECEIVER_DID_NOT_TERMINATE_AFTER_EOF",
+    "effect": "C1-C3, OAK control, attack scenarios, ablations and detection gates were not evaluated"
+  },
+  "reason": "Receiver replay did not terminate after consuming the complete frozen positive-control IQ and writing ten TRACE dumps; cross-configuration physical identifiability cannot be certified.",
+  "next_action": "Repair and independently validate physical-control terminal drain without changing frozen CRID score, then create a new freeze version."
+}

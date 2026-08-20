@@ -1,0 +1,10 @@
+{
+  "configuration_permutation": "PASS_UNIT",
+  "prn_permutation": "PASS_UNIT",
+  "deterministic_identical_C0": "PASS_BYTE_IDENTICAL_10_OF_10",
+  "configuration_collapse": "NOT_EVALUABLE",
+  "leave_one_configuration": "NOT_EVALUABLE",
+  "leave_one_prn": "NOT_EVALUABLE",
+  "reason": "positive-control receiver did not terminate before C1-C3",
+  "status": "INCONCLUSIVE"
+}

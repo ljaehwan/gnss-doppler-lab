@@ -1,0 +1,12 @@
+{
+  "model": "shared PRN-agnostic ridge causal FIR",
+  "order": 4,
+  "ridge": 0.001,
+  "covariance_shrinkage": 0.2,
+  "latent_dimension": 2,
+  "H0": "shared configuration state",
+  "H1": "regularized configuration-specific state",
+  "complexity_correction": "BIC/effective df",
+  "normal_only": true,
+  "status": "PASS_CLEAN_FIT"
+}

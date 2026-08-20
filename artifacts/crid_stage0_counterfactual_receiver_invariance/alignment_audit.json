@@ -1,0 +1,44 @@
+{
+  "attack_payload_accessed": false,
+  "clean_domains": {
+    "OAK": {
+      "causal_delays_ms": {
+        "C0": 0,
+        "C1": 0,
+        "C2": 0,
+        "C3": 0
+      },
+      "common_epoch_count": 14894,
+      "minimum_common_prns": 4,
+      "status": "PASS"
+    },
+    "TEX": {
+      "causal_delays_ms": {
+        "C0": 0,
+        "C1": 0,
+        "C2": 0,
+        "C3": 0
+      },
+      "common_epoch_count": 13925,
+      "minimum_common_prns": 4,
+      "status": "PASS"
+    }
+  },
+  "deterministic_replay": {
+    "binary_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+    "channel_dump_count": 10,
+    "dump_sha256_matches": 10,
+    "fixed_channel_prn_map": true,
+    "status": "PASS"
+  },
+  "failure": {
+    "control": "TEX.second_source_d0.15_p-3",
+    "input_bytes_consumed": 4500000000,
+    "native_dump_count": 10,
+    "receiver_state_after_eof": "sleeping with no further I/O for more than five minutes",
+    "stage": "positive physical-control C0 terminal drain",
+    "status": "FAIL_RECEIVER_DID_NOT_TERMINATE"
+  },
+  "raw_endpoint_tolerance_samples": 1,
+  "status": "FAIL"
+}
