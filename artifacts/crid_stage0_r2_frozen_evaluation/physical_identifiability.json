@@ -1,0 +1,36 @@
+{
+  "attack_open_authorized": false,
+  "blocking_reason": "Frozen semantic grid and pre-attack executable implementation are not congruent. Completing PRN-selective/smooth controls now would introduce unregistered scientific choices after freeze.",
+  "coverage": {
+    "OAK": {
+      "conforming_negative": 9,
+      "conforming_positive": 0,
+      "required_negative": 15,
+      "required_positive": 18
+    },
+    "TEX": {
+      "conforming_negative": 9,
+      "conforming_positive": 0,
+      "required_negative": 15,
+      "required_positive": 18
+    }
+  },
+  "grid_complete": false,
+  "phase_a_gate": "FAIL_CLOSED_EXECUTION_BINDING",
+  "r1_diagnostic": {
+    "alarm_ratio_q99": 0.037102997922232116,
+    "control_sha256": "c2ea6be45e1c2433abf255c3f98491f75cf458a2d48e6709bf1136053994e59b",
+    "dataset": "TEX",
+    "delay_chip": 0.15,
+    "epoch_count": 13476,
+    "interpretation": "diagnostic below gate, but nonconforming stimulus cannot decide the frozen physical hypothesis",
+    "median_score": -22.096401965536558,
+    "positive_gate_alarm_ratio": 0.7,
+    "power_db": -3,
+    "score_q99": -21.667799007368508,
+    "score_threshold_q99": -21.942672917134093,
+    "stimulus": "all-waveform fixed-delay duplicate"
+  },
+  "schema": "gnss-doppler-lab.crid-r2-physical-identifiability.v1",
+  "status": "INCONCLUSIVE"
+}

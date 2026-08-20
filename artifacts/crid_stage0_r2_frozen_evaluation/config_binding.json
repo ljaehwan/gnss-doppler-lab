@@ -1,0 +1,29 @@
+{
+  "config_preregistration_byte_identical": true,
+  "config_sha256": "326a1ffb178f0fc5e9937418ae5701021c661fa64ba3bb9f43ba32ec4936aa7e",
+  "freeze_sha": "2bd96157b00df8997b66830894912edb016c067b",
+  "frozen_sections_unchanged": [
+    "C0-C3",
+    "handoff_PRN_map",
+    "features_preprocessing",
+    "predictor",
+    "H0_H1",
+    "covariance_whitening",
+    "pooling_score",
+    "thresholds",
+    "physical_control_grid",
+    "ablations",
+    "gates",
+    "scenario_timeline"
+  ],
+  "preregistration_sha256": "326a1ffb178f0fc5e9937418ae5701021c661fa64ba3bb9f43ba32ec4936aa7e",
+  "result_sha": "a30049c316d3f1eefe6fa5af4c2ad5c9acb023cc",
+  "schema": "gnss-doppler-lab.crid-r2-config-binding.v1",
+  "science_file_sha256": {
+    "src/gnss_doppler_lab/crid.py": "e9e5fe2363006c9d21b116030fe4c5e6f9ef4dceef667f86c736b02b3b7fcdae",
+    "src/gnss_doppler_lab/crid_experiment.py": "a695cb1852e08713694c5386e807800d28461979f3bc83a6084681d27c2cf88b",
+    "src/gnss_doppler_lab/crid_metrics.py": "dd6957c19f0a02b85a0501385b7cc5b4078b2e41c980dc93fb94dba07b3494d0",
+    "src/gnss_doppler_lab/crid_physical_controls.py": "30c09e885f95e13adef41813258eb7b8e7d8bd91d8d840ca306c273ce90a7a48"
+  },
+  "status": "PASS"
+}

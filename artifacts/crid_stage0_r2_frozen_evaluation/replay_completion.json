@@ -1,0 +1,71 @@
+{
+  "attack_replay_count": 0,
+  "phase_a_complete": false,
+  "phase_b_started": false,
+  "r1_reuse": {
+    "C0_repeat_bit_identical": true,
+    "allowed_by_checksum": true,
+    "configurations": {
+      "C0": {
+        "dump_count": 10,
+        "exact_input_bytes": 4500000000,
+        "exit_cause": "verified_eof_graceful_sigint",
+        "exit_code": 0,
+        "sigkill_sent": false,
+        "sigterm_sent": false,
+        "status": "PASS"
+      },
+      "C1": {
+        "dump_count": 10,
+        "exact_input_bytes": 4500000000,
+        "exit_cause": "verified_eof_graceful_sigint",
+        "exit_code": 0,
+        "sigkill_sent": false,
+        "sigterm_sent": false,
+        "status": "PASS"
+      },
+      "C2": {
+        "dump_count": 10,
+        "exact_input_bytes": 4500000000,
+        "exit_cause": "verified_eof_graceful_sigint",
+        "exit_code": 0,
+        "sigkill_sent": false,
+        "sigterm_sent": false,
+        "status": "PASS"
+      },
+      "C3": {
+        "dump_count": 10,
+        "exact_input_bytes": 4500000000,
+        "exit_cause": "verified_eof_graceful_sigint",
+        "exit_code": 0,
+        "sigkill_sent": false,
+        "sigterm_sent": false,
+        "status": "PASS"
+      }
+    },
+    "control_sha256": "c2ea6be45e1c2433abf255c3f98491f75cf458a2d48e6709bf1136053994e59b",
+    "native_endpoint_contract": {
+      "maximum_absolute_endpoint_delta_samples": 1,
+      "minimum_matched_c0_rows": 124959,
+      "per_config": {
+        "C1": {
+          "matched_c0_rows": 133816,
+          "maximum_absolute_endpoint_delta_samples": 1
+        },
+        "C2": {
+          "matched_c0_rows": 124959,
+          "maximum_absolute_endpoint_delta_samples": 1
+        },
+        "C3": {
+          "matched_c0_rows": 135725,
+          "maximum_absolute_endpoint_delta_samples": 1
+        }
+      },
+      "status": "PASS",
+      "tolerance_samples": 1
+    },
+    "scientific_use": "DIAGNOSTIC_ONLY_NONCONFORMING_STIMULUS"
+  },
+  "schema": "gnss-doppler-lab.crid-r2-replay-completion.v1",
+  "status": "PARTIAL_PHASE_A_ONLY"
+}

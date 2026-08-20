@@ -1,0 +1,8 @@
+dataset,family,role,status,roc_auc,pauc_0_05,pr_auc,preonset_fpr,attack_detection_rate,transition_detection_rate,established_detection_rate,first_alarm_onset_delay_s,first_alarm_pull_off_delay_s,persistent_alarm_ratio
+oak_os3,OAK_OS3_OS4,core,NOT_OPENED_PHASE_A_BLOCKED,,,,,,,,,,
+oak_os4,OAK_OS3_OS4,core,NOT_OPENED_PHASE_A_BLOCKED,,,,,,,,,,
+tex_ds1,TEX_DS1,diagnostic,NOT_OPENED_PHASE_A_BLOCKED,,,,,,,,,,
+tex_ds3,TEX_DS3,core,NOT_OPENED_PHASE_A_BLOCKED,,,,,,,,,,
+tex_ds4,TEX_DS4,appendix,NOT_OPENED_PHASE_A_BLOCKED,,,,,,,,,,
+tex_ds7,TEX_DS7_DS8,core,NOT_OPENED_PHASE_A_BLOCKED,,,,,,,,,,
+tex_ds8,TEX_DS7_DS8,core,NOT_OPENED_PHASE_A_BLOCKED,,,,,,,,,,

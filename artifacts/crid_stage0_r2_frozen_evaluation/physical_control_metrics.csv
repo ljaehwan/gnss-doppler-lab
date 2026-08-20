@@ -1,0 +1,68 @@
+domain,control,kind,frozen_required,executable,conforming,executed,reused,alarm_ratio,status,reason
+TEX,byte_identical,negative,True,True,True,False,False,,NOT_RUN_FAIL_CLOSED,implemented raw-IQ transform but not executed because the complete Phase-A binding failed
+TEX,gain,negative,True,True,True,False,False,,NOT_RUN_FAIL_CLOSED,implemented raw-IQ transform but not executed because the complete Phase-A binding failed
+TEX,global_phase,negative,True,True,True,False,False,,NOT_RUN_FAIL_CLOSED,implemented raw-IQ transform but not executed because the complete Phase-A binding failed
+TEX,nav_sign,negative,True,False,False,False,False,,BLOCKED_BINDING,"implementation applies one global pi rotation, not NAV-bit-wise signs"
+TEX,awgn_0.5sigma,negative,True,True,True,False,False,,NOT_RUN_FAIL_CLOSED,implemented raw-IQ transform but not executed because the complete Phase-A binding failed
+TEX,awgn_1sigma,negative,True,True,True,False,False,,NOT_RUN_FAIL_CLOSED,implemented raw-IQ transform but not executed because the complete Phase-A binding failed
+TEX,awgn_2sigma,negative,True,True,True,False,False,,NOT_RUN_FAIL_CLOSED,implemented raw-IQ transform but not executed because the complete Phase-A binding failed
+TEX,cn0_reduction,negative,True,True,True,False,False,,NOT_RUN_FAIL_CLOSED,implemented raw-IQ transform but not executed because the complete Phase-A binding failed
+TEX,single_source_code_ramp,negative,True,False,False,False,False,,BLOCKED_BINDING,implementation returns input IQ unchanged
+TEX,single_source_doppler_ramp,negative,True,True,True,False,False,,NOT_RUN_FAIL_CLOSED,implemented raw-IQ transform but not executed because the complete Phase-A binding failed
+TEX,common_clock_drift,negative,True,False,False,False,False,,BLOCKED_BINDING,implementation uses gain=1 and returns input IQ unchanged
+TEX,prn_drop_add,negative,True,False,False,False,False,,BLOCKED_BINDING,no registered transform
+TEX,single_prn_disturbance,negative,True,False,False,False,False,,BLOCKED_BINDING,no registered transform
+TEX,independent_multipath,negative,True,False,False,False,False,,BLOCKED_BINDING,no registered transform
+TEX,zero_delay_collapsed_duplicate,negative,True,True,True,False,False,,NOT_RUN_FAIL_CLOSED,implemented raw-IQ transform but not executed because the complete Phase-A binding failed
+TEX,second_source_single_prn_d0.05_p-6_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+TEX,second_source_single_prn_d0.05_p-3_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+TEX,second_source_single_prn_d0.05_p0_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+TEX,second_source_single_prn_d0.15_p-6_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+TEX,second_source_single_prn_d0.15_p-3_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+TEX,second_source_single_prn_d0.15_p0_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+TEX,second_source_single_prn_d0.3_p-6_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+TEX,second_source_single_prn_d0.3_p-3_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+TEX,second_source_single_prn_d0.3_p0_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+TEX,second_source_four_prn_d0.05_p-6_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+TEX,second_source_four_prn_d0.05_p-3_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+TEX,second_source_four_prn_d0.05_p0_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+TEX,second_source_four_prn_d0.15_p-6_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+TEX,second_source_four_prn_d0.15_p-3_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+TEX,second_source_four_prn_d0.15_p0_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+TEX,second_source_four_prn_d0.3_p-6_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+TEX,second_source_four_prn_d0.3_p-3_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+TEX,second_source_four_prn_d0.3_p0_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+OAK,byte_identical,negative,True,True,True,False,False,,NOT_RUN_FAIL_CLOSED,implemented raw-IQ transform but not executed because the complete Phase-A binding failed
+OAK,gain,negative,True,True,True,False,False,,NOT_RUN_FAIL_CLOSED,implemented raw-IQ transform but not executed because the complete Phase-A binding failed
+OAK,global_phase,negative,True,True,True,False,False,,NOT_RUN_FAIL_CLOSED,implemented raw-IQ transform but not executed because the complete Phase-A binding failed
+OAK,nav_sign,negative,True,False,False,False,False,,BLOCKED_BINDING,"implementation applies one global pi rotation, not NAV-bit-wise signs"
+OAK,awgn_0.5sigma,negative,True,True,True,False,False,,NOT_RUN_FAIL_CLOSED,implemented raw-IQ transform but not executed because the complete Phase-A binding failed
+OAK,awgn_1sigma,negative,True,True,True,False,False,,NOT_RUN_FAIL_CLOSED,implemented raw-IQ transform but not executed because the complete Phase-A binding failed
+OAK,awgn_2sigma,negative,True,True,True,False,False,,NOT_RUN_FAIL_CLOSED,implemented raw-IQ transform but not executed because the complete Phase-A binding failed
+OAK,cn0_reduction,negative,True,True,True,False,False,,NOT_RUN_FAIL_CLOSED,implemented raw-IQ transform but not executed because the complete Phase-A binding failed
+OAK,single_source_code_ramp,negative,True,False,False,False,False,,BLOCKED_BINDING,implementation returns input IQ unchanged
+OAK,single_source_doppler_ramp,negative,True,True,True,False,False,,NOT_RUN_FAIL_CLOSED,implemented raw-IQ transform but not executed because the complete Phase-A binding failed
+OAK,common_clock_drift,negative,True,False,False,False,False,,BLOCKED_BINDING,implementation uses gain=1 and returns input IQ unchanged
+OAK,prn_drop_add,negative,True,False,False,False,False,,BLOCKED_BINDING,no registered transform
+OAK,single_prn_disturbance,negative,True,False,False,False,False,,BLOCKED_BINDING,no registered transform
+OAK,independent_multipath,negative,True,False,False,False,False,,BLOCKED_BINDING,no registered transform
+OAK,zero_delay_collapsed_duplicate,negative,True,True,True,False,False,,NOT_RUN_FAIL_CLOSED,implemented raw-IQ transform but not executed because the complete Phase-A binding failed
+OAK,second_source_single_prn_d0.05_p-6_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+OAK,second_source_single_prn_d0.05_p-3_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+OAK,second_source_single_prn_d0.05_p0_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+OAK,second_source_single_prn_d0.15_p-6_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+OAK,second_source_single_prn_d0.15_p-3_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+OAK,second_source_single_prn_d0.15_p0_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+OAK,second_source_single_prn_d0.3_p-6_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+OAK,second_source_single_prn_d0.3_p-3_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+OAK,second_source_single_prn_d0.3_p0_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+OAK,second_source_four_prn_d0.05_p-6_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+OAK,second_source_four_prn_d0.05_p-3_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+OAK,second_source_four_prn_d0.05_p0_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+OAK,second_source_four_prn_d0.15_p-6_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+OAK,second_source_four_prn_d0.15_p-3_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+OAK,second_source_four_prn_d0.15_p0_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+OAK,second_source_four_prn_d0.3_p-6_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+OAK,second_source_four_prn_d0.3_p-3_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+OAK,second_source_four_prn_d0.3_p0_smooth_pull_off,positive,True,False,False,False,False,,BLOCKED_BINDING,registered duplicate is all-waveform fixed delay; it has neither selected-PRN multiplicity nor smooth pull-off
+TEX,second_source_all_waveform_d0.15_p-3_fixed,diagnostic_nonconforming,False,True,False,True,True,0.037102997922232116,DIAGNOSTIC_ONLY,"R1 checksum/config exact, but stimulus does not satisfy frozen selected-PRN smooth-pull-off definition"

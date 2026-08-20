@@ -1,0 +1,18 @@
+{
+  "all_configurations_pass": true,
+  "contract": {
+    "dump_count": 10,
+    "exact_bytes": 4500000000,
+    "exit_code": 0,
+    "sigkill": false,
+    "sigterm": false,
+    "stability_s": 5.0
+  },
+  "endpoint_max_error_samples": 1,
+  "repair_base_sha": "aa78fe158c9ea8f00ddd82c46bf87fc4fd328551",
+  "repair_manifest_sha256": "9771946ef995252ffeec4e9076a2bd7e4be647a044d1554769b7c1524add43a0",
+  "repair_status": "READY_FOR_FROZEN_CRID_RESUME",
+  "repair_verdict": "TERMINAL_DRAIN_REPAIR_PASS",
+  "schema": "gnss-doppler-lab.crid-r2-repair-binding.v1",
+  "status": "PASS"
+}

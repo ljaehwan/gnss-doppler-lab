@@ -1,0 +1,15 @@
+{
+  "OAK": {
+    "holdout_fpr_q99": 0.00730093543235227,
+    "q99": -21.705587048010322,
+    "q99_5": -21.666766135199047
+  },
+  "TEX": {
+    "holdout_fpr_q99": 0.012708150744960562,
+    "q99": -21.942672917134093,
+    "q99_5": -21.921639651039257
+  },
+  "schema": "gnss-doppler-lab.crid-r2-thresholds.v1",
+  "source": "parent cleanStatic calibration only",
+  "status": "BOUND_UNCHANGED"
+}
