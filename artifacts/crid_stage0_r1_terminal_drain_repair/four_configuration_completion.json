@@ -1,0 +1,1074 @@
+{
+  "absolute_raw_endpoint_contract": {
+    "maximum_absolute_endpoint_delta_samples": 1,
+    "minimum_matched_c0_rows": 124959,
+    "per_config": {
+      "C1": {
+        "matched_c0_rows": 133816,
+        "maximum_absolute_endpoint_delta_samples": 1
+      },
+      "C2": {
+        "matched_c0_rows": 124959,
+        "maximum_absolute_endpoint_delta_samples": 1
+      },
+      "C3": {
+        "matched_c0_rows": 135725,
+        "maximum_absolute_endpoint_delta_samples": 1
+      }
+    },
+    "status": "PASS",
+    "tolerance_samples": 1
+  },
+  "configurations": {
+    "C0": {
+      "dump_count": 10,
+      "exact_input_bytes": 4500000000,
+      "exit_cause": "verified_eof_graceful_sigint",
+      "exit_code": 0,
+      "expected_input_bytes": 4500000000,
+      "pre_signal_stability_s": 5.0520876530208625,
+      "scientific_config_unchanged": true,
+      "sigkill_sent": false,
+      "sigterm_sent": false,
+      "status": "PASS",
+      "terminal_rows": [
+        {
+          "channel": 0,
+          "file": "trace_native_1ms_ch_0.bin",
+          "last_end": 1124963012,
+          "last_interval": 25000,
+          "last_start": 1124938012,
+          "prn": 19,
+          "record_count": 14998
+        },
+        {
+          "channel": 1,
+          "file": "trace_native_1ms_ch_1.bin",
+          "last_end": 1124957082,
+          "last_interval": 25000,
+          "last_start": 1124932082,
+          "prn": 16,
+          "record_count": 14998
+        },
+        {
+          "channel": 2,
+          "file": "trace_native_1ms_ch_2.bin",
+          "last_end": 1124963684,
+          "last_interval": 25000,
+          "last_start": 1124938684,
+          "prn": 3,
+          "record_count": 14998
+        },
+        {
+          "channel": 3,
+          "file": "trace_native_1ms_ch_3.bin",
+          "last_end": 1124965953,
+          "last_interval": 25000,
+          "last_start": 1124940953,
+          "prn": 30,
+          "record_count": 14998
+        },
+        {
+          "channel": 4,
+          "file": "trace_native_1ms_ch_4.bin",
+          "last_end": 1124967031,
+          "last_interval": 25000,
+          "last_start": 1124942031,
+          "prn": 13,
+          "record_count": 14998
+        },
+        {
+          "channel": 5,
+          "file": "trace_native_1ms_ch_5.bin",
+          "last_end": 1124966416,
+          "last_interval": 25000,
+          "last_start": 1124941416,
+          "prn": 6,
+          "record_count": 14998
+        },
+        {
+          "channel": 6,
+          "file": "trace_native_1ms_ch_6.bin",
+          "last_end": 1124955117,
+          "last_interval": 25000,
+          "last_start": 1124930117,
+          "prn": 7,
+          "record_count": 14998
+        },
+        {
+          "channel": 7,
+          "file": "trace_native_1ms_ch_7.bin",
+          "last_end": 1124958262,
+          "last_interval": 25000,
+          "last_start": 1124933262,
+          "prn": 20,
+          "record_count": 14998
+        },
+        {
+          "channel": 8,
+          "file": "trace_native_1ms_ch_8.bin",
+          "last_end": 1124959441,
+          "last_interval": 25000,
+          "last_start": 1124934441,
+          "prn": 10,
+          "record_count": 14998
+        },
+        {
+          "channel": 9,
+          "file": "trace_native_1ms_ch_9.bin",
+          "last_end": 1124965344,
+          "last_interval": 25000,
+          "last_start": 1124940344,
+          "prn": 23,
+          "record_count": 14998
+        }
+      ],
+      "trace_validation": {
+        "cadence_pair_count": 149970,
+        "causal_pair_count": 149970,
+        "causal_sequence_mismatch_count": 0,
+        "causal_value_mismatch_count": 0,
+        "consume_span_mismatch_count": 0,
+        "current_span_mismatch_count": 0,
+        "duration_mismatch_count": 0,
+        "failure_labels": [],
+        "file_summaries": [
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              0
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C0/trace_native_1ms_ch_0.bin",
+            "prn_values": [
+              19
+            ],
+            "record_count": 14998,
+            "sha256": "e29686ddc73e9b8540f21b351838ab763474ecae856144a4b64e3d1b16ff6e02",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              1
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C0/trace_native_1ms_ch_1.bin",
+            "prn_values": [
+              16
+            ],
+            "record_count": 14998,
+            "sha256": "2f8371a1933f36b36cf2b6842679b81dc54ad337f258b0a0f3e7cfee0b778612",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              2
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C0/trace_native_1ms_ch_2.bin",
+            "prn_values": [
+              3
+            ],
+            "record_count": 14998,
+            "sha256": "b8fccb87933d0008b2be485c319a16f1712341e824de93a2f3ff562413a99c9d",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              3
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C0/trace_native_1ms_ch_3.bin",
+            "prn_values": [
+              30
+            ],
+            "record_count": 14998,
+            "sha256": "176c4b31e6e314a1e5b949ce187e643798ba7de4232a0854086376e402b22ca4",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              4
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C0/trace_native_1ms_ch_4.bin",
+            "prn_values": [
+              13
+            ],
+            "record_count": 14998,
+            "sha256": "c339d03b4a9bde8a51d37ed76246cc6dcf1d067e29426612150469743ba1cf8a",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              5
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C0/trace_native_1ms_ch_5.bin",
+            "prn_values": [
+              6
+            ],
+            "record_count": 14998,
+            "sha256": "f607db10c78d55f3130f6d61dfb3f76d52830235f5a2d1a1bd24faebca335228",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              6
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C0/trace_native_1ms_ch_6.bin",
+            "prn_values": [
+              7
+            ],
+            "record_count": 14998,
+            "sha256": "908ce660a5488f098bab98c4f4c66d30b2e9be7bb2140b69808d85bdd136f290",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              7
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C0/trace_native_1ms_ch_7.bin",
+            "prn_values": [
+              20
+            ],
+            "record_count": 14998,
+            "sha256": "4e587542fbe561716ae47681881c99733ab9c1403ed0546dcbba487caa3e7878",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              8
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C0/trace_native_1ms_ch_8.bin",
+            "prn_values": [
+              10
+            ],
+            "record_count": 14998,
+            "sha256": "0b16ff900f2afe43f5402f66aafb6ea92538929c1d4d6706983912aa6f01f0e9",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              9
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C0/trace_native_1ms_ch_9.bin",
+            "prn_values": [
+              23
+            ],
+            "record_count": 14998,
+            "sha256": "cfec09cf79fc895654c836b4d51c1a7bc8034da6e4146abf3fed25d0b8508065",
+            "tracking_session_count": 1
+          }
+        ],
+        "finite_failure_count": 0,
+        "maximum_valid_prns_same_rounded_ms_epoch": 10,
+        "minimum_prns_required": 4,
+        "native_cadence_fraction": 1.0,
+        "native_cadence_pair_count": 149970,
+        "reassignment_failure_count": 0,
+        "repeated_action_row_count": 0,
+        "repeated_tap_row_count": 0,
+        "scenario_ids": [
+          "tex_clean.second_source_d0.15_p-3"
+        ],
+        "schema": "gnss-doppler-lab.trace-native-1ms-validation.v2",
+        "status": "PASS",
+        "timestamp_mismatch_count": 0,
+        "zero_action_row_count": 0,
+        "zero_tap_row_count": 0
+      }
+    },
+    "C1": {
+      "dump_count": 10,
+      "exact_input_bytes": 4500000000,
+      "exit_cause": "verified_eof_graceful_sigint",
+      "exit_code": 0,
+      "expected_input_bytes": 4500000000,
+      "pre_signal_stability_s": 5.052119647967629,
+      "scientific_config_unchanged": true,
+      "sigkill_sent": false,
+      "sigterm_sent": false,
+      "status": "PASS",
+      "terminal_rows": [
+        {
+          "channel": 0,
+          "file": "trace_native_1ms_ch_0.bin",
+          "last_end": 1124963012,
+          "last_interval": 25000,
+          "last_start": 1124938012,
+          "prn": 19,
+          "record_count": 14998
+        },
+        {
+          "channel": 1,
+          "file": "trace_native_1ms_ch_1.bin",
+          "last_end": 1124957082,
+          "last_interval": 25000,
+          "last_start": 1124932082,
+          "prn": 16,
+          "record_count": 14998
+        },
+        {
+          "channel": 2,
+          "file": "trace_native_1ms_ch_2.bin",
+          "last_end": 1124963684,
+          "last_interval": 25000,
+          "last_start": 1124938684,
+          "prn": 3,
+          "record_count": 14998
+        },
+        {
+          "channel": 3,
+          "file": "trace_native_1ms_ch_3.bin",
+          "last_end": 1124965953,
+          "last_interval": 25000,
+          "last_start": 1124940953,
+          "prn": 30,
+          "record_count": 14998
+        },
+        {
+          "channel": 4,
+          "file": "trace_native_1ms_ch_4.bin",
+          "last_end": 1124967030,
+          "last_interval": 25000,
+          "last_start": 1124942030,
+          "prn": 13,
+          "record_count": 14998
+        },
+        {
+          "channel": 5,
+          "file": "trace_native_1ms_ch_5.bin",
+          "last_end": 1124966416,
+          "last_interval": 25000,
+          "last_start": 1124941416,
+          "prn": 6,
+          "record_count": 14998
+        },
+        {
+          "channel": 6,
+          "file": "trace_native_1ms_ch_6.bin",
+          "last_end": 1124955117,
+          "last_interval": 25000,
+          "last_start": 1124930117,
+          "prn": 7,
+          "record_count": 14998
+        },
+        {
+          "channel": 7,
+          "file": "trace_native_1ms_ch_7.bin",
+          "last_end": 1124958262,
+          "last_interval": 25000,
+          "last_start": 1124933262,
+          "prn": 20,
+          "record_count": 14998
+        },
+        {
+          "channel": 8,
+          "file": "trace_native_1ms_ch_8.bin",
+          "last_end": 1124959441,
+          "last_interval": 25000,
+          "last_start": 1124934441,
+          "prn": 10,
+          "record_count": 14998
+        },
+        {
+          "channel": 9,
+          "file": "trace_native_1ms_ch_9.bin",
+          "last_end": 1124965344,
+          "last_interval": 25000,
+          "last_start": 1124940344,
+          "prn": 23,
+          "record_count": 14998
+        }
+      ],
+      "trace_validation": {
+        "cadence_pair_count": 149970,
+        "causal_pair_count": 149970,
+        "causal_sequence_mismatch_count": 0,
+        "causal_value_mismatch_count": 0,
+        "consume_span_mismatch_count": 0,
+        "current_span_mismatch_count": 0,
+        "duration_mismatch_count": 0,
+        "failure_labels": [],
+        "file_summaries": [
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              0
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C1/trace_native_1ms_ch_0.bin",
+            "prn_values": [
+              19
+            ],
+            "record_count": 14998,
+            "sha256": "190f633f442683f744206110aa0d123a4b82b76fe63652e6493ff873e79c8058",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              1
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C1/trace_native_1ms_ch_1.bin",
+            "prn_values": [
+              16
+            ],
+            "record_count": 14998,
+            "sha256": "3e092b3819926d72eead3fb474fb5bc250fc1cfcc18b3226bf1e7ad4594c1e7a",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              2
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C1/trace_native_1ms_ch_2.bin",
+            "prn_values": [
+              3
+            ],
+            "record_count": 14998,
+            "sha256": "1c81f1024af72071d2165047d107ba6d0e3f2c5623b944a5b0594b626308bcb9",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              3
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C1/trace_native_1ms_ch_3.bin",
+            "prn_values": [
+              30
+            ],
+            "record_count": 14998,
+            "sha256": "b81b7b2c0ca1a811ac6869beba13ee840bb1367a69550bd946958ea04e8fdda7",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              4
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C1/trace_native_1ms_ch_4.bin",
+            "prn_values": [
+              13
+            ],
+            "record_count": 14998,
+            "sha256": "89c119db312960acbfba2678b1decf5d64325bce2d59009239bf603310b19c90",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              5
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C1/trace_native_1ms_ch_5.bin",
+            "prn_values": [
+              6
+            ],
+            "record_count": 14998,
+            "sha256": "244756c0b4f6a29411b7b7beefcb5c9456d5b49ac2a4453501c252e015c948bc",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              6
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C1/trace_native_1ms_ch_6.bin",
+            "prn_values": [
+              7
+            ],
+            "record_count": 14998,
+            "sha256": "eb0bc73a71b4ebdaee1ab10ecde6e83b5d30fea06d64d5368c64018a69ea3e30",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              7
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C1/trace_native_1ms_ch_7.bin",
+            "prn_values": [
+              20
+            ],
+            "record_count": 14998,
+            "sha256": "ce4a40124e54cc75005e73abbd98780882d114f7878a2ec089bce286a794c3c6",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              8
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C1/trace_native_1ms_ch_8.bin",
+            "prn_values": [
+              10
+            ],
+            "record_count": 14998,
+            "sha256": "714cf51908053d4396f60882d446ad34ef0caaf6a2acb7800273c8444b52b7ca",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              9
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C1/trace_native_1ms_ch_9.bin",
+            "prn_values": [
+              23
+            ],
+            "record_count": 14998,
+            "sha256": "88d5ca5dc5ca6ed26b59202820ea1fdccd063b673f82f7d027bc890b03c5cdb3",
+            "tracking_session_count": 1
+          }
+        ],
+        "finite_failure_count": 0,
+        "maximum_valid_prns_same_rounded_ms_epoch": 10,
+        "minimum_prns_required": 4,
+        "native_cadence_fraction": 1.0,
+        "native_cadence_pair_count": 149970,
+        "reassignment_failure_count": 0,
+        "repeated_action_row_count": 0,
+        "repeated_tap_row_count": 0,
+        "scenario_ids": [
+          "tex_clean.second_source_d0.15_p-3"
+        ],
+        "schema": "gnss-doppler-lab.trace-native-1ms-validation.v2",
+        "status": "PASS",
+        "timestamp_mismatch_count": 0,
+        "zero_action_row_count": 0,
+        "zero_tap_row_count": 0
+      }
+    },
+    "C2": {
+      "dump_count": 10,
+      "exact_input_bytes": 4500000000,
+      "exit_cause": "verified_eof_graceful_sigint",
+      "exit_code": 0,
+      "expected_input_bytes": 4500000000,
+      "pre_signal_stability_s": 5.058028600993566,
+      "scientific_config_unchanged": true,
+      "sigkill_sent": false,
+      "sigterm_sent": false,
+      "status": "PASS",
+      "terminal_rows": [
+        {
+          "channel": 0,
+          "file": "trace_native_1ms_ch_0.bin",
+          "last_end": 1124963012,
+          "last_interval": 25000,
+          "last_start": 1124938012,
+          "prn": 19,
+          "record_count": 14998
+        },
+        {
+          "channel": 1,
+          "file": "trace_native_1ms_ch_1.bin",
+          "last_end": 1124957082,
+          "last_interval": 25000,
+          "last_start": 1124932082,
+          "prn": 16,
+          "record_count": 14998
+        },
+        {
+          "channel": 2,
+          "file": "trace_native_1ms_ch_2.bin",
+          "last_end": 1124963684,
+          "last_interval": 25000,
+          "last_start": 1124938684,
+          "prn": 3,
+          "record_count": 14998
+        },
+        {
+          "channel": 3,
+          "file": "trace_native_1ms_ch_3.bin",
+          "last_end": 1124965953,
+          "last_interval": 25000,
+          "last_start": 1124940953,
+          "prn": 30,
+          "record_count": 14998
+        },
+        {
+          "channel": 4,
+          "file": "trace_native_1ms_ch_4.bin",
+          "last_end": 1124967029,
+          "last_interval": 24999,
+          "last_start": 1124942030,
+          "prn": 13,
+          "record_count": 14998
+        },
+        {
+          "channel": 5,
+          "file": "trace_native_1ms_ch_5.bin",
+          "last_end": 1124966416,
+          "last_interval": 25000,
+          "last_start": 1124941416,
+          "prn": 6,
+          "record_count": 14998
+        },
+        {
+          "channel": 6,
+          "file": "trace_native_1ms_ch_6.bin",
+          "last_end": 1124955117,
+          "last_interval": 25000,
+          "last_start": 1124930117,
+          "prn": 7,
+          "record_count": 14998
+        },
+        {
+          "channel": 7,
+          "file": "trace_native_1ms_ch_7.bin",
+          "last_end": 1124958262,
+          "last_interval": 25000,
+          "last_start": 1124933262,
+          "prn": 20,
+          "record_count": 14998
+        },
+        {
+          "channel": 8,
+          "file": "trace_native_1ms_ch_8.bin",
+          "last_end": 1124959441,
+          "last_interval": 25000,
+          "last_start": 1124934441,
+          "prn": 10,
+          "record_count": 14998
+        },
+        {
+          "channel": 9,
+          "file": "trace_native_1ms_ch_9.bin",
+          "last_end": 1124965345,
+          "last_interval": 25000,
+          "last_start": 1124940345,
+          "prn": 23,
+          "record_count": 14998
+        }
+      ],
+      "trace_validation": {
+        "cadence_pair_count": 149970,
+        "causal_pair_count": 149970,
+        "causal_sequence_mismatch_count": 0,
+        "causal_value_mismatch_count": 0,
+        "consume_span_mismatch_count": 0,
+        "current_span_mismatch_count": 0,
+        "duration_mismatch_count": 0,
+        "failure_labels": [],
+        "file_summaries": [
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              0
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C2/trace_native_1ms_ch_0.bin",
+            "prn_values": [
+              19
+            ],
+            "record_count": 14998,
+            "sha256": "ad3cadb65b2f7d374701dbc77a46bb2342bc2649fe267237681e5856651868ae",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              1
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C2/trace_native_1ms_ch_1.bin",
+            "prn_values": [
+              16
+            ],
+            "record_count": 14998,
+            "sha256": "ccee62153b3a5c4d8b5e9aee88a29cb089834bf019ba03c43315e5684a2e71c8",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              2
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C2/trace_native_1ms_ch_2.bin",
+            "prn_values": [
+              3
+            ],
+            "record_count": 14998,
+            "sha256": "f661270b1d2ff23319fdcec43cdfd788feb008d1606b08a020d7bc0a7b430c0f",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              3
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C2/trace_native_1ms_ch_3.bin",
+            "prn_values": [
+              30
+            ],
+            "record_count": 14998,
+            "sha256": "ec803bf08c02b69ae5212fb534521136a105f439fb186a0fd197ea37ce6b4a83",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              4
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C2/trace_native_1ms_ch_4.bin",
+            "prn_values": [
+              13
+            ],
+            "record_count": 14998,
+            "sha256": "60cff0c594cff87e1afeb78d9c81a1a7aefb747ef3bc139a85b369d1de3db0a5",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              5
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C2/trace_native_1ms_ch_5.bin",
+            "prn_values": [
+              6
+            ],
+            "record_count": 14998,
+            "sha256": "a2de9e0d3c85f0fda32e80f07f5fffec9a843ce366a0d9eed86a02105d3dbfa6",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              6
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C2/trace_native_1ms_ch_6.bin",
+            "prn_values": [
+              7
+            ],
+            "record_count": 14998,
+            "sha256": "64d6f37b7fd379ad0d951298f88d497e256882a051bbb748b336fbc745ea0a4d",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              7
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C2/trace_native_1ms_ch_7.bin",
+            "prn_values": [
+              20
+            ],
+            "record_count": 14998,
+            "sha256": "2ace93a40db0632e592eb8b5db2e58d2f69f03dc4130e5aad6e8a546e6956e4a",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              8
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C2/trace_native_1ms_ch_8.bin",
+            "prn_values": [
+              10
+            ],
+            "record_count": 14998,
+            "sha256": "c6bc1770fcdc67bb2a8734678974ad84863bca0ab349489d6ced0fad19cadc18",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              9
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C2/trace_native_1ms_ch_9.bin",
+            "prn_values": [
+              23
+            ],
+            "record_count": 14998,
+            "sha256": "50b649ebefa9a8c09d093a7a595c650421b74a9f804e9701d9f8f22e0fa33c36",
+            "tracking_session_count": 1
+          }
+        ],
+        "finite_failure_count": 0,
+        "maximum_valid_prns_same_rounded_ms_epoch": 10,
+        "minimum_prns_required": 4,
+        "native_cadence_fraction": 1.0,
+        "native_cadence_pair_count": 149970,
+        "reassignment_failure_count": 0,
+        "repeated_action_row_count": 0,
+        "repeated_tap_row_count": 0,
+        "scenario_ids": [
+          "tex_clean.second_source_d0.15_p-3"
+        ],
+        "schema": "gnss-doppler-lab.trace-native-1ms-validation.v2",
+        "status": "PASS",
+        "timestamp_mismatch_count": 0,
+        "zero_action_row_count": 0,
+        "zero_tap_row_count": 0
+      }
+    },
+    "C3": {
+      "dump_count": 10,
+      "exact_input_bytes": 4500000000,
+      "exit_cause": "verified_eof_graceful_sigint",
+      "exit_code": 0,
+      "expected_input_bytes": 4500000000,
+      "pre_signal_stability_s": 5.056059874012135,
+      "scientific_config_unchanged": true,
+      "sigkill_sent": false,
+      "sigterm_sent": false,
+      "status": "PASS",
+      "terminal_rows": [
+        {
+          "channel": 0,
+          "file": "trace_native_1ms_ch_0.bin",
+          "last_end": 1124963011,
+          "last_interval": 24999,
+          "last_start": 1124938012,
+          "prn": 19,
+          "record_count": 14998
+        },
+        {
+          "channel": 1,
+          "file": "trace_native_1ms_ch_1.bin",
+          "last_end": 1124957082,
+          "last_interval": 25000,
+          "last_start": 1124932082,
+          "prn": 16,
+          "record_count": 14998
+        },
+        {
+          "channel": 2,
+          "file": "trace_native_1ms_ch_2.bin",
+          "last_end": 1124963684,
+          "last_interval": 25000,
+          "last_start": 1124938684,
+          "prn": 3,
+          "record_count": 14998
+        },
+        {
+          "channel": 3,
+          "file": "trace_native_1ms_ch_3.bin",
+          "last_end": 1124965953,
+          "last_interval": 25000,
+          "last_start": 1124940953,
+          "prn": 30,
+          "record_count": 14998
+        },
+        {
+          "channel": 4,
+          "file": "trace_native_1ms_ch_4.bin",
+          "last_end": 1124967031,
+          "last_interval": 25000,
+          "last_start": 1124942031,
+          "prn": 13,
+          "record_count": 14998
+        },
+        {
+          "channel": 5,
+          "file": "trace_native_1ms_ch_5.bin",
+          "last_end": 1124966416,
+          "last_interval": 25000,
+          "last_start": 1124941416,
+          "prn": 6,
+          "record_count": 14998
+        },
+        {
+          "channel": 6,
+          "file": "trace_native_1ms_ch_6.bin",
+          "last_end": 1124955117,
+          "last_interval": 25000,
+          "last_start": 1124930117,
+          "prn": 7,
+          "record_count": 14998
+        },
+        {
+          "channel": 7,
+          "file": "trace_native_1ms_ch_7.bin",
+          "last_end": 1124958262,
+          "last_interval": 25000,
+          "last_start": 1124933262,
+          "prn": 20,
+          "record_count": 14998
+        },
+        {
+          "channel": 8,
+          "file": "trace_native_1ms_ch_8.bin",
+          "last_end": 1124959441,
+          "last_interval": 25000,
+          "last_start": 1124934441,
+          "prn": 10,
+          "record_count": 14998
+        },
+        {
+          "channel": 9,
+          "file": "trace_native_1ms_ch_9.bin",
+          "last_end": 1124965344,
+          "last_interval": 25000,
+          "last_start": 1124940344,
+          "prn": 23,
+          "record_count": 14998
+        }
+      ],
+      "trace_validation": {
+        "cadence_pair_count": 149970,
+        "causal_pair_count": 149970,
+        "causal_sequence_mismatch_count": 0,
+        "causal_value_mismatch_count": 0,
+        "consume_span_mismatch_count": 0,
+        "current_span_mismatch_count": 0,
+        "duration_mismatch_count": 0,
+        "failure_labels": [],
+        "file_summaries": [
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              0
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C3/trace_native_1ms_ch_0.bin",
+            "prn_values": [
+              19
+            ],
+            "record_count": 14998,
+            "sha256": "4e64cf6028866bad51ec8348b2b81747e15abf5393e93e214782cec4bc427678",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              1
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C3/trace_native_1ms_ch_1.bin",
+            "prn_values": [
+              16
+            ],
+            "record_count": 14998,
+            "sha256": "c98ada48859206c45999b0bb0b9247df31d7cc12fb73bebed9aa577d26c68cf3",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              2
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C3/trace_native_1ms_ch_2.bin",
+            "prn_values": [
+              3
+            ],
+            "record_count": 14998,
+            "sha256": "6c9259469a2ca3b679f452029c747466bbd8f9a050a5c146d917989153f807a2",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              3
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C3/trace_native_1ms_ch_3.bin",
+            "prn_values": [
+              30
+            ],
+            "record_count": 14998,
+            "sha256": "1c819da4f35f812faec5b508f326b6e5ac8ac36f7299831922737755089f004b",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              4
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C3/trace_native_1ms_ch_4.bin",
+            "prn_values": [
+              13
+            ],
+            "record_count": 14998,
+            "sha256": "11d0a5a778e365eedec2ef0108a00f5144037332a9d266d437c96f6ef65ff582",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              5
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C3/trace_native_1ms_ch_5.bin",
+            "prn_values": [
+              6
+            ],
+            "record_count": 14998,
+            "sha256": "d074defc3c42c3363fb188d1df3146e7041a016caa91bc1aa2d929015424b7b9",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              6
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C3/trace_native_1ms_ch_6.bin",
+            "prn_values": [
+              7
+            ],
+            "record_count": 14998,
+            "sha256": "390e96411952257984d4848302eba0e9cb7ee554847e380378915284d6f73698",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              7
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C3/trace_native_1ms_ch_7.bin",
+            "prn_values": [
+              20
+            ],
+            "record_count": 14998,
+            "sha256": "7a184d739b507e5b44dd3929dcdb4203364ae69c44380b56fef892b56acdeebc",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              8
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C3/trace_native_1ms_ch_8.bin",
+            "prn_values": [
+              10
+            ],
+            "record_count": 14998,
+            "sha256": "c1b54fc1ee522c42aebe3f2caab9fe3446b8a4dac10a5e0fd0a78ece74ea878a",
+            "tracking_session_count": 1
+          },
+          {
+            "byte_size": 6239360,
+            "channel_values": [
+              9
+            ],
+            "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r1-terminal-drain-repair/positive/C3/trace_native_1ms_ch_9.bin",
+            "prn_values": [
+              23
+            ],
+            "record_count": 14998,
+            "sha256": "cca8b4b9dc3ff73b4e51ff04b3c91f7eb87ad0a95ac5ffbfab02f5b0b3471bb8",
+            "tracking_session_count": 1
+          }
+        ],
+        "finite_failure_count": 0,
+        "maximum_valid_prns_same_rounded_ms_epoch": 10,
+        "minimum_prns_required": 4,
+        "native_cadence_fraction": 1.0,
+        "native_cadence_pair_count": 149970,
+        "reassignment_failure_count": 0,
+        "repeated_action_row_count": 0,
+        "repeated_tap_row_count": 0,
+        "scenario_ids": [
+          "tex_clean.second_source_d0.15_p-3"
+        ],
+        "schema": "gnss-doppler-lab.trace-native-1ms-validation.v2",
+        "status": "PASS",
+        "timestamp_mismatch_count": 0,
+        "zero_action_row_count": 0,
+        "zero_tap_row_count": 0
+      }
+    }
+  },
+  "schema": "gnss-doppler-lab.crid-r1-four-configuration-completion.v1",
+  "status": "PASS"
+}

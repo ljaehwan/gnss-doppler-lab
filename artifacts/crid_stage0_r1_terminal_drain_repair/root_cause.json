@@ -1,0 +1,29 @@
+{
+  "clean_difference": "same configuration naturally reaches flowgraph completion; the positive signal reaches EOF with worker threads quiescent but flowgraph running remains true",
+  "code_path": "Gnss_Sdr_Valve action DRAIN -> ControlThread::apply_action(2) -> flowgraph_->wait()",
+  "diagnosis": "R2C_DRAIN_WAIT_DEADLOCK_AFTER_EXACT_FINITE_SOURCE_EOF",
+  "finite_source": {
+    "configured_scalar_int16_items": 2250000000,
+    "expected_bytes": 4500000000,
+    "implementation": "File_Signal_Source",
+    "observed_raw_fd_position": 4500000000,
+    "repeat": false
+  },
+  "live_diagnostic": {
+    "cpu_after_eof_percent": 0.0,
+    "dump_count": 10,
+    "dump_size_stable": true,
+    "pid": 300204,
+    "post_eof_state": "sleeping",
+    "rchar": 4500240251,
+    "thread_count": 12,
+    "wait_channels": {
+      "main_and_ten_workers": "futex_wait_queue",
+      "sysv_listener": "do_msgrcv"
+    },
+    "wchar": 62415575
+  },
+  "repair": "wrapper verifies exact raw fd endpoint and ten stable dumps, then sends one SIGINT handled by GNSS-SDR as STOP; no SIGTERM/SIGKILL accepted",
+  "schema": "gnss-doppler-lab.crid-r1-root-cause.v1",
+  "status": "PASS"
+}

@@ -1,0 +1,216 @@
+{
+  "C0_bit_identical_two_runs": true,
+  "control_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-counterfactual-receiver-invariance/controls/tex_clean/second_source_d0.15_p-3/control.bin",
+  "control_sha256": "c2ea6be45e1c2433abf255c3f98491f75cf458a2d48e6709bf1136053994e59b",
+  "control_size_bytes": 4500000000,
+  "first_dump_sha256": {
+    "trace_native_1ms_ch_0.bin": "e29686ddc73e9b8540f21b351838ab763474ecae856144a4b64e3d1b16ff6e02",
+    "trace_native_1ms_ch_1.bin": "2f8371a1933f36b36cf2b6842679b81dc54ad337f258b0a0f3e7cfee0b778612",
+    "trace_native_1ms_ch_2.bin": "b8fccb87933d0008b2be485c319a16f1712341e824de93a2f3ff562413a99c9d",
+    "trace_native_1ms_ch_3.bin": "176c4b31e6e314a1e5b949ce187e643798ba7de4232a0854086376e402b22ca4",
+    "trace_native_1ms_ch_4.bin": "c339d03b4a9bde8a51d37ed76246cc6dcf1d067e29426612150469743ba1cf8a",
+    "trace_native_1ms_ch_5.bin": "f607db10c78d55f3130f6d61dfb3f76d52830235f5a2d1a1bd24faebca335228",
+    "trace_native_1ms_ch_6.bin": "908ce660a5488f098bab98c4f4c66d30b2e9be7bb2140b69808d85bdd136f290",
+    "trace_native_1ms_ch_7.bin": "4e587542fbe561716ae47681881c99733ab9c1403ed0546dcbba487caa3e7878",
+    "trace_native_1ms_ch_8.bin": "0b16ff900f2afe43f5402f66aafb6ea92538929c1d4d6706983912aa6f01f0e9",
+    "trace_native_1ms_ch_9.bin": "cfec09cf79fc895654c836b4d51c1a7bc8034da6e4146abf3fed25d0b8508065"
+  },
+  "first_terminal_rows": [
+    {
+      "channel": 0,
+      "file": "trace_native_1ms_ch_0.bin",
+      "last_end": 1124963012,
+      "last_interval": 25000,
+      "last_start": 1124938012,
+      "prn": 19,
+      "record_count": 14998
+    },
+    {
+      "channel": 1,
+      "file": "trace_native_1ms_ch_1.bin",
+      "last_end": 1124957082,
+      "last_interval": 25000,
+      "last_start": 1124932082,
+      "prn": 16,
+      "record_count": 14998
+    },
+    {
+      "channel": 2,
+      "file": "trace_native_1ms_ch_2.bin",
+      "last_end": 1124963684,
+      "last_interval": 25000,
+      "last_start": 1124938684,
+      "prn": 3,
+      "record_count": 14998
+    },
+    {
+      "channel": 3,
+      "file": "trace_native_1ms_ch_3.bin",
+      "last_end": 1124965953,
+      "last_interval": 25000,
+      "last_start": 1124940953,
+      "prn": 30,
+      "record_count": 14998
+    },
+    {
+      "channel": 4,
+      "file": "trace_native_1ms_ch_4.bin",
+      "last_end": 1124967031,
+      "last_interval": 25000,
+      "last_start": 1124942031,
+      "prn": 13,
+      "record_count": 14998
+    },
+    {
+      "channel": 5,
+      "file": "trace_native_1ms_ch_5.bin",
+      "last_end": 1124966416,
+      "last_interval": 25000,
+      "last_start": 1124941416,
+      "prn": 6,
+      "record_count": 14998
+    },
+    {
+      "channel": 6,
+      "file": "trace_native_1ms_ch_6.bin",
+      "last_end": 1124955117,
+      "last_interval": 25000,
+      "last_start": 1124930117,
+      "prn": 7,
+      "record_count": 14998
+    },
+    {
+      "channel": 7,
+      "file": "trace_native_1ms_ch_7.bin",
+      "last_end": 1124958262,
+      "last_interval": 25000,
+      "last_start": 1124933262,
+      "prn": 20,
+      "record_count": 14998
+    },
+    {
+      "channel": 8,
+      "file": "trace_native_1ms_ch_8.bin",
+      "last_end": 1124959441,
+      "last_interval": 25000,
+      "last_start": 1124934441,
+      "prn": 10,
+      "record_count": 14998
+    },
+    {
+      "channel": 9,
+      "file": "trace_native_1ms_ch_9.bin",
+      "last_end": 1124965344,
+      "last_interval": 25000,
+      "last_start": 1124940344,
+      "prn": 23,
+      "record_count": 14998
+    }
+  ],
+  "repeat_dump_sha256": {
+    "trace_native_1ms_ch_0.bin": "e29686ddc73e9b8540f21b351838ab763474ecae856144a4b64e3d1b16ff6e02",
+    "trace_native_1ms_ch_1.bin": "2f8371a1933f36b36cf2b6842679b81dc54ad337f258b0a0f3e7cfee0b778612",
+    "trace_native_1ms_ch_2.bin": "b8fccb87933d0008b2be485c319a16f1712341e824de93a2f3ff562413a99c9d",
+    "trace_native_1ms_ch_3.bin": "176c4b31e6e314a1e5b949ce187e643798ba7de4232a0854086376e402b22ca4",
+    "trace_native_1ms_ch_4.bin": "c339d03b4a9bde8a51d37ed76246cc6dcf1d067e29426612150469743ba1cf8a",
+    "trace_native_1ms_ch_5.bin": "f607db10c78d55f3130f6d61dfb3f76d52830235f5a2d1a1bd24faebca335228",
+    "trace_native_1ms_ch_6.bin": "908ce660a5488f098bab98c4f4c66d30b2e9be7bb2140b69808d85bdd136f290",
+    "trace_native_1ms_ch_7.bin": "4e587542fbe561716ae47681881c99733ab9c1403ed0546dcbba487caa3e7878",
+    "trace_native_1ms_ch_8.bin": "0b16ff900f2afe43f5402f66aafb6ea92538929c1d4d6706983912aa6f01f0e9",
+    "trace_native_1ms_ch_9.bin": "cfec09cf79fc895654c836b4d51c1a7bc8034da6e4146abf3fed25d0b8508065"
+  },
+  "repeat_terminal_rows": [
+    {
+      "channel": 0,
+      "file": "trace_native_1ms_ch_0.bin",
+      "last_end": 1124963012,
+      "last_interval": 25000,
+      "last_start": 1124938012,
+      "prn": 19,
+      "record_count": 14998
+    },
+    {
+      "channel": 1,
+      "file": "trace_native_1ms_ch_1.bin",
+      "last_end": 1124957082,
+      "last_interval": 25000,
+      "last_start": 1124932082,
+      "prn": 16,
+      "record_count": 14998
+    },
+    {
+      "channel": 2,
+      "file": "trace_native_1ms_ch_2.bin",
+      "last_end": 1124963684,
+      "last_interval": 25000,
+      "last_start": 1124938684,
+      "prn": 3,
+      "record_count": 14998
+    },
+    {
+      "channel": 3,
+      "file": "trace_native_1ms_ch_3.bin",
+      "last_end": 1124965953,
+      "last_interval": 25000,
+      "last_start": 1124940953,
+      "prn": 30,
+      "record_count": 14998
+    },
+    {
+      "channel": 4,
+      "file": "trace_native_1ms_ch_4.bin",
+      "last_end": 1124967031,
+      "last_interval": 25000,
+      "last_start": 1124942031,
+      "prn": 13,
+      "record_count": 14998
+    },
+    {
+      "channel": 5,
+      "file": "trace_native_1ms_ch_5.bin",
+      "last_end": 1124966416,
+      "last_interval": 25000,
+      "last_start": 1124941416,
+      "prn": 6,
+      "record_count": 14998
+    },
+    {
+      "channel": 6,
+      "file": "trace_native_1ms_ch_6.bin",
+      "last_end": 1124955117,
+      "last_interval": 25000,
+      "last_start": 1124930117,
+      "prn": 7,
+      "record_count": 14998
+    },
+    {
+      "channel": 7,
+      "file": "trace_native_1ms_ch_7.bin",
+      "last_end": 1124958262,
+      "last_interval": 25000,
+      "last_start": 1124933262,
+      "prn": 20,
+      "record_count": 14998
+    },
+    {
+      "channel": 8,
+      "file": "trace_native_1ms_ch_8.bin",
+      "last_end": 1124959441,
+      "last_interval": 25000,
+      "last_start": 1124934441,
+      "prn": 10,
+      "record_count": 14998
+    },
+    {
+      "channel": 9,
+      "file": "trace_native_1ms_ch_9.bin",
+      "last_end": 1124965344,
+      "last_interval": 25000,
+      "last_start": 1124940344,
+      "prn": 23,
+      "record_count": 14998
+    }
+  ],
+  "schema": "gnss-doppler-lab.crid-r1-positive-reproducibility.v1",
+  "status": "PASS"
+}

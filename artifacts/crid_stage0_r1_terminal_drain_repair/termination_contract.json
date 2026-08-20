@@ -1,0 +1,19 @@
+{
+  "attack_data_accessed": false,
+  "exact_input_bytes": 4500000000,
+  "forbidden_success_causes": [
+    "SIGTERM",
+    "SIGKILL"
+  ],
+  "graceful_exit_code": 0,
+  "pre_signal_stability_s": 5.0,
+  "priority": [
+    "natural_eos",
+    "verified_eof_plus_dump_stability_then_graceful_sigint"
+  ],
+  "required_dump_count": 10,
+  "schema": "gnss-doppler-lab.crid-r1-termination-contract.v1",
+  "scientific_configuration_changed": false,
+  "status": "PASS",
+  "terminal_guard": "integral TRACE records, valid causal links, stable closed dump, repeated terminal rows identical"
+}
