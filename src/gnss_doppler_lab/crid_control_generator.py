@@ -280,7 +280,7 @@ def generate_case(ctx: FrozenContext, case: ControlCase, output: Path, alpha: di
             if case.kind == "byte_identical": packed, cs, cc = payload, 0, 0
             else: packed, cs, cc = encode(y)
             sink.write(packed); digest.update(packed); clipped_samples += cs; clipped_components += cc
-            changed += sum(a != b for a,b in zip(payload, packed)); absolute += count
+            changed += int(np.count_nonzero(np.frombuffer(payload, dtype=np.uint8) != np.frombuffer(packed, dtype=np.uint8))); absolute += count
     scalars = 2 * ctx.count; total_fraction = clipped_components / scalars
     if total_fraction > ctx.spec["sample_contract"]["clipping_fail_closed"]["maximum_total_clip_fraction"]:
         raise RuntimeError(f"clipping fail closed: {total_fraction}")
