@@ -1,0 +1,116 @@
+{
+  "schema": "gnss-doppler-lab.crid-r4a-threshold-decision-equivalence-repair-preregistration.v1",
+  "status": "PRE_IMPLEMENTATION_METHOD_REPAIR_FROZEN",
+  "base_commit": "04ea478e5cb9f4d5da05563c1d883b2f7b20a28b",
+  "branch": "research/crid-stage0-r4a-threshold-decision-equivalence-repair",
+  "purpose": "Determine whether the approximately 1e-13 float64 R4 threshold recomputation differences change the scientific threshold decision or any clean holdout alarm, without revising R4.",
+  "prior_result_disclosure": {
+    "r4_threshold_status": "INCONCLUSIVE_THRESHOLD_BINDING",
+    "r4_terminal_verdict": "INCONCLUSIVE_CRID_PHASE_A_EXECUTION_OR_PROVENANCE",
+    "r4_phase_a_replays": 0,
+    "r4_control_scores": 0,
+    "observed_recomputation": {
+      "OAK": {
+        "committed_q99": -21.705587048010322,
+        "recomputed_q99": -21.705587048009935,
+        "absolute_difference": 3.87e-13
+      },
+      "TEX": {
+        "committed_q99": -21.942672917134093,
+        "recomputed_q99": -21.94267291713392,
+        "absolute_difference": 1.73e-13
+      }
+    }
+  },
+  "authoritative_thresholds": {
+    "source": "Committed R2 literal values; these remain the only thresholds authorized for any future Phase A.",
+    "OAK": {
+      "q99": -21.705587048010322,
+      "holdout_fpr": 0.00730093543235227
+    },
+    "TEX": {
+      "q99": -21.942672917134093,
+      "holdout_fpr": 0.012708150744960562
+    },
+    "recomputed_threshold_role": "Provenance diagnostic only; never a replacement threshold."
+  },
+  "clean_split_reference": {
+    "source": "Existing R4 clean-only threshold_recomputation evidence produced before this repair.",
+    "identity_rule": "Independently reconstruct exact sorted unique int64 sample-ID arrays from hash-bound clean C0-C3 traces, compare byte-for-byte with the arrays returned by the frozen scientific fit path, and require the following endpoints/counts.",
+    "OAK": {
+      "train": [150100296, 182037405, 70609],
+      "guard1": [182037888, 183585342, 3139],
+      "calibration": [183586221, 201521350, 36089],
+      "guard2": [201522279, 203079808, 3138],
+      "holdout": [203079809, 224989820, 43936]
+    },
+    "TEX": {
+      "train": [750505555, 901013382, 74254],
+      "guard1": [901013790, 908990496, 3300],
+      "calibration": [908991342, 1002581863, 37952],
+      "guard2": [1002583030, 1010858046, 3301],
+      "holdout": [1010859485, 1124942029, 46203]
+    },
+    "sample_id_hash_encoding": "SHA-256 over contiguous little-endian int64 bytes, one digest per domain and split."
+  },
+  "equivalence_gate": [
+    "The R2 clean replay inputs, C0-C3 configurations, receiver, scientific code, clean split, and threshold artifact hashes must match their committed R4/R2 bindings.",
+    "Exact train, guard1, calibration, guard2, and holdout sample-ID arrays and each count must match the independently reconstructed reference.",
+    "The calibration quantile is q=0.99 with NumPy method='higher'; any other method is a provenance failure.",
+    "Causal delays, common four-configuration support, at least four common PRNs per scored epoch, and finite scores must pass.",
+    "For each domain abs(recomputed-committed) <= 1e-12*max(1.0,abs(committed)).",
+    "Committed and recomputed thresholds applied with the same strict score>threshold rule to the same recomputed clean holdout score vector must produce byte-identical boolean vectors.",
+    "The two alarm vectors must have exactly equal false-positive counts and FPRs.",
+    "The committed-threshold holdout FPR must exactly equal OAK 0.00730093543235227 and TEX 0.012708150744960562.",
+    "Numeric tolerance alone cannot pass the repair; every hash, split, support, decision, and FPR condition must pass.",
+    "Any control score read or any attack path stat/hash/open/mmap/read forces INCONCLUSIVE_THRESHOLD_DECISION_PROVENANCE."
+  ],
+  "fixed_computation": {
+    "quantile": 0.99,
+    "quantile_method": "higher",
+    "comparison_operator": "score > threshold",
+    "numeric_sanity_relative_multiplier": 1e-12,
+    "numeric_sanity_scale": "max(1.0, abs(committed))",
+    "alarm_vector_encoding": "one uint8 byte per boolean in holdout sample order",
+    "fpr": "false_positive_count / holdout_score_count using float64 division"
+  },
+  "access_prohibitions": {
+    "r4_artifact_mutation": false,
+    "r4_verdict_rewrite": false,
+    "control_replay": false,
+    "control_score_read_or_compute": false,
+    "attack_stat": false,
+    "attack_hash": false,
+    "attack_open": false,
+    "attack_mmap": false,
+    "attack_read": false,
+    "threshold_replacement": false,
+    "phase_a": false,
+    "phase_b": false
+  },
+  "tamper_tests": [
+    "authoritative threshold byte flip",
+    "clean holdout score byte flip",
+    "split sample-ID byte flip",
+    "clean source hash byte flip",
+    "R4 artifact byte flip",
+    "alarm vector mismatch",
+    "FPR mismatch",
+    "quantile method mutation",
+    "numeric bound violation",
+    "control-score access sentinel",
+    "attack path stat/open/hash/mmap/read sentinel"
+  ],
+  "allowed_verdicts": {
+    "pass": {
+      "verdict": "THRESHOLD_DECISION_EQUIVALENCE_REPAIR_PASS",
+      "next_state": "READY_TO_REPEAT_CRID_PHASE_A"
+    },
+    "inconclusive": {
+      "verdict": "INCONCLUSIVE_THRESHOLD_DECISION_PROVENANCE",
+      "next_state": "NOT_AUTHORIZED"
+    }
+  },
+  "post_result_rule": "No preregistered condition, tolerance, threshold, split, support rule, or verdict rule may change after results are observed.",
+  "preregistration_commit_binding": "The pushed preregistration commit SHA is recorded in preregistration_commit.json only after local/remote identity and ahead/behind 0/0 are verified."
+}
