@@ -1,0 +1,20 @@
+{
+  "schema": "gnss-doppler-lab.crid-r3a-tamper-tests.v1",
+  "tests": {
+    "prn_order_permutation": "PASS",
+    "template_deletion": "PASS",
+    "duplicated_template_rank_deficiency": "PASS",
+    "nav_sign_mutation": "PASS",
+    "raw_start_sample_mutation": "PASS",
+    "source_hash_mutation": "PASS",
+    "output_hash_mutation": "PASS",
+    "condition_number_limit": "PASS",
+    "generator_module_import_prohibition": "PASS",
+    "attack_path_sentinel": "PASS",
+    "legacy_171_9_reproduction": "PASS",
+    "oak_prn21_no_exception": "PASS",
+    "row_case_prn_inventory": "PASS",
+    "artifact_byte_flip": "PASS"
+  },
+  "status": "PASS"
+}

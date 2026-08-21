@@ -1,0 +1,20 @@
+{
+  "failed": 9,
+  "failure_keys": [
+    "OAK|OAK.positive.d050.p+00.four|PRN=21",
+    "OAK|OAK.positive.d050.p-03.single|PRN=21",
+    "OAK|OAK.positive.d050.p-06.four|PRN=21",
+    "OAK|OAK.positive.d150.p+00.four|PRN=21",
+    "OAK|OAK.positive.d150.p-03.four|PRN=21",
+    "OAK|OAK.positive.d150.p-06.four|PRN=21",
+    "OAK|OAK.positive.d300.p+00.four|PRN=21",
+    "OAK|OAK.positive.d300.p-03.four|PRN=21",
+    "OAK|OAK.positive.d300.p-06.single|PRN=21"
+  ],
+  "numeric_match_to_committed_r3": true,
+  "passed": 171,
+  "rows": 180,
+  "same_nine_oak_prn21_failures": true,
+  "schema": "gnss-doppler-lab.crid-r3a-legacy-reproduction.v1",
+  "status": "PASS"
+}

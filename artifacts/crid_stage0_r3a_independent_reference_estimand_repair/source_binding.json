@@ -1,0 +1,487 @@
+{
+  "base_commit": "5ce681307f53f1aa1a2eb665e5ab5e9f8b153031",
+  "datasets": {
+    "OAK": {
+      "actual_source_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "expected_source_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "positive_controls": [
+        {
+          "actual_output_sha256": "963344c0ca51a88cda48bfbb0a2f686d3450a7e5d3ef79ff954ae9ef6ebaddf3",
+          "case_id": "OAK.positive.d050.p+00.four",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "963344c0ca51a88cda48bfbb0a2f686d3450a7e5d3ef79ff954ae9ef6ebaddf3",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/OAK/OAK.positive.d050.p+00.four/control.bin",
+          "output_size_bytes": 239707908
+        },
+        {
+          "actual_output_sha256": "eb2020a6a05e26914edcaf9bd29772c07f6c88614f686a836f441719d7b57d89",
+          "case_id": "OAK.positive.d050.p+00.single",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "eb2020a6a05e26914edcaf9bd29772c07f6c88614f686a836f441719d7b57d89",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/OAK/OAK.positive.d050.p+00.single/control.bin",
+          "output_size_bytes": 239707908
+        },
+        {
+          "actual_output_sha256": "7f2297e21bed325a76b9db019289414d0e13c07837123f03a5dea1511a39184d",
+          "case_id": "OAK.positive.d050.p-03.four",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "7f2297e21bed325a76b9db019289414d0e13c07837123f03a5dea1511a39184d",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/OAK/OAK.positive.d050.p-03.four/control.bin",
+          "output_size_bytes": 239707908
+        },
+        {
+          "actual_output_sha256": "37322654816bb979cebb018ff4618282f6f9b30673d4282e6ba3cdb43ce42b64",
+          "case_id": "OAK.positive.d050.p-03.single",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "37322654816bb979cebb018ff4618282f6f9b30673d4282e6ba3cdb43ce42b64",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/OAK/OAK.positive.d050.p-03.single/control.bin",
+          "output_size_bytes": 239707908
+        },
+        {
+          "actual_output_sha256": "f17526c2050b31e2382cff5e5a6f9dc3c172193b82c5a9bdb37888b3cdb21305",
+          "case_id": "OAK.positive.d050.p-06.four",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "f17526c2050b31e2382cff5e5a6f9dc3c172193b82c5a9bdb37888b3cdb21305",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/OAK/OAK.positive.d050.p-06.four/control.bin",
+          "output_size_bytes": 239707908
+        },
+        {
+          "actual_output_sha256": "3d278bf3b7b6955d3e8a419712bc9e4c9f72a5e64d6120379bb2349f90d02f97",
+          "case_id": "OAK.positive.d050.p-06.single",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "3d278bf3b7b6955d3e8a419712bc9e4c9f72a5e64d6120379bb2349f90d02f97",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/OAK/OAK.positive.d050.p-06.single/control.bin",
+          "output_size_bytes": 239707908
+        },
+        {
+          "actual_output_sha256": "da7989c334739b419a956cd388a0cc9b7fe122967b1f19217fdeb2ad3b08ac43",
+          "case_id": "OAK.positive.d150.p+00.four",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "da7989c334739b419a956cd388a0cc9b7fe122967b1f19217fdeb2ad3b08ac43",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/OAK/OAK.positive.d150.p+00.four/control.bin",
+          "output_size_bytes": 239707908
+        },
+        {
+          "actual_output_sha256": "130883bd6b4c0ab271d8c6046cd6e5b4ca22d32503adc0f0b66f6d368e75fb16",
+          "case_id": "OAK.positive.d150.p+00.single",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "130883bd6b4c0ab271d8c6046cd6e5b4ca22d32503adc0f0b66f6d368e75fb16",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/OAK/OAK.positive.d150.p+00.single/control.bin",
+          "output_size_bytes": 239707908
+        },
+        {
+          "actual_output_sha256": "6d784872daac797e092c1b7ecbd2260b759c8f9b5e38bff788d78afe5a67f52f",
+          "case_id": "OAK.positive.d150.p-03.four",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "6d784872daac797e092c1b7ecbd2260b759c8f9b5e38bff788d78afe5a67f52f",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/OAK/OAK.positive.d150.p-03.four/control.bin",
+          "output_size_bytes": 239707908
+        },
+        {
+          "actual_output_sha256": "8610ffbf7b074e50d72bbdf9630c0400e1acc0085f021278416cf4e99293e187",
+          "case_id": "OAK.positive.d150.p-03.single",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "8610ffbf7b074e50d72bbdf9630c0400e1acc0085f021278416cf4e99293e187",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/OAK/OAK.positive.d150.p-03.single/control.bin",
+          "output_size_bytes": 239707908
+        },
+        {
+          "actual_output_sha256": "a4552a1578e91967578506ccfa8c655c8d78e3533d35d5c6d4bd9ef5a648e2d5",
+          "case_id": "OAK.positive.d150.p-06.four",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "a4552a1578e91967578506ccfa8c655c8d78e3533d35d5c6d4bd9ef5a648e2d5",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/OAK/OAK.positive.d150.p-06.four/control.bin",
+          "output_size_bytes": 239707908
+        },
+        {
+          "actual_output_sha256": "b51af66664548124d6fdcffeaf621fa0892e787a9e50974581fca0caca2fd711",
+          "case_id": "OAK.positive.d150.p-06.single",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "b51af66664548124d6fdcffeaf621fa0892e787a9e50974581fca0caca2fd711",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/OAK/OAK.positive.d150.p-06.single/control.bin",
+          "output_size_bytes": 239707908
+        },
+        {
+          "actual_output_sha256": "d59069e78b2999c54a4b130040156e55bdb829f7c442e47cc20e854057f6372c",
+          "case_id": "OAK.positive.d300.p+00.four",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "d59069e78b2999c54a4b130040156e55bdb829f7c442e47cc20e854057f6372c",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/OAK/OAK.positive.d300.p+00.four/control.bin",
+          "output_size_bytes": 239707908
+        },
+        {
+          "actual_output_sha256": "0008ee2c4c37f7dba6268a443777c86b95adea80d62fac20f839318aff722842",
+          "case_id": "OAK.positive.d300.p+00.single",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "0008ee2c4c37f7dba6268a443777c86b95adea80d62fac20f839318aff722842",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/OAK/OAK.positive.d300.p+00.single/control.bin",
+          "output_size_bytes": 239707908
+        },
+        {
+          "actual_output_sha256": "4c9db1762505fe80c25f89d7867e7fc663b7dd295ca59c6c34e65c904ed1f0d6",
+          "case_id": "OAK.positive.d300.p-03.four",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "4c9db1762505fe80c25f89d7867e7fc663b7dd295ca59c6c34e65c904ed1f0d6",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/OAK/OAK.positive.d300.p-03.four/control.bin",
+          "output_size_bytes": 239707908
+        },
+        {
+          "actual_output_sha256": "2600159b1fcc946653e6a0a7ebdb34c4596feb8e76b62cbc8e9a5cd699bba308",
+          "case_id": "OAK.positive.d300.p-03.single",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "2600159b1fcc946653e6a0a7ebdb34c4596feb8e76b62cbc8e9a5cd699bba308",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/OAK/OAK.positive.d300.p-03.single/control.bin",
+          "output_size_bytes": 239707908
+        },
+        {
+          "actual_output_sha256": "86f24b8dd7ce12a6e97aede21ade5b6dc4b2b606955520eb3ced29ea21f6c2ee",
+          "case_id": "OAK.positive.d300.p-06.four",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "86f24b8dd7ce12a6e97aede21ade5b6dc4b2b606955520eb3ced29ea21f6c2ee",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/OAK/OAK.positive.d300.p-06.four/control.bin",
+          "output_size_bytes": 239707908
+        },
+        {
+          "actual_output_sha256": "3212f2ae228b1e106d3da3298093aec5628a18549547115024fa22d2ec5a0bfe",
+          "case_id": "OAK.positive.d300.p-06.single",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "3212f2ae228b1e106d3da3298093aec5628a18549547115024fa22d2ec5a0bfe",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/OAK/OAK.positive.d300.p-06.single/control.bin",
+          "output_size_bytes": 239707908
+        }
+      ],
+      "source_match": true,
+      "source_path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+      "source_size_bytes": 9600000000,
+      "status": "PASS"
+    },
+    "TEX": {
+      "actual_source_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "expected_source_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "positive_controls": [
+        {
+          "actual_output_sha256": "37e59e4176d4f567cb1c121db2aa427e65632d35cbfccfefa97d948397cfb19d",
+          "case_id": "TEX.positive.d050.p+00.four",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "37e59e4176d4f567cb1c121db2aa427e65632d35cbfccfefa97d948397cfb19d",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/TEX/TEX.positive.d050.p+00.four/control.bin",
+          "output_size_bytes": 1198806936
+        },
+        {
+          "actual_output_sha256": "3fd2f9df954b29da9de9e1297a109d0cb5d1857a88d9bfae5e1557a17404aa77",
+          "case_id": "TEX.positive.d050.p+00.single",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "3fd2f9df954b29da9de9e1297a109d0cb5d1857a88d9bfae5e1557a17404aa77",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/TEX/TEX.positive.d050.p+00.single/control.bin",
+          "output_size_bytes": 1198806936
+        },
+        {
+          "actual_output_sha256": "86ccb0c60d9daf7fc985528ae01db206b5cf9423a46bef9891cbbf3729153760",
+          "case_id": "TEX.positive.d050.p-03.four",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "86ccb0c60d9daf7fc985528ae01db206b5cf9423a46bef9891cbbf3729153760",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/TEX/TEX.positive.d050.p-03.four/control.bin",
+          "output_size_bytes": 1198806936
+        },
+        {
+          "actual_output_sha256": "eab6c7dc7dbaba7bff6a1993b360f848eb0c8b79a7593e2b49e3d509a79cc889",
+          "case_id": "TEX.positive.d050.p-03.single",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "eab6c7dc7dbaba7bff6a1993b360f848eb0c8b79a7593e2b49e3d509a79cc889",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/TEX/TEX.positive.d050.p-03.single/control.bin",
+          "output_size_bytes": 1198806936
+        },
+        {
+          "actual_output_sha256": "157fb20f7a7634df56db6ca9e0e2501b9d5f4ee01f41bafab7690fbcb85c8ad0",
+          "case_id": "TEX.positive.d050.p-06.four",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "157fb20f7a7634df56db6ca9e0e2501b9d5f4ee01f41bafab7690fbcb85c8ad0",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/TEX/TEX.positive.d050.p-06.four/control.bin",
+          "output_size_bytes": 1198806936
+        },
+        {
+          "actual_output_sha256": "26be33123dbe23a8fcb747e0d138f96c6deae54f77f31b8e96c1dfb82980eb83",
+          "case_id": "TEX.positive.d050.p-06.single",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "26be33123dbe23a8fcb747e0d138f96c6deae54f77f31b8e96c1dfb82980eb83",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/TEX/TEX.positive.d050.p-06.single/control.bin",
+          "output_size_bytes": 1198806936
+        },
+        {
+          "actual_output_sha256": "f99df35808daff69f6fcf9e84965936638993a796be474ca9d2450c9b346b2b4",
+          "case_id": "TEX.positive.d150.p+00.four",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "f99df35808daff69f6fcf9e84965936638993a796be474ca9d2450c9b346b2b4",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/TEX/TEX.positive.d150.p+00.four/control.bin",
+          "output_size_bytes": 1198806936
+        },
+        {
+          "actual_output_sha256": "11402b860c64d8667eb289c78a754e4deb339acfd60e5455d5e97c3a9b8ef98b",
+          "case_id": "TEX.positive.d150.p+00.single",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "11402b860c64d8667eb289c78a754e4deb339acfd60e5455d5e97c3a9b8ef98b",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/TEX/TEX.positive.d150.p+00.single/control.bin",
+          "output_size_bytes": 1198806936
+        },
+        {
+          "actual_output_sha256": "4090ec5b7a42666760a22d52e67bbe878dc4bff1ca217b5ecac8dbd17f73fd7f",
+          "case_id": "TEX.positive.d150.p-03.four",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "4090ec5b7a42666760a22d52e67bbe878dc4bff1ca217b5ecac8dbd17f73fd7f",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/TEX/TEX.positive.d150.p-03.four/control.bin",
+          "output_size_bytes": 1198806936
+        },
+        {
+          "actual_output_sha256": "ba2da45a5d2787f6c084ca516ecdd43782d7bdfec57c18411d00e32fe5533986",
+          "case_id": "TEX.positive.d150.p-03.single",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "ba2da45a5d2787f6c084ca516ecdd43782d7bdfec57c18411d00e32fe5533986",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/TEX/TEX.positive.d150.p-03.single/control.bin",
+          "output_size_bytes": 1198806936
+        },
+        {
+          "actual_output_sha256": "6e079c4c0ea1ca7cd63213b1a3d00d34eb91ecc72d1b6be7e145081b52d5d1c9",
+          "case_id": "TEX.positive.d150.p-06.four",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "6e079c4c0ea1ca7cd63213b1a3d00d34eb91ecc72d1b6be7e145081b52d5d1c9",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/TEX/TEX.positive.d150.p-06.four/control.bin",
+          "output_size_bytes": 1198806936
+        },
+        {
+          "actual_output_sha256": "ae4f25b913f33920ba9a5e4c515ebf5051e2909546843361b9e1dd83ddf112f6",
+          "case_id": "TEX.positive.d150.p-06.single",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "ae4f25b913f33920ba9a5e4c515ebf5051e2909546843361b9e1dd83ddf112f6",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/TEX/TEX.positive.d150.p-06.single/control.bin",
+          "output_size_bytes": 1198806936
+        },
+        {
+          "actual_output_sha256": "8b5bf5bdc0f6ab70b0c582859cad0c82b6d8e4e8df007345df372f96392c87bc",
+          "case_id": "TEX.positive.d300.p+00.four",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "8b5bf5bdc0f6ab70b0c582859cad0c82b6d8e4e8df007345df372f96392c87bc",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/TEX/TEX.positive.d300.p+00.four/control.bin",
+          "output_size_bytes": 1198806936
+        },
+        {
+          "actual_output_sha256": "7df2e6995330bdc00ad0449d0a6dcab193a5ff343fd67943a9b8075e3656ec3d",
+          "case_id": "TEX.positive.d300.p+00.single",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "7df2e6995330bdc00ad0449d0a6dcab193a5ff343fd67943a9b8075e3656ec3d",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/TEX/TEX.positive.d300.p+00.single/control.bin",
+          "output_size_bytes": 1198806936
+        },
+        {
+          "actual_output_sha256": "1d4a56aac219ef19c56cfcc02fa93f5aa386a255527202d72da3b1e4fe68dd9b",
+          "case_id": "TEX.positive.d300.p-03.four",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "1d4a56aac219ef19c56cfcc02fa93f5aa386a255527202d72da3b1e4fe68dd9b",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/TEX/TEX.positive.d300.p-03.four/control.bin",
+          "output_size_bytes": 1198806936
+        },
+        {
+          "actual_output_sha256": "b27a6b52e60521841282a781937dd388ae21af90c4c3308e35baf0a41e2e97f1",
+          "case_id": "TEX.positive.d300.p-03.single",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "b27a6b52e60521841282a781937dd388ae21af90c4c3308e35baf0a41e2e97f1",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/TEX/TEX.positive.d300.p-03.single/control.bin",
+          "output_size_bytes": 1198806936
+        },
+        {
+          "actual_output_sha256": "549e49198dd7321a67cbe294a2057e3695526f49b31aad08a14fd6774c704260",
+          "case_id": "TEX.positive.d300.p-06.four",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "549e49198dd7321a67cbe294a2057e3695526f49b31aad08a14fd6774c704260",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/TEX/TEX.positive.d300.p-06.four/control.bin",
+          "output_size_bytes": 1198806936
+        },
+        {
+          "actual_output_sha256": "b62e5191fa73025886df03ae78370b8b7a94b547f1b05ac6fa23a0c844ccae7e",
+          "case_id": "TEX.positive.d300.p-06.single",
+          "epoch_truth_match": true,
+          "expected_output_sha256": "b62e5191fa73025886df03ae78370b8b7a94b547f1b05ac6fa23a0c844ccae7e",
+          "output_match": true,
+          "output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r3-control-generator-foundation/controls/TEX/TEX.positive.d300.p-06.single/control.bin",
+          "output_size_bytes": 1198806936
+        }
+      ],
+      "source_match": true,
+      "source_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "source_size_bytes": 48016392192,
+      "status": "PASS"
+    }
+  },
+  "existing_r3_verdict_preserved": true,
+  "full_hash_executed": true,
+  "nav_mapping": {
+    "actual_sha256": "db7e23761e2bb4314d6f22e990e23c0fb19387ee7476a55a665def7a10af522f",
+    "expected_sha256": "db7e23761e2bb4314d6f22e990e23c0fb19387ee7476a55a665def7a10af522f",
+    "match": true
+  },
+  "preregistration_commit": "d23a93d624e58e4eebb961e387f24d8940f27b36",
+  "r3_manifest_checks": [
+    {
+      "actual_sha256": "04fc453925a43ecfb5be726ccc02ff48e4f015ec5f9ec273d91b52353eb2f1f2",
+      "expected_sha256": "04fc453925a43ecfb5be726ccc02ff48e4f015ec5f9ec273d91b52353eb2f1f2",
+      "match": true,
+      "path": "README.md"
+    },
+    {
+      "actual_sha256": "37bd3c75a7ea3ca1776d1e9f0af83fca768c8e7e24059f985ff2e71b5bca3eca",
+      "expected_sha256": "37bd3c75a7ea3ca1776d1e9f0af83fca768c8e7e24059f985ff2e71b5bca3eca",
+      "match": true,
+      "path": "c0_smoke_validation.json"
+    },
+    {
+      "actual_sha256": "ebcd9718468c4015ae4b023ac6f3e3a1bcb72ae47389218391fd90d3431868ba",
+      "expected_sha256": "ebcd9718468c4015ae4b023ac6f3e3a1bcb72ae47389218391fd90d3431868ba",
+      "match": true,
+      "path": "clipping_metrics.csv"
+    },
+    {
+      "actual_sha256": "9466d67c4f092b5e78e76eb9dff61116d9d4de62edecdfdefd98ecb0469b7749",
+      "expected_sha256": "9466d67c4f092b5e78e76eb9dff61116d9d4de62edecdfdefd98ecb0469b7749",
+      "match": true,
+      "path": "control_spec.json"
+    },
+    {
+      "actual_sha256": "3f5801245270a7664efcdbedbd21e5ac404d5a133a90ac2f215a41adca9e6310",
+      "expected_sha256": "3f5801245270a7664efcdbedbd21e5ac404d5a133a90ac2f215a41adca9e6310",
+      "match": true,
+      "path": "data_lineage.json"
+    },
+    {
+      "actual_sha256": "8b4ab501df1b08875ee2ba75c36b8694f3dbba75bfb7b0aae1f9099d23a3aba5",
+      "expected_sha256": "8b4ab501df1b08875ee2ba75c36b8694f3dbba75bfb7b0aae1f9099d23a3aba5",
+      "match": true,
+      "path": "design_freeze.json"
+    },
+    {
+      "actual_sha256": "1f1b808918abbcb568c291c515eaf4b92d6e63f944e8368294accd70a667fa6f",
+      "expected_sha256": "1f1b808918abbcb568c291c515eaf4b92d6e63f944e8368294accd70a667fa6f",
+      "match": true,
+      "path": "deterministic_reproduction.json"
+    },
+    {
+      "actual_sha256": "ea2e4a086eacf8fe633cd7c73d604463a82366ad3dc24fcd48fed1e3fa252a02",
+      "expected_sha256": "ea2e4a086eacf8fe633cd7c73d604463a82366ad3dc24fcd48fed1e3fa252a02",
+      "match": true,
+      "path": "final_verdict.json"
+    },
+    {
+      "actual_sha256": "758df166bd62f9cd5e40be54cc0042658850c88cadd1d39ec30f1666b3d4586a",
+      "expected_sha256": "758df166bd62f9cd5e40be54cc0042658850c88cadd1d39ec30f1666b3d4586a",
+      "match": true,
+      "path": "independent_correlator_validation.csv"
+    },
+    {
+      "actual_sha256": "718031412237d56fa09ba2aca04bec005244c26a92162d7cdfa4d4191737dec1",
+      "expected_sha256": "718031412237d56fa09ba2aca04bec005244c26a92162d7cdfa4d4191737dec1",
+      "match": true,
+      "path": "nav_continuity.json"
+    },
+    {
+      "actual_sha256": "179b21997554d77dbb07c67188c037a5b5bba557f0c6539e98a7c113b89db808",
+      "expected_sha256": "179b21997554d77dbb07c67188c037a5b5bba557f0c6539e98a7c113b89db808",
+      "match": true,
+      "path": "negative_control_inventory.csv"
+    },
+    {
+      "actual_sha256": "94d000004c9c87b14e4eebbc8a30e3ec3e68f6d61bb7428c5a7445a54128481e",
+      "expected_sha256": "94d000004c9c87b14e4eebbc8a30e3ec3e68f6d61bb7428c5a7445a54128481e",
+      "match": true,
+      "path": "non_target_preservation.csv"
+    },
+    {
+      "actual_sha256": "84eb19e0ecda5919a128789ed1ca34137450172b244964a2d4f5d62a5d61dc93",
+      "expected_sha256": "84eb19e0ecda5919a128789ed1ca34137450172b244964a2d4f5d62a5d61dc93",
+      "match": true,
+      "path": "phase_code_continuity.json"
+    },
+    {
+      "actual_sha256": "8d16946d26044a274d8606dd94c0dee7b8a29fc6d48510c72fbba5f7cad1458c",
+      "expected_sha256": "8d16946d26044a274d8606dd94c0dee7b8a29fc6d48510c72fbba5f7cad1458c",
+      "match": true,
+      "path": "plots/control_coverage.png"
+    },
+    {
+      "actual_sha256": "31ff21d6a7254d52223fc7de7c84a448b2c4bfa9ebddc07bdeceda1307b53a7d",
+      "expected_sha256": "31ff21d6a7254d52223fc7de7c84a448b2c4bfa9ebddc07bdeceda1307b53a7d",
+      "match": true,
+      "path": "positive_control_inventory.csv"
+    },
+    {
+      "actual_sha256": "efff5316da3528e16fc413a55f46733cc5ba373793c6b42083e6b1a6ca045756",
+      "expected_sha256": "efff5316da3528e16fc413a55f46733cc5ba373793c6b42083e6b1a6ca045756",
+      "match": true,
+      "path": "power_delay_validation.csv"
+    },
+    {
+      "actual_sha256": "9a9374aa1325db4a4de538ac26376341cc51a411819f99086a7b785f57b5e105",
+      "expected_sha256": "9a9374aa1325db4a4de538ac26376341cc51a411819f99086a7b785f57b5e105",
+      "match": true,
+      "path": "source_commit.json"
+    },
+    {
+      "actual_sha256": "248999e71e6ab1c721a09348940efdf786a4052df3368a7acee4a9ad9611e0d9",
+      "expected_sha256": "248999e71e6ab1c721a09348940efdf786a4052df3368a7acee4a9ad9611e0d9",
+      "match": true,
+      "path": "tamper_tests.json"
+    },
+    {
+      "actual_sha256": "bdd76fe330b09f469e46fd010b9731ec11eda7574fbe13a54be22ea24a215c74",
+      "expected_sha256": "bdd76fe330b09f469e46fd010b9731ec11eda7574fbe13a54be22ea24a215c74",
+      "match": true,
+      "path": "target_prn_assignments.json"
+    },
+    {
+      "actual_sha256": "3a6d5a7ef8925118f7465c0529a4715037eb1afe3451b05d36327e8f8ac39e5d",
+      "expected_sha256": "3a6d5a7ef8925118f7465c0529a4715037eb1afe3451b05d36327e8f8ac39e5d",
+      "match": true,
+      "path": "truth_summary.csv"
+    },
+    {
+      "actual_sha256": "09234014927ad8001deacc8a095dd20d8ea334713463c857fc840fa1ab69aaac",
+      "expected_sha256": "09234014927ad8001deacc8a095dd20d8ea334713463c857fc840fa1ab69aaac",
+      "match": true,
+      "path": "validation_checkpoint.json"
+    }
+  ],
+  "schema": "gnss-doppler-lab.crid-r3a-source-binding.v1",
+  "status": "PASS"
+}

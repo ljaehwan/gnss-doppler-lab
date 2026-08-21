@@ -1,0 +1,36 @@
+{
+  "all_condition_at_most_1e6": true,
+  "all_rank_five": true,
+  "deterministic_rerun_hashes": [
+    "713b85dad370a662a267ff5c029641e2e9f875d74fd9d21f6e903022504eaeb2",
+    "713b85dad370a662a267ff5c029641e2e9f875d74fd9d21f6e903022504eaeb2"
+  ],
+  "deterministic_rerun_match": true,
+  "failed": 0,
+  "maximum_condition_number": 1.0452200216306857,
+  "maximum_delay_error_chips": 0.0,
+  "maximum_non_target_relative_energy": 0.0034457958445727657,
+  "maximum_power_error_db": 0.0025041235959696807,
+  "non_target_rows": 90,
+  "passed": 180,
+  "rounding_and_clipping_diagnostic": [
+    {
+      "case_count": 18,
+      "clipped_components_total": 0,
+      "diagnostic_only_no_correction": true,
+      "domain": "OAK",
+      "maximum_clipping_fraction": 0.0
+    },
+    {
+      "case_count": 18,
+      "clipped_components_total": 0,
+      "diagnostic_only_no_correction": true,
+      "domain": "TEX",
+      "maximum_clipping_fraction": 0.0
+    }
+  ],
+  "rows": 180,
+  "schema": "gnss-doppler-lab.crid-r3a-joint-reference-summary.v1",
+  "status": "PASS",
+  "target_rows": 90
+}

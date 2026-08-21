@@ -1,0 +1,210 @@
+
+==================================== ERRORS ====================================
+_____________ ERROR collecting tests/test_ai_morph_gru_q70_eval.py _____________
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_ai_morph_gru_q70_eval.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_ai_morph_gru_q70_eval.py:4: in <module>
+    import pandas as pd
+E   ModuleNotFoundError: No module named 'pandas'
+______________ ERROR collecting tests/test_btail_support_gate.py _______________
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_btail_support_gate.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_btail_support_gate.py:7: in <module>
+    import pandas as pd
+E   ModuleNotFoundError: No module named 'pandas'
+_____ ERROR collecting tests/test_da_peak_floor_relational_transformer.py ______
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_da_peak_floor_relational_transformer.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_da_peak_floor_relational_transformer.py:9: in <module>
+    import torch
+E   ModuleNotFoundError: No module named 'torch'
+_______________ ERROR collecting tests/test_eval_oakbat_trcd.py ________________
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_eval_oakbat_trcd.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_eval_oakbat_trcd.py:3: in <module>
+    import numpy as np,pandas as pd,pytest
+E   ModuleNotFoundError: No module named 'pandas'
+_____ ERROR collecting tests/test_evaluate_oakbat_cleanstatic_detector.py ______
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_evaluate_oakbat_cleanstatic_detector.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_evaluate_oakbat_cleanstatic_detector.py:4: in <module>
+    import pandas as pd
+E   ModuleNotFoundError: No module named 'pandas'
+________________ ERROR collecting tests/test_gcmr_experiment.py ________________
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_gcmr_experiment.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_gcmr_experiment.py:1: in <module>
+    import json, numpy as np, pytest, torch
+E   ModuleNotFoundError: No module named 'torch'
+__________________ ERROR collecting tests/test_gcmr_model.py ___________________
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_gcmr_model.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_gcmr_model.py:4: in <module>
+    import torch
+E   ModuleNotFoundError: No module named 'torch'
+____________ ERROR collecting tests/test_gcmr_texbat_cleanstatic.py ____________
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_gcmr_texbat_cleanstatic.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_gcmr_texbat_cleanstatic.py:4: in <module>
+    from gnss_doppler_lab.gcmr_experiment import DEFAULT_ROLES
+src/gnss_doppler_lab/gcmr_experiment.py:16: in <module>
+    import torch
+E   ModuleNotFoundError: No module named 'torch'
+_____________ ERROR collecting tests/test_gcmr_texbat_external.py ______________
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_gcmr_texbat_external.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_gcmr_texbat_external.py:16: in <module>
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/run_gcmr_texbat_external.py:13: in <module>
+    import torch
+E   ModuleNotFoundError: No module named 'torch'
+______________ ERROR collecting tests/test_peak_floor_contract.py ______________
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_peak_floor_contract.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_peak_floor_contract.py:3: in <module>
+    import pandas as pd
+E   ModuleNotFoundError: No module named 'pandas'
+_______ ERROR collecting tests/test_peak_floor_contrastive_predictive.py _______
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_peak_floor_contrastive_predictive.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_peak_floor_contrastive_predictive.py:9: in <module>
+    import pandas as pd
+E   ModuleNotFoundError: No module named 'pandas'
+___________ ERROR collecting tests/test_peak_floor_dic_v3_quality.py ___________
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_peak_floor_dic_v3_quality.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_peak_floor_dic_v3_quality.py:5: in <module>
+    import pandas as pd
+E   ModuleNotFoundError: No module named 'pandas'
+_____ ERROR collecting tests/test_peak_floor_dynamic_innovation_copula.py ______
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_peak_floor_dynamic_innovation_copula.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_peak_floor_dynamic_innovation_copula.py:5: in <module>
+    import torch
+E   ModuleNotFoundError: No module named 'torch'
+____ ERROR collecting tests/test_score_peak_floor_contrastive_predictive.py ____
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_score_peak_floor_contrastive_predictive.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_score_peak_floor_contrastive_predictive.py:8: in <module>
+    import pandas as pd
+E   ModuleNotFoundError: No module named 'pandas'
+__ ERROR collecting tests/test_score_peak_floor_dynamic_innovation_copula.py ___
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_score_peak_floor_dynamic_innovation_copula.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_score_peak_floor_dynamic_innovation_copula.py:4: in <module>
+    import numpy as np,pandas as pd,pytest
+E   ModuleNotFoundError: No module named 'pandas'
+___________ ERROR collecting tests/test_tap_residual_common_drive.py ___________
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_tap_residual_common_drive.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_tap_residual_common_drive.py:3: in <module>
+    import pandas as pd
+E   ModuleNotFoundError: No module named 'pandas'
+_____________ ERROR collecting tests/test_trace_reproducibility.py _____________
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_trace_reproducibility.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_trace_reproducibility.py:6: in <module>
+    from gnss_doppler_lab.trace_reproducibility import (
+src/gnss_doppler_lab/trace_reproducibility.py:15: in <module>
+    import pandas as pd
+E   ModuleNotFoundError: No module named 'pandas'
+_______ ERROR collecting tests/test_train_oakbat_cleanstatic_detector.py _______
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_train_oakbat_cleanstatic_detector.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_train_oakbat_cleanstatic_detector.py:6: in <module>
+    import pandas as pd
+E   ModuleNotFoundError: No module named 'pandas'
+=========================== short test summary info ============================
+ERROR tests/test_ai_morph_gru_q70_eval.py
+ERROR tests/test_btail_support_gate.py
+ERROR tests/test_da_peak_floor_relational_transformer.py
+ERROR tests/test_eval_oakbat_trcd.py
+ERROR tests/test_evaluate_oakbat_cleanstatic_detector.py
+ERROR tests/test_gcmr_experiment.py
+ERROR tests/test_gcmr_model.py
+ERROR tests/test_gcmr_texbat_cleanstatic.py
+ERROR tests/test_gcmr_texbat_external.py
+ERROR tests/test_peak_floor_contract.py
+ERROR tests/test_peak_floor_contrastive_predictive.py
+ERROR tests/test_peak_floor_dic_v3_quality.py
+ERROR tests/test_peak_floor_dynamic_innovation_copula.py
+ERROR tests/test_score_peak_floor_contrastive_predictive.py
+ERROR tests/test_score_peak_floor_dynamic_innovation_copula.py
+ERROR tests/test_tap_residual_common_drive.py
+ERROR tests/test_trace_reproducibility.py
+ERROR tests/test_train_oakbat_cleanstatic_detector.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 18 errors during collection !!!!!!!!!!!!!!!!!!!
+18 errors in 2.43s

@@ -1,0 +1,27 @@
+
+==================================== ERRORS ====================================
+________ ERROR collecting tests/test_crid_r1_terminal_drain_artifact.py ________
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_crid_r1_terminal_drain_artifact.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_crid_r1_terminal_drain_artifact.py:4: in <module>
+    from scripts.verify_crid_r1_terminal_drain import verify
+E   ModuleNotFoundError: No module named 'scripts'
+___________ ERROR collecting tests/test_crid_r2_frozen_evaluation.py ___________
+ImportError while importing test module '/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/crid-stage0-r3a-independent-reference-estimand-repair/tests/test_crid_r2_frozen_evaluation.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_crid_r2_frozen_evaluation.py:4: in <module>
+    from scripts.verify_crid_r2_frozen_evaluation import verify
+E   ModuleNotFoundError: No module named 'scripts'
+=========================== short test summary info ============================
+ERROR tests/test_crid_r1_terminal_drain_artifact.py
+ERROR tests/test_crid_r2_frozen_evaluation.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!!
+2 errors in 0.97s

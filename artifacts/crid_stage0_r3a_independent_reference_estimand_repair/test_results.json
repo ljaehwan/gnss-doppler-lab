@@ -1,0 +1,40 @@
+{
+  "schema": "gnss-doppler-lab.crid-r3a-test-results.v1",
+  "new_r3a_tests_pre_manifest": {
+    "passed": 12,
+    "failed": 0,
+    "deselected": 1,
+    "status": "PASS",
+    "log": "logs/new_r3a_tests.txt"
+  },
+  "existing_r3_control_generator_tests": {
+    "passed": 5,
+    "failed": 0,
+    "status": "PASS",
+    "log": "logs/r3_generator_tests.txt"
+  },
+  "related_crid_tests": {
+    "passed": 34,
+    "failed": 0,
+    "status": "PASS",
+    "log": "logs/related_crid_tests_corrected.txt"
+  },
+  "full_pytest": {
+    "status": "BASELINE_MATCH_NO_NEW_FAILURE",
+    "r3a_collection_errors": 18,
+    "base_collection_errors": 18,
+    "cause": "Optional pandas and torch dependencies are absent in both base and R3a environments.",
+    "r3a_log": "logs/full_pytest_pre_manifest.txt",
+    "base_log": "logs/base_full_pytest.txt"
+  },
+  "corrected_invocation_note": "An initial related-CRID invocation omitted the repository root from PYTHONPATH and is preserved in logs/related_crid_tests.txt; the corrected invocation passed 34/34.",
+  "fresh_clone": "PENDING",
+  "final_r3a_tests": {
+    "passed": 13,
+    "failed": 0,
+    "status": "PASS",
+    "log": "logs/final_r3a_tests.txt"
+  },
+  "verifier": "PENDING",
+  "status": "PENDING"
+}

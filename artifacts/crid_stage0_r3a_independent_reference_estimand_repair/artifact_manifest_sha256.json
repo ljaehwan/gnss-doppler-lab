@@ -1,0 +1,152 @@
+{
+  "file_count": 29,
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "2c329a278247893aea9f74429002cd8b4e6debeb855995f7339c0b6260ead5d5",
+      "size_bytes": 1159
+    },
+    {
+      "path": "attack_access_audit.json",
+      "sha256": "80d550a69d45882195b20ac3856a2cb1ebd90e967a9954646c019a713635a710",
+      "size_bytes": 316
+    },
+    {
+      "path": "denominator_diagnostic.csv",
+      "sha256": "ed681628eabf0533c53adef3520622ed2c85cdb901e7532423264c9dc617ffa2",
+      "size_bytes": 1857
+    },
+    {
+      "path": "estimand_definition.md",
+      "sha256": "4092e409eb838d9053d45f3b53dc8dea97429627b6af3872c7e7bfd2df4c1277",
+      "size_bytes": 3737
+    },
+    {
+      "path": "final_verdict.json",
+      "sha256": "8a2f49d463b590df48c9a3296b0b2e44f2a113af91968c6b8f59409cc509c392",
+      "size_bytes": 758
+    },
+    {
+      "path": "joint_reference_summary.json",
+      "sha256": "5b513f4c38a453c671197ceb50844be9b307d4dc0a3a82468db2866bebf1b38a",
+      "size_bytes": 1071
+    },
+    {
+      "path": "joint_reference_validation.csv",
+      "sha256": "a6967a5ef69450283e035fd56d89f6d6b6168bca58b58333eb96369498da5669",
+      "size_bytes": 46219
+    },
+    {
+      "path": "legacy_reproduction_summary.json",
+      "sha256": "90373262a1206d0f6b63eaba7ff94c9c2359fdafe9380b43137a853d4ffb86a3",
+      "size_bytes": 657
+    },
+    {
+      "path": "legacy_validator_reproduction.csv",
+      "sha256": "70d1f5ad2fe5365494483a06d6021b464eaf21aa0547f06f20fd12d9e9a57288",
+      "size_bytes": 21230
+    },
+    {
+      "path": "logs/artifact_byte_flip_test.txt",
+      "sha256": "3a6f382ace8ac86b73ebb0735f2dede2f98f9613647775bc5a719e794886ada0",
+      "size_bytes": 113
+    },
+    {
+      "path": "logs/base_full_pytest.txt",
+      "sha256": "8d7d8545820864aaa16384162040c1df865045cbb0113c1e9880618c065348ac",
+      "size_bytes": 13603
+    },
+    {
+      "path": "logs/final_r3a_tests.txt",
+      "sha256": "a015a63f4cf5259eaa3bb7e60983effd6ef64f648fc5bab9c9ae6ba0c1191660",
+      "size_bytes": 99
+    },
+    {
+      "path": "logs/full_pytest_pre_manifest.txt",
+      "sha256": "61c60672ceff29e2968d3bb46298f402e8ee664340de9866e7b9b4e7e884ab07",
+      "size_bytes": 13783
+    },
+    {
+      "path": "logs/new_r3a_tests.txt",
+      "sha256": "5375ef7374ab8f18c8d8f4a487f19a8a0fb438cc6c341cc9a3259377acafd8e1",
+      "size_bytes": 113
+    },
+    {
+      "path": "logs/pre_fresh_clone_finalize.txt",
+      "sha256": "8a2f49d463b590df48c9a3296b0b2e44f2a113af91968c6b8f59409cc509c392",
+      "size_bytes": 758
+    },
+    {
+      "path": "logs/pre_fresh_clone_verifier.txt",
+      "sha256": "102e087a4c1986893aca59a23850b34f017f1a6cb80505779dbdcd1b41e0d669",
+      "size_bytes": 286
+    },
+    {
+      "path": "logs/pre_tamper_finalize.txt",
+      "sha256": "59f1cd98fe3fde1aee05c398e985434ba305707ae5ca81351e26e3d6b778eac5",
+      "size_bytes": 761
+    },
+    {
+      "path": "logs/r3_generator_tests.txt",
+      "sha256": "d14f97df2e52d4704acddb6a2f896d90d868e9d77ccc27e24b2ed3ccb7e349cc",
+      "size_bytes": 98
+    },
+    {
+      "path": "logs/related_crid_tests.txt",
+      "sha256": "903cf70d23f1b657a1140373524348d085430349764bd5bbdd2e8714a15693ce",
+      "size_bytes": 1803
+    },
+    {
+      "path": "logs/related_crid_tests_corrected.txt",
+      "sha256": "e8fe902744fabde94c7038b9af6feceeb88df75a253355b72501f27a55930d4f",
+      "size_bytes": 99
+    },
+    {
+      "path": "plots/prn_denominator_comparison.png",
+      "sha256": "783dbe39b29b5b31a6d14e5fcc6e4d592a4ca5b57212fb66c27de7e1c1bf150c",
+      "size_bytes": 41472
+    },
+    {
+      "path": "plots/requested_vs_recovered_power.png",
+      "sha256": "bbdfb6943634ce9a50117c462d0ad609338101ee4daf8eddf3a57849a6c001be",
+      "size_bytes": 44745
+    },
+    {
+      "path": "preregistration_commit.json",
+      "sha256": "12f8d55c22cb736e7365ece9361eaeba71151d32ffc00f3158ed1fb5bab62468",
+      "size_bytes": 321
+    },
+    {
+      "path": "repair_preregistration.json",
+      "sha256": "6943862358c990338e9f62aa669cbe9137cf57a207c3b24edae8d7fe4260c16f",
+      "size_bytes": 5524
+    },
+    {
+      "path": "solver_diagnostics.csv",
+      "sha256": "7c1ac5f0cf6bf5af260445374c739726fc48a182cd6113c18bc96ef06254a461",
+      "size_bytes": 996159
+    },
+    {
+      "path": "source_binding.json",
+      "sha256": "be5f0a255195595c0cc6f1329c7e086a5fc14a2260b0309ac0f056bdeea01765",
+      "size_bytes": 27353
+    },
+    {
+      "path": "tamper_test_results.json",
+      "sha256": "f2e8d1b2d7bfc65316edc54cfe56d65aa09361b0c473399c74b6ffee620b7da3",
+      "size_bytes": 640
+    },
+    {
+      "path": "test_results.json",
+      "sha256": "3f6063cc04e331485a2131f82cbc2625862e5143bab06acdfd81a8255b210e74",
+      "size_bytes": 1232
+    },
+    {
+      "path": "validation_checkpoint.json",
+      "sha256": "c5e8936205211b91f785450943bb3e50302808f5510e3f24e7f167e50ea46a2e",
+      "size_bytes": 238
+    }
+  ],
+  "schema": "gnss-doppler-lab.crid-r3a-artifact-manifest.v1",
+  "status": "PASS"
+}
