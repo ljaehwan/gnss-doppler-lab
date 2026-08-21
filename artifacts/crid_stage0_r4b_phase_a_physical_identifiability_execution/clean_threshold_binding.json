@@ -1,0 +1,43 @@
+{
+  "authoritative_source": "committed R2 literals authorized by R4a decision equivalence",
+  "comparison": "score > authoritative_threshold",
+  "domains": {
+    "OAK": {
+      "alarm_sha256": "8432f44ccbb73d4ebd13f4c368000cec58bdce6813a2003d3c8e78eeefb9a556",
+      "authoritative_threshold": -21.705587048010322,
+      "causal_delays_ms": {
+        "C0": 0,
+        "C1": 0,
+        "C2": 0,
+        "C3": 0
+      },
+      "holdout_fpr_q99": 0.00730093543235227,
+      "holdout_score_count": 4383
+    },
+    "TEX": {
+      "alarm_sha256": "d2b00be2e6ec2844f2dba1af3ab50b0e885c897c7aba5fe99527fc99a9fd68ae",
+      "authoritative_threshold": -21.942672917134093,
+      "causal_delays_ms": {
+        "C0": 0,
+        "C1": 0,
+        "C2": 0,
+        "C3": 0
+      },
+      "holdout_fpr_q99": 0.012708150744960562,
+      "holdout_score_count": 4564
+    }
+  },
+  "r2_thresholds": {
+    "path": "artifacts/crid_stage0_r2_frozen_evaluation/thresholds.json",
+    "sha256": "ca8bc344f24d95461374c466b15cddfcb3b6baaa3fb8f71ace69f6d972a7070a",
+    "size_bytes": 390
+  },
+  "r4a_final_verdict": {
+    "path": "artifacts/crid_stage0_r4a_threshold_decision_equivalence_repair/final_verdict.json",
+    "sha256": "8dc979cdb51f34db69510cbd4994d055cc03b4d14fc89ed46a2750b1c8e6c77a",
+    "size_bytes": 658
+  },
+  "schema": "gnss-doppler-lab.crid-r4b-clean-threshold-binding.v1",
+  "status": "FROZEN_R4A_DECISION_EQUIVALENCE_AUTHORIZED",
+  "threshold_recomputation_executed": false
+}

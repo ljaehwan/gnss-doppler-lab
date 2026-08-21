@@ -1,0 +1,7 @@
+R3 verifier: status=PASS verdict=INCONCLUSIVE_CONTROL_PROVENANCE positive_cases=36 negative_cases=30
+R3a verifier: status=PASS verdict=INDEPENDENT_REFERENCE_ESTIMAND_REPAIR_PASS
+R3b verifier: status=PASS verdict=TERMINAL_PROVENANCE_CLOSURE_PASS
+R4a verifier: status=PASS verdict=THRESHOLD_DECISION_EQUIVALENCE_REPAIR_PASS
+R4a next_state=READY_TO_REPEAT_CRID_PHASE_A
+R4a authoritative OAK=-21.705587048010322
+R4a authoritative TEX=-21.942672917134093

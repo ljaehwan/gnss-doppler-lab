@@ -1,0 +1,11 @@
+command=PYTHONPATH=src:. python3 scripts/verify_crid_r4b_phase_a.py --mode freeze
+status=PASS
+mode=freeze
+manifest_ok=true
+manifest_files_before_log_seal=15
+inventory_rows=66
+replay_rows=0
+metric_rows=0
+positive_rows=0
+verdict=NOT_EVALUATED_PRE_RESULT_FREEZE
+failures=[]

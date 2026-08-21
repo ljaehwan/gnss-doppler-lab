@@ -1,0 +1,96 @@
+{
+  "base_sha": "970f457daa1cd5677a1942198c92bf715a516050",
+  "inputs": {
+    "configurations": [
+      "C0",
+      "C1",
+      "C2",
+      "C3"
+    ],
+    "control_regeneration": false,
+    "controls": 66,
+    "domains": {
+      "OAK": 33,
+      "TEX": 33
+    },
+    "families": {
+      "OAK": {
+        "negative": 15,
+        "positive": 18
+      },
+      "TEX": {
+        "negative": 15,
+        "positive": 18
+      }
+    },
+    "overwrite": false,
+    "r4_inventory_byte_identity_required": true,
+    "total_replays": 264,
+    "truth_modification": false
+  },
+  "phase_b_execution": false,
+  "post_result_changes_forbidden": [
+    "code",
+    "threshold",
+    "window",
+    "score",
+    "gate",
+    "control exclusion"
+  ],
+  "primary_gate": {
+    "clean_holdout_fpr_max_each_domain": 0.02,
+    "legacy_any_positive_pass": "DIAGNOSTIC_ONLY_NOT_AUTHORIZATION",
+    "negative_alarm_ratio_q99_max_each": 0.05,
+    "negative_case_count": 30,
+    "positive_alarm_ratio_q99_min_each_pass": 0.7,
+    "positive_case_count": 36,
+    "positive_group_minimum_passes": {
+      "OAK-four": 1,
+      "OAK-single": 1,
+      "TEX-four": 1,
+      "TEX-single": 1
+    },
+    "positive_response_surface_complete": true,
+    "technical_requirements": [
+      "replay",
+      "terminal_drain",
+      "provenance",
+      "alignment",
+      "support"
+    ]
+  },
+  "schema": "gnss-doppler-lab.crid-r4b-preregistration.v1",
+  "scope": "CLEAN_ONLY_CRID_PHASE_A_PHYSICAL_IDENTIFIABILITY_EXECUTION",
+  "score_contract": {
+    "authoritative_thresholds": {
+      "OAK": -21.705587048010322,
+      "TEX": -21.942672917134093
+    },
+    "authorization": "R4a THRESHOLD_DECISION_EQUIVALENCE_REPAIR_PASS",
+    "cn0_or_power_score": false,
+    "comparison": "score > authoritative_threshold",
+    "exact_float_recomputation_gate_reused": false,
+    "implementation": "unchanged committed CRID feature/alignment/predictor/covariance/H0/H1/median-over-common-PRNs pooling",
+    "minimum_common_prns_per_epoch": 4,
+    "minimum_configurations_per_epoch": 4,
+    "neural_model": false,
+    "prn_identity_feature": false,
+    "score_fusion": false,
+    "threshold_reestimated_or_replaced": false
+  },
+  "status": "FROZEN_BEFORE_PHASE_A_RESULTS",
+  "verdicts": {
+    "execution_or_provenance": "INCONCLUSIVE_CRID_PHASE_A_EXECUTION_OR_PROVENANCE",
+    "pass": "CRID_PHASE_A_PHYSICAL_IDENTIFIABILITY_PASS",
+    "pass_next_state": "READY_FOR_CRID_PHASE_B",
+    "physical_failure": "NO_GO_CRID_CLEAN_PHYSICAL_IDENTIFIABILITY"
+  },
+  "window_contract": {
+    "coordinate": "raw sample",
+    "full_and_active_support_both_reported": true,
+    "negative_primary": "full truth replacement support",
+    "positive_full_45_second_primary_forbidden": true,
+    "positive_primary": "active truth delay support only",
+    "zero_valid_epochs": "INCONCLUSIVE_SUPPORT"
+  }
+}

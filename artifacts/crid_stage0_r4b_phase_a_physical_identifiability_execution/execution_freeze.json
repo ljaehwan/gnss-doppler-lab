@@ -1,0 +1,42 @@
+{
+  "base_sha": "970f457daa1cd5677a1942198c92bf715a516050",
+  "branch": "research/crid-stage0-r4b-phase-a-physical-identifiability-execution",
+  "checkpoint_contract": {
+    "completed_exact_replay": "validate and skip",
+    "hash_mismatch": "fail closed without overwrite or deletion",
+    "incomplete_output": "fail closed without overwrite or deletion",
+    "resource_shortage": "INCONCLUSIVE_RESOURCE without deletion"
+  },
+  "commands": {
+    "analyze": "python3 scripts/run_crid_r4b_phase_a.py analyze --freeze-sha <PUSHED_FREEZE_SHA>",
+    "authorize_threshold": "python3 scripts/run_crid_r4b_phase_a.py authorize-threshold --freeze-sha <PUSHED_FREEZE_SHA>",
+    "preflight": "python3 scripts/run_crid_r4b_phase_a.py preflight --freeze-sha <PUSHED_FREEZE_SHA>",
+    "replay": "python3 scripts/run_crid_r4b_phase_a.py replay --freeze-sha <PUSHED_FREEZE_SHA>"
+  },
+  "environment": {
+    "gnss_sdr_version": "gnss-sdr version 0.0.19",
+    "machine": "x86_64",
+    "numpy": "1.26.4",
+    "platform": "Linux-6.8.0-137-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "python_executable": "/usr/bin/python3",
+    "python_implementation": "CPython",
+    "release": "6.8.0-137-generic",
+    "system": "Linux",
+    "timezone": [
+      "KST",
+      "KST"
+    ]
+  },
+  "executable_sha256": {
+    "scripts/run_crid_r4b_phase_a.py": "202d73d453c5ca6980d8472029857c54e05507a6088f2989f46b2a7eefe7b195",
+    "scripts/verify_crid_r4b_phase_a.py": "564ff5a3472eb66ecd2ecab9250354fc07a9aa8799a6a65a920d0454fef72c19",
+    "src/gnss_doppler_lab/crid_r4b_phase_a.py": "31cdf26d82dca7bf360d1cf0354778e5de35d5adcd5a766c188e013a55a187a8"
+  },
+  "freeze_authorization": "HEAD, origin branch, supplied freeze SHA identical; clean checkout",
+  "output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4b-phase-a-physical-identifiability-execution",
+  "schema": "gnss-doppler-lab.crid-r4b-execution-freeze.v1",
+  "sequential_order": "OAK then TEX; lexical case_id; C0,C1,C2,C3",
+  "status": "FROZEN_PENDING_REMOTE_COMMIT",
+  "worker_count": 1
+}
