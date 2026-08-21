@@ -1,9 +1,20 @@
 {
   "attack_bytes_read": 0,
-  "next_state": "RUN_PHASE_A_FROM_PUSHED_FREEZE_SHA",
-  "phase_a_executed": false,
+  "attack_paths_hashed": 0,
+  "attack_paths_mapped": 0,
+  "attack_paths_opened": 0,
+  "attack_paths_statted": 0,
+  "freeze_sha": "66602181d3e024490fd71ef606c84d04c09c0ed5",
+  "next_state": "NOT_AUTHORIZED",
+  "phase_a_execution_status": "STOPPED_BEFORE_REPLAY_AT_THRESHOLD_BINDING",
+  "phase_a_preflight_executed": true,
+  "phase_a_replay_count": 0,
+  "phase_a_score_executed": false,
   "phase_b_executed": false,
+  "post_result_contract_changes": 0,
+  "reason": "Deterministic clean-only q99 recomputation did not exactly equal the committed R2 q99 in either domain; the frozen contract requires fail-closed termination before replay and score.",
   "schema": "gnss-doppler-lab.crid-r4-final-verdict.v1",
-  "status": "FROZEN_NOT_EXECUTED",
-  "verdict": "NOT_EVALUATED_PRE_RESULT_FREEZE"
+  "status": "INCONCLUSIVE",
+  "threshold_binding_status": "INCONCLUSIVE_THRESHOLD_BINDING",
+  "verdict": "INCONCLUSIVE_CRID_PHASE_A_EXECUTION_OR_PROVENANCE"
 }

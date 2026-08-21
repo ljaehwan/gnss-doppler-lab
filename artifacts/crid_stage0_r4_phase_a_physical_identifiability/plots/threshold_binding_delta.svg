@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="320" viewBox="0 0 720 320" role="img" aria-labelledby="title desc">
+  <title id="title">CRID R4 deterministic q99 exact-binding differences</title>
+  <desc id="desc">OAK differs by 3.87e-13 and TEX differs by 1.73e-13. Both fail the preregistered exact equality contract.</desc>
+  <rect width="720" height="320" fill="#ffffff"/>
+  <text x="32" y="34" font-family="sans-serif" font-size="20">Deterministic q99 absolute difference</text>
+  <text x="32" y="58" font-family="sans-serif" font-size="13" fill="#444">Frozen gate: exact equality required; any nonzero difference fails closed</text>
+  <line x1="120" y1="250" x2="670" y2="250" stroke="#555" stroke-width="1"/>
+  <line x1="120" y1="90" x2="120" y2="250" stroke="#555" stroke-width="1"/>
+  <rect x="210" y="95" width="120" height="155" fill="#b33a3a"/>
+  <rect x="460" y="181" width="120" height="69" fill="#b33a3a"/>
+  <text x="270" y="82" text-anchor="middle" font-family="monospace" font-size="14">3.87e-13</text>
+  <text x="520" y="168" text-anchor="middle" font-family="monospace" font-size="14">1.73e-13</text>
+  <text x="270" y="276" text-anchor="middle" font-family="sans-serif" font-size="15">OAK</text>
+  <text x="520" y="276" text-anchor="middle" font-family="sans-serif" font-size="15">TEX</text>
+  <text x="32" y="304" font-family="sans-serif" font-size="12" fill="#444">Result: INCONCLUSIVE_THRESHOLD_BINDING; no replay or score executed</text>
+</svg>

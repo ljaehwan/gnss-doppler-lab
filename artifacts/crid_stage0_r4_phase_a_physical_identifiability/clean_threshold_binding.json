@@ -1,19 +1,41 @@
 {
   "domains": {
     "OAK": {
-      "exact_match": null,
+      "absolute_q99_difference": 3.87e-13,
+      "causal_delays_ms": {
+        "C0": 0,
+        "C1": 0,
+        "C2": 0,
+        "C3": 0
+      },
+      "exact_match": false,
       "holdout_fpr_q99": 0.00730093543235227,
       "q99": -21.705587048010322,
-      "recomputed_holdout_fpr_q99": null,
-      "recomputed_q99": null
+      "recomputed_holdout_fpr_q99": 0.00730093543235227,
+      "recomputed_q99": -21.705587048009935
     },
     "TEX": {
-      "exact_match": null,
+      "absolute_q99_difference": 1.73e-13,
+      "causal_delays_ms": {
+        "C0": 0,
+        "C1": 0,
+        "C2": 0,
+        "C3": 0
+      },
+      "exact_match": false,
       "holdout_fpr_q99": 0.012708150744960562,
       "q99": -21.942672917134093,
-      "recomputed_holdout_fpr_q99": null,
-      "recomputed_q99": null
+      "recomputed_holdout_fpr_q99": 0.012708150744960562,
+      "recomputed_q99": -21.94267291713392
     }
+  },
+  "execution": {
+    "attack_bytes_read": 0,
+    "command": "PYTHONPATH=src python3 scripts/run_crid_r4_phase_a.py threshold-check --freeze-sha 66602181d3e024490fd71ef606c84d04c09c0ed5",
+    "exit_code": 2,
+    "freeze_sha": "66602181d3e024490fd71ef606c84d04c09c0ed5",
+    "result_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4-phase-a-physical-identifiability/threshold_recomputation.json",
+    "stderr_terminal": "BindingError: INCONCLUSIVE_THRESHOLD_BINDING"
   },
   "r2_thresholds": {
     "path": "artifacts/crid_stage0_r2_frozen_evaluation/thresholds.json",
@@ -22,5 +44,5 @@
   },
   "schema": "gnss-doppler-lab.crid-r4-clean-threshold-binding.v1",
   "source": "committed R2 clean-only threshold",
-  "status": "FROZEN_PENDING_DETERMINISTIC_RECOMPUTATION"
+  "status": "INCONCLUSIVE_THRESHOLD_BINDING"
 }

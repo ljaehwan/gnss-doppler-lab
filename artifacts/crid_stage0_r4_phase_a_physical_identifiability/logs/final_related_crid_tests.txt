@@ -1,0 +1,23 @@
+R4 synthetic and tamper test inventory:
+- truth support masks use raw sample intervals
+- primary gate requires all negatives and each positive group
+- checkpoint resume requires exact freeze and inventory
+- input/truth/config/receiver binding tamper fails closed
+- completed replay output/config/receiver/input tamper fails closed
+- artifact payload and manifest hash tamper fails closed
+- incomplete output directory fails before receiver execution
+
+Final related suite:
+command=PYTHONPATH=src:. pytest -q tests/test_crid.py tests/test_crid_terminal_drain.py tests/test_crid_r1_terminal_drain_artifact.py tests/test_crid_r2_frozen_evaluation.py tests/test_crid_r3_control_generator.py tests/test_crid_r3a_independent_reference_estimand_repair.py tests/test_crid_r3b_terminal_provenance_closure.py tests/test_crid_r4_phase_a.py -k 'not test_only_new_r3b_closure_paths_differ_from_target_commit'
+exit_code=0
+result=59 passed, 1 deselected
+
+The deselected R3b test is a historical branch-scope assertion requiring that every path changed after the R3b target commit belong to R3b. It necessarily rejects the authorized R4 files. When included it was the only failure: 59 passed, 1 failed. R3, R3a, and R3b compact verifiers independently remained PASS.
+
+Upstream final verifier results:
+R3=PASS (historical verdict INCONCLUSIVE_CONTROL_PROVENANCE)
+R3a=PASS (INDEPENDENT_REFERENCE_ESTIMAND_REPAIR_PASS)
+R3b=PASS (TERMINAL_PROVENANCE_CLOSURE_PASS)
+
+Initial collection-only environment correction:
+PYTHONPATH=src omitted the repository root and produced two ModuleNotFoundError:scripts collection errors; rerun with PYTHONPATH=src:. as shown above.

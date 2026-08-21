@@ -3,10 +3,17 @@
   "allowlisted_control_rows": 66,
   "attack_bytes_read": 0,
   "attack_paths_hashed": 0,
+  "attack_paths_mapped": 0,
   "attack_paths_opened": 0,
   "attack_paths_statted": 0,
   "explicit_allowlist_only": true,
+  "input_preflight_control_rows": 66,
+  "input_preflight_status": "PASS",
+  "phase_a_replay_count": 0,
+  "phase_a_score_executed": false,
   "phase_b_executed": false,
   "schema": "gnss-doppler-lab.crid-r4-attack-access-audit.v1",
-  "status": "PASS"
+  "status": "PASS",
+  "threshold_check_executed": true,
+  "threshold_check_status": "INCONCLUSIVE_THRESHOLD_BINDING"
 }

@@ -1,0 +1,17 @@
+command=PYTHONPATH=src:. python3 scripts/verify_crid_r4_phase_a.py --mode final
+exit_code=2
+status=FAIL
+manifest_ok=true
+manifest_files=23
+inventory_rows=66
+replay_rows=0
+metric_rows=0
+positive_rows=0
+verdict=INCONCLUSIVE_CRID_PHASE_A_EXECUTION_OR_PROVENANCE
+failures=replay_count,metric_counts,threshold_binding,gate_status,final_verdict,plot_missing
+interpretation=The pre-result frozen final-mode verifier only accepts a completed 264-replay result and has no preregistered branch for a required threshold-binding stop before replay.
+post_result_verifier_code_changed=false
+manifest_integrity_checked_separately=PASS
+terminal_semantic_verifier=PASS
+phase_b_executed=false
+attack_bytes_read=0

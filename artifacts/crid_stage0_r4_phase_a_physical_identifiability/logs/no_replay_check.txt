@@ -1,0 +1,5 @@
+check=test ! -e /home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4-phase-a-physical-identifiability/replays
+exit_code=0
+status=PASS
+replay_output_present=false
+completed_replay_count=0

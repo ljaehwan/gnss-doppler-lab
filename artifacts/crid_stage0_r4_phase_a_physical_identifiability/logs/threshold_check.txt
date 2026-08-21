@@ -1,0 +1,8 @@
+command=PYTHONPATH=src python3 scripts/run_crid_r4_phase_a.py threshold-check --freeze-sha 66602181d3e024490fd71ef606c84d04c09c0ed5
+working_directory=/tmp/crid-r4-freeze-execution-DUfXMT/repo
+exit_code=2
+status=INCONCLUSIVE_THRESHOLD_BINDING
+stderr_terminal=BindingError: INCONCLUSIVE_THRESHOLD_BINDING
+attack_bytes_read=0
+replay_count=0
+score_executed=false

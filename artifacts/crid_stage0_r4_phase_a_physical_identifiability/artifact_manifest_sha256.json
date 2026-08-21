@@ -1,20 +1,20 @@
 {
-  "file_count": 16,
+  "file_count": 23,
   "files": [
     {
       "path": "README.md",
-      "sha256": "c0048ed4aaa5953175b4fb308bf6f1e058aa1ea8d4e0c85b4beec6f344391ba7",
-      "size_bytes": 389
+      "sha256": "63a286ee082bb9511e9f75aad9b108d59a24465bab69314dfcffa37436de4f74",
+      "size_bytes": 1802
     },
     {
       "path": "attack_access_audit.json",
-      "sha256": "ef54502248a2f50f319b859cc42fd8515018e976d020bae83695d5d80bc6b9a1",
-      "size_bytes": 343
+      "sha256": "eebc5d7416a6d935cd7145449a2179a8e97ea8e87ff09192ed64cf35b0748280",
+      "size_bytes": 607
     },
     {
       "path": "clean_threshold_binding.json",
-      "sha256": "20274c9d79417ab60d1a181bb5c51fa89678cc25fed1ed8f2369a763da50db63",
-      "size_bytes": 797
+      "sha256": "7e896c258ba992ba347e945058f9ac26c35b9e7a387b3a3893d0b96bd20e7614",
+      "size_bytes": 1637
     },
     {
       "path": "control_input_inventory.csv",
@@ -23,18 +23,33 @@
     },
     {
       "path": "execution_freeze.json",
-      "sha256": "80197ca179aee880010d123c503291803b298e605a4cd0dd28e19c62f1e5aa91",
-      "size_bytes": 1910
+      "sha256": "012407d0436be51049f735459149330f5da0da7b862ab7d151efb4b0dd1f0088",
+      "size_bytes": 2447
     },
     {
       "path": "final_verdict.json",
-      "sha256": "2a50239b55d5e42ca8273cc81068486dbf48a855aee1b6698f781454aae5125f",
-      "size_bytes": 281
+      "sha256": "935ab97c5d5c8382c0f098cf9e1a0e19be904ffcbce13fe61875a4a5f8fb1617",
+      "size_bytes": 892
+    },
+    {
+      "path": "logs/final_related_crid_tests.txt",
+      "sha256": "65f11cc3cb69917d3e7e41324a14c633d5925f48bc34714a192c5b0450d7bd62",
+      "size_bytes": 1644
     },
     {
       "path": "logs/freeze_verifier.txt",
       "sha256": "87662ce9104ddff3b9561a6629f4ac452bfa03e42dfa45beb654e16b118cf347",
       "size_bytes": 334
+    },
+    {
+      "path": "logs/frozen_final_verifier.txt",
+      "sha256": "ed8586c2131c6ceea2d81b969c06e37a1616e075b0a05e26cd7edc88644045fb",
+      "size_bytes": 695
+    },
+    {
+      "path": "logs/no_replay_check.txt",
+      "sha256": "a78e6e99f12bcc96e65025f62c922e18edf039ceffafa948aa962a5e86794dea",
+      "size_bytes": 202
     },
     {
       "path": "logs/related_crid_tests.txt",
@@ -47,19 +62,39 @@
       "size_bytes": 98
     },
     {
+      "path": "logs/terminal_semantic_verifier.txt",
+      "sha256": "46912fcf37a124a21fca67bcc51d9c8d8f15f84ca8e12fa1b68a51d20445461a",
+      "size_bytes": 373
+    },
+    {
+      "path": "logs/threshold_check.txt",
+      "sha256": "58058dd77bcd6a8dbcd70840b155eef5b39e5596b3742fc670b27d22d69f990c",
+      "size_bytes": 359
+    },
+    {
+      "path": "logs/threshold_recomputation.json",
+      "sha256": "8e114e571d90def897a729c1cb7660f77b5630c560fadcb264471b907fad850c",
+      "size_bytes": 844
+    },
+    {
       "path": "logs/upstream_verifiers.txt",
       "sha256": "56c85404bbfa045715325f87971493d748d3b4751ec3c8b23af15a094079ad56",
       "size_bytes": 929
     },
     {
       "path": "phase_a_gate.json",
-      "sha256": "3620edac4c929d74a199c3909f08ec55baa597ccc202f522be3a28a55ef855ec",
-      "size_bytes": 727
+      "sha256": "812d10da993166c87f8278858cc14a79de06de0640046451e3cf5b7aba2a16ae",
+      "size_bytes": 1243
     },
     {
       "path": "physical_control_metrics.csv",
       "sha256": "a40597c87c52773f6ce8ef43ce1929a07fc42ddf4c3b9692ed3282fcc0035624",
       "size_bytes": 349
+    },
+    {
+      "path": "plots/threshold_binding_delta.svg",
+      "sha256": "90b51ce47c67e73f923f920ec804ab729d4cc650e7e9d86556cd4f38b6d05ccb",
+      "size_bytes": 1482
     },
     {
       "path": "positive_response_surface.csv",

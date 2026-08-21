@@ -1,0 +1,13 @@
+status=PASS
+manifest_status=PASS
+manifest_failures=[]
+threshold_status=INCONCLUSIVE_THRESHOLD_BINDING
+both_domain_exact_match_false=true
+gate_status=NOT_EVALUATED_THRESHOLD_BINDING
+physical_gate_evaluated=false
+final_verdict=INCONCLUSIVE_CRID_PHASE_A_EXECUTION_OR_PROVENANCE
+next_state=NOT_AUTHORIZED
+replay_rows=0
+metric_rows=0
+positive_rows=0
+attack_access_all_zero=true

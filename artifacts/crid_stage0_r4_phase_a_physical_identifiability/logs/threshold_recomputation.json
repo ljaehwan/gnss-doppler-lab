@@ -1,0 +1,24 @@
+{
+  "attack_bytes_read": 0,
+  "domains": {
+    "OAK": {
+      "causal_delays_ms": {"C0": 0, "C1": 0, "C2": 0, "C3": 0},
+      "exact_match": false,
+      "expected_holdout_fpr_q99": 0.00730093543235227,
+      "expected_q99": -21.705587048010322,
+      "recomputed_holdout_fpr_q99": 0.00730093543235227,
+      "recomputed_q99": -21.705587048009935
+    },
+    "TEX": {
+      "causal_delays_ms": {"C0": 0, "C1": 0, "C2": 0, "C3": 0},
+      "exact_match": false,
+      "expected_holdout_fpr_q99": 0.012708150744960562,
+      "expected_q99": -21.942672917134093,
+      "recomputed_holdout_fpr_q99": 0.012708150744960562,
+      "recomputed_q99": -21.94267291713392
+    }
+  },
+  "freeze_sha": "66602181d3e024490fd71ef606c84d04c09c0ed5",
+  "schema": "gnss-doppler-lab.crid-r4-threshold-recomputation.v1",
+  "status": "INCONCLUSIVE_THRESHOLD_BINDING"
+}

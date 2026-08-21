@@ -28,14 +28,30 @@
       "KST"
     ]
   },
+  "execution_result": {
+    "attack_bytes_read": 0,
+    "input_preflight_status": "PASS",
+    "phase_a_replay_count": 0,
+    "phase_a_score_executed": false,
+    "stop_point": "BEFORE_REPLAY",
+    "threshold_check_exit_code": 2,
+    "threshold_check_status": "INCONCLUSIVE_THRESHOLD_BINDING"
+  },
   "executable_sha256": {
     "scripts/run_crid_r4_phase_a.py": "df88bc094495061cc66e1a15458f68f92b78b544064ed27b30fb43ff932cb93d",
     "scripts/verify_crid_r4_phase_a.py": "84d43ddbcac5f0bc017892f819c504f3620ab8d3ec1f17963d0a0bd5a59a8083",
     "src/gnss_doppler_lab/crid_r4_phase_a.py": "5e0b25aaea8bea255e71320d797a2cd87208be07f45091857be71e4d65213aa4"
   },
   "freeze_authorization": "HEAD, origin branch, and supplied --freeze-sha must be identical",
+  "freeze_commit": {
+    "ahead": 0,
+    "behind": 0,
+    "checkout_clean_before_execution": true,
+    "local_sha": "66602181d3e024490fd71ef606c84d04c09c0ed5",
+    "remote_sha": "66602181d3e024490fd71ef606c84d04c09c0ed5"
+  },
   "schema": "gnss-doppler-lab.crid-r4-execution-freeze.v1",
   "sequential_order": "domain OAK then TEX; lexical case_id; C0,C1,C2,C3",
-  "status": "FROZEN_PENDING_REMOTE_COMMIT",
+  "status": "PUSHED_FREEZE_STOPPED_AT_THRESHOLD_BINDING",
   "worker_count": 1
 }

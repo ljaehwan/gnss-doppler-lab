@@ -21,7 +21,18 @@
       "support"
     ]
   },
-  "results": null,
+  "results": {
+    "clean_holdout_fpr_gate": "NOT_EVALUATED_THRESHOLD_BINDING",
+    "legacy_any_positive_pass": "NOT_EVALUATED_DIAGNOSTIC_ONLY",
+    "negative_cases": "NOT_EVALUATED_THRESHOLD_BINDING",
+    "physical_gate_evaluated": false,
+    "positive_groups": "NOT_EVALUATED_THRESHOLD_BINDING",
+    "positive_response_surface": "NOT_EVALUATED_THRESHOLD_BINDING",
+    "replay_count": 0,
+    "technical_complete": false,
+    "threshold_binding": false,
+    "threshold_binding_status": "INCONCLUSIVE_THRESHOLD_BINDING"
+  },
   "schema": "gnss-doppler-lab.crid-r4-phase-a-gate.v1",
-  "status": "FROZEN_NOT_EVALUATED"
+  "status": "NOT_EVALUATED_THRESHOLD_BINDING"
 }
