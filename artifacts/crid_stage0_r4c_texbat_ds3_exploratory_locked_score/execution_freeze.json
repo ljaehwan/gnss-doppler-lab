@@ -1,0 +1,30 @@
+{
+  "base_sha": "5051a0a5085a3ac5ce765b7d2b4f9b6159628017",
+  "branch": "research/crid-stage0-r4c-texbat-ds3-exploratory-locked-score",
+  "commands": {
+    "analyze": "python3 scripts/run_crid_r4c_ds3.py analyze --freeze-sha <PUSHED_FREEZE_SHA>",
+    "inventory": "python3 scripts/run_crid_r4c_ds3.py inventory --freeze-sha <PUSHED_FREEZE_SHA>",
+    "replay": "python3 scripts/run_crid_r4c_ds3.py replay --freeze-sha <PUSHED_FREEZE_SHA>"
+  },
+  "environment": {
+    "gnss_sdr_version": "gnss-sdr version 0.0.19",
+    "machine": "x86_64",
+    "numpy": "1.26.4",
+    "platform": "Linux-6.8.0-137-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "python_executable": "/usr/bin/python3",
+    "timezone": [
+      "KST",
+      "KST"
+    ]
+  },
+  "executable_sha256": {
+    "scripts/run_crid_r4c_ds3.py": "d6957c8c00cd8ab1da0eb270d5bf3b8082ae8f42594c2521fa030bd56b436546",
+    "scripts/verify_crid_r4c_ds3.py": "1270d91bb3325cbc8cb7d6f369a718b6bc09ec5fc5a02b4611bf0c4753d1b534",
+    "src/gnss_doppler_lab/crid_r4c_ds3.py": "8f9617cc5603ce0844ddea50dd1a2550f909ffb0202dd1c28f7874f0048d5ab0"
+  },
+  "output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4c-texbat-ds3-exploratory-locked-score",
+  "schema": "gnss-doppler-lab.crid-r4c-execution-freeze.v1",
+  "status": "FROZEN_PENDING_PUSH",
+  "worker_count": 1
+}

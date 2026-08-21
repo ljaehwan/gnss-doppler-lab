@@ -1,0 +1,107 @@
+{
+  "file_count": 20,
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "52c279d525a964b7e6583994451152251af452cd1d569e53be7108d387ee7a6b",
+      "size_bytes": 294
+    },
+    {
+      "path": "attack_access_audit.json",
+      "sha256": "4e314d2113f1d4ea0a2f9a194be134d2f1677205ebc96a60f62ff157817eac8d",
+      "size_bytes": 355
+    },
+    {
+      "path": "ds3_input_inventory.json",
+      "sha256": "2403b45c34598835ec5bfa8d00d68afb85c71676fd0e0f2660e2d3f05c109b7f",
+      "size_bytes": 345
+    },
+    {
+      "path": "execution_freeze.json",
+      "sha256": "16ae54cddb988ab73d4d77bae035fbc33198b66ed4f50576460fe813e8362c88",
+      "size_bytes": 1342
+    },
+    {
+      "path": "final_verdict.json",
+      "sha256": "310a71adfdddf32d920da8dd0f3e3776aefec5cb9ba163e3198707e72ccc5bf5",
+      "size_bytes": 228
+    },
+    {
+      "path": "freeze_commit.json",
+      "sha256": "a6b3c167113190e2d1340c47bc5fe61fc55cff7f17e4c8ed0e33fa0d25822e7d",
+      "size_bytes": 111
+    },
+    {
+      "path": "frozen_configs/C0.conf",
+      "sha256": "c071a7bdfc9227005d743f941fd09fe6e3d998e36368c6b85a4dadb6686768b1",
+      "size_bytes": 2731
+    },
+    {
+      "path": "frozen_configs/C1.conf",
+      "sha256": "56d68ef0fc77332b30f113fe596ee4d33365148b3c0de2dc6fccd0a874db03ab",
+      "size_bytes": 2729
+    },
+    {
+      "path": "frozen_configs/C2.conf",
+      "sha256": "f4facd13b63b37479e7511ee63b8e7d863d47327496499ed7b3ec924d15ff3f1",
+      "size_bytes": 2730
+    },
+    {
+      "path": "frozen_configs/C3.conf",
+      "sha256": "1b677d48609b37bf789f5d9fe8483edf7d2e2117fe3b3d551e346d20cfdf928f",
+      "size_bytes": 2731
+    },
+    {
+      "path": "frozen_handoff_texbat_ds3_78p9s.csv",
+      "sha256": "e2118c753b2b58c13f29fd55115323e4b43ec445c92bf2e689d56843834804a3",
+      "size_bytes": 3071
+    },
+    {
+      "path": "logs/pre_access_freeze_verifier.txt",
+      "sha256": "aaee46c33a9f8f3e7372512236217137114ad712e6d45c056984d76ead6439c6",
+      "size_bytes": 285
+    },
+    {
+      "path": "logs/pre_access_tests.txt",
+      "sha256": "5011569acc93c23256f49c2216d49b993205b7b87e0ee6c0f95c896cae26f1cc",
+      "size_bytes": 1168
+    },
+    {
+      "path": "per_epoch_scores.csv.gz",
+      "sha256": "9de2f3d496b88e14eac798eb9883ac287455573a2945e79fca6163aaf777e0c2",
+      "size_bytes": 181
+    },
+    {
+      "path": "preregistration.json",
+      "sha256": "14bbb22bdd9281612818f0574cf2bb07e6c64488a8945f2f2d8aea3963aa096a",
+      "size_bytes": 3557
+    },
+    {
+      "path": "replay_completion.csv",
+      "sha256": "bd41a6405d0d5e3801dcb2466d468086e6e79655fadf5c075f37fe60a1177676",
+      "size_bytes": 237
+    },
+    {
+      "path": "scenario_metrics.json",
+      "sha256": "de3758a28b773dad22d1e2a60429a00c2bc5b758e61c066382c73b2f1ec445ae",
+      "size_bytes": 1789
+    },
+    {
+      "path": "shortcut_audit.json",
+      "sha256": "1eca8bbea950a9bcccce9bcfc3df3f2fad32d7c91b913dc48356760cefe7ceec",
+      "size_bytes": 98
+    },
+    {
+      "path": "source_binding.json",
+      "sha256": "151f48b7899dba22510c179824dacd76b443d298d95cfcdc152c163a2b08e09d",
+      "size_bytes": 20319
+    },
+    {
+      "path": "support_audit.json",
+      "sha256": "0a0e9897416f6ff4a2941158c24f38fe927f87a56671706074944fdf3645e079",
+      "size_bytes": 97
+    }
+  ],
+  "schema": "gnss-doppler-lab.crid-r4c-artifact-manifest.v1",
+  "status": "PASS"
+}

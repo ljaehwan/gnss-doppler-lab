@@ -1,0 +1,10 @@
+command=python3 scripts/verify_crid_r4c_ds3.py --mode freeze
+exit_code=0
+status=PASS
+manifest_ok=true
+manifest_files=18
+replay_rows=0
+epoch_rows=0
+verdict=NOT_EVALUATED_PRE_ACCESS_FREEZE
+DS3_payload_stat_open_hash_mmap_read=0/0/0/0/0
+forbidden_input_stat_open_hash_mmap_read=0/0/0/0/0
