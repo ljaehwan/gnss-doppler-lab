@@ -1,0 +1,87 @@
+{
+  "file_count": 16,
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "c0048ed4aaa5953175b4fb308bf6f1e058aa1ea8d4e0c85b4beec6f344391ba7",
+      "size_bytes": 389
+    },
+    {
+      "path": "attack_access_audit.json",
+      "sha256": "ef54502248a2f50f319b859cc42fd8515018e976d020bae83695d5d80bc6b9a1",
+      "size_bytes": 343
+    },
+    {
+      "path": "clean_threshold_binding.json",
+      "sha256": "20274c9d79417ab60d1a181bb5c51fa89678cc25fed1ed8f2369a763da50db63",
+      "size_bytes": 797
+    },
+    {
+      "path": "control_input_inventory.csv",
+      "sha256": "b049e3cff46a26438a0ae8f0c85d2bab2155b7f92fb6f0cf8f2dedbb1f11cc41",
+      "size_bytes": 81904
+    },
+    {
+      "path": "execution_freeze.json",
+      "sha256": "80197ca179aee880010d123c503291803b298e605a4cd0dd28e19c62f1e5aa91",
+      "size_bytes": 1910
+    },
+    {
+      "path": "final_verdict.json",
+      "sha256": "2a50239b55d5e42ca8273cc81068486dbf48a855aee1b6698f781454aae5125f",
+      "size_bytes": 281
+    },
+    {
+      "path": "logs/freeze_verifier.txt",
+      "sha256": "87662ce9104ddff3b9561a6629f4ac452bfa03e42dfa45beb654e16b118cf347",
+      "size_bytes": 334
+    },
+    {
+      "path": "logs/related_crid_tests.txt",
+      "sha256": "55b9f6b93d81728e00261fe96f3d9b6fb797274746abe891343abf4250c9d7f1",
+      "size_bytes": 99
+    },
+    {
+      "path": "logs/synthetic_tests.txt",
+      "sha256": "c356eafbf65977199ed70984da461e590fda849af350e2afa22dad5422d4ba41",
+      "size_bytes": 98
+    },
+    {
+      "path": "logs/upstream_verifiers.txt",
+      "sha256": "56c85404bbfa045715325f87971493d748d3b4751ec3c8b23af15a094079ad56",
+      "size_bytes": 929
+    },
+    {
+      "path": "phase_a_gate.json",
+      "sha256": "3620edac4c929d74a199c3909f08ec55baa597ccc202f522be3a28a55ef855ec",
+      "size_bytes": 727
+    },
+    {
+      "path": "physical_control_metrics.csv",
+      "sha256": "a40597c87c52773f6ce8ef43ce1929a07fc42ddf4c3b9692ed3282fcc0035624",
+      "size_bytes": 349
+    },
+    {
+      "path": "positive_response_surface.csv",
+      "sha256": "a40597c87c52773f6ce8ef43ce1929a07fc42ddf4c3b9692ed3282fcc0035624",
+      "size_bytes": 349
+    },
+    {
+      "path": "preregistration.json",
+      "sha256": "46421395b99b4f5f43b99e00b129137a856e6b6e14e61df8c817eaa34546feea",
+      "size_bytes": 2640
+    },
+    {
+      "path": "replay_completion.csv",
+      "sha256": "6a2455ae377f9425d35f0a552357d8769791d3a0a3be54187444b895b50ffec8",
+      "size_bytes": 230
+    },
+    {
+      "path": "source_binding.json",
+      "sha256": "1a13354128c5a8ab03ca7043aa1d2bf8456be4e02e5040fbd9b32f2136bc763c",
+      "size_bytes": 33780
+    }
+  ],
+  "schema": "gnss-doppler-lab.crid-r4-artifact-manifest.v1",
+  "status": "PASS"
+}

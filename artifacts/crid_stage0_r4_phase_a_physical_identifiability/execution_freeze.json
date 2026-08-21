@@ -1,0 +1,41 @@
+{
+  "base_r3b_sha": "8cf594bde9c8e48bf80b5872e4ca13e1d0d13b0d",
+  "branch": "research/crid-stage0-r4-phase-a-physical-identifiability",
+  "checkpoint_contract": {
+    "completed_exact_replay": "validate and skip",
+    "hash_mismatch": "fail closed without overwrite or deletion",
+    "incomplete_output": "fail closed without overwrite or deletion",
+    "resource_shortage": "INCONCLUSIVE_RESOURCE without deletion"
+  },
+  "commands": {
+    "analyze": "python3 scripts/run_crid_r4_phase_a.py analyze --freeze-sha <PUSHED_FREEZE_SHA>",
+    "preflight": "python3 scripts/run_crid_r4_phase_a.py preflight --freeze-sha <PUSHED_FREEZE_SHA>",
+    "replay": "python3 scripts/run_crid_r4_phase_a.py replay --freeze-sha <PUSHED_FREEZE_SHA>",
+    "threshold_check": "python3 scripts/run_crid_r4_phase_a.py threshold-check --freeze-sha <PUSHED_FREEZE_SHA>"
+  },
+  "environment": {
+    "gnss_sdr_version": "gnss-sdr version 0.0.19",
+    "machine": "x86_64",
+    "numpy": "1.26.4",
+    "platform": "Linux-6.8.0-137-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "python_executable": "/usr/bin/python3",
+    "python_implementation": "CPython",
+    "release": "6.8.0-137-generic",
+    "system": "Linux",
+    "timezone": [
+      "KST",
+      "KST"
+    ]
+  },
+  "executable_sha256": {
+    "scripts/run_crid_r4_phase_a.py": "df88bc094495061cc66e1a15458f68f92b78b544064ed27b30fb43ff932cb93d",
+    "scripts/verify_crid_r4_phase_a.py": "84d43ddbcac5f0bc017892f819c504f3620ab8d3ec1f17963d0a0bd5a59a8083",
+    "src/gnss_doppler_lab/crid_r4_phase_a.py": "5e0b25aaea8bea255e71320d797a2cd87208be07f45091857be71e4d65213aa4"
+  },
+  "freeze_authorization": "HEAD, origin branch, and supplied --freeze-sha must be identical",
+  "schema": "gnss-doppler-lab.crid-r4-execution-freeze.v1",
+  "sequential_order": "domain OAK then TEX; lexical case_id; C0,C1,C2,C3",
+  "status": "FROZEN_PENDING_REMOTE_COMMIT",
+  "worker_count": 1
+}

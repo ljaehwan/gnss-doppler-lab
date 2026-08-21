@@ -1,0 +1,15 @@
+{
+  "checks": {
+    "inventory_rows": 66,
+    "manifest_files": 12,
+    "manifest_ok": true,
+    "metric_rows": 0,
+    "positive_rows": 0,
+    "replay_rows": 0,
+    "verdict": "NOT_EVALUATED_PRE_RESULT_FREEZE"
+  },
+  "failures": [],
+  "mode": "freeze",
+  "schema": "gnss-doppler-lab.crid-r4-compact-verifier.v1",
+  "status": "PASS"
+}

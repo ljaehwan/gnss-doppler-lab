@@ -1,0 +1,12 @@
+{
+  "actual_spoofing_evaluation_executed": false,
+  "allowlisted_control_rows": 66,
+  "attack_bytes_read": 0,
+  "attack_paths_hashed": 0,
+  "attack_paths_opened": 0,
+  "attack_paths_statted": 0,
+  "explicit_allowlist_only": true,
+  "phase_b_executed": false,
+  "schema": "gnss-doppler-lab.crid-r4-attack-access-audit.v1",
+  "status": "PASS"
+}

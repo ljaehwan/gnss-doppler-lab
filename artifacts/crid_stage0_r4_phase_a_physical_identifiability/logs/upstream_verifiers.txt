@@ -1,0 +1,39 @@
+R3 verifier
+{
+  "schema": "gnss-doppler-lab.crid-r3-verification.v1",
+  "verdict": "INCONCLUSIVE_CONTROL_PROVENANCE",
+  "positive_cases": 36,
+  "negative_cases": 30,
+  "manifest_files": 21,
+  "failures": [],
+  "status": "PASS"
+}
+
+R3a verifier
+{
+  "inventory_complete": true,
+  "manifest_checks_pass": true,
+  "manifest_files": 31,
+  "pass_claim_contract": true,
+  "required_files_present": true,
+  "schema": "gnss-doppler-lab.crid-r3a-compact-verifier.v1",
+  "status": "PASS",
+  "verdict": "INDEPENDENT_REFERENCE_ESTIMAND_REPAIR_PASS"
+}
+
+R3b verifier
+{
+  "checks": {
+    "execution": true,
+    "historical_evidence": true,
+    "manifest": true,
+    "r3a_bindings": true,
+    "required_files": true,
+    "scope_guards": true,
+    "target_commit": true,
+    "terminal_verdict": true
+  },
+  "schema": "gnss-doppler-lab.crid-r3b-terminal-provenance-verifier.v1",
+  "status": "PASS",
+  "verdict": "TERMINAL_PROVENANCE_CLOSURE_PASS"
+}

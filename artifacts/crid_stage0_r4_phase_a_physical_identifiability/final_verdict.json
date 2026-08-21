@@ -1,0 +1,9 @@
+{
+  "attack_bytes_read": 0,
+  "next_state": "RUN_PHASE_A_FROM_PUSHED_FREEZE_SHA",
+  "phase_a_executed": false,
+  "phase_b_executed": false,
+  "schema": "gnss-doppler-lab.crid-r4-final-verdict.v1",
+  "status": "FROZEN_NOT_EXECUTED",
+  "verdict": "NOT_EVALUATED_PRE_RESULT_FREEZE"
+}
