@@ -15,12 +15,12 @@
   "maximum_delay_error_chips": 0.0,
   "maximum_non_target_relative_energy": 0.0034457958445727657,
   "maximum_power_error_db": 0.0025041235959696807,
-  "next_state": "NOT_AUTHORIZED",
+  "next_state": "READY_TO_REPEAT_CRID_PHASE_A",
   "phase_a_executed": false,
   "r3_verdict_preserved": "INCONCLUSIVE_CONTROL_PROVENANCE",
   "schema": "gnss-doppler-lab.crid-r3a-final-verdict.v1",
-  "status": "FAIL",
+  "status": "PASS",
   "tamper_tests": "PASS",
-  "tests": "PENDING",
-  "verdict": "INCONCLUSIVE_REFERENCE_PROVENANCE"
+  "tests": "PASS",
+  "verdict": "INDEPENDENT_REFERENCE_ESTIMAND_REPAIR_PASS"
 }

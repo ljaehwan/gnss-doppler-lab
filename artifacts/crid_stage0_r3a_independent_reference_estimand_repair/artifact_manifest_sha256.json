@@ -1,10 +1,10 @@
 {
-  "file_count": 29,
+  "file_count": 31,
   "files": [
     {
       "path": "README.md",
-      "sha256": "2c329a278247893aea9f74429002cd8b4e6debeb855995f7339c0b6260ead5d5",
-      "size_bytes": 1159
+      "sha256": "47c50a7c31e24191e872c2be375d74dbef8991fa817d19246b92aa48ec74fd0e",
+      "size_bytes": 1180
     },
     {
       "path": "attack_access_audit.json",
@@ -13,8 +13,8 @@
     },
     {
       "path": "denominator_diagnostic.csv",
-      "sha256": "ed681628eabf0533c53adef3520622ed2c85cdb901e7532423264c9dc617ffa2",
-      "size_bytes": 1857
+      "sha256": "e4425bbd052196f33d11e8f17796ebabad228e25dee5d6bf95ae15b8396b3152",
+      "size_bytes": 1846
     },
     {
       "path": "estimand_definition.md",
@@ -23,8 +23,8 @@
     },
     {
       "path": "final_verdict.json",
-      "sha256": "8a2f49d463b590df48c9a3296b0b2e44f2a113af91968c6b8f59409cc509c392",
-      "size_bytes": 758
+      "sha256": "c36e396d55f7c9f08768bfaeba37e8c8867e078c7290d83c85e9d0100b0da4a6",
+      "size_bytes": 778
     },
     {
       "path": "joint_reference_summary.json",
@@ -33,8 +33,8 @@
     },
     {
       "path": "joint_reference_validation.csv",
-      "sha256": "a6967a5ef69450283e035fd56d89f6d6b6168bca58b58333eb96369498da5669",
-      "size_bytes": 46219
+      "sha256": "2985e6439035cf8434c241d6329c0c6ee4b59742e6054e9287279bbc94bc17a2",
+      "size_bytes": 46038
     },
     {
       "path": "legacy_reproduction_summary.json",
@@ -43,8 +43,8 @@
     },
     {
       "path": "legacy_validator_reproduction.csv",
-      "sha256": "70d1f5ad2fe5365494483a06d6021b464eaf21aa0547f06f20fd12d9e9a57288",
-      "size_bytes": 21230
+      "sha256": "d67eaf5da66de57f4f8a20604343e834ab788c818dba7884a0288ae25c69cf1f",
+      "size_bytes": 21049
     },
     {
       "path": "logs/artifact_byte_flip_test.txt",
@@ -60,6 +60,16 @@
       "path": "logs/final_r3a_tests.txt",
       "sha256": "a015a63f4cf5259eaa3bb7e60983effd6ef64f648fc5bab9c9ae6ba0c1191660",
       "size_bytes": 99
+    },
+    {
+      "path": "logs/fresh_clone_tests.txt",
+      "sha256": "b1eb6abf9e348ecbf135268790ce41a3309300c1c62afbc045ef987b2ea247d9",
+      "size_bytes": 99
+    },
+    {
+      "path": "logs/fresh_clone_verifier.txt",
+      "sha256": "948dc92c57453cc4744d4017d29caaa5b0bba8edd7ded072948e1608d7e7a1c0",
+      "size_bytes": 285
     },
     {
       "path": "logs/full_pytest_pre_manifest.txt",
@@ -123,8 +133,8 @@
     },
     {
       "path": "solver_diagnostics.csv",
-      "sha256": "7c1ac5f0cf6bf5af260445374c739726fc48a182cd6113c18bc96ef06254a461",
-      "size_bytes": 996159
+      "sha256": "eba1bbb7a5f387e762df5d6ef1767a1f586e0dbde6f8dbb28f7c907e7cfba82f",
+      "size_bytes": 993240
     },
     {
       "path": "source_binding.json",
@@ -138,8 +148,8 @@
     },
     {
       "path": "test_results.json",
-      "sha256": "3f6063cc04e331485a2131f82cbc2625862e5143bab06acdfd81a8255b210e74",
-      "size_bytes": 1232
+      "sha256": "5ed524eb80409049c3ff25af12966532fb517916b05d8fc613ed41db24869d25",
+      "size_bytes": 1429
     },
     {
       "path": "validation_checkpoint.json",

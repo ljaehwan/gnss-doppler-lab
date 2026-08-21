@@ -28,13 +28,20 @@
     "base_log": "logs/base_full_pytest.txt"
   },
   "corrected_invocation_note": "An initial related-CRID invocation omitted the repository root from PYTHONPATH and is preserved in logs/related_crid_tests.txt; the corrected invocation passed 34/34.",
-  "fresh_clone": "PENDING",
+  "fresh_clone": {
+    "compact_verifier": "PASS",
+    "r3a_tests_passed": 13,
+    "r3a_tests_failed": 0,
+    "status": "PASS",
+    "verifier_log": "logs/fresh_clone_verifier.txt",
+    "test_log": "logs/fresh_clone_tests.txt"
+  },
   "final_r3a_tests": {
     "passed": 13,
     "failed": 0,
     "status": "PASS",
     "log": "logs/final_r3a_tests.txt"
   },
-  "verifier": "PENDING",
-  "status": "PENDING"
+  "verifier": "PASS",
+  "status": "PASS"
 }

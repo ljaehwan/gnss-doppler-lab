@@ -74,7 +74,7 @@ def main() -> int:
     fields = oak21.split(",")
     readme = f"""# CRID Stage-0 R3a independent-reference estimand repair
 
-Final verdict: `{verdict}`  
+Final verdict: `{verdict}`
 Next state: `{next_state}`
 
 This versioned post-result method repair leaves R3 permanently at `INCONCLUSIVE_CONTROL_PROVENANCE`. It changes neither the frozen generator nor any R3 artifact/control. The legacy single-PRN diagnostic reproduced {legacy['passed']}/180 PASS and {legacy['failed']} FAIL, all and only OAK PRN 21. The preregistered independent five-PRN joint complex-LS reference produced {joint['passed']}/180 PASS.

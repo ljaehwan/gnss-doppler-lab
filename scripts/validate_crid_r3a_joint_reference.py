@@ -45,7 +45,7 @@ def dump_json(path: Path, value: object) -> None:
 
 def write_csv(path: Path, rows: list[dict], fields: list[str]) -> None:
     with path.open("w", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=fields)
+        writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 

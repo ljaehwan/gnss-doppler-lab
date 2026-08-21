@@ -1,7 +1,7 @@
 # CRID Stage-0 R3a independent-reference estimand repair
 
-Final verdict: `INCONCLUSIVE_REFERENCE_PROVENANCE`  
-Next state: `NOT_AUTHORIZED`
+Final verdict: `INDEPENDENT_REFERENCE_ESTIMAND_REPAIR_PASS`
+Next state: `READY_TO_REPEAT_CRID_PHASE_A`
 
 This versioned post-result method repair leaves R3 permanently at `INCONCLUSIVE_CONTROL_PROVENANCE`. It changes neither the frozen generator nor any R3 artifact/control. The legacy single-PRN diagnostic reproduced 171/180 PASS and 9 FAIL, all and only OAK PRN 21. The preregistered independent five-PRN joint complex-LS reference produced 180/180 PASS.
 
