@@ -1,0 +1,24 @@
+{
+  "historical_evidence_preserved": true,
+  "next_state": "READY_TO_REPEAT_CRID_PHASE_A",
+  "phase_a_executed": false,
+  "schema": "gnss-doppler-lab.crid-r3b-final-verdict.v1",
+  "scope": "TERMINAL_PROVENANCE_CLOSURE_ONLY",
+  "status": "PASS",
+  "supersession_scope": "TERMINAL_PROVENANCE_INTERPRETATION_ONLY",
+  "verdict": "TERMINAL_PROVENANCE_CLOSURE_PASS",
+  "verification_gates": {
+    "fresh_clone_r3a_verifier": {
+      "exit_code": 0,
+      "status": "PASS",
+      "verdict": "INDEPENDENT_REFERENCE_ESTIMAND_REPAIR_PASS"
+    },
+    "manifest_tamper_pre_finalization": "PASS",
+    "protected_surfaces_unchanged": "PASS",
+    "related_tests_pre_finalization": {
+      "failed": 0,
+      "passed": 17,
+      "status": "PASS"
+    }
+  }
+}

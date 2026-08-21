@@ -1,0 +1,63 @@
+{
+  "attestation_scope": "TERMINAL_PROVENANCE_CLOSURE_ONLY",
+  "bindings": {
+    "artifact_manifest_path": "artifacts/crid_stage0_r3a_independent_reference_estimand_repair/artifact_manifest_sha256.json",
+    "artifact_manifest_sha256": "5fd07fda8b4fe01ee34defe240ed2a024f1faf425aaa0a6463eade82130cfd7b",
+    "verifier_path": "scripts/verify_crid_r3a_estimand_repair.py",
+    "verifier_sha256": "6609e918df671aab5db9894533c0a6b0da5d435d3370ca48bcb89abb3eb02a98"
+  },
+  "captured_at_utc": "2026-08-21T03:47:39+00:00",
+  "environment": {
+    "cwd": "/tmp/crid-r3b-terminal-provenance-UTK9jM/repo",
+    "git_version": "2.43.0",
+    "locale": "LC_CTYPE=C.UTF-8;LC_NUMERIC=C;LC_TIME=C;LC_COLLATE=C;LC_MONETARY=C;LC_MESSAGES=C;LC_PAPER=C;LC_NAME=C;LC_ADDRESS=C;LC_TELEPHONE=C;LC_MEASUREMENT=C;LC_IDENTIFICATION=C",
+    "machine": "x86_64",
+    "platform": "Linux-6.8.0-137-generic-x86_64-with-glibc2.39",
+    "python_executable": "/usr/bin/python3",
+    "python_implementation": "CPython",
+    "python_version": "3.12.3",
+    "release": "6.8.0-137-generic",
+    "system": "Linux",
+    "timezone": [
+      "KST",
+      "KST"
+    ]
+  },
+  "execution": {
+    "argv": [
+      "python3",
+      "scripts/verify_crid_r3a_estimand_repair.py"
+    ],
+    "command": "python3 scripts/verify_crid_r3a_estimand_repair.py",
+    "exit_code": 0,
+    "parsed_result": {
+      "status": "PASS",
+      "verdict": "INDEPENDENT_REFERENCE_ESTIMAND_REPAIR_PASS"
+    },
+    "stderr": "",
+    "stdout": "{\n  \"inventory_complete\": true,\n  \"manifest_checks_pass\": true,\n  \"manifest_files\": 31,\n  \"pass_claim_contract\": true,\n  \"required_files_present\": true,\n  \"schema\": \"gnss-doppler-lab.crid-r3a-compact-verifier.v1\",\n  \"status\": \"PASS\",\n  \"verdict\": \"INDEPENDENT_REFERENCE_ESTIMAND_REPAIR_PASS\"\n}\n",
+    "working_directory": "/tmp/crid-r3b-terminal-provenance-UTK9jM/repo"
+  },
+  "schema": "gnss-doppler-lab.crid-r3b-terminal-attestation.v1",
+  "scope_guards": {
+    "attack_data_accessed": false,
+    "c1_c2_c3_replay_executed": false,
+    "controls_modified": false,
+    "crid_score_computed": false,
+    "estimator_modified": false,
+    "existing_verifier_modified": false,
+    "generator_modified": false,
+    "phase_a_executed": false,
+    "r3_scientific_artifact_modified": false,
+    "r3a_scientific_artifact_modified": false,
+    "thresholds_modified": false
+  },
+  "source_checkout": {
+    "branch": "research/crid-stage0-r3b-terminal-provenance-closure",
+    "checkout_command": "git switch -c research/crid-stage0-r3b-terminal-provenance-closure aa3833fb73ae572521e3a3ac8f2b865d3aac0307",
+    "clone_command": "git clone https://github.com/ljaehwan/gnss-doppler-lab.git /tmp/crid-r3b-terminal-provenance-UTK9jM/repo",
+    "fresh_clone": true,
+    "remote_url": "https://github.com/ljaehwan/gnss-doppler-lab.git",
+    "target_commit_sha": "aa3833fb73ae572521e3a3ac8f2b865d3aac0307"
+  }
+}

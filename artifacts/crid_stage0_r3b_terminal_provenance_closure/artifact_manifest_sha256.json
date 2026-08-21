@@ -1,0 +1,32 @@
+{
+  "file_count": 5,
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "2b6dbe657f31881dd32ec8e3537be8b22baa27b51d2bb24ad90e81d066460c04",
+      "size_bytes": 1063
+    },
+    {
+      "path": "final_verdict.json",
+      "sha256": "669f1b671fab7b164097d7c6d925c62ca38d5afd4d2da355ae0fc8e59f8a09ab",
+      "size_bytes": 742
+    },
+    {
+      "path": "historical_evidence_classification.json",
+      "sha256": "01f9a37b5c1725c9318e8e15fd284de5c869b31a10140d69deb9ece64d6dc536",
+      "size_bytes": 751
+    },
+    {
+      "path": "logs/r3a_verifier_stdout.txt",
+      "sha256": "e8e2f3c963175d5bf0c9d9c5c767bcfc7406d49715373dd83527837828880097",
+      "size_bytes": 294
+    },
+    {
+      "path": "terminal_attestation.json",
+      "sha256": "8737471b0ee3ea4eeba157e5fb0306f2daaa94bfc049f7868ff000706f46b060",
+      "size_bytes": 2899
+    }
+  ],
+  "schema": "gnss-doppler-lab.crid-r3b-artifact-manifest.v1",
+  "status": "PASS"
+}

@@ -1,0 +1,18 @@
+{
+  "classification": "HISTORICAL_STALE_PRE_FINALIZATION_EVIDENCE",
+  "historical_record_rewritten": false,
+  "preservation": "PRESERVED_UNMODIFIED",
+  "preserved_evidence": [
+    {
+      "observed_status": "PASS",
+      "observed_verdict": "INCONCLUSIVE_REFERENCE_PROVENANCE",
+      "path": "artifacts/crid_stage0_r3a_independent_reference_estimand_repair/logs/fresh_clone_verifier.txt",
+      "sha256": "948dc92c57453cc4744d4017d29caaa5b0bba8edd7ded072948e1608d7e7a1c0",
+      "size_bytes": 285
+    }
+  ],
+  "schema": "gnss-doppler-lab.crid-r3b-historical-evidence-classification.v1",
+  "scientific_result_changed": false,
+  "superseding_attestation": "terminal_attestation.json",
+  "supersession_scope": "TERMINAL_PROVENANCE_INTERPRETATION_ONLY"
+}
