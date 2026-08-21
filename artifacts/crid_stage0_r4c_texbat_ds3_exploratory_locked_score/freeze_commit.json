@@ -1,5 +1,12 @@
 {
-  "freeze_sha": null,
+  "ahead": 0,
+  "base_sha": "5051a0a5085a3ac5ce765b7d2b4f9b6159628017",
+  "behind": 0,
+  "branch": "research/crid-stage0-r4c-texbat-ds3-exploratory-locked-score",
+  "clean_checkout_before_access": true,
+  "freeze_sha": "be4e51fecca78569a6a5e6d6d70930de5733b34c",
+  "local_sha_before_access": "be4e51fecca78569a6a5e6d6d70930de5733b34c",
+  "remote_sha_before_access": "be4e51fecca78569a6a5e6d6d70930de5733b34c",
   "schema": "gnss-doppler-lab.crid-r4c-freeze-commit.v1",
-  "status": "PENDING_PUSH"
+  "status": "PASS"
 }

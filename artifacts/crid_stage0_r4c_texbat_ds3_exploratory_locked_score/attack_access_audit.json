@@ -1,10 +1,10 @@
 {
   "allowed_ds3": {
-    "bytes_read": 0,
-    "hashes": 0,
+    "bytes_read": 61785022464,
+    "hashes": 1,
     "mmaps": 0,
-    "opens": 0,
-    "stats": 0
+    "opens": 2,
+    "stats": 3
   },
   "forbidden_inputs": {
     "bytes_read": 0,
@@ -14,6 +14,8 @@
     "stats": 0
   },
   "phase_b_executed": false,
+  "receiver_invocations": 1,
+  "receiver_logical_slice_bytes": 16000000000,
   "schema": "gnss-doppler-lab.crid-r4c-attack-access-audit.v1",
-  "status": "PASS_PRE_ACCESS_ZERO"
+  "status": "PASS"
 }

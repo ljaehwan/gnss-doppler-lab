@@ -1,0 +1,12 @@
+command=PYTHONPATH=src:. pytest -q tests/test_crid_r4c_ds3.py
+result=12 passed in 0.75s
+
+command=PYTHONPATH=src:. pytest -q tests/test_crid_r3_control_generator.py tests/test_crid_r3a_independent_reference_estimand_repair.py tests/test_crid_r3b_terminal_provenance_closure.py tests/test_crid_r4_phase_a.py tests/test_crid_r4a_threshold_decision_equivalence.py tests/test_crid_r4b_phase_a.py tests/test_crid_r4c_ds3.py -k 'not test_only_new_r3b_closure_paths_differ_from_target_commit'
+result=61 passed, 1 deselected in 1.26s
+deselection_reason=historical R3b branch-scoped diff assertion necessarily rejects later R4/R4a/R4b/R4c paths
+
+R3_verifier=status PASS; verdict INCONCLUSIVE_CONTROL_PROVENANCE
+R3a_verifier=status PASS; verdict INDEPENDENT_REFERENCE_ESTIMAND_REPAIR_PASS
+R3b_verifier=status PASS; verdict TERMINAL_PROVENANCE_CLOSURE_PASS
+R4a_verifier=status PASS; verdict THRESHOLD_DECISION_EQUIVALENCE_REPAIR_PASS
+post_access_executable_changes=false

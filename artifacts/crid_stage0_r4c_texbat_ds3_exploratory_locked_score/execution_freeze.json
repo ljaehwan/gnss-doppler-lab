@@ -23,8 +23,12 @@
     "scripts/verify_crid_r4c_ds3.py": "1270d91bb3325cbc8cb7d6f369a718b6bc09ec5fc5a02b4611bf0c4753d1b534",
     "src/gnss_doppler_lab/crid_r4c_ds3.py": "8f9617cc5603ce0844ddea50dd1a2550f909ffb0202dd1c28f7874f0048d5ab0"
   },
+  "freeze_sha": "be4e51fecca78569a6a5e6d6d70930de5733b34c",
   "output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4c-texbat-ds3-exploratory-locked-score",
+  "post_access_executable_changes": false,
+  "replay_status": "C0_RECEIVER_OUTPUT_PRESERVED_MANIFEST_CONSTRUCTION_FAILED_C1_C3_NOT_RUN",
   "schema": "gnss-doppler-lab.crid-r4c-execution-freeze.v1",
-  "status": "FROZEN_PENDING_PUSH",
+  "score_status": "NOT_RUN",
+  "status": "EXECUTION_STOPPED_FAIL_CLOSED_FROM_PUSHED_FREEZE",
   "worker_count": 1
 }

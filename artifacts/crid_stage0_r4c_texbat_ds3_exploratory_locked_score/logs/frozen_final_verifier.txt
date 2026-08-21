@@ -1,0 +1,10 @@
+command=python3 scripts/verify_crid_r4c_ds3.py --mode final
+exit_code=2
+status=FAIL_EXPECTED_FAIL_CLOSED
+manifest_ok=true
+manifest_files=25
+replay_rows=4
+epoch_rows=0
+verdict=INCONCLUSIVE_TEXBAT_DS3_EXPLORATORY_EXECUTION
+failures=replay:C0,replay:C1,replay:C2,replay:C3,epoch_contract,support
+interpretation=frozen verifier correctly refuses to accept incomplete replay and zero-score evidence as a complete exploratory evaluation

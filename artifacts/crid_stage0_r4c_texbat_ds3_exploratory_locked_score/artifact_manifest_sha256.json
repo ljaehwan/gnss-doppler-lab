@@ -1,35 +1,45 @@
 {
-  "file_count": 20,
+  "file_count": 27,
   "files": [
     {
       "path": "README.md",
-      "sha256": "52c279d525a964b7e6583994451152251af452cd1d569e53be7108d387ee7a6b",
-      "size_bytes": 294
+      "sha256": "07469e8e7a86f68d2a9d7faa10dd6e46d4f1b3d936f9ea0b491c5e06dc5d3eb3",
+      "size_bytes": 797
+    },
+    {
+      "path": "alarm_timeline.png",
+      "sha256": "589bd1aa59bc1d8baef201c37a0f8afb804c0d64e41106254c6f643429eb03e9",
+      "size_bytes": 23457
     },
     {
       "path": "attack_access_audit.json",
-      "sha256": "4e314d2113f1d4ea0a2f9a194be134d2f1677205ebc96a60f62ff157817eac8d",
-      "size_bytes": 355
+      "sha256": "142d385debb474cbe8273646425ef10d71654808abe5c4ddcc67bf30e242c070",
+      "size_bytes": 425
     },
     {
       "path": "ds3_input_inventory.json",
-      "sha256": "2403b45c34598835ec5bfa8d00d68afb85c71676fd0e0f2660e2d3f05c109b7f",
-      "size_bytes": 345
+      "sha256": "083d1db15057efc4921d27ebf16817e72e2cc8eb2d144b2af73ce5f77388f5e4",
+      "size_bytes": 867
+    },
+    {
+      "path": "execution_failure_attestation.json",
+      "sha256": "2403f28faef2f885a6f7d4c70a39b678dbd4f92703b6d895c0c79a0726b3244a",
+      "size_bytes": 522
     },
     {
       "path": "execution_freeze.json",
-      "sha256": "16ae54cddb988ab73d4d77bae035fbc33198b66ed4f50576460fe813e8362c88",
-      "size_bytes": 1342
+      "sha256": "c32fd339a27450f64aeca07c124bee3c293478ed1f2ab2112d3375498785e8e0",
+      "size_bytes": 1597
     },
     {
       "path": "final_verdict.json",
-      "sha256": "310a71adfdddf32d920da8dd0f3e3776aefec5cb9ba163e3198707e72ccc5bf5",
-      "size_bytes": 228
+      "sha256": "d1cb2f3c78b06ed31f249b51cc22eb49d82ab75c648957f6812b8cd0be2b2032",
+      "size_bytes": 903
     },
     {
       "path": "freeze_commit.json",
-      "sha256": "a6b3c167113190e2d1340c47bc5fe61fc55cff7f17e4c8ed0e33fa0d25822e7d",
-      "size_bytes": 111
+      "sha256": "03a99e35bff77ad32a04cc0d5698ddd8118bffb06ae3aa454481b06d4b2a3061",
+      "size_bytes": 491
     },
     {
       "path": "frozen_configs/C0.conf",
@@ -57,6 +67,26 @@
       "size_bytes": 3071
     },
     {
+      "path": "incomplete_c0_output_binding.json",
+      "sha256": "a801e555722e98a2aac3ce90c51a37c2fc5cc9fc2b400423812baf71c03187db",
+      "size_bytes": 4677
+    },
+    {
+      "path": "logs/execution_failure.txt",
+      "sha256": "f48903d2ce4b5503de046909d6a331e0ad9824b4c03722e1508ce0ad7d8a7e4d",
+      "size_bytes": 486
+    },
+    {
+      "path": "logs/frozen_final_verifier.txt",
+      "sha256": "4e5c696d0e63fc614511796d77fbdef7d72f8f7f003f6d5bf85a584090b3f268",
+      "size_bytes": 431
+    },
+    {
+      "path": "logs/post_execution_tests.txt",
+      "sha256": "d0850804e1a286bb757b67af0ab4069a874a57f4565c4440947b80e7d6ead545",
+      "size_bytes": 959
+    },
+    {
       "path": "logs/pre_access_freeze_verifier.txt",
       "sha256": "aaee46c33a9f8f3e7372512236217137114ad712e6d45c056984d76ead6439c6",
       "size_bytes": 285
@@ -78,18 +108,23 @@
     },
     {
       "path": "replay_completion.csv",
-      "sha256": "bd41a6405d0d5e3801dcb2466d468086e6e79655fadf5c075f37fe60a1177676",
-      "size_bytes": 237
+      "sha256": "4e68f7206b235289f458175a6213f983073feb071e19fb5a6f3f0e9cb068a436",
+      "size_bytes": 1618
     },
     {
       "path": "scenario_metrics.json",
-      "sha256": "de3758a28b773dad22d1e2a60429a00c2bc5b758e61c066382c73b2f1ec445ae",
-      "size_bytes": 1789
+      "sha256": "29d7610bb11445110750aa9d0ab683507c4ec314c438f3c49f0f0b952243b16e",
+      "size_bytes": 2252
+    },
+    {
+      "path": "score_components.png",
+      "sha256": "8ae42ac93bf252851568d95b0db05a2572ad73ddbe1566ca2d3d13e822a89468",
+      "size_bytes": 22664
     },
     {
       "path": "shortcut_audit.json",
-      "sha256": "1eca8bbea950a9bcccce9bcfc3df3f2fad32d7c91b913dc48356760cefe7ceec",
-      "size_bytes": 98
+      "sha256": "33d0dad0a97b784f00fdd19d0a3fff779a7bc204f5ccca534b1769d6028206b6",
+      "size_bytes": 278
     },
     {
       "path": "source_binding.json",
@@ -98,8 +133,8 @@
     },
     {
       "path": "support_audit.json",
-      "sha256": "0a0e9897416f6ff4a2941158c24f38fe927f87a56671706074944fdf3645e079",
-      "size_bytes": 97
+      "sha256": "c7f1463e055ac1b593607d02d623d8e1ed531a7c66ce0e936edbe6b818ce69c7",
+      "size_bytes": 432
     }
   ],
   "schema": "gnss-doppler-lab.crid-r4c-artifact-manifest.v1",

@@ -1,0 +1,14 @@
+{
+  "C1_C2_C3_executed": false,
+  "checkpoint_completed": 0,
+  "exception": "KeyError: byte_size",
+  "failure_stage": "C0_POST_RECEIVER_NATIVE_SUMMARY_TO_MANIFEST",
+  "freeze_sha": "be4e51fecca78569a6a5e6d6d70930de5733b34c",
+  "output_deleted_or_overwritten": false,
+  "output_preserved": true,
+  "post_access_executable_changes": false,
+  "schema": "gnss-doppler-lab.crid-r4c-execution-failure-attestation.v1",
+  "score_executed": false,
+  "status": "PASS",
+  "verdict": "INCONCLUSIVE_TEXBAT_DS3_EXPLORATORY_EXECUTION"
+}

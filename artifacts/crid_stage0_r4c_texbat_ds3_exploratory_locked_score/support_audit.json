@@ -1,4 +1,12 @@
 {
+  "alignment_executed": false,
+  "completed_replay_manifests": 0,
+  "expected_replay_manifests": 4,
+  "minimum_common_prns": 4,
+  "minimum_configurations": 4,
+  "reason": "C0 frozen runner KeyError before replay manifest/checkpoint; C1-C3 stopped fail closed",
   "schema": "gnss-doppler-lab.crid-r4c-support-audit.v1",
-  "status": "FROZEN_NOT_EVALUATED"
+  "score_epoch_count": 0,
+  "score_executed": false,
+  "status": "INCONCLUSIVE_REPLAY_MANIFEST_CONSTRUCTION"
 }

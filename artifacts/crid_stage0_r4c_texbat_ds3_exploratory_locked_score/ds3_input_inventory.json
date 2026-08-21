@@ -1,12 +1,33 @@
 {
+  "access": {
+    "bytes_read": 45785022464,
+    "hashes": 1,
+    "mmaps": 0,
+    "opens": 1,
+    "stats": 1
+  },
+  "access_after_pushed_freeze_only": true,
+  "bytes_per_complex_sample": 4,
+  "forbidden_access": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "freeze_sha": "be4e51fecca78569a6a5e6d6d70930de5733b34c",
+  "hash_bytes_read": 45785022464,
+  "mtime_ns": 1784563991000000000,
   "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds3.bin",
-  "payload_bytes_read": 0,
-  "payload_hash_count": 0,
-  "payload_mmap_count": 0,
-  "payload_open_count": 0,
-  "payload_stat_count": 0,
+  "sample_rate_hz": 25000000,
   "schema": "gnss-doppler-lab.crid-r4c-ds3-input-inventory.v1",
-  "sha256": null,
-  "size_bytes": null,
-  "status": "FROZEN_NOT_ACCESSED"
+  "sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+  "size_bytes": 45785022464,
+  "slice": {
+    "end_s": 238.9,
+    "end_sample_exclusive": 5972500000,
+    "start_s": 78.9,
+    "start_sample_inclusive": 1972500000
+  },
+  "status": "PASS"
 }

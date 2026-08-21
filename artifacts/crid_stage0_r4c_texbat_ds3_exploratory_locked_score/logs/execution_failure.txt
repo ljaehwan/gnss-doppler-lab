@@ -1,0 +1,12 @@
+command=PYTHONPATH=src python3 scripts/run_crid_r4c_ds3.py replay --freeze-sha be4e51fecca78569a6a5e6d6d70930de5733b34c
+exit_code=1
+receiver_invocations=1
+C0_output_files=11
+C0_manifest_written=false
+checkpoint_completed=0
+exception=KeyError: byte_size
+failure_detail=trace_native_1ms_ch_10.bin has 0 records and native summary omits byte_size
+C1_C2_C3_executed=false
+score_executed=false
+outputs_deleted_or_overwritten=false
+final_verdict=INCONCLUSIVE_TEXBAT_DS3_EXPLORATORY_EXECUTION

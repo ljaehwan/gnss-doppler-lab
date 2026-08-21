@@ -1,4 +1,11 @@
 {
+  "reason": "score was not executed after technical replay failure",
   "schema": "gnss-doppler-lab.crid-r4c-shortcut-audit.v1",
-  "status": "FROZEN_NOT_EVALUATED"
+  "score_inputs": {
+    "cn0": false,
+    "lock": false,
+    "power": false,
+    "prn_count": false
+  },
+  "status": "INCONCLUSIVE_NOT_EVALUATED"
 }
