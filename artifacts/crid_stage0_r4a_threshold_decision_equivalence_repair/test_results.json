@@ -27,6 +27,14 @@
     "log": "logs/final_r4a_tests.txt"
   },
   "compact_verifier": "PASS",
-  "fresh_clone": "PENDING",
+  "fresh_clone": {
+    "remote_checkpoint_sha": "d772816137ab9615c05c58cdb166ba9ed0716b46",
+    "compact_verifier": "PASS",
+    "r4a_tests_passed": 9,
+    "r4a_tests_failed": 0,
+    "verifier_log": "logs/fresh_clone_checkpoint_verifier.txt",
+    "test_log": "logs/fresh_clone_checkpoint_tests.txt",
+    "status": "PASS"
+  },
   "status": "PASS"
 }

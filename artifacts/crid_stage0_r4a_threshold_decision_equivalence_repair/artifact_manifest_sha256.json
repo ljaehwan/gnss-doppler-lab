@@ -1,5 +1,5 @@
 {
-  "file_count": 18,
+  "file_count": 20,
   "files": [
     {
       "path": "README.md",
@@ -42,6 +42,16 @@
       "size_bytes": 98
     },
     {
+      "path": "logs/fresh_clone_checkpoint_tests.txt",
+      "sha256": "47150831b8aff85930d88a893091ffb4810a1dcf7f23b1d3052f1d9e5e14e60c",
+      "size_bytes": 98
+    },
+    {
+      "path": "logs/fresh_clone_checkpoint_verifier.txt",
+      "sha256": "ea3c901c02de23d6406331a3fe9a071bef57fda3caef6d7ff3ffede757cff04d",
+      "size_bytes": 185
+    },
+    {
       "path": "logs/r4a_unit_tamper_tests.txt",
       "sha256": "2f37d039ae1d06e770402b5d73d0099bebb307685f1b978e35f40a76d1437108",
       "size_bytes": 112
@@ -78,8 +88,8 @@
     },
     {
       "path": "test_results.json",
-      "sha256": "73684c9763e0e027ab71ee5c217eaf0d745b2ea86f95e17e572b324c33e05585",
-      "size_bytes": 1029
+      "sha256": "fafc537429620de1f19e388d302b7baebec81625fb88479137f14f76ee20caf0",
+      "size_bytes": 1326
     },
     {
       "path": "threshold_numeric_comparison.json",
