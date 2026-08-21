@@ -1,0 +1,15 @@
+command=python3 scripts/verify_crid_r4b_phase_a.py --mode final
+exit_code=2
+status=FAIL_EXPECTED_FAIL_CLOSED
+manifest_ok=true
+manifest_files=22
+inventory_rows=66
+replay_rows=264
+metric_rows=38
+positive_rows=18
+verdict=INCONCLUSIVE_CRID_PHASE_A_EXECUTION_OR_PROVENANCE
+incomplete_replay_common_support_failures=112
+incomplete_replay_common_support_reason=28 unanalysed cases times C0-C3
+other_failures=metric_counts,support_audit,deterministic_reproduction,freeze_commit
+freeze_commit_failure_note=frozen verifier applies its 64-character SHA-256 predicate to the 40-character Git freeze commit SHA; verifier code was not changed after results
+interpretation=The frozen verifier correctly does not accept the incomplete Phase A artifact as a complete result. Manifest integrity passes separately.

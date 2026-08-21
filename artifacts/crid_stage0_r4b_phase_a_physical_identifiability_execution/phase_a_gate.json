@@ -21,7 +21,40 @@
       "support"
     ]
   },
-  "results": null,
+  "evaluation_status": "PARTIAL_USER_AUTHORIZED_EARLY_STOP_AFTER_PASS_BECAME_IMPOSSIBLE",
+  "results": {
+    "clean_holdout_fpr": {
+      "OAK": 0.00730093543235227,
+      "TEX": 0.012708150744960562,
+      "both_at_or_below_0p02": true
+    },
+    "completed_case_metrics": 38,
+    "completed_replays": 264,
+    "expected_case_metrics": 66,
+    "fully_evaluated": false,
+    "known_negative": {
+      "OAK": {
+        "completed": 15,
+        "fail": 15,
+        "pass": 0
+      },
+      "TEX": {
+        "completed": 5,
+        "fail": 1,
+        "pass": 4
+      }
+    },
+    "legacy_any_positive_pass": false,
+    "legacy_any_positive_pass_use": "DIAGNOSTIC_ONLY_NOT_AUTHORIZATION",
+    "pass_impossibility_reason": "Primary gate requires negative 30/30; completed OAK negative controls are 0 PASS and 15 FAIL.",
+    "pass_possible": false,
+    "positive_surface_complete": false,
+    "positive_surface_completed": 18,
+    "positive_surface_expected": 36,
+    "replay_complete": true,
+    "support_complete": false
+  },
   "schema": "gnss-doppler-lab.crid-r4b-phase-a-gate.v1",
-  "status": "FROZEN_NOT_EVALUATED"
+  "status": "FAIL",
+  "threshold_authorization": "R4a decision equivalence"
 }

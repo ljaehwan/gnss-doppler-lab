@@ -1,7 +1,12 @@
 {
+  "ahead": 0,
   "base_sha": "970f457daa1cd5677a1942198c92bf715a516050",
+  "behind": 0,
   "branch": "research/crid-stage0-r4b-phase-a-physical-identifiability-execution",
-  "freeze_sha": null,
+  "clean_checkout_before_execution": true,
+  "freeze_sha": "f61e1338bb43c432171a163e25b1ed547e632434",
+  "local_sha_before_execution": "f61e1338bb43c432171a163e25b1ed547e632434",
+  "remote_sha_before_execution": "f61e1338bb43c432171a163e25b1ed547e632434",
   "schema": "gnss-doppler-lab.crid-r4b-freeze-commit.v1",
-  "status": "PENDING_PUSH"
+  "status": "PASS"
 }

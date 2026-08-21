@@ -1,5 +1,10 @@
 # CRID Stage-0 R4b Phase A physical-identifiability execution
 
-Pre-result executable freeze from base `970f457daa1cd5677a1942198c92bf715a516050`. R4 and R4a are immutable inputs. The exact 66 frozen R4 controls will be replayed sequentially through C0-C3 only after the freeze commit is pushed.
+Final verdict: `INCONCLUSIVE_CRID_PHASE_A_EXECUTION_OR_PROVENANCE`
+Next state: `NOT_AUTHORIZED`
 
-The committed R2 threshold literals are authoritative under the R4a decision-equivalence authorization. The historical R4 exact-float check is not reused as an execution gate. Phase B and attack data are out of scope.
+All 264 frozen clean-control replays completed successfully from pushed freeze commit `f61e1338bb43c432171a163e25b1ed547e632434`. The authoritative R2 literals were used under the R4a decision-equivalence authorization; no threshold was re-estimated or replaced.
+
+Analysis was stopped with explicit user authorization after 38 of 66 cases completed because the frozen primary PASS became mathematically impossible: all 15 completed OAK negative controls failed the required per-case alarm-ratio limit, while the gate requires 30/30 negative PASS. The remaining 28 cases were not started. Consequently support and the 36-case positive response surface are incomplete, so this artifact records the fail-closed INCONCLUSIVE verdict rather than a full NO_GO verdict.
+
+No post-result code, threshold, score, window, gate, truth, or control change was made. Phase B was not executed, and attack stat/hash/open/mmap/read counters are all zero.

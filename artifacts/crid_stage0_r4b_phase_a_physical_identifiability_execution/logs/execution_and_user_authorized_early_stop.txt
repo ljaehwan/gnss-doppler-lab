@@ -1,0 +1,15 @@
+freeze_sha=f61e1338bb43c432171a163e25b1ed547e632434
+replay_status=PASS
+replay_count=264/264
+analysis_complete_cases=38/66
+analysis_partial_cases=0
+analysis_not_started_cases=28
+OAK_negative_PASS=0/15
+OAK_negative_FAIL=15/15
+primary_PASS_possible=false
+stop_authorization=user stated execution may stop if no possibility remains
+final_verdict=INCONCLUSIVE_CRID_PHASE_A_EXECUTION_OR_PROVENANCE
+next_state=NOT_AUTHORIZED
+phase_b_executed=false
+attack_stat_hash_open_mmap_read=0/0/0/0/0
+post_result_code_threshold_window_score_gate_changes=false

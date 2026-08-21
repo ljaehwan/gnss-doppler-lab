@@ -1,0 +1,13 @@
+command=PYTHONPATH=src:. pytest -q tests/test_crid_r4b_phase_a.py
+result=10 passed in 0.77s
+coverage=R4a authorization tamper, strict threshold comparison, raw-sample windows, primary gate, checkpoint binding, input/truth/config/receiver/output tamper, manifest tamper, incomplete-output fail-closed, deterministic score hash, and absence of a threshold-recomputation command
+
+command=PYTHONPATH=src:. pytest -q tests/test_crid_r3_control_generator.py tests/test_crid_r3a_independent_reference_estimand_repair.py tests/test_crid_r3b_terminal_provenance_closure.py tests/test_crid_r4_phase_a.py tests/test_crid_r4a_threshold_decision_equivalence.py tests/test_crid_r4b_phase_a.py -k 'not test_only_new_r3b_closure_paths_differ_from_target_commit'
+result=49 passed, 1 deselected in 1.27s
+deselection_reason=historical R3b branch-scoped diff assertion necessarily rejects later R4/R4a/R4b paths
+
+upstream_final_recheck=PASS
+R3=status PASS; verdict INCONCLUSIVE_CONTROL_PROVENANCE
+R3a=status PASS; verdict INDEPENDENT_REFERENCE_ESTIMAND_REPAIR_PASS
+R3b=status PASS; verdict TERMINAL_PROVENANCE_CLOSURE_PASS
+R4a=status PASS; verdict THRESHOLD_DECISION_EQUIVALENCE_REPAIR_PASS

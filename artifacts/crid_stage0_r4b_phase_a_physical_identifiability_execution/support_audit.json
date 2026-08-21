@@ -1,7 +1,355 @@
 {
-  "cases": [],
+  "cases": [
+    {
+      "case_id": "OAK.negative.bitwise_nav_sign",
+      "common_valid_epochs": 14885,
+      "domain": "OAK",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11896
+    },
+    {
+      "case_id": "OAK.negative.byte_identical",
+      "common_valid_epochs": 14894,
+      "domain": "OAK",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11905
+    },
+    {
+      "case_id": "OAK.negative.cn0_reduction",
+      "common_valid_epochs": 14852,
+      "domain": "OAK",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11863
+    },
+    {
+      "case_id": "OAK.negative.common_receiver_clock_drift",
+      "common_valid_epochs": 14894,
+      "domain": "OAK",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11905
+    },
+    {
+      "case_id": "OAK.negative.empirical_awgn_0p5sigma",
+      "common_valid_epochs": 14905,
+      "domain": "OAK",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11916
+    },
+    {
+      "case_id": "OAK.negative.empirical_awgn_1sigma",
+      "common_valid_epochs": 14877,
+      "domain": "OAK",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11888
+    },
+    {
+      "case_id": "OAK.negative.empirical_awgn_2sigma",
+      "common_valid_epochs": 13370,
+      "domain": "OAK",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 10381
+    },
+    {
+      "case_id": "OAK.negative.gain",
+      "common_valid_epochs": 14894,
+      "domain": "OAK",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11905
+    },
+    {
+      "case_id": "OAK.negative.global_phase",
+      "common_valid_epochs": 14844,
+      "domain": "OAK",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11855
+    },
+    {
+      "case_id": "OAK.negative.independent_multipath",
+      "common_valid_epochs": 14908,
+      "domain": "OAK",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11919
+    },
+    {
+      "case_id": "OAK.negative.prn_drop_add",
+      "common_valid_epochs": 14894,
+      "domain": "OAK",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11905
+    },
+    {
+      "case_id": "OAK.negative.single_prn_disturbance",
+      "common_valid_epochs": 14894,
+      "domain": "OAK",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11905
+    },
+    {
+      "case_id": "OAK.negative.single_source_code_ramp",
+      "common_valid_epochs": 14894,
+      "domain": "OAK",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11905
+    },
+    {
+      "case_id": "OAK.negative.single_source_doppler_ramp",
+      "common_valid_epochs": 14894,
+      "domain": "OAK",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11905
+    },
+    {
+      "case_id": "OAK.negative.zero_delay_collapsed_duplicate",
+      "common_valid_epochs": 14900,
+      "domain": "OAK",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11911
+    },
+    {
+      "case_id": "OAK.positive.d050.p+00.four",
+      "common_valid_epochs": 14889,
+      "domain": "OAK",
+      "family": "positive",
+      "technical_status": "PASS",
+      "valid_active_epochs": 11479,
+      "valid_full_epochs": 11900
+    },
+    {
+      "case_id": "OAK.positive.d050.p+00.single",
+      "common_valid_epochs": 14864,
+      "domain": "OAK",
+      "family": "positive",
+      "technical_status": "PASS",
+      "valid_active_epochs": 11457,
+      "valid_full_epochs": 11875
+    },
+    {
+      "case_id": "OAK.positive.d050.p-03.four",
+      "common_valid_epochs": 14902,
+      "domain": "OAK",
+      "family": "positive",
+      "technical_status": "PASS",
+      "valid_active_epochs": 11485,
+      "valid_full_epochs": 11913
+    },
+    {
+      "case_id": "OAK.positive.d050.p-03.single",
+      "common_valid_epochs": 14891,
+      "domain": "OAK",
+      "family": "positive",
+      "technical_status": "PASS",
+      "valid_active_epochs": 11477,
+      "valid_full_epochs": 11902
+    },
+    {
+      "case_id": "OAK.positive.d050.p-06.four",
+      "common_valid_epochs": 14894,
+      "domain": "OAK",
+      "family": "positive",
+      "technical_status": "PASS",
+      "valid_active_epochs": 11478,
+      "valid_full_epochs": 11905
+    },
+    {
+      "case_id": "OAK.positive.d050.p-06.single",
+      "common_valid_epochs": 14896,
+      "domain": "OAK",
+      "family": "positive",
+      "technical_status": "PASS",
+      "valid_active_epochs": 11479,
+      "valid_full_epochs": 11907
+    },
+    {
+      "case_id": "OAK.positive.d150.p+00.four",
+      "common_valid_epochs": 14851,
+      "domain": "OAK",
+      "family": "positive",
+      "technical_status": "PASS",
+      "valid_active_epochs": 11464,
+      "valid_full_epochs": 11862
+    },
+    {
+      "case_id": "OAK.positive.d150.p+00.single",
+      "common_valid_epochs": 14895,
+      "domain": "OAK",
+      "family": "positive",
+      "technical_status": "PASS",
+      "valid_active_epochs": 11479,
+      "valid_full_epochs": 11906
+    },
+    {
+      "case_id": "OAK.positive.d150.p-03.four",
+      "common_valid_epochs": 14890,
+      "domain": "OAK",
+      "family": "positive",
+      "technical_status": "PASS",
+      "valid_active_epochs": 11479,
+      "valid_full_epochs": 11901
+    },
+    {
+      "case_id": "OAK.positive.d150.p-03.single",
+      "common_valid_epochs": 14861,
+      "domain": "OAK",
+      "family": "positive",
+      "technical_status": "PASS",
+      "valid_active_epochs": 11458,
+      "valid_full_epochs": 11872
+    },
+    {
+      "case_id": "OAK.positive.d150.p-06.four",
+      "common_valid_epochs": 14910,
+      "domain": "OAK",
+      "family": "positive",
+      "technical_status": "PASS",
+      "valid_active_epochs": 11480,
+      "valid_full_epochs": 11921
+    },
+    {
+      "case_id": "OAK.positive.d150.p-06.single",
+      "common_valid_epochs": 14895,
+      "domain": "OAK",
+      "family": "positive",
+      "technical_status": "PASS",
+      "valid_active_epochs": 11479,
+      "valid_full_epochs": 11906
+    },
+    {
+      "case_id": "OAK.positive.d300.p+00.four",
+      "common_valid_epochs": 14913,
+      "domain": "OAK",
+      "family": "positive",
+      "technical_status": "PASS",
+      "valid_active_epochs": 11485,
+      "valid_full_epochs": 11924
+    },
+    {
+      "case_id": "OAK.positive.d300.p+00.single",
+      "common_valid_epochs": 14886,
+      "domain": "OAK",
+      "family": "positive",
+      "technical_status": "PASS",
+      "valid_active_epochs": 11476,
+      "valid_full_epochs": 11897
+    },
+    {
+      "case_id": "OAK.positive.d300.p-03.four",
+      "common_valid_epochs": 14906,
+      "domain": "OAK",
+      "family": "positive",
+      "technical_status": "PASS",
+      "valid_active_epochs": 11484,
+      "valid_full_epochs": 11917
+    },
+    {
+      "case_id": "OAK.positive.d300.p-03.single",
+      "common_valid_epochs": 14902,
+      "domain": "OAK",
+      "family": "positive",
+      "technical_status": "PASS",
+      "valid_active_epochs": 11485,
+      "valid_full_epochs": 11913
+    },
+    {
+      "case_id": "OAK.positive.d300.p-06.four",
+      "common_valid_epochs": 14889,
+      "domain": "OAK",
+      "family": "positive",
+      "technical_status": "PASS",
+      "valid_active_epochs": 11476,
+      "valid_full_epochs": 11900
+    },
+    {
+      "case_id": "OAK.positive.d300.p-06.single",
+      "common_valid_epochs": 14898,
+      "domain": "OAK",
+      "family": "positive",
+      "technical_status": "PASS",
+      "valid_active_epochs": 11479,
+      "valid_full_epochs": 11909
+    },
+    {
+      "case_id": "TEX.negative.bitwise_nav_sign",
+      "common_valid_epochs": 13925,
+      "domain": "TEX",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11922
+    },
+    {
+      "case_id": "TEX.negative.byte_identical",
+      "common_valid_epochs": 13925,
+      "domain": "TEX",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11922
+    },
+    {
+      "case_id": "TEX.negative.cn0_reduction",
+      "common_valid_epochs": 13904,
+      "domain": "TEX",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11901
+    },
+    {
+      "case_id": "TEX.negative.common_receiver_clock_drift",
+      "common_valid_epochs": 13917,
+      "domain": "TEX",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11922
+    },
+    {
+      "case_id": "TEX.negative.empirical_awgn_0p5sigma",
+      "common_valid_epochs": 13930,
+      "domain": "TEX",
+      "family": "negative",
+      "technical_status": "PASS",
+      "valid_active_epochs": 0,
+      "valid_full_epochs": 11927
+    }
+  ],
+  "completed_case_count": 38,
+  "expected_case_count": 66,
   "minimum_common_prns": 4,
   "minimum_configurations": 4,
+  "partial_score_evidence": [],
+  "remaining_case_count": 28,
   "schema": "gnss-doppler-lab.crid-r4b-support-audit.v1",
-  "status": "FROZEN_NOT_EVALUATED"
+  "status": "INCOMPLETE_USER_AUTHORIZED_EARLY_STOP",
+  "zero_support_cases_among_completed": 0
 }

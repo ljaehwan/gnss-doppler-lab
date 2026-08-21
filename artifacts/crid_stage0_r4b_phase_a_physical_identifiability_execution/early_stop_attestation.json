@@ -1,0 +1,15 @@
+{
+  "analysis_completed": 38,
+  "analysis_not_started": 28,
+  "analysis_partial": [],
+  "authorization": "User stated that execution may stop if there is no possibility of passing.",
+  "freeze_sha": "f61e1338bb43c432171a163e25b1ed547e632434",
+  "monotone_gate_failure": "negative 30/30 cannot be satisfied after OAK negative 0/15 PASS",
+  "next_state": "NOT_AUTHORIZED",
+  "pass_possible": false,
+  "preservation": "All replay outputs and complete score evidence are preserved; none were deleted or overwritten.",
+  "replay_completed": 264,
+  "schema": "gnss-doppler-lab.crid-r4b-user-authorized-early-stop.v1",
+  "status": "PASS",
+  "verdict": "INCONCLUSIVE_CRID_PHASE_A_EXECUTION_OR_PROVENANCE"
+}

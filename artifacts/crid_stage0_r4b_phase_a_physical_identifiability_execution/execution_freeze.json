@@ -1,4 +1,5 @@
 {
+  "analysis_status": "STOPPED_AFTER_38_COMPLETE_WHEN_PRIMARY_PASS_BECAME_IMPOSSIBLE",
   "base_sha": "970f457daa1cd5677a1942198c92bf715a516050",
   "branch": "research/crid-stage0-r4b-phase-a-physical-identifiability-execution",
   "checkpoint_contract": {
@@ -34,9 +35,12 @@
     "src/gnss_doppler_lab/crid_r4b_phase_a.py": "31cdf26d82dca7bf360d1cf0354778e5de35d5adcd5a766c188e013a55a187a8"
   },
   "freeze_authorization": "HEAD, origin branch, supplied freeze SHA identical; clean checkout",
+  "freeze_sha": "f61e1338bb43c432171a163e25b1ed547e632434",
   "output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4b-phase-a-physical-identifiability-execution",
+  "post_result_executable_changes": false,
+  "replay_status": "PASS_264_OF_264",
   "schema": "gnss-doppler-lab.crid-r4b-execution-freeze.v1",
   "sequential_order": "OAK then TEX; lexical case_id; C0,C1,C2,C3",
-  "status": "FROZEN_PENDING_REMOTE_COMMIT",
+  "status": "EXECUTED_FROM_PUSHED_FREEZE_USER_AUTHORIZED_EARLY_STOP",
   "worker_count": 1
 }
