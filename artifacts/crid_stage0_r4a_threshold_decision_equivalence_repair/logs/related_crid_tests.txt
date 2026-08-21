@@ -1,0 +1,27 @@
+..................................................F.......               [100%]
+=================================== FAILURES ===================================
+__________ test_only_new_r3b_closure_paths_differ_from_target_commit ___________
+
+    def test_only_new_r3b_closure_paths_differ_from_target_commit():
+        result = subprocess.run(
+            ["git", "diff", "--name-only", TARGET, "--"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        changed = {line for line in result.stdout.splitlines() if line}
+        assert changed
+>       assert all(
+            path.startswith("artifacts/crid_stage0_r3b_terminal_provenance_closure/")
+            or path == "scripts/verify_crid_r3b_terminal_provenance_closure.py"
+            or path == "tests/test_crid_r3b_terminal_provenance_closure.py"
+            for path in changed
+        )
+E       assert False
+E        +  where False = all(<generator object test_only_new_r3b_closure_paths_differ_from_target_commit.<locals>.<genexpr> at 0x7f3583764450>)
+
+tests/test_crid_r3b_terminal_provenance_closure.py:129: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_crid_r3b_terminal_provenance_closure.py::test_only_new_r3b_closure_paths_differ_from_target_commit
+1 failed, 57 passed in 1.39s

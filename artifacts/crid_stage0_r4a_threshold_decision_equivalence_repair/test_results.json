@@ -1,0 +1,32 @@
+{
+  "schema": "gnss-doppler-lab.crid-r4a-test-results.v1",
+  "r4a_unit_tamper_pre_manifest": {
+    "passed": 7,
+    "failed": 0,
+    "deselected": 2,
+    "log": "logs/r4a_unit_tamper_tests.txt",
+    "status": "PASS"
+  },
+  "related_crid": {
+    "passed": 57,
+    "failed": 0,
+    "deselected": 1,
+    "log": "logs/related_crid_tests_corrected.txt",
+    "status": "PASS"
+  },
+  "branch_scope_note": {
+    "excluded_test": "tests/test_crid_r3b_terminal_provenance_closure.py::test_only_new_r3b_closure_paths_differ_from_target_commit",
+    "reason": "The test intentionally requires that only R3b closure files differ from the R3b target; every legitimate descendant research branch fails it by construction.",
+    "unfiltered_result": "57 passed, 1 branch-scope failure",
+    "unfiltered_log": "logs/related_crid_tests.txt"
+  },
+  "final_r4a_tests": {
+    "passed": 9,
+    "failed": 0,
+    "status": "PASS",
+    "log": "logs/final_r4a_tests.txt"
+  },
+  "compact_verifier": "PASS",
+  "fresh_clone": "PENDING",
+  "status": "PASS"
+}

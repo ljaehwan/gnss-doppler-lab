@@ -1,0 +1,18 @@
+{
+  "schema": "gnss-doppler-lab.crid-r4a-tamper-tests.v1",
+  "tests": {
+    "authoritative_threshold_byte_flip": "PASS",
+    "clean_holdout_score_byte_flip": "PASS",
+    "split_sample_id_byte_flip": "PASS",
+    "clean_source_hash_byte_flip": "PASS",
+    "quantile_method_mutation": "PASS",
+    "numeric_bound_violation": "PASS",
+    "alarm_vector_mismatch": "PASS",
+    "fpr_mismatch": "PASS",
+    "control_score_path_sentinel": "PASS",
+    "attack_path_access_sentinel": "PASS",
+    "r4_artifact_byte_identity": "PASS",
+    "artifact_manifest_byte_flip": "PASS"
+  },
+  "status": "PASS"
+}

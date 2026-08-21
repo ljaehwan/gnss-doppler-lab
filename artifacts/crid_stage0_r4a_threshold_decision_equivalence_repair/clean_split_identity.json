@@ -1,0 +1,146 @@
+{
+  "domains": {
+    "OAK": {
+      "calibration_score_count": 3587,
+      "domain": "OAK",
+      "holdout_score_sha256": "b224972b5c81239a1a8f6de73741c7c1a622c26ef9c4914c4bf3d0c81ab37374",
+      "holdout_scored_sample_count": 4383,
+      "holdout_scored_sample_id_sha256": "2e78c8560863dead9ac58c8184249bb9ace314c865dc5f7e1e7a274eb41c31f6",
+      "splits": {
+        "calibration": {
+          "byte_identical": true,
+          "candidate_sha256": "5ca5c4c0bb337d731a62f9cffc880b71c09b44a45b8e818675929780d8974bfe",
+          "count": 36089,
+          "expected_count": 36089,
+          "expected_first_sample": 183586221,
+          "expected_last_sample": 201521350,
+          "first_sample": 183586221,
+          "last_sample": 201521350,
+          "reference_sha256": "5ca5c4c0bb337d731a62f9cffc880b71c09b44a45b8e818675929780d8974bfe",
+          "status": "PASS"
+        },
+        "guard1": {
+          "byte_identical": true,
+          "candidate_sha256": "8bbb5213fed11f9cf6e8dd1f08d78b8358a308512636826f24e72d90c9f11d3d",
+          "count": 3139,
+          "expected_count": 3139,
+          "expected_first_sample": 182037888,
+          "expected_last_sample": 183585342,
+          "first_sample": 182037888,
+          "last_sample": 183585342,
+          "reference_sha256": "8bbb5213fed11f9cf6e8dd1f08d78b8358a308512636826f24e72d90c9f11d3d",
+          "status": "PASS"
+        },
+        "guard2": {
+          "byte_identical": true,
+          "candidate_sha256": "d45e89b7b571ec584e4432578d19535af21174939ad41c5432ccdb1c21c1cf26",
+          "count": 3138,
+          "expected_count": 3138,
+          "expected_first_sample": 201522279,
+          "expected_last_sample": 203079808,
+          "first_sample": 201522279,
+          "last_sample": 203079808,
+          "reference_sha256": "d45e89b7b571ec584e4432578d19535af21174939ad41c5432ccdb1c21c1cf26",
+          "status": "PASS"
+        },
+        "holdout": {
+          "byte_identical": true,
+          "candidate_sha256": "d3bfaad5cc4a1af61dc969a04f836eaa99429c7c2ecc269a509584062a4aacce",
+          "count": 43936,
+          "expected_count": 43936,
+          "expected_first_sample": 203079809,
+          "expected_last_sample": 224989820,
+          "first_sample": 203079809,
+          "last_sample": 224989820,
+          "reference_sha256": "d3bfaad5cc4a1af61dc969a04f836eaa99429c7c2ecc269a509584062a4aacce",
+          "status": "PASS"
+        },
+        "train": {
+          "byte_identical": true,
+          "candidate_sha256": "9bd3f896999cdd09f10df01766e9c9f832d2e477a3208b07918ffca4f67035dd",
+          "count": 70609,
+          "expected_count": 70609,
+          "expected_first_sample": 150100296,
+          "expected_last_sample": 182037405,
+          "first_sample": 150100296,
+          "last_sample": 182037405,
+          "reference_sha256": "9bd3f896999cdd09f10df01766e9c9f832d2e477a3208b07918ffca4f67035dd",
+          "status": "PASS"
+        }
+      },
+      "status": "PASS"
+    },
+    "TEX": {
+      "calibration_score_count": 3733,
+      "domain": "TEX",
+      "holdout_score_sha256": "984e5d932ea378249e0c3fa03ca07218baf4cf08e7fba7317dd05dd285690f00",
+      "holdout_scored_sample_count": 4564,
+      "holdout_scored_sample_id_sha256": "5d2d25e30d722c366828733bf34c5db9ad3298df222597e4c6aaa5af382e5400",
+      "splits": {
+        "calibration": {
+          "byte_identical": true,
+          "candidate_sha256": "266443d32aebf57ef4859d41f5d3966e48183f1761759f79985facd19a49b680",
+          "count": 37952,
+          "expected_count": 37952,
+          "expected_first_sample": 908991342,
+          "expected_last_sample": 1002581863,
+          "first_sample": 908991342,
+          "last_sample": 1002581863,
+          "reference_sha256": "266443d32aebf57ef4859d41f5d3966e48183f1761759f79985facd19a49b680",
+          "status": "PASS"
+        },
+        "guard1": {
+          "byte_identical": true,
+          "candidate_sha256": "68454deebd31941ec8a73a582341917f7bb34c158aae430c26cc437b21fa9bde",
+          "count": 3300,
+          "expected_count": 3300,
+          "expected_first_sample": 901013790,
+          "expected_last_sample": 908990496,
+          "first_sample": 901013790,
+          "last_sample": 908990496,
+          "reference_sha256": "68454deebd31941ec8a73a582341917f7bb34c158aae430c26cc437b21fa9bde",
+          "status": "PASS"
+        },
+        "guard2": {
+          "byte_identical": true,
+          "candidate_sha256": "c7527eba70907572506504258207da7e854fbba84dc074ede7bd7617a63da5b9",
+          "count": 3301,
+          "expected_count": 3301,
+          "expected_first_sample": 1002583030,
+          "expected_last_sample": 1010858046,
+          "first_sample": 1002583030,
+          "last_sample": 1010858046,
+          "reference_sha256": "c7527eba70907572506504258207da7e854fbba84dc074ede7bd7617a63da5b9",
+          "status": "PASS"
+        },
+        "holdout": {
+          "byte_identical": true,
+          "candidate_sha256": "1c2b97b91e402defee2371b27bacc4e9bc91a50b810f3d08bec09ca6a8f5d089",
+          "count": 46203,
+          "expected_count": 46203,
+          "expected_first_sample": 1010859485,
+          "expected_last_sample": 1124942029,
+          "first_sample": 1010859485,
+          "last_sample": 1124942029,
+          "reference_sha256": "1c2b97b91e402defee2371b27bacc4e9bc91a50b810f3d08bec09ca6a8f5d089",
+          "status": "PASS"
+        },
+        "train": {
+          "byte_identical": true,
+          "candidate_sha256": "ce1a807417d47158f455fa6b0505d04693290f9fa77b3e283e6b8fb86491c7bf",
+          "count": 74254,
+          "expected_count": 74254,
+          "expected_first_sample": 750505555,
+          "expected_last_sample": 901013382,
+          "first_sample": 750505555,
+          "last_sample": 901013382,
+          "reference_sha256": "ce1a807417d47158f455fa6b0505d04693290f9fa77b3e283e6b8fb86491c7bf",
+          "status": "PASS"
+        }
+      },
+      "status": "PASS"
+    }
+  },
+  "schema": "gnss-doppler-lab.crid-r4a-clean-split-identity.v1",
+  "status": "PASS"
+}

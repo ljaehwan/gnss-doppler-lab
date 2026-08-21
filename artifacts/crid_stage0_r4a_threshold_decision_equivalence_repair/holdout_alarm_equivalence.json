@@ -1,0 +1,59 @@
+{
+  "comparison": "score > threshold",
+  "domains": {
+    "OAK": {
+      "alarm_vectors_byte_identical": true,
+      "all_scored_epochs_finite_four_config_min_four_prn": true,
+      "causal_delays_match_r4": true,
+      "causal_delays_ms": {
+        "C0": 0,
+        "C1": 0,
+        "C2": 0,
+        "C3": 0
+      },
+      "committed_alarm_sha256": "8432f44ccbb73d4ebd13f4c368000cec58bdce6813a2003d3c8e78eeefb9a556",
+      "committed_false_positive_count": 32,
+      "committed_fpr": 0.00730093543235227,
+      "domain": "OAK",
+      "expected_committed_fpr": 0.00730093543235227,
+      "expected_committed_fpr_exact_match": true,
+      "false_positive_count_and_fpr_equal": true,
+      "fit_domain_holdout_count": 4383,
+      "fit_domain_holdout_fpr": 0.00730093543235227,
+      "holdout_score_count": 4383,
+      "holdout_score_sha256": "b224972b5c81239a1a8f6de73741c7c1a622c26ef9c4914c4bf3d0c81ab37374",
+      "recomputed_alarm_sha256": "8432f44ccbb73d4ebd13f4c368000cec58bdce6813a2003d3c8e78eeefb9a556",
+      "recomputed_false_positive_count": 32,
+      "recomputed_fpr": 0.00730093543235227,
+      "status": "PASS"
+    },
+    "TEX": {
+      "alarm_vectors_byte_identical": true,
+      "all_scored_epochs_finite_four_config_min_four_prn": true,
+      "causal_delays_match_r4": true,
+      "causal_delays_ms": {
+        "C0": 0,
+        "C1": 0,
+        "C2": 0,
+        "C3": 0
+      },
+      "committed_alarm_sha256": "d2b00be2e6ec2844f2dba1af3ab50b0e885c897c7aba5fe99527fc99a9fd68ae",
+      "committed_false_positive_count": 58,
+      "committed_fpr": 0.012708150744960562,
+      "domain": "TEX",
+      "expected_committed_fpr": 0.012708150744960562,
+      "expected_committed_fpr_exact_match": true,
+      "false_positive_count_and_fpr_equal": true,
+      "fit_domain_holdout_count": 4564,
+      "fit_domain_holdout_fpr": 0.012708150744960562,
+      "holdout_score_count": 4564,
+      "holdout_score_sha256": "984e5d932ea378249e0c3fa03ca07218baf4cf08e7fba7317dd05dd285690f00",
+      "recomputed_alarm_sha256": "d2b00be2e6ec2844f2dba1af3ab50b0e885c897c7aba5fe99527fc99a9fd68ae",
+      "recomputed_false_positive_count": 58,
+      "recomputed_fpr": 0.012708150744960562,
+      "status": "PASS"
+    }
+  },
+  "schema": "gnss-doppler-lab.crid-r4a-holdout-alarm-equivalence.v1",
+  "status": "PASS"
+}

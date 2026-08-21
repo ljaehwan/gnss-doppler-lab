@@ -1,0 +1,46 @@
+{
+  "authoritative_threshold_policy": "COMMITTED_R2_LITERALS_ONLY",
+  "domains": {
+    "OAK": {
+      "absolute_difference": 3.872457909892546e-13,
+      "authoritative_threshold_retained": -21.705587048010322,
+      "committed_q99": -21.705587048010322,
+      "domain": "OAK",
+      "finite": true,
+      "fit_and_independent_q99_equal": true,
+      "fit_domain_q99": -21.705587048009935,
+      "independent_higher_q99": -21.705587048009935,
+      "numeric_sanity_pass": true,
+      "quantile": 0.99,
+      "quantile_method": "higher",
+      "recomputed_q99": -21.705587048009935,
+      "sanity_bound": 2.1705587048010323e-11,
+      "status": "PASS"
+    },
+    "TEX": {
+      "absolute_difference": 1.7408297026122455e-13,
+      "authoritative_threshold_retained": -21.942672917134093,
+      "committed_q99": -21.942672917134093,
+      "domain": "TEX",
+      "finite": true,
+      "fit_and_independent_q99_equal": true,
+      "fit_domain_q99": -21.94267291713392,
+      "independent_higher_q99": -21.94267291713392,
+      "numeric_sanity_pass": true,
+      "quantile": 0.99,
+      "quantile_method": "higher",
+      "recomputed_q99": -21.94267291713392,
+      "sanity_bound": 2.1942672917134092e-11,
+      "status": "PASS"
+    }
+  },
+  "quantile_source": {
+    "numpy_quantile_methods_in_scientific_code": [
+      "higher"
+    ],
+    "required_method": "higher",
+    "status": "PASS"
+  },
+  "schema": "gnss-doppler-lab.crid-r4a-threshold-numeric-comparison.v1",
+  "status": "PASS"
+}

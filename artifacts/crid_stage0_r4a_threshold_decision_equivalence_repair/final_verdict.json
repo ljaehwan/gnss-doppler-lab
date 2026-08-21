@@ -1,0 +1,20 @@
+{
+  "attack_bytes_read": 0,
+  "authoritative_thresholds": {
+    "OAK": -21.705587048010322,
+    "TEX": -21.942672917134093
+  },
+  "control_replays_executed": 0,
+  "control_scores_read": 0,
+  "next_state": "READY_TO_REPEAT_CRID_PHASE_A",
+  "phase_a_executed": false,
+  "phase_b_executed": false,
+  "r4_threshold_status_preserved": "INCONCLUSIVE_THRESHOLD_BINDING",
+  "r4_verdict_preserved": "INCONCLUSIVE_CRID_PHASE_A_EXECUTION_OR_PROVENANCE",
+  "schema": "gnss-doppler-lab.crid-r4a-final-verdict.v1",
+  "status": "PASS",
+  "tamper_tests": "PASS",
+  "tests": "PASS",
+  "thresholds_replaced": false,
+  "verdict": "THRESHOLD_DECISION_EQUIVALENCE_REPAIR_PASS"
+}
