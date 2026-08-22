@@ -1,0 +1,17 @@
+Script started on 2026-08-23 01:35:43+09:00 [COMMAND="/usr/bin/python3 scripts/verify_qset_gnss_stage0a_r2_terminal_inconclusive.py && env PYTHONPATH=src /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_qset_gnss_stage0a_r2.py tests/test_qset_gnss_stage0a_r2_execution_repair_v4.py tests/test_qset_gnss_stage0a_r2_execution_repair_v5.py tests/test_qset_gnss_stage0a_r2_execution_repair_v6.py tests/test_qset_gnss_stage0a_r2_execution_repair_v7.py tests/test_qset_gnss_stage0a_r2_terminal_inconclusive.py" <not executed on terminal>]
+{
+  "attack_score_computed": false,
+  "manifest_files": 32,
+  "stage0b_authorized": false,
+  "status": "PASS",
+  "tracked_prns_ss1": [
+    9,
+    30,
+    36
+  ],
+  "verdict": "INCONCLUSIVE_QSET_DATA_FORMAT_OR_RECEIVER_SUPPORT"
+}
+...............................                                          [100%]
+31 passed in 2.49s
+
+Script done on 2026-08-23 01:35:47+09:00 [COMMAND_EXIT_CODE="0"]
