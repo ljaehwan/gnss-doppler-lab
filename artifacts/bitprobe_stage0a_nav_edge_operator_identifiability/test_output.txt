@@ -1,2 +1,5 @@
 ....                                                                     [100%]
-4 passed in 1.21s
+4 passed in 1.30s
+deterministic_reproduction=PASS byte_identical_files=5/5
+manifest_source_code_config_tensor_guard_tamper=PASS tests=7/7
+post_result_executable_changes=0

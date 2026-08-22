@@ -1,0 +1,52 @@
+{
+  "comparisons": {
+    "between_prn_metrics.csv": {
+      "byte_identical": true,
+      "committed_candidate_sha256": "163f5eca8fea4bc1be0e486d8fe4982877bb9358cf85dce2920320b246642fdd",
+      "recomputed_sha256": "163f5eca8fea4bc1be0e486d8fe4982877bb9358cf85dce2920320b246642fdd"
+    },
+    "flip_no_flip_metrics.csv": {
+      "byte_identical": true,
+      "committed_candidate_sha256": "f2a348c85819488fed7a3b49f80a154b1fe5bb058800a4f1b55370d3e2e34dbb",
+      "recomputed_sha256": "f2a348c85819488fed7a3b49f80a154b1fe5bb058800a4f1b55370d3e2e34dbb"
+    },
+    "nuisance_metrics.csv": {
+      "byte_identical": true,
+      "committed_candidate_sha256": "212b3b9527d6a9ec621b9ebe9196ee75597b8291712ab0ac86d66bf7cca54400",
+      "recomputed_sha256": "212b3b9527d6a9ec621b9ebe9196ee75597b8291712ab0ac86d66bf7cca54400"
+    },
+    "split_half_metrics.csv": {
+      "byte_identical": true,
+      "committed_candidate_sha256": "7e716fae992d6fbd0f3a2ece79e16c215119e8c4568eda6e8f62070ef40da73b",
+      "recomputed_sha256": "7e716fae992d6fbd0f3a2ece79e16c215119e8c4568eda6e8f62070ef40da73b"
+    },
+    "synthetic_control_metrics.csv": {
+      "byte_identical": true,
+      "committed_candidate_sha256": "90148f25daa135ab18942b4f03602b8685663a74f104fc367f50f6183c070415",
+      "recomputed_sha256": "90148f25daa135ab18942b4f03602b8685663a74f104fc367f50f6183c070415"
+    }
+  },
+  "frozen_analyzer_reexecuted": true,
+  "receiver_confound_recomputed": {
+    "common_kernel_is_spoofer_claim": false,
+    "receiver_linear_false_positive_rate": 0.0,
+    "receiver_linear_not_misclassified": true,
+    "receiver_nonlinear_indistinguishable_from_transmitter_common_nonlinearity": true,
+    "receiver_nonlinear_median_statistic": 1.8506687309814378,
+    "single_receiver_identity": "h * sum(s_i) = sum(h * s_i)",
+    "source_localization_available": false
+  },
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-deterministic-reproduction.v1",
+  "source": "frozen SSD edge tensor only; no raw or TRACE reopen",
+  "status": "PASS",
+  "synthetic_gate_recomputed": {
+    "calibration_seed_count": 16,
+    "common_vs_separate_auc": 1.0,
+    "evaluation_seed_count": 16,
+    "gate_pass": true,
+    "null_false_positive_rate": 0.046875,
+    "null_threshold": 0.25928214333737815,
+    "pauc": null,
+    "weak_levels_same_direction": 3
+  }
+}

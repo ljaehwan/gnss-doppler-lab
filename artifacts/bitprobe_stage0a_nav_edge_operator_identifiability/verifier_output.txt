@@ -1,5 +1,14 @@
 {
-  "executable_count": 3,
-  "mode": "freeze",
-  "status": "PASS"
+  "edge_inventory_rows": 5990,
+  "forbidden_access_operations": 0,
+  "manifest_files": 28,
+  "mode": "final",
+  "self_test": {
+    "status": "PASS",
+    "tamper_tests": 3
+  },
+  "split_metric_rows": 10,
+  "status": "PASS",
+  "support_rows": 10,
+  "verdict": "INCONCLUSIVE_BITPROBE_STAGE0A_EXECUTION_OR_PROVENANCE"
 }

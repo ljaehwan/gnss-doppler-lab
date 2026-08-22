@@ -1,0 +1,3 @@
+dataset,eligible_prns,median_same_similarity,median_different_similarity,same_minus_different,bootstrap_95_lower,exact_prn_label_permutation_p,median_within_between_distance_ratio,nearest_kernel_prn_retrieval_diagnostic
+TEXBAT.cleanStatic,5,0.4422987386946777,0.4371787589881091,0.005119979706568578,0.11203220586311341,0.21666666666666667,0.9695678312980616,0.4
+OAKBAT.cleanStatic,5,0.7246080377972713,0.6883421601379711,0.03626587765930023,0.05616973948501659,0.19166666666666668,0.9887695364701798,0.0

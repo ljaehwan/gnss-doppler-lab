@@ -1,0 +1,9 @@
+{
+  "common_kernel_is_spoofer_claim": false,
+  "receiver_linear_false_positive_rate": 0.0,
+  "receiver_linear_not_misclassified": true,
+  "receiver_nonlinear_indistinguishable_from_transmitter_common_nonlinearity": true,
+  "receiver_nonlinear_median_statistic": 1.8506687309814378,
+  "single_receiver_identity": "h * sum(s_i) = sum(h * s_i)",
+  "source_localization_available": false
+}

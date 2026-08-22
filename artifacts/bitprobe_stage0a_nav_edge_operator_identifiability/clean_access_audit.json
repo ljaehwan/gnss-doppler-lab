@@ -1,10 +1,11 @@
 {
-  "bytes_read": 0,
-  "hashes": 0,
+  "bytes_read": 57744166496,
+  "hashes": 12,
   "mmaps": 0,
-  "opens": 0,
-  "phase": "PRE_ACCESS_FREEZE",
+  "opens": 5980,
+  "phase": "POST_FREEZE_CLEAN_ONLY_EXECUTION",
+  "raw_window_reads_only": true,
   "schema": "gnss-doppler-lab.bitprobe-stage0a-clean-access-audit.v1",
-  "stats": 0,
+  "stats": 22,
   "status": "PASS"
 }

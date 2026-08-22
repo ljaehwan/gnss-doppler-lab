@@ -1,0 +1,11 @@
+dataset,prn,candidate_flip,valid_flip,first_half_flip,second_half_flip,candidate_no_flip,valid_no_flip,first_half_no_flip,second_half_no_flip,support_gate
+TEXBAT.cleanStatic,3,299,299,149,150,300,299,149,150,PASS
+TEXBAT.cleanStatic,13,301,300,150,150,298,298,149,149,PASS
+TEXBAT.cleanStatic,16,295,294,147,147,304,304,152,152,PASS
+TEXBAT.cleanStatic,19,303,303,151,152,296,294,147,147,PASS
+TEXBAT.cleanStatic,30,289,289,144,145,310,310,155,155,PASS
+OAKBAT.cleanStatic,10,297,297,148,149,302,301,150,151,PASS
+OAKBAT.cleanStatic,11,281,280,140,140,318,318,159,159,PASS
+OAKBAT.cleanStatic,21,301,282,141,141,298,275,137,138,PASS
+OAKBAT.cleanStatic,24,289,289,144,145,310,310,155,155,PASS
+OAKBAT.cleanStatic,27,301,301,150,151,298,298,149,149,PASS

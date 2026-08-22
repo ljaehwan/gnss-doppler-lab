@@ -1,0 +1,93 @@
+{
+  "attack_evaluation_performed": false,
+  "base_sha": "2cb81593783cb4c8db2d0d38ecc71d9850fafadf",
+  "claims": {
+    "common_kernel_is_spoofer": false,
+    "source_localization_available": false,
+    "spoofing_detector_validated": false
+  },
+  "completed_utc": "2026-08-22T03:50:59.000940+00:00",
+  "dataset_gates": {
+    "OAKBAT.cleanStatic": {
+      "between_prn_separability_pass": false,
+      "coherence_bootstrap_95_lower": 0.6866469642735291,
+      "eligible_prns": 5,
+      "flip_specificity_pass": false,
+      "median_same_prn_coherence": 0.7246080377972713,
+      "moderate_nuisance_pass": false,
+      "real_data_gates_1_through_6_pass": false,
+      "reproducibility_pass": true,
+      "strong_nuisance_pass": true,
+      "support_pass": true,
+      "technically_complete": true
+    },
+    "TEXBAT.cleanStatic": {
+      "between_prn_separability_pass": false,
+      "coherence_bootstrap_95_lower": 0.4755529157081772,
+      "eligible_prns": 5,
+      "flip_specificity_pass": false,
+      "median_same_prn_coherence": 0.4422987386946777,
+      "moderate_nuisance_pass": false,
+      "real_data_gates_1_through_6_pass": false,
+      "reproducibility_pass": false,
+      "strong_nuisance_pass": true,
+      "support_pass": true,
+      "technically_complete": true
+    }
+  },
+  "edge_tensor_binding": {
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/bitprobe-stage0a-nav-edge-operator-identifiability/clean_nav_edge_residual_tensors.npz",
+    "sha256": "b6df7a0b158b25166863959b49b05c165cf1d310d8609aad67e13a3a120c96da",
+    "size_bytes": 8787673
+  },
+  "forbidden_attack_access": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "freeze_sha": "b206ec39a671d8b0dd994757426017b988a47ce6",
+  "next_state": "NOT_AUTHORIZED",
+  "nuisance_gates": {
+    "OAKBAT.cleanStatic": {
+      "moderate_gate_pass": false,
+      "moderate_median_similarity": 0.944350653363402,
+      "receiver_filter_not_source_evidence": true,
+      "strong_gate_pass": true,
+      "strong_median_similarity": 0.9999999999999999
+    },
+    "TEXBAT.cleanStatic": {
+      "moderate_gate_pass": false,
+      "moderate_median_similarity": 0.9406169878357126,
+      "receiver_filter_not_source_evidence": true,
+      "strong_gate_pass": true,
+      "strong_median_similarity": 0.9999999999999999
+    }
+  },
+  "post_result_method_gate_or_executable_changes": 0,
+  "receiver_confound": {
+    "common_kernel_is_spoofer_claim": false,
+    "receiver_linear_false_positive_rate": 0.0,
+    "receiver_linear_not_misclassified": true,
+    "receiver_nonlinear_indistinguishable_from_transmitter_common_nonlinearity": true,
+    "receiver_nonlinear_median_statistic": 1.8506687309814378,
+    "single_receiver_identity": "h * sum(s_i) = sum(h * s_i)",
+    "source_localization_available": false
+  },
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-final-verdict.v1",
+  "stage": "BITPROBE_GNSS_STAGE0A_CLEAN_PHYSICAL_IDENTIFIABILITY",
+  "started_utc": "2026-08-22T03:43:26.751196+00:00",
+  "status": "PASS",
+  "synthetic_gate": {
+    "calibration_seed_count": 16,
+    "common_vs_separate_auc": 1.0,
+    "evaluation_seed_count": 16,
+    "gate_pass": true,
+    "null_false_positive_rate": 0.046875,
+    "null_threshold": 0.25928214333737815,
+    "pauc": null,
+    "weak_levels_same_direction": 3
+  },
+  "verdict": "BITPROBE_STAGE0A_EDGE_OPERATOR_NOT_IDENTIFIABLE"
+}

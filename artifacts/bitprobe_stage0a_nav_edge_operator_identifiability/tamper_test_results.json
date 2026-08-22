@@ -1,0 +1,15 @@
+{
+  "post_result_executable_changes": 0,
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-tamper-tests.v1",
+  "status": "PASS",
+  "test_count": 7,
+  "tests": {
+    "configuration_binding_matches": true,
+    "configuration_gate_tamper_detected": true,
+    "executable_tamper_detected": true,
+    "forbidden_path_rejected_before_operation": true,
+    "large_tensor_tamper_detected": true,
+    "manifest_file_tamper_detected": true,
+    "source_binding_tamper_detected": true
+  }
+}

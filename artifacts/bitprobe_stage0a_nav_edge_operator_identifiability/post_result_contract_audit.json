@@ -1,0 +1,23 @@
+{
+  "audit_scope": "read-only inspection of frozen executable after deterministic reproduction",
+  "findings": [
+    {
+      "contract": "chronological first/second halves independently within PRN; contiguous 10-edge block bootstrap",
+      "id": "BOOTSTRAP_CHRONOLOGICAL_HALF_MIXING",
+      "impact": "bootstrap confidence limits are not authoritative under the preregistered split contract",
+      "implementation": "resamples blocks from the full per-PRN sequence before splitting the resampled sequence into halves"
+    },
+    {
+      "contract": "exact permutation of second-half PRN kernel labels using the same same-minus-different statistic",
+      "id": "PRN_PERMUTATION_STATISTIC_MISMATCH",
+      "impact": "reported exact permutation p-values are not authoritative",
+      "implementation": "permuted different set contains only mismatched assigned diagonal entries rather than the frozen full off-diagonal comparison set"
+    }
+  ],
+  "initial_locked_analysis_preserved_as": "initial_locked_analysis_result.json",
+  "method_gate_or_executable_changes_after_results": 0,
+  "repair_attempted": false,
+  "required_fail_closed_verdict": "INCONCLUSIVE_BITPROBE_STAGE0A_EXECUTION_OR_PROVENANCE",
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-post-result-contract-audit.v1",
+  "status": "FAIL_CLOSED"
+}

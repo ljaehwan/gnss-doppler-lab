@@ -1,15 +1,40 @@
 {
-  "file_count": 9,
+  "file_count": 28,
   "files": [
     {
       "path": "README.md",
-      "sha256": "145c98ff141922c7f98ad5b17b7a47400dfdef3654102af39a41809ff054b5bb",
-      "size_bytes": 636
+      "sha256": "b70251d64efe22b91d25c332eea00bd22a482d630c929abf7bd899d7e1b2a5fe",
+      "size_bytes": 1187
+    },
+    {
+      "path": "between_prn_metrics.csv",
+      "sha256": "163f5eca8fea4bc1be0e486d8fe4982877bb9358cf85dce2920320b246642fdd",
+      "size_bytes": 505
     },
     {
       "path": "clean_access_audit.json",
-      "sha256": "65b8216a2cab418c7b7666ecc38201b89197da00a5696610fdbf13bb51de83c1",
-      "size_bytes": 202
+      "sha256": "75bc3d80a8762f1d163bcf367f5f1a4b717981919898b5bbda1edab23610ea4c",
+      "size_bytes": 265
+    },
+    {
+      "path": "deterministic_reproduction.json",
+      "sha256": "85d2ca96d03ddae86d1a9a0a07aef25146cc56eb70f3251f02bbf276ca85b651",
+      "size_bytes": 2312
+    },
+    {
+      "path": "edge_operator_summary.png",
+      "sha256": "cf795106952cc1185e2408f15495327d463d31af2a71843d1b097d6c57012c25",
+      "size_bytes": 47301
+    },
+    {
+      "path": "edge_tensor_binding.json",
+      "sha256": "5de053879a136d1c8eabec77952e970063683699fc8e92b6880a54b76dd64d37",
+      "size_bytes": 261
+    },
+    {
+      "path": "exclusion_audit.json",
+      "sha256": "b920c08ea90febb57c50eae086d87701edaaf0504ccfff8dbb8ad43f726b6a87",
+      "size_bytes": 216
     },
     {
       "path": "execution_freeze.json",
@@ -17,9 +42,49 @@
       "size_bytes": 2978
     },
     {
+      "path": "final_verdict.json",
+      "sha256": "a12c87795a9d8ceac69c16c1dba63a481befb7c84b67a08dced221cd586244dc",
+      "size_bytes": 3781
+    },
+    {
+      "path": "flip_no_flip_metrics.csv",
+      "sha256": "f2a348c85819488fed7a3b49f80a154b1fe5bb058800a4f1b55370d3e2e34dbb",
+      "size_bytes": 272
+    },
+    {
       "path": "forbidden_attack_access_audit.json",
       "sha256": "f4541100b0710bf7e53fb7e8a1422f1d132fed5116e8ce96ce62dfaf6ad5a432",
       "size_bytes": 678
+    },
+    {
+      "path": "freeze_commit.json",
+      "sha256": "eab0d1f7c9e43e3321a918dc60c2be7ed20532e1b31fd97b5a204f288bbe13a6",
+      "size_bytes": 313
+    },
+    {
+      "path": "initial_locked_analysis_result.json",
+      "sha256": "829f878f9a837ae5c8b9054c61eb1beb16ce45dddf7c9e50f0f5fba0b26699cc",
+      "size_bytes": 3387
+    },
+    {
+      "path": "nav_edge_inventory.csv.gz",
+      "sha256": "400af60590a39e5932d9ce856aa853c3b89f261dc2fa80038fd620bc63e313e5",
+      "size_bytes": 365743
+    },
+    {
+      "path": "nuisance_metrics.csv",
+      "sha256": "212b3b9527d6a9ec621b9ebe9196ee75597b8291712ab0ac86d66bf7cca54400",
+      "size_bytes": 2258
+    },
+    {
+      "path": "per_prn_support.csv",
+      "sha256": "0155f2184feeac5373e41eb4c603c96f3c3b2dd6fdb7d2eac492dea1ab5c498c",
+      "size_bytes": 744
+    },
+    {
+      "path": "post_result_contract_audit.json",
+      "sha256": "ca3de473c868322d305c00f3e8adce82007d19d1603534c89e3be2e7990635f4",
+      "size_bytes": 1309
     },
     {
       "path": "preregistration.json",
@@ -32,19 +97,49 @@
       "size_bytes": 362
     },
     {
+      "path": "receiver_confound_audit.json",
+      "sha256": "c0fec083cf05c5022324e6f912e6e724f40ee5dfa1f8248329b3890f054d6caa",
+      "size_bytes": 386
+    },
+    {
+      "path": "shortcut_audit.json",
+      "sha256": "86e96d1a830ff4013f6482fbb8aace72ff386b714381f19ffae1af820a1d9e6a",
+      "size_bytes": 274
+    },
+    {
       "path": "source_binding.json",
       "sha256": "f2cc2a552f147ab26c28e45b88a151e7036c15652cbda7cd4c54945148e207e0",
       "size_bytes": 7393
     },
     {
+      "path": "split_half_metrics.csv",
+      "sha256": "7e716fae992d6fbd0f3a2ece79e16c215119e8c4568eda6e8f62070ef40da73b",
+      "size_bytes": 1287
+    },
+    {
+      "path": "synthetic_control_metrics.csv",
+      "sha256": "90148f25daa135ab18942b4f03602b8685663a74f104fc367f50f6183c070415",
+      "size_bytes": 4032
+    },
+    {
+      "path": "synthetic_operator_controls.png",
+      "sha256": "f7a1ae23e43ff081c0e57d5c9b09c9d08e6b9f7b5e61ca488164bd8240a16f90",
+      "size_bytes": 33205
+    },
+    {
+      "path": "tamper_test_results.json",
+      "sha256": "64d126a967a18b6e3d7bdef7d34e5ca5307157a22365e3f3ea2c48e41612d81d",
+      "size_bytes": 477
+    },
+    {
       "path": "test_output.txt",
-      "sha256": "0f359b65eb49e1c16fc9873c3238e97ec9b08b15eeb25ade92b23737ec985269",
-      "size_bytes": 98
+      "sha256": "7a56702a86f26a7e191b1467887bbd4d8d8df2a9b1e94fa0134e3fccd46c681d",
+      "size_bytes": 251
     },
     {
       "path": "verifier_output.txt",
-      "sha256": "b8f43b79986c8a237bfa88d6a4dc3d6a19ed9eeb0b8c48fe8cac229acc883f45",
-      "size_bytes": 68
+      "sha256": "6321500995197e948681ccc1818844786f56874769b78b6072938df62e92511d",
+      "size_bytes": 318
     }
   ],
   "schema": "gnss-doppler-lab.bitprobe-stage0a-artifact-manifest.v1",

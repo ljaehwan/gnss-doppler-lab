@@ -10,3 +10,7 @@ The method, edge support, nuisance suite, synthetic controls, statistics, and
 gates were preregistered and pushed before any clean raw edge extraction.
 Large edge tensors remain on the bound SSD output root; Git contains compact
 summaries and hashes only.
+
+## Final disposition
+
+The locked analysis completed with full support and initially returned BITPROBE_STAGE0A_EDGE_OPERATOR_NOT_IDENTIFIABLE. Post-result contract review found that the frozen bootstrap mixed the preregistered chronological halves and that the PRN-permutation comparison statistic was not shape-identical to the observed statistic. The original output is preserved, no executable or gate was changed, and the terminal verdict is therefore fail-closed INCONCLUSIVE_BITPROBE_STAGE0A_EXECUTION_OR_PROVENANCE. Stage-0B is not authorized.

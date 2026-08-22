@@ -1,0 +1,11 @@
+{
+  "candidate_count": 5990,
+  "exclusion_counts": {
+    "AGC_OUTLIER": 7,
+    "NONE": 5941,
+    "TRACKING_OR_LOCK": 42
+  },
+  "frozen_rules_changed_after_results": false,
+  "status": "PASS",
+  "valid_count": 5941
+}
