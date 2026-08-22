@@ -1,0 +1,10 @@
+{
+  "commands": [
+    "/usr/bin/python3 scripts/run_qset_gnss_stage0a_r2a.py run-variants",
+    "/usr/bin/python3 scripts/run_qset_gnss_stage0a_r2a.py clean-regression --selected <selected>",
+    "/usr/bin/python3 scripts/verify_qset_gnss_stage0a_r2a.py"
+  ],
+  "overwrite": false,
+  "status": "FROZEN_PRE_EXECUTION",
+  "worker_count": 1
+}

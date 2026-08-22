@@ -1,0 +1,126 @@
+{
+  "base_sha": "0df61a01485e6d7ac5cee21b861533541ec29859",
+  "branch": "research/qset-gnss-stage0a-r2a-ss1-receiver-support-audit",
+  "clean_regression": "selected variant only, C-1/C-3, existing R2 model/threshold, no refit",
+  "executable_bindings": [
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/src/gnss_doppler_lab/qset_stage0a_r2a.py",
+      "sha256": "4317dbfd19495f8c49dba5902dddb0faf542672618f1617b5f1e030a005a9e14",
+      "size_bytes": 20238
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/scripts/run_qset_gnss_stage0a_r2a.py",
+      "sha256": "80a205068bedcca86bb19b007c1f0f3cc9204de465848f9fa9e19b0976b4f881",
+      "size_bytes": 4157
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/scripts/verify_qset_gnss_stage0a_r2a.py",
+      "sha256": "9caf60877d20be35f2b99992d2b02aaf8f6f1b33d1f0bc72204b68ebec340301",
+      "size_bytes": 2655
+    },
+    {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/tests/test_qset_gnss_stage0a_r2a.py",
+      "sha256": "eb60dd011d34826c8e768d5806cf7dd5cc417441984ca0336b9d11e0ceeaefc3",
+      "size_bytes": 1636
+    }
+  ],
+  "execution_order": [
+    "V0_REUSE",
+    "V1",
+    "V2",
+    "V3"
+  ],
+  "inputs": {
+    "R2_C1_C3_SS1_outputs_read_only": {
+      "C-1": "b01c45a8c435c1fd3634346ae685a31a3edcb3e60510be2850e39d6c85e72384",
+      "C-3": "e6205442e56b73d8ea92a525ff17ef97fcbed5bd0b082decb74648e48d5ad446",
+      "SS-1": "45e353a3e1d51f719ec746ee5f20b6c644f06d276456d8bcb0860d6d897e1e4c"
+    },
+    "SS1_decoded_sha256": "b33689e2cdbbf750ce1e9bfb19a244b85f8e299a9a3f7cf2f52d63be146587f0",
+    "receiver_sha256": "3ed059f699201807cb86eb54a24ba00fde7e248f37a8081306cbc76d6be1b06f"
+  },
+  "objective": "distinguish SS-1 dataset support limit from acquisition/channel scheduling limitation",
+  "prohibited": [
+    "spoofing score",
+    "morphology",
+    "ROC/AUC",
+    "threshold/model/feature/window/aggregator/persistence changes",
+    "minimum-five relaxation",
+    "SS-3/SS-5/SS-11/SS-12/SS-13 raw access"
+  ],
+  "result_driven_variants_forbidden": true,
+  "schema": "gnss-doppler-lab.qset-stage0a-r2a-preregistration.v1",
+  "score_operations_before_selection": 0,
+  "selection_order": [
+    "gate pass",
+    "maximum M>=5 windows",
+    "maximum median panel",
+    "minimum churn",
+    "closest to baseline"
+  ],
+  "source_bindings": [
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/receiver-source-v7/src/core/receiver/gnss_flowgraph.cc",
+      "sha256": "79892cdc95b8d924b9ad4f349aef9be9297aa37851ddf47d890dc65a3ea9c209",
+      "size_bytes": 123795
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/receiver-source-v7/src/algorithms/acquisition/adapters/galileo_e1_pcps_ambiguous_acquisition.cc",
+      "sha256": "513f2d7413e94a9b4ae8bf30f0a8be4a3c32ac9dfa9d478a0e96751cb10fcaf2",
+      "size_bytes": 8252
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/receiver-source-v7/src/algorithms/acquisition/libs/acq_conf.cc",
+      "sha256": "36daf9e6c71edfd170f0ff6ccf373541e5820a15f11a883a775e3e0984004d31",
+      "size_bytes": 4619
+    }
+  ],
+  "status": "FROZEN_PRE_SS1_VARIANT_EXECUTION",
+  "success_gate": {
+    "cadence_failures": 0,
+    "causal_failures": 0,
+    "finite_failures": 0,
+    "m_ge_5_windows_minimum": 60,
+    "prn9_stable_windows_minimum": 60,
+    "real_valid_tracking": true,
+    "terminal_drain": true
+  },
+  "variants": [
+    {
+      "coherent_ms": 4,
+      "execution": "REUSE_VERIFIED_R2_BASELINE",
+      "in_acquisition": 4,
+      "pfa": "0.00001",
+      "support_basis": "Channels.in_acquisition is clamped to channel count; PFA source range is (0,1]; coherent time must be a 4-ms multiple and 8-ms adapter test exists",
+      "supported": true,
+      "variant": "V0"
+    },
+    {
+      "coherent_ms": 4,
+      "execution": "RUN",
+      "in_acquisition": 12,
+      "pfa": "0.00001",
+      "support_basis": "Channels.in_acquisition is clamped to channel count; PFA source range is (0,1]; coherent time must be a 4-ms multiple and 8-ms adapter test exists",
+      "supported": true,
+      "variant": "V1"
+    },
+    {
+      "coherent_ms": 4,
+      "execution": "RUN",
+      "in_acquisition": 12,
+      "pfa": "0.0001",
+      "support_basis": "Channels.in_acquisition is clamped to channel count; PFA source range is (0,1]; coherent time must be a 4-ms multiple and 8-ms adapter test exists",
+      "supported": true,
+      "variant": "V2"
+    },
+    {
+      "coherent_ms": 8,
+      "execution": "RUN",
+      "in_acquisition": 12,
+      "pfa": "0.00001",
+      "support_basis": "Channels.in_acquisition is clamped to channel count; PFA source range is (0,1]; coherent time must be a 4-ms multiple and 8-ms adapter test exists",
+      "supported": true,
+      "variant": "V3"
+    }
+  ]
+}

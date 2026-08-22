@@ -1,0 +1,29 @@
+{
+  "status": "FROZEN",
+  "variants": {
+    "V0": {
+      "coherent_ms": 4,
+      "execution": "REUSE_VERIFIED_R2_BASELINE",
+      "in_acquisition": 4,
+      "pfa": "0.00001"
+    },
+    "V1": {
+      "coherent_ms": 4,
+      "execution": "RUN",
+      "in_acquisition": 12,
+      "pfa": "0.00001"
+    },
+    "V2": {
+      "coherent_ms": 4,
+      "execution": "RUN",
+      "in_acquisition": 12,
+      "pfa": "0.0001"
+    },
+    "V3": {
+      "coherent_ms": 8,
+      "execution": "RUN",
+      "in_acquisition": 12,
+      "pfa": "0.00001"
+    }
+  }
+}

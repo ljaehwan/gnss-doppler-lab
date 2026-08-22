@@ -1,0 +1,960 @@
+{
+  "events": {
+    "acquisition_success_prns": [
+      9,
+      30,
+      36
+    ],
+    "failure_observability_reason": "GNSSFlowgraph acquisition failure and reassignment messages are DLOG(INFO), compiled out in the frozen Release receiver",
+    "individual_failed_acquisition_attempts_observable": false,
+    "initial_assignments": [
+      {
+        "channel": 0,
+        "prn": 1
+      },
+      {
+        "channel": 1,
+        "prn": 2
+      },
+      {
+        "channel": 2,
+        "prn": 3
+      },
+      {
+        "channel": 3,
+        "prn": 4
+      },
+      {
+        "channel": 4,
+        "prn": 5
+      },
+      {
+        "channel": 5,
+        "prn": 6
+      },
+      {
+        "channel": 6,
+        "prn": 7
+      },
+      {
+        "channel": 7,
+        "prn": 8
+      },
+      {
+        "channel": 8,
+        "prn": 9
+      },
+      {
+        "channel": 9,
+        "prn": 10
+      },
+      {
+        "channel": 10,
+        "prn": 11
+      },
+      {
+        "channel": 11,
+        "prn": 12
+      }
+    ],
+    "loss_of_lock_events": 0,
+    "preamble_prns": [
+      9,
+      30,
+      36
+    ],
+    "program_ended": true,
+    "synchronization_timeout_events": 0,
+    "telemetry_prns": [
+      9,
+      30,
+      36
+    ],
+    "terminal_drain": true,
+    "tracking_starts": [
+      {
+        "channel": 3,
+        "prn": 9
+      },
+      {
+        "channel": 10,
+        "prn": 36
+      },
+      {
+        "channel": 7,
+        "prn": 30
+      }
+    ]
+  },
+  "execution": "REUSED_VERIFIED_R2_BASELINE",
+  "parameters": {
+    "coherent_ms": 4,
+    "execution": "REUSE_VERIFIED_R2_BASELINE",
+    "in_acquisition": 4,
+    "pfa": "0.00001"
+  },
+  "r2_output_set_sha256": "45e353a3e1d51f719ec746ee5f20b6c644f06d276456d8bcb0860d6d897e1e4c",
+  "receiver": {
+    "config_sha256": "d5004a671e28bbf97b1ddc03efff379b62305f84b3bc8bd1ea3b9c2f322a51a1",
+    "drained_samples": 599996606,
+    "exit_code": "NOT_PERSISTED_BEFORE_FAIL_CLOSED_EXCEPTION",
+    "program_ended": true,
+    "sha256": "3ed059f699201807cb86eb54a24ba00fde7e248f37a8081306cbc76d6be1b06f",
+    "terminal_drain": true
+  },
+  "schema": "gnss-doppler-lab.qset-stage0a-r2a-preserved-baseline.v1",
+  "status": "PASS",
+  "support": {
+    "cadence_failures": 1361,
+    "causal_failures": 0,
+    "files": [
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_0.bin",
+        "record_count": 0,
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_1.bin",
+        "record_count": 0,
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_10.bin",
+        "prns": [
+          36
+        ],
+        "record_count": 35232,
+        "sha256": "33ebc4d443ef48998fbe83bcdb204dbbd1400edc0a7f336ab1beb0eeffbc9724",
+        "size_bytes": 14656704,
+        "status": "PASS"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_11.bin",
+        "record_count": 0,
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_2.bin",
+        "record_count": 0,
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_3.bin",
+        "prns": [
+          9
+        ],
+        "record_count": 37391,
+        "sha256": "2e2ebeecedfce2862959f4c5af0f5ab9dffa8c0b1b7be63be2e2ead18e45f939",
+        "size_bytes": 15554848,
+        "status": "PASS"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_4.bin",
+        "record_count": 0,
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_5.bin",
+        "record_count": 0,
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_6.bin",
+        "record_count": 0,
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_7.bin",
+        "prns": [
+          30
+        ],
+        "record_count": 33621,
+        "sha256": "49ecf00da89753659bb789e431fcb2c527f1cef8c1d02d1fcb299e1c8fd32d93",
+        "size_bytes": 13986528,
+        "status": "PASS"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_8.bin",
+        "record_count": 0,
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_9.bin",
+        "record_count": 0,
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      }
+    ],
+    "finite_failures": 0,
+    "longest_m_ge_5_run": 0,
+    "m_ge_5_windows": 0,
+    "median_panel_size": 3.0,
+    "panel_churn": 3,
+    "panels": {
+      "1": [],
+      "5": [
+        9
+      ],
+      "6": [
+        9
+      ],
+      "7": [
+        9
+      ],
+      "8": [
+        9
+      ],
+      "9": [
+        9
+      ],
+      "10": [
+        9
+      ],
+      "11": [
+        9
+      ],
+      "12": [
+        9,
+        36
+      ],
+      "13": [
+        9,
+        36
+      ],
+      "14": [
+        9,
+        36
+      ],
+      "15": [
+        9,
+        36
+      ],
+      "16": [
+        9,
+        36
+      ],
+      "17": [
+        9,
+        36
+      ],
+      "18": [
+        9,
+        36
+      ],
+      "19": [
+        9,
+        30,
+        36
+      ],
+      "20": [
+        9,
+        30,
+        36
+      ],
+      "21": [
+        9,
+        30,
+        36
+      ],
+      "22": [
+        9,
+        30,
+        36
+      ],
+      "23": [
+        9,
+        30,
+        36
+      ],
+      "24": [
+        9,
+        30,
+        36
+      ],
+      "25": [
+        9,
+        30,
+        36
+      ],
+      "26": [
+        9,
+        30,
+        36
+      ],
+      "27": [
+        9,
+        30,
+        36
+      ],
+      "28": [
+        9,
+        30,
+        36
+      ],
+      "29": [
+        9,
+        30,
+        36
+      ],
+      "30": [
+        9,
+        30,
+        36
+      ],
+      "31": [
+        9,
+        30,
+        36
+      ],
+      "32": [
+        9,
+        30,
+        36
+      ],
+      "33": [
+        9,
+        30,
+        36
+      ],
+      "34": [
+        9,
+        30,
+        36
+      ],
+      "35": [
+        9,
+        30,
+        36
+      ],
+      "36": [
+        9,
+        30,
+        36
+      ],
+      "37": [
+        9,
+        30,
+        36
+      ],
+      "38": [
+        9,
+        30,
+        36
+      ],
+      "39": [
+        9,
+        30,
+        36
+      ],
+      "40": [
+        9,
+        30,
+        36
+      ],
+      "41": [
+        9,
+        30,
+        36
+      ],
+      "42": [
+        9,
+        30,
+        36
+      ],
+      "43": [
+        9,
+        30,
+        36
+      ],
+      "44": [
+        9,
+        30,
+        36
+      ],
+      "45": [
+        9,
+        30,
+        36
+      ],
+      "46": [
+        9,
+        30,
+        36
+      ],
+      "47": [
+        9,
+        30,
+        36
+      ],
+      "48": [
+        9,
+        30,
+        36
+      ],
+      "49": [
+        9,
+        30,
+        36
+      ],
+      "50": [
+        9,
+        30,
+        36
+      ],
+      "51": [
+        9,
+        30,
+        36
+      ],
+      "52": [
+        9,
+        30,
+        36
+      ],
+      "53": [
+        9,
+        30,
+        36
+      ],
+      "54": [
+        9,
+        30,
+        36
+      ],
+      "55": [
+        9,
+        30,
+        36
+      ],
+      "56": [
+        9,
+        30,
+        36
+      ],
+      "57": [
+        9,
+        30,
+        36
+      ],
+      "58": [
+        9,
+        30,
+        36
+      ],
+      "59": [
+        9,
+        30,
+        36
+      ],
+      "60": [
+        9,
+        30,
+        36
+      ],
+      "61": [
+        9,
+        30,
+        36
+      ],
+      "62": [
+        9,
+        30,
+        36
+      ],
+      "63": [
+        9,
+        30,
+        36
+      ],
+      "64": [
+        9,
+        30,
+        36
+      ],
+      "65": [
+        9,
+        30,
+        36
+      ],
+      "66": [
+        9,
+        30,
+        36
+      ],
+      "67": [
+        9,
+        30,
+        36
+      ],
+      "68": [
+        9,
+        30,
+        36
+      ],
+      "69": [
+        9,
+        30,
+        36
+      ],
+      "70": [
+        9,
+        30,
+        36
+      ],
+      "71": [
+        9,
+        30,
+        36
+      ],
+      "72": [
+        9,
+        30,
+        36
+      ],
+      "73": [
+        9,
+        30,
+        36
+      ],
+      "74": [
+        9,
+        30,
+        36
+      ],
+      "75": [
+        9,
+        30,
+        36
+      ],
+      "76": [
+        9,
+        30,
+        36
+      ],
+      "77": [
+        9,
+        30,
+        36
+      ],
+      "78": [
+        9,
+        30,
+        36
+      ],
+      "79": [
+        9,
+        30,
+        36
+      ],
+      "80": [
+        9,
+        30,
+        36
+      ],
+      "81": [
+        9,
+        30,
+        36
+      ],
+      "82": [
+        9,
+        30,
+        36
+      ],
+      "83": [
+        9,
+        30,
+        36
+      ],
+      "84": [
+        9,
+        30,
+        36
+      ],
+      "85": [
+        9,
+        30,
+        36
+      ],
+      "86": [
+        9,
+        30,
+        36
+      ],
+      "87": [
+        9,
+        30,
+        36
+      ],
+      "88": [
+        9,
+        30,
+        36
+      ],
+      "89": [
+        9,
+        30,
+        36
+      ],
+      "90": [
+        9,
+        30,
+        36
+      ],
+      "91": [
+        9,
+        30,
+        36
+      ],
+      "92": [
+        9,
+        30,
+        36
+      ],
+      "93": [
+        9,
+        30,
+        36
+      ],
+      "94": [
+        9,
+        30,
+        36
+      ],
+      "95": [
+        9,
+        30,
+        36
+      ],
+      "96": [
+        9,
+        30,
+        36
+      ],
+      "97": [
+        9,
+        30,
+        36
+      ],
+      "98": [
+        9,
+        30,
+        36
+      ],
+      "99": [
+        9,
+        30,
+        36
+      ],
+      "100": [
+        9,
+        30,
+        36
+      ],
+      "101": [
+        9,
+        30,
+        36
+      ],
+      "102": [
+        9,
+        30,
+        36
+      ],
+      "103": [
+        9,
+        30,
+        36
+      ],
+      "104": [
+        9,
+        30,
+        36
+      ],
+      "105": [
+        9,
+        30,
+        36
+      ],
+      "106": [
+        9,
+        30,
+        36
+      ],
+      "107": [
+        9,
+        30,
+        36
+      ],
+      "108": [
+        9,
+        30,
+        36
+      ],
+      "109": [
+        9,
+        30,
+        36
+      ],
+      "110": [
+        9,
+        30,
+        36
+      ],
+      "111": [
+        9,
+        30,
+        36
+      ],
+      "112": [
+        9,
+        30,
+        36
+      ],
+      "113": [
+        9,
+        30,
+        36
+      ],
+      "114": [
+        9,
+        30,
+        36
+      ],
+      "115": [
+        9,
+        30,
+        36
+      ],
+      "116": [
+        9,
+        30,
+        36
+      ],
+      "117": [
+        9,
+        30,
+        36
+      ],
+      "118": [
+        9,
+        30,
+        36
+      ],
+      "119": [
+        9,
+        30,
+        36
+      ],
+      "120": [
+        9,
+        30,
+        36
+      ],
+      "121": [
+        9,
+        30,
+        36
+      ],
+      "122": [
+        9,
+        30,
+        36
+      ],
+      "123": [
+        9,
+        30,
+        36
+      ],
+      "124": [
+        9,
+        30,
+        36
+      ],
+      "125": [
+        9,
+        30,
+        36
+      ],
+      "126": [
+        9,
+        30,
+        36
+      ],
+      "127": [
+        9,
+        30,
+        36
+      ],
+      "128": [
+        9,
+        30,
+        36
+      ],
+      "129": [
+        9,
+        30,
+        36
+      ],
+      "130": [
+        9,
+        30,
+        36
+      ],
+      "131": [
+        9,
+        30,
+        36
+      ],
+      "132": [
+        9,
+        30,
+        36
+      ],
+      "133": [
+        9,
+        30,
+        36
+      ],
+      "134": [
+        9,
+        30,
+        36
+      ],
+      "135": [
+        9,
+        30,
+        36
+      ],
+      "136": [
+        9,
+        30,
+        36
+      ],
+      "137": [
+        9,
+        30,
+        36
+      ],
+      "138": [
+        9,
+        30,
+        36
+      ],
+      "139": [
+        9,
+        30,
+        36
+      ],
+      "140": [
+        9,
+        30,
+        36
+      ],
+      "141": [
+        9,
+        30,
+        36
+      ],
+      "142": [
+        9,
+        30,
+        36
+      ],
+      "143": [
+        9,
+        30,
+        36
+      ],
+      "144": [
+        9,
+        30,
+        36
+      ],
+      "145": [
+        9,
+        30,
+        36
+      ],
+      "146": [
+        9,
+        30,
+        36
+      ],
+      "147": [
+        9,
+        30,
+        36
+      ],
+      "148": [
+        9,
+        30,
+        36
+      ],
+      "149": [
+        9,
+        30,
+        36
+      ]
+    },
+    "per_prn": [
+      {
+        "duration_span_s": 148.4080245,
+        "first_valid_s": 0.590103395,
+        "last_valid_s": 148.998127895,
+        "median_carrier_lock_test": 0.9764739274978638,
+        "median_cn0_db_hz": 41.546871185302734,
+        "prn": 9,
+        "qualifying_one_second_windows": 145,
+        "valid_records": 36177
+      },
+      {
+        "duration_span_s": 133.32791425000002,
+        "first_valid_s": 15.670718895,
+        "last_valid_s": 148.998633145,
+        "median_carrier_lock_test": 0.9330872893333435,
+        "median_cn0_db_hz": 37.35316467285156,
+        "prn": 30,
+        "qualifying_one_second_windows": 131,
+        "valid_records": 32713
+      },
+      {
+        "duration_span_s": 139.8519825,
+        "first_valid_s": 9.145417645,
+        "last_valid_s": 148.997400145,
+        "median_carrier_lock_test": 0.9318738281726837,
+        "median_cn0_db_hz": 37.055097579956055,
+        "prn": 36,
+        "qualifying_one_second_windows": 138,
+        "valid_records": 34468
+      }
+    ],
+    "prn9_stable": true,
+    "prn9_stable_windows": 145,
+    "status": "FAIL",
+    "tracked_prn_count": 3,
+    "tracked_prns": [
+      9,
+      30,
+      36
+    ]
+  },
+  "variant": "V0"
+}

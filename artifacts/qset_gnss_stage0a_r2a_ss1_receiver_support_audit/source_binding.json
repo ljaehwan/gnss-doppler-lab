@@ -1,0 +1,24 @@
+{
+  "base_sha": "0df61a01485e6d7ac5cee21b861533541ec29859",
+  "normal_model": {
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/artifacts/qset_gnss_stage0a_r2_galileo_partial_prn_execution/normal_model.json",
+    "sha256": "0f478f6bb6c0f871321a69bb58f4308cdb837f81a2c0afdd82ad5ba04f0ade15",
+    "size_bytes": 4229
+  },
+  "r2_artifact_manifest": {
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/artifacts/qset_gnss_stage0a_r2_galileo_partial_prn_execution/artifact_manifest_sha256.json",
+    "sha256": "87d84b2c953159afd0b2228d78d42f436d0f9f3477a18f2ad489b36bb959aec0",
+    "size_bytes": 5449
+  },
+  "receiver": {
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/receiver-build-v7/src/main/gnss-sdr",
+    "sha256": "3ed059f699201807cb86eb54a24ba00fde7e248f37a8081306cbc76d6be1b06f",
+    "size_bytes": 36607208
+  },
+  "status": "PASS",
+  "threshold_binding": {
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/artifacts/qset_gnss_stage0a_r2_galileo_partial_prn_execution/threshold_binding.json",
+    "sha256": "59248d88c63532da1bee487cdb29bc9112abb75f827f2639ee5e6bb09b319323",
+    "size_bytes": 1383
+  }
+}

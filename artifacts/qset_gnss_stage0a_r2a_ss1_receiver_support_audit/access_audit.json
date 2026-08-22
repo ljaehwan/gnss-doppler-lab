@@ -1,0 +1,16 @@
+{
+  "allowed_inputs": [
+    "R2 C-1/C-3/SS-1 decoded IQ, logs, TRACE"
+  ],
+  "downstream_attack_raw_opened": [],
+  "forbidden_raw_access": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "ss1_raw_redecode": false,
+  "ss1_spoofing_score_operations": 0,
+  "status": "PASS_PRE_EXECUTION"
+}
