@@ -7,6 +7,13 @@
   },
   "main_local_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
   "main_remote_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "receiver_instrumentation_inputs": {
+    "base_gnss_sdr_commit": "1ddd4562723040fd66cb334b578a5b69455625f4",
+    "frozen_configuration": "configs/qset_galileo_e1_trace9.conf.template",
+    "frozen_configuration_sha256": "b37da63cdbf9e386d5a5dec3eb5ae7dfcd35d07e9e9785a56e5900f85bd3026d",
+    "r2c_terminal_drain_native_trace_patch": "artifacts/trace_stage0_r2c_terminal_drain_repair/receiver_repair.diff",
+    "r2c_terminal_drain_native_trace_patch_sha256": "81b680bfae682fa92743fca53ce30ae09790383d008841d6eae3a25407442540"
+  },
   "r1a_final_verdict_artifact": "artifacts/qset_gnss_stage0a_r1a_galileo_c1_terminal_drain_repair/final_verdict.json",
   "schema": "gnss-doppler-lab.qset-stage0a-r2-source-binding.v1",
   "status": "PASS_METADATA_ONLY_PRE_FREEZE"

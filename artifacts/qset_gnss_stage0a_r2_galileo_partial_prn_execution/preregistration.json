@@ -1,0 +1,127 @@
+{
+  "aggregators": {
+    "candidates": ["MEAN", "MAX", "Q50", "Q70", "Q90", "MULTI_Q"],
+    "multi_q": {
+      "definition": "max_q ((Q_q(local_scores)-median_clean_calibration_q)/max(1.4826*MAD_clean_calibration_q,1e-9))",
+      "quantiles": [0.5, 0.7, 0.9, 1.0],
+      "single_joint_threshold": true
+    },
+    "persistence": {
+      "alarm": "at least two of the current and previous two raw aggregate statistics strictly exceed the aggregator threshold",
+      "continuous_statistic_for_roc": "second-largest raw aggregate statistic in the causal three-window history",
+      "warmup": "first two scoreable windows of every contiguous support run are non-alarm and excluded from ROC/pAUC denominators"
+    }
+  },
+  "attack_allowlist_after_freeze_only": [
+    {"scenario": "SS-1", "spoofed_prns_ground_truth_only": [9]},
+    {"scenario": "SS-3", "spoofed_prns_ground_truth_only": [6, 9, 23]},
+    {"scenario": "SS-5", "spoofed_prns_ground_truth_only": [4, 6, 9, 23, 31]},
+    {"scenario": "SS-11", "spoofed_prns_ground_truth_only": [31], "role": "multipath partial-spoof sensitivity"}
+  ],
+  "attack_access_gate": {
+    "required_before_any_payload_stat_hash_open_mmap": [
+      "clean C-1/C-3 receiver replay PASS",
+      "clean feature scaler and threshold fit complete",
+      "clean holdout and synthetic dilution results committed",
+      "runner/analyzer/verifier and tests committed",
+      "execution_freeze SHA pushed",
+      "local and remote freeze SHA equal with ahead/behind 0/0",
+      "fresh clean checkout of the pushed freeze SHA"
+    ]
+  },
+  "bootstrap": {
+    "confidence": 0.95,
+    "replicates": 10000,
+    "seed": 20260822,
+    "unit": "non-overlapping contiguous 10-second blocks; never individual windows"
+  },
+  "clean_split": {
+    "calibration": {"scenario": "C-1", "raw_time_interval_s": [110.0, 149.0]},
+    "development": {"scenario": "C-1", "raw_time_interval_s": [0.0, 100.0]},
+    "guard": {"scenario": "C-1", "raw_time_interval_s": [100.0, 110.0]},
+    "holdout": {"scenario": "C-3", "raw_time_interval_s": [0.0, 149.0]},
+    "rule": "1-second windows are assigned by causal raw-time window end; no overlapping or adjacent samples cross a C-1 split boundary"
+  },
+  "feature_contract": {
+    "epoch_transform": "for complex taps c[-4..4] and prompt p=c[0], y_j=c_j*conj(p)/max(|p|^2,1e-12); this removes prompt phase and amplitude",
+    "excluded_inputs": ["PRN identity", "receiver channel or slot", "spoofed PRN list", "expected visible satellites", "scenario ID", "filename", "absolute C/N0", "raw or total power", "tracked PRN count", "attack PRN count", "onset information"],
+    "features_per_prn_window": [
+      "componentwise median real and imaginary parts of the nine normalized complex taps",
+      "componentwise MAD of the real and imaginary nine-tap residual about the window median",
+      "real and imaginary early/late antisymmetry for four mirrored tap pairs",
+      "real and imaginary center-relative second differences at the seven interior taps"
+    ],
+    "finite_support": "valid tracking and lock TRACE rows with finite complex taps and nonzero prompt only; C/N0 and lock are exclusion/audit fields, never score features",
+    "global_scaler": "one feature-wise median and 1.4826*MAD fit on clean-development rows, shared across all PRNs; scale floor 1e-6",
+    "local_score": "sqrt(mean(clip((x-median)/scale,-8,8)^2))",
+    "prn_specific_scalers": false,
+    "supervised_or_neural_model": false,
+    "tap_offsets_chips": [-0.5, -0.375, -0.25, -0.125, 0.0, 0.125, 0.25, 0.375, 0.5]
+  },
+  "format_contract": {
+    "bytes_per_complex_sample": 4,
+    "decoder": "big-endian signed int16 interleaved I,Q -> native little-endian float32 complex, I/Q unchanged, scale 1.0",
+    "input_sample_rate_hz": 50000000,
+    "resampler": {"decimation": 25, "fractional_bw": 0.4, "interpolation": 2, "output_sample_rate_hz": 4000000},
+    "selected_format": ">i2 interleaved I,Q"
+  },
+  "forbidden_post_result_changes": ["feature", "score", "window", "split", "receiver configuration", "threshold rule", "aggregator", "persistence", "gate", "scenario exclusion"],
+  "hypothesis": "When k of M PRNs are spoofed, a cross-PRN mean dilutes their local morphology anomaly approximately by k/M, while a clean-standardized multi-quantile set statistic can reduce this dilution without knowing k.",
+  "metrics": {
+    "primary": ["clean empirical FPR", "Wilson 95% upper", "normalized pAUC at FPR<=0.01", "scenario detection rate", "spoofed-PRN-count detection rate", "per-PRN spoof-vs-genuine AUC", "10-second-block bootstrap intervals"],
+    "secondary": ["tracking/acquisition coverage", "telemetry sync", "lock-loss shortcut", "PRN-count shortcut", "C/N0 correlation", "power correlation when available"],
+    "pauc_definition": "trapezoidal ROC area from FPR 0 to 0.01 with linear boundary interpolation, divided by 0.01"
+  },
+  "receiver_contract": {
+    "base_source_commit": "1ddd4562723040fd66cb334b578a5b69455625f4",
+    "complex_trace_schema": {"header_bytes": 192, "record_bytes": 416, "tap_count": 9, "version": 2},
+    "configuration_template": "configs/qset_galileo_e1_trace9.conf.template",
+    "configuration_template_sha256": "b37da63cdbf9e386d5a5dec3eb5ae7dfcd35d07e9e9785a56e5900f85bd3026d",
+    "engineering_extension": "apply the byte-bound R2c terminal-drain/native-TRACE patch, then change only its native-TRACE eligibility guard to allow Galileo signal 1B with track_pilot=true; correlator, acquisition, tracking loops, tap positions, and record layout remain unchanged",
+    "frozen_acquisition": {"coherent_integration_ms": 4, "doppler_max_hz": 15000, "doppler_step_hz": 125, "pfa": 0.00001},
+    "frozen_tracking": {"channels": 12, "dll_bw_hz": 3.0, "pll_bw_hz": 20.0, "tap_count": 9, "tap_spacing_chips": 0.125, "track_pilot": true},
+    "receiver_fallbacks": [],
+    "worker_count": 1
+  },
+  "replay_order": ["C-1", "C-3", "SS-1", "SS-3", "SS-5", "SS-11"],
+  "schema": "gnss-doppler-lab.qset-stage0a-r2-preregistration.v1",
+  "status": "SCIENTIFIC_CONTRACT_FROZEN_BEFORE_ATTACK_ACCESS",
+  "success_gate": {
+    "aggregation": [
+      "SS-1 and SS-3 MULTI_Q detection rate minus MEAN is at least 0.15 in each",
+      "SS-1 and SS-3 MULTI_Q normalized pAUC@0.01 minus MEAN is at least 0.10 in each",
+      "mean MULTI_Q pAUC across SS-1 and SS-3 is greater than mean MAX pAUC",
+      "SS-5 MULTI_Q detection rate is no more than 0.05 below MEAN",
+      "no serious reversal: MULTI_Q detection rate at k=3 or k=5 is not more than 0.10 below its lower-k predecessor",
+      "MULTI_Q-minus-MEAN detection-rate bootstrap 95% lower bound exceeds zero in at least two partial scenarios"
+    ],
+    "false_alarm": ["clean holdout FPR <=0.01", "clean holdout Wilson 95% upper <=0.05", "multipath-clean FPR <=0.02 if such a clean scenario exists"],
+    "local_signal": ["per-PRN spoof-vs-genuine AUC >=0.75 in at least two partial scenarios", "shortcut audit PASS"],
+    "technical": ["clean holdout scoreable windows >=100", "each attack scenario scoreable windows >=60", "each scoreable event window has >=5 actual tracked PRNs", "at least one spoofed PRN is stably tracked in every primary partial scenario", "receiver/source provenance PASS"]
+  },
+  "synthetic_dilution": {
+    "claimed_as_detection_evidence": false,
+    "k_values": [1, 2, 3, 5, "M"],
+    "seeds": [11, 29, 47, 83],
+    "shift_levels": [0.5, 1.0, 2.0, 4.0]
+  },
+  "threshold_contract": {
+    "alarm_comparison": "strictly greater than",
+    "method": "block-calibrated empirical threshold; for each aggregator choose the smallest observed calibration statistic whose causal persistent calibration FPR is <=0.01, using the maximum observed statistic if no lower attainable threshold qualifies",
+    "target_fpr": 0.01,
+    "thresholds_fit_from_attack": false
+  },
+  "verdicts": [
+    "QSET_STAGE0A_PARTIAL_PRN_AGGREGATION_PASS",
+    "QSET_STAGE0A_PARTIAL_SIGNAL_WITHOUT_AGGREGATION_GAIN",
+    "NO_GO_QSET_PARTIAL_PRN_SIGNAL",
+    "INCONCLUSIVE_QSET_DATA_FORMAT_OR_RECEIVER_SUPPORT",
+    "BLOCKED_TUNI2025_DATASET_NOT_LOCAL"
+  ],
+  "window_contract": {
+    "causal_timestamp": "raw-time window end",
+    "primary_window_s": 1.0,
+    "stride_s": 1.0,
+    "support": "actual dynamically tracked PRNs only; no fixed 10-slot panel; minimum 5 PRNs per event window"
+  }
+}

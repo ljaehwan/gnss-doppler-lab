@@ -8,19 +8,20 @@
     "stats": 0
   },
   "clean_c3_payload": {
-    "bytes_read": 0,
-    "hashes": 0,
+    "bounded_format_bytes_read": 12582912,
+    "bytes_read": 30012414912,
+    "hashes": 1,
     "mmaps": 0,
-    "opens": 0,
-    "signal_statistics": 0,
-    "stats": 1
+    "opens": 2,
+    "signal_statistics": 1,
+    "stats": 2
   },
   "clean_metadata": {
     "c3_default_parameter_opens": 1,
     "c3_directory_inventory": 1,
     "c3_zenodo_json_opens": 2
   },
-  "phase": "DATASET_PREFLIGHT_CONTINUATION",
+  "phase": "SCIENTIFIC_PREREGISTRATION",
   "schema": "gnss-doppler-lab.qset-stage0a-r2-access-audit.v1",
   "scientific_operations": {
     "attack_evaluations": 0,
@@ -29,5 +30,5 @@
     "scores": 0,
     "thresholds_fit": 0
   },
-  "status": "PASS_PRE_FREEZE"
+  "status": "PASS_PRE_ATTACK_FREEZE"
 }

@@ -1,0 +1,25 @@
+{
+  "bounded_windows": [
+    {"id": "head", "length_bytes": 4194304, "offset_bytes": 0},
+    {"id": "middle", "length_bytes": 4194304, "offset_bytes": 14997818848},
+    {"id": "tail", "length_bytes": 4194304, "offset_bytes": 29995637696}
+  ],
+  "c3": {
+    "complex_sample_count": 7499958000,
+    "duration_s": 149.99916,
+    "float32_rejected": {"<f4": true, ">f4": true},
+    "head_iq_std": [17.78807147204893, 17.76830616739741],
+    "little_endian_i2_rejected": true,
+    "md5": "1b7c99c754faec3c8fa625849ef70014",
+    "middle_iq_std": [17.799476642769474, 17.787131794594004],
+    "path": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/galileo/C-3/clearsky_signal_C-3.bin",
+    "selected_format": ">i2 interleaved I,Q",
+    "size_bytes": 29999832000,
+    "status": "PASS",
+    "tail_iq_std": [17.74162487870376, 17.74510464890512],
+    "zero_header_bytes": 0
+  },
+  "procedure": "scripts/run_qset_gnss_stage0a_r1.py::identify_format; the same predeclared byte windows and four dtype interpretations used by R1",
+  "schema": "gnss-doppler-lab.qset-stage0a-r2-clean-format-validation.v1",
+  "status": "PASS"
+}

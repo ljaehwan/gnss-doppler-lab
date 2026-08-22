@@ -82,5 +82,14 @@
     "record_id": 17249902
   },
   "schema": "gnss-doppler-lab.qset-stage0a-r2-dataset-preflight.v1",
-  "status": "CONTINUATION_PENDING_CLEAN_VERIFICATION"
+  "independent_clean_verification": {
+    "c3_bounded_format_bytes_read": 12582912,
+    "c3_format_status": "PASS",
+    "c3_md5_actual": "1b7c99c754faec3c8fa625849ef70014",
+    "c3_md5_status": "PASS",
+    "c3_size_actual": 29999832000,
+    "c3_size_status": "PASS",
+    "selected_format": ">i2 interleaved I,Q"
+  },
+  "status": "PASS_CLEAN_IDENTITY_AND_FORMAT"
 }
