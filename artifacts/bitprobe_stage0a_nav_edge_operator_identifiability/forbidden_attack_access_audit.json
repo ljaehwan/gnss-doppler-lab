@@ -1,0 +1,37 @@
+{
+  "OAKBAT_attack_inputs": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0,
+    "status": "PASS"
+  },
+  "R4d_DS3_score": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0,
+    "status": "PASS"
+  },
+  "TEXBAT_DS1_through_DS8": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0,
+    "status": "PASS"
+  },
+  "aggregate": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0,
+    "status": "PASS"
+  },
+  "guard_mode": "reject-before-operation",
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-forbidden-audit.v1",
+  "status": "PASS"
+}

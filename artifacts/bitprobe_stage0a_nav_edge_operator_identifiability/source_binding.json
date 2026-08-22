@@ -1,0 +1,165 @@
+{
+  "base_sha": "2cb81593783cb4c8db2d0d38ecc71d9850fafadf",
+  "candidate_count_by_dataset": {
+    "OAKBAT.cleanStatic": 2995,
+    "TEXBAT.cleanStatic": 2995
+  },
+  "candidate_count_pre_access": 5990,
+  "clean_raw_expected": {
+    "OAKBAT.cleanStatic": {
+      "path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+      "sample_format": "little-endian interleaved signed int16 I/Q",
+      "sample_rate_hz": 5000000,
+      "sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "size_bytes": 9600000000
+    },
+    "TEXBAT.cleanStatic": {
+      "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "sample_format": "little-endian interleaved signed int16 I/Q",
+      "sample_rate_hz": 25000000,
+      "sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "size_bytes": 48016392192
+    }
+  },
+  "mosaic": {
+    "artifacts/mosaic_stage0b_r0_navbit_provenance/raw_source_binding.json": {
+      "path": "artifacts/mosaic_stage0b_r0_navbit_provenance/raw_source_binding.json",
+      "sha256": "1813640a844842658d597d184d30d606a286c6e875e146dff7eed4cbc9e7a905",
+      "size_bytes": 1724
+    },
+    "artifacts/mosaic_stage0b_r0b_corrected_navbit_mapping/artifact_manifest_sha256.json": {
+      "path": "artifacts/mosaic_stage0b_r0b_corrected_navbit_mapping/artifact_manifest_sha256.json",
+      "sha256": "e11e5fc0832396c461ffb1bac6a9a4768300416910993a187a67c84bfe8f291f",
+      "size_bytes": 2574
+    },
+    "artifacts/mosaic_stage0b_r0c_boundary_phase_extrapolation/artifact_manifest_sha256.json": {
+      "path": "artifacts/mosaic_stage0b_r0c_boundary_phase_extrapolation/artifact_manifest_sha256.json",
+      "sha256": "4beec873bdfeaf7db43b996e2746b5e89c7f4e735e7adcc09fc27a09b7213707",
+      "size_bytes": 2359
+    },
+    "artifacts/mosaic_stage0b_r0c_boundary_phase_extrapolation/common_interval_validation.json": {
+      "path": "artifacts/mosaic_stage0b_r0c_boundary_phase_extrapolation/common_interval_validation.json",
+      "sha256": "0c7d976349ede76b1d62111bf9d8028296d60555d47efb8da4226c0d40b27472",
+      "size_bytes": 884
+    },
+    "artifacts/mosaic_stage0b_r0c_boundary_phase_extrapolation/corrected_bit_mapping.csv.gz": {
+      "path": "artifacts/mosaic_stage0b_r0c_boundary_phase_extrapolation/corrected_bit_mapping.csv.gz",
+      "sha256": "db7e23761e2bb4314d6f22e990e23c0fb19387ee7476a55a665def7a10af522f",
+      "size_bytes": 185761
+    },
+    "artifacts/mosaic_stage0b_r0c_boundary_phase_extrapolation/nav_structure_validation.json": {
+      "path": "artifacts/mosaic_stage0b_r0c_boundary_phase_extrapolation/nav_structure_validation.json",
+      "sha256": "1454e0a37d2c8dc6ad866a492f671c801d0492ed36782caf1b538ac8feda5c81",
+      "size_bytes": 6125
+    },
+    "artifacts/mosaic_stage0b_r0c_boundary_phase_extrapolation/tracking_continuity.csv": {
+      "path": "artifacts/mosaic_stage0b_r0c_boundary_phase_extrapolation/tracking_continuity.csv",
+      "sha256": "2c4e2d04a07b66380187515aaddd31213ee94068ffcec21c29af3adf42ed78b2",
+      "size_bytes": 5403
+    }
+  },
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-source-binding.v1",
+  "scope": {
+    "OAKBAT.cleanStatic": {
+      "common_raw_end_sample_exclusive": 210202273,
+      "common_raw_start_sample": 150275296,
+      "prns": [
+        10,
+        11,
+        21,
+        24,
+        27
+      ],
+      "sample_rate_hz": 5000000,
+      "size_bytes": 9600000000,
+      "source_sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe"
+    },
+    "TEXBAT.cleanStatic": {
+      "common_raw_end_sample_exclusive": 1117517038,
+      "common_raw_start_sample": 817815304,
+      "prns": [
+        3,
+        13,
+        16,
+        19,
+        30
+      ],
+      "sample_rate_hz": 25000000,
+      "size_bytes": 48016392192,
+      "source_sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9"
+    }
+  },
+  "status": "FROZEN_NO_EXTERNAL_SOURCE_ACCESSED",
+  "trace_expected": [
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_10.bin",
+      "prn": 10,
+      "record_count": 14940,
+      "sha256": "059ca9a4ba66faf8208318ac2f320e15762c281c01e5a877225cec05e627ed09"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_2.bin",
+      "prn": 11,
+      "record_count": 14940,
+      "sha256": "653c3fbce4c14e4624f5111ad739a5455e8c16532c8ecaf2d2f77e38cc3051bd"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_0.bin",
+      "prn": 21,
+      "record_count": 14940,
+      "sha256": "4ef713eac37560d85ea0e4b8fe01aca5b33eddce51df23e7a1d40f750351156b"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_3.bin",
+      "prn": 24,
+      "record_count": 14940,
+      "sha256": "9493ce9e855df4cd63774f6f3122806d780bb1105ed4b11e1e0ba453b120b3bf"
+    },
+    {
+      "dataset": "OAKBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/oakbat_cleanstatic/slow/rep1/trace_native_1ms_ch_1.bin",
+      "prn": 27,
+      "record_count": 14940,
+      "sha256": "f7cbf285bffac4d034ee63569094e602f688736dd2e296979958497b8653d40c"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_2.bin",
+      "prn": 3,
+      "record_count": 12280,
+      "sha256": "228d8db83103674c25db2a80eb1ca2d0470bff372d503b4cec94040fba507fa0"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_4.bin",
+      "prn": 13,
+      "record_count": 12280,
+      "sha256": "d2feffd1bbb4c0ce9cd12ca137abc512d168ecc29667e95a2f3b65c923c04325"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_1.bin",
+      "prn": 16,
+      "record_count": 12280,
+      "sha256": "b3a7a9afa644c48328a0295749cf08203da734912a79cecd614b75d219ea1fa8"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_0.bin",
+      "prn": 19,
+      "record_count": 12280,
+      "sha256": "c4b5f7e04d9a96cb9e5770b54dad7c0b3674281ac7d1a4859924b91ea77d7fc8"
+    },
+    {
+      "dataset": "TEXBAT.cleanStatic",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/mctd-stage0-static/dumps/phase_a/texbat_cleanstatic/slow/rep1/trace_native_1ms_ch_3.bin",
+      "prn": 30,
+      "record_count": 12280,
+      "sha256": "98e6015ae8473573882b0f0980af1bf244c1759bdfa36398c0002d7bba907bc7"
+    }
+  ]
+}

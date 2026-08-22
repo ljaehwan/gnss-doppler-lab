@@ -1,0 +1,75 @@
+{
+  "artifact_schema": [
+    "README.md",
+    "preregistration.json",
+    "preregistration_commit.json",
+    "freeze_commit.json",
+    "source_binding.json",
+    "clean_access_audit.json",
+    "forbidden_attack_access_audit.json",
+    "nav_edge_inventory.csv.gz",
+    "exclusion_audit.json",
+    "per_prn_support.csv",
+    "split_half_metrics.csv",
+    "between_prn_metrics.csv",
+    "flip_no_flip_metrics.csv",
+    "nuisance_metrics.csv",
+    "synthetic_control_metrics.csv",
+    "receiver_confound_audit.json",
+    "shortcut_audit.json",
+    "final_verdict.json",
+    "artifact_manifest_sha256.json",
+    "edge_operator_summary.png",
+    "synthetic_operator_controls.png",
+    "verifier_output.txt",
+    "test_output.txt"
+  ],
+  "base_sha": "2cb81593783cb4c8db2d0d38ecc71d9850fafadf",
+  "configuration_sha256": "ad85479860d353905c470281eebcdcd15172c4f6a29d62a8b6f702b4ea9676ce",
+  "environment": {
+    "execution_order": "TEXBAT.cleanStatic then OAKBAT.cleanStatic; PRN ascending; NAV bit ascending",
+    "numpy": "1.26.4",
+    "platform": "Linux-6.8.0-137-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]",
+    "worker_count": 1
+  },
+  "executable_bindings": {
+    "scripts/run_bitprobe_stage0a.py": {
+      "path": "scripts/run_bitprobe_stage0a.py",
+      "sha256": "d83ca4f2fd04df6e5a900d84529095bc444e4658d3fc14896805bfe6e5f0ca21",
+      "size_bytes": 947
+    },
+    "scripts/verify_bitprobe_stage0a.py": {
+      "path": "scripts/verify_bitprobe_stage0a.py",
+      "sha256": "78872c76e906b840019fdc123fa58934fa57671db4ab37d7cb48a2f4a37d3a0d",
+      "size_bytes": 6562
+    },
+    "src/gnss_doppler_lab/bitprobe_stage0a.py": {
+      "path": "src/gnss_doppler_lab/bitprobe_stage0a.py",
+      "sha256": "64745d611591f9554b7594fc1aae8b024900c7fceea384ab7db60e7b0a08b6d9",
+      "size_bytes": 66503
+    }
+  },
+  "output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/bitprobe-stage0a-nav-edge-operator-identifiability",
+  "preregistration_commit_sha": "5c9be7d1cf14f1075a49ec0c925036150024a5bd",
+  "raw_or_trace_access_during_prepare": 0,
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-execution-freeze.v1",
+  "science_dependency_bindings": {
+    "src/gnss_doppler_lab/acquisition_surface.py": {
+      "path": "src/gnss_doppler_lab/acquisition_surface.py",
+      "sha256": "ce04922ff4a6bf45666fdfb608df55a36d6ff859e3f2637864bb317919dce8d5",
+      "size_bytes": 8819
+    },
+    "src/gnss_doppler_lab/mosaic_raw_recorrelation.py": {
+      "path": "src/gnss_doppler_lab/mosaic_raw_recorrelation.py",
+      "sha256": "da2d7c595c84daad5a3b01250bee77d590168d9342dd4f39c981259628c235c7",
+      "size_bytes": 10584
+    },
+    "src/gnss_doppler_lab/trace_native_1ms.py": {
+      "path": "src/gnss_doppler_lab/trace_native_1ms.py",
+      "sha256": "f73052a4edef5ccdfe85b1e1cb81355f8cfed9dce579cba41dc2720cf6b04a57",
+      "size_bytes": 18131
+    }
+  },
+  "status": "IMPLEMENTED_AND_SYNTHETIC_TESTED_BEFORE_RAW_EDGE_RESULTS"
+}
