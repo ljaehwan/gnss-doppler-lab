@@ -1,0 +1,17 @@
+{
+  "byte_identical": true,
+  "gate": {
+    "calibration_seed_count": 16,
+    "common_vs_separate_auc": 1.0,
+    "evaluation_seed_count": 16,
+    "gate_pass": true,
+    "null_false_positive_rate": 0.046875,
+    "null_threshold": 0.25928214333737815,
+    "pauc": null,
+    "weak_levels_same_direction": 3
+  },
+  "sha256": "90148f25daa135ab18942b4f03602b8685663a74f104fc367f50f6183c070415",
+  "status": "PASS",
+  "synthetic_common_vs_separate_geometry_only": true,
+  "synthetic_level_detectability_authoritative": false
+}

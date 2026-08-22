@@ -1,0 +1,21 @@
+{
+  "byte_identical": true,
+  "gates": {
+    "OAKBAT.cleanStatic": {
+      "moderate_gate_pass": false,
+      "moderate_median_similarity": 0.944350653363402,
+      "receiver_filter_not_source_evidence": true,
+      "strong_gate_pass": true,
+      "strong_median_similarity": 0.9999999999999999
+    },
+    "TEXBAT.cleanStatic": {
+      "moderate_gate_pass": false,
+      "moderate_median_similarity": 0.9406169878357126,
+      "receiver_filter_not_source_evidence": true,
+      "strong_gate_pass": true,
+      "strong_median_similarity": 0.9999999999999999
+    }
+  },
+  "sha256": "212b3b9527d6a9ec621b9ebe9196ee75597b8291712ab0ac86d66bf7cca54400",
+  "status": "PASS"
+}

@@ -1,0 +1,19 @@
+{
+  "analysis_run_count": 2,
+  "byte_identical": true,
+  "files": {
+    "corrected_between_prn_metrics.csv": {
+      "byte_identical": true,
+      "sha256": "7d9b49f6120e52a158c498185cd881c9263e3361e688c3ff33ae8555826ca610"
+    },
+    "corrected_bootstrap_metrics.json": {
+      "byte_identical": true,
+      "sha256": "990562948ba17bf89d0cc749920a456d1e1f46c27ebe30a6376676860d036e5c"
+    },
+    "corrected_split_half_metrics.csv": {
+      "byte_identical": true,
+      "sha256": "7e716fae992d6fbd0f3a2ece79e16c215119e8c4568eda6e8f62070ef40da73b"
+    }
+  },
+  "status": "PASS"
+}

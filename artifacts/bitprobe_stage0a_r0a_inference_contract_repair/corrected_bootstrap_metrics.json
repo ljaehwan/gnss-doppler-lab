@@ -1,0 +1,36 @@
+{
+  "OAKBAT.cleanStatic": {
+    "coherence_bootstrap_95_lower": 0.4852839421249456,
+    "coherence_median_distribution_sha256": "f53671f060f0bbeb5fc127967da500561ece5e51ee97dbd94624c0578604e7ad",
+    "effect_bootstrap_95_lower": -0.056033750339569734,
+    "effect_distribution_sha256": "782688441964be5abd3a37ddb64ff6fd3b0dad8774a216520abcdbb75728fc5a",
+    "effect_replicate_count": 500,
+    "permutation": {
+      "all_shapes_valid": true,
+      "different_count": 20,
+      "distribution_sha256": "0433859aee2de6147c3ae8307c3c8007796b3c1ba16ff22495873c5c924fa340",
+      "observed": 0.03626587765930023,
+      "p_value": 0.3,
+      "permutation_count": 120,
+      "same_count": 5
+    },
+    "replicate_count": 500
+  },
+  "TEXBAT.cleanStatic": {
+    "coherence_bootstrap_95_lower": 0.21899935997235673,
+    "coherence_median_distribution_sha256": "6c673fed9384a1004c61bebd0b899235fb05b94c8697eb7aa36c8e2c56f0f91e",
+    "effect_bootstrap_95_lower": -0.07700500743915306,
+    "effect_distribution_sha256": "dcb118b37c1f6bc8356a977361d579a511b64aff60c74c79862fbc47dd3481d1",
+    "effect_replicate_count": 500,
+    "permutation": {
+      "all_shapes_valid": true,
+      "different_count": 20,
+      "distribution_sha256": "e50ca406f16fe433ad67e893744c45f4a933d279f3cc3e3d763e5d06f188ed26",
+      "observed": 0.005119979706568578,
+      "p_value": 0.4666666666666667,
+      "permutation_count": 120,
+      "same_count": 5
+    },
+    "replicate_count": 500
+  }
+}

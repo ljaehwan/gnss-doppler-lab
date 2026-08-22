@@ -1,0 +1,39 @@
+{
+  "datasets": [
+    {
+      "block_permutation_p": 0.017,
+      "dataset": "TEXBAT.cleanStatic",
+      "flip_minus_no_flip": 0.144324424683623,
+      "median_flip_reproducibility": 0.4931952711114921,
+      "median_no_flip_reproducibility": 0.3488708464278691,
+      "mismatch": {
+        "class_count_preservation": false,
+        "frozen_code": "individual-edge random permutation of pooled flip/no-flip edges followed by equal-size repartition",
+        "preregistration": "contiguous blocks of 10 NAV edges within PRN",
+        "repaired_in_r0a": false
+      },
+      "new_contract_mismatch_found": true,
+      "reproduction_matches_original_algorithm": true
+    },
+    {
+      "block_permutation_p": 0.629,
+      "dataset": "OAKBAT.cleanStatic",
+      "flip_minus_no_flip": -0.026961595425936125,
+      "median_flip_reproducibility": 0.6640216242625447,
+      "median_no_flip_reproducibility": 0.6909832196884809,
+      "mismatch": {
+        "class_count_preservation": false,
+        "frozen_code": "individual-edge random permutation of pooled flip/no-flip edges followed by equal-size repartition",
+        "preregistration": "contiguous blocks of 10 NAV edges within PRN",
+        "repaired_in_r0a": false
+      },
+      "new_contract_mismatch_found": true,
+      "reproduction_matches_original_algorithm": true
+    }
+  ],
+  "new_mismatch_found": true,
+  "repair_attempted": false,
+  "required_fail_closed_verdict": "INCONCLUSIVE_BITPROBE_STAGE0A_R0A_INFERENCE_REPAIR",
+  "status": "PASS_REPRODUCTION_WITH_NEW_CONTRACT_MISMATCH",
+  "values_match_original": true
+}

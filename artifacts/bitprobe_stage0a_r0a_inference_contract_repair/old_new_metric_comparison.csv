@@ -1,0 +1,13 @@
+dataset,metric,original_value,repaired_value,changed,expected_to_change,gate_before,gate_after,reason
+TEXBAT.cleanStatic,coherence_bootstrap_95_lower,0.4755529157081772,0.21899935997235673,True,True,False,False,chronological-half bootstrap repair
+TEXBAT.cleanStatic,between_bootstrap_95_lower,0.11203220586311341,-0.07700500743915306,True,True,False,False,chronological-half bootstrap repair
+TEXBAT.cleanStatic,exact_prn_label_permutation_p,0.21666666666666667,0.4666666666666667,True,True,False,False,shape-identical exact permutation repair
+TEXBAT.cleanStatic,median_same_similarity,0.4422987386946777,0.4422987386946777,False,False,False,False,frozen point estimate
+TEXBAT.cleanStatic,median_different_similarity,0.4371787589881091,0.4371787589881091,False,False,False,False,frozen point estimate
+TEXBAT.cleanStatic,same_minus_different,0.005119979706568578,0.005119979706568578,False,False,False,False,frozen point estimate
+OAKBAT.cleanStatic,coherence_bootstrap_95_lower,0.6866469642735291,0.4852839421249456,True,True,False,False,chronological-half bootstrap repair
+OAKBAT.cleanStatic,between_bootstrap_95_lower,0.05616973948501659,-0.056033750339569734,True,True,False,False,chronological-half bootstrap repair
+OAKBAT.cleanStatic,exact_prn_label_permutation_p,0.19166666666666668,0.3,True,True,False,False,shape-identical exact permutation repair
+OAKBAT.cleanStatic,median_same_similarity,0.7246080377972713,0.7246080377972713,False,False,False,False,frozen point estimate
+OAKBAT.cleanStatic,median_different_similarity,0.6883421601379711,0.6883421601379711,False,False,False,False,frozen point estimate
+OAKBAT.cleanStatic,same_minus_different,0.03626587765930023,0.03626587765930023,False,False,False,False,frozen point estimate

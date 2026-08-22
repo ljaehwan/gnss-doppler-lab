@@ -13,3 +13,7 @@ common operator to a transmitter.
 
 Stage-0B authorization is determined only by the terminal R0a verdict after
 the pushed execution freeze is replayed against the bound frozen tensor.
+
+## Final disposition
+
+The two permitted inference repairs reproduced twice byte-identically from the frozen tensor. Point estimates, support, nuisance values, synthetic values, PRNs, edge counts, and source binding were unchanged. A newly confirmed mismatch remains in the frozen flip-specificity test: the preregistration specifies contiguous 10-edge blocks, while the frozen code shuffles individual pooled edges and repartitions them equally. R0a does not repair that third issue. The terminal substantive verdict is therefore INCONCLUSIVE_BITPROBE_STAGE0A_R0A_INFERENCE_REPAIR, repair_status=FAIL, and Stage-0B is not authorized.

@@ -1,8 +1,27 @@
 {
   "base_sha": "0947dd3751b86d7f890d71561030e6f36a44f1e3",
-  "executable_count": 3,
-  "mode": "freeze",
+  "final_sha": "46c6017aa7d8db7b3afa87239816a88c00873c05",
+  "freeze_sha": "46c6017aa7d8db7b3afa87239816a88c00873c05",
+  "manifest_files": 21,
+  "mode": "final",
+  "original_artifact_byte_identical": true,
+  "raw_trace_attack_operations": 0,
   "repair_preregistration_commit_sha": "57857b1f8696d52d6056e135836e342de36ffaf8",
+  "repair_status": "FAIL",
+  "self_test": {
+    "status": "PASS",
+    "test_count": 6,
+    "tests": {
+      "access_tamper": true,
+      "code_tamper": true,
+      "manifest_tamper": true,
+      "original_artifact_tamper": true,
+      "permutation_shape": true,
+      "tensor_binding_tamper": true
+    }
+  },
+  "stage0b_authorized": false,
   "status": "PASS",
-  "tensor_access_before_freeze": 0
+  "substantive_verdict": "INCONCLUSIVE_BITPROBE_STAGE0A_R0A_INFERENCE_REPAIR",
+  "tensor_verification_bytes": 8787673
 }

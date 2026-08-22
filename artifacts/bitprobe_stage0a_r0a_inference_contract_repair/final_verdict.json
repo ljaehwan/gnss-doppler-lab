@@ -1,0 +1,60 @@
+{
+  "attack_operations": 0,
+  "base_sha": "0947dd3751b86d7f890d71561030e6f36a44f1e3",
+  "completed_utc": "2026-08-22T04:44:01.894685+00:00",
+  "dataset_gates": {
+    "OAKBAT.cleanStatic": {
+      "between_prn_separability_pass": false,
+      "coherence_bootstrap_95_lower": 0.4852839421249456,
+      "eligible_prns": 5,
+      "flip_specificity_pass": false,
+      "median_same_prn_coherence": 0.7246080377972713,
+      "moderate_nuisance_pass": false,
+      "real_data_gates_1_through_6_pass": false,
+      "reproducibility_pass": false,
+      "strong_nuisance_pass": true,
+      "support_pass": true,
+      "technically_complete": true
+    },
+    "TEXBAT.cleanStatic": {
+      "between_prn_separability_pass": false,
+      "coherence_bootstrap_95_lower": 0.21899935997235673,
+      "eligible_prns": 5,
+      "flip_specificity_pass": false,
+      "median_same_prn_coherence": 0.4422987386946777,
+      "moderate_nuisance_pass": false,
+      "real_data_gates_1_through_6_pass": false,
+      "reproducibility_pass": false,
+      "strong_nuisance_pass": true,
+      "support_pass": true,
+      "technically_complete": true
+    }
+  },
+  "freeze_sha": "46c6017aa7d8db7b3afa87239816a88c00873c05",
+  "new_flip_specificity_contract_mismatch": true,
+  "original_artifact_byte_identical": true,
+  "post_result_method_feature_gate_threshold_changes": 0,
+  "raw_iq_operations": 0,
+  "repair_preregistration_commit_sha": "57857b1f8696d52d6056e135836e342de36ffaf8",
+  "repair_status": "FAIL",
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-r0a-final-verdict.v1",
+  "source_localization_available": false,
+  "stage0b_authorized": false,
+  "status": "INCONCLUSIVE",
+  "substantive_verdict": "INCONCLUSIVE_BITPROBE_STAGE0A_R0A_INFERENCE_REPAIR",
+  "support_and_edge_counts_reproduced": true,
+  "synthetic_common_vs_separate_geometry_only": true,
+  "synthetic_gate_reproduced": {
+    "calibration_seed_count": 16,
+    "common_vs_separate_auc": 1.0,
+    "evaluation_seed_count": 16,
+    "gate_pass": true,
+    "null_false_positive_rate": 0.046875,
+    "null_threshold": 0.25928214333737815,
+    "pauc": null,
+    "weak_levels_same_direction": 3
+  },
+  "synthetic_level_detectability_authoritative": false,
+  "trace_operations": 0,
+  "unauthorized_value_changes": []
+}
