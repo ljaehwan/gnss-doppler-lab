@@ -34,6 +34,7 @@ MIN_EPOCHS = 125
 MIN_PANEL = 5
 PRN9_STABLE_WINDOWS = 60
 RUN_NAMESPACE = "variants-repair-v1"
+CLEAN_NAMESPACE = "clean-regression-repair-v1"
 VARIANTS = {
     "V0": {"in_acquisition": 4, "pfa": "0.00001", "coherent_ms": 4, "execution": "REUSE_VERIFIED_R2_BASELINE"},
     "V1": {"in_acquisition": 12, "pfa": "0.00001", "coherent_ms": 4, "execution": "RUN"},
@@ -157,7 +158,8 @@ def render_variant_config(variant: str, receiver_dir: Path, scenario: str = "SS-
     baseline = R2_SSD / f"replays/{scenario}/receiver/receiver.conf"
     text = baseline.read_text(encoding="utf-8")
     decoded = R2_SSD / f"replays/{scenario}/decoded_4msps_gr_complex.bin"
-    expected = read_json(R2_ARTIFACT / f"receiver_manifests/{scenario}.json")["decoder"]["sha256"]
+    decoder_binding = read_json(R2_ARTIFACT / f"receiver_manifests/{scenario}.json")["decoder"]
+    expected = decoder_binding["sha256"] if scenario == "SS-1" else decoder_binding["output_sha256"]
     require(sha256_file(decoded) == expected, f"{scenario} decoded IQ drift")
     replacements = {
         r"^Channels\.in_acquisition=.*$": f"Channels.in_acquisition={spec['in_acquisition']}",
@@ -175,7 +177,7 @@ def render_variant_config(variant: str, receiver_dir: Path, scenario: str = "SS-
 
 def run_clean_replay(selected: str, scenario: str) -> dict[str, Any]:
     require(selected in ("V1", "V2", "V3") and scenario in ("C-1", "C-3"), "clean replay outside frozen contract")
-    root = SSD_ROOT / "clean-regression" / selected / scenario; manifest_path = root / "manifest.json"
+    root = SSD_ROOT / CLEAN_NAMESPACE / selected / scenario; manifest_path = root / "manifest.json"
     if manifest_path.is_file():
         prior = read_json(manifest_path); verify_output_manifest(root, prior["output_set"]); return prior
     require(not root.exists(), f"incomplete clean output exists; refusing overwrite: {root}")
@@ -201,7 +203,7 @@ def score_clean_regression(selected: str) -> dict[str, Any]:
     require(canonical_sha({"multi_q_reference": threshold_binding["multi_q_reference"], "thresholds": threshold_binding["thresholds"]}) == expected_threshold_sha, "R2 threshold binding drift")
     metrics: dict[str, Any] = {}
     for name in ("C-1", "C-3"):
-        rows = r2.extract_window_features(SSD_ROOT / "clean-regression" / selected / name / "receiver", name, 149.99916)
+        rows = r2.extract_window_features(SSD_ROOT / CLEAN_NAMESPACE / selected / name / "receiver", name, 149.99916)
         windows = r2.dynamic_windows(rows, model)
         for window in windows: window["aggregates"] = r2.aggregate_scores(window["scores"], threshold_binding["multi_q_reference"])
         raw = [window["aggregates"]["MULTI_Q"] for window in windows]; ends = [window["window_end_s"] for window in windows]

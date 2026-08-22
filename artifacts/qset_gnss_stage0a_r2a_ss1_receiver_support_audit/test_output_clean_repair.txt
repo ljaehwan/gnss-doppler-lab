@@ -1,0 +1,17 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0 -- /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/ubuntu/projects/gnss-doppler-lab/artifacts/worktrees/qset-gnss-stage0a-r2a-ss1-receiver-support-audit
+configfile: pyproject.toml
+plugins: anyio-4.14.1
+collecting ... collected 7 items
+
+tests/test_qset_gnss_stage0a_r2a.py::test_variant_matrix_is_finite_and_frozen PASSED [ 14%]
+tests/test_qset_gnss_stage0a_r2a.py::test_config_changes_only_preregistered_acquisition_fields PASSED [ 28%]
+tests/test_qset_gnss_stage0a_r2a.py::test_manifest_tamper_detection PASSED [ 42%]
+tests/test_qset_gnss_stage0a_r2a.py::test_source_has_no_attack_score_or_raw_resolver PASSED [ 57%]
+tests/test_qset_gnss_stage0a_r2a.py::test_preregistered_success_gate_is_not_relaxed PASSED [ 71%]
+tests/test_qset_gnss_stage0a_r2a.py::test_cadence_contract_matches_frozen_r2_tolerance PASSED [ 85%]
+tests/test_qset_gnss_stage0a_r2a.py::test_clean_decoder_manifest_keys_are_explicit PASSED [100%]
+
+============================== 7 passed in 31.79s ==============================

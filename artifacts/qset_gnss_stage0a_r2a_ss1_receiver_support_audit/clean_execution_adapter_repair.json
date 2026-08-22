@@ -1,0 +1,18 @@
+{
+  "clean_decoded_bytes_read": 0,
+  "entries": [
+    "receiver"
+  ],
+  "gate_changes": false,
+  "model_or_threshold_changes": false,
+  "new_output_namespace": "clean-regression-repair-v1",
+  "preserved_empty_attempt": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression/V3/C-1",
+  "receiver_runs": 0,
+  "repair": "scenario-explicit existing decoder digest key selection",
+  "schema": "gnss-doppler-lab.qset-stage0a-r2a-clean-decoder-binding-repair.v1",
+  "scientific_changes": false,
+  "score_operations": 0,
+  "status": "FROZEN_ENGINEERING_REPAIR_BEFORE_CLEAN_INPUT_ACCESS",
+  "trigger": "C-1/C-3 compact receiver manifest uses decoder.output_sha256 while SS-1 terminal manifest uses decoder.sha256",
+  "variant_changes": false
+}

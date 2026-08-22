@@ -39,3 +39,9 @@ def test_cadence_contract_matches_frozen_r2_tolerance() -> None:
     source = (Q.ROOT / "src/gnss_doppler_lab/qset_stage0a_r2a.py").read_text()
     assert "dt < 0.0035" in source and "dt > 0.0045" in source
     assert "!= 16000" not in source
+
+
+def test_clean_decoder_manifest_keys_are_explicit() -> None:
+    source = (Q.ROOT / "src/gnss_doppler_lab/qset_stage0a_r2a.py").read_text()
+    assert 'scenario == "SS-1"' in source
+    assert 'decoder_binding["output_sha256"]' in source
