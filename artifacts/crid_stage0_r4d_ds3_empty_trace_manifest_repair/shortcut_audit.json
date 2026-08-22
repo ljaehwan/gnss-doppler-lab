@@ -1,4 +1,43 @@
 {
+  "correlations": {
+    "cn0_median_db_hz": {
+      "count": 73480,
+      "pearson": -0.18737389574235266,
+      "spearman": -0.20533474550588254
+    },
+    "common_prn_count": {
+      "count": 73480,
+      "pearson": -0.12998957188108107,
+      "spearman": -0.0863218350748707
+    },
+    "lock_median": {
+      "count": 73480,
+      "pearson": -0.22630362677324686,
+      "spearman": -0.24723768384985456
+    },
+    "tracked_prn_count_min_config": {
+      "count": 73480,
+      "pearson": -0.09138511024789596,
+      "spearman": -0.05356132777423077
+    }
+  },
+  "established_alarm_count": 501,
+  "established_alarms_outside_lock_loss_or_prn_collapse": 501,
+  "explained_only_by_lock_loss_or_tracked_prn_collapse": false,
+  "nuisance_definitions": {
+    "lock_loss_below": 0.85,
+    "tracked_prn_collapse_below": 4.0
+  },
+  "pre_onset_reference": {
+    "lock_q10": 0.9765095710754395,
+    "tracked_prn_median": 7.0
+  },
   "schema": "gnss-doppler-lab.crid-r4d-shortcut-audit.v1",
-  "status": "FROZEN_NOT_EVALUATED"
+  "score_inputs": {
+    "cn0": false,
+    "lock": false,
+    "power": false,
+    "prn_count": false
+  },
+  "status": "PASS"
 }

@@ -1,1 +1,5 @@
 config,channel,status,record_count,size_bytes,file_size_bytes,sha256,excluded_from_support,path
+C0,10,EMPTY_OPTIONAL_CHANNEL,0,0,192,be751aaec77f214b019e5c9fc620c727fe8a5371194c5b19b24c175fbdafa9a4,True,/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4d-ds3-empty-trace-manifest-repair/replays/C0/trace_native_1ms_ch_10.bin
+C1,10,EMPTY_OPTIONAL_CHANNEL,0,0,192,eb8fee08bfe248c56e5b1df58b614e94b7b27e284e77826fc353982d32d12323,True,/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4d-ds3-empty-trace-manifest-repair/replays/C1/trace_native_1ms_ch_10.bin
+C2,10,EMPTY_OPTIONAL_CHANNEL,0,0,192,f3b31781fb459b47d61f12187fbef38b43430931440274db684c2fd43ea862fc,True,/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4d-ds3-empty-trace-manifest-repair/replays/C2/trace_native_1ms_ch_10.bin
+C3,10,EMPTY_OPTIONAL_CHANNEL,0,0,192,8eaaec8b66383f70e5b3fe652ede789929e3034c9cd605ac4261b0f016861b36,True,/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4d-ds3-empty-trace-manifest-repair/replays/C3/trace_native_1ms_ch_10.bin

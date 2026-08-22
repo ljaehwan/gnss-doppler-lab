@@ -1,40 +1,45 @@
 {
-  "file_count": 24,
+  "file_count": 29,
   "files": [
     {
       "path": "README.md",
-      "sha256": "4dfc8222f38c8eaeda926cf0bb39bc7bc009b3e382fc1e1909a54fb2af315fd3",
-      "size_bytes": 294
+      "sha256": "e21c67d197d324e78debbe5bccf8102adb0bd90c8bfb52d1f09e91c51701ff8d",
+      "size_bytes": 1751
+    },
+    {
+      "path": "alarm_timeline.png",
+      "sha256": "b2c5710ed4bd26de26233b41f058b692309cd82f06435280d4332bf46a74836b",
+      "size_bytes": 101252
     },
     {
       "path": "attack_access_audit.json",
-      "sha256": "8301522d61511b528946455f066e3bc635f0105f1cbb6f9fece8d259ea539066",
-      "size_bytes": 355
+      "sha256": "e5a8fe95be9e3a3b5f72d9d576e3f5882024842c9d900786c82295e5d1be261c",
+      "size_bytes": 426
     },
     {
       "path": "ds3_input_inventory.json",
-      "sha256": "94e7b81d2d58a8f3c804d36a0b448bc4c7ad6147a700300d4d621feaa993994e",
-      "size_bytes": 345
+      "sha256": "5a079fb8f90ecfbd0a257bfe0ec67979eac81802b8bc6e4bed252a4a9964f056",
+      "size_bytes": 867
     },
     {
       "path": "empty_channel_inventory.csv",
-      "sha256": "f65dae998a055ce6ed53c0e469d994ff9b1ff8769e7f68594dc9b8e9e3f86156",
-      "size_bytes": 96
+      "sha256": "52178eb77ee31c5553aa35e082d3c0073a4ea8190ea9ac93bfe5be0f14917d39",
+      "size_bytes": 1080
     },
     {
       "path": "execution_repair_freeze.json",
-      "sha256": "f435d32b2dc6c83cc267facdc0bf05ed5715421e76408e8efa2f3df91a458942",
-      "size_bytes": 1534
+      "sha256": "00d0f260982dd4c38a629e50b8769191bb0c2fdc5d4569f8b9f096d08de92c74",
+      "size_bytes": 1645
     },
     {
       "path": "final_verdict.json",
-      "sha256": "01a1f0b493734e1a9b3462e9b735920532ff737c72213d498c5ece8884c44693",
-      "size_bytes": 228
+      "sha256": "c2ca4940998fc745a482a52e02609ad36d695a2a5dd0b998ac3cd228cdc3a2a4",
+      "size_bytes": 717
     },
     {
       "path": "freeze_commit.json",
-      "sha256": "75b903a0e8eb43f870c32703d6fc2055856df5c49d4ffe3f79622b542d16fea1",
-      "size_bytes": 111
+      "sha256": "f30e01d4cc1b6d7bd6c8b374574c44e909351318b58787873cc8d3f57d22c578",
+      "size_bytes": 487
     },
     {
       "path": "frozen_configs/C0.conf",
@@ -62,6 +67,11 @@
       "size_bytes": 3071
     },
     {
+      "path": "logs/checkpoint_resume.txt",
+      "sha256": "a33322830f0df269dfaec4f659d448a0b107a12e185d9d128d664cfc07d617e7",
+      "size_bytes": 727
+    },
+    {
       "path": "logs/execution_repair_freeze_tests.txt",
       "sha256": "5852c8aaae6013dbeb625ee1ef7a6c8ca37bcf1a0d1033308e036860316e78a6",
       "size_bytes": 99
@@ -72,9 +82,19 @@
       "size_bytes": 284
     },
     {
+      "path": "logs/final_compact_verifier.txt",
+      "sha256": "a25a877fbbc4539fc411b3fcb3339b89dccd3a9fcac4132edd70b41a8936b4fb",
+      "size_bytes": 295
+    },
+    {
+      "path": "logs/final_related_tests.txt",
+      "sha256": "809728d4df99f9fcb782442cc1b9a216afefb844195cda05dd29b8c86e854473",
+      "size_bytes": 99
+    },
+    {
       "path": "per_epoch_scores.csv.gz",
-      "sha256": "6d02326fcd987be4e9ba6014d94272924de0edc582546ac7ef2a655c1ee828f2",
-      "size_bytes": 181
+      "sha256": "35545f63f73045077a15e4868637a9c60c5c59929e9d28d0fa929efb155fcf22",
+      "size_bytes": 5452351
     },
     {
       "path": "preregistration.json",
@@ -88,8 +108,8 @@
     },
     {
       "path": "r4c_preserved_output_audit.json",
-      "sha256": "39cbcb90cdf405cec0f30b9fec4f89c82b0013898615d968ad94c6cf4e9acf6b",
-      "size_bytes": 318
+      "sha256": "cad781e52892d7cf5663efe1e11db5f68e554ea32ffff5101c24f960741376de",
+      "size_bytes": 7403
     },
     {
       "path": "repair_preregistration.json",
@@ -98,18 +118,23 @@
     },
     {
       "path": "replay_completion.csv",
-      "sha256": "bd41a6405d0d5e3801dcb2466d468086e6e79655fadf5c075f37fe60a1177676",
-      "size_bytes": 237
+      "sha256": "3f1b7e0cccbb1022ba9700b32fce328b91a14fecb37d511a93e9f8a56593ad0c",
+      "size_bytes": 2565
     },
     {
       "path": "scenario_metrics.json",
-      "sha256": "d939d6d3157a02e26f4f1f56ffb30135c422d9e4e71697f77f9dda7054758b18",
-      "size_bytes": 1789
+      "sha256": "343cdf9cce4ba959986c62bde0117f53a3110b9f67566d346ed19eac2c9142e3",
+      "size_bytes": 13039
+    },
+    {
+      "path": "score_components.png",
+      "sha256": "6f2a5e8e61a266e75567c751c3a7f1ce26b9afcbb39b8dd058e0890caecf361b",
+      "size_bytes": 96354
     },
     {
       "path": "shortcut_audit.json",
-      "sha256": "aef38e4b50448e9250ec49d8b9cffb81d2ea1d6c26774ae9a35127e8ecaf3676",
-      "size_bytes": 98
+      "sha256": "4c13993ae417ccfd3bc6e2dbfdf9c1420fe84e5735edc79a4843997403d7d0a6",
+      "size_bytes": 1108
     },
     {
       "path": "source_binding.json",
@@ -118,8 +143,8 @@
     },
     {
       "path": "support_audit.json",
-      "sha256": "5b5ce6d6d85c65fa67349a7e82381dbd7b020cb71cb5da7b5f5245a5d005a75e",
-      "size_bytes": 97
+      "sha256": "5bad98c5fc54e6dfaed7819b5e6f1ad64b4299f4fe456e70393250c40c905df8",
+      "size_bytes": 974
     }
   ],
   "schema": "gnss-doppler-lab.crid-r4d-artifact-manifest.v1",

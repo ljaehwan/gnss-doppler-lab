@@ -1,7 +1,150 @@
 {
-  "audit_after_pushed_repair_freeze_only": true,
-  "old_output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4c-texbat-ds3-exploratory-locked-score",
-  "overwrite_or_delete": false,
+  "committed_incomplete_binding": {
+    "path": "artifacts/crid_stage0_r4c_texbat_ds3_exploratory_locked_score/incomplete_c0_output_binding.json",
+    "sha256": "a801e555722e98a2aac3ce90c51a37c2fc5cc9fc2b400423812baf71c03187db",
+    "size_bytes": 4677
+  },
+  "config_binding_pass": true,
+  "ds3_input_sha256": "e37e11b060bc2c675d4a60024f8b4a53e95e7cd1d304bea80cd903856075a30d",
+  "dump_bindings_pass": true,
+  "dumps": [
+    {
+      "binding_pass": true,
+      "exists": true,
+      "expected_sha256": "73398fc59e5b25740345dfedd4d270a54fade97d72c3588edff8f5c6bbb23daf",
+      "expected_size_bytes": 59862176,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4c-texbat-ds3-exploratory-locked-score/replays/C0/trace_native_1ms_ch_0.bin",
+      "record_count": 143899,
+      "sha256": "73398fc59e5b25740345dfedd4d270a54fade97d72c3588edff8f5c6bbb23daf",
+      "size_bytes": 59862176
+    },
+    {
+      "binding_pass": true,
+      "exists": true,
+      "expected_sha256": "c91f93b7103b0fc29911144ba82e1b5a99785ce39d5f16a03d81ec121a9db0c4",
+      "expected_size_bytes": 42750432,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4c-texbat-ds3-exploratory-locked-score/replays/C0/trace_native_1ms_ch_1.bin",
+      "record_count": 102765,
+      "sha256": "c91f93b7103b0fc29911144ba82e1b5a99785ce39d5f16a03d81ec121a9db0c4",
+      "size_bytes": 42750432
+    },
+    {
+      "binding_pass": true,
+      "exists": true,
+      "expected_sha256": "19406244357a847d546e3d40754e88f666875d2177eedaea43fef998dd8d45b1",
+      "expected_size_bytes": 192,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4c-texbat-ds3-exploratory-locked-score/replays/C0/trace_native_1ms_ch_10.bin",
+      "record_count": 0,
+      "sha256": "19406244357a847d546e3d40754e88f666875d2177eedaea43fef998dd8d45b1",
+      "size_bytes": 192
+    },
+    {
+      "binding_pass": true,
+      "exists": true,
+      "expected_sha256": "2158436b1f7e60f9bf7a02512c97bb76dddc62fd8f8bd130b62209b24dd7e7b8",
+      "expected_size_bytes": 33812256,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4c-texbat-ds3-exploratory-locked-score/replays/C0/trace_native_1ms_ch_2.bin",
+      "record_count": 81279,
+      "sha256": "2158436b1f7e60f9bf7a02512c97bb76dddc62fd8f8bd130b62209b24dd7e7b8",
+      "size_bytes": 33812256
+    },
+    {
+      "binding_pass": true,
+      "exists": true,
+      "expected_sha256": "afd90a790b954d3e376b5242285fddc3e5c12eaaffef5d9901bb6bfc1946b74c",
+      "expected_size_bytes": 59861760,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4c-texbat-ds3-exploratory-locked-score/replays/C0/trace_native_1ms_ch_3.bin",
+      "record_count": 143898,
+      "sha256": "afd90a790b954d3e376b5242285fddc3e5c12eaaffef5d9901bb6bfc1946b74c",
+      "size_bytes": 59861760
+    },
+    {
+      "binding_pass": true,
+      "exists": true,
+      "expected_sha256": "8da476d3b6149d42f6b208078ccde84d4a935e515827f3190fbe2c1229b17794",
+      "expected_size_bytes": 32912864,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4c-texbat-ds3-exploratory-locked-score/replays/C0/trace_native_1ms_ch_4.bin",
+      "record_count": 79117,
+      "sha256": "8da476d3b6149d42f6b208078ccde84d4a935e515827f3190fbe2c1229b17794",
+      "size_bytes": 32912864
+    },
+    {
+      "binding_pass": true,
+      "exists": true,
+      "expected_sha256": "04780287de8942f08afadcbfab7c166223cb7b62aefa5003a58ff25a1da44f6f",
+      "expected_size_bytes": 6656192,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4c-texbat-ds3-exploratory-locked-score/replays/C0/trace_native_1ms_ch_5.bin",
+      "record_count": 16000,
+      "sha256": "04780287de8942f08afadcbfab7c166223cb7b62aefa5003a58ff25a1da44f6f",
+      "size_bytes": 6656192
+    },
+    {
+      "binding_pass": true,
+      "exists": true,
+      "expected_sha256": "6259f95ba82a23be8b1f6a9d962efafe56bcc5668f01f88f527e0825d222d25e",
+      "expected_size_bytes": 28178784,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4c-texbat-ds3-exploratory-locked-score/replays/C0/trace_native_1ms_ch_6.bin",
+      "record_count": 67737,
+      "sha256": "6259f95ba82a23be8b1f6a9d962efafe56bcc5668f01f88f527e0825d222d25e",
+      "size_bytes": 28178784
+    },
+    {
+      "binding_pass": true,
+      "exists": true,
+      "expected_sha256": "8827e28e1219d37aa10cc71864faa0dce9702466296ed8ec81001fc1ee9a76e5",
+      "expected_size_bytes": 12429440,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4c-texbat-ds3-exploratory-locked-score/replays/C0/trace_native_1ms_ch_7.bin",
+      "record_count": 29878,
+      "sha256": "8827e28e1219d37aa10cc71864faa0dce9702466296ed8ec81001fc1ee9a76e5",
+      "size_bytes": 12429440
+    },
+    {
+      "binding_pass": true,
+      "exists": true,
+      "expected_sha256": "f8e7f4234d759e0c88718385e294d0c53980db06ef89b321bf93823826684838",
+      "expected_size_bytes": 59861760,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4c-texbat-ds3-exploratory-locked-score/replays/C0/trace_native_1ms_ch_8.bin",
+      "record_count": 143898,
+      "sha256": "f8e7f4234d759e0c88718385e294d0c53980db06ef89b321bf93823826684838",
+      "size_bytes": 59861760
+    },
+    {
+      "binding_pass": true,
+      "exists": true,
+      "expected_sha256": "22174d1c1d3d415b90ac5fd996a71c622a64d18def0e08717189260f4a7678cc",
+      "expected_size_bytes": 59861760,
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4c-texbat-ds3-exploratory-locked-score/replays/C0/trace_native_1ms_ch_9.bin",
+      "record_count": 143898,
+      "sha256": "22174d1c1d3d415b90ac5fd996a71c622a64d18def0e08717189260f4a7678cc",
+      "size_bytes": 59861760
+    }
+  ],
+  "execution_command_reconstruction": [
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/trace-stage0-r2c-terminal-drain-repair/receiver-build/src/main/gnss-sdr",
+    "--config_file=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4c-texbat-ds3-exploratory-locked-score/replays/C0/receiver.conf",
+    "--keyboard=false"
+  ],
+  "freeze_sha": "2e2d5246122e2305e173b225663c9d4c5fc93fbd",
+  "handoff_sha256": "e2118c753b2b58c13f29fd55115323e4b43ec445c92bf2e689d56843834804a3",
+  "missing_required_evidence": [
+    "receiver_exit_code",
+    "terminal_drain_status"
+  ],
+  "native_record_counts_recovered": true,
+  "old_output_deleted_or_overwritten": false,
+  "old_output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4c-texbat-ds3-exploratory-locked-score/replays/C0",
+  "r4c_freeze_sha": "be4e51fecca78569a6a5e6d6d70930de5733b34c",
+  "receiver_exit_code_recovered": false,
+  "receiver_log": {
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4c-texbat-ds3-exploratory-locked-score/replays/C0/receiver.log",
+    "sha256": "562af149492b1eb564796bed8d1ac0bd54fafa2fade3778a792d0fcaba6f036f",
+    "size_bytes": 68336
+  },
+  "receiver_sha256": "2f6e8e969e525bb48b4d94f016af8fd24f433b0be26b51837f316f60a6b911e0",
+  "rerun_c0_in_r4d_root": true,
+  "reuse_c0": false,
   "schema": "gnss-doppler-lab.crid-r4d-r4c-preserved-output-audit.v1",
-  "status": "FROZEN_NOT_AUDITED"
+  "score_executed": false,
+  "status": "HISTORICAL_INCOMPLETE_EVIDENCE",
+  "terminal_drain_status_recovered": false
 }

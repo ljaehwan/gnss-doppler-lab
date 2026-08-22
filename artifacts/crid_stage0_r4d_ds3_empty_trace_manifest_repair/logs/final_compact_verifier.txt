@@ -1,0 +1,13 @@
+{
+  "checks": {
+    "epoch_rows": 73480,
+    "manifest_files": 26,
+    "manifest_ok": true,
+    "replay_rows": 4,
+    "verdict": "EXPLORATORY_TEXBAT_DS3_NO_USEFUL_SIGNAL"
+  },
+  "failures": [],
+  "mode": "final",
+  "schema": "gnss-doppler-lab.crid-r4d-compact-verifier.v1",
+  "status": "PASS"
+}

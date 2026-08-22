@@ -24,10 +24,12 @@
     "scripts/verify_crid_r4d_ds3.py": "cb3d2d9beb109c87555be829c40f085b9d48951eb48662f056ea58fde97f594d",
     "src/gnss_doppler_lab/crid_r4d_ds3.py": "5652af2b742275c26d5e67fbfcdb77db0b4825f0017d2c3b66350e48ba87bf0b"
   },
+  "freeze_sha": "2e2d5246122e2305e173b225663c9d4c5fc93fbd",
   "output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4d-ds3-empty-trace-manifest-repair",
+  "post_access_executable_changes": false,
   "repair_scope": "EMPTY_TRACE_MANIFEST_ADAPTER_ONLY",
   "schema": "gnss-doppler-lab.crid-r4d-execution-freeze.v1",
   "score_executed_before_repair_freeze": false,
-  "status": "FROZEN_PENDING_PUSH",
+  "status": "EXECUTED_FROM_PUSHED_FREEZE",
   "worker_count": 1
 }

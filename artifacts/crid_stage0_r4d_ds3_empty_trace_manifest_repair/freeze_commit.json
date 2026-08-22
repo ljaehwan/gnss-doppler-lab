@@ -1,5 +1,12 @@
 {
-  "freeze_sha": null,
+  "ahead": 0,
+  "base_sha": "39b38a9dd8a470e0a2f83604cde61722ad52be1d",
+  "behind": 0,
+  "branch": "research/crid-stage0-r4d-ds3-empty-trace-manifest-repair",
+  "clean_checkout_before_access": true,
+  "freeze_sha": "2e2d5246122e2305e173b225663c9d4c5fc93fbd",
+  "local_sha_before_access": "2e2d5246122e2305e173b225663c9d4c5fc93fbd",
+  "remote_sha_before_access": "2e2d5246122e2305e173b225663c9d4c5fc93fbd",
   "schema": "gnss-doppler-lab.crid-r4d-freeze-commit.v1",
-  "status": "PENDING_PUSH"
+  "status": "PASS"
 }

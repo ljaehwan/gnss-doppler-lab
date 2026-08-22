@@ -1,0 +1,24 @@
+{"replay": 1, "total": 4, "config": "C0", "status": "SKIP_EXACT_COMPLETE"}
+{"replay": 2, "total": 4, "config": "C1", "status": "SKIP_EXACT_COMPLETE"}
+{"replay": 3, "total": 4, "config": "C2", "status": "SKIP_EXACT_COMPLETE"}
+{"replay": 4, "total": 4, "config": "C3", "status": "SKIP_EXACT_COMPLETE"}
+{
+  "completed_replays": 4,
+  "expected_replays": 4,
+  "freeze_sha": "2e2d5246122e2305e173b225663c9d4c5fc93fbd",
+  "order": [
+    "C0",
+    "C1",
+    "C2",
+    "C3"
+  ],
+  "phase_b_executed": false,
+  "resource_preflight": {
+    "free_bytes": 189394575360,
+    "required_with_margin_bytes": 10000000000,
+    "status": "PASS"
+  },
+  "schema": "gnss-doppler-lab.crid-r4d-replay-run.v1",
+  "status": "PASS",
+  "worker_count": 1
+}

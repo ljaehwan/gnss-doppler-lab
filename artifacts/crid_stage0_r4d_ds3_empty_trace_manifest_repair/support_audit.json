@@ -1,4 +1,35 @@
 {
+  "causal_delays_ms": {
+    "C0": 0,
+    "C1": 0,
+    "C2": 0,
+    "C3": 0
+  },
+  "deterministic_exact_match": true,
+  "empty_optional_channel_count": 4,
+  "empty_optional_channels_excluded_from_support": true,
+  "minimum_common_prns": 4,
+  "minimum_configurations": 4,
+  "partitions": {
+    "established": {
+      "availability": 0.21271070615034168,
+      "nominal_1ms_epochs": 43900,
+      "valid_epochs": 9338
+    },
+    "pre_onset": {
+      "availability": 0.570775,
+      "nominal_1ms_epochs": 40000,
+      "valid_epochs": 22831
+    },
+    "transition": {
+      "availability": 0.5428515111695138,
+      "nominal_1ms_epochs": 76100,
+      "valid_epochs": 41311
+    }
+  },
   "schema": "gnss-doppler-lab.crid-r4d-support-audit.v1",
-  "status": "FROZEN_NOT_EVALUATED"
+  "score_epoch_count": 73480,
+  "score_sha256_first": "6b78624972da5628cfa3bcbddac8535b17c3fa2d9c34173aa9e2cad10bb13381",
+  "score_sha256_second": "6b78624972da5628cfa3bcbddac8535b17c3fa2d9c34173aa9e2cad10bb13381",
+  "status": "PASS"
 }
