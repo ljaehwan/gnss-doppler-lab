@@ -1,0 +1,314 @@
+{
+  "allowed_final_verdicts": [
+    "BITPROBE_STAGE0A_EDGE_OPERATOR_IDENTIFIABLE",
+    "BITPROBE_STAGE0A_PARTIAL_DATASET_SUPPORT",
+    "BITPROBE_STAGE0A_EDGE_OPERATOR_NOT_IDENTIFIABLE",
+    "INCONCLUSIVE_BITPROBE_STAGE0A_EXECUTION_OR_PROVENANCE"
+  ],
+  "base_sha": "2cb81593783cb4c8db2d0d38ecc71d9850fafadf",
+  "branch": "research/bitprobe-stage0a-nav-edge-operator-identifiability",
+  "clean_inputs": {
+    "OAKBAT.cleanStatic": {
+      "path": "/home/ubuntu/ssd_data/gnss-datasets/oakbat/gps_l1ca/raw/cleanStatic_gps.bin",
+      "sample_format": "little-endian interleaved signed int16 I/Q",
+      "sample_rate_hz": 5000000,
+      "sha256": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "size_bytes": 9600000000
+    },
+    "TEXBAT.cleanStatic": {
+      "path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/cleanStatic.bin",
+      "sample_format": "little-endian interleaved signed int16 I/Q",
+      "sample_rate_hz": 25000000,
+      "sha256": "dd295ab46616bfe9634d1c37479520e720ebc54bcb64adf0a247315a541fb9b9",
+      "size_bytes": 48016392192
+    }
+  },
+  "data_access_contract": {
+    "allowed": [
+      "TEXBAT cleanStatic raw IQ",
+      "OAKBAT cleanStatic raw IQ",
+      "their committed clean tracking/NAV/ephemeris/source-binding artifacts",
+      "deterministic nuisance and synthetic controls derived from clean-only inputs"
+    ],
+    "forbidden": [
+      "TEXBAT DS1 through DS8",
+      "all OAKBAT attack scenarios",
+      "renamed or aliased attack payloads",
+      "R4d DS3 scores as a BITPROBE design input"
+    ],
+    "forbidden_operations": [
+      "stat",
+      "hash",
+      "open",
+      "mmap",
+      "partial_read"
+    ],
+    "forbidden_operation_counts_required": 0,
+    "raw_edge_results_before_implementation_freeze": false
+  },
+  "edge_contract": {
+    "boundary_coordinate": "absolute raw complex-sample coordinate from R0c corrected_raw_start_sample",
+    "candidate_rule": "For every target PRN, use consecutive R0c corrected bits whose boundary lies wholly within the R0c authorized common interval, corrected_confidence equals 1, phase_extrapolation_match is true, source_method and boundary_basis match R0c, and inherited parity/preamble/TOW checks pass.",
+    "classification": {
+      "flip": "previous bit_value_pm1 != current bit_value_pm1",
+      "no_flip": "previous bit_value_pm1 == current bit_value_pm1"
+    },
+    "direction_canonicalization": "Multiply the despread edge by previous bit_value_pm1 so flip edges are +1 to -1 and no-flip controls are +1 to +1.",
+    "fractional_alignment": {
+      "fractional_offset_samples": "action_used_residual_code_phase_samples minus its nearest integer",
+      "interpolation": "complex linear interpolation on signed receiver sample coordinates after carrier wipe-off and code despreading",
+      "maximum_absolute_offset_samples": 0.5,
+      "maximum_grid_reconstruction_error_samples": 1e-06
+    },
+    "ideal_and_control_removal": "Fit one complex amplitude to the canonical ideal sign template using samples outside +/-0.25 chip, divide by that amplitude, subtract the ideal template, then subtract the robust same-PRN no-flip residual kernel from the flip residual kernel.",
+    "normalization": "Per-edge complex least-squares amplitude and global-phase normalization; magnitude-only features are prohibited.",
+    "raw_half_window_chips": 4.0,
+    "representation": {
+      "fast_transient": {
+        "end_chip": 0.25,
+        "start_chip": -0.25,
+        "step_chip": 0.03125
+      },
+      "one_chip": {
+        "end_chip": 1.0,
+        "start_chip": -1.0,
+        "step_chip": 0.0625
+      },
+      "ringing": {
+        "end_chip": 3.0,
+        "start_chip": -3.0,
+        "step_chip": 0.125
+      }
+    },
+    "robust_aggregation": "coordinate-wise median of real and imaginary residuals followed by L2 normalization only for similarity calculations"
+  },
+  "edge_exclusion_contract": {
+    "agc_outlier": "absolute robust z-score above 6 for log fitted-amplitude magnitude within PRN using flip and no-flip candidates jointly",
+    "alignment": "exclude when delay-center consistency exceeds 0.125 chip, Doppler-center consistency exceeds 50 Hz, fractional offset exceeds 0.5 sample, or interpolation reconstruction error exceeds 1e-6 sample",
+    "clipping": "exclude if any raw I or Q component in the frozen window has absolute value 32767 or greater",
+    "mapping": "exclude parity/bit/phase provenance failure, nonconsecutive bit indices, corrected boundary discontinuity, or boundary outside the authorized R0c common interval",
+    "overlap": "exclude both candidates if their +/-4 chip raw windows overlap",
+    "raw_bounds": "exclude when the complete +/-4 chip window is unavailable",
+    "tracking": "require valid_tracking=1, valid_lock=1, C/N0>=28 dB-Hz, carrier_lock_test>=0.85, unchanged PRN/session, and valid preceding/current TRACE records",
+    "zero_fill": "exclude if complex-zero fraction exceeds 0.10 or a consecutive complex-zero run reaches 8 samples"
+  },
+  "model_contract": {
+    "ai_classifier": false,
+    "attack_evaluation": false,
+    "cn0_lock_gain_prn_count_as_feature": false,
+    "detector_name": "BITPROBE-GNSS",
+    "feature": "deterministic complex NAV-edge residual kernels and preregistered cross-PRN operator statistics",
+    "prn_identity_as_feature": false
+  },
+  "nuisance_contract": {
+    "agc_normalization_sensitivity": [
+      "per-edge complex LS normalization",
+      "per-edge median-magnitude normalization diagnostic"
+    ],
+    "awgn_snr_degradation_db": [
+      3.0,
+      6.0
+    ],
+    "fractional_timing_perturbation_chips": [
+      -0.05,
+      0.05
+    ],
+    "gain_scales": [
+      0.5,
+      0.8,
+      1.25,
+      2.0
+    ],
+    "global_phase_rotations_rad": [
+      0.5235987755982988,
+      1.5707963267948966,
+      3.141592653589793
+    ],
+    "receiver_filter_firs": [
+      [
+        0.1,
+        0.8,
+        0.1
+      ],
+      [
+        -0.05,
+        0.9,
+        0.15
+      ]
+    ],
+    "small_carrier_residual_hz": [
+      -5.0,
+      5.0
+    ]
+  },
+  "output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/bitprobe-stage0a-nav-edge-operator-identifiability",
+  "primary_gate": {
+    "between_prn_separability": {
+      "block_permutation_p_max": 0.01,
+      "bootstrap_95_lower_bound_min_exclusive": 0.0,
+      "median_same_minus_different_min": 0.15
+    },
+    "flip_specificity": {
+      "block_permutation_p_max": 0.01,
+      "flip_split_reproducibility_greater_than_no_flip": true
+    },
+    "moderate_nuisance": {
+      "median_similarity_min": 0.75,
+      "separability_effect_direction_preserved": true
+    },
+    "reproducibility": {
+      "bootstrap_95_lower_bound_min_exclusive": 0.5,
+      "median_complex_coherence_min": 0.7
+    },
+    "strong_nuisance": {
+      "median_similarity_min": 0.9,
+      "separability_decision_preserved": true
+    },
+    "support": {
+      "minimum_flip_edges_per_half": 80,
+      "minimum_flip_edges_per_prn": 200,
+      "minimum_no_flip_edges_per_half": 80,
+      "minimum_no_flip_edges_per_prn": 200,
+      "minimum_prns_per_dataset": 4
+    },
+    "synthetic_operator": {
+      "auc_or_pauc_min": 0.8,
+      "minimum_nontrivial_weak_levels_same_direction": 2,
+      "null_false_positive_rate_max": 0.05
+    }
+  },
+  "provenance_contract": {
+    "R0b_manifest_sha256": "e11e5fc0832396c461ffb1bac6a9a4768300416910993a187a67c84bfe8f291f",
+    "R0c_manifest_status": "PASS",
+    "R0c_scope": "only the two approximately 12-second authorized common intervals; no distant extrapolation",
+    "R0c_verdict": "BOUNDARY_PHASE_EXTRAPOLATION_PASS_WITH_SCOPE_LIMITATION",
+    "frozen_navbit_sequence_sha256": "0c953453d9340329d92c0856c48e4da38454fcd7d68d329678b3e12a1c11a342",
+    "historical_R0b_failure_preserved": true,
+    "required_edge_fields": [
+      "dataset",
+      "source_sha256",
+      "prn",
+      "nav_bit_index",
+      "previous_bit_value_pm1",
+      "current_bit_value_pm1",
+      "flip",
+      "parity_status",
+      "raw_complex_sample_boundary",
+      "fractional_boundary_offset_samples",
+      "carrier_code_state_source",
+      "cn0_db_hz",
+      "carrier_lock_test",
+      "exclusion_reason"
+    ]
+  },
+  "scientific_limitation": {
+    "identity": "h * sum(s_i) = sum(h * s_i)",
+    "source_localization_claim": false,
+    "statement": "A common linear response observed by one receiver cannot identify whether the operator is transmitter-side or receiver-front-end. Receiver-side and transmitter-side nonlinearities may also remain nonlocalizable; that limitation must be reported."
+  },
+  "split_and_inference": {
+    "bootstrap_replicates": 500,
+    "bootstrap_unit": "contiguous blocks of 10 NAV edges within PRN; never waveform samples",
+    "deterministic_seed": 20260822,
+    "flip_specificity_permutations": 999,
+    "odd_even_split_role": "diagnostic_only",
+    "primary_split": "chronological first and second halves independently within PRN and edge class",
+    "prn_permutation": "exact permutation of second-half PRN kernel labels within each dataset",
+    "reported_metrics": [
+      "complex normalized coherence",
+      "phase-aligned cosine similarity",
+      "phase-aligned kernel distance",
+      "edge-block bootstrap confidence intervals",
+      "same-minus-different similarity",
+      "within/between distance ratio",
+      "exact PRN-label permutation p",
+      "nearest-kernel PRN retrieval diagnostic"
+    ]
+  },
+  "stage": "BITPROBE_GNSS_STAGE0A_CLEAN_PHYSICAL_IDENTIFIABILITY",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION_AND_RAW_EDGE_RESULTS",
+  "synthetic_contract": {
+    "calibration_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "evaluation_seeds": [
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ],
+    "null_threshold": "95th percentile of calibration-seed null scores, evaluated only on disjoint evaluation seeds",
+    "operator_statistic": "median absolute cross-PRN third-order residual plus leading common-subspace fraction of edge-conditioned Volterra residuals",
+    "receiver_linear_confound": "must not be interpreted as transmitter evidence",
+    "receiver_nonlinear_confound": "report source_localization_unavailable when indistinguishable from transmitter common nonlinearity",
+    "scenarios": [
+      "separate-emitter per-PRN weak LTI/PA before summation",
+      "common-emitter DAC/filter/PA after summation",
+      "receiver-common linear filter after summation",
+      "receiver nonlinear operator after summation",
+      "gain-only null",
+      "global-phase-only null",
+      "AWGN-only null",
+      "identical receiver-filter null",
+      "C/N0-reduction null",
+      "fractional-delay null"
+    ],
+    "weak_cubic_levels": [
+      0.0025,
+      0.005,
+      0.01
+    ]
+  },
+  "target_prn_rule": {
+    "OAKBAT.cleanStatic_expected_from_R0c": [
+      10,
+      11,
+      21,
+      24,
+      27
+    ],
+    "TEXBAT.cleanStatic_expected_from_R0c": [
+      3,
+      13,
+      16,
+      19,
+      30
+    ],
+    "rule": "Use every PRN in the R0c authorized common interval whose tracking_continuity status is PASS and whose corrected mapping has complete validated bit/phase provenance; do not select by edge outcome or metric."
+  },
+  "verdict_contract": {
+    "identifiable": "Both clean datasets pass gates 1-6, synthetic gate passes, confound limitation is recorded, and forbidden access is zero.",
+    "inconclusive": "Any execution, provenance, raw binding, mapping, alignment, resource, or minimum-support failure.",
+    "not_identifiable": "Both datasets are technically complete but the frozen scientific gates or synthetic gate fail.",
+    "partial": "Both datasets are technically complete and exactly one dataset passes all real-data gates 1-6.",
+    "stage0b_next_state_only_after_identifiable": "READY_FOR_BITPROBE_STAGE0B_PREREGISTRATION",
+    "otherwise_next_state": "NOT_AUTHORIZED"
+  }
+}
