@@ -1,0 +1,141 @@
+{
+  "allowed_verdicts": [
+    "INCONCLUSIVE_TEXBAT_DS3_EXPLORATORY_EXECUTION",
+    "EXPLORATORY_TEXBAT_DS3_SIGNAL_PRESENT",
+    "EXPLORATORY_TEXBAT_DS3_NO_USEFUL_SIGNAL"
+  ],
+  "authoritative_threshold": -21.942672917134093,
+  "base_sha": "39b38a9dd8a470e0a2f83604cde61722ad52be1d",
+  "branch": "research/crid-stage0-r4d-ds3-empty-trace-manifest-repair",
+  "execution_after_repair_freeze_only": true,
+  "exploratory_only": true,
+  "forbidden_inputs": [
+    "TEXBAT DS1",
+    "TEXBAT DS4",
+    "TEXBAT DS7",
+    "TEXBAT DS8",
+    "OAK attack data"
+  ],
+  "frozen_r4c_protocol": {
+    "configuration_order": [
+      "C0",
+      "C1",
+      "C2",
+      "C3"
+    ],
+    "established_window_s": [
+      195.0,
+      238.9
+    ],
+    "input": "TEXBAT DS3 only",
+    "input_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds3.bin",
+    "minimum_common_prns": 4,
+    "minimum_configurations": 4,
+    "pre_onset_window_s": [
+      78.9,
+      118.9
+    ],
+    "r4c_freeze_sha": "be4e51fecca78569a6a5e6d6d70930de5733b34c",
+    "r4c_final_sha": "39b38a9dd8a470e0a2f83604cde61722ad52be1d",
+    "replay_interval_s": [
+      78.9,
+      238.9
+    ],
+    "threshold_comparison": "score > -21.942672917134093",
+    "transition_window_s": [
+      118.9,
+      195.0
+    ],
+    "worker_count": 1
+  },
+  "immutable_scientific_contract": {
+    "causal_alignment": "UNCHANGED_FROM_R4C",
+    "configuration_scientific_fields": "BYTE_IDENTICAL_TO_R4C_AFTER_EXCLUDING_ONLY_TRACE_OUTPUT_PATH_AND_PROVENANCE_SCENARIO_LABEL",
+    "feature": "UNCHANGED_FROM_R4C",
+    "gate": {
+      "established_detection_rate_min": 0.7,
+      "established_four_config_min_four_prn_support_required": true,
+      "not_explained_only_by_lock_loss_or_tracked_prn_collapse": true,
+      "pauc_0_05_min": 0.8,
+      "pre_onset_fpr_max": 0.05
+    },
+    "handoff": "BYTE_IDENTICAL_TO_R4C",
+    "h0_h1_score": "UNCHANGED_FROM_R4C",
+    "metrics": "UNCHANGED_FROM_R4C",
+    "model_predictor_covariance": "UNCHANGED_FROM_R4C",
+    "prn_pooling": "MEDIAN_OVER_COMMON_PRNS_UNCHANGED_FROM_R4C",
+    "receiver_binary": "BYTE_IDENTICAL_TO_R4C",
+    "threshold_recalibration": false,
+    "timeline_and_windows": "UNCHANGED_FROM_R4C"
+  },
+  "manifest_adapter_repair": {
+    "aggregate_binding": "Every expected dump, including EMPTY_OPTIONAL_CHANNEL, is included with record_count, logical size_bytes, physical file_size_bytes, actual sha256, and status.",
+    "empty_existing": {
+      "file_size_bytes": "Path.stat().st_size of the on-disk container; a header-only native TRACE may therefore be nonzero",
+      "record_count": 0,
+      "sha256": "SHA256 of the actual on-disk file bytes",
+      "size_bytes": 0,
+      "size_bytes_semantics": "logical native-record payload bytes",
+      "status": "EMPTY_OPTIONAL_CHANNEL"
+    },
+    "missing_expected_file": "FAIL_CLOSED",
+    "native_summary_byte_size": "OPTIONAL_AND_NON_AUTHORITATIVE",
+    "nonempty_existing": "Record actual Path.stat().st_size and actual SHA256; validate any supplied native-summary byte_size and sha256.",
+    "repair_scope": "VERSIONED_ENGINEERING_MANIFEST_ADAPTER_ONLY",
+    "support_rule": "Exclude EMPTY_OPTIONAL_CHANNEL from valid TRACE support and tracked-PRN counts; decide only after four-configuration common support is measured.",
+    "tamper_rule": "Any post-binding size, hash, record-count, status, threshold, model, window, handoff, receiver, or scientific-config mismatch fails closed."
+  },
+  "old_r4c_c0_policy": {
+    "audit_required_evidence": [
+      "execution command and frozen SHA",
+      "DS3 input SHA",
+      "receiver/config/handoff SHA",
+      "receiver exit code",
+      "terminal-drain status",
+      "all dump files, native record counts, sizes, and SHA256",
+      "output path and execution log"
+    ],
+    "if_fully_recoverable": "Hash-bind and reuse as RECOVERED_PRESERVED_C0.",
+    "if_not_fully_recoverable": "Preserve as historical incomplete evidence and run C0 in the new R4d output root.",
+    "overwrite_or_delete": false
+  },
+  "output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4d-ds3-empty-trace-manifest-repair",
+  "post_attack_access_changes_forbidden": [
+    "CRID feature",
+    "model",
+    "predictor",
+    "covariance",
+    "H0/H1 score",
+    "PRN pooling",
+    "threshold",
+    "timeline",
+    "window",
+    "metric",
+    "gate",
+    "receiver binary",
+    "configuration scientific fields",
+    "handoff",
+    "DS3 input"
+  ],
+  "pre_score_sequence": [
+    "Commit and push this repair_preregistration.json as the only changed path.",
+    "Verify preregistration local/remote SHA equality, ahead/behind 0/0, and a clean worktree.",
+    "Implement and test only the empty-channel adapter, R4d orchestration, frozen analyzer adapter, compact verifier, and tamper checks.",
+    "Commit and push execution-repair-freeze bindings and verify local/remote SHA equality, ahead/behind 0/0, and a clean worktree.",
+    "Use a fresh clean checkout of the pushed execution-repair-freeze SHA for R4c C0 evidence audit, DS3 replay, and locked scoring."
+  ],
+  "prohibited_claims": [
+    "PHASE_B_PASS",
+    "SPOOFING_DETECTOR_VALIDATED",
+    "READY_FOR_DEPLOYMENT"
+  ],
+  "r4c_result_preservation": {
+    "historical_verdict": "INCONCLUSIVE_TEXBAT_DS3_EXPLORATORY_EXECUTION",
+    "modify_r4c_artifact": false,
+    "overwrite_old_c0_output": false,
+    "supersession": "R4d is a versioned engineering repair and continuation; it does not rewrite the R4c record."
+  },
+  "schema": "gnss-doppler-lab.crid-r4d-repair-preregistration.v1",
+  "score_before_execution_repair_freeze": false,
+  "status": "REPAIR_PREREGISTERED_BEFORE_ADAPTER_IMPLEMENTATION"
+}
