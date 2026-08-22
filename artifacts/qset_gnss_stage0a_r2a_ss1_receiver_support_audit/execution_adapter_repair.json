@@ -1,0 +1,111 @@
+{
+  "gate_changes": false,
+  "new_output_namespace": "variants-repair-v1",
+  "preserved_aggregate_sha256": "65ba703bb968b5455c8cfb2dc03104a48e37ca7099aff9d55a4362c8ef9d328a",
+  "preserved_files": [
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1/receiver/gal_almanac.xml",
+      "sha256": "910ff5adab27907536e678dd4f790d2f6db6b702d8d5c4b74703a636f11ccded",
+      "size_bytes": 5045
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1/receiver/gal_ephemeris.xml",
+      "sha256": "8f90d3e51d283ad2b669eb38e846f8b874f67cfdf6f523d3415d486e19926557",
+      "size_bytes": 5784
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1/receiver/gal_iono.xml",
+      "sha256": "06210d9349e20b7c9cb3cba94851109f4075f2384a7a8bb5b6409c9cf9ff3de3",
+      "size_bytes": 582
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1/receiver/gal_utc_model.xml",
+      "sha256": "dd3be066743043083f92ee696691a00c6faf221d4addcb20490ceffff04f657b",
+      "size_bytes": 505
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1/receiver/receiver.conf",
+      "sha256": "6cc19553c2d983c4d24e3b63738cd480c527bd998687fb9e62a9d4b05f110fc2",
+      "size_bytes": 2154
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1/receiver/receiver.log",
+      "sha256": "1ac293880eaa29b446265ab6824f1b77b49aa4f20a34d3ab63e9729a705259e8",
+      "size_bytes": 307711
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1/receiver/trace_native_1ms_ch_0.bin",
+      "sha256": "564d9d379bbdb0008ebf472e707a6215192688eac0a32e5b95a358646e5ec262",
+      "size_bytes": 10487552
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1/receiver/trace_native_1ms_ch_1.bin",
+      "sha256": "53338d760a084f9a2799417fb17c7c7ec1a4669a9057a3ef98b015a74daa2fc9",
+      "size_bytes": 15366816
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1/receiver/trace_native_1ms_ch_10.bin",
+      "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+      "size_bytes": 192
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1/receiver/trace_native_1ms_ch_11.bin",
+      "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+      "size_bytes": 192
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1/receiver/trace_native_1ms_ch_2.bin",
+      "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+      "size_bytes": 192
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1/receiver/trace_native_1ms_ch_3.bin",
+      "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+      "size_bytes": 192
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1/receiver/trace_native_1ms_ch_4.bin",
+      "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+      "size_bytes": 192
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1/receiver/trace_native_1ms_ch_5.bin",
+      "sha256": "4f3968132366fbe703fca871333d207b378653a4d9b32de19ccede8094093b3b",
+      "size_bytes": 15542368
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1/receiver/trace_native_1ms_ch_6.bin",
+      "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+      "size_bytes": 192
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1/receiver/trace_native_1ms_ch_7.bin",
+      "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+      "size_bytes": 192
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1/receiver/trace_native_1ms_ch_8.bin",
+      "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+      "size_bytes": 192
+    },
+    {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1/receiver/trace_native_1ms_ch_9.bin",
+      "sha256": "38f879258763dfed0480687f6ffa45aaf3a0145ddb4341ba304abc0d5515975d",
+      "size_bytes": 15566912
+    }
+  ],
+  "preserved_v1_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/variants/V1",
+  "receiver_completed_log_evidence": {
+    "exit_code": "NOT_PERSISTED_BEFORE_ADAPTER_EXCEPTION",
+    "program_ended": true,
+    "terminal_drain": true
+  },
+  "repair": "use the already-authoritative R2 3.5-4.5 ms cadence tolerance and same-session/same-PRN adjacency",
+  "schema": "gnss-doppler-lab.qset-stage0a-r2a-cadence-adapter-repair.v1",
+  "scientific_changes": false,
+  "score_operations": 0,
+  "status": "FROZEN_ENGINEERING_REPAIR_BEFORE_REEXECUTION",
+  "support_metric_changes": false,
+  "trigger": "R2a exact 16000-sample cadence check falsely rejected normal 15999/16001 resampler quantization",
+  "variant_changes": false
+}

@@ -33,6 +33,7 @@ RECEIVER_SHA256 = "3ed059f699201807cb86eb54a24ba00fde7e248f37a8081306cbc76d6be1b
 MIN_EPOCHS = 125
 MIN_PANEL = 5
 PRN9_STABLE_WINDOWS = 60
+RUN_NAMESPACE = "variants-repair-v1"
 VARIANTS = {
     "V0": {"in_acquisition": 4, "pfa": "0.00001", "coherent_ms": 4, "execution": "REUSE_VERIFIED_R2_BASELINE"},
     "V1": {"in_acquisition": 12, "pfa": "0.00001", "coherent_ms": 4, "execution": "RUN"},
@@ -102,11 +103,13 @@ def support_from_traces(receiver_dir: Path, scenario: str = "SS-1") -> dict[str,
         finite = np.isfinite(taps.real).all(axis=1) & np.isfinite(taps.imag).all(axis=1) & np.isfinite(measurements).all(axis=1)
         finite_failures += int((~finite).sum())
         tracked.update(int(value) for value in np.unique(records["prn"]))
-        for session in np.unique(records["tracking_session_id"]):
-            part = records[records["tracking_session_id"] == session]
-            if len(part) > 1:
-                cadence_failures += int(np.sum(np.diff(part["raw_interval_start_sample"].astype(np.int64)) != 16000))
-                causal_failures += int(np.sum(part["action_used_source_loop_sequence"][1:] != part["loop_sequence"][:-1]))
+        same = (records["tracking_session_id"][1:] == records["tracking_session_id"][:-1]) & (records["prn"][1:] == records["prn"][:-1])
+        indices = np.flatnonzero(same) + 1
+        if len(indices):
+            prior = indices - 1
+            dt = (records["raw_interval_start_sample"][indices] - records["raw_interval_start_sample"][prior]).astype(float) / r2.OUTPUT_FS
+            cadence_failures += int(np.sum((dt < 0.0035) | (dt > 0.0045)))
+            causal_failures += int(np.sum(records["action_used_source_loop_sequence"][indices] != records["loop_sequence"][prior]))
         valid = finite & (records["valid_tracking"] == 1) & (records["valid_lock"] == 1)
         raw_time = (records["raw_interval_start_sample"].astype(float) * r2.RESAMPLER_RATIO - r2.RESAMPLER_GROUP_DELAY_RAW_SAMPLES) / r2.RAW_FS
         seconds = np.floor(raw_time).astype(int) + 1
@@ -212,7 +215,7 @@ def score_clean_regression(selected: str) -> dict[str, Any]:
 def run_variant(variant: str) -> dict[str, Any]:
     require(variant in ("V1", "V2", "V3"), "V0 is preserved baseline and must not rerun")
     require(sha256_file(RECEIVER) == RECEIVER_SHA256, "receiver drift")
-    root = SSD_ROOT / "variants" / variant
+    root = SSD_ROOT / RUN_NAMESPACE / variant
     manifest_path = root / "manifest.json"
     if manifest_path.is_file():
         prior = read_json(manifest_path); verify_output_manifest(root, prior["output_set"])

@@ -33,3 +33,9 @@ def test_preregistered_success_gate_is_not_relaxed() -> None:
     assert prereg["success_gate"]["m_ge_5_windows_minimum"] == 60
     assert prereg["success_gate"]["prn9_stable_windows_minimum"] == 60
     assert "minimum-five relaxation" in prereg["prohibited"]
+
+
+def test_cadence_contract_matches_frozen_r2_tolerance() -> None:
+    source = (Q.ROOT / "src/gnss_doppler_lab/qset_stage0a_r2a.py").read_text()
+    assert "dt < 0.0035" in source and "dt > 0.0045" in source
+    assert "!= 16000" not in source
