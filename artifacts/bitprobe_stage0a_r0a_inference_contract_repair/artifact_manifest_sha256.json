@@ -1,0 +1,57 @@
+{
+  "file_count": 10,
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "6751204a4bce2e7e2947278039fb8737e9660c6028c8f816c4392727b4081827",
+      "size_bytes": 812
+    },
+    {
+      "path": "execution_freeze.json",
+      "sha256": "85adad1b58cb8743f9f4f034e32aa1fcc010c624c0970d9aa7a5aed211b96aa9",
+      "size_bytes": 4375
+    },
+    {
+      "path": "frozen_tensor_binding.json",
+      "sha256": "180bb51f01bc7b3ff0d3833347e7c32b8a8941a7168b9f79fb1a30923c028c85",
+      "size_bytes": 383
+    },
+    {
+      "path": "inference_contract_tests.json",
+      "sha256": "d15019e437be20a5876bd7308bd4557d2efc13c1d154bba1d9b304b441fb1376",
+      "size_bytes": 734
+    },
+    {
+      "path": "input_access_audit.json",
+      "sha256": "54c6ab5ec9c2530d0b7cf7dfd40c180d788a9977d569f1bd44c42cdb9b1882f7",
+      "size_bytes": 560
+    },
+    {
+      "path": "original_artifact_binding.json",
+      "sha256": "6745e2b72d3448baa6603f6611d420795cbeae413bfca3f9db68d688a1ddc167",
+      "size_bytes": 5487
+    },
+    {
+      "path": "repair_preregistration.json",
+      "sha256": "f28a621326a24b8ec341e3ad893a918d79ce733aca011d49de5e5322cf0fbaba",
+      "size_bytes": 6460
+    },
+    {
+      "path": "repair_preregistration_commit.json",
+      "sha256": "55aab1e3c08a7beaf9795a9dfb40fbd5f3651637bf94a3dc51523c75da0e461a",
+      "size_bytes": 439
+    },
+    {
+      "path": "test_output.txt",
+      "sha256": "a9adc2465c8f2f4d6fbe33ad90c65218571e4d6855ee93cbb8dfc5f0f3625bc3",
+      "size_bytes": 99
+    },
+    {
+      "path": "verifier_output.txt",
+      "sha256": "9de221252354dd15e7eb62fbfa62b02ed464115f5ed1bd23c9de20d4af093778",
+      "size_bytes": 245
+    }
+  ],
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-r0a-manifest.v1",
+  "status": "PASS"
+}

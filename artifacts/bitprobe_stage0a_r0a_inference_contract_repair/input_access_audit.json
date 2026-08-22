@@ -1,0 +1,33 @@
+{
+  "attacks": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "clean_raw_iq": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "frozen_tensor": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "phase": "PRE_TENSOR_ACCESS_FREEZE",
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-r0a-input-access.v1",
+  "status": "PASS",
+  "trace": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  }
+}

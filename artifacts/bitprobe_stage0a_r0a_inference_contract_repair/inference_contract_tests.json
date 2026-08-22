@@ -1,0 +1,24 @@
+{
+  "bootstrap_tests": {
+    "contiguous_blocks": true,
+    "different_seed_changes_draws_only": true,
+    "fixed_seed_byte_identical": true,
+    "half_isolation": true,
+    "odd_n_floor_split": true,
+    "replicate_count_500": true
+  },
+  "fresh_clone_import_bootstrap_test": true,
+  "original_plus_r0a_pytest_count": 18,
+  "permutation_tests": {
+    "brute_force_match": true,
+    "exchangeable_non_significant": true,
+    "identity_matches_observed": true,
+    "perfect_separation_small_p": true,
+    "prn_order_invariant": true,
+    "shape_m_and_m_times_m_minus_one": true
+  },
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-r0a-inference-tests.v1",
+  "status": "PASS",
+  "tensor_raw_trace_attack_access": 0,
+  "test_count": 14
+}

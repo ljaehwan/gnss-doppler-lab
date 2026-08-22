@@ -1,0 +1,83 @@
+{
+  "base_sha": "0947dd3751b86d7f890d71561030e6f36a44f1e3",
+  "environment": {
+    "numpy": "1.26.4",
+    "platform": "Linux-6.8.0-137-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]",
+    "worker_count": 1
+  },
+  "executable_bindings": {
+    "scripts/run_bitprobe_stage0a_r0a.py": {
+      "path": "scripts/run_bitprobe_stage0a_r0a.py",
+      "sha256": "e12a060bf39c02edb8829ad6ec35cf8993eb6850c86789dcf501235bb2f3564a",
+      "size_bytes": 1267
+    },
+    "scripts/verify_bitprobe_stage0a_r0a.py": {
+      "path": "scripts/verify_bitprobe_stage0a_r0a.py",
+      "sha256": "6d11afd6edb5292735c44b5ff500676b28946ae2d6ab6e88050003e9d268fd1b",
+      "size_bytes": 11730
+    },
+    "src/gnss_doppler_lab/bitprobe_stage0a_r0a.py": {
+      "path": "src/gnss_doppler_lab/bitprobe_stage0a_r0a.py",
+      "sha256": "d8163b0d90a6a16a72640fa7feea42263699d226ffa12f0164de1ceb6f74e2d6",
+      "size_bytes": 38159
+    }
+  },
+  "frozen_bindings": {
+    "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/between_prn_metrics.csv": {
+      "path": "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/between_prn_metrics.csv",
+      "sha256": "163f5eca8fea4bc1be0e486d8fe4982877bb9358cf85dce2920320b246642fdd",
+      "size_bytes": 505
+    },
+    "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/flip_no_flip_metrics.csv": {
+      "path": "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/flip_no_flip_metrics.csv",
+      "sha256": "f2a348c85819488fed7a3b49f80a154b1fe5bb058800a4f1b55370d3e2e34dbb",
+      "size_bytes": 272
+    },
+    "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/nav_edge_inventory.csv.gz": {
+      "path": "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/nav_edge_inventory.csv.gz",
+      "sha256": "400af60590a39e5932d9ce856aa853c3b89f261dc2fa80038fd620bc63e313e5",
+      "size_bytes": 365743
+    },
+    "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/nuisance_metrics.csv": {
+      "path": "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/nuisance_metrics.csv",
+      "sha256": "212b3b9527d6a9ec621b9ebe9196ee75597b8291712ab0ac86d66bf7cca54400",
+      "size_bytes": 2258
+    },
+    "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/per_prn_support.csv": {
+      "path": "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/per_prn_support.csv",
+      "sha256": "0155f2184feeac5373e41eb4c603c96f3c3b2dd6fdb7d2eac492dea1ab5c498c",
+      "size_bytes": 744
+    },
+    "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/preregistration.json": {
+      "path": "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/preregistration.json",
+      "sha256": "898c01a13a29b04ef7ef42759a7039ad26899e2c2c9ce1a9040b33789b50a3ae",
+      "size_bytes": 12070
+    },
+    "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/source_binding.json": {
+      "path": "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/source_binding.json",
+      "sha256": "f2cc2a552f147ab26c28e45b88a151e7036c15652cbda7cd4c54945148e207e0",
+      "size_bytes": 7393
+    },
+    "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/split_half_metrics.csv": {
+      "path": "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/split_half_metrics.csv",
+      "sha256": "7e716fae992d6fbd0f3a2ece79e16c215119e8c4568eda6e8f62070ef40da73b",
+      "size_bytes": 1287
+    },
+    "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/synthetic_control_metrics.csv": {
+      "path": "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/synthetic_control_metrics.csv",
+      "sha256": "90148f25daa135ab18942b4f03602b8685663a74f104fc367f50f6183c070415",
+      "size_bytes": 4032
+    },
+    "src/gnss_doppler_lab/bitprobe_stage0a.py": {
+      "path": "src/gnss_doppler_lab/bitprobe_stage0a.py",
+      "sha256": "64745d611591f9554b7594fc1aae8b024900c7fceea384ab7db60e7b0a08b6d9",
+      "size_bytes": 66503
+    }
+  },
+  "repair_configuration_sha256": "70a70a119297897ffe546b7dc5cb038105555aae120532eb0462d77c6ec2e29e",
+  "repair_preregistration_commit_sha": "57857b1f8696d52d6056e135836e342de36ffaf8",
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-r0a-execution-freeze.v1",
+  "status": "IMPLEMENTED_AND_SYNTHETIC_TESTED_BEFORE_TENSOR_ACCESS",
+  "tensor_operations_before_freeze": 0
+}
