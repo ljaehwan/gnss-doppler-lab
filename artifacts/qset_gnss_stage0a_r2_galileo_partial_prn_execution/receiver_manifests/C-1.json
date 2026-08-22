@@ -1,0 +1,318 @@
+{
+  "decoder": {
+    "decoder": "big-endian signed int16 interleaved I,Q -> native float32 complex; scale_factor=1.0; no I/Q swap",
+    "elapsed_s": 143.26377820968628,
+    "output_sample_rate_hz": 4000000,
+    "output_samples": 599996606,
+    "output_sha256": "c5f1979ab79e75b163204e100d01e0decc9c88c2d2054dcda5e1453a411471da",
+    "output_size_bytes": 4799972848,
+    "resampler": {
+      "decimation": 25,
+      "declared_sample_delay": 0,
+      "eof_loss_output_samples": 34,
+      "fractional_bw": 0.4,
+      "interpolation": 2,
+      "tap_count": 822,
+      "tap_sha256": "f50d0eb8ee4e707ccb94387e4ec327e42cb2bd1e42a544afbc687f74ea31826f"
+    },
+    "source_bytes_read": 29999832000,
+    "source_offset_bytes": 0,
+    "source_offset_samples": 0,
+    "source_sample_count": 7499958000
+  },
+  "output_set": {
+    "aggregate_sha256": "b01c45a8c435c1fd3634346ae685a31a3edcb3e60510be2850e39d6c85e72384",
+    "file_count": 25,
+    "files": [
+      {
+        "path": "decoded_4msps_gr_complex.bin",
+        "sha256": "c5f1979ab79e75b163204e100d01e0decc9c88c2d2054dcda5e1453a411471da",
+        "size_bytes": 4799972848
+      },
+      {
+        "path": "receiver/GSDR235a47.26L",
+        "sha256": "dea985899bd3ba7a69845c56376983a0b1a5994b1639aa40f5139480ca7f1942",
+        "size_bytes": 5994
+      },
+      {
+        "path": "receiver/GSDR235a47.26O",
+        "sha256": "e6e1e3c8b651182f2210132c7c337aed56577be11c8aa0e2e294ed9309d58f51",
+        "size_bytes": 42201
+      },
+      {
+        "path": "receiver/gal_almanac.xml",
+        "sha256": "f0be1b85f1f8b232c5c225e993655fcf2908578669a38a2751643f06a5b95fce",
+        "size_bytes": 2735
+      },
+      {
+        "path": "receiver/gal_ephemeris.xml",
+        "sha256": "f40e75043a68419e0989af80b9456b21e69f81ff45ef446bd6dddffe9630e11f",
+        "size_bytes": 11157
+      },
+      {
+        "path": "receiver/gal_iono.xml",
+        "sha256": "bf1b266dc1939a297e5fb9d23758f7f77b0d16afd68fea5804b3c802b2d2d923",
+        "size_bytes": 583
+      },
+      {
+        "path": "receiver/gal_utc_model.xml",
+        "sha256": "1e872e672f7334ab744861744abd31a5106adc9449683a6db9b7fc792225bc8f",
+        "size_bytes": 507
+      },
+      {
+        "path": "receiver/nmea_pvt.nmea",
+        "sha256": "e5309dcfa332dda7cbde1d013031ef89c4c7865fda853cb78bf2320c18b8d422",
+        "size_bytes": 22254
+      },
+      {
+        "path": "receiver/pvt.dat_260823_004720.geojson",
+        "sha256": "bc80baa513b90c275b3fe08d8e925290e780bc1325ba969fd40c72a8b35089b3",
+        "size_bytes": 4401
+      },
+      {
+        "path": "receiver/pvt.dat_260823_004720.gpx",
+        "sha256": "5840fc3b90bd917fd2852b537a91eeece48ce84512ae0fbf678a733fea870ec1",
+        "size_bytes": 25841
+      },
+      {
+        "path": "receiver/pvt.dat_260823_004720.kml",
+        "sha256": "fe1bec74c0edf8efd5c7fd8c9267d8adb0dd5217bfadac5efcfb358434a75619",
+        "size_bytes": 75651
+      },
+      {
+        "path": "receiver/receiver.conf",
+        "sha256": "b69b0f6c045f9e5e9a8b3d00cca9e16411f2183a03bb8644eb83f0f21f0febb2",
+        "size_bytes": 2153
+      },
+      {
+        "path": "receiver/receiver.log",
+        "sha256": "18d72aa08ebfb6040bfee5c62c88f663401bfd2e32732fc18476d354aa80c18b",
+        "size_bytes": 216551
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_0.bin",
+        "sha256": "2556e8e50bbb119f7df6b0283d03306ed1ccaf46882ba16abbbb1c712f856dd1",
+        "size_bytes": 2180032
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_1.bin",
+        "sha256": "d8bfe07d0ff5548d1e41384c37818ea8f0b7ce4090c8f3ad13ccf502dfbcc51f",
+        "size_bytes": 15594784
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_10.bin",
+        "sha256": "e9d31accc528a5c524ec41d9ffe7849b46f4443bee7c30a8c48d37733eaa9eab",
+        "size_bytes": 15550272
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_11.bin",
+        "sha256": "cc2e348deb76d8438440557879580fdebd43d0ce03e0e616ac0e3eb10ab32093",
+        "size_bytes": 2180864
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_2.bin",
+        "sha256": "4d5b6ab42180388c0d4cae8f700e015c32a06a7b9a76f1460fd76aa3b9362553",
+        "size_bytes": 14802720
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_3.bin",
+        "sha256": "0df1ef02676d7aa1c97c9f6a26e4ede98743e439d0206e39c5f0f1196cb42010",
+        "size_bytes": 10834496
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_4.bin",
+        "sha256": "74a70bb9f262ab386e78cad1480be744dc50a8a12d33546b0b0bde9729a30565",
+        "size_bytes": 10810784
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_5.bin",
+        "sha256": "e8df08ad1c409dfaee47916482b173f4e843565fb7b90ba10aacdd56f3883d99",
+        "size_bytes": 13315520
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_6.bin",
+        "sha256": "36702744209562dfb972877113e99e08ff5cc3c40c8fd2dae55bb9cca26f7a52",
+        "size_bytes": 192
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_7.bin",
+        "sha256": "3c2dd75f3de5e3fb75f42f28578b776182ed5dd385165f96e48cadb2275bdc6a",
+        "size_bytes": 15565248
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_8.bin",
+        "sha256": "3994b4bd765831c00db3210e8c5f139fc990d5f45a7b591e7e6a8379ee13d8a5",
+        "size_bytes": 14603872
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_9.bin",
+        "sha256": "a69ca9febea8cdd79395afe7352400dda31ed1006d1df4dde8d82ef74166211f",
+        "size_bytes": 2180448
+      }
+    ]
+  },
+  "raw_input": {
+    "md5": "4ff0e86938792bf3150c30d5f1481917",
+    "path": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/galileo/C-1/clearsky_signal_C-1.bin",
+    "size_bytes": 29999832000,
+    "stable_during_hash": true
+  },
+  "receiver": {
+    "command": [
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/receiver-build-v7/src/main/gnss-sdr",
+      "--config_file=/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/C-1/receiver/receiver.conf",
+      "--keyboard=false",
+      "--logtostderr=true",
+      "--logbufsecs=0"
+    ],
+    "config_sha256": "b69b0f6c045f9e5e9a8b3d00cca9e16411f2183a03bb8644eb83f0f21f0febb2",
+    "elapsed_s": 126.54732537269592,
+    "exit_code": 0,
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/receiver-build-v7/src/main/gnss-sdr",
+    "sha256": "3ed059f699201807cb86eb54a24ba00fde7e248f37a8081306cbc76d6be1b06f",
+    "terminal_drain": true
+  },
+  "scenario": "C-1",
+  "schema": "gnss-doppler-lab.qset-stage0a-r2-replay.v1",
+  "status": "PASS",
+  "trace_validation": {
+    "cadence_failures": 0,
+    "causal_failures": 0,
+    "files": [
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/C-1/receiver/trace_native_1ms_ch_0.bin",
+        "prns": [
+          30
+        ],
+        "record_count": 5240,
+        "sha256": "2556e8e50bbb119f7df6b0283d03306ed1ccaf46882ba16abbbb1c712f856dd1",
+        "size_bytes": 2180032,
+        "status": "PASS"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/C-1/receiver/trace_native_1ms_ch_1.bin",
+        "prns": [
+          2
+        ],
+        "record_count": 37487,
+        "sha256": "d8bfe07d0ff5548d1e41384c37818ea8f0b7ce4090c8f3ad13ccf502dfbcc51f",
+        "size_bytes": 15594784,
+        "status": "PASS"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/C-1/receiver/trace_native_1ms_ch_10.bin",
+        "prns": [
+          14
+        ],
+        "record_count": 37380,
+        "sha256": "e9d31accc528a5c524ec41d9ffe7849b46f4443bee7c30a8c48d37733eaa9eab",
+        "size_bytes": 15550272,
+        "status": "PASS"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/C-1/receiver/trace_native_1ms_ch_11.bin",
+        "prns": [
+          30
+        ],
+        "record_count": 5242,
+        "sha256": "cc2e348deb76d8438440557879580fdebd43d0ce03e0e616ac0e3eb10ab32093",
+        "size_bytes": 2180864,
+        "status": "PASS"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/C-1/receiver/trace_native_1ms_ch_2.bin",
+        "prns": [
+          10
+        ],
+        "record_count": 35583,
+        "sha256": "4d5b6ab42180388c0d4cae8f700e015c32a06a7b9a76f1460fd76aa3b9362553",
+        "size_bytes": 14802720,
+        "status": "PASS"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/C-1/receiver/trace_native_1ms_ch_3.bin",
+        "prns": [
+          11
+        ],
+        "record_count": 26044,
+        "sha256": "0df1ef02676d7aa1c97c9f6a26e4ede98743e439d0206e39c5f0f1196cb42010",
+        "size_bytes": 10834496,
+        "status": "PASS"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/C-1/receiver/trace_native_1ms_ch_4.bin",
+        "prns": [
+          29
+        ],
+        "record_count": 25987,
+        "sha256": "74a70bb9f262ab386e78cad1480be744dc50a8a12d33546b0b0bde9729a30565",
+        "size_bytes": 10810784,
+        "status": "PASS"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/C-1/receiver/trace_native_1ms_ch_5.bin",
+        "prns": [
+          11,
+          30
+        ],
+        "record_count": 32008,
+        "sha256": "e8df08ad1c409dfaee47916482b173f4e843565fb7b90ba10aacdd56f3883d99",
+        "size_bytes": 13315520,
+        "status": "PASS"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/C-1/receiver/trace_native_1ms_ch_6.bin",
+        "record_count": 0,
+        "sha256": "36702744209562dfb972877113e99e08ff5cc3c40c8fd2dae55bb9cca26f7a52",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/C-1/receiver/trace_native_1ms_ch_7.bin",
+        "prns": [
+          36
+        ],
+        "record_count": 37416,
+        "sha256": "3c2dd75f3de5e3fb75f42f28578b776182ed5dd385165f96e48cadb2275bdc6a",
+        "size_bytes": 15565248,
+        "status": "PASS"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/C-1/receiver/trace_native_1ms_ch_8.bin",
+        "prns": [
+          34
+        ],
+        "record_count": 35105,
+        "sha256": "3994b4bd765831c00db3210e8c5f139fc990d5f45a7b591e7e6a8379ee13d8a5",
+        "size_bytes": 14603872,
+        "status": "PASS"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/C-1/receiver/trace_native_1ms_ch_9.bin",
+        "prns": [
+          11
+        ],
+        "record_count": 5241,
+        "sha256": "a69ca9febea8cdd79395afe7352400dda31ed1006d1df4dde8d82ef74166211f",
+        "size_bytes": 2180448,
+        "status": "PASS"
+      }
+    ],
+    "finite_failures": 0,
+    "native_integration_s": 0.004,
+    "scenario": "C-1",
+    "schema": "gnss-doppler-lab.qset-galileo-native-trace.v1",
+    "status": "PASS",
+    "tracked_prn_count": 8,
+    "tracked_prns": [
+      2,
+      10,
+      11,
+      14,
+      29,
+      30,
+      34,
+      36
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "claimed_as_detection_evidence": false,
+  "max_k1_responsive": true,
+  "maximum_mean_k_over_m_error": 1.3322676295501878e-15,
+  "runs": 2400,
+  "schema": "gnss-doppler-lab.qset-stage0a-r2-synthetic-dilution.v1",
+  "status": "PASS",
+  "summary": {
+    "MAX": 1.6525747862001163,
+    "MEAN": 1.10375,
+    "MULTI_Q": 12.441238120774475,
+    "Q50": 1.1078152099972498,
+    "Q70": 1.3439245725701403,
+    "Q90": 1.5326894981711991
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "attack_data_used": false,
+  "multi_q_reference": {
+    "median": [
+      0.8729529615610268,
+      1.196477259219086,
+      1.6580123395151465,
+      1.9223816754542988
+    ],
+    "scale": [
+      0.09459840143140368,
+      0.15107288825942766,
+      0.21971503790494373,
+      0.4536071922005734
+    ]
+  },
+  "schema": "gnss-doppler-lab.qset-stage0a-r2-threshold.v1",
+  "status": "PASS",
+  "target_fpr": 0.01,
+  "threshold_sha256": "2b223096c96af7a97fd9d5a5da6048c5f65f55b75fa05e410bcce9daf55e0490",
+  "thresholds": {
+    "MAX": {
+      "calibration_fpr": 0.0,
+      "candidate_count": 39,
+      "comparison": ">",
+      "threshold": 2.364620905499119
+    },
+    "MEAN": {
+      "calibration_fpr": 0.0,
+      "candidate_count": 39,
+      "comparison": ">",
+      "threshold": 1.135167327507662
+    },
+    "MULTI_Q": {
+      "calibration_fpr": 0.0,
+      "candidate_count": 39,
+      "comparison": ">",
+      "threshold": 2.4103852567980066
+    },
+    "Q50": {
+      "calibration_fpr": 0.0,
+      "candidate_count": 39,
+      "comparison": ">",
+      "threshold": 1.0311015450965333
+    },
+    "Q70": {
+      "calibration_fpr": 0.0,
+      "candidate_count": 39,
+      "comparison": ">",
+      "threshold": 1.400846331778986
+    },
+    "Q90": {
+      "calibration_fpr": 0.0,
+      "candidate_count": 39,
+      "comparison": ">",
+      "threshold": 1.8271545898174002
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "calibration_event_windows": 39,
+  "clean_metrics": {
+    "MAX": {
+      "alarm_count": 0,
+      "eligible_windows": 136,
+      "empirical_fpr": 0.0,
+      "wilson_95_upper": 0.027470099733582408
+    },
+    "MEAN": {
+      "alarm_count": 0,
+      "eligible_windows": 136,
+      "empirical_fpr": 0.0,
+      "wilson_95_upper": 0.027470099733582408
+    },
+    "MULTI_Q": {
+      "alarm_count": 0,
+      "eligible_windows": 136,
+      "empirical_fpr": 0.0,
+      "wilson_95_upper": 0.027470099733582408
+    },
+    "Q50": {
+      "alarm_count": 0,
+      "eligible_windows": 136,
+      "empirical_fpr": 0.0,
+      "wilson_95_upper": 0.027470099733582408
+    },
+    "Q70": {
+      "alarm_count": 0,
+      "eligible_windows": 136,
+      "empirical_fpr": 0.0,
+      "wilson_95_upper": 0.027470099733582408
+    },
+    "Q90": {
+      "alarm_count": 0,
+      "eligible_windows": 136,
+      "empirical_fpr": 0.0,
+      "wilson_95_upper": 0.027470099733582408
+    }
+  },
+  "development_prn_windows": 665,
+  "holdout_event_windows": 140,
+  "model_sha256": "a38d8bb79ca817c9241f4146e0b41759d7cfcf62c609f0b2e5ec5fbcc09f2bda",
+  "schema": "gnss-doppler-lab.qset-stage0a-r2-clean-analysis.v1",
+  "status": "PASS",
+  "threshold_sha256": "2b223096c96af7a97fd9d5a5da6048c5f65f55b75fa05e410bcce9daf55e0490"
+}

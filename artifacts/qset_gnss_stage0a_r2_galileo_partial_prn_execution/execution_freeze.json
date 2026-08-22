@@ -1,0 +1,502 @@
+{
+  "attack_allowlist": [
+    "SS-1",
+    "SS-3",
+    "SS-5",
+    "SS-11"
+  ],
+  "clean_holdout_metrics": {
+    "MAX": {
+      "alarm_count": 0,
+      "eligible_windows": 136,
+      "empirical_fpr": 0.0,
+      "wilson_95_upper": 0.027470099733582408
+    },
+    "MEAN": {
+      "alarm_count": 0,
+      "eligible_windows": 136,
+      "empirical_fpr": 0.0,
+      "wilson_95_upper": 0.027470099733582408
+    },
+    "MULTI_Q": {
+      "alarm_count": 0,
+      "eligible_windows": 136,
+      "empirical_fpr": 0.0,
+      "wilson_95_upper": 0.027470099733582408
+    },
+    "Q50": {
+      "alarm_count": 0,
+      "eligible_windows": 136,
+      "empirical_fpr": 0.0,
+      "wilson_95_upper": 0.027470099733582408
+    },
+    "Q70": {
+      "alarm_count": 0,
+      "eligible_windows": 136,
+      "empirical_fpr": 0.0,
+      "wilson_95_upper": 0.027470099733582408
+    },
+    "Q90": {
+      "alarm_count": 0,
+      "eligible_windows": 136,
+      "empirical_fpr": 0.0,
+      "wilson_95_upper": 0.027470099733582408
+    }
+  },
+  "clean_holdout_status": "PASS",
+  "clean_replay_bindings": {
+    "C-1": {
+      "decoder_sha256": "c5f1979ab79e75b163204e100d01e0decc9c88c2d2054dcda5e1453a411471da",
+      "output_set_sha256": "b01c45a8c435c1fd3634346ae685a31a3edcb3e60510be2850e39d6c85e72384",
+      "raw_md5": "4ff0e86938792bf3150c30d5f1481917"
+    },
+    "C-3": {
+      "decoder_sha256": "29ee9d48398f2865b7424e2857b27165fbb12bf9da3536cfcd1a856b8ebd594e",
+      "output_set_sha256": "e6205442e56b73d8ea92a525ff17ef97fcbed5bd0b082decb74648e48d5ad446",
+      "raw_md5": "1b7c99c754faec3c8fa625849ef70014"
+    }
+  },
+  "code_bindings": {
+    "configs/qset_galileo_e1_trace9.conf.template": "b37da63cdbf9e386d5a5dec3eb5ae7dfcd35d07e9e9785a56e5900f85bd3026d",
+    "patches/qset_galileo_e1_native_trace.patch": "85f5c601a112f8ae51a977ce8dd4bea4002275a7e2fdce849a158f85c280277c",
+    "patches/qset_galileo_e1_trace9_veml_preservation_repair.patch": "5cc1ac60c10f510f447f848a5151e0a4f007121dd11d4a885f1f9f8d2fd95bc0",
+    "patches/qset_galileo_e1_veml_9tap_pointer_repair.patch": "5680ed7984edce60d4e8a7296b6450ca0a9ea767dfbd218b32eea4d1726663c0",
+    "patches/qset_terminal_drain_exact_boundary_repair.patch": "5f1208df9d44a41048b8e01b6e69f28f48c99203316df8d112649890c1074c56",
+    "scripts/run_qset_gnss_stage0a_r2.py": "e503f8a070069aedceb12dc3eae26c68cd7608c32567f560364904a3bd08e0bc",
+    "scripts/run_qset_gnss_stage0a_r2_repaired.py": "b9431cb157377f1b87a550918274ecf1dcd55a852d89209fd0a2c721ad476288",
+    "scripts/run_qset_gnss_stage0a_r2_repaired_v2.py": "bd7f998506f41bc148e8bcfb45e463f241cd1c7e2acae577e4eaab21a0bcd7fd",
+    "scripts/run_qset_gnss_stage0a_r2_repaired_v4.py": "ca18400f34f6b1e4384e2d59674a53f5817fd896014725b4e58bdccd9efc4037",
+    "scripts/run_qset_gnss_stage0a_r2_repaired_v5.py": "4ed90c95c2e55467ca9add4f71522d86d00c236f2b5f98f487801fafad573da3",
+    "scripts/run_qset_gnss_stage0a_r2_repaired_v6.py": "d2796c75c92aec9f34664fb7b9b67d28ec61ce996ab30a2737ab3cd74fc484ea",
+    "scripts/run_qset_gnss_stage0a_r2_repaired_v7.py": "a0bc73c0981fd62d5e06c3bf5808d6bc9bc509d6b6cedccb8ba7505cac8112b0",
+    "scripts/verify_qset_gnss_stage0a_r2.py": "cf029fb146245d5f8551e3437ff0228a47373e5641ed20f78a21007095168a7d",
+    "src/gnss_doppler_lab/qset_stage0a_r2.py": "c9b6b13ee575362c112b57ad0a9c12daa0338e2ec154e1a6421b07d48c9a1265",
+    "src/gnss_doppler_lab/qset_stage0a_r2_evaluation.py": "42cb8a9cdf0c72d84ef0ef06c923e860b1810ee54ed669e00729cfd1fbfcc8a9",
+    "src/gnss_doppler_lab/qset_stage0a_r2_execution.py": "760bede8b5f9db5ca59ada30e1e06e934eec42ec99f4fe6d9f33b60dfdcfd90d",
+    "src/gnss_doppler_lab/qset_stage0a_r2_execution_repair.py": "4a9ae30129ab6d0e85f38fcf30014a9ad088bfc5d593f0f1a9a161fa6962c727",
+    "src/gnss_doppler_lab/qset_stage0a_r2_execution_repair_v2.py": "b0032a3b34649742c87e8e0dd6e60396bc88d4d66e79e187a441fe4c04c9a1d4",
+    "src/gnss_doppler_lab/qset_stage0a_r2_execution_repair_v4.py": "0eaa4bd1c9c4c3513b03b18dcc360f3b383014a2cfc434e0e39affcdf4ad3695",
+    "src/gnss_doppler_lab/qset_stage0a_r2_execution_repair_v5.py": "f98ab138a0497a5c5da979888face2508f9581efc845fcaf3460433a1bc35a5c",
+    "src/gnss_doppler_lab/qset_stage0a_r2_execution_repair_v6.py": "139b541141417297537677a494efbd4f18d4aa60bbbf4322b780a66b9c0c71eb",
+    "src/gnss_doppler_lab/qset_stage0a_r2_execution_repair_v7.py": "986c01bb956ff9ea31533cc80c6c8ed65ddf4729607b329ee9743fd5720f79a4",
+    "src/gnss_doppler_lab/qset_stage0a_r2_finalize.py": "dda95f70140c2dd3ac7f31311bcef49442e0f9298d0a58e12d38d9da99b99551",
+    "tests/test_qset_gnss_stage0a_r2.py": "90e2e8435f5646131c89d3b8aba89a5f69c2df5d63ba22783e71239ef9b18b2e",
+    "tests/test_qset_gnss_stage0a_r2_execution_repair_v4.py": "36c14255d8b8af4b393f99322ce6d67992264cfd6b50bfa6dc5c01c08278323f",
+    "tests/test_qset_gnss_stage0a_r2_execution_repair_v5.py": "91c8aa7f37182f68102af8b7cc23e6cf139e46724846a4706541e115b2c75ceb",
+    "tests/test_qset_gnss_stage0a_r2_execution_repair_v6.py": "b4b75b374f8edd7b3d99433cb3fd2315fe4ca1003e03e0a45afeeb5b03d0d474",
+    "tests/test_qset_gnss_stage0a_r2_execution_repair_v7.py": "817e4de2199b2dcc48bac2c28a655f4263f915f68a6d6bf8a5ac66491180ca96"
+  },
+  "configuration_sha256": "b37da63cdbf9e386d5a5dec3eb5ae7dfcd35d07e9e9785a56e5900f85bd3026d",
+  "environment": {
+    "numpy": "1.26.4",
+    "platform": "Linux-6.8.0-137-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3"
+  },
+  "feature_bindings": {
+    "C-1": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/features/C-1.npz",
+      "sha256": "9b9081bf8de7742038b96087d4a0c1648fff20e29fe7fe740b2ad3e803d54c96",
+      "size_bytes": 454122
+    },
+    "C-3": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/features/C-3.npz",
+      "sha256": "487a36cfb48ca1e3f3f98750ca039428f77f0bf29d5f5fb2794269d8b7e2a706",
+      "size_bytes": 367617
+    }
+  },
+  "freeze_commit": "supplied as --freeze-sha from pushed clean checkout",
+  "model_sha256": "a38d8bb79ca817c9241f4146e0b41759d7cfcf62c609f0b2e5ec5fbcc09f2bda",
+  "output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution",
+  "prefreeze_engineering_repair": {
+    "preserved_partial_build_resumed": true,
+    "receiver_source_changes": false,
+    "scientific_changes": false,
+    "stage": "CMake configure before clean receiver replay or scoring",
+    "trigger": "worktree-local .venv path did not exist"
+  },
+  "prefreeze_engineering_repair_v2": {
+    "receiver_source_changes": false,
+    "resolution": "build-subprocess-only safe.directory=* matching the verified R2c build environment",
+    "scientific_changes": false,
+    "stage": "dependency build before clean receiver replay or scoring",
+    "trigger": "preserved third-party Git caches failed ownership safety check"
+  },
+  "prefreeze_engineering_repair_v4": {
+    "attack_accessed": false,
+    "preserved_attempt": {
+      "attack_accessed": false,
+      "clean_score_computed": false,
+      "log": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/clean_execution_stdout.txt",
+        "sha256": "7d47d2e2239e4da710fb1e4f5022b438b9646ed012fb5a4c5750514fd81210b0",
+        "size_bytes": 1875
+      },
+      "original_entries": [],
+      "original_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/C-1",
+      "preserved_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/historical-incomplete/C-1-missing-gnuradio-before-decoder",
+      "schema": "gnss-doppler-lab.qset-stage0a-r2-prefreeze-attempt-preservation.v1",
+      "status": "PRESERVED_EMPTY_PRE_SCORE_ATTEMPT",
+      "trigger": "ModuleNotFoundError: No module named 'gnuradio' before decoder creation"
+    },
+    "receiver_source_changes": false,
+    "resolution": "bind /usr/lib/python3/dist-packages and preserve the empty failed attempt under a versioned historical path",
+    "runtime": {
+      "gnuradio_version": "3.10.9.2",
+      "python_executable": "/usr/bin/python3",
+      "status": "PASS",
+      "system_dist_packages": "/usr/lib/python3/dist-packages"
+    },
+    "scientific_changes": false,
+    "stage": "after C-1 identity MD5, before decoder output, receiver replay, feature extraction, or score",
+    "trigger": "project venv did not expose system GNURadio Python modules"
+  },
+  "prefreeze_engineering_repair_v5": {
+    "attack_accessed": false,
+    "build_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/receiver-build-v5",
+    "clean_score_computed": false,
+    "proposal_patch_sha256": "5680ed7984edce60d4e8a7296b6450ca0a9ea767dfbd218b32eea4d1726663c0",
+    "reason": "pointer-only mapping would have replaced frozen Galileo VEML loop spacings with outer TRACE tap spacing",
+    "receiver_executable_created": false,
+    "receiver_executed": false,
+    "source_diff_sha256": "d7ef320d8e9b5d9765f8bf801d51e4d4c4bfccbc199372faf32a2baed611c8c1",
+    "source_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/receiver-source-v5",
+    "status": "ABANDONED_PRE_EXECUTION_LOOP_SPACING_MISMATCH"
+  },
+  "prefreeze_engineering_repair_v6": {
+    "attack_accessed": false,
+    "preserved_attempt": {
+      "attack_accessed": false,
+      "failure_log": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/clean_execution_v4_stdout.txt",
+        "sha256": "5d56297d80adad24a753836fe2a62ea8401794f83cbb4d2f8d05f9799f606f5a",
+        "size_bytes": 2615
+      },
+      "kernel_evidence": {
+        "function": "dll_pll_veml_tracking::general_work",
+        "instruction_offset": "0x396015",
+        "pid": 694093,
+        "signal": "SIGSEGV",
+        "timestamp": "2026-08-22T23:09:24+09:00"
+      },
+      "original_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/C-1",
+      "output_set": {
+        "aggregate_sha256": "6fe1293b844745ffa0c7f7fd309e2694993077d12a755bb5e126dd0786cecb8f",
+        "file_count": 26,
+        "files": [
+          {
+            "path": "decoded_4msps_gr_complex.bin",
+            "sha256": "c5f1979ab79e75b163204e100d01e0decc9c88c2d2054dcda5e1453a411471da",
+            "size_bytes": 4799972848
+          },
+          {
+            "path": "receiver/GSDR234x09.26B",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/GSDR234x09.26F",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/GSDR234x09.26G",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/GSDR234x09.26L",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/GSDR234x09.26N",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/GSDR234x09.26O",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/GSDR234x09.26P",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/nmea_pvt.nmea",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/pvt.dat_260822_230923.geojson",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/pvt.dat_260822_230923.gpx",
+            "sha256": "259f7b01cac5f6ad1d34767837d4757cbb33942be33285e5911e40dcb5c121e5",
+            "size_bytes": 751
+          },
+          {
+            "path": "receiver/pvt.dat_260822_230923.kml",
+            "sha256": "937d6f4d66dfd090f9205e99dcabacab567822655a152da15cdc04e7431477c6",
+            "size_bytes": 278
+          },
+          {
+            "path": "receiver/receiver.conf",
+            "sha256": "b69b0f6c045f9e5e9a8b3d00cca9e16411f2183a03bb8644eb83f0f21f0febb2",
+            "size_bytes": 2153
+          },
+          {
+            "path": "receiver/receiver.log",
+            "sha256": "2bf5834382b1f218522ef2f94a04c412fd3dc81c280e2c5705df482bbd0c13f0",
+            "size_bytes": 12611
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_0.bin",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_1.bin",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_10.bin",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_11.bin",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_2.bin",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_3.bin",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_4.bin",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_5.bin",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_6.bin",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_7.bin",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_8.bin",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_9.bin",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0
+          }
+        ]
+      },
+      "preserved_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/historical-incomplete/C-1-galileo-veml-null-pointer",
+      "receiver_exit_code": "UNRECOVERED_EXCEPTION_MASKED_RETURN_CODE",
+      "root_cause": "trace_9tap left d_Very_Early/d_Very_Late null while Galileo E1 d_veml dereferenced them",
+      "schema": "gnss-doppler-lab.qset-stage0a-r2-segfault-attempt-preservation.v1",
+      "score_computed": false,
+      "status": "PRESERVED_PRE_SCORE_RECEIVER_SIGSEGV_ATTEMPT",
+      "terminal_drain": false
+    },
+    "receiver_loop_changes": false,
+    "resolution": "nine serialized TRACE taps plus four loop-only taps at original configured VEML spacings",
+    "scientific_changes": false,
+    "trigger": "Galileo E1 VEML null dereference under frozen nine-tap TRACE"
+  },
+  "prefreeze_engineering_repair_v7": {
+    "attack_accessed": false,
+    "configuration_changes": false,
+    "final_sample_forwarded": true,
+    "preserved_attempt": {
+      "attack_accessed": false,
+      "clean_score_computed": false,
+      "feature_rows_computed": 0,
+      "original_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/C-1",
+      "output_set": {
+        "aggregate_sha256": "5bfac3ec4e6d1eaa8114e8eba6ed886041d5c9d4e99eb3aa3a737e4fd23f35d1",
+        "file_count": 25,
+        "files": [
+          {
+            "path": "decoded_4msps_gr_complex.bin",
+            "sha256": "c5f1979ab79e75b163204e100d01e0decc9c88c2d2054dcda5e1453a411471da",
+            "size_bytes": 4799972848
+          },
+          {
+            "path": "receiver/GSDR235a07.26L",
+            "sha256": "54dece3ce926c0cb73a13c652729b6a6c43065c1d7a3418fcd626626b0afab14",
+            "size_bytes": 6642
+          },
+          {
+            "path": "receiver/GSDR235a07.26O",
+            "sha256": "d0959d5bc1e1d2f48a90f0aeb9c10c8bb6556a70f49f146723bcbb44523464f7",
+            "size_bytes": 60264
+          },
+          {
+            "path": "receiver/gal_almanac.xml",
+            "sha256": "a4f1f37d12b86326e9c0833e9077d484b951719b126317b4ca9ad7bf529e72e1",
+            "size_bytes": 2735
+          },
+          {
+            "path": "receiver/gal_ephemeris.xml",
+            "sha256": "4e1b4333acfdc19065ac86deabc9a69c8bd41cb8ab4966d81551cb947a081c57",
+            "size_bytes": 12495
+          },
+          {
+            "path": "receiver/gal_iono.xml",
+            "sha256": "bf1b266dc1939a297e5fb9d23758f7f77b0d16afd68fea5804b3c802b2d2d923",
+            "size_bytes": 583
+          },
+          {
+            "path": "receiver/gal_utc_model.xml",
+            "sha256": "1e872e672f7334ab744861744abd31a5106adc9449683a6db9b7fc792225bc8f",
+            "size_bytes": 507
+          },
+          {
+            "path": "receiver/nmea_pvt.nmea",
+            "sha256": "7c0f153032ea6362e10968a850ed15b7f17bf56a27345e6eccdf32ae867e2f8a",
+            "size_bytes": 31726
+          },
+          {
+            "path": "receiver/pvt.dat_260823_000747.geojson",
+            "sha256": "483f8a070d763dbd59b55153cf907a03a680814cd6276ea2ac59e44f3f1c7f46",
+            "size_bytes": 6411
+          },
+          {
+            "path": "receiver/pvt.dat_260823_000747.gpx",
+            "sha256": "0e3bbca3d25f99dddc4b10cccfdc72c9f558e95359d3e113b586d8b93d43a00b",
+            "size_bytes": 37751
+          },
+          {
+            "path": "receiver/pvt.dat_260823_000747.kml",
+            "sha256": "a9ad9cf31abc60ecacb040d95e3fc91a03e2c113e8c63f65738e53ad4fa0f0fa",
+            "size_bytes": 110811
+          },
+          {
+            "path": "receiver/receiver.conf",
+            "sha256": "b69b0f6c045f9e5e9a8b3d00cca9e16411f2183a03bb8644eb83f0f21f0febb2",
+            "size_bytes": 2153
+          },
+          {
+            "path": "receiver/receiver.log",
+            "sha256": "5b4b89956ab65598d012df5a8d15f78138a1d089a0ef1c10141451201c074966",
+            "size_bytes": 109050
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_0.bin",
+            "sha256": "2afe8f65cff5779080f29164f7c1ffbe1ed868fe067a7f73660093173156023d",
+            "size_bytes": 15320224
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_1.bin",
+            "sha256": "275d14441a0f5031062cdf45d3d10738eceeb1311b9d560878695ee9c237c5d8",
+            "size_bytes": 15594784
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_10.bin",
+            "sha256": "36702744209562dfb972877113e99e08ff5cc3c40c8fd2dae55bb9cca26f7a52",
+            "size_bytes": 192
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_11.bin",
+            "sha256": "31ddb1a90c10e7ba345979cf02fe42ab3880df6a08fccfa958cb83cb14ae58ef",
+            "size_bytes": 15564000
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_2.bin",
+            "sha256": "ade0e8b66977b10ef7ea0352717f2d17197595420b42a4039d2bc66fa79af9cf",
+            "size_bytes": 15358496
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_3.bin",
+            "sha256": "bd571cf0ba87f3b9598021e7de56ee89c463bc86eaabc56b2fe430a7beaada38",
+            "size_bytes": 15570656
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_4.bin",
+            "sha256": "bcec24796762c35975933279d6b58c5d640280176c153f7f59e80c68357b0c15",
+            "size_bytes": 14624256
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_5.bin",
+            "sha256": "9e5af7924d288181cc1b2fd93cb5caa99ca4b2c7a8173ddbe6b187bae8d8819b",
+            "size_bytes": 15118880
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_6.bin",
+            "sha256": "e1d452cd576126d0e3579e460b779c0b51d4f414b39e10f2455fc70c556a8a36",
+            "size_bytes": 2180032
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_7.bin",
+            "sha256": "3d0b9ca1195a3a3b3e1a7dcf4b28e6f0842861d080d5c3e6d068802d0013cd25",
+            "size_bytes": 8529024
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_8.bin",
+            "sha256": "7e3ff56d321e9f0c748f30618d5b17a64b30d6fd38d0cbd5b899812883b2dc84",
+            "size_bytes": 9327744
+          },
+          {
+            "path": "receiver/trace_native_1ms_ch_9.bin",
+            "sha256": "a557bed425d290172065aaed8e8612bc79795c6d1d4c5f41935fa7f5a4e4a18a",
+            "size_bytes": 2180032
+          }
+        ]
+      },
+      "preserved_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/historical-incomplete/C-1-terminal-drain-exact-boundary",
+      "receiver_exit_code": "OPERATOR_SIGINT_AFTER_BOUNDED_EOF_DEADLOCK",
+      "receiver_reached_final_sample": true,
+      "root_cause": "valve queued DRAIN only on a later work call that cannot occur after exact upstream EOF",
+      "schema": "gnss-doppler-lab.qset-stage0a-r2-exact-boundary-attempt-preservation.v1",
+      "status": "PRESERVED_PRE_SCORE_EXACT_BOUNDARY_DRAIN_DEADLOCK",
+      "terminal_drain": false,
+      "wrapper_log": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/clean_execution_v6_stdout.txt",
+        "sha256": "8510f56be502a30fe1a9778112e647d0fcdd3b7d2a328553659b095f592e019b",
+        "size_bytes": 2371
+      }
+    },
+    "receiver_loop_changes": false,
+    "resolution": "queue terminal DRAIN after copying the exact-boundary final chunk while returning its full item count to downstream blocks",
+    "scientific_changes": false,
+    "stage": "after complete C-1 receiver sample processing, before replay manifest, feature extraction, or any clean score",
+    "trigger": "exact-boundary EOF prevented the later valve work call that formerly queued terminal DRAIN"
+  },
+  "preregistration_commit": "0a964599205db3a8fdf50d553261b5ce6fd02c1d",
+  "receiver_sha256": "3ed059f699201807cb86eb54a24ba00fde7e248f37a8081306cbc76d6be1b06f",
+  "receiver_source_diff_sha256": "1a5906a0cc8fa8ed92c5d60e36e4eb002bc46d74bce519285c0a43723bb845b0",
+  "schema": "gnss-doppler-lab.qset-stage0a-r2-execution-freeze.v1",
+  "shortcut_operationalization": {
+    "absolute_pearson_correlation_limit": 0.8,
+    "score_inputs": "morphology only",
+    "stable_spoofed_prn_windows_min": 60
+  },
+  "status": "PASS_PRE_ATTACK",
+  "threshold_sha256": "2b223096c96af7a97fd9d5a5da6048c5f65f55b75fa05e410bcce9daf55e0490",
+  "worker_count": 1
+}

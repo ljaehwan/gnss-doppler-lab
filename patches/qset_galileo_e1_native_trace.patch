@@ -1,0 +1,31 @@
+diff --git a/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc b/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc
+index 9b730a82e..3263ce56a 100644
+--- a/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc
++++ b/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc
+@@ -637,16 +637,21 @@ dll_pll_veml_tracking::dll_pll_veml_tracking(const Dll_Pll_Conf &conf_)
+         }
+     if (d_trace_dump)
+         {
+-            // TRACE-R2 is intentionally fail-closed outside the authenticated
+-            // GPS L1 C/A, nine-tap, one-loop-update-per-1-ms configuration.
++            // Q-SET extends the authenticated TRACE instrumentation to the
++            // Galileo E1 pilot while preserving the receiver loops and record
++            // layout. Galileo E1 emits one record per native 4 ms code period.
++            const bool supported_trace_signal =
++                (d_systemName == "GPS" and d_signal_type == "1C") or
++                (d_systemName == "Galileo" and d_signal_type == "1B" and
++                    d_trk_parameters.track_pilot);
+             if (d_trk_parameters.tap_count != 9 or
+                 d_trk_parameters.extend_correlation_symbols != 1 or
+-                d_systemName != "GPS" or d_signal_type != "1C" or
++                not supported_trace_signal or
+                 d_trk_parameters.trace_scenario_id.empty() or
+                 d_trk_parameters.trace_scenario_id == "UNSET")
+                 {
+-                    LOG(ERROR) << "TRACE native 1 ms dump disabled: require GPS 1C, tap_count=9, "
+-                               << "extend_correlation_symbols=1, and an explicit trace_scenario_id";
++                    LOG(ERROR) << "TRACE native dump disabled: require GPS 1C or pilot-tracked Galileo 1B, "
++                               << "tap_count=9, extend_correlation_symbols=1, and an explicit trace_scenario_id";
+                     d_trace_dump = false;
+                 }
+             else

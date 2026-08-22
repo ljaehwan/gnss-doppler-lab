@@ -1,0 +1,56 @@
+--- a/src/algorithms/signal_source/libs/gnss_sdr_valve.cc
++++ b/src/algorithms/signal_source/libs/gnss_sdr_valve.cc
+@@ -36,6 +36,7 @@ Gnss_Sdr_Valve::Gnss_Sdr_Valve(size_t sizeof_stream_item,
+                            d_queue(queue),
+                            d_stop_flowgraph(stop_flowgraph),
+                            d_terminal_drain(terminal_drain),
++                           d_terminal_action_sent(false),
+                            d_open_valve(false)
+ {
+ }
+@@ -76,10 +77,14 @@ int Gnss_Sdr_Valve::work(int noutput_items,
+         {
+             if (d_ncopied_items >= d_nitems)
+                 {
+-                    const unsigned int action = d_terminal_drain ? 2U : 0U;
+-                    LOG(INFO) << (d_terminal_drain ? "Draining receiver, " : "Stopping receiver, ")
+-                              << d_ncopied_items << " samples processed";
+-                    d_queue->push(pmt::make_any(command_event_make(200, action)));
++                    if (not d_terminal_action_sent)
++                        {
++                            const unsigned int action = d_terminal_drain ? 2U : 0U;
++                            LOG(INFO) << (d_terminal_drain ? "Draining receiver, " : "Stopping receiver, ")
++                                      << d_ncopied_items << " samples processed";
++                            d_queue->push(pmt::make_any(command_event_make(200, action)));
++                            d_terminal_action_sent = true;
++                        }
+                     if (d_stop_flowgraph)
+                         {
+                             return -1;  // Done!
+@@ -97,6 +101,16 @@ int Gnss_Sdr_Valve::work(int noutput_items,
+                     std::memcpy(output_items[ch], input_items[ch], n * input_signature()->sizeof_stream_item(ch));
+                 }
+             d_ncopied_items += n;
++            // At an exact file boundary GNU Radio may propagate upstream EOF
++            // without invoking work() again.  Queue DRAIN after copying the
++            // final chunk, but return n so every final output item remains
++            // visible to downstream blocks before flowgraph wait completes.
++            if (d_terminal_drain and d_ncopied_items >= d_nitems and not d_terminal_action_sent)
++                {
++                    LOG(INFO) << "Draining receiver, " << d_ncopied_items << " samples processed";
++                    d_queue->push(pmt::make_any(command_event_make(200, 2U)));
++                    d_terminal_action_sent = true;
++                }
+             return n;
+         }
+     for (size_t ch = 0; ch < output_items.size(); ch++)
+--- a/src/algorithms/signal_source/libs/gnss_sdr_valve.h
++++ b/src/algorithms/signal_source/libs/gnss_sdr_valve.h
+@@ -96,6 +96,7 @@ private:
+     Concurrent_Queue<pmt::pmt_t>* d_queue;
+     bool d_stop_flowgraph;
+     bool d_terminal_drain;
++    bool d_terminal_action_sent;
+     bool d_open_valve;
+ };
+ 

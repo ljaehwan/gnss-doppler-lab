@@ -1,0 +1,28 @@
+{
+  "attack_payload_bytes_read": 0,
+  "clean_gate_changed": false,
+  "clean_holdout_alarm_count_by_aggregator": {
+    "MAX": 0,
+    "MEAN": 0,
+    "MULTI_Q": 0,
+    "Q50": 0,
+    "Q70": 0,
+    "Q90": 0
+  },
+  "clean_holdout_eligible_windows": 136,
+  "clean_threshold_changed": false,
+  "feature_model_score_or_gate_code_changed": false,
+  "frozen_literal_model_sha256": "a38d8bb79ca817c9241f4146e0b41759d7cfcf62c609f0b2e5ec5fbcc09f2bda",
+  "historical_pre_freeze_evidence": {
+    "execution_freeze_file_sha256": "2722a623a31c3ce8fbed22058cc5b92fc7fd82431838514fecbf1570cecb2d36",
+    "normal_model_file_sha256": "0f478f6bb6c0f871321a69bb58f4308cdb837f81a2c0afdd82ad5ba04f0ade15",
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/historical-pre-freeze-numerics",
+    "threshold_binding_file_sha256": "59248d88c63532da1bee487cdb29bc9112abb75f827f2639ee5e6bb09b319323"
+  },
+  "maximum_observed_absolute_feature_difference": 6.661338147750939e-16,
+  "resolution": "freeze and consume the committed literal model artifact without post-freeze refitting",
+  "schema": "gnss-doppler-lab.qset-stage0a-r2-prefreeze-numerical-reproduction.v1",
+  "scientific_interpretation": "alignment-level floating-point variation below 1e-15; no attack-informed adaptation",
+  "status": "PASS_LITERAL_MODEL_ARTIFACT_FREEZE",
+  "threshold_sha256": "2b223096c96af7a97fd9d5a5da6048c5f65f55b75fa05e410bcce9daf55e0490"
+}

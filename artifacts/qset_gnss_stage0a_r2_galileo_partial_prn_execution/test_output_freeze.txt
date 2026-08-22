@@ -1,0 +1,5 @@
+Script started on 2026-08-23 01:14:47+09:00 [COMMAND="env PYTHONPATH=src /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_qset_gnss_stage0a_r2.py tests/test_qset_gnss_stage0a_r2_execution_repair_v4.py tests/test_qset_gnss_stage0a_r2_execution_repair_v5.py tests/test_qset_gnss_stage0a_r2_execution_repair_v6.py tests/test_qset_gnss_stage0a_r2_execution_repair_v7.py" <not executed on terminal>]
+..........................                                               [100%]
+26 passed in 2.41s
+
+Script done on 2026-08-23 01:14:50+09:00 [COMMAND_EXIT_CODE="0"]

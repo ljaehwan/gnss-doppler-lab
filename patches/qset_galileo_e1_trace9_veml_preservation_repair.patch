@@ -1,0 +1,106 @@
+--- a/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc
++++ b/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc
+@@ -489,8 +489,10 @@
+     const bool trace_9tap = (d_trk_parameters.tap_count == 9);
+     if (trace_9tap)
+         {
+-            // TRACE: E4, E3, E2, E, Prompt, L, L2, L3, L4.
+-            d_n_correlator_taps = 9;
++            // TRACE: E4, E3, E2, E, Prompt, L, L2, L3, L4. Galileo
++            // VEML retains four additional loop-only correlators at its
++            // configured VE/E/L/VL spacings; they are never serialized.
++            d_n_correlator_taps = d_veml ? 13 : 9;
+         }
+     else if (d_trk_parameters.tap_count == 5 or d_veml)
+         {
+@@ -508,18 +510,25 @@
+     // map memory pointers of correlator outputs
+     if (trace_9tap)
+         {
+-            d_Very_Early = nullptr;
+-            d_Early = &d_correlator_outs[3];
++            d_Very_Early = d_veml ? &d_correlator_outs[9] : nullptr;
++            d_Early = d_veml ? &d_correlator_outs[10] : &d_correlator_outs[3];
+             d_Prompt = &d_correlator_outs[4];
+-            d_Late = &d_correlator_outs[5];
+-            d_Very_Late = nullptr;
++            d_Late = d_veml ? &d_correlator_outs[11] : &d_correlator_outs[5];
++            d_Very_Late = d_veml ? &d_correlator_outs[12] : nullptr;
+             const float spacing = d_trk_parameters.tap_spacing_chips * static_cast<float>(d_code_samples_per_chip);
+-            for (int32_t n = 0; n < d_n_correlator_taps; ++n)
++            for (int32_t n = 0; n < 9; ++n)
+                 {
+                     d_local_code_shift_chips[n] = static_cast<float>(n - 4) * spacing;
+                 }
++            if (d_veml)
++                {
++                    d_local_code_shift_chips[9] = -d_trk_parameters.very_early_late_space_chips * static_cast<float>(d_code_samples_per_chip);
++                    d_local_code_shift_chips[10] = -d_trk_parameters.early_late_space_chips * static_cast<float>(d_code_samples_per_chip);
++                    d_local_code_shift_chips[11] = d_trk_parameters.early_late_space_chips * static_cast<float>(d_code_samples_per_chip);
++                    d_local_code_shift_chips[12] = d_trk_parameters.very_early_late_space_chips * static_cast<float>(d_code_samples_per_chip);
++                }
+             d_prompt_data_shift = &d_local_code_shift_chips[4];
+-            d_trk_parameters.spc = d_trk_parameters.tap_spacing_chips;
++            d_trk_parameters.spc = d_veml ? d_trk_parameters.early_late_space_chips : d_trk_parameters.tap_spacing_chips;
+         }
+     else if (d_n_correlator_taps == 5)
+         {
+@@ -940,14 +949,21 @@
+     d_carrier_lock_test = 1.0;
+     d_CN0_SNV_dB_Hz = 0.0;
+ 
+-    if (d_n_correlator_taps == 9)
++    if (d_trk_parameters.tap_count == 9)
+         {
+             const float spacing = d_trk_parameters.tap_spacing_chips * static_cast<float>(d_code_samples_per_chip);
+-            for (int32_t n = 0; n < d_n_correlator_taps; ++n)
++            for (int32_t n = 0; n < 9; ++n)
+                 {
+                     d_local_code_shift_chips[n] = static_cast<float>(n - 4) * spacing;
+                 }
+-            d_trk_parameters.spc = d_trk_parameters.tap_spacing_chips;
++            if (d_veml)
++                {
++                    d_local_code_shift_chips[9] = -d_trk_parameters.very_early_late_space_chips * static_cast<float>(d_code_samples_per_chip);
++                    d_local_code_shift_chips[10] = -d_trk_parameters.early_late_space_chips * static_cast<float>(d_code_samples_per_chip);
++                    d_local_code_shift_chips[11] = d_trk_parameters.early_late_space_chips * static_cast<float>(d_code_samples_per_chip);
++                    d_local_code_shift_chips[12] = d_trk_parameters.very_early_late_space_chips * static_cast<float>(d_code_samples_per_chip);
++                }
++            d_trk_parameters.spc = d_veml ? d_trk_parameters.early_late_space_chips : d_trk_parameters.tap_spacing_chips;
+         }
+     else if (d_n_correlator_taps == 5)
+         {
+@@ -2210,7 +2226,7 @@
+                 d_E_accu = *d_Early;
+                 d_P_accu = *d_Prompt;
+                 d_L_accu = *d_Late;
+-                d_trk_parameters.spc = (d_n_correlator_taps == 9) ? d_trk_parameters.tap_spacing_chips : d_trk_parameters.early_late_space_chips;
++                d_trk_parameters.spc = (d_trk_parameters.tap_count == 9 and not d_veml) ? d_trk_parameters.tap_spacing_chips : d_trk_parameters.early_late_space_chips;
+                 // if (std::string(d_trk_parameters.signal) == "E1")
+                 //    {
+                 //        d_trk_parameters.slope = -CalculateSlopeAbs(&SinBocCorrelationFunction<1, 1>, d_trk_parameters.spc);
+@@ -2320,14 +2336,21 @@
+                                         d_code_loop_filter.set_update_interval(static_cast<float>(d_current_correlation_time_s));
+                                         d_code_loop_filter.set_noise_bandwidth(d_trk_parameters.dll_bw_narrow_hz);
+                                         d_carrier_loop_filter.set_params(d_trk_parameters.fll_bw_hz, d_trk_parameters.pll_bw_narrow_hz, d_trk_parameters.pll_filter_order);
+-                                        if (d_n_correlator_taps == 9)
++                                        if (d_trk_parameters.tap_count == 9)
+                                             {
+                                                 const float spacing = d_trk_parameters.tap_spacing_chips * static_cast<float>(d_code_samples_per_chip);
+-                                                for (int32_t n = 0; n < d_n_correlator_taps; ++n)
++                                                for (int32_t n = 0; n < 9; ++n)
+                                                     {
+                                                         d_local_code_shift_chips[n] = static_cast<float>(n - 4) * spacing;
+                                                     }
+-                                                d_trk_parameters.spc = d_trk_parameters.tap_spacing_chips;
++                                                if (d_veml)
++                                                    {
++                                                        d_local_code_shift_chips[9] = -d_trk_parameters.very_early_late_space_narrow_chips * static_cast<float>(d_code_samples_per_chip);
++                                                        d_local_code_shift_chips[10] = -d_trk_parameters.early_late_space_narrow_chips * static_cast<float>(d_code_samples_per_chip);
++                                                        d_local_code_shift_chips[11] = d_trk_parameters.early_late_space_narrow_chips * static_cast<float>(d_code_samples_per_chip);
++                                                        d_local_code_shift_chips[12] = d_trk_parameters.very_early_late_space_narrow_chips * static_cast<float>(d_code_samples_per_chip);
++                                                    }
++                                                d_trk_parameters.spc = d_veml ? d_trk_parameters.early_late_space_narrow_chips : d_trk_parameters.tap_spacing_chips;
+                                             }
+                                         else if (d_veml)
+                                             {

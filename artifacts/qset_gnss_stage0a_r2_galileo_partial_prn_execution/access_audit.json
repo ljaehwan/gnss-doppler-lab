@@ -1,4 +1,16 @@
 {
+  "abandoned_pointer_only_build_v5": {
+    "attack_accessed": false,
+    "build_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/receiver-build-v5",
+    "clean_score_computed": false,
+    "proposal_patch_sha256": "5680ed7984edce60d4e8a7296b6450ca0a9ea767dfbd218b32eea4d1726663c0",
+    "reason": "pointer-only mapping would have replaced frozen Galileo VEML loop spacings with outer TRACE tap spacing",
+    "receiver_executable_created": false,
+    "receiver_executed": false,
+    "source_diff_sha256": "d7ef320d8e9b5d9765f8bf801d51e4d4c4bfccbc199372faf32a2baed611c8c1",
+    "source_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/receiver-source-v5",
+    "status": "ABANDONED_PRE_EXECUTION_LOOP_SPACING_MISMATCH"
+  },
   "attack_payload": {
     "bytes_read": 0,
     "hashes": 0,
@@ -21,14 +33,56 @@
     "c3_directory_inventory": 1,
     "c3_zenodo_json_opens": 2
   },
-  "phase": "SCIENTIFIC_PREREGISTRATION",
+  "clean_payload_execution": {
+    "C-1": {
+      "decoder_bytes_read": 29999832000,
+      "identity_hash_bytes": 29999832000
+    },
+    "C-3": {
+      "decoder_bytes_read": 29999832000,
+      "identity_hash_bytes": 29999832000
+    }
+  },
+  "phase": "CLEAN_EXECUTION_COMPLETE_PRE_ATTACK",
+  "prefreeze_failed_clean_attempt": {
+    "attack_bytes_read": 0,
+    "decoder_bytes_read": 0,
+    "feature_windows": 0,
+    "identity_hash_bytes": 29999832000,
+    "preserved": true,
+    "receiver_runs": 0,
+    "scenario": "C-1",
+    "scores": 0
+  },
+  "prefreeze_failed_clean_attempt_v5": {
+    "attack_bytes_read": 0,
+    "decoder_bytes_read": 29999832000,
+    "failure": "SIGSEGV",
+    "feature_windows": 0,
+    "identity_hash_bytes": 29999832000,
+    "preserved": true,
+    "receiver_runs": 1,
+    "scenario": "C-1",
+    "scores": 0
+  },
+  "prefreeze_failed_clean_attempt_v6": {
+    "attack_bytes_read": 0,
+    "decoder_bytes_read": 29999832000,
+    "failure": "EXACT_BOUNDARY_TERMINAL_DRAIN_DEADLOCK",
+    "feature_windows": 0,
+    "identity_hash_bytes": 29999832000,
+    "preserved": true,
+    "receiver_runs": 1,
+    "scenario": "C-1",
+    "scores": 0
+  },
   "schema": "gnss-doppler-lab.qset-stage0a-r2-access-audit.v1",
   "scientific_operations": {
     "attack_evaluations": 0,
-    "feature_windows": 0,
-    "receiver_runs": 0,
-    "scores": 0,
-    "thresholds_fit": 0
+    "feature_windows": 665,
+    "receiver_runs": 2,
+    "scores": 140,
+    "thresholds_fit": 6
   },
-  "status": "PASS_PRE_ATTACK_FREEZE"
+  "status": "PASS_ATTACK_STILL_SEALED"
 }
