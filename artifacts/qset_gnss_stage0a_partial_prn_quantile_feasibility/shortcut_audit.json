@@ -1,0 +1,12 @@
+{
+  "schema": "gnss-doppler-lab.qset-stage0a-shortcut-audit.v1",
+  "status": "NOT_RUN_DATASET_BLOCKED",
+  "model_or_score_created": false,
+  "prn_id_feature_uses": 0,
+  "receiver_channel_feature_uses": 0,
+  "absolute_cn0_feature_uses": 0,
+  "absolute_power_feature_uses": 0,
+  "tracked_prn_count_feature_uses": 0,
+  "scenario_or_filename_feature_uses": 0,
+  "lock_loss_explanation_tested": false
+}

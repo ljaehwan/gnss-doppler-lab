@@ -1,0 +1,19 @@
+{
+  "schema": "gnss-doppler-lab.qset-stage0a-final-verdict.v1",
+  "status": "BLOCKED",
+  "verdict": "BLOCKED_TUNI2025_DATASET_NOT_LOCAL",
+  "next_state": "WAITING_FOR_TUNI2025_DATASET_AND_PROTOCOL_RESOLUTION",
+  "base_sha": "8025f331444e600bee97baf28ad3cb7af9410381",
+  "preflight_commit_sha": "617a897c9709a5ca46471a99c3906301af9e798e",
+  "scientific_preregistration_created": false,
+  "implementation_freeze_created": false,
+  "clean_scoring_performed": false,
+  "synthetic_control_performed": false,
+  "attack_evaluation_performed": false,
+  "stage0b_authorized": false,
+  "spoofing_detector_validated": false,
+  "raw_iq_bytes_read": 0,
+  "attack_bytes_read": 0,
+  "reason": "Both registered local Tuni2025 directories are absent. Exact 1/3/5 scenarios are Galileo E1, while GPS L1 provides 1/2/4 and duplicate clean payloads, so no silent protocol substitution is allowed.",
+  "completed_utc": "2026-08-22T05:54:53Z"
+}

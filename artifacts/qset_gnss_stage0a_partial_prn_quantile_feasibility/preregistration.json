@@ -1,0 +1,10 @@
+{
+  "schema": "gnss-doppler-lab.qset-stage0a-preregistration.v1",
+  "status": "NOT_RUN_DATASET_BLOCKED",
+  "reason": "The required raw files are not local; constellation, exact-k, format, and clean-independence bindings remain unresolved.",
+  "feature_contract_frozen": false,
+  "window_stride_frozen": false,
+  "aggregator_frozen": false,
+  "threshold_frozen": false,
+  "success_gate_frozen": false
+}

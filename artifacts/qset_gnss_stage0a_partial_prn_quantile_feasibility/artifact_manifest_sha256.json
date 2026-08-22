@@ -1,0 +1,127 @@
+{
+  "file_count": 24,
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "888c45cc8f24f1234e1614bedade940ba4d3a308c3cfdaf431e29e981e14e6c0",
+      "size_bytes": 1257
+    },
+    {
+      "path": "access_audit.json",
+      "sha256": "924d7143b5de6506b221e6c3539159b803d39a8243bc94ca5206176535121047",
+      "size_bytes": 1389
+    },
+    {
+      "path": "aggregator_comparison.csv",
+      "sha256": "bb7f66edbd61cfb8c78eb060510d43181a75bec0a42874025fed54f925caba79",
+      "size_bytes": 124
+    },
+    {
+      "path": "clean_score_summary.json",
+      "sha256": "f81bb1a90cb873362a97e4ac785071df231ea97125e5602ef557bfabbc032366",
+      "size_bytes": 235
+    },
+    {
+      "path": "dataset_download_plan.json",
+      "sha256": "b25c83581c51cf2ea8f85edb4bc40c531bdaff8496f440b3bb8f14449ad9bff5",
+      "size_bytes": 3772
+    },
+    {
+      "path": "dataset_preflight.json",
+      "sha256": "f52867a9f6d5c07a773c51490f232f15b5a6895e69d35b6d7141900bbc7be4c5",
+      "size_bytes": 10182
+    },
+    {
+      "path": "deterministic_reproduction.json",
+      "sha256": "f0f7e5f2339a8e7940df3ab576768d92276420ecd20606c38517058aa9a4f815",
+      "size_bytes": 322
+    },
+    {
+      "path": "execution_freeze.json",
+      "sha256": "bcc7e5edad82a7e42e417077e498aa2baf2c8d6fccc6c26b68dc8c3c54e07327",
+      "size_bytes": 282
+    },
+    {
+      "path": "final_verdict.json",
+      "sha256": "22bc2ecca3a9687bcc209d3c3ca583d01c673ebff5c10c5e7f6fc3371f2270f5",
+      "size_bytes": 923
+    },
+    {
+      "path": "freeze_commit.json",
+      "sha256": "2fc98fb70a4039f4d68c3e8d4f3c535ac3bee4fecafb9dacec30fadebe763df7",
+      "size_bytes": 202
+    },
+    {
+      "path": "per_prn_ground_truth_metrics.csv",
+      "sha256": "5710c387d3c4025d8bba0cce2a90f39fb59b51a65b9ed2833b6f942197bffdd3",
+      "size_bytes": 113
+    },
+    {
+      "path": "per_prn_support.csv",
+      "sha256": "2d300963ac2f6188364b898865e5e7d6d6bb2faaaa7fad2c61aa9ba2030926c8",
+      "size_bytes": 87
+    },
+    {
+      "path": "plots/dataset_availability.svg",
+      "sha256": "72034ede8e075c07ec175555e6b51987b9919b4f7558965f9a2a218ea9957305",
+      "size_bytes": 1426
+    },
+    {
+      "path": "preflight_commit.json",
+      "sha256": "fd40640324e86ef174b0d212ea69dfc5d6696ae2a7858c0b34cf708d7f685752",
+      "size_bytes": 284
+    },
+    {
+      "path": "preregistration.json",
+      "sha256": "9731cdc3e9c73d5ccf6910b4ee2dc9827dfb8eba24f65c873c8dc3d777c8e966",
+      "size_bytes": 402
+    },
+    {
+      "path": "preregistration_commit.json",
+      "sha256": "a8deb49621f064e558ffa322f442ccfc8a7de3e9de1c20786149bb6ba5065811",
+      "size_bytes": 219
+    },
+    {
+      "path": "receiver_manifests/status.json",
+      "sha256": "c805f412e62b0a1bf8794bde1c2a241bc88fd02ed26ed44a6e696a21534fb0ba",
+      "size_bytes": 241
+    },
+    {
+      "path": "scenario_metrics.json",
+      "sha256": "bb1d34cd0d3b905af0e2dff34c20d1a46060eb35717770a5fc6d2ac51ca6f7c9",
+      "size_bytes": 450
+    },
+    {
+      "path": "shortcut_audit.json",
+      "sha256": "a6b3b76bf44cb2bd3d7b8bc6ba566020bf2ac7fe5fca76e1ab2219284d31b5bd",
+      "size_bytes": 398
+    },
+    {
+      "path": "source_binding.json",
+      "sha256": "8944b8c01976053d1f0211d5bbf073cb240280894164899fde6980c80de03774",
+      "size_bytes": 2391
+    },
+    {
+      "path": "synthetic_dilution_control.json",
+      "sha256": "1a5b1264e6d4e22d032dc85a4b162af7032a0215dc22170af8554988e82f566a",
+      "size_bytes": 198
+    },
+    {
+      "path": "test_output.txt",
+      "sha256": "851826fe920b915816425f7d80809f02c1b46f14a7cc2d7d904d805392019957",
+      "size_bytes": 763
+    },
+    {
+      "path": "threshold_binding.json",
+      "sha256": "f11b70d24b445918d39cc3b56fea34629bd74899c0adc4d2db09b2cbc14b0370",
+      "size_bytes": 193
+    },
+    {
+      "path": "verifier_output.txt",
+      "sha256": "fa3904051bdd742c180e42aae074036704b35fd176f5aee605aaa1af7235eef7",
+      "size_bytes": 721
+    }
+  ],
+  "schema": "gnss-doppler-lab.qset-stage0a-manifest.v1",
+  "status": "PASS"
+}

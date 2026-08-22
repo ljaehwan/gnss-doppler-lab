@@ -1,0 +1,24 @@
+{
+  "attack_bytes_read": 0,
+  "base_sha": "8025f331444e600bee97baf28ad3cb7af9410381",
+  "final_candidate_head": "617a897c9709a5ca46471a99c3906301af9e798e",
+  "manifest_files": 24,
+  "minimum_download_bytes": 141925248000,
+  "preflight_commit_sha": "617a897c9709a5ca46471a99c3906301af9e798e",
+  "raw_iq_bytes_read": 0,
+  "self_test": {
+    "status": "PASS",
+    "test_count": 6,
+    "tests": {
+      "attack_access_tamper": true,
+      "authorization_tamper": true,
+      "download_total_tamper": true,
+      "duplicate_gps_clean_detected": true,
+      "exact_1_3_5_set": true,
+      "manifest_tamper": true
+    }
+  },
+  "stage0b_authorized": false,
+  "status": "PASS",
+  "verdict": "BLOCKED_TUNI2025_DATASET_NOT_LOCAL"
+}

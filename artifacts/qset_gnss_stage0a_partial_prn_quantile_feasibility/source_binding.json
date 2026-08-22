@@ -15,6 +15,23 @@
     "descriptor_doi": "10.1109/IEEEDATA.2025.3627116",
     "retrieved_utc": "2026-08-22T05:54:53Z"
   },
+  "scientific_bindings": {
+    "receiver_configuration": "NOT_CREATED_DATASET_BLOCKED",
+    "feature_code": "NOT_CREATED_DATASET_BLOCKED",
+    "normal_model": "NOT_CREATED_DATASET_BLOCKED",
+    "threshold": "NOT_CREATED_DATASET_BLOCKED"
+  },
+  "compact_verifier_binding": {
+    "scripts/verify_qset_gnss_stage0a.py": "3b4a5641e406d3fe1d422d2aef8ba6680cb443c2937e3169922f079efa91c61a",
+    "tests/test_qset_gnss_stage0a.py": "86939e1ea4758b2de3963f98a1b9095b5f27426ec5ba9b580f124119c1c6b104"
+  },
+  "test_environment": {
+    "python": "3.12.3",
+    "pandas": "3.0.3",
+    "numpy": "2.5.1",
+    "pytest": "9.1.1",
+    "interpreter": "/home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python"
+  },
   "readme_verification": {
     "document_count": 13,
     "total_bytes": 1618046,
@@ -37,4 +54,3 @@
     }
   }
 }
-

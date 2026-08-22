@@ -1,0 +1,12 @@
+Q-SET compact tests (default python):
+Command: python3 -m pytest -q tests/test_qset_gnss_stage0a.py
+.......                                                                  [100%]
+7 passed in 0.04s
+
+Related regression tests (project virtual environment):
+Command: /home/ubuntu/projects/gnss-doppler-lab/.venv/bin/python -m pytest -q tests/test_qset_gnss_stage0a.py tests/test_gnss_sdr.py tests/test_oakbat_9tap_detection_pipeline.py
+......................................................                   [100%]
+54 passed in 3.93s
+
+Environment: Python 3.12.3; pandas 3.0.3; NumPy 2.5.1; pytest 9.1.1.
+The default interpreter lacked pandas for the 9-tap regression module; no code was changed, and the dependency-complete project environment passed all 54 tests.

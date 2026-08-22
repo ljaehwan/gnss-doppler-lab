@@ -1,0 +1,9 @@
+{
+  "schema": "gnss-doppler-lab.qset-stage0a-deterministic-reproduction.v1",
+  "status": "PASS",
+  "scope": "compact blocked-artifact validation only",
+  "run_count": 2,
+  "byte_identical": true,
+  "scientific_rerun_performed": false,
+  "reason": "There are no scientific scores to rerun because the dataset is absent."
+}

@@ -1,0 +1,16 @@
+{
+  "schema": "gnss-doppler-lab.qset-stage0a-scenario-metrics.v1",
+  "status": "NOT_RUN_DATASET_BLOCKED",
+  "clean_fpr": null,
+  "one_prn_results": null,
+  "three_prn_results": null,
+  "five_prn_results": null,
+  "multipath_results": null,
+  "gates": {
+    "technical_support": "NOT_EVALUATED",
+    "false_alarm": "NOT_EVALUATED",
+    "local_signal": "NOT_EVALUATED",
+    "aggregation_benefit": "NOT_EVALUATED",
+    "shortcut": "NOT_EVALUATED"
+  }
+}
