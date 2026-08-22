@@ -1,0 +1,38 @@
+{
+  "base_sha": "0b2a8913c856ab9b300f7fd604fc8f61da350cc6",
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-r0b-source-binding.v1",
+  "source_metric_changes_allowed": 0,
+  "sources": {
+    "corrected_between_prn_metrics": {
+      "path": "artifacts/bitprobe_stage0a_r0a_inference_contract_repair/corrected_between_prn_metrics.csv",
+      "sha256": "7d9b49f6120e52a158c498185cd881c9263e3361e688c3ff33ae8555826ca610",
+      "size_bytes": 491
+    },
+    "corrected_bootstrap_metrics": {
+      "path": "artifacts/bitprobe_stage0a_r0a_inference_contract_repair/corrected_bootstrap_metrics.json",
+      "sha256": "990562948ba17bf89d0cc749920a456d1e1f46c27ebe30a6376676860d036e5c",
+      "size_bytes": 1459
+    },
+    "corrected_split_half_metrics": {
+      "path": "artifacts/bitprobe_stage0a_r0a_inference_contract_repair/corrected_split_half_metrics.csv",
+      "sha256": "7e716fae992d6fbd0f3a2ece79e16c215119e8c4568eda6e8f62070ef40da73b",
+      "size_bytes": 1287
+    },
+    "flip_no_flip_advisory": {
+      "path": "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/flip_no_flip_metrics.csv",
+      "sha256": "f2a348c85819488fed7a3b49f80a154b1fe5bb058800a4f1b55370d3e2e34dbb",
+      "size_bytes": 272
+    },
+    "nuisance_metrics": {
+      "path": "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/nuisance_metrics.csv",
+      "sha256": "212b3b9527d6a9ec621b9ebe9196ee75597b8291712ab0ac86d66bf7cca54400",
+      "size_bytes": 2258
+    },
+    "per_prn_support": {
+      "path": "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/per_prn_support.csv",
+      "sha256": "0155f2184feeac5373e41eb4c603c96f3c3b2dd6fdb7d2eac492dea1ab5c498c",
+      "size_bytes": 744
+    }
+  },
+  "status": "PASS"
+}

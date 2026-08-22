@@ -1,0 +1,63 @@
+{
+  "base_sha": "0b2a8913c856ab9b300f7fd604fc8f61da350cc6",
+  "configuration_sha256": "e9e231642afde997ffbcaca90e624b07b6a7b9bffbf46be517bd7f5fae469f22",
+  "contract_commit_sha": "76cf6039d70d233150a8d75a5bd6145427bb6fcf",
+  "environment": {
+    "numpy": "1.26.4",
+    "platform": "Linux-6.8.0-137-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]",
+    "worker_count": 1
+  },
+  "executable_bindings": {
+    "scripts/run_bitprobe_stage0a_r0b.py": {
+      "path": "scripts/run_bitprobe_stage0a_r0b.py",
+      "sha256": "dce6efdf465b78b40edafc903e86b3e17a54c2a1a625e21e46f14ed9b0a373ce",
+      "size_bytes": 1140
+    },
+    "scripts/verify_bitprobe_stage0a_r0b.py": {
+      "path": "scripts/verify_bitprobe_stage0a_r0b.py",
+      "sha256": "cd82a486d3907ef96822bd30559754734b38372cc1d4f9d643682339879c5226",
+      "size_bytes": 7462
+    },
+    "src/gnss_doppler_lab/bitprobe_stage0a_r0b.py": {
+      "path": "src/gnss_doppler_lab/bitprobe_stage0a_r0b.py",
+      "sha256": "ffdab85d03729f6f4e95db8d4ae2ddf8bd49e6f4b97436851dda08b31a90fb8f",
+      "size_bytes": 27746
+    }
+  },
+  "raw_trace_tensor_attack_access_before_execution": 0,
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-r0b-execution-freeze.v1",
+  "source_bindings": {
+    "corrected_between_prn_metrics": {
+      "path": "artifacts/bitprobe_stage0a_r0a_inference_contract_repair/corrected_between_prn_metrics.csv",
+      "sha256": "7d9b49f6120e52a158c498185cd881c9263e3361e688c3ff33ae8555826ca610",
+      "size_bytes": 491
+    },
+    "corrected_bootstrap_metrics": {
+      "path": "artifacts/bitprobe_stage0a_r0a_inference_contract_repair/corrected_bootstrap_metrics.json",
+      "sha256": "990562948ba17bf89d0cc749920a456d1e1f46c27ebe30a6376676860d036e5c",
+      "size_bytes": 1459
+    },
+    "corrected_split_half_metrics": {
+      "path": "artifacts/bitprobe_stage0a_r0a_inference_contract_repair/corrected_split_half_metrics.csv",
+      "sha256": "7e716fae992d6fbd0f3a2ece79e16c215119e8c4568eda6e8f62070ef40da73b",
+      "size_bytes": 1287
+    },
+    "flip_no_flip_advisory": {
+      "path": "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/flip_no_flip_metrics.csv",
+      "sha256": "f2a348c85819488fed7a3b49f80a154b1fe5bb058800a4f1b55370d3e2e34dbb",
+      "size_bytes": 272
+    },
+    "nuisance_metrics": {
+      "path": "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/nuisance_metrics.csv",
+      "sha256": "212b3b9527d6a9ec621b9ebe9196ee75597b8291712ab0ac86d66bf7cca54400",
+      "size_bytes": 2258
+    },
+    "per_prn_support": {
+      "path": "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability/per_prn_support.csv",
+      "sha256": "0155f2184feeac5373e41eb4c603c96f3c3b2dd6fdb7d2eac492dea1ab5c498c",
+      "size_bytes": 744
+    }
+  },
+  "status": "IMPLEMENTED_BEFORE_SENSITIVITY_EXECUTION"
+}

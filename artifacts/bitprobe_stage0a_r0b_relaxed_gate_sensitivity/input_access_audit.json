@@ -1,0 +1,37 @@
+{
+  "attacks": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "committed_metric_files": {
+    "file_count": 6,
+    "hash_verified": 6
+  },
+  "frozen_tensor": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "phase": "PRE_EXECUTION_FREEZE",
+  "raw_iq": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-r0b-access.v1",
+  "status": "PASS",
+  "trace": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  }
+}

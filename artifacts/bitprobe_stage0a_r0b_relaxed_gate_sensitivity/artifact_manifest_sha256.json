@@ -1,0 +1,47 @@
+{
+  "file_count": 8,
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "48f9d6cac474a2da01ed3422feac75fa13d5d44ad7630954b6232ae6db4c568e",
+      "size_bytes": 563
+    },
+    {
+      "path": "contract_commit.json",
+      "sha256": "609e32224d1afc7e6545b63e530da6b4de9d5d311a303356269b4363405453ac",
+      "size_bytes": 336
+    },
+    {
+      "path": "execution_freeze.json",
+      "sha256": "dff3ec9514af80a1bcb0bdc9c22ba939ddc7b2de1f5bf6774fc5fabc07599594",
+      "size_bytes": 2846
+    },
+    {
+      "path": "input_access_audit.json",
+      "sha256": "e21c558b2428dc8b3c0a0f891a1f7582e295061bef7bc775daa9fcc1b50015c3",
+      "size_bytes": 623
+    },
+    {
+      "path": "relaxed_sensitivity_contract.json",
+      "sha256": "c2ef1dca14347b07f4dc0f080760ed816dadfae7d881fbbde84ce86e1437f262",
+      "size_bytes": 5466
+    },
+    {
+      "path": "source_metric_binding.json",
+      "sha256": "0487a808872649798b4e11fb3edb442417b41cbb4295888b02272d422d99e64b",
+      "size_bytes": 1720
+    },
+    {
+      "path": "test_output.txt",
+      "sha256": "fe70efce8bd5cc3d6baacbbc5945aac75bebeb3cccb0ab04fbcaed3875ea98cd",
+      "size_bytes": 99
+    },
+    {
+      "path": "verifier_output.txt",
+      "sha256": "cefda1b56803253410a88de6fe8b072f491e6b96e3b7ac0bf1745a4ceb605adb",
+      "size_bytes": 206
+    }
+  ],
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-r0b-manifest.v1",
+  "status": "PASS"
+}
