@@ -1,1 +1,9 @@
 prn,acquired,segments_observed,run_count,longest_continuous_tracking_s,tracking_ge_10s,all_finite,telemetry_sync
+2,True,segment_030_060;segment_100_130,3,29.95202425,True,True,True
+10,True,segment_030_060,1,20.412036750000002,True,True,True
+11,True,segment_030_060;segment_100_130,2,27.64803225,True,True,False
+14,True,segment_030_060;segment_100_130,2,29.3560485,True,True,True
+25,True,segment_030_060,1,6.300012,False,True,False
+29,True,segment_030_060,1,10.00000425,True,True,False
+30,True,segment_030_060;segment_100_130,3,29.659969,True,True,True
+36,True,segment_030_060;segment_100_130,3,29.54797975,True,True,True

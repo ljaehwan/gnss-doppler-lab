@@ -1,0 +1,107 @@
+{
+  "file_count": 20,
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "8e6e20142efc1a7120e54b4058c4114b1a11c7512620fbe6628e5057ff84253b",
+      "size_bytes": 923
+    },
+    {
+      "path": "access_audit.json",
+      "sha256": "8f2d94902605b27f513bd97c8921e3b46f457130303df72e50eab3206287a1c8",
+      "size_bytes": 669
+    },
+    {
+      "path": "acquisition_inventory.csv",
+      "sha256": "ca734d4e1b033916f40bf63f77ba4236562bca224477347392e1083bab0aa88f",
+      "size_bytes": 621
+    },
+    {
+      "path": "decoder_validation.json",
+      "sha256": "f3536f68a1c85f3514d28e5bfdfd98ef9dfa7e103f745f5d1c33680dcf1682c1",
+      "size_bytes": 1987
+    },
+    {
+      "path": "deterministic_reproduction.json",
+      "sha256": "3562eba88c183487137fa28bb3089dbc5daf7390f0f3e0305006a5a14dc1b8f3",
+      "size_bytes": 218
+    },
+    {
+      "path": "execution_repair_freeze.json",
+      "sha256": "2c01f444b4fd47f4b24441890109a1a9398eb106aac219613c57bd2bd54aef62",
+      "size_bytes": 1755
+    },
+    {
+      "path": "final_verdict.json",
+      "sha256": "0a94a2c5a5144c4c6dc8d88c8578ccc8f6f3061ac8961e20bf5bb4e12ec4b723",
+      "size_bytes": 1245
+    },
+    {
+      "path": "format_identification.json",
+      "sha256": "4118dad1cc786d30ba95df5c45b2ecebe9c777584996faaab288ee8bad4289fc",
+      "size_bytes": 15549
+    },
+    {
+      "path": "freeze_commit.json",
+      "sha256": "5575ee2309cc1975242dd66a6fbad66750f8d6b6fbbff35f68e369d1165efbf0",
+      "size_bytes": 227
+    },
+    {
+      "path": "per_prn_tracking_support.csv",
+      "sha256": "ca734d4e1b033916f40bf63f77ba4236562bca224477347392e1083bab0aa88f",
+      "size_bytes": 621
+    },
+    {
+      "path": "preregistration_commit.json",
+      "sha256": "9a4d88ea63ac040e4beddf66bf400570b0496e4710227c40c4d39fb6588388a6",
+      "size_bytes": 236
+    },
+    {
+      "path": "r1_preservation_audit.json",
+      "sha256": "a3be19fb942e766aae8f1dae297adca52f91abb13e2611d3f9b85eaf07669b44",
+      "size_bytes": 932
+    },
+    {
+      "path": "receiver_run_manifest.json",
+      "sha256": "c1b34b74f995f88fc961985fec4520467368ce1cb5732fe8339d9f84e4cd45f8",
+      "size_bytes": 28492
+    },
+    {
+      "path": "repair_preregistration.json",
+      "sha256": "b69e09b9c510e4a666430dc108be57d4da9d862ae67dc9479d9139c004f7a02e",
+      "size_bytes": 5517
+    },
+    {
+      "path": "source_binding.json",
+      "sha256": "958a0dc659cf7ab9241b31eb3ce48fa7cbe6f5b2ed795fa3e0b9c63893b2928f",
+      "size_bytes": 1980
+    },
+    {
+      "path": "support_audit.json",
+      "sha256": "ca57bb1325f307e3de91eaf19bf76f7673309ded0e6d51e3cf39f705e6f54675",
+      "size_bytes": 14945
+    },
+    {
+      "path": "test_output.txt",
+      "sha256": "89494a7e2b985b573cd086195cb3d0f671d2f566b97adfa68d9bad39ca3042db",
+      "size_bytes": 99
+    },
+    {
+      "path": "time_mapping_validation.json",
+      "sha256": "2d238f223b492b2c5a81a66659a0d24cec336fc3e8e0d37867cc9e5e0fc4fe07",
+      "size_bytes": 307
+    },
+    {
+      "path": "tracking_dump_inventory.json",
+      "sha256": "1beaa261471db006fda0501f604ffff7eaffc4263e4a5bff2cebf52239a225fd",
+      "size_bytes": 11485
+    },
+    {
+      "path": "verifier_output.txt",
+      "sha256": "76d5183406178745acde96a677fab0f39bb8c4476febac85bc20c263ed76336f",
+      "size_bytes": 506
+    }
+  ],
+  "schema": "gnss-doppler-lab.qset-r1a-artifact-manifest.v1",
+  "status": "PASS"
+}

@@ -1,3 +1,35 @@
 {
-  "status": "PENDING_FROZEN_EXECUTION"
+  "attack": {
+    "bytes_read": 0,
+    "downloads": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "c1": {
+    "format_window_bytes": 12582912,
+    "identity_hash_bytes": 29999832000,
+    "identity_hash_passes": 1,
+    "receiver_decode_bytes": 12000000000,
+    "total_payload_bytes_read": 42012414912
+  },
+  "c3": {
+    "bytes_read": 0,
+    "downloads": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "other_tuni2025_raw": {
+    "bytes_read": 0,
+    "downloads": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "schema": "gnss-doppler-lab.qset-r1a-access-audit.v1",
+  "status": "PASS"
 }

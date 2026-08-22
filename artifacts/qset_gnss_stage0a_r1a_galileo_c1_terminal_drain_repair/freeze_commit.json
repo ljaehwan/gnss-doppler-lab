@@ -1,3 +1,6 @@
 {
-  "status": "PENDING_REPAIR_FREEZE_COMMIT"
+  "commit_sha": "f3c75fab308a3002ef88e7e9b9dc0021742b0443",
+  "remote_branch": "research/qset-gnss-stage0a-r1a-galileo-c1-terminal-drain-repair",
+  "schema": "gnss-doppler-lab.qset-r1a-freeze-commit.v1",
+  "status": "PASS"
 }

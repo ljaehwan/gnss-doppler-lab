@@ -1,3 +1,52 @@
 {
-  "status": "PENDING_FROZEN_EXECUTION"
+  "acquisition_prn_count": 8,
+  "actual_format": ">i2 interleaved I,Q",
+  "attack_download_or_access_authorized": false,
+  "attack_scoring_performed": false,
+  "base_r1_final_sha": "cfa1dedfe330d74047e5ffcac2b9f94fd33f23a7",
+  "c3_clean_download_authorized": true,
+  "common_panel": [
+    2,
+    11,
+    14,
+    30,
+    36
+  ],
+  "detection_performance_claimed": false,
+  "dynamic_panel": [
+    2,
+    10,
+    11,
+    14,
+    25,
+    29,
+    30,
+    36
+  ],
+  "freeze_sha": "f3c75fab308a3002ef88e7e9b9dc0021742b0443",
+  "gates": {
+    "acquisition": true,
+    "dynamic_availability_mask": true,
+    "finite": true,
+    "identity_format": true,
+    "physical_consistency": true,
+    "receiver_terminal_drain": true,
+    "time_mapping": true,
+    "tracking": true
+  },
+  "next_state": "C3_CLEAN_DOWNLOAD_ONLY",
+  "qset_training_performed": false,
+  "reason": "all unchanged C-1 format and Galileo E1 receiver feasibility gates passed after engineering terminal-drain repair",
+  "schema": "gnss-doppler-lab.qset-r1a-final-verdict.v1",
+  "status": "PASS",
+  "telemetry_sync_prns": [
+    2,
+    10,
+    14,
+    30,
+    36
+  ],
+  "threshold_calibrated": false,
+  "tracking_ge_10s_prn_count": 7,
+  "verdict": "READY_FOR_TUNI2025_C3_CLEAN_DOWNLOAD"
 }

@@ -1,3 +1,8 @@
 {
-  "status": "PENDING_FROZEN_EXECUTION"
+  "all_tracking_records_within_source_window": true,
+  "mapping": "effective_raw_sample = window_start_raw_sample + receiver_output_sample*25/2 - 205.25",
+  "raw_sample_rate_hz": 50000000,
+  "receiver_sample_rate_hz": 4000000,
+  "schema": "gnss-doppler-lab.qset-r1a-time-mapping.v1",
+  "status": "PASS"
 }

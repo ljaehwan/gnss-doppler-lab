@@ -1,3 +1,499 @@
 {
-  "status": "PENDING_FROZEN_EXECUTION"
+  "acquisition_prn_count": 8,
+  "all_tracking_finite": true,
+  "availability_mask": {
+    "segment_030_060": {
+      "10": true,
+      "11": true,
+      "14": true,
+      "2": true,
+      "25": true,
+      "29": true,
+      "30": true,
+      "36": true
+    },
+    "segment_100_130": {
+      "10": false,
+      "11": true,
+      "14": true,
+      "2": true,
+      "25": false,
+      "29": false,
+      "30": true,
+      "36": true
+    }
+  },
+  "common_panel": [
+    2,
+    11,
+    14,
+    30,
+    36
+  ],
+  "dynamic_panel": [
+    2,
+    10,
+    11,
+    14,
+    25,
+    29,
+    30,
+    36
+  ],
+  "per_prn": [
+    {
+      "acquired": true,
+      "all_finite": true,
+      "longest_continuous_tracking_s": 29.95202425,
+      "prn": 2,
+      "run_count": 3,
+      "segments_observed": "segment_030_060;segment_100_130",
+      "telemetry_sync": true,
+      "tracking_ge_10s": true
+    },
+    {
+      "acquired": true,
+      "all_finite": true,
+      "longest_continuous_tracking_s": 20.412036750000002,
+      "prn": 10,
+      "run_count": 1,
+      "segments_observed": "segment_030_060",
+      "telemetry_sync": true,
+      "tracking_ge_10s": true
+    },
+    {
+      "acquired": true,
+      "all_finite": true,
+      "longest_continuous_tracking_s": 27.64803225,
+      "prn": 11,
+      "run_count": 2,
+      "segments_observed": "segment_030_060;segment_100_130",
+      "telemetry_sync": false,
+      "tracking_ge_10s": true
+    },
+    {
+      "acquired": true,
+      "all_finite": true,
+      "longest_continuous_tracking_s": 29.3560485,
+      "prn": 14,
+      "run_count": 2,
+      "segments_observed": "segment_030_060;segment_100_130",
+      "telemetry_sync": true,
+      "tracking_ge_10s": true
+    },
+    {
+      "acquired": true,
+      "all_finite": true,
+      "longest_continuous_tracking_s": 6.300012,
+      "prn": 25,
+      "run_count": 1,
+      "segments_observed": "segment_030_060",
+      "telemetry_sync": false,
+      "tracking_ge_10s": false
+    },
+    {
+      "acquired": true,
+      "all_finite": true,
+      "longest_continuous_tracking_s": 10.00000425,
+      "prn": 29,
+      "run_count": 1,
+      "segments_observed": "segment_030_060",
+      "telemetry_sync": false,
+      "tracking_ge_10s": true
+    },
+    {
+      "acquired": true,
+      "all_finite": true,
+      "longest_continuous_tracking_s": 29.659969,
+      "prn": 30,
+      "run_count": 3,
+      "segments_observed": "segment_030_060;segment_100_130",
+      "telemetry_sync": true,
+      "tracking_ge_10s": true
+    },
+    {
+      "acquired": true,
+      "all_finite": true,
+      "longest_continuous_tracking_s": 29.54797975,
+      "prn": 36,
+      "run_count": 3,
+      "segments_observed": "segment_030_060;segment_100_130",
+      "telemetry_sync": true,
+      "tracking_ge_10s": true
+    }
+  ],
+  "physical_consistency_details": [
+    {
+      "cn0_delta_db": 4.020530700683594,
+      "cn0_physical": true,
+      "doppler_delta_hz": 101.174560546875,
+      "doppler_in_search_range": true,
+      "prn": 2
+    },
+    {
+      "cn0_delta_db": 4.6185760498046875,
+      "cn0_physical": true,
+      "doppler_delta_hz": 152.010986328125,
+      "doppler_in_search_range": true,
+      "prn": 11
+    },
+    {
+      "cn0_delta_db": 0.237548828125,
+      "cn0_physical": true,
+      "doppler_delta_hz": 74.71630859375,
+      "doppler_in_search_range": true,
+      "prn": 14
+    },
+    {
+      "cn0_delta_db": 5.291408538818359,
+      "cn0_physical": true,
+      "doppler_delta_hz": 148.4716796875,
+      "doppler_in_search_range": true,
+      "prn": 30
+    },
+    {
+      "cn0_delta_db": 4.062671661376953,
+      "cn0_physical": true,
+      "doppler_delta_hz": 156.0150146484375,
+      "doppler_in_search_range": true,
+      "prn": 36
+    }
+  ],
+  "physical_consistency_pass": true,
+  "runs": {
+    "10": [
+      {
+        "channel_file": "veml_tracking_ch_5.dat",
+        "cn0_max_db_hz": 40.27954864501953,
+        "cn0_median_db_hz": 35.26739501953125,
+        "cn0_min_db_hz": 0.0,
+        "doppler_max_hz": -2837.5869140625,
+        "doppler_median_hz": -2847.12890625,
+        "doppler_min_hz": -2889.94287109375,
+        "duration_s": 20.412036750000002,
+        "effective_first_raw_sample": 1979205969.75,
+        "effective_last_raw_sample": 2999607807.25,
+        "first_output_sample": 38336494,
+        "last_output_sample": 119968641,
+        "mapping_valid": true,
+        "records": 5103,
+        "segment_id": "segment_030_060"
+      }
+    ],
+    "11": [
+      {
+        "channel_file": "veml_tracking_ch_9.dat",
+        "cn0_max_db_hz": 40.99016571044922,
+        "cn0_median_db_hz": 34.78004455566406,
+        "cn0_min_db_hz": 0.0,
+        "doppler_max_hz": -1672.230712890625,
+        "doppler_median_hz": -1705.177490234375,
+        "doppler_min_hz": -1764.6502685546875,
+        "duration_s": 20.98002425,
+        "effective_first_raw_sample": 1641457019.75,
+        "effective_last_raw_sample": 2690258232.25,
+        "first_output_sample": 11316578,
+        "last_output_sample": 95220675,
+        "mapping_valid": true,
+        "records": 5245,
+        "segment_id": "segment_030_060"
+      },
+      {
+        "channel_file": "veml_tracking_ch_7.dat",
+        "cn0_max_db_hz": 41.72793960571289,
+        "cn0_median_db_hz": 39.39862060546875,
+        "cn0_min_db_hz": 0.0,
+        "doppler_max_hz": -1846.055419921875,
+        "doppler_median_hz": -1857.1884765625,
+        "doppler_min_hz": -1888.0257568359375,
+        "duration_s": 27.64803225,
+        "effective_first_raw_sample": 5117461069.75,
+        "effective_last_raw_sample": 6499662682.25,
+        "first_output_sample": 9396902,
+        "last_output_sample": 119973031,
+        "mapping_valid": true,
+        "records": 6912,
+        "segment_id": "segment_100_130"
+      }
+    ],
+    "14": [
+      {
+        "channel_file": "veml_tracking_ch_6.dat",
+        "cn0_max_db_hz": 40.95471954345703,
+        "cn0_median_db_hz": 39.250301361083984,
+        "cn0_min_db_hz": 0.0,
+        "doppler_max_hz": -2486.7626953125,
+        "doppler_median_hz": -2533.34814453125,
+        "doppler_min_hz": -2553.453125,
+        "duration_s": 29.356047,
+        "effective_first_raw_sample": 1532186132.25,
+        "effective_last_raw_sample": 2999788482.25,
+        "first_output_sample": 2574907,
+        "last_output_sample": 119983095,
+        "mapping_valid": true,
+        "records": 7339,
+        "segment_id": "segment_030_060"
+      },
+      {
+        "channel_file": "veml_tracking_ch_3.dat",
+        "cn0_max_db_hz": 40.57501220703125,
+        "cn0_median_db_hz": 39.487850189208984,
+        "cn0_min_db_hz": 0.0,
+        "doppler_max_hz": -2573.402099609375,
+        "doppler_median_hz": -2608.064453125,
+        "doppler_min_hz": -2640.3857421875,
+        "duration_s": 29.3560485,
+        "effective_first_raw_sample": 5032191794.75,
+        "effective_last_raw_sample": 6499794219.75,
+        "first_output_sample": 2575360,
+        "last_output_sample": 119983554,
+        "mapping_valid": true,
+        "records": 7339,
+        "segment_id": "segment_100_130"
+      }
+    ],
+    "2": [
+      {
+        "channel_file": "veml_tracking_ch_1.dat",
+        "cn0_max_db_hz": 44.98102951049805,
+        "cn0_median_db_hz": 44.68439483642578,
+        "cn0_min_db_hz": 0.0,
+        "doppler_max_hz": -1235.4044189453125,
+        "doppler_median_hz": -1288.361572265625,
+        "doppler_min_hz": -1295.776123046875,
+        "duration_s": 29.95202425,
+        "effective_first_raw_sample": 1502382069.75,
+        "effective_last_raw_sample": 2999783282.25,
+        "first_output_sample": 190582,
+        "last_output_sample": 119982679,
+        "mapping_valid": true,
+        "records": 7488,
+        "segment_id": "segment_030_060"
+      },
+      {
+        "channel_file": "veml_tracking_ch_1.dat",
+        "cn0_max_db_hz": 44.90938186645508,
+        "cn0_median_db_hz": 40.66386413574219,
+        "cn0_min_db_hz": 0.0,
+        "doppler_max_hz": -1112.872314453125,
+        "doppler_median_hz": -1187.18701171875,
+        "doppler_min_hz": -1194.10205078125,
+        "duration_s": 20.964017000000002,
+        "effective_first_raw_sample": 5002384957.25,
+        "effective_last_raw_sample": 6050385807.25,
+        "first_output_sample": 190813,
+        "last_output_sample": 84030881,
+        "mapping_valid": true,
+        "records": 5241,
+        "segment_id": "segment_100_130"
+      },
+      {
+        "channel_file": "veml_tracking_ch_2.dat",
+        "cn0_max_db_hz": 37.687747955322266,
+        "cn0_median_db_hz": 25.90041160583496,
+        "cn0_min_db_hz": 0.0,
+        "doppler_max_hz": -1018.6393432617188,
+        "doppler_median_hz": -1093.750732421875,
+        "doppler_min_hz": -1145.01904296875,
+        "duration_s": 8.556006,
+        "effective_first_raw_sample": 6072185844.75,
+        "effective_last_raw_sample": 6499786144.75,
+        "first_output_sample": 85774884,
+        "last_output_sample": 119982908,
+        "mapping_valid": true,
+        "records": 2139,
+        "segment_id": "segment_100_130"
+      }
+    ],
+    "25": [
+      {
+        "channel_file": "veml_tracking_ch_7.dat",
+        "cn0_max_db_hz": 40.225685119628906,
+        "cn0_median_db_hz": 35.74658966064453,
+        "cn0_min_db_hz": 0.0,
+        "doppler_max_hz": -2985.7607421875,
+        "doppler_median_hz": -3015.95263671875,
+        "doppler_min_hz": -3030.675537109375,
+        "duration_s": 6.300012,
+        "effective_first_raw_sample": 2684985057.25,
+        "effective_last_raw_sample": 2999785657.25,
+        "first_output_sample": 94798821,
+        "last_output_sample": 119982869,
+        "mapping_valid": true,
+        "records": 1575,
+        "segment_id": "segment_030_060"
+      }
+    ],
+    "29": [
+      {
+        "channel_file": "veml_tracking_ch_0.dat",
+        "cn0_max_db_hz": 39.20757293701172,
+        "cn0_median_db_hz": 37.50883483886719,
+        "cn0_min_db_hz": 0.0,
+        "doppler_max_hz": -673.2664794921875,
+        "doppler_median_hz": -702.8182373046875,
+        "doppler_min_hz": -765.0108642578125,
+        "duration_s": 10.00000425,
+        "effective_first_raw_sample": 2499960157.25,
+        "effective_last_raw_sample": 2999760369.75,
+        "first_output_sample": 79996829,
+        "last_output_sample": 119980846,
+        "mapping_valid": true,
+        "records": 2500,
+        "segment_id": "segment_030_060"
+      }
+    ],
+    "30": [
+      {
+        "channel_file": "veml_tracking_ch_8.dat",
+        "cn0_max_db_hz": 40.568443298339844,
+        "cn0_median_db_hz": 39.3941535949707,
+        "cn0_min_db_hz": 0.0,
+        "doppler_max_hz": 1964.4378662109375,
+        "doppler_median_hz": 1780.4180908203125,
+        "doppler_min_hz": 1773.8226318359375,
+        "duration_s": 20.96397775,
+        "effective_first_raw_sample": 1520346932.25,
+        "effective_last_raw_sample": 2568345819.75,
+        "first_output_sample": 1627771,
+        "last_output_sample": 85467682,
+        "mapping_valid": true,
+        "records": 5241,
+        "segment_id": "segment_030_060"
+      },
+      {
+        "channel_file": "veml_tracking_ch_11.dat",
+        "cn0_max_db_hz": 43.6491584777832,
+        "cn0_median_db_hz": 40.37238693237305,
+        "cn0_min_db_hz": 0.0,
+        "doppler_max_hz": 1781.073974609375,
+        "doppler_median_hz": 1775.482666015625,
+        "doppler_min_hz": 1736.2193603515625,
+        "duration_s": 8.21599125,
+        "effective_first_raw_sample": 2589145807.25,
+        "effective_last_raw_sample": 2999745369.75,
+        "first_output_sample": 87131681,
+        "last_output_sample": 119979646,
+        "mapping_valid": true,
+        "records": 2054,
+        "segment_id": "segment_030_060"
+      },
+      {
+        "channel_file": "veml_tracking_ch_6.dat",
+        "cn0_max_db_hz": 46.84515380859375,
+        "cn0_median_db_hz": 44.68556213378906,
+        "cn0_min_db_hz": 0.0,
+        "doppler_max_hz": 1639.802001953125,
+        "doppler_median_hz": 1631.9464111328125,
+        "doppler_min_hz": 1625.09765625,
+        "duration_s": 29.659969,
+        "effective_first_raw_sample": 5016943257.25,
+        "effective_last_raw_sample": 6499741707.25,
+        "first_output_sample": 1355477,
+        "last_output_sample": 119979353,
+        "mapping_valid": true,
+        "records": 7415,
+        "segment_id": "segment_100_130"
+      }
+    ],
+    "36": [
+      {
+        "channel_file": "veml_tracking_ch_4.dat",
+        "cn0_max_db_hz": 45.78236389160156,
+        "cn0_median_db_hz": 44.605918884277344,
+        "cn0_min_db_hz": 0.0,
+        "doppler_max_hz": 1140.2459716796875,
+        "doppler_median_hz": 1068.861083984375,
+        "doppler_min_hz": 1059.67919921875,
+        "duration_s": 29.54797975,
+        "effective_first_raw_sample": 1522441319.75,
+        "effective_last_raw_sample": 2999640307.25,
+        "first_output_sample": 1795322,
+        "last_output_sample": 119971241,
+        "mapping_valid": true,
+        "records": 7387,
+        "segment_id": "segment_030_060"
+      },
+      {
+        "channel_file": "veml_tracking_ch_10.dat",
+        "cn0_max_db_hz": 42.001060485839844,
+        "cn0_median_db_hz": 40.54324722290039,
+        "cn0_min_db_hz": 0.0,
+        "doppler_max_hz": 923.0888671875,
+        "doppler_median_hz": 912.8460693359375,
+        "doppler_min_hz": 860.1632080078125,
+        "duration_s": 20.975986000000002,
+        "effective_first_raw_sample": 5021038957.25,
+        "effective_last_raw_sample": 6069638257.25,
+        "first_output_sample": 1683133,
+        "last_output_sample": 85571077,
+        "mapping_valid": true,
+        "records": 5244,
+        "segment_id": "segment_100_130"
+      },
+      {
+        "channel_file": "veml_tracking_ch_10.dat",
+        "cn0_max_db_hz": 45.428871154785156,
+        "cn0_median_db_hz": 25.845500946044922,
+        "cn0_min_db_hz": 0.0,
+        "doppler_max_hz": 1348.999755859375,
+        "doppler_median_hz": 1258.635986328125,
+        "doppler_min_hz": 1106.30322265625,
+        "duration_s": 8.1119945,
+        "effective_first_raw_sample": 6094238244.75,
+        "effective_last_raw_sample": 6499637969.75,
+        "first_output_sample": 87539076,
+        "last_output_sample": 119971054,
+        "mapping_valid": true,
+        "records": 2028,
+        "segment_id": "segment_100_130"
+      }
+    ]
+  },
+  "schema": "gnss-doppler-lab.qset-r1a-support-audit.v1",
+  "segments": {
+    "segment_030_060": {
+      "observed_prn_count": 8,
+      "observed_prns": [
+        2,
+        10,
+        11,
+        14,
+        25,
+        29,
+        30,
+        36
+      ],
+      "telemetry_sync_prns": [
+        2,
+        10,
+        14,
+        36
+      ]
+    },
+    "segment_100_130": {
+      "observed_prn_count": 5,
+      "observed_prns": [
+        2,
+        11,
+        14,
+        30,
+        36
+      ],
+      "telemetry_sync_prns": [
+        14,
+        30
+      ]
+    }
+  },
+  "status": "PASS",
+  "telemetry_sync_prns": [
+    2,
+    10,
+    14,
+    30,
+    36
+  ],
+  "time_mapping_pass": true,
+  "tracking_ge_10s_prn_count": 7
 }

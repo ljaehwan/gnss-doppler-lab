@@ -1,3 +1,7 @@
 {
-  "status": "PENDING_FROZEN_EXECUTION"
+  "analysis_runs": 2,
+  "analysis_sha256": "b30b30c382a1c4b08f2db780b849f12fcfa14f7590d17e172f977d93dd73717e",
+  "byte_identical": true,
+  "schema": "gnss-doppler-lab.qset-r1a-deterministic.v1",
+  "status": "PASS"
 }
