@@ -1,0 +1,120 @@
+{
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-r0b-relaxed-sensitivity-contract.v1",
+  "status": "FROZEN_BEFORE_ANALYSIS_IMPLEMENTATION",
+  "stage": "BITPROBE_STAGE0A_R0B_RELAXED_GATE_SENSITIVITY",
+  "base_sha": "0b2a8913c856ab9b300f7fd604fc8f61da350cc6",
+  "branch": "research/bitprobe-stage0a-r0b-relaxed-gate-sensitivity",
+  "artifact_path": "artifacts/bitprobe_stage0a_r0b_relaxed_gate_sensitivity",
+  "interpretation": {
+    "post_hoc": true,
+    "confirmatory": false,
+    "formal_stage0a_verdict_changed": false,
+    "stage0b_authorized": false,
+    "spoofing_detector_validated": false,
+    "purpose": "Determine whether original failure is primarily gate strictness or weak observed cross-PRN separation."
+  },
+  "input_contract": {
+    "committed_metrics_only": true,
+    "allowed": {
+      "R0a_corrected_split_half_metrics.csv": "7e716fae992d6fbd0f3a2ece79e16c215119e8c4568eda6e8f62070ef40da73b",
+      "R0a_corrected_between_prn_metrics.csv": "7d9b49f6120e52a158c498185cd881c9263e3361e688c3ff33ae8555826ca610",
+      "R0a_corrected_bootstrap_metrics.json": "990562948ba17bf89d0cc749920a456d1e1f46c27ebe30a6376676860d036e5c",
+      "Stage0A_nuisance_metrics.csv": "212b3b9527d6a9ec621b9ebe9196ee75597b8291712ab0ac86d66bf7cca54400",
+      "Stage0A_per_prn_support.csv": "0155f2184feeac5373e41eb4c603c96f3c3b2dd6fdb7d2eac492dea1ab5c498c",
+      "Stage0A_flip_no_flip_metrics.csv": "f2a348c85819488fed7a3b49f80a154b1fe5bb058800a4f1b55370d3e2e34dbb"
+    },
+    "forbidden": [
+      "raw IQ", "TRACE", "frozen edge tensor", "attack data",
+      "metric recomputation", "metric modification", "new edge generation"
+    ],
+    "required_access": {
+      "raw_iq_operations": 0,
+      "trace_operations": 0,
+      "frozen_tensor_operations": 0,
+      "attack_operations": 0
+    },
+    "flip_no_flip_usage": "advisory-only; excluded from every tier pass/fail"
+  },
+  "tiers": {
+    "ORIGINAL": {
+      "support_min_prns": 4,
+      "support_min_flip_per_prn": 200,
+      "reproducibility_median_min": 0.70,
+      "reproducibility_lower_exclusive_min": 0.50,
+      "separability_effect_min": 0.15,
+      "separability_lower_exclusive_min": 0.0,
+      "permutation_p_max": 0.01,
+      "moderate_nuisance_median_min": 0.75,
+      "moderate_nuisance_direction_fraction_min": 1.0
+    },
+    "MODERATE_RELAXATION": {
+      "support_min_prns": 4,
+      "support_min_flip_per_prn": 200,
+      "reproducibility_median_min": 0.60,
+      "reproducibility_lower_inclusive_min": 0.40,
+      "separability_effect_min": 0.05,
+      "separability_lower_exclusive_min": 0.0,
+      "permutation_p_max": 0.10,
+      "moderate_nuisance_median_min": 0.75,
+      "moderate_nuisance_direction_fraction_min": 0.75
+    },
+    "LENIENT_RELAXATION": {
+      "support_min_prns": 4,
+      "support_min_flip_per_prn": 150,
+      "reproducibility_median_min": 0.50,
+      "reproducibility_lower_inclusive_min": 0.30,
+      "separability_effect_min": 0.03,
+      "separability_lower_required": false,
+      "permutation_p_max": 0.20,
+      "moderate_nuisance_median_min": 0.70,
+      "moderate_nuisance_direction_fraction_min": 0.60,
+      "effect_and_p_must_both_pass": true
+    }
+  },
+  "threshold_grid": {
+    "reproducibility_median_thresholds": [0.40, 0.50, 0.60, 0.70],
+    "reproducibility_lower_bound_thresholds": [0.20, 0.30, 0.40, 0.50],
+    "separability_effect_thresholds": [0.00, 0.01, 0.03, 0.05, 0.10, 0.15],
+    "permutation_p_thresholds": [0.01, 0.05, 0.10, 0.20, 0.30, 0.50],
+    "nuisance_direction_fraction_thresholds": [0.50, 0.60, 0.75, 1.00],
+    "datasets_evaluated_independently": ["TEXBAT.cleanStatic", "OAKBAT.cleanStatic"],
+    "moderate_nuisance_median_threshold": 0.75,
+    "support_contract_for_grid": "PRN>=4 and valid flip edges per PRN>=200"
+  },
+  "minimum_relaxation_contract": {
+    "required_max_reproducibility_threshold": "largest grid threshold not exceeding observed median",
+    "required_max_lower_bound_threshold": "largest grid threshold not exceeding observed corrected lower bound",
+    "required_max_effect_threshold": "largest grid threshold not exceeding observed effect",
+    "required_min_p_threshold": "smallest grid p threshold at or above observed exact p",
+    "required_min_nuisance_direction_fraction": "largest grid required fraction not exceeding observed fraction",
+    "outside_grid": "record NO_GRID_THRESHOLD_PASSES rather than inventing a threshold"
+  },
+  "stability_contract": {
+    "report": [
+      "dataset gate pass/fail by tier", "failed items", "signed threshold margins",
+      "single-small-change flip sensitivity", "both-dataset pass",
+      "OAK-only/TEX-only status"
+    ],
+    "leave_one_prn_out": "Use only a committed 5x5 similarity matrix if present; otherwise NOT_AVAILABLE_FROM_COMMITTED_METRICS. Never open the tensor."
+  },
+  "verdict_contract": {
+    "allowed": [
+      "RELAXED_SIGNAL_BOTH_DATASETS",
+      "RELAXED_SIGNAL_OAK_ONLY",
+      "RELAXED_SIGNAL_TEX_ONLY",
+      "NO_ROBUST_SIGNAL_UNDER_RELAXED_GATES",
+      "INCONCLUSIVE_RELAXED_SENSITIVITY_EXECUTION"
+    ],
+    "signal_verdict_uses_moderate_tier_only": true,
+    "lenient_only_label": "LENIENT_ONLY",
+    "no_moderate_pass": "NO_ROBUST_SIGNAL_UNDER_RELAXED_GATES",
+    "formal_stage0a_verdict_changed": false,
+    "stage0b_authorized": false
+  },
+  "post_result_contract": {
+    "new_pass_threshold_fitted_to_observations": false,
+    "source_metric_changes": 0,
+    "gate_tier_or_grid_changes": 0,
+    "formal_stage0a_change": false
+  }
+}
