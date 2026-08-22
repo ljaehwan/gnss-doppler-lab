@@ -1,0 +1,136 @@
+{
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-r0a-repair-preregistration.v1",
+  "status": "FROZEN_BEFORE_REPAIR_IMPLEMENTATION_AND_TENSOR_ACCESS",
+  "stage": "BITPROBE_GNSS_STAGE0A_R0A_INFERENCE_CONTRACT_REPAIR",
+  "base_sha": "0947dd3751b86d7f890d71561030e6f36a44f1e3",
+  "branch": "research/bitprobe-stage0a-r0a-inference-contract-repair",
+  "artifact_path": "artifacts/bitprobe_stage0a_r0a_inference_contract_repair",
+  "repair_scope": {
+    "allowed_changes": [
+      "chronological-half-preserving block bootstrap implementation",
+      "shape-identical exact second-half PRN-label permutation implementation",
+      "fresh-clone verifier import bootstrap and truthful CLI",
+      "values and gates directly dependent on repaired bootstrap confidence limits or permutation p-values"
+    ],
+    "forbidden_changes": [
+      "edge extraction or inventory",
+      "feature, complex normalization, kernel, grid, window, carrier/code/fractional alignment",
+      "dataset, PRN set, flip/no-flip selection, exclusion, temporal half definition",
+      "similarity, distance, support, gate, threshold, nuisance, synthetic generator/statistic/gate",
+      "raw IQ or TRACE access, attack data access, new edge generation, feature exploration"
+    ],
+    "flip_specificity_policy": "Reproduce the frozen implementation after code/preregistration comparison. If any new mismatch is found, do not repair it on this branch and return INCONCLUSIVE_BITPROBE_STAGE0A_R0A_INFERENCE_REPAIR."
+  },
+  "original_binding": {
+    "artifact_path": "artifacts/bitprobe_stage0a_nav_edge_operator_identifiability",
+    "committed_manifest_file_sha256": "42fb18e8b5d197e34ed4300d969a681d1bf2b69fae603c98f0da3f9ea83f6375",
+    "preservation": "byte-identical tree required before and after repair"
+  },
+  "input_contract": {
+    "only_large_input": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/bitprobe-stage0a-nav-edge-operator-identifiability/clean_nav_edge_residual_tensors.npz",
+      "size_bytes": 8787673,
+      "sha256": "b6df7a0b158b25166863959b49b05c165cf1d310d8609aad67e13a3a120c96da"
+    },
+    "additional_allowed_inputs": [
+      "committed original Stage-0A artifact",
+      "committed original preregistration",
+      "read-only original frozen executable comparison",
+      "committed edge inventory and source binding"
+    ],
+    "pre_freeze_tensor_operations": 0,
+    "raw_iq_operations_required": 0,
+    "raw_iq_bytes_required": 0,
+    "trace_operations_required": 0,
+    "trace_bytes_required": 0,
+    "attack_operations_required": 0,
+    "attack_bytes_required": 0
+  },
+  "chronological_half_bootstrap_contract": {
+    "split_rule": "first=sequence[:floor(N/2)], second=sequence[floor(N/2):] on the original frozen chronological sequence",
+    "resampling": "independently sample contiguous blocks within each already-split half for flip first, flip second, no-flip first, and no-flip second",
+    "block_length_edges": 10,
+    "replicates": 500,
+    "deterministic_seed": 20260822,
+    "target_length": "exact original half length",
+    "last_block_rule": "append complete sampled source blocks in draw order and truncate only the final appended block at the target resample length",
+    "half_boundary_crossing": false,
+    "random_half_assignment": false,
+    "dataset_replicate_rule": "one replicate computes every eligible PRN first/second kernel once and emits exactly one dataset-level median; exactly 500 medians per dataset",
+    "repaired_outputs": [
+      "reproducibility coherence bootstrap 95 percent lower bound",
+      "between-PRN same-minus-different bootstrap 95 percent lower bound"
+    ],
+    "point_estimates_must_remain_byte_equivalent": true
+  },
+  "exact_prn_permutation_contract": {
+    "matrix": "S(i,j)=similarity(K_first_i,K_second_j)",
+    "observed": "median_i S(i,i) - median_{i!=j} S(i,j)",
+    "permuted": "median_i S(i,pi(i)) - median_{i!=j} S(i,pi(j))",
+    "same_count_each_permutation": "M",
+    "different_count_each_permutation": "M*(M-1)",
+    "enumeration": "all M! permutations including identity",
+    "p_value": "count(E_pi >= E_obs - 1e-15) / M!",
+    "plus_one_correction": false,
+    "ordering_invariance_required": true,
+    "prn_identity_usage": "label permutation only; never a feature"
+  },
+  "frozen_reproduction_contract": {
+    "must_not_change": [
+      "support and edge counts",
+      "point-estimate coherence",
+      "same/different medians and same-minus-different point estimate",
+      "flip/no-flip point estimates",
+      "nuisance values",
+      "synthetic values",
+      "PRNs and source binding"
+    ],
+    "may_change": [
+      "coherence bootstrap 95 percent lower bound",
+      "between-PRN bootstrap 95 percent lower bound",
+      "exact PRN permutation p-value",
+      "directly dependent gates and substantive verdict"
+    ],
+    "analysis_runs": 2,
+    "byte_identical_runs_required": true
+  },
+  "synthetic_interpretation": {
+    "synthetic_level_detectability_authoritative": false,
+    "synthetic_common_vs_separate_geometry_only": true,
+    "frozen_values_and_gate_reproduced_without_change": true,
+    "weak_signal_detection_claim": false
+  },
+  "verifier_contract": {
+    "commands": [
+      "python3 scripts/verify_bitprobe_stage0a_r0a.py",
+      "python3 scripts/verify_bitprobe_stage0a_r0a.py --self-test"
+    ],
+    "external_pythonpath_required": false,
+    "checks": [
+      "base/preregistration/freeze/final SHA",
+      "original artifact byte preservation",
+      "frozen tensor path/size/SHA",
+      "code/config binding and input access audit",
+      "bootstrap half isolation and exact permutation shape",
+      "repaired metric reproduction and final verdict",
+      "manifest, zero post-result method/gate change, zero forbidden access"
+    ]
+  },
+  "allowed_substantive_verdicts": [
+    "BITPROBE_STAGE0A_EDGE_OPERATOR_IDENTIFIABLE",
+    "BITPROBE_STAGE0A_PARTIAL_DATASET_SUPPORT",
+    "BITPROBE_STAGE0A_EDGE_OPERATOR_NOT_IDENTIFIABLE",
+    "INCONCLUSIVE_BITPROBE_STAGE0A_R0A_INFERENCE_REPAIR"
+  ],
+  "authorization_contract": {
+    "repair_status_values": ["PASS", "FAIL"],
+    "stage0b_authorized_only_if_both_datasets_pass_all_original_gates": true,
+    "otherwise_stage0b_authorized": false
+  },
+  "post_result_contract": {
+    "method_feature_gate_threshold_changes": 0,
+    "unexpected_frozen_value_change": "fail closed",
+    "new_flip_specificity_mismatch": "fail closed without repair",
+    "attempt_to_rescue_model": false
+  }
+}
