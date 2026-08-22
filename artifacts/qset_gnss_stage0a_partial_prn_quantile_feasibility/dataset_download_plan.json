@@ -1,0 +1,74 @@
+{
+  "schema": "gnss-doppler-lab.qset-stage0a-download-plan.v1",
+  "status": "DOWNLOAD_REQUIRED_MANUAL_APPROVAL",
+  "automatic_download_performed": false,
+  "large_file_threshold_bytes": 1000000000,
+  "exact_1_3_5_minimum_raw_files": [
+    {
+      "role": "clean-development", "scenario": "C-1", "size_bytes": 29999832000,
+      "checksum": "md5:4ff0e86938792bf3150c30d5f1481917",
+      "url": "https://zenodo.org/api/records/15470143/files/clearsky_signal_C-1.bin/content"
+    },
+    {
+      "role": "clean-calibration-and-contiguous-holdout", "scenario": "C-3", "size_bytes": 29999832000,
+      "checksum": "md5:1b7c99c754faec3c8fa625849ef70014",
+      "url": "https://zenodo.org/api/records/17249902/files/clearsky_signal_C-3.bin/content"
+    },
+    {
+      "role": "primary-1-spoofed-PRN", "scenario": "SS-1", "size_bytes": 29999832000,
+      "checksum": "md5:f2784d9f7d3c85edffeaf30bbd7efdb2",
+      "url": "https://zenodo.org/api/records/15489567/files/Galileo_1_Spoofer_Static_NoMP_TruePosition.bin/content"
+    },
+    {
+      "role": "primary-3-spoofed-PRNs", "scenario": "SS-3", "size_bytes": 21925920000,
+      "checksum": "md5:cdee5a9b6a6509af016bdb3776ebd231",
+      "url": "https://zenodo.org/api/records/15489857/files/Galileo_3_Spoofer_Static_NoMP_TruePosition.bin/content"
+    },
+    {
+      "role": "primary-5-spoofed-PRNs", "scenario": "SS-5", "size_bytes": 29999832000,
+      "checksum": "md5:8a8e2ffc0bc5420b9df07b4faddb35bc",
+      "url": "https://zenodo.org/api/records/17233077/files/Galileo_5_Spoofer_Static_NoMP_TruePosition.bin/content"
+    }
+  ],
+  "minimum_totals": {
+    "file_count": 5,
+    "raw_bytes": 141925248000,
+    "raw_decimal_gb": 141.925248,
+    "raw_gib": 132.1781873703003,
+    "ssd_available_bytes_at_preflight": 189385814016,
+    "bytes_remaining_after_raw_only": 47460566016,
+    "receiver_output_and_checkpoint_reserve_bytes": 60000000000,
+    "safe_headroom_status": "INSUFFICIENT_FOR_RAW_PLUS_PLANNING_RESERVE",
+    "additional_free_bytes_needed_for_reserve": 12539433984
+  },
+  "optional_packages_not_in_minimum": [
+    {
+      "purpose": "Galileo multipath partial-spoof sensitivity", "scenario": "SS-11",
+      "size_bytes": 29999832000, "checksum": "md5:71de773dce5684c98daed0a48496891a",
+      "url": "https://zenodo.org/api/records/15490403/files/Galileo_1_Spoofer_Static_MP_TruePosition.bin/content",
+      "minimum_plus_optional_raw_bytes": 171925080000,
+      "headroom_warning": "Only 17,460,734,016 bytes would remain at the observed free-space level."
+    },
+    {
+      "purpose": "Separate GPS delayed-all-PRN auxiliary sensitivity; not combinable with a Galileo-fitted model",
+      "scenarios": ["C-5", "SS-33"], "raw_bytes": 69999744000,
+      "note": "Requires its own clean-only GPS binding and is not part of the exact 1/3/5 primary experiment."
+    }
+  ],
+  "throughput_planning_not_benchmarked": {
+    "raw_stream_bytes_per_second_if_50Msps_counts_float_scalars": 200000000,
+    "raw_stream_bytes_per_second_if_50Msps_counts_complex_samples": 400000000,
+    "single_pass_wall_seconds_at_50MBps": 2838.50496,
+    "single_pass_wall_seconds_at_100MBps": 1419.25248,
+    "single_pass_wall_seconds_at_200MBps": 709.62624,
+    "receiver_throughput": "UNKNOWN_UNTIL_GALILEO_E1_ADAPTER_AND_BOUNDED_CLEAN_PREFLIGHT",
+    "warning": "These are byte-throughput planning ratios, not measured receiver performance."
+  },
+  "format_resolution_after_download": [
+    "Verify official MD5 before any scientific use.",
+    "Use C-1 only for bounded int16/float32, endianness, header, and sample-rate-semantics preflight.",
+    "Do not open attack payloads until scientific contract, clean calibration, and implementation freeze are pushed.",
+    "Do not substitute GPS 1/2/4 scenarios for the frozen 1/3/5 gate."
+  ]
+}
+

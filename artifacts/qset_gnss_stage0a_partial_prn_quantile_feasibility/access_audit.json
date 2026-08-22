@@ -1,0 +1,61 @@
+{
+  "schema": "gnss-doppler-lab.qset-stage0a-access-audit.v1",
+  "phase": "DATASET_PREFLIGHT",
+  "status": "PASS",
+  "local_directory_metadata": {
+    "registered_root_checks": 4,
+    "existing_roots": 2,
+    "missing_tuni2025_roots": 2
+  },
+  "official_metadata_and_readmes": {
+    "zenodo_api_metadata_only": true,
+    "readme_pdf_count": 13,
+    "readme_bytes": 1618046,
+    "readme_checksums_verified": 13
+  },
+  "raw_iq": {
+    "stats": 0,
+    "hashes": 0,
+    "opens": 0,
+    "mmaps": 0,
+    "bytes_read": 0,
+    "downloads": 0,
+    "bytes_downloaded": 0,
+    "decodes": 0
+  },
+  "attack_payload": {
+    "stats": 0,
+    "hashes": 0,
+    "opens": 0,
+    "mmaps": 0,
+    "bytes_read": 0,
+    "downloads": 0,
+    "bytes_downloaded": 0,
+    "signal_statistics": 0
+  },
+  "clean_payload": {
+    "stats": 0,
+    "hashes": 0,
+    "opens": 0,
+    "mmaps": 0,
+    "bytes_read": 0,
+    "downloads": 0,
+    "bytes_downloaded": 0,
+    "bounded_decode_attempts": 0
+  },
+  "scientific_operations": {
+    "receiver_runs": 0,
+    "feature_windows": 0,
+    "scores": 0,
+    "thresholds_fit": 0,
+    "synthetic_controls": 0,
+    "attack_evaluations": 0
+  },
+  "forbidden_inputs": {
+    "prn_id_used_as_feature": 0,
+    "channel_id_used_as_feature": 0,
+    "spoofed_prn_list_used_as_feature": 0,
+    "scenario_or_filename_used_as_feature": 0,
+    "absolute_cn0_power_or_count_used_as_feature": 0
+  }
+}

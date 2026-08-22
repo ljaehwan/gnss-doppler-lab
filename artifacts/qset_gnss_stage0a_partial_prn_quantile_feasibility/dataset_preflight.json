@@ -1,0 +1,164 @@
+{
+  "schema": "gnss-doppler-lab.qset-stage0a-dataset-preflight.v1",
+  "status": "BLOCKED",
+  "verdict": "BLOCKED_TUNI2025_DATASET_NOT_LOCAL",
+  "base_sha": "8025f331444e600bee97baf28ad3cb7af9410381",
+  "branch": "research/qset-gnss-stage0a-partial-prn-quantile-feasibility",
+  "completed_utc": "2026-08-22T05:54:53Z",
+  "official_sources": {
+    "user_cited_record": {
+      "doi": "10.5281/zenodo.15470143",
+      "url": "https://zenodo.org/records/15470143",
+      "concept_doi": "10.5281/zenodo.15470142",
+      "signal": "Galileo E1"
+    },
+    "descriptor": {
+      "doi": "10.1109/IEEEDATA.2025.3627116",
+      "title": "Descriptor: Tuni2025 GNSS - Galileo and GPS Spoofing Datasets (TG-GGSD)"
+    },
+    "descriptor_discovered_gps_concept": {
+      "concept_doi": "10.5281/zenodo.15572975",
+      "first_record_doi": "10.5281/zenodo.15572976",
+      "signal": "GPS L1"
+    }
+  },
+  "local_preflight": {
+    "inspected_paths": [
+      {"path": "/home/ubuntu/ssd_data", "exists": true, "kind": "directory"},
+      {"path": "/home/ubuntu/ssd_data/gnss-datasets", "exists": true, "kind": "directory"},
+      {"path": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025", "exists": false},
+      {"path": "/home/ubuntu/ssd_data/tuni2025", "exists": false}
+    ],
+    "local_tuni2025_raw_file_count": 0,
+    "local_tuni2025_raw_bytes": 0,
+    "local_raw_checksums_computed": 0,
+    "ssd_available_bytes": 189385814016,
+    "ssd_available_gib": 176.3792839050293
+  },
+  "format_preflight": {
+    "documented_signal_family": ["Galileo E1", "GPS L1"],
+    "nominal_center_frequency_hz": 1575420000,
+    "center_frequency_note": "Band nominal; the inspected scenario READMEs do not state an exact RF tuning value.",
+    "documented_sampling_frequency_sps": 50000000,
+    "documented_format": "interleaved 32-bit float raw I/Q",
+    "endianness": "UNRESOLVED_DATASET_NOT_LOCAL",
+    "header_bytes": "UNRESOLVED_DATASET_NOT_LOCAL",
+    "sample_rate_semantics": "UNRESOLVED_DATASET_NOT_LOCAL",
+    "size_consistency": {
+      "29999832000_byte_file_seconds_if_50Msps_counts_float_scalars": 149.99916,
+      "29999832000_byte_file_seconds_if_50Msps_counts_complex_samples": 74.99958,
+      "conclusion": "The raw file is absent, so bounded clean-only decode cannot resolve the factor-of-two ambiguity."
+    }
+  },
+  "scenario_role_inventory": [
+    {
+      "official_id": "C-1", "constellation": "Galileo", "band": "E1", "record_id": 15470143,
+      "file": "clearsky_signal_C-1.bin", "official_size_bytes": 29999832000,
+      "official_checksum": "md5:4ff0e86938792bf3150c30d5f1481917", "local_path": null,
+      "local_checksum": null, "role": "clean-development", "multipath": false,
+      "spoofed_prns": [], "genuine_prns": "NOT_DOCUMENTED", "attack_timing": "not_applicable_clean",
+      "duration_seconds": "UNRESOLVED_74.99958_OR_149.99916"
+    },
+    {
+      "official_id": "C-3", "constellation": "Galileo", "band": "E1", "record_id": 17249902,
+      "file": "clearsky_signal_C-3.bin", "official_size_bytes": 29999832000,
+      "official_checksum": "md5:1b7c99c754faec3c8fa625849ef70014", "local_path": null,
+      "local_checksum": null, "role": "clean-calibration-and-contiguous-holdout-fallback", "multipath": false,
+      "metadata_note": "README overview says no multipath; one usage sentence incorrectly says multipath.",
+      "spoofed_prns": [], "genuine_prns": "NOT_DOCUMENTED", "attack_timing": "not_applicable_clean",
+      "duration_seconds": "UNRESOLVED_74.99958_OR_149.99916"
+    },
+    {
+      "official_id": "SS-1", "constellation": "Galileo", "band": "E1", "record_id": 15489567,
+      "file": "Galileo_1_Spoofer_Static_NoMP_TruePosition.bin", "official_size_bytes": 29999832000,
+      "official_checksum": "md5:f2784d9f7d3c85edffeaf30bbd7efdb2", "local_path": null,
+      "local_checksum": null, "role": "primary-1-spoofed-PRN", "multipath": false,
+      "spoofed_prns": [9], "genuine_prns": "NOT_DOCUMENTED", "attack_timing": "NOT_DOCUMENTED_AS_DELAYED_OR_FULL_FILE",
+      "duration_seconds": "UNRESOLVED_74.99958_OR_149.99916"
+    },
+    {
+      "official_id": "SS-3", "constellation": "Galileo", "band": "E1", "record_id": 15489857,
+      "file": "Galileo_3_Spoofer_Static_NoMP_TruePosition.bin", "official_size_bytes": 21925920000,
+      "official_checksum": "md5:cdee5a9b6a6509af016bdb3776ebd231", "local_path": null,
+      "local_checksum": null, "role": "primary-3-spoofed-PRNs", "multipath": false,
+      "spoofed_prns": [6, 9, 23], "genuine_prns": "NOT_DOCUMENTED", "attack_timing": "NOT_DOCUMENTED_AS_DELAYED_OR_FULL_FILE",
+      "duration_seconds": "UNRESOLVED_54.8148_OR_109.6296"
+    },
+    {
+      "official_id": "SS-5", "constellation": "Galileo", "band": "E1", "record_id": 17233077,
+      "file": "Galileo_5_Spoofer_Static_NoMP_TruePosition.bin", "official_size_bytes": 29999832000,
+      "official_checksum": "md5:8a8e2ffc0bc5420b9df07b4faddb35bc", "local_path": null,
+      "local_checksum": null, "role": "primary-5-spoofed-PRNs", "multipath": false,
+      "spoofed_prns": [4, 6, 9, 23, 31], "genuine_prns": "NOT_DOCUMENTED", "attack_timing": "NOT_DOCUMENTED_AS_DELAYED_OR_FULL_FILE",
+      "duration_seconds": "UNRESOLVED_74.99958_OR_149.99916"
+    },
+    {
+      "official_id": "SS-11", "constellation": "Galileo", "band": "E1", "record_id": 15490403,
+      "file": "Galileo_1_Spoofer_Static_MP_TruePosition.bin", "official_size_bytes": 29999832000,
+      "official_checksum": "md5:71de773dce5684c98daed0a48496891a", "local_path": null,
+      "local_checksum": null, "role": "optional-multipath-partial-spoof", "multipath": true,
+      "spoofed_prns": [31], "genuine_prns": "NOT_DOCUMENTED", "attack_timing": "NOT_DOCUMENTED_AS_DELAYED_OR_FULL_FILE",
+      "duration_seconds": "UNRESOLVED_74.99958_OR_149.99916"
+    },
+    {
+      "official_id": "C-5/C-7", "constellation": "GPS", "band": "L1", "record_ids": [15572976, 17413258],
+      "files": ["Clear-Sky Signal C-5.bin", "Clearsky signal C-7.bin"], "official_size_bytes_each": 29999832000,
+      "official_checksum_both": "md5:a03dedd79ac4208f6d60b4c916484dba", "local_path": null,
+      "local_checksum": null, "role": "gps-clean-reference-not-independent", "multipath": false,
+      "spoofed_prns": [], "genuine_prns": "NOT_DOCUMENTED", "attack_timing": "not_applicable_clean",
+      "duration_seconds": "UNRESOLVED_74.99958_OR_149.99916",
+      "independence": "FAIL_BYTE_IDENTICAL_OFFICIAL_MD5"
+    },
+    {
+      "official_id": "SS-17", "constellation": "GPS", "band": "L1", "record_id": 15623217,
+      "file": "SS-17 GPS Static No Multipath True Position – 1 Spoofer.bin", "official_size_bytes": 29999832000,
+      "official_checksum": "md5:67e59df277c444f8fc4295484e6ec250", "local_path": null,
+      "local_checksum": null, "role": "gps-1-spoofed-PRN-alternative", "multipath": false,
+      "spoofed_prns": [1], "genuine_prns": "NOT_DOCUMENTED", "attack_timing": "NOT_DOCUMENTED_AS_DELAYED_OR_FULL_FILE",
+      "duration_seconds": "UNRESOLVED_74.99958_OR_149.99916"
+    },
+    {
+      "official_id": "SS-18", "constellation": "GPS", "band": "L1", "record_id": 15623318,
+      "file": "SS-18 GPS Static No Multipath True Position – 2 Spoofers.bin", "official_size_bytes": 29999832000,
+      "official_checksum": "md5:235762e69e6a8ff2309e2cd7c7a9d98f", "local_path": null,
+      "local_checksum": null, "role": "gps-2-spoofed-PRN-non-equivalent", "multipath": false,
+      "spoofed_prns": [1, 2], "genuine_prns": "NOT_DOCUMENTED", "attack_timing": "NOT_DOCUMENTED_AS_DELAYED_OR_FULL_FILE",
+      "duration_seconds": "UNRESOLVED_74.99958_OR_149.99916"
+    },
+    {
+      "official_id": "SS-20/README-SS-19", "constellation": "GPS", "band": "L1", "record_id": 15623460,
+      "file": "SS-20 GPS Static No Multipath True Position – 4 Spoofers.bin", "official_size_bytes": 29999832000,
+      "official_checksum": "md5:cc63804902fba0b01b0e7e6a1a56026d", "local_path": null,
+      "local_checksum": null, "role": "gps-4-spoofed-PRN-non-equivalent", "multipath": false,
+      "metadata_note": "Zenodo filename says SS-20; README title and included filename say SS-19.",
+      "spoofed_prns": [1, 2, 21, 32], "genuine_prns": "NOT_DOCUMENTED", "attack_timing": "NOT_DOCUMENTED_AS_DELAYED_OR_FULL_FILE",
+      "duration_seconds": "UNRESOLVED_74.99958_OR_149.99916"
+    },
+    {
+      "official_id": "SS-27", "constellation": "GPS", "band": "L1", "record_id": 15623799,
+      "file": "SS-27 GPS Static Multipath True Position – 1 Spoofer.bin", "official_size_bytes": 29999832000,
+      "official_checksum": "md5:9b73971348877078647610212d1bbba7", "local_path": null,
+      "local_checksum": null, "role": "optional-gps-multipath-partial-spoof", "multipath": true,
+      "spoofed_prns": [1], "genuine_prns": "NOT_DOCUMENTED", "attack_timing": "NOT_DOCUMENTED_AS_DELAYED_OR_FULL_FILE",
+      "duration_seconds": "UNRESOLVED_74.99958_OR_149.99916"
+    },
+    {
+      "official_id": "SS-33", "constellation": "GPS", "band": "L1", "record_id": 17249727,
+      "file": "SS-33 GPS Delayed Spoofer Injection (All PRNs Spoofed).bin", "official_size_bytes": 39999912000,
+      "official_checksum": "md5:2320ab15af06dd66bfe459094e24381e", "local_path": null,
+      "local_checksum": null, "role": "optional-delayed-all-PRN-sensitivity", "multipath": false,
+      "spoofed_prns": "ALL_GPS_PRNS_VISIBLE_IN_SKY", "genuine_prns": "NOT_DOCUMENTED", "attack_timing": {
+        "onset_seconds_approx": 70, "active_duration_seconds_approx": 80, "removal_seconds_approx": 150
+      },
+      "duration_seconds": "UNRESOLVED_99.99978_OR_199.99956"
+    }
+  ],
+  "selection_conclusion": {
+    "gps_l1_priority_feasible_for_exact_1_3_5_contract": false,
+    "reason": "Official GPS no-multipath files provide 1/2/4 spoofed PRNs and duplicate clean payloads; the exact 1/3/5 set exists only for Galileo E1.",
+    "exact_contract_minimum_constellation": "Galileo E1",
+    "receiver_support_risk": "Current GPS L1 C/A 9-tap receiver cannot be assumed compatible with Galileo E1; separate support must be implemented and frozen after data availability.",
+    "next_action": "Acquire the exact minimum files in dataset_download_plan.json, preserve checksums, add safe output headroom, then repeat preflight."
+  }
+}
+

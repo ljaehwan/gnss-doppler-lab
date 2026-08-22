@@ -1,0 +1,40 @@
+{
+  "schema": "gnss-doppler-lab.qset-stage0a-source-binding.v1",
+  "status": "PASS_METADATA_ONLY",
+  "base": {
+    "sha": "8025f331444e600bee97baf28ad3cb7af9410381",
+    "tree": "0c092a05bb60eedfa9485a49f490bc2957d5c385",
+    "parent": "824cc0de256a81ba1346ed8d8058ec31f192de84",
+    "remote": "https://github.com/ljaehwan/gnss-doppler-lab.git"
+  },
+  "official_metadata": {
+    "galileo_api": "https://zenodo.org/api/records/15470143/versions",
+    "galileo_concept_doi": "10.5281/zenodo.15470142",
+    "gps_api": "https://zenodo.org/api/records/15572976/versions",
+    "gps_concept_doi": "10.5281/zenodo.15572975",
+    "descriptor_doi": "10.1109/IEEEDATA.2025.3627116",
+    "retrieved_utc": "2026-08-22T05:54:53Z"
+  },
+  "readme_verification": {
+    "document_count": 13,
+    "total_bytes": 1618046,
+    "all_downloaded_md5_match_official_metadata": true,
+    "raw_iq_downloaded_or_hashed": false,
+    "documents": {
+      "Galileo-C1": "md5:317e2f82dc89cfbe36272630e3c4f5e3",
+      "Galileo-C3": "md5:e0b125c3bbea6e04ccf263aa3837c4d7",
+      "Galileo-SS1": "md5:bacf410c951ce869754c207c2844ad7c",
+      "Galileo-SS3": "md5:d45f48419f4b2ac5d4c1b542d7c31ed4",
+      "Galileo-SS5": "md5:4f343d0cf26146550fd42b2a23120dac",
+      "Galileo-SS11": "md5:150d2da752947b31735d2790d198d4ce",
+      "GPS-C5": "md5:f462dc75459c1274077c82c4043b3ccb",
+      "GPS-C7": "md5:fbd7447ae09ced807a59d3e5de869b62",
+      "GPS-SS17": "md5:01b759e75f12af69f74294429b4ba9d5",
+      "GPS-SS18": "md5:d44f85d42f739e49d8fe013685d24466",
+      "GPS-SS20": "md5:4c0bfb67c4aff2866f8981b2f6127563",
+      "GPS-SS27": "md5:e79412124605cfd43176a4faeddbbe33",
+      "GPS-SS33": "md5:03a3ef01be031c409bf8376c4e1ee355"
+    }
+  }
+}
+
