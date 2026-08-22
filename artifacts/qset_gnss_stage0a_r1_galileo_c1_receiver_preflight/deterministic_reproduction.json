@@ -1,4 +1,7 @@
 {
-  "schema": "gnss-doppler-lab.qset-r1-pending.v1",
-  "status": "PENDING_FROZEN_EXECUTION"
+  "analysis_runs": 0,
+  "byte_identical": null,
+  "reason": "frozen parser rejected interrupted dump record boundaries; no partial metric analysis performed",
+  "schema": "gnss-doppler-lab.qset-r1-deterministic.v1",
+  "status": "NOT_RUN_INCOMPLETE_RECEIVER"
 }

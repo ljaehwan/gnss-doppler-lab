@@ -1,20 +1,20 @@
 {
-  "file_count": 20,
+  "file_count": 22,
   "files": [
     {
       "path": "README.md",
-      "sha256": "187723c13e2de902604153dd8703bef3f132cf9befb42693566086af40c986f3",
-      "size_bytes": 198
+      "sha256": "4cd6bcc1fd7a4c2569900cb19f08dd6efdeef151c05577906bcdc1d4ec822533",
+      "size_bytes": 986
     },
     {
       "path": "access_audit.json",
-      "sha256": "e1f83032f4b65e837b2d89d6e432a530f3dc8b3b3bfe5beaa18a5359a85cbb68",
-      "size_bytes": 94
+      "sha256": "f5171c7658346e5c76fba8fe7ab6459c14f990b1a25564361afcce30b77ba76e",
+      "size_bytes": 727
     },
     {
       "path": "acquisition_inventory.csv",
-      "sha256": "7a204c5eba238a29f9fbf4bba1d80c440abee76c1a88cc87838369a41d10dac2",
-      "size_bytes": 46
+      "sha256": "be5b2c0ad0a36490cb317634a608693e0ea13c02d5acdb8e78f7796b4ef8fc9f",
+      "size_bytes": 87
     },
     {
       "path": "bounded_window_contract.json",
@@ -23,13 +23,13 @@
     },
     {
       "path": "decoder_validation.json",
-      "sha256": "e1f83032f4b65e837b2d89d6e432a530f3dc8b3b3bfe5beaa18a5359a85cbb68",
-      "size_bytes": 94
+      "sha256": "733f891edd9f73ec1039b2dbe0a13011852def933216645c658edc987fd3ba70",
+      "size_bytes": 1346
     },
     {
       "path": "deterministic_reproduction.json",
-      "sha256": "e1f83032f4b65e837b2d89d6e432a530f3dc8b3b3bfe5beaa18a5359a85cbb68",
-      "size_bytes": 94
+      "sha256": "e2deb159944eb3df189db87278ad864d39e5b3310a9036c6d924aaadf10fcbb6",
+      "size_bytes": 262
     },
     {
       "path": "execution_freeze.json",
@@ -37,9 +37,14 @@
       "size_bytes": 965
     },
     {
+      "path": "execution_interrupt_audit.json",
+      "sha256": "9307abe804f75669685a3f59de1f1fdbe7a18911724095b84ff92dd70e65e52b",
+      "size_bytes": 1273
+    },
+    {
       "path": "final_verdict.json",
-      "sha256": "e1f83032f4b65e837b2d89d6e432a530f3dc8b3b3bfe5beaa18a5359a85cbb68",
-      "size_bytes": 94
+      "sha256": "b2fd3d30dae14ca83b5f7007f68cbd70824255763eead89c922c99ff24d4e41a",
+      "size_bytes": 1207
     },
     {
       "path": "format_discovery_provenance.json",
@@ -48,13 +53,18 @@
     },
     {
       "path": "format_identification.json",
-      "sha256": "e1f83032f4b65e837b2d89d6e432a530f3dc8b3b3bfe5beaa18a5359a85cbb68",
-      "size_bytes": 94
+      "sha256": "4118dad1cc786d30ba95df5c45b2ecebe9c777584996faaab288ee8bad4289fc",
+      "size_bytes": 15549
+    },
+    {
+      "path": "freeze_commit.json",
+      "sha256": "b1d9fb65edc592c0eaed47cef84ebbf18e224bdea0ad848179376feb05cae930",
+      "size_bytes": 222
     },
     {
       "path": "per_prn_tracking_support.csv",
-      "sha256": "71b27cd5dcf42982b5c9fcb0c4f2551cc6ee9cfb3e6257bd1afbd590194a7766",
-      "size_bytes": 61
+      "sha256": "be5b2c0ad0a36490cb317634a608693e0ea13c02d5acdb8e78f7796b4ef8fc9f",
+      "size_bytes": 87
     },
     {
       "path": "preregistration.json",
@@ -73,8 +83,8 @@
     },
     {
       "path": "receiver_run_manifest.json",
-      "sha256": "e1f83032f4b65e837b2d89d6e432a530f3dc8b3b3bfe5beaa18a5359a85cbb68",
-      "size_bytes": 94
+      "sha256": "9b02caddbd493f6c24360dcbbe02fc95c7eb29fd6188f224d2233001f104d80a",
+      "size_bytes": 8275
     },
     {
       "path": "source_binding.json",
@@ -83,23 +93,23 @@
     },
     {
       "path": "support_audit.json",
-      "sha256": "e1f83032f4b65e837b2d89d6e432a530f3dc8b3b3bfe5beaa18a5359a85cbb68",
-      "size_bytes": 94
+      "sha256": "ba33075253f3da5df058b4ebb2c78d1ad5a98e10d4a28f98eb928813a549d752",
+      "size_bytes": 3216
     },
     {
       "path": "test_output.txt",
-      "sha256": "95e0a41d4919ffd0eda8c04785ea005b2bcc1afceeeb8674f544de24d2a83fa4",
+      "sha256": "faf87b968a21dc9776dbf5150352179ee6058140c360a7acece0335ab894600c",
       "size_bytes": 99
     },
     {
       "path": "time_mapping_validation.json",
-      "sha256": "e1f83032f4b65e837b2d89d6e432a530f3dc8b3b3bfe5beaa18a5359a85cbb68",
-      "size_bytes": 94
+      "sha256": "5ca045fe7f7fe7717182e4d7583995d5dd9bf5cd0fcd5c583d73201422dc3eef",
+      "size_bytes": 324
     },
     {
       "path": "verifier_output.txt",
-      "sha256": "c2dc2d8ae4b262e1a518a9fb810ed01f27259472481b8ecbdf467d27f2188ca6",
-      "size_bytes": 23
+      "sha256": "35f751cf0cdbddc60ecf78d4503980cb2634001ba4af1b0babb2b4fda3656422",
+      "size_bytes": 19
     }
   ],
   "schema": "gnss-doppler-lab.qset-r1-artifact-manifest.v1",

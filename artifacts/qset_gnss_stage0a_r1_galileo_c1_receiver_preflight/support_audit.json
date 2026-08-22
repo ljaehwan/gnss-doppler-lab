@@ -1,4 +1,101 @@
 {
-  "schema": "gnss-doppler-lab.qset-r1-pending.v1",
-  "status": "PENDING_FROZEN_EXECUTION"
+  "acquisition_prn_count": null,
+  "all_tracking_finite": null,
+  "availability_mask": {},
+  "common_panel": [],
+  "diagnostic_only": true,
+  "dump_inventory": [
+    {
+      "nonempty": false,
+      "path": "veml_tracking_ch_0.dat",
+      "record_size_96_remainder": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "nonempty": true,
+      "path": "veml_tracking_ch_1.dat",
+      "record_size_96_remainder": 0,
+      "sha256": "2040c59d984671c7068deb9e87aef8dcc790f473d7026d41b5bd438f0b1e0a7b",
+      "size_bytes": 718848
+    },
+    {
+      "nonempty": true,
+      "path": "veml_tracking_ch_10.dat",
+      "record_size_96_remainder": 68,
+      "sha256": "0fdfd5afce88f503d8a9466c3b8eef5e83c95fbaa499a49f9d6a7126f6415e71",
+      "size_bytes": 704516
+    },
+    {
+      "nonempty": false,
+      "path": "veml_tracking_ch_11.dat",
+      "record_size_96_remainder": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "nonempty": false,
+      "path": "veml_tracking_ch_2.dat",
+      "record_size_96_remainder": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "nonempty": true,
+      "path": "veml_tracking_ch_3.dat",
+      "record_size_96_remainder": 0,
+      "sha256": "2bf036d76a693b6d1f4b46f586f566b4701fc1ceffb7cda6b16343a7cf0ddd2e",
+      "size_bytes": 711648
+    },
+    {
+      "nonempty": false,
+      "path": "veml_tracking_ch_4.dat",
+      "record_size_96_remainder": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "nonempty": true,
+      "path": "veml_tracking_ch_5.dat",
+      "record_size_96_remainder": 36,
+      "sha256": "0407220e7e2bf2cf94510b28b9875cd4b54ce0949e13c5b5e3dd2993ba655863",
+      "size_bytes": 647172
+    },
+    {
+      "nonempty": true,
+      "path": "veml_tracking_ch_6.dat",
+      "record_size_96_remainder": 68,
+      "sha256": "15505689b4e39c2f497a105481246ebe74807ee0913c75cab6c4b9f10c55c3f6",
+      "size_bytes": 679940
+    },
+    {
+      "nonempty": false,
+      "path": "veml_tracking_ch_7.dat",
+      "record_size_96_remainder": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "nonempty": true,
+      "path": "veml_tracking_ch_8.dat",
+      "record_size_96_remainder": 36,
+      "sha256": "4ca7bb4d1c3fcb3fb6dbb07bfc512ca29f021491edc00ecc7d05b5a7ba28ca67",
+      "size_bytes": 499716
+    },
+    {
+      "nonempty": true,
+      "path": "veml_tracking_ch_9.dat",
+      "record_size_96_remainder": 68,
+      "sha256": "bc43114cea1048689330fb25f7245c9384ca741770094281ffb5cf0e4484907f",
+      "size_bytes": 606212
+    }
+  ],
+  "dynamic_panel": [],
+  "nonempty_tracking_dump_count": 7,
+  "physical_consistency_pass": false,
+  "reason": "partial first-window evidence is not used to adjudicate the frozen success gate",
+  "schema": "gnss-doppler-lab.qset-r1-support-audit.v1",
+  "status": "INCONCLUSIVE_TERMINAL_DRAIN",
+  "time_mapping_pass": false,
+  "tracking_ge_10s_prn_count": null
 }

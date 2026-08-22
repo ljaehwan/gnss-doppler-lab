@@ -1,4 +1,6 @@
 {
-  "schema": "gnss-doppler-lab.qset-r1-pending.v1",
-  "status": "PENDING_FROZEN_EXECUTION"
+  "mapping": "effective_raw_sample = window_start_raw_sample + receiver_output_sample*25/2 - 205.25",
+  "reason": "terminal EOF absent and interrupted native dump tails fail frozen 96-byte record boundary checks",
+  "schema": "gnss-doppler-lab.qset-r1-time-mapping.v1",
+  "status": "NOT_ADJUDICATED_INCOMPLETE_RECEIVER"
 }

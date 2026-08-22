@@ -1,4 +1,32 @@
 {
-  "schema": "gnss-doppler-lab.qset-r1-pending.v1",
-  "status": "PENDING_FROZEN_EXECUTION"
+  "acquisition_prn_count": null,
+  "actual_format": ">i2 interleaved I,Q",
+  "attack_download_or_access_authorized": false,
+  "attack_scoring_performed": false,
+  "base_sha": "3e6e17ed705bad33124cff234f36621dd782b384",
+  "c3_clean_download_authorized": false,
+  "common_panel": [],
+  "detection_performance_claimed": false,
+  "dynamic_panel": [],
+  "freeze_sha": "de44b6d448b9395a3c1a7199637b0df32cf51077",
+  "gates": {
+    "acquisition": false,
+    "dynamic_availability_mask": false,
+    "finite": false,
+    "identity_format": true,
+    "physical_consistency": false,
+    "receiver_terminal_eof": false,
+    "time_mapping": false,
+    "tracking": false,
+    "two_windows_complete": false
+  },
+  "next_state": "NOT_AUTHORIZED",
+  "qset_training_performed": false,
+  "reason": "first frozen receiver run did not terminal-drain after sample EOF; acquisition assignments repeated indefinitely, so execution was stopped without running the second window",
+  "schema": "gnss-doppler-lab.qset-r1-final-verdict.v1",
+  "status": "PASS_FAIL_CLOSED_ATTESTATION",
+  "telemetry_sync_prns": [],
+  "threshold_calibrated": false,
+  "tracking_ge_10s_prn_count": null,
+  "verdict": "INCONCLUSIVE_RECEIVER_FEASIBILITY"
 }

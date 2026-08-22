@@ -1,4 +1,38 @@
 {
-  "schema": "gnss-doppler-lab.qset-r1-pending.v1",
-  "status": "PENDING_FROZEN_EXECUTION"
+  "byteswap": "big endian to native little endian",
+  "completed_source_windows": [
+    {
+      "decoder": "big-endian signed int16 interleaved I,Q -> native float32 complex; scale_factor=1.0; no I/Q swap",
+      "elapsed_s": 30.89430832862854,
+      "output_sample_rate_hz": 4000000,
+      "output_samples": 119999966,
+      "output_sha256": "d404b5a1ec0d421820b8935d21622991ce2fc97db9f4690ea13ca528c0bf19d9",
+      "output_size_bytes": 959999728,
+      "resampler": {
+        "decimation": 25,
+        "declared_sample_delay": 0,
+        "eof_loss_output_samples": 34,
+        "fractional_bw": 0.4,
+        "interpolation": 2,
+        "tap_count": 822,
+        "tap_sha256": "f50d0eb8ee4e707ccb94387e4ec327e42cb2bd1e42a544afbc687f74ea31826f"
+      },
+      "segment_id": "segment_030_060",
+      "source_bytes_read": 6000000000,
+      "source_offset_bytes": 6000000000,
+      "source_offset_samples": 1500000000,
+      "source_sample_count": 1500000000
+    }
+  ],
+  "input_dtype": ">i2",
+  "interleaving": "I,Q",
+  "missing_source_windows": [
+    "segment_100_130"
+  ],
+  "normalization_scale_factor": 1.0,
+  "schema": "gnss-doppler-lab.qset-r1-decoder-validation.v1",
+  "overall_execution_status": "INCOMPLETE_AFTER_FIRST_PREFIX_RECEIVER_TERMINAL_DRAIN",
+  "status": "PASS",
+  "streaming_round_trip_pass": true,
+  "unit_vector_pass": true
 }
