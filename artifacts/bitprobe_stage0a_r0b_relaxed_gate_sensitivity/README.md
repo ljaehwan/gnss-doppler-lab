@@ -9,3 +9,7 @@ ORIGINAL, MODERATE_RELAXATION, LENIENT_RELAXATION, and the full preregistered
 threshold grid are evaluated independently for TEXBAT and OAKBAT. The frozen
 flip-specificity result is advisory-only and excluded from all pass/fail
 decisions.
+
+## Final result
+
+Exploratory verdict: NO_ROBUST_SIGNAL_UNDER_RELAXED_GATES. No dataset passes MODERATE_RELAXATION; LENIENT_ONLY datasets: none. The formal Stage-0A verdict is unchanged and Stage-0B remains unauthorized.

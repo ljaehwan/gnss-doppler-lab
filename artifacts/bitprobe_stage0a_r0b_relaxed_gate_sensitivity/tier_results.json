@@ -1,0 +1,539 @@
+{
+  "LENIENT_RELAXATION": {
+    "OAKBAT.cleanStatic": {
+      "criteria": [
+        {
+          "comparison": ">=",
+          "criterion": "support_prns",
+          "observed": 5.0,
+          "pass": true,
+          "signed_margin": 1.0,
+          "threshold": 4.0
+        },
+        {
+          "comparison": ">=",
+          "criterion": "support_flip_per_prn",
+          "observed": 280.0,
+          "pass": true,
+          "signed_margin": 130.0,
+          "threshold": 150.0
+        },
+        {
+          "comparison": ">=",
+          "criterion": "reproducibility_median",
+          "observed": 0.7246080377972713,
+          "pass": true,
+          "signed_margin": 0.22460803779727134,
+          "threshold": 0.5
+        },
+        {
+          "comparison": ">=",
+          "criterion": "reproducibility_lower",
+          "observed": 0.4852839421249456,
+          "pass": true,
+          "signed_margin": 0.1852839421249456,
+          "threshold": 0.3
+        },
+        {
+          "comparison": ">=",
+          "criterion": "separability_effect",
+          "observed": 0.03626587765930023,
+          "pass": true,
+          "signed_margin": 0.0062658776593002286,
+          "threshold": 0.03
+        },
+        {
+          "comparison": "<=",
+          "criterion": "permutation_p",
+          "observed": 0.3,
+          "pass": false,
+          "signed_margin": -0.09999999999999998,
+          "threshold": 0.2
+        },
+        {
+          "comparison": ">=",
+          "criterion": "moderate_nuisance_median",
+          "observed": 0.944350653363402,
+          "pass": true,
+          "signed_margin": 0.244350653363402,
+          "threshold": 0.7
+        },
+        {
+          "comparison": ">=",
+          "criterion": "moderate_nuisance_direction_fraction",
+          "observed": 0.875,
+          "pass": true,
+          "signed_margin": 0.275,
+          "threshold": 0.6
+        }
+      ],
+      "failed_item_count": 1,
+      "failed_items": [
+        "permutation_p"
+      ],
+      "flip_specificity_excluded": true,
+      "pass": false,
+      "single_metric_flip_possible": true,
+      "smallest_absolute_margin": 0.0062658776593002286,
+      "tier": "LENIENT_RELAXATION"
+    },
+    "TEXBAT.cleanStatic": {
+      "criteria": [
+        {
+          "comparison": ">=",
+          "criterion": "support_prns",
+          "observed": 5.0,
+          "pass": true,
+          "signed_margin": 1.0,
+          "threshold": 4.0
+        },
+        {
+          "comparison": ">=",
+          "criterion": "support_flip_per_prn",
+          "observed": 289.0,
+          "pass": true,
+          "signed_margin": 139.0,
+          "threshold": 150.0
+        },
+        {
+          "comparison": ">=",
+          "criterion": "reproducibility_median",
+          "observed": 0.4422987386946777,
+          "pass": false,
+          "signed_margin": -0.05770126130532233,
+          "threshold": 0.5
+        },
+        {
+          "comparison": ">=",
+          "criterion": "reproducibility_lower",
+          "observed": 0.21899935997235673,
+          "pass": false,
+          "signed_margin": -0.08100064002764326,
+          "threshold": 0.3
+        },
+        {
+          "comparison": ">=",
+          "criterion": "separability_effect",
+          "observed": 0.005119979706568578,
+          "pass": false,
+          "signed_margin": -0.02488002029343142,
+          "threshold": 0.03
+        },
+        {
+          "comparison": "<=",
+          "criterion": "permutation_p",
+          "observed": 0.4666666666666667,
+          "pass": false,
+          "signed_margin": -0.26666666666666666,
+          "threshold": 0.2
+        },
+        {
+          "comparison": ">=",
+          "criterion": "moderate_nuisance_median",
+          "observed": 0.9406169878357126,
+          "pass": true,
+          "signed_margin": 0.24061698783571261,
+          "threshold": 0.7
+        },
+        {
+          "comparison": ">=",
+          "criterion": "moderate_nuisance_direction_fraction",
+          "observed": 0.625,
+          "pass": true,
+          "signed_margin": 0.025000000000000022,
+          "threshold": 0.6
+        }
+      ],
+      "failed_item_count": 4,
+      "failed_items": [
+        "reproducibility_median",
+        "reproducibility_lower",
+        "separability_effect",
+        "permutation_p"
+      ],
+      "flip_specificity_excluded": true,
+      "pass": false,
+      "single_metric_flip_possible": false,
+      "smallest_absolute_margin": 0.02488002029343142,
+      "tier": "LENIENT_RELAXATION"
+    },
+    "summary": {
+      "both_datasets_pass": false,
+      "oak_only": false,
+      "passing_datasets": [],
+      "tex_only": false
+    }
+  },
+  "MODERATE_RELAXATION": {
+    "OAKBAT.cleanStatic": {
+      "criteria": [
+        {
+          "comparison": ">=",
+          "criterion": "support_prns",
+          "observed": 5.0,
+          "pass": true,
+          "signed_margin": 1.0,
+          "threshold": 4.0
+        },
+        {
+          "comparison": ">=",
+          "criterion": "support_flip_per_prn",
+          "observed": 280.0,
+          "pass": true,
+          "signed_margin": 80.0,
+          "threshold": 200.0
+        },
+        {
+          "comparison": ">=",
+          "criterion": "reproducibility_median",
+          "observed": 0.7246080377972713,
+          "pass": true,
+          "signed_margin": 0.12460803779727136,
+          "threshold": 0.6
+        },
+        {
+          "comparison": ">=",
+          "criterion": "reproducibility_lower",
+          "observed": 0.4852839421249456,
+          "pass": true,
+          "signed_margin": 0.08528394212494556,
+          "threshold": 0.4
+        },
+        {
+          "comparison": ">=",
+          "criterion": "separability_effect",
+          "observed": 0.03626587765930023,
+          "pass": false,
+          "signed_margin": -0.013734122340699775,
+          "threshold": 0.05
+        },
+        {
+          "comparison": ">",
+          "criterion": "separability_lower",
+          "observed": -0.056033750339569734,
+          "pass": false,
+          "signed_margin": -0.056033750339569734,
+          "threshold": 0.0
+        },
+        {
+          "comparison": "<=",
+          "criterion": "permutation_p",
+          "observed": 0.3,
+          "pass": false,
+          "signed_margin": -0.19999999999999998,
+          "threshold": 0.1
+        },
+        {
+          "comparison": ">=",
+          "criterion": "moderate_nuisance_median",
+          "observed": 0.944350653363402,
+          "pass": true,
+          "signed_margin": 0.19435065336340196,
+          "threshold": 0.75
+        },
+        {
+          "comparison": ">=",
+          "criterion": "moderate_nuisance_direction_fraction",
+          "observed": 0.875,
+          "pass": true,
+          "signed_margin": 0.125,
+          "threshold": 0.75
+        }
+      ],
+      "failed_item_count": 3,
+      "failed_items": [
+        "separability_effect",
+        "separability_lower",
+        "permutation_p"
+      ],
+      "flip_specificity_excluded": true,
+      "pass": false,
+      "single_metric_flip_possible": false,
+      "smallest_absolute_margin": 0.013734122340699775,
+      "tier": "MODERATE_RELAXATION"
+    },
+    "TEXBAT.cleanStatic": {
+      "criteria": [
+        {
+          "comparison": ">=",
+          "criterion": "support_prns",
+          "observed": 5.0,
+          "pass": true,
+          "signed_margin": 1.0,
+          "threshold": 4.0
+        },
+        {
+          "comparison": ">=",
+          "criterion": "support_flip_per_prn",
+          "observed": 289.0,
+          "pass": true,
+          "signed_margin": 89.0,
+          "threshold": 200.0
+        },
+        {
+          "comparison": ">=",
+          "criterion": "reproducibility_median",
+          "observed": 0.4422987386946777,
+          "pass": false,
+          "signed_margin": -0.1577012613053223,
+          "threshold": 0.6
+        },
+        {
+          "comparison": ">=",
+          "criterion": "reproducibility_lower",
+          "observed": 0.21899935997235673,
+          "pass": false,
+          "signed_margin": -0.1810006400276433,
+          "threshold": 0.4
+        },
+        {
+          "comparison": ">=",
+          "criterion": "separability_effect",
+          "observed": 0.005119979706568578,
+          "pass": false,
+          "signed_margin": -0.044880020293431425,
+          "threshold": 0.05
+        },
+        {
+          "comparison": ">",
+          "criterion": "separability_lower",
+          "observed": -0.07700500743915306,
+          "pass": false,
+          "signed_margin": -0.07700500743915306,
+          "threshold": 0.0
+        },
+        {
+          "comparison": "<=",
+          "criterion": "permutation_p",
+          "observed": 0.4666666666666667,
+          "pass": false,
+          "signed_margin": -0.3666666666666667,
+          "threshold": 0.1
+        },
+        {
+          "comparison": ">=",
+          "criterion": "moderate_nuisance_median",
+          "observed": 0.9406169878357126,
+          "pass": true,
+          "signed_margin": 0.19061698783571257,
+          "threshold": 0.75
+        },
+        {
+          "comparison": ">=",
+          "criterion": "moderate_nuisance_direction_fraction",
+          "observed": 0.625,
+          "pass": false,
+          "signed_margin": -0.125,
+          "threshold": 0.75
+        }
+      ],
+      "failed_item_count": 6,
+      "failed_items": [
+        "reproducibility_median",
+        "reproducibility_lower",
+        "separability_effect",
+        "separability_lower",
+        "permutation_p",
+        "moderate_nuisance_direction_fraction"
+      ],
+      "flip_specificity_excluded": true,
+      "pass": false,
+      "single_metric_flip_possible": false,
+      "smallest_absolute_margin": 0.044880020293431425,
+      "tier": "MODERATE_RELAXATION"
+    },
+    "summary": {
+      "both_datasets_pass": false,
+      "oak_only": false,
+      "passing_datasets": [],
+      "tex_only": false
+    }
+  },
+  "ORIGINAL": {
+    "OAKBAT.cleanStatic": {
+      "criteria": [
+        {
+          "comparison": ">=",
+          "criterion": "support_prns",
+          "observed": 5.0,
+          "pass": true,
+          "signed_margin": 1.0,
+          "threshold": 4.0
+        },
+        {
+          "comparison": ">=",
+          "criterion": "support_flip_per_prn",
+          "observed": 280.0,
+          "pass": true,
+          "signed_margin": 80.0,
+          "threshold": 200.0
+        },
+        {
+          "comparison": ">=",
+          "criterion": "reproducibility_median",
+          "observed": 0.7246080377972713,
+          "pass": true,
+          "signed_margin": 0.024608037797271387,
+          "threshold": 0.7
+        },
+        {
+          "comparison": ">",
+          "criterion": "reproducibility_lower",
+          "observed": 0.4852839421249456,
+          "pass": false,
+          "signed_margin": -0.014716057875054422,
+          "threshold": 0.5
+        },
+        {
+          "comparison": ">=",
+          "criterion": "separability_effect",
+          "observed": 0.03626587765930023,
+          "pass": false,
+          "signed_margin": -0.11373412234069977,
+          "threshold": 0.15
+        },
+        {
+          "comparison": ">",
+          "criterion": "separability_lower",
+          "observed": -0.056033750339569734,
+          "pass": false,
+          "signed_margin": -0.056033750339569734,
+          "threshold": 0.0
+        },
+        {
+          "comparison": "<=",
+          "criterion": "permutation_p",
+          "observed": 0.3,
+          "pass": false,
+          "signed_margin": -0.29,
+          "threshold": 0.01
+        },
+        {
+          "comparison": ">=",
+          "criterion": "moderate_nuisance_median",
+          "observed": 0.944350653363402,
+          "pass": true,
+          "signed_margin": 0.19435065336340196,
+          "threshold": 0.75
+        },
+        {
+          "comparison": ">=",
+          "criterion": "moderate_nuisance_direction_fraction",
+          "observed": 0.875,
+          "pass": false,
+          "signed_margin": -0.125,
+          "threshold": 1.0
+        }
+      ],
+      "failed_item_count": 5,
+      "failed_items": [
+        "reproducibility_lower",
+        "separability_effect",
+        "separability_lower",
+        "permutation_p",
+        "moderate_nuisance_direction_fraction"
+      ],
+      "flip_specificity_excluded": true,
+      "pass": false,
+      "single_metric_flip_possible": false,
+      "smallest_absolute_margin": 0.014716057875054422,
+      "tier": "ORIGINAL"
+    },
+    "TEXBAT.cleanStatic": {
+      "criteria": [
+        {
+          "comparison": ">=",
+          "criterion": "support_prns",
+          "observed": 5.0,
+          "pass": true,
+          "signed_margin": 1.0,
+          "threshold": 4.0
+        },
+        {
+          "comparison": ">=",
+          "criterion": "support_flip_per_prn",
+          "observed": 289.0,
+          "pass": true,
+          "signed_margin": 89.0,
+          "threshold": 200.0
+        },
+        {
+          "comparison": ">=",
+          "criterion": "reproducibility_median",
+          "observed": 0.4422987386946777,
+          "pass": false,
+          "signed_margin": -0.2577012613053223,
+          "threshold": 0.7
+        },
+        {
+          "comparison": ">",
+          "criterion": "reproducibility_lower",
+          "observed": 0.21899935997235673,
+          "pass": false,
+          "signed_margin": -0.28100064002764324,
+          "threshold": 0.5
+        },
+        {
+          "comparison": ">=",
+          "criterion": "separability_effect",
+          "observed": 0.005119979706568578,
+          "pass": false,
+          "signed_margin": -0.14488002029343142,
+          "threshold": 0.15
+        },
+        {
+          "comparison": ">",
+          "criterion": "separability_lower",
+          "observed": -0.07700500743915306,
+          "pass": false,
+          "signed_margin": -0.07700500743915306,
+          "threshold": 0.0
+        },
+        {
+          "comparison": "<=",
+          "criterion": "permutation_p",
+          "observed": 0.4666666666666667,
+          "pass": false,
+          "signed_margin": -0.45666666666666667,
+          "threshold": 0.01
+        },
+        {
+          "comparison": ">=",
+          "criterion": "moderate_nuisance_median",
+          "observed": 0.9406169878357126,
+          "pass": true,
+          "signed_margin": 0.19061698783571257,
+          "threshold": 0.75
+        },
+        {
+          "comparison": ">=",
+          "criterion": "moderate_nuisance_direction_fraction",
+          "observed": 0.625,
+          "pass": false,
+          "signed_margin": -0.375,
+          "threshold": 1.0
+        }
+      ],
+      "failed_item_count": 6,
+      "failed_items": [
+        "reproducibility_median",
+        "reproducibility_lower",
+        "separability_effect",
+        "separability_lower",
+        "permutation_p",
+        "moderate_nuisance_direction_fraction"
+      ],
+      "flip_specificity_excluded": true,
+      "pass": false,
+      "single_metric_flip_possible": false,
+      "smallest_absolute_margin": 0.07700500743915306,
+      "tier": "ORIGINAL"
+    },
+    "summary": {
+      "both_datasets_pass": false,
+      "oak_only": false,
+      "passing_datasets": [],
+      "tex_only": false
+    }
+  }
+}

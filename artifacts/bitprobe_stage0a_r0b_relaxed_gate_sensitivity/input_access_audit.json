@@ -7,8 +7,11 @@
     "stats": 0
   },
   "committed_metric_files": {
+    "analysis_runs": 2,
+    "bytes_per_analysis_run": 6511,
     "file_count": 6,
-    "hash_verified": 6
+    "hash_verified": 6,
+    "source_metric_changes": 0
   },
   "frozen_tensor": {
     "bytes_read": 0,
@@ -17,7 +20,7 @@
     "opens": 0,
     "stats": 0
   },
-  "phase": "PRE_EXECUTION_FREEZE",
+  "phase": "COMMITTED_METRIC_SENSITIVITY",
   "raw_iq": {
     "bytes_read": 0,
     "hashes": 0,

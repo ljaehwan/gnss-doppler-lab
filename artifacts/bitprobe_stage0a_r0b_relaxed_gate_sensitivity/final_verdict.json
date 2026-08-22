@@ -1,0 +1,22 @@
+{
+  "attack_operations": 0,
+  "base_sha": "0b2a8913c856ab9b300f7fd604fc8f61da350cc6",
+  "completed_utc": "2026-08-22T05:13:29.020788+00:00",
+  "confirmatory": false,
+  "contract_commit_sha": "76cf6039d70d233150a8d75a5bd6145427bb6fcf",
+  "exploratory_verdict": "NO_ROBUST_SIGNAL_UNDER_RELAXED_GATES",
+  "flip_specificity_advisory_only": true,
+  "formal_stage0a_verdict_changed": false,
+  "freeze_sha": "824cc0de256a81ba1346ed8d8058ec31f192de84",
+  "frozen_tensor_operations": 0,
+  "lenient_only_datasets": [],
+  "moderate_passing_datasets": [],
+  "post_hoc": true,
+  "raw_iq_operations": 0,
+  "schema": "gnss-doppler-lab.bitprobe-stage0a-r0b-final-verdict.v1",
+  "source_metric_changes": 0,
+  "spoofing_detector_validated": false,
+  "stage0b_authorized": false,
+  "status": "PASS",
+  "trace_operations": 0
+}

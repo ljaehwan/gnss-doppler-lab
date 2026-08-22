@@ -1,7 +1,25 @@
 {
   "base_sha": "0b2a8913c856ab9b300f7fd604fc8f61da350cc6",
   "contract_commit_sha": "76cf6039d70d233150a8d75a5bd6145427bb6fcf",
+  "exploratory_verdict": "NO_ROBUST_SIGNAL_UNDER_RELAXED_GATES",
+  "final_candidate_head": "824cc0de256a81ba1346ed8d8058ec31f192de84",
   "forbidden_access_operations": 0,
-  "mode": "freeze",
-  "status": "PASS"
+  "formal_stage0a_verdict_changed": false,
+  "freeze_sha": "824cc0de256a81ba1346ed8d8058ec31f192de84",
+  "manifest_files": 20,
+  "mode": "final-candidate",
+  "self_test": {
+    "status": "PASS",
+    "test_count": 5,
+    "tests": {
+      "formal_preservation": true,
+      "grid_cardinality": true,
+      "manifest_tamper": true,
+      "source_metric_tamper": true,
+      "tensor_access_tamper": true
+    }
+  },
+  "stage0b_authorized": false,
+  "status": "PASS",
+  "threshold_grid_rows": 4608
 }

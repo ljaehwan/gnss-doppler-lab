@@ -1,0 +1,22 @@
+{
+  "OAKBAT.cleanStatic": {
+    "any_full_grid_pass": false,
+    "fixed_separability_lower_gt_zero": false,
+    "interpretation": "NO_STATISTICALLY_MEANINGFUL_SEPARATION",
+    "required_max_effect_threshold": 0.03,
+    "required_max_lower_bound_threshold": 0.4,
+    "required_max_reproducibility_threshold": 0.7,
+    "required_min_nuisance_direction_fraction": 0.75,
+    "required_min_p_threshold": 0.3
+  },
+  "TEXBAT.cleanStatic": {
+    "any_full_grid_pass": false,
+    "fixed_separability_lower_gt_zero": false,
+    "interpretation": "NO_STATISTICALLY_MEANINGFUL_SEPARATION",
+    "required_max_effect_threshold": 0.0,
+    "required_max_lower_bound_threshold": 0.2,
+    "required_max_reproducibility_threshold": 0.4,
+    "required_min_nuisance_direction_fraction": 0.6,
+    "required_min_p_threshold": 0.5
+  }
+}

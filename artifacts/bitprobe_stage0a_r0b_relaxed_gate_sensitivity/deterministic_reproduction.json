@@ -1,0 +1,27 @@
+{
+  "byte_identical": true,
+  "files": {
+    "gate_margin.csv": {
+      "byte_identical": true,
+      "sha256": "3853b85b25597a3e9ede8e2069ea86345e6a359dde33c4cff847482fba5a2119"
+    },
+    "leave_one_prn_out.json": {
+      "byte_identical": true,
+      "sha256": "a243f1f25e40c53aad00c566d80c03b7cce86fd15561b7b4862bc332413abbe3"
+    },
+    "minimum_relaxation_required.json": {
+      "byte_identical": true,
+      "sha256": "adb89332d6b5664171164cf87e784c369bdd8ea8b38f24e43effd327ae6eef27"
+    },
+    "threshold_grid.csv.gz": {
+      "byte_identical": true,
+      "sha256": "1f872471f21f96a552856c7d5c03ce1b1406ac738829c5bbb8e1164b772b9647"
+    },
+    "tier_results.json": {
+      "byte_identical": true,
+      "sha256": "89cfd12a545384f4ae834b6e718d238fd7f3f295aac78d70622f1d12df7a506f"
+    }
+  },
+  "run_count": 2,
+  "status": "PASS"
+}
