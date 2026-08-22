@@ -1,0 +1,13 @@
+{
+  "base_r1a_final_sha": "0a615f120c00d5727ce6f83ad330546098eeba81",
+  "branch": "research/qset-gnss-stage0a-r2-galileo-partial-prn-execution",
+  "existing_official_inventory_source": {
+    "artifact": "artifacts/qset_gnss_stage0a_partial_prn_quantile_feasibility/dataset_preflight.json",
+    "status": "COMMITTED_METADATA_ONLY_INVENTORY_REUSED_WITHOUT_ATTACK_PAYLOAD_ACCESS"
+  },
+  "main_local_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "main_remote_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "r1a_final_verdict_artifact": "artifacts/qset_gnss_stage0a_r1a_galileo_c1_terminal_drain_repair/final_verdict.json",
+  "schema": "gnss-doppler-lab.qset-stage0a-r2-source-binding.v1",
+  "status": "PASS_METADATA_ONLY_PRE_FREEZE"
+}

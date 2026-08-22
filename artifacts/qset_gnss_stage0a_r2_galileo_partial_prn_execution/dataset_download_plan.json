@@ -1,0 +1,15 @@
+{
+  "automatic_download_performed_by_r2": false,
+  "independent_r2_payload_verification": "PENDING_CLEAN_ONLY",
+  "schema": "gnss-doppler-lab.qset-stage0a-r2-download-status.v1",
+  "status": "USER_ATTESTED_DOWNLOAD_COMPLETE",
+  "user_attestation": {
+    "galileo_scenario_count": 8,
+    "ownership": "ubuntu:ubuntu",
+    "raw_file_count": 8,
+    "reported_official_size_and_md5_status": "PASS_ALL",
+    "reported_raw_decimal_gb": 231.925,
+    "reported_ssd_free_decimal_gb": 285.2,
+    "temporary_artifacts_present": false
+  }
+}

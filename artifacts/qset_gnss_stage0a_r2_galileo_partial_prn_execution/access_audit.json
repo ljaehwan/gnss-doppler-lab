@@ -1,0 +1,33 @@
+{
+  "attack_payload": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "signal_statistics": 0,
+    "stats": 0
+  },
+  "clean_c3_payload": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "signal_statistics": 0,
+    "stats": 1
+  },
+  "clean_metadata": {
+    "c3_default_parameter_opens": 1,
+    "c3_directory_inventory": 1,
+    "c3_zenodo_json_opens": 2
+  },
+  "phase": "DATASET_PREFLIGHT_CONTINUATION",
+  "schema": "gnss-doppler-lab.qset-stage0a-r2-access-audit.v1",
+  "scientific_operations": {
+    "attack_evaluations": 0,
+    "feature_windows": 0,
+    "receiver_runs": 0,
+    "scores": 0,
+    "thresholds_fit": 0
+  },
+  "status": "PASS_PRE_FREEZE"
+}

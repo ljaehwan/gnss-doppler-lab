@@ -1,0 +1,86 @@
+{
+  "base_r1a_final_sha": "0a615f120c00d5727ce6f83ad330546098eeba81",
+  "branch": "research/qset-gnss-stage0a-r2-galileo-partial-prn-execution",
+  "clean_inputs_authorized_pre_freeze": [
+    {
+      "md5": "4ff0e86938792bf3150c30d5f1481917",
+      "official_record_id": 15470143,
+      "path": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/galileo/C-1/clearsky_signal_C-1.bin",
+      "role": "clean-development",
+      "scenario": "C-1",
+      "size_bytes": 29999832000
+    },
+    {
+      "md5": "1b7c99c754faec3c8fa625849ef70014",
+      "official_record_id": 17249902,
+      "path": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/galileo/C-3/clearsky_signal_C-3.bin",
+      "role": "clean-calibration-and-contiguous-holdout",
+      "scenario": "C-3",
+      "size_bytes": 29999832000
+    }
+  ],
+  "format_inherited_from_r1a": {
+    "bytes_per_complex_sample": 4,
+    "complex_sample_count_for_29999832000_bytes": 7499958000,
+    "duration_at_50_msps_s": 149.99916,
+    "format": ">i2 big-endian signed int16 interleaved I,Q",
+    "r1a_final_sha": "0a615f120c00d5727ce6f83ad330546098eeba81",
+    "r1a_verdict": "READY_FOR_TUNI2025_C3_CLEAN_DOWNLOAD"
+  },
+  "minimum_attack_inventory_expected_but_not_accessed": [
+    {
+      "md5": "f2784d9f7d3c85edffeaf30bbd7efdb2",
+      "official_filename": "Galileo_1_Spoofer_Static_NoMP_TruePosition.bin",
+      "official_record_id": 15489567,
+      "role": "primary-1-spoofed-PRN",
+      "scenario": "SS-1",
+      "size_bytes": 29999832000,
+      "spoofed_prns_ground_truth_only": [9]
+    },
+    {
+      "md5": "cdee5a9b6a6509af016bdb3776ebd231",
+      "official_filename": "Galileo_3_Spoofer_Static_NoMP_TruePosition.bin",
+      "official_record_id": 15489857,
+      "role": "primary-3-spoofed-PRNs",
+      "scenario": "SS-3",
+      "size_bytes": 21925920000,
+      "spoofed_prns_ground_truth_only": [6, 9, 23]
+    },
+    {
+      "md5": "8a8e2ffc0bc5420b9df07b4faddb35bc",
+      "official_filename": "Galileo_5_Spoofer_Static_NoMP_TruePosition.bin",
+      "official_record_id": 17233077,
+      "role": "primary-5-spoofed-PRNs",
+      "scenario": "SS-5",
+      "size_bytes": 29999832000,
+      "spoofed_prns_ground_truth_only": [4, 6, 9, 23, 31]
+    },
+    {
+      "md5": "71de773dce5684c98daed0a48496891a",
+      "official_filename": "Galileo_1_Spoofer_Static_MP_TruePosition.bin",
+      "official_record_id": 15490403,
+      "role": "optional-multipath-partial-spoof-sensitivity",
+      "scenario": "SS-11",
+      "size_bytes": 29999832000,
+      "spoofed_prns_ground_truth_only": [31]
+    }
+  ],
+  "next_required_order": [
+    "independently verify C-3 clean size/MD5/format",
+    "freeze feature/window/split/aggregator/gate contract",
+    "implement and test clean-only pipeline",
+    "fit clean model and thresholds and publish clean holdout result",
+    "push execution freeze and verify local/remote 0/0 clean",
+    "only then resolve and access the attack allowlist"
+  ],
+  "official_c3_metadata": {
+    "concept_record_id": 15470142,
+    "doi": "10.5281/zenodo.17249902",
+    "raw_md5": "1b7c99c754faec3c8fa625849ef70014",
+    "raw_size_bytes": 29999832000,
+    "readme_md5": "e0b125c3bbea6e04ccf263aa3837c4d7",
+    "record_id": 17249902
+  },
+  "schema": "gnss-doppler-lab.qset-stage0a-r2-dataset-preflight.v1",
+  "status": "CONTINUATION_PENDING_CLEAN_VERIFICATION"
+}
