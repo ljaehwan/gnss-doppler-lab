@@ -1,0 +1,18 @@
+{
+  "attack_score_computed": false,
+  "downstream_attack_scenarios_opened": [],
+  "freeze_sha": "5a15e1ea82b35b2158b1887d1997f365252e493b",
+  "model_sha256": "a38d8bb79ca817c9241f4146e0b41759d7cfcf62c609f0b2e5ec5fbcc09f2bda",
+  "reporting_code_bindings": {
+    "scripts/finalize_qset_gnss_stage0a_r2_terminal_inconclusive.py": "885fe04a26db18ee2b1faa376fb283c6f040fe127788367fbb74652d55a8acb5",
+    "scripts/verify_qset_gnss_stage0a_r2_terminal_inconclusive.py": "56d03cc9e5a9354168f1ae8c6ce21f372e30f5aab494259fd2f1a78c2309c668",
+    "src/gnss_doppler_lab/qset_stage0a_r2_terminal_inconclusive.py": "16a0c220956feeb293bbc2001a61d616c269cee0de0d49c623f89c22f84be748",
+    "tests/test_qset_gnss_stage0a_r2_terminal_inconclusive.py": "446196342e613a4d817eda46cd8d5fe2e4124ada67a3a4261ddcc3e4ee496427"
+  },
+  "reporting_commit": "793359202cdeac55c0dbba606980af62d9afcf54",
+  "schema": "gnss-doppler-lab.qset-stage0a-r2-terminal-execution-attestation.v1",
+  "scientific_code_bindings_unchanged": true,
+  "ss1_failure_sha256": "d9a80b99b9729c3a16c2f132f18dc524b4dc45720963a45d72614268a489a58f",
+  "status": "PASS_FAIL_CLOSED_AT_FROZEN_SUPPORT_GATE",
+  "threshold_sha256": "2b223096c96af7a97fd9d5a5da6048c5f65f55b75fa05e410bcce9daf55e0490"
+}

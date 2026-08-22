@@ -1,0 +1,7 @@
+scenario,aggregator,status,reason
+SS-1,MEAN,NOT_COMPUTED_TECHNICAL_SUPPORT_GATE,3 tracked PRNs < frozen minimum 5
+SS-1,MAX,NOT_COMPUTED_TECHNICAL_SUPPORT_GATE,3 tracked PRNs < frozen minimum 5
+SS-1,Q50,NOT_COMPUTED_TECHNICAL_SUPPORT_GATE,3 tracked PRNs < frozen minimum 5
+SS-1,Q70,NOT_COMPUTED_TECHNICAL_SUPPORT_GATE,3 tracked PRNs < frozen minimum 5
+SS-1,Q90,NOT_COMPUTED_TECHNICAL_SUPPORT_GATE,3 tracked PRNs < frozen minimum 5
+SS-1,MULTI_Q,NOT_COMPUTED_TECHNICAL_SUPPORT_GATE,3 tracked PRNs < frozen minimum 5

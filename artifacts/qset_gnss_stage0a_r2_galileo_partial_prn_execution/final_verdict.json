@@ -1,0 +1,12 @@
+{
+  "attack_evaluation_complete": false,
+  "classification": "STAGE_0A_NON_NEURAL_FEASIBILITY",
+  "forbidden_claims_made": false,
+  "freeze_sha": "5a15e1ea82b35b2158b1887d1997f365252e493b",
+  "next_state": "NOT_AUTHORIZED",
+  "schema": "gnss-doppler-lab.qset-stage0a-r2-final-verdict.v1",
+  "score_computed": false,
+  "stage0b_authorized": false,
+  "stopped_fail_closed_after_scenario": "SS-1",
+  "verdict": "INCONCLUSIVE_QSET_DATA_FORMAT_OR_RECEIVER_SUPPORT"
+}

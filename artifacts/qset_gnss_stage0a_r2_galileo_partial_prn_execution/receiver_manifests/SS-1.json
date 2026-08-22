@@ -1,0 +1,249 @@
+{
+  "decoder": {
+    "output_samples": 599996606,
+    "sha256": "b33689e2cdbbf750ce1e9bfb19a244b85f8e299a9a3f7cf2f52d63be146587f0",
+    "size_bytes": 4799972848,
+    "source_bytes_read": 29999832000
+  },
+  "downstream_attack_scenarios_opened": [],
+  "output_set": {
+    "aggregate_sha256": "45e353a3e1d51f719ec746ee5f20b6c644f06d276456d8bcb0860d6d897e1e4c",
+    "file_count": 19,
+    "files": [
+      {
+        "path": "decoded_4msps_gr_complex.bin",
+        "sha256": "b33689e2cdbbf750ce1e9bfb19a244b85f8e299a9a3f7cf2f52d63be146587f0",
+        "size_bytes": 4799972848
+      },
+      {
+        "path": "receiver/gal_almanac.xml",
+        "sha256": "20af73330f408f96b15ea618fa967c8513ef11c9b42198896ea0770e0542d415",
+        "size_bytes": 5045
+      },
+      {
+        "path": "receiver/gal_ephemeris.xml",
+        "sha256": "670317965042b1086bd9ceabe9fb70f8e7c401417b345cf2b592e0838f35c4fd",
+        "size_bytes": 4447
+      },
+      {
+        "path": "receiver/gal_iono.xml",
+        "sha256": "06210d9349e20b7c9cb3cba94851109f4075f2384a7a8bb5b6409c9cf9ff3de3",
+        "size_bytes": 582
+      },
+      {
+        "path": "receiver/gal_utc_model.xml",
+        "sha256": "dd3be066743043083f92ee696691a00c6faf221d4addcb20490ceffff04f657b",
+        "size_bytes": 505
+      },
+      {
+        "path": "receiver/receiver.conf",
+        "sha256": "d5004a671e28bbf97b1ddc03efff379b62305f84b3bc8bd1ea3b9c2f322a51a1",
+        "size_bytes": 2156
+      },
+      {
+        "path": "receiver/receiver.log",
+        "sha256": "d9bbbbc1b9c723cf762a204a1ebb9f8d42dcdef4e35f4a8a6b4e9ddfe4a1f80a",
+        "size_bytes": 39193
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_0.bin",
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_1.bin",
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_10.bin",
+        "sha256": "33ebc4d443ef48998fbe83bcdb204dbbd1400edc0a7f336ab1beb0eeffbc9724",
+        "size_bytes": 14656704
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_11.bin",
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_2.bin",
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_3.bin",
+        "sha256": "2e2ebeecedfce2862959f4c5af0f5ab9dffa8c0b1b7be63be2e2ead18e45f939",
+        "size_bytes": 15554848
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_4.bin",
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_5.bin",
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_6.bin",
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_7.bin",
+        "sha256": "49ecf00da89753659bb789e431fcb2c527f1cef8c1d02d1fcb299e1c8fd32d93",
+        "size_bytes": 13986528
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_8.bin",
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192
+      },
+      {
+        "path": "receiver/trace_native_1ms_ch_9.bin",
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192
+      }
+    ]
+  },
+  "raw_input_identity": {
+    "md5": "f2784d9f7d3c85edffeaf30bbd7efdb2",
+    "path_redacted_from_compact_artifact": true,
+    "size_bytes": 29999832000
+  },
+  "receiver": {
+    "config_sha256": "d5004a671e28bbf97b1ddc03efff379b62305f84b3bc8bd1ea3b9c2f322a51a1",
+    "drained_samples": 599996606,
+    "exit_code": "NOT_PERSISTED_BEFORE_FAIL_CLOSED_EXCEPTION",
+    "program_ended": true,
+    "sha256": "3ed059f699201807cb86eb54a24ba00fde7e248f37a8081306cbc76d6be1b06f",
+    "terminal_drain": true
+  },
+  "scenario": "SS-1",
+  "schema": "gnss-doppler-lab.qset-stage0a-r2-ss1-terminal-failure.v1",
+  "score_computed": false,
+  "status": "FAIL_INSUFFICIENT_GALILEO_RECEIVER_SUPPORT",
+  "support_gate": {
+    "actual_tracked_prns": 3,
+    "event_window_minimum_prns": 5,
+    "pass": false,
+    "receiver_validation_minimum_prns": 4
+  },
+  "threshold_or_model_changed": false,
+  "trace_validation": {
+    "cadence_failures": 0,
+    "causal_failures": 0,
+    "files": [
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_0.bin",
+        "record_count": 0,
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_1.bin",
+        "record_count": 0,
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_10.bin",
+        "prns": [
+          36
+        ],
+        "record_count": 35232,
+        "sha256": "33ebc4d443ef48998fbe83bcdb204dbbd1400edc0a7f336ab1beb0eeffbc9724",
+        "size_bytes": 14656704,
+        "status": "PASS"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_11.bin",
+        "record_count": 0,
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_2.bin",
+        "record_count": 0,
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_3.bin",
+        "prns": [
+          9
+        ],
+        "record_count": 37391,
+        "sha256": "2e2ebeecedfce2862959f4c5af0f5ab9dffa8c0b1b7be63be2e2ead18e45f939",
+        "size_bytes": 15554848,
+        "status": "PASS"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_4.bin",
+        "record_count": 0,
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_5.bin",
+        "record_count": 0,
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_6.bin",
+        "record_count": 0,
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_7.bin",
+        "prns": [
+          30
+        ],
+        "record_count": 33621,
+        "sha256": "49ecf00da89753659bb789e431fcb2c527f1cef8c1d02d1fcb299e1c8fd32d93",
+        "size_bytes": 13986528,
+        "status": "PASS"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_8.bin",
+        "record_count": 0,
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      },
+      {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/replays/SS-1/receiver/trace_native_1ms_ch_9.bin",
+        "record_count": 0,
+        "sha256": "80a3a1725f19365a4817d79e0fda91f88e126ddc186e9c7faf17fb7b5a9ccd5f",
+        "size_bytes": 192,
+        "status": "EMPTY_OPTIONAL_CHANNEL"
+      }
+    ],
+    "finite_failures": 0,
+    "native_integration_s": 0.004,
+    "scenario": "SS-1",
+    "schema": "gnss-doppler-lab.qset-galileo-native-trace.v1",
+    "status": "FAIL",
+    "tracked_prn_count": 3,
+    "tracked_prns": [
+      9,
+      30,
+      36
+    ]
+  },
+  "wrapper_log": {
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/attack_execution_freeze_5a15e1ea_stdout.txt",
+    "sha256": "d7803f7f9268d96bf4774e57b0d9677d25e2d21702aa3f5a49c0d536536e15ef",
+    "size_bytes": 1304
+  }
+}

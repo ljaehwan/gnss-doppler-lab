@@ -11,13 +11,23 @@
     "source_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/receiver-source-v5",
     "status": "ABANDONED_PRE_EXECUTION_LOOP_SPACING_MISMATCH"
   },
+  "attack_access_after_freeze_only": true,
   "attack_payload": {
-    "bytes_read": 0,
-    "hashes": 0,
+    "allowlisted_scenarios": [
+      "SS-1"
+    ],
+    "bytes_read": 59999664000,
+    "hashes": 1,
     "mmaps": 0,
-    "opens": 0,
+    "opens": 2,
     "signal_statistics": 0,
-    "stats": 0
+    "stats": 3
+  },
+  "attack_scientific_operations": {
+    "attack_evaluations": 0,
+    "feature_windows": 0,
+    "receiver_runs": 1,
+    "scores": 0
   },
   "clean_c3_payload": {
     "bounded_format_bytes_read": 12582912,
@@ -43,7 +53,7 @@
       "identity_hash_bytes": 29999832000
     }
   },
-  "phase": "CLEAN_EXECUTION_COMPLETE_PRE_ATTACK",
+  "phase": "ATTACK_EXECUTION_STOPPED_FAIL_CLOSED",
   "prefreeze_failed_clean_attempt": {
     "attack_bytes_read": 0,
     "decoder_bytes_read": 0,
@@ -84,5 +94,17 @@
     "scores": 140,
     "thresholds_fit": 6
   },
-  "status": "PASS_ATTACK_STILL_SEALED"
+  "status": "PASS",
+  "unallowlisted_tuni2025_raw": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "unopened_allowlisted_scenarios": [
+    "SS-3",
+    "SS-5",
+    "SS-11"
+  ]
 }

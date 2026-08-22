@@ -1,0 +1,15 @@
+Script started on 2026-08-23 01:34:51+09:00 [COMMAND="/usr/bin/python3 scripts/verify_qset_gnss_stage0a_r2_terminal_inconclusive.py" <not executed on terminal>]
+{
+  "attack_score_computed": false,
+  "manifest_files": 32,
+  "stage0b_authorized": false,
+  "status": "PASS",
+  "tracked_prns_ss1": [
+    9,
+    30,
+    36
+  ],
+  "verdict": "INCONCLUSIVE_QSET_DATA_FORMAT_OR_RECEIVER_SUPPORT"
+}
+
+Script done on 2026-08-23 01:34:51+09:00 [COMMAND_EXIT_CODE="0"]

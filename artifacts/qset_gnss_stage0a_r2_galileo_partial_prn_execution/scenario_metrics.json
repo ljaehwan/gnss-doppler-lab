@@ -1,0 +1,20 @@
+{
+  "scenarios": {
+    "SS-1": {
+      "score_computed": false,
+      "status": "FAIL_INSUFFICIENT_GALILEO_RECEIVER_SUPPORT",
+      "tracked_prns": [
+        9,
+        30,
+        36
+      ]
+    }
+  },
+  "schema": "gnss-doppler-lab.qset-stage0a-r2-scenario-metrics.v1",
+  "status": "NOT_COMPUTED_TECHNICAL_SUPPORT_GATE",
+  "unopened_scenarios": [
+    "SS-3",
+    "SS-5",
+    "SS-11"
+  ]
+}

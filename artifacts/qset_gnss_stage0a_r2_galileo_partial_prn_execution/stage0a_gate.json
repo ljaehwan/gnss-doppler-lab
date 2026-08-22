@@ -1,0 +1,57 @@
+{
+  "aggregation": {
+    "pass": null,
+    "status": "NOT_EVALUATED"
+  },
+  "false_alarm": {
+    "metrics": {
+      "MAX": {
+        "alarm_count": 0,
+        "eligible_windows": 136,
+        "empirical_fpr": 0.0,
+        "wilson_95_upper": 0.027470099733582408
+      },
+      "MEAN": {
+        "alarm_count": 0,
+        "eligible_windows": 136,
+        "empirical_fpr": 0.0,
+        "wilson_95_upper": 0.027470099733582408
+      },
+      "MULTI_Q": {
+        "alarm_count": 0,
+        "eligible_windows": 136,
+        "empirical_fpr": 0.0,
+        "wilson_95_upper": 0.027470099733582408
+      },
+      "Q50": {
+        "alarm_count": 0,
+        "eligible_windows": 136,
+        "empirical_fpr": 0.0,
+        "wilson_95_upper": 0.027470099733582408
+      },
+      "Q70": {
+        "alarm_count": 0,
+        "eligible_windows": 136,
+        "empirical_fpr": 0.0,
+        "wilson_95_upper": 0.027470099733582408
+      },
+      "Q90": {
+        "alarm_count": 0,
+        "eligible_windows": 136,
+        "empirical_fpr": 0.0,
+        "wilson_95_upper": 0.027470099733582408
+      }
+    },
+    "pass": true
+  },
+  "local_signal": {
+    "pass": null,
+    "status": "NOT_EVALUATED"
+  },
+  "overall_pass": false,
+  "schema": "gnss-doppler-lab.qset-stage0a-r2-gate.v1",
+  "technical": {
+    "pass": false,
+    "reason": "SS-1 tracked PRN count 3 is below receiver minimum 4 and event minimum 5"
+  }
+}
