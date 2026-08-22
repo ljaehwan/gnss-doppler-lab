@@ -1,0 +1,6 @@
+candidate_sha=07ae5ab73079de08c71eae2e733bbacd407ae8cf
+remote_branch=research/qset-stage0a-r2a-ss1-receiver-support-audit
+clone=/tmp/qset-r2a-remote-clone3-GEH0Zi
+verifier={"forbidden_raw_bytes": 0, "score_operations": 0, "status": "PASS", "verdict": "RECEIVER_REPAIR_FAILED_CLEAN_REGRESSION"}
+tests=13 passed in 31.30s
+worktree=clean
