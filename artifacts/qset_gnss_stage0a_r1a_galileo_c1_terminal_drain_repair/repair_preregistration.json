@@ -1,0 +1,123 @@
+{
+  "allowed_inputs": [
+    "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/galileo/C-1/clearsky_signal_C-1.bin",
+    "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/galileo/C-1/Readme.pdf",
+    "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/galileo/C-1/zenodo_record_15470143.json",
+    "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r1-galileo-c1-receiver-preflight"
+  ],
+  "base_r1_final_sha": "cfa1dedfe330d74047e5ffcac2b9f94fd33f23a7",
+  "branch": "research/qset-gnss-stage0a-r1a-galileo-c1-terminal-drain-repair",
+  "data_scope": {
+    "attack_access_authorized": false,
+    "c3_access_or_download_authorized": false,
+    "other_tuni2025_raw_access_authorized": false,
+    "qset_model_training_authorized": false,
+    "threshold_calibration_authorized": false
+  },
+  "failure_verdicts": [
+    "BLOCKED_C1_FORMAT_UNRESOLVED",
+    "BLOCKED_GALILEO_E1_RECEIVER_NOT_AVAILABLE",
+    "BLOCKED_INSUFFICIENT_GALILEO_PRN_SUPPORT",
+    "BLOCKED_RECEIVER_TIME_MAPPING",
+    "INCONCLUSIVE_RECEIVER_FEASIBILITY"
+  ],
+  "frozen_scientific_contract": {
+    "acquisition_distinct_prns_min": 4,
+    "all_tracking_finite": true,
+    "decoder": "big-endian signed int16 interleaved I,Q to native float32 complex, scale 1.0, no I/Q swap",
+    "dynamic_panel": "union of actually observed Galileo E1 PRNs; no fixed ten-slot panel",
+    "format_windows": [
+      {
+        "id": "head",
+        "length_bytes": 4194304,
+        "offset_bytes": 0
+      },
+      {
+        "id": "middle",
+        "length_bytes": 4194304,
+        "offset_bytes": 14997818848
+      },
+      {
+        "id": "tail",
+        "length_bytes": 4194304,
+        "offset_bytes": 29995637696
+      }
+    ],
+    "receiver_configuration_template_sha256": "6dda45478b1b2521605e4544a51c84e513872b7bd433bb308d888dccd5fe4061",
+    "receiver_sha256": "9e523c156c288cae401628ba308bc886bcb7c7989e35747b7482b1d50a0c6131",
+    "receiver_windows": [
+      {
+        "duration_s": 30.0,
+        "id": "segment_030_060",
+        "start_s": 30.0
+      },
+      {
+        "duration_s": 30.0,
+        "id": "segment_100_130",
+        "start_s": 100.0
+      }
+    ],
+    "resampler": {
+      "decimation": 25,
+      "fractional_bw": 0.4,
+      "interpolation": 2,
+      "tap_count": 822,
+      "tap_sha256": "f50d0eb8ee4e707ccb94387e4ec327e42cb2bd1e42a544afbc687f74ea31826f"
+    },
+    "tracking_distinct_prns_ge_10s_min": 4,
+    "two_window_physical_consistency": "each observed panel >=4, common panel >=4, median Doppler delta <=500 Hz, median C/N0 delta <=15 dB, Doppler within +/-15 kHz, C/N0 within 15..65 dB-Hz"
+  },
+  "historical_diagnosis_disclosure": {
+    "basis": "R1 preserved output was inspected before R1a preregistration; this is engineering failure evidence, not newly preregistered scientific evidence",
+    "complete_record_diagnostic": "seven Galileo PRNs have finite complete 96-byte records reaching the final bounded-source region in R1 segment_030_060",
+    "last_acquisition_sample_stamp": 119985449,
+    "r1_output_samples": 119999966,
+    "r1_terminal_behavior": "source consumption reached its frozen bound, followed by repeated control-state polling until operator interrupt",
+    "tracking_dump_tail_diagnostic": "some channel dumps contain 0..95 trailing bytes after the final complete 96-byte record"
+  },
+  "large_output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r1a-galileo-c1-terminal-drain-repair",
+  "main_sha_at_preregistration": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "preservation_contract": {
+    "new_output_root_only": true,
+    "overwrite_or_delete_forbidden": true,
+    "r1_compact_artifact_manifest_sha256": "bb3ce40a9a6b369564672f278f27564f4eded5201ba7c765ed9aa3c1e3656566",
+    "r1_execution_interrupt_audit_sha256": "9307abe804f75669685a3f59de1f1fdbe7a18911724095b84ff92dd70e65e52b",
+    "r1_final_verdict_sha256": "b2fd3d30dae14ca83b5f7007f68cbd70824255763eead89c922c99ff24d4e41a",
+    "r1_receiver_run_manifest_sha256": "9b02caddbd493f6c24360dcbbe02fc95c7eb29fd6188f224d2233001f104d80a",
+    "r1_tree_sha": "771c0500425441f85acb669a8f8f98ab4961a1bd"
+  },
+  "repair_scope": {
+    "complete_record_adapter": {
+      "complete_record_size_bytes": 96,
+      "empty_file": "record as an unavailable channel",
+      "full_dump_sha256_required": true,
+      "missing_dump": "fail closed",
+      "parse_rule": "parse floor(file_size/96) complete records only",
+      "source_basis": "GNSS-SDR v0.0.19 Tracking_Dump_Reader epoch size",
+      "trailing_fragment": "preserve in place; record size 0..95 and SHA256; exclude from tracking evidence"
+    },
+    "controlled_terminal_drain": {
+      "eof_evidence": "maximum acquisition sample stamp >= rendered SignalSource.samples - 4000000",
+      "eof_margin_output_samples": 4000000,
+      "graceful_stop_signal": "SIGINT to child process group only",
+      "log_markers_required": [
+        "GNSS-SDR received 2 OS signal",
+        "Received action STOP",
+        "Flowgraph stopped"
+      ],
+      "maximum_runtime_s": 3600,
+      "post_eof_quiet_period_s": 5,
+      "required_child_exit_code": 0,
+      "stop_grace_s": 60,
+      "timeout_behavior": "record inconclusive and preserve output; no scientific support adjudication"
+    }
+  },
+  "schema": "gnss-doppler-lab.qset-r1a-repair-preregistration.v1",
+  "sequential_order": [
+    "segment_030_060",
+    "segment_100_130"
+  ],
+  "status": "PREREGISTERED_REPAIR_PENDING_IMPLEMENTATION",
+  "success_verdict": "READY_FOR_TUNI2025_C3_CLEAN_DOWNLOAD",
+  "worker_count": 1
+}

@@ -1,0 +1,14 @@
+{
+  "base_r1_final_sha": "cfa1dedfe330d74047e5ffcac2b9f94fd33f23a7",
+  "compact_artifacts": {
+    "artifact_manifest_sha256.json": "bb3ce40a9a6b369564672f278f27564f4eded5201ba7c765ed9aa3c1e3656566",
+    "execution_interrupt_audit.json": "9307abe804f75669685a3f59de1f1fdbe7a18911724095b84ff92dd70e65e52b",
+    "final_verdict.json": "b2fd3d30dae14ca83b5f7007f68cbd70824255763eead89c922c99ff24d4e41a",
+    "receiver_run_manifest.json": "9b02caddbd493f6c24360dcbbe02fc95c7eb29fd6188f224d2233001f104d80a"
+  },
+  "historical_verdict": "INCONCLUSIVE_RECEIVER_FEASIBILITY",
+  "large_output_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r1-galileo-c1-receiver-preflight",
+  "mutation_policy": "R1 compact and large outputs are historical evidence; no delete, overwrite, truncation, rename, or content repair",
+  "schema": "gnss-doppler-lab.qset-r1a-r1-preservation-audit.v1",
+  "status": "PASS_PRE_REPAIR"
+}
