@@ -1,0 +1,40 @@
+{
+  "format_windows": [
+    {
+      "id": "head",
+      "length_bytes": 4194304,
+      "offset_bytes": 0
+    },
+    {
+      "id": "middle",
+      "length_bytes": 4194304,
+      "offset_bytes": 14997818848
+    },
+    {
+      "id": "tail",
+      "length_bytes": 4194304,
+      "offset_bytes": 29995637696
+    }
+  ],
+  "full_150s_conversion_forbidden": true,
+  "identity_hash_exception": {
+    "passes_total_planned_including_pre_freeze": 2,
+    "purpose": "official full-file MD5"
+  },
+  "outside_window_decode_forbidden": true,
+  "receiver_source_bytes_total": 12000000000,
+  "receiver_windows": [
+    {
+      "duration_s": 30.0,
+      "id": "segment_030_060",
+      "start_s": 30.0
+    },
+    {
+      "duration_s": 30.0,
+      "id": "segment_100_130",
+      "start_s": 100.0
+    }
+  ],
+  "schema": "gnss-doppler-lab.qset-r1-bounded-window.v1",
+  "status": "FROZEN_PRE_EXECUTION"
+}

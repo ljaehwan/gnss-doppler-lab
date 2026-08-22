@@ -1,0 +1,35 @@
+{
+  "base_sha": "3e6e17ed705bad33124cff234f36621dd782b384",
+  "base_tree": "1dae84f56bfe16c7a2fc36d315ef4ac91dcfd08f",
+  "c1": {
+    "concept_record_id": "15470142",
+    "doi": "10.5281/zenodo.15470143",
+    "identity_hash_completed_pre_freeze": true,
+    "md5": "4ff0e86938792bf3150c30d5f1481917",
+    "raw_path": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/galileo/C-1/clearsky_signal_C-1.bin",
+    "readme": {
+      "md5": "317e2f82dc89cfbe36272630e3c4f5e3",
+      "path": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/galileo/C-1/Readme.pdf",
+      "size_bytes": 117810
+    },
+    "size_bytes": 29999832000,
+    "zenodo_record_id": 15470143
+  },
+  "code_bindings": {
+    "configs/qset_galileo_e1_c1_preflight.conf.template": "6dda45478b1b2521605e4544a51c84e513872b7bd433bb308d888dccd5fe4061",
+    "scripts/run_qset_gnss_stage0a_r1.py": "a0548cf2bbd48fa859809c6647f7bcb220d6fd1cc16d7ca99e677567c29a3035",
+    "scripts/verify_qset_gnss_stage0a_r1.py": "39ab90030720f2af3999b1c25cc947a4738d3eb3fc371272ee7574eace3516e4",
+    "tests/test_qset_gnss_stage0a_r1.py": "da3a2e6ef31371498066ccb9f6ab437837ef1f754daf265e5d353d175a702bff"
+  },
+  "main_local_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "main_remote_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "schema": "gnss-doppler-lab.qset-r1-source-binding.v1",
+  "scientific_scope": {
+    "constellation_signal": "Galileo E1",
+    "multipath": "none",
+    "nominal_sampling_rate_hz": 50000000,
+    "scenario": "authentic static clear sky",
+    "spoofers": "none"
+  },
+  "status": "PASS_PRE_EXECUTION"
+}

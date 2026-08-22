@@ -1,0 +1,23 @@
+{
+  "galileo_e1_components": {
+    "acquisition": "Galileo_E1_PCPS_Ambiguous_Acquisition",
+    "support_evidence": "installed Galileo E1 example configs, receiver source factory entries, and a synthetic zero-stream launch with no component-construction error before the bounded audit stop",
+    "telemetry": "Galileo_E1B_Telemetry_Decoder",
+    "tracking": "Galileo_E1_DLL_PLL_VEML_Tracking"
+  },
+  "method_a_inventory_only": {
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/.tools/gnss-sdr-method-a-9tap",
+    "resolved_path": "/home/ubuntu/projects/gnss-doppler-lab/.tools/gnss-sdr-src/build/src/main/gnss-sdr",
+    "sha256": "4c556bcd5dcb227f43f72aa7da2bd6381aee559ac31953ae4f02ad49ee511443",
+    "size_bytes": 36570904,
+    "version": "gnss-sdr-method-a-9tap version 0.0.19"
+  },
+  "schema": "gnss-doppler-lab.qset-r1-receiver-inventory.v1",
+  "selected": {
+    "path": "/usr/bin/gnss-sdr",
+    "sha256": "9e523c156c288cae401628ba308bc886bcb7c7989e35747b7482b1d50a0c6131",
+    "size_bytes": 9144664,
+    "version": "gnss-sdr version 0.0.19"
+  },
+  "status": "PASS_PRE_EXECUTION"
+}

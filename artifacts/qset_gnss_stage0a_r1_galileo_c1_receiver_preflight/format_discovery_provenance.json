@@ -1,0 +1,20 @@
+{
+  "authorization": "user-approved clean-only inspection before R1",
+  "historical_observation": {
+    "candidate": ">i2 interleaved I,Q",
+    "candidate_duration_s": 149.99916,
+    "candidate_samples": 7499958000,
+    "float_interpretations": "non-finite/extreme and nonphysical",
+    "official_readme_claim": "interleaved 32-bit float",
+    "representative_range": [
+      -100,
+      87
+    ],
+    "representative_std": 18,
+    "saturation_fraction": 0
+  },
+  "not_preregistered_by_r1": true,
+  "r1_action": "independently reproduce with frozen equal-size head/middle/tail windows and fail closed if >i2 is not reproduced",
+  "schema": "gnss-doppler-lab.qset-r1-format-discovery-provenance.v1",
+  "status": "HISTORICAL_PRE_R1_CLEAN_ONLY_OBSERVATION"
+}

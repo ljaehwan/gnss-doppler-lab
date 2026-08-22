@@ -1,0 +1,64 @@
+{
+  "allowed_inputs": [
+    "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/galileo/C-1/clearsky_signal_C-1.bin",
+    "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/galileo/C-1/Readme.pdf",
+    "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/galileo/C-1/zenodo_record_15470143.json"
+  ],
+  "base_sha": "3e6e17ed705bad33124cff234f36621dd782b384",
+  "branch": "research/qset-gnss-stage0a-r1-galileo-c1-receiver-preflight",
+  "c3_or_attack_authorized": false,
+  "format_windows": [
+    {
+      "id": "head",
+      "length_bytes": 4194304,
+      "offset_bytes": 0
+    },
+    {
+      "id": "middle",
+      "length_bytes": 4194304,
+      "offset_bytes": 14997818848
+    },
+    {
+      "id": "tail",
+      "length_bytes": 4194304,
+      "offset_bytes": 29995637696
+    }
+  ],
+  "objective": "C-1 clean-only format and Galileo E1 receiver feasibility; no Q-SET training, threshold, attack scoring, or detection claim",
+  "post_result_change_forbidden": true,
+  "receiver_configuration_order": [
+    "single frozen primary configuration; no fallback or post-result tuning"
+  ],
+  "receiver_windows": [
+    {
+      "duration_s": 30.0,
+      "id": "segment_030_060",
+      "start_s": 30.0
+    },
+    {
+      "duration_s": 30.0,
+      "id": "segment_100_130",
+      "start_s": 100.0
+    }
+  ],
+  "schema": "gnss-doppler-lab.qset-r1-preregistration.v1",
+  "status": "FROZEN_PRE_EXECUTION",
+  "success_gate": {
+    "acquisition_distinct_prns_min": 4,
+    "all_tracking_finite": true,
+    "availability_mask": "union of actually observed Galileo E1 PRNs; no fixed ten-slot panel",
+    "format": ">i2 and official identity PASS",
+    "receiver_raw_time_mapping": "output counter maps through exact 25/2 ratio and fixed 205.25-input-sample FIR group delay",
+    "telemetry_sync": "auxiliary only; not a success gate",
+    "tracking_distinct_prns_ge_10s_min": 4,
+    "two_window_physical_consistency": "each panel >=4, common panel >=4, median Doppler delta <=500 Hz, median C/N0 delta <=15 dB, Doppler within +/-15 kHz, C/N0 15..65 dB-Hz"
+  },
+  "verdicts": [
+    "READY_FOR_TUNI2025_C3_CLEAN_DOWNLOAD",
+    "BLOCKED_C1_FORMAT_UNRESOLVED",
+    "BLOCKED_GALILEO_E1_RECEIVER_NOT_AVAILABLE",
+    "BLOCKED_INSUFFICIENT_GALILEO_PRN_SUPPORT",
+    "BLOCKED_RECEIVER_TIME_MAPPING",
+    "INCONCLUSIVE_RECEIVER_FEASIBILITY"
+  ]
+}

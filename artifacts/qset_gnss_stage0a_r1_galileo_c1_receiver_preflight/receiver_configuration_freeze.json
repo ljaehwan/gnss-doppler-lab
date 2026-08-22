@@ -1,0 +1,28 @@
+{
+  "channels_capacity": 12,
+  "channels_in_acquisition": 4,
+  "disk_output_upper_bound_bytes": 4000000000,
+  "dynamic_panel_contract": "observed PRNs only; channel capacity is not a fixed panel",
+  "fallback": "none; any resource or receiver failure is inconclusive/blocked without tuning",
+  "large_output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r1-galileo-c1-receiver-preflight",
+  "minimum_free_bytes": 10000000000,
+  "reference_example": {
+    "path": "/usr/share/gnss-sdr/conf/gnss-sdr_Galileo_E1_ishort.conf",
+    "sha256": "188c25a7dde92fe22c96ac648def65f39a0dc9513f6746eeb56ede5ff75774d2",
+    "size_bytes": 3618
+  },
+  "resampler": {
+    "decimation": 25,
+    "deterministic_eof_loss_output_samples": 34,
+    "fractional_bw": 0.4,
+    "group_delay_input_samples": 205.25,
+    "interpolation": 2,
+    "tap_count": 822,
+    "tap_sha256": "f50d0eb8ee4e707ccb94387e4ec327e42cb2bd1e42a544afbc687f74ea31826f"
+  },
+  "schema": "gnss-doppler-lab.qset-r1-receiver-config-freeze.v1",
+  "selected_path": "offline fixed anti-alias 50 MSps -> 4 MSps rational 2/25; native gr_complex",
+  "status": "FROZEN_PRE_EXECUTION",
+  "template_path": "configs/qset_galileo_e1_c1_preflight.conf.template",
+  "template_sha256": "6dda45478b1b2521605e4544a51c84e513872b7bd433bb308d888dccd5fe4061"
+}

@@ -1,0 +1,22 @@
+{
+  "code_bindings": {
+    "configs/qset_galileo_e1_c1_preflight.conf.template": "6dda45478b1b2521605e4544a51c84e513872b7bd433bb308d888dccd5fe4061",
+    "scripts/run_qset_gnss_stage0a_r1.py": "a0548cf2bbd48fa859809c6647f7bcb220d6fd1cc16d7ca99e677567c29a3035",
+    "scripts/verify_qset_gnss_stage0a_r1.py": "39ab90030720f2af3999b1c25cc947a4738d3eb3fc371272ee7574eace3516e4",
+    "tests/test_qset_gnss_stage0a_r1.py": "da3a2e6ef31371498066ccb9f6ab437837ef1f754daf265e5d353d175a702bff"
+  },
+  "command": "/usr/bin/python3 scripts/run_qset_gnss_stage0a_r1.py execute --freeze-sha <pushed-freeze-sha>",
+  "environment": {
+    "numpy": "1.26.4",
+    "os": "Linux-6.8.0-137-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3"
+  },
+  "result_dependent_changes_forbidden": true,
+  "schema": "gnss-doppler-lab.qset-r1-execution-freeze.v1",
+  "sequential_order": [
+    "segment_030_060",
+    "segment_100_130"
+  ],
+  "status": "FROZEN_PRE_EXECUTION",
+  "worker_count": 1
+}
