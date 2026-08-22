@@ -1,0 +1,38 @@
+{
+  "code_bindings": {
+    "configs/qset_galileo_e1_c1_preflight.conf.template": "6dda45478b1b2521605e4544a51c84e513872b7bd433bb308d888dccd5fe4061",
+    "scripts/run_qset_gnss_stage0a_r1.py": "a0548cf2bbd48fa859809c6647f7bcb220d6fd1cc16d7ca99e677567c29a3035",
+    "scripts/run_qset_gnss_stage0a_r1a.py": "14e2c049de3ecd30f8cc98e3e2e57f8c9210eacbbba27846b69657620620615c",
+    "scripts/verify_qset_gnss_stage0a_r1.py": "39ab90030720f2af3999b1c25cc947a4738d3eb3fc371272ee7574eace3516e4",
+    "scripts/verify_qset_gnss_stage0a_r1a.py": "313b0b1d686a83ff370ee66e2b4eac8fb12dcc5bab5ea966940a659cea98db0d",
+    "tests/test_qset_gnss_stage0a_r1.py": "da3a2e6ef31371498066ccb9f6ab437837ef1f754daf265e5d353d175a702bff",
+    "tests/test_qset_gnss_stage0a_r1a.py": "e232709f2398efb11a013ab4063b5eabe476ea995642c5d5b4ba2ee43552c6c8"
+  },
+  "command": "/usr/bin/python3 scripts/run_qset_gnss_stage0a_r1a.py execute --freeze-sha <pushed-repair-freeze-sha>",
+  "complete_record_adapter": {
+    "missing_dump": "FAIL_CLOSED",
+    "record_size_bytes": 96,
+    "trailing_fragment_max_bytes": 95
+  },
+  "environment": {
+    "numpy": "1.26.4",
+    "os": "Linux-6.8.0-137-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3"
+  },
+  "output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r1a-galileo-c1-terminal-drain-repair",
+  "schema": "gnss-doppler-lab.qset-r1a-execution-repair-freeze.v1",
+  "scientific_contract_changed": false,
+  "sequential_order": [
+    "segment_030_060",
+    "segment_100_130"
+  ],
+  "status": "FROZEN_PRE_EXECUTION",
+  "terminal_drain": {
+    "eof_margin_output_samples": 4000000,
+    "post_eof_quiet_s": 5.0,
+    "required_exit_code": 0,
+    "signal": "SIGINT",
+    "stop_grace_s": 60.0
+  },
+  "worker_count": 1
+}

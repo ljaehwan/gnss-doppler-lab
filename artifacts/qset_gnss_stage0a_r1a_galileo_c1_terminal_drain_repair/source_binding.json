@@ -1,0 +1,38 @@
+{
+  "base_r1_final_sha": "cfa1dedfe330d74047e5ffcac2b9f94fd33f23a7",
+  "c1": {
+    "md5": "4ff0e86938792bf3150c30d5f1481917",
+    "path": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/galileo/C-1/clearsky_signal_C-1.bin",
+    "size_bytes": 29999832000
+  },
+  "code_bindings": {
+    "configs/qset_galileo_e1_c1_preflight.conf.template": "6dda45478b1b2521605e4544a51c84e513872b7bd433bb308d888dccd5fe4061",
+    "scripts/run_qset_gnss_stage0a_r1.py": "a0548cf2bbd48fa859809c6647f7bcb220d6fd1cc16d7ca99e677567c29a3035",
+    "scripts/run_qset_gnss_stage0a_r1a.py": "14e2c049de3ecd30f8cc98e3e2e57f8c9210eacbbba27846b69657620620615c",
+    "scripts/verify_qset_gnss_stage0a_r1.py": "39ab90030720f2af3999b1c25cc947a4738d3eb3fc371272ee7574eace3516e4",
+    "scripts/verify_qset_gnss_stage0a_r1a.py": "313b0b1d686a83ff370ee66e2b4eac8fb12dcc5bab5ea966940a659cea98db0d",
+    "tests/test_qset_gnss_stage0a_r1.py": "da3a2e6ef31371498066ccb9f6ab437837ef1f754daf265e5d353d175a702bff",
+    "tests/test_qset_gnss_stage0a_r1a.py": "e232709f2398efb11a013ab4063b5eabe476ea995642c5d5b4ba2ee43552c6c8"
+  },
+  "main_local_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "main_remote_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "preregistration_sha": "a4d734fa4bbbf8ac0656b3eebf66e945d575adec",
+  "preserved_r1_large_output": {
+    "bytes_checked": 973887417,
+    "files_checked": 30,
+    "status": "PASS"
+  },
+  "r1_freeze_sha": "de44b6d448b9395a3c1a7199637b0df32cf51077",
+  "readme": {
+    "md5": "317e2f82dc89cfbe36272630e3c4f5e3",
+    "path": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/galileo/C-1/Readme.pdf"
+  },
+  "receiver": {
+    "path": "/usr/bin/gnss-sdr",
+    "sha256": "9e523c156c288cae401628ba308bc886bcb7c7989e35747b7482b1d50a0c6131",
+    "version": "gnss-sdr version 0.0.19"
+  },
+  "receiver_configuration_sha256": "6dda45478b1b2521605e4544a51c84e513872b7bd433bb308d888dccd5fe4061",
+  "schema": "gnss-doppler-lab.qset-r1a-source-binding.v1",
+  "status": "PASS_PRE_EXECUTION"
+}
