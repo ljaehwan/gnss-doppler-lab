@@ -1,0 +1,36 @@
+{
+  "base_sha": "0df61a01485e6d7ac5cee21b861533541ec29859",
+  "cadence_adapter_repair_sha": "bcb2c719421f8de18eb60e7709ee93717e59a9e7",
+  "clean_binding_adapter_repair_sha": "e47da3ac8a02aa522b2bd07e2755550b5d83387f",
+  "executable_final_bindings": [
+    {
+      "path": "src/gnss_doppler_lab/qset_stage0a_r2a.py",
+      "sha256": "0eb8b99ae18950f180cd8b056e210b761a6b7c02fa1f2f5503f1cf5ea61359e1",
+      "size_bytes": 20615
+    },
+    {
+      "path": "scripts/run_qset_gnss_stage0a_r2a.py",
+      "sha256": "80a205068bedcca86bb19b007c1f0f3cc9204de465848f9fa9e19b0976b4f881",
+      "size_bytes": 4157
+    },
+    {
+      "path": "scripts/finalize_qset_gnss_stage0a_r2a.py",
+      "sha256": "0358593c266883e44710fe06f7ae069e07bb8a1d2b51667523f18cb7db6b660c",
+      "size_bytes": 8755
+    },
+    {
+      "path": "scripts/verify_qset_gnss_stage0a_r2a.py",
+      "sha256": "02de83c3062a4ed91c0f4f20be3ab678d607ec9c8af4a86c6a2937235cd2536b",
+      "size_bytes": 4089
+    },
+    {
+      "path": "tests/test_qset_gnss_stage0a_r2a.py",
+      "sha256": "5b36165d12fcbb04b741eb1e1719e611f911a79d7def233429f6877cc1c65601",
+      "size_bytes": 2369
+    }
+  ],
+  "preregistration_freeze_sha": "4fdb60ad0ed43bfa244ff963dfa0454fb8b8d741",
+  "scientific_changes": false,
+  "status": "PASS",
+  "variant_or_gate_changes_after_freeze": false
+}

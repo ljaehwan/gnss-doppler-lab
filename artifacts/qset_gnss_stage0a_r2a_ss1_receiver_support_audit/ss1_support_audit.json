@@ -1,0 +1,206 @@
+{
+  "detection_claim": false,
+  "evidence": "V1 channel concurrency and V2 relaxed PFA remained below five stable PRNs; V3 8-ms coherent acquisition produced six stable PRNs and 132 consecutive M>=5 windows",
+  "root_cause": "RECEIVER_ACQUISITION_INTEGRATION_LIMIT_CONFIRMED",
+  "schema": "gnss-doppler-lab.qset-stage0a-r2a-ss1-support.v1",
+  "spoofing_score_computed": false,
+  "status": "PASS",
+  "variants": [
+    {
+      "cadence_failures": 0,
+      "causal_failures": 0,
+      "exit_code": "NOT_PERSISTED_BEFORE_FAIL_CLOSED_EXCEPTION",
+      "finite_failures": 0,
+      "longest_m_ge_5_run": 0,
+      "m_ge_5_windows": 0,
+      "median_panel_size": 3.0,
+      "output_set_sha256": "45e353a3e1d51f719ec746ee5f20b6c644f06d276456d8bcb0860d6d897e1e4c",
+      "panel_churn": 3,
+      "parameters": {
+        "coherent_ms": 4,
+        "execution": "REUSE_VERIFIED_R2_BASELINE",
+        "in_acquisition": 4,
+        "pfa": "0.00001"
+      },
+      "prn9_stable_windows": 145,
+      "qualified_prn_count": 3,
+      "qualified_prns": [
+        9,
+        30,
+        36
+      ],
+      "status": "PASS",
+      "support_gate_pass": false,
+      "telemetry_prns": [
+        9,
+        30,
+        36
+      ],
+      "terminal_drain": true,
+      "tracked_prn_count_ever": 3,
+      "tracked_prns_ever": [
+        9,
+        30,
+        36
+      ],
+      "variant": "V0"
+    },
+    {
+      "cadence_failures": 0,
+      "causal_failures": 0,
+      "exit_code": 0,
+      "finite_failures": 0,
+      "longest_m_ge_5_run": 0,
+      "m_ge_5_windows": 0,
+      "median_panel_size": 4.0,
+      "output_set_sha256": "3f109372403e36e6144d04ea8b65bce406c5e28924e8faf69eef2459f1970dce",
+      "panel_churn": 4,
+      "parameters": {
+        "coherent_ms": 4,
+        "execution": "RUN",
+        "in_acquisition": 12,
+        "pfa": "0.00001"
+      },
+      "prn9_stable_windows": 145,
+      "qualified_prn_count": 4,
+      "qualified_prns": [
+        2,
+        9,
+        30,
+        36
+      ],
+      "status": "PASS",
+      "support_gate_pass": false,
+      "telemetry_prns": [
+        2,
+        9,
+        30,
+        36
+      ],
+      "terminal_drain": true,
+      "tracked_prn_count_ever": 4,
+      "tracked_prns_ever": [
+        2,
+        9,
+        30,
+        36
+      ],
+      "variant": "V1"
+    },
+    {
+      "cadence_failures": 0,
+      "causal_failures": 0,
+      "exit_code": 0,
+      "finite_failures": 0,
+      "longest_m_ge_5_run": 0,
+      "m_ge_5_windows": 0,
+      "median_panel_size": 3.0,
+      "output_set_sha256": "c984c80c4f4cce62c37c3ba87b0649e5a5beb9284da097086cec8e70516095fe",
+      "panel_churn": 8,
+      "parameters": {
+        "coherent_ms": 4,
+        "execution": "RUN",
+        "in_acquisition": 12,
+        "pfa": "0.0001"
+      },
+      "prn9_stable_windows": 146,
+      "qualified_prn_count": 4,
+      "qualified_prns": [
+        2,
+        9,
+        30,
+        36
+      ],
+      "status": "PASS",
+      "support_gate_pass": false,
+      "telemetry_prns": [
+        9,
+        30,
+        36
+      ],
+      "terminal_drain": true,
+      "tracked_prn_count_ever": 4,
+      "tracked_prns_ever": [
+        2,
+        9,
+        30,
+        36
+      ],
+      "variant": "V2"
+    },
+    {
+      "cadence_failures": 0,
+      "causal_failures": 0,
+      "exit_code": 0,
+      "finite_failures": 0,
+      "longest_m_ge_5_run": 132,
+      "m_ge_5_windows": 132,
+      "median_panel_size": 6.0,
+      "output_set_sha256": "7067f9eb443cde25e8e96c2fa917eb953397a05cbe5bc797f41d8d9ead0a5b32",
+      "panel_churn": 28,
+      "parameters": {
+        "coherent_ms": 8,
+        "execution": "RUN",
+        "in_acquisition": 12,
+        "pfa": "0.00001"
+      },
+      "prn9_stable_windows": 145,
+      "qualified_prn_count": 6,
+      "qualified_prns": [
+        2,
+        9,
+        29,
+        30,
+        34,
+        36
+      ],
+      "status": "PASS",
+      "support_gate_pass": true,
+      "telemetry_prns": [
+        2,
+        9,
+        29,
+        30,
+        34,
+        36
+      ],
+      "terminal_drain": true,
+      "tracked_prn_count_ever": 32,
+      "tracked_prns_ever": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        23,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        36
+      ],
+      "variant": "V3"
+    }
+  ]
+}

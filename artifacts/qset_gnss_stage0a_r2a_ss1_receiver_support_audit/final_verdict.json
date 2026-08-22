@@ -1,0 +1,12 @@
+{
+  "clean_regression_pass": false,
+  "detection_claim": false,
+  "model_threshold_feature_window_aggregator_changed": false,
+  "next_state": "NOT_AUTHORIZED",
+  "root_cause_finding": "SS-1 support deficit is receiver acquisition-integration dependent, not demonstrated dataset unavailability",
+  "schema": "gnss-doppler-lab.qset-stage0a-r2a-final-verdict.v1",
+  "selected_candidate": "V3_REJECTED",
+  "ss1_spoofing_score_computed": false,
+  "unopened_attack_confirmation_authorized": false,
+  "verdict": "RECEIVER_REPAIR_FAILED_CLEAN_REGRESSION"
+}

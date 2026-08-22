@@ -45,3 +45,9 @@ def test_clean_decoder_manifest_keys_are_explicit() -> None:
     source = (Q.ROOT / "src/gnss_doppler_lab/qset_stage0a_r2a.py").read_text()
     assert 'scenario == "SS-1"' in source
     assert 'decoder_binding["output_sha256"]' in source
+
+
+def test_final_verifier_binds_no_ss1_score() -> None:
+    source = (Q.ROOT / "scripts/verify_qset_gnss_stage0a_r2a.py").read_text()
+    assert 'ss1_spoofing_score_computed' in source
+    assert 'RECEIVER_REPAIR_FAILED_CLEAN_REGRESSION' in source
