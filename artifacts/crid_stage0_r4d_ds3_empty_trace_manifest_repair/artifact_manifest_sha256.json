@@ -1,0 +1,127 @@
+{
+  "file_count": 24,
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "4dfc8222f38c8eaeda926cf0bb39bc7bc009b3e382fc1e1909a54fb2af315fd3",
+      "size_bytes": 294
+    },
+    {
+      "path": "attack_access_audit.json",
+      "sha256": "8301522d61511b528946455f066e3bc635f0105f1cbb6f9fece8d259ea539066",
+      "size_bytes": 355
+    },
+    {
+      "path": "ds3_input_inventory.json",
+      "sha256": "94e7b81d2d58a8f3c804d36a0b448bc4c7ad6147a700300d4d621feaa993994e",
+      "size_bytes": 345
+    },
+    {
+      "path": "empty_channel_inventory.csv",
+      "sha256": "f65dae998a055ce6ed53c0e469d994ff9b1ff8769e7f68594dc9b8e9e3f86156",
+      "size_bytes": 96
+    },
+    {
+      "path": "execution_repair_freeze.json",
+      "sha256": "f435d32b2dc6c83cc267facdc0bf05ed5715421e76408e8efa2f3df91a458942",
+      "size_bytes": 1534
+    },
+    {
+      "path": "final_verdict.json",
+      "sha256": "01a1f0b493734e1a9b3462e9b735920532ff737c72213d498c5ece8884c44693",
+      "size_bytes": 228
+    },
+    {
+      "path": "freeze_commit.json",
+      "sha256": "75b903a0e8eb43f870c32703d6fc2055856df5c49d4ffe3f79622b542d16fea1",
+      "size_bytes": 111
+    },
+    {
+      "path": "frozen_configs/C0.conf",
+      "sha256": "4b0bb8ad2ee1f4770f009b3d6bc03027046212d47ef87b3bb69eb469bb9e5868",
+      "size_bytes": 2723
+    },
+    {
+      "path": "frozen_configs/C1.conf",
+      "sha256": "eeff6c3b57d6d852d15a015e787d27da315064f980826438d411895f344e2828",
+      "size_bytes": 2721
+    },
+    {
+      "path": "frozen_configs/C2.conf",
+      "sha256": "fe18755fd4ccf2a40121ec1cd6b6a6df9a132d48bdd5a3bc5271ce849911623a",
+      "size_bytes": 2722
+    },
+    {
+      "path": "frozen_configs/C3.conf",
+      "sha256": "8b85d06e43f1a7b84e5a3f7d9549dfd7a4071b754f9833db0f6adec6fad171df",
+      "size_bytes": 2723
+    },
+    {
+      "path": "frozen_handoff_texbat_ds3_78p9s.csv",
+      "sha256": "e2118c753b2b58c13f29fd55115323e4b43ec445c92bf2e689d56843834804a3",
+      "size_bytes": 3071
+    },
+    {
+      "path": "logs/execution_repair_freeze_tests.txt",
+      "sha256": "5852c8aaae6013dbeb625ee1ef7a6c8ca37bcf1a0d1033308e036860316e78a6",
+      "size_bytes": 99
+    },
+    {
+      "path": "logs/execution_repair_freeze_verifier.txt",
+      "sha256": "735275a1f7f53f29af7e98d6ef4322b2044ff054ff6fd17e6102b6b0b822da41",
+      "size_bytes": 284
+    },
+    {
+      "path": "per_epoch_scores.csv.gz",
+      "sha256": "6d02326fcd987be4e9ba6014d94272924de0edc582546ac7ef2a655c1ee828f2",
+      "size_bytes": 181
+    },
+    {
+      "path": "preregistration.json",
+      "sha256": "f95e42700d22d3a154153ef97b793a0468d6199728b8d43b5094df29902ad264",
+      "size_bytes": 3557
+    },
+    {
+      "path": "preregistration_commit.json",
+      "sha256": "2d93d0540c3fe0bf0f7ad7b308d5a406f929aeb51d6f14501976182a5652a252",
+      "size_bytes": 445
+    },
+    {
+      "path": "r4c_preserved_output_audit.json",
+      "sha256": "39cbcb90cdf405cec0f30b9fec4f89c82b0013898615d968ad94c6cf4e9acf6b",
+      "size_bytes": 318
+    },
+    {
+      "path": "repair_preregistration.json",
+      "sha256": "05ce4f4d272680b13d198b45c16d6ce19ca9354d3aa456b7fe789a8fc57899d3",
+      "size_bytes": 5644
+    },
+    {
+      "path": "replay_completion.csv",
+      "sha256": "bd41a6405d0d5e3801dcb2466d468086e6e79655fadf5c075f37fe60a1177676",
+      "size_bytes": 237
+    },
+    {
+      "path": "scenario_metrics.json",
+      "sha256": "d939d6d3157a02e26f4f1f56ffb30135c422d9e4e71697f77f9dda7054758b18",
+      "size_bytes": 1789
+    },
+    {
+      "path": "shortcut_audit.json",
+      "sha256": "aef38e4b50448e9250ec49d8b9cffb81d2ea1d6c26774ae9a35127e8ecaf3676",
+      "size_bytes": 98
+    },
+    {
+      "path": "source_binding.json",
+      "sha256": "dd0071f6041aad2d4bf45c543ccb83001eafc19ede769a0a171db5fe53b0683d",
+      "size_bytes": 21181
+    },
+    {
+      "path": "support_audit.json",
+      "sha256": "5b5ce6d6d85c65fa67349a7e82381dbd7b020cb71cb5da7b5f5245a5d005a75e",
+      "size_bytes": 97
+    }
+  ],
+  "schema": "gnss-doppler-lab.crid-r4d-artifact-manifest.v1",
+  "status": "PASS"
+}

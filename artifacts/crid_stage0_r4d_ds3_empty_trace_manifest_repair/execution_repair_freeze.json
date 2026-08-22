@@ -1,0 +1,33 @@
+{
+  "base_sha": "39b38a9dd8a470e0a2f83604cde61722ad52be1d",
+  "branch": "research/crid-stage0-r4d-ds3-empty-trace-manifest-repair",
+  "commands": {
+    "analyze": "python3 scripts/run_crid_r4d_ds3.py analyze --freeze-sha <PUSHED_FREEZE_SHA>",
+    "audit_c0": "python3 scripts/run_crid_r4d_ds3.py audit-c0 --freeze-sha <PUSHED_FREEZE_SHA>",
+    "inventory": "python3 scripts/run_crid_r4d_ds3.py inventory --freeze-sha <PUSHED_FREEZE_SHA>",
+    "replay": "python3 scripts/run_crid_r4d_ds3.py replay --freeze-sha <PUSHED_FREEZE_SHA>"
+  },
+  "environment": {
+    "gnss_sdr_version": "gnss-sdr version 0.0.19",
+    "machine": "x86_64",
+    "numpy": "1.26.4",
+    "platform": "Linux-6.8.0-137-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "python_executable": "/usr/bin/python3",
+    "timezone": [
+      "KST",
+      "KST"
+    ]
+  },
+  "executable_sha256": {
+    "scripts/run_crid_r4d_ds3.py": "f5a43ac11b2c7263d394b8750d518ac2015f9657b66e9c62bcf74048e393ebc3",
+    "scripts/verify_crid_r4d_ds3.py": "cb3d2d9beb109c87555be829c40f085b9d48951eb48662f056ea58fde97f594d",
+    "src/gnss_doppler_lab/crid_r4d_ds3.py": "5652af2b742275c26d5e67fbfcdb77db0b4825f0017d2c3b66350e48ba87bf0b"
+  },
+  "output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/crid-stage0-r4d-ds3-empty-trace-manifest-repair",
+  "repair_scope": "EMPTY_TRACE_MANIFEST_ADAPTER_ONLY",
+  "schema": "gnss-doppler-lab.crid-r4d-execution-freeze.v1",
+  "score_executed_before_repair_freeze": false,
+  "status": "FROZEN_PENDING_PUSH",
+  "worker_count": 1
+}

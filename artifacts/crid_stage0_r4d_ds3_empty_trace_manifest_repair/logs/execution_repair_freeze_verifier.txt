@@ -1,0 +1,13 @@
+{
+  "checks": {
+    "epoch_rows": 0,
+    "manifest_files": 22,
+    "manifest_ok": true,
+    "replay_rows": 0,
+    "verdict": "NOT_EVALUATED_PRE_ACCESS_FREEZE"
+  },
+  "failures": [],
+  "mode": "freeze",
+  "schema": "gnss-doppler-lab.crid-r4d-compact-verifier.v1",
+  "status": "PASS"
+}

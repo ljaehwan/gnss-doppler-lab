@@ -1,0 +1,111 @@
+{
+  "allowed_verdicts": [
+    "INCONCLUSIVE_TEXBAT_DS3_EXPLORATORY_EXECUTION",
+    "EXPLORATORY_TEXBAT_DS3_SIGNAL_PRESENT",
+    "EXPLORATORY_TEXBAT_DS3_NO_USEFUL_SIGNAL"
+  ],
+  "base_sha": "39b38a9dd8a470e0a2f83604cde61722ad52be1d",
+  "confirmatory_detection_evaluation": false,
+  "deployment_validation": false,
+  "exploratory_signal_gate": {
+    "established_detection_rate_min": 0.7,
+    "established_four_config_min_four_prn_support_required": true,
+    "exploratory_only": true,
+    "not_explained_only_by_lock_loss_or_tracked_prn_collapse": true,
+    "pauc_0_05_min": 0.8,
+    "pre_onset_fpr_max": 0.05
+  },
+  "forbidden_inputs": [
+    "TEXBAT DS1",
+    "TEXBAT DS4",
+    "TEXBAT DS7",
+    "TEXBAT DS8",
+    "OAK attack data"
+  ],
+  "formal_phase_b": false,
+  "input": {
+    "access_before_pushed_freeze": false,
+    "bytes_per_complex_sample": 4,
+    "dataset": "TEXBAT.DS3",
+    "duration_s": 160.0,
+    "end_s": 238.9,
+    "end_sample_exclusive": 5972500000,
+    "planned_path": "/home/ubuntu/ssd_data/gnss-datasets/texbat/raw/ds3.bin",
+    "sample_format": "little-endian interleaved int16 I/Q",
+    "sample_rate_hz": 25000000,
+    "source_items": 8000000000,
+    "start_s": 78.9,
+    "start_sample_inclusive": 1972500000
+  },
+  "metric_contract": {
+    "alarm": "score > -21.942672917134093",
+    "common_support_availability": "valid scored epochs / nominal 1 ms epochs in each frozen interval",
+    "coordinate": "absolute raw complex-sample / 25,000,000",
+    "first_alarm": "earliest supported strict-threshold alarm at or after each boundary",
+    "partitions": {
+      "established": {
+        "end_s_exclusive": 238.9,
+        "label": 1,
+        "start_s_inclusive": 195.0
+      },
+      "pre_onset": {
+        "end_s_exclusive": 118.9,
+        "label": 0,
+        "start_s_inclusive": 78.9
+      },
+      "transition": {
+        "end_s_exclusive": 195.0,
+        "label": 1,
+        "start_s_inclusive": 118.9
+      }
+    },
+    "pauc_0_05": "sklearn standardized partial ROC AUC with max_fpr=0.05",
+    "persistent_alarm_ratio": {
+      "bin_pass": "within-bin alarm fraction >= 0.8",
+      "bins": "non-overlapping complete bins anchored at 195.0 s",
+      "region": "established",
+      "reported_value": "passing bins / complete bins with at least one supported epoch",
+      "windows_s": [
+        1,
+        5,
+        10
+      ]
+    },
+    "roc_pr_population": "pre_onset label 0 versus transition+established label 1",
+    "shortcut_correlations": "Pearson and Spearman correlations of score with median C/N0, median lock, common PRN count, and minimum per-config tracked PRN count"
+  },
+  "post_access_changes_forbidden": [
+    "code",
+    "threshold",
+    "score",
+    "feature",
+    "model",
+    "window",
+    "gate"
+  ],
+  "r4b_phase_a_passed": false,
+  "replay": {
+    "checkpoint_resume": true,
+    "configurations": [
+      "C0",
+      "C1",
+      "C2",
+      "C3"
+    ],
+    "minimum_common_prns": 4,
+    "minimum_configurations": 4,
+    "order": "C0,C1,C2,C3",
+    "overwrite_or_delete": false,
+    "worker_count": 1
+  },
+  "schema": "gnss-doppler-lab.crid-r4d-preregistration.v1",
+  "scope": "EXPLORATORY_TEXBAT_DS3_LOCKED_MODEL_AUDIT",
+  "score": {
+    "cn0_power_lock_prn_count_in_score": false,
+    "comparison": "score > threshold",
+    "implementation": "unchanged frozen CRID feature, causal alignment, predictor, covariance, H0/H1, median-over-common-PRNs pooling",
+    "threshold": -21.942672917134093,
+    "threshold_recomputation_or_recalibration": false
+  },
+  "status": "FROZEN_BEFORE_DS3_PAYLOAD_ACCESS"
+}
