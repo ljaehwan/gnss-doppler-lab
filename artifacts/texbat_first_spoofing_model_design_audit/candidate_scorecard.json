@@ -1,0 +1,58 @@
+{
+  "schema": "gnss-doppler-lab.texbat-first-design-audit.candidate-scorecard.v1",
+  "weights_percent": {
+    "physical_identifiability": 25,
+    "independence_from_prior_failures": 20,
+    "clean_only_falsifiability": 15,
+    "texbat_onset_fit": 15,
+    "tuni_external_validation": 10,
+    "literature_novelty": 10,
+    "implementation_feasibility": 5
+  },
+  "mandatory": {
+    "physical_identifiability_min": 4,
+    "independence_from_prior_failures_min": 4,
+    "clean_only_falsifiability_min": 4,
+    "weighted_total_min": 75
+  },
+  "candidates": [
+    {
+      "id": "candidate_1",
+      "name": "Causal Code-Carrier-Clock Closure Monitor",
+      "scores": {
+        "physical_identifiability": 4,
+        "independence_from_prior_failures": 4,
+        "clean_only_falsifiability": 5,
+        "texbat_onset_fit": 4,
+        "tuni_external_validation": 2,
+        "literature_novelty": 1,
+        "implementation_feasibility": 4
+      },
+      "weighted_total": 73.0,
+      "mandatory_dimensions_pass": true,
+      "weighted_total_pass": false,
+      "eligible": false,
+      "failure_reason": "The receiver-clock bias/drift and code/carrier/Doppler consistency idea is already directly represented in prior literature; signal-specific Galileo transfer and provenance are also unresolved."
+    },
+    {
+      "id": "candidate_2",
+      "name": "Causal NAV-Content Coherence Monitor",
+      "scores": {
+        "physical_identifiability": 2,
+        "independence_from_prior_failures": 4,
+        "clean_only_falsifiability": 5,
+        "texbat_onset_fit": 2,
+        "tuni_external_validation": 3,
+        "literature_novelty": 2,
+        "implementation_feasibility": 4
+      },
+      "weighted_total": 61.0,
+      "mandatory_dimensions_pass": false,
+      "weighted_total_pass": false,
+      "eligible": false,
+      "failure_reason": "A coherent replay can preserve parity, TOW, ephemeris, and cross-PRN NAV consistency; the observable is therefore not physically identifiable for the TEXBAT primary task."
+    }
+  ],
+  "selected_model": null,
+  "selection_verdict": "NO_CREDIBLE_NEW_MODEL_AFTER_FAILURE_AUDIT"
+}

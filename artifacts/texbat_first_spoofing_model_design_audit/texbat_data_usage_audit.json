@@ -1,0 +1,38 @@
+{
+  "schema": "gnss-doppler-lab.texbat-first-design-audit.texbat-usage.v1",
+  "primary_task": {
+    "input": "receiver observables with attack truth, filename, scenario ID, and official onset removed",
+    "output": "causal alarm time and, when supported, suspected PRN contribution",
+    "metrics": [
+      "clean_false_alarm_rate",
+      "first_detection_delay_after_official_onset",
+      "attack_detection_probability",
+      "recording-safe_block_bootstrap_confidence_interval"
+    ],
+    "primary_dataset": "TEXBAT",
+    "external_dataset_if_a_model_is_selected": ["Tuni2025 SS-3", "Tuni2025 SS-5"],
+    "forbidden_features": ["PRN_ID", "scenario_ID", "filename", "known_onset"],
+    "causality": "A decision at t may use only observations available at or before t; later attack samples cannot revise an earlier decision."
+  },
+  "historical_project_exposure": {
+    "DS1": {"status": "PREVIOUSLY_OPENED_AND_SCORED", "examples": ["B0", "GCMR", "AMCF", "CMTE"]},
+    "DS2": {"status": "PREVIOUSLY_OPENED_AND_SCORED", "examples": ["B0", "GCMR", "M1", "CMTE"]},
+    "DS3": {"status": "PREVIOUSLY_OPENED_AND_SCORED", "examples": ["B0", "CRID R4d", "Q-COMET", "CRISP"]},
+    "DS4": {"status": "PREVIOUSLY_OPENED_WITH_TRUNCATION_OR_LINEAGE_LIMITS", "examples": ["B0", "GCMR", "ACAF-NF", "Q-COMET"]},
+    "DS5": {"status": "NO_COMMITTED_EVIDENCE_OF_PAYLOAD_USE", "note": "Branches explicitly report it excluded or receiver outputs unavailable."},
+    "DS6": {"status": "NO_COMMITTED_EVIDENCE_OF_PAYLOAD_USE", "note": "Branches explicitly report it excluded or receiver outputs unavailable."},
+    "DS7": {"status": "PREVIOUSLY_OPENED_AND_SCORED", "examples": ["M1", "AMCF", "CMTE", "Q-COMET"]},
+    "DS8": {"status": "PREVIOUSLY_OPENED_AND_SCORED", "examples": ["AMCF", "CMTE", "Q-COMET", "GCSPO-derived work"]}
+  },
+  "blindness_statement": "TEXBAT DS1-DS4 and DS7-DS8 are developmental/post-exposure data in this repository and are not represented as fully blind. DS7 and DS8 share byte-identical pre-110 s material in prior audits and count as one family.",
+  "current_audit_access": {
+    "payload_open": 0,
+    "payload_stat": 0,
+    "payload_hash": 0,
+    "payload_mmap": 0,
+    "payload_bytes": 0,
+    "receiver_feature_rows_read": 0,
+    "scores_computed": 0,
+    "sources_used": ["Git objects", "committed compact artifacts", "source code", "public literature"]
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "algorithm": "sha256",
+  "excluded_self_referential_files": [
+    "artifact_manifest_sha256.json",
+    "verifier_output.txt"
+  ],
+  "files": {
+    "README.md": {
+      "sha256": "a642ca3b676a9f9b27e79a5ca530d799575bff9e020956aabe623db45e0f6bb4",
+      "size_bytes": 3771
+    },
+    "candidate_1.md": {
+      "sha256": "33062ac378692f939d0fa33d95d66925001a3df36f406641c3bb84420082b1ef",
+      "size_bytes": 5359
+    },
+    "candidate_2.md": {
+      "sha256": "7147d1ca27a27f98cb4078af9c3d1d995fc59c9676899a1ad88d53756515054f",
+      "size_bytes": 3252
+    },
+    "candidate_scorecard.json": {
+      "sha256": "334486cdad2abe9f11f9676fa0fa31ced241eac12b030093a77e4484be3f3351",
+      "size_bytes": 2119
+    },
+    "failure_mechanism_map.md": {
+      "sha256": "7a74addf16ea7dbbfe83ec66cb95539da9a87d575a221c42c28e57598697d939",
+      "size_bytes": 3315
+    },
+    "final_verdict.json": {
+      "sha256": "adc6b6b00c59a12f4ac16e7048d2eede7f3e4a20c9d0fd9fee15fd04575d03d2",
+      "size_bytes": 1202
+    },
+    "literature_review.md": {
+      "sha256": "d517b361adab055423a5adfe05e89441e2d109f790ea10cd40b7c215787bc712",
+      "size_bytes": 5935
+    },
+    "literature_sources.json": {
+      "sha256": "2cf4c0d4f470bc6fdf54dfc8fc83181057591275c1029ab42d246bfeb5d8f327",
+      "size_bytes": 12287
+    },
+    "observable_coverage_matrix.csv": {
+      "sha256": "aa002b9401e0d5b024436a661e245ac95a102798074bf0fef945515cd6631ad1",
+      "size_bytes": 4699
+    },
+    "preregistration_draft.json": {
+      "sha256": "a7e815b77c4acb26f5daeba8ba12b63dce8da3f1157b765844c96f19552b2d63",
+      "size_bytes": 1369
+    },
+    "prior_experiment_inventory.csv": {
+      "sha256": "ffb954fe43ef2ca5d17195099d784d7a8aec5841008c1376d89a017b076a15cb",
+      "size_bytes": 32737
+    },
+    "prior_experiment_inventory.json": {
+      "sha256": "632cb91f3a1ab113f972735d4e87574ac719b6312e377c7416ee1a0c530277af",
+      "size_bytes": 47798
+    },
+    "selected_model_spec.md": {
+      "sha256": "106aa6086eb1653ff214758afb97aee899bb5a72662f5e63879a03989b65c397",
+      "size_bytes": 966
+    },
+    "test_output.txt": {
+      "sha256": "ddc75fd2ae7feffada82399c849ea577536402b8b3bfd555d378cec4700ccf08",
+      "size_bytes": 1556
+    },
+    "texbat_data_usage_audit.json": {
+      "sha256": "6b944d54fab02aa64a292f9fa1abecff9e4683a17a3d88b7e0fb1a5bd9819179",
+      "size_bytes": 2376
+    },
+    "tuni_unopened_preservation.json": {
+      "sha256": "00de1a763f603f7f12c15c255db26240352c4b6ae5bbc1e02374f9287ba4f53f",
+      "size_bytes": 993
+    },
+    "wcl_claim_matrix.md": {
+      "sha256": "d310608732fa79d8e7a5f7ebc7746ef2eeb0b06ed99c66c69d72ab20bbdd3b7c",
+      "size_bytes": 1427
+    }
+  },
+  "schema": "gnss-doppler-lab.texbat-first-design-audit.manifest.v1"
+}

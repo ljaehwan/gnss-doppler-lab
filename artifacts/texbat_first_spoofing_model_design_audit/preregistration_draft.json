@@ -1,0 +1,38 @@
+{
+  "schema": "gnss-doppler-lab.texbat-first-design-audit.preregistration-draft.v1",
+  "status": "NOT_CREATED_NO_SELECTED_MODEL",
+  "selected_model": null,
+  "implementation_authorized": false,
+  "reason": "No candidate meets the frozen scorecard.",
+  "task_contract_preserved": {
+    "primary_dataset": "TEXBAT",
+    "causal": true,
+    "attack_labels_used_as_features": false,
+    "prn_identity_used_as_feature": false,
+    "scenario_or_filename_used_as_feature": false,
+    "known_onset_used_as_feature": false,
+    "post_decision_future_data": false,
+    "primary_metrics": [
+      "clean_false_alarm_rate",
+      "first_detection_delay_after_official_onset",
+      "attack_detection_probability",
+      "recording-safe_block_bootstrap_confidence_interval"
+    ]
+  },
+  "required_if_reopened": [
+    "exact feature equations",
+    "causal timestamp",
+    "normal train/calibration/holdout split",
+    "TEXBAT development/confirmatory scenario order",
+    "Tuni SS-3/SS-5 access condition",
+    "receiver configuration",
+    "capacity and seeds",
+    "threshold and persistence",
+    "false-alarm denominator and bootstrap unit",
+    "success/no-go gate",
+    "forbidden post-result changes",
+    "data access order",
+    "figures, tables, minimum WCL claim, and permitted failure conclusion"
+  ],
+  "terminal_verdict": "NO_CREDIBLE_NEW_MODEL_AFTER_FAILURE_AUDIT"
+}

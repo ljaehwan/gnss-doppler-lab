@@ -1,0 +1,32 @@
+{
+  "schema": "gnss-doppler-lab.texbat-first-design-audit.final-verdict.v1",
+  "audit_status": "COMPLETE",
+  "verdict": "NO_CREDIBLE_NEW_MODEL_AFTER_FAILURE_AUDIT",
+  "selected_model": null,
+  "candidate_count": 2,
+  "eligible_candidate_count": 0,
+  "audited_model_count": 33,
+  "remote_research_refs_audited": 96,
+  "base_sha": "461eb4dc7bb794e719295daf028f6811658ba37f",
+  "implementation_or_training_performed": false,
+  "attack_evaluation_performed": false,
+  "next_implementation_authorized": false,
+  "reason": "The only two physically distinct residual hypotheses fail the frozen selection contract: clock-closure is not sufficiently novel for a WCL model contribution and NAV-content coherence lacks physical identifiability against coherent replay. All other residual ideas duplicate a failed or inconclusive observable family.",
+  "current_audit_raw_access": {
+    "texbat_attack_bytes": 0,
+    "oakbat_attack_bytes": 0,
+    "tuni_attack_bytes": 0,
+    "raw_open_calls": 0,
+    "raw_stat_calls": 0,
+    "raw_hash_calls": 0,
+    "raw_mmap_calls": 0,
+    "feature_or_score_computations": 0
+  },
+  "tuni_preserved_unopened": [
+    "SS-3",
+    "SS-5",
+    "SS-11",
+    "SS-12",
+    "SS-13"
+  ]
+}

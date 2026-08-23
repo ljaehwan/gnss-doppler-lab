@@ -1,0 +1,20 @@
+{
+  "schema": "gnss-doppler-lab.texbat-first-design-audit.tuni-preservation.v1",
+  "preserved_scenarios": ["SS-3", "SS-5", "SS-11", "SS-12", "SS-13"],
+  "role": "unopened external validation only after a model is selected and frozen",
+  "current_audit_operations": {
+    "stat": 0,
+    "open": 0,
+    "hash": 0,
+    "mmap": 0,
+    "bytes_read": 0,
+    "download": 0
+  },
+  "historical_boundary": "Q-SET R2/R2a accessed SS-1 only; no cited Q-SET artifact authorizes or reports access to SS-3, SS-5, SS-11, SS-12, or SS-13.",
+  "future_contract": {
+    "allowed_only_if": "A selected TEXBAT-frozen model passes its prospective development gate before Tuni access.",
+    "gps_to_galileo_warning": "TEXBAT GPS L1 C/A and Tuni Galileo E1 do not share a raw feature contract by default.",
+    "canonicalization": "Only a preregistered signal-specific canonicalizer may change; physical logic, model capacity, threshold rule, and success gate must remain fixed.",
+    "post_tuni_tuning": false
+  }
+}

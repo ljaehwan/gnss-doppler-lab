@@ -1,0 +1,13 @@
+test_candidate_score_arithmetic_tamper_is_detected (tests.test_texbat_first_spoofing_model_design_audit.TexbatFirstDesignAuditVerifierTest.test_candidate_score_arithmetic_tamper_is_detected) ... ok
+test_causal_contract_tamper_is_detected (tests.test_texbat_first_spoofing_model_design_audit.TexbatFirstDesignAuditVerifierTest.test_causal_contract_tamper_is_detected) ... ok
+test_implementation_failure_cannot_be_relabelled_physical (tests.test_texbat_first_spoofing_model_design_audit.TexbatFirstDesignAuditVerifierTest.test_implementation_failure_cannot_be_relabelled_physical) ... ok
+test_manifest_tamper_is_detected (tests.test_texbat_first_spoofing_model_design_audit.TexbatFirstDesignAuditVerifierTest.test_manifest_tamper_is_detected) ... ok
+test_prior_final_verdict_misread_is_detected (tests.test_texbat_first_spoofing_model_design_audit.TexbatFirstDesignAuditVerifierTest.test_prior_final_verdict_misread_is_detected) ... ok
+test_pristine_semantics_pass (tests.test_texbat_first_spoofing_model_design_audit.TexbatFirstDesignAuditVerifierTest.test_pristine_semantics_pass) ... ok
+test_selected_model_contradiction_is_detected (tests.test_texbat_first_spoofing_model_design_audit.TexbatFirstDesignAuditVerifierTest.test_selected_model_contradiction_is_detected) ... ok
+test_tuni_attack_access_tamper_is_detected (tests.test_texbat_first_spoofing_model_design_audit.TexbatFirstDesignAuditVerifierTest.test_tuni_attack_access_tamper_is_detected) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.056s
+
+OK
