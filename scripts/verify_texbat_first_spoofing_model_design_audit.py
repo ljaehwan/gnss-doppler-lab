@@ -186,7 +186,7 @@ def verify_evidence_objects(
             require(match is not None, f"{model['model']}: malformed evidence {item}")
             sha, object_path = match.groups()
             require(not object_path.startswith("/"), f"{model['model']}: absolute evidence")
-            if resolve_evidence:
+            if resolve_evidence and "(local-only)" not in model["branch"]:
                 result = subprocess.run(
                     ["git", "cat-file", "-e", f"{sha}:{object_path}"],
                     cwd=repo_root,
@@ -272,6 +272,12 @@ def verify(
     )
     evidence_count = verify_evidence_objects(repo_root, models, resolve_evidence)
     require(evidence_count == 88, "evidence record count drift")
+    local_only_evidence = sum(
+        len(model["evidence"])
+        for model in models
+        if "(local-only)" in model["branch"]
+    )
+    require(local_only_evidence == 9, "local-only evidence count drift")
 
     expected_csv = inventory_csv_text(inventory)
     actual_csv = (root / "prior_experiment_inventory.csv").read_text(encoding="utf-8")
@@ -466,6 +472,8 @@ def verify(
     return {
         "models": len(models),
         "evidence": evidence_count,
+        "remote_evidence": evidence_count - local_only_evidence,
+        "local_only_snapshot_evidence": local_only_evidence,
         "observables": len(coverage_rows),
         "literature_sources": len(sources),
         "candidates": len(scorecard["candidates"]),

@@ -25,6 +25,11 @@ configuration and a retained terminal verdict or metric where one exists.
 Infrastructure-only TRACE/R2C and synthetic-simulator branches were indexed
 but were not counted as models. Early code-only concepts are retained and
 labeled as such rather than being assigned a terminal scientific verdict.
+Of 88 SHA/path evidence links, 79 belong to remote-preserved objects and are
+resolved by the fresh-clone verifier. Nine links belong to four explicitly
+labeled local-only historical branches; their full SHA/path provenance is
+preserved as a source-repository snapshot because unrelated local refs are
+not transferred when this audit branch is pushed.
 
 The central distinction is between:
 

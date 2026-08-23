@@ -8,6 +8,6 @@ test_selected_model_contradiction_is_detected (tests.test_texbat_first_spoofing_
 test_tuni_attack_access_tamper_is_detected (tests.test_texbat_first_spoofing_model_design_audit.TexbatFirstDesignAuditVerifierTest.test_tuni_attack_access_tamper_is_detected) ... ok
 
 ----------------------------------------------------------------------
-Ran 8 tests in 0.056s
+Ran 8 tests in 0.044s
 
 OK

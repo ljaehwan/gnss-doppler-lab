@@ -41,6 +41,8 @@ class TexbatFirstDesignAuditVerifierTest(unittest.TestCase):
         summary = VERIFIER.verify(ARTIFACT, check_manifest=False)
         self.assertEqual(summary["models"], 33)
         self.assertEqual(summary["evidence"], 88)
+        self.assertEqual(summary["remote_evidence"], 79)
+        self.assertEqual(summary["local_only_snapshot_evidence"], 9)
         self.assertEqual(summary["eligible_candidates"], 0)
 
     def test_prior_final_verdict_misread_is_detected(self) -> None:
