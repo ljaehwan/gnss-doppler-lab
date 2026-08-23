@@ -1,0 +1,1318 @@
+{
+  "balancing": {
+    "method": "minority count within each fold/role/power; majority chosen by ascending SHA-256 rank",
+    "random_resampling": false
+  },
+  "block_size_2048": {
+    "executable": false,
+    "reason": "support cells insufficient by frozen contract"
+  },
+  "coverage": {
+    "all_label_indices_covered_by_primary_or_exclusion": true,
+    "primary_excluded_unique_indices": 32598,
+    "primary_unique_eligible_indices": 3588
+  },
+  "forbidden_claims": [
+    "clean-versus-spoof detector success",
+    "general GNSS spoofing detector success",
+    "READY_FOR_WCL",
+    "recording-independent generalization"
+  ],
+  "iq_feature_bytes_read": 0,
+  "label_file_sha256": {
+    "test_crpa_1.txt": "ddeced3f02b3f1354a492885a787a9e9e01d6e098ec68af324e8efc0e3a23d11",
+    "test_crpa_2.txt": "1def42ddcc53e79d6906958a4d71766275433f371e2390407d6b56f7e95fdbaa",
+    "train_crpa_1.txt": "e2bd68ecf96068979a92fdd482b1539c72f74eb415016518ce4b2f5ca94c24f1",
+    "train_crpa_2.txt": "8bc430499417cdb66bdd099ab75456f6f6f9f67af7e69977bc7718636c887283"
+  },
+  "label_inputs_used": [
+    "sample_index",
+    "Area",
+    "transmit_power",
+    "class label for binary cell",
+    "block occupancy"
+  ],
+  "label_row_count": 36186,
+  "models": {
+    "M0": "mean and per-channel received log-power; no transmit-power metadata",
+    "M1": "channel-0 amplitude statistics and 16-bin normalized spectrum; no absolute phase",
+    "M2": "calibration-free eigenvalue fractions/effective rank/lambda1/trace/sorted coherence magnitudes",
+    "M3": "M2 plus six complex-coherence real/imaginary pairs; diagnostic only"
+  },
+  "numerical_invariance": {
+    "all_combinations_required": true,
+    "atol": 1e-12,
+    "gains": [
+      0.1,
+      1.0,
+      3.7,
+      10.0
+    ],
+    "phases_radians": [
+      0.0,
+      0.37,
+      1.123,
+      2.9
+    ],
+    "rtol": 1e-10
+  },
+  "pipeline": {
+    "bootstrap_replicates": 2000,
+    "bootstrap_unit": "test group_key block",
+    "classifier": {
+      "C": 1.0,
+      "max_iter": 2000,
+      "penalty": "l2",
+      "random_state": 20250823,
+      "solver": "liblinear",
+      "type": "LogisticRegression"
+    },
+    "scaler": "StandardScaler fit on train fold only",
+    "test_label_threshold_use": false,
+    "threshold": 0.5
+  },
+  "primary": {
+    "audit": {
+      "feasible": true,
+      "inventory": [
+        {
+          "binary_class": "negative",
+          "block_count": 50,
+          "blocks": [
+            {
+              "group_key": 354,
+              "sample_count": 32
+            },
+            {
+              "group_key": 355,
+              "sample_count": 32
+            },
+            {
+              "group_key": 356,
+              "sample_count": 32
+            },
+            {
+              "group_key": 357,
+              "sample_count": 32
+            },
+            {
+              "group_key": 358,
+              "sample_count": 17
+            },
+            {
+              "group_key": 367,
+              "sample_count": 13
+            },
+            {
+              "group_key": 368,
+              "sample_count": 32
+            },
+            {
+              "group_key": 369,
+              "sample_count": 1
+            },
+            {
+              "group_key": 432,
+              "sample_count": 3
+            },
+            {
+              "group_key": 433,
+              "sample_count": 32
+            },
+            {
+              "group_key": 434,
+              "sample_count": 32
+            },
+            {
+              "group_key": 435,
+              "sample_count": 32
+            },
+            {
+              "group_key": 436,
+              "sample_count": 32
+            },
+            {
+              "group_key": 437,
+              "sample_count": 10
+            },
+            {
+              "group_key": 478,
+              "sample_count": 7
+            },
+            {
+              "group_key": 479,
+              "sample_count": 32
+            },
+            {
+              "group_key": 480,
+              "sample_count": 32
+            },
+            {
+              "group_key": 481,
+              "sample_count": 32
+            },
+            {
+              "group_key": 482,
+              "sample_count": 32
+            },
+            {
+              "group_key": 483,
+              "sample_count": 5
+            },
+            {
+              "group_key": 575,
+              "sample_count": 17
+            },
+            {
+              "group_key": 576,
+              "sample_count": 32
+            },
+            {
+              "group_key": 577,
+              "sample_count": 32
+            },
+            {
+              "group_key": 578,
+              "sample_count": 32
+            },
+            {
+              "group_key": 579,
+              "sample_count": 32
+            },
+            {
+              "group_key": 580,
+              "sample_count": 7
+            },
+            {
+              "group_key": 590,
+              "sample_count": 21
+            },
+            {
+              "group_key": 591,
+              "sample_count": 32
+            },
+            {
+              "group_key": 592,
+              "sample_count": 32
+            },
+            {
+              "group_key": 593,
+              "sample_count": 32
+            },
+            {
+              "group_key": 594,
+              "sample_count": 32
+            },
+            {
+              "group_key": 595,
+              "sample_count": 9
+            },
+            {
+              "group_key": 615,
+              "sample_count": 8
+            },
+            {
+              "group_key": 616,
+              "sample_count": 32
+            },
+            {
+              "group_key": 617,
+              "sample_count": 32
+            },
+            {
+              "group_key": 618,
+              "sample_count": 32
+            },
+            {
+              "group_key": 619,
+              "sample_count": 32
+            },
+            {
+              "group_key": 620,
+              "sample_count": 28
+            },
+            {
+              "group_key": 698,
+              "sample_count": 20
+            },
+            {
+              "group_key": 699,
+              "sample_count": 32
+            },
+            {
+              "group_key": 700,
+              "sample_count": 32
+            },
+            {
+              "group_key": 701,
+              "sample_count": 32
+            },
+            {
+              "group_key": 702,
+              "sample_count": 32
+            },
+            {
+              "group_key": 703,
+              "sample_count": 22
+            },
+            {
+              "group_key": 724,
+              "sample_count": 29
+            },
+            {
+              "group_key": 725,
+              "sample_count": 32
+            },
+            {
+              "group_key": 726,
+              "sample_count": 32
+            },
+            {
+              "group_key": 727,
+              "sample_count": 32
+            },
+            {
+              "group_key": 728,
+              "sample_count": 32
+            },
+            {
+              "group_key": 729,
+              "sample_count": 16
+            }
+          ],
+          "power_dbm": 30,
+          "sample_count": 1289
+        },
+        {
+          "binary_class": "positive",
+          "block_count": 6,
+          "blocks": [
+            {
+              "group_key": 112,
+              "sample_count": 13
+            },
+            {
+              "group_key": 113,
+              "sample_count": 32
+            },
+            {
+              "group_key": 114,
+              "sample_count": 17
+            },
+            {
+              "group_key": 120,
+              "sample_count": 17
+            },
+            {
+              "group_key": 121,
+              "sample_count": 32
+            },
+            {
+              "group_key": 122,
+              "sample_count": 17
+            }
+          ],
+          "power_dbm": 30,
+          "sample_count": 128
+        },
+        {
+          "binary_class": "negative",
+          "block_count": 6,
+          "blocks": [
+            {
+              "group_key": 95,
+              "sample_count": 28
+            },
+            {
+              "group_key": 96,
+              "sample_count": 32
+            },
+            {
+              "group_key": 97,
+              "sample_count": 32
+            },
+            {
+              "group_key": 98,
+              "sample_count": 32
+            },
+            {
+              "group_key": 99,
+              "sample_count": 32
+            },
+            {
+              "group_key": 100,
+              "sample_count": 8
+            }
+          ],
+          "power_dbm": 40,
+          "sample_count": 164
+        },
+        {
+          "binary_class": "positive",
+          "block_count": 69,
+          "blocks": [
+            {
+              "group_key": 84,
+              "sample_count": 3
+            },
+            {
+              "group_key": 85,
+              "sample_count": 32
+            },
+            {
+              "group_key": 86,
+              "sample_count": 32
+            },
+            {
+              "group_key": 87,
+              "sample_count": 32
+            },
+            {
+              "group_key": 88,
+              "sample_count": 32
+            },
+            {
+              "group_key": 89,
+              "sample_count": 32
+            },
+            {
+              "group_key": 90,
+              "sample_count": 32
+            },
+            {
+              "group_key": 91,
+              "sample_count": 32
+            },
+            {
+              "group_key": 92,
+              "sample_count": 32
+            },
+            {
+              "group_key": 93,
+              "sample_count": 32
+            },
+            {
+              "group_key": 94,
+              "sample_count": 32
+            },
+            {
+              "group_key": 95,
+              "sample_count": 4
+            },
+            {
+              "group_key": 100,
+              "sample_count": 24
+            },
+            {
+              "group_key": 101,
+              "sample_count": 32
+            },
+            {
+              "group_key": 102,
+              "sample_count": 32
+            },
+            {
+              "group_key": 103,
+              "sample_count": 32
+            },
+            {
+              "group_key": 104,
+              "sample_count": 32
+            },
+            {
+              "group_key": 105,
+              "sample_count": 32
+            },
+            {
+              "group_key": 106,
+              "sample_count": 32
+            },
+            {
+              "group_key": 107,
+              "sample_count": 32
+            },
+            {
+              "group_key": 108,
+              "sample_count": 32
+            },
+            {
+              "group_key": 109,
+              "sample_count": 32
+            },
+            {
+              "group_key": 110,
+              "sample_count": 17
+            },
+            {
+              "group_key": 116,
+              "sample_count": 14
+            },
+            {
+              "group_key": 117,
+              "sample_count": 32
+            },
+            {
+              "group_key": 118,
+              "sample_count": 19
+            },
+            {
+              "group_key": 128,
+              "sample_count": 22
+            },
+            {
+              "group_key": 129,
+              "sample_count": 32
+            },
+            {
+              "group_key": 130,
+              "sample_count": 32
+            },
+            {
+              "group_key": 131,
+              "sample_count": 32
+            },
+            {
+              "group_key": 132,
+              "sample_count": 32
+            },
+            {
+              "group_key": 133,
+              "sample_count": 32
+            },
+            {
+              "group_key": 134,
+              "sample_count": 32
+            },
+            {
+              "group_key": 135,
+              "sample_count": 32
+            },
+            {
+              "group_key": 136,
+              "sample_count": 32
+            },
+            {
+              "group_key": 137,
+              "sample_count": 32
+            },
+            {
+              "group_key": 138,
+              "sample_count": 32
+            },
+            {
+              "group_key": 139,
+              "sample_count": 32
+            },
+            {
+              "group_key": 140,
+              "sample_count": 32
+            },
+            {
+              "group_key": 141,
+              "sample_count": 32
+            },
+            {
+              "group_key": 142,
+              "sample_count": 32
+            },
+            {
+              "group_key": 143,
+              "sample_count": 32
+            },
+            {
+              "group_key": 144,
+              "sample_count": 32
+            },
+            {
+              "group_key": 145,
+              "sample_count": 32
+            },
+            {
+              "group_key": 146,
+              "sample_count": 32
+            },
+            {
+              "group_key": 147,
+              "sample_count": 32
+            },
+            {
+              "group_key": 148,
+              "sample_count": 32
+            },
+            {
+              "group_key": 149,
+              "sample_count": 32
+            },
+            {
+              "group_key": 150,
+              "sample_count": 32
+            },
+            {
+              "group_key": 151,
+              "sample_count": 32
+            },
+            {
+              "group_key": 152,
+              "sample_count": 32
+            },
+            {
+              "group_key": 153,
+              "sample_count": 32
+            },
+            {
+              "group_key": 154,
+              "sample_count": 32
+            },
+            {
+              "group_key": 155,
+              "sample_count": 7
+            },
+            {
+              "group_key": 206,
+              "sample_count": 14
+            },
+            {
+              "group_key": 207,
+              "sample_count": 32
+            },
+            {
+              "group_key": 208,
+              "sample_count": 32
+            },
+            {
+              "group_key": 209,
+              "sample_count": 32
+            },
+            {
+              "group_key": 210,
+              "sample_count": 32
+            },
+            {
+              "group_key": 211,
+              "sample_count": 25
+            },
+            {
+              "group_key": 227,
+              "sample_count": 27
+            },
+            {
+              "group_key": 228,
+              "sample_count": 32
+            },
+            {
+              "group_key": 229,
+              "sample_count": 32
+            },
+            {
+              "group_key": 230,
+              "sample_count": 32
+            },
+            {
+              "group_key": 231,
+              "sample_count": 32
+            },
+            {
+              "group_key": 232,
+              "sample_count": 32
+            },
+            {
+              "group_key": 233,
+              "sample_count": 32
+            },
+            {
+              "group_key": 234,
+              "sample_count": 32
+            },
+            {
+              "group_key": 235,
+              "sample_count": 7
+            }
+          ],
+          "power_dbm": 40,
+          "sample_count": 2007
+        }
+      ],
+      "search": [
+        {
+          "combinations_checked": 1,
+          "fold": 0,
+          "found": true
+        },
+        {
+          "combinations_checked": 1,
+          "fold": 1,
+          "found": true
+        },
+        {
+          "combinations_checked": 1,
+          "fold": 2,
+          "found": true
+        }
+      ],
+      "test_blocks_disjoint_across_folds": true
+    },
+    "config": {
+      "area": 1,
+      "block_size": 32,
+      "folds": 3,
+      "group_key": "floor(sample_index / 32)",
+      "guard_blocks_each_side": 1,
+      "name": "primary",
+      "powers_dbm": [
+        30,
+        40
+      ]
+    },
+    "folds": [
+      {
+        "cell_available_counts": [
+          {
+            "binary_class": "negative",
+            "power_dbm": 30,
+            "test_available": 32,
+            "train_available": 1243
+          },
+          {
+            "binary_class": "positive",
+            "power_dbm": 30,
+            "test_available": 17,
+            "train_available": 79
+          },
+          {
+            "binary_class": "negative",
+            "power_dbm": 40,
+            "test_available": 28,
+            "train_available": 104
+          },
+          {
+            "binary_class": "positive",
+            "power_dbm": 40,
+            "test_available": 36,
+            "train_available": 1875
+          }
+        ],
+        "combinations_checked": 1,
+        "fold": 0,
+        "guard_blocks": [
+          89,
+          91,
+          94,
+          96,
+          121,
+          123,
+          367,
+          369
+        ],
+        "test_blocks": [
+          90,
+          95,
+          122,
+          368
+        ]
+      },
+      {
+        "cell_available_counts": [
+          {
+            "binary_class": "negative",
+            "power_dbm": 30,
+            "test_available": 32,
+            "train_available": 1193
+          },
+          {
+            "binary_class": "positive",
+            "power_dbm": 30,
+            "test_available": 32,
+            "train_available": 62
+          },
+          {
+            "binary_class": "negative",
+            "power_dbm": 40,
+            "test_available": 32,
+            "train_available": 92
+          },
+          {
+            "binary_class": "positive",
+            "power_dbm": 40,
+            "test_available": 32,
+            "train_available": 1887
+          }
+        ],
+        "combinations_checked": 1,
+        "fold": 1,
+        "guard_blocks": [
+          87,
+          89,
+          98,
+          100,
+          120,
+          122,
+          480,
+          482
+        ],
+        "test_blocks": [
+          88,
+          99,
+          121,
+          481
+        ]
+      },
+      {
+        "cell_available_counts": [
+          {
+            "binary_class": "negative",
+            "power_dbm": 30,
+            "test_available": 32,
+            "train_available": 1203
+          },
+          {
+            "binary_class": "positive",
+            "power_dbm": 30,
+            "test_available": 13,
+            "train_available": 83
+          },
+          {
+            "binary_class": "negative",
+            "power_dbm": 40,
+            "test_available": 8,
+            "train_available": 124
+          },
+          {
+            "binary_class": "positive",
+            "power_dbm": 40,
+            "test_available": 56,
+            "train_available": 1855
+          }
+        ],
+        "combinations_checked": 1,
+        "fold": 2,
+        "guard_blocks": [
+          99,
+          101,
+          111,
+          113,
+          143,
+          145,
+          701,
+          703
+        ],
+        "test_blocks": [
+          100,
+          112,
+          144,
+          702
+        ]
+      }
+    ]
+  },
+  "seed": 20250823,
+  "sensitivity_a": {
+    "audit": {
+      "feasible": true,
+      "inventory": [
+        {
+          "binary_class": "negative",
+          "block_count": 20,
+          "blocks": [
+            {
+              "group_key": 88,
+              "sample_count": 64
+            },
+            {
+              "group_key": 89,
+              "sample_count": 81
+            },
+            {
+              "group_key": 91,
+              "sample_count": 13
+            },
+            {
+              "group_key": 92,
+              "sample_count": 33
+            },
+            {
+              "group_key": 108,
+              "sample_count": 99
+            },
+            {
+              "group_key": 109,
+              "sample_count": 42
+            },
+            {
+              "group_key": 119,
+              "sample_count": 39
+            },
+            {
+              "group_key": 120,
+              "sample_count": 101
+            },
+            {
+              "group_key": 143,
+              "sample_count": 17
+            },
+            {
+              "group_key": 144,
+              "sample_count": 128
+            },
+            {
+              "group_key": 145,
+              "sample_count": 7
+            },
+            {
+              "group_key": 147,
+              "sample_count": 53
+            },
+            {
+              "group_key": 148,
+              "sample_count": 105
+            },
+            {
+              "group_key": 153,
+              "sample_count": 8
+            },
+            {
+              "group_key": 154,
+              "sample_count": 128
+            },
+            {
+              "group_key": 155,
+              "sample_count": 28
+            },
+            {
+              "group_key": 174,
+              "sample_count": 52
+            },
+            {
+              "group_key": 175,
+              "sample_count": 118
+            },
+            {
+              "group_key": 181,
+              "sample_count": 125
+            },
+            {
+              "group_key": 182,
+              "sample_count": 48
+            }
+          ],
+          "power_dbm": 30,
+          "sample_count": 1289
+        },
+        {
+          "binary_class": "positive",
+          "block_count": 2,
+          "blocks": [
+            {
+              "group_key": 28,
+              "sample_count": 62
+            },
+            {
+              "group_key": 30,
+              "sample_count": 66
+            }
+          ],
+          "power_dbm": 30,
+          "sample_count": 128
+        },
+        {
+          "binary_class": "negative",
+          "block_count": 3,
+          "blocks": [
+            {
+              "group_key": 23,
+              "sample_count": 28
+            },
+            {
+              "group_key": 24,
+              "sample_count": 128
+            },
+            {
+              "group_key": 25,
+              "sample_count": 8
+            }
+          ],
+          "power_dbm": 40,
+          "sample_count": 164
+        },
+        {
+          "binary_class": "positive",
+          "block_count": 19,
+          "blocks": [
+            {
+              "group_key": 21,
+              "sample_count": 99
+            },
+            {
+              "group_key": 22,
+              "sample_count": 128
+            },
+            {
+              "group_key": 23,
+              "sample_count": 100
+            },
+            {
+              "group_key": 25,
+              "sample_count": 120
+            },
+            {
+              "group_key": 26,
+              "sample_count": 128
+            },
+            {
+              "group_key": 27,
+              "sample_count": 81
+            },
+            {
+              "group_key": 29,
+              "sample_count": 65
+            },
+            {
+              "group_key": 32,
+              "sample_count": 118
+            },
+            {
+              "group_key": 33,
+              "sample_count": 128
+            },
+            {
+              "group_key": 34,
+              "sample_count": 128
+            },
+            {
+              "group_key": 35,
+              "sample_count": 128
+            },
+            {
+              "group_key": 36,
+              "sample_count": 128
+            },
+            {
+              "group_key": 37,
+              "sample_count": 128
+            },
+            {
+              "group_key": 38,
+              "sample_count": 103
+            },
+            {
+              "group_key": 51,
+              "sample_count": 46
+            },
+            {
+              "group_key": 52,
+              "sample_count": 121
+            },
+            {
+              "group_key": 56,
+              "sample_count": 27
+            },
+            {
+              "group_key": 57,
+              "sample_count": 128
+            },
+            {
+              "group_key": 58,
+              "sample_count": 103
+            }
+          ],
+          "power_dbm": 40,
+          "sample_count": 2007
+        }
+      ],
+      "search": [
+        {
+          "combinations_checked": 1,
+          "fold": 0,
+          "found": true
+        },
+        {
+          "combinations_checked": 324,
+          "fold": 1,
+          "found": true
+        }
+      ],
+      "test_blocks_disjoint_across_folds": true
+    },
+    "config": {
+      "area": 1,
+      "block_size": 128,
+      "folds": 2,
+      "group_key": "floor(sample_index / 128)",
+      "guard_blocks_each_side": 1,
+      "name": "sensitivity_a",
+      "powers_dbm": [
+        30,
+        40
+      ]
+    },
+    "folds": [
+      {
+        "cell_available_counts": [
+          {
+            "binary_class": "negative",
+            "power_dbm": 30,
+            "test_available": 118,
+            "train_available": 1119
+          },
+          {
+            "binary_class": "positive",
+            "power_dbm": 30,
+            "test_available": 62,
+            "train_available": 66
+          },
+          {
+            "binary_class": "negative",
+            "power_dbm": 40,
+            "test_available": 8,
+            "train_available": 28
+          },
+          {
+            "binary_class": "positive",
+            "power_dbm": 40,
+            "test_available": 248,
+            "train_available": 1613
+          }
+        ],
+        "combinations_checked": 1,
+        "fold": 0,
+        "guard_blocks": [
+          24,
+          27,
+          29,
+          174,
+          176
+        ],
+        "test_blocks": [
+          25,
+          26,
+          28,
+          175
+        ]
+      },
+      {
+        "cell_available_counts": [
+          {
+            "binary_class": "negative",
+            "power_dbm": 30,
+            "test_available": 64,
+            "train_available": 1144
+          },
+          {
+            "binary_class": "positive",
+            "power_dbm": 30,
+            "test_available": 66,
+            "train_available": 62
+          },
+          {
+            "binary_class": "negative",
+            "power_dbm": 40,
+            "test_available": 28,
+            "train_available": 8
+          },
+          {
+            "binary_class": "positive",
+            "power_dbm": 40,
+            "test_available": 228,
+            "train_available": 1355
+          }
+        ],
+        "combinations_checked": 324,
+        "fold": 1,
+        "guard_blocks": [
+          22,
+          24,
+          29,
+          31,
+          36,
+          38,
+          87,
+          89
+        ],
+        "test_blocks": [
+          23,
+          30,
+          37,
+          88
+        ]
+      }
+    ]
+  },
+  "sensitivity_b": {
+    "audit": {
+      "feasible": false,
+      "inventory": [
+        {
+          "binary_class": "negative",
+          "block_count": 2,
+          "blocks": [
+            {
+              "group_key": 4,
+              "sample_count": 10
+            },
+            {
+              "group_key": 5,
+              "sample_count": 10
+            }
+          ],
+          "power_dbm": 25,
+          "sample_count": 20
+        },
+        {
+          "binary_class": "positive",
+          "block_count": 17,
+          "blocks": [
+            {
+              "group_key": 6,
+              "sample_count": 47
+            },
+            {
+              "group_key": 7,
+              "sample_count": 83
+            },
+            {
+              "group_key": 18,
+              "sample_count": 29
+            },
+            {
+              "group_key": 19,
+              "sample_count": 512
+            },
+            {
+              "group_key": 20,
+              "sample_count": 512
+            },
+            {
+              "group_key": 21,
+              "sample_count": 512
+            },
+            {
+              "group_key": 22,
+              "sample_count": 354
+            },
+            {
+              "group_key": 23,
+              "sample_count": 282
+            },
+            {
+              "group_key": 25,
+              "sample_count": 402
+            },
+            {
+              "group_key": 26,
+              "sample_count": 512
+            },
+            {
+              "group_key": 27,
+              "sample_count": 371
+            },
+            {
+              "group_key": 28,
+              "sample_count": 512
+            },
+            {
+              "group_key": 29,
+              "sample_count": 473
+            },
+            {
+              "group_key": 30,
+              "sample_count": 411
+            },
+            {
+              "group_key": 31,
+              "sample_count": 512
+            },
+            {
+              "group_key": 32,
+              "sample_count": 512
+            },
+            {
+              "group_key": 33,
+              "sample_count": 284
+            }
+          ],
+          "power_dbm": 25,
+          "sample_count": 6320
+        },
+        {
+          "binary_class": "negative",
+          "block_count": 2,
+          "blocks": [
+            {
+              "group_key": 5,
+              "sample_count": 28
+            },
+            {
+              "group_key": 6,
+              "sample_count": 136
+            }
+          ],
+          "power_dbm": 40,
+          "sample_count": 164
+        },
+        {
+          "binary_class": "positive",
+          "block_count": 8,
+          "blocks": [
+            {
+              "group_key": 5,
+              "sample_count": 327
+            },
+            {
+              "group_key": 6,
+              "sample_count": 329
+            },
+            {
+              "group_key": 7,
+              "sample_count": 65
+            },
+            {
+              "group_key": 8,
+              "sample_count": 502
+            },
+            {
+              "group_key": 9,
+              "sample_count": 359
+            },
+            {
+              "group_key": 12,
+              "sample_count": 46
+            },
+            {
+              "group_key": 13,
+              "sample_count": 121
+            },
+            {
+              "group_key": 14,
+              "sample_count": 258
+            }
+          ],
+          "power_dbm": 40,
+          "sample_count": 2007
+        }
+      ],
+      "reason": "no block-disjoint train/test allocation retains every power/class cell after guard",
+      "search": [
+        {
+          "combinations_checked": 544,
+          "fold": 0,
+          "found": false
+        }
+      ]
+    },
+    "config": {
+      "area": 1,
+      "block_size": 512,
+      "folds": 2,
+      "group_key": "floor(sample_index / 512)",
+      "guard_blocks_each_side": 1,
+      "name": "sensitivity_b",
+      "powers_dbm": [
+        25,
+        40
+      ]
+    },
+    "folds": []
+  },
+  "source_commit": "df98657cf1a50814e169bcd4f91a3b555c9025c0",
+  "stage0b_class_spatial_results_used": false,
+  "status": "LABEL_ONLY_DESIGN_FREEZE_PRE_FEATURE"
+}
