@@ -1,0 +1,9 @@
+shortcut,available_for_crpa,evidence,gate_status
+transmit_power,true,"Area1 spoofish/non-spoof overlap: 15,25,30,35,40 dBm; Area2 overlap: none",PARTIAL_CONFOUND
+VGA,false,not present in CRPA split,UNKNOWN_NOT_ZERO
+band,false,not present in CRPA split,UNKNOWN_NOT_ZERO
+bandwidth,true,spoof/meacon commonly encoded as -1; many jammer classes have class-specific widths,SEVERE_CONFOUND
+area,true,Meacon only Area1; Sweep only Area1; Chirp/ChirpB/Triang only Area2,SEVERE_CONFOUND
+day,false,not bound to CRPA indices,UNKNOWN_NOT_ZERO
+transmitter_id,false,not bound to CRPA indices,UNKNOWN_NOT_ZERO
+clean_class,false,0 rows,MISSING_CONTROL

@@ -1,0 +1,390 @@
+{
+  "crpa": {
+    "area": {
+      "1": {
+        "bandwidth_counts": [
+          {
+            "bandwidth_mhz": -1.0,
+            "count": 16855
+          },
+          {
+            "bandwidth_mhz": 0.1,
+            "count": 1353
+          },
+          {
+            "bandwidth_mhz": 10.0,
+            "count": 658
+          },
+          {
+            "bandwidth_mhz": 20.0,
+            "count": 3890
+          }
+        ],
+        "class_counts": [
+          {
+            "class": "CW",
+            "class_id": 0,
+            "count": 1353
+          },
+          {
+            "class": "Sweep",
+            "class_id": 1,
+            "count": 661
+          },
+          {
+            "class": "Prn",
+            "class_id": 2,
+            "count": 3887
+          },
+          {
+            "class": "Meac",
+            "class_id": 3,
+            "count": 2554
+          },
+          {
+            "class": "Spoof",
+            "class_id": 4,
+            "count": 14301
+          }
+        ],
+        "count": 22756,
+        "power_counts": [
+          {
+            "count": 996,
+            "power_dbm": -25.0
+          },
+          {
+            "count": 1315,
+            "power_dbm": -20.0
+          },
+          {
+            "count": 153,
+            "power_dbm": -5.0
+          },
+          {
+            "count": 1635,
+            "power_dbm": 0.0
+          },
+          {
+            "count": 329,
+            "power_dbm": 5.0
+          },
+          {
+            "count": 317,
+            "power_dbm": 10.0
+          },
+          {
+            "count": 10,
+            "power_dbm": 11.0
+          },
+          {
+            "count": 9,
+            "power_dbm": 13.0
+          },
+          {
+            "count": 2303,
+            "power_dbm": 15.0
+          },
+          {
+            "count": 10,
+            "power_dbm": 17.0
+          },
+          {
+            "count": 20,
+            "power_dbm": 19.0
+          },
+          {
+            "count": 417,
+            "power_dbm": 20.0
+          },
+          {
+            "count": 20,
+            "power_dbm": 21.0
+          },
+          {
+            "count": 20,
+            "power_dbm": 23.0
+          },
+          {
+            "count": 6340,
+            "power_dbm": 25.0
+          },
+          {
+            "count": 19,
+            "power_dbm": 27.0
+          },
+          {
+            "count": 819,
+            "power_dbm": 28.0
+          },
+          {
+            "count": 20,
+            "power_dbm": 29.0
+          },
+          {
+            "count": 1417,
+            "power_dbm": 30.0
+          },
+          {
+            "count": 21,
+            "power_dbm": 31.0
+          },
+          {
+            "count": 20,
+            "power_dbm": 33.0
+          },
+          {
+            "count": 135,
+            "power_dbm": 35.0
+          },
+          {
+            "count": 10,
+            "power_dbm": 37.0
+          },
+          {
+            "count": 10,
+            "power_dbm": 39.0
+          },
+          {
+            "count": 2171,
+            "power_dbm": 40.0
+          },
+          {
+            "count": 10,
+            "power_dbm": 41.0
+          },
+          {
+            "count": 16,
+            "power_dbm": 43.0
+          },
+          {
+            "count": 21,
+            "power_dbm": 45.0
+          },
+          {
+            "count": 3173,
+            "power_dbm": 47.0
+          },
+          {
+            "count": 1000,
+            "power_dbm": 50.0
+          }
+        ],
+        "sample_index_max": 24163,
+        "sample_index_min": 0
+      },
+      "2": {
+        "bandwidth_counts": [
+          {
+            "bandwidth_mhz": -1.0,
+            "count": 337
+          },
+          {
+            "bandwidth_mhz": 0.0,
+            "count": 330
+          },
+          {
+            "bandwidth_mhz": 0.1,
+            "count": 795
+          },
+          {
+            "bandwidth_mhz": 2.0,
+            "count": 1195
+          },
+          {
+            "bandwidth_mhz": 20.0,
+            "count": 3004
+          },
+          {
+            "bandwidth_mhz": 26.0,
+            "count": 397
+          },
+          {
+            "bandwidth_mhz": 28.0,
+            "count": 399
+          },
+          {
+            "bandwidth_mhz": 30.0,
+            "count": 2984
+          },
+          {
+            "bandwidth_mhz": 77.0,
+            "count": 400
+          },
+          {
+            "bandwidth_mhz": 80.0,
+            "count": 2049
+          },
+          {
+            "bandwidth_mhz": 81.0,
+            "count": 251
+          },
+          {
+            "bandwidth_mhz": 85.0,
+            "count": 1050
+          },
+          {
+            "bandwidth_mhz": 87.0,
+            "count": 239
+          }
+        ],
+        "class_counts": [
+          {
+            "class": "CW",
+            "class_id": 0,
+            "count": 795
+          },
+          {
+            "class": "Prn",
+            "class_id": 2,
+            "count": 2390
+          },
+          {
+            "class": "Spoof",
+            "class_id": 4,
+            "count": 1168
+          },
+          {
+            "class": "Chirp",
+            "class_id": 5,
+            "count": 6385
+          },
+          {
+            "class": "ChirpB",
+            "class_id": 6,
+            "count": 1050
+          },
+          {
+            "class": "Triang",
+            "class_id": 7,
+            "count": 1642
+          }
+        ],
+        "count": 13430,
+        "power_counts": [
+          {
+            "count": 1388,
+            "power_dbm": -50.0
+          },
+          {
+            "count": 831,
+            "power_dbm": 5.0
+          },
+          {
+            "count": 337,
+            "power_dbm": 10.0
+          },
+          {
+            "count": 791,
+            "power_dbm": 15.0
+          },
+          {
+            "count": 1782,
+            "power_dbm": 20.0
+          },
+          {
+            "count": 1902,
+            "power_dbm": 25.0
+          },
+          {
+            "count": 3019,
+            "power_dbm": 30.0
+          },
+          {
+            "count": 3380,
+            "power_dbm": 35.0
+          }
+        ],
+        "sample_index_max": 42672,
+        "sample_index_min": 24418
+      }
+    },
+    "binary_task_counts": {
+      "nondeceptive_jammer": 18163,
+      "spoof_or_meacon": 18023
+    },
+    "clean_no_transmission_count": 0,
+    "direct_fields": [
+      "sample_index",
+      "type",
+      "transmit power",
+      "bandwidth"
+    ],
+    "indices_absent_from_public_splits": 6487,
+    "inherited_field": [
+      "area from split filename"
+    ],
+    "multi_emitter_classes_present_in_split": [],
+    "released_label_dictionary": {
+      "0": "CW",
+      "1": "Sweep",
+      "10": "Mod",
+      "11": "ChirpM",
+      "12": "ChirpMS",
+      "13": "FmS",
+      "14": "Chirp,Spoof",
+      "15": "Chirp,Prn",
+      "16": "Chirp,Prn,Triang",
+      "2": "Prn",
+      "3": "Meac",
+      "4": "Spoof",
+      "5": "Chirp",
+      "6": "ChirpB",
+      "7": "Triang",
+      "8": "Meac,Prn",
+      "9": "Meac,Spoof"
+    },
+    "rows": 36186,
+    "source_object_candidate_snapshots": 42673,
+    "spoof_meacon_vs_nonspoof_power_overlap_dbm": {
+      "1": [
+        15.0,
+        25.0,
+        30.0,
+        35.0,
+        40.0
+      ],
+      "2": []
+    },
+    "unique_sample_indices": 36186,
+    "unknown_fields": [
+      "date",
+      "time",
+      "E1/E5a band",
+      "VGA",
+      "jammer/spoofer ID",
+      "recording ID",
+      "snapshot cadence",
+      "start/end time",
+      "transmitter position",
+      "receiver position/orientation"
+    ]
+  },
+  "innosense_text_split_only": {
+    "1": {
+      "antenna_power_flag_counts": {
+        "0": 123420,
+        "1": 1225879
+      },
+      "band_counts": {
+        "1": 872779,
+        "5": 476520
+      },
+      "rows": 1349299
+    },
+    "2": {
+      "antenna_power_flag_counts": {
+        "1": 457993
+      },
+      "band_counts": {
+        "1": 457993
+      },
+      "rows": 457993
+    }
+  },
+  "receiver_counts": {
+    "CRPA": 36186,
+    "Innosense": 1807292
+  },
+  "unknown_is_not_zero": true
+}

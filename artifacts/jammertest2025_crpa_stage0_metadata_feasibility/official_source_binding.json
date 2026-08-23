@@ -1,0 +1,87 @@
+{
+  "audit_date": "2026-08-23",
+  "base_repository": {
+    "branch": "origin/research/texbat-first-spoofing-model-design-audit",
+    "commit": "88ef328eeead5053a3ba9c4bf7cc888a6de549fa",
+    "url": "https://github.com/ljaehwan/gnss-doppler-lab.git"
+  },
+  "dataset": {
+    "authors": [
+      {
+        "affiliation": null,
+        "name": "Heublein, Lucas",
+        "orcid": "0000-0001-6670-3698"
+      },
+      {
+        "affiliation": "Fraunhofer Institute for Integrated Circuits",
+        "name": "Vidal, Inigo Cortes"
+      },
+      {
+        "affiliation": null,
+        "name": "Feigl, Tobias",
+        "orcid": "0000-0002-3040-3543"
+      },
+      {
+        "affiliation": null,
+        "name": "Rügamer, Alexander",
+        "orcid": "0000-0002-5927-4685"
+      },
+      {
+        "affiliation": "Fraunhofer Institute for Integrated Circuits",
+        "name": "Ott, Felix",
+        "orcid": "0000-0002-4392-0830"
+      }
+    ],
+    "data_paper": {
+      "arxiv": "2608.15819",
+      "pdf_bytes": 15807845,
+      "pdf_sha256": "8eafa593694773e4cd1edb09b9e06423b813073db96d95d60f98bbb350f9f0d3",
+      "title": "Analyzing and Characterizing Multi-Source Interference Effects at Jammertest Norway 2025",
+      "url": "https://arxiv.org/abs/2608.15819"
+    },
+    "doi": "10.5281/zenodo.21332689",
+    "gitattributes_sha256": "423093dae1ddda586c1969afe107f3cabb20ffaf1c101f49610aa929afd44297",
+    "github_commit": "3b778a12147ded5c86c3edfc586b5de6ae6a67d7",
+    "github_ref": "refs/tags/dataset",
+    "github_url": "https://github.com/FelixOtt94/FraunhoferIIS_Jammertest2025",
+    "institution": "Fraunhofer Institute for Integrated Circuits IIS, Nürnberg, Germany",
+    "license_conflict": {
+      "repository_readme": "CC-BY-NC-SA-4.0",
+      "status": "CONFLICT_REQUIRES_PUBLISHER_CLARIFICATION",
+      "zenodo_structured_metadata": "cc-by-sa-4.0"
+    },
+    "publication_date": "2026-07-06",
+    "reader_sha256": "5d63b77591c079056d0d581fe6fe2c3ec195b0edc580c618fdfa5ea5ea02c57f",
+    "readme_sha256": "3541ea5bf997dfd0f4537047565de2aae4ecc950466ae3089571f90a6527d8b3",
+    "record_created": "2026-07-13T06:35:27.465845+00:00",
+    "record_id": 21332689,
+    "record_updated": "2026-07-13T09:39:01.124410+00:00",
+    "title": "Jammertest 2025 GNSS Interference Dataset",
+    "version": "dataset",
+    "zenodo_archive": {
+      "bytes": 5754417,
+      "checksum": "md5:23caa25bd6bb11aa3aa7f864f3588004",
+      "contains": "ordinary Git snapshot and LFS pointer text, not LFS payloads",
+      "name": "FelixOtt94/FraunhoferIIS_Jammertest2025-dataset.zip"
+    }
+  },
+  "transmission_plan": {
+    "commit": "1ab4ae055a291e69ea9476c88f3903b5cbd9bd64",
+    "commit_date": "2026-08-17T14:01:53+00:00",
+    "file_sha256": {
+      "LICENSE": "523e5f1beed83cf431a81ea48956f7f934875aacefba77faa72882295d713d15",
+      "README.md": "ccb4ee4543753f1e304972942dd0272594cd6a0df1e1aaf3846a311b25c33484",
+      "Testcatalog.pdf": "c8346c1dbeeac8d45b5e34b32d00a6952abddc73038a24f422c9d4397d2c3e6d",
+      "Transmissionplan.pdf": "a3f8c1cf9a0117607c0a5b3e9c79de8fa1438b8c2f9957aaa8bfb94d590b7479",
+      "equipment.json": "6eca9f1f1cbafd910563f161c9867df58e793516d0c05ce8acbfeae4fe49ad3f",
+      "plan-friday-2025-09-19.json": "bb10ae59b58674fc14fd1aa7b4ef2b1ff14626808a7c590a9bd10bd38c4880a5",
+      "plan-monday-2025-09-15.json": "9cb36dbd6d519c2c6f1f9b2b29ac43cb2d7415ab26e9171dc06e3ff0bad2b5fa",
+      "plan-thursday-2025-09-18.json": "64d8608e8b68dca70fb8cf2350b0770ee54d173ed6af5f9e12a4496f6ce7b1b8",
+      "plan-tuesday-2025-09-16.json": "105a3cb5f519d1e2a1a8d1e220dec7d1c44fc9060d7db6eadb7d3b91b894d173",
+      "plan-wednesday-2025-09-17.json": "ffbfec5b5cbae0202e7f568f708effc1549028c0a531beaa8c04992e8bc16714",
+      "testcatalog2025.json": "7221dcdeae64a3316eeeae369031d16931f9bef392cfd7f15b4b557f3ee56292"
+    },
+    "license": "MIT",
+    "url": "https://github.com/NPRA/jammertest-plan"
+  }
+}

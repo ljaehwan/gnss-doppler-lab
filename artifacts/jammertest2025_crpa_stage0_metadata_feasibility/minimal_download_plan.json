@@ -1,0 +1,23 @@
+{
+  "area_band_transmitter_constraints": "IMPOSSIBLE TO VERIFY: absent CRPA bindings",
+  "balanced_clean_spoof_nonspoof_plan": "IMPOSSIBLE: CRPA clean count is zero",
+  "clarification": "The contractual verdict name says H5, but the official CRPA payload is NPY. Downloading any HDF5 part would sample Innosense, not the array, and cannot close the CRPA phase gate.",
+  "crpa_is_single_lfs_object": true,
+  "current_authorization": "NOT_AUTHORIZED",
+  "download_command_intentionally_omitted": true,
+  "forty_gb_cap_bytes": 40000000000,
+  "reason": "direct relative-phase evidence and leakage-safe class/domain bindings are absent",
+  "single_bounded_object_required_for_next_schema_step": {
+    "area": "Area1 and Area2 shared object",
+    "band": "UNKNOWN",
+    "class": "all released CRPA classes; no clean class",
+    "gib": 1.3022767305374146,
+    "logical_size_bytes": 1398308992,
+    "official_lfs_object_granularity": "entire object; no arbitrary partial reconstruction",
+    "oid_sha256": "d869fa20d552288002e4d2a5b6c5d1300083a6348c01a956cd6a34ff232e0a3f",
+    "path": "all_crpa_files.npy",
+    "receiver": "CRPA",
+    "recording_group": "UNKNOWN"
+  },
+  "would_fit_size_cap": true
+}

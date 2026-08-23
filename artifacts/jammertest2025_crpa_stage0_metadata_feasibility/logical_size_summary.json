@@ -1,0 +1,39 @@
+{
+  "all_lfs_pointers": {
+    "bytes": 360208806569,
+    "count": 231,
+    "decimal_gb": 360.208806569
+  },
+  "arithmetic_verified": true,
+  "crpa": {
+    "area_size_status": "ONE_SHARED_OBJECT; cannot download by area",
+    "band_size": "UNKNOWN: CRPA split metadata has no band field",
+    "bytes": 1398308992,
+    "gib": 1.3022767305374146,
+    "object_count": 1,
+    "selected_split_snapshot_payload_estimate": {
+      "Area1": 745668608,
+      "Area2": 440074240,
+      "npy_header": 128,
+      "unselected_indices": 212566016
+    }
+  },
+  "innosense": {
+    "area_bytes": {
+      "Area1": 253162967514,
+      "Area2": 105647530063
+    },
+    "band_size": "UNKNOWN: band is stored per raw HDF5 label and objects mix labels",
+    "bytes": 358810497577,
+    "hdf5_object_count": 86,
+    "largest_reconstructed_hdf5": [
+      "dataset/Sample_Area2_0550000_0574999.h5",
+      6001467716
+    ],
+    "part_pointer_count": 230,
+    "smallest_reconstructed_hdf5": [
+      "dataset/Sample_Area1_1475000_1486589.h5",
+      2235735159
+    ]
+  }
+}

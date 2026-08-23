@@ -1,0 +1,34 @@
+{
+  "metrics": [
+    "macro AUROC",
+    "macro AUPRC",
+    "per-class recall",
+    "FPR at fixed TPR",
+    "matched-power performance",
+    "cross-area performance",
+    "cross-band performance",
+    "recording-level bootstrap CI"
+  ],
+  "missing_bindings": [
+    "recording ID",
+    "timestamp",
+    "day",
+    "transmitter ID",
+    "band",
+    "VGA",
+    "multi-emitter indicator",
+    "received power"
+  ],
+  "prohibited": "snapshot-level random split as primary evidence",
+  "required_evaluations": [
+    "transmitter/spoofer ID holdout",
+    "day holdout",
+    "Area1-to-Area2 and reverse external validation",
+    "E1-to-E5a and reverse transfer",
+    "matched transmit/received power and VGA",
+    "multi-emitter stress set"
+  ],
+  "required_group_key": "original recording/event, with all consecutive snapshots and derivative chunks kept together",
+  "status": "NOT_EXECUTABLE_WITH_RELEASED_CRPA_METADATA",
+  "threshold_rule": "set without test labels"
+}

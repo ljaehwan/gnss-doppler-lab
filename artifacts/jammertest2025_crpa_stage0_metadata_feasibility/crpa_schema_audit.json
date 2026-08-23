@@ -1,0 +1,60 @@
+{
+  "antenna_element_order": "UNKNOWN",
+  "array": "2x2 patch array",
+  "array_geometry_beyond_2x2": "UNKNOWN",
+  "automatic_gain_control": false,
+  "band_labels": "UNKNOWN for CRPA split; repository prose says E1/E5a campaign coverage",
+  "bandwidth_hz": 100000000,
+  "cable_receiver_channel_phase_offsets": "UNKNOWN",
+  "channel_representation": "four complex channels exposed as 8 float I/Q channels by reader",
+  "crpa_hdf5_dataset_name": "NOT_APPLICABLE: released CRPA payload is all_crpa_files.npy",
+  "crpa_original_adc_quantization": "UNKNOWN",
+  "crpa_released_storage_dtype": "complex64 candidate inferred from reader and exact LFS size; header not opened",
+  "element_spacing": "UNKNOWN",
+  "innosense_data_dtype": "8-bit quantized interleaved I/Q; signedness not documented",
+  "innosense_data_shape": [
+    "records",
+    263120
+  ],
+  "innosense_hdf5_dataset_names": [
+    "/data",
+    "/label"
+  ],
+  "innosense_label_shape": [
+    "records",
+    5
+  ],
+  "npy_layout_inference": {
+    "bytes_per_complex_value": 8,
+    "bytes_per_snapshot": 32768,
+    "candidate_dtype": "complex64",
+    "candidate_npy_header_bytes": 128,
+    "candidate_payload_bytes": 1398308864,
+    "candidate_shape": [
+      42673,
+      4,
+      1024
+    ],
+    "size_exactly_consistent": true,
+    "status": "INFERRED_NOT_DIRECTLY_OBSERVED"
+  },
+  "one_snapshot_candidate_physical_shape": [
+    4,
+    1024
+  ],
+  "phase_calibration": "UNKNOWN",
+  "raw_or_beamformed": "reader exposes four per-channel complex streams; no beamforming step is documented, but raw-front-end status is not explicitly attested",
+  "reader_transform": "complex array -> view(float32) -> (-1,1024,2) -> (1024,8)",
+  "receiver_orientation": "UNKNOWN",
+  "relative_phase_preservation": "NOT DIRECTLY DOCUMENTED OR VALIDATED",
+  "sample_rate": "not explicitly stated for CRPA; 1024 samples/10 us implies 102.4 MS/s only if duration is exact",
+  "schema_gate": "FAIL_CLOSED",
+  "snapshot_duration_us": 10,
+  "snapshot_shape_exposed_to_model": [
+    8,
+    1024
+  ],
+  "stored_channel_count": 4,
+  "synchronous_sampling": "INTENDED/IMPLIED by array snapshot reader, not directly attested with clock/trigger specification",
+  "vga_metadata_for_crpa": "ABSENT from released CRPA split rows"
+}

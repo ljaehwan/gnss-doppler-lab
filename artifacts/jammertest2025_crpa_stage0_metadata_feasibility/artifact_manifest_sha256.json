@@ -1,0 +1,30 @@
+{
+  "algorithm": "sha256",
+  "excluded_self_and_mutable_logs": [
+    "artifact_manifest_sha256.json",
+    "test_output.txt",
+    "verifier_output.txt"
+  ],
+  "files": {
+    "README.md": "8148e8c1369a67de549e8555acc4b06e4cc55c064213404d20b7cae52177c514",
+    "access_audit.json": "6177d325090d67f127bbfb33a95635ccd1109bd651514361d90cfd78e2e062a3",
+    "array_phase_coherence_evidence.md": "f5889c6df4e87dee2cd47308b63f30cbee23da6057e26fcc83106c257df3ef48",
+    "campaign_alignment_audit.json": "657fd4256ae10b6a7d855d85168781b4c4eb2c15f60464f34cba7e45c15eec30",
+    "crpa_schema_audit.json": "748132588f3e7a37ebf99708ae848e1d5641a8913c630dcbe1341f76f97d9d9c",
+    "destruction_controls.json": "a5847681154fc69b1a61471b0f48459cdc2ba41440b43ce48a4f619bce850276",
+    "final_verdict.json": "4f70fbb4a90b5cb9fc7144f2c335f8ef1d0f95c500a02591ecf7a6ae5698a6fd",
+    "label_distribution_audit.json": "4287e36e35647148888a5aa8783b2542cbb984fba5e3036b0986973d41a94655",
+    "leakage_safe_split_plan.json": "77dd7e5ff27614c2c2f109f5dd8801dd757321878b7366aa81ef14584ce3f113",
+    "lfs_pointer_inventory.csv": "583d6227c61510282ae0fbd5ffa079b4e3820de17ee39ef8ebe407d884a0c3a4",
+    "literature_review.md": "b681bbfa90a4df971f5f2f124cce8691aa1cff1b2af42f1d837d2d66d38bf1e7",
+    "literature_sources.json": "a435942d9cc634daea7eacb0750b1fb9f11756f907f8bec974640afc49c771bb",
+    "logical_size_summary.json": "2f6e82a3d6a55687a7f9f20c4cef73ce545ff8f1546ce36932907ab220e68231",
+    "minimal_download_plan.json": "1aa378008fbb18cb6bd93592a76b7456dbdd7078fc938790cabf588bbf4ded87",
+    "official_source_binding.json": "05e0bac6ef55a9f67254d3ea93e443a1761002d2fda0402f6214495d51bdb091",
+    "repository_inventory.json": "4734f6955189c932a955f79e3182fe09bd76c078c1aab32359f28293175e2b30",
+    "shortcut_confound_matrix.csv": "103a700ae20a6cf7fbeb0cbefb62e5a84fc10688565d7250ebe1c3ed0910618d",
+    "sparc_candidate_spec.md": "00383a224db09320b65bec595fcd02852b1761dedab76236577d1b9f8da7c096",
+    "spatial_identifiability.md": "da98bf52b8f054ff7befe021da4ae581ea1de58ac833aec6fbfec6d1258fd5bf",
+    "ssd_capacity_audit.json": "826be479e29edeff266faa12ac0509e29302abc64cf61371dbe15f601a292dd8"
+  }
+}

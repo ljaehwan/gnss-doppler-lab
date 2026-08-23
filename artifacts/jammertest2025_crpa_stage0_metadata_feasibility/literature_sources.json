@@ -1,0 +1,161 @@
+{
+  "as_of": "2026-08-23",
+  "sources": [
+    {
+      "antennas": "2",
+      "dataset": "live-signal yacht spoofing",
+      "difference_from_sparc": "post-correlation phase, not 10 us raw covariance",
+      "doi_or_official_url": "https://www.ion.org/publications/abstract.cfm?articleID=12530",
+      "evaluation": "real-time attack",
+      "hypothesis": "authentic satellites have diverse AoA; one spoofer has common AoA",
+      "input": "per-satellite differential carrier phase",
+      "learning": "physics/unsupervised",
+      "title": "GNSS Spoofing Detection Using Two-Antenna Differential Carrier Phase",
+      "year": 2014
+    },
+    {
+      "antennas": "6",
+      "dataset": "open-sky six-element array plus splitter emulation",
+      "difference_from_sparc": "closest prior art; already establishes blind snapshot eigen/spatial metrics",
+      "doi_or_official_url": "https://doi.org/10.3390/s19245439",
+      "evaluation": "single authentic and single spoof scenario",
+      "hypothesis": "spoofed constellation has similar steering vectors",
+      "input": "snapshot acquisition steering vectors, eigenvalue ratio, clustering",
+      "learning": "physics/unsupervised",
+      "title": "Blind Spoofing GNSS Constellation Detection Using a Multi-Antenna Snapshot Receiver",
+      "year": 2019
+    },
+    {
+      "antennas": "multi-antenna snapshot array (paper builds on six-element platform)",
+      "dataset": "simulated training and real recorded validation",
+      "difference_from_sparc": "directly overlaps the proposed small spatial ML detector",
+      "doi_or_official_url": "https://doi.org/10.33012/2020.17564",
+      "evaluation": "cross simulated-to-real; reported F1 >99% for several models",
+      "hypothesis": "ML combines array spoof metrics without trusted calibration",
+      "input": "blind spatial snapshot metrics",
+      "learning": "supervised LR/KNN/NB/DT/SVM",
+      "title": "Blind Spoofing Detection for Multi-Antenna Snapshot Receivers using Machine-Learning Techniques",
+      "year": 2020
+    },
+    {
+      "antennas": "12-element 3x4 example",
+      "dataset": "simulation",
+      "difference_from_sparc": "calibrated cyclic MUSIC/mitigation rather than field covariance classification",
+      "doi_or_official_url": "https://doi.org/10.3390/s19183870",
+      "evaluation": "MUSIC/beam pattern and detection statistic",
+      "hypothesis": "subspaces separate jamming and common-DOA spoof signals",
+      "input": "spatial/cyclic correlation matrices",
+      "learning": "physics/unsupervised",
+      "title": "A Two-Stage Interference Suppression Scheme Based on Antenna Array for GNSS Jamming and Spoofing",
+      "year": 2019
+    },
+    {
+      "antennas": "M-element simulated array",
+      "dataset": "simulation",
+      "difference_from_sparc": "tracking/acquisition-aware simulated attack",
+      "doi_or_official_url": "https://doi.org/10.3390/s19102411",
+      "evaluation": "MVDR/LCMV detection and mitigation",
+      "hypothesis": "counterfeit components share an AoA",
+      "input": "estimated steering vectors and multipath components",
+      "learning": "physics/unsupervised",
+      "title": "A Multi-Antenna Scheme for Early Detection and Mitigation of Intermediate GNSS Spoofing",
+      "year": 2019
+    },
+    {
+      "antennas": "simulation array/subarrays",
+      "dataset": "simulation",
+      "difference_from_sparc": "calibrated signal model rather than metadata-bound field snapshots",
+      "doi_or_official_url": "https://doi.org/10.3390/s21030929",
+      "evaluation": "detection and suppression",
+      "hypothesis": "spatial-temporal structure separates correlated spoof sources",
+      "input": "array eigenspace and cross-correlation",
+      "learning": "physics/unsupervised",
+      "title": "A Spatial-Temporal Approach Based on Antenna Array for GNSS Anti-Spoofing",
+      "year": 2021
+    },
+    {
+      "antennas": "CRPA element count not disclosed in abstract",
+      "dataset": "simulation",
+      "difference_from_sparc": "general interference mitigation, not spoof-vs-jammer discrimination",
+      "doi_or_official_url": "https://doi.org/10.3390/ENC2023-15452",
+      "evaluation": "static/dynamic simulated interference",
+      "hypothesis": "dominant interference subspace enables detection/localization",
+      "input": "array covariance/eigendecomposition and MUSIC",
+      "learning": "physics/unsupervised",
+      "title": "Interference Detection, Localization, and Mitigation Capabilities of CRPA for Aviation",
+      "year": 2023
+    },
+    {
+      "antennas": "array count not exposed by publisher abstract",
+      "dataset": "controlled experiment",
+      "difference_from_sparc": "requires GNSS signal/Doppler extraction",
+      "doi_or_official_url": "https://doi.org/10.1109/JIOT.2024.3413954",
+      "evaluation": "detection probability versus DoA baselines",
+      "hypothesis": "spoof signals combine angular inconsistency with similar Doppler",
+      "input": "relative DoA and Doppler difference",
+      "learning": "physics/GLRT",
+      "title": "GLRT-Based Spacetime Detection Algorithms Via Joint DoA and Doppler Shift",
+      "year": 2024
+    },
+    {
+      "antennas": "array count not stated in official abstract",
+      "dataset": "indoor moving-jammer array dataset",
+      "difference_from_sparc": "jammer localization; large vision/time-series benchmark",
+      "doi_or_official_url": "https://doi.org/10.1109/RadarConf2559087.2025.11204959",
+      "evaluation": "classification and 3D localization",
+      "hypothesis": "learned fusion improves jammer range/azimuth/elevation in multipath",
+      "input": "IQ, FFT spectrograms, 22 AoA features",
+      "learning": "supervised deep learning",
+      "title": "Attention-Based Fusion of IQ and FFT Spectrograms with AoA Features for GNSS Jammer Localization",
+      "year": 2025
+    },
+    {
+      "antennas": "5 coherent KrakenSDR channels",
+      "dataset": "Jammertest 2023",
+      "difference_from_sparc": "already supplies real Jammertest spatial jammer/spoofer localization evidence",
+      "doi_or_official_url": "https://doi.org/10.33012/navi.735",
+      "evaluation": "real jammer and driving spoofer localization",
+      "hypothesis": "coherent array bearings localize terrestrial emitters",
+      "input": "array DoA over campaign motion",
+      "learning": "physics/DoA",
+      "title": "Real-World Jammer and Spoofer Localization Using a Low-Cost Array-Based SDR",
+      "year": 2026
+    },
+    {
+      "antennas": "2x2 CRPA",
+      "dataset": "Jammertest 2025 release",
+      "difference_from_sparc": "same data, but no reported phase-destruction-controlled 4x4 covariance spoof-vs-jammer study",
+      "doi_or_official_url": "https://arxiv.org/abs/2608.15819",
+      "evaluation": "within/cross-area type, power, bandwidth; YOLO/RF-DETR",
+      "hypothesis": "waveform structure supports interference characterization and domain-shift evaluation",
+      "input": "CRPA/Innosense time series and spectrograms",
+      "learning": "supervised 17-model benchmark and object detection",
+      "title": "Analyzing and Characterizing Multi-Source Interference Effects at Jammertest Norway 2025",
+      "year": 2026
+    },
+    {
+      "antennas": "two commercial CRPA configurations; element counts undisclosed",
+      "dataset": "15-minute vehicle trials",
+      "difference_from_sparc": "system mitigation, not open raw covariance detector",
+      "doi_or_official_url": "https://doi.org/10.3390/electronics15122544",
+      "evaluation": "HDOP, satellites, availability",
+      "hypothesis": "STAP gives resilience under jamming/spoofing",
+      "input": "receiver/PVT/RSSI logs",
+      "learning": "system comparison",
+      "title": "Experimental Evaluation of Spatial-Temporal Interference Mitigation in CRPA GNSS Receivers Under Jamming and Spoofing",
+      "year": 2026
+    },
+    {
+      "antennas": "1",
+      "dataset": "TEXBAT and OAKBAT",
+      "difference_from_sparc": "single-channel reference; cross-domain result motivates group/domain-safe evaluation",
+      "doi_or_official_url": "https://doi.org/10.1109/ACCESS.2026.3693081",
+      "evaluation": "in-domain and cross-dataset",
+      "hypothesis": "RF fingerprints can transfer across attack datasets",
+      "input": "post-correlation TEXBAT/OAKBAT features",
+      "learning": "supervised",
+      "title": "GNSS-Spoofing Detection via ML with In-Domain and Cross-Domain Testing",
+      "year": 2026
+    }
+  ]
+}

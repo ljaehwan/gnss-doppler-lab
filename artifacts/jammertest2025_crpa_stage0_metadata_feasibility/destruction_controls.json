@@ -1,0 +1,21 @@
+{
+  "destruction_tests": [
+    "antenna channel permutation",
+    "independent per-antenna phase randomization",
+    "channel synchronization destruction",
+    "remove off-diagonal covariance",
+    "remove eigenvectors and retain eigenvalues",
+    "power matching",
+    "recording-group label shuffle"
+  ],
+  "negative_shortcut_controls": [
+    "total power only",
+    "VGA only",
+    "bandwidth only",
+    "area/day only",
+    "single antenna channel",
+    "channel magnitude with phase removed"
+  ],
+  "physics_gate": "performance that survives phase/coherence destruction is shortcut evidence, not spatial-physics evidence",
+  "status": "PREREGISTERED_FOR_A_FUTURE_AUTHORIZED_EXPERIMENT_ONLY"
+}

@@ -1,0 +1,25 @@
+{
+  "allowed_downloads": {
+    "Zenodo_JSON_bytes": 26700,
+    "data_paper_PDF_bytes": 15807845
+  },
+  "git_lfs_payload_bytes_downloaded": 0,
+  "git_lfs_pull_or_fetch_executed": false,
+  "git_lfs_skip_smudge": true,
+  "mode": "METADATA_ONLY",
+  "models_implemented": false,
+  "models_trained": false,
+  "oakbat_raw_payload_bytes_accessed": 0,
+  "ordinary_git_objects_read": [
+    "README",
+    "reader scripts",
+    "split text",
+    "LFS pointers",
+    "transmission-plan JSON/PDF"
+  ],
+  "raw_hdf5_bytes_downloaded": 0,
+  "raw_iq_bytes_opened": 0,
+  "scores_computed": false,
+  "texbat_raw_payload_bytes_accessed": 0,
+  "tuni_raw_payload_bytes_accessed": 0
+}

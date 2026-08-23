@@ -1,0 +1,7 @@
+# Literature and novelty audit (through 2026-08-23)
+
+Multi-antenna GNSS spoofing detection is established prior art. Two-antenna differential carrier phase, array steering-vector similarity, eigenspectrum tests, MUSIC/MVDR, cyclic covariance, and blind snapshot ML have all been published. The closest work is the 2019/2020 Fraunhofer six-element snapshot program: it already uses blind spatial/eigen features and then classical ML for spoof detection. Recent work also covers field CRPA mitigation, Jammertest array localization, joint DoA/Doppler GLRT, and AoA-feature deep fusion.
+
+The Jammertest 2025 data paper benchmarks 17 time-series models and spectrogram detectors and reports severe cross-area degradation, but does not report a phase/coherence-destruction-controlled 4×4 covariance comparison for spoof/meacon versus non-deceptive jammers. That narrow evaluation could differ experimentally, especially if power-matched and recording-safe. It is not currently a defensible WCL claim because released CRPA metadata cannot establish phase provenance, clean controls, recording groups, bands, VGA, or campaign alignment.
+
+Novelty verdict: `CONDITIONALLY_DIFFERENT_EXPERIMENT, NOT A CURRENTLY DEFENSIBLE SINGLE CLAIM`. “First AI on this dataset” is explicitly rejected. The broad SPARC idea overlaps prior blind snapshot ML; only the narrow cross-area, matched-power, destruction-controlled field validation could be new after provenance closure.

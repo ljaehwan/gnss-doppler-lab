@@ -1,0 +1,21 @@
+{
+  "azimuth_elevation_computable": false,
+  "continuous_snapshot_independence": "UNKNOWN; sample_index alone does not establish independent recordings",
+  "crpa_recording_chunk_mapping": "ABSENT",
+  "crpa_sample_index_to_test_id_mapping": "ABSENT",
+  "crpa_sample_index_to_timestamp_mapping": "ABSENT",
+  "released_crpa_split_has_clean_label": false,
+  "schedule_has_zero_transmission_or_grace_families": true,
+  "schedule_time_bounds": [
+    "2025-09-15T11:00:00",
+    "2025-09-19T16:00:00"
+  ],
+  "schedule_to_label_alignment_verifiable": false,
+  "scheduled_events": 198,
+  "scheduled_events_area_1_2": 153,
+  "status": "INCONCLUSIVE_ALIGNMENT",
+  "train_test_leakage_risk": "HIGH: published train/test split separates snapshot indices, not documented recording groups",
+  "transmission_plan_commit": "1ab4ae055a291e69ea9476c88f3903b5cbd9bd64",
+  "transmitter_receiver_coordinate_binding": "NOT RELEASED WITH CRPA ROWS",
+  "unique_scheduled_test_ids": 123
+}

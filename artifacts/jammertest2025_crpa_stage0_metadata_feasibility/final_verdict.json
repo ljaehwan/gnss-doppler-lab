@@ -1,0 +1,24 @@
+{
+  "additional_blockers": [
+    "no CRPA clean class",
+    "no recording/day/band/VGA/transmitter binding",
+    "no Area2 power overlap for spoof vs jammer",
+    "broad blind snapshot spatial ML novelty already exists",
+    "Zenodo/repository license conflict"
+  ],
+  "contract_note": "Verdict token is retained exactly; the one relevant bounded object is NPY, because released HDF5 files are Innosense-only.",
+  "gates": {
+    "approximately_40gb_minimal_subset_plan": false,
+    "defensible_single_wcl_claim": false,
+    "direct_relative_phase_preservation_evidence": false,
+    "four_channel_synchronous_complex_iq_schema": false,
+    "matched_power_vga_comparison": false,
+    "recording_safe_split": false,
+    "usable_clean_and_spoof_meacon_labels": false
+  },
+  "model_implementation_authorized": false,
+  "next_state": "AWAIT_PUBLISHER_PHASE_AND_METADATA_PROVENANCE_OR_SEPARATELY_AUTHORIZE_ONE_BOUNDED_CRPA_OBJECT",
+  "primary_blocker": "No direct phase-coherence/calibration evidence for the four released CRPA channels",
+  "raw_download_authorized": false,
+  "verdict": "INCONCLUSIVE_SCHEMA_REQUIRES_ONE_BOUNDED_H5_SAMPLE"
+}

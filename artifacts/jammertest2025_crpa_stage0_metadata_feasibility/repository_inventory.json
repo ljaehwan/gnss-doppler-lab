@@ -1,0 +1,24 @@
+{
+  "crpa_storage": "single Git-LFS NPY object plus four ordinary-text split files",
+  "dataset_commit": "3b778a12147ded5c86c3edfc586b5de6ae6a67d7",
+  "dataset_tag": "dataset",
+  "innosense_storage": "86 HDF5 objects split across 230 Git-LFS part objects",
+  "lfs_payload_file_count": 0,
+  "lfs_pointer_count": 231,
+  "metadata_only_worktree_bytes": 41000000,
+  "ordinary_code": [
+    "README.md",
+    "utilities_crpa.py",
+    "utilities_innosense.py"
+  ],
+  "split_files": {
+    "test_1.txt": 269737,
+    "test_2.txt": 91577,
+    "test_crpa_1.txt": 4473,
+    "test_crpa_2.txt": 2663,
+    "train_1.txt": 1079562,
+    "train_2.txt": 366416,
+    "train_crpa_1.txt": 18283,
+    "train_crpa_2.txt": 10767
+  }
+}
