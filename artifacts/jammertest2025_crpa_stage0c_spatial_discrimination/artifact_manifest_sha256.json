@@ -1,0 +1,33 @@
+{
+  "algorithm": "sha256",
+  "excluded_self_and_mutable_logs": [
+    "artifact_manifest_sha256.json",
+    "test_output.txt",
+    "verifier_output.txt"
+  ],
+  "files": {
+    "README.md": "5d7822f9a8e5976cc0365476de702eac9db05c30b207e4fc51b5af25608f3ac4",
+    "access_audit.json": "0730990f83fd525d73562707c3dac3bfa9dbb97529b14217ee536237717e3954",
+    "aggregate_metrics.json": "b678f9894d0eca2f027f8b0866a65ffd1dcf9823a04d77ab3eb3a002cf3d133d",
+    "channel_permutation_stress.json": "04c606929c5fe7666588f8d198dc0c6748eb0849c97a64e16d2f0e9fbcf3efbb",
+    "class_family_results.json": "63ab604ab93cfc38b13a2d6a997936f7f01c41bd94ae8d267a659eb1c0e5574f",
+    "confound_analysis.md": "a64da1cb90fe1d9fca7d2864df72f4cacea2ed7bce9eaa6073a91ad37acfad09",
+    "data_integrity.json": "3664bfabf923c4634175ef5ab3bc3532aa5d35426c50f2871bff97751033e6dd",
+    "design_freeze.json": "e40ed18e5488e760cdcaef7c231a026a49a536e7415cb75e58422fb907aa561b",
+    "design_freeze_commit.json": "c270cc9a757814e0e54d94a2eb52bb385ab02117077bc1dbae80272db2b15e7f",
+    "destruction_classifier_results.json": "94a41cd62200214ccec1d77b7b24309f456e248b7c1e7735b45fa3d810ec9c5a",
+    "exclusion_manifest.csv": "e844f47b409f935c40e89b20b134c306ded7807bd4d4432dadd3fa7cd8a4d1f9",
+    "feature_contract.json": "9a7b51edfa33ee8db2cb0fd1bc7b59435373f35fef3b20b5822a4f867d4d535b",
+    "figures/m2_destruction_auroc.png": "6295ca6017094efe50afd01e4fb09e434d64fcbebe4d8978005c15ca90fec136",
+    "figures/power_stratified_auroc.png": "0a7eda012c215cb8d6c31837ba024db14582b0a399eae26d2eb6485072177772",
+    "figures/primary_model_auroc.png": "42ad9100320a8a762401f782d693b38d8daaae8e9a3c138bcecefcefc7d40b5c",
+    "final_verdict.json": "f9904c2225809ac590580d1c4020540b391abc7a10a2a04780bebcaa71487f63",
+    "fold_results.csv": "c88bfd7ab9b94f0aa41a0250a0f14ce565c46688d6f375186ca1e36329d6a1a4",
+    "numerical_invariance.json": "37e058fd550570b9e729b7ea8f27acb32f939c68256397f9c7bcc2239415809c",
+    "out_of_fold_predictions.csv": "2ee1045a7cb9e01b707bc38428a80a05eb2e8b35da103c853c504bd5318a0116",
+    "paired_bootstrap_results.json": "00c16b7c9ecd5c7d9f1579e3a1834bc553632e0f84ad705833469c45351abfc9",
+    "power_stratified_results.json": "2f53b0623ef43a146b5ce17d960082e883b86cdda17742a566af1e965ccc1e88",
+    "sensitivity_results.json": "96bdc87c881e1886b58be66718247b3f64319c34fe6e079c417699ff3b738855",
+    "split_manifest.csv": "aae2b5e624466da4b58dce71a879fe401c049694b56111ed52f938686b8204b5"
+  }
+}

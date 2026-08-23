@@ -1,0 +1,112 @@
+{
+  "rows": [
+    {
+      "binary_class": "positive",
+      "class_family": "Meac",
+      "count": 130,
+      "metric": "recall",
+      "model": "M0",
+      "value": 1.0,
+      "status": "ESTIMATED"
+    },
+    {
+      "binary_class": "negative",
+      "class_family": "Prn",
+      "count": 130,
+      "metric": "false_positive_rate",
+      "model": "M0",
+      "value": 0.0,
+      "status": "ESTIMATED"
+    },
+    {
+      "model": "M0",
+      "class_family": "Spoof",
+      "binary_class": "positive",
+      "count": 0,
+      "metric": "recall",
+      "value": null,
+      "status": "NOT_ESTIMABLE_NO_PRIMARY_OOF_SUPPORT"
+    },
+    {
+      "binary_class": "positive",
+      "class_family": "Meac",
+      "count": 130,
+      "metric": "recall",
+      "model": "M1",
+      "value": 1.0,
+      "status": "ESTIMATED"
+    },
+    {
+      "binary_class": "negative",
+      "class_family": "Prn",
+      "count": 130,
+      "metric": "false_positive_rate",
+      "model": "M1",
+      "value": 0.0,
+      "status": "ESTIMATED"
+    },
+    {
+      "model": "M1",
+      "class_family": "Spoof",
+      "binary_class": "positive",
+      "count": 0,
+      "metric": "recall",
+      "value": null,
+      "status": "NOT_ESTIMABLE_NO_PRIMARY_OOF_SUPPORT"
+    },
+    {
+      "binary_class": "positive",
+      "class_family": "Meac",
+      "count": 130,
+      "metric": "recall",
+      "model": "M2",
+      "value": 0.5692307692307692,
+      "status": "ESTIMATED"
+    },
+    {
+      "binary_class": "negative",
+      "class_family": "Prn",
+      "count": 130,
+      "metric": "false_positive_rate",
+      "model": "M2",
+      "value": 0.0,
+      "status": "ESTIMATED"
+    },
+    {
+      "model": "M2",
+      "class_family": "Spoof",
+      "binary_class": "positive",
+      "count": 0,
+      "metric": "recall",
+      "value": null,
+      "status": "NOT_ESTIMABLE_NO_PRIMARY_OOF_SUPPORT"
+    },
+    {
+      "binary_class": "positive",
+      "class_family": "Meac",
+      "count": 130,
+      "metric": "recall",
+      "model": "M3",
+      "value": 0.9846153846153847,
+      "status": "ESTIMATED"
+    },
+    {
+      "binary_class": "negative",
+      "class_family": "Prn",
+      "count": 130,
+      "metric": "false_positive_rate",
+      "model": "M3",
+      "value": 0.0,
+      "status": "ESTIMATED"
+    },
+    {
+      "model": "M3",
+      "class_family": "Spoof",
+      "binary_class": "positive",
+      "count": 0,
+      "metric": "recall",
+      "value": null,
+      "status": "NOT_ESTIMABLE_NO_PRIMARY_OOF_SUPPORT"
+    }
+  ]
+}

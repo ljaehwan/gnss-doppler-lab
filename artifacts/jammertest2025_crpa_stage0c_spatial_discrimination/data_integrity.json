@@ -1,0 +1,13 @@
+{
+  "dtype": "complex64",
+  "read_mode": "np.load(path, mmap_mode='r', allow_pickle=False)",
+  "sha256": "d869fa20d552288002e4d2a5b6c5d1300083a6348c01a956cd6a34ff232e0a3f",
+  "shape": [
+    42673,
+    4,
+    1024
+  ],
+  "size_bytes": 1398308992,
+  "source_object_copied": false,
+  "source_object_reused_without_redownload": true
+}

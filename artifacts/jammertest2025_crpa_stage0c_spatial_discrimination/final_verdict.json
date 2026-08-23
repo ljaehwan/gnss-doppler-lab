@@ -1,0 +1,27 @@
+{
+  "actual_minus_destruction_m2_auroc": {
+    "circular_shift": 0.4789940828402366,
+    "fourier_phase_randomized": 0.351775147928994,
+    "mismatched": 0.38230769230769224
+  },
+  "array_calibration_provenance_blocked": true,
+  "clean_detector_success": false,
+  "general_spoof_detector_success": false,
+  "m2_minus_best_m0_m1": -0.020828402366864007,
+  "numerical_invariance_passed": true,
+  "paired_ci_lower_vs_both_baselines": -0.07077887394620629,
+  "power_direction_consistent": false,
+  "primary_m2_auroc": 0.979171597633136,
+  "ready_for_wcl": false,
+  "recording_independent_generalization": false,
+  "recording_provenance_blocked": true,
+  "sensitivity_a_direction_consistent": false,
+  "task": "spoof_meacon_vs_non_deceptive_terrestrial_jammer",
+  "transmitter_position_provenance_blocked": true,
+  "verdict": "NO_INCREMENTAL_SPATIAL_DISCRIMINATION",
+  "primary_m0_auroc": 1.0,
+  "primary_m1_auroc": 1.0,
+  "primary_m3_auroc": 1.0,
+  "m3_actual_minus_permuted_auroc": 0.6111242603550295,
+  "verdict_resolution": "M2 does not outperform either M0 or M1; M3 phase/order sensitivity is diagnostic and cannot establish incremental spatial discrimination."
+}

@@ -1,0 +1,57 @@
+{
+  "M0": {
+    "columns": [
+      "mean_4ch_log_power",
+      "ch0_log_power",
+      "ch1_log_power",
+      "ch2_log_power",
+      "ch3_log_power"
+    ],
+    "metadata_transmit_power_used": false
+  },
+  "M1": {
+    "absolute_phase_used": false,
+    "channel": 0,
+    "columns": [
+      "log_power",
+      "normalized_amplitude_mean",
+      "normalized_amplitude_std",
+      "amplitude_q50",
+      "amplitude_q90",
+      "amplitude_q99",
+      "amplitude_kurtosis",
+      "16_bin_log_normalized_spectrum"
+    ]
+  },
+  "M2": {
+    "columns": [
+      "4_eigenvalue_fractions",
+      "effective_rank",
+      "lambda1_over_trace",
+      "6_sorted_coherence_magnitudes",
+      "coherence_mean_std_min_max"
+    ],
+    "complex_phase_used": false,
+    "pair_identity_used": false
+  },
+  "M3": {
+    "columns": [
+      "M2",
+      "6_coherence_real",
+      "6_coherence_imag"
+    ],
+    "diagnostic_only": true
+  },
+  "condition_eigenvalue_floor_relative_to_lambda_max": 1e-12,
+  "feature_dimensions": {
+    "M0": 5,
+    "M1": 23,
+    "M2": 16,
+    "M3": 28
+  },
+  "frozen_design_commit": "67495be08486b5479fbf09ee1b03c9faddb2a077",
+  "normalization": "per snapshot/channel centered RMS before 4x4 Hermitian covariance",
+  "pipeline": "StandardScaler(train fold only) + frozen LogisticRegression",
+  "threshold": 0.5,
+  "threshold_source": "fixed before training; no test-label use"
+}

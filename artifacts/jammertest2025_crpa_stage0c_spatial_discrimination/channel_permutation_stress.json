@@ -1,0 +1,189 @@
+{
+  "fixed_permutation": [
+    2,
+    0,
+    3,
+    1
+  ],
+  "global_gain_phase_reference": "numerical_invariance.json",
+  "one_channel_ablation": {
+    "M2": {
+      "auprc": 0.5082981804429584,
+      "auroc": 0.497603550295858,
+      "balanced_accuracy": 0.5,
+      "block_bootstrap_95ci": {
+        "auprc": {
+          "ci95_high": 0.9509831671628177,
+          "ci95_low": 0.1431063900753056,
+          "estimate": 0.5082981804429584
+        },
+        "auroc": {
+          "ci95_high": 0.8414946309333912,
+          "ci95_low": 0.14196334224198,
+          "estimate": 0.497603550295858
+        },
+        "balanced_accuracy": {
+          "ci95_high": 0.5,
+          "ci95_low": 0.5,
+          "estimate": 0.5
+        },
+        "replicates": 2000,
+        "tpr_at_5pct_fpr": {
+          "ci95_high": 0.6880623891843966,
+          "ci95_low": 0.0,
+          "estimate": 0.06153846153846154
+        },
+        "unique_block_count": 12,
+        "unit": "test group_key block"
+      },
+      "confusion_matrix_tn_fp_fn_tp": [
+        130,
+        0,
+        130,
+        0
+      ],
+      "count": 260,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 0.06153846153846154
+    },
+    "M3": {
+      "auprc": 0.5126210715481647,
+      "auroc": 0.502189349112426,
+      "balanced_accuracy": 0.5,
+      "block_bootstrap_95ci": {
+        "auprc": {
+          "ci95_high": 0.9456384271521914,
+          "ci95_low": 0.15076364621229305,
+          "estimate": 0.5126210715481647
+        },
+        "auroc": {
+          "ci95_high": 0.8353041656176262,
+          "ci95_low": 0.145809075603725,
+          "estimate": 0.502189349112426
+        },
+        "balanced_accuracy": {
+          "ci95_high": 0.5,
+          "ci95_low": 0.5,
+          "estimate": 0.5
+        },
+        "replicates": 2000,
+        "tpr_at_5pct_fpr": {
+          "ci95_high": 0.6785760547742413,
+          "ci95_low": 0.0,
+          "estimate": 0.06923076923076923
+        },
+        "unique_block_count": 12,
+        "unit": "test group_key block"
+      },
+      "confusion_matrix_tn_fp_fn_tp": [
+        130,
+        0,
+        130,
+        0
+      ],
+      "count": 260,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 0.06923076923076923
+    }
+  },
+  "primary": {
+    "M2": {
+      "actual_minus_permuted": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "comparison": "actual_minus_channel_permutation_M2",
+        "estimate": 0.0,
+        "metric": "paired_auroc_difference",
+        "replicates": 2000,
+        "unique_block_count": 12,
+        "unit": "test group_key block"
+      },
+      "auprc": 0.9789068942869551,
+      "auroc": 0.979171597633136,
+      "balanced_accuracy": 0.7846153846153846,
+      "block_bootstrap_95ci": {
+        "auprc": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.9035131468121488,
+          "estimate": 0.9789068942869551
+        },
+        "auroc": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.9325773610980996,
+          "estimate": 0.979171597633136
+        },
+        "balanced_accuracy": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.5916586538461539,
+          "estimate": 0.7846153846153846
+        },
+        "replicates": 2000,
+        "tpr_at_5pct_fpr": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.5896892655367232,
+          "estimate": 0.8
+        },
+        "unique_block_count": 12,
+        "unit": "test group_key block"
+      },
+      "confusion_matrix_tn_fp_fn_tp": [
+        130,
+        0,
+        56,
+        74
+      ],
+      "count": 260,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 0.8
+    },
+    "M3": {
+      "actual_minus_permuted": {
+        "ci95_high": 0.9292818627450976,
+        "ci95_low": 0.2698684210526315,
+        "comparison": "actual_minus_channel_permutation_M3",
+        "estimate": 0.6111242603550295,
+        "metric": "paired_auroc_difference",
+        "replicates": 2000,
+        "unique_block_count": 12,
+        "unit": "test group_key block"
+      },
+      "auprc": 0.4490357047398862,
+      "auroc": 0.3888757396449704,
+      "balanced_accuracy": 0.5,
+      "block_bootstrap_95ci": {
+        "auprc": {
+          "ci95_high": 0.8267369763238644,
+          "ci95_low": 0.1862593137105827,
+          "estimate": 0.4490357047398862
+        },
+        "auroc": {
+          "ci95_high": 0.7526752721754593,
+          "ci95_low": 0.0618496801705757,
+          "estimate": 0.3888757396449704
+        },
+        "balanced_accuracy": {
+          "ci95_high": 0.5,
+          "ci95_low": 0.5,
+          "estimate": 0.5
+        },
+        "replicates": 2000,
+        "tpr_at_5pct_fpr": {
+          "ci95_high": 0.38633363336333526,
+          "ci95_low": 0.0,
+          "estimate": 0.038461538461538464
+        },
+        "unique_block_count": 12,
+        "unit": "test group_key block"
+      },
+      "confusion_matrix_tn_fp_fn_tp": [
+        130,
+        0,
+        130,
+        0
+      ],
+      "count": 260,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 0.038461538461538464
+    }
+  }
+}

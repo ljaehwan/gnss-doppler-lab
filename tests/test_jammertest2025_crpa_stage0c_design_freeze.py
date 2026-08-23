@@ -84,7 +84,10 @@ def test_primary_and_exclusion_cover_all_released_label_indices() -> None:
     assert len(primary | excluded) == 36_186
 
 
-def test_execution_skeleton_is_fail_closed() -> None:
+def test_execution_is_bound_to_pushed_design_freeze() -> None:
     source = (ROOT / "scripts/run_jammertest2025_crpa_stage0c.py").read_text()
-    assert "LABEL_ONLY_DESIGN_FREEZE_IMPLEMENTATION_NOT_YET_AUTHORIZED" in source
-    assert "np.load" not in source
+    executor = (ROOT / "scripts/execute_jammertest2025_crpa_stage0c.py").read_text()
+    assert "execute_jammertest2025_crpa_stage0c import main" in source
+    assert "67495be08486b5479fbf09ee1b03c9faddb2a077" in (ARTIFACT / "design_freeze_commit.json").read_text()
+    assert "--raw-npy" in executor
+    assert "/home/ubuntu/ssd_data" not in executor

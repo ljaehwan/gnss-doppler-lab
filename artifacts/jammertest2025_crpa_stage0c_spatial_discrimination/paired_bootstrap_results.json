@@ -1,0 +1,154 @@
+{
+  "comparisons": [
+    {
+      "ci95_high": 0.0,
+      "ci95_low": -0.06649192120309547,
+      "comparison": "M2_minus_M0",
+      "estimate": -0.020828402366864007,
+      "metric": "paired_auroc_difference",
+      "replicates": 2000,
+      "unique_block_count": 12,
+      "unit": "test group_key block"
+    },
+    {
+      "ci95_high": 0.0,
+      "ci95_low": -0.07077887394620629,
+      "comparison": "M2_minus_M1",
+      "estimate": -0.020828402366864007,
+      "metric": "paired_auroc_difference",
+      "replicates": 2000,
+      "unique_block_count": 12,
+      "unit": "test group_key block"
+    },
+    {
+      "ci95_high": 0.06648708234336972,
+      "ci95_low": 0.0,
+      "comparison": "M3_minus_M2",
+      "estimate": 0.020828402366864007,
+      "metric": "paired_auroc_difference",
+      "replicates": 2000,
+      "unique_block_count": 12,
+      "unit": "test group_key block"
+    },
+    {
+      "ci95_high": 0.5542939095928224,
+      "ci95_low": 0.23926847429430068,
+      "comparison": "actual_minus_mismatched_retrained_M2",
+      "estimate": 0.38230769230769224,
+      "metric": "paired_auroc_difference",
+      "replicates": 2000,
+      "unique_block_count": 12,
+      "unit": "test group_key block"
+    },
+    {
+      "ci95_high": 0.5,
+      "ci95_low": 0.4356111845487259,
+      "comparison": "actual_minus_mismatched_cross_apply_M2",
+      "estimate": 0.479171597633136,
+      "metric": "paired_auroc_difference",
+      "replicates": 2000,
+      "unique_block_count": 12,
+      "unit": "test group_key block"
+    },
+    {
+      "ci95_high": 0.5299191951984322,
+      "ci95_low": 0.297140096913661,
+      "comparison": "actual_minus_mismatched_retrained_M3",
+      "estimate": 0.4049704142011834,
+      "metric": "paired_auroc_difference",
+      "replicates": 2000,
+      "unique_block_count": 12,
+      "unit": "test group_key block"
+    },
+    {
+      "ci95_high": 0.5,
+      "ci95_low": 0.5,
+      "comparison": "actual_minus_mismatched_cross_apply_M3",
+      "estimate": 0.5,
+      "metric": "paired_auroc_difference",
+      "replicates": 2000,
+      "unique_block_count": 12,
+      "unit": "test group_key block"
+    },
+    {
+      "ci95_high": 0.567167363075003,
+      "ci95_low": 0.3783834272135187,
+      "comparison": "actual_minus_circular_shift_retrained_M2",
+      "estimate": 0.4789940828402366,
+      "metric": "paired_auroc_difference",
+      "replicates": 2000,
+      "unique_block_count": 12,
+      "unit": "test group_key block"
+    },
+    {
+      "ci95_high": 0.5189812712410641,
+      "ci95_low": 0.43415701430338133,
+      "comparison": "actual_minus_circular_shift_cross_apply_M2",
+      "estimate": 0.48319526627218923,
+      "metric": "paired_auroc_difference",
+      "replicates": 2000,
+      "unique_block_count": 12,
+      "unit": "test group_key block"
+    },
+    {
+      "ci95_high": 0.594121263259402,
+      "ci95_low": 0.42329698139418376,
+      "comparison": "actual_minus_circular_shift_retrained_M3",
+      "estimate": 0.5271005917159763,
+      "metric": "paired_auroc_difference",
+      "replicates": 2000,
+      "unique_block_count": 12,
+      "unit": "test group_key block"
+    },
+    {
+      "ci95_high": 0.5231166022544083,
+      "ci95_low": 0.4830424932170316,
+      "comparison": "actual_minus_circular_shift_cross_apply_M3",
+      "estimate": 0.5039644970414201,
+      "metric": "paired_auroc_difference",
+      "replicates": 2000,
+      "unique_block_count": 12,
+      "unit": "test group_key block"
+    },
+    {
+      "ci95_high": 0.46104114589363965,
+      "ci95_low": 0.20906438924458332,
+      "comparison": "actual_minus_fourier_phase_randomized_retrained_M2",
+      "estimate": 0.351775147928994,
+      "metric": "paired_auroc_difference",
+      "replicates": 2000,
+      "unique_block_count": 12,
+      "unit": "test group_key block"
+    },
+    {
+      "ci95_high": 0.5,
+      "ci95_low": 0.4328156887320481,
+      "comparison": "actual_minus_fourier_phase_randomized_cross_apply_M2",
+      "estimate": 0.479171597633136,
+      "metric": "paired_auroc_difference",
+      "replicates": 2000,
+      "unique_block_count": 12,
+      "unit": "test group_key block"
+    },
+    {
+      "ci95_high": 0.5190698828198828,
+      "ci95_low": 0.2942876546253288,
+      "comparison": "actual_minus_fourier_phase_randomized_retrained_M3",
+      "estimate": 0.41988165680473366,
+      "metric": "paired_auroc_difference",
+      "replicates": 2000,
+      "unique_block_count": 12,
+      "unit": "test group_key block"
+    },
+    {
+      "ci95_high": 0.5,
+      "ci95_low": 0.5,
+      "comparison": "actual_minus_fourier_phase_randomized_cross_apply_M3",
+      "estimate": 0.5,
+      "metric": "paired_auroc_difference",
+      "replicates": 2000,
+      "unique_block_count": 12,
+      "unit": "test group_key block"
+    }
+  ]
+}

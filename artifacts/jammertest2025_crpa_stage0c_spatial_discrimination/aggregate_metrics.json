@@ -1,0 +1,320 @@
+{
+  "bootstrap_replicates": 2000,
+  "bootstrap_unit": "test group_key block",
+  "primary_actual": {
+    "M0": {
+      "auprc": 0.9999999999999999,
+      "auroc": 1.0,
+      "balanced_accuracy": 1.0,
+      "block_bootstrap_95ci": {
+        "auprc": {
+          "ci95_high": 1.0000000000000002,
+          "ci95_low": 0.9999999999999998,
+          "estimate": 0.9999999999999999
+        },
+        "auroc": {
+          "ci95_high": 1.0,
+          "ci95_low": 1.0,
+          "estimate": 1.0
+        },
+        "balanced_accuracy": {
+          "ci95_high": 1.0,
+          "ci95_low": 1.0,
+          "estimate": 1.0
+        },
+        "replicates": 2000,
+        "tpr_at_5pct_fpr": {
+          "ci95_high": 1.0,
+          "ci95_low": 1.0,
+          "estimate": 1.0
+        },
+        "unique_block_count": 12,
+        "unit": "test group_key block"
+      },
+      "confusion_matrix_tn_fp_fn_tp": [
+        130,
+        0,
+        0,
+        130
+      ],
+      "count": 260,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 1.0
+    },
+    "M1": {
+      "auprc": 0.9999999999999999,
+      "auroc": 1.0,
+      "balanced_accuracy": 1.0,
+      "block_bootstrap_95ci": {
+        "auprc": {
+          "ci95_high": 1.0000000000000002,
+          "ci95_low": 0.9999999999999998,
+          "estimate": 0.9999999999999999
+        },
+        "auroc": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.9999999999999999,
+          "estimate": 1.0
+        },
+        "balanced_accuracy": {
+          "ci95_high": 1.0,
+          "ci95_low": 1.0,
+          "estimate": 1.0
+        },
+        "replicates": 2000,
+        "tpr_at_5pct_fpr": {
+          "ci95_high": 1.0,
+          "ci95_low": 1.0,
+          "estimate": 1.0
+        },
+        "unique_block_count": 12,
+        "unit": "test group_key block"
+      },
+      "confusion_matrix_tn_fp_fn_tp": [
+        130,
+        0,
+        0,
+        130
+      ],
+      "count": 260,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 1.0
+    },
+    "M2": {
+      "auprc": 0.9789068942869551,
+      "auroc": 0.979171597633136,
+      "balanced_accuracy": 0.7846153846153846,
+      "block_bootstrap_95ci": {
+        "auprc": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.8992453930252018,
+          "estimate": 0.9789068942869551
+        },
+        "auroc": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.931041049771916,
+          "estimate": 0.979171597633136
+        },
+        "balanced_accuracy": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.594016290726817,
+          "estimate": 0.7846153846153846
+        },
+        "replicates": 2000,
+        "tpr_at_5pct_fpr": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.5882147264500206,
+          "estimate": 0.8
+        },
+        "unique_block_count": 12,
+        "unit": "test group_key block"
+      },
+      "confusion_matrix_tn_fp_fn_tp": [
+        130,
+        0,
+        56,
+        74
+      ],
+      "count": 260,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 0.8
+    },
+    "M3": {
+      "auprc": 0.9999999999999999,
+      "auroc": 1.0,
+      "balanced_accuracy": 0.9923076923076923,
+      "block_bootstrap_95ci": {
+        "auprc": {
+          "ci95_high": 1.0000000000000002,
+          "ci95_low": 0.9999999999999998,
+          "estimate": 0.9999999999999999
+        },
+        "auroc": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.9999999999999999,
+          "estimate": 1.0
+        },
+        "balanced_accuracy": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.9761857142857142,
+          "estimate": 0.9923076923076923
+        },
+        "replicates": 2000,
+        "tpr_at_5pct_fpr": {
+          "ci95_high": 1.0,
+          "ci95_low": 1.0,
+          "estimate": 1.0
+        },
+        "unique_block_count": 12,
+        "unit": "test group_key block"
+      },
+      "confusion_matrix_tn_fp_fn_tp": [
+        130,
+        0,
+        2,
+        128
+      ],
+      "count": 260,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 1.0
+    }
+  },
+  "sensitivity_a_actual": {
+    "M0": {
+      "auprc": 1.0,
+      "auroc": 1.0,
+      "balanced_accuracy": 0.9537037037037037,
+      "block_bootstrap_95ci": {
+        "auprc": {
+          "ci95_high": 1.0000000000000002,
+          "ci95_low": 0.9999999999999998,
+          "estimate": 1.0
+        },
+        "auroc": {
+          "ci95_high": 1.0,
+          "ci95_low": 1.0,
+          "estimate": 1.0
+        },
+        "balanced_accuracy": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.7539959016393443,
+          "estimate": 0.9537037037037037
+        },
+        "replicates": 2000,
+        "tpr_at_5pct_fpr": {
+          "ci95_high": 1.0,
+          "ci95_low": 1.0,
+          "estimate": 1.0
+        },
+        "unique_block_count": 8,
+        "unit": "test group_key block"
+      },
+      "confusion_matrix_tn_fp_fn_tp": [
+        162,
+        0,
+        15,
+        147
+      ],
+      "count": 324,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 1.0
+    },
+    "M1": {
+      "auprc": 1.0,
+      "auroc": 1.0,
+      "balanced_accuracy": 1.0,
+      "block_bootstrap_95ci": {
+        "auprc": {
+          "ci95_high": 1.0000000000000002,
+          "ci95_low": 0.9999999999999998,
+          "estimate": 1.0
+        },
+        "auroc": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.9999999999999999,
+          "estimate": 1.0
+        },
+        "balanced_accuracy": {
+          "ci95_high": 1.0,
+          "ci95_low": 1.0,
+          "estimate": 1.0
+        },
+        "replicates": 2000,
+        "tpr_at_5pct_fpr": {
+          "ci95_high": 1.0,
+          "ci95_low": 1.0,
+          "estimate": 1.0
+        },
+        "unique_block_count": 8,
+        "unit": "test group_key block"
+      },
+      "confusion_matrix_tn_fp_fn_tp": [
+        162,
+        0,
+        0,
+        162
+      ],
+      "count": 324,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 1.0
+    },
+    "M2": {
+      "auprc": 0.9668470418296067,
+      "auroc": 0.9625057155921354,
+      "balanced_accuracy": 0.7345679012345678,
+      "block_bootstrap_95ci": {
+        "auprc": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.4182310462742965,
+          "estimate": 0.9668470418296067
+        },
+        "auroc": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.6386085626911315,
+          "estimate": 0.9625057155921354
+        },
+        "balanced_accuracy": {
+          "ci95_high": 0.9773689727463312,
+          "ci95_low": 0.5340909090909091,
+          "estimate": 0.7345679012345678
+        },
+        "replicates": 2000,
+        "tpr_at_5pct_fpr": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.13043478260869565,
+          "estimate": 0.8271604938271605
+        },
+        "unique_block_count": 8,
+        "unit": "test group_key block"
+      },
+      "confusion_matrix_tn_fp_fn_tp": [
+        162,
+        0,
+        86,
+        76
+      ],
+      "count": 324,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 0.8271604938271605
+    },
+    "M3": {
+      "auprc": 1.0,
+      "auroc": 1.0,
+      "balanced_accuracy": 0.9969135802469136,
+      "block_bootstrap_95ci": {
+        "auprc": {
+          "ci95_high": 1.0000000000000002,
+          "ci95_low": 0.9999999999999998,
+          "estimate": 1.0
+        },
+        "auroc": {
+          "ci95_high": 1.0,
+          "ci95_low": 1.0,
+          "estimate": 1.0
+        },
+        "balanced_accuracy": {
+          "ci95_high": 1.0,
+          "ci95_low": 0.9794520547945205,
+          "estimate": 0.9969135802469136
+        },
+        "replicates": 2000,
+        "tpr_at_5pct_fpr": {
+          "ci95_high": 1.0,
+          "ci95_low": 1.0,
+          "estimate": 1.0
+        },
+        "unique_block_count": 8,
+        "unit": "test group_key block"
+      },
+      "confusion_matrix_tn_fp_fn_tp": [
+        162,
+        0,
+        1,
+        161
+      ],
+      "count": 324,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 1.0
+    }
+  }
+}

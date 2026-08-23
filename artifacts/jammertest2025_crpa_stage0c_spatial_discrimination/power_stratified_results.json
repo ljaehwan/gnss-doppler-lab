@@ -1,0 +1,132 @@
+{
+  "rows": [
+    {
+      "auprc": 1.0,
+      "auroc": 1.0,
+      "balanced_accuracy": 1.0,
+      "confusion_matrix_tn_fp_fn_tp": [
+        62,
+        0,
+        0,
+        62
+      ],
+      "count": 124,
+      "model": "M0",
+      "power_dbm": 30,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 1.0
+    },
+    {
+      "auprc": 1.0,
+      "auroc": 1.0,
+      "balanced_accuracy": 1.0,
+      "confusion_matrix_tn_fp_fn_tp": [
+        68,
+        0,
+        0,
+        68
+      ],
+      "count": 136,
+      "model": "M0",
+      "power_dbm": 40,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 1.0
+    },
+    {
+      "auprc": 1.0,
+      "auroc": 1.0,
+      "balanced_accuracy": 1.0,
+      "confusion_matrix_tn_fp_fn_tp": [
+        62,
+        0,
+        0,
+        62
+      ],
+      "count": 124,
+      "model": "M1",
+      "power_dbm": 30,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 1.0
+    },
+    {
+      "auprc": 1.0,
+      "auroc": 1.0,
+      "balanced_accuracy": 1.0,
+      "confusion_matrix_tn_fp_fn_tp": [
+        68,
+        0,
+        0,
+        68
+      ],
+      "count": 136,
+      "model": "M1",
+      "power_dbm": 40,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 1.0
+    },
+    {
+      "auprc": 1.0,
+      "auroc": 1.0,
+      "balanced_accuracy": 1.0,
+      "confusion_matrix_tn_fp_fn_tp": [
+        62,
+        0,
+        0,
+        62
+      ],
+      "count": 124,
+      "model": "M2",
+      "power_dbm": 30,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 1.0
+    },
+    {
+      "auprc": 0.9168326952026835,
+      "auroc": 0.9243079584775087,
+      "balanced_accuracy": 0.5882352941176471,
+      "confusion_matrix_tn_fp_fn_tp": [
+        68,
+        0,
+        56,
+        12
+      ],
+      "count": 136,
+      "model": "M2",
+      "power_dbm": 40,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 0.5882352941176471
+    },
+    {
+      "auprc": 1.0,
+      "auroc": 1.0,
+      "balanced_accuracy": 1.0,
+      "confusion_matrix_tn_fp_fn_tp": [
+        62,
+        0,
+        0,
+        62
+      ],
+      "count": 124,
+      "model": "M3",
+      "power_dbm": 30,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 1.0
+    },
+    {
+      "auprc": 1.0,
+      "auroc": 1.0,
+      "balanced_accuracy": 0.9852941176470589,
+      "confusion_matrix_tn_fp_fn_tp": [
+        68,
+        0,
+        2,
+        66
+      ],
+      "count": 136,
+      "model": "M3",
+      "power_dbm": 40,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 1.0
+    }
+  ]
+}
