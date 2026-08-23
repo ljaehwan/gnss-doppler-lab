@@ -1,0 +1,113 @@
+{
+  "all_values_finite": true,
+  "any_byte_identical_channel_pair": false,
+  "channel_pair_exact_equality": [
+    {
+      "byte_identical_channels": false,
+      "exact_equal_ratio": 4.3252246736812505e-06,
+      "pair": "0-1"
+    },
+    {
+      "byte_identical_channels": false,
+      "exact_equal_ratio": 4.050607234082441e-06,
+      "pair": "0-2"
+    },
+    {
+      "byte_identical_channels": false,
+      "exact_equal_ratio": 4.508302966747123e-06,
+      "pair": "0-3"
+    },
+    {
+      "byte_identical_channels": false,
+      "exact_equal_ratio": 6.201777177606449e-06,
+      "pair": "1-2"
+    },
+    {
+      "byte_identical_channels": false,
+      "exact_equal_ratio": 3.386948421718651e-06,
+      "pair": "1-3"
+    },
+    {
+      "byte_identical_channels": false,
+      "exact_equal_ratio": 3.684450647950695e-06,
+      "pair": "2-3"
+    }
+  ],
+  "channels": [
+    {
+      "adjacent_exact_repeat_ratio": 2.1761799058465456e-05,
+      "channel": 0,
+      "finite_ratio": 1.0,
+      "imag_max": 0.606658935546875,
+      "imag_max_count": 1,
+      "imag_min": -0.5897216796875,
+      "imag_min_count": 1,
+      "inf_ratio": 0.0,
+      "nan_ratio": 0.0,
+      "observed_extreme_component_ratio": 4.576957326646826e-08,
+      "real_max": 0.5762939453125,
+      "real_max_count": 1,
+      "real_min": -0.594451904296875,
+      "real_min_count": 1,
+      "rms": 0.08569783808393387,
+      "zero_ratio": 7.5748643756004965e-06
+    },
+    {
+      "adjacent_exact_repeat_ratio": 2.6320323282291377e-05,
+      "channel": 1,
+      "finite_ratio": 1.0,
+      "imag_max": 0.495025634765625,
+      "imag_max_count": 1,
+      "imag_min": -0.617095947265625,
+      "imag_min_count": 1,
+      "inf_ratio": 0.0,
+      "nan_ratio": 0.0,
+      "observed_extreme_component_ratio": 4.576957326646826e-08,
+      "real_max": 0.501312255859375,
+      "real_max_count": 1,
+      "real_min": -0.498046875,
+      "real_min_count": 1,
+      "rms": 0.0729574523545586,
+      "zero_ratio": 7.437555655801092e-06
+    },
+    {
+      "adjacent_exact_repeat_ratio": 2.682428073417163e-05,
+      "channel": 2,
+      "finite_ratio": 1.0,
+      "imag_max": 0.56890869140625,
+      "imag_max_count": 1,
+      "imag_min": -0.56683349609375,
+      "imag_min_count": 1,
+      "inf_ratio": 0.0,
+      "nan_ratio": 0.0,
+      "observed_extreme_component_ratio": 4.576957326646826e-08,
+      "real_max": 0.613250732421875,
+      "real_max_count": 1,
+      "real_min": -0.55816650390625,
+      "real_min_count": 1,
+      "rms": 0.08589640093545096,
+      "zero_ratio": 9.726034319124506e-06
+    },
+    {
+      "adjacent_exact_repeat_ratio": 2.18305205291764e-05,
+      "channel": 3,
+      "finite_ratio": 1.0,
+      "imag_max": 0.638671875,
+      "imag_max_count": 1,
+      "imag_min": -0.6785888671875,
+      "imag_min_count": 1,
+      "inf_ratio": 0.0,
+      "nan_ratio": 0.0,
+      "observed_extreme_component_ratio": 4.576957326646826e-08,
+      "real_max": 0.655517578125,
+      "real_max_count": 1,
+      "real_min": -0.65655517578125,
+      "real_min_count": 1,
+      "rms": 0.08933881182397611,
+      "zero_ratio": 6.4077402573055564e-06
+    }
+  ],
+  "clipping_definition": "fraction of real/imag components equal to each channel's observed extrema",
+  "complex_values_per_channel": 43697152,
+  "repeat_definition": "fraction of adjacent complex time samples exactly equal within a snapshot"
+}

@@ -1,0 +1,76 @@
+{
+  "byte_order": "=",
+  "c_contiguous": true,
+  "data_offset_bytes": 128,
+  "dtype": "complex64",
+  "dtype_str": "<c8",
+  "f_contiguous": false,
+  "file_size_bytes": 1398308992,
+  "header": {
+    "descr": "<c8",
+    "fortran_order": false,
+    "shape": [
+      42673,
+      4,
+      1024
+    ]
+  },
+  "npy_version": [
+    1,
+    0
+  ],
+  "official_reader_conversion": {
+    "all_exact": true,
+    "axis_order": [
+      "ch0_I",
+      "ch0_Q",
+      "ch1_I",
+      "ch1_Q",
+      "ch2_I",
+      "ch2_Q",
+      "ch3_I",
+      "ch3_Q"
+    ],
+    "observed_output_shape": [
+      8,
+      1024
+    ],
+    "sample_checks": [
+      {
+        "exact_equal": true,
+        "sample_index": 0
+      },
+      {
+        "exact_equal": true,
+        "sample_index": 1
+      },
+      {
+        "exact_equal": true,
+        "sample_index": 17
+      },
+      {
+        "exact_equal": true,
+        "sample_index": 10000
+      },
+      {
+        "exact_equal": true,
+        "sample_index": 20000
+      },
+      {
+        "exact_equal": true,
+        "sample_index": 30000
+      },
+      {
+        "exact_equal": true,
+        "sample_index": 42672
+      }
+    ]
+  },
+  "read_mode": "np.load(path, mmap_mode='r', allow_pickle=False)",
+  "schema_valid": true,
+  "shape": [
+    42673,
+    4,
+    1024
+  ]
+}

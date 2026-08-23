@@ -1,0 +1,26 @@
+{
+  "algorithm": "sha256",
+  "excluded_self_and_mutable_logs": [
+    "artifact_manifest_sha256.json",
+    "test_output.txt",
+    "verifier_output.txt"
+  ],
+  "files": {
+    "README.md": "d09258439c021c63f22740b952dbf1eb6386db0a626c178482cd2bf6b6520027",
+    "access_audit.json": "13ee185b385aed72dd8e35c53075d55c51fe629a4b8495404bc933dbee4805db",
+    "block_sensitivity.json": "313127d6e94d3982c20264b33c0098b1f38761abea1dd667fd95d3417e394eab",
+    "blocked_split_manifest.json": "19505746485a8f5a3a214bf076bd257b7e42e9b099d9bc6190eb1eaa1c6433a8",
+    "channel_quality.json": "858efee1b24c8ba98a11368eef0c0a9a2736f8291bf8d661a7fd1aa7804b7065",
+    "classifier_not_run.json": "1d1b3dbaefaeb6e48445bccdf2e8b263cfa4d875ece7ffcd92a74ce23242d23f",
+    "confound_analysis.md": "b2e61df5fdb661108d329343773b4d620ff2db86987434fba0b336c0f388243a",
+    "destruction_control_results.json": "b64a1e4cc50df3ec3118bd2fe614cb17fa67a929f89f198be8fc2417e27687fc",
+    "download_integrity.json": "5efcf14e868d25a3dbcd9563df6b7d3e5abb1248f4b6f9bf9e0f9ca80778ef6f",
+    "figures/coherence_destruction_controls.png": "e0439162f0b183ef5ab575a91c1538a37b771c7f1343424d223aaa85bc62d47b",
+    "figures/lambda1_fraction_ecdf.png": "a425823bb2a2f61b52b2727fea8c81bf9fe007e092b90cd901e484ed147fc593",
+    "final_verdict.json": "6511e074c132bb4d29b55201df0b03fd29899ad0fbad91245b67e7b7a6cf44a0",
+    "label_binding_audit.json": "93acd2c3e6956d98e8d929c577f74a9b1a1f16898b81898be9bc08fe00d77a52",
+    "lag_coherence_results.csv": "33fbc21bd87c932056d46e225e94f0c314388eb4fc12c3933530c9ba327026ef",
+    "npy_schema_observed.json": "252a5dbd8322118fc023571793db98832929a7b866dc13732e35bda40d6fac1a",
+    "spatial_metrics_summary.json": "6d7ef8759c76f4fd08123b1434da6c85be72662205c235ee8f2c59494fff8a9e"
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "block_sizes": [
+    32,
+    128,
+    512,
+    2048
+  ],
+  "classification_split_feasibility": [
+    {
+      "block_size": 32,
+      "feasible": false
+    },
+    {
+      "block_size": 128,
+      "feasible": false
+    },
+    {
+      "block_size": 512,
+      "feasible": false
+    },
+    {
+      "block_size": 2048,
+      "feasible": false
+    }
+  ],
+  "decision_flips": false,
+  "destruction_comparison_decisions": [
+    {
+      "actual_significantly_higher": true,
+      "block_count": 1140,
+      "block_size": 32,
+      "bootstrap_replicates": 2000,
+      "ci95_high": 0.7889218917374604,
+      "ci95_low": 0.7660161983735367,
+      "control": "mismatched",
+      "grouping": "floor(sample_index / block_size), resampled as contiguous-coordinate blocks",
+      "mean_difference": 0.7780006381729353,
+      "sample_count": 36186
+    },
+    {
+      "actual_significantly_higher": true,
+      "block_count": 292,
+      "block_size": 128,
+      "bootstrap_replicates": 2000,
+      "ci95_high": 0.7990858131558225,
+      "ci95_low": 0.7555620277583276,
+      "control": "mismatched",
+      "grouping": "floor(sample_index / block_size), resampled as contiguous-coordinate blocks",
+      "mean_difference": 0.7780006381729353,
+      "sample_count": 36186
+    },
+    {
+      "actual_significantly_higher": true,
+      "block_count": 79,
+      "block_size": 512,
+      "bootstrap_replicates": 2000,
+      "ci95_high": 0.8120060309926058,
+      "ci95_low": 0.7372374681047585,
+      "control": "mismatched",
+      "grouping": "floor(sample_index / block_size), resampled as contiguous-coordinate blocks",
+      "mean_difference": 0.7780006381729353,
+      "sample_count": 36186
+    },
+    {
+      "actual_significantly_higher": true,
+      "block_count": 20,
+      "block_size": 2048,
+      "bootstrap_replicates": 2000,
+      "ci95_high": 0.8263492716293225,
+      "ci95_low": 0.7231652277479228,
+      "control": "mismatched",
+      "grouping": "floor(sample_index / block_size), resampled as contiguous-coordinate blocks",
+      "mean_difference": 0.7780006381729353,
+      "sample_count": 36186
+    },
+    {
+      "actual_significantly_higher": true,
+      "block_count": 1140,
+      "block_size": 32,
+      "bootstrap_replicates": 2000,
+      "ci95_high": 0.7662780058868799,
+      "ci95_low": 0.7474813545829138,
+      "control": "circular_shift",
+      "grouping": "floor(sample_index / block_size), resampled as contiguous-coordinate blocks",
+      "mean_difference": 0.7572145495095307,
+      "sample_count": 36186
+    },
+    {
+      "actual_significantly_higher": true,
+      "block_count": 292,
+      "block_size": 128,
+      "bootstrap_replicates": 2000,
+      "ci95_high": 0.7753900323795561,
+      "ci95_low": 0.73800067307219,
+      "control": "circular_shift",
+      "grouping": "floor(sample_index / block_size), resampled as contiguous-coordinate blocks",
+      "mean_difference": 0.7572145495095307,
+      "sample_count": 36186
+    },
+    {
+      "actual_significantly_higher": true,
+      "block_count": 79,
+      "block_size": 512,
+      "bootstrap_replicates": 2000,
+      "ci95_high": 0.7899321585148456,
+      "ci95_low": 0.7240026483355319,
+      "control": "circular_shift",
+      "grouping": "floor(sample_index / block_size), resampled as contiguous-coordinate blocks",
+      "mean_difference": 0.7572145495095307,
+      "sample_count": 36186
+    },
+    {
+      "actual_significantly_higher": true,
+      "block_count": 20,
+      "block_size": 2048,
+      "bootstrap_replicates": 2000,
+      "ci95_high": 0.7982355292010503,
+      "ci95_low": 0.7113259471862458,
+      "control": "circular_shift",
+      "grouping": "floor(sample_index / block_size), resampled as contiguous-coordinate blocks",
+      "mean_difference": 0.7572145495095307,
+      "sample_count": 36186
+    },
+    {
+      "actual_significantly_higher": true,
+      "block_count": 1140,
+      "block_size": 32,
+      "bootstrap_replicates": 2000,
+      "ci95_high": 0.7433663066349064,
+      "ci95_low": 0.7246183255409071,
+      "control": "fourier_phase_randomized",
+      "grouping": "floor(sample_index / block_size), resampled as contiguous-coordinate blocks",
+      "mean_difference": 0.7339719504842388,
+      "sample_count": 36186
+    },
+    {
+      "actual_significantly_higher": true,
+      "block_count": 292,
+      "block_size": 128,
+      "bootstrap_replicates": 2000,
+      "ci95_high": 0.7514206592010939,
+      "ci95_low": 0.715690243120387,
+      "control": "fourier_phase_randomized",
+      "grouping": "floor(sample_index / block_size), resampled as contiguous-coordinate blocks",
+      "mean_difference": 0.7339719504842388,
+      "sample_count": 36186
+    },
+    {
+      "actual_significantly_higher": true,
+      "block_count": 79,
+      "block_size": 512,
+      "bootstrap_replicates": 2000,
+      "ci95_high": 0.7639074864628443,
+      "ci95_low": 0.7000942027582668,
+      "control": "fourier_phase_randomized",
+      "grouping": "floor(sample_index / block_size), resampled as contiguous-coordinate blocks",
+      "mean_difference": 0.7339719504842388,
+      "sample_count": 36186
+    },
+    {
+      "actual_significantly_higher": true,
+      "block_count": 20,
+      "block_size": 2048,
+      "bootstrap_replicates": 2000,
+      "ci95_high": 0.7739670067447522,
+      "ci95_low": 0.6896556519106178,
+      "control": "fourier_phase_randomized",
+      "grouping": "floor(sample_index / block_size), resampled as contiguous-coordinate blocks",
+      "mean_difference": 0.7339719504842388,
+      "sample_count": 36186
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "classification_run": false,
+  "deep_learning_used": false,
+  "hyperparameter_search_used": false,
+  "normalized_spatial_logistic_regression": "NOT_RUN",
+  "power_only_baseline": "NOT_RUN",
+  "reason": "global gain/phase invariance failed for the full condition-bearing feature vector; model execution forbidden",
+  "single_channel_amplitude_spectrum_baseline": "NOT_RUN",
+  "snapshot_random_split_used": false
+}

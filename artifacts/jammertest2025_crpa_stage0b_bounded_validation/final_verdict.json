@@ -1,0 +1,16 @@
+{
+  "antenna_calibration_present": false,
+  "classification_run": false,
+  "classification_split_feasible": false,
+  "clean_class_present": false,
+  "coherence_destruction_gate_passed": true,
+  "general_spoofing_detector_success_declared": false,
+  "ready_for_wcl_declared": false,
+  "reason": "coherence survives B/C/D comparison, but the full condition-bearing feature vector fails frozen global-invariance tolerance",
+  "recording_provenance_present": false,
+  "schema_gate_passed": true,
+  "spatial_gate_passed": false,
+  "task": "spoof_meacon_vs_non_deceptive_terrestrial_jammer",
+  "transmitter_position_provenance_present": false,
+  "verdict": "INCONCLUSIVE_SPATIAL_SIGNAL_PROVENANCE_BLOCKED"
+}

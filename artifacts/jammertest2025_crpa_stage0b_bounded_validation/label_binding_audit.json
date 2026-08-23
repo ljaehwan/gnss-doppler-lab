@@ -1,0 +1,76 @@
+{
+  "all_indices_in_bounds": true,
+  "clean_count": 0,
+  "counts_by_area_class": [
+    {
+      "area": 1,
+      "class": "CW",
+      "count": 1353
+    },
+    {
+      "area": 1,
+      "class": "Meac",
+      "count": 2554
+    },
+    {
+      "area": 1,
+      "class": "Prn",
+      "count": 3887
+    },
+    {
+      "area": 1,
+      "class": "Spoof",
+      "count": 14301
+    },
+    {
+      "area": 1,
+      "class": "Sweep",
+      "count": 661
+    },
+    {
+      "area": 2,
+      "class": "CW",
+      "count": 795
+    },
+    {
+      "area": 2,
+      "class": "Chirp",
+      "count": 6385
+    },
+    {
+      "area": 2,
+      "class": "ChirpB",
+      "count": 1050
+    },
+    {
+      "area": 2,
+      "class": "Prn",
+      "count": 2390
+    },
+    {
+      "area": 2,
+      "class": "Spoof",
+      "count": 1168
+    },
+    {
+      "area": 2,
+      "class": "Triang",
+      "count": 1642
+    }
+  ],
+  "maximum_sample_index": 42672,
+  "minimum_sample_index": 0,
+  "non_deceptive_jammer_count": 18163,
+  "npy_snapshot_count": 42673,
+  "public_split_is_not_used_as_scientific_random_split": true,
+  "row_count": 36186,
+  "split_root_sha256": {
+    "test_crpa_1.txt": "ddeced3f02b3f1354a492885a787a9e9e01d6e098ec68af324e8efc0e3a23d11",
+    "test_crpa_2.txt": "1def42ddcc53e79d6906958a4d71766275433f371e2390407d6b56f7e95fdbaa",
+    "train_crpa_1.txt": "e2bd68ecf96068979a92fdd482b1539c72f74eb415016518ce4b2f5ca94c24f1",
+    "train_crpa_2.txt": "8bc430499417cdb66bdd099ab75456f6f6f9f67af7e69977bc7718636c887283"
+  },
+  "spoof_or_meacon_count": 18023,
+  "unique_sample_index_count": 36186,
+  "unlabelled_or_unreleased_split_indices": 6487
+}
