@@ -1,1 +1,9 @@
-PENDING_REMOTE_RESULT_COMMIT
+fresh_clone_path: /tmp/splitclock-r2-fresh-657fd6d
+detached_head: 657fd6d2fea11ad14f596c97bcefd3db88b3acba
+
+$ pytest -q tests/test_splitclock_r2_terminal_contract_repair.py
+................                                                         [100%]
+16 passed in 17.90s
+
+$ python3 scripts/verify_splitclock_r2.py artifacts/splitclock_stage0a_r2_terminal_contract_repair
+{"errors": [], "status": "PASS"}
