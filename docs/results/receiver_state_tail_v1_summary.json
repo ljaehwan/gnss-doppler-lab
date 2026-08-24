@@ -1,0 +1,311 @@
+{
+  "attacks": {
+    "ds4": {
+      "detectors": {
+        "matched_global_conformal": {
+          "first_detection_available_delay_s": 14.416761919999999,
+          "first_detection_delay_s": 13.416761919999999,
+          "first_detection_score_time_s": 113.41676192,
+          "first_three_consecutive_available_delay_s": 15.416761919999999,
+          "first_three_consecutive_delay_s": 14.416761919999999,
+          "first_three_consecutive_score_time_s": 114.41676192,
+          "guard_s": 10.0,
+          "onset_s": 100.0,
+          "post_detection_flags": 28,
+          "post_detection_rate": 0.8235294117647058,
+          "post_windows": 34,
+          "pre_false_flags": 0,
+          "pre_false_positive_rate": 0.0,
+          "pre_windows": 169,
+          "threshold": 4.22157915124175
+        },
+        "receiver_state_conformal": {
+          "first_detection_available_delay_s": 14.916761919999999,
+          "first_detection_delay_s": 13.916761919999999,
+          "first_detection_score_time_s": 113.91676192,
+          "first_three_consecutive_available_delay_s": 15.916761919999999,
+          "first_three_consecutive_delay_s": 14.916761919999999,
+          "first_three_consecutive_score_time_s": 114.91676192,
+          "guard_s": 10.0,
+          "onset_s": 100.0,
+          "post_detection_flags": 27,
+          "post_detection_rate": 0.7941176470588235,
+          "post_windows": 34,
+          "pre_false_flags": 0,
+          "pre_false_positive_rate": 0.0,
+          "pre_windows": 169,
+          "threshold": 3.8785872788928217
+        }
+      },
+      "input": {
+        "path": "artifacts/receiver_state_tail_v1/quality_scores/texbat_ds4_prn_local_scores.csv",
+        "sha256": "67e47a8984ddab05dd1cfaa860e8c3cc55082f3c62906de767aec5ff953ffe94",
+        "size_bytes": 558406
+      },
+      "onset_s": 100.0,
+      "paired_post_flags": {
+        "both_flag": 27,
+        "global_only_flag": 1,
+        "neither_flag": 6,
+        "state_only_flag": 0,
+        "windows": 34
+      },
+      "paired_pre_flags": {
+        "both_flag": 0,
+        "global_only_flag": 0,
+        "neither_flag": 169,
+        "state_only_flag": 0,
+        "windows": 169
+      },
+      "pool_usage": {
+        "by_origin_and_pool_level": {
+          "initial|exact_state": 2525
+        },
+        "by_pool_level": {
+          "exact_state": 2525
+        },
+        "reacquisition_rows": 0,
+        "rows": 2525
+      }
+    },
+    "ds8": {
+      "detectors": {
+        "matched_global_conformal": {
+          "first_detection_available_delay_s": 69.29139563999999,
+          "first_detection_delay_s": 68.29139563999999,
+          "first_detection_score_time_s": 178.29139564,
+          "first_three_consecutive_available_delay_s": 70.29139563999999,
+          "first_three_consecutive_delay_s": 69.29139563999999,
+          "first_three_consecutive_score_time_s": 179.29139564,
+          "guard_s": 10.0,
+          "onset_s": 110.0,
+          "post_detection_flags": 582,
+          "post_detection_rate": 0.833810888252149,
+          "post_windows": 698,
+          "pre_false_flags": 0,
+          "pre_false_positive_rate": 0.0,
+          "pre_windows": 189,
+          "threshold": 4.22157915124175
+        },
+        "receiver_state_conformal": {
+          "first_detection_available_delay_s": 70.29139563999999,
+          "first_detection_delay_s": 69.29139563999999,
+          "first_detection_score_time_s": 179.29139564,
+          "first_three_consecutive_available_delay_s": 71.29139563999999,
+          "first_three_consecutive_delay_s": 70.29139563999999,
+          "first_three_consecutive_score_time_s": 180.29139564,
+          "guard_s": 10.0,
+          "onset_s": 110.0,
+          "post_detection_flags": 580,
+          "post_detection_rate": 0.830945558739255,
+          "post_windows": 698,
+          "pre_false_flags": 0,
+          "pre_false_positive_rate": 0.0,
+          "pre_windows": 189,
+          "threshold": 3.8785872788928217
+        }
+      },
+      "input": {
+        "path": "artifacts/receiver_state_tail_v1/quality_scores/texbat_ds8_prn_local_scores.csv",
+        "sha256": "d945b7066cbf9441cb4e20f4c18b7a5355e75ddb9c80559e44dd04e7217de249",
+        "size_bytes": 2153092
+      },
+      "onset_s": 110.0,
+      "paired_post_flags": {
+        "both_flag": 580,
+        "global_only_flag": 2,
+        "neither_flag": 116,
+        "state_only_flag": 0,
+        "windows": 698
+      },
+      "paired_pre_flags": {
+        "both_flag": 0,
+        "global_only_flag": 0,
+        "neither_flag": 189,
+        "state_only_flag": 0,
+        "windows": 189
+      },
+      "pool_usage": {
+        "by_origin_and_pool_level": {
+          "gap_restart|age_bin": 908,
+          "initial|exact_state": 8521,
+          "reacquired|age_bin": 174
+        },
+        "by_pool_level": {
+          "age_bin": 1082,
+          "exact_state": 8521
+        },
+        "reacquisition_rows": 174,
+        "rows": 9603
+      }
+    }
+  },
+  "calibration": {
+    "attack_score_csv_opened_before_freeze": false,
+    "clean_inputs": [
+      {
+        "path": "artifacts/receiver_state_tail_v1/quality_scores/texbat_cleanStatic_prn_local_scores.csv",
+        "sha256": "65180c55f88213885ee5c9c2de6bd8e3113ff056a07248d04c047edebc7dd826",
+        "size_bytes": 385434
+      },
+      {
+        "path": "artifacts/receiver_state_tail_v1/quality_scores/texbat_cleanDynamic_prn_local_scores.csv",
+        "sha256": "58cf8eae2b549acb1c3545185ded464c65a68f25f8376dfe6679188c036262cd",
+        "size_bytes": 378595
+      }
+    ],
+    "clean_split_inventory": [
+      {
+        "event_calibration_end_s": 72.5,
+        "event_calibration_event_bins": 33,
+        "event_calibration_rows": 348,
+        "event_calibration_start_s": 56.5,
+        "held_clean_end_s": 89.5,
+        "held_clean_event_bins": 34,
+        "held_clean_rows": 331,
+        "held_clean_start_s": 73.0,
+        "reference_end_s": 56.0,
+        "reference_event_bins": 100,
+        "reference_rows": 995,
+        "reference_start_s": 6.5,
+        "run_id": "texbat-cleanDynamic-method-a-9tap-external-validation",
+        "total_event_bins": 167
+      },
+      {
+        "event_calibration_end_s": 72.5,
+        "event_calibration_event_bins": 33,
+        "event_calibration_rows": 330,
+        "event_calibration_start_s": 56.5,
+        "held_clean_end_s": 89.5,
+        "held_clean_event_bins": 34,
+        "held_clean_rows": 331,
+        "held_clean_start_s": 73.0,
+        "reference_end_s": 56.0,
+        "reference_event_bins": 100,
+        "reference_rows": 1030,
+        "reference_start_s": 6.5,
+        "run_id": "texbat-cleanStatic-method-a-9tap-external-validation",
+        "total_event_bins": 167
+      }
+    ],
+    "event_calibration_events": 66,
+    "event_calibration_fraction_per_clean_run": 0.2,
+    "event_calibration_pool_usage": {
+      "by_origin_and_pool_level": {
+        "initial|exact_state": 678
+      },
+      "by_pool_level": {
+        "exact_state": 678
+      },
+      "reacquisition_rows": 0,
+      "rows": 678
+    },
+    "event_calibration_rows": 678,
+    "event_quantile": 0.99,
+    "excluded_conditioning_fields": {
+      "epoch_count": "receiver integration/update-rate regimes are not portable lock-quality states"
+    },
+    "global_event_threshold": 4.22157915124175,
+    "held_clean_fraction_per_clean_run": 0.2,
+    "implementation_files": [
+      {
+        "path": "src/gnss_doppler_lab/receiver_state_tail.py",
+        "sha256": "0b767d85645089d6961a2253e7c77c03999f63aa27646c3bb0db11562c33073e",
+        "size_bytes": 17335
+      },
+      {
+        "path": "scripts/eval_receiver_state_tail.py",
+        "sha256": "3b01291fae2157ee6d66714e8fe7a29e003331898223f8f8bb7054db7b3fa748",
+        "size_bytes": 14168
+      }
+    ],
+    "normal_only": true,
+    "reference_events": 200,
+    "reference_fraction_per_clean_run": 0.6,
+    "reference_inventory": {
+      "age_cutoffs_s": [
+        10.0,
+        30.0
+      ],
+      "age_pool_rows": {
+        "age_10_to_30s": 820,
+        "age_ge_30s": 1029,
+        "age_lt_10s": 176
+      },
+      "exact_pool_rows": {
+        "initial|age_10_to_30s": 820,
+        "initial|age_ge_30s": 1029,
+        "initial|age_lt_10s": 176
+      },
+      "fallback_order": [
+        "exact_state",
+        "age_bin",
+        "global"
+      ],
+      "global_rows": 2025,
+      "min_pool_rows": 100,
+      "score_column": "prn_node_rmse"
+    },
+    "reference_rows": 2025,
+    "score_column": "prn_node_rmse",
+    "source_model": {
+      "path": "artifacts/ai_morph_gru_cleanStatic_q70_frame/prn_local_gru_predictor.pt",
+      "sha256": "f171bf0b2084e617c15ab6af72ef930539a4b8fddb120b5aa8f43a6339c96a6b",
+      "size_bytes": 545490
+    },
+    "state_event_threshold": 3.8785872788928217
+  },
+  "decision": {
+    "checks": {
+      "fewer_held_clean_false_flags": true,
+      "no_attack_post_detection_loss": false,
+      "no_attack_pre_false_flag_increase": true,
+      "no_first_detection_delay_increase": false
+    },
+    "passed": false,
+    "rule": "fewer held-clean false flags and no per-attack increase in pre-onset flags, post-detection loss, or first-detection delay"
+  },
+  "held_clean": {
+    "detectors": {
+      "matched_global_conformal": {
+        "any_false_positive": true,
+        "false_positive_flags": 2,
+        "false_positive_rate": 0.029411764705882353,
+        "threshold": 4.22157915124175,
+        "windows": 68
+      },
+      "receiver_state_conformal": {
+        "any_false_positive": true,
+        "false_positive_flags": 1,
+        "false_positive_rate": 0.014705882352941176,
+        "threshold": 3.8785872788928217,
+        "windows": 68
+      }
+    },
+    "paired_flags": {
+      "both_flag": 1,
+      "global_only_flag": 1,
+      "neither_flag": 66,
+      "state_only_flag": 0,
+      "windows": 68
+    },
+    "pool_usage": {
+      "by_origin_and_pool_level": {
+        "initial|exact_state": 662
+      },
+      "by_pool_level": {
+        "exact_state": 662
+      },
+      "reacquisition_rows": 0,
+      "rows": 662
+    }
+  },
+  "hypothesis": "Conditioning finite-sample local tail probabilities on causal receiver origin and tracking-age state reduces clean false alarms without degrading buffered spoofing detection or first-detection delay relative to a matched global conformal detector.",
+  "manifest": {
+    "path": "configs/experiments/receiver_state_tail_v1.json",
+    "sha256": "bf38b4c54e7bb36bb511ef34c220bdad08d41297c2b74fbc1e830ad146c11781",
+    "size_bytes": 1550
+  },
+  "protocol": "Score all runs with the frozen TEXBAT cleanStatic q70 PRN-local GRU and receiver-quality contract v1. For each clean run, fit local conformal reference pools on the first 60% of complete event bins, fit event thresholds on the next 20%, hold out the final 20%, freeze, and only then open DS4/DS8 score CSVs.",
+  "schema": "gnss-doppler-lab.receiver-state-tail-results.v1"
+}
