@@ -1,0 +1,24 @@
+{
+  "clean_versus_spoof_success": false,
+  "general_spoof_detector_success": false,
+  "primary_matched_pair_count": 0,
+  "primary_power_match_gate_pass": false,
+  "ready_for_wcl": false,
+  "received_power_range_gap_db": 21.714379367359616,
+  "recording_independent_generalization": false,
+  "track_a_results_diagnostic_only": true,
+  "track_b_executed": false,
+  "verdict": "SPOOF_EVALUATION_INVALID_NO_RECEIVED_POWER_OVERLAP",
+  "verdict_precedence": "power-overlap gate failure is terminal for the conditional spatial question",
+  "track_a_auroc": {
+    "M0": 1.0,
+    "M1": 1.0,
+    "M2": 0.9126180173092053,
+    "M2R": 0.22236428009441386,
+    "M3": 1.0
+  },
+  "track_b_metrics": null,
+  "matched_m0_before_auroc": 1.0,
+  "matched_m0_after_auroc": null,
+  "largest_provenance_limit": "No received-power common support; recording ID, transmitter position, and array calibration are unavailable."
+}

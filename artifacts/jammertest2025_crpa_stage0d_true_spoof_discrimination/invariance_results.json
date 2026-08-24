@@ -1,0 +1,162 @@
+{
+  "all_contracts_pass": true,
+  "atol": 1e-12,
+  "fixed_channel_permutation": [
+    2,
+    0,
+    3,
+    1
+  ],
+  "global_gain_phase": [
+    {
+      "gain": 0.1,
+      "m2": {
+        "allclose_pass": true,
+        "max_absolute_error": 2.4424906541753444e-15,
+        "max_relative_error": 9.41645825595788e-14
+      },
+      "phase_radians": 0.0
+    },
+    {
+      "gain": 0.1,
+      "m2": {
+        "allclose_pass": true,
+        "max_absolute_error": 2.886579864025407e-15,
+        "max_relative_error": 1.3247988882100266e-13
+      },
+      "phase_radians": 0.37
+    },
+    {
+      "gain": 0.1,
+      "m2": {
+        "allclose_pass": true,
+        "max_absolute_error": 2.220446049250313e-15,
+        "max_relative_error": 8.975175227504233e-14
+      },
+      "phase_radians": 1.123
+    },
+    {
+      "gain": 0.1,
+      "m2": {
+        "allclose_pass": true,
+        "max_absolute_error": 2.4424906541753444e-15,
+        "max_relative_error": 9.12929563162983e-14
+      },
+      "phase_radians": 2.9
+    },
+    {
+      "gain": 1.0,
+      "m2": {
+        "allclose_pass": true,
+        "max_absolute_error": 0.0,
+        "max_relative_error": 0.0
+      },
+      "phase_radians": 0.0
+    },
+    {
+      "gain": 1.0,
+      "m2": {
+        "allclose_pass": true,
+        "max_absolute_error": 2.4424906541753444e-15,
+        "max_relative_error": 9.008091443837257e-14
+      },
+      "phase_radians": 0.37
+    },
+    {
+      "gain": 1.0,
+      "m2": {
+        "allclose_pass": true,
+        "max_absolute_error": 3.3306690738754696e-15,
+        "max_relative_error": 1.3769826311434308e-13
+      },
+      "phase_radians": 1.123
+    },
+    {
+      "gain": 1.0,
+      "m2": {
+        "allclose_pass": true,
+        "max_absolute_error": 2.220446049250313e-15,
+        "max_relative_error": 1.0185148725831993e-13
+      },
+      "phase_radians": 2.9
+    },
+    {
+      "gain": 3.7,
+      "m2": {
+        "allclose_pass": true,
+        "max_absolute_error": 2.220446049250313e-15,
+        "max_relative_error": 1.0260476577239824e-13
+      },
+      "phase_radians": 0.0
+    },
+    {
+      "gain": 3.7,
+      "m2": {
+        "allclose_pass": true,
+        "max_absolute_error": 3.1086244689504383e-15,
+        "max_relative_error": 1.0241102397453592e-13
+      },
+      "phase_radians": 0.37
+    },
+    {
+      "gain": 3.7,
+      "m2": {
+        "allclose_pass": true,
+        "max_absolute_error": 2.4424906541753444e-15,
+        "max_relative_error": 9.440479833141446e-14
+      },
+      "phase_radians": 1.123
+    },
+    {
+      "gain": 3.7,
+      "m2": {
+        "allclose_pass": true,
+        "max_absolute_error": 2.6645352591003757e-15,
+        "max_relative_error": 1.0305256611749822e-13
+      },
+      "phase_radians": 2.9
+    },
+    {
+      "gain": 10.0,
+      "m2": {
+        "allclose_pass": true,
+        "max_absolute_error": 2.4424906541753444e-15,
+        "max_relative_error": 7.747857723245224e-14
+      },
+      "phase_radians": 0.0
+    },
+    {
+      "gain": 10.0,
+      "m2": {
+        "allclose_pass": true,
+        "max_absolute_error": 2.886579864025407e-15,
+        "max_relative_error": 9.553221504919807e-14
+      },
+      "phase_radians": 0.37
+    },
+    {
+      "gain": 10.0,
+      "m2": {
+        "allclose_pass": true,
+        "max_absolute_error": 2.4424906541753444e-15,
+        "max_relative_error": 1.036396262827871e-13
+      },
+      "phase_radians": 1.123
+    },
+    {
+      "gain": 10.0,
+      "m2": {
+        "allclose_pass": true,
+        "max_absolute_error": 2.886579864025407e-15,
+        "max_relative_error": 1.1207871185524619e-13
+      },
+      "phase_radians": 2.9
+    }
+  ],
+  "m2_channel_permutation_error": {
+    "allclose_pass": true,
+    "max_absolute_error": 2.4424906541753444e-15,
+    "max_relative_error": 8.215713333953354e-14
+  },
+  "rtol": 1e-10
+}

@@ -1,0 +1,131 @@
+{
+  "fit_scope": "each Track-A train fold only",
+  "folds": [
+    {
+      "coefficient_sha256": "bd27e1b7a576a1d3b103f562922807257323757ed575b6cb1888784895f4dd3a",
+      "coefficient_shape": [
+        16,
+        4
+      ],
+      "fit_scope": "train fold only",
+      "fold": 0,
+      "polynomial_basis": [
+        "1",
+        "z",
+        "z^2",
+        "z^3"
+      ],
+      "power_mean_db": -36.13528216545841,
+      "power_scale_db": 12.470211230998618,
+      "ridge_alpha": 1.0,
+      "ridge_fit_intercept": false,
+      "test_max_abs_feature_power_correlation_after": 0.9842446093486087,
+      "test_max_abs_feature_power_correlation_before": 0.9893373117929254,
+      "test_sample_index_sha256": "e4066ec83a6af6b3ea4356264316d3ebadca490db00a5e6400e060e1d3f5b740",
+      "train_max_abs_feature_power_correlation_after": 0.043707613832425815,
+      "train_max_abs_feature_power_correlation_before": 0.830984354719192,
+      "train_sample_index_sha256": "6b8ec56860956e041bd8da377936bb9a9329252a2c5f84e229c271beba67715e"
+    },
+    {
+      "coefficient_sha256": "673fddb43c426af6f06d44608003a33c5a505db1d026528d9b4392c4af5506bf",
+      "coefficient_shape": [
+        16,
+        4
+      ],
+      "fit_scope": "train fold only",
+      "fold": 1,
+      "polynomial_basis": [
+        "1",
+        "z",
+        "z^2",
+        "z^3"
+      ],
+      "power_mean_db": -31.76559804644854,
+      "power_scale_db": 11.878265875367921,
+      "ridge_alpha": 1.0,
+      "ridge_fit_intercept": false,
+      "test_max_abs_feature_power_correlation_after": 0.991478853084073,
+      "test_max_abs_feature_power_correlation_before": 0.9949381991620309,
+      "test_sample_index_sha256": "1c32a49835776e0cff878cc3105992f36f29046c8c1960aeb184042fc0f2c3ea",
+      "train_max_abs_feature_power_correlation_after": 0.1116778016579357,
+      "train_max_abs_feature_power_correlation_before": 0.9781516819934167,
+      "train_sample_index_sha256": "050183f0cf47c4d2dc96623fbe9fc92fba33202a632f75d513796eb670172360"
+    },
+    {
+      "coefficient_sha256": "ddb91a95efbddbffef2ca9e1a4b9909d99a4f5865ffbfb013d1b5d75d40e9922",
+      "coefficient_shape": [
+        16,
+        4
+      ],
+      "fit_scope": "train fold only",
+      "fold": 2,
+      "polynomial_basis": [
+        "1",
+        "z",
+        "z^2",
+        "z^3"
+      ],
+      "power_mean_db": -30.764591311514693,
+      "power_scale_db": 12.157066618001142,
+      "ridge_alpha": 1.0,
+      "ridge_fit_intercept": false,
+      "test_max_abs_feature_power_correlation_after": 0.49489697323573706,
+      "test_max_abs_feature_power_correlation_before": 0.817700453979362,
+      "test_sample_index_sha256": "390d2395c380b0aea903e0f76341ab8f0b6ae84ea4b527a56318bd8cbf6ccd29",
+      "train_max_abs_feature_power_correlation_after": 0.06754575898146001,
+      "train_max_abs_feature_power_correlation_before": 0.9268148662227106,
+      "train_sample_index_sha256": "654db6e250f6006ccd13411669789d14c701265f21f201d9d32abaa553355b5d"
+    },
+    {
+      "coefficient_sha256": "9afafdccd0e41e112a52b7a95a23a85f16d16466c259af4929833b7463494086",
+      "coefficient_shape": [
+        16,
+        4
+      ],
+      "fit_scope": "train fold only",
+      "fold": 3,
+      "polynomial_basis": [
+        "1",
+        "z",
+        "z^2",
+        "z^3"
+      ],
+      "power_mean_db": -34.95384942202472,
+      "power_scale_db": 13.612870646893304,
+      "ridge_alpha": 1.0,
+      "ridge_fit_intercept": false,
+      "test_max_abs_feature_power_correlation_after": 0.9957810472575278,
+      "test_max_abs_feature_power_correlation_before": 0.9733741053087029,
+      "test_sample_index_sha256": "cd77c1c015ab25a54e96bc26eb0839a34f6bb536f25a6acef16d52f412e1ba12",
+      "train_max_abs_feature_power_correlation_after": 0.022931693417597668,
+      "train_max_abs_feature_power_correlation_before": 0.9922312589075702,
+      "train_sample_index_sha256": "75ea7d6cd940e9b83ab140782a1ee8baef4713a51ef7994fbe090fae21257744"
+    },
+    {
+      "coefficient_sha256": "f176370bbb0acad5bf5a7b08feb5f74dbae821d489f27d5446fcb1410a30be5a",
+      "coefficient_shape": [
+        16,
+        4
+      ],
+      "fit_scope": "train fold only",
+      "fold": 4,
+      "polynomial_basis": [
+        "1",
+        "z",
+        "z^2",
+        "z^3"
+      ],
+      "power_mean_db": -35.70049567015707,
+      "power_scale_db": 13.289017061005955,
+      "ridge_alpha": 1.0,
+      "ridge_fit_intercept": false,
+      "test_max_abs_feature_power_correlation_after": 0.9977131384994523,
+      "test_max_abs_feature_power_correlation_before": 0.9794008593008755,
+      "test_sample_index_sha256": "1781526ff5c32e013212e859c2f14e0271ae699726dbecd0978dd4b547800245",
+      "train_max_abs_feature_power_correlation_after": 0.03174710191527578,
+      "train_max_abs_feature_power_correlation_before": 0.9021427333219308,
+      "train_sample_index_sha256": "bcc1c8c57d6a4a1bfa8cc7f9431b224e0c59985335e3d6dff93e23c8c6587fe4"
+    }
+  ],
+  "test_refit_count": 0
+}

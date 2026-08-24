@@ -1,0 +1,236 @@
+{
+  "bootstrap_replicates": 2000,
+  "bootstrap_unit": "original test class_block_key",
+  "track_a_actual": {
+    "M0": {
+      "auprc": 1.0,
+      "auroc": 1.0,
+      "balanced_accuracy": 1.0,
+      "block_bootstrap_95ci": {
+        "accepted_replicates": 2000,
+        "metrics": {
+          "auprc": {
+            "ci95_high": 1.0000000000000002,
+            "ci95_low": 0.9999999999999998,
+            "estimate": 1.0
+          },
+          "auroc": {
+            "ci95_high": 1.0,
+            "ci95_low": 1.0,
+            "estimate": 1.0
+          },
+          "balanced_accuracy": {
+            "ci95_high": 1.0,
+            "ci95_low": 1.0,
+            "estimate": 1.0
+          },
+          "tpr_at_5pct_fpr": {
+            "ci95_high": 1.0,
+            "ci95_low": 1.0,
+            "estimate": 1.0
+          }
+        },
+        "single_class_rejected_replicates": 1,
+        "single_class_rejection_ratio": 0.0004997501249375312,
+        "total_draws": 2001,
+        "unique_block_count": 11,
+        "unit": "original test class_block_key"
+      },
+      "confusion_matrix_tn_fp_fn_tp": [
+        164,
+        0,
+        0,
+        124
+      ],
+      "count": 288,
+      "prn_false_positive_rate": 0.0,
+      "spoof_recall": 1.0,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 1.0
+    },
+    "M1": {
+      "auprc": 1.0,
+      "auroc": 1.0,
+      "balanced_accuracy": 1.0,
+      "block_bootstrap_95ci": {
+        "accepted_replicates": 2000,
+        "metrics": {
+          "auprc": {
+            "ci95_high": 1.0000000000000002,
+            "ci95_low": 0.9999999999999998,
+            "estimate": 1.0
+          },
+          "auroc": {
+            "ci95_high": 1.0,
+            "ci95_low": 0.9999999999999999,
+            "estimate": 1.0
+          },
+          "balanced_accuracy": {
+            "ci95_high": 1.0,
+            "ci95_low": 1.0,
+            "estimate": 1.0
+          },
+          "tpr_at_5pct_fpr": {
+            "ci95_high": 1.0,
+            "ci95_low": 1.0,
+            "estimate": 1.0
+          }
+        },
+        "single_class_rejected_replicates": 2,
+        "single_class_rejection_ratio": 0.000999000999000999,
+        "total_draws": 2002,
+        "unique_block_count": 11,
+        "unit": "original test class_block_key"
+      },
+      "confusion_matrix_tn_fp_fn_tp": [
+        164,
+        0,
+        0,
+        124
+      ],
+      "count": 288,
+      "prn_false_positive_rate": 0.0,
+      "spoof_recall": 1.0,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 1.0
+    },
+    "M2": {
+      "auprc": 0.9279400548582958,
+      "auroc": 0.9126180173092053,
+      "balanced_accuracy": 0.8669354838709677,
+      "block_bootstrap_95ci": {
+        "accepted_replicates": 2000,
+        "metrics": {
+          "auprc": {
+            "ci95_high": 1.0,
+            "ci95_low": 0.6832276987754663,
+            "estimate": 0.9279400548582958
+          },
+          "auroc": {
+            "ci95_high": 1.0,
+            "ci95_low": 0.6978428019349865,
+            "estimate": 0.9126180173092053
+          },
+          "balanced_accuracy": {
+            "ci95_high": 1.0,
+            "ci95_low": 0.6125025201612904,
+            "estimate": 0.8669354838709677
+          },
+          "tpr_at_5pct_fpr": {
+            "ci95_high": 1.0,
+            "ci95_low": 0.4609375,
+            "estimate": 0.8225806451612904
+          }
+        },
+        "single_class_rejected_replicates": 1,
+        "single_class_rejection_ratio": 0.0004997501249375312,
+        "total_draws": 2001,
+        "unique_block_count": 11,
+        "unit": "original test class_block_key"
+      },
+      "confusion_matrix_tn_fp_fn_tp": [
+        164,
+        0,
+        33,
+        91
+      ],
+      "count": 288,
+      "prn_false_positive_rate": 0.0,
+      "spoof_recall": 0.7338709677419355,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 0.8225806451612904
+    },
+    "M2R": {
+      "auprc": 0.41664045263498634,
+      "auroc": 0.22236428009441386,
+      "balanced_accuracy": 0.3893587726199843,
+      "block_bootstrap_95ci": {
+        "accepted_replicates": 2000,
+        "metrics": {
+          "auprc": {
+            "ci95_high": 0.7541295603789072,
+            "ci95_low": 0.12112695013626924,
+            "estimate": 0.41664045263498634
+          },
+          "auroc": {
+            "ci95_high": 0.6621617245277684,
+            "ci95_low": 0.00023255144348894409,
+            "estimate": 0.22236428009441386
+          },
+          "balanced_accuracy": {
+            "ci95_high": 0.6416823122529642,
+            "ci95_low": 0.20703424551638838,
+            "estimate": 0.3893587726199843
+          },
+          "tpr_at_5pct_fpr": {
+            "ci95_high": 0.5780769230769214,
+            "ci95_low": 0.0,
+            "estimate": 0.18548387096774194
+          }
+        },
+        "single_class_rejected_replicates": 5,
+        "single_class_rejection_ratio": 0.0024937655860349127,
+        "total_draws": 2005,
+        "unique_block_count": 11,
+        "unit": "original test class_block_key"
+      },
+      "confusion_matrix_tn_fp_fn_tp": [
+        92,
+        72,
+        97,
+        27
+      ],
+      "count": 288,
+      "prn_false_positive_rate": 0.43902439024390244,
+      "spoof_recall": 0.21774193548387097,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 0.18548387096774194
+    },
+    "M3": {
+      "auprc": 1.0,
+      "auroc": 1.0,
+      "balanced_accuracy": 1.0,
+      "block_bootstrap_95ci": {
+        "accepted_replicates": 2000,
+        "metrics": {
+          "auprc": {
+            "ci95_high": 1.0000000000000002,
+            "ci95_low": 0.9999999999999998,
+            "estimate": 1.0
+          },
+          "auroc": {
+            "ci95_high": 1.0,
+            "ci95_low": 0.9999999999999999,
+            "estimate": 1.0
+          },
+          "balanced_accuracy": {
+            "ci95_high": 1.0,
+            "ci95_low": 1.0,
+            "estimate": 1.0
+          },
+          "tpr_at_5pct_fpr": {
+            "ci95_high": 1.0,
+            "ci95_low": 1.0,
+            "estimate": 1.0
+          }
+        },
+        "single_class_rejected_replicates": 0,
+        "single_class_rejection_ratio": 0.0,
+        "total_draws": 2000,
+        "unique_block_count": 11,
+        "unit": "original test class_block_key"
+      },
+      "confusion_matrix_tn_fp_fn_tp": [
+        164,
+        0,
+        0,
+        124
+      ],
+      "count": 288,
+      "prn_false_positive_rate": 0.0,
+      "spoof_recall": 1.0,
+      "threshold": 0.5,
+      "tpr_at_5pct_fpr": 1.0
+    }
+  }
+}

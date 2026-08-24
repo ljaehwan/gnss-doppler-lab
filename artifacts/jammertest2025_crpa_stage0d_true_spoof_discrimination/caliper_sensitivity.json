@@ -1,0 +1,34 @@
+{
+  "calipers": {
+    "0.10": {
+      "caliper_db": 0.1,
+      "spatial_metrics": null,
+      "test_pair_count": 0,
+      "track_b_m0_oof": null,
+      "train_pair_count_across_folds": 0
+    },
+    "0.25": {
+      "caliper_db": 0.25,
+      "spatial_metrics": null,
+      "test_pair_count": 0,
+      "track_b_m0_oof": null,
+      "train_pair_count_across_folds": 0
+    },
+    "0.50": {
+      "caliper_db": 0.5,
+      "spatial_metrics": null,
+      "test_pair_count": 0,
+      "track_b_m0_oof": null,
+      "train_pair_count_across_folds": 0
+    },
+    "1.00": {
+      "caliper_db": 1.0,
+      "spatial_metrics": null,
+      "test_pair_count": 0,
+      "track_b_m0_oof": null,
+      "train_pair_count_across_folds": 0
+    }
+  },
+  "reason": "all frozen calipers have zero pairs",
+  "spatial_scoring_executed": false
+}

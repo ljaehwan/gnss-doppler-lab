@@ -1,0 +1,9 @@
+............................................................             [100%]
+=============================== warnings summary ===============================
+tests/test_jammertest2025_crpa_stage0c_execution.py::test_scaler_is_fit_on_training_values_only
+tests/test_jammertest2025_crpa_stage0d_execution.py::test_train_only_scaler_and_residualizer
+  /home/ubuntu/.local/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1403: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', l1_ratio set to a float between 0 and 1 instead of penalty='elasticnet', and C=np.inf instead of penalty=None.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+60 passed, 2 warnings in 1.92s

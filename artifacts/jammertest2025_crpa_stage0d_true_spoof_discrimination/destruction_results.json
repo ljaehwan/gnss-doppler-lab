@@ -1,0 +1,572 @@
+{
+  "circular_shift": {
+    "actual_trained_cross_apply": {
+      "M2": {
+        "auprc": 0.40245743538653933,
+        "auroc": 0.4373278914240755,
+        "balanced_accuracy": 0.5,
+        "block_bootstrap_95ci": {
+          "accepted_replicates": 2000,
+          "metrics": {
+            "auprc": {
+              "ci95_high": 0.7651532955963326,
+              "ci95_low": 0.11518790539984558,
+              "estimate": 0.40245743538653933
+            },
+            "auroc": {
+              "ci95_high": 0.7311636327398351,
+              "ci95_low": 0.13878590838509314,
+              "estimate": 0.4373278914240755
+            },
+            "balanced_accuracy": {
+              "ci95_high": 0.5,
+              "ci95_low": 0.5,
+              "estimate": 0.5
+            },
+            "tpr_at_5pct_fpr": {
+              "ci95_high": 0.0,
+              "ci95_low": 0.0,
+              "estimate": 0.0
+            }
+          },
+          "single_class_rejected_replicates": 2,
+          "single_class_rejection_ratio": 0.000999000999000999,
+          "total_draws": 2002,
+          "unique_block_count": 11,
+          "unit": "original test class_block_key"
+        },
+        "confusion_matrix_tn_fp_fn_tp": [
+          0,
+          164,
+          0,
+          124
+        ],
+        "count": 288,
+        "prn_false_positive_rate": 1.0,
+        "spoof_recall": 1.0,
+        "threshold": 0.5,
+        "tpr_at_5pct_fpr": 0.0
+      },
+      "M2R": {
+        "auprc": 0.4000432519554234,
+        "auroc": 0.49404996066089696,
+        "balanced_accuracy": 0.4995082612116444,
+        "block_bootstrap_95ci": {
+          "accepted_replicates": 2000,
+          "metrics": {
+            "auprc": {
+              "ci95_high": 0.8486187808312153,
+              "ci95_low": 0.1442810609475175,
+              "estimate": 0.4000432519554234
+            },
+            "auroc": {
+              "ci95_high": 0.8604059147243802,
+              "ci95_low": 0.09180085885438613,
+              "estimate": 0.49404996066089696
+            },
+            "balanced_accuracy": {
+              "ci95_high": 0.7783244795742807,
+              "ci95_low": 0.21293780193236717,
+              "estimate": 0.4995082612116444
+            },
+            "tpr_at_5pct_fpr": {
+              "ci95_high": 0.5276718738620637,
+              "ci95_low": 0.0,
+              "estimate": 0.0
+            }
+          },
+          "single_class_rejected_replicates": 5,
+          "single_class_rejection_ratio": 0.0024937655860349127,
+          "total_draws": 2005,
+          "unique_block_count": 11,
+          "unit": "original test class_block_key"
+        },
+        "confusion_matrix_tn_fp_fn_tp": [
+          103,
+          61,
+          78,
+          46
+        ],
+        "count": 288,
+        "prn_false_positive_rate": 0.3719512195121951,
+        "spoof_recall": 0.3709677419354839,
+        "threshold": 0.5,
+        "tpr_at_5pct_fpr": 0.0
+      }
+    },
+    "retrained": {
+      "M2": {
+        "auprc": 0.7765188018188838,
+        "auroc": 0.8084185680566484,
+        "balanced_accuracy": 0.7521636506687648,
+        "block_bootstrap_95ci": {
+          "accepted_replicates": 2000,
+          "metrics": {
+            "auprc": {
+              "ci95_high": 0.9394098420464798,
+              "ci95_low": 0.4200855097266234,
+              "estimate": 0.7765188018188838
+            },
+            "auroc": {
+              "ci95_high": 0.9481933368007396,
+              "ci95_low": 0.6289761898663512,
+              "estimate": 0.8084185680566484
+            },
+            "balanced_accuracy": {
+              "ci95_high": 0.8939959881756756,
+              "ci95_low": 0.5863558940425699,
+              "estimate": 0.7521636506687648
+            },
+            "tpr_at_5pct_fpr": {
+              "ci95_high": 0.704225352112676,
+              "ci95_low": 0.17604593929450368,
+              "estimate": 0.4112903225806452
+            }
+          },
+          "single_class_rejected_replicates": 1,
+          "single_class_rejection_ratio": 0.0004997501249375312,
+          "total_draws": 2001,
+          "unique_block_count": 11,
+          "unit": "original test class_block_key"
+        },
+        "confusion_matrix_tn_fp_fn_tp": [
+          129,
+          35,
+          35,
+          89
+        ],
+        "count": 288,
+        "prn_false_positive_rate": 0.21341463414634146,
+        "spoof_recall": 0.717741935483871,
+        "threshold": 0.5,
+        "tpr_at_5pct_fpr": 0.4112903225806452
+      },
+      "M2R": {
+        "auprc": 0.7342760501037764,
+        "auroc": 0.6349822974036192,
+        "balanced_accuracy": 0.6011014948859166,
+        "block_bootstrap_95ci": {
+          "accepted_replicates": 2000,
+          "metrics": {
+            "auprc": {
+              "ci95_high": 0.9871137932139,
+              "ci95_low": 0.23953075102026214,
+              "estimate": 0.7342760501037764
+            },
+            "auroc": {
+              "ci95_high": 0.9931230086018831,
+              "ci95_low": 0.18528625303541477,
+              "estimate": 0.6349822974036192
+            },
+            "balanced_accuracy": {
+              "ci95_high": 0.8113655252659573,
+              "ci95_low": 0.3613840852130326,
+              "estimate": 0.6011014948859166
+            },
+            "tpr_at_5pct_fpr": {
+              "ci95_high": 0.964884009942004,
+              "ci95_low": 0.054042548145337266,
+              "estimate": 0.46774193548387094
+            }
+          },
+          "single_class_rejected_replicates": 2,
+          "single_class_rejection_ratio": 0.000999000999000999,
+          "total_draws": 2002,
+          "unique_block_count": 11,
+          "unit": "original test class_block_key"
+        },
+        "confusion_matrix_tn_fp_fn_tp": [
+          94,
+          70,
+          46,
+          78
+        ],
+        "count": 288,
+        "prn_false_positive_rate": 0.4268292682926829,
+        "spoof_recall": 0.6290322580645161,
+        "threshold": 0.5,
+        "tpr_at_5pct_fpr": 0.46774193548387094
+      }
+    }
+  },
+  "fourier_phase_randomized": {
+    "actual_trained_cross_apply": {
+      "M2": {
+        "auprc": 0.39974086540904974,
+        "auroc": 0.4310090479937057,
+        "balanced_accuracy": 0.5,
+        "block_bootstrap_95ci": {
+          "accepted_replicates": 2000,
+          "metrics": {
+            "auprc": {
+              "ci95_high": 0.758484103803969,
+              "ci95_low": 0.12526949214262428,
+              "estimate": 0.39974086540904974
+            },
+            "auroc": {
+              "ci95_high": 0.7263277610198178,
+              "ci95_low": 0.12976681659347405,
+              "estimate": 0.4310090479937057
+            },
+            "balanced_accuracy": {
+              "ci95_high": 0.5,
+              "ci95_low": 0.5,
+              "estimate": 0.5
+            },
+            "tpr_at_5pct_fpr": {
+              "ci95_high": 0.0,
+              "ci95_low": 0.0,
+              "estimate": 0.0
+            }
+          },
+          "single_class_rejected_replicates": 2,
+          "single_class_rejection_ratio": 0.000999000999000999,
+          "total_draws": 2002,
+          "unique_block_count": 11,
+          "unit": "original test class_block_key"
+        },
+        "confusion_matrix_tn_fp_fn_tp": [
+          0,
+          164,
+          0,
+          124
+        ],
+        "count": 288,
+        "prn_false_positive_rate": 1.0,
+        "spoof_recall": 1.0,
+        "threshold": 0.5,
+        "tpr_at_5pct_fpr": 0.0
+      },
+      "M2R": {
+        "auprc": 0.39379353951395557,
+        "auroc": 0.48628048780487804,
+        "balanced_accuracy": 0.5255704169944925,
+        "block_bootstrap_95ci": {
+          "accepted_replicates": 2000,
+          "metrics": {
+            "auprc": {
+              "ci95_high": 0.8576929501776765,
+              "ci95_low": 0.13304728488933562,
+              "estimate": 0.39379353951395557
+            },
+            "auroc": {
+              "ci95_high": 0.8711708836675107,
+              "ci95_low": 0.07973077638507327,
+              "estimate": 0.48628048780487804
+            },
+            "balanced_accuracy": {
+              "ci95_high": 0.8441864011176229,
+              "ci95_low": 0.20583109816253548,
+              "estimate": 0.5255704169944925
+            },
+            "tpr_at_5pct_fpr": {
+              "ci95_high": 0.5406698564593302,
+              "ci95_low": 0.0,
+              "estimate": 0.0
+            }
+          },
+          "single_class_rejected_replicates": 1,
+          "single_class_rejection_ratio": 0.0004997501249375312,
+          "total_draws": 2001,
+          "unique_block_count": 11,
+          "unit": "original test class_block_key"
+        },
+        "confusion_matrix_tn_fp_fn_tp": [
+          97,
+          67,
+          67,
+          57
+        ],
+        "count": 288,
+        "prn_false_positive_rate": 0.40853658536585363,
+        "spoof_recall": 0.4596774193548387,
+        "threshold": 0.5,
+        "tpr_at_5pct_fpr": 0.0
+      }
+    },
+    "retrained": {
+      "M2": {
+        "auprc": 0.7837300139176941,
+        "auroc": 0.7204464988198268,
+        "balanced_accuracy": 0.7261998426435877,
+        "block_bootstrap_95ci": {
+          "accepted_replicates": 2000,
+          "metrics": {
+            "auprc": {
+              "ci95_high": 0.9610054198250378,
+              "ci95_low": 0.39432162300406287,
+              "estimate": 0.7837300139176941
+            },
+            "auroc": {
+              "ci95_high": 0.9751121794871794,
+              "ci95_low": 0.3984705652918544,
+              "estimate": 0.7204464988198268
+            },
+            "balanced_accuracy": {
+              "ci95_high": 0.8876944930069929,
+              "ci95_low": 0.5476059862221246,
+              "estimate": 0.7261998426435877
+            },
+            "tpr_at_5pct_fpr": {
+              "ci95_high": 0.8873239436619719,
+              "ci95_low": 0.24509803921568626,
+              "estimate": 0.5887096774193549
+            }
+          },
+          "single_class_rejected_replicates": 1,
+          "single_class_rejection_ratio": 0.0004997501249375312,
+          "total_draws": 2001,
+          "unique_block_count": 11,
+          "unit": "original test class_block_key"
+        },
+        "confusion_matrix_tn_fp_fn_tp": [
+          139,
+          25,
+          49,
+          75
+        ],
+        "count": 288,
+        "prn_false_positive_rate": 0.1524390243902439,
+        "spoof_recall": 0.6048387096774194,
+        "threshold": 0.5,
+        "tpr_at_5pct_fpr": 0.5887096774193549
+      },
+      "M2R": {
+        "auprc": 0.756208733705231,
+        "auroc": 0.6615361919748229,
+        "balanced_accuracy": 0.6191974822974036,
+        "block_bootstrap_95ci": {
+          "accepted_replicates": 2000,
+          "metrics": {
+            "auprc": {
+              "ci95_high": 0.9746483991084599,
+              "ci95_low": 0.2977891599167281,
+              "estimate": 0.756208733705231
+            },
+            "auroc": {
+              "ci95_high": 0.9877717977117362,
+              "ci95_low": 0.23955701345036204,
+              "estimate": 0.6615361919748229
+            },
+            "balanced_accuracy": {
+              "ci95_high": 0.8125,
+              "ci95_low": 0.38326713076713076,
+              "estimate": 0.6191974822974036
+            },
+            "tpr_at_5pct_fpr": {
+              "ci95_high": 0.9333532934131735,
+              "ci95_low": 0.13513513513513514,
+              "estimate": 0.5241935483870968
+            }
+          },
+          "single_class_rejected_replicates": 2,
+          "single_class_rejection_ratio": 0.000999000999000999,
+          "total_draws": 2002,
+          "unique_block_count": 11,
+          "unit": "original test class_block_key"
+        },
+        "confusion_matrix_tn_fp_fn_tp": [
+          92,
+          72,
+          40,
+          84
+        ],
+        "count": 288,
+        "prn_false_positive_rate": 0.43902439024390244,
+        "spoof_recall": 0.6774193548387096,
+        "threshold": 0.5,
+        "tpr_at_5pct_fpr": 0.5241935483870968
+      }
+    }
+  },
+  "mismatched": {
+    "actual_trained_cross_apply": {
+      "M2": {
+        "auprc": 0.40732000908917887,
+        "auroc": 0.44345003933910304,
+        "balanced_accuracy": 0.5,
+        "block_bootstrap_95ci": {
+          "accepted_replicates": 2000,
+          "metrics": {
+            "auprc": {
+              "ci95_high": 0.772888518540563,
+              "ci95_low": 0.13383758115591163,
+              "estimate": 0.40732000908917887
+            },
+            "auroc": {
+              "ci95_high": 0.7354117647058818,
+              "ci95_low": 0.1416952809832067,
+              "estimate": 0.44345003933910304
+            },
+            "balanced_accuracy": {
+              "ci95_high": 0.5,
+              "ci95_low": 0.5,
+              "estimate": 0.5
+            },
+            "tpr_at_5pct_fpr": {
+              "ci95_high": 0.0,
+              "ci95_low": 0.0,
+              "estimate": 0.0
+            }
+          },
+          "single_class_rejected_replicates": 2,
+          "single_class_rejection_ratio": 0.000999000999000999,
+          "total_draws": 2002,
+          "unique_block_count": 11,
+          "unit": "original test class_block_key"
+        },
+        "confusion_matrix_tn_fp_fn_tp": [
+          0,
+          164,
+          0,
+          124
+        ],
+        "count": 288,
+        "prn_false_positive_rate": 1.0,
+        "spoof_recall": 1.0,
+        "threshold": 0.5,
+        "tpr_at_5pct_fpr": 0.0
+      },
+      "M2R": {
+        "auprc": 0.40366313656788466,
+        "auroc": 0.49857395751376865,
+        "balanced_accuracy": 0.49744295830055074,
+        "block_bootstrap_95ci": {
+          "accepted_replicates": 2000,
+          "metrics": {
+            "auprc": {
+              "ci95_high": 0.8470590271040525,
+              "ci95_low": 0.14552900981492356,
+              "estimate": 0.40366313656788466
+            },
+            "auroc": {
+              "ci95_high": 0.8868115470566603,
+              "ci95_low": 0.10652917242751311,
+              "estimate": 0.49857395751376865
+            },
+            "balanced_accuracy": {
+              "ci95_high": 0.7854782196969693,
+              "ci95_low": 0.20504807692307692,
+              "estimate": 0.49744295830055074
+            },
+            "tpr_at_5pct_fpr": {
+              "ci95_high": 0.5695308032624069,
+              "ci95_low": 0.0,
+              "estimate": 0.0
+            }
+          },
+          "single_class_rejected_replicates": 2,
+          "single_class_rejection_ratio": 0.000999000999000999,
+          "total_draws": 2002,
+          "unique_block_count": 11,
+          "unit": "original test class_block_key"
+        },
+        "confusion_matrix_tn_fp_fn_tp": [
+          101,
+          63,
+          77,
+          47
+        ],
+        "count": 288,
+        "prn_false_positive_rate": 0.38414634146341464,
+        "spoof_recall": 0.3790322580645161,
+        "threshold": 0.5,
+        "tpr_at_5pct_fpr": 0.0
+      }
+    },
+    "retrained": {
+      "M2": {
+        "auprc": 0.808681604309494,
+        "auroc": 0.7958300550747444,
+        "balanced_accuracy": 0.7472462627852084,
+        "block_bootstrap_95ci": {
+          "accepted_replicates": 2000,
+          "metrics": {
+            "auprc": {
+              "ci95_high": 0.9564481926698661,
+              "ci95_low": 0.4044968240502562,
+              "estimate": 0.808681604309494
+            },
+            "auroc": {
+              "ci95_high": 0.9554425914963443,
+              "ci95_low": 0.601037338248318,
+              "estimate": 0.7958300550747444
+            },
+            "balanced_accuracy": {
+              "ci95_high": 0.8995220588235293,
+              "ci95_low": 0.5833581875958267,
+              "estimate": 0.7472462627852084
+            },
+            "tpr_at_5pct_fpr": {
+              "ci95_high": 0.8478260869565217,
+              "ci95_low": 0.1875,
+              "estimate": 0.5564516129032258
+            }
+          },
+          "single_class_rejected_replicates": 3,
+          "single_class_rejection_ratio": 0.0014977533699450823,
+          "total_draws": 2003,
+          "unique_block_count": 11,
+          "unit": "original test class_block_key"
+        },
+        "confusion_matrix_tn_fp_fn_tp": [
+          134,
+          30,
+          40,
+          84
+        ],
+        "count": 288,
+        "prn_false_positive_rate": 0.18292682926829268,
+        "spoof_recall": 0.6774193548387096,
+        "threshold": 0.5,
+        "tpr_at_5pct_fpr": 0.5564516129032258
+      },
+      "M2R": {
+        "auprc": 0.6737962563120661,
+        "auroc": 0.5910700236034618,
+        "balanced_accuracy": 0.5697285601888278,
+        "block_bootstrap_95ci": {
+          "accepted_replicates": 2000,
+          "metrics": {
+            "auprc": {
+              "ci95_high": 0.9549407800875339,
+              "ci95_low": 0.17808250559441696,
+              "estimate": 0.6737962563120661
+            },
+            "auroc": {
+              "ci95_high": 0.9733995666631755,
+              "ci95_low": 0.2591581426148441,
+              "estimate": 0.5910700236034618
+            },
+            "balanced_accuracy": {
+              "ci95_high": 0.7732369215291749,
+              "ci95_low": 0.3828806440352259,
+              "estimate": 0.5697285601888278
+            },
+            "tpr_at_5pct_fpr": {
+              "ci95_high": 0.8571428571428571,
+              "ci95_low": 0.013513513513513514,
+              "estimate": 0.33064516129032256
+            }
+          },
+          "single_class_rejected_replicates": 3,
+          "single_class_rejection_ratio": 0.0014977533699450823,
+          "total_draws": 2003,
+          "unique_block_count": 11,
+          "unit": "original test class_block_key"
+        },
+        "confusion_matrix_tn_fp_fn_tp": [
+          89,
+          75,
+          50,
+          74
+        ],
+        "count": 288,
+        "prn_false_positive_rate": 0.4573170731707317,
+        "spoof_recall": 0.5967741935483871,
+        "threshold": 0.5,
+        "tpr_at_5pct_fpr": 0.33064516129032256
+      }
+    }
+  }
+}

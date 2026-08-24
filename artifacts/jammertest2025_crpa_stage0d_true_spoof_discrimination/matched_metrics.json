@@ -1,0 +1,19 @@
+{
+  "matched_m0": null,
+  "matched_models": {
+    "M0": null,
+    "M1": null,
+    "M2": null,
+    "M2R": null,
+    "M3": null
+  },
+  "power_match_gate": {
+    "at_least_4_prn_blocks_retained": false,
+    "at_least_4_spoof_blocks_retained": false,
+    "matched_m0_auroc_at_most_0_60": false,
+    "total_test_matched_pairs_at_least_50": false
+  },
+  "primary_caliper_db": 0.25,
+  "reason": "NOT_EXECUTED: primary power-match gate failed with zero train/test pairs",
+  "track_b_executed": false
+}

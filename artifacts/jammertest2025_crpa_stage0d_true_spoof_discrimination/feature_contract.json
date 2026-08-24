@@ -1,0 +1,45 @@
+{
+  "M0": {
+    "dimension": 1,
+    "input": "received_power_db"
+  },
+  "M1": {
+    "absolute_phase_excluded": true,
+    "absolute_received_power_excluded": true,
+    "dimension": 22
+  },
+  "M2": {
+    "channel_identity_excluded": true,
+    "coherence_phase_excluded": true,
+    "dimension": 16
+  },
+  "M2R": {
+    "basis": [
+      "1",
+      "z",
+      "z^2",
+      "z^3"
+    ],
+    "dimension": 16,
+    "power_standardization": "train mean/std only",
+    "ridge_alpha": 1.0,
+    "ridge_fit_intercept": false
+  },
+  "M3": {
+    "diagnostic_only": true,
+    "dimension": 28
+  },
+  "classifier": {
+    "C": 1.0,
+    "class_weight": "balanced",
+    "max_iter": 2000,
+    "penalty": "l2",
+    "random_state": 20250823,
+    "scaler": "StandardScaler train only",
+    "solver": "liblinear"
+  },
+  "design_freeze_commit": "33c3c6924f2a7f42ca964e1bd136239cacaea04c",
+  "power_match_freeze_commit": "aa1859b411b65a2599325642b7c0d4a9abf6558c",
+  "test_label_threshold_use": false,
+  "threshold": 0.5
+}

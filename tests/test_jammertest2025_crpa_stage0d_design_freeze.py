@@ -120,7 +120,13 @@ def test_complete_oof_contract_passes() -> None:
     assert contract["enumerated_unique_class_block_count"] == 11
 
 
-def test_execution_skeleton_is_fail_closed() -> None:
-    source = (ROOT / "scripts/run_jammertest2025_crpa_stage0d.py").read_text()
-    assert "LABEL_ONLY_DESIGN_FREEZE_POWER_ACCESS_NOT_YET_AUTHORIZED" in source
-    assert "/home/ubuntu/ssd_data" not in source
+def test_execution_is_bound_to_both_pushed_freezes() -> None:
+    runner = (ROOT / "scripts/run_jammertest2025_crpa_stage0d.py").read_text()
+    executor = (ROOT / "scripts/execute_jammertest2025_crpa_stage0d.py").read_text()
+    contract = (ROOT / "src/gnss_doppler_lab/jammertest_crpa_stage0d_execution.py").read_text()
+    assert "execute_jammertest2025_crpa_stage0d" in runner
+    assert "DESIGN_FREEZE_COMMIT" in executor and "POWER_MATCH_FREEZE_COMMIT" in executor
+    assert "33c3c6924f2a7f42ca964e1bd136239cacaea04c" in contract
+    assert "aa1859b411b65a2599325642b7c0d4a9abf6558c" in contract
+    assert "/home/ubuntu/ssd_data" not in runner
+    assert "/home/ubuntu/ssd_data" not in executor
