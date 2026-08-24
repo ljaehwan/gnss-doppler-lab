@@ -29,6 +29,7 @@ def _load_script(name):
  path=ROOT/"scripts"/name; spec=importlib.util.spec_from_file_location("_oakbat_"+path.stem,path); module=importlib.util.module_from_spec(spec); sys.modules[spec.name]=module; spec.loader.exec_module(module); return module
 train_lib=_load_script("train_prn_node_gru.py")
 gate_lib=_load_script("eval_btail_support_gate.py")
+quality_contract=train_lib.quality_contract
 FEATURE_COLUMNS=["tap_E4_rel_prompt_mean","tap_E3_rel_prompt_mean","tap_E2_rel_prompt_mean","tap_E_rel_prompt_mean","tap_P_rel_prompt_mean","tap_L_rel_prompt_mean","tap_L2_rel_prompt_mean","tap_L3_rel_prompt_mean","tap_L4_rel_prompt_mean"]
 TAP_LAYOUT="E4,E3,E2,E,P,L,L2,L3,L4"
 PARTITION_RULES={"train":(None,240.0),"validation":(250.0,330.0),"calibration":(340.0,410.0),"held_clean":(420.0,None)}
@@ -287,6 +288,31 @@ def score_partition(part,checkpoint):
    for start in range(len(x)-cfg.seq_len):
     target=start+cfg.seq_len; pred=model(torch.from_numpy(x[start:target][None])).numpy()[0]; source=group.iloc[target]
     rows.append({"run_id":str(source.run_id),"prn":str(source.prn),"window_bin_s":float(source.window_bin_s),"window_start_s":float(source.window_start_s),"window_mid_s":float(source.window_mid_s),"window_end_s":float(source.window_end_s),"prn_node_rmse":float(np.sqrt(np.mean((pred-x[target])**2)))})
+ scores=pd.DataFrame(rows)
+ if scores.empty or not np.isfinite(scores.prn_node_rmse).all(): raise ValueError("empty/non-finite partition scores")
+ return scores
+
+def score_partition_with_quality(part,checkpoint):
+ """Score future/evaluation data without crossing receiver or cadence boundaries."""
+ _,cfg,model,mean,std=_open_model(checkpoint); rows=[]
+ blocks=quality_contract.segment_safe_blocks(part,FEATURE_COLUMNS,expected_stride_s=CADENCE_S,time_tolerance_s=TIME_TOLERANCE_S)
+ with torch.no_grad():
+  for block in blocks:
+   group=block.frame
+   x=(group[FEATURE_COLUMNS].to_numpy(np.float32)-mean)/std
+   if not np.isfinite(x).all(): raise ValueError("non-finite score input")
+   target_positions=np.arange(cfg.seq_len,len(x),dtype=int)
+   if not len(target_positions): continue
+   sequences=np.stack([x[target-cfg.seq_len:target] for target in target_positions]).astype(np.float32)
+   targets=x[target_positions]
+   for offset in range(0,len(target_positions),1024):
+    stop=offset+1024; predicted=model(torch.from_numpy(sequences[offset:stop])).numpy()
+    rmse=np.sqrt(np.mean((predicted-targets[offset:stop])**2,axis=1))
+    for target,value in zip(target_positions[offset:stop],rmse):
+     source=group.iloc[target]
+     row={"run_id":str(source.run_id),"prn":str(source.prn),"window_bin_s":float(source.window_bin_s),"window_start_s":float(source.window_start_s),"window_mid_s":float(source.window_mid_s),"window_end_s":float(source.window_end_s)}
+     row.update(quality_contract.score_quality_metadata(block,int(target),cfg.seq_len,expected_stride_s=CADENCE_S))
+     row["prn_node_rmse"]=float(value); rows.append(row)
  scores=pd.DataFrame(rows)
  if scores.empty or not np.isfinite(scores.prn_node_rmse).all(): raise ValueError("empty/non-finite partition scores")
  return scores

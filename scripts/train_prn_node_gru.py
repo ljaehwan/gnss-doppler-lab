@@ -11,6 +11,7 @@ import argparse
 import json
 import math
 import random
+import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -19,6 +20,13 @@ import pandas as pd
 import torch
 from torch import nn
 from torch.utils.data import DataLoader, Dataset
+
+ROOT = Path(__file__).resolve().parents[1]
+SRC_ROOT = ROOT / "src"
+if str(SRC_ROOT) not in sys.path:
+    sys.path.insert(0, str(SRC_ROOT))
+
+from gnss_doppler_lab import receiver_quality_contract as quality_contract
 
 META_COLS = {
     "run_id", "source_fingerprint", "split", "label", "prn", "channel", "sample_rate_hz",
@@ -114,11 +122,23 @@ class PrnLocalGRU(nn.Module):
         return self.head(out[:, -1])
 
 
-def build_series(df: pd.DataFrame, feature_cols: list[str], mean: np.ndarray, std: np.ndarray) -> list[np.ndarray]:
+def build_series(
+    df: pd.DataFrame,
+    feature_cols: list[str],
+    mean: np.ndarray,
+    std: np.ndarray,
+    expected_stride_s: float = 0.5,
+) -> list[np.ndarray]:
+    """Build one standardized series per uninterrupted receiver segment."""
+
     series: list[np.ndarray] = []
-    for (_run, _prn), g in df.groupby(["run_id", "prn"], sort=True):
-        g = g.sort_values("window_bin_s")
-        x = standardize(g[feature_cols].to_numpy(np.float32), mean, std)
+    blocks = quality_contract.segment_safe_blocks(
+        df, feature_cols, expected_stride_s=expected_stride_s
+    )
+    for block in blocks:
+        x = standardize(
+            block.frame[feature_cols].to_numpy(np.float32), mean, std
+        )
         if len(x):
             series.append(x)
     return series
@@ -168,6 +188,7 @@ def main() -> None:
     ap.add_argument("--seq-len", type=int, default=12)
     ap.add_argument("--epochs", type=int, default=40)
     ap.add_argument("--batch-size", type=int, default=256)
+    ap.add_argument("--stride-s", type=float, default=0.5)
     ap.add_argument("--feature-subset", choices=["all_numeric", "tap_rel_prompt_mean"], default="all_numeric",
                     help="Feature family for shared PRN encoder; tap_rel_prompt_mean matches q70 morphology framing.")
     args = ap.parse_args()
@@ -194,8 +215,8 @@ def main() -> None:
         val_df = df[df["prn"].astype(str).isin(val_prns)].copy()
         split_doc = {"mode": "prn_holdout", "val_prns": sorted(val_prns)}
     mean, std = fit_standardizer(train_df[feature_cols].to_numpy(np.float32))
-    train_series = build_series(train_df, feature_cols, mean, std)
-    val_series = build_series(val_df, feature_cols, mean, std)
+    train_series = build_series(train_df, feature_cols, mean, std, args.stride_s)
+    val_series = build_series(val_df, feature_cols, mean, std, args.stride_s)
     train_ds = PrnSequenceDataset(train_series, cfg.seq_len)
     val_ds = PrnSequenceDataset(val_series, cfg.seq_len)
     train_loader = DataLoader(train_ds, batch_size=cfg.batch_size, shuffle=True, num_workers=0)
@@ -219,6 +240,7 @@ def main() -> None:
                 "config": asdict(cfg),
                 "node_feature_columns": feature_cols,
                 "standardizer": {"node_mean": mean.tolist(), "node_std": std.tolist()},
+                "expected_stride_s": float(args.stride_s),
                 "architecture_note": "PRN-local GRU next-window predictor; no receiver graph, no PRN relation, no PRN ID input",
             }, best_path)
     pd.DataFrame(history).to_csv(out / "training_history.csv", index=False)
@@ -236,6 +258,9 @@ def main() -> None:
         "uses_prn_id_as_input": False,
         "uses_receiver_graph_or_prn_relation": False,
         "score": "per-PRN next-window standardized feature prediction RMSE",
+        "sequence_contract": quality_contract.score_contract_document(
+            expected_stride_s=args.stride_s, history_length=cfg.seq_len
+        ),
         "device": str(device),
         "torch": {"version": torch.__version__, "cuda": torch.version.cuda, "cuda_available": torch.cuda.is_available(), "gpu": gpu},
         "data": {"node_csv": cfg.node_csv, "node_rows": len(df), "train_windows": len(train_ds), "val_windows": len(val_ds), "split": split_doc},

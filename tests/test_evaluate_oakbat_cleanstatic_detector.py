@@ -6,6 +6,9 @@ import pytest
 P=Path(__file__).parents[1]/"scripts/evaluate_oakbat_cleanstatic_detector.py"
 def mod():
  s=importlib.util.spec_from_file_location("oe",P);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
+def quality_score_metadata(times):
+ times=np.asarray(times,float);target=np.arange(200,200+len(times))
+ return {"channel":0,"segment_index":0,"prn_segment_ordinal":0,"continuity_block_index":0,"target_window_index":target,"target_sequence_position":np.arange(12,12+len(times)),"epoch_count":50,"tracking_age_s":target*.5,"continuity_age_s":times-times[0],"segment_start_s":times-target*.5,"history_start_window_index":target-12,"history_end_window_index":target-1,"history_start_s":times-6.,"history_end_s":times+.5,"history_length":12,"reacquisition_flag":0,"sequence_restart_flag":0,"history_same_segment_flag":1}
 def test_auc_ties():assert mod().probability_auc([1,2,2],[2,2,3])==pytest.approx(7/9)
 def test_alias_and_restriction():
  m=mod();assert m.scenario_contract("os1")["official_scenario_id"]=="os1a"
@@ -40,7 +43,7 @@ def test_resume_report_tamper_rejected(tmp_path,monkeypatch):
 def test_resume_accepts_normal_noninteger_csv_round_trip(tmp_path,monkeypatch):
     m=mod();k=m.gate_lib.FINAL_SCORE
     times=np.arange(100.0,131.5,0.5);n=len(times)
-    s=pd.DataFrame({"run_id":["oakbat-os2-method-a-9tap"]*n,"prn":["G01"]*n,"window_bin_s":times,"window_start_s":times,"window_mid_s":times+0.5,"window_end_s":times+1.0,"prn_node_rmse":np.sin(times)*0.123456789+0.5})
+    s=pd.DataFrame({"run_id":["oakbat-os2-method-a-9tap"]*n,"prn":["G01"]*n,"window_bin_s":times,"window_start_s":times,"window_mid_s":times+0.5,"window_end_s":times+1.0,"prn_node_rmse":np.sin(times)*0.123456789+0.5}).assign(**quality_score_metadata(times))
     e=pd.DataFrame({"window_start_s":times,k:np.cos(times)*0.234567891+2.0})
     c={"node_thresholds":{"q50":1.,"q70":2.,"q80":3.},"alpha":.75,"event_q99_threshold":2.1}
     monkeypatch.setattr(m,"build_attack_events",lambda scores,calibration:e.copy())

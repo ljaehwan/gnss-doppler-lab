@@ -6,8 +6,8 @@ import pandas as pd
 ROOT=Path(__file__).resolve().parents[1]
 def load(n,t):
  s=importlib.util.spec_from_file_location(t,ROOT/"scripts"/n);m=importlib.util.module_from_spec(s);sys.modules[t]=m;s.loader.exec_module(m);return m
-trainer=load("train_oakbat_cleanstatic_detector.py","_oe_t");pipeline=load("run_oakbat_9tap_detection_pipeline.py","_oe_p");gate_lib=trainer.gate_lib
-SCENARIOS=("os1","os2","os3","os4");SCHEMA="gnss-doppler-lab.oakbat-cleanstatic-attack-evaluation.v1"
+trainer=load("train_oakbat_cleanstatic_detector.py","_oe_t");pipeline=load("run_oakbat_9tap_detection_pipeline.py","_oe_p");gate_lib=trainer.gate_lib;quality_contract=trainer.quality_contract
+SCENARIOS=("os1","os2","os3","os4");SCHEMA="gnss-doppler-lab.oakbat-cleanstatic-attack-evaluation.v2"
 def atomic_json(p,x):trainer.atomic_json(p,x)
 def atomic_csv(p,x):trainer.atomic_csv(p,x)
 def scenario_contract(s):
@@ -50,9 +50,7 @@ def readj(p):
  return x
 def cadence(f):
  trainer.validate_clean_frame(f)
- for _,g in f.groupby(["run_id","prn"]):
-  d=np.diff(np.sort(g.window_bin_s.to_numpy(float)))
-  if len(d) and not np.allclose(d,.5,rtol=0,atol=1e-6):raise ValueError("cadence gap")
+ quality_contract.validate_quality_node_frame(f,trainer.FEATURE_COLUMNS)
 def authenticate(s,iq,r,node,exe):
  iq=Path(iq).resolve();r=Path(r).resolve();node=Path(node).resolve();pipeline.validate_iq(iq);ii=identity(iq);pipeline.validate_cached_receiver(r,s,iq,exe,ii);pipeline.validate_cached_features(node.parents[1],r);rd=readj(r);src=rd["source"];run=f"oakbat-{s}-method-a-9tap"
  if rd.get("receiver_run_id")!=run or src.get("scenario_id")!=s or src.get("iq")!=str(iq) or src.get("iq_sha256")!=ii["sha256"] or src.get("configured_signal_source_samples")!=0 or src.get("signal_source_repeat") is not False:raise ValueError("receiver identity")
@@ -63,14 +61,18 @@ def authenticate(s,iq,r,node,exe):
  if not f.run_id.astype(str).eq(run).all() or "label" not in f or not f.label.astype(str).eq(f"oakbat_{s}_9tap").all():raise ValueError("run/label")
  return f,{"attack_iq":ii,"receiver_manifest":identity(r),"feature_cache_manifest":identity(fp),"node_manifest":identity(nm),"node_csv":ni,"scenario_contract":scenario_contract(s)}
 def validate_scores(f,s):
- required={"run_id","prn","window_bin_s","window_start_s","window_mid_s","window_end_s","prn_node_rmse"}
- if f.empty or not required.issubset(f.columns) or f[["run_id","prn"]].isna().any().any() or not f.run_id.astype(str).eq(f"oakbat-{s}-method-a-9tap").all():raise ValueError("score key/run contract")
- if not np.isfinite(f[["window_bin_s","window_start_s","window_mid_s","window_end_s","prn_node_rmse"]].to_numpy(float)).all() or f.duplicated(["run_id","window_bin_s","prn"]).any():raise ValueError("score finite/unique contract")
- for _,g in f.groupby(["run_id","prn"]):
-  d=np.diff(np.sort(g.window_bin_s.to_numpy(float)))
-  if len(d) and not np.allclose(d,.5,rtol=0,atol=1e-6):raise ValueError("score cadence gap")
+ required={"run_id","prn","window_bin_s","window_start_s","window_mid_s","window_end_s","prn_node_rmse",*quality_contract.SCORE_QUALITY_COLUMNS}
+ if f.empty or not required.issubset(f.columns) or f[["run_id","prn"]].isna().any().any() or not f.run_id.astype(str).eq(f"oakbat-{s}-method-a-9tap").all():raise ValueError("score key/run/quality contract")
+ numeric=["window_bin_s","window_start_s","window_mid_s","window_end_s","prn_node_rmse",*quality_contract.SCORE_QUALITY_COLUMNS]
+ if not np.isfinite(f[numeric].to_numpy(float)).all() or f.duplicated(["run_id","window_bin_s","prn"]).any():raise ValueError("score finite/unique contract")
+ if not f.history_same_segment_flag.eq(1).all() or not f.history_length.eq(trainer.SEQ_LEN).all():raise ValueError("score history boundary contract")
+ if not f.reacquisition_flag.isin([0,1]).all() or not f.sequence_restart_flag.isin([0,1]).all():raise ValueError("score receiver-state flag contract")
+ keys=["run_id","prn","channel","segment_index","continuity_block_index"]
+ for _,g in f.groupby(keys):
+  ordered=g.sort_values("target_window_index")
+  if len(ordered)>1 and (not np.allclose(np.diff(ordered.window_bin_s),.5,rtol=0,atol=1e-6) or not np.equal(np.diff(ordered.target_window_index),1).all()):raise ValueError("score in-block cadence gap")
 def build_report(s,scores,events,q,inputs,out):
- return {"schema":SCHEMA,"scenario":s,"official_scenario_id":scenario_contract(s)["official_scenario_id"],"published_filename":s+".bin","onset":{"seconds":120.,"guard_seconds":10.,"source":"OAKBAT official scenario metadata"},"timing":{"score_timestamp":"window_start_s","online_availability_offset_s":1.},"calibration_policy":{"normal_only_training":True,"attack_inputs_read_during_training":False,"node_quantiles":["q50","q70","q80"],"event_quantile":"q99","alpha":.75},"inputs":inputs,"outputs":{"prn_scores":identity(Path(out)/"attack_prn_scores.csv"),"event_scores":identity(Path(out)/"attack_event_scores.csv")},"raw_score_discrimination":discrimination_report(scores,events),"detection":detection_report(events,q)}
+ return {"schema":SCHEMA,"scenario":s,"official_scenario_id":scenario_contract(s)["official_scenario_id"],"published_filename":s+".bin","onset":{"seconds":120.,"guard_seconds":10.,"source":"OAKBAT official scenario metadata"},"timing":{"score_timestamp":"window_start_s","online_availability_offset_s":1.},"receiver_quality_score_contract":quality_contract.score_contract_document(expected_stride_s=trainer.CADENCE_S,history_length=trainer.SEQ_LEN),"calibration_policy":{"normal_only_training":True,"attack_inputs_read_during_training":False,"node_quantiles":["q50","q70","q80"],"event_quantile":"q99","alpha":.75},"inputs":inputs,"outputs":{"prn_scores":identity(Path(out)/"attack_prn_scores.csv"),"event_scores":identity(Path(out)/"attack_event_scores.csv")},"raw_score_discrimination":discrimination_report(scores,events),"detection":detection_report(events,q)}
 def load_valid_resume(s,out,inputs,calibration):
  try:
   out=Path(out);r=readj(out/"report.json");a=pd.read_csv(out/"attack_prn_scores.csv");b=pd.read_csv(out/"attack_event_scores.csv")
@@ -83,7 +85,7 @@ def evaluate_scenario(s,raw,pre,scored,c,frozen,exe,timeout_s,fr=False,ff=False,
  if not fs:
   old=load_valid_resume(s,out,inputs,c)
   if old:return old
- scores=trainer.score_partition(frame,Path(frozen["checkpoint"]["path"]));validate_scores(scores,s);events=build_attack_events(scores,c);atomic_csv(out/"attack_prn_scores.csv",scores);atomic_csv(out/"attack_event_scores.csv",events);x=build_report(s,scores,events,float(c["event_q99_threshold"]),inputs,out);atomic_json(out/"report.json",x);return x
+ scores=trainer.score_partition_with_quality(frame,Path(frozen["checkpoint"]["path"]));validate_scores(scores,s);events=build_attack_events(scores,c);atomic_csv(out/"attack_prn_scores.csv",scores);atomic_csv(out/"attack_event_scores.csv",events);x=build_report(s,scores,events,float(c["event_q99_threshold"]),inputs,out);atomic_json(out/"report.json",x);return x
 def run_evaluation(campaign_root,raw_root,output_root,scenarios,exe,timeout_s=21600,preprocessing_root=None,force_receiver=False,force_features=False,force_scoring=False,minimum_free_bytes=pipeline.DEFAULT_MIN_FREE_BYTES):
  scenarios=list(scenarios)
  if not scenarios or len(set(scenarios))!=len(scenarios) or any(s not in SCENARIOS for s in scenarios):raise ValueError("scenarios restricted to os1-os4")
@@ -91,7 +93,7 @@ def run_evaluation(campaign_root,raw_root,output_root,scenarios,exe,timeout_s=21
  z=trainer.load_frozen_artifacts(campaign_root);c=z["calibration"];root=Path(campaign_root).resolve()
  if set(c.get("node_thresholds",{}))!={"q50","q70","q80"} or c.get("normal_only") is not True or c.get("attack_inputs_read") is not False:raise ValueError("frozen semantics")
  frozen={"campaign_manifest":identity(root/"campaign_manifest.json"),"checkpoint":identity(root/"model.pt"),"calibration":identity(root/"calibration.json")};out=Path(output_root);pre=Path(preprocessing_root) if preprocessing_root else out/"preprocessed";scored=out/"scored"
- running={"schema":"gnss-doppler-lab.oakbat-cleanstatic-attack-evaluation-manifest.v1","complete":False,"status":"running","selected_scenarios":scenarios,"serial":True,"frozen":frozen,"normal_only_training":True,"attack_inputs_read_during_training":False}
+ running={"schema":"gnss-doppler-lab.oakbat-cleanstatic-attack-evaluation-manifest.v2","complete":False,"status":"running","selected_scenarios":scenarios,"serial":True,"frozen":frozen,"normal_only_training":True,"attack_inputs_read_during_training":False}
  atomic_json(out/"manifest.json",running)
  disk={"preprocessing":pipeline.preflight_output_space(pre,scenario_count=len(scenarios),minimum_free_bytes=minimum_free_bytes),"scoring":pipeline.preflight_output_space(scored,scenario_count=len(scenarios),minimum_free_bytes=minimum_free_bytes)}
  running["disk_preflight"]=disk;atomic_json(out/"manifest.json",running)

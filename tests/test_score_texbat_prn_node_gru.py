@@ -147,3 +147,69 @@ def test_validation_prn_scores_accept_numeric_nonempty_finite_values(tmp_path):
     path.write_text("prn_node_rmse,prn_node_mae\n1.0,0.5\n2.5,1.0\n")
     frame = mod.load_validation_prn_scores(path)
     assert frame["prn_node_rmse"].tolist() == [1.0, 2.5]
+
+
+def test_scorer_restarts_history_and_preserves_receiver_quality(tmp_path, monkeypatch):
+    mod = _load_module()
+    import numpy as np
+    import pandas as pd
+    import torch
+
+    model_dir = tmp_path / "model"
+    model_dir.mkdir()
+    cfg = mod.train_mod.TrainConfig(
+        node_csv="normal.csv",
+        output_dir=str(model_dir),
+        seq_len=2,
+        hidden_dim=4,
+        emb_dim=4,
+        dropout=0.0,
+    )
+    model = mod.train_mod.PrnLocalGRU(1, cfg)
+    torch.save(
+        {
+            "config": cfg.__dict__,
+            "node_feature_columns": ["feature"],
+            "standardizer": {"node_mean": [0.0], "node_std": [1.0]},
+            "model_state_dict": model.state_dict(),
+        },
+        model_dir / "prn_local_gru_predictor.pt",
+    )
+    pd.DataFrame({"prn_node_rmse": [0.1, 0.2, 0.3]}).to_csv(
+        model_dir / "validation_prn_node_scores.csv", index=False
+    )
+
+    rows = []
+    for segment_index, channel, start_s in ((3, 7, 0.0), (0, 2, 10.0)):
+        for window_index in range(4):
+            time_s = start_s + window_index * 0.5
+            rows.append({
+                "run_id": "run-a",
+                "prn": "G01",
+                "channel": channel,
+                "segment_index": segment_index,
+                "window_index": window_index,
+                "epoch_count": 50,
+                "window_bin_s": time_s,
+                "window_start_s": time_s,
+                "window_mid_s": time_s + 0.5,
+                "window_end_s": time_s + 1.0,
+                "feature": float(window_index),
+            })
+    node_csv = tmp_path / "nodes.csv"
+    pd.DataFrame(rows).to_csv(node_csv, index=False)
+    monkeypatch.setattr(mod, "make_plot", lambda *args, **kwargs: None)
+
+    summary = mod.score_node_csv(
+        node_csv, model_dir, tmp_path / "scores", "synthetic", onset_s=None
+    )
+    scores = pd.read_csv(summary["prn_score_csv"])
+
+    assert scores.segment_index.tolist() == [3, 3, 0, 0]
+    assert scores.prn_segment_ordinal.tolist() == [0, 0, 1, 1]
+    assert scores.reacquisition_flag.tolist() == [0, 0, 1, 1]
+    assert scores.target_window_index.tolist() == [2, 3, 2, 3]
+    assert scores.history_start_window_index.tolist() == [0, 1, 0, 1]
+    assert scores.history_same_segment_flag.eq(1).all()
+    assert summary["receiver_quality_score_contract"]["history_length"] == 2
+    assert np.isfinite(scores.prn_node_rmse).all()

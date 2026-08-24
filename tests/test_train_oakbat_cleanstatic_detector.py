@@ -12,7 +12,7 @@ def clean_frame():
  m=load_runner(); rows=[]
  for pi,prn in enumerate(("G01","G02")):
   for t in np.arange(0.,440.,.5):
-   row={"run_id":"oakbat-cleanStatic-method-a-9tap","source_fingerprint":"frozen-clean-fingerprint","label":"oakbat_cleanStatic_9tap","prn":prn,"segment_index":0,"window_index":int(t*2),"window_bin_s":t,"window_start_s":t,"window_mid_s":t+.5,"window_end_s":t+1,"tap_count":9,"tap_layout":"E4,E3,E2,E,P,L,L2,L3,L4"}; row.update({n:pi+i+t/1000 for i,n in enumerate(m.FEATURE_COLUMNS)}); rows.append(row)
+   row={"run_id":"oakbat-cleanStatic-method-a-9tap","source_fingerprint":"frozen-clean-fingerprint","label":"oakbat_cleanStatic_9tap","prn":prn,"channel":pi,"segment_index":0,"window_index":int(t*2),"epoch_count":50,"window_bin_s":t,"window_start_s":t,"window_mid_s":t+.5,"window_end_s":t+1,"tap_count":9,"tap_layout":"E4,E3,E2,E,P,L,L2,L3,L4"}; row.update({n:pi+i+t/1000 for i,n in enumerate(m.FEATURE_COLUMNS)}); rows.append(row)
  return pd.DataFrame(rows)
 def tiny_frame():
  df=clean_frame(); wanted=[]
@@ -72,6 +72,10 @@ def test_tiny_training_freezes_then_scores_held_clean_and_rejects_tamper(tmp_pat
  calibration=json.loads((root/"calibration.json").read_text()); assert calibration["normal_only"] is True and calibration["attack_inputs_read"] is False and calibration["input_partition"]=="calibration"
  split=json.loads((root/"split_manifest.json").read_text()); assert split["history_contract"]=="each partition forms sequences independently; no history crosses boundaries"; assert set(split["partition_csvs"])=={"train","validation","calibration","held_clean"}
  model=json.loads((root/"model_metadata.json").read_text()); assert model["checkpoint_selection"]=="minimum validation loss" and model["standardizer_fit_partition"]=="train"; assert (root/"held_clean_fpr.json").is_file()
+ held=pd.read_csv(root/"partitions"/"held_clean.csv"); quality=m.score_partition_with_quality(held,root/"model.pt")
+ assert len(quality)==4 and set(m.quality_contract.SCORE_QUALITY_COLUMNS)<=set(quality.columns)
+ assert quality.history_same_segment_flag.eq(1).all() and quality.history_length.eq(12).all()
+ assert quality.target_window_index.min()==852 and quality.tracking_age_s.min()==pytest.approx(426.)
  (root/"calibration.json").write_text("{}")
  with pytest.raises(ValueError,match="tamper|hash"): m.load_frozen_artifacts(root)
 def test_rejects_insufficient_prns_and_detects_source_mutation(tmp_path,monkeypatch):

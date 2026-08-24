@@ -26,6 +26,8 @@ SRC_ROOT = ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
+from gnss_doppler_lab import receiver_quality_contract as quality_contract
+
 spec = importlib.util.spec_from_file_location("train_prn_node_gru", str(ROOT / "scripts/train_prn_node_gru.py"))
 train_mod = importlib.util.module_from_spec(spec)
 sys.modules[spec.name] = train_mod
@@ -68,20 +70,22 @@ def load_checkpoint(path: Path) -> dict[str, object]:
 
 
 def validate_node_inputs(frame: pd.DataFrame, feature_columns: list[str]) -> None:
-    required = ["run_id", "prn", "window_bin_s", "window_start_s", "window_end_s", "window_mid_s", *feature_columns]
+    required = [
+        "run_id", "prn", "window_bin_s", "window_start_s", "window_end_s",
+        "window_mid_s", *feature_columns,
+    ]
     missing = [column for column in required if column not in frame.columns]
     if missing:
         raise ValueError(f"node CSV missing required columns: {missing[:5]}")
-    for column in ("run_id", "prn"):
-        if frame[column].isna().any() or frame[column].astype(str).str.strip().eq("").any():
-            raise ValueError(f"node CSV contains null or empty {column}")
-    numeric_columns = ["window_bin_s", "window_start_s", "window_end_s", "window_mid_s", *feature_columns]
     try:
-        numeric = frame[numeric_columns].apply(pd.to_numeric, errors="raise").to_numpy(float)
+        numeric = frame[
+            ["window_bin_s", "window_start_s", "window_end_s", "window_mid_s", *feature_columns]
+        ].apply(pd.to_numeric, errors="raise").to_numpy(float)
     except (TypeError, ValueError) as exc:
         raise ValueError("node CSV timing and feature inputs must be numeric") from exc
     if not np.isfinite(numeric).all():
         raise ValueError("node CSV timing and feature inputs must be finite")
+    quality_contract.validate_quality_node_frame(frame, feature_columns)
 
 
 def aggregate_event_scores(prn_scores: pd.DataFrame) -> pd.DataFrame:
@@ -207,10 +211,15 @@ def load_validation_prn_scores(path: Path) -> pd.DataFrame:
 
 def score_node_csv(node_csv: Path, model_dir: Path, out_dir: Path, scenario: str,
                    onset_s: float | None = ONSET_S, output_prefix: str = "texbat",
-                   dataset_prefix: str = "TEXBAT") -> dict:
+                   dataset_prefix: str = "TEXBAT", stride_s: float = 0.5) -> dict:
     ckpt_path = model_dir / "prn_local_gru_predictor.pt"
     ckpt = load_checkpoint(ckpt_path)
     cfg = train_mod.TrainConfig(**ckpt["config"])
+    trained_stride = ckpt.get("expected_stride_s")
+    if trained_stride is not None and not np.isclose(
+        float(trained_stride), stride_s, rtol=0.0, atol=1e-12
+    ):
+        raise ValueError("requested stride_s does not match checkpoint expected_stride_s")
     feature_cols = ckpt["node_feature_columns"]
     std = ckpt["standardizer"]
     mean = np.asarray(std["node_mean"], dtype=np.float32)
@@ -222,10 +231,15 @@ def score_node_csv(node_csv: Path, model_dir: Path, out_dir: Path, scenario: str
     model.load_state_dict(ckpt["model_state_dict"])
     model.eval()
     rows = []
+    blocks = quality_contract.segment_safe_blocks(
+        df, feature_cols, expected_stride_s=stride_s
+    )
     with torch.no_grad():
-        for (run_id, prn), g in df.groupby(["run_id", "prn"], sort=True):
-            g = g.sort_values("window_bin_s").reset_index(drop=True)
-            x = train_mod.standardize(g[feature_cols].to_numpy(np.float32), mean, stdev)
+        for block in blocks:
+            g = block.frame
+            x = train_mod.standardize(
+                g[feature_cols].to_numpy(np.float32), mean, stdev
+            )
             if len(x) < cfg.seq_len + 1:
                 continue
             seqs = []
@@ -242,18 +256,24 @@ def score_node_csv(node_csv: Path, model_dir: Path, out_dir: Path, scenario: str
                 rmse = torch.sqrt(((pred-target)**2).mean(dim=1)).cpu().numpy()
                 mae = torch.mean(torch.abs(pred-target), dim=1).cpu().numpy()
                 for j, (r, a) in enumerate(zip(rmse, mae)):
-                    src = g.iloc[meta_idx[offset+j]]
-                    rows.append({
-                        "run_id": run_id,
-                        "prn": prn,
-                        "target_window_index": int(meta_idx[offset+j]),
+                    target_position = meta_idx[offset+j]
+                    src = g.iloc[target_position]
+                    row = {
+                        "run_id": block.run_id,
+                        "prn": block.prn,
                         "window_bin_s": float(src["window_bin_s"]),
                         "window_start_s": float(src["window_start_s"]),
                         "window_end_s": float(src["window_end_s"]),
                         "window_mid_s": float(src["window_mid_s"]),
+                    }
+                    row.update(quality_contract.score_quality_metadata(
+                        block, target_position, cfg.seq_len, expected_stride_s=stride_s
+                    ))
+                    row.update({
                         "prn_node_rmse": float(r),
                         "prn_node_mae": float(a),
                     })
+                    rows.append(row)
     out_dir.mkdir(parents=True, exist_ok=True)
     prn_scores = pd.DataFrame(rows)
     if prn_scores.empty:
@@ -284,6 +304,9 @@ def score_node_csv(node_csv: Path, model_dir: Path, out_dir: Path, scenario: str
         "evaluation": ({"kind": "clean_negative_control"} if onset_s is None else {"kind": "onset", "onset_s": float(onset_s)}),
         "checkpoint_provenance": checkpoint_provenance(ckpt_path, feature_cols),
         "timing_contract": TIMING_CONTRACT,
+        "receiver_quality_score_contract": quality_contract.score_contract_document(
+            expected_stride_s=stride_s, history_length=cfg.seq_len
+        ),
         "rows": {"prn_scores": int(len(prn_scores)), "event_windows": int(len(event))},
         "score_summary": event[["prn_node_rmse_max", "prn_node_rmse_top3_mean", "prn_node_rmse_mean"]].describe(percentiles=[.5,.9,.95,.99]).to_dict(),
         "normal_prn_thresholds": thresholds,
@@ -339,9 +362,10 @@ def main() -> None:
     ap.add_argument("--onset-s", type=float, default=ONSET_S)
     ap.add_argument("--output-prefix", default="texbat")
     ap.add_argument("--dataset-prefix", default="TEXBAT")
+    ap.add_argument("--stride-s", type=float, default=0.5)
     ap.add_argument("--clean-only", action="store_true", help="Score a clean negative control without onset metrics.")
     args = ap.parse_args()
-    score_node_csv(Path(args.node_csv), Path(args.model_dir), Path(args.out_dir), args.scenario, None if args.clean_only else args.onset_s, args.output_prefix, args.dataset_prefix)
+    score_node_csv(Path(args.node_csv), Path(args.model_dir), Path(args.out_dir), args.scenario, None if args.clean_only else args.onset_s, args.output_prefix, args.dataset_prefix, args.stride_s)
 
 if __name__ == "__main__":
     main()
