@@ -1,0 +1,43 @@
+{
+  "alignment_tolerance_epochs": 1,
+  "audit_only": [
+    "decoded_satellite_id",
+    "C/N0",
+    "lock",
+    "PRN_count"
+  ],
+  "carrier_increment": "delta_range_m = - wavelength_m * delta(cycle-consistent accumulated_phase_rad)/(2*pi)",
+  "carrier_increment_unit": "meter",
+  "carrier_source_unit": "radian_or_cycle",
+  "doppler_source_unit": "hertz",
+  "doppler_to_range_rate": "range_rate_mps = - wavelength_m * doppler_hz",
+  "epoch_rate_hz": 1.0,
+  "galileo_e1_wavelength_m": 0.19029367279836487,
+  "model_feature_exclusions": [
+    "PRN_identity",
+    "filename",
+    "scenario",
+    "absolute_sample_index",
+    "C/N0",
+    "lock",
+    "PRN_count"
+  ],
+  "pseudorange_unit": "meter",
+  "range_rate_unit": "meter_per_second",
+  "raw_tracking_cadence_ms": 8,
+  "real_sign_checks_required_before_score": true,
+  "required": [
+    "receiver_relative_epoch_or_sample_index",
+    "decoded_satellite_id",
+    "pseudorange_or_absolute_code_range_m",
+    "cycle_consistent_carrier_phase_or_increment",
+    "carrier_doppler_hz_or_range_rate_mps",
+    "code_rate",
+    "decoded_receive_time_or_tow",
+    "ephemeris_or_satellite_position_velocity",
+    "receiver_position_for_geometry",
+    "lock_reacquisition_cycle_slip_flags"
+  ],
+  "time_basis": "receiver-relative 1 Hz epoch after alignment",
+  "unavailable_policy": "do not manufacture approximations; STOP_SPLITCLOCK_OBSERVABLES_UNAVAILABLE"
+}

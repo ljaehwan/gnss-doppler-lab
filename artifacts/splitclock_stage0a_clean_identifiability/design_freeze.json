@@ -1,0 +1,225 @@
+{
+  "ablations": [
+    "A0_K1_energy_CUSUM",
+    "A1_no_temporal_persistence",
+    "A2_pseudorange_only",
+    "A3_Doppler_only",
+    "A4_carrier_only",
+    "A5_full_primary"
+  ],
+  "attack_access": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "base_sha": "a0e687de330a8ae1844e57f936aaf906144f693f",
+  "bootstrap": {
+    "replicates": 2000,
+    "unit": "independent_10_second_parent_block"
+  },
+  "boundary_controls": [
+    "B1_all_PRN_coherent_false_path",
+    "B2_below_noise_K2"
+  ],
+  "branch": "research/splitclock-stage0a-clean-identifiability",
+  "clean_format": {
+    "bytes_per_complex_sample": 4,
+    "component_dtype": "signed_int16",
+    "endianness": "big",
+    "interleaving": "I,Q",
+    "nominal_duration_s": 149.99916,
+    "sample_rate_hz": 50000000
+  },
+  "clean_sources": {
+    "C-1": {
+      "md5": "4ff0e86938792bf3150c30d5f1481917",
+      "role": "development_and_state_model_fitting",
+      "size_bytes": 29999832000
+    },
+    "C-3": {
+      "md5": "1b7c99c754faec3c8fa625849ef70014",
+      "role": "calibration_then_chronological_holdout",
+      "size_bytes": 29999832000
+    }
+  },
+  "destructions": [
+    "D1_epochwise_assignment_shuffle",
+    "D2_temporal_membership_destruction_with_modal_coherence"
+  ],
+  "forbidden_access": [
+    "SS-1",
+    "SS-3",
+    "SS-5",
+    "SS-11",
+    "SS-12",
+    "SS-13",
+    "SS-33",
+    "TEXBAT_attack",
+    "OAKBAT_attack",
+    "Jammertest_raw"
+  ],
+  "model": {
+    "assignment": "residual-history only, fixed throughout window as persistence prior",
+    "fit_fraction": 0.7,
+    "heldout_fraction": 0.30000000000000004,
+    "label_canonicalization": "ascending clock-path fitted range intercept; no PRN or truth label",
+    "minimum_prns_per_cluster": 2,
+    "observation_likelihood": "Student-t",
+    "primary": "non-neural robust K=1 vs K=2 state-space baseline",
+    "score": "heldout_loglik_K2 - heldout_loglik_K1 - 0.5*delta_parameter_count*log(valid_observation_count)",
+    "shared_noise_scale": true,
+    "state_evolution": "shared constant drift",
+    "student_t_df": 4.0,
+    "window_seconds": 10
+  },
+  "negative_controls": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6",
+    "N7",
+    "N8",
+    "N9",
+    "N10",
+    "N11",
+    "N12"
+  ],
+  "observable_contract": {
+    "alignment_tolerance_epochs": 1,
+    "audit_only": [
+      "decoded_satellite_id",
+      "C/N0",
+      "lock",
+      "PRN_count"
+    ],
+    "carrier_increment": "delta_range_m = - wavelength_m * delta(cycle-consistent accumulated_phase_rad)/(2*pi)",
+    "carrier_increment_unit": "meter",
+    "carrier_source_unit": "radian_or_cycle",
+    "doppler_source_unit": "hertz",
+    "doppler_to_range_rate": "range_rate_mps = - wavelength_m * doppler_hz",
+    "epoch_rate_hz": 1.0,
+    "galileo_e1_wavelength_m": 0.19029367279836487,
+    "model_feature_exclusions": [
+      "PRN_identity",
+      "filename",
+      "scenario",
+      "absolute_sample_index",
+      "C/N0",
+      "lock",
+      "PRN_count"
+    ],
+    "pseudorange_unit": "meter",
+    "range_rate_unit": "meter_per_second",
+    "raw_tracking_cadence_ms": 8,
+    "real_sign_checks_required_before_score": true,
+    "required": [
+      "receiver_relative_epoch_or_sample_index",
+      "decoded_satellite_id",
+      "pseudorange_or_absolute_code_range_m",
+      "cycle_consistent_carrier_phase_or_increment",
+      "carrier_doppler_hz_or_range_rate_mps",
+      "code_rate",
+      "decoded_receive_time_or_tow",
+      "ephemeris_or_satellite_position_velocity",
+      "receiver_position_for_geometry",
+      "lock_reacquisition_cycle_slip_flags"
+    ],
+    "time_basis": "receiver-relative 1 Hz epoch after alignment",
+    "unavailable_policy": "do not manufacture approximations; STOP_SPLITCLOCK_OBSERVABLES_UNAVAILABLE"
+  },
+  "raw_feature_bytes_read": 0,
+  "receiver": {
+    "coherent_integration_ms": 8,
+    "concurrent_acquisition_channels": 12,
+    "configuration": "V3",
+    "pfa": "0.00001",
+    "reference_sha": "798667d0902efc04b09b40f5f4c6064b41c418da"
+  },
+  "score_operations": 0,
+  "seeds": {
+    "bootstrap": 20250825,
+    "global": 20250824,
+    "subset_order": 20250826
+  },
+  "split": {
+    "C-1": "first stable M>=5 interval after acquisition plus 10 s guard; maximum 80 s; never score-selected",
+    "C-3": "after acquisition plus 10 s guard: first usable chronological half calibration, 10 s guard, remainder untouched holdout"
+  },
+  "status": "PRE_RAW_DESIGN_FREEZE",
+  "support_gates": {
+    "maximum_alignment_error_epochs": 1,
+    "minimum_continuous_m_ge_5_seconds": 60,
+    "minimum_prns_each_clean": 5,
+    "minimum_required_observable_finite_coverage": 0.95
+  },
+  "synthetic_positive": {
+    "coherent_modalities": [
+      "pseudorange",
+      "Doppler/range-rate",
+      "carrier increment"
+    ],
+    "duration_minimum_seconds": 30,
+    "grids": {
+      "accelerating": {
+        "a_mps2": 0.02,
+        "d0_m": 0,
+        "v_mps": 0.05
+      },
+      "delayed_offset_plus_ramp": {
+        "a_mps2": 0,
+        "d0_m": 10,
+        "v_mps": 0.1
+      },
+      "mild_ramp": {
+        "a_mps2": 0,
+        "d0_m": 0,
+        "v_mps": 0.1
+      },
+      "moderate_ramp": {
+        "a_mps2": 0,
+        "d0_m": 0,
+        "v_mps": 0.5
+      }
+    },
+    "onset_count": 3,
+    "subset_order": "SHA-256 frozen order, never PRN identity order",
+    "subset_sizes": {
+      "diagnostic": [
+        1
+      ],
+      "primary": [
+        3,
+        5
+      ]
+    }
+  },
+  "threshold": {
+    "method": "higher",
+    "persistence_consecutive_exceedances": 3,
+    "positive_control_tuning": false,
+    "quantile": 0.99,
+    "source": "C-3 calibration non-overlapping 10 s block maxima"
+  },
+  "verdict_precedence": [
+    "observable_unavailable",
+    "panel_unsupported",
+    "execution_or_provenance",
+    "clean_false_alarms",
+    "negative_controls",
+    "synthetic_identifiability",
+    "ready"
+  ],
+  "verdicts": [
+    "INCONCLUSIVE_SPLITCLOCK_EXECUTION_OR_PROVENANCE",
+    "NO_GO_SPLITCLOCK_CLEAN_FALSE_ALARMS",
+    "NO_GO_SPLITCLOCK_NEGATIVE_CONTROLS",
+    "NO_GO_SPLITCLOCK_SYNTHETIC_IDENTIFIABILITY",
+    "READY_FOR_SPLITCLOCK_ATTACK_FREEZE",
+    "STOP_SPLITCLOCK_CLEAN_PANEL_UNSUPPORTED",
+    "STOP_SPLITCLOCK_OBSERVABLES_UNAVAILABLE"
+  ]
+}

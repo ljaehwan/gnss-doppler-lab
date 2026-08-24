@@ -1,0 +1,21 @@
+{
+  "merge_performed": false,
+  "qset_feature_threshold_score_reused": false,
+  "receiver_binary": {
+    "path_from_cli": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/receiver-build-v7/src/main/gnss-sdr",
+    "sha256": "3ed059f699201807cb86eb54a24ba00fde7e248f37a8081306cbc76d6be1b06f",
+    "size_bytes": 36607208
+  },
+  "reference_git_blobs": {
+    "adapter": "0d52d9165e4c0797850c9065842d1275b7bd8b01",
+    "config_template": "46a6bc220926f0bb3aca3eba8d04b53792a07fa9",
+    "runner": "01714abd4754767f581842e4c72a342da048a179"
+  },
+  "reference_only": true,
+  "status": "PASS",
+  "v3_parameters": {
+    "coherent_integration_ms": 8,
+    "concurrent_acquisition_channels": 12,
+    "pfa": "0.00001"
+  }
+}
