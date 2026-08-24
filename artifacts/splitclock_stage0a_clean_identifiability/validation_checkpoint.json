@@ -1,0 +1,28 @@
+{
+  "base_no_new_failure": {
+    "base_sha": "a0e687de330a8ae1844e57f936aaf906144f693f",
+    "current_collection_errors": 17,
+    "current_missing_dependencies": [
+      "pandas",
+      "torch"
+    ],
+    "error_test_modules_identical": true,
+    "exact_base_collection_errors": 17,
+    "status": "PASS_NO_NEW_FAILURE"
+  },
+  "compact_verifier": {
+    "errors": [],
+    "status": "PASS"
+  },
+  "forbidden_access": {
+    "attack_bytes_read": 0,
+    "jammertest_raw_bytes_read": 0,
+    "status": "PASS"
+  },
+  "related_tests": {
+    "failed": 0,
+    "passed": 13,
+    "status": "PASS"
+  },
+  "status": "PASS"
+}

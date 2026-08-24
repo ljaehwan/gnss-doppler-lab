@@ -1,0 +1,24 @@
+{
+  "hash_execution": "full-file MD5 immediately before observable audit",
+  "sources": {
+    "C-1": {
+      "expected_md5": "4ff0e86938792bf3150c30d5f1481917",
+      "expected_size_bytes": 29999832000,
+      "md5": "4ff0e86938792bf3150c30d5f1481917",
+      "path": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/galileo/C-1/clearsky_signal_C-1.bin",
+      "size_bytes": 29999832000,
+      "stable_during_hash": true,
+      "status": "PASS"
+    },
+    "C-3": {
+      "expected_md5": "1b7c99c754faec3c8fa625849ef70014",
+      "expected_size_bytes": 29999832000,
+      "md5": "1b7c99c754faec3c8fa625849ef70014",
+      "path": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/galileo/C-3/clearsky_signal_C-3.bin",
+      "size_bytes": 29999832000,
+      "stable_during_hash": true,
+      "status": "PASS"
+    }
+  },
+  "status": "PASS"
+}

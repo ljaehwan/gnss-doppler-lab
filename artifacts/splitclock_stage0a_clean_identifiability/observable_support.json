@@ -1,0 +1,18 @@
+{
+  "panel_status": "PASS",
+  "prerequisite_note": "Existence/finite support passed; frozen sign/cadence consistency is evaluated separately before score.",
+  "required": {
+    "carrier_doppler_hz_or_range_rate_mps": "PASS",
+    "code_rate": "PASS_NATIVE_TRACE_ACTION",
+    "cycle_consistent_carrier_phase_or_increment": "PASS_WITH_SIGN_GATE_FAILURE",
+    "decoded_receive_time_or_tow": "PASS_RINEX_EPOCH",
+    "decoded_satellite_id": "PASS",
+    "ephemeris_or_satellite_position_velocity": "PASS_RINEX_NAV_AVAILABLE",
+    "lock_reacquisition_cycle_slip_flags": "PASS_TRACE_AND_RINEX_INDICATORS",
+    "pseudorange_or_absolute_code_range_m": "PASS",
+    "receiver_position_for_geometry": "PASS_GPX_AVAILABLE",
+    "receiver_relative_epoch_or_sample_index": "PASS"
+  },
+  "required_finite_coverage_gate": 0.95,
+  "status": "PASS"
+}

@@ -6,12 +6,16 @@
     "opens": 0,
     "stats": 0
   },
+  "attack_freeze_created": false,
   "clean_raw": {
-    "bytes_read": 0,
-    "hashes": 0,
-    "mmaps": 0,
-    "opens": 0,
-    "stats": 0
+    "bytes_read": 59999664000,
+    "hashes": 2,
+    "opens": 2,
+    "stats": 2
+  },
+  "clean_receiver_outputs": {
+    "mode": "read-only manifest verification",
+    "scenarios": 2
   },
   "jammertest_raw": {
     "bytes_read": 0,
@@ -20,6 +24,7 @@
     "opens": 0,
     "stats": 0
   },
-  "phase": "DESIGN_FREEZE",
+  "phase": "CLEAN_ONLY_OBSERVABLE_AUDIT",
+  "score_operations": 0,
   "status": "PASS"
 }

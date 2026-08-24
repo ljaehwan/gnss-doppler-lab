@@ -1,0 +1,87 @@
+{
+  "receiver_binary": {
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/receiver-build-v7/src/main/gnss-sdr",
+    "sha256": "3ed059f699201807cb86eb54a24ba00fde7e248f37a8081306cbc76d6be1b06f",
+    "size_bytes": 36607208
+  },
+  "reference": "QSET R2a V3 clean-only receiver outputs",
+  "scenarios": {
+    "C-1": {
+      "config_contract": {
+        "channels_12": true,
+        "coherent_integration_8ms": true,
+        "file_repeat_false": true,
+        "pfa_original": true
+      },
+      "output_manifest": {
+        "actual_aggregate_sha256": "3fb4ebf1fff38293c1dcd15972cfe5d8615636c34e49664a91e36631dd84c178",
+        "expected_aggregate_sha256": "3fb4ebf1fff38293c1dcd15972cfe5d8615636c34e49664a91e36631dd84c178",
+        "file_count": 24,
+        "status": "PASS"
+      },
+      "rinex_navigation": {
+        "finite_failure_count": 0,
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-1/receiver/GSDR235c24.26L",
+        "prns": [
+          2,
+          7,
+          10,
+          11,
+          14,
+          25,
+          29,
+          30,
+          34,
+          36
+        ],
+        "record_count": 10,
+        "sha256": "6b383201ed34834ecb290a633d87f7a1ae6bd47b11960a3444d0123e6280ceef",
+        "status": "PASS"
+      },
+      "rinex_observation": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-1/receiver/GSDR235c24.26O",
+        "row_count": 844,
+        "sha256": "fc8283cad50770d698ae3d97651afb2265c593a74afb936a4cc71de7e204b6e0"
+      },
+      "status": "PASS"
+    },
+    "C-3": {
+      "config_contract": {
+        "channels_12": true,
+        "coherent_integration_8ms": true,
+        "file_repeat_false": true,
+        "pfa_original": true
+      },
+      "output_manifest": {
+        "actual_aggregate_sha256": "b8c61a2356192d57b94c794d3d3856f5b68e1393c7583b7fc79579f5695ed4f8",
+        "expected_aggregate_sha256": "b8c61a2356192d57b94c794d3d3856f5b68e1393c7583b7fc79579f5695ed4f8",
+        "file_count": 24,
+        "status": "PASS"
+      },
+      "rinex_navigation": {
+        "finite_failure_count": 0,
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-3/receiver/GSDR235c26.26L",
+        "prns": [
+          2,
+          11,
+          19,
+          27,
+          29,
+          30,
+          34,
+          36
+        ],
+        "record_count": 8,
+        "sha256": "55cbfdd9b41ae6ed69513c58f1dbf59b8fc03405383a0d3dda0405312dda8a46",
+        "status": "PASS"
+      },
+      "rinex_observation": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-3/receiver/GSDR235c26.26O",
+        "row_count": 540,
+        "sha256": "78b4c34e79835994b9d5bb8c4b5ac2842e49c3a2c31f15e5f3e10beff00fc3fc"
+      },
+      "status": "PASS"
+    }
+  },
+  "status": "PASS"
+}

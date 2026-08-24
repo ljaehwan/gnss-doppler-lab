@@ -1,0 +1,53 @@
+{
+  "frozen_trace_cadence_contract": {
+    "actual_ms": 4.0,
+    "basis": "native TRACE header and QSET R2a support manifest",
+    "frozen_ms": 8.0,
+    "status": "FAIL"
+  },
+  "scenarios": {
+    "C-1": {
+      "correlation": {
+        "frozen_carrier_vs_doppler_range": -0.999999867319491,
+        "frozen_carrier_vs_pseudorange_delta": -0.999965244847519,
+        "pseudorange_delta_vs_doppler_range": 0.999965027392658,
+        "rinex_native_carrier_vs_doppler_range": 0.999999867319491,
+        "rinex_native_carrier_vs_pseudorange_delta": 0.999965244847519
+      },
+      "frozen_contract_sign_status": "FAIL",
+      "frozen_formula": "delta_range_m = -wavelength_m * delta(cycle_consistent_phase)",
+      "mean_absolute_error_m": {
+        "frozen_carrier_vs_doppler_range": 753.2420939940608,
+        "pseudorange_delta_vs_doppler_range": 2.527390145885834,
+        "rinex_native_carrier_vs_doppler_range": 0.14665044567763405
+      },
+      "pair_count": 835,
+      "rinex_native_formula": "delta_range_m = +wavelength_m * delta(L1B_cycles)",
+      "rinex_native_sign_status": "PASS",
+      "status": "FAIL",
+      "wavelength_m": 0.19029367279836487
+    },
+    "C-3": {
+      "correlation": {
+        "frozen_carrier_vs_doppler_range": -0.9999999451050161,
+        "frozen_carrier_vs_pseudorange_delta": -0.999978965276943,
+        "pseudorange_delta_vs_doppler_range": 0.9999790012863452,
+        "rinex_native_carrier_vs_doppler_range": 0.9999999451050161,
+        "rinex_native_carrier_vs_pseudorange_delta": 0.999978965276943
+      },
+      "frozen_contract_sign_status": "FAIL",
+      "frozen_formula": "delta_range_m = -wavelength_m * delta(cycle_consistent_phase)",
+      "mean_absolute_error_m": {
+        "frozen_carrier_vs_doppler_range": 636.1515925676875,
+        "pseudorange_delta_vs_doppler_range": 1.9667405860028198,
+        "rinex_native_carrier_vs_doppler_range": 0.09485495736937861
+      },
+      "pair_count": 532,
+      "rinex_native_formula": "delta_range_m = +wavelength_m * delta(L1B_cycles)",
+      "rinex_native_sign_status": "PASS",
+      "status": "FAIL",
+      "wavelength_m": 0.19029367279836487
+    }
+  },
+  "status": "FAIL"
+}

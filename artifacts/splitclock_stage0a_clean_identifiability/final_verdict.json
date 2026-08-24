@@ -1,0 +1,17 @@
+{
+  "attack_bytes_read": 0,
+  "base_sha": "a0e687de330a8ae1844e57f936aaf906144f693f",
+  "branch": "research/splitclock-stage0a-clean-identifiability",
+  "clean_panel_support": "PASS",
+  "design_freeze_sha": "8b7de5722037c1269989f2ee8cbff89ac42e3773",
+  "failure_reasons": [
+    "Frozen -lambda*delta(carrier phase) has the opposite sign from the RINEX L1B cycle convention on both clean recordings.",
+    "Frozen observable contract states 8 ms raw tracking cadence while verified native TRACE cadence is 4 ms."
+  ],
+  "next_state": "NOT_AUTHORIZED_FOR_ATTACK_FREEZE",
+  "observable_availability": "PASS",
+  "scope": "versioned clean-only Stage-0A prerequisite audit; no attack or Jammertest raw access",
+  "score_operations": 0,
+  "sign_unit_validation": "FAIL",
+  "verdict": "INCONCLUSIVE_SPLITCLOCK_EXECUTION_OR_PROVENANCE"
+}

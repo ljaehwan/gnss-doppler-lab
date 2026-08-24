@@ -1,0 +1,3 @@
+scenario,role,status,reason
+C-1,fit,NOT_MATERIALIZED,sign/cadence prerequisite gate
+C-3,calibration_guard_holdout,NOT_MATERIALIZED,sign/cadence prerequisite gate
