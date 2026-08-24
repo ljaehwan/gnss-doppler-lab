@@ -1,0 +1,61 @@
+{
+  "data_independent_test": {
+    "failed": 0,
+    "log": "test_output.txt",
+    "passed": 16
+  },
+  "design_freeze_sha": "d472376ba2e59d766c93296b4755df4c89ccbe9b",
+  "implementation_bindings": {
+    "scripts/run_splitclock_r1.py": {
+      "sha256": "4804df7eb1deaa500b3d00f7343ac7f595ed55db35a2c0370fdb541c6920541b",
+      "size_bytes": 1557
+    },
+    "scripts/verify_splitclock_r1.py": {
+      "sha256": "583eefc514f2fb57bf89928636d6c46b3f9688331a412ead76fdb79abae364da",
+      "size_bytes": 711
+    },
+    "src/gnss_doppler_lab/splitclock_r1_contract.py": {
+      "sha256": "97e2d93e996fe3a8e3c1d7fb20f772ebecc01a790d35125ecf35bf3030c1c983",
+      "size_bytes": 12373
+    },
+    "src/gnss_doppler_lab/splitclock_r1_experiment.py": {
+      "sha256": "bae44616b1ee36085904b1cb073a407f094ee4951a2997d9178d565fb8ccbf5e",
+      "size_bytes": 37549
+    },
+    "src/gnss_doppler_lab/splitclock_r1_geometry.py": {
+      "sha256": "ee13ffb1bb85ac1a4f16383b2d3a40211a22f62aaba36ee6b33eafc2f576256c",
+      "size_bytes": 15860
+    },
+    "src/gnss_doppler_lab/splitclock_r1_model.py": {
+      "sha256": "669d1adbb4a4b2c9c59cd5f5f3e963db0bb7697668ff8ec66af5d448f14eb672",
+      "size_bytes": 14212
+    },
+    "tests/test_splitclock_r1_design_freeze.py": {
+      "sha256": "e93b03941b3ac3fec0ae8bdc618899b9021c2f96abf3bf6c10963b1c76000b4e",
+      "size_bytes": 1623
+    },
+    "tests/test_splitclock_r1_model.py": {
+      "sha256": "1596e075b50fe9094c3ad24d551b471b48edd23307ebfb02a1c3e4ef99fef263",
+      "size_bytes": 4814
+    }
+  },
+  "model_contract": {
+    "delta_p": "2 + M_eligible",
+    "final_k2_membership": "soft_window_persistent",
+    "fit_epochs": 7,
+    "heldout_epochs": 3,
+    "minimum_effective_cluster_mass_prns": 2.0,
+    "primary_score": "heldout_loglik_K2-heldout_loglik_K1-0.5*delta_p*log(n_valid)",
+    "restart_selection_data": "fit_only",
+    "student_t_degrees_of_freedom": 4.0,
+    "window_epochs": 10
+  },
+  "post_result_change_policy": "NO_MODEL_THRESHOLD_SIGN_FEATURE_SPLIT_OR_GATE_CHANGES",
+  "pre_freeze_access_audit": {
+    "attack_bytes_read": 0,
+    "clean_data_bytes_read": 0,
+    "clean_score_operations": 0,
+    "jammertest_raw_bytes_read": 0
+  },
+  "status": "PRE_CLEAN_EXECUTION_IMPLEMENTATION_FREEZE"
+}
