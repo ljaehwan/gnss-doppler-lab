@@ -1,0 +1,37 @@
+{
+  "heldout_only_new_PRNs_excluded": true,
+  "representation": "union-of-PRNs plus modality mask",
+  "same_K1_K2_mask": true,
+  "splits": {
+    "C-1": {
+      "development": [
+        10,
+        90
+      ],
+      "stable": [
+        0,
+        101
+      ]
+    },
+    "C-3": {
+      "calibration": [
+        10,
+        42
+      ],
+      "guard": [
+        42,
+        52
+      ],
+      "holdout": [
+        52,
+        85
+      ],
+      "stable": [
+        0,
+        85
+      ]
+    },
+    "status": "PASS"
+  },
+  "status": "PASS"
+}

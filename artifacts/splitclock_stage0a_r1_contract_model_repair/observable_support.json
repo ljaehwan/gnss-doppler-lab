@@ -1,0 +1,27 @@
+{
+  "scenarios": [
+    {
+      "epoch_count": 101,
+      "finite_tensor_coverage": 0.9964454976303317,
+      "geometry_code_slot_coverage": 1.0,
+      "longest_continuous_m_ge_5_seconds": 101,
+      "m_ge_5_epoch_count": 101,
+      "maximum_alignment_error_s": 0.003999948501586914,
+      "prn_count_inventory": 9,
+      "scenario": "C-1",
+      "status": "PASS"
+    },
+    {
+      "epoch_count": 85,
+      "finite_tensor_coverage": 0.9950617283950617,
+      "geometry_code_slot_coverage": 1.0,
+      "longest_continuous_m_ge_5_seconds": 85,
+      "m_ge_5_epoch_count": 85,
+      "maximum_alignment_error_s": 0.006999969482421875,
+      "prn_count_inventory": 8,
+      "scenario": "C-3",
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS"
+}

@@ -1,0 +1,32 @@
+{
+  "attack_bytes_read": 0,
+  "base_sha": "04ba01f2f01d08882e069917bfe062c93abe1585",
+  "boundary_gate": true,
+  "clean": {
+    "epoch_exceedance_count": 0,
+    "epoch_fpr": 0.0,
+    "holdout_epoch_count": 33,
+    "holdout_persistent_decision_count": 22,
+    "holdout_score_count": 24,
+    "persistent_false_alarm_count": 0,
+    "score_CN0_correlation": 0.19861387852221427,
+    "score_PRN_count_correlation": -0.5249624991219917,
+    "status": "FAIL",
+    "zero_false_alarm_CP_upper95": 0.15437251281557463
+  },
+  "clean_fpr_evidence": "PROVISIONAL_LIMITED_DURATION",
+  "contribution_gate": true,
+  "design_freeze_sha": "d472376ba2e59d766c93296b4755df4c89ccbe9b",
+  "implementation_freeze_sha": "3b2d943b15eed67df55051c123682ac92453a699",
+  "jammertest_raw_bytes_read": 0,
+  "negative_gate": true,
+  "next_state": "NOT_AUTHORIZED",
+  "synthetic": {
+    "accelerating_detection_rate": 0.0,
+    "median_delay_s": null,
+    "median_localization_f1": 0.6333333333333333,
+    "mild_detection_rate": 0.0,
+    "moderate_detection_rate": 0.0
+  },
+  "verdict": "NO_GO_SPLITCLOCK_CLEAN_FALSE_ALARMS"
+}

@@ -1,0 +1,12 @@
+{
+  "base_collection_errors": 17,
+  "base_sha": "04ba01f2f01d08882e069917bfe062c93abe1585",
+  "branch_collection_errors": 17,
+  "error_inventory_identical": true,
+  "missing_dependencies": [
+    "pandas",
+    "torch"
+  ],
+  "new_collection_failures": 0,
+  "status": "PASS_NO_NEW_FAILURE"
+}

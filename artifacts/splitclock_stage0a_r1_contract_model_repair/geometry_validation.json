@@ -1,0 +1,119 @@
+{
+  "BGD_applied": false,
+  "Sagnac_applied": true,
+  "finite_satellite_state": {
+    "C-1": {
+      "finite_coverage": 1.0,
+      "finite_satellite_position_velocity_count": 844,
+      "geometry_row_count": 844
+    },
+    "C-3": {
+      "finite_coverage": 1.0,
+      "finite_satellite_position_velocity_count": 540,
+      "geometry_row_count": 540
+    }
+  },
+  "reference_frame": "WGS84 ECEF",
+  "residual_statistics": {
+    "C-1": {
+      "carrier_increment_m": {
+        "mad": 2.363513399330259,
+        "median": -3.200472189041079
+      },
+      "code_m": {
+        "mad": 100.82459837011993,
+        "median": 1380604.1094018389
+      },
+      "doppler_mps": {
+        "mad": 1.299437620891183,
+        "median": -3.2145446914448996
+      }
+    },
+    "C-3": {
+      "carrier_increment_m": {
+        "mad": 2.1286064057934992,
+        "median": -3.347710574533373
+      },
+      "code_m": {
+        "mad": 95.42468474432826,
+        "median": 2154749.0278625786
+      },
+      "doppler_mps": {
+        "mad": 1.2346021562018445,
+        "median": -3.3438510246579085
+      }
+    }
+  },
+  "satellite_clock_applied": true,
+  "scenarios": {
+    "C-1": {
+      "navigation": {
+        "format": "RINEX3_GALILEO_NAV",
+        "prns": [
+          2,
+          7,
+          10,
+          11,
+          14,
+          25,
+          29,
+          30,
+          34,
+          36
+        ],
+        "record_count": 10
+      },
+      "observation": {
+        "leap_seconds": 18,
+        "observation_types": [
+          "C1B",
+          "L1B",
+          "D1B",
+          "S1B"
+        ],
+        "time_system": "GAL"
+      },
+      "receiver_position": {
+        "coordinate_system": "WGS84_geodetic_to_ECEF",
+        "point_count": 101,
+        "source": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-1/receiver/pvt.dat_260823_022451.gpx"
+      }
+    },
+    "C-3": {
+      "navigation": {
+        "format": "RINEX3_GALILEO_NAV",
+        "prns": [
+          2,
+          11,
+          19,
+          27,
+          29,
+          30,
+          34,
+          36
+        ],
+        "record_count": 8
+      },
+      "observation": {
+        "leap_seconds": 18,
+        "observation_types": [
+          "C1B",
+          "L1B",
+          "D1B",
+          "S1B"
+        ],
+        "time_system": "GAL"
+      },
+      "receiver_position": {
+        "coordinate_system": "WGS84_geodetic_to_ECEF",
+        "point_count": 85,
+        "source": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-3/receiver/pvt.dat_260823_022630.gpx"
+      }
+    }
+  },
+  "status": "PASS",
+  "units": {
+    "range": "meter",
+    "range_rate": "meter/second"
+  }
+}

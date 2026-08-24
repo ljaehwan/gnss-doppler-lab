@@ -1,0 +1,31 @@
+{
+  "receiver_outputs": {
+    "C-1": {
+      "aggregate_sha256": "3fb4ebf1fff38293c1dcd15972cfe5d8615636c34e49664a91e36631dd84c178",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-1",
+      "status": "PASS"
+    },
+    "C-3": {
+      "aggregate_sha256": "b8c61a2356192d57b94c794d3d3856f5b68e1393c7583b7fc79579f5695ed4f8",
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-3",
+      "status": "PASS"
+    }
+  },
+  "sources": {
+    "C-1": {
+      "md5": "4ff0e86938792bf3150c30d5f1481917",
+      "path": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/galileo/C-1/clearsky_signal_C-1.bin",
+      "size_bytes": 29999832000,
+      "stable_during_hash": true,
+      "status": "PASS"
+    },
+    "C-3": {
+      "md5": "1b7c99c754faec3c8fa625849ef70014",
+      "path": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/galileo/C-3/clearsky_signal_C-3.bin",
+      "size_bytes": 29999832000,
+      "stable_during_hash": true,
+      "status": "PASS"
+    }
+  },
+  "status": "PASS"
+}

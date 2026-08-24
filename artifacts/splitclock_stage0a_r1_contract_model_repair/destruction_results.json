@@ -1,0 +1,41 @@
+{
+  "results": [
+    {
+      "destruction": "actual",
+      "maximum_raw_gain": 87.42183206287314,
+      "maximum_score": 68.77772579411123,
+      "score_count": 20
+    },
+    {
+      "destruction": "epoch_membership_shuffle",
+      "maximum_raw_gain": 26.611709589133625,
+      "maximum_score": 6.6667893563122504,
+      "score_count": 20
+    },
+    {
+      "destruction": "time_varying_subset_membership",
+      "maximum_raw_gain": 26.611709589133625,
+      "maximum_score": 6.6667893563122504,
+      "score_count": 20
+    },
+    {
+      "destruction": "per_PRN_time_shuffle",
+      "maximum_raw_gain": 16.49838940760651,
+      "maximum_score": -7.247795216843194,
+      "score_count": 20
+    },
+    {
+      "destruction": "modality_coherence_break",
+      "maximum_raw_gain": 31.215593874977742,
+      "maximum_score": 15.730789831346177,
+      "score_count": 20
+    },
+    {
+      "destruction": "random_PRN_rename",
+      "maximum_raw_gain": 87.42183206287291,
+      "maximum_score": 68.777725794111,
+      "score_count": 20
+    }
+  ],
+  "status": "COMPLETE"
+}

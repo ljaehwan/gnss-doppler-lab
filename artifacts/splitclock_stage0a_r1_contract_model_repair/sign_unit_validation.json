@@ -1,0 +1,27 @@
+{
+  "scenarios": {
+    "C-1": {
+      "carrier_formula": "+lambda_E1*delta(L1B_cycles)",
+      "correlations": {
+        "carrier_vs_doppler_integral": 0.999999867319491,
+        "carrier_vs_pseudorange": 0.999965244847519,
+        "pseudorange_vs_doppler_integral": 0.999965027392658
+      },
+      "doppler_formula": "-lambda_E1*doppler_hz",
+      "pair_count": 835,
+      "status": "PASS"
+    },
+    "C-3": {
+      "carrier_formula": "+lambda_E1*delta(L1B_cycles)",
+      "correlations": {
+        "carrier_vs_doppler_integral": 0.9999999451050161,
+        "carrier_vs_pseudorange": 0.999978965276943,
+        "pseudorange_vs_doppler_integral": 0.9999790012863452
+      },
+      "doppler_formula": "-lambda_E1*doppler_hz",
+      "pair_count": 532,
+      "status": "PASS"
+    }
+  },
+  "status": "PASS"
+}

@@ -1,0 +1,29 @@
+{
+  "results": [
+    {
+      "boundary": true,
+      "control": "all_PRN_coherent_clock_jump",
+      "epoch_exceedance_count": 8,
+      "persistent_false_alarm_count": 0,
+      "persistent_fpr": 0.0,
+      "valid_score_count": 71
+    },
+    {
+      "boundary": true,
+      "control": "all_PRN_coherent_clock_ramp",
+      "epoch_exceedance_count": 7,
+      "persistent_false_alarm_count": 0,
+      "persistent_fpr": 0.0,
+      "valid_score_count": 71
+    },
+    {
+      "boundary": true,
+      "control": "common_oscillator_drift",
+      "epoch_exceedance_count": 7,
+      "persistent_false_alarm_count": 0,
+      "persistent_fpr": 0.0,
+      "valid_score_count": 71
+    }
+  ],
+  "status": "COMPLETE"
+}

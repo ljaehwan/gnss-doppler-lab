@@ -1,0 +1,215 @@
+{
+  "scenarios": {
+    "C-1": {
+      "acquisition_coherent_integration_ms": 8,
+      "files": [
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-1/receiver/trace_native_1ms_ch_0.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-1/receiver/trace_native_1ms_ch_1.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-1/receiver/trace_native_1ms_ch_10.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-1/receiver/trace_native_1ms_ch_11.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-1/receiver/trace_native_1ms_ch_2.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-1/receiver/trace_native_1ms_ch_3.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-1/receiver/trace_native_1ms_ch_4.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-1/receiver/trace_native_1ms_ch_5.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-1/receiver/trace_native_1ms_ch_6.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-1/receiver/trace_native_1ms_ch_7.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-1/receiver/trace_native_1ms_ch_8.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-1/receiver/trace_native_1ms_ch_9.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        }
+      ],
+      "native_trace_cadence_ms": 4.000000189989805,
+      "native_trace_nominal_cadence_ms": 4,
+      "semantic_separation": true,
+      "status": "PASS"
+    },
+    "C-3": {
+      "acquisition_coherent_integration_ms": 8,
+      "files": [
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-3/receiver/trace_native_1ms_ch_0.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-3/receiver/trace_native_1ms_ch_1.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-3/receiver/trace_native_1ms_ch_10.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-3/receiver/trace_native_1ms_ch_11.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-3/receiver/trace_native_1ms_ch_2.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-3/receiver/trace_native_1ms_ch_3.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-3/receiver/trace_native_1ms_ch_4.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-3/receiver/trace_native_1ms_ch_5.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-3/receiver/trace_native_1ms_ch_6.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-3/receiver/trace_native_1ms_ch_7.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-3/receiver/trace_native_1ms_ch_8.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        },
+        {
+          "coherent_integration_s": 0.004000000189989805,
+          "header_size": 192,
+          "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2a-ss1-receiver-support-audit/clean-regression-repair-v1/V3/C-3/receiver/trace_native_1ms_ch_9.bin",
+          "record_size": 416,
+          "sample_rate_hz": 4000000.0,
+          "tap_spacing_chips": 0.125
+        }
+      ],
+      "native_trace_cadence_ms": 4.000000189989805,
+      "native_trace_nominal_cadence_ms": 4,
+      "semantic_separation": true,
+      "status": "PASS"
+    }
+  },
+  "status": "PASS"
+}

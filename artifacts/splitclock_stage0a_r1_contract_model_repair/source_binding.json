@@ -1,13 +1,13 @@
 {
+  "R0_artifact_modified": false,
   "base_sha": "04ba01f2f01d08882e069917bfe062c93abe1585",
   "branch": "research/splitclock-stage0a-r1-contract-model-repair",
-  "r0_artifact": "artifacts/splitclock_stage0a_clean_identifiability",
-  "r0_artifact_modified": false,
-  "r0_final_sha": "04ba01f2f01d08882e069917bfe062c93abe1585",
-  "r0_results_reused": [
-    "verified RINEX L1B sign",
-    "verified clean V3 output manifests",
-    "verified clean panel inventory"
-  ],
+  "design_freeze_sha": "d472376ba2e59d766c93296b4755df4c89ccbe9b",
+  "implementation_freeze_sha": "3b2d943b15eed67df55051c123682ac92453a699",
+  "receiver_binary": {
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/receiver-build-v7/src/main/gnss-sdr",
+    "sha256": "3ed059f699201807cb86eb54a24ba00fde7e248f37a8081306cbc76d6be1b06f",
+    "size_bytes": 36607208
+  },
   "status": "PASS"
 }
