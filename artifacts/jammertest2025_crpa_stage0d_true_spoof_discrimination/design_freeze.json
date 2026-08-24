@@ -1,0 +1,171 @@
+{
+  "balancing": {
+    "classifier_class_weight": "balanced",
+    "test_sample_removal": false,
+    "train_sample_removal": false
+  },
+  "base_commit": "c71b225e3c07f28d685666a977dae94c4cb03214",
+  "block_size": 32,
+  "class_blocks": {
+    "Prn": [
+      95,
+      96,
+      97,
+      98,
+      99,
+      100
+    ],
+    "Spoof": [
+      231,
+      232,
+      233,
+      234,
+      235
+    ]
+  },
+  "class_counts": {
+    "Prn": 164,
+    "Spoof": 124
+  },
+  "controls": {
+    "destruction": [
+      "mismatched",
+      "circular_shift",
+      "fourier_phase_randomized"
+    ],
+    "fixed_channel_permutation": [
+      2,
+      0,
+      3,
+      1
+    ],
+    "global_gains": [
+      0.1,
+      1.0,
+      3.7,
+      10.0
+    ],
+    "global_phases_radians": [
+      0.0,
+      0.37,
+      1.123,
+      2.9
+    ],
+    "invariance_atol": 1e-12,
+    "invariance_rtol": 1e-10,
+    "one_channel_ablation": true
+  },
+  "eligibility": {
+    "area": 1,
+    "negative_exact_class": "Prn",
+    "positive_exact_class": "Spoof",
+    "transmit_power_dbm": 40
+  },
+  "fold_test_blocks": [
+    {
+      "Prn": [
+        95,
+        100
+      ],
+      "Spoof": [
+        231
+      ]
+    },
+    {
+      "Prn": [
+        96
+      ],
+      "Spoof": [
+        232
+      ]
+    },
+    {
+      "Prn": [
+        97
+      ],
+      "Spoof": [
+        233
+      ]
+    },
+    {
+      "Prn": [
+        98
+      ],
+      "Spoof": [
+        234
+      ]
+    },
+    {
+      "Prn": [
+        99
+      ],
+      "Spoof": [
+        235
+      ]
+    }
+  ],
+  "forbidden_claims": [
+    "clean-versus-spoof detection",
+    "general GNSS spoof detector",
+    "recording-independent generalization",
+    "READY_FOR_WCL"
+  ],
+  "guard": "test block ±1 only within the same class contiguous enumerated block run",
+  "iq_bytes_read": 0,
+  "label_hashes": {
+    "test_crpa_1.txt": "ddeced3f02b3f1354a492885a787a9e9e01d6e098ec68af324e8efc0e3a23d11",
+    "test_crpa_2.txt": "1def42ddcc53e79d6906958a4d71766275433f371e2390407d6b56f7e95fdbaa",
+    "train_crpa_1.txt": "e2bd68ecf96068979a92fdd482b1539c72f74eb415016518ce4b2f5ca94c24f1",
+    "train_crpa_2.txt": "8bc430499417cdb66bdd099ab75456f6f6f9f67af7e69977bc7718636c887283"
+  },
+  "matching": {
+    "algorithm": "fold-local one-to-one without replacement; maximum cardinality then minimum total absolute-power-difference cost",
+    "feature": "received_power_db = 10*log10(mean over channel,time of abs(x)^2)",
+    "inputs": [
+      "class label",
+      "received_power_db"
+    ],
+    "primary_caliper_db": 0.25,
+    "sensitivity_calipers_db": [
+      0.1,
+      0.5,
+      1.0
+    ],
+    "train_test_cross_pairing": false
+  },
+  "models": {
+    "M0": "received_power_db only",
+    "M1": "channel-0 normalized amplitude statistics and 16-bin normalized spectrum; absolute power excluded",
+    "M2": "centered/RMS-normalized covariance eigenvalue fractions, lambda1/trace, effective rank, sorted coherence magnitudes and summaries; no channel identity or coherence phase",
+    "M2R": "M2 residual after train-only received-power third-degree polynomial Ridge(alpha=1.0)",
+    "M3": "M2 plus six complex coherence real/imaginary components; diagnostic only"
+  },
+  "pipeline": {
+    "bootstrap_replicates": 2000,
+    "bootstrap_unit": "original test class_block_key",
+    "classifier": {
+      "C": 1.0,
+      "class_weight": "balanced",
+      "max_iter": 2000,
+      "penalty": "l2",
+      "random_state": 20250823,
+      "solver": "liblinear",
+      "type": "LogisticRegression"
+    },
+    "scaler": "StandardScaler(train fold only)",
+    "test_label_threshold_use": false,
+    "threshold": 0.5
+  },
+  "seed": 20250823,
+  "stage0c_model_results_used": false,
+  "status": "LABEL_ONLY_DESIGN_FREEZE_PRE_IQ",
+  "verdicts": [
+    "NO_TRUE_SPOOF_SPATIAL_SEPARATION",
+    "PHASE_OR_LOCATION_SHORTCUT_ONLY",
+    "PROMISING_TRUE_SPOOF_SPATIAL_INCREMENT_PROVENANCE_BLOCKED",
+    "SPLIT_VALIDITY_FAILURE",
+    "SPOOF_EVALUATION_INVALID_NO_RECEIVED_POWER_OVERLAP",
+    "TRUE_SPOOF_SPATIAL_SEPARATION_NOT_INCREMENTAL",
+    "TRUE_SPOOF_SPATIAL_SIGNAL_POWER_CONFOUNDED"
+  ]
+}

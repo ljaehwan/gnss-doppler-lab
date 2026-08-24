@@ -1,0 +1,143 @@
+{
+  "block_count_resolution": "The explicit fixed lists enumerate 5 Spoof + 6 Prn = 11 class blocks and are authoritative.",
+  "eligible_snapshot_count": 288,
+  "enumerated_unique_class_block_count": 11,
+  "errors": [],
+  "expected_class_counts": {
+    "Prn": 164,
+    "Spoof": 124
+  },
+  "folds": [
+    {
+      "class_counts": {
+        "guard": {
+          "Prn": 64,
+          "Spoof": 32
+        },
+        "test": {
+          "Prn": 36,
+          "Spoof": 21
+        },
+        "train": {
+          "Prn": 64,
+          "Spoof": 71
+        }
+      },
+      "fold": 0,
+      "sample_role_overlap_count": 0,
+      "test_class_block_count": 3,
+      "train_class_block_count": 5,
+      "train_test_class_block_overlap_count": 0,
+      "valid": true
+    },
+    {
+      "class_counts": {
+        "guard": {
+          "Prn": 60,
+          "Spoof": 53
+        },
+        "test": {
+          "Prn": 32,
+          "Spoof": 32
+        },
+        "train": {
+          "Prn": 72,
+          "Spoof": 39
+        }
+      },
+      "fold": 1,
+      "sample_role_overlap_count": 0,
+      "test_class_block_count": 2,
+      "train_class_block_count": 5,
+      "train_test_class_block_overlap_count": 0,
+      "valid": true
+    },
+    {
+      "class_counts": {
+        "guard": {
+          "Prn": 64,
+          "Spoof": 64
+        },
+        "test": {
+          "Prn": 32,
+          "Spoof": 32
+        },
+        "train": {
+          "Prn": 68,
+          "Spoof": 28
+        }
+      },
+      "fold": 2,
+      "sample_role_overlap_count": 0,
+      "test_class_block_count": 2,
+      "train_class_block_count": 5,
+      "train_test_class_block_overlap_count": 0,
+      "valid": true
+    },
+    {
+      "class_counts": {
+        "guard": {
+          "Prn": 64,
+          "Spoof": 39
+        },
+        "test": {
+          "Prn": 32,
+          "Spoof": 32
+        },
+        "train": {
+          "Prn": 68,
+          "Spoof": 53
+        }
+      },
+      "fold": 3,
+      "sample_role_overlap_count": 0,
+      "test_class_block_count": 2,
+      "train_class_block_count": 5,
+      "train_test_class_block_overlap_count": 0,
+      "valid": true
+    },
+    {
+      "class_counts": {
+        "guard": {
+          "Prn": 40,
+          "Spoof": 32
+        },
+        "test": {
+          "Prn": 32,
+          "Spoof": 7
+        },
+        "train": {
+          "Prn": 92,
+          "Spoof": 85
+        }
+      },
+      "fold": 4,
+      "sample_role_overlap_count": 0,
+      "test_class_block_count": 2,
+      "train_class_block_count": 6,
+      "train_test_class_block_overlap_count": 0,
+      "valid": true
+    }
+  ],
+  "oof_class_blocks": [
+    "Prn:100",
+    "Prn:95",
+    "Prn:96",
+    "Prn:97",
+    "Prn:98",
+    "Prn:99",
+    "Spoof:231",
+    "Spoof:232",
+    "Spoof:233",
+    "Spoof:234",
+    "Spoof:235"
+  ],
+  "oof_duplicate_count": 0,
+  "oof_missing_count": 0,
+  "oof_test_class_counts": {
+    "Prn": 164,
+    "Spoof": 124
+  },
+  "request_terminal_text_says_block_count": 10,
+  "status": "PASS"
+}
