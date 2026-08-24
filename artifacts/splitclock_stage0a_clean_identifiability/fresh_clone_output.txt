@@ -1,0 +1,11 @@
+fresh clone checkout: 924e5bc205f357df133744ac69a065782c7cb448
+
+$ pytest -q tests/test_splitclock_stage0a_design_freeze.py tests/test_splitclock_stage0a_observable_audit.py
+.............                                                            [100%]
+13 passed in 0.23s
+
+$ PYTHONPATH=src python3 scripts/verify_splitclock_stage0a.py artifacts/splitclock_stage0a_clean_identifiability
+{"errors": [], "status": "PASS"}
+
+$ git status --porcelain
+(no output; clean)
