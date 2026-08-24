@@ -1,0 +1,13 @@
+{
+  "base_sha": "04ba01f2f01d08882e069917bfe062c93abe1585",
+  "branch": "research/splitclock-stage0a-r1-contract-model-repair",
+  "r0_artifact": "artifacts/splitclock_stage0a_clean_identifiability",
+  "r0_artifact_modified": false,
+  "r0_final_sha": "04ba01f2f01d08882e069917bfe062c93abe1585",
+  "r0_results_reused": [
+    "verified RINEX L1B sign",
+    "verified clean V3 output manifests",
+    "verified clean panel inventory"
+  ],
+  "status": "PASS"
+}

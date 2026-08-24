@@ -1,0 +1,26 @@
+{
+  "attack": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "clean_raw": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "clean_score_operations": 0,
+  "jammertest_raw": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "phase": "R1_DESIGN_FREEZE",
+  "status": "PASS"
+}
