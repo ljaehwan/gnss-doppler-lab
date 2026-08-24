@@ -1,0 +1,15 @@
+{
+  "K1_K2_identical_centering": true,
+  "code_centering": "per-PRN fit-only median",
+  "dynamic_center_unique_value_count": {
+    "carrier_increment": 1,
+    "doppler": 1
+  },
+  "dynamic_centering": "one fit-only modality-global median",
+  "heldout_used": false,
+  "maximum_pairwise_dynamic_offset_change": {
+    "carrier_increment": 0.0,
+    "doppler": 0.0
+  },
+  "status": "PASS"
+}

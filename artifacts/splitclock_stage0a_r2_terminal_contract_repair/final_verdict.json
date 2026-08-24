@@ -1,0 +1,47 @@
+{
+  "attack_bytes_read": 0,
+  "base_sha": "38cddccd9d02a9c0da4052375e4d1168e2cc58cb",
+  "boundary_gate": true,
+  "clean": {
+    "PRN_drop_add_persistent_false_alarm_zero": true,
+    "epoch_exceedance_count": 0,
+    "epoch_fpr": 0.0,
+    "holdout_epoch_count": 33,
+    "holdout_persistent_decision_count": 22,
+    "holdout_score_count": 24,
+    "persistent_false_alarm_count": 0,
+    "score_CN0_correlation": 0.1417715438077684,
+    "score_PRN_count_correlation": -0.4815206478200818,
+    "status": "FAIL",
+    "zero_false_alarm_CP_upper95": 0.15437251281557463
+  },
+  "clean_fpr_evidence": "PROVISIONAL_LIMITED_DURATION",
+  "contribution_gate": false,
+  "implementation_freeze_sha": "470ffa33a92b6ff41469b6cf375d58d952797409",
+  "jammertest_raw_bytes_read": 0,
+  "matched_horizon": {
+    "A0_AUROC": 0.4305555555555556,
+    "A6_AUROC": 0.5694444444444444,
+    "A6_minus_A0_AUROC": 0.13888888888888884,
+    "duplicate_clean_parent_counted_as_independent": false,
+    "horizon_epochs": 20,
+    "independence_unit": "unique_parent_onset",
+    "negative_horizon_count": 3,
+    "positive_case_count": 24,
+    "statistic": "T=max_j min(score_j,score_j+1,score_j+2)",
+    "status": "PASS",
+    "unique_parent_onset_count": 3
+  },
+  "negative_gate": true,
+  "repair_scope_freeze_sha": "a645980a81e94499efaebbc3287f0a263302e7e9",
+  "synthetic": {
+    "accelerating_detection_rate": 0.0,
+    "median_delay_s": null,
+    "median_primary_localization_f1": 0.0,
+    "mild_detection_rate": 0.0,
+    "moderate_detection_rate": 0.0,
+    "primary_gate": false
+  },
+  "terminal_recommendation": "TERMINATE_SPLITCLOCK_NO_FURTHER_GATE_RELAXATION",
+  "verdict": "NO_GO_SPLITCLOCK_R2_CLEAN_FALSE_ALARMS"
+}

@@ -1,0 +1,25 @@
+{
+  "attack": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "clean_raw": {
+    "bytes_read": 59999664000,
+    "hashes": 2,
+    "opens": 2,
+    "stats": 2
+  },
+  "clean_score_execution_count": 1,
+  "jammertest_raw": {
+    "bytes_read": 0,
+    "hashes": 0,
+    "mmaps": 0,
+    "opens": 0,
+    "stats": 0
+  },
+  "phase": "R2_CLEAN_ONLY_SINGLE_EXECUTION",
+  "status": "PASS"
+}

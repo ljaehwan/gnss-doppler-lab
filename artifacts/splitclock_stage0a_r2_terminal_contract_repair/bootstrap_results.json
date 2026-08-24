@@ -1,0 +1,20 @@
+{
+  "clean_zero_false_alarm_CP_upper95": 0.15437251281557463,
+  "matched_horizon": {
+    "A0_AUROC_CI95": [
+      0.0,
+      0.875
+    ],
+    "A6_AUROC_CI95": [
+      0.125,
+      1.0
+    ],
+    "A6_minus_A0_CI95": [
+      0.06944444444444442,
+      1.0
+    ],
+    "replicates": 2000,
+    "unique_parent_onset_count": 3,
+    "unit": "unique_parent_onset"
+  }
+}

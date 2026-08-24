@@ -1,0 +1,13 @@
+{
+  "A0_AUROC": 0.4305555555555556,
+  "A6_AUROC": 0.5694444444444444,
+  "A6_minus_A0_AUROC": 0.13888888888888884,
+  "duplicate_clean_parent_counted_as_independent": false,
+  "horizon_epochs": 20,
+  "independence_unit": "unique_parent_onset",
+  "negative_horizon_count": 3,
+  "positive_case_count": 24,
+  "statistic": "T=max_j min(score_j,score_j+1,score_j+2)",
+  "status": "PASS",
+  "unique_parent_onset_count": 3
+}

@@ -1,0 +1,18 @@
+{
+  "R1_artifact_digest_after": "0c7e013582c0edfe042c5bba28b946868189f4d6e949d565ce5028d65f4fabec",
+  "R1_artifact_digest_before": "0c7e013582c0edfe042c5bba28b946868189f4d6e949d565ce5028d65f4fabec",
+  "R1_artifact_immutable": true,
+  "R1_design_freeze_sha": "d472376ba2e59d766c93296b4755df4c89ccbe9b",
+  "R1_final_sha": "38cddccd9d02a9c0da4052375e4d1168e2cc58cb",
+  "R1_implementation_freeze_sha": "3b2d943b15eed67df55051c123682ac92453a699",
+  "base_sha": "38cddccd9d02a9c0da4052375e4d1168e2cc58cb",
+  "branch": "research/splitclock-stage0a-r2-terminal-contract-repair",
+  "implementation_freeze_sha": "470ffa33a92b6ff41469b6cf375d58d952797409",
+  "receiver_binary": {
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/qset-gnss-stage0a-r2-galileo-partial-prn-execution/receiver-build-v7/src/main/gnss-sdr",
+    "sha256": "3ed059f699201807cb86eb54a24ba00fde7e248f37a8081306cbc76d6be1b06f",
+    "size_bytes": 36607208
+  },
+  "repair_scope_freeze_sha": "a645980a81e94499efaebbc3287f0a263302e7e9",
+  "status": "PASS"
+}

@@ -1,0 +1,50 @@
+{
+  "R1": {
+    "clean": {
+      "epoch_exceedance_count": 0,
+      "epoch_fpr": 0.0,
+      "holdout_epoch_count": 33,
+      "holdout_persistent_decision_count": 22,
+      "holdout_score_count": 24,
+      "persistent_false_alarm_count": 0,
+      "score_CN0_correlation": 0.19861387852221427,
+      "score_PRN_count_correlation": -0.5249624991219917,
+      "status": "FAIL",
+      "zero_false_alarm_CP_upper95": 0.15437251281557463
+    },
+    "final_sha": "38cddccd9d02a9c0da4052375e4d1168e2cc58cb",
+    "synthetic": {
+      "accelerating_detection_rate": 0.0,
+      "median_delay_s": null,
+      "median_localization_f1": 0.6333333333333333,
+      "mild_detection_rate": 0.0,
+      "moderate_detection_rate": 0.0
+    },
+    "verdict": "NO_GO_SPLITCLOCK_CLEAN_FALSE_ALARMS"
+  },
+  "R1_used_for_R2_parameter_selection": false,
+  "R2": {
+    "clean": {
+      "PRN_drop_add_persistent_false_alarm_zero": true,
+      "epoch_exceedance_count": 0,
+      "epoch_fpr": 0.0,
+      "holdout_epoch_count": 33,
+      "holdout_persistent_decision_count": 22,
+      "holdout_score_count": 24,
+      "persistent_false_alarm_count": 0,
+      "score_CN0_correlation": 0.1417715438077684,
+      "score_PRN_count_correlation": -0.4815206478200818,
+      "status": "FAIL",
+      "zero_false_alarm_CP_upper95": 0.15437251281557463
+    },
+    "synthetic": {
+      "accelerating_detection_rate": 0.0,
+      "median_delay_s": null,
+      "median_primary_localization_f1": 0.0,
+      "mild_detection_rate": 0.0,
+      "moderate_detection_rate": 0.0,
+      "primary_gate": false
+    },
+    "verdict": "NO_GO_SPLITCLOCK_R2_CLEAN_FALSE_ALARMS"
+  }
+}

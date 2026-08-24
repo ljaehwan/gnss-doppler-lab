@@ -1,0 +1,47 @@
+{
+  "results": [
+    {
+      "destruction": "actual",
+      "maximum_raw_gain": 84.629164896063,
+      "maximum_score": 65.9850586273011,
+      "persistence_T": -8.948651895905748,
+      "score_count": 20
+    },
+    {
+      "destruction": "epoch_membership_shuffle",
+      "maximum_raw_gain": 112.71335157046752,
+      "maximum_score": 88.5438812197691,
+      "persistence_T": -17.39395487764761,
+      "score_count": 20
+    },
+    {
+      "destruction": "time_varying_subset_membership",
+      "maximum_raw_gain": 112.71335157046752,
+      "maximum_score": 88.5438812197691,
+      "persistence_T": -17.39395487764761,
+      "score_count": 20
+    },
+    {
+      "destruction": "per_PRN_time_shuffle",
+      "maximum_raw_gain": 15.693985875622388,
+      "maximum_score": -8.052198748827315,
+      "persistence_T": -21.662645378984248,
+      "score_count": 20
+    },
+    {
+      "destruction": "modality_coherence_break",
+      "maximum_raw_gain": 145.19643044353694,
+      "maximum_score": 129.24049425727983,
+      "persistence_T": -10.594162206107152,
+      "score_count": 20
+    },
+    {
+      "destruction": "random_PRN_rename",
+      "maximum_raw_gain": 84.62916489606295,
+      "maximum_score": 65.98505862730104,
+      "persistence_T": -8.948651895905748,
+      "score_count": 20
+    }
+  ],
+  "status": "COMPLETE"
+}

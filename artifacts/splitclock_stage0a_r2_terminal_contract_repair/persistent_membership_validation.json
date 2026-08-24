@@ -1,0 +1,12 @@
+{
+  "heldout_logsumexp_count": "one per eligible PRN",
+  "membership_granularity": "one q_i per PRN per window",
+  "minimum_observed_cluster_mass": 2.0000253512099233,
+  "minimum_required_cluster_mass": 2.0,
+  "observation_wise_diagnostic_only": true,
+  "primary_observation_wise_score_difference_summary": {
+    "max_absolute_difference": 39.13404780377704,
+    "median_primary_minus_observation_wise": 0.22037413234528458
+  },
+  "status": "PASS"
+}

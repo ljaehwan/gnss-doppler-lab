@@ -1,0 +1,18 @@
+{
+  "calibration_raw_interval": [
+    10,
+    42
+  ],
+  "independent_nonoverlap_10_epoch_window_count": 3,
+  "method": "higher",
+  "nonoverlap_window_starts": [
+    10,
+    20,
+    30
+  ],
+  "persistence": 3,
+  "publication_grade_FPR": false,
+  "q": 0.99,
+  "scores_per_window": 1,
+  "threshold": 18.27156276605195
+}

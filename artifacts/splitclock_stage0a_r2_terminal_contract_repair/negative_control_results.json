@@ -1,0 +1,85 @@
+{
+  "results": [
+    {
+      "boundary": false,
+      "control": "receiver_motion_perturbation",
+      "epoch_exceedance_count": 3,
+      "persistent_false_alarm_count": 0,
+      "persistent_fpr": 0.0,
+      "valid_score_count": 71
+    },
+    {
+      "boundary": false,
+      "control": "one_PRN_multipath",
+      "epoch_exceedance_count": 3,
+      "persistent_false_alarm_count": 0,
+      "persistent_fpr": 0.0,
+      "valid_score_count": 71
+    },
+    {
+      "boundary": false,
+      "control": "one_PRN_cycle_slip",
+      "epoch_exceedance_count": 3,
+      "persistent_false_alarm_count": 0,
+      "persistent_fpr": 0.0,
+      "valid_score_count": 71
+    },
+    {
+      "boundary": false,
+      "control": "reacquisition",
+      "epoch_exceedance_count": 3,
+      "persistent_false_alarm_count": 0,
+      "persistent_fpr": 0.0,
+      "valid_score_count": 71
+    },
+    {
+      "boundary": false,
+      "control": "PRN_drop",
+      "epoch_exceedance_count": 3,
+      "persistent_false_alarm_count": 0,
+      "persistent_fpr": 0.0,
+      "valid_score_count": 71
+    },
+    {
+      "boundary": false,
+      "control": "PRN_add",
+      "epoch_exceedance_count": 3,
+      "persistent_false_alarm_count": 0,
+      "persistent_fpr": 0.0,
+      "valid_score_count": 71
+    },
+    {
+      "boundary": false,
+      "control": "temporary_gap",
+      "epoch_exceedance_count": 3,
+      "persistent_false_alarm_count": 0,
+      "persistent_fpr": 0.0,
+      "valid_score_count": 71
+    },
+    {
+      "boundary": false,
+      "control": "ephemeris_update",
+      "epoch_exceedance_count": 3,
+      "persistent_false_alarm_count": 0,
+      "persistent_fpr": 0.0,
+      "valid_score_count": 71
+    },
+    {
+      "boundary": false,
+      "control": "independent_small_PRN_biases",
+      "epoch_exceedance_count": 3,
+      "persistent_false_alarm_count": 0,
+      "persistent_fpr": 0.0,
+      "valid_score_count": 71
+    },
+    {
+      "boundary": false,
+      "control": "CN0_noise_change",
+      "epoch_exceedance_count": 3,
+      "persistent_false_alarm_count": 0,
+      "persistent_fpr": 0.0,
+      "valid_score_count": 71
+    }
+  ],
+  "status": "COMPLETE"
+}

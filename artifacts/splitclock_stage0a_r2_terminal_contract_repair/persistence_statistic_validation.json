@@ -1,0 +1,8 @@
+{
+  "A0_A6_same_horizon_per_case": true,
+  "A0_A6_same_statistic": true,
+  "formula": "T=max_j min(score_j,score_j+1,score_j+2)",
+  "horizon_epochs": 20,
+  "paired_clean_unique_parent_count": 3,
+  "status": "PASS"
+}

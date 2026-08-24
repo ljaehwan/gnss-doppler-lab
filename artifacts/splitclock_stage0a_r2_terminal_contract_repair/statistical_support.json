@@ -1,0 +1,8 @@
+{
+  "clean_fpr_evidence": "PROVISIONAL_LIMITED_DURATION",
+  "holdout_epochs": 33,
+  "holdout_persistent_decisions": 22,
+  "independent_calibration_windows": 3,
+  "matched_horizon_unique_parent_onsets": 3,
+  "publication_grade_FPR": false
+}
