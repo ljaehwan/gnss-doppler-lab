@@ -1,0 +1,228 @@
+{
+  "algorithm": "fold-local one-dimensional dynamic programming; maximum cardinality then minimum total absolute difference; no replacement",
+  "base_commit": "c71b225e3c07f28d685666a977dae94c4cb03214",
+  "calipers": {
+    "0.10": {
+      "caliper_db": 0.1,
+      "matched_common_support_db": null,
+      "matched_power_standardized_mean_difference": null,
+      "max_pair_difference_db": null,
+      "mean_pair_difference_db": null,
+      "per_fold": [
+        {
+          "fold": 0,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        },
+        {
+          "fold": 1,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        },
+        {
+          "fold": 2,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        },
+        {
+          "fold": 3,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        },
+        {
+          "fold": 4,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        }
+      ],
+      "retained_by_class_block": {},
+      "retained_prn_blocks": [],
+      "retained_spoof_blocks": [],
+      "total_test_pair_count": 0,
+      "total_train_pair_count_across_folds": 0,
+      "track_b_m0_oof": null
+    },
+    "0.25": {
+      "caliper_db": 0.25,
+      "matched_common_support_db": null,
+      "matched_power_standardized_mean_difference": null,
+      "max_pair_difference_db": null,
+      "mean_pair_difference_db": null,
+      "per_fold": [
+        {
+          "fold": 0,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        },
+        {
+          "fold": 1,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        },
+        {
+          "fold": 2,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        },
+        {
+          "fold": 3,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        },
+        {
+          "fold": 4,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        }
+      ],
+      "retained_by_class_block": {},
+      "retained_prn_blocks": [],
+      "retained_spoof_blocks": [],
+      "total_test_pair_count": 0,
+      "total_train_pair_count_across_folds": 0,
+      "track_b_m0_oof": null
+    },
+    "0.50": {
+      "caliper_db": 0.5,
+      "matched_common_support_db": null,
+      "matched_power_standardized_mean_difference": null,
+      "max_pair_difference_db": null,
+      "mean_pair_difference_db": null,
+      "per_fold": [
+        {
+          "fold": 0,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        },
+        {
+          "fold": 1,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        },
+        {
+          "fold": 2,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        },
+        {
+          "fold": 3,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        },
+        {
+          "fold": 4,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        }
+      ],
+      "retained_by_class_block": {},
+      "retained_prn_blocks": [],
+      "retained_spoof_blocks": [],
+      "total_test_pair_count": 0,
+      "total_train_pair_count_across_folds": 0,
+      "track_b_m0_oof": null
+    },
+    "1.00": {
+      "caliper_db": 1.0,
+      "matched_common_support_db": null,
+      "matched_power_standardized_mean_difference": null,
+      "max_pair_difference_db": null,
+      "mean_pair_difference_db": null,
+      "per_fold": [
+        {
+          "fold": 0,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        },
+        {
+          "fold": 1,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        },
+        {
+          "fold": 2,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        },
+        {
+          "fold": 3,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        },
+        {
+          "fold": 4,
+          "test_max_pair_difference_db": null,
+          "test_mean_pair_difference_db": null,
+          "test_pair_count": 0,
+          "train_pair_count": 0
+        }
+      ],
+      "retained_by_class_block": {},
+      "retained_prn_blocks": [],
+      "retained_spoof_blocks": [],
+      "total_test_pair_count": 0,
+      "total_train_pair_count_across_folds": 0,
+      "track_b_m0_oof": null
+    }
+  },
+  "design_freeze_commit": "33c3c6924f2a7f42ca964e1bd136239cacaea04c",
+  "matching_inputs": [
+    "class label",
+    "received_power_db"
+  ],
+  "primary_caliper_db": 0.25,
+  "primary_gate_conditions": {
+    "at_least_4_prn_blocks_retained": false,
+    "at_least_4_spoof_blocks_retained": false,
+    "matched_m0_auroc_at_most_0_60": false,
+    "total_test_matched_pairs_at_least_50": false
+  },
+  "primary_gate_pass": false,
+  "spatial_feature_bytes_computed": 0,
+  "status": "POWER_MATCH_FREEZE_PRE_SPATIAL_SCORING",
+  "train_test_cross_pairing": false,
+  "source_binding": {
+    "raw_size_bytes": 1398308992,
+    "raw_sha256": "d869fa20d552288002e4d2a5b6c5d1300083a6348c01a956cd6a34ff232e0a3f",
+    "design_freeze_sha256": "638f7082e1c4f3ebf5837c0592930336f86a752c65eea0a1d655e0b196a82225",
+    "split_manifest_sha256": "7380498b8dc42f38a2d3c44e4f482215104cb6d2a014f6d24f3b3bb5881e9889"
+  }
+}
