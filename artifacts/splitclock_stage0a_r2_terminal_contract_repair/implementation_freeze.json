@@ -1,0 +1,64 @@
+{
+  "data_independent_test": {
+    "failed": 0,
+    "log": "test_output.txt",
+    "passed": 16
+  },
+  "implementation_bindings": {
+    "scripts/build_splitclock_r2_implementation_freeze.py": {
+      "sha256": "58fa6046dc8758dc0516016711319aa5153fc7c5a42e1e7a9c3fa5a511fda902",
+      "size_bytes": 4370
+    },
+    "scripts/run_splitclock_r2.py": {
+      "sha256": "d325507cc8dbfc4276e93727098facac179e5508e62347823dea371ec3cb2257",
+      "size_bytes": 1885
+    },
+    "scripts/verify_splitclock_r2.py": {
+      "sha256": "bf77c816dfb2899fdd127668a2c31114d3850567b26d19553ce2d8c4c6eedcf0",
+      "size_bytes": 877
+    },
+    "src/gnss_doppler_lab/splitclock_r2_contract.py": {
+      "sha256": "af50d3c7d8ce0aa9e868115c93b9c89e911616d0069d53a685994cc89c782851",
+      "size_bytes": 1318
+    },
+    "src/gnss_doppler_lab/splitclock_r2_experiment.py": {
+      "sha256": "f6a86ff64a0c4d9d343ea7dc218c6b7c1d5c62656945fff0276fc5371095450a",
+      "size_bytes": 52077
+    },
+    "src/gnss_doppler_lab/splitclock_r2_model.py": {
+      "sha256": "6e6739e8283566fe1e41e8b81c01ac1237ea6520ecdfbd7abf9ea6639d9a16bb",
+      "size_bytes": 18380
+    },
+    "tests/test_splitclock_r2_terminal_contract_repair.py": {
+      "sha256": "e3b7f985ead5dbe91a51c5512b57e57d4bec82086bb824795c80621c505a893f",
+      "size_bytes": 7166
+    }
+  },
+  "post_result_change_policy": "NO_CODE_FEATURE_THRESHOLD_SPLIT_GATE_OR_PARAMETER_CHANGES",
+  "pre_freeze_access_audit": {
+    "attack_bytes_read": 0,
+    "clean_data_bytes_read": 0,
+    "clean_score_operations": 0,
+    "jammertest_raw_bytes_read": 0
+  },
+  "repair_scope_freeze_sha": "a645980a81e94499efaebbc3287f0a263302e7e9",
+  "repairs": {
+    "R2-F1": "fit-only per-PRN code median and one fit-only global median for each dynamic modality",
+    "R2-F2": "one fit posterior q_i per PRN and one held-out mixture marginalization per PRN",
+    "R2-F3": "matched 20-second A0/A6 persistence statistic T"
+  },
+  "status": "PRE_CLEAN_EXECUTION_IMPLEMENTATION_FREEZE",
+  "terminal_failure_policy": "TERMINATE_SPLITCLOCK_NO_FURTHER_GATE_RELAXATION",
+  "unchanged_parameters": {
+    "delta_p": "2 + M_eligible",
+    "evaluation_horizon_epochs": 20,
+    "fit_epochs": 7,
+    "heldout_epochs": 3,
+    "minimum_effective_cluster_mass_prns": 2.0,
+    "persistence": 3,
+    "q": 0.99,
+    "quantile_method": "higher",
+    "student_t_degrees_of_freedom": 4.0,
+    "window_epochs": 10
+  }
+}
