@@ -1,0 +1,54 @@
+{
+  "age_cutoffs_s": [
+    5.0,
+    20.0
+  ],
+  "attack_score_csv_opened_before_freeze": false,
+  "calibration_events": 947,
+  "calibration_rows": 9758,
+  "event_quantile": 0.99,
+  "global_event_threshold": 1.8367643929297124,
+  "global_node_thresholds": {
+    "q50": 0.07512817531824105,
+    "q70": 0.10604714527726165,
+    "q80": 0.13419466316699974
+  },
+  "input_scores": [
+    {
+      "path": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/cleanStatic/texbat_cleanStatic_prn_local_scores.csv",
+      "sha256": "9a6bc537bd8f1bc16a17257a5f7ae2e47f327c10e215c63d7ebd82ca0b80c36a",
+      "size_bytes": 3202934
+    }
+  ],
+  "max_gap_s": 0.75,
+  "min_bin_rows": 100,
+  "normal_only": true,
+  "quality_bin_counts": {
+    "age_5_to_20s": 414,
+    "age_ge_20s": 9144,
+    "age_lt_5s": 200
+  },
+  "quality_bin_fallbacks": {
+    "age_5_to_20s": false,
+    "age_ge_20s": false,
+    "age_lt_5s": false
+  },
+  "quality_event_threshold": 1.9578164836838197,
+  "quality_node_thresholds": {
+    "age_5_to_20s": {
+      "q50": 0.0950192511081695,
+      "q70": 0.1680344089865684,
+      "q80": 0.25987858772277833
+    },
+    "age_ge_20s": {
+      "q50": 0.07481077685952185,
+      "q70": 0.10381643101572982,
+      "q80": 0.12956831157207493
+    },
+    "age_lt_5s": {
+      "q50": 0.0485012792050838,
+      "q70": 0.43334117531776384,
+      "q80": 0.9342114686965942
+    }
+  }
+}

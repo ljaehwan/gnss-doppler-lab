@@ -1,0 +1,103 @@
+{
+  "schema": "gnss-doppler-lab.quality-conditioned-tail-campaign.v1",
+  "age_cutoffs_s": [
+    5.0,
+    20.0
+  ],
+  "max_gap_s": 0.75,
+  "min_bin_rows": 100,
+  "event_quantile": 0.99,
+  "guard_s": 10.0,
+  "availability_offset_s": 1.0,
+  "campaigns": {
+    "texbat_pooled_clean": {
+      "dataset": "TEXBAT",
+      "protocol": "cleanStatic+cleanDynamic pooled normal-only calibration; DS1-DS4 sealed evaluation",
+      "caveat": "Clean controls are calibration resubstitution checks, not held-clean generalization.",
+      "calibration_scores": [
+        "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/cleanStatic/texbat_cleanStatic_prn_local_scores.csv",
+        "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/cleanDynamic/texbat_cleanDynamic_prn_local_scores.csv"
+      ],
+      "clean_evaluations": {
+        "cleanStatic_resubstitution": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/cleanStatic/texbat_cleanStatic_prn_local_scores.csv",
+        "cleanDynamic_resubstitution": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/cleanDynamic/texbat_cleanDynamic_prn_local_scores.csv"
+      },
+      "attack_evaluations": {
+        "ds1": {
+          "score_csv": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds1/texbat_ds1_prn_local_scores.csv",
+          "onset_s": 100.0
+        },
+        "ds2": {
+          "score_csv": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds2/texbat_ds2_prn_local_scores.csv",
+          "onset_s": 100.0
+        },
+        "ds3": {
+          "score_csv": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds3/texbat_ds3_prn_local_scores.csv",
+          "onset_s": 100.0
+        },
+        "ds4": {
+          "score_csv": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds4/texbat_ds4_prn_local_scores.csv",
+          "onset_s": 100.0
+        }
+      }
+    },
+    "texbat_static_to_dynamic": {
+      "dataset": "TEXBAT",
+      "protocol": "cleanStatic-only normal calibration; cleanDynamic OOD control and DS1-DS4 sealed evaluation",
+      "caveat": "This is the strict normal-domain transfer stress test; no cleanDynamic score enters calibration.",
+      "calibration_scores": [
+        "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/cleanStatic/texbat_cleanStatic_prn_local_scores.csv"
+      ],
+      "clean_evaluations": {
+        "cleanDynamic_ood": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/cleanDynamic/texbat_cleanDynamic_prn_local_scores.csv"
+      },
+      "attack_evaluations": {
+        "ds1": {
+          "score_csv": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds1/texbat_ds1_prn_local_scores.csv",
+          "onset_s": 100.0
+        },
+        "ds2": {
+          "score_csv": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds2/texbat_ds2_prn_local_scores.csv",
+          "onset_s": 100.0
+        },
+        "ds3": {
+          "score_csv": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds3/texbat_ds3_prn_local_scores.csv",
+          "onset_s": 100.0
+        },
+        "ds4": {
+          "score_csv": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds4/texbat_ds4_prn_local_scores.csv",
+          "onset_s": 100.0
+        }
+      }
+    },
+    "oakbat_cleanstatic_held": {
+      "dataset": "OAKBAT",
+      "protocol": "frozen cleanStatic calibration partition; held-clean and OS1-OS4 evaluation",
+      "caveat": "No cleanDynamic OAKBAT score is available in the frozen campaign.",
+      "calibration_scores": [
+        "artifacts/oakbat_cleanstatic_detector_frozen_v1/calibration_prn_scores.csv"
+      ],
+      "clean_evaluations": {
+        "held_clean": "artifacts/oakbat_cleanstatic_detector_frozen_v1/held_clean_prn_scores.csv"
+      },
+      "attack_evaluations": {
+        "os1": {
+          "score_csv": "artifacts/oakbat_cleanstatic_detector_eval_v1/scored/os1/attack_prn_scores.csv",
+          "onset_s": 120.0
+        },
+        "os2": {
+          "score_csv": "artifacts/oakbat_cleanstatic_detector_eval_v1/scored/os2/attack_prn_scores.csv",
+          "onset_s": 120.0
+        },
+        "os3": {
+          "score_csv": "artifacts/oakbat_cleanstatic_detector_eval_v1/scored/os3/attack_prn_scores.csv",
+          "onset_s": 120.0
+        },
+        "os4": {
+          "score_csv": "artifacts/oakbat_cleanstatic_detector_eval_v1/scored/os4/attack_prn_scores.csv",
+          "onset_s": 120.0
+        }
+      }
+    }
+  }
+}

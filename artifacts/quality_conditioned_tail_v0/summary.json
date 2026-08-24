@@ -1,0 +1,826 @@
+{
+  "calibration_policy": "normal score CSVs only; frozen before evaluation score CSVs are opened",
+  "campaigns": {
+    "oakbat_cleanstatic_held": {
+      "attack_evaluations": {
+        "os1": {
+          "detectors": {
+            "global_btail": {
+              "first_detection_available_delay_s": 1.0141054000000054,
+              "first_detection_delay_s": 0.014105400000005375,
+              "first_detection_score_time_s": 120.0141054,
+              "first_three_consecutive_available_delay_s": 2.0141054000000054,
+              "first_three_consecutive_delay_s": 1.0141054000000054,
+              "first_three_consecutive_score_time_s": 121.0141054,
+              "guard_s": 10.0,
+              "onset_s": 120.0,
+              "post_detection_flags": 20,
+              "post_detection_rate": 0.02865329512893983,
+              "post_windows": 698,
+              "pre_false_flags": 23,
+              "pre_false_positive_rate": 0.11057692307692307,
+              "pre_windows": 208,
+              "threshold": 2.135628266299662
+            },
+            "quality_conditioned_btail": {
+              "first_detection_available_delay_s": 1.0141054000000054,
+              "first_detection_delay_s": 0.014105400000005375,
+              "first_detection_score_time_s": 120.0141054,
+              "first_three_consecutive_available_delay_s": 2.0141054000000054,
+              "first_three_consecutive_delay_s": 1.0141054000000054,
+              "first_three_consecutive_score_time_s": 121.0141054,
+              "guard_s": 10.0,
+              "onset_s": 120.0,
+              "post_detection_flags": 19,
+              "post_detection_rate": 0.027220630372492838,
+              "post_windows": 698,
+              "pre_false_flags": 23,
+              "pre_false_positive_rate": 0.11057692307692307,
+              "pre_windows": 208,
+              "threshold": 2.090394460075537
+            }
+          },
+          "input": {
+            "path": "artifacts/oakbat_cleanstatic_detector_eval_v1/scored/os1/attack_prn_scores.csv",
+            "sha256": "2bb15d2119becaa00ab4a22a334b0d096181d2807ea84e81bb0e20e6685e6260",
+            "size_bytes": 925442
+          },
+          "onset_s": 120.0
+        },
+        "os2": {
+          "detectors": {
+            "global_btail": {
+              "first_detection_available_delay_s": 1.017394600000003,
+              "first_detection_delay_s": 0.017394600000002924,
+              "first_detection_score_time_s": 120.0173946,
+              "first_three_consecutive_available_delay_s": 2.017394600000003,
+              "first_three_consecutive_delay_s": 1.017394600000003,
+              "first_three_consecutive_score_time_s": 121.0173946,
+              "guard_s": 10.0,
+              "onset_s": 120.0,
+              "post_detection_flags": 698,
+              "post_detection_rate": 1.0,
+              "post_windows": 698,
+              "pre_false_flags": 7,
+              "pre_false_positive_rate": 0.03365384615384615,
+              "pre_windows": 208,
+              "threshold": 2.135628266299662
+            },
+            "quality_conditioned_btail": {
+              "first_detection_available_delay_s": 1.017394600000003,
+              "first_detection_delay_s": 0.017394600000002924,
+              "first_detection_score_time_s": 120.0173946,
+              "first_three_consecutive_available_delay_s": 2.017394600000003,
+              "first_three_consecutive_delay_s": 1.017394600000003,
+              "first_three_consecutive_score_time_s": 121.0173946,
+              "guard_s": 10.0,
+              "onset_s": 120.0,
+              "post_detection_flags": 698,
+              "post_detection_rate": 1.0,
+              "post_windows": 698,
+              "pre_false_flags": 7,
+              "pre_false_positive_rate": 0.03365384615384615,
+              "pre_windows": 208,
+              "threshold": 2.090394460075537
+            }
+          },
+          "input": {
+            "path": "artifacts/oakbat_cleanstatic_detector_eval_v1/scored/os2/attack_prn_scores.csv",
+            "sha256": "d0ec067b32d7820dc99a399800934507f2bbd0d5471eb73670567e644e8cb402",
+            "size_bytes": 925965
+          },
+          "onset_s": 120.0
+        },
+        "os3": {
+          "detectors": {
+            "global_btail": {
+              "first_detection_available_delay_s": 3.5193644000000006,
+              "first_detection_delay_s": 2.5193644000000006,
+              "first_detection_score_time_s": 122.5193644,
+              "first_three_consecutive_available_delay_s": 5.519364400000001,
+              "first_three_consecutive_delay_s": 4.519364400000001,
+              "first_three_consecutive_score_time_s": 124.5193644,
+              "guard_s": 10.0,
+              "onset_s": 120.0,
+              "post_detection_flags": 527,
+              "post_detection_rate": 0.7550143266475645,
+              "post_windows": 698,
+              "pre_false_flags": 26,
+              "pre_false_positive_rate": 0.125,
+              "pre_windows": 208,
+              "threshold": 2.135628266299662
+            },
+            "quality_conditioned_btail": {
+              "first_detection_available_delay_s": 3.5193644000000006,
+              "first_detection_delay_s": 2.5193644000000006,
+              "first_detection_score_time_s": 122.5193644,
+              "first_three_consecutive_available_delay_s": 5.519364400000001,
+              "first_three_consecutive_delay_s": 4.519364400000001,
+              "first_three_consecutive_score_time_s": 124.5193644,
+              "guard_s": 10.0,
+              "onset_s": 120.0,
+              "post_detection_flags": 514,
+              "post_detection_rate": 0.7363896848137536,
+              "post_windows": 698,
+              "pre_false_flags": 27,
+              "pre_false_positive_rate": 0.12980769230769232,
+              "pre_windows": 208,
+              "threshold": 2.090394460075537
+            }
+          },
+          "input": {
+            "path": "artifacts/oakbat_cleanstatic_detector_eval_v1/scored/os3/attack_prn_scores.csv",
+            "sha256": "341eb658fcc3dcf631410bf6a9b7e027ea957142314383b70f9f494081fe5e27",
+            "size_bytes": 935156
+          },
+          "onset_s": 120.0
+        },
+        "os4": {
+          "detectors": {
+            "global_btail": {
+              "first_detection_available_delay_s": 1.0131147999999968,
+              "first_detection_delay_s": 0.013114799999996762,
+              "first_detection_score_time_s": 120.0131148,
+              "first_three_consecutive_available_delay_s": 2.0131147999999968,
+              "first_three_consecutive_delay_s": 1.0131147999999968,
+              "first_three_consecutive_score_time_s": 121.0131148,
+              "guard_s": 10.0,
+              "onset_s": 120.0,
+              "post_detection_flags": 698,
+              "post_detection_rate": 1.0,
+              "post_windows": 698,
+              "pre_false_flags": 9,
+              "pre_false_positive_rate": 0.04326923076923077,
+              "pre_windows": 208,
+              "threshold": 2.135628266299662
+            },
+            "quality_conditioned_btail": {
+              "first_detection_available_delay_s": 1.0131147999999968,
+              "first_detection_delay_s": 0.013114799999996762,
+              "first_detection_score_time_s": 120.0131148,
+              "first_three_consecutive_available_delay_s": 2.0131147999999968,
+              "first_three_consecutive_delay_s": 1.0131147999999968,
+              "first_three_consecutive_score_time_s": 121.0131148,
+              "guard_s": 10.0,
+              "onset_s": 120.0,
+              "post_detection_flags": 698,
+              "post_detection_rate": 1.0,
+              "post_windows": 698,
+              "pre_false_flags": 9,
+              "pre_false_positive_rate": 0.04326923076923077,
+              "pre_windows": 208,
+              "threshold": 2.090394460075537
+            }
+          },
+          "input": {
+            "path": "artifacts/oakbat_cleanstatic_detector_eval_v1/scored/os4/attack_prn_scores.csv",
+            "sha256": "419c5fb48f57e84ec5a417a948c71ed194f797d1bdab6307c6ff4280c7df9d73",
+            "size_bytes": 924082
+          },
+          "onset_s": 120.0
+        }
+      },
+      "calibration": {
+        "age_cutoffs_s": [
+          5.0,
+          20.0
+        ],
+        "attack_score_csv_opened_before_freeze": false,
+        "calibration_events": 128,
+        "calibration_rows": 1408,
+        "event_quantile": 0.99,
+        "global_event_threshold": 2.135628266299662,
+        "global_node_thresholds": {
+          "q50": 0.0844104066491127,
+          "q70": 0.10423689708113669,
+          "q80": 0.11687584966421125
+        },
+        "input_scores": [
+          {
+            "path": "artifacts/oakbat_cleanstatic_detector_frozen_v1/calibration_prn_scores.csv",
+            "sha256": "98bd160079fefe15fa72fa4ac9ec33557d167ecef58341e274ab987f5810745c",
+            "size_bytes": 137815
+          }
+        ],
+        "max_gap_s": 0.75,
+        "min_bin_rows": 100,
+        "normal_only": true,
+        "quality_bin_counts": {
+          "age_5_to_20s": 330,
+          "age_ge_20s": 968,
+          "age_lt_5s": 110
+        },
+        "quality_bin_fallbacks": {
+          "age_5_to_20s": false,
+          "age_ge_20s": false,
+          "age_lt_5s": false
+        },
+        "quality_event_threshold": 2.090394460075537,
+        "quality_node_thresholds": {
+          "age_5_to_20s": {
+            "q50": 0.08318470418453211,
+            "q70": 0.10388661026954649,
+            "q80": 0.11889930814504619
+          },
+          "age_ge_20s": {
+            "q50": 0.0852788351476192,
+            "q70": 0.10530818626284594,
+            "q80": 0.11697752773761746
+          },
+          "age_lt_5s": {
+            "q50": 0.0827563963830471,
+            "q70": 0.09986962899565693,
+            "q80": 0.1109474942088127
+          }
+        }
+      },
+      "caveat": "No cleanDynamic OAKBAT score is available in the frozen campaign.",
+      "clean_evaluations": {
+        "held_clean": {
+          "detectors": {
+            "global_btail": {
+              "any_false_positive": false,
+              "false_positive_flags": 0,
+              "false_positive_rate": 0.0,
+              "threshold": 2.135628266299662,
+              "windows": 107
+            },
+            "quality_conditioned_btail": {
+              "any_false_positive": false,
+              "false_positive_flags": 0,
+              "false_positive_rate": 0.0,
+              "threshold": 2.090394460075537,
+              "windows": 107
+            }
+          },
+          "input": {
+            "path": "artifacts/oakbat_cleanstatic_detector_frozen_v1/held_clean_prn_scores.csv",
+            "sha256": "5ae2760aa142f05b6841ac134ec5becfbca031f1abf1e88f04db31a46fe9ca12",
+            "size_bytes": 114260
+          }
+        }
+      },
+      "dataset": "OAKBAT",
+      "protocol": "frozen cleanStatic calibration partition; held-clean and OS1-OS4 evaluation"
+    },
+    "texbat_pooled_clean": {
+      "attack_evaluations": {
+        "ds1": {
+          "detectors": {
+            "global_btail": {
+              "first_detection_available_delay_s": 26.040794759999997,
+              "first_detection_delay_s": 25.040794759999997,
+              "first_detection_score_time_s": 125.04079476,
+              "first_three_consecutive_available_delay_s": 27.040794759999997,
+              "first_three_consecutive_delay_s": 26.040794759999997,
+              "first_three_consecutive_score_time_s": 126.04079476,
+              "guard_s": 10.0,
+              "onset_s": 100.0,
+              "post_detection_flags": 672,
+              "post_detection_rate": 0.9572649572649573,
+              "post_windows": 702,
+              "pre_false_flags": 0,
+              "pre_false_positive_rate": 0.0,
+              "pre_windows": 168,
+              "threshold": 4.169877716047041
+            },
+            "quality_conditioned_btail": {
+              "first_detection_available_delay_s": 26.040794759999997,
+              "first_detection_delay_s": 25.040794759999997,
+              "first_detection_score_time_s": 125.04079476,
+              "first_three_consecutive_available_delay_s": 27.040794759999997,
+              "first_three_consecutive_delay_s": 26.040794759999997,
+              "first_three_consecutive_score_time_s": 126.04079476,
+              "guard_s": 10.0,
+              "onset_s": 100.0,
+              "post_detection_flags": 672,
+              "post_detection_rate": 0.9572649572649573,
+              "post_windows": 702,
+              "pre_false_flags": 0,
+              "pre_false_positive_rate": 0.0,
+              "pre_windows": 168,
+              "threshold": 4.253306007137399
+            }
+          },
+          "input": {
+            "path": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds1/texbat_ds1_prn_local_scores.csv",
+            "sha256": "a8ae0c15428dbe90961272cd35163efa65853b1b00eca7864a7f16a2a287aba1",
+            "size_bytes": 2973606
+          },
+          "onset_s": 100.0
+        },
+        "ds2": {
+          "detectors": {
+            "global_btail": {
+              "first_detection_available_delay_s": 10.371334480000002,
+              "first_detection_delay_s": 9.371334480000002,
+              "first_detection_score_time_s": 109.37133448,
+              "first_three_consecutive_available_delay_s": 11.371334480000002,
+              "first_three_consecutive_delay_s": 10.371334480000002,
+              "first_three_consecutive_score_time_s": 110.37133448,
+              "guard_s": 10.0,
+              "onset_s": 100.0,
+              "post_detection_flags": 692,
+              "post_detection_rate": 1.0,
+              "post_windows": 692,
+              "pre_false_flags": 0,
+              "pre_false_positive_rate": 0.0,
+              "pre_windows": 169,
+              "threshold": 4.169877716047041
+            },
+            "quality_conditioned_btail": {
+              "first_detection_available_delay_s": 10.871334480000002,
+              "first_detection_delay_s": 9.871334480000002,
+              "first_detection_score_time_s": 109.87133448,
+              "first_three_consecutive_available_delay_s": 11.871334480000002,
+              "first_three_consecutive_delay_s": 10.871334480000002,
+              "first_three_consecutive_score_time_s": 110.87133448,
+              "guard_s": 10.0,
+              "onset_s": 100.0,
+              "post_detection_flags": 692,
+              "post_detection_rate": 1.0,
+              "post_windows": 692,
+              "pre_false_flags": 0,
+              "pre_false_positive_rate": 0.0,
+              "pre_windows": 169,
+              "threshold": 4.253306007137399
+            }
+          },
+          "input": {
+            "path": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds2/texbat_ds2_prn_local_scores.csv",
+            "sha256": "97fc00c309789e4ac88e9dfde57fc0ee9b9f16a51a08998236f69a8d6311ad4e",
+            "size_bytes": 3039813
+          },
+          "onset_s": 100.0
+        },
+        "ds3": {
+          "detectors": {
+            "global_btail": {
+              "first_detection_available_delay_s": 20.45092984,
+              "first_detection_delay_s": 19.45092984,
+              "first_detection_score_time_s": 119.45092984,
+              "first_three_consecutive_available_delay_s": 21.45092984,
+              "first_three_consecutive_delay_s": 20.45092984,
+              "first_three_consecutive_score_time_s": 120.45092984,
+              "guard_s": 10.0,
+              "onset_s": 100.0,
+              "post_detection_flags": 676,
+              "post_detection_rate": 0.9740634005763689,
+              "post_windows": 694,
+              "pre_false_flags": 0,
+              "pre_false_positive_rate": 0.0,
+              "pre_windows": 169,
+              "threshold": 4.169877716047041
+            },
+            "quality_conditioned_btail": {
+              "first_detection_available_delay_s": 20.45092984,
+              "first_detection_delay_s": 19.45092984,
+              "first_detection_score_time_s": 119.45092984,
+              "first_three_consecutive_available_delay_s": 21.45092984,
+              "first_three_consecutive_delay_s": 20.45092984,
+              "first_three_consecutive_score_time_s": 120.45092984,
+              "guard_s": 10.0,
+              "onset_s": 100.0,
+              "post_detection_flags": 676,
+              "post_detection_rate": 0.9740634005763689,
+              "post_windows": 694,
+              "pre_false_flags": 0,
+              "pre_false_positive_rate": 0.0,
+              "pre_windows": 169,
+              "threshold": 4.253306007137399
+            }
+          },
+          "input": {
+            "path": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds3/texbat_ds3_prn_local_scores.csv",
+            "sha256": "c62321e25fb152c8ece0fef45c3e79bb27d6679bf6ea37ef09b5db711df800d6",
+            "size_bytes": 2977701
+          },
+          "onset_s": 100.0
+        },
+        "ds4": {
+          "detectors": {
+            "global_btail": {
+              "first_detection_available_delay_s": 15.040465319999996,
+              "first_detection_delay_s": 14.040465319999996,
+              "first_detection_score_time_s": 114.04046532,
+              "first_three_consecutive_available_delay_s": 16.040465319999996,
+              "first_three_consecutive_delay_s": 15.040465319999996,
+              "first_three_consecutive_score_time_s": 115.04046532,
+              "guard_s": 10.0,
+              "onset_s": 100.0,
+              "post_detection_flags": 27,
+              "post_detection_rate": 0.7714285714285715,
+              "post_windows": 35,
+              "pre_false_flags": 0,
+              "pre_false_positive_rate": 0.0,
+              "pre_windows": 168,
+              "threshold": 4.169877716047041
+            },
+            "quality_conditioned_btail": {
+              "first_detection_available_delay_s": 15.040465319999996,
+              "first_detection_delay_s": 14.040465319999996,
+              "first_detection_score_time_s": 114.04046532,
+              "first_three_consecutive_available_delay_s": 16.040465319999996,
+              "first_three_consecutive_delay_s": 15.040465319999996,
+              "first_three_consecutive_score_time_s": 115.04046532,
+              "guard_s": 10.0,
+              "onset_s": 100.0,
+              "post_detection_flags": 27,
+              "post_detection_rate": 0.7714285714285715,
+              "post_windows": 35,
+              "pre_false_flags": 0,
+              "pre_false_positive_rate": 0.0,
+              "pre_windows": 168,
+              "threshold": 4.253306007137399
+            }
+          },
+          "input": {
+            "path": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds4/texbat_ds4_prn_local_scores.csv",
+            "sha256": "0669581b8a4f3ae73fe1279eb345e1651e3de16955a8ce5eec77d2c1541ae18d",
+            "size_bytes": 789155
+          },
+          "onset_s": 100.0
+        }
+      },
+      "calibration": {
+        "age_cutoffs_s": [
+          5.0,
+          20.0
+        ],
+        "attack_score_csv_opened_before_freeze": false,
+        "calibration_events": 1820,
+        "calibration_rows": 18642,
+        "event_quantile": 0.99,
+        "global_event_threshold": 4.169877716047041,
+        "global_node_thresholds": {
+          "q50": 0.0914354398846626,
+          "q70": 0.12956311106681812,
+          "q80": 0.1630456149578094
+        },
+        "input_scores": [
+          {
+            "path": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/cleanStatic/texbat_cleanStatic_prn_local_scores.csv",
+            "sha256": "9a6bc537bd8f1bc16a17257a5f7ae2e47f327c10e215c63d7ebd82ca0b80c36a",
+            "size_bytes": 3202934
+          },
+          {
+            "path": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/cleanDynamic/texbat_cleanDynamic_prn_local_scores.csv",
+            "sha256": "855c5ad2b2ea355136f027c49cc22e7234fab2147a6b812f832213b0c7ab082c",
+            "size_bytes": 2899972
+          }
+        ],
+        "max_gap_s": 0.75,
+        "min_bin_rows": 100,
+        "normal_only": true,
+        "quality_bin_counts": {
+          "age_5_to_20s": 990,
+          "age_ge_20s": 17186,
+          "age_lt_5s": 466
+        },
+        "quality_bin_fallbacks": {
+          "age_5_to_20s": false,
+          "age_ge_20s": false,
+          "age_lt_5s": false
+        },
+        "quality_event_threshold": 4.253306007137399,
+        "quality_node_thresholds": {
+          "age_5_to_20s": {
+            "q50": 0.11140518262982366,
+            "q70": 0.1868527621030807,
+            "q80": 0.315374231338501
+          },
+          "age_ge_20s": {
+            "q50": 0.09060483053326604,
+            "q70": 0.1265113949775695,
+            "q80": 0.1562627702951431
+          },
+          "age_lt_5s": {
+            "q50": 0.11379620805382726,
+            "q70": 0.7234644889831543,
+            "q80": 1.1100614070892334
+          }
+        }
+      },
+      "caveat": "Clean controls are calibration resubstitution checks, not held-clean generalization.",
+      "clean_evaluations": {
+        "cleanDynamic_resubstitution": {
+          "detectors": {
+            "global_btail": {
+              "any_false_positive": true,
+              "false_positive_flags": 19,
+              "false_positive_rate": 0.021764032073310423,
+              "threshold": 4.169877716047041,
+              "windows": 873
+            },
+            "quality_conditioned_btail": {
+              "any_false_positive": true,
+              "false_positive_flags": 19,
+              "false_positive_rate": 0.021764032073310423,
+              "threshold": 4.253306007137399,
+              "windows": 873
+            }
+          },
+          "input": {
+            "path": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/cleanDynamic/texbat_cleanDynamic_prn_local_scores.csv",
+            "sha256": "855c5ad2b2ea355136f027c49cc22e7234fab2147a6b812f832213b0c7ab082c",
+            "size_bytes": 2899972
+          }
+        },
+        "cleanStatic_resubstitution": {
+          "detectors": {
+            "global_btail": {
+              "any_false_positive": false,
+              "false_positive_flags": 0,
+              "false_positive_rate": 0.0,
+              "threshold": 4.169877716047041,
+              "windows": 947
+            },
+            "quality_conditioned_btail": {
+              "any_false_positive": false,
+              "false_positive_flags": 0,
+              "false_positive_rate": 0.0,
+              "threshold": 4.253306007137399,
+              "windows": 947
+            }
+          },
+          "input": {
+            "path": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/cleanStatic/texbat_cleanStatic_prn_local_scores.csv",
+            "sha256": "9a6bc537bd8f1bc16a17257a5f7ae2e47f327c10e215c63d7ebd82ca0b80c36a",
+            "size_bytes": 3202934
+          }
+        }
+      },
+      "dataset": "TEXBAT",
+      "protocol": "cleanStatic+cleanDynamic pooled normal-only calibration; DS1-DS4 sealed evaluation"
+    },
+    "texbat_static_to_dynamic": {
+      "attack_evaluations": {
+        "ds1": {
+          "detectors": {
+            "global_btail": {
+              "first_detection_available_delay_s": 20.040794759999997,
+              "first_detection_delay_s": 19.040794759999997,
+              "first_detection_score_time_s": 119.04079476,
+              "first_three_consecutive_available_delay_s": 21.040794759999997,
+              "first_three_consecutive_delay_s": 20.040794759999997,
+              "first_three_consecutive_score_time_s": 120.04079476,
+              "guard_s": 10.0,
+              "onset_s": 100.0,
+              "post_detection_flags": 675,
+              "post_detection_rate": 0.9615384615384616,
+              "post_windows": 702,
+              "pre_false_flags": 0,
+              "pre_false_positive_rate": 0.0,
+              "pre_windows": 168,
+              "threshold": 1.8367643929297124
+            },
+            "quality_conditioned_btail": {
+              "first_detection_available_delay_s": 20.040794759999997,
+              "first_detection_delay_s": 19.040794759999997,
+              "first_detection_score_time_s": 119.04079476,
+              "first_three_consecutive_available_delay_s": 21.040794759999997,
+              "first_three_consecutive_delay_s": 20.040794759999997,
+              "first_three_consecutive_score_time_s": 120.04079476,
+              "guard_s": 10.0,
+              "onset_s": 100.0,
+              "post_detection_flags": 675,
+              "post_detection_rate": 0.9615384615384616,
+              "post_windows": 702,
+              "pre_false_flags": 0,
+              "pre_false_positive_rate": 0.0,
+              "pre_windows": 168,
+              "threshold": 1.9578164836838197
+            }
+          },
+          "input": {
+            "path": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds1/texbat_ds1_prn_local_scores.csv",
+            "sha256": "a8ae0c15428dbe90961272cd35163efa65853b1b00eca7864a7f16a2a287aba1",
+            "size_bytes": 2973606
+          },
+          "onset_s": 100.0
+        },
+        "ds2": {
+          "detectors": {
+            "global_btail": {
+              "first_detection_available_delay_s": 10.371334480000002,
+              "first_detection_delay_s": 9.371334480000002,
+              "first_detection_score_time_s": 109.37133448,
+              "first_three_consecutive_available_delay_s": 11.371334480000002,
+              "first_three_consecutive_delay_s": 10.371334480000002,
+              "first_three_consecutive_score_time_s": 110.37133448,
+              "guard_s": 10.0,
+              "onset_s": 100.0,
+              "post_detection_flags": 692,
+              "post_detection_rate": 1.0,
+              "post_windows": 692,
+              "pre_false_flags": 12,
+              "pre_false_positive_rate": 0.07100591715976332,
+              "pre_windows": 169,
+              "threshold": 1.8367643929297124
+            },
+            "quality_conditioned_btail": {
+              "first_detection_available_delay_s": 10.371334480000002,
+              "first_detection_delay_s": 9.371334480000002,
+              "first_detection_score_time_s": 109.37133448,
+              "first_three_consecutive_available_delay_s": 11.371334480000002,
+              "first_three_consecutive_delay_s": 10.371334480000002,
+              "first_three_consecutive_score_time_s": 110.37133448,
+              "guard_s": 10.0,
+              "onset_s": 100.0,
+              "post_detection_flags": 692,
+              "post_detection_rate": 1.0,
+              "post_windows": 692,
+              "pre_false_flags": 5,
+              "pre_false_positive_rate": 0.029585798816568046,
+              "pre_windows": 169,
+              "threshold": 1.9578164836838197
+            }
+          },
+          "input": {
+            "path": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds2/texbat_ds2_prn_local_scores.csv",
+            "sha256": "97fc00c309789e4ac88e9dfde57fc0ee9b9f16a51a08998236f69a8d6311ad4e",
+            "size_bytes": 3039813
+          },
+          "onset_s": 100.0
+        },
+        "ds3": {
+          "detectors": {
+            "global_btail": {
+              "first_detection_available_delay_s": 15.95092984,
+              "first_detection_delay_s": 14.95092984,
+              "first_detection_score_time_s": 114.95092984,
+              "first_three_consecutive_available_delay_s": 16.95092984,
+              "first_three_consecutive_delay_s": 15.95092984,
+              "first_three_consecutive_score_time_s": 115.95092984,
+              "guard_s": 10.0,
+              "onset_s": 100.0,
+              "post_detection_flags": 683,
+              "post_detection_rate": 0.984149855907781,
+              "post_windows": 694,
+              "pre_false_flags": 1,
+              "pre_false_positive_rate": 0.005917159763313609,
+              "pre_windows": 169,
+              "threshold": 1.8367643929297124
+            },
+            "quality_conditioned_btail": {
+              "first_detection_available_delay_s": 15.95092984,
+              "first_detection_delay_s": 14.95092984,
+              "first_detection_score_time_s": 114.95092984,
+              "first_three_consecutive_available_delay_s": 20.95092984,
+              "first_three_consecutive_delay_s": 19.95092984,
+              "first_three_consecutive_score_time_s": 119.95092984,
+              "guard_s": 10.0,
+              "onset_s": 100.0,
+              "post_detection_flags": 680,
+              "post_detection_rate": 0.9798270893371758,
+              "post_windows": 694,
+              "pre_false_flags": 0,
+              "pre_false_positive_rate": 0.0,
+              "pre_windows": 169,
+              "threshold": 1.9578164836838197
+            }
+          },
+          "input": {
+            "path": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds3/texbat_ds3_prn_local_scores.csv",
+            "sha256": "c62321e25fb152c8ece0fef45c3e79bb27d6679bf6ea37ef09b5db711df800d6",
+            "size_bytes": 2977701
+          },
+          "onset_s": 100.0
+        },
+        "ds4": {
+          "detectors": {
+            "global_btail": {
+              "first_detection_available_delay_s": 14.540465319999996,
+              "first_detection_delay_s": 13.540465319999996,
+              "first_detection_score_time_s": 113.54046532,
+              "first_three_consecutive_available_delay_s": 15.540465319999996,
+              "first_three_consecutive_delay_s": 14.540465319999996,
+              "first_three_consecutive_score_time_s": 114.54046532,
+              "guard_s": 10.0,
+              "onset_s": 100.0,
+              "post_detection_flags": 28,
+              "post_detection_rate": 0.8,
+              "post_windows": 35,
+              "pre_false_flags": 2,
+              "pre_false_positive_rate": 0.011904761904761904,
+              "pre_windows": 168,
+              "threshold": 1.8367643929297124
+            },
+            "quality_conditioned_btail": {
+              "first_detection_available_delay_s": 14.540465319999996,
+              "first_detection_delay_s": 13.540465319999996,
+              "first_detection_score_time_s": 113.54046532,
+              "first_three_consecutive_available_delay_s": 15.540465319999996,
+              "first_three_consecutive_delay_s": 14.540465319999996,
+              "first_three_consecutive_score_time_s": 114.54046532,
+              "guard_s": 10.0,
+              "onset_s": 100.0,
+              "post_detection_flags": 28,
+              "post_detection_rate": 0.8,
+              "post_windows": 35,
+              "pre_false_flags": 0,
+              "pre_false_positive_rate": 0.0,
+              "pre_windows": 168,
+              "threshold": 1.9578164836838197
+            }
+          },
+          "input": {
+            "path": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/ds4/texbat_ds4_prn_local_scores.csv",
+            "sha256": "0669581b8a4f3ae73fe1279eb345e1651e3de16955a8ce5eec77d2c1541ae18d",
+            "size_bytes": 789155
+          },
+          "onset_s": 100.0
+        }
+      },
+      "calibration": {
+        "age_cutoffs_s": [
+          5.0,
+          20.0
+        ],
+        "attack_score_csv_opened_before_freeze": false,
+        "calibration_events": 947,
+        "calibration_rows": 9758,
+        "event_quantile": 0.99,
+        "global_event_threshold": 1.8367643929297124,
+        "global_node_thresholds": {
+          "q50": 0.07512817531824105,
+          "q70": 0.10604714527726165,
+          "q80": 0.13419466316699974
+        },
+        "input_scores": [
+          {
+            "path": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/cleanStatic/texbat_cleanStatic_prn_local_scores.csv",
+            "sha256": "9a6bc537bd8f1bc16a17257a5f7ae2e47f327c10e215c63d7ebd82ca0b80c36a",
+            "size_bytes": 3202934
+          }
+        ],
+        "max_gap_s": 0.75,
+        "min_bin_rows": 100,
+        "normal_only": true,
+        "quality_bin_counts": {
+          "age_5_to_20s": 414,
+          "age_ge_20s": 9144,
+          "age_lt_5s": 200
+        },
+        "quality_bin_fallbacks": {
+          "age_5_to_20s": false,
+          "age_ge_20s": false,
+          "age_lt_5s": false
+        },
+        "quality_event_threshold": 1.9578164836838197,
+        "quality_node_thresholds": {
+          "age_5_to_20s": {
+            "q50": 0.0950192511081695,
+            "q70": 0.1680344089865684,
+            "q80": 0.25987858772277833
+          },
+          "age_ge_20s": {
+            "q50": 0.07481077685952185,
+            "q70": 0.10381643101572982,
+            "q80": 0.12956831157207493
+          },
+          "age_lt_5s": {
+            "q50": 0.0485012792050838,
+            "q70": 0.43334117531776384,
+            "q80": 0.9342114686965942
+          }
+        }
+      },
+      "caveat": "This is the strict normal-domain transfer stress test; no cleanDynamic score enters calibration.",
+      "clean_evaluations": {
+        "cleanDynamic_ood": {
+          "detectors": {
+            "global_btail": {
+              "any_false_positive": true,
+              "false_positive_flags": 810,
+              "false_positive_rate": 0.9278350515463918,
+              "threshold": 1.8367643929297124,
+              "windows": 873
+            },
+            "quality_conditioned_btail": {
+              "any_false_positive": true,
+              "false_positive_flags": 786,
+              "false_positive_rate": 0.9003436426116839,
+              "threshold": 1.9578164836838197,
+              "windows": 873
+            }
+          },
+          "input": {
+            "path": "artifacts/ai_morph_gru_cleanStatic_q70_frame/scored/cleanDynamic/texbat_cleanDynamic_prn_local_scores.csv",
+            "sha256": "855c5ad2b2ea355136f027c49cc22e7234fab2147a6b812f832213b0c7ab082c",
+            "size_bytes": 2899972
+          }
+        }
+      },
+      "dataset": "TEXBAT",
+      "protocol": "cleanStatic-only normal calibration; cleanDynamic OOD control and DS1-DS4 sealed evaluation"
+    }
+  },
+  "manifest": {
+    "path": "configs/experiments/quality_conditioned_tail_v0.json",
+    "sha256": "466f7822ce3303c97d5df628f57b6d07a63c07f766428480f730e71706fab5c6",
+    "size_bytes": 4365
+  },
+  "quality_state": "causal observed-score continuity age; resets after timestamp gaps",
+  "schema": "gnss-doppler-lab.quality-conditioned-tail-results.v1"
+}

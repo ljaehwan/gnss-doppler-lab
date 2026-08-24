@@ -1,0 +1,54 @@
+{
+  "age_cutoffs_s": [
+    5.0,
+    20.0
+  ],
+  "attack_score_csv_opened_before_freeze": false,
+  "calibration_events": 128,
+  "calibration_rows": 1408,
+  "event_quantile": 0.99,
+  "global_event_threshold": 2.135628266299662,
+  "global_node_thresholds": {
+    "q50": 0.0844104066491127,
+    "q70": 0.10423689708113669,
+    "q80": 0.11687584966421125
+  },
+  "input_scores": [
+    {
+      "path": "artifacts/oakbat_cleanstatic_detector_frozen_v1/calibration_prn_scores.csv",
+      "sha256": "98bd160079fefe15fa72fa4ac9ec33557d167ecef58341e274ab987f5810745c",
+      "size_bytes": 137815
+    }
+  ],
+  "max_gap_s": 0.75,
+  "min_bin_rows": 100,
+  "normal_only": true,
+  "quality_bin_counts": {
+    "age_5_to_20s": 330,
+    "age_ge_20s": 968,
+    "age_lt_5s": 110
+  },
+  "quality_bin_fallbacks": {
+    "age_5_to_20s": false,
+    "age_ge_20s": false,
+    "age_lt_5s": false
+  },
+  "quality_event_threshold": 2.090394460075537,
+  "quality_node_thresholds": {
+    "age_5_to_20s": {
+      "q50": 0.08318470418453211,
+      "q70": 0.10388661026954649,
+      "q80": 0.11889930814504619
+    },
+    "age_ge_20s": {
+      "q50": 0.0852788351476192,
+      "q70": 0.10530818626284594,
+      "q80": 0.11697752773761746
+    },
+    "age_lt_5s": {
+      "q50": 0.0827563963830471,
+      "q70": 0.09986962899565693,
+      "q80": 0.1109474942088127
+    }
+  }
+}
