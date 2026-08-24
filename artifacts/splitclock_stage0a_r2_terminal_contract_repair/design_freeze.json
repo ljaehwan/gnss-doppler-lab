@@ -1,0 +1,121 @@
+{
+  "base_sha": "38cddccd9d02a9c0da4052375e4d1168e2cc58cb",
+  "centering_contract": {
+    "code": "fit-only median per eligible PRN",
+    "doppler": "one fit-only global median across all valid eligible PRNs and epochs",
+    "dynamic_PRN_offset_must_be_preserved": true,
+    "heldout_used": false,
+    "identical_for_K1_K2": true,
+    "carrier_increment": "one fit-only global median across all valid eligible PRNs and epochs"
+  },
+  "clean_gate": {
+    "epoch_FPR_max": 0.01,
+    "persistent_false_alarms": 0,
+    "publication_grade_claim": false,
+    "score_CN0_absolute_correlation_max": 0.3,
+    "score_PRN_count_absolute_correlation_max": 0.3,
+    "zero_alarm_CP_upper_reported": true
+  },
+  "contribution_gate": {
+    "A6_minus_A0_matched_horizon_AUROC_min": 0.05,
+    "destruction_advantage_reduction_min": 0.3,
+    "observation_wise_mixture_diagnostic_only": true,
+    "PRN_rename_score_difference_max": 1e-10
+  },
+  "data_contract": {
+    "allowed": [
+      "Tuni Galileo C-1 clean",
+      "Tuni Galileo C-3 clean",
+      "R1-verified QSET V3 clean receiver outputs",
+      "synthetic-on-clean controls"
+    ],
+    "forbidden": [
+      "SS-1/3/5/11/12/13/33",
+      "TEXBAT/OAKBAT attack data",
+      "Jammertest raw"
+    ]
+  },
+  "frozen_model": {
+    "K1_K2_same_mask": true,
+    "Student_t_df": 4.0,
+    "delta_p": "2 + M_eligible",
+    "fit_epochs": 7,
+    "heldout_epochs": 3,
+    "minimum_cluster_mass": 2.0,
+    "process_and_noise_calibration": "unchanged from R1",
+    "window_epochs": 10
+  },
+  "geometry_sign_cadence": "unchanged from R1",
+  "latent_membership_contract": {
+    "fit_membership": "q_i=softmax_k(log_prior_k + sum_valid_fit_t,m StudentT_logpdf_i,t,m,k)",
+    "heldout_marginalization": "exactly one logsumexp per eligible PRN after summing all valid held-out epochs and modalities per path",
+    "heldout_used_for_fit_or_restart": false,
+    "membership_granularity": "one posterior q_i per PRN per whole window",
+    "observation_wise_logsumexp_forbidden": true,
+    "restart_selection": "deterministic fit likelihood only"
+  },
+  "matched_horizon_contract": {
+    "A0_A6_same_horizon": true,
+    "bootstrap_unit": "unique parent onset",
+    "clean_pair": "same C-1 parent interval, onset, and 20-second horizon without injection",
+    "horizon_seconds": 20,
+    "statistic": "T=max_j min(score_j,score_j+1,score_j+2)",
+    "synthetic_max_vs_clean_epoch_forbidden": true
+  },
+  "negative_boundary_contract": {
+    "all_PRN_coherent_jump_ramp_drift_persistent_alarm": 0,
+    "cycle_slip_reacquisition_persistent_alarm": 0,
+    "other_persistent_FPR_max": 0.02
+  },
+  "primary_localization_contract": {
+    "alarm_window": "first persistent alarm window only",
+    "miss_F1": 0.0,
+    "oracle_peak_window": "diagnostic only"
+  },
+  "split_threshold_contract": {
+    "C1": "development and noise/process calibration",
+    "C3": "chronological calibration, 10-second guard, untouched holdout",
+    "calibration_windows": "non-overlapping 10-epoch raw interval partitions, exactly one score per window",
+    "persistence": 3,
+    "publication_grade_min_independent_windows": 20,
+    "q": 0.99,
+    "quantile_method": "higher"
+  },
+  "status": "PRE_CLEAN_EXECUTION_R2_DESIGN_FREEZE",
+  "synthetic_contract": {
+    "accelerating": {
+      "a_mps2": 0.02,
+      "v_mps": 0.05
+    },
+    "delayed": {
+      "d0_m": 10.0,
+      "v_mps": 0.1
+    },
+    "mild": {
+      "v_mps": 0.1
+    },
+    "moderate": {
+      "v_mps": 0.5
+    },
+    "onsets": "identical to R1 deterministic onset rule",
+    "primary_subsets": [3, 5],
+    "subset_sizes": [1, 3, 5]
+  },
+  "synthetic_gate": {
+    "accelerating_detection_rate_min": 0.8,
+    "median_delay_seconds_max": 10.0,
+    "median_primary_localization_F1_min": 0.8,
+    "mild_detection_rate_min": 0.7,
+    "moderate_detection_rate_min": 0.9,
+    "miss_localization_F1": 0.0
+  },
+  "verdicts": [
+    "STOP_SPLITCLOCK_R2_GEOMETRY_OR_PANEL",
+    "INCONCLUSIVE_SPLITCLOCK_R2_IMPLEMENTATION_CONTRACT",
+    "INCONCLUSIVE_SPLITCLOCK_R2_EXECUTION_OR_PROVENANCE",
+    "NO_GO_SPLITCLOCK_R2_CLEAN_FALSE_ALARMS",
+    "NO_GO_SPLITCLOCK_R2_NEGATIVE_CONTROLS",
+    "NO_GO_SPLITCLOCK_R2_SYNTHETIC_IDENTIFIABILITY",
+    "READY_FOR_SPLITCLOCK_ATTACK_FREEZE"
+  ]
+}

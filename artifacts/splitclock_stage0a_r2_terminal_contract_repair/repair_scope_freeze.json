@@ -1,0 +1,89 @@
+{
+  "attack_access": {
+    "attack_bytes_read": 0,
+    "jammertest_raw_bytes_read": 0,
+    "operations": {
+      "hash": 0,
+      "mmap": 0,
+      "open": 0,
+      "stat": 0
+    }
+  },
+  "base_sha": "38cddccd9d02a9c0da4052375e4d1168e2cc58cb",
+  "branch": "research/splitclock-stage0a-r2-terminal-contract-repair",
+  "errors_repaired": [
+    {
+      "id": "R2-F1",
+      "r1_error": "Doppler and carrier-increment were centered by PRN within each fit interval, erasing group-specific constant clock drift.",
+      "repair": "Keep fit-only per-PRN centering for code; use one fit-only modality-global median for Doppler and one for carrier increment."
+    },
+    {
+      "id": "R2-F2",
+      "r1_error": "K2 used observation-wise mixture marginalization, permitting path changes across epochs and modalities.",
+      "repair": "Infer one fit-only posterior membership per PRN for the whole window and marginalize held-out likelihood once per PRN."
+    },
+    {
+      "id": "R2-F3",
+      "r1_error": "A6 AUROC compared maximum synthetic score against individual clean epoch scores, creating a multiple-comparison mismatch.",
+      "repair": "Apply the same 20-second persistence-compatible statistic T=max_j min(s_j,s_j+1,s_j+2) to paired injected and clean horizons for A0 and A6."
+    }
+  ],
+  "frozen_parameters": {
+    "Student_t_df": 4.0,
+    "clean_correlation_absolute_limit": 0.3,
+    "delta_p": "2 + M_eligible",
+    "fit_epochs": 7,
+    "heldout_epochs": 3,
+    "minimum_effective_cluster_mass": 2.0,
+    "persistence": 3,
+    "q": 0.99,
+    "quantile_method": "higher",
+    "synthetic_subsets": [1, 3, 5],
+    "window_epochs": 10
+  },
+  "implementation_allowlist": {
+    "new_files": [
+      "src/gnss_doppler_lab/splitclock_r2_contract.py",
+      "src/gnss_doppler_lab/splitclock_r2_model.py",
+      "src/gnss_doppler_lab/splitclock_r2_experiment.py",
+      "scripts/build_splitclock_r2_implementation_freeze.py",
+      "scripts/run_splitclock_r2.py",
+      "scripts/verify_splitclock_r2.py",
+      "tests/test_splitclock_r2_terminal_contract_repair.py"
+    ],
+    "permitted_functions": [
+      "center_fit_only",
+      "persistent_prn_membership",
+      "persistent_prn_mixture_loglik",
+      "score_window",
+      "persistence_statistic",
+      "matched_horizon_evaluation",
+      "primary_localization"
+    ],
+    "r1_source_modification_allowed": false
+  },
+  "post_r2_policy": {
+    "additional_clean_only_repairs_allowed": false,
+    "failure_rule": "TERMINATE_SPLITCLOCK_NO_FURTHER_GATE_RELAXATION",
+    "terminal_stage": true
+  },
+  "prohibited_changes": [
+    "threshold",
+    "persistence",
+    "synthetic magnitude or onset",
+    "window length or fit/held-out split",
+    "C-1/C-3 data split",
+    "gate relaxation",
+    "new features",
+    "result-conditioned hyperparameter tuning",
+    "R1 artifact mutation",
+    "forbidden feature inputs",
+    "attack or Jammertest raw access"
+  ],
+  "r1_references": {
+    "design_freeze_sha": "d472376ba2e59d766c93296b4755df4c89ccbe9b",
+    "final_sha": "38cddccd9d02a9c0da4052375e4d1168e2cc58cb",
+    "implementation_freeze_sha": "3b2d943b15eed67df55051c123682ac92453a699"
+  },
+  "status": "PRE_CLEAN_EXECUTION_R2_REPAIR_SCOPE_FREEZE"
+}
