@@ -1,0 +1,69 @@
+{
+  "candidate_status": "train_generated_censoring_mechanism_and_fix_require_frozen_validation",
+  "created_at_date": "2026-08-26",
+  "data_boundary": {
+    "allowed_pair_ids": [
+      "pv1-pair-001",
+      "pv1-pair-002",
+      "pv1-pair-003",
+      "pv1-pair-004",
+      "pv1-pair-005",
+      "pv1-pair-006"
+    ],
+    "allowed_partition": "train",
+    "test_pair_ids_accessed": [],
+    "texbat_recordings_accessed": [],
+    "validation_pair_ids_accessed": []
+  },
+  "detector_comparison": {
+    "censoring_aware_one_or_more_prns": {
+      "detected_pair_count": 6,
+      "maximum_availability_delay_s": 8.625,
+      "median_availability_delay_s": 4.1875,
+      "paired_normal_persistent_warning_count": 0
+    },
+    "common_pair_median_delay_reduction_s": 5.875,
+    "detected_set_median_delay_reduction_s": 5.6875,
+    "strict_four_prn": {
+      "detected_pair_count": 5,
+      "maximum_availability_delay_s": 10.625,
+      "median_availability_delay_s": 9.875,
+      "paired_normal_persistent_warning_count": 0
+    }
+  },
+  "experiment": {
+    "analysis_origin": "post-hoc follow-up generated after the frozen v1 envelope support rule failed on train",
+    "name": "simulation-v4-los-censoring-audit-v1",
+    "role": "exploratory train-only mechanism and improvement generation"
+  },
+  "limitations": [
+    "The frozen v1 strong support rule failed on train.",
+    "LOS association is moderate and not an exact receiver-output prediction.",
+    "The censoring-aware policy and thresholds are train-generated and require frozen validation.",
+    "No validation, test, or TEXBAT recording was accessed."
+  ],
+  "physical_diagnostic": {
+    "pair_count": 6,
+    "pair_los_rho_positive_count": 6,
+    "pooled_enu_envelope_spearman_rho": 0.4295477459420167,
+    "pooled_los_corrected_row_count": 1642,
+    "pooled_los_corrected_spearman_rho": 0.4423275992374173,
+    "pooled_los_corrected_two_sided_p_value": 1.2910442271362525e-79,
+    "v1_exploratory_status": "not_supported_on_train"
+  },
+  "provenance": {
+    "config_sha256": "f4239274a4bd989625d21385285b49c614d91ffb70703a92a447d5ee35da400b",
+    "full_summary_sha256": "8df9e1068ce3a0fc36214b699840e09861f3a84a966499c52c17c1abe6ec2a9b",
+    "physics_module_sha256": "2afd34230448c1a827292f8850943574f90eecf1a1fef50286de979bb8badcfc",
+    "runner_sha256": "9f0aec82e5dbb4fea6631aa1f29684dd98475d56911e2d24b1041ca441887826",
+    "source_v1_summary_sha256": "8fc0126826fa633e23238e8c3cefcc2e572999ddf173583f8500d7766356ab84"
+  },
+  "support_attrition": {
+    "attack_event_count": 782,
+    "attack_support_fraction_median": 0.45454545454545453,
+    "reference_event_count": 1177,
+    "reference_support_fraction_median": 1.0,
+    "strict_attack_event_censored_fraction": 0.3273657289002558,
+    "support_deficit_auc_diagnostic": 0.8345331557320945
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "experiment": {
+    "name": "simulation-v4-los-censoring-audit-v1",
+    "role": "exploratory train-only mechanism and improvement generation",
+    "analysis_origin": "post-hoc follow-up generated after the frozen v1 envelope support rule failed on train"
+  },
+  "source_audit": {
+    "path": "artifacts/simulation_v4_peak_mixture_law_v1/summary.json",
+    "sha256": "8fc0126826fa633e23238e8c3cefcc2e572999ddf173583f8500d7766356ab84",
+    "required_status": "not_supported_on_train"
+  },
+  "source_artifact_summary": {
+    "path": "artifacts/simulation_v4_paired_train_generation_v1/summary.json",
+    "sha256": "bb7023ea7a8a57ae3197214e85e879524aace84a1c5d1306321274127a2449d7"
+  },
+  "split_config": {
+    "path": "configs/experiments/simulation_v4_paired_split_v1.json",
+    "sha256": "124bb766dcc0c52e248627e20499b55149b5477cabd4c88fa960585368f62b3e"
+  },
+  "output_root": "artifacts/simulation_v4_los_censoring_audit_v1",
+  "physics": {
+    "code_rate_hz": 1023000.0,
+    "speed_of_light_m_s": 299792458.0,
+    "observed_width_column": "width_excess",
+    "variance_law": "Delta V_j(t) = rho(t)/(1+rho(t))^2 * (u_j dot Delta r(t) / L_chip)^2",
+    "los_source": "gps-sdr-sim startup azimuth/elevation table",
+    "expected_navigation_sha256": "7db04513dd2d0e13c0ee20cb4eaa8f71e5a28ab58b65c9b5b789f86eeab436cd",
+    "static_los_approximation": "initial LOS is held fixed over each 30 s run"
+  },
+  "analysis": {
+    "physical_interval": "carryoff_transition",
+    "correlation_measure": "spearman",
+    "event_grid_s": 0.125,
+    "score_column": "width_z",
+    "event_aggregation": "median_across_available_prns",
+    "normal_counterpart_quantile": 0.99,
+    "persistence_windows": 3,
+    "strict_minimum_prns": 4,
+    "censoring_aware_minimum_prns": 1,
+    "support_baseline_start_s": 2.0,
+    "support_baseline_end_s": 9.5
+  },
+  "data_boundary": {
+    "allowed_partition": "train",
+    "allowed_pair_ids": [
+      "pv1-pair-001",
+      "pv1-pair-002",
+      "pv1-pair-003",
+      "pv1-pair-004",
+      "pv1-pair-005",
+      "pv1-pair-006"
+    ],
+    "validation_pairs_accessed": false,
+    "test_pairs_accessed": false,
+    "texbat_recordings_accessed": []
+  },
+  "confirmation": {
+    "formula_and_policies_must_freeze_before_validation": true,
+    "next_partition": "validation pairs 007-009",
+    "test_remains_locked": true
+  }
+}
