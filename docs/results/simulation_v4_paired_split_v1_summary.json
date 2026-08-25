@@ -1,0 +1,226 @@
+{
+  "calibration_exclusions": {
+    "paired_group_ids": [
+      "iv-d-london-circle",
+      "iv-d-sydney-sweep",
+      "iv-d-tokyo-straight",
+      "iv-s-denver-a",
+      "iv-s-seoul-b"
+    ],
+    "reason": "These runs were inspected against TEXBAT clean references and cannot become untouched train, validation, or test examples."
+  },
+  "catalogs": {
+    "pairs": {
+      "path": "artifacts/simulation_v4_paired_split_v1/pair_catalog.csv",
+      "rows": 12,
+      "sha256": "1ab398e312e9bdb72d450e6233f9820e573a8b2c537d3daaf23b766b95faf2e2"
+    },
+    "scenarios": {
+      "path": "artifacts/simulation_v4_paired_split_v1/scenario_catalog.csv",
+      "rows": 24,
+      "sha256": "10c1a7ebf9ea348958743b1ead5d40fd257824f4ac4529e04cda06ca1ef61289"
+    }
+  },
+  "config": {
+    "path": "configs/experiments/simulation_v4_paired_split_v1.json",
+    "sha256": "124bb766dcc0c52e248627e20499b55149b5477cabd4c88fa960585368f62b3e"
+  },
+  "created_at_utc": "2026-08-25T14:15:05.057874+00:00",
+  "data_boundary": {
+    "forbidden_texbat_recordings": [
+      "ds1",
+      "ds2",
+      "ds3",
+      "ds4",
+      "ds5",
+      "ds6",
+      "ds7",
+      "ds8"
+    ],
+    "test_partition_is_simulation_only": true,
+    "texbat_clean_used_only_for_prior_normal_calibration": [
+      "cleanStatic",
+      "cleanDynamic"
+    ]
+  },
+  "decision": {
+    "current_test_status": "locked",
+    "model_trained": false,
+    "pair_ratio": "6/3/3 train/validation/test",
+    "paired_iq_generated": false,
+    "split_unit": "paired_group_id",
+    "status": "frozen-before-generation",
+    "test_features_accessed": false
+  },
+  "leakage_checks": {
+    "all_partition_intersections_empty": true,
+    "calibration_runs_excluded": true,
+    "paired_members_never_split": true,
+    "partition_intersections": {
+      "train_vs_test": [],
+      "train_vs_validation": [],
+      "validation_vs_test": []
+    },
+    "prns_and_windows_inherit_pair_partition": true,
+    "unique_base_run_fingerprint_per_pair": true,
+    "unique_receiver_seed_per_pair": true
+  },
+  "limitations": [
+    "This freezes a simulation-only split plan; the paired IQ and tracking features have not been generated.",
+    "Three validation pairs and three test pairs are adequate only for an exploratory pilot, not a final WCL-scale uncertainty claim.",
+    "Scenario-level normal/spoof counts are balanced, but feature-window counts will depend on receiver tracking and spoof onset.",
+    "The prior five independent normal runs are calibration exclusions because their TEXBAT-clean domain scores were inspected."
+  ],
+  "normal_profile_source": {
+    "decision": "conditional",
+    "path": "docs/results/simulation_v4_normal_independent_validation_v1_summary.json",
+    "sha256": "0f038e31179ab24f94f50ddd38c06d76b985ccef851ab5568d7226c459824e6a"
+  },
+  "pair_contract": {
+    "members": [
+      "steady_normal",
+      "carryoff_spoof"
+    ],
+    "only_spoof_member_varies": [
+      "counterfeit_component",
+      "spoof_power_envelope",
+      "spoof_trajectory"
+    ],
+    "pre_onset_iq_must_be_byte_identical": true,
+    "shared_within_pair": [
+      "authentic_component",
+      "receiver_seed",
+      "frontend_noise",
+      "receiver_impairments",
+      "location",
+      "utc",
+      "motion"
+    ]
+  },
+  "partitions": {
+    "test": {
+      "access": "locked",
+      "group_file": {
+        "path": "artifacts/simulation_v4_paired_split_v1/partitions/test_groups.locked.txt",
+        "sha256": "89f0eddd48a90a4a0c21f12a48c791353c8a1bd011cfa653e074d4e624dd9f2a"
+      },
+      "motion_counts": {
+        "parallel-sweep": 1,
+        "static": 1,
+        "straight": 1
+      },
+      "normal_scenario_count": 3,
+      "pair_count": 3,
+      "paired_group_ids": [
+        "pv1-pair-010",
+        "pv1-pair-011",
+        "pv1-pair-012"
+      ],
+      "scenario_count": 6,
+      "spoof_scenario_count": 3
+    },
+    "train": {
+      "access": "planned",
+      "group_file": {
+        "path": "artifacts/simulation_v4_paired_split_v1/partitions/train_groups.txt",
+        "sha256": "2d5e58b4547125d3b0a8a8a2808ec1f635ff4d343c7c9fc3fd10b146f70a2b0d"
+      },
+      "motion_counts": {
+        "circle": 1,
+        "parallel-sweep": 1,
+        "static": 2,
+        "straight": 2
+      },
+      "normal_scenario_count": 6,
+      "pair_count": 6,
+      "paired_group_ids": [
+        "pv1-pair-001",
+        "pv1-pair-002",
+        "pv1-pair-003",
+        "pv1-pair-004",
+        "pv1-pair-005",
+        "pv1-pair-006"
+      ],
+      "scenario_count": 12,
+      "spoof_scenario_count": 6
+    },
+    "validation": {
+      "access": "planned",
+      "group_file": {
+        "path": "artifacts/simulation_v4_paired_split_v1/partitions/validation_groups.txt",
+        "sha256": "10399d05a6adf83a72c51a84607844356f36c592e25c60e83b62157b993bd923"
+      },
+      "motion_counts": {
+        "circle": 1,
+        "static": 1,
+        "straight": 1
+      },
+      "normal_scenario_count": 3,
+      "pair_count": 3,
+      "paired_group_ids": [
+        "pv1-pair-007",
+        "pv1-pair-008",
+        "pv1-pair-009"
+      ],
+      "scenario_count": 6,
+      "spoof_scenario_count": 3
+    }
+  },
+  "runner": {
+    "path": "scripts/plan_simulation_v4_paired_split.py",
+    "sha256": "92f990efa49b8a6fd987edbeb418f06e6e2fd3c4cd42753a159ce9fff8415e72"
+  },
+  "schema": "gnss-doppler-lab.simulation-v4-paired-split-result",
+  "schema_version": 1,
+  "source_split_manifest": {
+    "path": "artifacts/simulation_v4_paired_split_v1/split_manifest.json",
+    "sha256": "dd20c4917e3c406e716cb00f251d04f7aa900544151da03c37fa8ba29528a18e"
+  },
+  "split_policy": {
+    "base_run_fingerprint_unique_across_pairs": true,
+    "expected_pair_counts": {
+      "test": 3,
+      "train": 6,
+      "validation": 3
+    },
+    "normalization_fit_partition": "train",
+    "pair_members_atomic": true,
+    "prns_atomic_with_pair": true,
+    "random_window_split_forbidden": true,
+    "receiver_seed_unique_across_pairs": true,
+    "required_motion_coverage": {
+      "test": [
+        "static",
+        "straight",
+        "parallel-sweep"
+      ],
+      "train": [
+        "static",
+        "straight",
+        "circle",
+        "parallel-sweep"
+      ],
+      "validation": [
+        "static",
+        "straight",
+        "circle"
+      ]
+    },
+    "test_access": "locked until model, preprocessing, and threshold manifests are frozen",
+    "test_refit_or_adaptation_forbidden": true,
+    "threshold_selection_partition": "validation",
+    "unit": "paired_group_id",
+    "windows_atomic_with_pair": true
+  },
+  "ssd_bundle": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/simulation-v4-paired-split-v1",
+  "test_release": {
+    "refit_or_adaptation_after_release": "forbidden",
+    "required_before_release": [
+      "model artifact and SHA-256",
+      "preprocessing artifact and SHA-256",
+      "decision-threshold artifact and SHA-256",
+      "frozen split-plan SHA-256"
+    ],
+    "status": "locked"
+  }
+}

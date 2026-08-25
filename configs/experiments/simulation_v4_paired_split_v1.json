@@ -1,0 +1,219 @@
+{
+  "version": 1,
+  "campaign": {
+    "name": "simulation-v4-paired-spoof-pilot-v1",
+    "purpose": "preassigned leakage-safe paired normal/carry-off spoof pilot"
+  },
+  "normal_profile_source": {
+    "path": "docs/results/simulation_v4_normal_independent_validation_v1_summary.json",
+    "sha256": "0f038e31179ab24f94f50ddd38c06d76b985ccef851ab5568d7226c459824e6a",
+    "decision": "conditional"
+  },
+  "calibration_exclusions": {
+    "reason": "These runs were inspected against TEXBAT clean references and cannot become untouched train, validation, or test examples.",
+    "paired_group_ids": [
+      "iv-d-london-circle",
+      "iv-d-sydney-sweep",
+      "iv-d-tokyo-straight",
+      "iv-s-denver-a",
+      "iv-s-seoul-b"
+    ]
+  },
+  "split_policy": {
+    "unit": "paired_group_id",
+    "expected_pair_counts": {
+      "train": 6,
+      "validation": 3,
+      "test": 3
+    },
+    "pair_members_atomic": true,
+    "prns_atomic_with_pair": true,
+    "windows_atomic_with_pair": true,
+    "receiver_seed_unique_across_pairs": true,
+    "base_run_fingerprint_unique_across_pairs": true,
+    "random_window_split_forbidden": true,
+    "normalization_fit_partition": "train",
+    "threshold_selection_partition": "validation",
+    "test_access": "locked until model, preprocessing, and threshold manifests are frozen",
+    "test_refit_or_adaptation_forbidden": true,
+    "required_motion_coverage": {
+      "train": ["static", "straight", "circle", "parallel-sweep"],
+      "validation": ["static", "straight", "circle"],
+      "test": ["static", "straight", "parallel-sweep"]
+    }
+  },
+  "fixed_rf_profile": {
+    "rf_sample_rate_hz": 25000000,
+    "frontend_cutoff_hz": 8000000.0,
+    "frontend_order": 5,
+    "normal_target_rms": 22.0,
+    "tracking_tap_count": 9,
+    "tracking_tap_spacing_chips": 0.125,
+    "feature_tap_count": 3
+  },
+  "pair_contract": {
+    "members": ["steady_normal", "carryoff_spoof"],
+    "pre_onset_iq_must_be_byte_identical": true,
+    "shared_within_pair": [
+      "authentic_component",
+      "receiver_seed",
+      "frontend_noise",
+      "receiver_impairments",
+      "location",
+      "utc",
+      "motion"
+    ],
+    "only_spoof_member_varies": [
+      "counterfeit_component",
+      "spoof_power_envelope",
+      "spoof_trajectory"
+    ]
+  },
+  "data_boundary": {
+    "texbat_clean_used_only_for_prior_normal_calibration": ["cleanStatic", "cleanDynamic"],
+    "forbidden_texbat_recordings": ["ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7", "ds8"],
+    "test_partition_is_simulation_only": true
+  },
+  "pairs": [
+    {
+      "paired_group_id": "pv1-pair-001",
+      "split": "train",
+      "utc": "2022-01-01T01:00:00Z",
+      "duration_seconds": 30,
+      "domain": "static",
+      "position": {"latitude_deg": 48.8566, "longitude_deg": 2.3522, "altitude_m": 35.0},
+      "receiver_seed": 20260901,
+      "target_composite_cn0_db_hz": 59.5,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 10.0, "target_offset_enu_m": [80.0, 0.0, 0.0], "initial_advantage_db": -18.0, "final_advantage_db": 2.0, "power_ramp_seconds": 8.0}
+    },
+    {
+      "paired_group_id": "pv1-pair-002",
+      "split": "train",
+      "utc": "2022-01-01T03:00:00Z",
+      "duration_seconds": 30,
+      "domain": "static",
+      "position": {"latitude_deg": 1.3521, "longitude_deg": 103.8198, "altitude_m": 15.0},
+      "receiver_seed": 20260902,
+      "target_composite_cn0_db_hz": 60.0,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 10.0, "target_offset_enu_m": [0.0, 100.0, 0.0], "initial_advantage_db": -16.0, "final_advantage_db": 2.0, "power_ramp_seconds": 10.0}
+    },
+    {
+      "paired_group_id": "pv1-pair-003",
+      "split": "train",
+      "utc": "2022-01-01T05:00:00Z",
+      "duration_seconds": 30,
+      "domain": "dynamic",
+      "position": {"latitude_deg": 45.4215, "longitude_deg": -75.6972, "altitude_m": 70.0},
+      "motion": {"kind": "straight", "speed_mps": 9.0, "heading_deg": 70.0},
+      "receiver_seed": 20260903,
+      "target_composite_cn0_db_hz": 60.5,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 10.0, "target_offset_enu_m": [100.0, 50.0, 0.0], "initial_advantage_db": -18.0, "final_advantage_db": 3.0, "power_ramp_seconds": 8.0}
+    },
+    {
+      "paired_group_id": "pv1-pair-004",
+      "split": "train",
+      "utc": "2022-01-01T07:00:00Z",
+      "duration_seconds": 30,
+      "domain": "dynamic",
+      "position": {"latitude_deg": -25.7479, "longitude_deg": 28.2293, "altitude_m": 1339.0},
+      "motion": {"kind": "straight", "speed_mps": 11.0, "heading_deg": 145.0},
+      "receiver_seed": 20260904,
+      "target_composite_cn0_db_hz": 59.5,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 10.0, "target_offset_enu_m": [-80.0, 60.0, 0.0], "initial_advantage_db": -16.0, "final_advantage_db": 1.0, "power_ramp_seconds": 10.0}
+    },
+    {
+      "paired_group_id": "pv1-pair-005",
+      "split": "train",
+      "utc": "2022-01-01T09:00:00Z",
+      "duration_seconds": 30,
+      "domain": "dynamic",
+      "position": {"latitude_deg": 52.5200, "longitude_deg": 13.4050, "altitude_m": 34.0},
+      "motion": {"kind": "circle", "speed_mps": 7.0, "radius_m": 35.0, "heading_deg": 10.0},
+      "receiver_seed": 20260905,
+      "target_composite_cn0_db_hz": 60.0,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 11.0, "target_offset_enu_m": [120.0, 0.0, 10.0], "initial_advantage_db": -14.0, "final_advantage_db": 2.0, "power_ramp_seconds": 12.0}
+    },
+    {
+      "paired_group_id": "pv1-pair-006",
+      "split": "train",
+      "utc": "2022-01-01T11:00:00Z",
+      "duration_seconds": 30,
+      "domain": "dynamic",
+      "position": {"latitude_deg": -33.4489, "longitude_deg": -70.6693, "altitude_m": 520.0},
+      "motion": {"kind": "parallel-sweep", "speed_mps": 10.0, "leg_length_m": 75.0, "lane_spacing_m": 18.0, "heading_deg": 25.0},
+      "receiver_seed": 20260906,
+      "target_composite_cn0_db_hz": 60.5,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 10.0, "target_offset_enu_m": [0.0, -140.0, 0.0], "initial_advantage_db": -18.0, "final_advantage_db": 3.0, "power_ramp_seconds": 9.0}
+    },
+    {
+      "paired_group_id": "pv1-pair-007",
+      "split": "validation",
+      "utc": "2022-01-01T13:00:00Z",
+      "duration_seconds": 30,
+      "domain": "static",
+      "position": {"latitude_deg": 40.4168, "longitude_deg": -3.7038, "altitude_m": 667.0},
+      "receiver_seed": 20260907,
+      "target_composite_cn0_db_hz": 59.5,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 10.0, "target_offset_enu_m": [70.0, 70.0, 0.0], "initial_advantage_db": -17.0, "final_advantage_db": 2.0, "power_ramp_seconds": 9.0}
+    },
+    {
+      "paired_group_id": "pv1-pair-008",
+      "split": "validation",
+      "utc": "2022-01-01T15:00:00Z",
+      "duration_seconds": 30,
+      "domain": "dynamic",
+      "position": {"latitude_deg": 13.7563, "longitude_deg": 100.5018, "altitude_m": 5.0},
+      "motion": {"kind": "straight", "speed_mps": 8.0, "heading_deg": 210.0},
+      "receiver_seed": 20260908,
+      "target_composite_cn0_db_hz": 60.0,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 11.0, "target_offset_enu_m": [-120.0, 0.0, 0.0], "initial_advantage_db": -15.0, "final_advantage_db": 2.5, "power_ramp_seconds": 11.0}
+    },
+    {
+      "paired_group_id": "pv1-pair-009",
+      "split": "validation",
+      "utc": "2022-01-01T17:00:00Z",
+      "duration_seconds": 30,
+      "domain": "dynamic",
+      "position": {"latitude_deg": -1.2921, "longitude_deg": 36.8219, "altitude_m": 1795.0},
+      "motion": {"kind": "circle", "speed_mps": 9.0, "radius_m": 45.0, "heading_deg": 300.0},
+      "receiver_seed": 20260909,
+      "target_composite_cn0_db_hz": 60.5,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 10.0, "target_offset_enu_m": [0.0, 90.0, 10.0], "initial_advantage_db": -16.0, "final_advantage_db": 1.5, "power_ramp_seconds": 10.0}
+    },
+    {
+      "paired_group_id": "pv1-pair-010",
+      "split": "test",
+      "utc": "2022-01-01T19:00:00Z",
+      "duration_seconds": 30,
+      "domain": "static",
+      "position": {"latitude_deg": -41.2865, "longitude_deg": 174.7762, "altitude_m": 31.0},
+      "receiver_seed": 20260910,
+      "target_composite_cn0_db_hz": 60.5,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 10.0, "target_offset_enu_m": [90.0, -40.0, 0.0], "initial_advantage_db": -17.0, "final_advantage_db": 2.5, "power_ramp_seconds": 10.0}
+    },
+    {
+      "paired_group_id": "pv1-pair-011",
+      "split": "test",
+      "utc": "2022-01-01T21:00:00Z",
+      "duration_seconds": 30,
+      "domain": "dynamic",
+      "position": {"latitude_deg": 19.4326, "longitude_deg": -99.1332, "altitude_m": 2240.0},
+      "motion": {"kind": "straight", "speed_mps": 12.0, "heading_deg": 330.0},
+      "receiver_seed": 20260911,
+      "target_composite_cn0_db_hz": 60.0,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 12.0, "target_offset_enu_m": [-60.0, -100.0, 0.0], "initial_advantage_db": -15.5, "final_advantage_db": 1.5, "power_ramp_seconds": 9.0}
+    },
+    {
+      "paired_group_id": "pv1-pair-012",
+      "split": "test",
+      "utc": "2022-01-01T23:00:00Z",
+      "duration_seconds": 30,
+      "domain": "dynamic",
+      "position": {"latitude_deg": 59.9139, "longitude_deg": 10.7522, "altitude_m": 23.0},
+      "motion": {"kind": "parallel-sweep", "speed_mps": 9.0, "leg_length_m": 70.0, "lane_spacing_m": 16.0, "heading_deg": 110.0},
+      "receiver_seed": 20260912,
+      "target_composite_cn0_db_hz": 59.5,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 11.0, "target_offset_enu_m": [130.0, 30.0, 0.0], "initial_advantage_db": -16.5, "final_advantage_db": 3.0, "power_ramp_seconds": 11.0}
+    }
+  ]
+}
