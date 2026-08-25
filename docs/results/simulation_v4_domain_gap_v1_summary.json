@@ -1,0 +1,109 @@
+{
+  "audit_name": "simulation-v4-texbat-clean-domain-gap-v1",
+  "date_fixed": "2026-08-25",
+  "overall_gate_status": "stop",
+  "decision": "do_not_scale_simulation_v4; run a normal-only receiver/channel calibration sweep and rerun this gate",
+  "config": {
+    "path": "configs/experiments/simulation_v4_domain_gap_gate_v1.json",
+    "sha256": "6649df1cb5bfc7ef282e4bd5f0df1decc0ab4dfb7dc5175e28f016cd5adae0cc"
+  },
+  "data_boundary": {
+    "allowed_texbat_recordings": [
+      "cleanStatic",
+      "cleanDynamic"
+    ],
+    "forbidden_texbat_scenarios_accessed": false,
+    "reserved_texbat_scenarios": [
+      "ds1",
+      "ds2",
+      "ds3",
+      "ds4",
+      "ds5",
+      "ds6",
+      "ds7",
+      "ds8"
+    ]
+  },
+  "feature_contract": {
+    "tap_count": 3,
+    "tap_spacing_chips": 0.125,
+    "window_s": 1.0,
+    "stride_s": 0.5,
+    "feature_count": 11
+  },
+  "simulation": {
+    "source_sha256": "bdf96697bc40622db1db8aaf4fdf91f9ac9a1b7c25ce406a3df3acd268067cb2",
+    "input_rows": 2503,
+    "selected_normal_rows": 1105,
+    "selected_state_counts": {
+      "steady_normal": 867,
+      "post_recovery_normal": 238
+    }
+  },
+  "real_clean": {
+    "cleanStatic": {
+      "rows": 1837,
+      "feature_csv_sha256": "fe8f30be6c08dd58e18aad21269973180c67c0d88f9b614608663270bf3537a9"
+    },
+    "cleanDynamic": {
+      "rows": 1806,
+      "feature_csv_sha256": "45241d0412f27229c847da964f7a836547ca412c5a09124b43ce43ede4683491"
+    }
+  },
+  "comparisons": {
+    "cleanStatic": {
+      "gate_status": "stop",
+      "oof_separability_auc": 0.9868639557164147,
+      "mean_fold_separability_auc": 0.9875657474280637,
+      "median_ks_statistic": 0.6068944792438982,
+      "median_robust_median_shift": 1.3646998463276767,
+      "simulation_groups": 14,
+      "real_groups": 13
+    },
+    "cleanDynamic": {
+      "gate_status": "stop",
+      "oof_separability_auc": 0.9774953389383334,
+      "mean_fold_separability_auc": 0.9850345480322564,
+      "median_ks_statistic": 0.3352600431943798,
+      "median_robust_median_shift": 0.4717799269583321,
+      "simulation_groups": 14,
+      "real_groups": 11
+    },
+    "cleanCombined": {
+      "gate_status": "stop",
+      "oof_separability_auc": 0.9906273675723392,
+      "mean_fold_separability_auc": 0.9917841962822914,
+      "median_ks_statistic": 0.4183499502548121,
+      "median_robust_median_shift": 0.8760087408158428,
+      "simulation_groups": 14,
+      "real_groups": 24
+    }
+  },
+  "dominant_combined_shifts": [
+    {
+      "feature": "sharp_narrow_std",
+      "robust_median_shift": 3.258078,
+      "ks_statistic": 0.831531
+    },
+    {
+      "feature": "near_sym_std",
+      "robust_median_shift": 2.62328,
+      "ks_statistic": 0.744108
+    },
+    {
+      "feature": "code_err_abs_mean",
+      "robust_median_shift": 2.106758,
+      "ks_statistic": 0.628209
+    },
+    {
+      "feature": "code_err_std",
+      "robust_median_shift": 2.047588,
+      "ks_statistic": 0.61795
+    }
+  ],
+  "limitations": [
+    "This is a domain-fidelity engineering screen, not detector accuracy or WCL evidence.",
+    "Only one independent paired simulation campaign was available.",
+    "cleanStatic and cleanDynamic are development-domain references after this audit, not untouched final validation recordings."
+  ]
+}

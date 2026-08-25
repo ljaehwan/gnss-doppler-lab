@@ -84,15 +84,15 @@ def _source_fingerprint(run_dir: Path) -> str:
     hashes=sorted(hashlib.sha256(p.read_bytes()).hexdigest() for p in paths)
     return hashlib.sha256("".join(hashes).encode()).hexdigest()
 
-def collect_receiver_run_tracking_feature_records(receiver_run_dir: str|Path, *, window_s=1.0,stride_s=0.5,min_epochs=4,label="normal",prns=None):
+def collect_receiver_run_tracking_feature_records(receiver_run_dir: str|Path, *, window_s=1.0,stride_s=0.5,min_epochs=4,label="normal",prns=None,tap_count=3):
     run=Path(receiver_run_dir); fp=_source_fingerprint(run); selected=prns if prns is not None else available_tracking_prns(run); out=[]
     for prn in selected:
-        for segment in load_receiver_tracking_peak_series_segments(run, prn):
+        for segment in load_receiver_tracking_peak_series_segments(run, prn, tap_count=tap_count):
             out.extend(compute_tracking_window_feature_records(segment,receiver_run_id=run.name,window_s=window_s,stride_s=stride_s,min_epochs=min_epochs,label=label,source_fingerprint=fp))
     return out
 
-def export_receiver_run_tracking_feature_csv(receiver_run_dir: str|Path, *, output_path: str|Path,window_s=1.0,stride_s=0.5,min_epochs=4,label="normal",prns=None):
-    records=collect_receiver_run_tracking_feature_records(receiver_run_dir,window_s=window_s,stride_s=stride_s,min_epochs=min_epochs,label=label,prns=prns); output=Path(output_path); output.parent.mkdir(parents=True,exist_ok=True)
+def export_receiver_run_tracking_feature_csv(receiver_run_dir: str|Path, *, output_path: str|Path,window_s=1.0,stride_s=0.5,min_epochs=4,label="normal",prns=None,tap_count=3):
+    records=collect_receiver_run_tracking_feature_records(receiver_run_dir,window_s=window_s,stride_s=stride_s,min_epochs=min_epochs,label=label,prns=prns,tap_count=tap_count); output=Path(output_path); output.parent.mkdir(parents=True,exist_ok=True)
     with output.open("w",encoding="utf-8",newline="") as h:
         w=csv.DictWriter(h,fieldnames=list(TrackingWindowFeatureRecord.__dataclass_fields__)); w.writeheader(); w.writerows(r.to_row() for r in records)
     return output

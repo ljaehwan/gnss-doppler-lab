@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "audit_name": "simulation-v4-texbat-clean-domain-gap-v1",
+  "simulation": {
+    "feature_csv": "artifacts/simulation_v4_pilot/simulation_v4_tracking_features_labeled.csv",
+    "expected_feature_sha256": "bdf96697bc40622db1db8aaf4fdf91f9ac9a1b7c25ce406a3df3acd268067cb2",
+    "normal_selectors": [
+      {
+        "scenario_name": "steady-normal",
+        "event_state": "steady_normal"
+      },
+      {
+        "scenario_name": "normal-outage-recovery",
+        "event_state": "post_recovery_normal"
+      }
+    ],
+    "receiver_state_sources": {
+      "simulation_steady": {
+        "receiver_dir": "artifacts/simulation_v4_pilot/receiver/texbat-wrw-simulation-v4-pilot-steady-normal_20220101T000000Z",
+        "intervals_s": [[null, null]]
+      },
+      "simulation_post_recovery": {
+        "receiver_dir": "artifacts/simulation_v4_pilot/receiver/texbat-wrw-simulation-v4-pilot-normal-outage-recovery_20220101T000000Z",
+        "intervals_s": [[31.5, null]]
+      }
+    }
+  },
+  "real_clean": {
+    "cleanStatic": {
+      "receiver_dir": "artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/cleanStatic/receiver/texbat-cleanStatic-method-a-9tap-external-validation"
+    },
+    "cleanDynamic": {
+      "receiver_dir": "artifacts/ai_morph_gru_window_ablation_ds4_20260723/receiver_shared/cleanDynamic/receiver/texbat-cleanDynamic-method-a-9tap-external-validation"
+    }
+  },
+  "extraction": {
+    "tap_count": 3,
+    "tap_spacing_chips": 0.125,
+    "window_s": 1.0,
+    "stride_s": 0.5,
+    "min_epochs": 4
+  },
+  "feature_columns": [
+    "near_sym_mean",
+    "near_sym_std",
+    "sharp_narrow_mean",
+    "sharp_narrow_std",
+    "sharp_narrow_slope",
+    "doppler_std",
+    "doppler_slope",
+    "cn0_std",
+    "code_err_abs_mean",
+    "code_err_std",
+    "prompt_mag_cv"
+  ],
+  "classifier": {
+    "n_splits": 5,
+    "max_windows_per_source_prn_group": 128,
+    "random_state": 20260825
+  },
+  "gate": {
+    "interpretation": "Predeclared engineering screen, not a canonical statistical or publication acceptance threshold.",
+    "pass": {
+      "domain_auc_max": 0.70,
+      "median_ks_max": 0.20,
+      "median_robust_shift_max": 0.75
+    },
+    "conditional": {
+      "domain_auc_max": 0.85,
+      "median_ks_max": 0.35,
+      "median_robust_shift_max": 1.50
+    }
+  },
+  "output_root": "artifacts/simulation_v4_domain_gap_audit_v1",
+  "data_boundary": {
+    "allowed_texbat_recordings": ["cleanStatic", "cleanDynamic"],
+    "forbidden_texbat_recordings": ["ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7", "ds8"]
+  }
+}

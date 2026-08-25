@@ -15,6 +15,12 @@ overfitting guardrails are documented in
 The later synthetic-normal-only 30-run experiment is retained as a negative
 sim-to-real result and is not a replacement for this frozen detector.
 
+The causal paired simulation-v4 pipeline is qualified at the RF/receiver level,
+but its frozen TEXBAT `cleanStatic`/`cleanDynamic` domain audit returned
+**STOP** (grouped domain AUC 0.9775-0.9906). Do not scale or use v4 as a
+detector-training distribution until a normal-only calibration sweep passes the
+gate in [`docs/results/SIMULATION_V4_DOMAIN_GAP_V1_RESULT.md`](docs/results/SIMULATION_V4_DOMAIN_GAP_V1_RESULT.md).
+
 ## Candidate second detector: raw-IQ noise/fingerprint continuity
 
 In addition to the frozen B0 detector above, the repository records a candidate
