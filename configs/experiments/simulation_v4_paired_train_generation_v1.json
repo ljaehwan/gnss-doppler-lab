@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "campaign": {
+    "name": "simulation-v4-paired-spoof-train-v1",
+    "partition": "train"
+  },
+  "split_config": {
+    "path": "configs/experiments/simulation_v4_paired_split_v1.json",
+    "sha256": "124bb766dcc0c52e248627e20499b55149b5477cabd4c88fa960585368f62b3e"
+  },
+  "split_record": {
+    "path": "docs/results/simulation_v4_paired_split_v1_summary.json",
+    "sha256": "66e4b54355d1d18a6bcc18bc12bfd3e7096da50a9c7e673594534dcd17c012cf"
+  },
+  "canonical_split_manifest_sha256": "dd20c4917e3c406e716cb00f251d04f7aa900544151da03c37fa8ba29528a18e",
+  "normal_profile": {
+    "path": "configs/experiments/simulation_v4_normal_independent_validation_v1.json",
+    "sha256": "256977cfb14f0828d6cc98af83f459e7dee0407b41cd1188b0c37cb170593a78"
+  },
+  "output_root": "artifacts/simulation_v4_paired_train_generation_v1",
+  "keep_components": true,
+  "minimum_feature_rows_per_scenario": 100,
+  "data_boundary": {
+    "allowed_partition": "train",
+    "validation_pairs_accessed": false,
+    "test_pairs_accessed": false,
+    "allowed_texbat_recordings": ["cleanStatic", "cleanDynamic"],
+    "forbidden_texbat_recordings": ["ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7", "ds8"]
+  }
+}

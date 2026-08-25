@@ -1,0 +1,331 @@
+{
+  "campaign": {
+    "name": "simulation-v4-paired-spoof-train-v1",
+    "partition": "train"
+  },
+  "created_at_utc": "2026-08-25T16:02:20.601459+00:00",
+  "data_boundary": {
+    "allowed_partition": "train",
+    "allowed_texbat_recordings": [
+      "cleanStatic",
+      "cleanDynamic"
+    ],
+    "forbidden_texbat_recordings": [
+      "ds1",
+      "ds2",
+      "ds3",
+      "ds4",
+      "ds5",
+      "ds6",
+      "ds7",
+      "ds8"
+    ],
+    "forbidden_texbat_scenarios_accessed": false,
+    "generated_pair_ids": [
+      "pv1-pair-001",
+      "pv1-pair-002",
+      "pv1-pair-003",
+      "pv1-pair-004",
+      "pv1-pair-005",
+      "pv1-pair-006"
+    ],
+    "test_pair_ids_accessed": [],
+    "test_pairs_accessed": false,
+    "validation_pair_ids_accessed": [],
+    "validation_pairs_accessed": false
+  },
+  "dataset": {
+    "event_state_counts": {
+      "carryoff_final": 1204,
+      "carryoff_transition": 1312,
+      "pre_event_normal": 1219,
+      "steady_normal": 3764
+    },
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/simulation_v4_paired_train_generation_v1/train_tracking_features_labeled.csv",
+    "role": "train only; normalization and model fitting allowed, threshold selection forbidden",
+    "row_count": 7499,
+    "sha256": "ce353d0cb902f15af52cffc6b45e04f3515e4023752a5c50815eb93db04850bd",
+    "split_validation": {
+      "pair_atomic": true,
+      "paired_group_count": 6,
+      "row_counts": {
+        "test": 0,
+        "train": 7499,
+        "validation": 0
+      },
+      "run_id_count": 12,
+      "source_fingerprint_count": 12,
+      "source_fingerprint_partition_overlap": []
+    }
+  },
+  "dataset_sha256": "ce353d0cb902f15af52cffc6b45e04f3515e4023752a5c50815eb93db04850bd",
+  "decision": {
+    "interpretation": "qualified for exploratory train-only model fitting",
+    "model_trained": false,
+    "status": "conditional",
+    "test_status": "locked",
+    "validation_pairs_generated": false
+  },
+  "elapsed_seconds": 2947.698,
+  "integrity": {
+    "all_hashes_match": true,
+    "checked_files": 60,
+    "large_iq_files": 24,
+    "receiver_iq_hardlink_aliases_match": true
+  },
+  "limitations": [
+    "Only the six preassigned train pairs were generated.",
+    "TEXBAT clean recordings remain development normal-fidelity references.",
+    "No validation or test pair was generated or accessed.",
+    "No detector, preprocessing transform, or decision threshold was fit in this stage.",
+    "Conditional generation fidelity is not spoof-detector accuracy.",
+    "This train-only pilot does not establish a WCL claim."
+  ],
+  "normal_domain_gate_status": "conditional",
+  "normal_fidelity": {
+    "cleanCombined": {
+      "gate_status": "conditional",
+      "mean_fold_separability_auc": 0.7491671840104919,
+      "median_ks_statistic": 0.10891930807572675,
+      "median_robust_median_shift": 0.1438839771668589,
+      "pooled_separability_auc": 0.7434747380518463,
+      "real_rows": 3643,
+      "simulation_rows": 3764
+    },
+    "cleanDynamic": {
+      "gate_status": "conditional",
+      "mean_fold_separability_auc": 0.8427383940453806,
+      "median_ks_statistic": 0.16567582909368117,
+      "median_robust_median_shift": 0.3154650084765249,
+      "pooled_separability_auc": 0.826105467332331,
+      "real_rows": 1806,
+      "simulation_rows": 2503
+    },
+    "cleanStatic": {
+      "gate_status": "conditional",
+      "mean_fold_separability_auc": 0.6984978665009437,
+      "median_ks_statistic": 0.21149842194351126,
+      "median_robust_median_shift": 0.3057986582323088,
+      "pooled_separability_auc": 0.6892614736961534,
+      "real_rows": 1837,
+      "simulation_rows": 1261
+    }
+  },
+  "normal_receiver_state_gate": {
+    "gate_status": "conditional",
+    "runs": {
+      "pv1-pair-001": {
+        "gate_status": "conditional",
+        "metrics": {
+          "carrier_lock_above_0_5_fraction": {
+            "gate_status": "conditional",
+            "value": 0.8739116457256142
+          },
+          "cn0_db_hz_median": {
+            "gate_status": "pass",
+            "value": 46.570133209228516
+          }
+        }
+      },
+      "pv1-pair-002": {
+        "gate_status": "pass",
+        "metrics": {
+          "carrier_lock_above_0_5_fraction": {
+            "gate_status": "pass",
+            "value": 0.7760513719269322
+          },
+          "cn0_db_hz_median": {
+            "gate_status": "pass",
+            "value": 46.22037124633789
+          }
+        }
+      },
+      "pv1-pair-003": {
+        "gate_status": "conditional",
+        "metrics": {
+          "carrier_lock_above_0_5_fraction": {
+            "gate_status": "conditional",
+            "value": 0.8930056710775047
+          },
+          "cn0_db_hz_median": {
+            "gate_status": "pass",
+            "value": 47.298274993896484
+          }
+        }
+      },
+      "pv1-pair-004": {
+        "gate_status": "conditional",
+        "metrics": {
+          "carrier_lock_above_0_5_fraction": {
+            "gate_status": "conditional",
+            "value": 0.8231625461461014
+          },
+          "cn0_db_hz_median": {
+            "gate_status": "pass",
+            "value": 46.955617904663086
+          }
+        }
+      },
+      "pv1-pair-005": {
+        "gate_status": "conditional",
+        "metrics": {
+          "carrier_lock_above_0_5_fraction": {
+            "gate_status": "conditional",
+            "value": 0.8613287457336705
+          },
+          "cn0_db_hz_median": {
+            "gate_status": "pass",
+            "value": 46.18569564819336
+          }
+        }
+      },
+      "pv1-pair-006": {
+        "gate_status": "conditional",
+        "metrics": {
+          "carrier_lock_above_0_5_fraction": {
+            "gate_status": "conditional",
+            "value": 0.8631892955189037
+          },
+          "cn0_db_hz_median": {
+            "gate_status": "conditional",
+            "value": 48.89754867553711
+          }
+        }
+      }
+    },
+    "thresholds": {
+      "conditional": {
+        "carrier_lock_above_0_5_fraction": [
+          0.6,
+          0.9
+        ],
+        "cn0_db_hz_median": [
+          42.0,
+          50.0
+        ]
+      },
+      "pass": {
+        "carrier_lock_above_0_5_fraction": [
+          0.68,
+          0.8
+        ],
+        "cn0_db_hz_median": [
+          44.0,
+          48.0
+        ]
+      }
+    }
+  },
+  "overall_generation_gate_status": "conditional",
+  "pair_count": 6,
+  "pair_scores_sha256": "fd767068d537d0c58afa02a378d03caf7ebf20a67c86856e5b9b7222f7b28f6b",
+  "paired_prefix_all_byte_identical": true,
+  "pairs": [
+    {
+      "domain": "static",
+      "motion_kind": "static",
+      "normal_cn0_median_db_hz": 46.570133209228516,
+      "normal_feature_rows": 632,
+      "normal_iq_sha256": "747ab7fd35c14c2f41a5f4bef785fbeef8c2c118e453b6e7b29fc3b89685fe5f",
+      "normal_lock_fraction": 0.8739116457256142,
+      "paired_group_id": "pv1-pair-001",
+      "prefix_byte_identical": true,
+      "spoof_feature_rows": 627,
+      "spoof_iq_sha256": "c5fe50fab72966c888ad8f6126666e892ee5ff44188bcea56dabef9acd905b78"
+    },
+    {
+      "domain": "static",
+      "motion_kind": "static",
+      "normal_cn0_median_db_hz": 46.22037124633789,
+      "normal_feature_rows": 629,
+      "normal_iq_sha256": "9e9bc632d53a95b928c5d21199cfd566cb1e9307f9ff14c52fee528da125ae21",
+      "normal_lock_fraction": 0.7760513719269322,
+      "paired_group_id": "pv1-pair-002",
+      "prefix_byte_identical": true,
+      "spoof_feature_rows": 623,
+      "spoof_iq_sha256": "0690d7f2d7c4a93f2e932fa6524f8061a2d8070b719c829a3647813d3e186166"
+    },
+    {
+      "domain": "dynamic",
+      "motion_kind": "straight",
+      "normal_cn0_median_db_hz": 47.298274993896484,
+      "normal_feature_rows": 637,
+      "normal_iq_sha256": "b3d7bfa11b9dcef6ec035481fa1ff9ce92ca6e68877aef52044b690d03c233f8",
+      "normal_lock_fraction": 0.8930056710775047,
+      "paired_group_id": "pv1-pair-003",
+      "prefix_byte_identical": true,
+      "spoof_feature_rows": 637,
+      "spoof_iq_sha256": "c47cdf9626c770e7ceea8ee8b1c4c4261245932dd3a9bcfdfa7c0d0c6617921a"
+    },
+    {
+      "domain": "dynamic",
+      "motion_kind": "straight",
+      "normal_cn0_median_db_hz": 46.955617904663086,
+      "normal_feature_rows": 638,
+      "normal_iq_sha256": "59edb2135f0210d570450d098dcf5b19da3d70c6e05f7cd4bad7cdb5c44369ba",
+      "normal_lock_fraction": 0.8231625461461014,
+      "paired_group_id": "pv1-pair-004",
+      "prefix_byte_identical": true,
+      "spoof_feature_rows": 618,
+      "spoof_iq_sha256": "b95ec4cb59a479f3367cc1cefe4401b8f1e7744e0a5de9ce815808deb99f6332"
+    },
+    {
+      "domain": "dynamic",
+      "motion_kind": "circle",
+      "normal_cn0_median_db_hz": 46.18569564819336,
+      "normal_feature_rows": 632,
+      "normal_iq_sha256": "b96e8c89a45af9353420ffc5285ef77da1d5399b2b7d3da9108823c6af902c23",
+      "normal_lock_fraction": 0.8613287457336705,
+      "paired_group_id": "pv1-pair-005",
+      "prefix_byte_identical": true,
+      "spoof_feature_rows": 631,
+      "spoof_iq_sha256": "c107af8a08ebab4f498f7c0e142d7275cdf06c7270963678fde8bfb034d0b2cd"
+    },
+    {
+      "domain": "dynamic",
+      "motion_kind": "parallel-sweep",
+      "normal_cn0_median_db_hz": 48.89754867553711,
+      "normal_feature_rows": 596,
+      "normal_iq_sha256": "f3a883a9e7c8298ae829f2c8b34fcd153dc3c1a3c706259e4ca3864e8bffb1cd",
+      "normal_lock_fraction": 0.8631892955189037,
+      "paired_group_id": "pv1-pair-006",
+      "prefix_byte_identical": true,
+      "spoof_feature_rows": 599,
+      "spoof_iq_sha256": "3f8af60802745dd4ca8cd1359fcb9ba0439d11055469f0ab7b939b6db1a40fd5"
+    }
+  ],
+  "provenance": {
+    "canonical_split_manifest": {
+      "path": "artifacts/simulation_v4_paired_split_v1/split_manifest.json",
+      "sha256": "dd20c4917e3c406e716cb00f251d04f7aa900544151da03c37fa8ba29528a18e"
+    },
+    "generation_config": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/configs/experiments/simulation_v4_paired_train_generation_v1.json",
+      "sha256": "b44781e7e0f03c60ca18ecccdd8cbbd7f02a98c8270244658009419ad9772f78"
+    },
+    "normal_profile": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/configs/experiments/simulation_v4_normal_independent_validation_v1.json",
+      "sha256": "256977cfb14f0828d6cc98af83f459e7dee0407b41cd1188b0c37cb170593a78"
+    },
+    "runner": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/scripts/run_simulation_v4_paired_train_generation.py",
+      "sha256": "c15c23f96e5d6137e265ff0048f2cd89a51c9123635ce0f7331c0d4fe07375d0"
+    },
+    "split_config": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/configs/experiments/simulation_v4_paired_split_v1.json",
+      "sha256": "124bb766dcc0c52e248627e20499b55149b5477cabd4c88fa960585368f62b3e"
+    },
+    "split_record": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/docs/results/simulation_v4_paired_split_v1_summary.json",
+      "sha256": "66e4b54355d1d18a6bcc18bc12bfd3e7096da50a9c7e673594534dcd17c012cf"
+    }
+  },
+  "scenario_count": 12,
+  "schema": "gnss-doppler-lab.simulation-v4-paired-train-result",
+  "schema_version": 1,
+  "source_summary": {
+    "path": "artifacts/simulation_v4_paired_train_generation_v1/summary.json",
+    "sha256": "bb7023ea7a8a57ae3197214e85e879524aace84a1c5d1306321274127a2449d7"
+  },
+  "ssd_bundle": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/simulation-v4-paired-train-generation-v1"
+}
