@@ -1,0 +1,169 @@
+{
+  "version": 1,
+  "campaign": {
+    "name": "texbat-wrw-simulation-v4-normal-calibration-v2",
+    "utc": "2022-01-01T00:00:00Z",
+    "duration_seconds": 30,
+    "position": {
+      "latitude_deg": 30.2851494,
+      "longitude_deg": -97.7339352,
+      "altitude_m": 180.0
+    }
+  },
+  "input": {
+    "rinex_nav": ".tools/gps-sdr-sim-src/brdc0010.22n"
+  },
+  "simulator": {
+    "executable": ".tools/gps-sdr-sim-src/gps-sdr-sim"
+  },
+  "output_root": "artifacts/simulation_v4_normal_calibration_v2",
+  "normal_target_rms": 22.0,
+  "keep_authentic_components": true,
+  "receiver": {
+    "seed": 20260826,
+    "reference_sample_rate_hz": 2600000,
+    "carrier_offset_hz": 45.0,
+    "frequency_drift_hz_per_s": 0.15,
+    "phase_noise_std_rad_per_sqrt_sample": 0.00002,
+    "frontend_order": 5,
+    "iq_gain_imbalance_db": 0.2,
+    "iq_phase_imbalance_deg": 0.6,
+    "dc_i": 0.4,
+    "dc_q": -0.3,
+    "clip_level": 127.0,
+    "chunk_samples": 1048576
+  },
+  "candidates": [
+    {
+      "name": "fs2p6-cn060-bw1p10",
+      "rf_sample_rate_hz": 2600000,
+      "target_composite_cn0_db_hz": 60.0,
+      "frontend_cutoff_hz": 1100000.0
+    },
+    {
+      "name": "fs5p2-cn060-bw1p05",
+      "rf_sample_rate_hz": 5200000,
+      "target_composite_cn0_db_hz": 60.0,
+      "frontend_cutoff_hz": 1050000.0
+    },
+    {
+      "name": "fs5p2-cn060-bw1p10",
+      "rf_sample_rate_hz": 5200000,
+      "target_composite_cn0_db_hz": 60.0,
+      "frontend_cutoff_hz": 1100000.0
+    },
+    {
+      "name": "fs5p2-cn060-bw1p15",
+      "rf_sample_rate_hz": 5200000,
+      "target_composite_cn0_db_hz": 60.0,
+      "frontend_cutoff_hz": 1150000.0
+    },
+    {
+      "name": "fs5p2-cn060-bw1p20",
+      "rf_sample_rate_hz": 5200000,
+      "target_composite_cn0_db_hz": 60.0,
+      "frontend_cutoff_hz": 1200000.0
+    },
+    {
+      "name": "fs5p2-cn063-bw1p10",
+      "rf_sample_rate_hz": 5200000,
+      "target_composite_cn0_db_hz": 63.0,
+      "frontend_cutoff_hz": 1100000.0
+    }
+  ],
+  "gnss_sdr": {
+    "executable": "gnss-sdr",
+    "channel_count": 11,
+    "timeout_seconds": 1200,
+    "tracking_tap_count": 3,
+    "tracking_tap_spacing_chips": 0.125
+  },
+  "features": {
+    "window_s": 1.0,
+    "stride_s": 0.5,
+    "min_epochs": 4,
+    "columns": [
+      "near_sym_mean",
+      "near_sym_std",
+      "sharp_narrow_mean",
+      "sharp_narrow_std",
+      "sharp_narrow_slope",
+      "doppler_std",
+      "doppler_slope",
+      "cn0_std",
+      "code_err_abs_mean",
+      "code_err_std",
+      "prompt_mag_cv"
+    ]
+  },
+  "real_clean": {
+    "cleanStatic": {
+      "feature_csv": "artifacts/simulation_v4_domain_gap_audit_v1/texbat_cleanStatic_3tap_features.csv",
+      "feature_sha256": "fe8f30be6c08dd58e18aad21269973180c67c0d88f9b614608663270bf3537a9"
+    },
+    "cleanDynamic": {
+      "feature_csv": "artifacts/simulation_v4_domain_gap_audit_v1/texbat_cleanDynamic_3tap_features.csv",
+      "feature_sha256": "45241d0412f27229c847da964f7a836547ca412c5a09124b43ce43ede4683491"
+    }
+  },
+  "classifier": {
+    "n_splits": 5,
+    "max_windows_per_source_prn_group": 128,
+    "random_state": 20260826
+  },
+  "gate": {
+    "pass": {
+      "domain_auc_max": 0.70,
+      "median_ks_max": 0.20,
+      "median_robust_shift_max": 0.75
+    },
+    "conditional": {
+      "domain_auc_max": 0.85,
+      "median_ks_max": 0.35,
+      "median_robust_shift_max": 1.50
+    }
+  },
+  "receiver_state_target": {
+    "carrier_lock_above_0_5_fraction": [
+      0.70,
+      0.75
+    ],
+    "cn0_db_hz_median": [
+      44.0,
+      48.0
+    ]
+  },
+  "ranking_weights": {
+    "domain_separation": 0.50,
+    "median_ks": 0.20,
+    "median_robust_shift": 0.20,
+    "lock_range_distance": 0.05,
+    "cn0_range_distance": 0.05
+  },
+  "data_boundary": {
+    "allowed_texbat_recordings": [
+      "cleanStatic",
+      "cleanDynamic"
+    ],
+    "forbidden_texbat_recordings": [
+      "ds1",
+      "ds2",
+      "ds3",
+      "ds4",
+      "ds5",
+      "ds6",
+      "ds7",
+      "ds8"
+    ]
+  },
+  "authentic_components": {
+    "2600000": {
+      "path": "artifacts/simulation_v4_normal_calibration_v1/components/fs2600000/authentic_gps_l1ca_s8_iq.bin",
+      "sha256": "43b7c2865af84e0b692f310c6b93049b5b441430aa30ae349653c7fe818a8db5"
+    },
+    "5200000": {
+      "path": "artifacts/simulation_v4_normal_calibration_v1/components/fs5200000/authentic_gps_l1ca_s8_iq.bin",
+      "sha256": "69ef116a7ae51f0d14bd0ef7eef3fb82dda3a283deab8f9baaef62a5520a5985"
+    }
+  }
+}

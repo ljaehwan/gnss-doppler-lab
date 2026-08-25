@@ -2,6 +2,21 @@
 
 Date fixed: 2026-08-25
 
+## Correction recorded 2026-08-25
+
+This document remains the frozen historical decision for the original pilot,
+but its claim that both receivers actually used 0.125-chip E/L spacing was
+incorrect. The pilot was processed by stock `/usr/bin/gnss-sdr`, which
+ignored the locally patched `tap_spacing_chips` key. TEXBAT used the patched
+Method-A receiver and did use 0.125-chip spacing. The renderer now emits the
+standard `early_late_space_chips` and `early_late_space_narrow_chips` keys, and
+the simulation was reprocessed with receiver parity. See
+[`SIMULATION_V4_NORMAL_CALIBRATION_V4_RESULT.md`](SIMULATION_V4_NORMAL_CALIBRATION_V4_RESULT.md).
+
+The v1 **STOP** remains valid for the old artifacts; its numerical AUC is not a
+clean estimate of the residual domain gap after receiver alignment. The later
+v4 candidate is **CONDITIONAL**, not permission to scale or train a detector.
+
 ## Decision
 
 **STOP: do not scale simulation-v4 or train a detector from it yet.** The
@@ -36,9 +51,10 @@ excluded. This avoids counting counterfactual siblings as independent normal
 observations.
 
 The TEXBAT Method-A receiver dumps were re-extracted using only their measured
-inner E/P/L correlators. Both receivers used a 0.125-chip tap spacing, so these
-are physically aligned three-tap features rather than projections of the old
-nine-tap feature table:
+inner E/P/L correlators. The TEXBAT receiver used 0.125-chip spacing. The
+pilot manifest also recorded 0.125, but the later correction above establishes
+that the stock simulation receiver ignored that patched-only key; the two sides
+were therefore not physically aligned in this historical audit:
 
 - `cleanStatic`: 1,837 windows, extracted CSV SHA-256
   `fe8f30be6c08dd58e18aad21269973180c67c0d88f9b614608663270bf3537a9`

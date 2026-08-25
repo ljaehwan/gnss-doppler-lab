@@ -60,6 +60,8 @@ def test_render_receiver_config_matches_s8_complex_baseband(tmp_path: Path) -> N
     assert "Channels_1C.count=11" in config
     assert "Acquisition_1C.doppler_max=6000" in config
     assert "Tracking_1C.dump=true" in config
+    assert "Tracking_1C.early_late_space_chips=0.125" in config
+    assert "Tracking_1C.early_late_space_narrow_chips=0.125" in config
     assert str(output.resolve() / "raw" / "epl_tracking_ch_") in config
 
 

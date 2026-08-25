@@ -15,11 +15,14 @@ overfitting guardrails are documented in
 The later synthetic-normal-only 30-run experiment is retained as a negative
 sim-to-real result and is not a replacement for this frozen detector.
 
-The causal paired simulation-v4 pipeline is qualified at the RF/receiver level,
-but its frozen TEXBAT `cleanStatic`/`cleanDynamic` domain audit returned
-**STOP** (grouped domain AUC 0.9775-0.9906). Do not scale or use v4 as a
-detector-training distribution until a normal-only calibration sweep passes the
-gate in [`docs/results/SIMULATION_V4_DOMAIN_GAP_V1_RESULT.md`](docs/results/SIMULATION_V4_DOMAIN_GAP_V1_RESULT.md).
+The original simulation-v4 TEXBAT clean-domain audit returned **STOP** and was
+later found to include a stock-receiver tap-spacing confound. The corrected
+normal-only calibration selected a 25 MHz, 8 MHz-front-end, C/N0 60 dB-Hz
+Method-A candidate: cleanStatic and pooled gates pass, while cleanDynamic is
+conditional (AUC 0.8374). It is qualified only for independent-seed normal
+calibration, not scale generation or detector training. See
+[`docs/results/SIMULATION_V4_NORMAL_CALIBRATION_V4_RESULT.md`](docs/results/SIMULATION_V4_NORMAL_CALIBRATION_V4_RESULT.md) and the historical
+[`v1 audit`](docs/results/SIMULATION_V4_DOMAIN_GAP_V1_RESULT.md).
 
 ## Candidate second detector: raw-IQ noise/fingerprint continuity
 

@@ -87,6 +87,8 @@ Tracking_1C.dll_bw_hz=1.5
 Tracking_1C.order=3
 Tracking_1C.dump=true
 Tracking_1C.dump_filename={tracking_prefix}
+Tracking_1C.early_late_space_chips={tracking_tap_spacing_chips}
+Tracking_1C.early_late_space_narrow_chips={tracking_tap_spacing_chips}
 Tracking_1C.tap_count={tracking_tap_count}
 Tracking_1C.tap_spacing_chips={tracking_tap_spacing_chips}
 

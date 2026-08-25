@@ -1,0 +1,137 @@
+{
+  "schema": "gnss-doppler-lab.simulation-v4-normal-calibration-result",
+  "schema_version": 1,
+  "generated_at_utc": "2026-08-25T11:11:27.160944+00:00",
+  "source_summary": {
+    "path": "artifacts/simulation_v4_normal_calibration_v4/summary_methoda9.json",
+    "sha256": "d49b33fe2cbb3c8fae3e63cdac8b3b7aa5d10fcf3631c7fc5f20a1d927c7edf0"
+  },
+  "config": {
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/configs/experiments/simulation_v4_normal_calibration_v4.json",
+    "sha256": "c59c2de9dc5e86cadb921ba320b121009c60d97fbb18ae69717ec8a072f0e201"
+  },
+  "runner": {
+    "path": "scripts/run_simulation_v4_normal_calibration.py",
+    "sha256": "128a360617ba34861c169d12c3ed5029a694d28f0fdead5e0eff53ee0edcc7b8"
+  },
+  "effective_receiver": {
+    "executable": "/home/ubuntu/projects/gnss-doppler-lab/.tools/gnss-sdr-src/build/src/main/gnss-sdr",
+    "feature_tap_count": 3,
+    "tracking_tap_count": 9,
+    "tracking_tap_spacing_chips": 0.125
+  },
+  "data_boundary": {
+    "allowed_texbat_recordings": [
+      "cleanStatic",
+      "cleanDynamic"
+    ],
+    "forbidden_scenarios_accessed": false,
+    "forbidden_texbat_recordings": [
+      "ds1",
+      "ds2",
+      "ds3",
+      "ds4",
+      "ds5",
+      "ds6",
+      "ds7",
+      "ds8"
+    ],
+    "spoofing_data_generated": false
+  },
+  "selection": {
+    "candidate": "fs25-cn060-bw8p0",
+    "gate_status": "conditional",
+    "interpretation": "qualified for the next independent-seed normal calibration stage",
+    "fidelity_loss": 0.3266788375098138,
+    "fidelity_loss_terms": {
+      "cn0_range_distance": 0.0,
+      "domain_separation": 0.27818238406473705,
+      "lock_range_distance": 2.6374585261879946,
+      "median_ks": 0.1822133336819035,
+      "median_robust_shift": 0.09636026215832431
+    }
+  },
+  "candidate": {
+    "frontend_cutoff_hz": 8000000.0,
+    "name": "fs25-cn060-bw8p0",
+    "rf_sample_rate_hz": 25000000,
+    "target_composite_cn0_db_hz": 60.0
+  },
+  "receiver_state": {
+    "carrier_lock_above_0_5_fraction": 0.8818729263093998,
+    "carrier_lock_median": 0.9663547873497009,
+    "cn0_db_hz_iqr": 4.266897201538086,
+    "cn0_db_hz_median": 46.931880950927734,
+    "epoch_count": 144971,
+    "sample_rate_hz": 25000000,
+    "tracked_prn_count": 11,
+    "tracked_prns": [
+      "G01",
+      "G07",
+      "G08",
+      "G09",
+      "G13",
+      "G14",
+      "G17",
+      "G19",
+      "G21",
+      "G28",
+      "G30"
+    ]
+  },
+  "comparisons": {
+    "cleanCombined": {
+      "gate_status": "pass",
+      "domain_auc": 0.6390911920323685,
+      "mean_fold_domain_auc": 0.7156527485064468,
+      "median_ks": 0.1822133336819035,
+      "median_robust_shift": 0.14454039323748646,
+      "max_ks": 0.27623056176446237,
+      "max_robust_shift": 0.44957891160249164
+    },
+    "cleanDynamic": {
+      "gate_status": "conditional",
+      "domain_auc": 0.8374263904034895,
+      "mean_fold_domain_auc": 0.8659453149740267,
+      "median_ks": 0.22912513842746407,
+      "median_robust_shift": 0.3573947948237608,
+      "max_ks": 0.45411590992986334,
+      "max_robust_shift": 1.081018385574702
+    },
+    "cleanStatic": {
+      "gate_status": "pass",
+      "domain_auc": 0.522840820381804,
+      "mean_fold_domain_auc": 0.6541200522565909,
+      "median_ks": 0.19403357786591313,
+      "median_robust_shift": 0.32986528582571406,
+      "max_ks": 0.3743672827505163,
+      "max_robust_shift": 0.6300219281428966
+    }
+  },
+  "artifacts": {
+    "rf_manifest": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/simulation_v4_normal_calibration_v4/rf/texbat-wrw-simulation-v4-normal-calibration-v4-fs25-cn060-bw8p0_20220101T000000Z/manifest.json",
+      "sha256": "82dd7bf27a911ce943d7791a0123c2a8ce8b5e7460c563c2c60049161e073d7e"
+    },
+    "receiver_manifest": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/simulation_v4_normal_calibration_v4/receiver_methoda9/simv4cal-fs25-cn060-bw8p0_20220101T000000Z/manifest.json",
+      "sha256": "94bd001db6b95428b0278246ec437c80e2748d911165664af93160359d62800f"
+    },
+    "feature_csv": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/simulation_v4_normal_calibration_v4/features_methoda9/fs25-cn060-bw8p0_tracking_features.csv",
+      "sha256": "053834cd622245b9e3e12128952a25c1eaa91b2fcf51a64e38cba9d4725e286e",
+      "rows": 630
+    },
+    "iq": {
+      "path": "artifacts/simulation_v4_normal_calibration_v4/rf/texbat-wrw-simulation-v4-normal-calibration-v4-fs25-cn060-bw8p0_20220101T000000Z/gps_l1ca_s8_iq.bin",
+      "sha256": "a844cea7d06141e0557935d6293141a94674fdb32d46e9baa3a6f99c8f48ccb7",
+      "bytes": 1495000000
+    },
+    "ssd_bundle": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/simulation-v4-normal-calibration-v4-selected-fs25-cn060-bw8p0-methoda9"
+  },
+  "limitations": [
+    "The sweep uses one location, epoch, receiver seed, and 30-second normal recording per candidate.",
+    "TEXBAT cleanStatic and cleanDynamic are development calibration references, not final validation recordings.",
+    "No TEXBAT spoofing scenario was accessed and no spoof detector was trained."
+  ]
+}
