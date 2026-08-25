@@ -1,0 +1,76 @@
+{
+  "schema": "gnss-doppler-lab.simulation-v4-pilot-result",
+  "schema_version": 1,
+  "date_fixed": "2026-08-25",
+  "status": "pipeline_qualification_pass",
+  "config": {
+    "path": "configs/experiments/simulation_v4_pilot.yaml",
+    "sha256": "74a94f5d6bdba8b735fd6f48b4cf89073a3dc6909c225b88e7fc503fe86061ec"
+  },
+  "paired_prefix": {
+    "onset_seconds": 18.0,
+    "complex_samples": 46800000,
+    "byte_identical": true,
+    "sha256": "cd193efe40238f459a29af0297bf8030a4268cad1b06425e6e11aa9f7a9012e4"
+  },
+  "iq": {
+    "complex_samples_per_scenario": 129740000,
+    "actual_duration_seconds": 49.9,
+    "sample_rate_hz": 2600000,
+    "scenarios": {
+      "steady-normal": {
+        "sha256": "26de6cea61a186e81f32854b201f7d148c8b5e348a93359c9043715acbb453fc",
+        "rms": 22.00361172758046,
+        "clipping_fraction": 0.0
+      },
+      "normal-outage-recovery": {
+        "sha256": "4078a30bc23c1d6f9c55795ac0d27ed9397c1c105d722bc3099f98c2ffc13321",
+        "rms": 21.742764554022852,
+        "clipping_fraction": 0.0
+      },
+      "carryoff-spoof": {
+        "sha256": "d50e72a2db2caeb2305c76abd368aa8aa61274dc7c00cd7504aa84672ff204d1",
+        "rms": 22.94744199527945,
+        "clipping_fraction": 0.0
+      }
+    }
+  },
+  "recovery_validation": {
+    "loss_and_recovery_observed": true,
+    "reacquisition_segment_count": 6,
+    "pre_event_prn_count": 10,
+    "post_event_prn_count": 7,
+    "common_pre_post_prn_count": 7,
+    "carrier_lock_median": {
+      "pre_event": 0.9120224118232727,
+      "outage_interior": 0.026483949273824692,
+      "post_recovery": 0.8789328634738922
+    },
+    "carrier_lock_above_0_5_fraction": {
+      "pre_event": 0.6847424061507994,
+      "outage_interior": 0.0,
+      "post_recovery": 0.6088024108039733
+    }
+  },
+  "feature_dataset": {
+    "row_count": 2503,
+    "sha256": "bdf96697bc40622db1db8aaf4fdf91f9ac9a1b7c25ce406a3df3acd268067cb2",
+    "role": "simulation_only_pilot",
+    "paired_group_id": "texbat-wrw-simulation-v4-pilot",
+    "event_state_counts": {
+      "steady_normal": 867,
+      "pre_event_normal": 629,
+      "normal_outage": 102,
+      "post_recovery_normal": 238,
+      "carryoff_transition": 328,
+      "carryoff_final": 339
+    }
+  },
+  "limitations": [
+    "single-location single-epoch single-seed pilot",
+    "not a trained detector result",
+    "not external validation evidence",
+    "carry-off source/tracking validated but no false PVT solution observed",
+    "simulation-to-real domain gap remains unresolved"
+  ]
+}

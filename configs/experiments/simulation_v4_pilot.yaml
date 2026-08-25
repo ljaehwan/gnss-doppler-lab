@@ -1,0 +1,53 @@
+version: 1
+campaign:
+  name: texbat-wrw-simulation-v4-pilot
+  utc: 2022-01-01T00:00:00Z
+  duration_seconds: 50
+  position:
+    type: static
+    latitude_deg: 30.2851494
+    longitude_deg: -97.7339352
+    altitude_m: 180.0
+input:
+  rinex_nav: ../../.tools/gps-sdr-sim-src/brdc0010.22n
+output:
+  root: ../../artifacts/simulation_v4_pilot
+  rf_sample_rate_hz: 2600000
+  sample_format: s8_iq
+  keep_component_iq: false
+receiver:
+  seed: 20260825
+  sample_snr_db: -10.0
+  normal_target_rms: 22.0
+  carrier_offset_hz: 45.0
+  frequency_drift_hz_per_s: 0.15
+  phase_noise_std_rad_per_sqrt_sample: 0.00002
+  frontend_cutoff_hz: 1050000.0
+  frontend_order: 5
+  iq_gain_imbalance_db: 0.2
+  iq_phase_imbalance_deg: 0.6
+  dc_i: 0.4
+  dc_q: -0.3
+  clip_level: 127.0
+  chunk_samples: 1048576
+scenarios:
+  - name: steady-normal
+    kind: steady_normal
+  - name: normal-outage-recovery
+    kind: recovery_normal
+    outage:
+      start_seconds: 18.0
+      end_seconds: 30.0
+      attenuation_db: -100.0
+      recovery_ramp_seconds: 1.5
+  - name: carryoff-spoof
+    kind: carryoff_spoof
+    spoofing:
+      start_seconds: 18.0
+      transition_seconds: 16.0
+      target_offset_enu_m: [100.0, 0.0, 0.0]
+      initial_advantage_db: -18.0
+      final_advantage_db: 3.0
+      power_ramp_seconds: 14.0
+simulator:
+  executable: ../../.tools/gps-sdr-sim-src/gps-sdr-sim

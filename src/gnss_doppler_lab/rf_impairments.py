@@ -173,8 +173,12 @@ def _multipath(x: np.ndarray, taps: tuple[MultipathTap, ...], history: np.ndarra
     return y, joined[-hlen:].copy()
 
 
-class _ChannelPass:
-    """Fresh deterministic signal-channel state for one complete input pass."""
+class CompositeChannelProcessor:
+    """Stateful deterministic channel for IQ8 or in-memory complex samples.
+
+    ``process_complex`` superposes sources before the common oscillator and
+    frontend without an intermediate IQ8 quantization.
+    """
     def __init__(self, fs: float, cfg: ImpairmentConfig):
         self.fs, self.cfg, self.offset = fs, cfg, 0
         max_delay = max((math.ceil(t.delay_samples) for t in cfg.multipath), default=0)
@@ -185,8 +189,15 @@ class _ChannelPass:
         self.random_phase = 0.0
 
     def process(self, raw: bytes) -> np.ndarray:
+        """Backward-compatible IQ8 byte entry point."""
         a = np.frombuffer(raw, dtype=np.int8).astype(np.float32)
-        x = (a[0::2] + 1j * a[1::2]).astype(np.complex64)
+        return self.process_complex(a[0::2] + 1j * a[1::2])
+
+    def process_complex(self, samples: np.ndarray) -> np.ndarray:
+        """Process complex samples without an intermediate IQ8 quantization."""
+        x = np.asarray(samples, dtype=np.complex64)
+        if x.ndim != 1:
+            raise ValueError("complex channel input must be one-dimensional")
         x, self.history = _multipath(x, self.cfg.multipath, self.history)
         n = self.offset + np.arange(x.size, dtype=np.float64)
         t = n / self.fs
@@ -211,6 +222,10 @@ class _ChannelPass:
         return x
 
 
+# Internal compatibility for the existing two-pass impairment implementation.
+_ChannelPass = CompositeChannelProcessor
+
+
 def _iq_transform(x: np.ndarray, cfg: ImpairmentConfig) -> np.ndarray:
     gi = np.float32(10 ** (cfg.iq_gain_imbalance_db / 40))
     gq = np.float32(1 / gi)
@@ -218,6 +233,13 @@ def _iq_transform(x: np.ndarray, cfg: ImpairmentConfig) -> np.ndarray:
     i = gi * x.real
     q = gq * (x.imag * np.cos(phi) + x.real * np.sin(phi))
     return (i + 1j * q).astype(np.complex64)
+
+
+def apply_iq_imbalance(x: np.ndarray, config: ImpairmentConfig) -> np.ndarray:
+    """Apply receiver IQ imbalance without gain, clipping, or quantization."""
+    if not isinstance(config, ImpairmentConfig):
+        raise TypeError("config must be an ImpairmentConfig")
+    return _iq_transform(np.asarray(x, dtype=np.complex64), config)
 
 
 def _chunks(path: Path, chunk_samples: int) -> Iterator[bytes]:
