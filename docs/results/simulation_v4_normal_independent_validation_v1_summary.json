@@ -1,0 +1,558 @@
+{
+  "comparisons": {
+    "cleanCombined": {
+      "domain_auc": 0.7599072769082413,
+      "gate_status": "conditional",
+      "mean_fold_domain_auc": 0.7618517957877546,
+      "median_ks": 0.10728520450178436,
+      "median_robust_shift": 0.22307516519603895,
+      "real_rows": 3643,
+      "simulation_rows": 3050
+    },
+    "cleanDynamic": {
+      "domain_auc": 0.8314200836361028,
+      "gate_status": "conditional",
+      "mean_fold_domain_auc": 0.8412027149504008,
+      "median_ks": 0.18117331393971448,
+      "median_robust_shift": 0.2889204090164449,
+      "real_rows": 1806,
+      "simulation_rows": 1809
+    },
+    "cleanStatic": {
+      "domain_auc": 0.5705580927836909,
+      "gate_status": "conditional",
+      "mean_fold_domain_auc": 0.6473147160798133,
+      "median_ks": 0.24295340167222518,
+      "median_robust_shift": 0.5638323620429391,
+      "real_rows": 1837,
+      "simulation_rows": 1241
+    }
+  },
+  "config": {
+    "path": "configs/experiments/simulation_v4_normal_independent_validation_v1.json",
+    "sha256": "256977cfb14f0828d6cc98af83f459e7dee0407b41cd1188b0c37cb170593a78"
+  },
+  "data_boundary": {
+    "allowed_texbat_recordings": [
+      "cleanStatic",
+      "cleanDynamic"
+    ],
+    "detector_trained": false,
+    "forbidden_scenarios_accessed": false,
+    "forbidden_texbat_recordings": [
+      "ds1",
+      "ds2",
+      "ds3",
+      "ds4",
+      "ds5",
+      "ds6",
+      "ds7",
+      "ds8"
+    ],
+    "spoofing_data_generated": false
+  },
+  "decision": {
+    "domain_gate_status": "conditional",
+    "interpretation": "qualified for additional normal coverage and at most an exploratory paired-spoofing pilot; not scale generation or final detector training",
+    "overall_gate_status": "conditional",
+    "receiver_state_gate_status": "conditional"
+  },
+  "effective_receiver": {
+    "executable": "/home/ubuntu/projects/gnss-doppler-lab/.tools/gnss-sdr-src/build/src/main/gnss-sdr",
+    "feature_tap_count": 3,
+    "tracking_tap_count": 9,
+    "tracking_tap_spacing_chips": 0.125
+  },
+  "gate_thresholds": {
+    "domain": {
+      "conditional": {
+        "domain_auc_max": 0.85,
+        "median_ks_max": 0.35,
+        "median_robust_shift_max": 1.5
+      },
+      "pass": {
+        "domain_auc_max": 0.7,
+        "median_ks_max": 0.2,
+        "median_robust_shift_max": 0.75
+      }
+    },
+    "receiver_state": {
+      "conditional": {
+        "carrier_lock_above_0_5_fraction": [
+          0.6,
+          0.9
+        ],
+        "cn0_db_hz_median": [
+          42.0,
+          50.0
+        ]
+      },
+      "pass": {
+        "carrier_lock_above_0_5_fraction": [
+          0.68,
+          0.8
+        ],
+        "cn0_db_hz_median": [
+          44.0,
+          48.0
+        ]
+      }
+    }
+  },
+  "generated_at_utc": "2026-08-25T13:44:32.006762+00:00",
+  "limitations": [
+    "This independent pilot uses two static and three dynamic 30-second runs.",
+    "TEXBAT cleanStatic and cleanDynamic remain development calibration references.",
+    "Per-run diagnostics are reported but aggregate matched-domain gates are primary.",
+    "No TEXBAT spoofing scenario was accessed and no detector was trained.",
+    "The five runs are a pilot, not a statistically complete coverage of receiver environments.",
+    "TEXBAT clean references were used to make this gate decision and cannot be called untouched final validation data.",
+    "Conditional dynamic separability remains (AUC 0.8314), dominated by correlator-shape features."
+  ],
+  "rf_profile": {
+    "frontend_cutoff_hz": 8000000.0,
+    "rf_sample_rate_hz": 25000000,
+    "target_composite_cn0_db_hz": 60.0
+  },
+  "runner": {
+    "path": "scripts/run_simulation_v4_normal_independent_validation.py",
+    "sha256": "6097970b0c562d4d02a85eec3bc1b76bdcadf6c925b2dc9b4e75f604ae2c200b"
+  },
+  "runs": {
+    "iv-d-london-circle": {
+      "artifacts": {
+        "component_manifest": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-d-london-circle/manifest.json",
+          "sha256": "66b98c5bfff85be3b49492542a68075e98ad7a3a8046c8617a10e46cac2777d6"
+        },
+        "feature_csv": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/features/iv-d-london-circle_tracking_features.csv",
+          "rows": 635,
+          "sha256": "e21a1e4861e61eb24910079010791611ca757a82bdb3a49e8c82f2c5dc913748"
+        },
+        "iq": {
+          "bytes": 1495000000,
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-d-london-circle/gps_l1ca_s8_iq.bin",
+          "sha256": "b7db9bb40897bbaaaf988aad3a360004effab07b3cc5b490fa3a2b5f09fc1d39"
+        },
+        "receiver_manifest": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/receiver/simv4iv-iv-d-london-circle_20220101T080000Z/manifest.json",
+          "sha256": "864daff7adc1e649546330232f2db1640174c263cabe1c6d2c2007b29243a8d8"
+        },
+        "rf_manifest": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-d-london-circle/manifest.json",
+          "sha256": "1ac4d90d4873632385d26d20d32a097b4e2192315f4da3c5752f3fdaafffbf6a"
+        },
+        "trajectory": {
+          "metadata_path": "artifacts/simulation_v4_normal_independent_validation_v1/trajectories/iv-d-london-circle.json",
+          "metadata_sha256": "2cfd61c65ba52a8bdeecff6cd2014a762d14bd7475ae8c17be9299b58781661f",
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/trajectories/iv-d-london-circle.csv",
+          "row_count": 300,
+          "sha256": "53aa3a17dd521d6977fcae434124030e834a0244d10e57586b08e06f2c127bbb"
+        }
+      },
+      "diagnostic_domain_auc": 0.8200000000000001,
+      "diagnostic_gate_status": "conditional",
+      "domain": "dynamic",
+      "feature_rows": 635,
+      "motion": {
+        "heading_deg": 0.0,
+        "kind": "circle",
+        "radius_m": 40.0,
+        "speed_mps": 8.0
+      },
+      "position": {
+        "altitude_m": 80.0,
+        "latitude_deg": 51.5072,
+        "longitude_deg": -0.1276
+      },
+      "receiver_seed": 20260834,
+      "receiver_state": {
+        "carrier_lock_above_0_5_fraction": 0.7602474319773422,
+        "carrier_lock_median": 0.953604131937027,
+        "cn0_db_hz_iqr": 5.38558292388916,
+        "cn0_db_hz_median": 47.945451736450195,
+        "epoch_count": 141938,
+        "sample_rate_hz": 25000000,
+        "tracked_prn_count": 11,
+        "tracked_prns": [
+          "G02",
+          "G04",
+          "G05",
+          "G06",
+          "G07",
+          "G09",
+          "G11",
+          "G16",
+          "G20",
+          "G29",
+          "G30"
+        ]
+      },
+      "receiver_state_gate": "pass",
+      "target_composite_cn0_db_hz": 60.0,
+      "utc": "2022-01-01T08:00:00Z"
+    },
+    "iv-d-sydney-sweep": {
+      "artifacts": {
+        "component_manifest": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-d-sydney-sweep/manifest.json",
+          "sha256": "ec0a48f40c03697e16da932e6ad9e1f3e786f8e27bc029197d39b6aa5fc84a7a"
+        },
+        "feature_csv": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/features/iv-d-sydney-sweep_tracking_features.csv",
+          "rows": 627,
+          "sha256": "54d4a6f38829d4a4fd213abbd6f17e4f761c1ec8dbff9f5898450cd85a786bf0"
+        },
+        "iq": {
+          "bytes": 1495000000,
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-d-sydney-sweep/gps_l1ca_s8_iq.bin",
+          "sha256": "c422e833621ba088461cafcb3572b9dc87aa3c898ac23712c062942d260fbf66"
+        },
+        "receiver_manifest": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/receiver/simv4iv-iv-d-sydney-sweep_20220101T100000Z/manifest.json",
+          "sha256": "d40b8af5bfd916f7f59d618d153054d922a78273d3c317434c4325ce5e55a847"
+        },
+        "rf_manifest": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-d-sydney-sweep/manifest.json",
+          "sha256": "ac44f0de7530fa3254341c21446b14a0c2bbbb833b41dafe6e22a1f11cd1ff5d"
+        },
+        "trajectory": {
+          "metadata_path": "artifacts/simulation_v4_normal_independent_validation_v1/trajectories/iv-d-sydney-sweep.json",
+          "metadata_sha256": "749f0740529054e99389da4691bd501b8a685f496c322dfb6983ce105a861af5",
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/trajectories/iv-d-sydney-sweep.csv",
+          "row_count": 300,
+          "sha256": "7b71d10e5b84206cca204e3607b9e06a9a8f372f1304d32db42e15e02d66cd82"
+        }
+      },
+      "diagnostic_domain_auc": 0.8097726968357744,
+      "diagnostic_gate_status": "conditional",
+      "domain": "dynamic",
+      "feature_rows": 627,
+      "motion": {
+        "heading_deg": 30.0,
+        "kind": "parallel-sweep",
+        "lane_spacing_m": 20.0,
+        "leg_length_m": 80.0,
+        "speed_mps": 10.0
+      },
+      "position": {
+        "altitude_m": 100.0,
+        "latitude_deg": -33.8688,
+        "longitude_deg": 151.2093
+      },
+      "receiver_seed": 20260835,
+      "receiver_state": {
+        "carrier_lock_above_0_5_fraction": 0.8608944251582602,
+        "carrier_lock_median": 0.9563931822776794,
+        "cn0_db_hz_iqr": 6.321681976318359,
+        "cn0_db_hz_median": 46.57171630859375,
+        "epoch_count": 146910,
+        "sample_rate_hz": 25000000,
+        "tracked_prn_count": 11,
+        "tracked_prns": [
+          "G01",
+          "G03",
+          "G04",
+          "G10",
+          "G17",
+          "G21",
+          "G22",
+          "G25",
+          "G26",
+          "G31",
+          "G32"
+        ]
+      },
+      "receiver_state_gate": "conditional",
+      "target_composite_cn0_db_hz": 60.5,
+      "utc": "2022-01-01T10:00:00Z"
+    },
+    "iv-d-tokyo-straight": {
+      "artifacts": {
+        "component_manifest": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-d-tokyo-straight/manifest.json",
+          "sha256": "dc88151166e94cee1e825484ddf7e5b29f25b8dc24c0680b56bd778d7c925efd"
+        },
+        "feature_csv": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/features/iv-d-tokyo-straight_tracking_features.csv",
+          "rows": 547,
+          "sha256": "332e4ef9d987d622646192b6e1ac7b2063c95d304947769958294dce01569f58"
+        },
+        "iq": {
+          "bytes": 1495000000,
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-d-tokyo-straight/gps_l1ca_s8_iq.bin",
+          "sha256": "2087a6137a99bea3347e9f9236274a76a56af6772a35282a613d927eeb51d92f"
+        },
+        "receiver_manifest": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/receiver/simv4iv-iv-d-tokyo-straight_20220101T060000Z/manifest.json",
+          "sha256": "ec0abe09aa75e83b68dceadcc80b9362ce790c42840e4834d9d861ba9c852394"
+        },
+        "rf_manifest": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-d-tokyo-straight/manifest.json",
+          "sha256": "7518ec4d33ddacf52302bb07971161b1ed9f7ec1d98e23d21bd340fcd1da4b3b"
+        },
+        "trajectory": {
+          "metadata_path": "artifacts/simulation_v4_normal_independent_validation_v1/trajectories/iv-d-tokyo-straight.json",
+          "metadata_sha256": "8bae8775a5c58027310a538bbe391cbd8253c73fb218ddc157d78a062597b203",
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/trajectories/iv-d-tokyo-straight.csv",
+          "row_count": 300,
+          "sha256": "c2b0b66a7de0e7df0eb38395ea11a122a4d7e135611cb0f6a06bf2511ea7aa61"
+        }
+      },
+      "diagnostic_domain_auc": 0.8351424145582428,
+      "diagnostic_gate_status": "conditional",
+      "domain": "dynamic",
+      "feature_rows": 547,
+      "motion": {
+        "heading_deg": 90.0,
+        "kind": "straight",
+        "speed_mps": 10.0
+      },
+      "position": {
+        "altitude_m": 100.0,
+        "latitude_deg": 35.6762,
+        "longitude_deg": 139.6503
+      },
+      "receiver_seed": 20260833,
+      "receiver_state": {
+        "carrier_lock_above_0_5_fraction": 0.7224031210161733,
+        "carrier_lock_median": 0.9479851722717285,
+        "cn0_db_hz_iqr": 6.735522270202637,
+        "cn0_db_hz_median": 46.07558250427246,
+        "epoch_count": 130214,
+        "sample_rate_hz": 25000000,
+        "tracked_prn_count": 11,
+        "tracked_prns": [
+          "G01",
+          "G03",
+          "G16",
+          "G18",
+          "G22",
+          "G24",
+          "G25",
+          "G26",
+          "G29",
+          "G31",
+          "G32"
+        ]
+      },
+      "receiver_state_gate": "pass",
+      "target_composite_cn0_db_hz": 59.5,
+      "utc": "2022-01-01T06:00:00Z"
+    },
+    "iv-s-denver-a": {
+      "artifacts": {
+        "component_manifest": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-s-denver-a/manifest.json",
+          "sha256": "c497d4264030794a5ac9f665aafcbed00bcd0dbd948594054dc4155f9e0bc8e8"
+        },
+        "feature_csv": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/features/iv-s-denver-a_tracking_features.csv",
+          "rows": 633,
+          "sha256": "f7ca5f0a15b8fffca82a2dae61f813cb71c8e0dbcab2d5b1780b186a78b8d6ee"
+        },
+        "iq": {
+          "bytes": 1495000000,
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-s-denver-a/gps_l1ca_s8_iq.bin",
+          "sha256": "2b5a626fbbaa57c0ae29e282f2ff5c6beb694a6207e92b938794cd6b5557e615"
+        },
+        "receiver_manifest": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/receiver/simv4iv-iv-s-denver-a_20220101T020000Z/manifest.json",
+          "sha256": "d41f913a65546e00ff21bab07c534790927f86b5ad8581937699d1b96ebcc6f1"
+        },
+        "rf_manifest": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-s-denver-a/manifest.json",
+          "sha256": "1e6e8690f357342e120c9e070db40021d46b5bf165db2464054785e55c95d707"
+        },
+        "trajectory": null
+      },
+      "diagnostic_domain_auc": 0.5479501722217905,
+      "diagnostic_gate_status": "conditional",
+      "domain": "static",
+      "feature_rows": 633,
+      "motion": null,
+      "position": {
+        "altitude_m": 1609.0,
+        "latitude_deg": 39.7392,
+        "longitude_deg": -104.9903
+      },
+      "receiver_seed": 20260831,
+      "receiver_state": {
+        "carrier_lock_above_0_5_fraction": 0.8125348067404622,
+        "carrier_lock_median": 0.9495638608932495,
+        "cn0_db_hz_iqr": 6.540597915649414,
+        "cn0_db_hz_median": 44.95331954956055,
+        "epoch_count": 159811,
+        "sample_rate_hz": 25000000,
+        "tracked_prn_count": 11,
+        "tracked_prns": [
+          "G01",
+          "G06",
+          "G07",
+          "G13",
+          "G14",
+          "G15",
+          "G17",
+          "G19",
+          "G22",
+          "G28",
+          "G30"
+        ]
+      },
+      "receiver_state_gate": "conditional",
+      "target_composite_cn0_db_hz": 59.5,
+      "utc": "2022-01-01T02:00:00Z"
+    },
+    "iv-s-seoul-b": {
+      "artifacts": {
+        "component_manifest": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-s-seoul-b/manifest.json",
+          "sha256": "78c3f19445640335c72afdf3e348c4f8202d4215ee02bdc95b16bc871ba1010b"
+        },
+        "feature_csv": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/features/iv-s-seoul-b_tracking_features.csv",
+          "rows": 608,
+          "sha256": "d52c68ec64060c5111b6d6997b59be9374c908e756a07466cb152d7c8b9d4a8c"
+        },
+        "iq": {
+          "bytes": 1495000000,
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-s-seoul-b/gps_l1ca_s8_iq.bin",
+          "sha256": "39de651601a88d548baaa23451c1a53f977f5e41c6669cf12678a5c61bec2090"
+        },
+        "receiver_manifest": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/receiver/simv4iv-iv-s-seoul-b_20220101T040000Z/manifest.json",
+          "sha256": "3a8d755316fe1a9e09d81aa6f7af6196d781d53f337ec643a070856ddcb0904e"
+        },
+        "rf_manifest": {
+          "path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-s-seoul-b/manifest.json",
+          "sha256": "e81878615eff35ffb578f240bea811661740014e1966a99605f82d07bad41ec1"
+        },
+        "trajectory": null
+      },
+      "diagnostic_domain_auc": 0.5138429974899992,
+      "diagnostic_gate_status": "pass",
+      "domain": "static",
+      "feature_rows": 608,
+      "motion": null,
+      "position": {
+        "altitude_m": 120.0,
+        "latitude_deg": 37.5665,
+        "longitude_deg": 126.978
+      },
+      "receiver_seed": 20260832,
+      "receiver_state": {
+        "carrier_lock_above_0_5_fraction": 0.7350423120700748,
+        "carrier_lock_median": 0.955421656370163,
+        "cn0_db_hz_iqr": 5.275687217712402,
+        "cn0_db_hz_median": 44.84856033325195,
+        "epoch_count": 161656,
+        "sample_rate_hz": 25000000,
+        "tracked_prn_count": 11,
+        "tracked_prns": [
+          "G08",
+          "G10",
+          "G12",
+          "G22",
+          "G23",
+          "G24",
+          "G25",
+          "G26",
+          "G29",
+          "G31",
+          "G32"
+        ]
+      },
+      "receiver_state_gate": "pass",
+      "target_composite_cn0_db_hz": 60.5,
+      "utc": "2022-01-01T04:00:00Z"
+    }
+  },
+  "schema": "gnss-doppler-lab.simulation-v4-normal-independent-validation-result",
+  "schema_version": 1,
+  "source_summary": {
+    "path": "artifacts/simulation_v4_normal_independent_validation_v1/summary.json",
+    "sha256": "7724d7d266f7cdb5079284e940f3f87d0ce0895acaf662cabfb12af110b2dabb"
+  },
+  "ssd_bundle": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/simulation-v4-normal-independent-validation-v1-methoda9",
+  "tables": {
+    "aggregate_scores.csv": {
+      "path": "artifacts/simulation_v4_normal_independent_validation_v1/aggregate_scores.csv",
+      "sha256": "3c9ea2d003ce71cc72529b2aa724c0ba8e453608d6b668c09be8d4a020b57029"
+    },
+    "domain_classifier_folds.csv": {
+      "path": "artifacts/simulation_v4_normal_independent_validation_v1/domain_classifier_folds.csv",
+      "sha256": "1b31c64201484ec52187c2a28e2a7405b008f3e426410855af1870802b0f3c95"
+    },
+    "per_feature_metrics.csv": {
+      "path": "artifacts/simulation_v4_normal_independent_validation_v1/per_feature_metrics.csv",
+      "sha256": "182ebe6eb147ee75eeb0813aa43f52fc2bc0ad5c13d8e7c3d5fce2146d937d58"
+    },
+    "run_scores.csv": {
+      "path": "artifacts/simulation_v4_normal_independent_validation_v1/run_scores.csv",
+      "sha256": "e790185609aaeffe97108a4a850f621e8c423302d85a147168c9eab9c5a47cfb"
+    }
+  },
+  "top_residual_features_by_ks": {
+    "cleanCombined": [
+      {
+        "feature": "sharp_narrow_mean",
+        "ks": 0.30283760006839966,
+        "real_scaled_wasserstein": 1.110284445199937,
+        "robust_median_shift": 0.5211718424632171
+      },
+      {
+        "feature": "doppler_slope",
+        "ks": 0.21574868487960286,
+        "real_scaled_wasserstein": 5.176456184647946,
+        "robust_median_shift": 0.570707537278817
+      },
+      {
+        "feature": "prompt_mag_cv",
+        "ks": 0.2056017603938387,
+        "real_scaled_wasserstein": 0.43332705566565405,
+        "robust_median_shift": 0.08718139023471629
+      }
+    ],
+    "cleanDynamic": [
+      {
+        "feature": "sharp_narrow_mean",
+        "ks": 0.5485262869851554,
+        "real_scaled_wasserstein": 1.7152647215460037,
+        "robust_median_shift": 1.1720229539443299
+      },
+      {
+        "feature": "prompt_mag_cv",
+        "ks": 0.31516742606641945,
+        "real_scaled_wasserstein": 0.8240984997900197,
+        "robust_median_shift": 0.5210898943520447
+      },
+      {
+        "feature": "cn0_std",
+        "ks": 0.2046265534637628,
+        "real_scaled_wasserstein": 0.9084582987468502,
+        "robust_median_shift": 0.27621930498025965
+      }
+    ],
+    "cleanStatic": [
+      {
+        "feature": "sharp_narrow_std",
+        "ks": 0.33305625215761436,
+        "real_scaled_wasserstein": 1.42716894943652,
+        "robust_median_shift": 0.9603234314167063
+      },
+      {
+        "feature": "doppler_slope",
+        "ks": 0.2796123378471978,
+        "real_scaled_wasserstein": 3.326363658702501,
+        "robust_median_shift": 0.8310635179084219
+      },
+      {
+        "feature": "code_err_abs_mean",
+        "ks": 0.2632954002624011,
+        "real_scaled_wasserstein": 0.3898564512205698,
+        "robust_median_shift": 0.7586748591254007
+      }
+    ]
+  }
+}
