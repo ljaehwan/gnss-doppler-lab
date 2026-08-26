@@ -1,0 +1,210 @@
+{
+  "artifacts": {
+    "delay_estimates": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_train_replication_v1/analysis/delay_estimates.csv",
+      "row_count": 3157,
+      "sha256": "55bdc988e856d855bfb1ea10ae89e26eb346d7a0ff0020ae9e173c62b7f94dd2"
+    },
+    "geometry_scores": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_train_replication_v1/analysis/geometry_scores.csv",
+      "row_count": 300,
+      "sha256": "49e29fcb943f272f1ca7ead9c13a59e8af2e045add8f13aa21bf6eb607af457f"
+    },
+    "pair_scenario_medians": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_train_replication_v1/analysis/pair_scenario_medians.csv",
+      "row_count": 10,
+      "sha256": "4eeff09f6b45033da3f03230b7a66b34fd67847e062a236926063d5c1b55d61b"
+    },
+    "pair_summary": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_train_replication_v1/analysis/pair_summary.csv",
+      "row_count": 5,
+      "sha256": "ed6cbf1bcc87ae8aa274d06a2cb012170def892aa6e2570d0392996e68842165"
+    }
+  },
+  "claim_boundary": "unused-train replication only; no validation, test, TEXBAT, threshold, detector-performance, or WCL generalization claim",
+  "config": "/home/ubuntu/projects/gnss-doppler-lab/configs/experiments/cgc_rf_train_replication_v1.json",
+  "config_sha256": "ee6a5fe713dfeaec05c9ec8688fb68f4443e575768a58af963eeb502a396f596",
+  "data_boundary": {
+    "allowed_pair_ids": [
+      "pv1-pair-002",
+      "pv1-pair-003",
+      "pv1-pair-004",
+      "pv1-pair-005",
+      "pv1-pair-006"
+    ],
+    "authorized_partition": "train",
+    "pair_001_access": "frozen pilot records only",
+    "test_pairs_accessed": false,
+    "texbat_attack_recordings_accessed": [],
+    "validation_pairs_accessed": false
+  },
+  "execution_policy": "one deterministic execution on pairs 002--006; no score, estimator, aggregation, seed, or gate changes after outcome inspection",
+  "frozen_candidate": {
+    "candidate_origin": "post-hoc after legacy zero-referenced residual failed on train pair 001",
+    "clock_centered_module": {
+      "path": "src/gnss_doppler_lab/clock_centered_geometry.py",
+      "sha256": "b25a00efdb654ceb96540a2597bdc542526a0c6027e393018c739394858a203a"
+    },
+    "detection_score": "negative residual",
+    "pilot_config": {
+      "path": "configs/experiments/cgc_rf_challenge_pilot_v1.json",
+      "sha256": "290309c5235ccfdb44af82da7f660f4c42837fc7715a8f8fcac0bdb424bd37d8"
+    },
+    "pilot_result": {
+      "path": "docs/results/cgc_receiver_rf_challenge_pilot_v1_summary.json",
+      "sha256": "93f3726cce1943a95903448bb43c7e063a170f16e6ba4af37ac3a7ac143e73cb"
+    },
+    "residual": "SSE_full / sum(weight * (delay - weighted_mean(delay))^2)"
+  },
+  "next_gate": "if supported, freeze a still-locked test protocol before any test access; the previously inspected validation partition cannot validate this post-hoc candidate",
+  "pairs": [
+    {
+      "clock_centered_improvement_over_legacy": 0.6360140023286521,
+      "clock_centered_multipath_median_residual": 0.7769233465233286,
+      "clock_centered_separation": 0.6914511063489498,
+      "clock_centered_spoof_median_residual": 0.08547224017437886,
+      "comparison_start_seconds": 21.0,
+      "direction_supported": true,
+      "domain": "static",
+      "legacy_multipath_median_residual": 0.13771012350282372,
+      "legacy_separation": 0.05543710402029765,
+      "legacy_spoof_median_residual": 0.08227301948252606,
+      "multipath_comparison_bin_count": 9,
+      "pair_id": "pv1-pair-002",
+      "runtime_manifest_sha256": "3cb847a18937ddd7bfe2d54eb716728654765a23c603c300ea4eb7438d5c95ab",
+      "spoof_comparison_bin_count": 9,
+      "startup_los_prn_count": 12
+    },
+    {
+      "clock_centered_improvement_over_legacy": 0.6443417918688572,
+      "clock_centered_multipath_median_residual": 0.8243663459305327,
+      "clock_centered_separation": 0.811677898444894,
+      "clock_centered_spoof_median_residual": 0.012688447485638674,
+      "comparison_start_seconds": 21.0,
+      "direction_supported": true,
+      "domain": "dynamic",
+      "legacy_multipath_median_residual": 0.17990576859583537,
+      "legacy_separation": 0.1673361065760368,
+      "legacy_spoof_median_residual": 0.012569662019798561,
+      "multipath_comparison_bin_count": 9,
+      "pair_id": "pv1-pair-003",
+      "runtime_manifest_sha256": "237b89fd8c0c4f66d616fbd8d1a8f0d77d85ed253e88cd2ed28794dae728f9a2",
+      "spoof_comparison_bin_count": 9,
+      "startup_los_prn_count": 14
+    },
+    {
+      "clock_centered_improvement_over_legacy": 0.5607498092309959,
+      "clock_centered_multipath_median_residual": 0.6588819164030326,
+      "clock_centered_separation": 0.3822361981910599,
+      "clock_centered_spoof_median_residual": 0.2766457182119727,
+      "comparison_start_seconds": 21.0,
+      "direction_supported": true,
+      "domain": "dynamic",
+      "legacy_multipath_median_residual": 0.09441351083460205,
+      "legacy_separation": -0.17851361103993607,
+      "legacy_spoof_median_residual": 0.2729271218745381,
+      "multipath_comparison_bin_count": 9,
+      "pair_id": "pv1-pair-004",
+      "runtime_manifest_sha256": "7a2042621b1308b4944f45666650794d96bc92007fa56a9b78c59a9fb92b579b",
+      "spoof_comparison_bin_count": 9,
+      "startup_los_prn_count": 12
+    },
+    {
+      "clock_centered_improvement_over_legacy": 0.2842876208499712,
+      "clock_centered_multipath_median_residual": 0.3837310398729509,
+      "clock_centered_separation": 0.3289158482819223,
+      "clock_centered_spoof_median_residual": 0.054815191591028614,
+      "comparison_start_seconds": 23.0,
+      "direction_supported": true,
+      "domain": "dynamic",
+      "legacy_multipath_median_residual": 0.09811118536973362,
+      "legacy_separation": 0.04462822743195105,
+      "legacy_spoof_median_residual": 0.05348295793778257,
+      "multipath_comparison_bin_count": 7,
+      "pair_id": "pv1-pair-005",
+      "runtime_manifest_sha256": "99882df871941a2414f2acab5e8655f5ed93c9753aa428dab17ad41d21a81df0",
+      "spoof_comparison_bin_count": 7,
+      "startup_los_prn_count": 12
+    },
+    {
+      "clock_centered_improvement_over_legacy": 0.5354693935908633,
+      "clock_centered_multipath_median_residual": 0.7142887419583629,
+      "clock_centered_separation": 0.6646622441171788,
+      "clock_centered_spoof_median_residual": 0.04962649784118412,
+      "comparison_start_seconds": 21.0,
+      "direction_supported": true,
+      "domain": "dynamic",
+      "legacy_multipath_median_residual": 0.17430122803493903,
+      "legacy_separation": 0.12919285052631546,
+      "legacy_spoof_median_residual": 0.04510837750862356,
+      "multipath_comparison_bin_count": 9,
+      "pair_id": "pv1-pair-006",
+      "runtime_manifest_sha256": "c31024e198abf0ba4e8e7990bc1ed92beaf9226d1c0b572c2f888577b99c1bca",
+      "spoof_comparison_bin_count": 9,
+      "startup_los_prn_count": 10
+    }
+  ],
+  "primary_pair_block_evaluation": {
+    "all_support_gates_passed": true,
+    "clock_centered_improvement_over_legacy_pair_count": 5,
+    "gates": {
+      "minimum_clock_centered_improvement_over_legacy_pair_count": {
+        "observed": 5,
+        "passed": true,
+        "required": 4
+      },
+      "minimum_comparison_bins_per_scenario_per_pair": {
+        "observed": 7,
+        "passed": true,
+        "required": 5
+      },
+      "minimum_pair_block_auc": {
+        "observed": 1.0,
+        "passed": true,
+        "required": 0.8
+      },
+      "positive_clock_centered_separation_pair_count": {
+        "observed": 5,
+        "passed": true,
+        "required": 5
+      },
+      "required_pair_count": {
+        "observed": 5,
+        "passed": true,
+        "required": 5
+      }
+    },
+    "median_pair_separation": 0.6646622441171788,
+    "median_pair_separation_bootstrap_95_percentile_interval": [
+      0.3289158482819223,
+      0.811677898444894
+    ],
+    "pair_block_auc": 1.0,
+    "pair_block_auc_bootstrap_95_percentile_interval": [
+      1.0,
+      1.0
+    ],
+    "pair_count": 5,
+    "pair_level_clock_centered_separations": [
+      0.6914511063489498,
+      0.811677898444894,
+      0.3822361981910599,
+      0.3289158482819223,
+      0.6646622441171788
+    ],
+    "positive_separation_pair_count": 5,
+    "status": "supported_on_unused_train_replication_requires_locked_test"
+  },
+  "role": "preregistered unused-train receiver-RF replication of the post-hoc clock-centered CGC candidate",
+  "runner": {
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/scripts/run_cgc_rf_train_replication.py",
+    "sha256": "1b97bba63b8c9055d234b72c19c6de5e9171c9cbeb431fb71566efef22e4c029"
+  },
+  "schema": "gnss-doppler-lab.cgc-rf-train-replication-result",
+  "schema_version": 1,
+  "secondary_serial_bin_auc": {
+    "clock_centered_directional": 0.9810708491076258,
+    "legacy_zero_referenced": 0.6738777717685235
+  },
+  "threshold_fitted": false
+}
