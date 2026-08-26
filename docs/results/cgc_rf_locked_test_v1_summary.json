@@ -1,0 +1,108 @@
+{
+  "schema": "gnss-doppler-lab.cgc-rf-locked-test-terminal-result",
+  "schema_version": 1,
+  "status": "NOT_SUPPORTED",
+  "outcome_kind": "terminal_input_support_gate_failure_before_cgc_performance_analysis",
+  "date": "2026-08-26",
+  "config": {
+    "path": "configs/experiments/cgc_rf_locked_test_v1.json",
+    "sha256": "f3792b00993d40b028218ae0024d855a294f6e71cc0f12caab5c268bd5404c95",
+    "commit": "a5eb634f1f0f0d693caac5b5710b6b0315853641"
+  },
+  "protocol": {
+    "path": "docs/results/cgc_rf_locked_test_protocol_v1.md",
+    "sha256": "be93580ecd60d90f8758ea833be0cff2ca4a11aeb609d678b5388976cd3ae655",
+    "commit": "a5eb634f1f0f0d693caac5b5710b6b0315853641"
+  },
+  "runner": {
+    "path": "scripts/run_cgc_rf_locked_test.py",
+    "sha256": "3a6e29d45425168395e64bf6c479de2c8b4351037efce7805f86d8db952736d8",
+    "commit": "acc8dac0284e7e6a147ffe09bee36b289b82387a"
+  },
+  "release": {
+    "single_release_started": true,
+    "resume_or_retest_authorized": false,
+    "release_state": {
+      "path": "artifacts/cgc_rf_locked_test_v1/release_state.json",
+      "sha256": "0ad10e51be77419874ca14e3e585f5f4a341a47f9183130d21f792d74b5fca15"
+    },
+    "terminal_failure": {
+      "path": "artifacts/cgc_rf_locked_test_v1/terminal_failure.json",
+      "sha256": "444c13a9f8991c90c7cc66a0ad7c6d8316dc9a1dca3fe2c7ecee987bc4d042ba"
+    },
+    "source_generation_summary": {
+      "path": "artifacts/simulation_v4_paired_test_generation_v1/summary.json",
+      "sha256": "71eda16d37939aeb2f506fd0f8f465e203cb4d998ad19ca6eaa471c7d7de67ef"
+    }
+  },
+  "pair_support": [
+    {
+      "pair_id": "pv1-pair-010",
+      "motion_kind": "static",
+      "startup_los_prn_count": 13,
+      "source_pair_complete": true,
+      "receiver_runtime_complete": true
+    },
+    {
+      "pair_id": "pv1-pair-011",
+      "motion_kind": "straight",
+      "startup_los_prn_count": 12,
+      "source_pair_complete": true,
+      "receiver_runtime_complete": true
+    },
+    {
+      "pair_id": "pv1-pair-012",
+      "motion_kind": "parallel-sweep",
+      "startup_los_prn_count": 3,
+      "source_pair_complete": true,
+      "receiver_runtime_complete": false
+    }
+  ],
+  "gates": {
+    "required_pair_count": {
+      "observed_complete_receiver_pairs": 2,
+      "required": 3,
+      "passed": false
+    },
+    "minimum_startup_los_prns_per_pair": {
+      "observed_minimum": 3,
+      "required": 8,
+      "passed": false
+    },
+    "positive_clock_centered_separation_pair_count": {
+      "status": "NOT_EVALUATED"
+    },
+    "minimum_pair_block_auc": {
+      "status": "NOT_EVALUATED"
+    },
+    "minimum_clock_centered_improvement_over_legacy_pair_count": {
+      "status": "NOT_EVALUATED"
+    },
+    "minimum_comparison_bins_per_scenario_per_pair": {
+      "status": "NOT_EVALUATED"
+    },
+    "all_support_gates_passed": false
+  },
+  "performance": {
+    "cgc_pair_metrics_emitted": false,
+    "pair_block_auc_emitted": false,
+    "clock_centered_separations_emitted": false,
+    "absolute_threshold_applied": false,
+    "threshold_or_calibration_fitted": false
+  },
+  "interpretation": {
+    "locked_claim": "NOT_SUPPORTED",
+    "score_failure_inferred": false,
+    "reason": "The complete held-out three-pair comparison could not be evaluated because pair 012 violated a frozen input-support gate before analysis.",
+    "test_partition_spent": true
+  },
+  "ssd_archive": {
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cgc-rf-locked-test-v1-terminal",
+    "regular_file_count": 179,
+    "total_bytes": 33241987312,
+    "checksum_dry_run_differences": 0,
+    "terminal_failure_sha256": "444c13a9f8991c90c7cc66a0ad7c6d8316dc9a1dca3fe2c7ecee987bc4d042ba"
+  },
+  "next_gate": "Design and preregister a fresh RF campaign whose navigation/geometry support is verified before split assignment; do not reuse pairs 010--012 as untouched evidence or tune the CGC candidate from this release.",
+  "claim_boundary": "terminal outcome of the single-release held-out simulated receiver-RF test; no multipath-versus-spoof performance, threshold, field, TEXBAT, operational, or WCL generalization claim"
+}
