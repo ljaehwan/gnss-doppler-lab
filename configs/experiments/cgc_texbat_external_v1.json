@@ -1,0 +1,84 @@
+{
+  "schema": "gnss-doppler-lab.cgc-texbat-external-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "cgc-texbat-external-v1",
+    "role": "single-release threshold-free external pre/post direction check of the frozen clock-centered CGC candidate",
+    "candidate_commit": "60280575737ff70618c5619ff7522c516bbdc67a",
+    "runner_path": "scripts/run_cgc_texbat_external.py",
+    "execution_policy": "one deterministic execution on DS1--DS3; no estimator, interval, support gate, aggregation, exclusion, or direction change after CGC outcome access"
+  },
+  "claim_boundary": "real TEXBAT spoof pre/post directional consistency only; TEXBAT has no labeled independent-multipath class and cannot validate real multipath-versus-spoof accuracy or an absolute threshold",
+  "frozen_candidate": {
+    "clock_centered_module": {"path": "src/gnss_doppler_lab/clock_centered_geometry.py", "sha256": "b25a00efdb654ceb96540a2597bdc542526a0c6027e393018c739394858a203a"},
+    "correlator_geometry_module": {"path": "src/gnss_doppler_lab/correlator_geometry.py", "sha256": "74732c182e799c2e82b4719d6572ebbd3dc4f6e16eada5bfe0f8a3d8c236b2b2"},
+    "template_runner": {"path": "scripts/run_cgc_rf_challenge_pilot.py", "sha256": "a1283cb6d4c78697d72e34e4d9afe9048b9ab2fde0aef521ea19bb3a5b836b18"},
+    "controlled_template_config": {"path": "configs/experiments/correlator_geometry_identifiability_train_v1.json", "sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6"},
+    "geometry_module": {"path": "src/gnss_doppler_lab/gcmr_geometry.py", "sha256": "781b66b8c485f4a656da3ed4ce82726f47f47a94cc4ea702eeab727708208921"},
+    "preflight_module": {"path": "scripts/run_gcmr_texbat_external.py", "sha256": "756cea2362565b1c84f4fb5e852d29536fafe183d58872ba15c8b5291b4a871c"},
+    "residual": "SSE_full / sum(weight * (delay - weighted_mean(delay))^2)",
+    "detection_score": "negative residual",
+    "absolute_threshold_applied": false,
+    "threshold_or_calibration_fitting": false
+  },
+  "prior_simulation_evidence": {
+    "path": "docs/results/cgc_rf_fresh_test_v2_summary.json",
+    "sha256": "0a645225e3f7d7acb1c598a51b739b34fbbb5592148c3054152278d981f2b458",
+    "use": "context only; no TEXBAT calibration or adaptation"
+  },
+  "analysis": {
+    "bin_seconds": 1.0,
+    "minimum_prns": 8,
+    "los_epoch_policy": "bin center TOW",
+    "receiver_position_policy": "median checksum-valid pre-onset NMEA GGA in [20,90] seconds, held fixed",
+    "stable_pre_seconds": [30.0, 90.0],
+    "excluded_transition_seconds": [90.0, 110.0],
+    "stable_post_start_seconds": 110.0,
+    "primary_change": "stable-pre median residual minus stable-post median residual; positive is consistent with higher spoof detection score after onset",
+    "scenario_aggregation": "one pre/post median change per TEXBAT recording",
+    "epoch_chunk_size": 50000,
+    "cn0_weighting": false
+  },
+  "evaluation": {
+    "required_scenario_count": 3,
+    "required_positive_change_scenario_count": 3,
+    "minimum_stable_pre_bins_per_scenario": 50,
+    "minimum_stable_post_bins_per_scenario": 300,
+    "minimum_prns_per_geometry_bin": 8,
+    "decision_rule": "DIRECTIONALLY_CONSISTENT only if every support gate and all three positive-change directions pass; otherwise NOT_DIRECTIONALLY_CONSISTENT",
+    "bin_auc_is_secondary_descriptive_only": true,
+    "threshold_fitting": false,
+    "post_release_tuning_or_retest": false
+  },
+  "input_support_observed_before_score": {
+    "score_accessed": false,
+    "healthy_tracked_prns_each": 11,
+    "ds1": {"stable_pre_bins_at_least_8_prns": 60, "stable_post_bins_at_least_8_prns": 352, "minimum_pre_prns": 10, "minimum_post_prns": 10, "nmea_position_samples": 700},
+    "ds2": {"stable_pre_bins_at_least_8_prns": 60, "stable_post_bins_at_least_8_prns": 348, "minimum_pre_prns": 10, "minimum_post_prns": 10, "nmea_position_samples": 700},
+    "ds3": {"stable_pre_bins_at_least_8_prns": 60, "stable_post_bins_at_least_8_prns": 348, "minimum_pre_prns": 10, "minimum_post_prns": 8, "nmea_position_samples": 700}
+  },
+  "scenarios": [
+    {
+      "name": "ds1", "tow0_s": 477900.0,
+      "complex_epoch_npz": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds1.npz", "sha256": "b24d947c83890dbfa1c801bfbcb72e1fd192dd66509e927eb5afb8118902b072"},
+      "export_manifest": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds1.manifest.json", "sha256": "7be224f13002f8c4de03d833d2987547a750068b181debe2592b9f745c5c651f"},
+      "ephemeris": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds1-complex9/gps_ephemeris.xml", "sha256": "3ad57e22266b980f148801eec0ebde3e58ba043b66db652b835b43fd2492a2e9"},
+      "nmea": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds1-complex9/nmea_pvt.nmea", "sha256": "7d4b470f46112301e6e9581b846a43493b4a31ddac12adff5e86614936bf00cf"}
+    },
+    {
+      "name": "ds2", "tow0_s": 477900.02,
+      "complex_epoch_npz": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds2.npz", "sha256": "dae0f245cbb107febd220c6de33b9a279a2bad356cb0ba772daf9418bc75d7c9"},
+      "export_manifest": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds2.manifest.json", "sha256": "15066dacfd4e1ef88fc35df5c323c67b3e1dc1420003de90707340c9982a5595"},
+      "ephemeris": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/gps_ephemeris.xml", "sha256": "3ad57e22266b980f148801eec0ebde3e58ba043b66db652b835b43fd2492a2e9"},
+      "nmea": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/nmea_pvt.nmea", "sha256": "4ea787e39b33481b438964003ff42daccad8d938866693143d29ff2470e1cf79"}
+    },
+    {
+      "name": "ds3", "tow0_s": 477900.0,
+      "complex_epoch_npz": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds3.npz", "sha256": "38eb5842dfec306d99bf0c5d61df6cffcb6faa25ed63721cafa8e3c3776f9b3e"},
+      "export_manifest": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds3.manifest.json", "sha256": "01de5f689a543da2107b0258f95cfff68b0c1a2c9a4cfeb37724b8a32a6074a8"},
+      "ephemeris": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/gps_ephemeris.xml", "sha256": "3ad57e22266b980f148801eec0ebde3e58ba043b66db652b835b43fd2492a2e9"},
+      "nmea": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/nmea_pvt.nmea", "sha256": "edf2fdbb9484a58f80ea72d46ee1ce33e2c602c9a62ab209011cf83c0eb09e2d"}
+    }
+  ],
+  "output_root": "artifacts/cgc_texbat_external_v1"
+}
