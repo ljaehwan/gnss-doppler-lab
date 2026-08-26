@@ -1,0 +1,125 @@
+{
+  "schema": "gnss-doppler-lab.cgc-rf-train-replication-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "cgc-rf-train-replication-v1",
+    "role": "preregistered unused-train receiver-RF replication of the post-hoc clock-centered CGC candidate",
+    "execution_policy": "one deterministic execution on pairs 002--006; no score, estimator, aggregation, seed, or gate changes after outcome inspection",
+    "candidate_commit": "aa7c5bfefd6ef0102146d1f22d04b47b517044a6",
+    "runner_path": "scripts/run_cgc_rf_train_replication.py"
+  },
+  "frozen_candidate": {
+    "pilot_config": {
+      "path": "configs/experiments/cgc_rf_challenge_pilot_v1.json",
+      "sha256": "290309c5235ccfdb44af82da7f660f4c42837fc7715a8f8fcac0bdb424bd37d8"
+    },
+    "pilot_result": {
+      "path": "docs/results/cgc_receiver_rf_challenge_pilot_v1_summary.json",
+      "sha256": "93f3726cce1943a95903448bb43c7e063a170f16e6ba4af37ac3a7ac143e73cb"
+    },
+    "clock_centered_module": {
+      "path": "src/gnss_doppler_lab/clock_centered_geometry.py",
+      "sha256": "b25a00efdb654ceb96540a2597bdc542526a0c6027e393018c739394858a203a"
+    },
+    "residual": "SSE_full / sum(weight * (delay - weighted_mean(delay))^2)",
+    "detection_score": "negative residual",
+    "candidate_origin": "post-hoc after legacy zero-referenced residual failed on train pair 001"
+  },
+  "split_config": {
+    "path": "configs/experiments/simulation_v4_paired_split_v1.json",
+    "sha256": "124bb766dcc0c52e248627e20499b55149b5477cabd4c88fa960585368f62b3e"
+  },
+  "data_boundary": {
+    "authorized_partition": "train",
+    "allowed_pair_ids": [
+      "pv1-pair-002",
+      "pv1-pair-003",
+      "pv1-pair-004",
+      "pv1-pair-005",
+      "pv1-pair-006"
+    ],
+    "pair_001_access": "frozen pilot records only",
+    "validation_pairs_accessed": false,
+    "test_pairs_accessed": false,
+    "texbat_attack_recordings_accessed": []
+  },
+  "source_generation": {
+    "normal_profile": {
+      "path": "configs/experiments/simulation_v4_normal_independent_validation_v1.json",
+      "sha256": "256977cfb14f0828d6cc98af83f459e7dee0407b41cd1188b0c37cb170593a78"
+    },
+    "paired_generation_config": {
+      "path": "configs/experiments/simulation_v4_paired_train_generation_v1.json",
+      "sha256": "b44781e7e0f03c60ca18ecccdd8cbbd7f02a98c8270244658009419ad9772f78"
+    },
+    "paired_generator_sha256": "c15c23f96e5d6137e265ff0048f2cd89a51c9123635ce0f7331c0d4fe07375d0",
+    "pair_root_template": "artifacts/simulation_v4_paired_train_generation_v1/pairs/{pair_id}",
+    "normal_manifest_relative": "rf/normal/manifest.json",
+    "spoof_manifest_relative": "rf/spoof/manifest.json",
+    "component_manifest_relative": "components/manifest.json",
+    "los_log_relative": "components/authentic-gps-sdr-sim.log",
+    "trajectory_policy": "reuse the source paired-component authentic trajectory and verify its recorded CSV and metadata hashes; static pairs remain static"
+  },
+  "multipath": {
+    "seed_by_pair": {
+      "pv1-pair-002": 2026091202,
+      "pv1-pair-003": 2026091203,
+      "pv1-pair-004": 2026091204,
+      "pv1-pair-005": 2026091205,
+      "pv1-pair-006": 2026091206
+    },
+    "prn_policy": "all valid GPS PRNs present in the frozen authentic startup LOS table",
+    "delay_chips_range": [0.12, 0.45],
+    "amplitude_range": [0.20, 0.70],
+    "phase_policy": "SHA-256-derived independent uniform phase in [-180,180) degrees",
+    "simulator_executable": {
+      "path": ".tools/gps-sdr-sim-src/gps-sdr-sim-prn-multipath-v1",
+      "sha256": "012ca5d2eef7bdec91e07732bbd7e1c0dfd817f3263ec0a94aecf1584f0adc46"
+    },
+    "simulator_upstream_commit": "28ca29a6719475195e3aabd5930c4ed02d67190f",
+    "simulator_patch": {
+      "path": "patches/gps-sdr-sim-prn-multipath-v1.patch",
+      "sha256": "7d523547e8c3f43c3631606a0dbbc5417d1173f21d8c031f14a9b6a5f7b9ee79"
+    }
+  },
+  "gnss_sdr": {
+    "executable": {
+      "path": ".tools/gnss-sdr-src/build/src/main/gnss-sdr",
+      "sha256": "fc00d610fdb966358ac85486b616ff2411cb163ca8269dd0b435919c5e197e25"
+    },
+    "upstream_commit": "1ddd4562723040fd66cb334b578a5b69455625f4",
+    "patch": {
+      "path": "patches/gnss-sdr-complex9-tracking-v1.patch",
+      "sha256": "41e48ef6ed7dc63a63b7666f3b2ffc0a3d4e48393c98a42d2d3e4ec1b9a8a2b1"
+    },
+    "channel_count": 11,
+    "timeout_seconds": 1200,
+    "tracking_tap_count": 9,
+    "tracking_tap_spacing_chips": 0.125
+  },
+  "analysis": {
+    "controlled_template_config": {
+      "path": "configs/experiments/correlator_geometry_identifiability_train_v1.json",
+      "sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6"
+    },
+    "bin_seconds": 1.0,
+    "minimum_prns": 8,
+    "comparison_start_policy": "spoof start + max(transition, power ramp) + 1 second",
+    "primary_unit": "pair-level scenario median; one multipath and one spoof value per pair",
+    "bin_level_metrics": "secondary descriptive only; bins are serially dependent"
+  },
+  "evaluation": {
+    "bootstrap_seed": 2026091299,
+    "bootstrap_repetitions": 10000,
+    "support_gates": {
+      "required_pair_count": 5,
+      "positive_clock_centered_separation_pair_count": 5,
+      "minimum_pair_block_auc": 0.80,
+      "minimum_clock_centered_improvement_over_legacy_pair_count": 4,
+      "minimum_comparison_bins_per_scenario_per_pair": 5
+    },
+    "threshold_fitting": false
+  },
+  "output_root": "artifacts/cgc_rf_train_replication_v1",
+  "claim_boundary": "unused-train replication only; no validation, test, TEXBAT, threshold, detector-performance, or WCL generalization claim"
+}
