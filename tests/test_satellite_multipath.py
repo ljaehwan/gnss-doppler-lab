@@ -3,6 +3,7 @@ from types import SimpleNamespace
 
 import pytest
 
+from gnss_doppler_lab.gps_sdr_sim import SimulatorError
 from gnss_doppler_lab.satellite_multipath import (
     PATCH_CONTRACT,
     PrnMultipathGpsSdrSimRunner,
@@ -70,6 +71,25 @@ def test_patched_runner_inserts_multipath_before_output_argument(tmp_path):
     )
     time = SimpleNamespace(simulator_input_calendar="2026/07/11,03:04:23")
     command = runner.build_command(config, tmp_path / "iq.bin", "nav.rnx", time)
-    assert command[-4:] == ["-m", str(spec), "-o", str(tmp_path / "iq.bin")]
+    assert command[-4:] == ["-m", "multipath.csv", "-o", str(tmp_path / "iq.bin")]
     assert command[0] == "/sim"
     assert runner.cli_contract.endswith(PATCH_CONTRACT)
+
+
+def test_patched_runner_rejects_unstaged_multipath_spec(tmp_path):
+    runner = PrnMultipathGpsSdrSimRunner("/sim", [])
+    runner._active_spec_path = tmp_path / "elsewhere" / "multipath.csv"
+    config = SimpleNamespace(
+        scenario=SimpleNamespace(
+            position=SimpleNamespace(
+                latitude_deg=37.5,
+                longitude_deg=127.0,
+                altitude_m=42.0,
+            ),
+            duration_seconds=2,
+        ),
+        output=SimpleNamespace(rf_sample_rate_hz=25_000_000),
+    )
+    time = SimpleNamespace(simulator_input_calendar="2026/07/11,03:04:23")
+    with pytest.raises(SimulatorError, match="must be staged beside"):
+        runner.build_command(config, tmp_path / "iq.bin", "nav.rnx", time)

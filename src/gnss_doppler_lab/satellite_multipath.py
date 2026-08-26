@@ -139,8 +139,14 @@ class PrnMultipathGpsSdrSimRunner(GpsSdrSimRunner):
         command = super().build_command(config, output, nav, time)
         if self._active_spec_path is None:
             raise SimulatorError("multipath spec is not staged")
+        spec_path = self._active_spec_path.resolve()
+        output_parent = Path(output).resolve().parent
+        if spec_path.parent != output_parent:
+            raise SimulatorError(
+                "multipath spec must be staged beside the simulator output"
+            )
         output_index = command.index("-o")
-        command[output_index:output_index] = ["-m", str(self._active_spec_path)]
+        command[output_index:output_index] = ["-m", spec_path.name]
         return command
 
     def run(self, config, output: Path, log: Path) -> dict:
