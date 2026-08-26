@@ -231,6 +231,13 @@ def _ensure_component(
     return iq_path, log_path, manifest
 
 
+def multipath_run_id(pair: dict[str, Any]) -> str:
+    """Return a collision-free receiver run ID while preserving pair-001."""
+    pair_number = str(pair["paired_group_id"]).rsplit("-", 1)[-1]
+    utc = datetime.fromisoformat(str(pair["utc"]).replace("Z", "+00:00"))
+    return f"cgc-rf-mp-p{pair_number}_{utc.strftime('%Y%m%dT%H%M%SZ')}"
+
+
 def _ensure_rf(
     root: Path,
     config: dict[str, Any],
@@ -274,9 +281,9 @@ def _ensure_rf(
     report = composition["scenarios"][scenario.name]
     manifest = {
         "schema_version": 4,
-        "run_id": "cgc-rf-mp-p001_20220101T010000Z",
+        "run_id": multipath_run_id(pair),
         "scenario": {
-            "name": "pv1-pair-001-independent-multipath",
+            "name": f"{pair['paired_group_id']}-independent-multipath",
             "class": "multipath",
             "event": "steady_prn_specific_multipath",
             "is_spoofing": False,
