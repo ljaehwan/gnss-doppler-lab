@@ -1,3 +1,4 @@
+import csv
 import copy
 import importlib.util
 import json
@@ -107,3 +108,16 @@ def test_forbidden_access_and_threshold_drift_are_rejected():
     drifted["threshold_selection"]["persistence_consecutive_bins"] = 3
     with pytest.raises(ValueError, match="threshold-selection"):
         module.validate_config(drifted)
+
+
+def test_csv_writer_preserves_union_of_mixed_row_fields(tmp_path):
+    module = load_module()
+    path = tmp_path / "mixed.csv"
+    module._write_csv(path, [
+        {"pair_id": "p1", "normal_only": 1},
+        {"pair_id": "p2", "replication_only": 2},
+    ])
+
+    with path.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    assert list(rows[0]) == ["pair_id", "normal_only", "replication_only"]

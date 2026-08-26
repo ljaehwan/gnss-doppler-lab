@@ -70,9 +70,14 @@ def _write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         raise ValueError(f"cannot write empty CSV: {path}")
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(path.name + ".tmp")
+    fieldnames = list(dict.fromkeys(
+        field
+        for row in rows
+        for field in row
+    ))
     with temporary.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(
-            handle, fieldnames=list(rows[0]), lineterminator="\n"
+            handle, fieldnames=fieldnames, lineterminator="\n"
         )
         writer.writeheader()
         writer.writerows(rows)
