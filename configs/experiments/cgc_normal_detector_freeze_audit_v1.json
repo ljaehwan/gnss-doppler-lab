@@ -1,0 +1,162 @@
+{
+  "schema": "gnss-doppler-lab.cgc-normal-detector-freeze-audit-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "cgc-normal-detector-freeze-audit-v1",
+    "role": "train-only normal false-alarm, numerical-stability, and threshold-freeze audit",
+    "execution_policy": "one deterministic execution on train pairs 002--006; no score, window, threshold-selection, persistence, or gate changes after normal nine-tap outcome inspection",
+    "candidate_commit": "60280575737ff70618c5619ff7522c516bbdc67a",
+    "runner_path": "scripts/run_cgc_normal_detector_freeze_audit.py"
+  },
+  "frozen_candidate": {
+    "replication_config": {
+      "path": "configs/experiments/cgc_rf_train_replication_v1.json",
+      "sha256": "ee6a5fe713dfeaec05c9ec8688fb68f4443e575768a58af963eeb502a396f596"
+    },
+    "replication_result": {
+      "path": "docs/results/cgc_rf_train_replication_v1_summary.json",
+      "sha256": "5d9e82dcb3576ac1509870648901abc9d16048f163d85da74fc98a0f31b7d3fe"
+    },
+    "replication_artifact_summary": {
+      "path": "artifacts/cgc_rf_train_replication_v1/summary.json",
+      "sha256": "5d9e82dcb3576ac1509870648901abc9d16048f163d85da74fc98a0f31b7d3fe"
+    },
+    "replication_geometry_scores": {
+      "path": "artifacts/cgc_rf_train_replication_v1/analysis/geometry_scores.csv",
+      "sha256": "49e29fcb943f272f1ca7ead9c13a59e8af2e045add8f13aa21bf6eb607af457f"
+    },
+    "replication_runner": {
+      "path": "scripts/run_cgc_rf_train_replication.py",
+      "sha256": "1b97bba63b8c9055d234b72c19c6de5e9171c9cbeb431fb71566efef22e4c029"
+    },
+    "receiver_runner": {
+      "path": "scripts/run_cgc_rf_challenge_pilot.py",
+      "sha256": "a1283cb6d4c78697d72e34e4d9afe9048b9ab2fde0aef521ea19bb3a5b836b18"
+    },
+    "clock_centered_module": {
+      "path": "src/gnss_doppler_lab/clock_centered_geometry.py",
+      "sha256": "b25a00efdb654ceb96540a2597bdc542526a0c6027e393018c739394858a203a"
+    },
+    "controlled_template_config": {
+      "path": "configs/experiments/correlator_geometry_identifiability_train_v1.json",
+      "sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6"
+    },
+    "residual": "SSE_LOS+clock / SSE_clock-only",
+    "detection_score": "negative clock-centered residual",
+    "clock_energy_epsilon": 1e-12,
+    "degenerate_clock_energy_policy": "residual=1 and score=-1; retain as benign-valued finite observation"
+  },
+  "split_config": {
+    "path": "configs/experiments/simulation_v4_paired_split_v1.json",
+    "sha256": "124bb766dcc0c52e248627e20499b55149b5477cabd4c88fa960585368f62b3e"
+  },
+  "data_boundary": {
+    "authorized_partition": "train",
+    "allowed_pair_ids": [
+      "pv1-pair-002",
+      "pv1-pair-003",
+      "pv1-pair-004",
+      "pv1-pair-005",
+      "pv1-pair-006"
+    ],
+    "pair_001_access": "frozen records only",
+    "validation_pairs_accessed": false,
+    "test_pairs_accessed": false,
+    "texbat_attack_recordings_accessed": []
+  },
+  "normal_sources": {
+    "pv1-pair-002": {
+      "manifest_path": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-002/rf/normal/manifest.json",
+      "manifest_sha256": "81d12d16b9bd4815190e0a0888874631d84317e257179791b42b6bc75cceabeb",
+      "iq_sha256": "9e9bc632d53a95b928c5d21199cfd566cb1e9307f9ff14c52fee528da125ae21",
+      "iq_bytes": 1495000000,
+      "los_log_path": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-002/components/authentic-gps-sdr-sim.log",
+      "los_log_sha256": "70e812ace80d5d9c94734bbbe2f041997f6fd8bbaf8faf6a7f227adccf1e14eb"
+    },
+    "pv1-pair-003": {
+      "manifest_path": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-003/rf/normal/manifest.json",
+      "manifest_sha256": "a38fe6e2c865be7fb29f63155461aac31e7a375221c19f801fa09e50894118a5",
+      "iq_sha256": "b3d7bfa11b9dcef6ec035481fa1ff9ce92ca6e68877aef52044b690d03c233f8",
+      "iq_bytes": 1495000000,
+      "los_log_path": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-003/components/authentic-gps-sdr-sim.log",
+      "los_log_sha256": "22153844903ab88a81724c2ca76b39b709bed3a87311fe4b08ca781e13cf8222"
+    },
+    "pv1-pair-004": {
+      "manifest_path": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-004/rf/normal/manifest.json",
+      "manifest_sha256": "4f057ca061b14e3cc43ab945d6217d4e75d3b015eabe0f45a83bcfec0750d035",
+      "iq_sha256": "59edb2135f0210d570450d098dcf5b19da3d70c6e05f7cd4bad7cdb5c44369ba",
+      "iq_bytes": 1495000000,
+      "los_log_path": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-004/components/authentic-gps-sdr-sim.log",
+      "los_log_sha256": "730f6d39c78bf4f6f085784af9f9c2da7333bd6ddc8c8ca3b9edb694758d9268"
+    },
+    "pv1-pair-005": {
+      "manifest_path": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-005/rf/normal/manifest.json",
+      "manifest_sha256": "79eea0263e6a9f9c8141bb345b3aba1cf04ec9511d0ad05cf27632165b239a6f",
+      "iq_sha256": "b96e8c89a45af9353420ffc5285ef77da1d5399b2b7d3da9108823c6af902c23",
+      "iq_bytes": 1495000000,
+      "los_log_path": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-005/components/authentic-gps-sdr-sim.log",
+      "los_log_sha256": "dc008b6e173068ac03424cf60506fb1459d9f5afcd0d2a94a7dfddd42ece631c"
+    },
+    "pv1-pair-006": {
+      "manifest_path": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-006/rf/normal/manifest.json",
+      "manifest_sha256": "64c03654752adfd1b1f7cd734095548b04ce1df20321dc3b63d7c77556dc01e7",
+      "iq_sha256": "f3a883a9e7c8298ae829f2c8b34fcd153dc3c1a3c706259e4ca3864e8bffb1cd",
+      "iq_bytes": 1495000000,
+      "los_log_path": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-006/components/authentic-gps-sdr-sim.log",
+      "los_log_sha256": "984a52b0d47211d899b0a983c27a90c92eda24b3af397a4599e46e482fec9529"
+    }
+  },
+  "gnss_sdr": {
+    "executable": {
+      "path": ".tools/gnss-sdr-src/build/src/main/gnss-sdr",
+      "sha256": "fc00d610fdb966358ac85486b616ff2411cb163ca8269dd0b435919c5e197e25"
+    },
+    "patch": {
+      "path": "patches/gnss-sdr-complex9-tracking-v1.patch",
+      "sha256": "41e48ef6ed7dc63a63b7666f3b2ffc0a3d4e48393c98a42d2d3e4ec1b9a8a2b1"
+    },
+    "channel_count": 11,
+    "timeout_seconds": 1200,
+    "tracking_tap_count": 9,
+    "tracking_tap_spacing_chips": 0.125
+  },
+  "analysis": {
+    "bin_seconds": 1.0,
+    "minimum_prns": 8,
+    "normal_warmup_seconds": 1.0,
+    "normal_window": "all complete one-second bins at or after 1 second",
+    "multipath_and_spoof_window": "reuse each pair's preregistered post-transition comparison boundary",
+    "minimum_normal_bins_per_pair": 20,
+    "minimum_multipath_and_spoof_bins_per_pair": 5,
+    "required_fit_rank": 4
+  },
+  "threshold_selection": {
+    "method": "leave-one-pair-out on train pairs; fit on four pairs and evaluate the fifth",
+    "score": "negative clock-centered residual; alarm when score > threshold",
+    "candidate_rule": "midpoints of adjacent unique training scores plus finite no-alarm and all-alarm boundary candidates",
+    "objective": "maximize macro balanced accuracy across pair-scenario streams",
+    "tie_breaks": [
+      "minimum macro benign false-positive rate",
+      "highest threshold"
+    ],
+    "benign_scenarios": [
+      "normal",
+      "independent_multipath"
+    ],
+    "positive_scenario": "carryoff_spoof",
+    "persistence_consecutive_bins": 2,
+    "final_threshold_rule": "median of the five leave-one-pair-out training thresholds",
+    "refitting_after_audit": false
+  },
+  "support_gates": {
+    "required_pair_count": 5,
+    "minimum_finite_score_fraction": 1.0,
+    "minimum_full_rank_fraction": 1.0,
+    "maximum_lopo_normal_persistent_alarm_pair_count": 0,
+    "maximum_lopo_multipath_persistent_alarm_pair_count": 1,
+    "minimum_lopo_spoof_persistent_detection_pair_count": 4,
+    "minimum_lopo_macro_balanced_accuracy": 0.80
+  },
+  "output_root": "artifacts/cgc_normal_detector_freeze_audit_v1",
+  "claim_boundary": "train-only internal detector-freeze audit; no validation, test, TEXBAT, field false-alarm, operational, or WCL generalization claim"
+}
