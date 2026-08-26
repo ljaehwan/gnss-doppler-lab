@@ -1,0 +1,485 @@
+{
+  "artifacts": {
+    "lopo_scored_rows": {
+      "bytes": 69923,
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_normal_detector_freeze_audit_v1/analysis/lopo_scored_rows.csv",
+      "row_count": 226,
+      "sha256": "ca3bb1b7f7c21f8f120208a08f3a9fd5e103e8fcdd0de1d41d6ce723d2caabca"
+    },
+    "normal_delay_estimates": {
+      "bytes": 131366,
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_normal_detector_freeze_audit_v1/analysis/normal_delay_estimates.csv",
+      "row_count": 1602,
+      "sha256": "a1ff32c1b22d4974c70af7c9820a9d5ca058cc92af9dbfed8d18368a60da58e4"
+    },
+    "normal_geometry_scores": {
+      "bytes": 43371,
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_normal_detector_freeze_audit_v1/analysis/normal_geometry_scores.csv",
+      "row_count": 150,
+      "sha256": "32450ade0e936fce20917899d64bb7f1ab6a95c8443c6450f2f783d07be69220"
+    },
+    "normal_pair_summary": {
+      "bytes": 1123,
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_normal_detector_freeze_audit_v1/analysis/normal_pair_summary.csv",
+      "row_count": 5,
+      "sha256": "6d4309bca955f0f2ef5d145d4614b74ef4ff3f2fd32594b135694be7b3451939"
+    },
+    "threshold_input_rows": {
+      "bytes": 64975,
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_normal_detector_freeze_audit_v1/analysis/threshold_input_rows.csv",
+      "row_count": 226,
+      "sha256": "c3a830dd917a5588a9aa1d216528904f056abb9152a1dc607031a55887aab155"
+    }
+  },
+  "claim_boundary": "train-only internal detector-freeze audit; no validation, test, TEXBAT, field false-alarm, operational, or WCL generalization claim",
+  "config": "/home/ubuntu/projects/gnss-doppler-lab/configs/experiments/cgc_normal_detector_freeze_audit_v1.json",
+  "config_sha256": "4fe2a1a97ceaa4ce7bebd679396e8ef1d3ed0fbf5fb6395a3334b6ce9b9771bf",
+  "data_boundary": {
+    "allowed_pair_ids": [
+      "pv1-pair-002",
+      "pv1-pair-003",
+      "pv1-pair-004",
+      "pv1-pair-005",
+      "pv1-pair-006"
+    ],
+    "authorized_partition": "train",
+    "pair_001_access": "frozen records only",
+    "test_pairs_accessed": false,
+    "texbat_attack_recordings_accessed": [],
+    "validation_pairs_accessed": false
+  },
+  "detector_freeze_supported": false,
+  "frozen_candidate": {
+    "clock_centered_module": {
+      "path": "src/gnss_doppler_lab/clock_centered_geometry.py",
+      "sha256": "b25a00efdb654ceb96540a2597bdc542526a0c6027e393018c739394858a203a"
+    },
+    "clock_energy_epsilon": 1e-12,
+    "controlled_template_config": {
+      "path": "configs/experiments/correlator_geometry_identifiability_train_v1.json",
+      "sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6"
+    },
+    "degenerate_clock_energy_policy": "residual=1 and score=-1; retain as benign-valued finite observation",
+    "detection_score": "negative clock-centered residual",
+    "receiver_runner": {
+      "path": "scripts/run_cgc_rf_challenge_pilot.py",
+      "sha256": "a1283cb6d4c78697d72e34e4d9afe9048b9ab2fde0aef521ea19bb3a5b836b18"
+    },
+    "replication_artifact_summary": {
+      "path": "artifacts/cgc_rf_train_replication_v1/summary.json",
+      "sha256": "5d9e82dcb3576ac1509870648901abc9d16048f163d85da74fc98a0f31b7d3fe"
+    },
+    "replication_config": {
+      "path": "configs/experiments/cgc_rf_train_replication_v1.json",
+      "sha256": "ee6a5fe713dfeaec05c9ec8688fb68f4443e575768a58af963eeb502a396f596"
+    },
+    "replication_geometry_scores": {
+      "path": "artifacts/cgc_rf_train_replication_v1/analysis/geometry_scores.csv",
+      "sha256": "49e29fcb943f272f1ca7ead9c13a59e8af2e045add8f13aa21bf6eb607af457f"
+    },
+    "replication_result": {
+      "path": "docs/results/cgc_rf_train_replication_v1_summary.json",
+      "sha256": "5d9e82dcb3576ac1509870648901abc9d16048f163d85da74fc98a0f31b7d3fe"
+    },
+    "replication_runner": {
+      "path": "scripts/run_cgc_rf_train_replication.py",
+      "sha256": "1b97bba63b8c9055d234b72c19c6de5e9171c9cbeb431fb71566efef22e4c029"
+    },
+    "residual": "SSE_LOS+clock / SSE_clock-only"
+  },
+  "next_gate": "if supported, preregister test pairs 010--012 with this exact threshold and persistence before any test signal access",
+  "normal_clock_energy": {
+    "degenerate_bin_count": 0,
+    "finite_score_fraction": 1.0,
+    "total_eligible_bin_count": 140
+  },
+  "normal_pairs": [
+    {
+      "degenerate_clock_energy_bin_count": 0,
+      "domain": "static",
+      "eligible_bin_count": 28,
+      "full_rank_bin_count": 28,
+      "median_clock_centered_energy_chips2": 0.16410511363636365,
+      "median_clock_centered_residual": 0.7321486563185978,
+      "median_score": -0.7321486563185978,
+      "minimum_clock_centered_energy_chips2": 0.049204545454545466,
+      "minimum_prn_count": 11,
+      "pair_id": "pv1-pair-002",
+      "runtime_manifest_sha256": "7ee7e06aad4699313d7314ab0bf3a9c83c3ebf862039b43d322e27ebc95dd5ca"
+    },
+    {
+      "degenerate_clock_energy_bin_count": 0,
+      "domain": "dynamic",
+      "eligible_bin_count": 28,
+      "full_rank_bin_count": 28,
+      "median_clock_centered_energy_chips2": 0.14991477272727277,
+      "median_clock_centered_residual": 0.8035462690059061,
+      "median_score": -0.8035462690059061,
+      "minimum_clock_centered_energy_chips2": 0.03295454545454547,
+      "minimum_prn_count": 10,
+      "pair_id": "pv1-pair-003",
+      "runtime_manifest_sha256": "15b0cf867a51554ae3a8da26b9735470e60b77d3cc593c38c651bd43854c0635"
+    },
+    {
+      "degenerate_clock_energy_bin_count": 0,
+      "domain": "dynamic",
+      "eligible_bin_count": 28,
+      "full_rank_bin_count": 28,
+      "median_clock_centered_energy_chips2": 0.1372443181818182,
+      "median_clock_centered_residual": 0.7470983274090668,
+      "median_score": -0.7470983274090668,
+      "minimum_clock_centered_energy_chips2": 0.0413352272727273,
+      "minimum_prn_count": 11,
+      "pair_id": "pv1-pair-004",
+      "runtime_manifest_sha256": "49af7d94a61ffc5c51fc4fdb1d1946b577e64c27fc0336d55c33fad7eddc68ca"
+    },
+    {
+      "degenerate_clock_energy_bin_count": 0,
+      "domain": "dynamic",
+      "eligible_bin_count": 28,
+      "full_rank_bin_count": 28,
+      "median_clock_centered_energy_chips2": 0.14556818181818187,
+      "median_clock_centered_residual": 0.6889239741972507,
+      "median_score": -0.6889239741972507,
+      "minimum_clock_centered_energy_chips2": 0.03556818181818183,
+      "minimum_prn_count": 10,
+      "pair_id": "pv1-pair-005",
+      "runtime_manifest_sha256": "0f33ed38d036fa421e79a2e1ca4a055001d54351412b3594b76fcc249a95fc9c"
+    },
+    {
+      "degenerate_clock_energy_bin_count": 0,
+      "domain": "dynamic",
+      "eligible_bin_count": 28,
+      "full_rank_bin_count": 28,
+      "median_clock_centered_energy_chips2": 0.12091406250000002,
+      "median_clock_centered_residual": 0.6278049390916196,
+      "median_score": -0.6278049390916196,
+      "minimum_clock_centered_energy_chips2": 0.0188888888888889,
+      "minimum_prn_count": 9,
+      "pair_id": "pv1-pair-006",
+      "runtime_manifest_sha256": "a250983d1399cbb692948c55d8847ebd819bb80fc8228b3b6fc0e0f44ad85587"
+    }
+  ],
+  "role": "train-only normal false-alarm, numerical-stability, and threshold-freeze audit",
+  "runner": {
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/scripts/run_cgc_normal_detector_freeze_audit.py",
+    "sha256": "63342f4cc7c8266ce2a86d643d8f9bd23d6af86667196963b0548738b2b2fd69"
+  },
+  "schema": "gnss-doppler-lab.cgc-normal-detector-freeze-audit-result",
+  "schema_version": 1,
+  "threshold_cross_validation": {
+    "all_support_gates_passed": false,
+    "cross_validated_macro_balanced_accuracy": 0.8543650793650794,
+    "cross_validated_macro_benign_false_positive_rate": 0.13571428571428573,
+    "cross_validated_macro_multipath_false_positive_rate": 0.17142857142857143,
+    "cross_validated_macro_normal_false_positive_rate": 0.1,
+    "cross_validated_macro_spoof_true_positive_rate": 0.8444444444444444,
+    "final_threshold": -0.327800133845091,
+    "final_train_descriptive_metrics": {
+      "macro_balanced_accuracy": 0.9123015873015874,
+      "macro_benign_false_positive_rate": 0.06428571428571428,
+      "macro_spoof_true_positive_rate": 0.888888888888889,
+      "stream_alarm_rates": {
+        "pv1-pair-002:carryoff_spoof": 0.7777777777777778,
+        "pv1-pair-002:independent_multipath": 0.0,
+        "pv1-pair-002:normal": 0.03571428571428571,
+        "pv1-pair-003:carryoff_spoof": 1.0,
+        "pv1-pair-003:independent_multipath": 0.0,
+        "pv1-pair-003:normal": 0.03571428571428571,
+        "pv1-pair-004:carryoff_spoof": 0.6666666666666666,
+        "pv1-pair-004:independent_multipath": 0.0,
+        "pv1-pair-004:normal": 0.03571428571428571,
+        "pv1-pair-005:carryoff_spoof": 1.0,
+        "pv1-pair-005:independent_multipath": 0.2857142857142857,
+        "pv1-pair-005:normal": 0.17857142857142858,
+        "pv1-pair-006:carryoff_spoof": 1.0,
+        "pv1-pair-006:independent_multipath": 0.0,
+        "pv1-pair-006:normal": 0.07142857142857142
+      },
+      "threshold": -0.327800133845091
+    },
+    "folds": [
+      {
+        "heldout_metrics": {
+          "macro_balanced_accuracy": 0.8799603174603174,
+          "macro_benign_false_positive_rate": 0.017857142857142856,
+          "macro_spoof_true_positive_rate": 0.7777777777777778,
+          "stream_alarm_rates": {
+            "pv1-pair-002:carryoff_spoof": 0.7777777777777778,
+            "pv1-pair-002:independent_multipath": 0.0,
+            "pv1-pair-002:normal": 0.03571428571428571
+          },
+          "threshold": -0.327800133845091
+        },
+        "heldout_pair_id": "pv1-pair-002",
+        "heldout_persistent_alarm": {
+          "carryoff_spoof": true,
+          "independent_multipath": false,
+          "normal": false
+        },
+        "training_fit": {
+          "candidate_count": 181,
+          "macro_balanced_accuracy": 0.9203869047619048,
+          "macro_benign_false_positive_rate": 0.07589285714285714,
+          "macro_spoof_true_positive_rate": 0.9166666666666666,
+          "selection_objective": "max macro balanced accuracy; min benign FPR; max threshold",
+          "stream_alarm_rates": {
+            "pv1-pair-003:carryoff_spoof": 1.0,
+            "pv1-pair-003:independent_multipath": 0.0,
+            "pv1-pair-003:normal": 0.03571428571428571,
+            "pv1-pair-004:carryoff_spoof": 0.6666666666666666,
+            "pv1-pair-004:independent_multipath": 0.0,
+            "pv1-pair-004:normal": 0.03571428571428571,
+            "pv1-pair-005:carryoff_spoof": 1.0,
+            "pv1-pair-005:independent_multipath": 0.2857142857142857,
+            "pv1-pair-005:normal": 0.17857142857142858,
+            "pv1-pair-006:carryoff_spoof": 1.0,
+            "pv1-pair-006:independent_multipath": 0.0,
+            "pv1-pair-006:normal": 0.07142857142857142
+          },
+          "threshold": -0.327800133845091
+        },
+        "training_pair_ids": [
+          "pv1-pair-003",
+          "pv1-pair-004",
+          "pv1-pair-005",
+          "pv1-pair-006"
+        ]
+      },
+      {
+        "heldout_metrics": {
+          "macro_balanced_accuracy": 0.9910714285714286,
+          "macro_benign_false_positive_rate": 0.017857142857142856,
+          "macro_spoof_true_positive_rate": 1.0,
+          "stream_alarm_rates": {
+            "pv1-pair-003:carryoff_spoof": 1.0,
+            "pv1-pair-003:independent_multipath": 0.0,
+            "pv1-pair-003:normal": 0.03571428571428571
+          },
+          "threshold": -0.327800133845091
+        },
+        "heldout_pair_id": "pv1-pair-003",
+        "heldout_persistent_alarm": {
+          "carryoff_spoof": true,
+          "independent_multipath": false,
+          "normal": false
+        },
+        "training_fit": {
+          "candidate_count": 181,
+          "macro_balanced_accuracy": 0.892609126984127,
+          "macro_benign_false_positive_rate": 0.07589285714285714,
+          "macro_spoof_true_positive_rate": 0.8611111111111112,
+          "selection_objective": "max macro balanced accuracy; min benign FPR; max threshold",
+          "stream_alarm_rates": {
+            "pv1-pair-002:carryoff_spoof": 0.7777777777777778,
+            "pv1-pair-002:independent_multipath": 0.0,
+            "pv1-pair-002:normal": 0.03571428571428571,
+            "pv1-pair-004:carryoff_spoof": 0.6666666666666666,
+            "pv1-pair-004:independent_multipath": 0.0,
+            "pv1-pair-004:normal": 0.03571428571428571,
+            "pv1-pair-005:carryoff_spoof": 1.0,
+            "pv1-pair-005:independent_multipath": 0.2857142857142857,
+            "pv1-pair-005:normal": 0.17857142857142858,
+            "pv1-pair-006:carryoff_spoof": 1.0,
+            "pv1-pair-006:independent_multipath": 0.0,
+            "pv1-pair-006:normal": 0.07142857142857142
+          },
+          "threshold": -0.327800133845091
+        },
+        "training_pair_ids": [
+          "pv1-pair-002",
+          "pv1-pair-004",
+          "pv1-pair-005",
+          "pv1-pair-006"
+        ]
+      },
+      {
+        "heldout_metrics": {
+          "macro_balanced_accuracy": 0.7132936507936507,
+          "macro_benign_false_positive_rate": 0.017857142857142856,
+          "macro_spoof_true_positive_rate": 0.4444444444444444,
+          "stream_alarm_rates": {
+            "pv1-pair-004:carryoff_spoof": 0.4444444444444444,
+            "pv1-pair-004:independent_multipath": 0.0,
+            "pv1-pair-004:normal": 0.03571428571428571
+          },
+          "threshold": -0.24518644569682255
+        },
+        "heldout_pair_id": "pv1-pair-004",
+        "heldout_persistent_alarm": {
+          "carryoff_spoof": true,
+          "independent_multipath": false,
+          "normal": false
+        },
+        "training_fit": {
+          "candidate_count": 181,
+          "macro_balanced_accuracy": 0.9521329365079365,
+          "macro_benign_false_positive_rate": 0.040178571428571425,
+          "macro_spoof_true_positive_rate": 0.9444444444444444,
+          "selection_objective": "max macro balanced accuracy; min benign FPR; max threshold",
+          "stream_alarm_rates": {
+            "pv1-pair-002:carryoff_spoof": 0.7777777777777778,
+            "pv1-pair-002:independent_multipath": 0.0,
+            "pv1-pair-002:normal": 0.0,
+            "pv1-pair-003:carryoff_spoof": 1.0,
+            "pv1-pair-003:independent_multipath": 0.0,
+            "pv1-pair-003:normal": 0.0,
+            "pv1-pair-005:carryoff_spoof": 1.0,
+            "pv1-pair-005:independent_multipath": 0.14285714285714285,
+            "pv1-pair-005:normal": 0.14285714285714285,
+            "pv1-pair-006:carryoff_spoof": 1.0,
+            "pv1-pair-006:independent_multipath": 0.0,
+            "pv1-pair-006:normal": 0.03571428571428571
+          },
+          "threshold": -0.24518644569682255
+        },
+        "training_pair_ids": [
+          "pv1-pair-002",
+          "pv1-pair-003",
+          "pv1-pair-005",
+          "pv1-pair-006"
+        ]
+      },
+      {
+        "heldout_metrics": {
+          "macro_balanced_accuracy": 0.7053571428571428,
+          "macro_benign_false_positive_rate": 0.5892857142857143,
+          "macro_spoof_true_positive_rate": 1.0,
+          "stream_alarm_rates": {
+            "pv1-pair-005:carryoff_spoof": 1.0,
+            "pv1-pair-005:independent_multipath": 0.8571428571428571,
+            "pv1-pair-005:normal": 0.32142857142857145
+          },
+          "threshold": -0.47869629545307135
+        },
+        "heldout_pair_id": "pv1-pair-005",
+        "heldout_persistent_alarm": {
+          "carryoff_spoof": true,
+          "independent_multipath": true,
+          "normal": true
+        },
+        "training_fit": {
+          "candidate_count": 185,
+          "macro_balanced_accuracy": 0.9526289682539683,
+          "macro_benign_false_positive_rate": 0.06696428571428571,
+          "macro_spoof_true_positive_rate": 0.9722222222222222,
+          "selection_objective": "max macro balanced accuracy; min benign FPR; max threshold",
+          "stream_alarm_rates": {
+            "pv1-pair-002:carryoff_spoof": 1.0,
+            "pv1-pair-002:independent_multipath": 0.0,
+            "pv1-pair-002:normal": 0.07142857142857142,
+            "pv1-pair-003:carryoff_spoof": 1.0,
+            "pv1-pair-003:independent_multipath": 0.0,
+            "pv1-pair-003:normal": 0.17857142857142858,
+            "pv1-pair-004:carryoff_spoof": 0.8888888888888888,
+            "pv1-pair-004:independent_multipath": 0.0,
+            "pv1-pair-004:normal": 0.10714285714285714,
+            "pv1-pair-006:carryoff_spoof": 1.0,
+            "pv1-pair-006:independent_multipath": 0.0,
+            "pv1-pair-006:normal": 0.17857142857142858
+          },
+          "threshold": -0.47869629545307135
+        },
+        "training_pair_ids": [
+          "pv1-pair-002",
+          "pv1-pair-003",
+          "pv1-pair-004",
+          "pv1-pair-006"
+        ]
+      },
+      {
+        "heldout_metrics": {
+          "macro_balanced_accuracy": 0.9821428571428572,
+          "macro_benign_false_positive_rate": 0.03571428571428571,
+          "macro_spoof_true_positive_rate": 1.0,
+          "stream_alarm_rates": {
+            "pv1-pair-006:carryoff_spoof": 1.0,
+            "pv1-pair-006:independent_multipath": 0.0,
+            "pv1-pair-006:normal": 0.07142857142857142
+          },
+          "threshold": -0.327800133845091
+        },
+        "heldout_pair_id": "pv1-pair-006",
+        "heldout_persistent_alarm": {
+          "carryoff_spoof": true,
+          "independent_multipath": false,
+          "normal": false
+        },
+        "training_fit": {
+          "candidate_count": 181,
+          "macro_balanced_accuracy": 0.8948412698412698,
+          "macro_benign_false_positive_rate": 0.07142857142857142,
+          "macro_spoof_true_positive_rate": 0.861111111111111,
+          "selection_objective": "max macro balanced accuracy; min benign FPR; max threshold",
+          "stream_alarm_rates": {
+            "pv1-pair-002:carryoff_spoof": 0.7777777777777778,
+            "pv1-pair-002:independent_multipath": 0.0,
+            "pv1-pair-002:normal": 0.03571428571428571,
+            "pv1-pair-003:carryoff_spoof": 1.0,
+            "pv1-pair-003:independent_multipath": 0.0,
+            "pv1-pair-003:normal": 0.03571428571428571,
+            "pv1-pair-004:carryoff_spoof": 0.6666666666666666,
+            "pv1-pair-004:independent_multipath": 0.0,
+            "pv1-pair-004:normal": 0.03571428571428571,
+            "pv1-pair-005:carryoff_spoof": 1.0,
+            "pv1-pair-005:independent_multipath": 0.2857142857142857,
+            "pv1-pair-005:normal": 0.17857142857142858
+          },
+          "threshold": -0.327800133845091
+        },
+        "training_pair_ids": [
+          "pv1-pair-002",
+          "pv1-pair-003",
+          "pv1-pair-004",
+          "pv1-pair-005"
+        ]
+      }
+    ],
+    "gates": {
+      "maximum_lopo_multipath_persistent_alarm_pair_count": {
+        "observed": 1,
+        "passed": true,
+        "required": 1
+      },
+      "maximum_lopo_normal_persistent_alarm_pair_count": {
+        "observed": 1,
+        "passed": false,
+        "required": 0
+      },
+      "minimum_finite_score_fraction": {
+        "observed": 1.0,
+        "passed": true,
+        "required": 1.0
+      },
+      "minimum_full_rank_fraction": {
+        "observed": 1.0,
+        "passed": true,
+        "required": 1.0
+      },
+      "minimum_lopo_macro_balanced_accuracy": {
+        "observed": 0.8543650793650794,
+        "passed": true,
+        "required": 0.8
+      },
+      "minimum_lopo_spoof_persistent_detection_pair_count": {
+        "observed": 5,
+        "passed": true,
+        "required": 4
+      },
+      "required_pair_count": {
+        "observed": 5,
+        "passed": true,
+        "required": 5
+      }
+    },
+    "multipath_persistent_alarm_pair_count": 1,
+    "normal_persistent_alarm_pair_count": 1,
+    "spoof_persistent_detection_pair_count": 5,
+    "status": "train_detector_freeze_not_supported"
+  },
+  "threshold_freeze": {
+    "bytes": 1656,
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_normal_detector_freeze_audit_v1/threshold_freeze.json",
+    "sha256": "fcc425fff1097ec77679c79e417041ced20ed44af7b2ddaba81025423199a651"
+  }
+}
