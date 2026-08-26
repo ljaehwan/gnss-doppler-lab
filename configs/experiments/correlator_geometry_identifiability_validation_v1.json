@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "experiment": {
+    "name": "correlator-geometry-identifiability-validation-v1",
+    "role": "locked held-out geometry validation of the train-generated CGC candidate",
+    "primary_question": "Does the frozen complex-nine-tap CGC mechanism retain its train support on three unseen satellite geometries?",
+    "execution_policy": "one deterministic validation execution; no tuning or rerun based on outcome"
+  },
+  "frozen_candidate": {
+    "git_commit": "15f59ab70de6269845fd88b8188106cb97cdd736",
+    "train_config": {
+      "path": "configs/experiments/correlator_geometry_identifiability_train_v1.json",
+      "sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6"
+    },
+    "train_result_record": {
+      "path": "docs/results/correlator_geometry_identifiability_train_v1_summary.json",
+      "sha256": "b21e9975f66ad26ba6dd3d49d9036be42f0e961ce7a068ca7cebe82b28753f40"
+    },
+    "train_artifact_summary": {
+      "path": "artifacts/correlator_geometry_identifiability_train_v1/summary.json",
+      "sha256": "ae29fb8d5a52675bbbb3fcf2afde6f32f1ac17b2aced9ab99de03ec8ea3acbc9"
+    },
+    "train_runner_sha256": "0d566bdb05ce0ea019219a06e2bd89258e1fd7b39483ec07bb370ad1942a5590",
+    "physics_module_sha256": "74732c182e799c2e82b4719d6572ebbd3dc4f6e16eada5bfe0f8a3d8c236b2b2"
+  },
+  "split_config": {
+    "path": "configs/experiments/simulation_v4_paired_split_v1.json",
+    "sha256": "124bb766dcc0c52e248627e20499b55149b5477cabd4c88fa960585368f62b3e"
+  },
+  "output_root": "artifacts/correlator_geometry_identifiability_validation_v1",
+  "los_generation": {
+    "rinex_nav": {
+      "path": ".tools/gps-sdr-sim-src/brdc0010.22n",
+      "sha256": "7db04513dd2d0e13c0ee20cb4eaa8f71e5a28ab58b65c9b5b789f86eeab436cd"
+    },
+    "simulator": {
+      "path": ".tools/gps-sdr-sim-src/gps-sdr-sim",
+      "sha256": "27cd471d2023b8a26262584b14f71ebed602159da47b54172b22da9299011e28"
+    },
+    "duration_seconds": 1,
+    "rf_sample_rate_hz": 1000000,
+    "sample_format": "s8_iq",
+    "position_policy": "frozen pair start LLH; only the simulator startup LOS table is used",
+    "train_equivalence_evidence": {
+      "dynamic_pair_ids": [
+        "pv1-pair-003",
+        "pv1-pair-004",
+        "pv1-pair-005",
+        "pv1-pair-006"
+      ],
+      "original_duration_seconds": 30,
+      "original_rf_sample_rate_hz": 25000000,
+      "prn_roster_exact_match": true,
+      "maximum_los_component_absolute_difference": 0.0
+    }
+  },
+  "validation_randomness": {
+    "generator_seed": 2026082701,
+    "bootstrap_seed": 2026082702,
+    "event_count_per_geometry": 300,
+    "bootstrap_repetitions": 1000
+  },
+  "frozen_support_rule": {
+    "single_prn_profile_multiset_exact_match": true,
+    "single_prn_width_auc_absolute_distance_from_half_max": 1e-12,
+    "oracle_geometry_auc_min": 0.95,
+    "complex_geometry_auc_min": 0.8,
+    "each_geometry_complex_auc_min": 0.75,
+    "complex_delay_mae_max_chips": 0.1,
+    "complex_delay_sign_accuracy_min": 0.8,
+    "magnitude_only_is_reported_ablation_without_support_gate": true,
+    "requires_validation_confirmation": true
+  },
+  "data_boundary": {
+    "authorized_partition": "validation",
+    "allowed_pair_ids": [
+      "pv1-pair-007",
+      "pv1-pair-008",
+      "pv1-pair-009"
+    ],
+    "train_access": "frozen candidate records only",
+    "test_pairs_accessed": false,
+    "texbat_recordings_accessed": []
+  },
+  "claim_boundary": {
+    "held_out_satellite_geometry_validation": true,
+    "actual_multipath_rf_generated": false,
+    "actual_receiver_tracking_evaluated": false,
+    "actual_receiver_complex_taps_evaluated": false,
+    "result_role": "confirmation of controlled identifiability across unseen constellations only"
+  }
+}
