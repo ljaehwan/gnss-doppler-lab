@@ -1,0 +1,83 @@
+{
+  "schema": "gnss-doppler-lab.correlator-geometry-identifiability-validation-record",
+  "schema_version": 1,
+  "created_at_utc": "2026-08-26T09:34:55.440409+00:00",
+  "experiment": "correlator-geometry-identifiability-validation-v1",
+  "candidate_name": "Correlator Geometry Consistency (CGC)",
+  "preregistration_commit": "756e248482e1121995b42bf9993e5f44d463846c",
+  "validation_status": "confirmed_on_heldout_geometry",
+  "data_boundary": {
+    "partition": "validation",
+    "pair_ids": [
+      "pv1-pair-007",
+      "pv1-pair-008",
+      "pv1-pair-009"
+    ],
+    "single_execution": true,
+    "test_accessed": false,
+    "texbat_accessed": []
+  },
+  "sample_counts": {
+    "matched_event_pairs": 900,
+    "classified_events": 1800,
+    "signed_delay_rows": 11700
+  },
+  "metrics": {
+    "single_prn_width_auc": 0.49999999999999994,
+    "oracle_geometry_auc": {
+      "estimate": 1.0,
+      "ci95": [
+        0.9999999999999999,
+        1.0
+      ]
+    },
+    "magnitude_geometry_auc": {
+      "estimate": 0.6715086419753087,
+      "ci95": [
+        0.6496142283950617,
+        0.6933138271604938
+      ]
+    },
+    "complex_geometry_auc": {
+      "estimate": 0.8594938271604938,
+      "ci95": [
+        0.8429336728395062,
+        0.8759962962962962
+      ]
+    },
+    "complex_minus_magnitude_auc": {
+      "estimate": 0.18798518518518514,
+      "paired_ci95": [
+        0.16522163580246907,
+        0.20935234567901237
+      ]
+    },
+    "validation_minus_train_complex_auc": -0.004843827160493808,
+    "per_geometry_complex_auc": {
+      "pv1-pair-007": 0.8256888888888889,
+      "pv1-pair-008": 0.8880888888888889,
+      "pv1-pair-009": 0.8747111111111111
+    },
+    "complex_delay_mae_chips": 0.08774048888775567,
+    "complex_delay_sign_accuracy": 0.8454762940408873
+  },
+  "decision": {
+    "all_frozen_support_gates_passed": true,
+    "test_remains_locked": true
+  },
+  "provenance": {
+    "validation_config_sha256": "8edcf6b51fb8494f58e92f9e5058beb6f4c4820d9a07b15f5e32681bd051d4d6",
+    "validation_runner_sha256": "a3ce1c4625e22efa430f03abdadbf7539f6eeb25496e934d455907d7e6d1f73d",
+    "artifact_summary_sha256": "add092c0d42e7e8cc703fa8c3543f9dec3f69331159a77e451b06b45d5f0eb2f",
+    "split_config_sha256": "124bb766dcc0c52e248627e20499b55149b5477cabd4c88fa960585368f62b3e"
+  },
+  "ssd_bundle": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/correlator-geometry-identifiability-validation-v1",
+  "ssd_recursive_byte_match": true,
+  "claim_boundary": [
+    "held-out geometry only",
+    "matched correlator-domain control is not RF multipath",
+    "complex nine-tap receiver output not evaluated",
+    "no test or TEXBAT access"
+  ],
+  "next_gate": "complex nine-tap GNSS-SDR export and satellite-specific RF multipath challenge before test unlock"
+}
