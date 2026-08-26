@@ -1,0 +1,27 @@
+{
+  "schema": "gnss-doppler-lab.cgc-geometry-archive-record",
+  "schema_version": 1,
+  "archive_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cgc-geometry-fresh-v2-and-texbat-v1",
+  "file_count": 182,
+  "total_bytes": 323935846,
+  "checksum_rsync_dry_run_difference_count": 0,
+  "included": [
+    "fresh candidate preflight logs and summary",
+    "fresh simulation source manifests, trajectories, and simulator logs",
+    "fresh receiver complex-nine-tap MAT files and manifests",
+    "fresh and TEXBAT release states, analysis CSVs, and raw summaries",
+    "frozen configs, protocols, runners, and concise result records"
+  ],
+  "excluded_as_deterministically_regenerable_large_intermediates": [
+    "*.bin",
+    "*.dat",
+    "*.tmp"
+  ],
+  "key_hashes": {
+    "fresh_test_summary_sha256": "9896826d939f383c2df1252e9e988731f84bb8c413450bf56fcaee4cd827662a",
+    "texbat_external_summary_sha256": "22c4f3c06b953b43fb1a34dee9692d0e322243b2d8e760ec7e7c4c38ae6bed2b",
+    "fresh_test_release_state_sha256": "5f8e5b92d75d505dc1019f05a4ff24d709748315da4d0e1cdef8f50e667953ab",
+    "texbat_external_release_state_sha256": "6215e78eaa0d98f693371eca5683532b822e119648e53e839d022825b218ec0e"
+  },
+  "recovery_note": "The archive preserves the receiver correlator data required to audit or reanalyze the frozen CGC endpoints. Excluded IQ and GNSS-SDR DAT intermediates can be regenerated from the pinned configs, seeds, executables, manifests, and source provenance."
+}
