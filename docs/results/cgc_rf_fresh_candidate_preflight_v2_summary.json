@@ -1,0 +1,39 @@
+{
+  "schema": "gnss-doppler-lab.cgc-rf-fresh-candidate-preflight-record",
+  "schema_version": 1,
+  "decision": "SUPPORT_ELIGIBLE",
+  "interpretation": "startup LOS support only; no CGC score or performance metric was computed",
+  "candidate_commit": "60280575737ff70618c5619ff7522c516bbdc67a",
+  "preflight_release_commit": "b4756c4a4ceec8057a2d1bbf10137c4ea63517c6",
+  "candidate_pool": {
+    "path": "configs/experiments/cgc_rf_fresh_candidate_pool_v2.json",
+    "sha256": "211c89afef6777ab742e5ebec6c9d79c984989b0e2a63088a90b1095883d04ae"
+  },
+  "protocol": {
+    "path": "docs/results/cgc_rf_fresh_candidate_preflight_protocol_v2.md",
+    "sha256": "9da490c5bd03f82a91abfe77d3f3b5da9b7eca23275aa79dcd288eb4e5f8b2fa"
+  },
+  "raw_summary": {
+    "path": "artifacts/cgc_rf_fresh_candidate_preflight_v2/summary.json",
+    "sha256": "c3337c98ea5b7aae89f7b2dd7e6d12a52c30d7fba1492fe74d26a23ff8f4c869"
+  },
+  "selection_rule": "first candidate in file order per required motion kind with at least 10 startup LOS PRNs",
+  "selected_candidate_ids": [
+    "fv2-static-01",
+    "fv2-straight-01",
+    "fv2-sweep-01"
+  ],
+  "probes": [
+    {"candidate_id": "fv2-static-01", "motion_kind": "static", "startup_los_prn_count": 13, "support_eligible": true, "audit_log_sha256": "1ddba2777cc4aca41d9df7155d9ddf1b290d15b1178fa3955969bbd415f31e99"},
+    {"candidate_id": "fv2-static-02", "motion_kind": "static", "startup_los_prn_count": 10, "support_eligible": true, "audit_log_sha256": "b74a1d18e861598cd4f342e07af47ff0fed5c3b66a75189ab586d4cee2e8c59e"},
+    {"candidate_id": "fv2-static-03", "motion_kind": "static", "startup_los_prn_count": 13, "support_eligible": true, "audit_log_sha256": "6c939905478e388d99ff7fbbd025243a28ad517ede82fdda9266ca0d8693d442"},
+    {"candidate_id": "fv2-straight-01", "motion_kind": "straight", "startup_los_prn_count": 13, "support_eligible": true, "audit_log_sha256": "ac4d533abbc7a1bda7793b32de2fb8641f11b88a4df7a4f6fa301ea93299f5ed"},
+    {"candidate_id": "fv2-straight-02", "motion_kind": "straight", "startup_los_prn_count": 9, "support_eligible": false, "audit_log_sha256": "eac813626d45c577a283cf6198d135645d261da7fddd005ada564f9e47443e3c"},
+    {"candidate_id": "fv2-straight-03", "motion_kind": "straight", "startup_los_prn_count": 11, "support_eligible": true, "audit_log_sha256": "14a3d44fb519c2e513605110abe20bf8bc960e118c5f8484c1722d2173cee143"},
+    {"candidate_id": "fv2-sweep-01", "motion_kind": "parallel-sweep", "startup_los_prn_count": 11, "support_eligible": true, "audit_log_sha256": "6487b3fbf8fc1e5c67769382c4e24b54c03e80850e7f71d194c38621cfd040df"},
+    {"candidate_id": "fv2-sweep-02", "motion_kind": "parallel-sweep", "startup_los_prn_count": 13, "support_eligible": true, "audit_log_sha256": "8e34e9c420f176af409223ec8e6a59f61dcb238dee1cac2c87a2b2421927b81a"},
+    {"candidate_id": "fv2-sweep-03", "motion_kind": "parallel-sweep", "startup_los_prn_count": 10, "support_eligible": true, "audit_log_sha256": "196911d48a449ad1e4ed087864ab856376ba2f884895942e76603a6d98ec6ed5"}
+  ],
+  "probe_iq_retained": false,
+  "score_accessed": false
+}
