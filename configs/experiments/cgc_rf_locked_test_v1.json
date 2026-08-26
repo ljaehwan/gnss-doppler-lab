@@ -1,0 +1,155 @@
+{
+  "schema": "gnss-doppler-lab.cgc-rf-locked-test-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "cgc-rf-locked-test-v1",
+    "role": "single-release threshold-free held-out simulation test of frozen clock-centered multipath-versus-spoof discrimination",
+    "execution_policy": "one deterministic release and one analysis on test pairs 010--012; no score, estimator, aggregation, seed, gate, or exclusion changes after any test signal or metric access",
+    "candidate_commit": "60280575737ff70618c5619ff7522c516bbdc67a",
+    "runner_path": "scripts/run_cgc_rf_locked_test.py",
+    "runner_implementation_rule": "the runner must be implemented, reviewed against this config, and committed before any test signal is generated or opened"
+  },
+  "frozen_candidate": {
+    "positive_train_replication": {
+      "path": "docs/results/cgc_rf_train_replication_v1_summary.json",
+      "sha256": "5d9e82dcb3576ac1509870648901abc9d16048f163d85da74fc98a0f31b7d3fe"
+    },
+    "negative_absolute_threshold_audit": {
+      "path": "docs/results/cgc_normal_detector_freeze_audit_v1_summary.json",
+      "sha256": "60794d951dbdeaeb5ef703a49c9bfcd6c3d714911e0e2e62215f90d86a4dec54",
+      "interpretation": "the absolute threshold failed train geometry transfer and is forbidden in this locked test"
+    },
+    "clock_centered_module": {
+      "path": "src/gnss_doppler_lab/clock_centered_geometry.py",
+      "sha256": "b25a00efdb654ceb96540a2597bdc542526a0c6027e393018c739394858a203a"
+    },
+    "residual": "SSE_full / sum(weight * (delay - weighted_mean(delay))^2)",
+    "detection_score": "negative residual",
+    "primary_separation": "multipath median residual minus spoof median residual; positive means spoof has the higher detection score",
+    "absolute_threshold_applied": false,
+    "threshold_or_calibration_fitting": false
+  },
+  "data_boundary": {
+    "authorized_partition": "test",
+    "allowed_pair_ids": [
+      "pv1-pair-010",
+      "pv1-pair-011",
+      "pv1-pair-012"
+    ],
+    "validation_partition_role": "not evidence for this post-hoc candidate because it was previously inspected",
+    "pre_freeze_test_signal_artifacts_accessed": false,
+    "test_release_condition": "the protocol/config commit and the conforming runner commit must both exist before first test signal access",
+    "test_refit_or_adaptation_forbidden": true,
+    "texbat_recordings_accessed": []
+  },
+  "source_generation": {
+    "output_root": "artifacts/simulation_v4_paired_test_generation_v1",
+    "split_config": {
+      "path": "configs/experiments/simulation_v4_paired_split_v1.json",
+      "sha256": "124bb766dcc0c52e248627e20499b55149b5477cabd4c88fa960585368f62b3e"
+    },
+    "split_record": {
+      "path": "docs/results/simulation_v4_paired_split_v1_summary.json",
+      "sha256": "66e4b54355d1d18a6bcc18bc12bfd3e7096da50a9c7e673594534dcd17c012cf"
+    },
+    "canonical_split_manifest_sha256": "dd20c4917e3c406e716cb00f251d04f7aa900544151da03c37fa8ba29528a18e",
+    "normal_profile": {
+      "path": "configs/experiments/simulation_v4_normal_independent_validation_v1.json",
+      "sha256": "256977cfb14f0828d6cc98af83f459e7dee0407b41cd1188b0c37cb170593a78"
+    },
+    "reference_train_generation_config": {
+      "path": "configs/experiments/simulation_v4_paired_train_generation_v1.json",
+      "sha256": "b44781e7e0f03c60ca18ecccdd8cbbd7f02a98c8270244658009419ad9772f78"
+    },
+    "reference_paired_generator": {
+      "path": "scripts/run_simulation_v4_paired_train_generation.py",
+      "sha256": "c15c23f96e5d6137e265ff0048f2cd89a51c9123635ce0f7331c0d4fe07375d0"
+    },
+    "generation_law": "use the pinned paired train generator's signal, gain, front-end, receiver-seed, and AWGN laws without parameter fitting, restricted to the three frozen test rows",
+    "pairing_contract": "normal and spoof share authentic component, time, position or trajectory, receiver seed, receiver impairments, front-end gain, and pre-onset samples; only the counterfeit component and its power/trajectory envelope vary",
+    "keep_components": true,
+    "test_source_manifest_policy": "manifests and hashes are created and recorded only after the protocol and conforming runner are committed; they may not be used to change this config"
+  },
+  "multipath": {
+    "seed_by_pair": {
+      "pv1-pair-010": 2026091310,
+      "pv1-pair-011": 2026091311,
+      "pv1-pair-012": 2026091312
+    },
+    "prn_policy": "all valid GPS PRNs present in the frozen authentic startup LOS table",
+    "delay_chips_range": [
+      0.12,
+      0.45
+    ],
+    "amplitude_range": [
+      0.20,
+      0.70
+    ],
+    "phase_policy": "SHA-256-derived independent uniform phase in [-180,180) degrees",
+    "trajectory_policy": "reuse the exact authentic test-pair trajectory and recorded trajectory hash; static pairs remain static",
+    "simulator_executable": {
+      "path": ".tools/gps-sdr-sim-src/gps-sdr-sim-prn-multipath-v1",
+      "sha256": "012ca5d2eef7bdec91e07732bbd7e1c0dfd817f3263ec0a94aecf1584f0adc46"
+    },
+    "simulator_upstream_commit": "28ca29a6719475195e3aabd5930c4ed02d67190f",
+    "simulator_patch": {
+      "path": "patches/gps-sdr-sim-prn-multipath-v1.patch",
+      "sha256": "7d523547e8c3f43c3631606a0dbbc5417d1173f21d8c031f14a9b6a5f7b9ee79"
+    },
+    "multipath_module": {
+      "path": "src/gnss_doppler_lab/satellite_multipath.py",
+      "sha256": "1a78ac6e81e0929f5b76ce7e9b2d31565b924c34f335d55dbfdb7c7eceeb45fd"
+    }
+  },
+  "gnss_sdr": {
+    "executable": {
+      "path": ".tools/gnss-sdr-src/build/src/main/gnss-sdr",
+      "sha256": "fc00d610fdb966358ac85486b616ff2411cb163ca8269dd0b435919c5e197e25"
+    },
+    "upstream_commit": "1ddd4562723040fd66cb334b578a5b69455625f4",
+    "patch": {
+      "path": "patches/gnss-sdr-complex9-tracking-v1.patch",
+      "sha256": "41e48ef6ed7dc63a63b7666f3b2ffc0a3d4e48393c98a42d2d3e4ec1b9a8a2b1"
+    },
+    "channel_count": 11,
+    "timeout_seconds": 1200,
+    "tracking_tap_count": 9,
+    "tracking_tap_spacing_chips": 0.125
+  },
+  "analysis": {
+    "controlled_template_config": {
+      "path": "configs/experiments/correlator_geometry_identifiability_train_v1.json",
+      "sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6"
+    },
+    "reference_replication_runner": {
+      "path": "scripts/run_cgc_rf_train_replication.py",
+      "sha256": "1b97bba63b8c9055d234b72c19c6de5e9171c9cbeb431fb71566efef22e4c029"
+    },
+    "bin_seconds": 1.0,
+    "minimum_prns": 8,
+    "comparison_start_policy": "spoof start + max(transition, power ramp) + 1 second",
+    "primary_unit": "pair-level scenario median; one multipath residual and one spoof residual per pair",
+    "primary_endpoint": "three pair-level clock-centered separations and their pair-block AUC",
+    "legacy_endpoint": "the same pair-level calculation with the frozen zero-referenced residual, used only for the preregistered centered-versus-legacy support gate",
+    "bin_level_metrics": "secondary descriptive only because one-second bins within a run are serially dependent",
+    "normal_stream_use": "generation/provenance only; normal scores cannot fit a threshold, calibrate the candidate, exclude a pair, or enter the primary endpoint"
+  },
+  "evaluation": {
+    "bootstrap_seed": 2026091399,
+    "bootstrap_repetitions": 10000,
+    "support_gates": {
+      "required_pair_count": 3,
+      "positive_clock_centered_separation_pair_count": 3,
+      "minimum_pair_block_auc": 0.80,
+      "minimum_clock_centered_improvement_over_legacy_pair_count": 2,
+      "minimum_comparison_bins_per_scenario_per_pair": 5,
+      "minimum_startup_los_prns_per_pair": 8
+    },
+    "decision_rule": "SUPPORTED only if every support gate passes; otherwise NOT SUPPORTED",
+    "threshold_fitting": false,
+    "post_release_tuning_or_retest": false,
+    "bootstrap_intervals_are_descriptive": true
+  },
+  "output_root": "artifacts/cgc_rf_locked_test_v1",
+  "claim_boundary": "held-out simulated receiver-RF evidence for relative multipath-versus-carry-off-spoof discrimination only; no absolute detector threshold, field false-alarm, TEXBAT, operational, or WCL generalization claim"
+}
