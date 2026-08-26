@@ -1,0 +1,139 @@
+{
+  "version": 1,
+  "experiment": {
+    "name": "correlator-geometry-identifiability-train-v1",
+    "role": "exploratory train-only matched-control mechanism audit",
+    "question": "Can cross-satellite LOS consistency separate spoofing from a marginally identical independent multipath control when no single-PRN profile can?",
+    "design_origin": "train-only preflight selected the magnitude-versus-complex observation ladder; frozen before the official 300-event-per-geometry run"
+  },
+  "source_artifact_summary": {
+    "path": "artifacts/simulation_v4_paired_train_generation_v1/summary.json",
+    "sha256": "bb7023ea7a8a57ae3197214e85e879524aace84a1c5d1306321274127a2449d7"
+  },
+  "split_config": {
+    "path": "configs/experiments/simulation_v4_paired_split_v1.json",
+    "sha256": "124bb766dcc0c52e248627e20499b55149b5477cabd4c88fa960585368f62b3e"
+  },
+  "output_root": "artifacts/correlator_geometry_identifiability_train_v1",
+  "correlator": {
+    "tap_offsets_chips": [
+      -0.5,
+      -0.375,
+      -0.25,
+      -0.125,
+      0.0,
+      0.125,
+      0.25,
+      0.375,
+      0.5
+    ],
+    "profile": "complex coherent authentic plus one delayed replica under ideal triangular L1 C/A autocorrelation",
+    "single_prn_control": "multipath is an exact derangement of complete observed complex profiles across satellite identities",
+    "prompt_index": 4,
+    "observation_modes": {
+      "magnitude_9tap": "legacy ablation matching the current stored extra-tap magnitudes",
+      "complex_9tap": "proposed prompt-phase-aligned complex I/Q taps"
+    }
+  },
+  "template_estimator": {
+    "delay_min_chips": -0.5,
+    "delay_max_chips": 0.5,
+    "delay_step_chips": 0.025,
+    "center_min_chips": -0.06,
+    "center_max_chips": 0.06,
+    "center_step_chips": 0.03,
+    "amplitude_min": 0.1,
+    "amplitude_max": 0.8,
+    "amplitude_step": 0.1,
+    "phase_count": 12,
+    "normalization": "l2",
+    "fit": "nearest deterministic physical template",
+    "observation_modes": [
+      "magnitude_9tap",
+      "complex_9tap"
+    ]
+  },
+  "generator": {
+    "seed": 2026082601,
+    "event_count_per_geometry": 300,
+    "displacement_norm_min_chips": 0.12,
+    "displacement_norm_max_chips": 0.35,
+    "vertical_direction_abs_max": 0.25,
+    "clock_bias_abs_max_chips": 0.03,
+    "authentic_center_std_chips": 0.02,
+    "authentic_center_abs_max_chips": 0.06,
+    "secondary_amplitude_min": 0.1,
+    "secondary_amplitude_max": 0.8,
+    "relative_phase_min_rad": -3.141592653589793,
+    "relative_phase_max_rad": 3.141592653589793,
+    "complex_noise_std_min": 0.005,
+    "complex_noise_std_max": 0.025,
+    "maximum_absolute_delay_chips": 0.5,
+    "matched_multipath_control": "derange complete observed complex profiles, physical delays, and nuisance parameters across PRN identities"
+  },
+  "evaluation": {
+    "minimum_prns": 8,
+    "spoof_positive_label": 1,
+    "score": "negative normalized common-geometry residual, separately for oracle, magnitude-only, and complex-tap delays",
+    "delay_sign_accuracy_min_abs_truth_chips": 0.05,
+    "bootstrap_repetitions": 1000,
+    "bootstrap_seed": 2026082602
+  },
+  "exploratory_support_rule": {
+    "single_prn_profile_multiset_exact_match": true,
+    "single_prn_width_auc_absolute_distance_from_half_max": 1e-12,
+    "oracle_geometry_auc_min": 0.95,
+    "complex_geometry_auc_min": 0.8,
+    "each_geometry_complex_auc_min": 0.75,
+    "complex_delay_mae_max_chips": 0.1,
+    "complex_delay_sign_accuracy_min": 0.8,
+    "magnitude_only_is_reported_ablation_without_support_gate": true,
+    "requires_validation_confirmation": true
+  },
+  "data_boundary": {
+    "allowed_partition": "train",
+    "allowed_pair_ids": [
+      "pv1-pair-001",
+      "pv1-pair-002",
+      "pv1-pair-003",
+      "pv1-pair-004",
+      "pv1-pair-005",
+      "pv1-pair-006"
+    ],
+    "validation_pairs_accessed": false,
+    "test_pairs_accessed": false,
+    "texbat_recordings_accessed": []
+  },
+  "claim_boundary": {
+    "actual_multipath_rf_generated": false,
+    "actual_receiver_tracking_evaluated": false,
+    "result_role": "necessary-condition and observability feasibility only; not detector validation",
+    "actual_receiver_complex_taps_evaluated": false
+  },
+  "los_sources": {
+    "pv1-pair-001": {
+      "path": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-001/components/authentic-gps-sdr-sim.log",
+      "sha256": "9270b816532148dea393daa86a4bcc8d93864e8f205e68bc3c1bb6a7d98f5746"
+    },
+    "pv1-pair-002": {
+      "path": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-002/components/authentic-gps-sdr-sim.log",
+      "sha256": "70e812ace80d5d9c94734bbbe2f041997f6fd8bbaf8faf6a7f227adccf1e14eb"
+    },
+    "pv1-pair-003": {
+      "path": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-003/components/authentic-gps-sdr-sim.log",
+      "sha256": "22153844903ab88a81724c2ca76b39b709bed3a87311fe4b08ca781e13cf8222"
+    },
+    "pv1-pair-004": {
+      "path": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-004/components/authentic-gps-sdr-sim.log",
+      "sha256": "730f6d39c78bf4f6f085784af9f9c2da7333bd6ddc8c8ca3b9edb694758d9268"
+    },
+    "pv1-pair-005": {
+      "path": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-005/components/authentic-gps-sdr-sim.log",
+      "sha256": "dc008b6e173068ac03424cf60506fb1459d9f5afcd0d2a94a7dfddd42ece631c"
+    },
+    "pv1-pair-006": {
+      "path": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-006/components/authentic-gps-sdr-sim.log",
+      "sha256": "984a52b0d47211d899b0a983c27a90c92eda24b3af397a4599e46e482fec9529"
+    }
+  }
+}

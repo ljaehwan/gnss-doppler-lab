@@ -1,0 +1,91 @@
+{
+  "schema": "gnss-doppler-lab.correlator-geometry-identifiability-result-record",
+  "schema_version": 1,
+  "created_at_utc": "2026-08-26T08:40:29.946590+00:00",
+  "experiment": "correlator-geometry-identifiability-train-v1",
+  "candidate_name": "Correlator Geometry Consistency (CGC)",
+  "status": "supported_on_train_requires_validation",
+  "data_boundary": {
+    "partition": "train",
+    "pair_ids": [
+      "pv1-pair-001",
+      "pv1-pair-002",
+      "pv1-pair-003",
+      "pv1-pair-004",
+      "pv1-pair-005",
+      "pv1-pair-006"
+    ],
+    "validation_accessed": false,
+    "test_accessed": false,
+    "texbat_accessed": []
+  },
+  "sample_counts": {
+    "matched_event_pairs": 1800,
+    "classified_events": 3600,
+    "signed_delay_rows": 21600
+  },
+  "metrics": {
+    "single_prn_width_auc": 0.5,
+    "oracle_geometry_auc": {
+      "estimate": 1.0,
+      "ci95": [
+        0.9999999999999999,
+        1.0
+      ]
+    },
+    "magnitude_geometry_auc": {
+      "estimate": 0.670504012345679,
+      "ci95": [
+        0.6538743827160494,
+        0.6867912345679013
+      ]
+    },
+    "complex_geometry_auc": {
+      "estimate": 0.8643376543209876,
+      "ci95": [
+        0.8529219984567901,
+        0.8754432793209876
+      ]
+    },
+    "complex_minus_magnitude_auc": {
+      "estimate": 0.1938336419753086,
+      "paired_ci95": [
+        0.17775043209876554,
+        0.21095722993827162
+      ]
+    },
+    "complex_per_geometry_auc_range": [
+      0.8233222222222223,
+      0.8912333333333333
+    ],
+    "magnitude_delay_mae_chips": 0.16391156814833874,
+    "complex_delay_mae_chips": 0.08590046945655332,
+    "magnitude_delay_sign_accuracy": 0.7195035039790949,
+    "complex_delay_sign_accuracy": 0.8489131725858178
+  },
+  "decision": {
+    "all_exploratory_support_gates_passed": true,
+    "requires_validation_confirmation": true
+  },
+  "provenance": {
+    "config_sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6",
+    "runner_sha256": "0d566bdb05ce0ea019219a06e2bd89258e1fd7b39483ec07bb370ad1942a5590",
+    "physics_module_sha256": "74732c182e799c2e82b4719d6572ebbd3dc4f6e16eada5bfe0f8a3d8c236b2b2",
+    "artifact_summary_sha256": "ae29fb8d5a52675bbbb3fcf2afde6f32f1ac17b2aced9ab99de03ec8ea3acbc9"
+  },
+  "limitations": [
+    "ideal triangular autocorrelation",
+    "identity-deranged matched control is not RF multipath",
+    "complex nine-tap observable not evaluated through receiver",
+    "no validation, test, or TEXBAT access"
+  ],
+  "next_gate": "complex nine-tap receiver export, RF multipath controls, then frozen validation pairs 007-009",
+  "ssd_bundle": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/correlator-geometry-identifiability-train-v1",
+  "ssd_byte_verification": {
+    "summary.json": true,
+    "event_scores.csv": true,
+    "delay_estimates.csv": true,
+    "profile_assignments.csv": true,
+    "template_manifest.json": true
+  }
+}
