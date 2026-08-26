@@ -1,0 +1,106 @@
+{
+  "schema": "gnss-doppler-lab.cgc-rf-fresh-test-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "cgc-rf-fresh-test-v2",
+    "role": "single-release threshold-free fresh simulation test of frozen clock-centered multipath-versus-spoof discrimination",
+    "execution_policy": "one deterministic release and one analysis on the three support-selected fresh pairs; no score, estimator, aggregation, seed, gate, exclusion, or pair substitution after release",
+    "candidate_commit": "60280575737ff70618c5619ff7522c516bbdc67a",
+    "runner_path": "scripts/run_cgc_rf_fresh_test_v2.py"
+  },
+  "frozen_candidate": {
+    "positive_train_replication": {"path": "docs/results/cgc_rf_train_replication_v1_summary.json", "sha256": "5d9e82dcb3576ac1509870648901abc9d16048f163d85da74fc98a0f31b7d3fe"},
+    "negative_absolute_threshold_audit": {"path": "docs/results/cgc_normal_detector_freeze_audit_v1_summary.json", "sha256": "60794d951dbdeaeb5ef703a49c9bfcd6c3d714911e0e2e62215f90d86a4dec54"},
+    "clock_centered_module": {"path": "src/gnss_doppler_lab/clock_centered_geometry.py", "sha256": "b25a00efdb654ceb96540a2597bdc542526a0c6027e393018c739394858a203a"},
+    "reference_locked_runner": {"path": "scripts/run_cgc_rf_locked_test.py", "sha256": "3a6e29d45425168395e64bf6c479de2c8b4351037efce7805f86d8db952736d8"},
+    "residual": "SSE_full / sum(weight * (delay - weighted_mean(delay))^2)",
+    "detection_score": "negative residual",
+    "primary_separation": "multipath median residual minus spoof median residual; positive means spoof has the higher detection score",
+    "absolute_threshold_applied": false,
+    "threshold_or_calibration_fitting": false
+  },
+  "data_boundary": {
+    "authorized_partition": "fresh_test",
+    "allowed_pair_ids": ["fv2-static-01", "fv2-straight-01", "fv2-sweep-01"],
+    "selection_used_only_startup_los_support": true,
+    "pre_release_cgc_scores_accessed": false,
+    "post_release_pair_substitution_forbidden": true,
+    "test_refit_or_adaptation_forbidden": true,
+    "texbat_recordings_in_primary_test": []
+  },
+  "selection": {
+    "candidate_pool": {"path": "configs/experiments/cgc_rf_fresh_candidate_pool_v2.json", "sha256": "211c89afef6777ab742e5ebec6c9d79c984989b0e2a63088a90b1095883d04ae"},
+    "preflight_record": {"path": "docs/results/cgc_rf_fresh_candidate_preflight_v2_summary.json", "sha256": "90389bfbb41cdbc49151edeadec0dbf48e06af5e8d5be93d86d767b4df46f2be"},
+    "selected_startup_los_counts": {"fv2-static-01": 13, "fv2-straight-01": 13, "fv2-sweep-01": 11}
+  },
+  "source_generation": {
+    "output_root": "artifacts/simulation_v5_fresh_test_generation_v2",
+    "split_config": {"path": "configs/experiments/cgc_rf_fresh_candidate_pool_v2.json", "sha256": "211c89afef6777ab742e5ebec6c9d79c984989b0e2a63088a90b1095883d04ae"},
+    "split_record": {"path": "docs/results/cgc_rf_fresh_candidate_preflight_v2_summary.json", "sha256": "90389bfbb41cdbc49151edeadec0dbf48e06af5e8d5be93d86d767b4df46f2be"},
+    "canonical_split_manifest_sha256": "c3337c98ea5b7aae89f7b2dd7e6d12a52c30d7fba1492fe74d26a23ff8f4c869",
+    "normal_profile": {"path": "configs/experiments/simulation_v4_normal_independent_validation_v1.json", "sha256": "256977cfb14f0828d6cc98af83f459e7dee0407b41cd1188b0c37cb170593a78"},
+    "reference_paired_generator": {"path": "scripts/run_simulation_v4_paired_train_generation.py", "sha256": "c15c23f96e5d6137e265ff0048f2cd89a51c9123635ce0f7331c0d4fe07375d0"},
+    "generation_law": "unchanged pinned simulation-v4 paired generator and normal RF profile",
+    "keep_components": true
+  },
+  "pairs": [
+    {
+      "paired_group_id": "fv2-static-01", "split": "fresh_test", "utc": "2022-01-01T00:30:00Z", "duration_seconds": 30, "domain": "static",
+      "position": {"latitude_deg": 49.2827, "longitude_deg": -123.1207, "altitude_m": 70.0}, "receiver_seed": 20261001, "target_composite_cn0_db_hz": 60.0,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 10.0, "target_offset_enu_m": [85.0, -55.0, 0.0], "initial_advantage_db": -17.0, "final_advantage_db": 2.0, "power_ramp_seconds": 9.0}
+    },
+    {
+      "paired_group_id": "fv2-straight-01", "split": "fresh_test", "utc": "2022-01-01T12:30:00Z", "duration_seconds": 30, "domain": "dynamic",
+      "position": {"latitude_deg": 35.1796, "longitude_deg": 129.0756, "altitude_m": 35.0}, "motion": {"kind": "straight", "speed_mps": 10.0, "heading_deg": 55.0},
+      "receiver_seed": 20261004, "target_composite_cn0_db_hz": 60.0,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 10.0, "target_offset_enu_m": [95.0, 60.0, 0.0], "initial_advantage_db": -17.0, "final_advantage_db": 2.5, "power_ramp_seconds": 9.0}
+    },
+    {
+      "paired_group_id": "fv2-sweep-01", "split": "fresh_test", "utc": "2022-01-01T02:30:00Z", "duration_seconds": 30, "domain": "dynamic",
+      "position": {"latitude_deg": -31.9523, "longitude_deg": 115.8613, "altitude_m": 35.0}, "motion": {"kind": "parallel-sweep", "speed_mps": 9.0, "leg_length_m": 72.0, "lane_spacing_m": 17.0, "heading_deg": 20.0},
+      "receiver_seed": 20261007, "target_composite_cn0_db_hz": 60.0,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 10.0, "target_offset_enu_m": [125.0, -25.0, 0.0], "initial_advantage_db": -16.5, "final_advantage_db": 2.5, "power_ramp_seconds": 10.0}
+    }
+  ],
+  "multipath": {
+    "seed_by_pair": {"fv2-static-01": 20261011, "fv2-straight-01": 20261012, "fv2-sweep-01": 20261013},
+    "prn_policy": "all valid GPS PRNs present in the frozen authentic startup LOS table",
+    "delay_chips_range": [0.12, 0.45],
+    "amplitude_range": [0.20, 0.70],
+    "phase_policy": "SHA-256-derived independent uniform phase in [-180,180) degrees",
+    "trajectory_policy": "reuse exact authentic trajectory; static remains static",
+    "simulator_executable": {"path": ".tools/gps-sdr-sim-src/gps-sdr-sim-prn-multipath-v1", "sha256": "012ca5d2eef7bdec91e07732bbd7e1c0dfd817f3263ec0a94aecf1584f0adc46"},
+    "simulator_upstream_commit": "28ca29a6719475195e3aabd5930c4ed02d67190f",
+    "simulator_patch": {"path": "patches/gps-sdr-sim-prn-multipath-v1.patch", "sha256": "7d523547e8c3f43c3631606a0dbbc5417d1173f21d8c031f14a9b6a5f7b9ee79"},
+    "multipath_module": {"path": "src/gnss_doppler_lab/satellite_multipath.py", "sha256": "1a78ac6e81e0929f5b76ce7e9b2d31565b924c34f335d55dbfdb7c7eceeb45fd"}
+  },
+  "gnss_sdr": {
+    "executable": {"path": ".tools/gnss-sdr-src/build/src/main/gnss-sdr", "sha256": "fc00d610fdb966358ac85486b616ff2411cb163ca8269dd0b435919c5e197e25"},
+    "upstream_commit": "1ddd4562723040fd66cb334b578a5b69455625f4",
+    "patch": {"path": "patches/gnss-sdr-complex9-tracking-v1.patch", "sha256": "41e48ef6ed7dc63a63b7666f3b2ffc0a3d4e48393c98a42d2d3e4ec1b9a8a2b1"},
+    "channel_count": 11, "timeout_seconds": 1200, "tracking_tap_count": 9, "tracking_tap_spacing_chips": 0.125
+  },
+  "analysis": {
+    "controlled_template_config": {"path": "configs/experiments/correlator_geometry_identifiability_train_v1.json", "sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6"},
+    "bin_seconds": 1.0, "minimum_prns": 8,
+    "comparison_start_policy": "spoof start + max(transition, power ramp) + 1 second",
+    "primary_unit": "pair-level scenario median",
+    "primary_endpoint": "three pair-level clock-centered separations and pair-block AUC",
+    "normal_stream_use": "generation/provenance only; no threshold or calibration"
+  },
+  "evaluation": {
+    "bootstrap_seed": 20261099, "bootstrap_repetitions": 10000,
+    "support_gates": {
+      "required_pair_count": 3,
+      "positive_clock_centered_separation_pair_count": 3,
+      "minimum_pair_block_auc": 0.8,
+      "minimum_clock_centered_improvement_over_legacy_pair_count": 2,
+      "minimum_comparison_bins_per_scenario_per_pair": 5,
+      "minimum_startup_los_prns_per_pair": 8
+    },
+    "decision_rule": "SUPPORTED only if every support gate passes; otherwise NOT_SUPPORTED",
+    "threshold_fitting": false, "post_release_tuning_or_retest": false
+  },
+  "output_root": "artifacts/cgc_rf_fresh_test_v2",
+  "claim_boundary": "fresh held-out simulated receiver-RF evidence for relative multipath-versus-carry-off-spoof discrimination only; no absolute threshold, field false-alarm, operational, or TEXBAT multipath claim"
+}
