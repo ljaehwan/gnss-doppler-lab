@@ -1,0 +1,142 @@
+{
+  "schema": "gnss-doppler-lab.cgc-rf-fresh-candidate-pool",
+  "schema_version": 1,
+  "experiment": {
+    "name": "cgc-rf-fresh-test-v2",
+    "candidate_commit": "60280575737ff70618c5619ff7522c516bbdc67a",
+    "purpose": "support-only selection for a fresh threshold-free receiver-RF test",
+    "score_access_during_preflight": false
+  },
+  "inputs": {
+    "rinex_nav": ".tools/gps-sdr-sim-src/brdc0010.22n",
+    "simulator_executable": ".tools/gps-sdr-sim-src/gps-sdr-sim"
+  },
+  "preflight": {
+    "duration_seconds": 1,
+    "sample_rate_hz": 1000000,
+    "minimum_startup_los_prns": 10,
+    "required_motion_kinds": ["static", "straight", "parallel-sweep"],
+    "selection_rule": "for each required motion kind, select the first candidate in file order whose startup LOS count is at least 10",
+    "forbidden_during_selection": [
+      "correlator-delay estimation",
+      "CGC residual or coherence computation",
+      "multipath or spoof generation",
+      "model score or performance metric access"
+    ]
+  },
+  "fixed_rf_profile": {
+    "rf_sample_rate_hz": 25000000,
+    "frontend_cutoff_hz": 8000000.0,
+    "frontend_order": 5,
+    "normal_target_rms": 22.0,
+    "tracking_tap_count": 9,
+    "tracking_tap_spacing_chips": 0.125
+  },
+  "candidates": [
+    {
+      "paired_group_id": "fv2-static-01",
+      "split": "fresh_test",
+      "utc": "2022-01-01T00:30:00Z",
+      "duration_seconds": 30,
+      "domain": "static",
+      "position": {"latitude_deg": 49.2827, "longitude_deg": -123.1207, "altitude_m": 70.0},
+      "receiver_seed": 20261001,
+      "target_composite_cn0_db_hz": 60.0,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 10.0, "target_offset_enu_m": [85.0, -55.0, 0.0], "initial_advantage_db": -17.0, "final_advantage_db": 2.0, "power_ramp_seconds": 9.0}
+    },
+    {
+      "paired_group_id": "fv2-static-02",
+      "split": "fresh_test",
+      "utc": "2022-01-01T04:30:00Z",
+      "duration_seconds": 30,
+      "domain": "static",
+      "position": {"latitude_deg": 41.9028, "longitude_deg": 12.4964, "altitude_m": 45.0},
+      "receiver_seed": 20261002,
+      "target_composite_cn0_db_hz": 59.5,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 10.0, "target_offset_enu_m": [-65.0, 90.0, 0.0], "initial_advantage_db": -16.0, "final_advantage_db": 2.5, "power_ramp_seconds": 10.0}
+    },
+    {
+      "paired_group_id": "fv2-static-03",
+      "split": "fresh_test",
+      "utc": "2022-01-01T08:30:00Z",
+      "duration_seconds": 30,
+      "domain": "static",
+      "position": {"latitude_deg": -33.9249, "longitude_deg": 18.4241, "altitude_m": 25.0},
+      "receiver_seed": 20261003,
+      "target_composite_cn0_db_hz": 60.5,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 11.0, "target_offset_enu_m": [105.0, 35.0, 5.0], "initial_advantage_db": -18.0, "final_advantage_db": 2.0, "power_ramp_seconds": 9.0}
+    },
+    {
+      "paired_group_id": "fv2-straight-01",
+      "split": "fresh_test",
+      "utc": "2022-01-01T12:30:00Z",
+      "duration_seconds": 30,
+      "domain": "dynamic",
+      "position": {"latitude_deg": 35.1796, "longitude_deg": 129.0756, "altitude_m": 35.0},
+      "motion": {"kind": "straight", "speed_mps": 10.0, "heading_deg": 55.0},
+      "receiver_seed": 20261004,
+      "target_composite_cn0_db_hz": 60.0,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 10.0, "target_offset_enu_m": [95.0, 60.0, 0.0], "initial_advantage_db": -17.0, "final_advantage_db": 2.5, "power_ramp_seconds": 9.0}
+    },
+    {
+      "paired_group_id": "fv2-straight-02",
+      "split": "fresh_test",
+      "utc": "2022-01-01T14:30:00Z",
+      "duration_seconds": 30,
+      "domain": "dynamic",
+      "position": {"latitude_deg": 42.3601, "longitude_deg": -71.0589, "altitude_m": 20.0},
+      "motion": {"kind": "straight", "speed_mps": 12.0, "heading_deg": 225.0},
+      "receiver_seed": 20261005,
+      "target_composite_cn0_db_hz": 59.5,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 11.0, "target_offset_enu_m": [-110.0, 40.0, 0.0], "initial_advantage_db": -15.5, "final_advantage_db": 1.5, "power_ramp_seconds": 10.0}
+    },
+    {
+      "paired_group_id": "fv2-straight-03",
+      "split": "fresh_test",
+      "utc": "2022-01-01T16:30:00Z",
+      "duration_seconds": 30,
+      "domain": "dynamic",
+      "position": {"latitude_deg": -34.6037, "longitude_deg": -58.3816, "altitude_m": 30.0},
+      "motion": {"kind": "straight", "speed_mps": 9.0, "heading_deg": 135.0},
+      "receiver_seed": 20261006,
+      "target_composite_cn0_db_hz": 60.5,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 10.0, "target_offset_enu_m": [40.0, -120.0, 5.0], "initial_advantage_db": -18.0, "final_advantage_db": 3.0, "power_ramp_seconds": 8.0}
+    },
+    {
+      "paired_group_id": "fv2-sweep-01",
+      "split": "fresh_test",
+      "utc": "2022-01-01T02:30:00Z",
+      "duration_seconds": 30,
+      "domain": "dynamic",
+      "position": {"latitude_deg": -31.9523, "longitude_deg": 115.8613, "altitude_m": 35.0},
+      "motion": {"kind": "parallel-sweep", "speed_mps": 9.0, "leg_length_m": 72.0, "lane_spacing_m": 17.0, "heading_deg": 20.0},
+      "receiver_seed": 20261007,
+      "target_composite_cn0_db_hz": 60.0,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 10.0, "target_offset_enu_m": [125.0, -25.0, 0.0], "initial_advantage_db": -16.5, "final_advantage_db": 2.5, "power_ramp_seconds": 10.0}
+    },
+    {
+      "paired_group_id": "fv2-sweep-02",
+      "split": "fresh_test",
+      "utc": "2022-01-01T06:30:00Z",
+      "duration_seconds": 30,
+      "domain": "dynamic",
+      "position": {"latitude_deg": 41.0082, "longitude_deg": 28.9784, "altitude_m": 55.0},
+      "motion": {"kind": "parallel-sweep", "speed_mps": 10.0, "leg_length_m": 78.0, "lane_spacing_m": 18.0, "heading_deg": 115.0},
+      "receiver_seed": 20261008,
+      "target_composite_cn0_db_hz": 59.5,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 11.0, "target_offset_enu_m": [-35.0, 130.0, 0.0], "initial_advantage_db": -17.5, "final_advantage_db": 2.0, "power_ramp_seconds": 9.0}
+    },
+    {
+      "paired_group_id": "fv2-sweep-03",
+      "split": "fresh_test",
+      "utc": "2022-01-01T10:30:00Z",
+      "duration_seconds": 30,
+      "domain": "dynamic",
+      "position": {"latitude_deg": 37.7749, "longitude_deg": -122.4194, "altitude_m": 25.0},
+      "motion": {"kind": "parallel-sweep", "speed_mps": 8.0, "leg_length_m": 68.0, "lane_spacing_m": 16.0, "heading_deg": 285.0},
+      "receiver_seed": 20261009,
+      "target_composite_cn0_db_hz": 60.5,
+      "spoofing": {"start_seconds": 10.0, "transition_seconds": 10.0, "target_offset_enu_m": [115.0, 45.0, 10.0], "initial_advantage_db": -16.0, "final_advantage_db": 3.0, "power_ramp_seconds": 10.0}
+    }
+  ]
+}
