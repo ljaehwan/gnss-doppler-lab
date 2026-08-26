@@ -1,0 +1,39 @@
+{
+  "schema": "gnss-doppler-lab.cgc-texbat-external-result-record",
+  "schema_version": 1,
+  "status": "DIRECTIONALLY_CONSISTENT",
+  "interpretation": "all three real TEXBAT spoof recordings changed in the preregistered lower-residual post-onset direction; this is not a real multipath-versus-spoof classification result",
+  "release": {
+    "candidate_commit": "60280575737ff70618c5619ff7522c516bbdc67a",
+    "external_freeze_commit": "0dfc1af23cf5abc7b313f30f3be466c9e697faf5",
+    "threshold_fitted": false,
+    "absolute_threshold_applied": false,
+    "post_release_tuning_or_retest": false
+  },
+  "raw_result": {
+    "path": "artifacts/cgc_texbat_external_v1/summary.json",
+    "sha256": "22c4f3c06b953b43fb1a34dee9692d0e322243b2d8e760ec7e7c4c38ae6bed2b"
+  },
+  "release_state": {
+    "path": "artifacts/cgc_texbat_external_v1/release_state.json",
+    "sha256": "6215e78eaa0d98f693371eca5683532b822e119648e53e839d022825b218ec0e"
+  },
+  "primary": {
+    "required_scenario_count": 3,
+    "positive_change_scenario_count": 3,
+    "scenario_changes": [0.13301428056149267, 0.19919497912131423, 0.12936952501983245],
+    "median_scenario_change": 0.13301428056149267,
+    "all_preregistered_gates_passed": true
+  },
+  "scenarios": [
+    {"scenario": "ds1", "stable_pre_bin_count": 60, "stable_post_bin_count": 352, "minimum_prn_count": 10, "stable_pre_median_residual": 0.6491300459848786, "stable_post_median_residual": 0.5161157654233859, "pre_minus_post_residual_change": 0.13301428056149267, "secondary_serial_bin_auc": 0.6552083333333333},
+    {"scenario": "ds2", "stable_pre_bin_count": 60, "stable_post_bin_count": 348, "minimum_prn_count": 10, "stable_pre_median_residual": 0.6913788636775045, "stable_post_median_residual": 0.4921838845561902, "pre_minus_post_residual_change": 0.19919497912131423, "secondary_serial_bin_auc": 0.7117337164750958},
+    {"scenario": "ds3", "stable_pre_bin_count": 60, "stable_post_bin_count": 348, "minimum_prn_count": 8, "stable_pre_median_residual": 0.706703849771977, "stable_post_median_residual": 0.5773343247521445, "pre_minus_post_residual_change": 0.12936952501983245, "secondary_serial_bin_auc": 0.6343869731800766}
+  ],
+  "artifacts": {
+    "delay_estimates": {"row_count": 14427, "sha256": "d16de64aca1395a20c2bfea0685e2dd9c975fcd9f65ea83d978d272905a404a2"},
+    "geometry_scores": {"row_count": 1378, "sha256": "92f75d3d4aca1452ec5018d3a93c1b5cd5eed2ced7bb754c3a52ea825d141a74"},
+    "scenario_summary": {"row_count": 3, "sha256": "935974c315875b2fad6beb70e9017ff738025c51f924a6889e9b02d2d89625c8"}
+  },
+  "claim_boundary": "real TEXBAT spoof pre/post directional consistency only; TEXBAT has no labeled independent-multipath class and cannot validate real multipath-versus-spoof accuracy or an absolute threshold"
+}
