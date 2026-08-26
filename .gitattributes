@@ -1,0 +1,2 @@
+# Unified diff payloads contain significant prefix spaces and tabs.
+patches/*.patch -whitespace

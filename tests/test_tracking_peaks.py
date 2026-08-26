@@ -6,6 +6,7 @@ from pathlib import Path
 
 import h5py
 import numpy as np
+import pytest
 
 from gnss_doppler_lab.tracking_peaks import (
     available_tracking_prns,
@@ -127,7 +128,9 @@ def test_same_prn_reappearance_is_returned_as_distinct_segments(tmp_path: Path) 
     assert [segment.time_s.tolist() for segment in segments] == [[0.0, 1.0], [10.0, 11.0]]
 
 
-def _nine_tap_tracking_mat(path: Path, *, prn: int, samples: list[int]) -> None:
+def _nine_tap_tracking_mat(
+    path: Path, *, prn: int, samples: list[int], complex_taps: bool = False
+) -> None:
     with h5py.File(path, "w") as handle:
         n = len(samples)
         values = {
@@ -149,6 +152,14 @@ def _nine_tap_tracking_mat(path: Path, *, prn: int, samples: list[int]) -> None:
             "abs_L3": np.arange(n, dtype=np.float32) * 0.1 + 2.5,
             "abs_L4": np.arange(n, dtype=np.float32) * 0.1 + 1.5,
         }
+        if complex_taps:
+            for label, magnitude_name in (
+                ("E4", "abs_E4"), ("E3", "abs_E3"), ("E2", "abs_E2"),
+                ("E", "abs_E"), ("P", "abs_P"), ("L", "abs_L"),
+                ("L2", "abs_L2"), ("L3", "abs_L3"), ("L4", "abs_L4"),
+            ):
+                values[f"tap_I_{label}"] = values[magnitude_name].copy()
+                values[f"tap_Q_{label}"] = np.zeros(n, dtype=np.float32)
         for key, value in values.items():
             handle.create_dataset(key, data=value.reshape(-1, 1))
 
@@ -168,3 +179,44 @@ def test_load_receiver_tracking_peak_series_can_select_real_nine_tap_layout(tmp_
     assert series.tap_names == ("E4", "E3", "E2", "E", "P", "L", "L2", "L3", "L4")
     assert series.magnitudes.shape == (3, 9)
     assert np.allclose(series.magnitudes[0], [1.0, 2.0, 3.0, 4.0, 10.0, 5.0, 3.5, 2.5, 1.5])
+
+
+def test_load_receiver_tracking_peak_series_requires_consistent_complex_nine_taps(tmp_path: Path) -> None:
+    run_dir = tmp_path / "complex_nine_tap_run"
+    raw = run_dir / "raw"
+    raw.mkdir(parents=True)
+    mat = raw / "epl_tracking_ch_0.mat"
+    _nine_tap_tracking_mat(mat, prn=5, samples=[10, 20, 30], complex_taps=True)
+    (run_dir / "manifest.json").write_text(json.dumps({
+        "source": {"sample_rate_hz": 10},
+        "tracking": {"raw_directory": "raw", "prns": ["G05"], "tap_count": 9},
+    }))
+
+    series = load_receiver_tracking_peak_series(
+        run_dir, "G05", tap_count=9, require_complex_taps=True
+    )
+
+    assert series.has_complex_taps
+    assert series.complex_taps.shape == (3, 9)
+    assert np.allclose(np.abs(series.complex_taps), series.magnitudes)
+    assert np.allclose(series.complex_taps.imag, 0.0)
+
+
+def test_complex_nine_tap_requirement_rejects_missing_or_partial_dump(tmp_path: Path) -> None:
+    run_dir = tmp_path / "magnitude_only_nine_tap_run"
+    raw = run_dir / "raw"
+    raw.mkdir(parents=True)
+    mat = raw / "epl_tracking_ch_0.mat"
+    _nine_tap_tracking_mat(mat, prn=5, samples=[10, 20, 30])
+    (run_dir / "manifest.json").write_text(json.dumps({
+        "source": {"sample_rate_hz": 10},
+        "tracking": {"raw_directory": "raw", "prns": ["G05"], "tap_count": 9},
+    }))
+    with pytest.raises(ValueError, match="missing required complex"):
+        load_receiver_tracking_peak_series(
+            run_dir, "G05", tap_count=9, require_complex_taps=True
+        )
+    with h5py.File(mat, "a") as handle:
+        handle.create_dataset("tap_I_E4", data=np.ones((3, 1), dtype=np.float32))
+    with pytest.raises(ValueError, match="partial complex"):
+        load_receiver_tracking_peak_series(run_dir, "G05", tap_count=9)

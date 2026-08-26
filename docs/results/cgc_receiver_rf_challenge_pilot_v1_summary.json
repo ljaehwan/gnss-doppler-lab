@@ -1,0 +1,77 @@
+{
+  "schema": "gnss-doppler-lab.cgc-rf-challenge-pilot-result-record",
+  "schema_version": 1,
+  "date": "2026-08-26",
+  "role": "exploratory train-only mechanism development",
+  "pair_id": "pv1-pair-001",
+  "candidate_origin": "post-hoc after observing legacy normalization failure",
+  "legacy_failure_observed_first": true,
+  "primary_candidate": "clock_centered_directional",
+  "score_law": {
+    "residual": "SSE_full / sum(weight * (delay - weighted_mean(delay))^2)",
+    "detection_score": "negative residual",
+    "interpretation": "partial R-squared of LOS columns beyond clock-only nuisance"
+  },
+  "result": {
+    "comparison_bin_count": 18,
+    "comparison_start_seconds": 21.0,
+    "exploratory_auc": 1.0,
+    "legacy_exploratory_auc": 0.2592592592592593,
+    "median_residual": {
+      "independent_multipath": 0.8141229316686202,
+      "carryoff_spoof": 0.4025949623623441
+    },
+    "multipath_minus_spoof_median_separation": 0.41152796930627605
+  },
+  "artifacts": {
+    "root": "artifacts/cgc_rf_challenge_pilot_v1",
+    "ssd_archives": {
+      "complex_tap_smoke": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cgc-complex9-receiver-smoke-v1",
+        "bytes": 73459085
+      },
+      "receiver_rf_challenge": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cgc-rf-challenge-pilot-v1",
+        "bytes": 3162824008
+      },
+      "verification": "rsync --checksum --dry-run produced no differences"
+    },
+    "config_sha256": "290309c5235ccfdb44af82da7f660f4c42837fc7715a8f8fcac0bdb424bd37d8",
+    "delay_estimates": {
+      "rows": 623,
+      "sha256": "f25b7707e02c30bdd23c9ce1c7908fb53866ebbcb45892f72bbb41559c764210"
+    },
+    "geometry_scores": {
+      "rows": 60,
+      "sha256": "7c96c4550cbc7222799876a916fa8a8ee9ccc82eef3418833f9a736beb0ed113"
+    },
+    "full_component_equivalence": {
+      "artifact_executable_sha256": "c18c9615cff053b7fc7ba310c0717fdcf56abdcd26a8a5408c682c4a09b3ef87",
+      "corrected_executable_sha256": "012ca5d2eef7bdec91e07732bbd7e1c0dfd817f3263ec0a94aecf1584f0adc46",
+      "artifact_bytes": 1495000000,
+      "corrected_regeneration_bytes": 1495000000,
+      "artifact_sha256": "5e7f671c5019b704cee3ae89359f4f389ed0f97b8bb880ab040895ec18fdc5fd",
+      "corrected_regeneration_sha256": "5e7f671c5019b704cee3ae89359f4f389ed0f97b8bb880ab040895ec18fdc5fd"
+    },
+    "multipath_receiver_manifest_sha256": "2de1e231052ae4a8b347c587559a89f4169da1491ea58ba8ff6f198ddbe05978",
+    "spoof_receiver_manifest_sha256": "d2271e98a921c39acabec9ecb3228b8d530f16c8d69885432718d1243a4c80d0"
+  },
+  "provenance": {
+    "gps_sdr_executable_sha256": "fc00d610fdb966358ac85486b616ff2411cb163ca8269dd0b435919c5e197e25",
+    "gps_sdr_patch_sha256": "41e48ef6ed7dc63a63b7666f3b2ffc0a3d4e48393c98a42d2d3e4ec1b9a8a2b1",
+    "original_gps_sdr_sim_sha256": "27cd471d2023b8a26262584b14f71ebed602159da47b54172b22da9299011e28",
+    "artifact_multipath_gps_sdr_sim_sha256": "c18c9615cff053b7fc7ba310c0717fdcf56abdcd26a8a5408c682c4a09b3ef87",
+    "corrected_multipath_gps_sdr_sim_sha256": "012ca5d2eef7bdec91e07732bbd7e1c0dfd817f3263ec0a94aecf1584f0adc46",
+    "multipath_patch_sha256": "7d523547e8c3f43c3631606a0dbbc5417d1173f21d8c031f14a9b6a5f7b9ee79",
+    "legacy_frozen_geometry_module_sha256": "74732c182e799c2e82b4719d6572ebbd3dc4f6e16eada5bfe0f8a3d8c236b2b2",
+    "clock_centered_geometry_module_sha256": "b25a00efdb654ceb96540a2597bdc542526a0c6027e393018c739394858a203a"
+  },
+  "data_boundary": {
+    "train_pairs_accessed": ["pv1-pair-001"],
+    "validation_pairs_accessed": false,
+    "test_pairs_accessed": false,
+    "texbat_attack_recordings_accessed": []
+  },
+  "claim_boundary": "single train-geometry RF pilot; no confidence interval, threshold, detector validation, or WCL performance claim",
+  "next_gate": "freeze candidate, replicate on unused train pairs 002--006, then preregister still-locked test access"
+}

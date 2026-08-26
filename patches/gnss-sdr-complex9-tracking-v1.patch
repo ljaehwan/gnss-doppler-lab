@@ -1,0 +1,342 @@
+diff --git a/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc b/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc
+index 5ac5f6d..3360b70 100644
+--- a/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc
++++ b/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc
+@@ -469,7 +469,13 @@ dll_pll_veml_tracking::dll_pll_veml_tracking(const Dll_Pll_Conf &conf_)
+     // Get space for a vector with the sinboc(1,1) replica sampled 2x/chip
+     d_tracking_code.resize(2 * d_code_length_chips, 0.0);
+     // correlator outputs (scalar)
+-    if (d_veml)
++    const bool method_a_9tap = (d_trk_parameters.tap_count == 9);
++    if (method_a_9tap)
++        {
++            // Method-A: E4, E3, E2, E, Prompt, L, L2, L3, L4
++            d_n_correlator_taps = 9;
++        }
++    else if (d_trk_parameters.tap_count == 5 or d_veml)
+         {
+             // Very-Early, Early, Prompt, Late, Very-Late
+             d_n_correlator_taps = 5;
+@@ -481,9 +487,25 @@ dll_pll_veml_tracking::dll_pll_veml_tracking(const Dll_Pll_Conf &conf_)
+         }
+ 
+     d_correlator_outs = volk_gnsssdr::vector<gr_complex>(d_n_correlator_taps);
++    d_tap_accu = volk_gnsssdr::vector<gr_complex>(d_n_correlator_taps);
+     d_local_code_shift_chips = volk_gnsssdr::vector<float>(d_n_correlator_taps);
+     // map memory pointers of correlator outputs
+-    if (d_veml)
++    if (method_a_9tap)
++        {
++            d_Very_Early = nullptr;
++            d_Early = &d_correlator_outs[3];
++            d_Prompt = &d_correlator_outs[4];
++            d_Late = &d_correlator_outs[5];
++            d_Very_Late = nullptr;
++            const float spacing = d_trk_parameters.tap_spacing_chips * static_cast<float>(d_code_samples_per_chip);
++            for (int32_t n = 0; n < d_n_correlator_taps; ++n)
++                {
++                    d_local_code_shift_chips[n] = static_cast<float>(n - 4) * spacing;
++                }
++            d_prompt_data_shift = &d_local_code_shift_chips[4];
++            d_trk_parameters.spc = d_trk_parameters.tap_spacing_chips;
++        }
++    else if (d_n_correlator_taps == 5)
+         {
+             d_Very_Early = &d_correlator_outs[0];
+             d_Early = &d_correlator_outs[1];
+@@ -846,7 +868,16 @@ void dll_pll_veml_tracking::start_tracking()
+     d_carrier_lock_test = 1.0;
+     d_CN0_SNV_dB_Hz = 0.0;
+ 
+-    if (d_veml)
++    if (d_n_correlator_taps == 9)
++        {
++            const float spacing = d_trk_parameters.tap_spacing_chips * static_cast<float>(d_code_samples_per_chip);
++            for (int32_t n = 0; n < d_n_correlator_taps; ++n)
++                {
++                    d_local_code_shift_chips[n] = static_cast<float>(n - 4) * spacing;
++                }
++            d_trk_parameters.spc = d_trk_parameters.tap_spacing_chips;
++        }
++    else if (d_n_correlator_taps == 5)
+         {
+             d_local_code_shift_chips[0] = -d_trk_parameters.very_early_late_space_chips * static_cast<float>(d_code_samples_per_chip);
+             d_local_code_shift_chips[1] = -d_trk_parameters.early_late_space_chips * static_cast<float>(d_code_samples_per_chip);
+@@ -1165,6 +1196,7 @@ void dll_pll_veml_tracking::check_carrier_phase_coherent_initialization()
+ void dll_pll_veml_tracking::clear_tracking_vars()
+ {
+     std::fill_n(d_correlator_outs.begin(), d_n_correlator_taps, gr_complex(0.0, 0.0));
++    std::fill_n(d_tap_accu.begin(), d_n_correlator_taps, gr_complex(0.0, 0.0));
+     if (d_trk_parameters.track_pilot)
+         {
+             d_Prompt_Data[0] = gr_complex(0.0, 0.0);
+@@ -1274,6 +1306,10 @@ void dll_pll_veml_tracking::save_correlation_results()
+                     d_E_accu += *d_Early;
+                     d_P_accu += *d_Prompt;
+                     d_L_accu += *d_Late;
++                    for (int32_t n = 0; n < d_n_correlator_taps; ++n)
++                        {
++                            d_tap_accu[n] += d_correlator_outs[n];
++                        }
+                 }
+             else
+                 {
+@@ -1285,6 +1321,10 @@ void dll_pll_veml_tracking::save_correlation_results()
+                     d_E_accu -= *d_Early;
+                     d_P_accu -= *d_Prompt;
+                     d_L_accu -= *d_Late;
++                    for (int32_t n = 0; n < d_n_correlator_taps; ++n)
++                        {
++                            d_tap_accu[n] -= d_correlator_outs[n];
++                        }
+                 }
+             d_current_symbol++;
+             // secondary code roll-up
+@@ -1300,6 +1340,10 @@ void dll_pll_veml_tracking::save_correlation_results()
+             d_E_accu += *d_Early;
+             d_P_accu += *d_Prompt;
+             d_L_accu += *d_Late;
++            for (int32_t n = 0; n < d_n_correlator_taps; ++n)
++                {
++                    d_tap_accu[n] += d_correlator_outs[n];
++                }
+         }
+ 
+     // data secondary code roll-up
+@@ -1415,11 +1459,31 @@ void dll_pll_veml_tracking::log_data()
+             try
+                 {
+                     // Dump correlators output
+-                    d_dump_file.write(reinterpret_cast<char *>(&tmp_VE), sizeof(float));
+-                    d_dump_file.write(reinterpret_cast<char *>(&tmp_E), sizeof(float));
+-                    d_dump_file.write(reinterpret_cast<char *>(&tmp_P), sizeof(float));
+-                    d_dump_file.write(reinterpret_cast<char *>(&tmp_L), sizeof(float));
+-                    d_dump_file.write(reinterpret_cast<char *>(&tmp_VL), sizeof(float));
++                    if (d_n_correlator_taps == 9)
++                        {
++                            for (int32_t n = 0; n < d_n_correlator_taps; ++n)
++                                {
++                                    tmp_float = std::abs<float>(d_tap_accu[n]);
++                                    d_dump_file.write(reinterpret_cast<char *>(&tmp_float), sizeof(float));
++                                }
++                            // Preserve the complex correlation shape for CGC.
++                            // I/Q pairs follow the nine legacy magnitudes.
++                            for (int32_t n = 0; n < d_n_correlator_taps; ++n)
++                                {
++                                    tmp_float = d_tap_accu[n].real();
++                                    d_dump_file.write(reinterpret_cast<char *>(&tmp_float), sizeof(float));
++                                    tmp_float = d_tap_accu[n].imag();
++                                    d_dump_file.write(reinterpret_cast<char *>(&tmp_float), sizeof(float));
++                                }
++                        }
++                    else
++                        {
++                            d_dump_file.write(reinterpret_cast<char *>(&tmp_VE), sizeof(float));
++                            d_dump_file.write(reinterpret_cast<char *>(&tmp_E), sizeof(float));
++                            d_dump_file.write(reinterpret_cast<char *>(&tmp_P), sizeof(float));
++                            d_dump_file.write(reinterpret_cast<char *>(&tmp_L), sizeof(float));
++                            d_dump_file.write(reinterpret_cast<char *>(&tmp_VL), sizeof(float));
++                        }
+                     // PROMPT I and Q (to analyze navigation symbols)
+                     d_dump_file.write(reinterpret_cast<char *>(&prompt_I), sizeof(float));
+                     d_dump_file.write(reinterpret_cast<char *>(&prompt_Q), sizeof(float));
+@@ -1477,7 +1541,7 @@ int32_t dll_pll_veml_tracking::save_matfile() const
+     // READ DUMP FILE
+     std::ifstream::pos_type size;
+     const int32_t number_of_double_vars = 1;
+-    const int32_t number_of_float_vars = 19;
++    const int32_t number_of_float_vars = (d_trk_parameters.tap_count == 9) ? 41 : 19;
+     const int32_t epoch_size_bytes = sizeof(uint64_t) + sizeof(double) * number_of_double_vars +
+                                      sizeof(float) * number_of_float_vars + sizeof(uint32_t);
+     std::ifstream dump_file;
+@@ -1509,11 +1573,20 @@ int32_t dll_pll_veml_tracking::save_matfile() const
+         {
+             return 1;
+         }
++    auto abs_E4 = std::vector<float>(num_epoch);
++    auto abs_E3 = std::vector<float>(num_epoch);
++    auto abs_E2 = std::vector<float>(num_epoch);
+     auto abs_VE = std::vector<float>(num_epoch);
+     auto abs_E = std::vector<float>(num_epoch);
+     auto abs_P = std::vector<float>(num_epoch);
+     auto abs_L = std::vector<float>(num_epoch);
+     auto abs_VL = std::vector<float>(num_epoch);
++    auto abs_L2 = std::vector<float>(num_epoch);
++    auto abs_L3 = std::vector<float>(num_epoch);
++    auto abs_L4 = std::vector<float>(num_epoch);
++    auto tap_I = std::vector<std::vector<float>>(9, std::vector<float>(num_epoch));
++    auto tap_Q = std::vector<std::vector<float>>(9, std::vector<float>(num_epoch));
++    const std::array<const char *, 9> tap_names{"E4", "E3", "E2", "E", "P", "L", "L2", "L3", "L4"};
+     auto Prompt_I = std::vector<float>(num_epoch);
+     auto Prompt_Q = std::vector<float>(num_epoch);
+     auto PRN_start_sample_count = std::vector<uint64_t>(num_epoch);
+@@ -1537,11 +1610,33 @@ int32_t dll_pll_veml_tracking::save_matfile() const
+                 {
+                     for (int64_t i = 0; i < num_epoch; i++)
+                         {
+-                            dump_file.read(reinterpret_cast<char *>(&abs_VE[i]), sizeof(float));
+-                            dump_file.read(reinterpret_cast<char *>(&abs_E[i]), sizeof(float));
+-                            dump_file.read(reinterpret_cast<char *>(&abs_P[i]), sizeof(float));
+-                            dump_file.read(reinterpret_cast<char *>(&abs_L[i]), sizeof(float));
+-                            dump_file.read(reinterpret_cast<char *>(&abs_VL[i]), sizeof(float));
++                            if (d_trk_parameters.tap_count == 9)
++                                {
++                                    dump_file.read(reinterpret_cast<char *>(&abs_E4[i]), sizeof(float));
++                                    dump_file.read(reinterpret_cast<char *>(&abs_E3[i]), sizeof(float));
++                                    dump_file.read(reinterpret_cast<char *>(&abs_E2[i]), sizeof(float));
++                                    dump_file.read(reinterpret_cast<char *>(&abs_E[i]), sizeof(float));
++                                    dump_file.read(reinterpret_cast<char *>(&abs_P[i]), sizeof(float));
++                                    dump_file.read(reinterpret_cast<char *>(&abs_L[i]), sizeof(float));
++                                    dump_file.read(reinterpret_cast<char *>(&abs_L2[i]), sizeof(float));
++                                    dump_file.read(reinterpret_cast<char *>(&abs_L3[i]), sizeof(float));
++                                    dump_file.read(reinterpret_cast<char *>(&abs_L4[i]), sizeof(float));
++                                    for (int32_t n = 0; n < 9; ++n)
++                                        {
++                                            dump_file.read(reinterpret_cast<char *>(&tap_I[n][i]), sizeof(float));
++                                            dump_file.read(reinterpret_cast<char *>(&tap_Q[n][i]), sizeof(float));
++                                        }
++                                    abs_VE[i] = abs_E2[i];
++                                    abs_VL[i] = abs_L2[i];
++                                }
++                            else
++                                {
++                                    dump_file.read(reinterpret_cast<char *>(&abs_VE[i]), sizeof(float));
++                                    dump_file.read(reinterpret_cast<char *>(&abs_E[i]), sizeof(float));
++                                    dump_file.read(reinterpret_cast<char *>(&abs_P[i]), sizeof(float));
++                                    dump_file.read(reinterpret_cast<char *>(&abs_L[i]), sizeof(float));
++                                    dump_file.read(reinterpret_cast<char *>(&abs_VL[i]), sizeof(float));
++                                }
+                             dump_file.read(reinterpret_cast<char *>(&Prompt_I[i]), sizeof(float));
+                             dump_file.read(reinterpret_cast<char *>(&Prompt_Q[i]), sizeof(float));
+                             dump_file.read(reinterpret_cast<char *>(&PRN_start_sample_count[i]), sizeof(uint64_t));
+@@ -1579,6 +1674,46 @@ int32_t dll_pll_veml_tracking::save_matfile() const
+     if (reinterpret_cast<int64_t *>(matfp) != nullptr)
+         {
+             std::array<size_t, 2> dims{1, static_cast<size_t>(num_epoch)};
++            if (d_trk_parameters.tap_count == 9)
++                {
++                    matvar = Mat_VarCreate("abs_E4", MAT_C_SINGLE, MAT_T_SINGLE, 2, dims.data(), abs_E4.data(), 0);
++                    Mat_VarWrite(matfp, matvar, MAT_COMPRESSION_ZLIB);
++                    Mat_VarFree(matvar);
++
++                    matvar = Mat_VarCreate("abs_E3", MAT_C_SINGLE, MAT_T_SINGLE, 2, dims.data(), abs_E3.data(), 0);
++                    Mat_VarWrite(matfp, matvar, MAT_COMPRESSION_ZLIB);
++                    Mat_VarFree(matvar);
++
++                    matvar = Mat_VarCreate("abs_E2", MAT_C_SINGLE, MAT_T_SINGLE, 2, dims.data(), abs_E2.data(), 0);
++                    Mat_VarWrite(matfp, matvar, MAT_COMPRESSION_ZLIB);
++                    Mat_VarFree(matvar);
++
++                    matvar = Mat_VarCreate("abs_L2", MAT_C_SINGLE, MAT_T_SINGLE, 2, dims.data(), abs_L2.data(), 0);
++                    Mat_VarWrite(matfp, matvar, MAT_COMPRESSION_ZLIB);
++                    Mat_VarFree(matvar);
++
++                    matvar = Mat_VarCreate("abs_L3", MAT_C_SINGLE, MAT_T_SINGLE, 2, dims.data(), abs_L3.data(), 0);
++                    Mat_VarWrite(matfp, matvar, MAT_COMPRESSION_ZLIB);
++                    Mat_VarFree(matvar);
++
++                    matvar = Mat_VarCreate("abs_L4", MAT_C_SINGLE, MAT_T_SINGLE, 2, dims.data(), abs_L4.data(), 0);
++                    Mat_VarWrite(matfp, matvar, MAT_COMPRESSION_ZLIB);
++                    Mat_VarFree(matvar);
++
++                    for (int32_t n = 0; n < 9; ++n)
++                        {
++                            const std::string tap_i_name = "tap_I_" + std::string(tap_names[n]);
++                            matvar = Mat_VarCreate(tap_i_name.c_str(), MAT_C_SINGLE, MAT_T_SINGLE, 2, dims.data(), tap_I[n].data(), 0);
++                            Mat_VarWrite(matfp, matvar, MAT_COMPRESSION_ZLIB);
++                            Mat_VarFree(matvar);
++
++                            const std::string tap_q_name = "tap_Q_" + std::string(tap_names[n]);
++                            matvar = Mat_VarCreate(tap_q_name.c_str(), MAT_C_SINGLE, MAT_T_SINGLE, 2, dims.data(), tap_Q[n].data(), 0);
++                            Mat_VarWrite(matfp, matvar, MAT_COMPRESSION_ZLIB);
++                            Mat_VarFree(matvar);
++                        }
++                }
++
+             matvar = Mat_VarCreate("abs_VE", MAT_C_SINGLE, MAT_T_SINGLE, 2, dims.data(), abs_VE.data(), 0);
+             Mat_VarWrite(matfp, matvar, MAT_COMPRESSION_ZLIB);  // or MAT_COMPRESSION_NONE
+             Mat_VarFree(matvar);
+@@ -1798,7 +1933,11 @@ int dll_pll_veml_tracking::general_work(int noutput_items __attribute__((unused)
+                 d_E_accu = *d_Early;
+                 d_P_accu = *d_Prompt;
+                 d_L_accu = *d_Late;
+-                d_trk_parameters.spc = d_trk_parameters.early_late_space_chips;
++                for (int32_t n = 0; n < d_n_correlator_taps; ++n)
++                    {
++                        d_tap_accu[n] = d_correlator_outs[n];
++                    }
++                d_trk_parameters.spc = (d_n_correlator_taps == 9) ? d_trk_parameters.tap_spacing_chips : d_trk_parameters.early_late_space_chips;
+                 // if (std::string(d_trk_parameters.signal) == "E1")
+                 //    {
+                 //        d_trk_parameters.slope = -CalculateSlopeAbs(&SinBocCorrelationFunction<1, 1>, d_trk_parameters.spc);
+@@ -1882,6 +2021,7 @@ int dll_pll_veml_tracking::general_work(int noutput_items __attribute__((unused)
+                                 d_P_data_accu = gr_complex(0.0, 0.0);
+                                 d_L_accu = gr_complex(0.0, 0.0);
+                                 d_VL_accu = gr_complex(0.0, 0.0);
++                                std::fill_n(d_tap_accu.begin(), d_n_correlator_taps, gr_complex(0.0, 0.0));
+                                 d_Prompt_circular_buffer.clear();
+                                 d_current_symbol = 0;
+                                 d_current_data_symbol = 0;
+@@ -2019,6 +2159,7 @@ int dll_pll_veml_tracking::general_work(int noutput_items __attribute__((unused)
+                         d_P_accu = gr_complex(0.0, 0.0);
+                         d_L_accu = gr_complex(0.0, 0.0);
+                         d_VL_accu = gr_complex(0.0, 0.0);
++                        std::fill_n(d_tap_accu.begin(), d_n_correlator_taps, gr_complex(0.0, 0.0));
+                         if (d_enable_extended_integration)
+                             {
+                                 d_state = 3;  // new coherent integration (correlation time extension) cycle
+diff --git a/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.h b/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.h
+index 0c0856e..088168a 100644
+--- a/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.h
++++ b/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.h
+@@ -104,6 +104,7 @@ private:
+     volk_gnsssdr::vector<float> d_data_code;
+     volk_gnsssdr::vector<float> d_local_code_shift_chips;
+     volk_gnsssdr::vector<gr_complex> d_correlator_outs;
++    volk_gnsssdr::vector<gr_complex> d_tap_accu;
+     volk_gnsssdr::vector<gr_complex> d_Prompt_Data;
+     volk_gnsssdr::vector<gr_complex> d_Prompt_buffer;
+ 
+diff --git a/src/algorithms/tracking/libs/dll_pll_conf.cc b/src/algorithms/tracking/libs/dll_pll_conf.cc
+index 0ffa5a3..dc2b11a 100644
+--- a/src/algorithms/tracking/libs/dll_pll_conf.cc
++++ b/src/algorithms/tracking/libs/dll_pll_conf.cc
+@@ -103,6 +103,18 @@ void Dll_Pll_Conf::SetFromConfiguration(const ConfigurationInterface *configurat
+     early_late_space_narrow_chips = configuration->property(role + ".early_late_space_narrow_chips", early_late_space_narrow_chips);
+     very_early_late_space_chips = configuration->property(role + ".very_early_late_space_chips", very_early_late_space_chips);
+     very_early_late_space_narrow_chips = configuration->property(role + ".very_early_late_space_narrow_chips", very_early_late_space_narrow_chips);
++    tap_count = configuration->property(role + ".tap_count", tap_count);
++    if (tap_count != 0 and tap_count != 3 and tap_count != 5 and tap_count != 9)
++        {
++            LOG(WARNING) << "Unsupported " << role << ".tap_count=" << tap_count << ". Use 3, 5, or 9. Falling back to the implementation default.";
++            tap_count = 0;
++        }
++    tap_spacing_chips = configuration->property(role + ".tap_spacing_chips", tap_spacing_chips);
++    if (tap_spacing_chips <= 0.0F)
++        {
++            LOG(WARNING) << role << ".tap_spacing_chips must be positive. Set to 0.125 chips.";
++            tap_spacing_chips = 0.125F;
++        }
+     extend_correlation_symbols = configuration->property(role + ".extend_correlation_symbols", extend_correlation_symbols);
+     track_pilot = configuration->property(role + ".track_pilot", track_pilot);
+     cn0_samples = configuration->property(role + ".cn0_samples", cn0_samples);
+diff --git a/src/algorithms/tracking/libs/dll_pll_conf.h b/src/algorithms/tracking/libs/dll_pll_conf.h
+index dec458a..d05c7ad 100644
+--- a/src/algorithms/tracking/libs/dll_pll_conf.h
++++ b/src/algorithms/tracking/libs/dll_pll_conf.h
+@@ -51,6 +51,7 @@ public:
+     float very_early_late_space_chips{0.5};
+     float early_late_space_narrow_chips{0.15};
+     float very_early_late_space_narrow_chips{0.5};
++    float tap_spacing_chips{0.125};
+     float slope{1.0};
+     float spc{0.5};
+     float y_intercept{1.0};
+@@ -64,6 +65,7 @@ public:
+     int32_t pll_filter_order{3};
+     int32_t dll_filter_order{2};
+     int32_t extend_correlation_symbols{1};
++    int32_t tap_count{0};
+     int32_t cn0_samples{0};
+     int32_t cn0_smoother_samples{200};
+     int32_t carrier_lock_test_smoother_samples{25};

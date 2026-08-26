@@ -1,0 +1,21 @@
+{
+  "schema": "gnss-doppler-lab.cgc-complex9-receiver-smoke-config",
+  "schema_version": 1,
+  "scope": "simulation-v4 paired train RF only; validation and TEXBAT are locked",
+  "source_rf_manifest": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-001/rf/normal/manifest.json",
+  "output_root": "artifacts/cgc_complex9_receiver_smoke_v1",
+  "gnss_sdr": {
+    "executable": ".tools/gnss-sdr-src/build/src/main/gnss-sdr",
+    "upstream_commit": "1ddd4562723040fd66cb334b578a5b69455625f4",
+    "patch": "patches/gnss-sdr-complex9-tracking-v1.patch",
+    "channel_count": 11,
+    "timeout_seconds": 900,
+    "tracking_tap_count": 9,
+    "tracking_tap_spacing_chips": 0.125
+  },
+  "gates": {
+    "minimum_complex_prns": 8,
+    "minimum_total_epochs": 10000,
+    "maximum_magnitude_reconstruction_error": 0.001
+  }
+}

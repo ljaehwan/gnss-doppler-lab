@@ -228,6 +228,72 @@ def test_paired_composer_freezes_gain_and_makes_pre_event_prefix_byte_identical(
     assert report["scenarios"]["steady"]["clipping_fraction"] < 0.05
 
 
+def test_paired_composer_uses_validated_reference_override(tmp_path):
+    samples = 40
+    indices = np.arange(samples)
+    authentic = tmp_path / "auth.bin"
+    counterfeit = tmp_path / "fake.bin"
+    _write_iq(authentic, (12 + indices % 5).astype(np.int8), (-8 + indices % 3).astype(np.int8))
+    _write_iq(counterfeit, (-9 + indices % 4).astype(np.int8), (6 - indices % 2).astype(np.int8))
+    reference = {
+        "complex_samples": 40,
+        "authentic_channel_mean_complex_power": 100.0,
+        "frontend_output_awgn_complex_variance": 25.0,
+        "expected_normal_pre_gain_mean_complex_power": 1600.0,
+        "fixed_receiver_gain": 0.5,
+        "normal_target_rms": 20.0,
+    }
+    outputs = {
+        name: tmp_path / "override" / name / "iq.bin"
+        for name in ("steady", "recovery", "spoof")
+    }
+
+    report = compose_paired_iq(
+        authentic,
+        counterfeit,
+        outputs,
+        _scenarios(),
+        sample_rate_hz=10,
+        receiver=_receiver(),
+        normal_target_rms=20.0,
+        reference_override=reference,
+    )
+
+    assert report["reference"]["fixed_receiver_gain"] == 0.5
+    assert report["reference"]["frontend_output_awgn_complex_variance"] == 25.0
+
+
+@pytest.mark.parametrize(
+    ("key", "value", "match"),
+    [
+        ("complex_samples", 39, "complex_samples"),
+        ("normal_target_rms", 21.0, "normal_target_rms"),
+        ("fixed_receiver_gain", 0.4, "fixed_receiver_gain"),
+    ],
+)
+def test_paired_composer_rejects_inconsistent_reference_override(
+    tmp_path, key, value, match
+):
+    authentic = tmp_path / "auth.bin"
+    counterfeit = tmp_path / "fake.bin"
+    _write_iq(authentic, np.ones(40, dtype=np.int8), np.ones(40, dtype=np.int8))
+    _write_iq(counterfeit, np.ones(40, dtype=np.int8), np.ones(40, dtype=np.int8))
+    reference = {
+        "complex_samples": 40, "authentic_channel_mean_complex_power": 100.0,
+        "frontend_output_awgn_complex_variance": 25.0,
+        "expected_normal_pre_gain_mean_complex_power": 1600.0,
+        "fixed_receiver_gain": 0.5, "normal_target_rms": 20.0,
+    }
+    reference[key] = value
+    with pytest.raises(SimulationV4Error, match=match):
+        compose_paired_iq(
+            authentic, counterfeit, {"steady": tmp_path / "out.bin"},
+            (SimulationScenario(name="steady", kind="steady_normal"),),
+            sample_rate_hz=10, receiver=_receiver(), normal_target_rms=20.0,
+            reference_override=reference,
+        )
+
+
 def test_generate_campaign_publishes_receiver_compatible_manifests_and_truth(tmp_path):
     campaign = load_simulation_campaign(_campaign_config(tmp_path))
     rate = 10

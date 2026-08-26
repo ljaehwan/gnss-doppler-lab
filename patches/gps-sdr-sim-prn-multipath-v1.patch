@@ -1,0 +1,259 @@
+diff --git a/gpssim.c b/gpssim.c
+index 1b01ebf..26efe12 100644
+--- a/gpssim.c
++++ b/gpssim.c
+@@ -9,8 +9,105 @@
+ #include "getopt.h"
+ #else
+ #include <unistd.h>
++
+ #endif
+ #include "gpssim.h"
++#define MULTIPATH_LINE_SIZE 512
++
++typedef struct
++{
++	int enabled;
++	int whole_delay_samples;
++	double fractional_delay_samples;
++	double amplitude_ratio;
++	double phase_cos;
++	double phase_sin;
++} multipath_spec_t;
++
++static int readMultipathSpecs(const char *filename,
++	multipath_spec_t specs[MAX_SAT], double sample_rate_hz, int *history_length)
++{
++	FILE *fp;
++	char line[MULTIPATH_LINE_SIZE];
++	int line_number = 0;
++	int spec_count = 0;
++	double maximum_delay = 0.0;
++
++	fp = fopen(filename, "r");
++	if (fp == NULL)
++	{
++		fprintf(stderr, "ERROR: Failed to open multipath specification file: %s\n", filename);
++		return(-1);
++	}
++
++	while (fgets(line, sizeof(line), fp) != NULL)
++	{
++		char *cursor = line;
++		char extra;
++		int prn;
++		double delay_samples;
++		double amplitude_ratio;
++		double phase_degrees;
++		double phase_radians;
++
++		line_number++;
++		while (*cursor == ' ' || *cursor == '\t')
++			cursor++;
++		if (*cursor == '\0' || *cursor == '\n' || *cursor == '\r' || *cursor == '#')
++			continue;
++
++		if (sscanf(cursor, " %d , %lf , %lf , %lf %c",
++			&prn, &delay_samples, &amplitude_ratio, &phase_degrees, &extra) != 4)
++		{
++			fprintf(stderr, "ERROR: Invalid multipath specification at line %d.\n", line_number);
++			fclose(fp);
++			return(-1);
++		}
++		if (prn < 1 || prn > MAX_SAT || specs[prn-1].enabled)
++		{
++			fprintf(stderr, "ERROR: Invalid or duplicate multipath PRN at line %d.\n", line_number);
++			fclose(fp);
++			return(-1);
++		}
++		if (!isfinite(delay_samples) || delay_samples < 1.0 ||
++			delay_samples > sample_rate_hz * 0.001)
++		{
++			fprintf(stderr, "ERROR: Multipath delay at line %d must be within [1 sample, 1 ms].\n", line_number);
++			fclose(fp);
++			return(-1);
++		}
++		if (!isfinite(amplitude_ratio) || amplitude_ratio <= 0.0 || amplitude_ratio > 1.0 ||
++			!isfinite(phase_degrees))
++		{
++			fprintf(stderr, "ERROR: Invalid multipath amplitude or phase at line %d.\n", line_number);
++			fclose(fp);
++			return(-1);
++		}
++
++		phase_radians = phase_degrees * (4.0 * atan(1.0)) / 180.0;
++		specs[prn-1].enabled = TRUE;
++		specs[prn-1].whole_delay_samples = (int)floor(delay_samples);
++		specs[prn-1].fractional_delay_samples =
++			delay_samples - floor(delay_samples);
++		specs[prn-1].amplitude_ratio = amplitude_ratio;
++		specs[prn-1].phase_cos = cos(phase_radians);
++		specs[prn-1].phase_sin = sin(phase_radians);
++		if (delay_samples > maximum_delay)
++			maximum_delay = delay_samples;
++		spec_count++;
++	}
++
++	fclose(fp);
++	if (spec_count == 0)
++	{
++		fprintf(stderr, "ERROR: Multipath specification file contains no active PRNs.\n");
++		return(-1);
++	}
++	*history_length = (int)ceil(maximum_delay) + 2;
++	fprintf(stderr, "Loaded %d PRN-specific multipath specifications from %s\n",
++		spec_count, filename);
++	return(0);
++}
+ 
+ int sinTable512[] = {
+ 	   2,   5,   8,  11,  14,  17,  20,  23,  26,  29,  32,  35,  38,  41,  44,  47,
+@@ -1720,6 +1817,7 @@ void usage(void)
+ 		"  -o <output>      I/Q sampling data file (default: gpssim.bin)\n"
+ 		"  -s <frequency>   Sampling frequency [Hz] (default: 2600000)\n"
+ 		"  -b <iq_bits>     I/Q data format [1/8/16] (default: 16)\n"
++		"  -m <multipath>   PRN,delay_samples,amplitude_ratio,phase_degrees file\n"
+ 		"  -i               Disable ionospheric delay for spacecraft scenario\n"
+ 		"  -p [fixed_gain]  Disable path loss and hold power level constant\n"
+ 		"  -v               Show details about simulated channels\n",
+@@ -1765,6 +1863,13 @@ int main(int argc, char *argv[])
+ 
+ 	char navfile[MAX_CHAR];
+ 	char outfile[MAX_CHAR];
++	char multipath_file[MAX_CHAR];
++	multipath_spec_t multipath_specs[MAX_SAT] = {{0}};
++	double *multipath_i_history = NULL;
++	double *multipath_q_history = NULL;
++	int multipath_history_length = 0;
++	int multipath_write_index[MAX_CHAN] = {0};
++	int multipath_history_prn[MAX_CHAN] = {0};
+ 
+ 	double samp_freq;
+ 	int iq_buff_size;
+@@ -1801,6 +1906,7 @@ int main(int argc, char *argv[])
+ 	navfile[0] = 0;
+ 	umfile[0] = 0;
+ 	strcpy(outfile, "gpssim.bin");
++	multipath_file[0] = 0;
+ 	samp_freq = 2.6e6;
+ 	data_format = SC16;
+ 	g0.week = -1; // Invalid start time
+@@ -1816,7 +1922,7 @@ int main(int argc, char *argv[])
+ 		exit(1);
+ 	}
+ 
+-	while ((result=getopt(argc,argv,"e:u:x:g:c:l:o:s:b:L:T:t:d:ipv"))!=-1)
++	while ((result=getopt(argc,argv,"e:u:x:g:c:l:o:s:b:L:T:t:d:m:ipv"))!=-1)
+ 	{
+ 		switch (result)
+ 		{
+@@ -1928,6 +2034,14 @@ int main(int argc, char *argv[])
+ 		case 'i':
+ 			ionoutc.enable = FALSE; // Disable ionospheric correction
+ 			break;
++		case 'm':
++			if (strlen(optarg) >= MAX_CHAR)
++			{
++				fprintf(stderr, "ERROR: Multipath filename is too long.\n");
++				exit(1);
++			}
++			strcpy(multipath_file, optarg);
++			break;
+ 		case 'p':
+ 			if (optind < argc && argv[optind][0] != '-') // Check if next item is an argument
+ 			{
+@@ -1980,6 +2094,13 @@ int main(int argc, char *argv[])
+ 	iq_buff_size = (int)samp_freq; // samples per 0.1sec
+ 	samp_freq *= 10.0;
+ 
++	if (multipath_file[0] != 0 &&
++		readMultipathSpecs(multipath_file, multipath_specs, samp_freq,
++			&multipath_history_length) != 0)
++	{
++		exit(1);
++	}
++
+ 	delt = 1.0/samp_freq;
+ 
+ 	////////////////////////////////////////////////////////////
+@@ -2189,6 +2310,19 @@ int main(int argc, char *argv[])
+ 		fprintf(stderr, "ERROR: Failed to allocate 16-bit I/Q buffer.\n");
+ 		exit(1);
+ 	}
++	if (multipath_history_length > 0)
++	{
++		size_t history_sample_count =
++			(size_t)MAX_CHAN * (size_t)multipath_history_length;
++		multipath_i_history = calloc(history_sample_count, sizeof(double));
++		multipath_q_history = calloc(history_sample_count, sizeof(double));
++		if (multipath_i_history == NULL || multipath_q_history == NULL)
++		{
++			fprintf(stderr, "ERROR: Failed to allocate PRN-specific multipath history.\n");
++			exit(1);
++		}
++	}
++
+ 
+ 	if (data_format==SC08)
+ 	{
+@@ -2317,6 +2451,50 @@ int main(int argc, char *argv[])
+ #endif
+ 					ip = chan[i].dataBit * chan[i].codeCA * cosTable512[iTable] * gain[i];
+ 					qp = chan[i].dataBit * chan[i].codeCA * sinTable512[iTable] * gain[i];
++					if (multipath_history_length > 0)
++					{
++						multipath_spec_t *spec = &multipath_specs[chan[i].prn-1];
++						double *i_history =
++							multipath_i_history + (size_t)i * multipath_history_length;
++						double *q_history =
++							multipath_q_history + (size_t)i * multipath_history_length;
++						int write_index = multipath_write_index[i];
++
++						if (multipath_history_prn[i] != chan[i].prn)
++						{
++							memset(i_history, 0, multipath_history_length * sizeof(double));
++							memset(q_history, 0, multipath_history_length * sizeof(double));
++							multipath_history_prn[i] = chan[i].prn;
++							multipath_write_index[i] = 0;
++							write_index = 0;
++						}
++						if (spec->enabled)
++						{
++							int first_index =
++								(write_index - spec->whole_delay_samples +
++									multipath_history_length) % multipath_history_length;
++							int second_index =
++								(first_index - 1 + multipath_history_length) %
++								multipath_history_length;
++							double fraction = spec->fractional_delay_samples;
++							double delayed_i =
++								(1.0-fraction)*i_history[first_index] +
++								fraction*i_history[second_index];
++							double delayed_q =
++								(1.0-fraction)*q_history[first_index] +
++								fraction*q_history[second_index];
++
++							i_acc += (int)round(spec->amplitude_ratio *
++								(delayed_i*spec->phase_cos - delayed_q*spec->phase_sin));
++							q_acc += (int)round(spec->amplitude_ratio *
++								(delayed_i*spec->phase_sin + delayed_q*spec->phase_cos));
++							i_history[write_index] = ip;
++							q_history[write_index] = qp;
++							multipath_write_index[i] =
++								(write_index + 1) % multipath_history_length;
++						}
++					}
++
+ 
+ 					// Accumulate for all visible satellites
+ 					i_acc += ip;
+@@ -2473,6 +2651,9 @@ int main(int argc, char *argv[])
+ 
+ 	fprintf(stderr, "\nDone!\n");
+ 
++	free(multipath_i_history);
++	free(multipath_q_history);
++
+ 	// Free I/Q buffer
+ 	free(iq_buff);
+ 

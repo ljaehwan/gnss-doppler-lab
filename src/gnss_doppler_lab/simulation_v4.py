@@ -481,6 +481,7 @@ def compose_paired_iq(
     sample_rate_hz: int,
     receiver: ImpairmentConfig,
     normal_target_rms: float,
+    reference_override: dict[str, float] | None = None,
 ) -> dict[str, Any]:
     """Compose all scenarios in one pass with shared noise and frozen gain."""
     authentic_path, counterfeit_path = Path(authentic_path), Path(counterfeit_path)
@@ -490,7 +491,44 @@ def compose_paired_iq(
         raise SimulationV4Error("component IQ must be non-empty signed interleaved IQ8")
     if set(destinations) != {item.name for item in scenarios}:
         raise SimulationV4Error("destination names must match scenario names")
-    reference = _measure_authentic_reference(authentic_path, sample_rate_hz, receiver, normal_target_rms)
+    if reference_override is None:
+        reference = _measure_authentic_reference(
+            authentic_path, sample_rate_hz, receiver, normal_target_rms
+        )
+    else:
+        required_reference = {
+            "complex_samples", "authentic_channel_mean_complex_power",
+            "frontend_output_awgn_complex_variance",
+            "expected_normal_pre_gain_mean_complex_power", "fixed_receiver_gain",
+            "normal_target_rms",
+        }
+        if set(reference_override) != required_reference or not all(
+            math.isfinite(float(value)) and float(value) > 0.0
+            for value in reference_override.values()
+        ):
+            raise SimulationV4Error("reference_override is incomplete or non-positive")
+        reference = {key: float(value) for key, value in reference_override.items()}
+        expected_samples = authentic_path.stat().st_size // 2
+        if (
+            not reference["complex_samples"].is_integer()
+            or int(reference["complex_samples"]) != expected_samples
+        ):
+            raise SimulationV4Error(
+                "reference_override complex_samples differs from component IQ"
+            )
+        if not math.isclose(
+            reference["normal_target_rms"], float(normal_target_rms),
+            rel_tol=1e-12, abs_tol=0.0,
+        ):
+            raise SimulationV4Error("reference_override normal_target_rms drifted")
+        expected_gain = normal_target_rms / math.sqrt(
+            reference["expected_normal_pre_gain_mean_complex_power"]
+        )
+        if not math.isclose(
+            reference["fixed_receiver_gain"], expected_gain,
+            rel_tol=1e-12, abs_tol=0.0,
+        ):
+            raise SimulationV4Error("reference_override fixed_receiver_gain is inconsistent")
     fixed_gain = np.float32(reference["fixed_receiver_gain"])
     noise_std = np.float32(math.sqrt(reference["frontend_output_awgn_complex_variance"] / 2.0))
     states: list[_OutputState] = []

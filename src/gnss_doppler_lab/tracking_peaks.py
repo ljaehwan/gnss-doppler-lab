@@ -24,6 +24,11 @@ TAP_DATASET_LAYOUTS: dict[int, tuple[tuple[str, str], ...]] = {
     ),
 }
 
+COMPLEX_TAP_DATASET_LAYOUT: tuple[tuple[str, str, str], ...] = tuple(
+    (label, f"tap_I_{label}", f"tap_Q_{label}")
+    for label, _ in TAP_DATASET_LAYOUTS[9]
+)
+
 def tap_dataset_layout(tap_count: int) -> tuple[tuple[str, str], ...]:
     try:
         return TAP_DATASET_LAYOUTS[int(tap_count)]
@@ -50,10 +55,22 @@ class TrackingPeakSeries:
     source_mat_path: Path
     # Zero-based position of this contiguous PRN run within its channel file.
     segment_index: int = 0
+    tap_i: np.ndarray | None = None
+    tap_q: np.ndarray | None = None
 
     @property
     def prompt_magnitude(self) -> np.ndarray:
         return np.hypot(self.prompt_i, self.prompt_q)
+
+    @property
+    def has_complex_taps(self) -> bool:
+        return self.tap_i is not None and self.tap_q is not None
+
+    @property
+    def complex_taps(self) -> np.ndarray:
+        if not self.has_complex_taps:
+            raise ValueError("tracking series does not contain complex correlator taps")
+        return self.tap_i + 1j * self.tap_q
 
 
 def _read_vector(handle: h5py.File, name: str) -> np.ndarray:
@@ -130,7 +147,11 @@ def _slice_indices(indices: np.ndarray, *, max_epochs: int | None, epoch_step: i
     return selected
 
 
-def _series_from_indices(mat_path: Path, handle: h5py.File, indices: np.ndarray, *, sample_rate_hz: int, prn: str, segment_index: int, tap_count: int = 3) -> TrackingPeakSeries:
+def _series_from_indices(
+    mat_path: Path, handle: h5py.File, indices: np.ndarray, *, sample_rate_hz: int,
+    prn: str, segment_index: int, tap_count: int = 3,
+    require_complex_taps: bool = False,
+) -> TrackingPeakSeries:
     epoch_count = len(_read_vector(handle, "PRN"))
     def take(name: str) -> np.ndarray:
         values = _read_vector(handle, name)
@@ -148,6 +169,33 @@ def _series_from_indices(mat_path: Path, handle: h5py.File, indices: np.ndarray,
             raise ValueError(f"Real {tap_count}-tap correlator tap {label} is all-zero: {mat_path}")
         tap_names.append(label)
         tap_columns.append(values)
+    complex_presence = [
+        i_name in handle and q_name in handle
+        for _, i_name, q_name in COMPLEX_TAP_DATASET_LAYOUT
+    ] if tap_count == 9 else []
+    complex_any = any(
+        name in handle
+        for _, i_name, q_name in COMPLEX_TAP_DATASET_LAYOUT
+        for name in (i_name, q_name)
+    ) if tap_count == 9 else False
+    if complex_any and not all(complex_presence):
+        raise ValueError(f"Tracking MAT has a partial complex nine-tap dump: {mat_path}")
+    if require_complex_taps and not all(complex_presence):
+        raise ValueError(f"Tracking MAT is missing required complex nine-tap datasets: {mat_path}")
+    tap_i = tap_q = None
+    if complex_presence and all(complex_presence):
+        stored_tap_i = np.column_stack(
+            [take(i_name) for _, i_name, _ in COMPLEX_TAP_DATASET_LAYOUT]
+        )
+        stored_tap_q = np.column_stack(
+            [take(q_name) for _, _, q_name in COMPLEX_TAP_DATASET_LAYOUT]
+        )
+        reconstructed = np.hypot(stored_tap_i, stored_tap_q).astype(np.float64)
+        magnitudes = np.column_stack(tap_columns)
+        if not np.array_equal(reconstructed, magnitudes):
+            raise ValueError(f"Complex nine-tap I/Q disagrees with stored magnitudes: {mat_path}")
+        tap_i = stored_tap_i.astype(np.float64)
+        tap_q = stored_tap_q.astype(np.float64)
     if indices.size == 0:
         raise ValueError(f"Tracking segment has no epochs: {mat_path}")
     if not tap_columns:
@@ -159,11 +207,15 @@ def _series_from_indices(mat_path: Path, handle: h5py.File, indices: np.ndarray,
         cn0_db_hz=take("CN0_SNV_dB_Hz").astype(np.float64), prompt_i=take("Prompt_I").astype(np.float64),
         prompt_q=take("Prompt_Q").astype(np.float64), code_error_chips=take("code_error_chips").astype(np.float64),
         code_freq_chips=take("code_freq_chips").astype(np.float64), source_mat_path=mat_path,
-        segment_index=segment_index,
+        segment_index=segment_index, tap_i=tap_i, tap_q=tap_q,
     )
 
 
-def load_receiver_tracking_peak_series_segments(receiver_run_dir: str | Path, prn: str | int, *, max_epochs: int | None = None, epoch_step: int = 1, tap_count: int | None = None) -> list[TrackingPeakSeries]:
+def load_receiver_tracking_peak_series_segments(
+    receiver_run_dir: str | Path, prn: str | int, *, max_epochs: int | None = None,
+    epoch_step: int = 1, tap_count: int | None = None,
+    require_complex_taps: bool = False,
+) -> list[TrackingPeakSeries]:
     """Load distinct contiguous channel segments for prn."""
     run_dir = Path(receiver_run_dir)
     manifest = _receiver_manifest(run_dir)
@@ -187,7 +239,12 @@ def load_receiver_tracking_peak_series_segments(receiver_run_dir: str | Path, pr
                     if value == target:
                         indices = _slice_indices(np.arange(start, end), max_epochs=max_epochs, epoch_step=epoch_step)
                         if len(indices):
-                            result.append(_series_from_indices(mat_path, handle, indices, sample_rate_hz=sample_rate_hz, prn=target, segment_index=segment_index, tap_count=requested_tap_count))
+                            result.append(_series_from_indices(
+                                mat_path, handle, indices, sample_rate_hz=sample_rate_hz,
+                                prn=target, segment_index=segment_index,
+                                tap_count=requested_tap_count,
+                                require_complex_taps=require_complex_taps,
+                            ))
                     segment_index += 1
                 start = end
     if not result:
@@ -195,12 +252,21 @@ def load_receiver_tracking_peak_series_segments(receiver_run_dir: str | Path, pr
     return result
 
 
-def load_receiver_tracking_peak_series(receiver_run_dir: str | Path, prn: str | int, *, max_epochs: int | None = None, epoch_step: int = 1, tap_count: int | None = None) -> TrackingPeakSeries:
+def load_receiver_tracking_peak_series(
+    receiver_run_dir: str | Path, prn: str | int, *, max_epochs: int | None = None,
+    epoch_step: int = 1, tap_count: int | None = None,
+    require_complex_taps: bool = False,
+) -> TrackingPeakSeries:
     """Load one PRN, concatenating segments for backwards compatibility."""
-    segments = load_receiver_tracking_peak_series_segments(receiver_run_dir, prn, max_epochs=max_epochs, epoch_step=epoch_step, tap_count=tap_count)
+    segments = load_receiver_tracking_peak_series_segments(
+        receiver_run_dir, prn, max_epochs=max_epochs, epoch_step=epoch_step,
+        tap_count=tap_count, require_complex_taps=require_complex_taps,
+    )
     if len(segments) == 1:
         return segments[0]
     first = segments[0]
+    if any(segment.has_complex_taps != first.has_complex_taps for segment in segments[1:]):
+        raise ValueError(f"Tracking segments have inconsistent complex-tap schemas for {first.prn}")
     return TrackingPeakSeries(
         prn=first.prn, channel=first.channel, sample_rate_hz=first.sample_rate_hz,
         time_s=np.concatenate([x.time_s for x in segments]), tap_names=first.tap_names,
@@ -210,6 +276,8 @@ def load_receiver_tracking_peak_series(receiver_run_dir: str | Path, prn: str | 
         prompt_q=np.concatenate([x.prompt_q for x in segments]), code_error_chips=np.concatenate([x.code_error_chips for x in segments]),
         code_freq_chips=np.concatenate([x.code_freq_chips for x in segments]), source_mat_path=first.source_mat_path,
         segment_index=first.segment_index,
+        tap_i=(None if first.tap_i is None else np.concatenate([x.tap_i for x in segments])),
+        tap_q=(None if first.tap_q is None else np.concatenate([x.tap_q for x in segments])),
     )
 
 
