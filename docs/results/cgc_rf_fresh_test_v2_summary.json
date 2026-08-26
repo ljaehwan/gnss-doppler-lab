@@ -1,0 +1,58 @@
+{
+  "schema": "gnss-doppler-lab.cgc-rf-fresh-test-result-record",
+  "schema_version": 1,
+  "status": "SUPPORTED",
+  "interpretation": "all preregistered threshold-free fresh simulation support gates passed; this does not establish an absolute detector threshold or field false-alarm rate",
+  "release": {
+    "candidate_commit": "60280575737ff70618c5619ff7522c516bbdc67a",
+    "freeze_commit": "f40224c014becc95953853bd85a4ba6c4bbe1d38",
+    "pair_substitution_performed": false,
+    "post_release_tuning_or_retest": false,
+    "threshold_fitted": false,
+    "absolute_threshold_applied": false
+  },
+  "raw_result": {
+    "path": "artifacts/cgc_rf_fresh_test_v2/summary.json",
+    "sha256": "9896826d939f383c2df1252e9e988731f84bb8c413450bf56fcaee4cd827662a"
+  },
+  "release_state": {
+    "path": "artifacts/cgc_rf_fresh_test_v2/release_state.json",
+    "sha256": "5f8e5b92d75d505dc1019f05a4ff24d709748315da4d0e1cdef8f50e667953ab"
+  },
+  "source_summary": {
+    "path": "artifacts/simulation_v5_fresh_test_generation_v2/summary.json",
+    "sha256": "4875fb42571bc155aed2e465a0c575127aa969e393dfc6677349564390f48166"
+  },
+  "primary": {
+    "pair_count": 3,
+    "pair_ids": ["fv2-static-01", "fv2-straight-01", "fv2-sweep-01"],
+    "pair_level_clock_centered_separations": [0.3286818804385625, 0.4998800359005879, 0.8566372303714984],
+    "positive_separation_pair_count": 3,
+    "median_pair_separation": 0.4998800359005879,
+    "median_pair_separation_bootstrap_95_percentile_interval": [0.3286818804385625, 0.8566372303714984],
+    "pair_block_auc": 1.0,
+    "pair_block_auc_bootstrap_95_percentile_interval": [1.0, 1.0],
+    "clock_centered_improvement_over_legacy_pair_count": 3
+  },
+  "support": {
+    "minimum_comparison_bins_per_scenario_per_pair": 9,
+    "minimum_startup_los_prns_per_pair": 11,
+    "all_six_preregistered_gates_passed": true
+  },
+  "secondary_serial_bin_auc": {
+    "clock_centered_directional": 0.9835390946502057,
+    "legacy_zero_referenced": 0.7626886145404663
+  },
+  "pair_details": [
+    {"pair_id": "fv2-static-01", "motion_kind": "static", "startup_los_prn_count": 13, "multipath_median_residual": 0.458401880528426, "spoof_median_residual": 0.12972000008986348, "clock_centered_separation": 0.3286818804385625, "legacy_separation": -0.02998266754690937},
+    {"pair_id": "fv2-straight-01", "motion_kind": "straight", "startup_los_prn_count": 13, "multipath_median_residual": 0.5738719682123917, "spoof_median_residual": 0.07399193231180384, "clock_centered_separation": 0.4998800359005879, "legacy_separation": 0.07569752351659041},
+    {"pair_id": "fv2-sweep-01", "motion_kind": "parallel-sweep", "startup_los_prn_count": 11, "multipath_median_residual": 0.8924211350072113, "spoof_median_residual": 0.03578390463571291, "clock_centered_separation": 0.8566372303714984, "legacy_separation": 0.1861278101907578}
+  ],
+  "analysis_artifacts": {
+    "delay_estimates_sha256": "ac532a96d62a2c6b10e77eea92af200effdbf68ae7959232f74aa5fb0263f1da",
+    "geometry_scores_sha256": "b6d54a56046feaa9323f4b6d9050d9f1ca6c89e8ebc71920ecf9671ff8948f07",
+    "pair_scenario_medians_sha256": "01240ff99229f0828d26aa0cef44d9fa1a3f5a4b068d63f25644c1171f6d5988",
+    "pair_summary_sha256": "257075ff6f5ac39ae0f0194c0412e36b596e9f6c61ad41a721d8434e8dbec604"
+  },
+  "claim_boundary": "fresh held-out simulated receiver-RF evidence for relative multipath-versus-carry-off-spoof discrimination only; no absolute threshold, field false-alarm, operational, or TEXBAT multipath claim"
+}
