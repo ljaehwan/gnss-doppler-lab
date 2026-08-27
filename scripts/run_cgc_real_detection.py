@@ -39,10 +39,11 @@ RELEASE_INPUTS = (
     "docs/results/cgc_real_detection_protocol_v1.md",
     "scripts/run_cgc_real_detection.py",
 )
-EXPECTED_ARRAYS = {
+REQUIRED_ARRAYS = {
     "complex_iq", "sample_count", "time_s", "prn", "channel",
-    "segment_index", "cn0_db_hz",
+    "segment_index",
 }
+OPTIONAL_ARRAYS = {"cn0_db_hz"}
 EXPECTED_SOURCE_ROSTER = [
     ("cleanStatic", "calibration_only"),
     ("cleanDynamic", "locked_normal"),
@@ -222,14 +223,15 @@ def evaluate_source(
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
     name, role = source["name"], source["role"]
     with np.load(source["paths"]["complex_epoch_npz"], allow_pickle=False) as loaded:
-        if set(loaded.files) != EXPECTED_ARRAYS:
+        observed_arrays = set(loaded.files)
+        if not REQUIRED_ARRAYS <= observed_arrays or observed_arrays - REQUIRED_ARRAYS - OPTIONAL_ARRAYS:
             raise ValueError(f"NPZ arrays drifted: {name}")
         arrays = {key: loaded[key] for key in loaded.files}
     complex_iq = arrays["complex_iq"]
     count = len(complex_iq)
     if complex_iq.shape != (count, 9, 2):
         raise ValueError(f"NPZ complex shape mismatch: {name}")
-    if any(arrays[key].shape != (count,) for key in EXPECTED_ARRAYS - {"complex_iq"}):
+    if any(arrays[key].shape != (count,) for key in observed_arrays - {"complex_iq"}):
         raise ValueError(f"NPZ vector shape mismatch: {name}")
     if count != int(source["manifest"]["output"]["row_count"]):
         raise ValueError(f"NPZ row count mismatch: {name}")

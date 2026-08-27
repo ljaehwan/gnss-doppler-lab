@@ -39,3 +39,11 @@ def test_source_regions_match_frozen_intervals():
     assert MODULE.source_region("ds7", "primary_attack", 30) == "stable_pre"
     assert MODULE.source_region("ds7", "primary_attack", 90) == "excluded_transition"
     assert MODULE.source_region("ds7", "primary_attack", 110) == "stable_post"
+
+
+def test_ds7_required_array_schema_does_not_require_cn0_diagnostic():
+    assert "cn0_db_hz" not in MODULE.REQUIRED_ARRAYS
+    assert MODULE.OPTIONAL_ARRAYS == {"cn0_db_hz"}
+    assert MODULE.REQUIRED_ARRAYS == {
+        "complex_iq", "sample_count", "time_s", "prn", "channel", "segment_index"
+    }

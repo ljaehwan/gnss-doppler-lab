@@ -62,6 +62,16 @@ Raw alarm rates, serial-bin AUC, DS1--DS3 results, and all calibration metrics
 are reported descriptively. No threshold, interval, persistence rule, source
 selection, or gate may change after release.
 
+### Input-support repair
+
+The first release stopped before computing the DS7 CGC score because the DS7
+NPZ omits the optional `cn0_db_hz` diagnostic array. Its required complex I/Q,
+time, PRN, channel, sample-count, and segment arrays are present with the frozen
+shapes. The adapter was changed only to accept the diagnostic array as optional;
+the estimator, score, calibration interval, threshold quantile, persistence,
+regions, gates, and source roster are unchanged. The failed release state is
+preserved separately and declares `metrics_emitted=false`.
+
 ## Claim boundary
 
 This is real replay-IQ detector evidence, not live-field false-alarm validation.
