@@ -1,0 +1,188 @@
+{
+  "schema": "gnss-doppler-lab.cgc-real-detection-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "cgc-real-detection-v1",
+    "role": "normal-only calibrated real-IQ spoof alarm evaluation",
+    "primary_attack": "TEXBAT DS7 carrier-aligned matched-power time push",
+    "primary_attack_cgc_outcome_accessed_before_freeze": false,
+    "secondary_attacks": ["ds1", "ds2", "ds3"],
+    "secondary_attack_cgc_direction_accessed_before_freeze": true
+  },
+  "frozen_candidate": {
+    "clock_centered_module": {
+      "path": "src/gnss_doppler_lab/clock_centered_geometry.py",
+      "sha256": "b25a00efdb654ceb96540a2597bdc542526a0c6027e393018c739394858a203a"
+    },
+    "correlator_geometry_module": {
+      "path": "src/gnss_doppler_lab/correlator_geometry.py",
+      "sha256": "74732c182e799c2e82b4719d6572ebbd3dc4f6e16eada5bfe0f8a3d8c236b2b2"
+    },
+    "geometry_module": {
+      "path": "src/gnss_doppler_lab/gcmr_geometry.py",
+      "sha256": "781b66b8c485f4a656da3ed4ce82726f47f47a94cc4ea702eeab727708208921"
+    },
+    "template_config": {
+      "path": "configs/experiments/correlator_geometry_identifiability_train_v1.json",
+      "sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6"
+    },
+    "residual": "SSE_LOS_plus_clock / SSE_clock_only",
+    "spoof_score": "negative clock-centered residual"
+  },
+  "analysis": {
+    "bin_seconds": 1.0,
+    "minimum_prns": 8,
+    "epoch_chunk_size": 50000,
+    "calibration_interval_seconds": [330.0, 420.0],
+    "residual_alarm_quantile": 0.05,
+    "residual_alarm_comparison": "less_than_or_equal",
+    "persistence_window_bins": 5,
+    "persistence_required_bins": 3,
+    "multipath_enrichment_metric": "q75 across PRNs of median epoch early-late magnitude asymmetry",
+    "multipath_enrichment_calibration_quantile": 0.8,
+    "stable_pre_seconds": [30.0, 90.0],
+    "excluded_transition_seconds": [90.0, 110.0],
+    "stable_post_start_seconds": 110.0,
+    "score_available_at": "bin_end"
+  },
+  "primary_gates": {
+    "minimum_calibration_bins": 80,
+    "minimum_locked_normal_bins": 25,
+    "minimum_primary_pre_bins": 50,
+    "minimum_primary_post_bins": 150,
+    "maximum_pooled_negative_persistent_alarm_rate": 0.05,
+    "maximum_multipath_enriched_persistent_alarm_rate": 0.1,
+    "primary_attack_must_have_persistent_detection": true,
+    "maximum_primary_detection_delay_seconds": 60.0
+  },
+  "sources": [
+    {
+      "name": "cleanStatic",
+      "role": "calibration_only",
+      "tow0_s": 477900.0,
+      "complex_epoch_npz": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.npz",
+        "sha256": "fcd1d378c28e79fe4a550b65fc1208cde3c8fb334db11406a07fed4d90fba237"
+      },
+      "export_manifest": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/exports/cleanStatic.manifest.json",
+        "sha256": "2424331f3fdb403cfa4610082ed36022abe180383bd08b5732d6aba834427eca"
+      },
+      "ephemeris": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/gps_ephemeris.xml",
+        "sha256": "7de95e83e9ab1c3db38897265c4aa91ca91c8e64988130c53e2bec2b6b9321eb"
+      },
+      "nmea": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/nmea_pvt.nmea",
+        "sha256": "1d2912e99d735df7cabb68134c26094073a6f5155e80bf9db15cd36085da118f"
+      }
+    },
+    {
+      "name": "cleanDynamic",
+      "role": "locked_normal",
+      "tow0_s": 429600.0,
+      "complex_epoch_npz": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/rc9-real-clean-domain-poc1/exports/cleanDynamic.npz",
+        "sha256": "efe224bb1987cb554f0d213725f54c35479cf18ad0a91ff6202ae062439aae81"
+      },
+      "export_manifest": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/rc9-real-clean-domain-poc1/exports/cleanDynamic.manifest.json",
+        "sha256": "a1c7d82f09ac6b9ee7e48f2d531905cd3bc1f323c8302e5063e5305127fe39c8"
+      },
+      "ephemeris": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/r2c-cleanDynamic-geometry-20260804/gps_ephemeris.xml",
+        "sha256": "b09eb4a78b4afcc45e19f2f3d1de74b02bda5d77ab7e236cf9ca9be2d7340062"
+      },
+      "nmea": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/r2c-cleanDynamic-geometry-20260804/nmea_pvt.nmea",
+        "sha256": "e085e3b796ef2bc13fbb21cac6f0a9c24b2a573d178b982e310dae1dd5130400"
+      }
+    },
+    {
+      "name": "ds7",
+      "role": "primary_attack",
+      "tow0_s": 477900.0,
+      "complex_epoch_npz": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/exports/ds7.npz",
+        "sha256": "d0e6da4e27d51e3e96abf2ef7786501124072f28667671e4e40da756eb35f3c8"
+      },
+      "export_manifest": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/exports/ds7.manifest.json",
+        "sha256": "8dec0643850c9d545b3980ea45bf2c3b9081cd2e314e208faab6bc51fa6e8959"
+      },
+      "ephemeris": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/gps_ephemeris.xml",
+        "sha256": "4c20014dbcd6a18a58671914be12a3ad159bd6add36382b1df69362f1cf37271"
+      },
+      "nmea": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/ds7-sealed-input/receiver/ds7-complex9/nmea_pvt.nmea",
+        "sha256": "b0d5d7f123a119d527035618d74b766a09a53c8cc9b5428dfa1783ec512dfd67"
+      }
+    },
+    {
+      "name": "ds1",
+      "role": "secondary_attack",
+      "tow0_s": 477900.0,
+      "complex_epoch_npz": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds1.npz",
+        "sha256": "b24d947c83890dbfa1c801bfbcb72e1fd192dd66509e927eb5afb8118902b072"
+      },
+      "export_manifest": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds1.manifest.json",
+        "sha256": "7be224f13002f8c4de03d833d2987547a750068b181debe2592b9f745c5c651f"
+      },
+      "ephemeris": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds1-complex9/gps_ephemeris.xml",
+        "sha256": "3ad57e22266b980f148801eec0ebde3e58ba043b66db652b835b43fd2492a2e9"
+      },
+      "nmea": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds1-complex9/nmea_pvt.nmea",
+        "sha256": "7d4b470f46112301e6e9581b846a43493b4a31ddac12adff5e86614936bf00cf"
+      }
+    },
+    {
+      "name": "ds2",
+      "role": "secondary_attack",
+      "tow0_s": 477900.02,
+      "complex_epoch_npz": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds2.npz",
+        "sha256": "dae0f245cbb107febd220c6de33b9a279a2bad356cb0ba772daf9418bc75d7c9"
+      },
+      "export_manifest": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds2.manifest.json",
+        "sha256": "15066dacfd4e1ef88fc35df5c323c67b3e1dc1420003de90707340c9982a5595"
+      },
+      "ephemeris": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/gps_ephemeris.xml",
+        "sha256": "3ad57e22266b980f148801eec0ebde3e58ba043b66db652b835b43fd2492a2e9"
+      },
+      "nmea": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds2-complex9/nmea_pvt.nmea",
+        "sha256": "4ea787e39b33481b438964003ff42daccad8d938866693143d29ff2470e1cf79"
+      }
+    },
+    {
+      "name": "ds3",
+      "role": "secondary_attack",
+      "tow0_s": 477900.0,
+      "complex_epoch_npz": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds3.npz",
+        "sha256": "38eb5842dfec306d99bf0c5d61df6cffcb6faa25ed63721cafa8e3c3776f9b3e"
+      },
+      "export_manifest": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/exports/ds3.manifest.json",
+        "sha256": "01de5f689a543da2107b0258f95cfff68b0c1a2c9a4cfeb37724b8a32a6074a8"
+      },
+      "ephemeris": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/gps_ephemeris.xml",
+        "sha256": "3ad57e22266b980f148801eec0ebde3e58ba043b66db652b835b43fd2492a2e9"
+      },
+      "nmea": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-ds123-graph-input/receiver/ds3-complex9/nmea_pvt.nmea",
+        "sha256": "edf2fdbb9484a58f80ea72d46ee1ce33e2c602c9a62ab209011cf83c0eb09e2d"
+      }
+    }
+  ],
+  "output_root": "artifacts/cgc_real_detection_v1",
+  "claim_boundary": "real replay-IQ detection with a normal-only threshold; clean recordings include uncontrolled environmental effects but do not provide ground-truth multipath labels, so the high-distortion subset is multipath-enriched rather than labeled multipath"
+}
