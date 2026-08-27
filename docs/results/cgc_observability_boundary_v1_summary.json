@@ -1,0 +1,34 @@
+{
+  "artifact_summary_sha256": "6c6579cbfe1c5326cedfce6ca375c9290fc2f4eb9241b349d04cfb14a99a19df",
+  "boundary_by_power_db": {
+    "-15": 80.0,
+    "-9": 60.0,
+    "-6": 60.0,
+    "-3": 60.0,
+    "+3": 60.0,
+    "+6": 60.0,
+    "+9": 60.0,
+    "+15": 80.0
+  },
+  "grid_cell_count": 64,
+  "observable_cell_count": 22,
+  "observability_rule": {
+    "minimum_complex_delay_sign_accuracy": 0.75,
+    "minimum_each_geometry_complex_auc": 0.7,
+    "minimum_pooled_complex_auc": 0.8,
+    "minimum_positive_separation_geometry_count": 5
+  },
+  "rf_anchor_plan_sha256": "f896c0a00d168ff028bef6814500de355a8e44f22c023bd1762113072954e37c",
+  "rf_anchors": [
+    {"power_db": -6.0, "role": "below_boundary", "separation_m": 40.0, "screen_auc": 0.7026916666666667},
+    {"power_db": -6.0, "role": "at_boundary", "separation_m": 60.0, "screen_auc": 0.8740805555555555},
+    {"power_db": -6.0, "role": "above_boundary", "separation_m": 80.0, "screen_auc": 0.9569138888888888},
+    {"power_db": 3.0, "role": "below_boundary", "separation_m": 40.0, "screen_auc": 0.7209611111111112},
+    {"power_db": 3.0, "role": "at_boundary", "separation_m": 60.0, "screen_auc": 0.8874444444444446},
+    {"power_db": 3.0, "role": "above_boundary", "separation_m": 80.0, "screen_auc": 0.9695861111111111}
+  ],
+  "schema": "gnss-doppler-lab.cgc-observability-boundary-curated-summary",
+  "schema_version": 1,
+  "screen_role": "profile-level mechanism boundary and RF-anchor selection",
+  "source_geometry_count": 6
+}
