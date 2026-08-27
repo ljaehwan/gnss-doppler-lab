@@ -1,0 +1,17 @@
+{
+  "artifact_summary_sha256": "d7fa0024628a231dae2ec1da2f2bae6d4b19fb3fdf97886913d9520349aa0a63",
+  "decision": "REAL_SPOOF_DETECTION_NOT_SUPPORTED",
+  "failed_primary_gate": "maximum_primary_detection_delay_seconds",
+  "multipath_enriched_negative_persistent_alarm_rate": 0.0,
+  "post_release_tuning_or_retest": false,
+  "primary_attack": "TEXBAT DS7 carrier-aligned matched-power time push",
+  "primary_attack_post_persistent_alarm_rate": 0.2919254658385093,
+  "primary_attack_serial_bin_auc": 0.6543478260869564,
+  "primary_detection_delay_from_nominal_onset_s": 119.0,
+  "primary_first_persistent_detection_bin_end_s": 219.0,
+  "primary_first_raw_detection_bin_end_s": 119.0,
+  "primary_negative_persistent_alarm_rate": 0.0,
+  "residual_alarm_threshold": 0.33023636533817136,
+  "schema": "gnss-doppler-lab.cgc-real-detection-curated-summary",
+  "schema_version": 1
+}
