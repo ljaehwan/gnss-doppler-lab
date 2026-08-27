@@ -1,0 +1,16 @@
+{
+  "archive_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cgc-real-detection-v1-20260827",
+  "artifact_summary_sha256": "d7fa0024628a231dae2ec1da2f2bae6d4b19fb3fdf97886913d9520349aa0a63",
+  "byte_count": 2920877,
+  "file_count": 12,
+  "included": [
+    "successful raw result artifacts",
+    "input-support failed release state",
+    "frozen config and protocol",
+    "result and curated summary",
+    "runner and focused test"
+  ],
+  "rsync_checksum_dry_run_difference_count": 0,
+  "schema": "gnss-doppler-lab.cgc-real-detection-archive",
+  "schema_version": 1
+}
