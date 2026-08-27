@@ -1,0 +1,21 @@
+{
+  "artifact_summary_sha256": "d7eacede40f236fb371c3b521d93a2daae0b4ade1e54820c1660b282468b90e0",
+  "decision": "SEQUENTIAL_DS8_NOT_SUPPORTED",
+  "descriptive_pre_vs_stable_post_auc": 0.5904287929604385,
+  "failed_primary_gate": "maximum_primary_detection_delay_seconds",
+  "first_post_onset_alarm_bin_end_s": 201.0,
+  "locked_normal_alarm_count": 0,
+  "normal_baseline_alarm_count": 0,
+  "official_onset_seconds": 110.0,
+  "post_onset_alarm_count": 187,
+  "post_onset_bin_count": 361,
+  "post_release_tuning_or_retest": false,
+  "primary_attack": "TEXBAT DS8",
+  "primary_detection_delay_seconds": 91.0,
+  "primary_pre_onset_alarm_count": 0,
+  "primary_pre_onset_bin_count": 79,
+  "schema": "gnss-doppler-lab.cgc-sequential-ds8-curated-summary",
+  "schema_version": 1,
+  "stable_post_alarm_count": 187,
+  "stable_post_bin_count": 351
+}
