@@ -1,0 +1,108 @@
+{
+  "schema": "gnss-doppler-lab.cgc-rf-state-validation-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "cgc-rf-state-validation-v1",
+    "role": "confirmatory two-geometry receiver-RF validation of the exploratory CGC observability state map",
+    "execution_policy": "one resumable release; all 24 cells and every preregistered state gate are reported without substitution"
+  },
+  "discovery_result": {
+    "path": "docs/results/cgc_rf_transfer_sweep_v1_summary.json",
+    "sha256": "c9fce14529f09917d2763a64fcef5a3813530c14c4dff4a3b69e07f57fcc0157"
+  },
+  "base_pair_config": {
+    "path": "configs/experiments/cgc_rf_fresh_test_v2.json",
+    "sha256": "d42636c4292fe2b9c098bfe1be1fadb19b91a92602dbc97a8f82597e982df250"
+  },
+  "normal_profile": {
+    "path": "configs/experiments/simulation_v4_normal_independent_validation_v1.json",
+    "sha256": "256977cfb14f0828d6cc98af83f459e7dee0407b41cd1188b0c37cb170593a78"
+  },
+  "controlled_template": {
+    "path": "configs/experiments/correlator_geometry_identifiability_train_v1.json",
+    "sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6"
+  },
+  "pinned_code": {
+    "paired_generator": {"path": "scripts/run_simulation_v4_paired_train_generation.py", "sha256": "c15c23f96e5d6137e265ff0048f2cd89a51c9123635ce0f7331c0d4fe07375d0"},
+    "cgc_rf_pilot": {"path": "scripts/run_cgc_rf_challenge_pilot.py", "sha256": "a1283cb6d4c78697d72e34e4d9afe9048b9ab2fde0aef521ea19bb3a5b836b18"},
+    "anchor_runner": {"path": "scripts/run_cgc_rf_observability_anchors.py", "sha256": "048f99d8305afab86432910126542b721ebe895bdf92ddb09181e6f68baccee5"},
+    "discovery_runner": {"path": "scripts/run_cgc_rf_transfer_sweep.py", "sha256": "4e1ff81d91fceea5bc210cc200e081e226fd1da1e79e97be9766be62400e3b7a"}
+  },
+  "geometries": [
+    {
+      "geometry_id": "straight",
+      "pair_id": "fv2-straight-01",
+      "motion_kind": "straight",
+      "authentic_component": {"path": "artifacts/simulation_v5_fresh_test_generation_v2/pairs/fv2-straight-01/components/authentic_gps_l1ca_s8_iq.bin", "sha256": "dac18f62ccbd9a489ebe9de0f6a05d752fca32fd8d4381a81a5c83b61903d116"},
+      "authentic_los_log": {"path": "artifacts/simulation_v5_fresh_test_generation_v2/pairs/fv2-straight-01/components/authentic-gps-sdr-sim.log", "sha256": "89f61c1e6662c43269086255c699c47f2eb5a34639728a19326eb006f55b0a43"},
+      "normal_rf_manifest": {"path": "artifacts/simulation_v5_fresh_test_generation_v2/pairs/fv2-straight-01/rf/normal/manifest.json", "sha256": "43745de99c709c7e7b08010f1dcf8a104094ce5a644d831b67509784ed6ad58a"},
+      "normal_rf_iq": {"path": "artifacts/simulation_v5_fresh_test_generation_v2/pairs/fv2-straight-01/rf/normal/gps_l1ca_s8_iq.bin", "sha256": "48e83ed75a0edb56de11b951a5f9919777a87ad1bce127a13cf9a6cf01f37086"},
+      "multipath_rf_manifest": {"path": "artifacts/cgc_rf_fresh_test_v2/pairs/fv2-straight-01/rf/manifest.json", "sha256": "593c427b8ba65ed65be034418549b243b0d9ea578f5ae3bf81882e5a854debbc"},
+      "multipath_rf_iq": {"path": "artifacts/cgc_rf_fresh_test_v2/pairs/fv2-straight-01/rf/gps_l1ca_s8_iq.bin", "sha256": "f8c44eb16a3fac11e615189602d8b9df804f54c596be3a6cec15c2a4cc21dc98"},
+      "multipath_receiver_manifest": {"path": "artifacts/cgc_rf_fresh_test_v2/pairs/fv2-straight-01/receiver/cgc-rf-test-mp-p01_20220101T123000Z/manifest.json", "sha256": "b4d0bf1d8a9e4857329df30d8d84880689635b1b330e3433a462c7329aaa0e02"}
+    },
+    {
+      "geometry_id": "sweep",
+      "pair_id": "fv2-sweep-01",
+      "motion_kind": "parallel-sweep",
+      "authentic_component": {"path": "artifacts/simulation_v5_fresh_test_generation_v2/pairs/fv2-sweep-01/components/authentic_gps_l1ca_s8_iq.bin", "sha256": "5288258c5b91c3abbe71e87bd2c34530853c846486f7423db8c70babca3828dd"},
+      "authentic_los_log": {"path": "artifacts/simulation_v5_fresh_test_generation_v2/pairs/fv2-sweep-01/components/authentic-gps-sdr-sim.log", "sha256": "f80ef6093a31f955637561694eb368a6479a614f2c7dfa45316ed85d2c5b6c4e"},
+      "normal_rf_manifest": {"path": "artifacts/simulation_v5_fresh_test_generation_v2/pairs/fv2-sweep-01/rf/normal/manifest.json", "sha256": "6e1dae24cf8a56a09fa19f0f28b99dfb0c866c9a5c7c2fd3c1ccffa05cd445a5"},
+      "normal_rf_iq": {"path": "artifacts/simulation_v5_fresh_test_generation_v2/pairs/fv2-sweep-01/rf/normal/gps_l1ca_s8_iq.bin", "sha256": "79008a4c58f1a304aa125bb8c2e22e5c3173dc2ea5a687c353961b1866e117f6"},
+      "multipath_rf_manifest": {"path": "artifacts/cgc_rf_fresh_test_v2/pairs/fv2-sweep-01/rf/manifest.json", "sha256": "31a793c58d41b36234562c6075d3bcde5d71339613a53b7557ad6ab6331863cb"},
+      "multipath_rf_iq": {"path": "artifacts/cgc_rf_fresh_test_v2/pairs/fv2-sweep-01/rf/gps_l1ca_s8_iq.bin", "sha256": "9bf4f65f67184e152d366de00d6c5fe1a1f63f9a8f5e402d07a03225cc24d355"},
+      "multipath_receiver_manifest": {"path": "artifacts/cgc_rf_fresh_test_v2/pairs/fv2-sweep-01/receiver/cgc-rf-test-mp-p01_20220101T023000Z/manifest.json", "sha256": "16f152dd9e4c252c1a61907491071ea9ba4dd1fb2bcaaa81a2bda812f8ca94ba"}
+    }
+  ],
+  "rf_tools": {
+    "simulator": {"path": ".tools/gps-sdr-sim-src/gps-sdr-sim", "sha256": "27cd471d2023b8a26262584b14f71ebed602159da47b54172b22da9299011e28"},
+    "receiver": {"path": ".tools/gnss-sdr-src/build/src/main/gnss-sdr", "sha256": "fc00d610fdb966358ac85486b616ff2411cb163ca8269dd0b435919c5e197e25"},
+    "receiver_patch": {"path": "patches/gnss-sdr-complex9-tracking-v1.patch", "sha256": "41e48ef6ed7dc63a63b7666f3b2ffc0a3d4e48393c98a42d2d3e4ec1b9a8a2b1"},
+    "channel_count": 11,
+    "tracking_tap_count": 9,
+    "tracking_tap_spacing_chips": 0.125,
+    "timeout_seconds": 1200
+  },
+  "sweep": {
+    "distances_m": [40.0, 60.0, 80.0, 100.0, 160.0, 240.0],
+    "final_advantages_db": [-6.0, 3.0],
+    "target_direction_enu_unit": [0.8, 0.6, 0.0],
+    "start_seconds": 5.0,
+    "pull_off_rate_mps": 20.0,
+    "initial_advantage_db": -30.0,
+    "power_ramp_seconds": 5.0,
+    "latest_settle_seconds": 17.0,
+    "comparison_start_seconds": 18.0,
+    "chip_length_m": 293.0522561094819
+  },
+  "analysis": {
+    "bin_seconds": 1.0,
+    "minimum_prns": 8,
+    "minimum_comparison_bins_per_stream": 8,
+    "descriptive_auc_threshold": 0.8,
+    "template_delay_edge_absolute_chips": 0.475
+  },
+  "state_gates": {
+    "unresolved_40m_max_auc": 0.8,
+    "onset_60m_max_auc": 0.8,
+    "onset_60m_min_absolute_direction_cosine": 0.7,
+    "onset_direction_must_improve_over_40m": true,
+    "metric_distances_m": [100.0, 160.0],
+    "metric_min_auc": 0.8,
+    "metric_min_absolute_direction_cosine": 0.85,
+    "metric_max_absolute_relative_displacement_error": 0.15,
+    "saturation_distance_m": 240.0,
+    "saturation_min_auc": 0.8,
+    "saturation_min_edge_fraction": 0.1,
+    "saturation_max_relative_displacement_error": -0.05,
+    "overall_rule": "every gate passes independently in all four geometry-power groups"
+  },
+  "retention": {
+    "campaign_created_counterfeit_iq_count": 12,
+    "campaign_created_spoof_iq_count": 24,
+    "shared_inputs_removed": false,
+    "regeneration_inputs_retained": true
+  },
+  "output_root": "artifacts/cgc_rf_state_validation_v1",
+  "claim_boundary": "two held-out motion/LOS geometries in simulation; no field, real-multipath, TEXBAT-multipath, or operational claim"
+}
