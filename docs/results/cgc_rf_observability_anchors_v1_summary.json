@@ -1,0 +1,52 @@
+{
+  "condition_count": 6,
+  "decision": "not_reproduced",
+  "minimum_multipath_prn_count": 11,
+  "minimum_spoof_prn_count": 10,
+  "post_release_tuning_or_anchor_substitution": false,
+  "power_regimes": {
+    "+3_db": {
+      "aucs_by_separation_m": {
+        "40": 0.5153061224489797,
+        "60": 0.6377551020408163,
+        "80": 0.5714285714285714
+      },
+      "gates": {
+        "40m_auc_below_threshold": true,
+        "60m_auc_at_or_above_threshold": false,
+        "80m_auc_at_or_above_threshold": false,
+        "minimum_comparison_bins": true,
+        "strict_auc_ordering": false
+      },
+      "ordering_reproduced": false
+    },
+    "-6_db": {
+      "aucs_by_separation_m": {
+        "40": 0.22959183673469385,
+        "60": 0.3826530612244898,
+        "80": 0.6581632653061225
+      },
+      "gates": {
+        "40m_auc_below_threshold": true,
+        "60m_auc_at_or_above_threshold": false,
+        "80m_auc_at_or_above_threshold": false,
+        "minimum_comparison_bins": true,
+        "strict_auc_ordering": true
+      },
+      "ordering_reproduced": false
+    }
+  },
+  "profile_boundary_reproduced_in_receiver_rf": false,
+  "raw_summary_sha256": "b9ca6b22ee65a90adb0e387aaba40ec3ece0a2d583b3fed61e3e0f1d32378c99",
+  "release_commit": "ccc39db6d844aec77c05a40000f9158fb8887f5d",
+  "retention": {
+    "campaign_created_intermediate_iq_removed": 12,
+    "deterministic_regeneration_inputs_retained": true,
+    "receiver_outputs_retained": true,
+    "retained_tree_bytes": 483476650,
+    "shared_inputs_removed": false
+  },
+  "schema": "gnss-doppler-lab.cgc-rf-observability-anchors-curated-summary",
+  "schema_version": 1,
+  "scope": "single-static-geometry receiver-RF pilot; profile boundary not reproduced"
+}
