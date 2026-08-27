@@ -1,0 +1,15 @@
+{
+  "archive_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cgc-observability-boundary-v1-20260827",
+  "artifact_summary_sha256": "6c6579cbfe1c5326cedfce6ca375c9290fc2f4eb9241b349d04cfb14a99a19df",
+  "byte_count": 22547948,
+  "file_count": 12,
+  "included": [
+    "64-cell and 76800-row profile-level boundary artifacts",
+    "boundary heatmap and six-condition RF anchor plan",
+    "frozen config, protocol, result, and curated summary",
+    "runner and focused tests"
+  ],
+  "rsync_checksum_dry_run_difference_count": 0,
+  "schema": "gnss-doppler-lab.cgc-observability-boundary-archive",
+  "schema_version": 1
+}
