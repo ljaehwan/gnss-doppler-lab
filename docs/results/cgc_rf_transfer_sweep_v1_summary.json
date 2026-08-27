@@ -1,0 +1,80 @@
+{
+  "condition_count": 18,
+  "decision": "exploratory_map_completed",
+  "full_grid_reported": true,
+  "minimum_spoof_prn_count": 10,
+  "observed_receiver_states": [
+    {
+      "description": "AUC below 0.26 and poor direction recovery",
+      "distance_grid_m": [20.0, 40.0],
+      "name": "unresolved_mixture"
+    },
+    {
+      "description": "direction recovery appears before reliable class ranking",
+      "distance_grid_m": [60.0],
+      "name": "geometry_onset"
+    },
+    {
+      "description": "both powers reach high AUC and approximately metric displacement recovery",
+      "distance_grid_m": [100.0, 120.0, 160.0],
+      "name": "discriminable_metric"
+    },
+    {
+      "description": "classification stays high while displacement is biased low and edge occupancy rises",
+      "distance_grid_m": [200.0, 240.0],
+      "name": "discriminable_saturated"
+    }
+  ],
+  "plot_sha256": "7bd778ef206847382a63a10ee6da72d09b08df2ad308d8082b8f139ce48bdae9",
+  "post_release_condition_or_interval_substitution": false,
+  "power_regimes": {
+    "+3_db": {
+      "above_auc_0_8_grid_interval_m": [100.0, 240.0],
+      "auc_by_distance_m": {
+        "20": 0.04861111111111111,
+        "40": 0.2569444444444444,
+        "60": 0.47222222222222227,
+        "80": 0.4166666666666667,
+        "100": 0.9861111111111112,
+        "120": 1.0,
+        "160": 1.0,
+        "200": 0.9861111111111112,
+        "240": 1.0
+      },
+      "edge_fraction_at_240_m": 0.32575757575757575,
+      "first_tested_auc_0_8_crossing_m": 100.0,
+      "relative_displacement_error_at_240_m": -0.17994525929622698,
+      "spearman_distance_auc": 0.8767942266815112
+    },
+    "-6_db": {
+      "above_auc_0_8_grid_interval_m": [80.0, 240.0],
+      "auc_by_distance_m": {
+        "20": 0.2013888888888889,
+        "40": 0.09027777777777778,
+        "60": 0.5486111111111112,
+        "80": 0.8541666666666667,
+        "100": 1.0,
+        "120": 0.9861111111111112,
+        "160": 1.0,
+        "200": 1.0,
+        "240": 1.0
+      },
+      "edge_fraction_at_240_m": 0.22727272727272727,
+      "first_tested_auc_0_8_crossing_m": 80.0,
+      "relative_displacement_error_at_240_m": -0.11908979832934352,
+      "spearman_distance_auc": 0.8964999281718439
+    }
+  },
+  "raw_summary_sha256": "7f15b76b48e176f1c1b90915614b7dbc6b04ba0e735da6dbf8dd284177ddb7eb",
+  "release_commit": "b90016b1c4e7d5751d7cfbd57d6d4ad2b869b5a9",
+  "retention": {
+    "campaign_created_counterfeit_iq_removed": 9,
+    "campaign_created_spoof_iq_removed": 18,
+    "deterministic_regeneration_inputs_retained": true,
+    "receiver_outputs_retained": true,
+    "shared_inputs_removed": false
+  },
+  "schema": "gnss-doppler-lab.cgc-rf-transfer-sweep-curated-summary",
+  "schema_version": 1,
+  "scope": "single-static-geometry exploratory fixed-receiver transfer-function map"
+}
