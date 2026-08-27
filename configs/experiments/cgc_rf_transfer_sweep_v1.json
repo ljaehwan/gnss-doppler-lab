@@ -1,0 +1,80 @@
+{
+  "schema": "gnss-doppler-lab.cgc-rf-transfer-sweep-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "cgc-rf-transfer-sweep-v1",
+    "role": "exploratory receiver-in-the-loop transfer-function map after the preregistered 40/60/80 m boundary was not reproduced",
+    "execution_policy": "one resumable release; report all 18 cells without distance, power, interval, or receiver substitution"
+  },
+  "prior_negative_result": {
+    "path": "docs/results/cgc_rf_observability_anchors_v1_summary.json",
+    "sha256": "297f69f1832b7e863b50eea92ccfccdd2b214bcca9ae87bfa54cd978982a7755"
+  },
+  "base_pair_config": {
+    "path": "configs/experiments/cgc_rf_fresh_test_v2.json",
+    "sha256": "d42636c4292fe2b9c098bfe1be1fadb19b91a92602dbc97a8f82597e982df250",
+    "pair_id": "fv2-static-01"
+  },
+  "normal_profile": {
+    "path": "configs/experiments/simulation_v4_normal_independent_validation_v1.json",
+    "sha256": "256977cfb14f0828d6cc98af83f459e7dee0407b41cd1188b0c37cb170593a78"
+  },
+  "controlled_template": {
+    "path": "configs/experiments/correlator_geometry_identifiability_train_v1.json",
+    "sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6"
+  },
+  "pinned_code": {
+    "paired_generator": {"path": "scripts/run_simulation_v4_paired_train_generation.py", "sha256": "c15c23f96e5d6137e265ff0048f2cd89a51c9123635ce0f7331c0d4fe07375d0"},
+    "cgc_rf_pilot": {"path": "scripts/run_cgc_rf_challenge_pilot.py", "sha256": "a1283cb6d4c78697d72e34e4d9afe9048b9ab2fde0aef521ea19bb3a5b836b18"},
+    "prior_anchor_runner": {"path": "scripts/run_cgc_rf_observability_anchors.py", "sha256": "048f99d8305afab86432910126542b721ebe895bdf92ddb09181e6f68baccee5"}
+  },
+  "shared_inputs": {
+    "authentic_component": {"path": "artifacts/simulation_v5_fresh_test_generation_v2/pairs/fv2-static-01/components/authentic_gps_l1ca_s8_iq.bin", "sha256": "aeb98681dcb05a19224f2d2feaaf40dbfc51a1bff21433db5dca5137d106ed26"},
+    "authentic_los_log": {"path": "artifacts/simulation_v5_fresh_test_generation_v2/pairs/fv2-static-01/components/authentic-gps-sdr-sim.log", "sha256": "e6e40b4611c11848135ad2a3e36625cf48ad1fb4bf15357a09bbdc495f71ef62"},
+    "normal_rf_manifest": {"path": "artifacts/simulation_v5_fresh_test_generation_v2/pairs/fv2-static-01/rf/normal/manifest.json", "sha256": "4d63ffaaad2ff8aaa14ff804657ab441cfd3fe2dafab2a311d48c97884ed4de3"},
+    "normal_rf_iq": {"path": "artifacts/simulation_v5_fresh_test_generation_v2/pairs/fv2-static-01/rf/normal/gps_l1ca_s8_iq.bin", "sha256": "def38cd596f926d187a71e7b63e8ce76a1a36fcb59191f13f58b008123868c5d"},
+    "multipath_rf_manifest": {"path": "artifacts/cgc_rf_fresh_test_v2/pairs/fv2-static-01/rf/manifest.json", "sha256": "330d27b953f59625d080e0d7385edeb2ebe5654d3a158bde7f64b984e788d7d6"},
+    "multipath_rf_iq": {"path": "artifacts/cgc_rf_fresh_test_v2/pairs/fv2-static-01/rf/gps_l1ca_s8_iq.bin", "sha256": "e3345ede4b21aa8ce1392658c0ea613c0f654b4d9df5c8f609c8fb2c03f33ee3"},
+    "multipath_receiver_manifest": {"path": "artifacts/cgc_rf_fresh_test_v2/pairs/fv2-static-01/receiver/cgc-rf-test-mp-p01_20220101T003000Z/manifest.json", "sha256": "cbafdf986e94d40bf1f251db3ad1f1f986912682f471ff022f27bb7cc0eec687"}
+  },
+  "rf_tools": {
+    "simulator": {"path": ".tools/gps-sdr-sim-src/gps-sdr-sim", "sha256": "27cd471d2023b8a26262584b14f71ebed602159da47b54172b22da9299011e28"},
+    "receiver": {"path": ".tools/gnss-sdr-src/build/src/main/gnss-sdr", "sha256": "fc00d610fdb966358ac85486b616ff2411cb163ca8269dd0b435919c5e197e25"},
+    "receiver_patch": {"path": "patches/gnss-sdr-complex9-tracking-v1.patch", "sha256": "41e48ef6ed7dc63a63b7666f3b2ffc0a3d4e48393c98a42d2d3e4ec1b9a8a2b1"},
+    "channel_count": 11,
+    "tracking_tap_count": 9,
+    "tracking_tap_spacing_chips": 0.125,
+    "tracking_half_aperture_chips": 0.5,
+    "timeout_seconds": 1200
+  },
+  "sweep": {
+    "distances_m": [20.0, 40.0, 60.0, 80.0, 100.0, 120.0, 160.0, 200.0, 240.0],
+    "final_advantages_db": [-6.0, 3.0],
+    "target_direction_enu_unit": [0.8, 0.6, 0.0],
+    "start_seconds": 5.0,
+    "pull_off_rate_mps": 20.0,
+    "initial_advantage_db": -30.0,
+    "power_ramp_seconds": 5.0,
+    "latest_settle_seconds": 17.0,
+    "comparison_start_seconds": 18.0,
+    "chip_length_m": 293.0522561094819
+  },
+  "analysis": {
+    "bin_seconds": 1.0,
+    "minimum_prns": 8,
+    "minimum_comparison_bins_per_stream": 8,
+    "descriptive_auc_threshold": 0.8,
+    "template_delay_edge_absolute_chips": 0.475,
+    "curve_outputs": ["serial_bin_auc", "median_clock_centered_residual", "estimated_displacement_norm", "absolute_direction_cosine", "template_delay_edge_fraction"],
+    "interpretation": "exploratory full-grid receiver transfer curve used to formulate, not confirm, a later held-out multi-geometry claim"
+  },
+  "retention": {
+    "policy": "reuse one unscaled counterfeit component per distance; after both powers complete, delete that component; delete each composed spoof IQ only after receiver outputs and scores are durable",
+    "campaign_created_counterfeit_iq_count": 9,
+    "campaign_created_spoof_iq_count": 18,
+    "shared_inputs_removed": false,
+    "regeneration_inputs_retained": true
+  },
+  "output_root": "artifacts/cgc_rf_transfer_sweep_v1",
+  "claim_boundary": "single-static-geometry exploratory receiver transfer-function map; no held-out, field, TEXBAT-multipath, or operational validation claim"
+}
