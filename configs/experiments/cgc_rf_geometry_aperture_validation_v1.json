@@ -1,0 +1,190 @@
+{
+  "schema": "gnss-doppler-lab.cgc-rf-geometry-aperture-validation-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "cgc-rf-geometry-aperture-validation-v1",
+    "role": "confirmatory five-geometry receiver-RF validation plus same-stream correlator-aperture mechanism ablation",
+    "execution_policy": "one resumable release; all 40 RF conditions and all 120 condition-aperture summaries are reported without cell, gate, estimator, aperture, or geometry substitution"
+  },
+  "normal_profile": {
+    "path": "configs/experiments/simulation_v4_normal_independent_validation_v1.json",
+    "sha256": "256977cfb14f0828d6cc98af83f459e7dee0407b41cd1188b0c37cb170593a78"
+  },
+  "controlled_template": {
+    "path": "configs/experiments/correlator_geometry_identifiability_train_v1.json",
+    "sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6"
+  },
+  "geometries": [
+    {
+      "geometry_id": "denver-static",
+      "source_run": "iv-s-denver-a",
+      "startup_los_prns": 14,
+      "multipath_seed": 20261101,
+      "run": {
+        "name": "iv-s-denver-a", "domain": "static", "utc": "2022-01-01T02:00:00Z", "duration_seconds": 30,
+        "position": {"latitude_deg": 39.7392, "longitude_deg": -104.9903, "altitude_m": 1609.0},
+        "receiver_seed": 20260831, "target_composite_cn0_db_hz": 59.5
+      },
+      "source_assets": {
+        "authentic_component": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-s-denver-a/authentic_gps_l1ca_s8_iq.bin", "sha256": "edfa8e2baa2ca680b5f43f0dc5f6a0411af772d2040f0397b6ac14a001c4856e", "bytes": 1495000000},
+        "authentic_los_log": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-s-denver-a/gps-sdr-sim.log", "sha256": "493b7127c25333842e4b42a99306151cf6bfa912f22e9f54bbbe9d9d4450abd2"},
+        "component_manifest": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-s-denver-a/manifest.json", "sha256": "c497d4264030794a5ac9f665aafcbed00bcd0dbd948594054dc4155f9e0bc8e8"},
+        "normal_rf_iq": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-s-denver-a/gps_l1ca_s8_iq.bin", "sha256": "2b5a626fbbaa57c0ae29e282f2ff5c6beb694a6207e92b938794cd6b5557e615", "bytes": 1495000000},
+        "normal_rf_manifest": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-s-denver-a/manifest.json", "sha256": "1e6e8690f357342e120c9e070db40021d46b5bf165db2464054785e55c95d707"}
+      }
+    },
+    {
+      "geometry_id": "seoul-static",
+      "source_run": "iv-s-seoul-b",
+      "startup_los_prns": 10,
+      "multipath_seed": 20261102,
+      "run": {
+        "name": "iv-s-seoul-b", "domain": "static", "utc": "2022-01-01T04:00:00Z", "duration_seconds": 30,
+        "position": {"latitude_deg": 37.5665, "longitude_deg": 126.978, "altitude_m": 120.0},
+        "receiver_seed": 20260832, "target_composite_cn0_db_hz": 60.5
+      },
+      "source_assets": {
+        "authentic_component": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-s-seoul-b/authentic_gps_l1ca_s8_iq.bin", "sha256": "b6490121bfae1629224d05b63d9aeed066710e3798ee5db111fdf34a97264027", "bytes": 1495000000},
+        "authentic_los_log": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-s-seoul-b/gps-sdr-sim.log", "sha256": "f2dc1bb93ad83394f1eb655c0eeb77b412eedb9e6199bc65cf6c758b6e8c88c8"},
+        "component_manifest": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-s-seoul-b/manifest.json", "sha256": "78c3f19445640335c72afdf3e348c4f8202d4215ee02bdc95b16bc871ba1010b"},
+        "normal_rf_iq": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-s-seoul-b/gps_l1ca_s8_iq.bin", "sha256": "39de651601a88d548baaa23451c1a53f977f5e41c6669cf12678a5c61bec2090", "bytes": 1495000000},
+        "normal_rf_manifest": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-s-seoul-b/manifest.json", "sha256": "e81878615eff35ffb578f240bea811661740014e1966a99605f82d07bad41ec1"}
+      }
+    },
+    {
+      "geometry_id": "tokyo-straight",
+      "source_run": "iv-d-tokyo-straight",
+      "startup_los_prns": 9,
+      "multipath_seed": 20261103,
+      "run": {
+        "name": "iv-d-tokyo-straight", "domain": "dynamic", "utc": "2022-01-01T06:00:00Z", "duration_seconds": 30,
+        "position": {"latitude_deg": 35.6762, "longitude_deg": 139.6503, "altitude_m": 100.0},
+        "motion": {"kind": "straight", "speed_mps": 10.0, "heading_deg": 90.0},
+        "receiver_seed": 20260833, "target_composite_cn0_db_hz": 59.5
+      },
+      "source_assets": {
+        "authentic_component": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-d-tokyo-straight/authentic_gps_l1ca_s8_iq.bin", "sha256": "ad0916df74e37445ccbd80bc678ea5a8a99a43571671c07e9a4d49fd768eb62a", "bytes": 1495000000},
+        "authentic_los_log": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-d-tokyo-straight/gps-sdr-sim.log", "sha256": "39e704f9f34a50bd86fd403648f461402dcc887b8bba033c3512f3b14d09f799"},
+        "component_manifest": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-d-tokyo-straight/manifest.json", "sha256": "dc88151166e94cee1e825484ddf7e5b29f25b8dc24c0680b56bd778d7c925efd"},
+        "normal_rf_iq": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-d-tokyo-straight/gps_l1ca_s8_iq.bin", "sha256": "2087a6137a99bea3347e9f9236274a76a56af6772a35282a613d927eeb51d92f", "bytes": 1495000000},
+        "normal_rf_manifest": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-d-tokyo-straight/manifest.json", "sha256": "7518ec4d33ddacf52302bb07971161b1ed9f7ec1d98e23d21bd340fcd1da4b3b"}
+      }
+    },
+    {
+      "geometry_id": "london-circle",
+      "source_run": "iv-d-london-circle",
+      "startup_los_prns": 13,
+      "multipath_seed": 20261104,
+      "run": {
+        "name": "iv-d-london-circle", "domain": "dynamic", "utc": "2022-01-01T08:00:00Z", "duration_seconds": 30,
+        "position": {"latitude_deg": 51.5072, "longitude_deg": -0.1276, "altitude_m": 80.0},
+        "motion": {"kind": "circle", "speed_mps": 8.0, "radius_m": 40.0, "heading_deg": 0.0},
+        "receiver_seed": 20260834, "target_composite_cn0_db_hz": 60.0
+      },
+      "source_assets": {
+        "authentic_component": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-d-london-circle/authentic_gps_l1ca_s8_iq.bin", "sha256": "5bda3ba07b1b82f453caad8114de527e963295e20ecf9a73cf15e99404574c22", "bytes": 1495000000},
+        "authentic_los_log": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-d-london-circle/gps-sdr-sim.log", "sha256": "4be6e219abc09d58c15409bacfbc7845b58245860d68c2077624fe89a1323c1b"},
+        "component_manifest": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-d-london-circle/manifest.json", "sha256": "66b98c5bfff85be3b49492542a68075e98ad7a3a8046c8617a10e46cac2777d6"},
+        "normal_rf_iq": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-d-london-circle/gps_l1ca_s8_iq.bin", "sha256": "b7db9bb40897bbaaaf988aad3a360004effab07b3cc5b490fa3a2b5f09fc1d39", "bytes": 1495000000},
+        "normal_rf_manifest": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-d-london-circle/manifest.json", "sha256": "1ac4d90d4873632385d26d20d32a097b4e2192315f4da3c5752f3fdaafffbf6a"}
+      }
+    },
+    {
+      "geometry_id": "sydney-sweep",
+      "source_run": "iv-d-sydney-sweep",
+      "startup_los_prns": 11,
+      "multipath_seed": 20261105,
+      "run": {
+        "name": "iv-d-sydney-sweep", "domain": "dynamic", "utc": "2022-01-01T10:00:00Z", "duration_seconds": 30,
+        "position": {"latitude_deg": -33.8688, "longitude_deg": 151.2093, "altitude_m": 100.0},
+        "motion": {"kind": "parallel-sweep", "speed_mps": 10.0, "leg_length_m": 80.0, "lane_spacing_m": 20.0, "heading_deg": 30.0},
+        "receiver_seed": 20260835, "target_composite_cn0_db_hz": 60.5
+      },
+      "source_assets": {
+        "authentic_component": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-d-sydney-sweep/authentic_gps_l1ca_s8_iq.bin", "sha256": "d3b30ed9935df4237bc334aa48de6855337e384c9241c3531cf3915ae4b09da7", "bytes": 1495000000},
+        "authentic_los_log": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-d-sydney-sweep/gps-sdr-sim.log", "sha256": "a1b3e45c06f1ea78ba7e3b6035bb67eefa15fa1f7d1c533d4c019e1fbfbe34f6"},
+        "component_manifest": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-d-sydney-sweep/manifest.json", "sha256": "ec0a48f40c03697e16da932e6ad9e1f3e786f8e27bc029197d39b6aa5fc84a7a"},
+        "normal_rf_iq": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-d-sydney-sweep/gps_l1ca_s8_iq.bin", "sha256": "c422e833621ba088461cafcb3572b9dc87aa3c898ac23712c062942d260fbf66", "bytes": 1495000000},
+        "normal_rf_manifest": {"path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-d-sydney-sweep/manifest.json", "sha256": "ac44f0de7530fa3254341c21446b14a0c2bbbb833b41dafe6e22a1f11cd1ff5d"}
+      }
+    }
+  ],
+  "multipath": {
+    "prn_policy": "all valid GPS PRNs in each frozen authentic startup LOS table",
+    "delay_chips_range": [0.12, 0.45],
+    "amplitude_range": [0.2, 0.7],
+    "phase_policy": "SHA-256-derived independent uniform phase in [-180,180) degrees",
+    "trajectory_policy": "reuse the exact authentic trajectory; static remains static"
+  },
+  "rf_tools": {
+    "simulator": {"path": ".tools/gps-sdr-sim-src/gps-sdr-sim", "sha256": "27cd471d2023b8a26262584b14f71ebed602159da47b54172b22da9299011e28"},
+    "multipath_simulator": {"path": ".tools/gps-sdr-sim-src/gps-sdr-sim-prn-multipath-v1", "sha256": "012ca5d2eef7bdec91e07732bbd7e1c0dfd817f3263ec0a94aecf1584f0adc46"},
+    "multipath_patch": {"path": "patches/gps-sdr-sim-prn-multipath-v1.patch", "sha256": "7d523547e8c3f43c3631606a0dbbc5417d1173f21d8c031f14a9b6a5f7b9ee79"},
+    "receiver": {"path": ".tools/gnss-sdr-src/build/src/main/gnss-sdr", "sha256": "fc00d610fdb966358ac85486b616ff2411cb163ca8269dd0b435919c5e197e25"},
+    "receiver_patch": {"path": "patches/gnss-sdr-complex9-tracking-v1.patch", "sha256": "41e48ef6ed7dc63a63b7666f3b2ffc0a3d4e48393c98a42d2d3e4ec1b9a8a2b1"},
+    "channel_count": 11,
+    "tracking_tap_count": 9,
+    "tracking_tap_spacing_chips": 0.125,
+    "timeout_seconds": 1200
+  },
+  "sweep": {
+    "distances_m": [40.0, 60.0, 100.0, 240.0],
+    "final_advantages_db": [-6.0, 3.0],
+    "target_direction_enu_unit": [0.8, 0.6, 0.0],
+    "start_seconds": 5.0,
+    "pull_off_rate_mps": 20.0,
+    "initial_advantage_db": -30.0,
+    "power_ramp_seconds": 5.0,
+    "comparison_start_seconds": 18.0,
+    "chip_length_m": 293.0522561094819
+  },
+  "aperture_ablation": {
+    "tap_counts": [3, 5, 9],
+    "policy": "central subsets of the same raw nine-tap receiver output",
+    "tap_offsets_chips": {"3": [-0.125, 0.0, 0.125], "5": [-0.25, -0.125, 0.0, 0.125, 0.25], "9": [-0.5, -0.375, -0.25, -0.125, 0.0, 0.125, 0.25, 0.375, 0.5]},
+    "fixed_across_apertures": ["RF waveform", "receiver tracking loop", "epochs", "PRNs", "template latent axes", "geometry fit", "comparison bins"],
+    "causal_interpretation": "only observation columns are removed; the tracking loop and RF realization remain identical"
+  },
+  "analysis": {
+    "bin_seconds": 1.0,
+    "minimum_prns": 8,
+    "minimum_comparison_bins_per_stream": 8,
+    "template_delay_edge_absolute_chips": 0.475,
+    "primary_aperture_taps": 9
+  },
+  "geometry_gates": {
+    "metric_min_auc": 0.8,
+    "metric_min_absolute_direction_cosine": 0.85,
+    "metric_max_absolute_relative_displacement_error": 0.15,
+    "saturation_min_auc": 0.8,
+    "saturation_min_absolute_direction_cosine": 0.85,
+    "saturation_min_edge_fraction": 0.1,
+    "saturation_max_relative_displacement_error": -0.05,
+    "overall_rule": "every gate passes independently in all ten five-geometry-by-two-power groups at the primary nine-tap aperture"
+  },
+  "aperture_gates": {
+    "aggregation_unit": "median over all ten geometry-power groups",
+    "distances_used_m": [100.0, 240.0],
+    "240m_absolute_error_nonincreasing_3_to_5_to_9": true,
+    "240m_recovered_norm_nondecreasing_3_to_5_to_9": true,
+    "240m_edge_fraction_nonincreasing_3_to_5_to_9": true,
+    "100m_9tap_error_not_worse_than_3tap": true,
+    "overall_rule": "all four aggregate paired aperture gates pass"
+  },
+  "early_boundary": {
+    "distances_m": [40.0, 60.0],
+    "role": "descriptive geometry-dependent detection-boundary estimate only",
+    "universal_pass_gate": false
+  },
+  "retention": {
+    "campaign_created_multipath_component_iq_count": 5,
+    "campaign_created_multipath_rf_iq_count": 5,
+    "campaign_created_counterfeit_iq_count": 20,
+    "campaign_created_spoof_rf_iq_count": 40,
+    "intermediate_iq_removed_after_receiver_success": true,
+    "receiver_outputs_retained": true,
+    "shared_source_inputs_removed": false
+  },
+  "output_root": "artifacts/cgc_rf_geometry_aperture_validation_v1",
+  "claim_boundary": "five simulated location/time/LOS geometries and four motion classes at 25 MHz receiver RF; independent synthetic multipath controls; same-stream 3/5/9-tap observation ablation; no field multipath, real spoof, universal distance threshold, TEXBAT multipath, or operational claim"
+}
