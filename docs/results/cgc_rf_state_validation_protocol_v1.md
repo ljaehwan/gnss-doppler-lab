@@ -18,6 +18,9 @@ All other controls match the discovery sweep: ENU direction `[0.8, 0.6, 0]`,
 20 m/s carry-off beginning at 5 s, five-second power ramp, fixed 0.125-chip
 nine-tap receiver, and a common comparison interval starting at 18 s.
 
+Receiver-internal run IDs are compact identifiers so that every generated
+`Tracking_1C.dump_filename` line stays below GNSS-SDR's fixed 200-character
+INI parser limit; condition IDs and all physical parameters remain unchanged.
 Each geometry uses its own byte-pinned authentic component, normal RF prefix,
 LOS log, and independent-multipath receiver recording. Every composed signal
 must have a byte-identical normal prefix.

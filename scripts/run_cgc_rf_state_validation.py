@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 import json
 import math
 from pathlib import Path
+import re
 import subprocess
 import sys
 from typing import Any
@@ -39,6 +40,17 @@ RELEASE_INPUTS = (
 GEOMETRY_IDS = ("straight", "sweep")
 DISTANCES_M = (40.0, 60.0, 80.0, 100.0, 160.0, 240.0)
 POWERS_DB = (-6.0, 3.0)
+
+
+def receiver_run_id(condition_id: str) -> str:
+    """Keep GNSS-SDR INI lines below its fixed 200-character parser limit."""
+    match = re.fullmatch(r"(straight|sweep)-p(neg|pos)(\d+)-d(\d{3})", condition_id)
+    if match is None:
+        raise ValueError(f"unsupported state-validation condition id: {condition_id}")
+    geometry, sign, magnitude, distance = match.groups()
+    geometry_short = {"straight": "st", "sweep": "sw"}[geometry]
+    sign_short = {"neg": "n", "pos": "p"}[sign]
+    return f"v-{geometry_short}-{sign_short}{int(magnitude)}-{int(distance)}"
 
 
 def sha256(path: str | Path) -> str:
@@ -314,7 +326,7 @@ def ensure_spoof_rf(
     truth = {"class": "spoofing", "event": "constant_rate_carryoff", "is_spoofing": True, "spoofing": asdict(event)}
     document = {
         "schema_version": 4,
-        "run_id": f"cgc-rf-state-{pair['paired_group_id']}",
+        "run_id": receiver_run_id(pair["paired_group_id"]),
         "scenario": {
             "name": scenario.name, "campaign": config["experiment"]["name"],
             "paired_group_id": pair["paired_group_id"], "split": "rf_state_validation",

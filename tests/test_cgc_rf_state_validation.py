@@ -66,6 +66,20 @@ def test_all_cells_use_constant_pull_off_rate():
         assert 5.0 + entry["transition_seconds"] <= 17.0
 
 
+def test_receiver_run_ids_are_unique_and_fit_gnss_sdr_ini_limit():
+    ids = set()
+    for entry in MODULE.condition_specs():
+        run_id = MODULE.receiver_run_id(entry["condition_id"])
+        ids.add(run_id)
+        receiver_root = (
+            MODULE.REPO_ROOT / "artifacts/cgc_rf_state_validation_v1/geometries"
+            / entry["geometry_id"] / "conditions" / entry["condition_id"] / "receiver"
+        )
+        dump_prefix = receiver_root / run_id / "raw/epl_tracking_ch_"
+        assert len(f"Tracking_1C.dump_filename={dump_prefix}") < 200
+    assert len(ids) == 24
+
+
 def test_complete_state_group_passes_every_gate():
     result = MODULE.evaluate_state_group(passing_rows(), GATES, minimum_bins=8)
     assert result["state_map_reproduced"] is True
