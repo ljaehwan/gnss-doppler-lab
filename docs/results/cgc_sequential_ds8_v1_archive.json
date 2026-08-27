@@ -1,0 +1,15 @@
+{
+  "archive_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cgc-sequential-ds8-v1-20260827",
+  "artifact_summary_sha256": "d7eacede40f236fb371c3b521d93a2daae0b4ade1e54820c1660b282468b90e0",
+  "byte_count": 614754,
+  "file_count": 11,
+  "included": [
+    "raw DS8 delay and sequential-score artifacts",
+    "frozen config and protocol",
+    "result, curated summary, and observability-latency note",
+    "runner and focused test"
+  ],
+  "rsync_checksum_dry_run_difference_count": 0,
+  "schema": "gnss-doppler-lab.cgc-sequential-ds8-archive",
+  "schema_version": 1
+}
