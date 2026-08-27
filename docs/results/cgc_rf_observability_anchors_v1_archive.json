@@ -1,0 +1,17 @@
+{
+  "archive_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cgc-rf-observability-anchors-v1-20260827",
+  "artifact_summary_sha256": "b9ca6b22ee65a90adb0e387aaba40ec3ece0a2d583b3fed61e3e0f1d32378c99",
+  "byte_count": 483524648,
+  "file_count": 239,
+  "included": [
+    "six receiver-RF anchor receiver outputs and CGC score artifacts",
+    "condition manifests, trajectories, hashes, and retention records",
+    "frozen config, protocol, result, and curated summary",
+    "runner and focused tests"
+  ],
+  "removed_but_regenerable_campaign_iq_count": 12,
+  "rsync_checksum_dry_run_difference_count": 0,
+  "schema": "gnss-doppler-lab.cgc-rf-observability-anchors-archive",
+  "schema_version": 1,
+  "shared_inputs_removed": false
+}
