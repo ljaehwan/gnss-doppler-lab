@@ -1,0 +1,775 @@
+{
+  "all_ten_geometry_power_groups_reproduced": false,
+  "aperture_evaluation": {
+    "aggregates": {
+      "3": {
+        "median_100m_absolute_relative_error": 0.4201563714657859,
+        "median_240m_absolute_relative_error": 0.7767586333750274,
+        "median_240m_edge_fraction": 0.0,
+        "median_240m_recovered_norm_chips": 0.18282721553243098
+      },
+      "5": {
+        "median_100m_absolute_relative_error": 0.05033909878343859,
+        "median_240m_absolute_relative_error": 0.46461883569428336,
+        "median_240m_edge_fraction": 0.02904040404040404,
+        "median_240m_recovered_norm_chips": 0.4384592739165558
+      },
+      "9": {
+        "median_100m_absolute_relative_error": 0.06921859211972062,
+        "median_240m_absolute_relative_error": 0.26673410708884215,
+        "median_240m_edge_fraction": 0.3573617857969003,
+        "median_240m_recovered_norm_chips": 0.6005202506713744
+      }
+    },
+    "aperture_mechanism_supported": false,
+    "gates": {
+      "100m_9tap_error_not_worse_than_3tap": true,
+      "240m_absolute_error_nonincreasing_3_to_5_to_9": true,
+      "240m_edge_fraction_nonincreasing_3_to_5_to_9": false,
+      "240m_recovered_norm_nondecreasing_3_to_5_to_9": true
+    }
+  },
+  "aperture_mechanism_supported": false,
+  "artifact": {
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/condition_aperture_summary.csv",
+    "row_count": 120,
+    "sha256": "8aae91cf9070ab2bf1240e3810c20da4afb3a76e5e45082b0c26bdab55d21afe"
+  },
+  "claim_boundary": "five simulated location/time/LOS geometries and four motion classes at 25 MHz receiver RF; independent synthetic multipath controls; same-stream 3/5/9-tap observation ablation; no field multipath, real spoof, universal distance threshold, TEXBAT multipath, or operational claim",
+  "common_multipath_artifacts": {
+    "denver-static": {
+      "apertures": {
+        "3": {
+          "delays": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/denver-static/common_multipath/multipath_delay_estimates_3tap.csv",
+            "row_count": 327,
+            "sha256": "feb40d45ff09e80d5679cfce3de492160f8e64cde19f0bf9558af5ae8f565d85"
+          },
+          "geometry": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/denver-static/common_multipath/multipath_geometry_scores_3tap.csv",
+            "row_count": 30,
+            "sha256": "3cac538e5bb4702313901ae7fd70ae8467090b9d41fa4a6a2f90157dfdc506d4"
+          }
+        },
+        "5": {
+          "delays": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/denver-static/common_multipath/multipath_delay_estimates_5tap.csv",
+            "row_count": 327,
+            "sha256": "74d2ed3026bc20dabbacd837aae10ad8de868198047fb656898f91bd8b6814ac"
+          },
+          "geometry": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/denver-static/common_multipath/multipath_geometry_scores_5tap.csv",
+            "row_count": 30,
+            "sha256": "33c4568091c1e8f50938af6336e0d5ff1446ed26b0d640fa43fbee6d34252e25"
+          }
+        },
+        "9": {
+          "delays": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/denver-static/common_multipath/multipath_delay_estimates_9tap.csv",
+            "row_count": 327,
+            "sha256": "cd3ac83408a2d1f98182d1b1fd4354c2a2b7e872347c99f97a845e15404802ef"
+          },
+          "geometry": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/denver-static/common_multipath/multipath_geometry_scores_9tap.csv",
+            "row_count": 30,
+            "sha256": "95109fea0b461e8b3ec6010dacbae96ee9432c420dd5a2cc1cbc183511bf969e"
+          }
+        }
+      },
+      "receiver_manifest": {
+        "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/denver-static/common_multipath/receiver/ga-mp-denver-static/manifest.json",
+        "sha256": "e47260a7d2e0eba6300f37cbce9816503fb2d3ac8e7d19730503a8d5100183c1"
+      }
+    },
+    "london-circle": {
+      "apertures": {
+        "3": {
+          "delays": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/london-circle/common_multipath/multipath_delay_estimates_3tap.csv",
+            "row_count": 328,
+            "sha256": "cc5d47a921466856f4b1ae0763193aeb88f3051e2cd5933b85411787fef4f98c"
+          },
+          "geometry": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/london-circle/common_multipath/multipath_geometry_scores_3tap.csv",
+            "row_count": 30,
+            "sha256": "11003ec1bef64b2b6f83591b98f0decbba375d3d891b688970898818f0c3598f"
+          }
+        },
+        "5": {
+          "delays": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/london-circle/common_multipath/multipath_delay_estimates_5tap.csv",
+            "row_count": 328,
+            "sha256": "05ebdbf104d59f61aa7a1187296fdd79592b4d97144895b2860575eaeae83f56"
+          },
+          "geometry": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/london-circle/common_multipath/multipath_geometry_scores_5tap.csv",
+            "row_count": 30,
+            "sha256": "d9c0a7453cd5081dabfde2291f8722da5cf0809001533562eb76ca1ace6cde6d"
+          }
+        },
+        "9": {
+          "delays": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/london-circle/common_multipath/multipath_delay_estimates_9tap.csv",
+            "row_count": 328,
+            "sha256": "ae02b5070697d6bcf0c0b4ae24414d4fb4a3dabcbd84d8cd50edce628eb461a6"
+          },
+          "geometry": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/london-circle/common_multipath/multipath_geometry_scores_9tap.csv",
+            "row_count": 30,
+            "sha256": "2b30ac2fc0be6c2a43d40552b2a668a5fc81333d1aea1a85d0a741c102f11d0c"
+          }
+        }
+      },
+      "receiver_manifest": {
+        "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/london-circle/common_multipath/receiver/ga-mp-london-circle/manifest.json",
+        "sha256": "c51e1f4d06386e51df541cca6243ef4cbcf50a3225e22428177209076f4d1267"
+      }
+    },
+    "seoul-static": {
+      "apertures": {
+        "3": {
+          "delays": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/seoul-static/common_multipath/multipath_delay_estimates_3tap.csv",
+            "row_count": 290,
+            "sha256": "63cc8d4a1899812e17a6d45c177a05def6326c7e8e51feb5dbe79eaa156c320b"
+          },
+          "geometry": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/seoul-static/common_multipath/multipath_geometry_scores_3tap.csv",
+            "row_count": 30,
+            "sha256": "45ced7ac21b2ffc50048f6ba30680be6baecb96f226893c8e09c09bab70707cc"
+          }
+        },
+        "5": {
+          "delays": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/seoul-static/common_multipath/multipath_delay_estimates_5tap.csv",
+            "row_count": 290,
+            "sha256": "ece3852d98d2a8480339ed063d270692adeac447e0710f2ad3962fd38f214c8b"
+          },
+          "geometry": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/seoul-static/common_multipath/multipath_geometry_scores_5tap.csv",
+            "row_count": 30,
+            "sha256": "769607660abdf27d6844a786a46b799ee9049a620b2e3aec25e45dec39e115f6"
+          }
+        },
+        "9": {
+          "delays": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/seoul-static/common_multipath/multipath_delay_estimates_9tap.csv",
+            "row_count": 290,
+            "sha256": "cf75709c0495e0b88ba319d1e31e736a1c1fb522d099fe9dd3a6e77be3c249dd"
+          },
+          "geometry": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/seoul-static/common_multipath/multipath_geometry_scores_9tap.csv",
+            "row_count": 30,
+            "sha256": "2122b92a66171b4761d5c0ee109361d15538e7b0ab61f394df45e1c64db6ce27"
+          }
+        }
+      },
+      "receiver_manifest": {
+        "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/seoul-static/common_multipath/receiver/ga-mp-seoul-static/manifest.json",
+        "sha256": "9c8ad2a7d39c9ac00dbfd3937ffa143454d3d1f0cf61aef6345c97f2b974d47a"
+      }
+    },
+    "sydney-sweep": {
+      "apertures": {
+        "3": {
+          "delays": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/sydney-sweep/common_multipath/multipath_delay_estimates_3tap.csv",
+            "row_count": 281,
+            "sha256": "1a469e99808d75cf6b0ece0848c6b909f65ae7af804cac1389a85839aedfa413"
+          },
+          "geometry": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/sydney-sweep/common_multipath/multipath_geometry_scores_3tap.csv",
+            "row_count": 30,
+            "sha256": "9ddf3d19a16ca581ca0b32925b2131f324617c6d84c2ff051a60c03f501a5008"
+          }
+        },
+        "5": {
+          "delays": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/sydney-sweep/common_multipath/multipath_delay_estimates_5tap.csv",
+            "row_count": 281,
+            "sha256": "41d3a367e76f9d4aec32e9000aa71f931aa5a746f048ca1b26a1de1c76861fe1"
+          },
+          "geometry": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/sydney-sweep/common_multipath/multipath_geometry_scores_5tap.csv",
+            "row_count": 30,
+            "sha256": "422162e2e247d2c4f1453bfba15bb6f63435818f4be387bc7d0c2803b48b7e3c"
+          }
+        },
+        "9": {
+          "delays": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/sydney-sweep/common_multipath/multipath_delay_estimates_9tap.csv",
+            "row_count": 281,
+            "sha256": "633cf74450f75e8a6d6bd5dc48052e333a47d685a9abf2e73b9e29e2d1f031e2"
+          },
+          "geometry": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/sydney-sweep/common_multipath/multipath_geometry_scores_9tap.csv",
+            "row_count": 30,
+            "sha256": "b1650cf27420c20d682092c5407937dfee33f6aa3ac7b7f7373cb2a4ebedb3d1"
+          }
+        }
+      },
+      "receiver_manifest": {
+        "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/sydney-sweep/common_multipath/receiver/ga-mp-sydney-sweep/manifest.json",
+        "sha256": "f2d45425920787e1b80236efb32173579d122d7f4a421cd1e99a2e836c63f74d"
+      }
+    },
+    "tokyo-straight": {
+      "apertures": {
+        "3": {
+          "delays": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/tokyo-straight/common_multipath/multipath_delay_estimates_3tap.csv",
+            "row_count": 244,
+            "sha256": "4a3ad9ea422583346ecbc3bfebe9a29a6613b39d83e902c6b7c545ac7dbc6733"
+          },
+          "geometry": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/tokyo-straight/common_multipath/multipath_geometry_scores_3tap.csv",
+            "row_count": 29,
+            "sha256": "8f745fa77a85b584702b5bca30d05b28e95e3e5fb7837ff357dcb47171f915ee"
+          }
+        },
+        "5": {
+          "delays": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/tokyo-straight/common_multipath/multipath_delay_estimates_5tap.csv",
+            "row_count": 244,
+            "sha256": "88999f8a2f2db63b63e3f69f09a4476da1321d0c6cf222f9759dd239ba5abb05"
+          },
+          "geometry": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/tokyo-straight/common_multipath/multipath_geometry_scores_5tap.csv",
+            "row_count": 29,
+            "sha256": "fb5ede8846c34bca3a2c864c1deb1a2db1952fe1033365894993f74c71e85962"
+          }
+        },
+        "9": {
+          "delays": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/tokyo-straight/common_multipath/multipath_delay_estimates_9tap.csv",
+            "row_count": 244,
+            "sha256": "5f3a3c6dc0682bd3fc8bc320d5ea3b119bbeff64e5614b039e5cdf7f1b0bc7fd"
+          },
+          "geometry": {
+            "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/tokyo-straight/common_multipath/multipath_geometry_scores_9tap.csv",
+            "row_count": 29,
+            "sha256": "94f77b7122b9f6f4faa148d3146d36ce484e527b8ac3ce6637c491620979b26e"
+          }
+        }
+      },
+      "receiver_manifest": {
+        "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/geometries/tokyo-straight/common_multipath/receiver/ga-mp-tokyo-straight/manifest.json",
+        "sha256": "c518db5c214bf69a72b0cc3014c70d7e4f5b8042bec464a8ef79857f4167f49e"
+      }
+    }
+  },
+  "condition_aperture_summary_count": 120,
+  "condition_count": 40,
+  "config": {
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/configs/experiments/cgc_rf_geometry_aperture_validation_v1.json",
+    "sha256": "b03093506b5a3b79ff296c640715f38cd44ad3fc50dc6454244a709a43eef2e2"
+  },
+  "early_boundary_role": "descriptive geometry-dependent outcome; no universal 40/60 m pass gate",
+  "full_grid_reported": true,
+  "geometry_evaluations_9tap": {
+    "denver-static": {
+      "+3_db": {
+        "auc_by_distance_m": {
+          "100": 1.0,
+          "240": 1.0,
+          "40": 0.8541666666666667,
+          "60": 1.0
+        },
+        "direction_by_distance_m": {
+          "100": 0.9313691692439271,
+          "240": 0.9579211702160488,
+          "40": 0.6801388419793017,
+          "60": 0.6528558006971541
+        },
+        "early_boundary_descriptive_only": {
+          "40": {
+            "auc": 0.8541666666666667,
+            "direction": 0.6801388419793017
+          },
+          "60": {
+            "auc": 1.0,
+            "direction": 0.6528558006971541
+          }
+        },
+        "edge_fraction_by_distance_m": {
+          "100": 0.0,
+          "240": 0.3712121212121212,
+          "40": 0.0,
+          "60": 0.0
+        },
+        "gates": {
+          "100m_metric_auc": true,
+          "100m_metric_direction": true,
+          "100m_metric_error": true,
+          "240m_saturation_auc": true,
+          "240m_saturation_bias": true,
+          "240m_saturation_direction": true,
+          "240m_saturation_edge": true,
+          "minimum_support": true
+        },
+        "mechanism_reproduced": true,
+        "relative_error_by_distance_m": {
+          "100": 0.10169854162949285,
+          "240": -0.25180073745667286,
+          "40": 0.6081421316191266,
+          "60": 0.2730317773654154
+        }
+      },
+      "-6_db": {
+        "auc_by_distance_m": {
+          "100": 0.9930555555555555,
+          "240": 1.0,
+          "40": 0.875,
+          "60": 0.8472222222222222
+        },
+        "direction_by_distance_m": {
+          "100": 0.9325827504419689,
+          "240": 0.9241612854911525,
+          "40": 0.7582523147049571,
+          "60": 0.6671543635626984
+        },
+        "early_boundary_descriptive_only": {
+          "40": {
+            "auc": 0.875,
+            "direction": 0.7582523147049571
+          },
+          "60": {
+            "auc": 0.8472222222222222,
+            "direction": 0.6671543635626984
+          }
+        },
+        "edge_fraction_by_distance_m": {
+          "100": 0.0,
+          "240": 0.12878787878787878,
+          "40": 0.0,
+          "60": 0.0
+        },
+        "gates": {
+          "100m_metric_auc": true,
+          "100m_metric_direction": true,
+          "100m_metric_error": true,
+          "240m_saturation_auc": true,
+          "240m_saturation_bias": true,
+          "240m_saturation_direction": true,
+          "240m_saturation_edge": true,
+          "minimum_support": true
+        },
+        "mechanism_reproduced": true,
+        "relative_error_by_distance_m": {
+          "100": -0.043182484420980306,
+          "240": -0.2816674767210115,
+          "40": 0.3780042424299003,
+          "60": -0.03857138670934688
+        }
+      }
+    },
+    "london-circle": {
+      "+3_db": {
+        "auc_by_distance_m": {
+          "100": 1.0,
+          "240": 1.0,
+          "40": 0.8194444444444444,
+          "60": 0.8333333333333334
+        },
+        "direction_by_distance_m": {
+          "100": 0.9469766365615122,
+          "240": 0.985217871423313,
+          "40": 0.5470568018102031,
+          "60": 0.749015508242927
+        },
+        "early_boundary_descriptive_only": {
+          "40": {
+            "auc": 0.8194444444444444,
+            "direction": 0.5470568018102031
+          },
+          "60": {
+            "auc": 0.8333333333333334,
+            "direction": 0.749015508242927
+          }
+        },
+        "edge_fraction_by_distance_m": {
+          "100": 0.0,
+          "240": 0.3435114503816794,
+          "40": 0.0,
+          "60": 0.0
+        },
+        "gates": {
+          "100m_metric_auc": true,
+          "100m_metric_direction": true,
+          "100m_metric_error": true,
+          "240m_saturation_auc": true,
+          "240m_saturation_bias": true,
+          "240m_saturation_direction": true,
+          "240m_saturation_edge": true,
+          "minimum_support": true
+        },
+        "mechanism_reproduced": true,
+        "relative_error_by_distance_m": {
+          "100": -0.06222263238214422,
+          "240": -0.11321190268867384,
+          "40": 0.7387158709531016,
+          "60": 0.08058682516428542
+        }
+      },
+      "-6_db": {
+        "auc_by_distance_m": {
+          "100": 1.0,
+          "240": 1.0,
+          "40": 0.6527777777777778,
+          "60": 0.8888888888888888
+        },
+        "direction_by_distance_m": {
+          "100": 0.8685587001396982,
+          "240": 0.9816934414142368,
+          "40": 0.4223967047565933,
+          "60": 0.6453146941088324
+        },
+        "early_boundary_descriptive_only": {
+          "40": {
+            "auc": 0.6527777777777778,
+            "direction": 0.4223967047565933
+          },
+          "60": {
+            "auc": 0.8888888888888888,
+            "direction": 0.6453146941088324
+          }
+        },
+        "edge_fraction_by_distance_m": {
+          "100": 0.0,
+          "240": 0.30303030303030304,
+          "40": 0.0,
+          "60": 0.0
+        },
+        "gates": {
+          "100m_metric_auc": true,
+          "100m_metric_direction": true,
+          "100m_metric_error": true,
+          "240m_saturation_auc": true,
+          "240m_saturation_bias": true,
+          "240m_saturation_direction": true,
+          "240m_saturation_edge": true,
+          "minimum_support": true
+        },
+        "mechanism_reproduced": true,
+        "relative_error_by_distance_m": {
+          "100": -0.07614026469749795,
+          "240": -0.29072205439607784,
+          "40": 0.6400884442624638,
+          "60": -0.04711256435766579
+        }
+      }
+    },
+    "seoul-static": {
+      "+3_db": {
+        "auc_by_distance_m": {
+          "100": 1.0,
+          "240": 1.0,
+          "40": 0.5208333333333334,
+          "60": 1.0
+        },
+        "direction_by_distance_m": {
+          "100": 0.9543190823561686,
+          "240": 0.9848972538456224,
+          "40": 0.510821675193351,
+          "60": 0.8606610266167427
+        },
+        "early_boundary_descriptive_only": {
+          "40": {
+            "auc": 0.5208333333333334,
+            "direction": 0.510821675193351
+          },
+          "60": {
+            "auc": 1.0,
+            "direction": 0.8606610266167427
+          }
+        },
+        "edge_fraction_by_distance_m": {
+          "100": 0.0,
+          "240": 0.49166666666666664,
+          "40": 0.0,
+          "60": 0.0
+        },
+        "gates": {
+          "100m_metric_auc": true,
+          "100m_metric_direction": true,
+          "100m_metric_error": true,
+          "240m_saturation_auc": true,
+          "240m_saturation_bias": true,
+          "240m_saturation_direction": true,
+          "240m_saturation_edge": true,
+          "minimum_support": true
+        },
+        "mechanism_reproduced": true,
+        "relative_error_by_distance_m": {
+          "100": 0.018050365497491803,
+          "240": -0.19483313148920095,
+          "40": 0.2651020206544473,
+          "60": 0.30283405163400895
+        }
+      },
+      "-6_db": {
+        "auc_by_distance_m": {
+          "100": 1.0,
+          "240": 1.0,
+          "40": 0.5138888888888888,
+          "60": 0.9583333333333333
+        },
+        "direction_by_distance_m": {
+          "100": 0.9001119515211704,
+          "240": 0.9847586165556874,
+          "40": 0.21800258336911138,
+          "60": 0.8373824985128235
+        },
+        "early_boundary_descriptive_only": {
+          "40": {
+            "auc": 0.5138888888888888,
+            "direction": 0.21800258336911138
+          },
+          "60": {
+            "auc": 0.9583333333333333,
+            "direction": 0.8373824985128235
+          }
+        },
+        "edge_fraction_by_distance_m": {
+          "100": 0.0,
+          "240": 0.25833333333333336,
+          "40": 0.0,
+          "60": 0.0
+        },
+        "gates": {
+          "100m_metric_auc": true,
+          "100m_metric_direction": true,
+          "100m_metric_error": true,
+          "240m_saturation_auc": true,
+          "240m_saturation_bias": true,
+          "240m_saturation_direction": true,
+          "240m_saturation_edge": true,
+          "minimum_support": true
+        },
+        "mechanism_reproduced": true,
+        "relative_error_by_distance_m": {
+          "100": 0.06599551620530364,
+          "240": -0.2475074382288656,
+          "40": 0.5077155914454019,
+          "60": -0.03335637790774167
+        }
+      }
+    },
+    "sydney-sweep": {
+      "+3_db": {
+        "auc_by_distance_m": {
+          "100": 0.9513888888888888,
+          "240": 1.0,
+          "40": 0.7916666666666666,
+          "60": 0.6944444444444445
+        },
+        "direction_by_distance_m": {
+          "100": 0.9274755884524809,
+          "240": 0.9737385567545442,
+          "40": 0.7033014474088659,
+          "60": 0.7167495040550178
+        },
+        "early_boundary_descriptive_only": {
+          "40": {
+            "auc": 0.7916666666666666,
+            "direction": 0.7033014474088659
+          },
+          "60": {
+            "auc": 0.6944444444444445,
+            "direction": 0.7167495040550178
+          }
+        },
+        "edge_fraction_by_distance_m": {
+          "100": 0.0,
+          "240": 0.425,
+          "40": 0.0,
+          "60": 0.0
+        },
+        "gates": {
+          "100m_metric_auc": true,
+          "100m_metric_direction": true,
+          "100m_metric_error": true,
+          "240m_saturation_auc": true,
+          "240m_saturation_bias": true,
+          "240m_saturation_direction": true,
+          "240m_saturation_edge": true,
+          "minimum_support": true
+        },
+        "mechanism_reproduced": true,
+        "relative_error_by_distance_m": {
+          "100": 0.11257354696835883,
+          "240": -0.29458757367979627,
+          "40": 0.7135071394761644,
+          "60": 0.523014383179107
+        }
+      },
+      "-6_db": {
+        "auc_by_distance_m": {
+          "100": 1.0,
+          "240": 1.0,
+          "40": 0.8819444444444445,
+          "60": 0.763888888888889
+        },
+        "direction_by_distance_m": {
+          "100": 0.9749237491765248,
+          "240": 0.9509709824797918,
+          "40": 0.828379845846977,
+          "60": 0.6120392541769553
+        },
+        "early_boundary_descriptive_only": {
+          "40": {
+            "auc": 0.8819444444444445,
+            "direction": 0.828379845846977
+          },
+          "60": {
+            "auc": 0.763888888888889,
+            "direction": 0.6120392541769553
+          }
+        },
+        "edge_fraction_by_distance_m": {
+          "100": 0.0,
+          "240": 0.26515151515151514,
+          "40": 0.0,
+          "60": 0.0
+        },
+        "gates": {
+          "100m_metric_auc": true,
+          "100m_metric_direction": true,
+          "100m_metric_error": true,
+          "240m_saturation_auc": true,
+          "240m_saturation_bias": true,
+          "240m_saturation_direction": true,
+          "240m_saturation_edge": true,
+          "minimum_support": true
+        },
+        "mechanism_reproduced": true,
+        "relative_error_by_distance_m": {
+          "100": 0.07244166803413761,
+          "240": -0.3488434678091516,
+          "40": 0.43898070755484075,
+          "60": 0.2170319881671255
+        }
+      }
+    },
+    "tokyo-straight": {
+      "+3_db": {
+        "auc_by_distance_m": {
+          "100": 0.9236111111111112,
+          "240": 0.41666666666666663,
+          "40": 0.8402777777777778,
+          "60": 0.4375
+        },
+        "direction_by_distance_m": {
+          "100": 0.9657033440446989,
+          "240": 0.9289605817535449,
+          "40": 0.8761856233506808,
+          "60": 0.7163847208360221
+        },
+        "early_boundary_descriptive_only": {
+          "40": {
+            "auc": 0.8402777777777778,
+            "direction": 0.8761856233506808
+          },
+          "60": {
+            "auc": 0.4375,
+            "direction": 0.7163847208360221
+          }
+        },
+        "edge_fraction_by_distance_m": {
+          "100": 0.0,
+          "240": 0.42592592592592593,
+          "40": 0.0,
+          "60": 0.0
+        },
+        "gates": {
+          "100m_metric_auc": true,
+          "100m_metric_direction": true,
+          "100m_metric_error": true,
+          "240m_saturation_auc": false,
+          "240m_saturation_bias": true,
+          "240m_saturation_direction": true,
+          "240m_saturation_edge": true,
+          "minimum_support": true
+        },
+        "mechanism_reproduced": false,
+        "relative_error_by_distance_m": {
+          "100": 0.08920818231571576,
+          "240": -0.5142011243184633,
+          "40": 1.0737316217212338,
+          "60": -0.062236461313035125
+        }
+      },
+      "-6_db": {
+        "auc_by_distance_m": {
+          "100": 0.8819444444444444,
+          "240": 0.9930555555555555,
+          "40": 0.7291666666666667,
+          "60": 0.4583333333333333
+        },
+        "direction_by_distance_m": {
+          "100": 0.927107850974918,
+          "240": 0.9956224426476472,
+          "40": 0.7545093186189102,
+          "60": 0.6570921369994922
+        },
+        "early_boundary_descriptive_only": {
+          "40": {
+            "auc": 0.7291666666666667,
+            "direction": 0.7545093186189102
+          },
+          "60": {
+            "auc": 0.4583333333333333,
+            "direction": 0.6570921369994922
+          }
+        },
+        "edge_fraction_by_distance_m": {
+          "100": 0.0,
+          "240": 0.37962962962962965,
+          "40": 0.0,
+          "60": 0.0
+        },
+        "gates": {
+          "100m_metric_auc": true,
+          "100m_metric_direction": true,
+          "100m_metric_error": true,
+          "240m_saturation_auc": true,
+          "240m_saturation_bias": true,
+          "240m_saturation_direction": true,
+          "240m_saturation_edge": true,
+          "minimum_support": true
+        },
+        "mechanism_reproduced": true,
+        "relative_error_by_distance_m": {
+          "100": 0.0375433636136861,
+          "240": -0.23151833365581576,
+          "40": 0.6549675680238733,
+          "60": -0.06286709870908025
+        }
+      }
+    }
+  },
+  "post_release_cell_gate_or_aperture_substitution": false,
+  "protocol": {
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/docs/results/cgc_rf_geometry_aperture_validation_protocol_v1.md",
+    "sha256": "11bb2b756ccfe657e1a4f5d6292fff61fe271548467c1d61881b3bc345ef6d3b"
+  },
+  "release_state": {
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/release_state.json",
+    "sha256": "22959bef69fc6d670f869d62abfa9bb991c4865a9ed30ef350ab8643d948c316"
+  },
+  "retention": {
+    "campaign_created_counterfeit_iq_count": 20,
+    "campaign_created_multipath_component_iq_count": 5,
+    "campaign_created_multipath_rf_iq_count": 5,
+    "campaign_created_spoof_rf_iq_count": 40,
+    "intermediate_iq_removed_after_receiver_success": true,
+    "receiver_outputs_retained": true,
+    "shared_source_inputs_removed": false
+  },
+  "runner": {
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/scripts/run_cgc_rf_geometry_aperture_validation.py",
+    "sha256": "06f2c460b72cbcc400537c9f1c5a29f9323820469e24f9c532131fffe1d5b86a"
+  },
+  "schema": "gnss-doppler-lab.cgc-rf-geometry-aperture-validation-result",
+  "schema_version": 1
+}
