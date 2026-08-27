@@ -243,7 +243,7 @@ def validate_config(config: dict[str, Any]) -> dict[str, Any]:
     if config["retention"]["shared_source_inputs_removed"] is not False:
         raise ValueError("source inputs may not be removed")
     output_root = repo_path(config["output_root"])
-    if output_root != REPO_ROOT / "artifacts/cgc_rf_geometry_aperture_validation_v1":
+    if output_root != REPO_ROOT / "artifacts/cgc_rf_ga_v1":
         raise ValueError("output root drifted")
     return {"normal_profile": normal_profile, "controlled": controlled, "contexts": contexts, "output_root": output_root}
 

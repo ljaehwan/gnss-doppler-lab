@@ -185,6 +185,6 @@
     "receiver_outputs_retained": true,
     "shared_source_inputs_removed": false
   },
-  "output_root": "artifacts/cgc_rf_geometry_aperture_validation_v1",
+  "output_root": "artifacts/cgc_rf_ga_v1",
   "claim_boundary": "five simulated location/time/LOS geometries and four motion classes at 25 MHz receiver RF; independent synthetic multipath controls; same-stream 3/5/9-tap observation ablation; no field multipath, real spoof, universal distance threshold, TEXBAT multipath, or operational claim"
 }
