@@ -1,0 +1,98 @@
+{
+  "schema": "gnss-doppler-lab.cgc-sequential-ds8-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "cgc-sequential-ds8-v1",
+    "role": "frozen outcome-unseen TEXBAT DS8 sequential validation",
+    "primary_attack": "TEXBAT DS8",
+    "official_onset_seconds": 110.0,
+    "primary_attack_cgc_outcome_accessed_before_freeze": false,
+    "development_disclosure": "DS1, DS2, DS3, and DS7 CGC outcomes were already accessed; none is a primary validation input"
+  },
+  "frozen_candidate": {
+    "real_detection_runner": {
+      "path": "scripts/run_cgc_real_detection.py",
+      "sha256": "428e91ce90ecf6e08c0a2bd75c22e4f8a7cc8c00494aeaa7f848c4ab80ad9ec6"
+    },
+    "clock_centered_module": {
+      "path": "src/gnss_doppler_lab/clock_centered_geometry.py",
+      "sha256": "b25a00efdb654ceb96540a2597bdc542526a0c6027e393018c739394858a203a"
+    },
+    "correlator_geometry_module": {
+      "path": "src/gnss_doppler_lab/correlator_geometry.py",
+      "sha256": "74732c182e799c2e82b4719d6572ebbd3dc4f6e16eada5bfe0f8a3d8c236b2b2"
+    },
+    "geometry_module": {
+      "path": "src/gnss_doppler_lab/gcmr_geometry.py",
+      "sha256": "781b66b8c485f4a656da3ed4ce82726f47f47a94cc4ea702eeab727708208921"
+    },
+    "template_config": {
+      "path": "configs/experiments/correlator_geometry_identifiability_train_v1.json",
+      "sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6"
+    },
+    "residual": "SSE_LOS_plus_clock / SSE_clock_only",
+    "spoof_score": "negative clock-centered residual"
+  },
+  "normal_scores": {
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cgc-real-detection-v1-20260827/artifacts/cgc_real_detection_v1/detection_scores.csv",
+    "sha256": "0ad4c391e373d1747a211e3170dbba95b861b86fabc4e81d24f51a5411ee6883",
+    "baseline_selector": {
+      "scenario": "cleanStatic",
+      "region": "calibration"
+    },
+    "locked_normal_selector": {
+      "scenario": "cleanDynamic",
+      "region": "locked_normal"
+    }
+  },
+  "primary_source": {
+    "name": "ds8",
+    "role": "primary_attack",
+    "tow0_s": 477900.0,
+    "complex_epoch_npz": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/exports/ds8.npz",
+      "sha256": "d1973fa150b7b4e7359df4827f36ce60289f206e9db11c1ac2bc1fd33a0df533"
+    },
+    "export_manifest": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/exports/ds8.manifest.json",
+      "sha256": "53b240d1c5ecd79c0802840575de5f00ca02131ca449c1cdd9cae30ea6c6f01d"
+    },
+    "ephemeris": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/gps_ephemeris.xml",
+      "sha256": "dd52c4431dab52df80d9a1487d49f3fca4c868d66c2f9cc5707b0b2f5702fd7d"
+    },
+    "nmea": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cmte-a2-ds8-complex-d67f813/receiver/nmea_pvt.nmea",
+      "sha256": "d984b6cc6b3731c66936e1ef7799c7f64647d73f6a7d39de1daac05a94b0a5f3"
+    }
+  },
+  "analysis": {
+    "bin_seconds": 1.0,
+    "minimum_prns": 8,
+    "epoch_chunk_size": 50000,
+    "monitor_start_seconds": 30.0,
+    "official_onset_seconds": 110.0,
+    "stable_post_start_seconds": 120.0,
+    "normal_location": "median",
+    "normal_scale": "1.4826_times_MAD",
+    "standardized_evidence": "clip((normal_median - residual) / normal_scale, -3, 3)",
+    "page_cusum_reference_value": 0.5,
+    "page_cusum_decision_threshold": 5.0,
+    "page_cusum_recursion": "S_t=max(0,S_(t-1)+evidence_t-0.5)",
+    "reset_on_nonconsecutive_bin": true,
+    "score_available_at": "bin_end"
+  },
+  "primary_gates": {
+    "minimum_baseline_bins": 80,
+    "minimum_locked_normal_bins": 25,
+    "maximum_baseline_alarm_count": 0,
+    "maximum_locked_normal_alarm_count": 0,
+    "minimum_primary_pre_bins": 70,
+    "minimum_primary_post_bins": 300,
+    "maximum_primary_pre_alarm_count": 0,
+    "primary_attack_must_have_post_onset_detection": true,
+    "maximum_primary_detection_delay_seconds": 60.0
+  },
+  "output_root": "artifacts/cgc_sequential_ds8_v1",
+  "claim_boundary": "outcome-unseen replay-IQ sequential validation of a fixed physical score; no labeled real-multipath class and no live-field false-alarm claim"
+}
