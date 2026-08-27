@@ -1,0 +1,69 @@
+{
+  "schema": "gnss-doppler-lab.cgc-observability-boundary-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "cgc-observability-boundary-v1",
+    "role": "exploratory train-geometry physical observability boundary screen",
+    "question": "At what spatial code separation and counterfeit-to-authentic power ratio does clock-centered correlator geometry become distinguishable from a marginally matched independent multipath control?"
+  },
+  "frozen_candidate": {
+    "template_config": {
+      "path": "configs/experiments/correlator_geometry_identifiability_train_v1.json",
+      "sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6"
+    },
+    "correlator_geometry_module": {
+      "path": "src/gnss_doppler_lab/correlator_geometry.py",
+      "sha256": "74732c182e799c2e82b4719d6572ebbd3dc4f6e16eada5bfe0f8a3d8c236b2b2"
+    },
+    "clock_centered_module": {
+      "path": "src/gnss_doppler_lab/clock_centered_geometry.py",
+      "sha256": "b25a00efdb654ceb96540a2597bdc542526a0c6027e393018c739394858a203a"
+    },
+    "residual": "SSE_LOS_plus_clock / SSE_clock_only",
+    "score": "negative clock-centered residual"
+  },
+  "grid": {
+    "spatial_separation_m": [5.0, 10.0, 20.0, 30.0, 40.0, 60.0, 80.0, 120.0],
+    "counterfeit_advantage_db": [-15.0, -9.0, -6.0, -3.0, 3.0, 6.0, 9.0, 15.0],
+    "gps_l1_ca_chip_length_m": 293.0522561094819,
+    "zero_db_excluded_reason": "equal-power prompt ownership is ambiguous in the dominant-component approximation"
+  },
+  "generator": {
+    "seed": 2026082703,
+    "events_per_geometry_per_cell": 100,
+    "vertical_direction_abs_max": 0.25,
+    "authentic_center_std_chips": 0.02,
+    "authentic_center_abs_max_chips": 0.06,
+    "relative_phase_min_rad": -3.141592653589793,
+    "relative_phase_max_rad": 3.141592653589793,
+    "complex_noise_std_min": 0.005,
+    "complex_noise_std_max": 0.025,
+    "tracking_model": "the stronger component owns the prompt; the weaker component is represented as a signed secondary path",
+    "nuisance_pairing": "direction, center, phase, noise, and PRN derangement are identical across every grid cell for the same geometry and event index",
+    "multipath_control": "exact PRN derangement of the complete complex profile and estimated-delay multiset within every event"
+  },
+  "evaluation": {
+    "minimum_prns": 8,
+    "delay_sign_min_abs_truth_chips": 0.05,
+    "bootstrap_seed": 2026082704,
+    "bootstrap_repetitions": 300,
+    "observable_cell_rule": {
+      "minimum_pooled_complex_auc": 0.8,
+      "minimum_each_geometry_complex_auc": 0.7,
+      "minimum_positive_separation_geometry_count": 5,
+      "minimum_complex_delay_sign_accuracy": 0.75
+    },
+    "boundary_definition": "minimum spatial separation satisfying every observable-cell rule at each power advantage",
+    "representative_rf_anchor_power_advantages_db": [-6.0, 3.0],
+    "rf_anchor_roles": ["below_boundary", "at_boundary", "above_boundary"]
+  },
+  "data_boundary": {
+    "allowed_geometry_partition": "train",
+    "geometry_source_policy": "reuse and hash-verify only the six LOS tables pinned by the template config",
+    "new_rf_generated": false,
+    "receiver_tracking_run": false,
+    "texbat_accessed": false
+  },
+  "output_root": "artifacts/cgc_observability_boundary_v1",
+  "claim_boundary": "ideal triangular-autocorrelation complex-nine-tap mechanism screen and RF-anchor selection only; not a receiver-RF, field, TEXBAT, or operational detector validation"
+}
