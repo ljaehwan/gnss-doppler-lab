@@ -1,0 +1,18 @@
+{
+  "archive_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cgc-rf-state-validation-v1-20260827",
+  "artifact_summary_sha256": "fb16d12a5f921e988190f17c372656b5cb9b521b5808b81a5549a0fca004fe8f",
+  "byte_count": 2120703477,
+  "file_count": 915,
+  "included": [
+    "24 held-out multi-geometry RF cells with GNSS-SDR outputs and CGC diagnostics",
+    "12 distance components' trajectories, hashes, manifests, and retention records",
+    "four-panel state-validation curve plot",
+    "frozen config, protocol, result, curated summary, runners, and focused tests"
+  ],
+  "removed_but_regenerable_campaign_iq_count": 36,
+  "receiver_retry_count_before_scoring": 1,
+  "source_to_archive_checksum_mismatch_count": 0,
+  "schema": "gnss-doppler-lab.cgc-rf-state-validation-archive",
+  "schema_version": 1,
+  "shared_inputs_removed": false
+}
