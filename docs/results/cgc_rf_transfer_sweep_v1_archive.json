@@ -1,0 +1,17 @@
+{
+  "archive_path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cgc-rf-transfer-sweep-v1-20260827",
+  "artifact_summary_sha256": "7f15b76b48e176f1c1b90915614b7dbc6b04ba0e735da6dbf8dd284177ddb7eb",
+  "byte_count": 1508156512,
+  "file_count": 670,
+  "included": [
+    "18 fixed-receiver RF cells with GNSS-SDR outputs and CGC diagnostics",
+    "nine distance components' trajectories, hashes, manifests, and retention records",
+    "three-panel transfer curve plot",
+    "frozen config, protocol, result, curated summary, runners, and focused tests"
+  ],
+  "removed_but_regenerable_campaign_iq_count": 27,
+  "rsync_checksum_dry_run_difference_count": 0,
+  "schema": "gnss-doppler-lab.cgc-rf-transfer-sweep-archive",
+  "schema_version": 1,
+  "shared_inputs_removed": false
+}
