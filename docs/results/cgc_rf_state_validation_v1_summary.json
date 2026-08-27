@@ -1,0 +1,53 @@
+{
+  "schema": "gnss-doppler-lab.cgc-rf-state-validation-curated-summary",
+  "schema_version": 1,
+  "decision": "absolute_distance_state_map_not_reproduced_physical_order_partially_reproduced",
+  "full_grid_reported": true,
+  "condition_count": 24,
+  "all_four_geometry_power_groups_reproduced": false,
+  "group_results": {
+    "straight_-6_db": {"state_map_reproduced": true, "failed_gates": []},
+    "straight_+3_db": {"state_map_reproduced": true, "failed_gates": []},
+    "sweep_-6_db": {
+      "state_map_reproduced": false,
+      "failed_gates": ["40m_unresolved_auc", "60m_onset_auc"]
+    },
+    "sweep_+3_db": {
+      "state_map_reproduced": false,
+      "failed_gates": ["40m_unresolved_auc", "60m_onset_auc"]
+    }
+  },
+  "first_tested_auc_0_8_crossing_m": {
+    "straight_-6_db": 80,
+    "straight_+3_db": 80,
+    "sweep_-6_db": 40,
+    "sweep_+3_db": 40
+  },
+  "first_tested_joint_metric_crossing_m": {
+    "straight_-6_db": 80,
+    "straight_+3_db": 80,
+    "sweep_-6_db": 80,
+    "sweep_+3_db": 100
+  },
+  "common_preregistered_results": {
+    "direction_improves_40m_to_60m_in_all_groups": true,
+    "all_100m_160m_metric_gates_pass": true,
+    "metric_auc_range": [0.8472222222222223, 1.0],
+    "metric_direction_range": [0.924085715960613, 0.9959342690655232],
+    "metric_max_absolute_relative_displacement_error": 0.08296135903231285,
+    "all_240m_saturation_gates_pass": true,
+    "saturation_auc_range": [1.0, 1.0],
+    "saturation_direction_range": [0.9932674660111958, 0.9971861016319661],
+    "saturation_edge_fraction_range": [0.3106060606060606, 0.5426356589147286],
+    "saturation_relative_displacement_error_range": [-0.30443723220568436, -0.183668227399176]
+  },
+  "integrity": {
+    "condition_result_count": 24,
+    "receiver_manifest_count": 24,
+    "retention_record_count": 36,
+    "remaining_campaign_intermediate_iq_count": 0,
+    "raw_summary_sha256": "fb16d12a5f921e988190f17c372656b5cb9b521b5808b81a5549a0fca004fe8f",
+    "plot_sha256": "be790d8ddf25f0a98a5eb627db79ae1057dee3abc36f3a8942ade93b76f1f432"
+  },
+  "claim_boundary": "two held-out motion/LOS geometries in simulation; no field, real-multipath, TEXBAT-multipath, or operational claim"
+}
