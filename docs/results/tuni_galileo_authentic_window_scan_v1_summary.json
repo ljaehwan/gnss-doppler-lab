@@ -1,0 +1,30 @@
+{
+  "schema": "gnss-doppler-lab.tuni-galileo-authentic-window-scan-result-summary.v1",
+  "status": "CONTROL_PAIR_SUPPORT_FAILED",
+  "protocol_commit": "429a5a6",
+  "release_commit": "78331a0c04287e05001585bd40a8aa22a29742dd",
+  "offsets_seconds": [30, 90, 150, 210, 270],
+  "duration_seconds": 10.0,
+  "receiver_run_count": 15,
+  "sustained_epoch_threshold": 1000,
+  "all_scenarios_have_control_pair_window": false,
+  "sustained_authentic_prns": {
+    "SS-11": {
+      "30": [], "90": [], "150": [], "210": [], "270": []
+    },
+    "SS-12": {
+      "30": [], "90": [], "150": [], "210": [], "270": []
+    },
+    "SS-13": {
+      "30": [], "90": [], "150": [], "210": [6], "270": [6]
+    }
+  },
+  "ss13_prn6_valid_epochs": {
+    "210": 2333,
+    "270": 1297
+  },
+  "detector_metrics_computed": false,
+  "reason_detector_metrics_not_computed": "no scenario-window contained the two authentic PRNs required to evaluate cross-PRN coherence",
+  "artifact_summary_sha256": "7258b8d16215ea435a0cc9ecd086e2852ffb861654c423775ade6cb61ed8105e",
+  "claim_safe": "TUNI does not provide receiver-usable real multipath specificity controls under the frozen receiver; real multipath specificity remains unverified"
+}
