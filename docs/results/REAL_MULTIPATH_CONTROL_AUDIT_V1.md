@@ -18,14 +18,14 @@ multipath-only negative control.
 
 ## Locally available evidence
 
-| Corpus | Local raw data | Physical label | Valid use | Not valid for |
+| Corpus | Local raw data | Scenario label | Valid use | Not valid for |
 |---|---|---|---|---|
 | Generated `independent_multipath` | yes | synthetic injection with generated epoch truth | controlled mechanism and classifier-negative tests | real-field multipath claim |
 | TEXBAT `cleanStatic` / `cleanDynamic` | yes | authentic clean recording; no path-level multipath truth | real normal baseline | labelled multipath negative |
 | OAKBAT `cleanStatic` / `cleanDynamic` | yes | authentic clean recording; no path-level multipath truth | independent real normal baseline | labelled multipath negative |
 | TUNI GPS C-5 | yes | static, no multipath, no spoofer | labelled no-multipath baseline | multipath response |
 | TUNI GPS SS-17 / SS-18 / SS-20 | yes | static, no multipath, 1/2/4 spoofers | real no-multipath spoof validation | multipath-only false-alarm control |
-| TUNI Galileo SS-11 / SS-12 / SS-13 | yes | static, multipath, 1/2/4 spoofers | spoof-detection robustness under multipath | multipath-only false-alarm control |
+| TUNI Galileo SS-11 / SS-12 / SS-13 | yes | controlled-lab RF; multipath with 1/2/4 spoofed PRNs | within-recording authentic-PRN multipath controls and spoof robustness | GPS or uncontrolled field-multipath claim |
 | TUNI GPS C-7 | no independent payload | conflicting historical label; official size and MD5 equal C-5 | metadata audit only | any independent experimental count |
 
 The generated control is located at
@@ -39,6 +39,30 @@ The current raw mounts are:
 - TEXBAT: `/home/ubuntu/unraid_hdd/texbat/raw/`;
 - OAKBAT: `/home/ubuntu/unraid_hdd/oakbat/gps_l1ca/raw/`;
 - TUNI2025: `/home/ubuntu/unraid_hdd/tuni2025/`.
+
+TUNI's official metadata describes controlled-laboratory recordings made with
+a USRP-2945R and a Spectracom GSG-6 where spoofing was used. In SS-11 only PRN
+31 is spoofed; in SS-12 PRNs 9 and 31 are spoofed; and in SS-13 PRNs 5, 9, 23,
+and 31 are spoofed. Other tracked PRNs in the same recording are authentic
+signals under the same labelled multipath condition. They therefore form a
+strong same-stream specificity control at the PRN level, although they are not
+an uncontrolled urban field recording. The attacks transmit a true-position
+solution, so they also test a different, near-zero-displacement regime from the
+simulated carry-off geometry campaign.
+
+The TUNI README calls the I/Q interleaved 32-bit floats, but clean C-1 byte
+inspection and receiver preflight show interleaved signed 16-bit I and 16-bit Q
+(GNU Radio `ishort`, 32 bits per complex sample). A 5-second clean-only C-1
+preflight using a 50-to-12.5 MHz receiver resampler tracked PRNs 2, 30, and 36
+for 1,778 valid epochs. Treat the README sample-format text as erroneous;
+the provided FGI-GSRx `sampleSize=32` setting is consistent with the bytes.
+
+No attack payload was decoded during this compatibility preflight. The local
+`DO_NOT_OPEN_BEFORE_MODEL_FREEZE.txt` boundary remains in force until a Galileo
+clean-only model and the evaluation contract are committed.
+
+The shared dataset volume currently has about 16 GB free. This is insufficient
+for an additional 126--132 GB SJTU environment archive without first expanding
 
 The tracked TEXBAT links under `data/external/texbat/raw/` still point to the
 old `/home/ubuntu/unraid/gnss-datasets/texbat/raw/` mount. Experiments should
@@ -73,7 +97,8 @@ proxy, subject to format adaptation and a frozen segment-selection rule.
 Limitations are important: the labels describe environments, not individual
 reflected paths or per-epoch multipath truth, and each environment is roughly
 126--132 GB. It is a defensible robustness proxy, not an exact causal
-multipath ground truth.
+multipath ground truth. The current 16 GB free space also prevents an immediate
+full-environment download.
 
 ### Stronger future target
 
@@ -93,13 +118,15 @@ The available data support the following staged tests:
 2. use TEXBAT and OAKBAT clean recordings to measure real-normal false alarms;
 3. use TUNI C-5 versus GPS SS-17/18/20 for an independent real no-multipath
    clean/spoof test;
-4. use TUNI Galileo no-multipath spoof scenarios versus SS-11/12/13 to test
-   whether multipath degrades spoof detection;
-5. obtain SJTU and preregister a low-/high-multipath environment comparison;
-6. reserve the operational statement "multipath is distinguished from
+4. freeze a Galileo-compatible clean model and use the authentic, non-target
+   PRNs inside SS-11/12/13 as same-stream multipath specificity controls;
+5. compare common spoofed PRNs across TUNI Galileo no-multipath and multipath
+   scenarios to test whether multipath degrades spoof detection;
+6. obtain storage and preregister an SJTU low-/high-multipath comparison;
+7. reserve the operational statement "field multipath is distinguished from
    spoofing" until a real multipath-only negative control is tested.
 
-Until step 6, the paper-safe wording is: the method separates simulated
+Until step 7, the paper-safe wording is: the method separates simulated
 independent multipath from coherent simulated spoofing and is additionally
 checked on real normal/spoof RF; field multipath specificity remains an open
 external-validity item.
