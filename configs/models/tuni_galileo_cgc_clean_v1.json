@@ -1,0 +1,152 @@
+{
+  "clean_validation": {
+    "calibration_bin_count": 48,
+    "cosine_calibration": {
+      "q100": 0.49819956894756795,
+      "q50": 0.02771370428033563,
+      "q90": 0.31147999467127896,
+      "q95": 0.4197285918013262,
+      "q99": 0.47707243799483284
+    },
+    "cosine_validation": {
+      "q100": 0.7223383978154518,
+      "q50": 0.05681950756474831,
+      "q90": 0.43360280987571076,
+      "q95": 0.5084842508080801,
+      "q99": 0.6349484624285961
+    },
+    "distortion_calibration": {
+      "q100": 1.3566932920783925,
+      "q50": 0.5927021554979421,
+      "q90": 0.8740272090511553,
+      "q95": 0.9703182999050644,
+      "q99": 1.1922837030532014
+    },
+    "distortion_validation": {
+      "q100": 1.1377765472918173,
+      "q50": 0.7107612395837407,
+      "q90": 0.9459601511821604,
+      "q95": 1.066011100251154,
+      "q99": 1.1108476711297344
+    },
+    "eligible_bin_count": 119,
+    "fixed_margin_pass": true,
+    "validation_bin_count": 60
+  },
+  "detector": {
+    "distortion_z_rms_threshold": 1.5,
+    "persistence_bins": 4,
+    "residual_cosine_threshold": 0.8,
+    "rule": "two PRNs must both exceed distortion and pair cosine thresholds for four consecutive common bins"
+  },
+  "model": {
+    "center": [
+      -0.5014163924051316,
+      -0.1377619952016831,
+      0.2249815187037632,
+      0.6231679122622968,
+      0.6118220188957827,
+      0.22620648496922463,
+      -0.1475982788731104,
+      -0.5005644947007857,
+      -0.006079415297324463,
+      -0.014187408199232213,
+      -0.019922893649053867,
+      -0.01762111894471608,
+      0.006715540842709941,
+      0.011207675324438258,
+      0.014085389843151826,
+      0.001158099780387281
+    ],
+    "robust_scale": [
+      0.02,
+      0.02,
+      0.02,
+      0.02,
+      0.02,
+      0.02,
+      0.02,
+      0.02,
+      0.02,
+      0.02,
+      0.02,
+      0.02,
+      0.02,
+      0.02,
+      0.02,
+      0.02
+    ]
+  },
+  "preprocessing": {
+    "bin_seconds": 0.25,
+    "calibration_interval_s": [
+      1.0,
+      5.0
+    ],
+    "feature_order": [
+      "real_E4",
+      "real_E3",
+      "real_E2",
+      "real_E",
+      "real_L",
+      "real_L2",
+      "real_L3",
+      "real_L4",
+      "imag_E4",
+      "imag_E3",
+      "imag_E2",
+      "imag_E",
+      "imag_L",
+      "imag_L2",
+      "imag_L3",
+      "imag_L4"
+    ],
+    "internal_sample_rate_hz": 12500000,
+    "minimum_epochs_per_bin": 20,
+    "prompt_index": 4,
+    "scale_floor": 0.02,
+    "stabilization_seconds": 1.0,
+    "tap_names": [
+      "E4",
+      "E3",
+      "E2",
+      "E",
+      "P",
+      "L",
+      "L2",
+      "L3",
+      "L4"
+    ],
+    "validation_interval_s": [
+      5.0,
+      10.0
+    ]
+  },
+  "schema": "gnss-doppler-lab.tuni-galileo-cgc-clean-model.v1",
+  "source": {
+    "prns": [
+      2,
+      30,
+      36
+    ],
+    "receiver_config_sha256": "289773536a8a6d1218b373d578de50c43d31ceaa1a8377ace009f24caea67852",
+    "receiver_executable_sha256": "3deb86bd586fe1db3ff681f8e67d357cbf6f32a3cba26258642d1ab9e79a3bdb",
+    "receiver_run": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/tuni_galileo_clean_complex9_freeze_inputs_v2/c-1",
+    "receiver_summary_sha256": "7fd400905ea9da4e2cb6f517f5f064c5b14f801ec273a24a413e4c5b2bea2033",
+    "tracking_mat_sha256": {
+      "epl_tracking_ch_0.mat": "6217248e31e90531dedb3bfa2c1b87a1ef868ddafcbf9d9320db16226bedd18f",
+      "epl_tracking_ch_1.mat": "3d86a8f2948b23651908826235d48efcfb4c286bbd35fd0e64d35c3e5f726269",
+      "epl_tracking_ch_10.mat": "6217248e31e90531dedb3bfa2c1b87a1ef868ddafcbf9d9320db16226bedd18f",
+      "epl_tracking_ch_11.mat": "43ad89b6ee8c5ab46c7fb75b84dcff06eb37100fc215f553e3a1e9f2088c4e50",
+      "epl_tracking_ch_2.mat": "6a430a34819e31cd11bbad903b63aba4a29ffd29d37aaec6a2930ffa59044bea",
+      "epl_tracking_ch_3.mat": "6217248e31e90531dedb3bfa2c1b87a1ef868ddafcbf9d9320db16226bedd18f",
+      "epl_tracking_ch_4.mat": "6217248e31e90531dedb3bfa2c1b87a1ef868ddafcbf9d9320db16226bedd18f",
+      "epl_tracking_ch_5.mat": "6217248e31e90531dedb3bfa2c1b87a1ef868ddafcbf9d9320db16226bedd18f",
+      "epl_tracking_ch_6.mat": "6217248e31e90531dedb3bfa2c1b87a1ef868ddafcbf9d9320db16226bedd18f",
+      "epl_tracking_ch_7.mat": "6217248e31e90531dedb3bfa2c1b87a1ef868ddafcbf9d9320db16226bedd18f",
+      "epl_tracking_ch_8.mat": "6217248e31e90531dedb3bfa2c1b87a1ef868ddafcbf9d9320db16226bedd18f",
+      "epl_tracking_ch_9.mat": "6217248e31e90531dedb3bfa2c1b87a1ef868ddafcbf9d9320db16226bedd18f"
+    }
+  },
+  "training_boundary": "TUNI C-1 only; no attack payload accessed"
+}

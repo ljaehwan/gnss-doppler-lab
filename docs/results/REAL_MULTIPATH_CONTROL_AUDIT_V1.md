@@ -52,18 +52,25 @@ simulated carry-off geometry campaign.
 
 The TUNI README calls the I/Q interleaved 32-bit floats, but clean C-1 byte
 inspection and receiver preflight show interleaved signed 16-bit I and 16-bit Q
-(GNU Radio `ishort`, 32 bits per complex sample). A 5-second clean-only C-1
-preflight using a 50-to-12.5 MHz receiver resampler tracked PRNs 2, 30, and 36
-for 1,778 valid epochs. Treat the README sample-format text as erroneous;
-the provided FGI-GSRx `sampleSize=32` setting is consistent with the bytes.
+(GNU Radio `ishort`, 32 bits per complex sample). The canonical clean-only C-1
+run processed 10.0 complex-sample seconds through a 50-to-12.5 MHz receiver,
+tracked PRNs 2, 30, and 36, and produced 7,402 valid nine-tap epochs. All nine
+complex tap datasets were present and nonzero, and reconstructed I/Q magnitudes
+matched the stored magnitudes exactly. Treat the README sample-format text as
+erroneous; the provided FGI-GSRx `sampleSize=32` setting is consistent with the
+bytes.
 
-No attack payload was decoded during this compatibility preflight. The local
-`DO_NOT_OPEN_BEFORE_MODEL_FREEZE.txt` boundary remains in force until a Galileo
-clean-only model and the evaluation contract are committed.
+C-3 remains excluded from the clean allowlist because its README simultaneously
+contains no-multipath metadata and a sentence describing multipath conditions.
+It requires an explicit provenance decision before scientific use.
+
+No attack payload was decoded during clean compatibility and model fitting. The
+local `DO_NOT_OPEN_BEFORE_MODEL_FREEZE.txt` boundary remains in force until the
+evaluation contract is committed.
 
 The shared dataset volume currently has about 16 GB free. This is insufficient
 for an additional 126--132 GB SJTU environment archive without first expanding
-
+or freeing storage.
 The tracked TEXBAT links under `data/external/texbat/raw/` still point to the
 old `/home/ubuntu/unraid/gnss-datasets/texbat/raw/` mount. Experiments should
 resolve the current mount explicitly or repair the links in a separately

@@ -1,0 +1,18 @@
+diff --git a/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc b/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc
+index 712ecef65..22a9939e0 100644
+--- a/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc
++++ b/src/algorithms/tracking/gnuradio_blocks/dll_pll_veml_tracking.cc
+@@ -492,11 +492,11 @@ dll_pll_veml_tracking::dll_pll_veml_tracking(const Dll_Pll_Conf &conf_)
+     // map memory pointers of correlator outputs
+     if (method_a_9tap)
+         {
+-            d_Very_Early = nullptr;
++            d_Very_Early = d_veml ? &d_correlator_outs[2] : nullptr;
+             d_Early = &d_correlator_outs[3];
+             d_Prompt = &d_correlator_outs[4];
+             d_Late = &d_correlator_outs[5];
+-            d_Very_Late = nullptr;
++            d_Very_Late = d_veml ? &d_correlator_outs[6] : nullptr;
+             const float spacing = d_trk_parameters.tap_spacing_chips * static_cast<float>(d_code_samples_per_chip);
+             for (int32_t n = 0; n < d_n_correlator_taps; ++n)
+                 {

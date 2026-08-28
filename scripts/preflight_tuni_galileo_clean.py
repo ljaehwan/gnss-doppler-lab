@@ -24,7 +24,6 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DATA_ROOT = Path("/home/ubuntu/unraid_hdd/tuni2025/galileo")
 CLEAN_ALLOWLIST = {
     "C-1": "C-1/clearsky_signal_C-1.bin",
-    "C-3": "C-3/clearsky_signal_C-3.bin",
 }
 
 
@@ -36,14 +35,25 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def ishort_source_item_count(duration_s: float, complex_sample_rate_hz: int) -> int:
+    if duration_s <= 0 or complex_sample_rate_hz <= 0:
+        raise ValueError("duration and complex sample rate must be positive")
+    # GNSS-SDR counts 16-bit source items; each complex sample contains I and Q.
+    return round(duration_s * complex_sample_rate_hz * 2)
+
+
+
 def render_config(
     *, iq_path: Path, output_dir: Path, input_samples: int, channel_count: int,
+    tracking_tap_count: int = 5,
     input_rate_hz: int = 50_000_000, internal_rate_hz: int = 12_500_000,
 ) -> str:
     if input_samples <= 0:
         raise ValueError("input_samples must be positive")
     if channel_count <= 0:
         raise ValueError("channel_count must be positive")
+    if tracking_tap_count not in {5, 9}:
+        raise ValueError("tracking_tap_count must be 5 or 9")
     raw = output_dir / "raw"
     return f"""[GNSS-SDR]
 GNSS-SDR.internal_fs_sps={internal_rate_hz}
@@ -92,7 +102,8 @@ Tracking_1B.early_late_space_chips=0.125
 Tracking_1B.very_early_late_space_chips=0.25
 Tracking_1B.early_late_space_narrow_chips=0.125
 Tracking_1B.very_early_late_space_narrow_chips=0.25
-Tracking_1B.tap_count=5
+Tracking_1B.tap_count={tracking_tap_count}
+Tracking_1B.tap_spacing_chips=0.125
 Tracking_1B.dump=true
 Tracking_1B.dump_filename={raw / 'epl_tracking_ch_'}
 
@@ -142,6 +153,7 @@ def parse_args() -> argparse.Namespace:
         default=ROOT / ".tools" / "gnss-sdr-src" / "build" / "src" / "main" / "gnss-sdr",
     )
     parser.add_argument("--duration-s", type=float, default=5.0)
+    parser.add_argument("--tap-count", type=int, choices=[5, 9], default=5)
     parser.add_argument("--channel-count", type=int, default=12)
     parser.add_argument("--timeout-s", type=int, default=1800)
     return parser.parse_args()
@@ -157,7 +169,8 @@ def main() -> int:
         raise ValueError("clean IQ path escaped the TUNI Galileo data root")
     if not iq_path.is_file():
         raise FileNotFoundError(iq_path)
-    executable = Path(shutil.which(str(args.executable)) or args.executable.resolve())
+    executable_match = shutil.which(str(args.executable))
+    executable = Path(executable_match).resolve() if executable_match else args.executable.resolve()
     if not executable.is_file():
         raise FileNotFoundError(executable)
 
@@ -165,14 +178,15 @@ def main() -> int:
     if output_dir.exists():
         raise FileExistsError(output_dir)
     (output_dir / "raw").mkdir(parents=True)
-    input_samples = round(args.duration_s * 50_000_000)
+    input_source_items = ishort_source_item_count(args.duration_s, 50_000_000)
     config_path = output_dir / "receiver.conf"
     config_path.write_text(
         render_config(
             iq_path=iq_path,
             output_dir=output_dir,
-            input_samples=input_samples,
+            input_samples=input_source_items,
             channel_count=args.channel_count,
+            tracking_tap_count=args.tap_count,
         ),
         encoding="utf-8",
     )
@@ -198,7 +212,8 @@ def main() -> int:
             "bytes": iq_path.stat().st_size,
             "sample_format": "interleaved int16 I/Q (GNU Radio ishort; 32 bits per complex sample)",
             "input_rate_hz": 50_000_000,
-            "samples_processed": input_samples,
+            "source_int16_items_processed": input_source_items,
+            "complex_samples_processed": input_source_items // 2,
             "duration_s": args.duration_s,
         },
         "receiver": {
@@ -208,7 +223,7 @@ def main() -> int:
             "return_code": completed.returncode,
         },
         "tracking": {
-            "tap_count": 5,
+            "tap_count": args.tap_count,
             "tap_spacing_chips": 0.125,
             "mat_file_count": len(mat_paths),
             "valid_prns": prns,
