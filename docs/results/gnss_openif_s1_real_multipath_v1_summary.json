@@ -1,0 +1,68 @@
+{
+  "schema": "gnss-doppler-lab.gnss-openif-s1-real-multipath-compact-result",
+  "schema_version": 1,
+  "status": "REAL_MULTIPATH_SPECIFICITY_SUPPORTED",
+  "claim_boundary": "external real-field multipath specificity only; real-spoof sensitivity is not established",
+  "chronology": {
+    "post_dataset_support_adaptation": true,
+    "s1_geometry_outcome_accessed_before_partial_f_freeze": false,
+    "s1_threshold_tuning": false
+  },
+  "dataset": {
+    "repository_commit": "09715cd679a0300782074e96bfed9f11eae4ef88",
+    "scenario": "S1",
+    "iq_bytes": 10200547328,
+    "iq_sha256": "79952be6e4b8c36d0dee2841d837c731499aef2c8cdcf42890c5bb066007ff91",
+    "ground_truth_sha256": "97991b3b38855cfb8c25eceefaeaf30ce73a37833a2e2cda7d0416334353d6bc",
+    "broadcast_navigation_sha256": "702bc509b15a3ccd078d9bd58c7b07047c58c175076d2ab5e6af4670e9925fac"
+  },
+  "support_normalization": {
+    "method": "nested-model partial-F tail probability",
+    "formula": "F=((SSE_clock-SSE_direction_clock)/3)/(SSE_direction_clock/(N-4)); p=sf_F(F;3,N-4)",
+    "p_value_alarm_threshold": 0.06028418845288192,
+    "threshold_calibration": "cleanStatic bins [330,420), fifth percentile",
+    "seven_prn_audit": {
+      "trials": 64,
+      "specificity_trial_pass_rate": 1.0,
+      "negative_persistent_alarm_rate_minimum": 0.0,
+      "negative_persistent_alarm_rate_median": 0.0,
+      "negative_persistent_alarm_rate_maximum": 0.044444444444444446,
+      "ds7_detection_trial_rate": 0.921875,
+      "ds7_detection_delay_s_minimum": 40.0,
+      "ds7_detection_delay_s_median": 124.0,
+      "ds7_detection_delay_s_maximum": 168.0,
+      "ds7_legacy_60_s_gate_pass_rate": 0.046875
+    }
+  },
+  "s1_result": {
+    "evaluated_bin_count": 84,
+    "minimum_prn_count": 7,
+    "maximum_prn_count": 11,
+    "prn22_geometry_bin_count": 84,
+    "multipath_enriched_bin_count": 84,
+    "raw_spoof_alarm_count": 8,
+    "raw_spoof_alarm_rate": 0.09523809523809523,
+    "persistent_spoof_alarm_count": 2,
+    "persistent_spoof_alarm_rate": 0.023809523809523808,
+    "multipath_enriched_persistent_spoof_alarm_rate": 0.023809523809523808,
+    "legacy_unadjusted_persistent_spoof_alarm_count": 11,
+    "legacy_unadjusted_persistent_spoof_alarm_rate": 0.13095238095238096,
+    "prn22_median_leave_one_out_prediction_error_chips": 0.10664068457142578,
+    "all_specificity_gates_passed": true
+  },
+  "provenance": {
+    "experiment_config_sha256": "50b68d52cbfff9e66b475c1396fc689e6baa087c290b728d6c2537c2233a0e12",
+    "support_audit_summary_sha256": "c07dee4ecc82e9d0ce98c98d7e8ba9b00ba6ff86400406e2cbb86821708c07d4",
+    "full_result_summary_sha256": "6b98b218c093544486b7dd24cef20c74157396e5de02f2f142227aabbf420ada",
+    "delay_estimates_sha256": "75cf9bf90f6b028fed4f9d027648030dbe6fcde58eb8e8eaa84986a4372a048f",
+    "geometry_scores_sha256": "e1c280feed0b1f7169abfa0719147339476833ee5f253c99222bc539d497c451",
+    "prn_summary_sha256": "d8f79674f341aea510583de9137335caf152926d1d62ae847112d77ace34b8ed",
+    "receiver_executable_sha256": "fc00d610fdb966358ac85486b616ff2411cb163ca8269dd0b435919c5e197e25"
+  },
+  "frozen_gates": {
+    "minimum_evaluated_bins": 60,
+    "maximum_persistent_spoof_alarm_rate": 0.05,
+    "maximum_multipath_enriched_persistent_spoof_alarm_rate": 0.1,
+    "require_prn22_tracking": true
+  }
+}

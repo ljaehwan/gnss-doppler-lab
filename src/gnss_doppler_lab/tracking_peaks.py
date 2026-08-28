@@ -79,6 +79,14 @@ def _read_vector(handle: h5py.File, name: str) -> np.ndarray:
     return np.asarray(handle[name]).reshape(-1)
 
 
+def _read_prn_vector(handle: h5py.File) -> np.ndarray:
+    """Read PRNs while rejecting GNSS-SDR's empty-MAT [1, 0] sentinel."""
+    values = _read_vector(handle, "PRN")
+    if values.shape == (2,) and np.array_equal(values, np.asarray([1, 0])):
+        return np.asarray([], dtype=values.dtype)
+    return values
+
+
 def _channel_from_name(path: Path) -> int:
     match = re.search(r"_ch_(\d+)\.mat$", path.name)
     if not match:
@@ -124,7 +132,7 @@ def available_tracking_prns(receiver_run_dir: str | Path) -> list[str]:
     seen: set[str] = set()
     for path in _raw_mat_paths(receiver_run_dir):
         with h5py.File(path, "r") as handle:
-            values = _read_vector(handle, "PRN")
+            values = _read_prn_vector(handle)
         for value in values:
             number = _valid_prn_number(value)
             if number is None:
@@ -149,7 +157,7 @@ def _slice_indices(indices: np.ndarray, *, max_epochs: int | None, epoch_step: i
 
 def _series_from_indices(
     mat_path: Path, handle: h5py.File, indices: np.ndarray, *, sample_rate_hz: int,
-    prn: str, segment_index: int, tap_count: int = 3,
+    time_offset_s: float, prn: str, segment_index: int, tap_count: int = 3,
     require_complex_taps: bool = False,
 ) -> TrackingPeakSeries:
     epoch_count = len(_read_vector(handle, "PRN"))
@@ -202,7 +210,7 @@ def _series_from_indices(
         raise ValueError(f"Tracking MAT does not contain non-zero correlator taps: {mat_path}")
     return TrackingPeakSeries(
         prn=prn, channel=_channel_from_name(mat_path), sample_rate_hz=sample_rate_hz,
-        time_s=sample_counts.astype(np.float64) / float(sample_rate_hz), tap_names=tuple(tap_names),
+        time_s=sample_counts.astype(np.float64) / float(sample_rate_hz) + time_offset_s, tap_names=tuple(tap_names),
         magnitudes=np.column_stack(tap_columns), carrier_doppler_hz=take("carrier_doppler_hz").astype(np.float64),
         cn0_db_hz=take("CN0_SNV_dB_Hz").astype(np.float64), prompt_i=take("Prompt_I").astype(np.float64),
         prompt_q=take("Prompt_Q").astype(np.float64), code_error_chips=take("code_error_chips").astype(np.float64),
@@ -220,13 +228,16 @@ def load_receiver_tracking_peak_series_segments(
     run_dir = Path(receiver_run_dir)
     manifest = _receiver_manifest(run_dir)
     sample_rate_hz = int(manifest["source"]["sample_rate_hz"])
+    time_offset_s = float(manifest["source"].get("start_offset_s", 0.0))
+    if not np.isfinite(time_offset_s) or time_offset_s < 0.0:
+        raise ValueError("receiver start_offset_s must be finite and nonnegative")
     target = _normalized_prn(prn)
     requested_tap_count = int(tap_count or manifest.get("tracking", {}).get("tap_count", 3))
     tap_dataset_layout(requested_tap_count)
     result: list[TrackingPeakSeries] = []
     for mat_path in _raw_mat_paths(run_dir):
         with h5py.File(mat_path, "r") as handle:
-            raw_prns = _read_vector(handle, "PRN")
+            raw_prns = _read_prn_vector(handle)
             normalized = [_normalized_prn(number) if (number := _valid_prn_number(value)) is not None else None for value in raw_prns]
             start = 0
             segment_index = 0
@@ -241,6 +252,7 @@ def load_receiver_tracking_peak_series_segments(
                         if len(indices):
                             result.append(_series_from_indices(
                                 mat_path, handle, indices, sample_rate_hz=sample_rate_hz,
+                                time_offset_s=time_offset_s,
                                 prn=target, segment_index=segment_index,
                                 tap_count=requested_tap_count,
                                 require_complex_taps=require_complex_taps,

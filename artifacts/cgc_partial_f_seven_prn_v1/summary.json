@@ -1,0 +1,69 @@
+{
+  "artifacts": {
+    "trial_metrics": {
+      "path": "artifacts/cgc_partial_f_seven_prn_v1/trial_metrics.csv",
+      "row_count": 64,
+      "sha256": "3c517eff5ef1168881103eeb32190f36a332569c2635d47eee4742717385bb18"
+    }
+  },
+  "claim_boundary": "exact-seven-PRN support audit. The partial-F score is calibrated only on the original cleanStatic calibration interval; S1 and attack outcomes do not tune its threshold.",
+  "deterministic_subset_trials": 64,
+  "inputs": {
+    "config": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/configs/experiments/cgc_real_detection_v1.json",
+      "sha256": "d89c0cf05001f7435b0e2886b080519650fcef39944ca8379a1293b785097a8a"
+    },
+    "delay_estimates": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_real_detection_v1/delay_estimates.csv",
+      "row_count": 22447,
+      "sha256": "9d0ac4a7a6f9b4c59367862366d638309c8f3dcb1effa28b9e2409b6f5700840"
+    },
+    "detection_scores": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_real_detection_v1/detection_scores.csv",
+      "row_count": 2160,
+      "sha256": "0ad4c391e373d1747a211e3170dbba95b861b86fabc4e81d24f51a5411ee6883"
+    },
+    "frozen_summary": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_real_detection_v1/summary.json",
+      "sha256": "d7fa0024628a231dae2ec1da2f2bae6d4b19fb3fdf97886913d9520349aa0a63"
+    }
+  },
+  "legacy_unadjusted_residual": {
+    "ds7_detection_delay_s": {
+      "maximum": 75.0,
+      "median": 20.0,
+      "minimum": 11.0
+    },
+    "ds7_detection_trial_rate": 1.0,
+    "negative_persistent_alarm_rate": {
+      "maximum": 0.35555555555555557,
+      "median": 0.2,
+      "minimum": 0.05555555555555555
+    },
+    "specificity_trial_pass_rate": 0.0,
+    "threshold_refitting": false
+  },
+  "partial_f": {
+    "calibration_source": "cleanStatic bins [330,420), unchanged 5th-percentile policy",
+    "ds7_detection_delay_s": {
+      "maximum": 168.0,
+      "median": 124.0,
+      "minimum": 40.0
+    },
+    "ds7_detection_trial_rate": 0.921875,
+    "external_or_s1_threshold_tuning": false,
+    "formula": "F=((SSE_clock-SSE_direction_clock)/3)/(SSE_direction_clock/(N-4)); p=sf_F(F;3,N-4)",
+    "legacy_primary_delay_gate_trial_pass_rate": 0.046875,
+    "negative_persistent_alarm_rate": {
+      "maximum": 0.044444444444444446,
+      "median": 0.0,
+      "minimum": 0.0
+    },
+    "p_value_alarm_threshold": 0.06028418845288192,
+    "specificity_trial_pass_rate": 1.0
+  },
+  "schema": "gnss-doppler-lab.cgc-seven-prn-support-audit",
+  "schema_version": 2,
+  "status": "PARTIAL_F_SEVEN_PRN_SPECIFICITY_SUPPORTED",
+  "subset_size": 7
+}

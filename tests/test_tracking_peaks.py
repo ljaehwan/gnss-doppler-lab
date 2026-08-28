@@ -59,6 +59,22 @@ def test_available_tracking_prns_reads_manifest_order(tmp_path: Path) -> None:
     assert available_tracking_prns(run_dir) == ["G05", "G18"]
 
 
+def test_available_tracking_prns_rejects_empty_matlab_sentinel(tmp_path: Path) -> None:
+    run_dir = tmp_path / "empty_receiver_run"
+    raw = run_dir / "raw"
+    raw.mkdir(parents=True)
+    with h5py.File(raw / "epl_tracking_ch_0.mat", "w") as handle:
+        handle.create_dataset("PRN", data=np.asarray([1, 0], dtype=np.uint64))
+    (run_dir / "manifest.json").write_text(json.dumps({
+        "source": {"sample_rate_hz": 10},
+        "tracking": {"raw_directory": "raw"},
+    }))
+
+    assert available_tracking_prns(run_dir) == []
+    with pytest.raises(FileNotFoundError, match="G01"):
+        load_receiver_tracking_peak_series(run_dir, "G01")
+
+
 def test_load_receiver_tracking_peak_series_extracts_real_prn_peak_slice(tmp_path: Path) -> None:
     run_dir = _receiver_run(tmp_path)
 
@@ -70,6 +86,18 @@ def test_load_receiver_tracking_peak_series_extracts_real_prn_peak_slice(tmp_pat
     assert series.magnitudes.shape == (2, 3)
     assert np.allclose(series.time_s, np.array([0.001, 0.002]))
     assert np.allclose(series.magnitudes[0], np.array([3.0, 9.0, 4.0]))
+
+
+def test_receiver_start_offset_is_added_to_tracking_time(tmp_path: Path) -> None:
+    run_dir = _receiver_run(tmp_path)
+    manifest_path = run_dir / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["source"]["start_offset_s"] = 7.0
+    manifest_path.write_text(json.dumps(manifest))
+
+    series = load_receiver_tracking_peak_series(run_dir, "G05", max_epochs=2)
+
+    assert np.allclose(series.time_s, np.array([7.001, 7.002]))
 
 
 def test_render_tracking_peak_dashboard_writes_png(tmp_path: Path) -> None:

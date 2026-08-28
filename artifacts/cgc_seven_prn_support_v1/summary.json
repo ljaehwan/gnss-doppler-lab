@@ -1,0 +1,44 @@
+{
+  "artifacts": {
+    "trial_metrics": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_seven_prn_support_v1/trial_metrics.csv",
+      "row_count": 64,
+      "sha256": "abfd2db4d6272c898c98dc809113fb68cc0b873453c3b8182c4f0ab96afb7a62"
+    }
+  },
+  "claim_boundary": "support audit for using the already-frozen residual threshold with exactly seven satellites; this does not refit or rescue the failed legacy DS7 <=60 s primary detection claim",
+  "deterministic_subset_trials": 64,
+  "ds7_detection_delay_s": {
+    "maximum": 75.0,
+    "median": 20.0,
+    "minimum": 11.0
+  },
+  "ds7_detection_trial_rate": 1.0,
+  "inputs": {
+    "config": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/configs/experiments/cgc_real_detection_v1.json",
+      "sha256": "d89c0cf05001f7435b0e2886b080519650fcef39944ca8379a1293b785097a8a"
+    },
+    "delay_estimates": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_real_detection_v1/delay_estimates.csv",
+      "row_count": 22447,
+      "sha256": "9d0ac4a7a6f9b4c59367862366d638309c8f3dcb1effa28b9e2409b6f5700840"
+    },
+    "frozen_summary": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_real_detection_v1/summary.json",
+      "sha256": "d7fa0024628a231dae2ec1da2f2bae6d4b19fb3fdf97886913d9520349aa0a63"
+    }
+  },
+  "legacy_primary_delay_gate_trial_pass_rate": 0.96875,
+  "negative_persistent_alarm_rate": {
+    "maximum": 0.35555555555555557,
+    "median": 0.2,
+    "minimum": 0.05555555555555555
+  },
+  "schema": "gnss-doppler-lab.cgc-seven-prn-support-audit",
+  "schema_version": 1,
+  "specificity_trial_pass_rate": 0.0,
+  "status": "SEVEN_PRN_SPECIFICITY_NOT_SUPPORTED",
+  "subset_size": 7,
+  "threshold_refitting": false
+}
