@@ -1,0 +1,25 @@
+{
+  "schema": "gnss-doppler-lab.cgc-rf-tokyo-replication-result-summary.v1",
+  "decision": "SINGLE_REALIZATION_EXCEPTION",
+  "release_commit": "47edb4a90b3650fa1a1dcb7cf57f89418d160793",
+  "replica_count": 5,
+  "condition_count": 10,
+  "support_replica_count": 5,
+  "minus6_auc_pass_count": 5,
+  "plus3_auc_pass_count": 5,
+  "plus3_auc_fail_count": 0,
+  "plus3_direction_pass_count": 5,
+  "median_paired_auc_drop_minus6_minus_plus3": 0.0,
+  "per_replica": {
+    "r01": {"minus6_auc": 1.0, "plus3_auc": 1.0, "plus3_direction": 0.9877186833092927},
+    "r02": {"minus6_auc": 1.0, "plus3_auc": 1.0, "plus3_direction": 0.9906780655177811},
+    "r03": {"minus6_auc": 1.0, "plus3_auc": 1.0, "plus3_direction": 0.9886318326741383},
+    "r04": {"minus6_auc": 1.0, "plus3_auc": 1.0, "plus3_direction": 0.990660167851964},
+    "r05": {"minus6_auc": 1.0, "plus3_auc": 1.0, "plus3_direction": 0.9912684321753304}
+  },
+  "original_observed_tokyo_cell_in_primary_counts": false,
+  "post_release_seed_power_estimator_or_gate_substitution": false,
+  "artifact_summary_sha256": "2f7751280415675c72c33c344c8cc73663911653a01b5422670373dfc3fb0a5d",
+  "condition_table_sha256": "d34b638a37cee3d1d194c2b593cd59e82c6c186534c350d26d051b4307c4bda0",
+  "claim_boundary": "fixed synthetic Tokyo straight geometry at 240 m with five independent receiver-noise and multipath seeds; no field-multipath or operational claim"
+}
