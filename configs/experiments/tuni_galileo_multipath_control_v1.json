@@ -1,0 +1,119 @@
+{
+  "schema": "gnss-doppler-lab.tuni-galileo-multipath-control.v1",
+  "release_token": "RELEASE-TUNI-GALILEO-MULTIPATH-CONTROL-V1",
+  "output_root": "artifacts/tuni_galileo_multipath_control_v1",
+  "frozen": {
+    "clean_model": {
+      "path": "configs/models/tuni_galileo_cgc_clean_v1.json",
+      "sha256": "d110992c83bee7fcfac6d6b92997cb91d06ccc8ace4c5a50315f07ba74b6c8cc"
+    },
+    "receiver": {
+      "path": ".tools/gnss-sdr-galileo-complex9-safety-v1",
+      "sha256": "3deb86bd586fe1db3ff681f8e67d357cbf6f32a3cba26258642d1ab9e79a3bdb"
+    },
+    "base_patch": {
+      "path": "patches/gnss-sdr-complex9-tracking-v1.patch",
+      "sha256": "41e48ef6ed7dc63a63b7666f3b2ffc0a3d4e48393c98a42d2d3e4ec1b9a8a2b1"
+    },
+    "galileo_safety_patch": {
+      "path": "patches/gnss-sdr-galileo-complex9-safety-v1.patch",
+      "sha256": "4a817aea2c9fb6b2e4b688aad19c981d1764d2a8c68409fd289d6ee4031b2747"
+    },
+    "download_manifest": {
+      "path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/download_manifest_20260822.json",
+      "sha256": "fd00a532965c0cf7cc2c8c9f6b07314012f53c70a57a192d686a6dafee01df56"
+    },
+    "protocol": {
+      "path": "docs/results/tuni_galileo_multipath_control_protocol_v1.md",
+      "sha256": "6f655d86b299bcf42f01971ba019e8358bf5fdc73e1ce541e49a168ef9b39332"
+    },
+    "runner": {
+      "path": "scripts/run_tuni_galileo_multipath_control.py",
+      "sha256": "3c88bdd5e7d1cabb42e723334877284be420581d2e418f4da6ff8969d602d0fe"
+    }
+  },
+  "receiver": {
+    "input_rate_hz": 50000000,
+    "internal_rate_hz": 12500000,
+    "duration_seconds": 10.0,
+    "source_int16_items": 1000000000,
+    "channel_count": 12,
+    "tap_count": 9,
+    "tap_spacing_chips": 0.125,
+    "timeout_seconds": 1800
+  },
+  "analysis": {
+    "stabilization_seconds": 1.0,
+    "end_seconds": 10.0,
+    "bin_seconds": 0.25,
+    "minimum_epochs_per_bin": 20,
+    "distortion_threshold": 1.5,
+    "residual_cosine_threshold": 0.8,
+    "persistence_bins": 4,
+    "continuous_score_quantile": 0.95,
+    "primary_sensitivity_scenarios": ["SS-12", "SS-13"],
+    "primary_specificity_scenarios": ["SS-11", "SS-12", "SS-13"],
+    "minimum_auc": 0.8,
+    "minimum_target_flag_rate": 0.5,
+    "maximum_authentic_flag_rate": 0.1,
+    "minimum_ss13_target_support": 3,
+    "minimum_authentic_prns_per_mp_scenario": 2
+  },
+  "scenarios": [
+    {
+      "id": "SS-1", "multipath": false, "spoofed_prns": [9],
+      "iq_path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/SS-1/Galileo_1_Spoofer_Static_NoMP_TruePosition.bin",
+      "bytes": 29999832000, "md5": "f2784d9f7d3c85edffeaf30bbd7efdb2",
+      "metadata_path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/SS-1/zenodo_record_15489567.json",
+      "metadata_sha256": "a06b348c42b12ee4b2ff88177c25bbd26ac81ced8eea14139649ce68300483ad",
+      "readme_path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/SS-1/Readme.pdf",
+      "readme_sha256": "b4397f7830b632c0b1fa2368d7ac2bb3ca76f19c499a5a9d4ef79b7414c497c2"
+    },
+    {
+      "id": "SS-3", "multipath": false, "spoofed_prns": [6, 9, 23],
+      "iq_path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/SS-3/Galileo_3_Spoofer_Static_NoMP_TruePosition.bin",
+      "bytes": 21925920000, "md5": "cdee5a9b6a6509af016bdb3776ebd231",
+      "metadata_path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/SS-3/zenodo_record_15489857.json",
+      "metadata_sha256": "394a3ee423118980dc6282c0f12a568e7fa7f05ddc04bbd55d27aca285e24522",
+      "readme_path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/SS-3/Readme.pdf",
+      "readme_sha256": "ab0b70fb547b57bb677f07c69426ee80f69bcf8aa9807a218edd48c16d92e6fd"
+    },
+    {
+      "id": "SS-5", "multipath": false, "spoofed_prns": [4, 6, 9, 23, 31],
+      "iq_path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/SS-5/Galileo_5_Spoofer_Static_NoMP_TruePosition.bin",
+      "bytes": 29999832000, "md5": "8a8e2ffc0bc5420b9df07b4faddb35bc",
+      "metadata_path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/SS-5/zenodo_record_17233077.json",
+      "metadata_sha256": "a3c5d8a778180136d5a4b52ce7f9a6ef2505e062fdb6c82ea8f9186782285aec",
+      "readme_path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/SS-5/Readme.pdf",
+      "readme_sha256": "6a9ad583f1e9bf84447609ebb5c211e235b0f44b962c108b5bf2b2a961d4b80d"
+    },
+    {
+      "id": "SS-11", "multipath": true, "spoofed_prns": [31],
+      "iq_path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/SS-11/Galileo_1_Spoofer_Static_MP_TruePosition.bin",
+      "bytes": 29999832000, "md5": "71de773dce5684c98daed0a48496891a",
+      "metadata_path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/SS-11/zenodo_record_15490403.json",
+      "metadata_sha256": "aa29abc48047c770c7a57382f239f69c82c14ba1176cd4c0b21a476a21add1ca",
+      "readme_path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/SS-11/Readme.pdf",
+      "readme_sha256": "b233b9dd96e5f47bcfd269385abb4c483825fb8fac581d38b29e58f446cc8397"
+    },
+    {
+      "id": "SS-12", "multipath": true, "spoofed_prns": [9, 31],
+      "iq_path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/SS-12/Galileo_2_Spoofer_Static_MP_TruePosition.bin",
+      "bytes": 29999832000, "md5": "fe3aecdfe249bc6a62e92037ff5c720d",
+      "metadata_path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/SS-12/zenodo_record_15490926.json",
+      "metadata_sha256": "c2cee2b58c0226f9cb0ba3873378856fe493c562b992cc2b8a9370bd0f019edb",
+      "readme_path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/SS-12/Readme.pdf",
+      "readme_sha256": "86ff7dd95e39462de7c4bb6f6ecc158157038596988240e96a256407dd30e84f"
+    },
+    {
+      "id": "SS-13", "multipath": true, "spoofed_prns": [5, 9, 23, 31],
+      "iq_path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/SS-13/Galileo_4_Spoofer_Static_MP_TruePosition.bin",
+      "bytes": 29999832000, "md5": "4c75501863b927a79fcaade073b30d64",
+      "metadata_path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/SS-13/zenodo_record_15491164.json",
+      "metadata_sha256": "ae1e652f1f6b6880144ca811df4717e40e7feb46d047bdc64b6ea5e93085e620",
+      "readme_path": "/home/ubuntu/unraid_hdd/tuni2025/galileo/SS-13/Readme.pdf",
+      "readme_sha256": "d650211ed5cc4769dd2a837c04b4afc8cb712edabf80a7f31db74b620253afd6"
+    }
+  ]
+}
+
