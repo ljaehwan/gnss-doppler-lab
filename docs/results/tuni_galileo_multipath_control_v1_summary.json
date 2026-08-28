@@ -1,0 +1,28 @@
+{
+  "schema": "gnss-doppler-lab.tuni-galileo-multipath-control-result.v1",
+  "decision": "INSUFFICIENT_SUPPORT",
+  "interpretation": "metadata-level authentic controls exist, but no authentic PRN was trackable in the frozen first-10-second receiver interval",
+  "primary": {
+    "release_commit": "4b15ba8d66f33784079679de39712d5b693b7761",
+    "artifact_summary_sha256": "5937971031aa74123935bc1aec0be84b6f28c7a173115940d40b9eeb3a4026a3",
+    "target_count_ss12_ss13": 2,
+    "authentic_count_all_mp": 0,
+    "post_release_tuning_or_retest": false
+  },
+  "fixed_prn_support_audit_v1_1": {
+    "release_commit": "0812c4a",
+    "artifact_summary_sha256": "6e2d174464419193aed03ef4027526d090743f07d2417224cb86d1a160a05439",
+    "all_scenarios_have_same_stream_controls": false,
+    "sustained_authentic_prns": {
+      "SS-11": [],
+      "SS-12": [],
+      "SS-13": []
+    },
+    "tracked_prns_and_epochs": {
+      "SS-11": {"31": 1643},
+      "SS-12": {"9": 847, "31": 2355},
+      "SS-13": {"9": 1501, "31": 2428}
+    }
+  },
+  "claim_safe": "real multipath specificity remains unverified"
+}
