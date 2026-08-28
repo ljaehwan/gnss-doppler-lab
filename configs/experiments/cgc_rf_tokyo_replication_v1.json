@@ -1,0 +1,63 @@
+{
+  "schema": "gnss-doppler-lab.cgc-rf-tokyo-replication-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "cgc-rf-tokyo-replication-v1",
+    "role": "confirmatory independent-seed replication of the Tokyo 240 m high-power discrimination reversal",
+    "execution_policy": "one resumable release; all five new seeds, both powers, and all primary nine-tap outcomes are reported without seed, power, estimator, support, or gate substitution"
+  },
+  "base_campaign": {
+    "config": {
+      "path": "configs/experiments/cgc_rf_geometry_aperture_validation_v1.json",
+      "sha256": "b03093506b5a3b79ff296c640715f38cd44ad3fc50dc6454244a709a43eef2e2"
+    },
+    "summary": {
+      "path": "docs/results/cgc_rf_geometry_aperture_validation_v1_summary.json",
+      "sha256": "256fab0adc9b1b6d7bb6cc545e59a006eb634676234bb4b579d704c2c2d845e2"
+    },
+    "condition_table": {
+      "path": "docs/results/cgc_rf_geometry_aperture_validation_v1_condition_aperture_summary.csv",
+      "sha256": "8aae91cf9070ab2bf1240e3810c20da4afb3a76e5e45082b0c26bdab55d21afe"
+    },
+    "runner": {
+      "path": "scripts/run_cgc_rf_geometry_aperture_validation.py",
+      "sha256": "06f2c460b72cbcc400537c9f1c5a29f9323820469e24f9c532131fffe1d5b86a"
+    }
+  },
+  "geometry_id": "tokyo-straight",
+  "distance_m": 240.0,
+  "final_advantages_db": [-6.0, 3.0],
+  "replicas": [
+    {"replica_id": "r01", "receiver_seed": 20268101, "multipath_seed": 20269101},
+    {"replica_id": "r02", "receiver_seed": 20268102, "multipath_seed": 20269102},
+    {"replica_id": "r03", "receiver_seed": 20268103, "multipath_seed": 20269103},
+    {"replica_id": "r04", "receiver_seed": 20268104, "multipath_seed": 20269104},
+    {"replica_id": "r05", "receiver_seed": 20268105, "multipath_seed": 20269105}
+  ],
+  "analysis": {
+    "primary_aperture_taps": 9,
+    "auc_threshold": 0.8,
+    "direction_threshold": 0.85,
+    "minimum_comparison_bins_per_stream": 8,
+    "minimum_prns": 8,
+    "systematic_min_replica_count": 4,
+    "systematic_min_median_paired_auc_drop": 0.2
+  },
+  "decision_rule": {
+    "systematic_high_power_blind_spot": "all five replicas have support; -6 dB AUC passes in at least four; +3 dB AUC fails in at least four; +3 dB direction passes in at least four; and median paired AUC(-6 minus +3) is at least 0.20",
+    "single_realization_exception": "all five replicas have support; -6 dB and +3 dB AUC each pass in at least four; +3 dB direction passes in at least four; and +3 dB AUC fails in at most one",
+    "otherwise": "mixed_or_unresolved"
+  },
+  "retention": {
+    "campaign_created_seed_normal_iq_count": 5,
+    "campaign_created_multipath_component_iq_count": 5,
+    "campaign_created_multipath_rf_iq_count": 5,
+    "campaign_created_counterfeit_iq_count": 5,
+    "campaign_created_spoof_rf_iq_count": 10,
+    "intermediate_iq_removed_after_receiver_success": true,
+    "receiver_outputs_retained": true,
+    "shared_source_inputs_removed": false
+  },
+  "output_root": "artifacts/cgc_rf_tokyo_replication_v1",
+  "claim_boundary": "five new independent receiver-noise and PRN-specific multipath seeds at the fixed Tokyo straight geometry, 240 m carry-off, -6/+3 dB, 25 MHz receiver RF, and the frozen nine-tap CGC estimator; no field-multipath, universal high-power, or operational claim"
+}
