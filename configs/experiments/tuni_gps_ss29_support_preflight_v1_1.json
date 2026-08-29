@@ -1,0 +1,41 @@
+{
+  "schema": "gnss-doppler-lab.tuni-gps-ss29-support-preflight-correction-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "TUNI GPS SS-29 score-free support preflight v1.1 timebase correction",
+    "base_release_commit": "5528711c481fb6a617e2c409d2759f539c97d432",
+    "correction_scope": "Replace the erroneous 50 MHz RF input rate with the frozen receiver's 5 MHz internal tracking sample rate when converting PRN_start_sample_count to seconds.",
+    "raw_iq_reprocessed": false,
+    "detector_score_access": false,
+    "delay_template_access": false,
+    "threshold_refitting": false,
+    "support_rule_change": false
+  },
+  "base_inputs": {
+    "config_path": "configs/experiments/tuni_gps_ss29_support_preflight_v1.json",
+    "config_sha256": "218fd8e7779475a23cfd745fba28db0f093011af4afac64b9f4de542a5c0c3a1",
+    "artifact_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/tuni-gps-ss29-support-preflight-v1",
+    "invalid_summary_sha256": "837dc990b065c892ab0b5e1c793405400414a3bdc5cff5c01b6e5225ce89d7c6",
+    "invalid_receiver_manifest_sha256": "f1fee25c2cac2ce9de945f0303bdcbfc06e3f6965d5bc3b6707c92c9fb5fc65f",
+    "raw_mat_tree_sha256": "e68eacaa274b1a6b951bb3d228a6a315fdaf2b839604e29523f26a302164dfcc",
+    "raw_mat_count": 31,
+    "raw_mat_bytes": 16350980,
+    "prefix_sha256": "cfe3be7f248f1e479c5203ce3c6c36b78a80e3099ddc79a9c05b39a60426ea1e"
+  },
+  "timebase": {
+    "input_sample_rate_hz": 50000000,
+    "internal_tracking_sample_rate_hz": 5000000,
+    "start_offset_seconds": 0.0
+  },
+  "documented_spoofed_prns": [1, 2, 21, 32],
+  "analysis_interval_seconds": [5.0, 10.0],
+  "support_gate": {
+    "bin_seconds": 1.0,
+    "minimum_epochs_per_prn_bin": 200,
+    "minimum_primary_prns": 8,
+    "minimum_primary_bins": 3,
+    "minimum_target_bins_per_spoofed_prn": 3,
+    "require_complex_nine_tap": true
+  },
+  "output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/tuni-gps-ss29-support-preflight-v1-1"
+}
