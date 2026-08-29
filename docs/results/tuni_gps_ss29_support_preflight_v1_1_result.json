@@ -1,0 +1,51 @@
+{
+  "schema": "gnss-doppler-lab.tuni-gps-ss29-support-preflight-public-result.v1_1",
+  "schema_version": 1,
+  "release_commit": "232e87ec89b95eeb9de81d07a98a2b777b3f85e6",
+  "source_summary": {
+    "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/tuni-gps-ss29-support-preflight-v1-1/summary.json",
+    "sha256": "68c1c7ef4847b7d2c3861825f8bb930738c805fea0f30532893e053318f9ee73"
+  },
+  "base_v1_invalidated": {
+    "reason": "PRN_start_sample_count was divided by the 50 MHz RF input rate instead of the 5 MHz internal tracking rate.",
+    "invalid_summary_sha256": "837dc990b065c892ab0b5e1c793405400414a3bdc5cff5c01b6e5225ce89d7c6",
+    "scientific_terminal_decision": false
+  },
+  "data_access": {
+    "raw_prefix_bytes": 2000000000,
+    "raw_prefix_content_range": [0, 1999999999, 29999832000],
+    "raw_prefix_sha256": "cfe3be7f248f1e479c5203ce3c6c36b78a80e3099ddc79a9c05b39a60426ea1e",
+    "raw_mat_count": 31,
+    "raw_mat_tree_sha256": "e68eacaa274b1a6b951bb3d228a6a315fdaf2b839604e29523f26a302164dfcc",
+    "raw_iq_reprocessed_in_v1_1": false,
+    "detector_loaded": false,
+    "delay_template_accessed": false,
+    "score_accessed": false
+  },
+  "support_rules": {
+    "analysis_interval_seconds": [5.0, 10.0],
+    "bin_seconds": 1.0,
+    "minimum_epochs_per_prn_bin": 200,
+    "minimum_primary_prns": 8,
+    "minimum_primary_bins": 3,
+    "minimum_target_bins_per_spoofed_prn": 3,
+    "documented_spoofed_prns": [1, 2, 21, 32]
+  },
+  "observed": {
+    "discovered_prns": ["G01", "G02", "G16", "G18", "G21", "G27"],
+    "discovered_prn_count": 6,
+    "maximum_eligible_prns": 5,
+    "eligible_bin_count_by_prn_count": {"4": 3, "5": 2},
+    "primary_bin_count": 0,
+    "target_eligible_bin_counts": {"G01": 5, "G02": 5, "G21": 5, "G32": 0},
+    "eligible_prns_by_bin": {
+      "5": [1, 2, 16, 21],
+      "6": [1, 2, 16, 21],
+      "7": [1, 2, 16, 21],
+      "8": [1, 2, 16, 18, 21],
+      "9": [1, 2, 16, 18, 21]
+    }
+  },
+  "decision": "INSUFFICIENT_SUPPORT",
+  "interpretation": "This is a data-support failure, not a spoof-detection failure. The full 29,999,832,000-byte SS-29 payload must not be downloaded for the frozen N>=8 CGC test."
+}

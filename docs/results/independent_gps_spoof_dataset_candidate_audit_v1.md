@@ -6,11 +6,12 @@ An additional dataset is required for the final confirmatory claim. The locally
 available attack batteries are either already opened or do not meet the frozen
 CGC support rule. No existing local recording qualifies as a new blind test.
 
-The next released action is a score-free bounded-prefix support preflight of
-TUNI2025 SS-29. SS-29 is the strongest current candidate because it combines
-real received GPS L1, environmental multipath, authentic satellites, and four
-documented true-position spoofers in the same RF stream. Its detector score has
-not been accessed in this project.
+The released score-free bounded-prefix support preflight of TUNI2025 SS-29 has
+now terminated as `INSUFFICIENT_SUPPORT`. SS-29 was the strongest scientific
+candidate because it combines real received GPS L1, environmental multipath,
+authentic satellites, and four documented true-position spoofers in the same
+RF stream. However, it produced at most five eligible PRNs and no `N>=8` bin.
+Its detector score was never accessed.
 
 ## Frozen support rule
 
@@ -34,7 +35,7 @@ opened by prior experiments.
 
 ## Fresh candidate triage
 
-### TUNI2025 SS-29 — proceed to support-only preflight
+### TUNI2025 SS-29 — terminal insufficient support
 
 - Official record: <https://doi.org/10.5281/zenodo.17250054>
 - Scenario: GPS L1 authentic plus spoofed signals, multipath present, four
@@ -42,16 +43,13 @@ opened by prior experiments.
 - Documented spoofed PRNs: 1, 2, 21, and 32.
 - Full raw file: 29,999,832,000 bytes; MD5
   `f821028e530bf3e56a24ef99f76977cd`.
-- The official README and scenario file have been stored on SSD and checksum
-  verified. The raw IQ has not been accessed.
-- A committed protocol permits only the first 2,000,000,000 bytes (10 seconds)
-  and only PRN/epoch/tap-schema outputs. Delay estimation and detector scoring
-  are forbidden.
-
-If the prefix contains N>=8 in at least 3 of 5 startup bins and every documented
-spoofed PRN is eligible in at least 3 bins, the full file can advance to a
-separately preregistered one-shot detector test. Otherwise SS-29 terminates as
-insufficient support.
+- The official README and scenario file were stored on SSD and checksum
+  verified. Exactly the permitted first 2,000,000,000 bytes were accessed.
+- The corrected 5 MHz tracking timebase found six distinct PRNs and a maximum
+  of five eligible PRNs per bin. G01, G02, and G21 were sustained, but G32 was
+  absent from every eligible bin.
+- No delay estimator or detector was loaded. The full raw file will not be
+  downloaded for the frozen CGC test.
 
 ### TUNI2025 SS-27/SS-28 — reserve follow-ups
 
