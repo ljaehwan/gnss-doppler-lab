@@ -37,7 +37,8 @@ COVERAGE_LATE_TOLERANCE_S=1.0
 RAW_FEATURE_REQUIRED_COLUMNS={"run_id","prn","window_start_s","window_end_s","window_mid_s","tap_count","tap_layout"}
 NODE_REQUIRED_COLUMNS={"run_id","prn","window_bin_s"}
 FEATURE_CONTRACT={"tap_count":9,"tap_spacing_chips":0.125,"window_s":1.0,"stride_s":0.5,"min_epochs":4,"min_prns_per_graph":2,"feature_mode":"normalized_dmcpd","node_feature_columns":FROZEN_FEATURE_COLUMNS}
-SCENARIOS={"os1":"os1.bin","os2":"os2.bin","os3":"os3.bin","os4":"os4.bin","cleanStatic":"cleanStatic_gps.bin"}
+CLEAN_SCENARIOS={"cleanStatic","cleanDynamic"}
+SCENARIOS={"os1":"os1.bin","os2":"os2.bin","os3":"os3.bin","os4":"os4.bin","cleanStatic":"cleanStatic_gps.bin","cleanDynamic":"cleanDynamic_gps.bin"}
 
 
 def sha256(path: Path, block: int=8*1024*1024) -> str:
@@ -472,13 +473,13 @@ def provenance_manifest(*,scenario:str,iq:Path,iq_sha256:str,receiver_manifest:P
     frozen={"checkpoint_sha256":sha256(checkpoint) if checkpoint and checkpoint.is_file() else FROZEN_CHECKPOINT_SHA256}
     if calibration_json and calibration_json.is_file():
         cal=json.loads(calibration_json.read_text()); frozen.update({"calibration_path":str(calibration_json.resolve()),"calibration_sha256":sha256(calibration_json),"calibration_constants":cal})
-    return {"schema":"gnss-doppler-lab.oakbat-frozen-champion-adapter.v1","source":{"dataset":"OAKBAT","scenario":scenario,"iq":str(iq.resolve()),"iq_sha256":iq_sha256,"sample_rate_hz":SAMPLE_RATE,"duration_s":DURATION_S,"sample_format":"interleaved_int16_iq"},"frozen_detector":frozen,"adapter":{"receiver_manifest":str(receiver_manifest),"tap_count":9,"tap_spacing_chips":0.125,"feature_mode":"normalized_dmcpd","node_csv":str(node_csv),"feature_contract":FEATURE_CONTRACT,"timing_contract":TIMING_CONTRACT},"evaluation":({"kind":"clean_negative_control"} if scenario=="cleanStatic" else {"onset_s":ONSET_S,"guard_s":GUARD_S}),"outputs":{"score_summary":str(score_summary),"gate_summary":str(gate_summary),"artifacts":artifacts}}
+    return {"schema":"gnss-doppler-lab.oakbat-frozen-champion-adapter.v1","source":{"dataset":"OAKBAT","scenario":scenario,"iq":str(iq.resolve()),"iq_sha256":iq_sha256,"sample_rate_hz":SAMPLE_RATE,"duration_s":DURATION_S,"sample_format":"interleaved_int16_iq"},"frozen_detector":frozen,"adapter":{"receiver_manifest":str(receiver_manifest),"tap_count":9,"tap_spacing_chips":0.125,"feature_mode":"normalized_dmcpd","node_csv":str(node_csv),"feature_contract":FEATURE_CONTRACT,"timing_contract":TIMING_CONTRACT},"evaluation":({"kind":"clean_negative_control"} if scenario in CLEAN_SCENARIOS else {"onset_s":ONSET_S,"guard_s":GUARD_S}),"outputs":{"score_summary":str(score_summary),"gate_summary":str(gate_summary),"artifacts":artifacts}}
 
 
 def build_parser() -> argparse.ArgumentParser:
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--raw-root",default="/home/ubuntu/unraid_hdd/oakbat/gps_l1ca/raw"); ap.add_argument("--out-root",default=str(ROOT/"artifacts/oakbat_9tap_frozen_champion"))
-    ap.add_argument("--scenarios",nargs="+",choices=list(SCENARIOS),default=["cleanStatic","os1","os2","os3","os4"])
+    ap.add_argument("--scenarios",nargs="+",choices=list(SCENARIOS),default=["cleanStatic","cleanDynamic","os1","os2","os3","os4"])
     ap.add_argument("--exe",default=os.environ.get("GNSS_SDR_METHOD_A_EXE",str(ROOT/".tools/gnss-sdr-method-a-9tap"))); ap.add_argument("--model-dir",default=str(ROOT/"artifacts/ai_morph_gru_cleanStatic_q70_frame")); ap.add_argument("--calibration-json",default=str(ROOT/"configs/detectors/texbat_btail_gate_v1.json"))
     ap.add_argument("--timeout-s",type=int,default=7200); ap.add_argument("--min-free-gib",type=float,default=20.0,help="Minimum free output-root GiB; scenario estimate may require more."); ap.add_argument("--force-receiver",action="store_true"); ap.add_argument("--force-features",action="store_true"); return ap
 
@@ -490,10 +491,10 @@ def main() -> None:
         iq=raw_root/SCENARIOS[scenario]; validate_iq(iq); out=out_root/scenario; out.mkdir(parents=True,exist_ok=True)
         receiver=run_receiver(scenario,iq,out,exe=args.exe,timeout_s=args.timeout_s,force=args.force_receiver); node=build_features(scenario,out,receiver,force=args.force_features)
         cmd=[sys.executable,str(ROOT/"scripts/score_texbat_prn_node_gru.py"),"--node-csv",str(node),"--model-dir",args.model_dir,"--out-dir",str(out),"--scenario",scenario,"--output-prefix","oakbat","--dataset-prefix","OAKBAT"]
-        if scenario=="cleanStatic": cmd.append("--clean-only")
+        if scenario in CLEAN_SCENARIOS: cmd.append("--clean-only")
         else: cmd += ["--onset-s",str(ONSET_S)]
         subprocess.run(cmd,check=True,timeout=args.timeout_s); summary=out/f"oakbat_{scenario}_prn_local_onset_summary.json"; validate_score_provenance(summary,calibration); records[scenario]=(iq,receiver,node)
-    gate_dir=out_root/"gate"; attacks=[s for s in args.scenarios if s!="cleanStatic"]
+    gate_dir=out_root/"gate"; attacks=[s for s in args.scenarios if s not in CLEAN_SCENARIOS]
     gate_cmd=[sys.executable,str(ROOT/"scripts/eval_btail_support_gate.py"),"--score-root",str(out_root),"--out-dir",str(gate_dir),"--scenarios",",".join(args.scenarios),"--calibration-json",str(calibration),"--score-prefix","oakbat","--onsets-json",json.dumps({s:ONSET_S for s in attacks}),"--onset-buffer-s",str(GUARD_S)]
     subprocess.run(gate_cmd,check=True,timeout=args.timeout_s)
     checkpoint=model_dir/"prn_local_gru_predictor.pt"

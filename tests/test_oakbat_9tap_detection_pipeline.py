@@ -53,7 +53,8 @@ def test_iq_validation_requires_exact_480_second_interleaved_int16_size(tmp_path
 
 def test_scenarios_and_manifest_are_oakbat_frozen_evaluation_contract(tmp_path):
     mod = _load_module()
-    assert set(mod.SCENARIOS) == {"os1", "os2", "os3", "os4", "cleanStatic"}
+    assert set(mod.SCENARIOS) == {"os1", "os2", "os3", "os4", "cleanStatic", "cleanDynamic"}
+    assert mod.CLEAN_SCENARIOS == {"cleanStatic", "cleanDynamic"}
     doc = mod.provenance_manifest(scenario="os1", iq=tmp_path / "os1.bin", iq_sha256="a" * 64, receiver_manifest=tmp_path / "receiver.json", node_csv=tmp_path / "nodes.csv", score_summary=tmp_path / "score.json", gate_summary=tmp_path / "gate.json")
     assert doc["source"]["dataset"] == "OAKBAT"
     assert doc["source"]["duration_s"] == 480.0
@@ -125,10 +126,10 @@ def test_feature_cache_validates_receiver_relationship_schema_hash_and_finitenes
         mod.validate_cached_features(out, receiver)
 
 
-def test_default_scenarios_include_clean_static_negative_control():
+def test_default_scenarios_include_both_clean_negative_controls():
     mod = _load_module()
     args = mod.build_parser().parse_args([])
-    assert args.scenarios == ["cleanStatic", "os1", "os2", "os3", "os4"]
+    assert args.scenarios == ["cleanStatic", "cleanDynamic", "os1", "os2", "os3", "os4"]
 
 
 def test_top_manifest_contains_frozen_contract_and_artifact_hashes(tmp_path):
