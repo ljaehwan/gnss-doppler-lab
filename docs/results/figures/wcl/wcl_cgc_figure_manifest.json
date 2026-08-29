@@ -1,0 +1,27 @@
+{
+  "schema": "gnss-doppler-lab.wcl-cgc-figure-manifest",
+  "schema_version": 1,
+  "figures": {
+    "wcl_cgc_principle": {
+      "pdf": "wcl_cgc_principle.pdf",
+      "png": "wcl_cgc_principle.png",
+      "representative_pair": "fv2-static-01",
+      "representative_bin_index": 21,
+      "sources": {
+        "artifacts/simulation_v5_fresh_test_generation_v2/pairs/fv2-static-01/components/authentic-gps-sdr-sim.log": "e6e40b4611c11848135ad2a3e36625cf48ad1fb4bf15357a09bbdc495f71ef62",
+        "artifacts/cgc_rf_fresh_test_v2/analysis/delay_estimates.csv": "ac532a96d62a2c6b10e77eea92af200effdbf68ae7959232f74aa5fb0263f1da",
+        "configs/experiments/cgc_rf_fresh_test_v2.json": "d42636c4292fe2b9c098bfe1be1fadb19b91a92602dbc97a8f82597e982df250"
+      }
+    },
+    "wcl_cgc_evidence": {
+      "pdf": "wcl_cgc_evidence.pdf",
+      "png": "wcl_cgc_evidence.png",
+      "sources": {
+        "docs/results/correlator_geometry_identifiability_train_v1_summary.json": "b21e9975f66ad26ba6dd3d49d9036be42f0e961ce7a068ca7cebe82b28753f40",
+        "artifacts/cgc_rf_ga_v1/condition_aperture_summary.csv": "8aae91cf9070ab2bf1240e3810c20da4afb3a76e5e45082b0c26bdab55d21afe",
+        "docs/results/cgc_texbat_external_v1_summary.json": "d9b8c8f047fd8012522fc3b993c3d629e1667f4f2a1c726a561bfce405752fa9",
+        "docs/results/gnss_openif_s1_real_multipath_v1_summary.json": "f4eb115274cebc90f741388ca668a1e42dd19d7734425703b7e7322629b10e79"
+      }
+    }
+  }
+}
