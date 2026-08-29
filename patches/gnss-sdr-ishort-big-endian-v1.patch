@@ -1,0 +1,86 @@
+diff --git a/src/algorithms/data_type_adapter/adapters/ishort_to_complex.cc b/src/algorithms/data_type_adapter/adapters/ishort_to_complex.cc
+index 0e67db0..1ae4917 100644
+--- a/src/algorithms/data_type_adapter/adapters/ishort_to_complex.cc
++++ b/src/algorithms/data_type_adapter/adapters/ishort_to_complex.cc
+@@ -25,6 +25,7 @@ IshortToComplex::IshortToComplex(const ConfigurationInterface* configuration,
+     unsigned int out_streams) : role_(role),
+                                 in_streams_(in_streams),
+                                 out_streams_(out_streams),
++                                swap_endian_(configuration->property(role + ".swap_endian", false)),
+                                 inverted_spectrum(configuration->property(role + ".inverted_spectrum", false)),
+                                 dump_(configuration->property(role + ".dump", false))
+ {
+@@ -38,6 +39,10 @@ IshortToComplex::IshortToComplex(const ConfigurationInterface* configuration,
+     dump_filename_ = configuration->property(role_ + ".dump_filename", default_dump_filename);
+ 
+     gr_interleaved_short_to_complex_ = gr::blocks::interleaved_short_to_complex::make();
++    if (swap_endian_)
++        {
++            gr_endian_swap_ = gr::blocks::endian_swap::make(sizeof(int16_t));
++        }
+ 
+     DLOG(INFO) << "data_type_adapter_(" << gr_interleaved_short_to_complex_->unique_id() << ")";
+ 
+@@ -64,6 +69,10 @@ IshortToComplex::IshortToComplex(const ConfigurationInterface* configuration,
+ 
+ void IshortToComplex::connect(gr::top_block_sptr top_block)
+ {
++    if (swap_endian_)
++        {
++            top_block->connect(gr_endian_swap_, 0, gr_interleaved_short_to_complex_, 0);
++        }
+     if (dump_)
+         {
+             if (inverted_spectrum)
+@@ -111,15 +120,21 @@ void IshortToComplex::disconnect(gr::top_block_sptr top_block)
+                     top_block->disconnect(gr_interleaved_short_to_complex_, 0, conjugate_cc_, 0);
+                 }
+         }
++    if (swap_endian_)
++        {
++            top_block->disconnect(gr_endian_swap_, 0, gr_interleaved_short_to_complex_, 0);
++        }
+ }
+ 
+-
+ gr::basic_block_sptr IshortToComplex::get_left_block()
+ {
++    if (swap_endian_)
++        {
++            return gr_endian_swap_;
++        }
+     return gr_interleaved_short_to_complex_;
+ }
+ 
+-
+ gr::basic_block_sptr IshortToComplex::get_right_block()
+ {
+     if (inverted_spectrum)
+diff --git a/src/algorithms/data_type_adapter/adapters/ishort_to_complex.h b/src/algorithms/data_type_adapter/adapters/ishort_to_complex.h
+index 397d295..5d3b0d3 100644
+--- a/src/algorithms/data_type_adapter/adapters/ishort_to_complex.h
++++ b/src/algorithms/data_type_adapter/adapters/ishort_to_complex.h
+@@ -19,6 +19,7 @@
+ 
+ #include "conjugate_cc.h"
+ #include "gnss_block_interface.h"
++#include <gnuradio/blocks/endian_swap.h>
+ #include <gnuradio/blocks/file_sink.h>
+ #include <gnuradio/blocks/interleaved_short_to_complex.h>
+ #include <cstdint>
+@@ -67,6 +68,7 @@ public:
+     gr::basic_block_sptr get_right_block() override;
+ 
+ private:
++    gr::blocks::endian_swap::sptr gr_endian_swap_;
+     gr::blocks::interleaved_short_to_complex::sptr gr_interleaved_short_to_complex_;
+     conjugate_cc_sptr conjugate_cc_;
+     gr::blocks::file_sink::sptr file_sink_;
+@@ -76,6 +78,7 @@ private:
+     std::string role_;
+     unsigned int in_streams_;
+     unsigned int out_streams_;
++    bool swap_endian_;
+     bool inverted_spectrum;
+     bool dump_;
+ };

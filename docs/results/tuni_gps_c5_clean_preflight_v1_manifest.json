@@ -1,0 +1,40 @@
+{
+  "compatible": true,
+  "receiver": {
+    "config_sha256": "dfd12d9c4acfff8ed936739274be40fac1950b68cfcb6c2ab4317d88a527f344",
+    "executable": "/home/ubuntu/projects/gnss-doppler-lab/.tools/gnss-sdr-gps-be-complex9-v1",
+    "executable_sha256": "0f11cb72a00ccbddde1efc32330e279acd8392d359742a66175b88953cb50ecd",
+    "return_code": 0
+  },
+  "schema": "gnss-doppler-lab.tuni-gps-clean-preflight.v1",
+  "scope": "C-5 clean-only compatibility; no attack payload accessed",
+  "source": {
+    "byte_order": "big-endian",
+    "bytes": 29999832000,
+    "duration_s": 10.0,
+    "input_sample_rate_hz": 50000000,
+    "md5": "a03dedd79ac4208f6d60b4c916484dba",
+    "path": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/gps/C-5/C-5.bin",
+    "sample_format": "big-endian interleaved int16 I/Q (ishort)",
+    "sample_rate_basis": "Zenodo C-5 record metadata",
+    "scenario": "C-5",
+    "source_int16_items": 1000000000
+  },
+  "tracking": {
+    "mat_file_count": 31,
+    "tap_count": 9,
+    "tap_spacing_chips": 0.125,
+    "valid_epoch_count": 76886,
+    "valid_prn_count": 8,
+    "valid_prns": [
+      5,
+      7,
+      16,
+      18,
+      23,
+      26,
+      27,
+      29
+    ]
+  }
+}
