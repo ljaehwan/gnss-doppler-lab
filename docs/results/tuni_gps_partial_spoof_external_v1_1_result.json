@@ -1,0 +1,97 @@
+{
+  "schema": "gnss-doppler-lab.tuni-gps-partial-spoof-support-failure.v1",
+  "decision": "INSUFFICIENT_SUPPORT",
+  "decision_source": "independent audit of frozen receiver manifests and delay_estimates.csv",
+  "base_preregistration_commit": "9827b313abebc26e071563512d11f6fe1df5133d",
+  "pre_attack_amendment_commit": "779a4ca37b559c08f52b8baee6da74446ade37e2",
+  "post_release_tuning_or_retest": false,
+  "runner_outcome": {
+    "receiver_runs_completed": true,
+    "template_analysis_loops_completed": true,
+    "metrics_emitted": false,
+    "exception": "FileNotFoundError: geometry_scores.csv",
+    "exception_stage": "hashing an intentionally non-emitted zero-row CSV"
+  },
+  "rules": {
+    "minimum_primary_prns": 8,
+    "secondary_boundary_prns": 7,
+    "minimum_epochs_per_prn_bin": 200,
+    "minimum_primary_bins_per_recording": 60,
+    "require_all_documented_spoof_prns_tracked": true
+  },
+  "recordings": {
+    "C-5": {
+      "receiver_prns": [5, 7, 16, 18, 23, 26, 27, 29],
+      "receiver_prn_count": 8,
+      "tracking_epochs": 613800,
+      "delay_rows": 284,
+      "eligible_prns": [5, 7, 23, 27, 29],
+      "max_prns_per_bin": 4,
+      "primary_bins": 0,
+      "secondary_bins": 0,
+      "missing_documented_targets": []
+    },
+    "SS-17": {
+      "receiver_prns": [2, 16, 18, 26],
+      "receiver_prn_count": 4,
+      "tracking_epochs": 333212,
+      "delay_rows": 123,
+      "eligible_prns": [2, 16, 18, 26],
+      "max_prns_per_bin": 2,
+      "primary_bins": 0,
+      "secondary_bins": 0,
+      "missing_documented_targets": [1]
+    },
+    "SS-18": {
+      "receiver_prns": [2, 16, 18, 21, 30],
+      "receiver_prn_count": 5,
+      "tracking_epochs": 528488,
+      "delay_rows": 214,
+      "eligible_prns": [16, 18, 30],
+      "max_prns_per_bin": 3,
+      "primary_bins": 0,
+      "secondary_bins": 0,
+      "missing_documented_targets": [1, 2]
+    },
+    "SS-20": {
+      "receiver_prns": [1, 2, 16, 18, 21, 32],
+      "receiver_prn_count": 6,
+      "tracking_epochs": 604152,
+      "delay_rows": 195,
+      "eligible_prns": [2, 16, 18, 21, 32],
+      "max_prns_per_bin": 5,
+      "primary_bins": 0,
+      "secondary_bins": 0,
+      "missing_documented_targets": [1]
+    }
+  },
+  "artifacts": {
+    "ssd_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/tuni-gps-partial-spoof-external-v1-1",
+    "release_state": {
+      "sha256": "30f6a32305b48b9f43697aa018b28048bb8c24ad08db3b8739a331a59153ab07",
+      "bytes": 497
+    },
+    "delay_estimates": {
+      "sha256": "afb78f2e35338f17d3394c6032bc8c0e469eade85093ead7f80207f1d1d51512",
+      "bytes": 67132,
+      "row_count": 816
+    },
+    "receiver_trees": {
+      "SS-17": {
+        "file_count": 36,
+        "sha256": "3f7b56c7027560ff2a017f7b9a16c32c35084b63dc409b60a60e8e9a2a330aaa"
+      },
+      "SS-18": {
+        "file_count": 36,
+        "sha256": "940ecdb0ce437644d76e858575de8df17caf8f005784318b3a77f4a6bc0b3d25"
+      },
+      "SS-20": {
+        "file_count": 36,
+        "sha256": "57859c6ff70153861823586561b3cc07bff53a0a7eb9ca142bf795df7e56e5f2"
+      }
+    },
+    "geometry_scores_present": false,
+    "summary_present": false
+  },
+  "claim": "No spoof-detection sensitivity or specificity conclusion is supported."
+}
