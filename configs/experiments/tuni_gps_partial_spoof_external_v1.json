@@ -1,0 +1,115 @@
+{
+  "schema": "gnss-doppler-lab.tuni-gps-partial-spoof-external-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "tuni-gps-partial-spoof-external-v1",
+    "role": "pre-registered external real-RF partial-spoofer transfer test",
+    "release_token": "RELEASE-TUNI-GPS-PARTIAL-SPOOF-EXTERNAL-V1",
+    "threshold_refitting": false,
+    "post_attack_tuning_or_retest": false,
+    "attack_active_from_recording_start": true
+  },
+  "dataset": {
+    "root": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/gps",
+    "download_manifest": "/home/ubuntu/unraid_hdd/tuni2025/gps/download_manifest_20260824T172706Z.json",
+    "download_manifest_sha256": "d59c493585c3f84331b4ad1b23bbad4567f1ba2061a6a9847e4f442f778b209a",
+    "input_sample_rate_hz": 50000000,
+    "sample_format": "big-endian interleaved int16 I/Q (ishort); empirically verified by the clean C-5 preflight",
+    "expected_bytes_each": 29999832000,
+    "scenarios": [
+      {
+        "id": "C-5",
+        "role": "clean_negative",
+        "iq": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/gps/C-5/C-5.bin",
+        "md5": "a03dedd79ac4208f6d60b4c916484dba",
+        "readme": "/home/ubuntu/unraid_hdd/tuni2025/gps/C-5/Readme.pdf",
+        "readme_sha256": "11da323e496155d1b71113dc77797552f4b0d99f793f9f560538f77c0c9a08df",
+        "spoofed_prns": []
+      },
+      {
+        "id": "SS-17",
+        "role": "attack",
+        "iq": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/gps/SS-17/SS-17.bin",
+        "md5": "67e59df277c444f8fc4295484e6ec250",
+        "readme": "/home/ubuntu/unraid_hdd/tuni2025/gps/SS-17/Readme.pdf",
+        "readme_sha256": "f899df5e76e80ce82034408c40f5d1c564c8e2545f628a7a4b4ecce73122b630",
+        "spoofed_prns": [1]
+      },
+      {
+        "id": "SS-18",
+        "role": "attack",
+        "iq": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/gps/SS-18/SS-18.bin",
+        "md5": "235762e69e6a8ff2309e2cd7c7a9d98f",
+        "readme": "/home/ubuntu/unraid_hdd/tuni2025/gps/SS-18/Readme.pdf",
+        "readme_sha256": "b86bfe24287103ded69e9be7d47f659aab166d6ef867b82a9787d74a4d2c69c7",
+        "spoofed_prns": [1, 2]
+      },
+      {
+        "id": "SS-20",
+        "role": "attack",
+        "iq": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/gps/SS-20/SS-20.bin",
+        "md5": "cc63804902fba0b01b0e7e6a1a56026d",
+        "readme": "/home/ubuntu/unraid_hdd/tuni2025/gps/SS-20/Readme.pdf",
+        "readme_sha256": "4a420636d10d5ed60c3b97d96c7b8d9ccc10ea94f34b489ba37303459df65fa5",
+        "spoofed_prns": [1, 2, 21, 32],
+        "metadata_note": "The SS-20 Zenodo record and payload name are authoritative; its README body inconsistently says SS-19."
+      }
+    ]
+  },
+  "frozen": {
+    "clean_preflight_manifest": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/tuni-gps-clean-complex9-preflight-be-50msps-v1/manifest.json",
+      "sha256": "4e2949fd796092313f4c10db630ce41c030b531b8ae14c878e7d190f81b43174"
+    },
+    "receiver": {
+      "path": ".tools/gnss-sdr-gps-be-complex9-v1",
+      "sha256": "0f11cb72a00ccbddde1efc32330e279acd8392d359742a66175b88953cb50ecd",
+      "channel_count": 31,
+      "internal_sample_rate_hz": 5000000,
+      "acquisition_pfa": 0.01,
+      "acquisition_max_dwells": 5,
+      "tap_count": 9,
+      "tap_spacing_chips": 0.125,
+      "duration_seconds": 149.99916
+    },
+    "delay_template": {
+      "path": "configs/experiments/correlator_geometry_identifiability_train_v1.json",
+      "sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6"
+    },
+    "threshold_source": {
+      "path": "artifacts/cgc_real_detection_v1/summary.json",
+      "sha256": "d7fa0024628a231dae2ec1da2f2bae6d4b19fb3fdf97886913d9520349aa0a63"
+    },
+    "support_audit": {
+      "path": "docs/results/cgc_prn_support_sweep_v1.md",
+      "config": "configs/experiments/cgc_prn_support_sweep_v1.json",
+      "config_sha256": "0d631b1566ad499d1e49bcbb9349e76a173351552bfd46d0da2a6b80cd6c3cd0"
+    },
+    "implementation": [
+      {"path": "src/gnss_doppler_lab/clock_centered_geometry.py", "sha256": "b25a00efdb654ceb96540a2597bdc542526a0c6027e393018c739394858a203a"},
+      {"path": "src/gnss_doppler_lab/correlator_geometry.py", "sha256": "74732c182e799c2e82b4719d6572ebbd3dc4f6e16eada5bfe0f8a3d8c236b2b2"},
+      {"path": "src/gnss_doppler_lab/gcmr_geometry.py", "sha256": "781b66b8c485f4a656da3ed4ce82726f47f47a94cc4ea702eeab727708208921"},
+      {"path": "src/gnss_doppler_lab/tracking_peaks.py", "sha256": "298bc1931d9bc366a731148583cfa8e7c5b083ed47ff7f352300ff640f14e732"},
+      {"path": "src/gnss_doppler_lab/trajectory.py", "sha256": "c95fdd8fb513d3d800c8ace3a433063673f26eddc20315e229d234d28267227b"}
+    ]
+  },
+  "analysis": {
+    "bin_seconds": 1.0,
+    "analysis_interval_seconds": [30.0, 140.0],
+    "minimum_epochs_per_prn_bin": 200,
+    "minimum_primary_prns": 8,
+    "secondary_boundary_prns": 7,
+    "partial_f_p_alarm_threshold": 0.06028418845288192,
+    "legacy_residual_alarm_threshold": 0.33023636533817136,
+    "persistence_window_bins": 5,
+    "persistence_required_bins": 3,
+    "los_time_rule": "per-PRN receiver-decoded ephemeris snapshot TOW; LOS held fixed over the 110 s static analysis interval",
+    "position_rule": "median checksum-valid C-5 GGA fix in [60,140] s; one clean static ECEF oracle reused for every recording",
+    "minimum_primary_bins_per_recording": 60,
+    "maximum_clean_persistent_alarm_rate": 0.05,
+    "minimum_detected_attack_recordings": 2,
+    "require_ss20_detection": true,
+    "require_all_documented_spoof_prns_tracked": true
+  },
+  "output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/tuni-gps-partial-spoof-external-v1"
+}
