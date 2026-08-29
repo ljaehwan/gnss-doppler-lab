@@ -1,0 +1,215 @@
+{
+  "all_gates_passed": false,
+  "artifacts": {
+    "support_curve": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_prn_support_sweep_v1/support_curve.csv",
+      "row_count": 4,
+      "sha256": "b10161da6ca078483b413bdfee1f09cc3b2d69c76125dbe694ea8a39bbcdae20"
+    },
+    "trial_metrics": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_prn_support_sweep_v1/trial_metrics.csv",
+      "row_count": 256,
+      "sha256": "54b2e8127303b2eef8a2aac360e6dcee9b3d58fd2a4369af26c38c526f09e2c4"
+    }
+  },
+  "by_prn_count": {
+    "10": {
+      "legacy_ds7_detection_delay_s": {
+        "maximum": 119.0,
+        "median": 119.0,
+        "minimum": 119.0
+      },
+      "legacy_ds7_detection_trial_rate": 1.0,
+      "legacy_pre_persistent_alarm_rate": {
+        "maximum": 0.0,
+        "median": 0.0,
+        "minimum": 0.0
+      },
+      "partial_f_ds7_detection_delay_s": {
+        "maximum": 119.0,
+        "median": 119.0,
+        "minimum": 119.0
+      },
+      "partial_f_ds7_detection_trial_rate": 1.0,
+      "partial_f_pre_persistent_alarm_rate": {
+        "maximum": 0.0,
+        "median": 0.0,
+        "minimum": 0.0
+      },
+      "partial_f_specificity_trial_pass_rate": 1.0,
+      "pre_design_condition_number": {
+        "maximum": 5.933275096981989,
+        "median": 5.931061467365696,
+        "minimum": 5.9310614673656925
+      },
+      "pre_residual": {
+        "maximum": 0.6699604194895328,
+        "median": 0.6641700835434106,
+        "minimum": 0.6466850109232727
+      },
+      "trial_count": 64
+    },
+    "7": {
+      "legacy_ds7_detection_delay_s": {
+        "maximum": 75.0,
+        "median": 20.0,
+        "minimum": 15.0
+      },
+      "legacy_ds7_detection_trial_rate": 1.0,
+      "legacy_pre_persistent_alarm_rate": {
+        "maximum": 0.43333333333333335,
+        "median": 0.2,
+        "minimum": 0.0
+      },
+      "partial_f_ds7_detection_delay_s": {
+        "maximum": 168.0,
+        "median": 124.0,
+        "minimum": 40.0
+      },
+      "partial_f_ds7_detection_trial_rate": 0.921875,
+      "partial_f_pre_persistent_alarm_rate": {
+        "maximum": 0.06666666666666667,
+        "median": 0.0,
+        "minimum": 0.0
+      },
+      "partial_f_specificity_trial_pass_rate": 0.90625,
+      "pre_design_condition_number": {
+        "maximum": 13.091571012288204,
+        "median": 6.586168965273302,
+        "minimum": 4.928485366934908
+      },
+      "pre_residual": {
+        "maximum": 0.5679787211186387,
+        "median": 0.4583107670606715,
+        "minimum": 0.3613899654669477
+      },
+      "trial_count": 64
+    },
+    "8": {
+      "legacy_ds7_detection_delay_s": {
+        "maximum": 104.0,
+        "median": 40.0,
+        "minimum": 16.0
+      },
+      "legacy_ds7_detection_trial_rate": 1.0,
+      "legacy_pre_persistent_alarm_rate": {
+        "maximum": 0.16666666666666666,
+        "median": 0.08333333333333333,
+        "minimum": 0.0
+      },
+      "partial_f_ds7_detection_delay_s": {
+        "maximum": 133.0,
+        "median": 124.5,
+        "minimum": 22.0
+      },
+      "partial_f_ds7_detection_trial_rate": 1.0,
+      "partial_f_pre_persistent_alarm_rate": {
+        "maximum": 0.03333333333333333,
+        "median": 0.0,
+        "minimum": 0.0
+      },
+      "partial_f_specificity_trial_pass_rate": 1.0,
+      "pre_design_condition_number": {
+        "maximum": 10.752188062152413,
+        "median": 6.089409777225592,
+        "minimum": 5.295860574710992
+      },
+      "pre_residual": {
+        "maximum": 0.6021906612058631,
+        "median": 0.5297624569198562,
+        "minimum": 0.44599739280379375
+      },
+      "trial_count": 64
+    },
+    "9": {
+      "legacy_ds7_detection_delay_s": {
+        "maximum": 120.0,
+        "median": 75.0,
+        "minimum": 19.0
+      },
+      "legacy_ds7_detection_trial_rate": 1.0,
+      "legacy_pre_persistent_alarm_rate": {
+        "maximum": 0.05,
+        "median": 0.0,
+        "minimum": 0.0
+      },
+      "partial_f_ds7_detection_delay_s": {
+        "maximum": 120.0,
+        "median": 119.0,
+        "minimum": 23.0
+      },
+      "partial_f_ds7_detection_trial_rate": 1.0,
+      "partial_f_pre_persistent_alarm_rate": {
+        "maximum": 0.0,
+        "median": 0.0,
+        "minimum": 0.0
+      },
+      "partial_f_specificity_trial_pass_rate": 1.0,
+      "pre_design_condition_number": {
+        "maximum": 8.010569913071734,
+        "median": 5.710123964570394,
+        "minimum": 5.582739598017017
+      },
+      "pre_residual": {
+        "maximum": 0.6519378103528495,
+        "median": 0.598234703363975,
+        "minimum": 0.5452732280531241
+      },
+      "trial_count": 64
+    }
+  },
+  "claim_boundary": "nested deterministic subsets of previously sealed DS7 delay estimates; a finite-support mechanism audit, not a new RF recording",
+  "deterministic_trials_per_size": 64,
+  "gates": {
+    "legacy_n7_far_above_n10": true,
+    "legacy_n7_residual_below_n10": true,
+    "partial_f_detection_each_n": true,
+    "partial_f_specificity_each_n": false
+  },
+  "inputs": {
+    "config": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/configs/experiments/cgc_prn_support_sweep_v1.json",
+      "sha256": "0d631b1566ad499d1e49bcbb9349e76a173351552bfd46d0da2a6b80cd6c3cd0"
+    },
+    "delay_estimates": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_real_detection_v1/delay_estimates.csv",
+      "sha256": "9d0ac4a7a6f9b4c59367862366d638309c8f3dcb1effa28b9e2409b6f5700840"
+    },
+    "frozen_summary": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_real_detection_v1/summary.json",
+      "sha256": "d7fa0024628a231dae2ec1da2f2bae6d4b19fb3fdf97886913d9520349aa0a63"
+    },
+    "partial_f_audit": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_partial_f_seven_prn_v1/summary.json",
+      "sha256": "c07dee4ecc82e9d0ce98c98d7e8ba9b00ba6ff86400406e2cbb86821708c07d4"
+    }
+  },
+  "release_commit": "ad6b7e5fcc632bfeee7325dbd9234bb3c82cf074",
+  "schema": "gnss-doppler-lab.cgc-prn-support-sweep-result",
+  "schema_version": 1,
+  "status": "FINITE_SUPPORT_MECHANISM_NOT_SUPPORTED",
+  "subset_sizes": [
+    7,
+    8,
+    9,
+    10
+  ],
+  "threshold_refitting": false,
+  "trend": {
+    "legacy_pre_far_spearman_rho_vs_prn_count": -0.9486832980505139,
+    "legacy_pre_residual_spearman_rho_vs_prn_count": 1.0,
+    "partial_f_median_pre_far_range": 0.0
+  },
+  "unsupported_sizes": {
+    "11": {
+      "primary_post_bin_count": 44,
+      "primary_pre_bin_count": 3,
+      "reason": "insufficient support for the frozen 60-pre/161-post-bin comparison"
+    },
+    "12": {
+      "primary_post_bin_count": 0,
+      "primary_pre_bin_count": 0,
+      "reason": "insufficient support for the frozen 60-pre/161-post-bin comparison"
+    }
+  }
+}
