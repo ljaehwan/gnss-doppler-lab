@@ -1,4 +1,4 @@
-# TUNI GPS partial-spoofer external protocol v1
+# TUNI GPS partial-spoofer external protocol v1.1
 
 ## Question
 
@@ -12,13 +12,37 @@ recording. They are not delayed-onset, all-channel carry-off attacks. A
 negative result therefore limits the mechanism's scope and is not to be
 relabelled as receiver failure.
 
+## Pre-attack v1.1 amendment
+
+Base protocol v1 was committed and pushed as '9827b313abebc26e071563512d11f6fe1df5133d'.
+The released runner then processed only the clean C-5 recording. It reached
+physical EOF at 29,999,832,000/29,999,832,000 bytes, produced 8 PRNs and
+613,800 tracking epochs, and calculated RTKLIB positions in its display log.
+The attack payloads SS-17, SS-18, and SS-20 remained unopened.
+
+The clean run exposed two engineering defects. First, an exact source sample
+valve consumed the complete file but did not emit GNSS-SDR's source-stop event,
+so a graceful SIGINT was sent only after /proc verified physical EOF. Second,
+GNSS-SDR prefixed the absolute NMEA output path with './', making the resulting
+'.//home/...' path unwritable even though the same RTKLIB PVT fixes were logged.
+
+Version 1.1 freezes the complete C-5 output as a 36-file SHA-256 tree and does
+not rerun it. Attack recordings read their complete equal-size payloads with
+'SignalSource.samples=0', so physical EOF supplies the stop event and the
+149.99916 s scientific duration is unchanged. When checksum-valid NMEA is
+absent, the clean position is the median of the same-run RTKLIB display fixes
+whose 'Current receiver time' is in '[60,140)' s. No threshold, feature,
+support rule, time interval, target PRN, LOS rule, persistence rule, or
+decision gate changed.
+
 ## Sealed data boundary
 
-Before this protocol and its runner are committed and pushed, the SS-17,
-SS-18, and SS-20 raw payloads may only have been downloaded and checksumed.
-No correlator, tracking, feature, score, or outcome from those attack payloads
-has been inspected. C-5 is the only TUNI GPS raw recording previously opened;
-its clean ten-second compatibility preflight is pinned in the configuration.
+Before base v1 and this v1.1 amendment were committed and pushed, the SS-17,
+SS-18, and SS-20 raw payloads had only been downloaded and checksumed. No
+correlator, tracking, feature, score, or outcome from those attack payloads
+was inspected. C-5 is the only TUNI GPS raw recording opened before v1.1; its
+ten-second compatibility preflight and hash-frozen full run are pinned in the
+configuration.
 
 The official scenario labels are:
 
@@ -51,9 +75,10 @@ The receiver-decoded ephemeris snapshot supplies one LOS per PRN. Because the
 recordings are static, only 110 s are analysed and some authentic and simulated
 PRNs have different navigation time bases, each PRN's decoded snapshot TOW is
 used and its LOS is held fixed. This is an offline geometry oracle, not an
-operational timing claim. The receiver position is the robust median C-5 NMEA
-GGA fix in [60,140] s and is reused for every recording; attack-derived PVT is
-prohibited.
+operational timing claim. The receiver position is the robust median
+receiver-derived C-5 RTKLIB fix in '[60,140)' s: checksum-valid GGA is preferred
+and the same-run display log is the frozen fallback. It is reused for every
+recording; attack-derived PVT is prohibited.
 
 The primary score is the already frozen partial-F tail probability
 
@@ -101,7 +126,7 @@ The terminal decision is:
 No threshold, persistence, interval, target list, support requirement, LOS
 rule, exclusion, or decision gate may change after attack outcomes are opened.
 A support failure is reported as such; it is not repaired by a receiver retune
-inside v1.
+inside v1.1.
 
 ## Claim boundary
 

@@ -31,13 +31,14 @@ def test_render_receiver_config_is_contiguous_big_endian_complex9(tmp_path: Path
     )
     assert "SignalSource.item_type=ishort" in text
     assert "DataTypeAdapter.swap_endian=true" in text
-    assert "SignalSource.samples=14999916000" in text
+    assert "SignalSource.samples=0" in text
     assert "SignalSource.sampling_frequency=50000000" in text
     assert "Resampler.sample_freq_out=5000000" in text
     assert "Channels_1C.count=31" in text
     assert "Tracking_1C.tap_count=9" in text
     assert "Tracking_1C.tap_spacing_chips=0.125" in text
     assert "PVT.nmea_output_enabled=true" in text
+    assert "PVT.nmea_dump_filename=nmea_pvt.nmea" in text
     assert "SignalSource.seconds_to_skip" not in text
 
 
@@ -51,6 +52,32 @@ def test_render_receiver_config_rejects_short_or_nonintegral_rate(tmp_path: Path
             iq_path=tmp_path / "input.bin", output_dir=tmp_path,
             duration_s=100.0, input_rate_hz=50_000_001,
         )
+
+
+def test_clean_static_position_falls_back_to_same_run_pvt_log(tmp_path: Path) -> None:
+    receiver_log = tmp_path / "receiver.log"
+    receiver_log.write_text(
+        "Current receiver time: 59 s\n"
+        "Position at t using 4 observations is Lat = 1.0 [deg], "
+        "Long = 2.0 [deg], Height = 3.0 [m]\n"
+        "Current receiver time: 60 s\n"
+        "Position at t using 4 observations is Lat = 61.1 [deg], "
+        "Long = 23.8 [deg], Height = 180.0 [m]\n"
+        "Current receiver time: 1 min 40 s\n"
+        "Position at t using 5 observations is Lat = 61.3 [deg], "
+        "Long = 24.0 [deg], Height = 200.0 [m]\n"
+        "Current receiver time: 2 min 20 s\n"
+        "Position at t using 5 observations is Lat = 9.0 [deg], "
+        "Long = 9.0 [deg], Height = 9.0 [m]\n",
+        encoding="utf-8",
+    )
+    result = MODULE.clean_static_position(
+        tmp_path / "missing.nmea", 0.0, receiver_log
+    )
+    assert result["llh"] == pytest.approx((61.2, 23.9, 190.0))
+    assert result["sample_count"] == 2
+    assert result["relative_time_range_s"] == [60.0, 100.0]
+    assert "display log" in result["source"]
 
 
 def _summary(*, bins: int = 100, target: bool = True, detected: bool = False, rate: float = 0.0):

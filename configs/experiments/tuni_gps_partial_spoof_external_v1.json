@@ -1,13 +1,22 @@
 {
   "schema": "gnss-doppler-lab.tuni-gps-partial-spoof-external-config",
-  "schema_version": 1,
+  "schema_version": "1.1",
   "experiment": {
-    "name": "tuni-gps-partial-spoof-external-v1",
-    "role": "pre-registered external real-RF partial-spoofer transfer test",
-    "release_token": "RELEASE-TUNI-GPS-PARTIAL-SPOOF-EXTERNAL-V1",
+    "name": "tuni-gps-partial-spoof-external-v1-1",
+    "role": "pre-attack engineering amendment to the pre-registered external real-RF partial-spoofer transfer test",
+    "release_token": "RELEASE-TUNI-GPS-PARTIAL-SPOOF-EXTERNAL-V1-1",
     "threshold_refitting": false,
     "post_attack_tuning_or_retest": false,
-    "attack_active_from_recording_start": true
+    "attack_active_from_recording_start": true,
+    "amendment": {
+      "base_preregistration_commit": "9827b313abebc26e071563512d11f6fe1df5133d",
+      "base_release_state": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/tuni-gps-partial-spoof-external-v1/release_state.json",
+      "reason": "C-5 reached physical EOF and produced valid tracking/PVT, but an absolute NMEA path was prefixed with ./ and the exact sample valve did not emit the source-stop message.",
+      "base_release_state_sha256": "fccbdf6e4ebb3f286722d8908c1112baa7c485852693f03b3d878c812824de25",
+      "attack_payloads_opened_before_amendment": false,
+      "clean_full_run_completed_before_amendment": true,
+      "scientific_rules_changed": false
+    }
   },
   "dataset": {
     "root": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/gps",
@@ -61,6 +70,12 @@
       "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/tuni-gps-clean-complex9-preflight-be-50msps-v1/manifest.json",
       "sha256": "4e2949fd796092313f4c10db630ce41c030b531b8ae14c878e7d190f81b43174"
     },
+    "clean_receiver_artifact": {
+      "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/tuni-gps-partial-spoof-external-v1/receiver/c-5",
+      "tree_sha256": "0f79eb0d0dcf72a7edeb8cc74bf4bc1f2e15146d96157a7f5cea312fefa23845",
+      "file_count": 36,
+      "provenance": "C-5 full run released at base commit; physical EOF verified at 29999832000/29999832000 bytes before graceful SIGINT flush"
+    },
     "receiver": {
       "path": ".tools/gnss-sdr-gps-be-complex9-v1",
       "sha256": "0f11cb72a00ccbddde1efc32330e279acd8392d359742a66175b88953cb50ecd",
@@ -70,7 +85,8 @@
       "acquisition_max_dwells": 5,
       "tap_count": 9,
       "tap_spacing_chips": 0.125,
-      "duration_seconds": 149.99916
+      "duration_seconds": 149.99916,
+      "source_stop_rule": "read the complete 29999832000-byte file to physical EOF with SignalSource.samples=0"
     },
     "delay_template": {
       "path": "configs/experiments/correlator_geometry_identifiability_train_v1.json",
@@ -104,12 +120,12 @@
     "persistence_window_bins": 5,
     "persistence_required_bins": 3,
     "los_time_rule": "per-PRN receiver-decoded ephemeris snapshot TOW; LOS held fixed over the 110 s static analysis interval",
-    "position_rule": "median checksum-valid C-5 GGA fix in [60,140] s; one clean static ECEF oracle reused for every recording",
+    "position_rule": "median receiver-derived C-5 RTKLIB PVT fix in [60,140) s; checksum-valid GGA preferred, same-run display log fallback; one clean static ECEF oracle reused for every recording",
     "minimum_primary_bins_per_recording": 60,
     "maximum_clean_persistent_alarm_rate": 0.05,
     "minimum_detected_attack_recordings": 2,
     "require_ss20_detection": true,
     "require_all_documented_spoof_prns_tracked": true
   },
-  "output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/tuni-gps-partial-spoof-external-v1"
+  "output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/tuni-gps-partial-spoof-external-v1-1"
 }

@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
+import re
 import subprocess
 import sys
 from typing import Any
@@ -136,7 +137,6 @@ def render_receiver_config(
     if input_rate_hz % internal_rate_hz:
         raise ValueError("input/internal sample-rate ratio must be integral")
     raw = output_dir / "raw"
-    nmea = output_dir / "nmea_pvt.nmea"
     return f"""[GNSS-SDR]
 GNSS-SDR.internal_fs_sps={internal_rate_hz}
 
@@ -144,7 +144,7 @@ SignalSource.implementation=File_Signal_Source
 SignalSource.filename={iq_path.resolve()}
 SignalSource.item_type=ishort
 SignalSource.sampling_frequency={input_rate_hz}
-SignalSource.samples={ishort_source_item_count(duration_s, input_rate_hz)}
+SignalSource.samples=0
 SignalSource.repeat=false
 SignalSource.dump=false
 SignalSource.enable_throttle_control=false
@@ -198,7 +198,7 @@ PVT.positioning_mode=Single
 PVT.output_rate_ms=100
 PVT.display_rate_ms=1000
 PVT.nmea_output_enabled=true
-PVT.nmea_dump_filename={nmea}
+PVT.nmea_dump_filename=nmea_pvt.nmea
 PVT.flag_nmea_tty_port=false
 PVT.flag_rtcm_server=false
 PVT.flag_rtcm_tty_port=false
@@ -223,6 +223,30 @@ def tracking_support(paths: list[Path]) -> tuple[list[int], int]:
         prns.update(valid)
         epochs += len(valid)
     return sorted(prns), epochs
+
+
+def clean_artifact_tree_hash(root: Path) -> tuple[str, int]:
+    """Hash the immutable C-5 files reused by the pre-attack v1.1 amendment."""
+    paths = [
+        root / "manifest.json",
+        root / "receiver.conf",
+        root / "receiver.log",
+        root / "gps_ephemeris.xml",
+        root / "raw" / "observables.mat",
+        *sorted((root / "raw").glob("epl_tracking_ch_*.mat")),
+    ]
+    if len(paths) != 36 or any(not path.is_file() for path in paths):
+        raise ValueError(
+            "frozen C-5 artifact must contain five metadata files and 31 MAT files"
+        )
+    digest = hashlib.sha256()
+    for path in paths:
+        relative = path.relative_to(root).as_posix()
+        digest.update(relative.encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(file_hash(path).encode("ascii"))
+        digest.update(b"\n")
+    return digest.hexdigest(), len(paths)
 
 
 def axis(low: float, high: float, step: float) -> np.ndarray:
@@ -360,6 +384,8 @@ def validate_config(config: dict[str, Any]) -> None:
         raise ValueError("threshold refitting must be disabled")
     if experiment.get("post_attack_tuning_or_retest") is not False:
         raise ValueError("post-attack tuning must be disabled")
+    if experiment["amendment"].get("attack_payloads_opened_before_amendment") is not False:
+        raise ValueError("v1.1 amendment requires unopened attack payloads")
     scenarios = config["dataset"]["scenarios"]
     if tuple(row["id"] for row in scenarios) != EXPECTED_IDS:
         raise ValueError("scenario order or membership drifted")
@@ -379,6 +405,19 @@ def validate_config(config: dict[str, Any]) -> None:
 
 def verify_frozen_inputs(config: dict[str, Any]) -> dict[str, Any]:
     validate_config(config)
+    amendment = config["experiment"]["amendment"]
+    base_state_path = verify(
+        amendment["base_release_state"],
+        amendment["base_release_state_sha256"],
+        "base v1 release state",
+    )
+    base_state = json.loads(base_state_path.read_text(encoding="utf-8"))
+    if (
+        base_state.get("release_commit") != amendment["base_preregistration_commit"]
+        or base_state.get("phase") != "receiver:C-5-clean-support"
+        or base_state.get("metrics_emitted") is not False
+    ):
+        raise ValueError("base v1 state does not prove the pre-attack amendment boundary")
     dataset = config["dataset"]
     manifest_path = verify(
         dataset["download_manifest"], dataset["download_manifest_sha256"],
@@ -403,6 +442,29 @@ def verify_frozen_inputs(config: dict[str, Any]) -> dict[str, Any]:
     clean_manifest = json.loads(clean_manifest_path.read_text(encoding="utf-8"))
     if clean_manifest.get("compatible") is not True or clean_manifest["source"]["scenario"] != "C-5":
         raise ValueError("pinned C-5 clean preflight is not compatible")
+
+    artifact_spec = frozen["clean_receiver_artifact"]
+    artifact_root = Path(artifact_spec["path"]).resolve()
+    if not artifact_root.is_dir():
+        raise FileNotFoundError(f"frozen C-5 artifact missing: {artifact_root}")
+    observed_tree, observed_count = clean_artifact_tree_hash(artifact_root)
+    if (
+        observed_tree != artifact_spec["tree_sha256"]
+        or observed_count != int(artifact_spec["file_count"])
+    ):
+        raise ValueError("frozen C-5 receiver artifact tree mismatch")
+    artifact_manifest_path = artifact_root / "manifest.json"
+    artifact_manifest = json.loads(artifact_manifest_path.read_text(encoding="utf-8"))
+    if (
+        artifact_manifest.get("scenario") != "C-5"
+        or artifact_manifest.get("compatible") is not True
+    ):
+        raise ValueError("frozen C-5 full-run artifact is not compatible")
+    if artifact_manifest["source"]["iq_md5"] != dataset["scenarios"][0]["md5"]:
+        raise ValueError("frozen C-5 full-run IQ provenance mismatch")
+    if artifact_manifest["receiver"]["executable_sha256"] != frozen["receiver"]["sha256"]:
+        raise ValueError("frozen C-5 receiver executable provenance mismatch")
+
     receiver = verify(
         frozen["receiver"]["path"], frozen["receiver"]["sha256"], "receiver executable"
     )
@@ -420,7 +482,14 @@ def verify_frozen_inputs(config: dict[str, Any]) -> dict[str, Any]:
     )
     for item in frozen["implementation"]:
         verify(item["path"], item["sha256"], f"implementation {item['path']}")
-    return {"receiver": receiver, "template": template, "download_manifest": manifest_path}
+    return {
+        "receiver": receiver,
+        "template": template,
+        "download_manifest": manifest_path,
+        "clean_artifact_root": artifact_root,
+        "clean_artifact_manifest": artifact_manifest,
+        "clean_artifact_tree_sha256": observed_tree,
+    }
 
 
 def run_receiver(
@@ -520,10 +589,14 @@ def observables_tow0(path: Path) -> float:
     return float(np.min(usable))
 
 
-def clean_static_position(nmea_path: Path, tow0_s: float) -> dict[str, Any]:
+def clean_static_position(
+    nmea_path: Path, tow0_s: float, receiver_log_path: Path | None = None,
+) -> dict[str, Any]:
     current_date = None
     points: list[tuple[float, float, float, float]] = []
-    for line in nmea_path.read_text(errors="replace").splitlines():
+    source = "clean C-5 checksum-valid NMEA GGA only"
+    nmea_lines = nmea_path.read_text(errors="replace").splitlines() if nmea_path.is_file() else []
+    for line in nmea_lines:
         fields = valid_nmea_sentence(line)
         if not fields:
             continue
@@ -544,15 +617,44 @@ def clean_static_position(nmea_path: Path, tow0_s: float) -> dict[str, Any]:
                     ))
         except (IndexError, ValueError):
             continue
+
+    if not points and receiver_log_path is not None and receiver_log_path.is_file():
+        current_time: float | None = None
+        current_pattern = re.compile(
+            r"Current receiver time:\s*(?:(\d+)\s*min\s*)?([0-9]+(?:\.[0-9]+)?)\s*s"
+        )
+        position_pattern = re.compile(
+            r"(?:First position fix|Position at).*?Lat\s*=\s*([-+]?[0-9.]+)"
+            r".*?Long\s*=\s*([-+]?[0-9.]+).*?Height\s*=\s*([-+]?[0-9.]+)"
+        )
+        for line in receiver_log_path.read_text(errors="replace").splitlines():
+            time_match = current_pattern.search(line)
+            if time_match is not None:
+                minutes = float(time_match.group(1) or 0.0)
+                current_time = 60.0 * minutes + float(time_match.group(2))
+                continue
+            position_match = position_pattern.search(line)
+            if (
+                position_match is not None
+                and current_time is not None
+                and 60.0 <= current_time < 140.0
+            ):
+                points.append((
+                    current_time, float(position_match.group(1)),
+                    float(position_match.group(2)), float(position_match.group(3)),
+                ))
+        if points:
+            source = "clean C-5 RTKLIB PVT display log in [60,140) s"
+
     if not points:
-        raise ValueError("C-5 has no valid NMEA GGA position in [60,140) s")
+        raise ValueError("C-5 has no valid receiver PVT position in [60,140) s")
     values = np.asarray(points, dtype=np.float64)
     llh = tuple(float(np.median(values[:, index])) for index in (1, 2, 3))
     ecef = tuple(float(value) for value in llh_to_ecef(*llh))
     return {
         "llh": llh, "ecef": ecef, "sample_count": len(points),
         "relative_time_range_s": [float(values[:, 0].min()), float(values[:, 0].max())],
-        "source": "clean C-5 checksum-valid NMEA GGA only",
+        "source": source,
     }
 
 
@@ -760,7 +862,7 @@ def main() -> int:
     output.mkdir(parents=True)
     state_path = output / "release_state.json"
     state = {
-        "schema": "gnss-doppler-lab.tuni-gps-partial-spoof-release-state.v1",
+        "schema": "gnss-doppler-lab.tuni-gps-partial-spoof-release-state.v1.1",
         "release_commit": release_commit, "config_sha256": file_hash(config_path),
         "protocol_sha256": file_hash(PROTOCOL), "runner_sha256": file_hash(Path(__file__)),
         "phase": "released_before_attack_access", "metrics_emitted": False,
@@ -771,15 +873,15 @@ def main() -> int:
     scenarios = config["dataset"]["scenarios"]
     receiver_manifests: dict[str, Any] = {}
     receiver_root = output / "receiver"
-    clean_scenario = scenarios[0]
-    state["phase"] = "receiver:C-5-clean-support"
+    run_dirs = {"C-5": frozen["clean_artifact_root"]}
+    state["phase"] = "frozen:C-5-clean-support"
     state_path.write_text(json.dumps(state, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    clean_dir = receiver_root / "c-5"
-    receiver_manifests["C-5"] = run_receiver(
-        clean_scenario, config, clean_dir, frozen["receiver"]
-    )
+    clean_dir = frozen["clean_artifact_root"]
+    receiver_manifests["C-5"] = frozen["clean_artifact_manifest"]
     tow0 = observables_tow0(clean_dir / "raw" / "observables.mat")
-    position = clean_static_position(clean_dir / "nmea_pvt.nmea", tow0)
+    position = clean_static_position(
+        clean_dir / "nmea_pvt.nmea", tow0, clean_dir / "receiver.log"
+    )
     receiver_ecef = np.asarray(position["ecef"], dtype=np.float64)
     clean_los, clean_ephemeris_report = static_los_map(
         clean_dir / "gps_ephemeris.xml", receiver_ecef
@@ -797,6 +899,7 @@ def main() -> int:
         receiver_manifests[scenario["id"]] = run_receiver(
             scenario, config, run_dir, frozen["receiver"]
         )
+        run_dirs[scenario["id"]] = run_dir
 
     state["phase"] = "analysis"
     state_path.write_text(json.dumps(state, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -806,9 +909,8 @@ def main() -> int:
     all_geometry: list[dict[str, Any]] = []
     summaries: dict[str, dict[str, Any]] = {}
     for scenario in scenarios:
-        run_dir = receiver_root / scenario["id"].lower()
         delays, geometry, summary = analyze_scenario(
-            scenario, run_dir, estimator, receiver_ecef, config
+            scenario, run_dirs[scenario["id"]], estimator, receiver_ecef, config
         )
         all_delays.extend({"scenario": scenario["id"], **row} for row in delays)
         all_geometry.extend(geometry)
@@ -830,11 +932,15 @@ def main() -> int:
     write_csv(delay_path, all_delays)
     write_csv(geometry_path, all_geometry)
     summary = {
-        "schema": "gnss-doppler-lab.tuni-gps-partial-spoof-external-result.v1",
+        "schema": "gnss-doppler-lab.tuni-gps-partial-spoof-external-result.v1.1",
         "release_commit": release_commit, "decision": decision,
         "scenario_summaries": summaries, "clean_position": position,
         "clean_observables_tow0_s": tow0, "clean_ephemeris": clean_ephemeris_report,
         "receiver_manifests": receiver_manifests,
+        "frozen_clean_artifact": {
+            "path": str(clean_dir),
+            "tree_sha256": frozen["clean_artifact_tree_sha256"],
+        },
         "frozen_rules": config["analysis"],
         "claim_boundary": "controlled real static partial-PRN true-position no-multipath RF; attack active from recording start; offline per-PRN ephemeris snapshot LOS",
         "post_release_tuning_or_retest": False,
