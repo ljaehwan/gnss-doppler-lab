@@ -1,0 +1,45 @@
+{
+  "schema": "gnss-doppler-lab.cgc-prn-support-sweep-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "cgc-prn-support-sweep-v1",
+    "role": "pre-registered finite-support mechanism audit",
+    "threshold_refitting": false,
+    "outcome_driven_subset_change": false
+  },
+  "inputs": {
+    "frozen_config": "configs/experiments/cgc_real_detection_v1.json",
+    "frozen_config_sha256": "d89c0cf05001f7435b0e2886b080519650fcef39944ca8379a1293b785097a8a",
+    "frozen_summary": "artifacts/cgc_real_detection_v1/summary.json",
+    "frozen_summary_sha256": "d7fa0024628a231dae2ec1da2f2bae6d4b19fb3fdf97886913d9520349aa0a63",
+    "delay_estimates_sha256": "9d0ac4a7a6f9b4c59367862366d638309c8f3dcb1effa28b9e2409b6f5700840",
+    "partial_f_audit": "artifacts/cgc_partial_f_seven_prn_v1/summary.json",
+    "partial_f_audit_sha256": "c07dee4ecc82e9d0ce98c98d7e8ba9b00ba6ff86400406e2cbb86821708c07d4"
+  },
+  "sweep": {
+    "subset_sizes": [7, 8, 9, 10],
+    "unsupported_sizes_to_report": [11, 12],
+    "deterministic_trials": 64,
+    "nested_subset_ranking": "SHA256(scenario:trial:PRN), first N",
+    "primary_scenario": "ds7",
+    "stable_pre_seconds": [30, 90],
+    "attack_onset_seconds": 100,
+    "stable_post_start_seconds": 110,
+    "expected_primary_pre_bins_per_trial": 60,
+    "expected_primary_post_bins_per_trial": 161
+  },
+  "frozen_rules": {
+    "legacy_residual_alarm_threshold": 0.33023636533817136,
+    "partial_f_p_alarm_threshold": 0.06028418845288192,
+    "persistence_window_bins": 5,
+    "persistence_required_bins": 3
+  },
+  "decision_gates": {
+    "minimum_specificity_trial_pass_rate_each_n": 0.95,
+    "maximum_primary_pre_persistent_alarm_rate": 0.05,
+    "minimum_ds7_detection_trial_rate_each_n": 0.80,
+    "require_legacy_median_pre_alarm_rate_n7_above_n10": true,
+    "require_legacy_median_pre_residual_n7_below_n10": true
+  },
+  "output_root": "artifacts/cgc_prn_support_sweep_v1"
+}
