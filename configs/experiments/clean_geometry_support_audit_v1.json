@@ -1,0 +1,55 @@
+{
+  "schema": "gnss-doppler-lab.clean-geometry-support-audit-config",
+  "schema_version": 1,
+  "protocol": {
+    "purpose": "Reject external datasets with inadequate simultaneous GPS L1 C/A support before any attack score is computed.",
+    "score_access": false,
+    "attack_payload_access": false
+  },
+  "rules": {
+    "bin_seconds": 1.0,
+    "minimum_epochs_per_prn_bin": 200,
+    "minimum_primary_prns": 8,
+    "secondary_boundary_prns": 7,
+    "minimum_primary_bins": 60,
+    "require_complex_nine_tap": true
+  },
+  "candidates": [
+    {
+      "id": "texbat-cleanstatic",
+      "dataset": "TEXBAT",
+      "scenario": "cleanStatic",
+      "scientific_role": "opened development clean control",
+      "prior_access": "opened",
+      "receiver_run_dir": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9",
+      "analysis_interval_seconds": [30.0, 140.0]
+    },
+    {
+      "id": "oakbat-cleanstatic",
+      "dataset": "OAKBAT",
+      "scenario": "cleanStatic",
+      "scientific_role": "opened external clean control",
+      "prior_access": "opened",
+      "receiver_run_dir": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/q-comet-oakbat-complex9/cleanstatic/receiver/cleanstatic-complex9",
+      "analysis_interval_seconds": [30.0, 140.0]
+    },
+    {
+      "id": "gnss-openif-s1",
+      "dataset": "GNSS-OpenIF",
+      "scenario": "S1 suburban Hong Kong",
+      "scientific_role": "opened real-multipath negative control",
+      "prior_access": "opened",
+      "receiver_run_dir": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/gnss-openif-s1-real-multipath-v1/receiver/s1-complex9-full",
+      "analysis_interval_seconds": [10.0, 80.0]
+    },
+    {
+      "id": "tuni-gps-c5",
+      "dataset": "TUNI2025 GPS",
+      "scenario": "C-5 clear sky",
+      "scientific_role": "opened external clean control",
+      "prior_access": "opened",
+      "receiver_run_dir": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/tuni-gps-partial-spoof-external-v1/receiver/c-5",
+      "analysis_interval_seconds": [30.0, 140.0]
+    }
+  ]
+}

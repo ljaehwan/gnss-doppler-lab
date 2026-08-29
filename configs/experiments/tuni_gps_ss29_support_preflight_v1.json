@@ -1,0 +1,49 @@
+{
+  "schema": "gnss-doppler-lab.tuni-gps-ss29-support-preflight-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "TUNI GPS SS-29 score-free support preflight",
+    "purpose": "Decide whether unopened SS-29 has enough simultaneous authentic-plus-spoofed GPS L1 C/A support for the frozen N>=8 CGC detector before any detector score is computed.",
+    "detector_score_access": false,
+    "delay_template_access": false,
+    "threshold_refitting": false,
+    "post_preflight_rule_change": false
+  },
+  "dataset": {
+    "name": "TUNI2025 GPS Spoofing",
+    "scenario": "SS-29",
+    "role": "prospective multipath-plus-partial-spoof external positive",
+    "zenodo_record_id": 17250054,
+    "doi": "10.5281/zenodo.17250054",
+    "raw_url": "https://zenodo.org/records/17250054/files/SS-29%20GPS%20Static%20Multipath%20True%20Position%20%E2%80%93%204%20Spoofers.bin?download=1",
+    "full_file_bytes": 29999832000,
+    "full_file_md5": "f821028e530bf3e56a24ef99f76977cd",
+    "readme_path": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/gps/SS-29/metadata/Readme.pdf",
+    "readme_md5": "6dff1cdb239c39b6e56666ed8f37c802",
+    "scenario_file_path": "/home/ubuntu/ssd_data/gnss-datasets/tuni2025/gps/SS-29/metadata/MPSpooferPRN4.scen",
+    "scenario_file_md5": "bf550188b686138bcd575af6e09cfb51",
+    "documented_spoofed_prns": [1, 2, 21, 32],
+    "signal": "GPS L1 C/A authentic plus four true-position spoofers with multipath",
+    "input_sample_rate_hz": 50000000,
+    "receiver_sample_format": "big-endian interleaved int16 I/Q (ishort); selected from the byte-rate identity and empirically verified TUNI C-5 receiver contract"
+  },
+  "prefix_probe": {
+    "byte_start": 0,
+    "byte_count": 2000000000,
+    "duration_seconds": 10.0,
+    "channel_count": 31,
+    "analysis_interval_seconds": [5.0, 10.0]
+  },
+  "support_gate": {
+    "bin_seconds": 1.0,
+    "minimum_epochs_per_prn_bin": 200,
+    "minimum_primary_prns": 8,
+    "minimum_primary_bins": 3,
+    "minimum_target_bins_per_spoofed_prn": 3,
+    "require_complex_nine_tap": true
+  },
+  "receiver": {
+    "executable": ".tools/gnss-sdr-gps-be-complex9-v1"
+  },
+  "output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/tuni-gps-ss29-support-preflight-v1"
+}

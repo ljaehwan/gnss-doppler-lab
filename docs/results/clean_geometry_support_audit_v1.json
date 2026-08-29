@@ -1,0 +1,1342 @@
+{
+  "config": {
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/configs/experiments/clean_geometry_support_audit_v1.json",
+    "sha256": "59a19a38ed65192b4fdaa35205b5e0f5841e206a4a38f3d55921dfb08614fa6a"
+  },
+  "created_at_utc": "2026-08-29T10:09:30.663893+00:00",
+  "protocol": {
+    "attack_payload_access": false,
+    "purpose": "Reject external datasets with inadequate simultaneous GPS L1 C/A support before any attack score is computed.",
+    "score_access": false
+  },
+  "results": [
+    {
+      "attack_payload_accessed": false,
+      "candidate": {
+        "dataset": "TEXBAT",
+        "id": "texbat-cleanstatic",
+        "prior_access": "opened",
+        "scenario": "cleanStatic",
+        "scientific_role": "opened development clean control"
+      },
+      "discovered_prn_count": 14,
+      "discovered_prns": [
+        "G03",
+        "G06",
+        "G07",
+        "G08",
+        "G10",
+        "G12",
+        "G13",
+        "G16",
+        "G19",
+        "G20",
+        "G23",
+        "G29",
+        "G30",
+        "G31"
+      ],
+      "eligible_bin_count_by_prn_count": {
+        "0": 42,
+        "1": 68
+      },
+      "eligible_prns_by_bin": {
+        "100": [
+          8
+        ],
+        "101": [
+          8
+        ],
+        "102": [
+          8
+        ],
+        "103": [
+          8
+        ],
+        "104": [
+          8
+        ],
+        "105": [
+          8
+        ],
+        "106": [
+          8
+        ],
+        "107": [],
+        "108": [],
+        "109": [],
+        "110": [],
+        "111": [],
+        "112": [],
+        "113": [],
+        "114": [],
+        "115": [],
+        "116": [],
+        "117": [],
+        "118": [],
+        "119": [],
+        "120": [],
+        "121": [],
+        "122": [
+          29
+        ],
+        "123": [
+          29
+        ],
+        "124": [
+          29
+        ],
+        "125": [
+          29
+        ],
+        "126": [
+          29
+        ],
+        "127": [
+          29
+        ],
+        "128": [
+          29
+        ],
+        "129": [
+          29
+        ],
+        "130": [
+          29
+        ],
+        "131": [
+          29
+        ],
+        "132": [
+          29
+        ],
+        "133": [
+          29
+        ],
+        "134": [
+          29
+        ],
+        "135": [
+          29
+        ],
+        "136": [
+          29
+        ],
+        "137": [
+          29
+        ],
+        "138": [
+          29
+        ],
+        "139": [],
+        "30": [],
+        "31": [],
+        "32": [],
+        "33": [],
+        "34": [],
+        "35": [],
+        "36": [],
+        "37": [],
+        "38": [
+          12
+        ],
+        "39": [
+          12
+        ],
+        "40": [
+          12
+        ],
+        "41": [
+          12
+        ],
+        "42": [
+          12
+        ],
+        "43": [
+          12
+        ],
+        "44": [
+          12
+        ],
+        "45": [
+          12
+        ],
+        "46": [
+          12
+        ],
+        "47": [
+          12
+        ],
+        "48": [
+          12
+        ],
+        "49": [
+          12
+        ],
+        "50": [
+          12
+        ],
+        "51": [
+          12
+        ],
+        "52": [
+          12
+        ],
+        "53": [
+          12
+        ],
+        "54": [
+          12
+        ],
+        "55": [],
+        "56": [
+          31
+        ],
+        "57": [
+          31
+        ],
+        "58": [
+          31
+        ],
+        "59": [
+          31
+        ],
+        "60": [
+          31
+        ],
+        "61": [
+          31
+        ],
+        "62": [
+          31
+        ],
+        "63": [
+          31
+        ],
+        "64": [
+          31
+        ],
+        "65": [
+          31
+        ],
+        "66": [
+          31
+        ],
+        "67": [
+          31
+        ],
+        "68": [
+          31
+        ],
+        "69": [
+          31
+        ],
+        "70": [
+          31
+        ],
+        "71": [
+          31
+        ],
+        "72": [
+          31
+        ],
+        "73": [],
+        "74": [],
+        "75": [],
+        "76": [],
+        "77": [],
+        "78": [],
+        "79": [],
+        "80": [],
+        "81": [],
+        "82": [],
+        "83": [],
+        "84": [],
+        "85": [],
+        "86": [],
+        "87": [],
+        "88": [],
+        "89": [],
+        "90": [
+          8
+        ],
+        "91": [
+          8
+        ],
+        "92": [
+          8
+        ],
+        "93": [
+          8
+        ],
+        "94": [
+          8
+        ],
+        "95": [
+          8
+        ],
+        "96": [
+          8
+        ],
+        "97": [
+          8
+        ],
+        "98": [
+          8
+        ],
+        "99": [
+          8
+        ]
+      },
+      "maximum_eligible_prns": 1,
+      "maximum_epoch_count_per_prn_bin": 1000,
+      "primary_bin_count": 0,
+      "primary_bins": [],
+      "receiver_run_dir": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9",
+      "rules": {
+        "analysis_interval_seconds": [
+          30.0,
+          140.0
+        ],
+        "bin_seconds": 1.0,
+        "duplicate_channel_rule": "maximum epoch count per PRN/bin",
+        "minimum_epochs_per_prn_bin": 200,
+        "minimum_primary_bins": 60,
+        "minimum_primary_prns": 8,
+        "require_complex_nine_tap": true,
+        "secondary_boundary_prns": 7
+      },
+      "schema": "gnss-doppler-lab.clean-geometry-support-audit",
+      "schema_version": 1,
+      "score_accessed": false,
+      "secondary_boundary_bin_count": 0,
+      "secondary_boundary_bins": [],
+      "source": {
+        "complex_nine_tap_evidence": "receiver_manifest",
+        "kind": "tracking_csv",
+        "observed_epoch_rows": 118845,
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/texbat-clean-graph-input-v2/receiver/cleanStatic-complex9/tracking.csv"
+      },
+      "status": "INSUFFICIENT_SUPPORT",
+      "support_eligible": false,
+      "telemetry_density_sufficient": true
+    },
+    {
+      "attack_payload_accessed": false,
+      "candidate": {
+        "dataset": "OAKBAT",
+        "id": "oakbat-cleanstatic",
+        "prior_access": "opened",
+        "scenario": "cleanStatic",
+        "scientific_role": "opened external clean control"
+      },
+      "discovered_prn_count": 11,
+      "discovered_prns": [
+        "G08",
+        "G10",
+        "G11",
+        "G12",
+        "G14",
+        "G15",
+        "G18",
+        "G20",
+        "G21",
+        "G24",
+        "G25"
+      ],
+      "eligible_bin_count_by_prn_count": {
+        "0": 106,
+        "1": 3,
+        "4": 1
+      },
+      "eligible_prns_by_bin": {
+        "100": [],
+        "101": [],
+        "102": [],
+        "103": [],
+        "104": [],
+        "105": [],
+        "106": [],
+        "107": [],
+        "108": [],
+        "109": [],
+        "110": [],
+        "111": [],
+        "112": [],
+        "113": [],
+        "114": [],
+        "115": [],
+        "116": [],
+        "117": [],
+        "118": [],
+        "119": [],
+        "120": [],
+        "121": [],
+        "122": [],
+        "123": [],
+        "124": [],
+        "125": [],
+        "126": [],
+        "127": [],
+        "128": [],
+        "129": [],
+        "130": [],
+        "131": [],
+        "132": [],
+        "133": [],
+        "134": [],
+        "135": [],
+        "136": [],
+        "137": [],
+        "138": [],
+        "139": [],
+        "30": [
+          12,
+          14,
+          15,
+          18
+        ],
+        "31": [
+          15
+        ],
+        "32": [
+          15
+        ],
+        "33": [
+          15
+        ],
+        "34": [],
+        "35": [],
+        "36": [],
+        "37": [],
+        "38": [],
+        "39": [],
+        "40": [],
+        "41": [],
+        "42": [],
+        "43": [],
+        "44": [],
+        "45": [],
+        "46": [],
+        "47": [],
+        "48": [],
+        "49": [],
+        "50": [],
+        "51": [],
+        "52": [],
+        "53": [],
+        "54": [],
+        "55": [],
+        "56": [],
+        "57": [],
+        "58": [],
+        "59": [],
+        "60": [],
+        "61": [],
+        "62": [],
+        "63": [],
+        "64": [],
+        "65": [],
+        "66": [],
+        "67": [],
+        "68": [],
+        "69": [],
+        "70": [],
+        "71": [],
+        "72": [],
+        "73": [],
+        "74": [],
+        "75": [],
+        "76": [],
+        "77": [],
+        "78": [],
+        "79": [],
+        "80": [],
+        "81": [],
+        "82": [],
+        "83": [],
+        "84": [],
+        "85": [],
+        "86": [],
+        "87": [],
+        "88": [],
+        "89": [],
+        "90": [],
+        "91": [],
+        "92": [],
+        "93": [],
+        "94": [],
+        "95": [],
+        "96": [],
+        "97": [],
+        "98": [],
+        "99": []
+      },
+      "maximum_eligible_prns": 4,
+      "maximum_epoch_count_per_prn_bin": 1000,
+      "primary_bin_count": 0,
+      "primary_bins": [],
+      "receiver_run_dir": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/q-comet-oakbat-complex9/cleanstatic/receiver/cleanstatic-complex9",
+      "rules": {
+        "analysis_interval_seconds": [
+          30.0,
+          140.0
+        ],
+        "bin_seconds": 1.0,
+        "duplicate_channel_rule": "maximum epoch count per PRN/bin",
+        "minimum_epochs_per_prn_bin": 200,
+        "minimum_primary_bins": 60,
+        "minimum_primary_prns": 8,
+        "require_complex_nine_tap": true,
+        "secondary_boundary_prns": 7
+      },
+      "schema": "gnss-doppler-lab.clean-geometry-support-audit",
+      "schema_version": 1,
+      "score_accessed": false,
+      "secondary_boundary_bin_count": 0,
+      "secondary_boundary_bins": [],
+      "source": {
+        "complex_nine_tap_evidence": "receiver_manifest",
+        "kind": "tracking_csv",
+        "observed_epoch_rows": 65006,
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/q-comet-oakbat-complex9/cleanstatic/receiver/cleanstatic-complex9/tracking.csv"
+      },
+      "status": "INSUFFICIENT_SUPPORT",
+      "support_eligible": false,
+      "telemetry_density_sufficient": true
+    },
+    {
+      "attack_payload_accessed": false,
+      "candidate": {
+        "dataset": "GNSS-OpenIF",
+        "id": "gnss-openif-s1",
+        "prior_access": "opened",
+        "scenario": "S1 suburban Hong Kong",
+        "scientific_role": "opened real-multipath negative control"
+      },
+      "discovered_prn_count": 12,
+      "discovered_prns": [
+        "G03",
+        "G05",
+        "G08",
+        "G09",
+        "G10",
+        "G12",
+        "G17",
+        "G19",
+        "G20",
+        "G22",
+        "G26",
+        "G27"
+      ],
+      "eligible_bin_count_by_prn_count": {
+        "0": 49,
+        "1": 6,
+        "11": 3,
+        "2": 4,
+        "4": 2,
+        "6": 6
+      },
+      "eligible_prns_by_bin": {
+        "10": [
+          3,
+          5,
+          8,
+          9,
+          10,
+          12,
+          17,
+          19,
+          20,
+          22,
+          26
+        ],
+        "11": [
+          3,
+          5,
+          8,
+          9,
+          10,
+          12,
+          17,
+          19,
+          20,
+          22,
+          26
+        ],
+        "12": [
+          3,
+          5,
+          8,
+          9,
+          10,
+          12,
+          17,
+          19,
+          20,
+          22,
+          26
+        ],
+        "13": [
+          3,
+          8,
+          10,
+          12,
+          20,
+          26
+        ],
+        "14": [
+          3,
+          8,
+          10,
+          12,
+          20,
+          26
+        ],
+        "15": [
+          3,
+          8,
+          10,
+          12,
+          20,
+          26
+        ],
+        "16": [
+          3,
+          8,
+          10,
+          12,
+          20,
+          26
+        ],
+        "17": [
+          3,
+          8,
+          10,
+          12,
+          20,
+          26
+        ],
+        "18": [
+          3,
+          8,
+          10,
+          12,
+          20,
+          26
+        ],
+        "19": [
+          3,
+          8,
+          20,
+          26
+        ],
+        "20": [
+          3,
+          8,
+          20,
+          26
+        ],
+        "21": [
+          3,
+          20
+        ],
+        "22": [
+          3,
+          20
+        ],
+        "23": [
+          3,
+          20
+        ],
+        "24": [
+          3,
+          20
+        ],
+        "25": [
+          20
+        ],
+        "26": [
+          20
+        ],
+        "27": [
+          20
+        ],
+        "28": [
+          20
+        ],
+        "29": [],
+        "30": [],
+        "31": [],
+        "32": [],
+        "33": [],
+        "34": [],
+        "35": [],
+        "36": [],
+        "37": [],
+        "38": [],
+        "39": [],
+        "40": [],
+        "41": [],
+        "42": [],
+        "43": [],
+        "44": [],
+        "45": [],
+        "46": [],
+        "47": [],
+        "48": [],
+        "49": [],
+        "50": [],
+        "51": [],
+        "52": [],
+        "53": [],
+        "54": [],
+        "55": [],
+        "56": [],
+        "57": [],
+        "58": [],
+        "59": [],
+        "60": [],
+        "61": [],
+        "62": [],
+        "63": [],
+        "64": [],
+        "65": [],
+        "66": [],
+        "67": [],
+        "68": [],
+        "69": [],
+        "70": [],
+        "71": [],
+        "72": [],
+        "73": [],
+        "74": [],
+        "75": [],
+        "76": [],
+        "77": [],
+        "78": [
+          27
+        ],
+        "79": [
+          27
+        ]
+      },
+      "maximum_eligible_prns": 11,
+      "maximum_epoch_count_per_prn_bin": 1000,
+      "primary_bin_count": 3,
+      "primary_bins": [
+        10,
+        11,
+        12
+      ],
+      "receiver_run_dir": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/gnss-openif-s1-real-multipath-v1/receiver/s1-complex9-full",
+      "rules": {
+        "analysis_interval_seconds": [
+          10.0,
+          80.0
+        ],
+        "bin_seconds": 1.0,
+        "duplicate_channel_rule": "maximum epoch count per PRN/bin",
+        "minimum_epochs_per_prn_bin": 200,
+        "minimum_primary_bins": 60,
+        "minimum_primary_prns": 8,
+        "require_complex_nine_tap": true,
+        "secondary_boundary_prns": 7
+      },
+      "schema": "gnss-doppler-lab.clean-geometry-support-audit",
+      "schema_version": 1,
+      "score_accessed": false,
+      "secondary_boundary_bin_count": 0,
+      "secondary_boundary_bins": [],
+      "source": {
+        "complex_nine_tap_evidence": "verified_dataset_names",
+        "file_count": 31,
+        "kind": "tracking_mat",
+        "nonempty_files_in_interval": 14,
+        "observed_epoch_rows": 119455,
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/gnss-openif-s1-real-multipath-v1/receiver/s1-complex9-full/raw"
+      },
+      "status": "INSUFFICIENT_SUPPORT",
+      "support_eligible": false,
+      "telemetry_density_sufficient": true
+    },
+    {
+      "attack_payload_accessed": false,
+      "candidate": {
+        "dataset": "TUNI2025 GPS",
+        "id": "tuni-gps-c5",
+        "prior_access": "opened",
+        "scenario": "C-5 clear sky",
+        "scientific_role": "opened external clean control"
+      },
+      "discovered_prn_count": 8,
+      "discovered_prns": [
+        "G05",
+        "G07",
+        "G16",
+        "G18",
+        "G23",
+        "G26",
+        "G27",
+        "G29"
+      ],
+      "eligible_bin_count_by_prn_count": {
+        "0": 1,
+        "1": 13,
+        "2": 31,
+        "3": 51,
+        "4": 14
+      },
+      "eligible_prns_by_bin": {
+        "100": [
+          7,
+          29
+        ],
+        "101": [
+          7,
+          27,
+          29
+        ],
+        "102": [
+          7,
+          27,
+          29
+        ],
+        "103": [
+          7,
+          27,
+          29
+        ],
+        "104": [
+          7,
+          27,
+          29
+        ],
+        "105": [
+          7,
+          27,
+          29
+        ],
+        "106": [
+          7,
+          27,
+          29
+        ],
+        "107": [
+          7,
+          27,
+          29
+        ],
+        "108": [
+          7,
+          27,
+          29
+        ],
+        "109": [
+          7,
+          27,
+          29
+        ],
+        "110": [
+          7,
+          27,
+          29
+        ],
+        "111": [
+          7,
+          27,
+          29
+        ],
+        "112": [
+          7,
+          27,
+          29
+        ],
+        "113": [
+          7,
+          27,
+          29
+        ],
+        "114": [
+          7,
+          29
+        ],
+        "115": [
+          7,
+          29
+        ],
+        "116": [
+          7,
+          29
+        ],
+        "117": [
+          7,
+          29
+        ],
+        "118": [
+          7,
+          29
+        ],
+        "119": [
+          7,
+          27,
+          29
+        ],
+        "120": [
+          7,
+          27,
+          29
+        ],
+        "121": [
+          7,
+          27,
+          29
+        ],
+        "122": [
+          7,
+          27,
+          29
+        ],
+        "123": [
+          7,
+          27,
+          29
+        ],
+        "124": [
+          7,
+          27,
+          29
+        ],
+        "125": [
+          7,
+          27,
+          29
+        ],
+        "126": [
+          7,
+          27,
+          29
+        ],
+        "127": [
+          7,
+          27,
+          29
+        ],
+        "128": [
+          7,
+          27,
+          29
+        ],
+        "129": [
+          7,
+          27,
+          29
+        ],
+        "130": [
+          7,
+          27,
+          29
+        ],
+        "131": [
+          7,
+          27,
+          29
+        ],
+        "132": [
+          7,
+          27,
+          29
+        ],
+        "133": [
+          7,
+          27,
+          29
+        ],
+        "134": [
+          7,
+          27,
+          29
+        ],
+        "135": [
+          27,
+          29
+        ],
+        "136": [
+          27,
+          29
+        ],
+        "137": [
+          27,
+          29
+        ],
+        "138": [
+          27
+        ],
+        "139": [],
+        "30": [
+          7
+        ],
+        "31": [
+          7
+        ],
+        "32": [
+          7
+        ],
+        "33": [
+          7
+        ],
+        "34": [
+          7
+        ],
+        "35": [
+          7
+        ],
+        "36": [
+          7,
+          23
+        ],
+        "37": [
+          7,
+          23
+        ],
+        "38": [
+          7,
+          23
+        ],
+        "39": [
+          5,
+          7,
+          23
+        ],
+        "40": [
+          5,
+          7,
+          23
+        ],
+        "41": [
+          5,
+          7,
+          23
+        ],
+        "42": [
+          5,
+          7,
+          23
+        ],
+        "43": [
+          5,
+          7,
+          23
+        ],
+        "44": [
+          5,
+          7,
+          23
+        ],
+        "45": [
+          5,
+          7,
+          23
+        ],
+        "46": [
+          5,
+          7,
+          23
+        ],
+        "47": [
+          5,
+          7,
+          23
+        ],
+        "48": [
+          5,
+          7,
+          23
+        ],
+        "49": [
+          5,
+          7,
+          23
+        ],
+        "50": [
+          5,
+          7,
+          23,
+          29
+        ],
+        "51": [
+          5,
+          7,
+          23,
+          29
+        ],
+        "52": [
+          5,
+          7,
+          23,
+          29
+        ],
+        "53": [
+          5,
+          7,
+          23,
+          29
+        ],
+        "54": [
+          7,
+          23,
+          29
+        ],
+        "55": [
+          7,
+          29
+        ],
+        "56": [
+          29
+        ],
+        "57": [
+          29
+        ],
+        "58": [
+          29
+        ],
+        "59": [
+          29
+        ],
+        "60": [
+          29
+        ],
+        "61": [
+          29
+        ],
+        "62": [
+          27,
+          29
+        ],
+        "63": [
+          27,
+          29
+        ],
+        "64": [
+          27,
+          29
+        ],
+        "65": [
+          27,
+          29
+        ],
+        "66": [
+          27,
+          29
+        ],
+        "67": [
+          27,
+          29
+        ],
+        "68": [
+          27,
+          29
+        ],
+        "69": [
+          27,
+          29
+        ],
+        "70": [
+          27,
+          29
+        ],
+        "71": [
+          27,
+          29
+        ],
+        "72": [
+          27,
+          29
+        ],
+        "73": [
+          27,
+          29
+        ],
+        "74": [
+          27,
+          29
+        ],
+        "75": [
+          27,
+          29
+        ],
+        "76": [
+          27,
+          29
+        ],
+        "77": [
+          27,
+          29
+        ],
+        "78": [
+          27,
+          29
+        ],
+        "79": [
+          27,
+          29
+        ],
+        "80": [
+          23,
+          27,
+          29
+        ],
+        "81": [
+          23,
+          27,
+          29
+        ],
+        "82": [
+          23,
+          27,
+          29
+        ],
+        "83": [
+          23,
+          27,
+          29
+        ],
+        "84": [
+          7,
+          23,
+          27,
+          29
+        ],
+        "85": [
+          7,
+          23,
+          27,
+          29
+        ],
+        "86": [
+          7,
+          23,
+          27,
+          29
+        ],
+        "87": [
+          7,
+          23,
+          27,
+          29
+        ],
+        "88": [
+          7,
+          23,
+          27,
+          29
+        ],
+        "89": [
+          7,
+          23,
+          27,
+          29
+        ],
+        "90": [
+          7,
+          23,
+          27,
+          29
+        ],
+        "91": [
+          7,
+          23,
+          27,
+          29
+        ],
+        "92": [
+          7,
+          23,
+          27,
+          29
+        ],
+        "93": [
+          7,
+          23,
+          27,
+          29
+        ],
+        "94": [
+          7,
+          23,
+          29
+        ],
+        "95": [
+          7,
+          23,
+          29
+        ],
+        "96": [
+          7,
+          23,
+          29
+        ],
+        "97": [
+          7,
+          23,
+          29
+        ],
+        "98": [
+          7,
+          23,
+          29
+        ],
+        "99": [
+          7,
+          23,
+          29
+        ]
+      },
+      "maximum_eligible_prns": 4,
+      "maximum_epoch_count_per_prn_bin": 1001,
+      "primary_bin_count": 0,
+      "primary_bins": [],
+      "receiver_run_dir": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/tuni-gps-partial-spoof-external-v1/receiver/c-5",
+      "rules": {
+        "analysis_interval_seconds": [
+          30.0,
+          140.0
+        ],
+        "bin_seconds": 1.0,
+        "duplicate_channel_rule": "maximum epoch count per PRN/bin",
+        "minimum_epochs_per_prn_bin": 200,
+        "minimum_primary_bins": 60,
+        "minimum_primary_prns": 8,
+        "require_complex_nine_tap": true,
+        "secondary_boundary_prns": 7
+      },
+      "schema": "gnss-doppler-lab.clean-geometry-support-audit",
+      "schema_version": 1,
+      "score_accessed": false,
+      "secondary_boundary_bin_count": 0,
+      "secondary_boundary_bins": [],
+      "source": {
+        "complex_nine_tap_evidence": "verified_dataset_names",
+        "file_count": 31,
+        "kind": "tracking_mat",
+        "nonempty_files_in_interval": 26,
+        "observed_epoch_rows": 426610,
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/tuni-gps-partial-spoof-external-v1/receiver/c-5/raw"
+      },
+      "status": "INSUFFICIENT_SUPPORT",
+      "support_eligible": false,
+      "telemetry_density_sufficient": true
+    }
+  ],
+  "rules": {
+    "bin_seconds": 1.0,
+    "minimum_epochs_per_prn_bin": 200,
+    "minimum_primary_bins": 60,
+    "minimum_primary_prns": 8,
+    "require_complex_nine_tap": true,
+    "secondary_boundary_prns": 7
+  },
+  "schema": "gnss-doppler-lab.clean-geometry-support-audit-batch",
+  "schema_version": 1,
+  "support_eligible_candidates": []
+}
