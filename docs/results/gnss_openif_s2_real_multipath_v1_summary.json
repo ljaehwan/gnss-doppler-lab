@@ -1,0 +1,68 @@
+{
+  "schema": "gnss-doppler-lab.gnss-openif-s2-real-multipath-compact-result",
+  "schema_version": 1,
+  "status": "REAL_MULTIPATH_SPECIFICITY_SUPPORTED",
+  "claim_boundary": "offline false-alarm transfer on one independent multipath-rich urban vehicle recording; no per-PRN machine-readable multipath truth and no real-spoof sensitivity claim",
+  "chronology": {
+    "protocol_committed_before_iq_download": true,
+    "only_iq_hash_added_after_download": true,
+    "s2_outcome_accessed_before_freeze": false,
+    "s2_threshold_tuning": false,
+    "preregistration_commit": "cf307df",
+    "iq_hash_sealing_commit": "c03c57b"
+  },
+  "dataset": {
+    "repository_commit": "09715cd679a0300782074e96bfed9f11eae4ef88",
+    "scenario": "S2",
+    "description": "vehicle in dense urban canyon, Mong Kok, Hong Kong",
+    "recording_date_utc": "2025-06-03",
+    "iq_bytes": 11593056256,
+    "iq_sha256": "7dfb51d0973b45b86441f1c50db95079bbf47459fe73fab3ca3d0b6bdcf3a8c5",
+    "ground_truth_sha256": "c7f7e248a7db8a2d0587c51c42fbf12ab0f07701bfeb6562c0113dfa5333f96c",
+    "broadcast_navigation_sha256": "9164bf9acc8619b37715e9cc7be09cd997293f4686e0fa8536594e3503173a30",
+    "machine_readable_multipath_labels": false
+  },
+  "support_normalization": {
+    "method": "nested-model partial-F tail probability",
+    "formula": "F=((SSE_clock-SSE_direction_clock)/3)/(SSE_direction_clock/(N-4)); p=sf_F(F;3,N-4)",
+    "p_value_alarm_threshold": 0.06028418845288192,
+    "threshold_calibration": "cleanStatic bins [330,420), fifth percentile",
+    "persistence": "3-of-5 causal bins",
+    "minimum_prns": 8
+  },
+  "s2_result": {
+    "evaluated_bin_count": 88,
+    "minimum_prn_count": 8,
+    "maximum_prn_count": 15,
+    "multipath_enriched_bin_count": 88,
+    "raw_spoof_alarm_count": 10,
+    "raw_spoof_alarm_rate": 0.11363636363636363,
+    "persistent_spoof_alarm_count": 3,
+    "persistent_spoof_alarm_rate": 0.03409090909090909,
+    "multipath_enriched_persistent_spoof_alarm_rate": 0.03409090909090909,
+    "legacy_unadjusted_raw_spoof_alarm_count": 12,
+    "legacy_unadjusted_raw_spoof_alarm_rate": 0.13636363636363635,
+    "legacy_unadjusted_persistent_spoof_alarm_count": 3,
+    "legacy_unadjusted_persistent_spoof_alarm_rate": 0.03409090909090909,
+    "partial_f_persistent_positive_bins": [75, 76, 77],
+    "legacy_persistent_positive_bins": [81, 82, 83],
+    "all_specificity_gates_passed": true
+  },
+  "provenance": {
+    "receiver_run_count": 9,
+    "receiver_valid_epoch_count_before_overlap_consolidation": 1638526,
+    "experiment_config_sha256": "7e06e7dc7dfa32f55382c2e9acd835eae1a3221541c4eb1afe8eca04b99a3d1e",
+    "support_audit_summary_sha256": "c07dee4ecc82e9d0ce98c98d7e8ba9b00ba6ff86400406e2cbb86821708c07d4",
+    "full_result_summary_sha256": "8730f0176f02412c6bd9d440524b8a1a89e7e83ac9356dec830e5a019eeb404c",
+    "delay_estimates_sha256": "7dc486a6a0e70d601273faa20ce4f9e12ded8138cc6ed29e91dc023d8c44af06",
+    "geometry_scores_sha256": "faaca28fbc2d43acf69d3c7802b87060d6709bf73d5fbc40a5ac69b811b77abb",
+    "prn_summary_sha256": "1bb31af9f26eaea1e03c90ed64c654a024e32222e0fa8dc827188e2b1736b497",
+    "receiver_executable_sha256": "fc00d610fdb966358ac85486b616ff2411cb163ca8269dd0b435919c5e197e25"
+  },
+  "frozen_gates": {
+    "minimum_evaluated_bins": 60,
+    "maximum_persistent_spoof_alarm_rate": 0.05,
+    "maximum_multipath_enriched_persistent_spoof_alarm_rate": 0.1,
+    "require_prn22_tracking": false
+  }
+}
