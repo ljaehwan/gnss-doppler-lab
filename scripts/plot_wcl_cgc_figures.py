@@ -163,7 +163,7 @@ def _plot_nine_tap_principle(ax: mpl.axes.Axes) -> None:
     ax.set_xticks(taps[::2])
     ax.set_xlabel("Code offset (chips)")
     ax.set_ylabel("Normalized correlation")
-    ax.set_title("(a) Nine-tap signed-delay sensor", loc="left", pad=7)
+    ax.set_title("(a) Nine-tap delay sensor", loc="left", pad=7, fontsize=8.2)
     ax.legend(frameon=False, loc="upper left", fontsize=6.2)
     ax.spines[["top", "right"]].set_visible(False)
 
@@ -227,7 +227,7 @@ def _plot_los_geometry(ax: mpl.axes.Axes, epoch: dict[str, object]) -> None:
     ax.set_zticks([])
     ax.set_box_aspect((1, 1, 0.72))
     ax.view_init(elev=27, azim=-58)
-    ax.set_title("(b) Held-out receiver-RF LOS geometry", loc="left", pad=2)
+    ax.set_title("(b) Held-out LOS geometry", loc="left", pad=2, fontsize=8.2)
     ax.grid(False)
     ax.xaxis.pane.set_alpha(0.0)
     ax.yaxis.pane.set_alpha(0.0)
@@ -269,7 +269,7 @@ def _plot_observed_vs_fitted(ax: mpl.axes.Axes, epoch: dict[str, object]) -> Non
     ax.set_aspect("equal", adjustable="box")
     ax.set_xlabel("Geometry-fitted delay (chips)")
     ax.set_ylabel("Observed delay (chips)")
-    ax.set_title("(c) One displacement explains spoof delays", loc="left", pad=7)
+    ax.set_title("(c) Common-displacement fit", loc="left", pad=7, fontsize=8.2)
     ax.legend(frameon=False, loc="lower right", fontsize=6.2)
     ax.spines[["top", "right"]].set_visible(False)
 
