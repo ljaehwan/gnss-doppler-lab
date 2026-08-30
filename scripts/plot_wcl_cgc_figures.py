@@ -3,7 +3,8 @@
 
 The script reads only frozen/archived experiment artifacts.  Figure 1 combines
 the nine-tap measurement principle with one representative held-out receiver-RF
-epoch.  Figure 2 aggregates the preregistered mechanism, aperture, TEXBAT, and
+epoch.  Figure 2 aggregates the preregistered mechanism, the nested-aperture
+audit (including the labeled post-hoc seven-tap result), TEXBAT, and
 real-multipath results used in the paper.
 """
 
@@ -325,7 +326,7 @@ def _plot_auc_ablation(ax: mpl.axes.Axes, train: dict[str, object]) -> None:
 
 def _plot_aperture(ax: mpl.axes.Axes, aperture: pd.DataFrame) -> None:
     subset = aperture[aperture["distance_m"] == 240.0]
-    taps = np.asarray([3, 5, 9])
+    taps = np.asarray([3, 5, 7, 9])
     series = [
         ("median_absolute_direction_cosine", BLUE, "Direction cosine"),
         ("recovery", ORANGE, "Recovered / true displacement"),
@@ -353,8 +354,8 @@ def _plot_aperture(ax: mpl.axes.Axes, aperture: pd.DataFrame) -> None:
         )
         for x, y in zip(taps, medians):
             ax.text(x, y + (0.035 if column.startswith("median") else -0.075), f"{y:.2f}", ha="center", color=color, fontsize=6.6)
-    ax.set_xticks(taps)
-    ax.set_xlim(2.2, 9.8)
+    ax.set_xticks(taps, ["3", "5", "7*", "9"])
+    ax.set_xlim(2.2, 9.6)
     ax.set_ylim(0.0, 1.08)
     ax.set_xlabel("Correlator taps")
     ax.set_ylabel("Median across 10 conditions")
@@ -407,10 +408,13 @@ def _plot_openif_false_alarm(ax: mpl.axes.Axes, openif: dict[str, object]) -> No
 def build_evidence_figure(output_dir: Path) -> tuple[Path, Path, list[Path]]:
     train_path = ROOT / "docs/results/correlator_geometry_identifiability_train_v1_summary.json"
     aperture_path = ROOT / "artifacts/cgc_rf_ga_v1/condition_aperture_summary.csv"
+    seven_tap_path = ROOT / "docs/results/cgc_rf_7tap_aperture_audit_v1_condition_summary.csv"
     texbat_path = ROOT / "docs/results/cgc_texbat_external_v1_summary.json"
     openif_path = ROOT / "docs/results/gnss_openif_s1_real_multipath_v1_summary.json"
     train = json.loads(train_path.read_text(encoding="utf-8"))
     aperture = pd.read_csv(aperture_path)
+    seven_tap = pd.read_csv(seven_tap_path)
+    aperture = pd.concat([aperture, seven_tap], ignore_index=True)
     texbat = json.loads(texbat_path.read_text(encoding="utf-8"))
     openif = json.loads(openif_path.read_text(encoding="utf-8"))
 
@@ -424,7 +428,7 @@ def build_evidence_figure(output_dir: Path) -> tuple[Path, Path, list[Path]]:
     figure.savefig(pdf, bbox_inches="tight")
     figure.savefig(png, bbox_inches="tight")
     plt.close(figure)
-    return pdf, png, [train_path, aperture_path, texbat_path, openif_path]
+    return pdf, png, [train_path, aperture_path, seven_tap_path, texbat_path, openif_path]
 
 
 def main() -> int:

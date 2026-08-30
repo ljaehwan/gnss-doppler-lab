@@ -1,0 +1,217 @@
+{
+  "aggregates": {
+    "3": {
+      "100": {
+        "condition_count": 10,
+        "direction_iqr": [
+          0.7625883781269277,
+          0.9171843290797042
+        ],
+        "median_absolute_direction_cosine": 0.8691952454651187,
+        "median_absolute_relative_displacement_error": 0.4201563714657859,
+        "median_recovered_to_true_displacement": 0.5798436285342141,
+        "median_serial_bin_auc": 0.9166666666666667,
+        "median_template_delay_edge_fraction": 0.0,
+        "recovered_to_true_iqr": [
+          0.4545112153573509,
+          0.6991547409852449
+        ]
+      },
+      "240": {
+        "condition_count": 10,
+        "direction_iqr": [
+          0.672802654737315,
+          0.8221958300875214
+        ],
+        "median_absolute_direction_cosine": 0.7123546455158742,
+        "median_absolute_relative_displacement_error": 0.7767586333750275,
+        "median_recovered_to_true_displacement": 0.22324136662497257,
+        "median_serial_bin_auc": 0.8298611111111112,
+        "median_template_delay_edge_fraction": 0.0,
+        "recovered_to_true_iqr": [
+          0.19568582813987223,
+          0.27548032901046227
+        ]
+      }
+    },
+    "5": {
+      "100": {
+        "condition_count": 10,
+        "direction_iqr": [
+          0.9648482711090227,
+          0.9847913447313847
+        ],
+        "median_absolute_direction_cosine": 0.976750836535077,
+        "median_absolute_relative_displacement_error": 0.05033909878343856,
+        "median_recovered_to_true_displacement": 0.9496609012165614,
+        "median_serial_bin_auc": 1.0,
+        "median_template_delay_edge_fraction": 0.0,
+        "recovered_to_true_iqr": [
+          0.8950678814062497,
+          0.9972757211315202
+        ]
+      },
+      "240": {
+        "condition_count": 10,
+        "direction_iqr": [
+          0.8672153856460397,
+          0.9575721159051995
+        ],
+        "median_absolute_direction_cosine": 0.936970435572663,
+        "median_absolute_relative_displacement_error": 0.46461883569428336,
+        "median_recovered_to_true_displacement": 0.5353811643057167,
+        "median_serial_bin_auc": 1.0,
+        "median_template_delay_edge_fraction": 0.02904040404040404,
+        "recovered_to_true_iqr": [
+          0.44414943374657573,
+          0.5616403789601643
+        ]
+      }
+    },
+    "7": {
+      "100": {
+        "condition_count": 10,
+        "direction_iqr": [
+          0.926573704947358,
+          0.9754723414470893
+        ],
+        "median_absolute_direction_cosine": 0.966139004648368,
+        "median_absolute_relative_displacement_error": 0.05450170422976286,
+        "median_recovered_to_true_displacement": 1.034001267797838,
+        "median_serial_bin_auc": 0.9965277777777777,
+        "median_template_delay_edge_fraction": 0.0,
+        "recovered_to_true_iqr": [
+          0.9787814446117985,
+          1.0711807530313675
+        ]
+      },
+      "240": {
+        "condition_count": 10,
+        "direction_iqr": [
+          0.9409706488623188,
+          0.9737261878542298
+        ],
+        "median_absolute_direction_cosine": 0.9598457097571408,
+        "median_absolute_relative_displacement_error": 0.35714570363372744,
+        "median_recovered_to_true_displacement": 0.6428542963662726,
+        "median_serial_bin_auc": 1.0,
+        "median_template_delay_edge_fraction": 0.0946969696969697,
+        "recovered_to_true_iqr": [
+          0.6167391087806873,
+          0.6689341165491666
+        ]
+      }
+    },
+    "9": {
+      "100": {
+        "condition_count": 10,
+        "direction_iqr": [
+          0.9271997853443087,
+          0.9524834709075045
+        ],
+        "median_absolute_direction_cosine": 0.931975959842948,
+        "median_absolute_relative_displacement_error": 0.06921859211972059,
+        "median_recovered_to_true_displacement": 1.0517694399094948,
+        "median_serial_bin_auc": 1.0,
+        "median_template_delay_edge_fraction": 0.0,
+        "recovered_to_true_iqr": [
+          0.9721257280586377,
+          1.0850165537453211
+        ]
+      },
+      "240": {
+        "condition_count": 10,
+        "direction_iqr": [
+          0.9527085294138561,
+          0.9848625945231386
+        ],
+        "median_absolute_direction_cosine": 0.9777159990843904,
+        "median_absolute_relative_displacement_error": 0.26673410708884215,
+        "median_recovered_to_true_displacement": 0.7332658929111578,
+        "median_serial_bin_auc": 1.0,
+        "median_template_delay_edge_fraction": 0.3573617857969003,
+        "recovered_to_true_iqr": [
+          0.7063788061411334,
+          0.7644843902009217
+        ]
+      }
+    }
+  },
+  "artifact": {
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/docs/results/cgc_rf_7tap_aperture_audit_v1_condition_summary.csv",
+    "row_count": 40,
+    "sha256": "1a3b7e31d726879c61f954a50abff18154aefaa901061ba373a0de933ceb222b"
+  },
+  "created_at_utc": "2026-08-30T09:30:44.538841+00:00",
+  "inputs": {
+    "config": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/configs/experiments/cgc_rf_geometry_aperture_validation_v1.json",
+      "sha256": "b03093506b5a3b79ff296c640715f38cd44ad3fc50dc6454244a709a43eef2e2"
+    },
+    "frozen_condition_table": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/condition_aperture_summary.csv",
+      "sha256": "8aae91cf9070ab2bf1240e3810c20da4afb3a76e5e45082b0c26bdab55d21afe"
+    },
+    "frozen_summary": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_rf_ga_v1/summary.json",
+      "sha256": "256fab0adc9b1b6d7bb6cc545e59a006eb634676234bb4b579d704c2c2d845e2"
+    },
+    "receiver_manifest_count": 45,
+    "receiver_manifest_set_sha256": "998cbba18757d61cb06fea1aaa62a6bb82afa3174b33e6751df432023b1fd760"
+  },
+  "paired_7_vs_9": {
+    "100": {
+      "condition_count": 10,
+      "median_deltas": {
+        "absolute_error_7_minus_9": -0.013256574787593345,
+        "auc_7_minus_9": 0.0,
+        "direction_7_minus_9": 0.023175613561086272
+      },
+      "seven_tap_win_count": {
+        "absolute_error": 8,
+        "auc": 3,
+        "direction": 9
+      },
+      "ties_are_not_wins": true
+    },
+    "240": {
+      "condition_count": 10,
+      "median_deltas": {
+        "absolute_error_7_minus_9": 0.084310529083651,
+        "auc_7_minus_9": 0.0,
+        "direction_7_minus_9": -0.015250768626872746
+      },
+      "seven_tap_win_count": {
+        "absolute_error": 1,
+        "auc": 1,
+        "direction": 1
+      },
+      "ties_are_not_wins": true
+    }
+  },
+  "role": "post-hoc descriptive aperture audit; the preregistered nine-tap primary is unchanged",
+  "schema": "gnss-doppler-lab.cgc-rf-7tap-aperture-audit.v1",
+  "seven_tap_condition_count": 40,
+  "subset": {
+    "indices": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "offsets_chips": [
+      -0.375,
+      -0.25,
+      -0.125,
+      0.0,
+      0.125,
+      0.25,
+      0.375
+    ],
+    "policy": "central subset of the same raw nine-tap receiver dumps",
+    "tracking_rerun": false
+  }
+}
