@@ -163,7 +163,7 @@ def _plot_nine_tap_principle(ax: mpl.axes.Axes) -> None:
     ax.set_xticks(taps[::2])
     ax.set_xlabel("Code offset (chips)")
     ax.set_ylabel("Normalized correlation")
-    ax.set_title("(a) Nine-tap delay sensor", loc="left", pad=7, fontsize=8.2)
+    ax.set_title("(a) Signed-delay sensing (9 taps)", loc="left", pad=7, fontsize=8.5)
     ax.legend(frameon=False, loc="upper left", fontsize=6.2)
     ax.spines[["top", "right"]].set_visible(False)
 
@@ -267,23 +267,21 @@ def _plot_observed_vs_fitted(ax: mpl.axes.Axes, epoch: dict[str, object]) -> Non
     ax.set_xlim(-limit, limit)
     ax.set_ylim(-limit, limit)
     ax.set_aspect("equal", adjustable="box")
-    ax.set_xlabel("Geometry-fitted delay (chips)")
+    ax.set_xlabel("Fitted delay (chips)")
     ax.set_ylabel("Observed delay (chips)")
-    ax.set_title("(c) Common-displacement fit", loc="left", pad=7, fontsize=8.2)
+    ax.set_title("(b) Cross-satellite geometry fit", loc="left", pad=7, fontsize=8.5)
     ax.legend(frameon=False, loc="lower right", fontsize=6.2)
     ax.spines[["top", "right"]].set_visible(False)
 
 
 def build_principle_figure(output_dir: Path) -> tuple[Path, Path, list[Path]]:
     epoch = _load_representative_epoch()
-    figure = plt.figure(figsize=(7.16, 2.42), constrained_layout=True)
-    grid = figure.add_gridspec(1, 3, width_ratios=(0.94, 1.08, 1.0))
+    figure = plt.figure(figsize=(3.45, 4.75), constrained_layout=True)
+    grid = figure.add_gridspec(2, 1, height_ratios=(0.82, 1.18))
     ax0 = figure.add_subplot(grid[0, 0])
-    ax1 = figure.add_subplot(grid[0, 1], projection="3d")
-    ax2 = figure.add_subplot(grid[0, 2])
+    ax1 = figure.add_subplot(grid[1, 0])
     _plot_nine_tap_principle(ax0)
-    _plot_los_geometry(ax1, epoch)
-    _plot_observed_vs_fitted(ax2, epoch)
+    _plot_observed_vs_fitted(ax1, epoch)
     pdf = output_dir / "wcl_cgc_principle.pdf"
     png = output_dir / "wcl_cgc_principle.png"
     figure.savefig(pdf, bbox_inches="tight")
