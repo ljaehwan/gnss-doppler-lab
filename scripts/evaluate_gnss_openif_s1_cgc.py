@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Evaluate frozen CGC spoof-alarm specificity on real GNSS-OpenIF S1."""
+"""Evaluate frozen CGC spoof-alarm specificity on a GNSS-OpenIF scenario."""
 from __future__ import annotations
 
 import argparse
@@ -65,7 +65,7 @@ def verify(path: str | Path, expected: str, label: str) -> Path:
 def load_ground_truth(path: Path) -> dict[str, np.ndarray]:
     values = np.loadtxt(path, skiprows=2)
     if values.ndim != 2 or values.shape[1] < 9 or len(values) < 2:
-        raise ValueError("unexpected GNSS-OpenIF S1 ground-truth format")
+        raise ValueError("unexpected GNSS-OpenIF ground-truth format")
     tow = values[:, 2].astype(np.float64)
     ecef = values[:, 6:9].astype(np.float64)
     if not np.all(np.diff(tow) > 0) or not np.isfinite(ecef).all():
@@ -287,15 +287,25 @@ def summarize_prns(rows: list[dict[str, Any]], named_mp: set[int]) -> list[dict[
 
 def evaluate(config_path: Path) -> dict[str, Any]:
     config = json.loads(config_path.read_text(encoding="utf-8"))
-    if config.get("schema") != "gnss-doppler-lab.gnss-openif-s1-real-multipath-config":
+    supported_schemas = {
+        "gnss-doppler-lab.gnss-openif-s1-real-multipath-config",
+        "gnss-doppler-lab.gnss-openif-real-multipath-config",
+    }
+    if config.get("schema") not in supported_schemas:
         raise ValueError("unsupported config schema")
+    release_code = config.get("release_code")
+    if release_code:
+        verify("scripts/run_gnss_openif_s1_receiver.py", release_code["receiver_script_sha256"], "receiver script")
+        verify("scripts/evaluate_gnss_openif_s1_cgc.py", release_code["evaluator_script_sha256"], "evaluator script")
+        verify("docs/results/gnss_openif_s2_real_multipath_protocol_v1.md", release_code["protocol_sha256"], "release protocol")
     dataset = config["dataset"]
+    scenario_id = str(dataset.get("scenario_id", "S1")).upper()
     if dataset["iq_sha256"] == "PENDING_DOWNLOAD":
         raise ValueError("IQ SHA-256 must be frozen before evaluation")
-    iq = verify(dataset["iq_path"], dataset["iq_sha256"], "S1 IQ")
+    iq = verify(dataset["iq_path"], dataset["iq_sha256"], f"{scenario_id} IQ")
     if iq.stat().st_size != int(dataset["iq_bytes"]):
-        raise ValueError("S1 IQ byte count mismatch")
-    truth_path = verify(dataset["ground_truth_path"], dataset["ground_truth_sha256"], "S1 ground truth")
+        raise ValueError(f"{scenario_id} IQ byte count mismatch")
+    truth_path = verify(dataset["ground_truth_path"], dataset["ground_truth_sha256"], f"{scenario_id} ground truth")
     verify(dataset["readme_path"], dataset["readme_sha256"], "GNSS-OpenIF README")
     broadcast_nav_path = verify(dataset["broadcast_navigation_path"], dataset["broadcast_navigation_sha256"], "NOAA broadcast NAV")
     detector = config["frozen_detector"]
@@ -316,8 +326,11 @@ def evaluate(config_path: Path) -> dict[str, Any]:
         support["partial_f_p_alarm_threshold"]
     ):
         raise ValueError("partial-F threshold drifted from the sealed audit")
-    if support.get("s1_outcome_accessed_before_freeze") is not False:
-        raise ValueError("S1 outcome must remain unseen before support-score freeze")
+    outcome_accessed = support.get(
+        "outcome_accessed_before_freeze", support.get("s1_outcome_accessed_before_freeze")
+    )
+    if outcome_accessed is not False:
+        raise ValueError(f"{scenario_id} outcome must remain unseen before support-score freeze")
 
 
     receiver = config["receiver"]
@@ -333,6 +346,9 @@ def evaluate(config_path: Path) -> dict[str, Any]:
         if not manifest_path.is_file():
             raise FileNotFoundError(manifest_path)
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest_scenario = str(manifest["source"].get("scenario_id", "S1")).upper()
+        if manifest_scenario != scenario_id:
+            raise ValueError("receiver scenario drifted")
         if manifest["receiver"]["executable_sha256"] != receiver["executable_sha256"]:
             raise ValueError("receiver executable drifted")
         if manifest["tracking"]["tap_count"] != 9:
@@ -381,6 +397,11 @@ def evaluate(config_path: Path) -> dict[str, Any]:
     observed_offsets = sorted(float(item["source"].get("start_offset_s", 0.0)) for item in manifests)
     if observed_offsets != sorted(float(value) for value in receiver["expected_start_offsets_s"]):
         raise ValueError("receiver restart-window offsets drifted")
+    if "expected_durations_s" in receiver:
+        observed_durations = sorted(float(item["source"]["requested_duration_s"]) for item in manifests)
+        expected_durations = sorted(float(value) for value in receiver["expected_durations_s"])
+        if observed_durations != expected_durations:
+            raise ValueError("receiver restart-window durations drifted")
     ephemerides = parse_rinex2_gps_nav_gz(
         broadcast_nav_path, full_gps_week=int(dataset["gps_week"]),
         target_tow_s=float(dataset["recording_start_tow_s"]),
@@ -453,14 +474,14 @@ def evaluate(config_path: Path) -> dict[str, Any]:
         for run_dir, manifest in zip(run_dirs, manifests)
     ]
     summary: dict[str, Any] = {
-        "schema": "gnss-doppler-lab.gnss-openif-s1-real-multipath-result",
+        "schema": f"gnss-doppler-lab.gnss-openif-{scenario_id.lower()}-real-multipath-result",
         "schema_version": 2,
         "status": "REAL_MULTIPATH_SPECIFICITY_SUPPORTED" if all(gates.values()) else "REAL_MULTIPATH_SPECIFICITY_NOT_SUPPORTED",
         "all_specificity_gates_passed": all(gates.values()),
         "gates": gates,
-        "claim_boundary": "offline specificity on external real field multipath using a hash-bound broadcast-orbit oracle; spoof sensitivity is assessed only in the separately sealed synthetic DS7 audit and its delay tradeoff remains",
+        "claim_boundary": config["experiment"].get("claim_boundary", "offline specificity on external real field multipath; real-spoof sensitivity remains separate"),
         "detector_score": "support-normalized nested-model partial-F p-value",
-        "s1_threshold_tuning": False,
+        "threshold_refitting": bool(config["experiment"].get("threshold_refitting", False)),
         "support_audit_sha256": support["audit_summary_sha256"],
         "evaluated_bin_count": len(geometries),
         "minimum_prn_count": min(int(row["prn_count"]) for row in geometries),

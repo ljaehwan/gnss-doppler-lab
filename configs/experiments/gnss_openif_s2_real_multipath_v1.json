@@ -1,0 +1,114 @@
+{
+  "schema": "gnss-doppler-lab.gnss-openif-real-multipath-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "gnss-openif-s2-real-multipath-v1",
+    "role": "outcome-unseen external urban-vehicle multipath negative",
+    "threshold_refitting": false,
+    "post_dataset_detector_tuning": false,
+    "claim_boundary": "offline false-alarm transfer on one independent multipath-rich urban vehicle recording; no per-PRN machine-readable multipath truth and no real-spoof sensitivity claim"
+  },
+  "release": {
+    "protocol_must_precede_iq_download": true,
+    "permitted_post_download_amendment": "replace PENDING_DOWNLOAD with the full-file SHA-256 only",
+    "receiver_or_detector_change_after_iq_access": false,
+    "dataset_specific_threshold_or_persistence_change": false
+  },
+  "release_code": {
+    "receiver_script_sha256": "998698d0858aa629cd116c1cfeaa5d807ca2259e80f3a824d3b9619fdba6f012",
+    "evaluator_script_sha256": "970446973d98732e4880320a20176d55fe976dc053b7627aaaac7d8c144a04b1",
+    "protocol_sha256": "be626d86397b15e3399cb75ba1736568d9c6ffaf4d689af0fb0ed91f020f76ae"
+  },
+  "dataset": {
+    "repository": "https://github.com/Fangjingxiaotao/GNSS-OpenIF",
+    "repository_commit": "09715cd679a0300782074e96bfed9f11eae4ef88",
+    "scenario_id": "S2",
+    "scenario": "vehicle in dense urban canyon, Mong Kok, Hong Kong",
+    "recording_date_utc": "2025-06-03",
+    "download_url": "https://www.dropbox.com/scl/fi/g79vor17skqgdm740ka13/S2_urban_HK.bin?rlkey=lrywu9e3j7j3s68hm3q8pdj52&dl=1",
+    "download_content_length_bytes": 11593056256,
+    "iq_path": "/home/ubuntu/ssd_data/gnss-datasets/gnss-openif/raw/S2_urban_HK.bin",
+    "iq_bytes": 11593056256,
+    "iq_sha256": "PENDING_DOWNLOAD",
+    "ground_truth_path": "/home/ubuntu/ssd_data/gnss-datasets/gnss-openif/metadata/repo/GT_20250603_1hz.txt",
+    "ground_truth_sha256": "c7f7e248a7db8a2d0587c51c42fbf12ab0f07701bfeb6562c0113dfa5333f96c",
+    "readme_path": "/home/ubuntu/ssd_data/gnss-datasets/gnss-openif/metadata/repo/README.md",
+    "readme_sha256": "4c42059b2cbdd8bffd7e0932b2e817aac44f76faad8a316145bee174b09baa76",
+    "broadcast_navigation_url": "https://geodesy.noaa.gov/corsdata/rinex/2025/154/brdc1540.25n.gz",
+    "broadcast_navigation_path": "/home/ubuntu/ssd_data/gnss-datasets/gnss-openif/metadata/brdc1540.25n.gz",
+    "broadcast_navigation_sha256": "9164bf9acc8619b37715e9cc7be09cd997293f4686e0fa8536594e3503173a30",
+    "broadcast_navigation_role": "offline orbit oracle; detector thresholds remain frozen",
+    "gps_week": 2369,
+    "recording_start_tow_s": 197500.0,
+    "official_multipath_prns": {
+      "whole_test": [],
+      "specific_epochs_without_machine_readable_epoch_labels": []
+    },
+    "label_note": "The official README describes ray-tracing-supported short-lived multipath events but does not publish machine-readable event or PRN labels."
+  },
+  "receiver": {
+    "run_dirs": [
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/gnss-openif-s2-real-multipath-v1/receiver/s2-complex9-full",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/gnss-openif-s2-real-multipath-v1/receiver/s2-complex9-window-010s",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/gnss-openif-s2-real-multipath-v1/receiver/s2-complex9-window-020s",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/gnss-openif-s2-real-multipath-v1/receiver/s2-complex9-window-030s",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/gnss-openif-s2-real-multipath-v1/receiver/s2-complex9-window-040s",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/gnss-openif-s2-real-multipath-v1/receiver/s2-complex9-window-050s",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/gnss-openif-s2-real-multipath-v1/receiver/s2-complex9-window-060s",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/gnss-openif-s2-real-multipath-v1/receiver/s2-complex9-window-070s",
+      "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/gnss-openif-s2-real-multipath-v1/receiver/s2-complex9-window-080s"
+    ],
+    "expected_start_offsets_s": [0, 10, 20, 30, 40, 50, 60, 70, 80],
+    "expected_durations_s": [0, 20, 20, 20, 20, 20, 20, 20, 15],
+    "executable": ".tools/gnss-sdr-method-a-9tap",
+    "executable_sha256": "fc00d610fdb966358ac85486b616ff2411cb163ca8269dd0b435919c5e197e25",
+    "input_sample_rate_hz": 58000000,
+    "official_intermediate_frequency_magnitude_hz": 4580000,
+    "observed_complex_spectrum_center_hz": -4580000,
+    "internal_sample_rate_hz": 5800000,
+    "channel_count": 31,
+    "acquisition_pfa": 0.01,
+    "acquisition_max_dwells": 5,
+    "tap_count": 9,
+    "tap_spacing_chips": 0.125
+  },
+  "frozen_detector": {
+    "threshold_source": "artifacts/cgc_real_detection_v1/summary.json",
+    "threshold_source_sha256": "d7fa0024628a231dae2ec1da2f2bae6d4b19fb3fdf97886913d9520349aa0a63",
+    "template_config": "configs/experiments/correlator_geometry_identifiability_train_v1.json",
+    "template_config_sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6",
+    "clock_centered_module": "src/gnss_doppler_lab/clock_centered_geometry.py",
+    "clock_centered_module_sha256": "b25a00efdb654ceb96540a2597bdc542526a0c6027e393018c739394858a203a",
+    "correlator_geometry_module": "src/gnss_doppler_lab/correlator_geometry.py",
+    "correlator_geometry_module_sha256": "74732c182e799c2e82b4719d6572ebbd3dc4f6e16eada5bfe0f8a3d8c236b2b2",
+    "geometry_module": "src/gnss_doppler_lab/gcmr_geometry.py",
+    "geometry_module_sha256": "781b66b8c485f4a656da3ed4ce82726f47f47a94cc4ea702eeab727708208921",
+    "residual_alarm_threshold": 0.33023636533817136,
+    "multipath_enrichment_threshold": 0.06339713426358337,
+    "persistence_window_bins": 5,
+    "persistence_required_bins": 3
+  },
+  "support_normalization": {
+    "method": "nested-model partial-F tail probability",
+    "audit_summary": "artifacts/cgc_partial_f_seven_prn_v1/summary.json",
+    "audit_summary_sha256": "c07dee4ecc82e9d0ce98c98d7e8ba9b00ba6ff86400406e2cbb86821708c07d4",
+    "partial_f_p_alarm_threshold": 0.06028418845288192,
+    "calibration_source": "original cleanStatic bins [330,420), fifth percentile",
+    "outcome_accessed_before_freeze": false
+  },
+  "analysis": {
+    "bin_seconds": 1.0,
+    "analysis_start_s": 3.0,
+    "analysis_end_s": 96.0,
+    "minimum_prns": 8,
+    "minimum_epochs_per_prn_bin": 200,
+    "maximum_ephemeris_toe_age_s": 7200.0
+  },
+  "specificity_gates": {
+    "minimum_evaluated_bins": 60,
+    "require_prn22_tracking": false,
+    "maximum_persistent_spoof_alarm_rate": 0.05,
+    "maximum_multipath_enriched_persistent_spoof_alarm_rate": 0.10
+  },
+  "output_root": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/gnss-openif-s2-real-multipath-v1/evaluation"
+}

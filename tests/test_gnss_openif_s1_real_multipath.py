@@ -3,6 +3,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import numpy as np
+import pytest
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -132,3 +133,29 @@ def test_profile_rows_consolidates_duplicate_prn_channels(monkeypatch) -> None:
 
     assert len(rows) == 1
     assert rows[0]["epoch_count"] == epoch_count
+
+
+def test_generic_s2_config_refuses_unsealed_iq(tmp_path: Path) -> None:
+    config = tmp_path / "s2.json"
+    config.write_text(
+        """{
+  "schema": "gnss-doppler-lab.gnss-openif-real-multipath-config",
+  "dataset": {"scenario_id": "S2", "iq_sha256": "PENDING_DOWNLOAD"}
+}
+""",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="SHA-256 must be frozen"):
+        EVALUATE.evaluate(config)
+
+
+def test_receiver_full_file_size_uses_scenario_contract(tmp_path: Path) -> None:
+    iq = tmp_path / "s2.bin"
+    iq.write_bytes(b"x")
+    args = SimpleNamespace(
+        iq=iq, duration_s=0.0, expected_bytes=2, scenario_id="S2",
+    )
+
+    with pytest.raises(ValueError, match="full S2 byte count mismatch"):
+        RECEIVER.run(args)

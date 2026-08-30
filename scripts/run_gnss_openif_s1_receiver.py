@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the frozen complex-nine-tap receiver on GNSS-OpenIF Scenario 1."""
+"""Run the frozen complex-nine-tap receiver on a GNSS-OpenIF scenario."""
 from __future__ import annotations
 
 import argparse
@@ -186,23 +186,25 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     iq_path = args.iq.resolve()
     if not iq_path.is_file():
         raise FileNotFoundError(iq_path)
-    if args.duration_s == 0 and iq_path.stat().st_size != EXPECTED_BYTES:
+    if args.duration_s == 0 and iq_path.stat().st_size != args.expected_bytes:
         raise ValueError(
-            f"full S1 byte count mismatch: {iq_path.stat().st_size} != {EXPECTED_BYTES}"
+            f"full {args.scenario_id} byte count mismatch: "
+            f"{iq_path.stat().st_size} != {args.expected_bytes}"
         )
     available_duration_s = iq_path.stat().st_size / (2.0 * INPUT_RATE_HZ)
     if args.start_offset_s >= available_duration_s:
-        raise ValueError("start offset is outside the S1 recording")
+        raise ValueError(f"start offset is outside the {args.scenario_id} recording")
     if (args.duration_s > 0 and
             args.start_offset_s + args.duration_s > available_duration_s + 1e-9):
-        raise ValueError("requested window extends beyond the S1 recording")
+        raise ValueError(f"requested window extends beyond the {args.scenario_id} recording")
 
     executable_match = shutil.which(str(args.executable))
     executable = Path(executable_match).resolve() if executable_match else args.executable.resolve()
     if not executable.is_file():
         raise FileNotFoundError(executable)
     suffix = "full" if args.duration_s == 0 else f"preflight-{args.duration_s:g}s"
-    run_id = args.run_id or f"s1-complex9-{suffix}"
+    scenario_slug = args.scenario_id.lower().replace("_", "-")
+    run_id = args.run_id or f"{scenario_slug}-complex9-{suffix}"
     output_dir = (args.output_root.resolve() / run_id).resolve()
     if output_dir.exists():
         raise FileExistsError(output_dir)
@@ -234,13 +236,13 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     mats = sorted((output_dir / "raw").glob("epl_tracking_ch_*.mat"), key=_channel_number)
     prns, epochs, by_prn = tracking_support(mats)
     manifest: dict[str, Any] = {
-        "schema": "gnss-doppler-lab.gnss-openif-s1-receiver.v1",
+        "schema": "gnss-doppler-lab.gnss-openif-receiver.v1",
         "schema_version": 1,
         "receiver_run_id": run_id,
-        "source_rf_run_id": "GNSS-OpenIF-S1",
+        "source_rf_run_id": f"GNSS-OpenIF-{args.scenario_id.upper()}",
         "source": {
             "dataset": "GNSS-OpenIF",
-            "scenario_id": "S1",
+            "scenario_id": args.scenario_id.upper(),
             "iq": str(iq_path),
             "iq_bytes": iq_path.stat().st_size,
             "iq_sha256": sha256(iq_path) if args.hash_source else None,
@@ -301,6 +303,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--iq", type=Path, default=DEFAULT_IQ)
     parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--executable", type=Path, default=DEFAULT_EXECUTABLE)
+    parser.add_argument("--scenario-id", default="S1")
+    parser.add_argument("--expected-bytes", type=int, default=EXPECTED_BYTES)
     parser.add_argument("--duration-s", type=float, default=0.0, help="0 processes the full file")
     parser.add_argument("--start-offset-s", type=float, default=0.0)
     parser.add_argument("--channel-count", type=int, default=31)
@@ -312,6 +316,10 @@ def parse_args() -> argparse.Namespace:
         parser.error("--duration-s must be nonnegative")
     if args.start_offset_s < 0:
         parser.error("--start-offset-s must be nonnegative")
+    if args.expected_bytes <= 0:
+        parser.error("--expected-bytes must be positive")
+    if not args.scenario_id.strip():
+        parser.error("--scenario-id must be nonempty")
     return args
 
 
