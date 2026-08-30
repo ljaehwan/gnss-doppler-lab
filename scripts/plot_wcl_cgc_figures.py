@@ -2,8 +2,8 @@
 """Build the two compact, publication-facing figures for the CGC WCL draft.
 
 The script reads only frozen/archived experiment artifacts.  Figure 1 combines
-the five-stage detector architecture with one representative held-out
-receiver-RF geometry.  Figure 2 aggregates the preregistered mechanism, the nested-aperture
+the nine-tap measurement principle with one representative held-out receiver-RF
+epoch.  Figure 2 aggregates the preregistered mechanism, the nested-aperture
 audit (including the labeled post-hoc seven-tap result), TEXBAT, and
 real-multipath results used in the paper.
 """
@@ -22,7 +22,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib.colors import TwoSlopeNorm
-from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Polygon
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -275,202 +274,18 @@ def _plot_observed_vs_fitted(ax: mpl.axes.Axes, epoch: dict[str, object]) -> Non
     ax.spines[["top", "right"]].set_visible(False)
 
 
-def _stage_box(
-    ax: mpl.axes.Axes,
-    x: float,
-    y: float,
-    width: float,
-    height: float,
-    title: str,
-) -> None:
-    box = FancyBboxPatch(
-        (x, y),
-        width,
-        height,
-        boxstyle="round,pad=0.006,rounding_size=0.012",
-        facecolor="#FAFAFA",
-        edgecolor="#777777",
-        linewidth=0.75,
-        transform=ax.transAxes,
-        zorder=0,
-    )
-    ax.add_patch(box)
-    ax.text(
-        x + 0.5 * width,
-        y + height - 0.045,
-        title,
-        transform=ax.transAxes,
-        ha="center",
-        va="top",
-        fontsize=7.0,
-        fontweight="bold",
-    )
-
-
-def _stage_arrow(ax: mpl.axes.Axes, x0: float, x1: float, y: float = 0.54) -> None:
-    ax.add_patch(
-        FancyArrowPatch(
-            (x0, y),
-            (x1, y),
-            arrowstyle="-|>",
-            mutation_scale=8,
-            linewidth=0.9,
-            color="#555555",
-            transform=ax.transAxes,
-            clip_on=False,
-        )
-    )
-
-
-def _draw_architecture(ax: mpl.axes.Axes, epoch: dict[str, object]) -> None:
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
-    ax.axis("off")
-
-    y = 0.14
-    height = 0.76
-    stages = [
-        (0.012, 0.165, "1  Complex 9-tap I/Q"),
-        (0.191, 0.158, "2  Signed-delay sensor"),
-        (0.363, 0.190, "3  PRN--LOS geometry"),
-        (0.568, 0.184, "4  Nested-model score"),
-        (0.767, 0.221, "5  Causal decision"),
-    ]
-    for x, width, title in stages:
-        _stage_box(ax, x, y, width, height, title)
-    for left, right in zip(stages[:-1], stages[1:]):
-        _stage_arrow(ax, left[0] + left[1] + 0.003, right[0] - 0.003)
-
-    # Stage 1: the actual nine-tap aperture, drawn as a compact sensor schematic.
-    x0, width, _ = stages[0]
-    taps = np.linspace(-0.5, 0.5, 9)
-    dense = np.linspace(-0.55, 0.55, 160)
-    clean = np.clip(1.0 - np.abs(dense) / 0.52, 0.0, None)
-    shifted = np.clip(1.0 - np.abs(dense - 0.22) / 0.52, 0.0, None)
-
-    def map_x(value: np.ndarray | float) -> np.ndarray | float:
-        return x0 + 0.018 + (np.asarray(value) + 0.55) / 1.1 * (width - 0.036)
-
-    def map_y(value: np.ndarray | float) -> np.ndarray | float:
-        return y + 0.25 + np.asarray(value) * 0.35
-
-    ax.plot(map_x(dense), map_y(clean), color=GRAY, linestyle="--", lw=0.8, transform=ax.transAxes)
-    ax.plot(map_x(dense), map_y(shifted), color=BLUE, lw=1.15, transform=ax.transAxes)
-    tap_values = np.clip(1.0 - np.abs(taps - 0.22) / 0.52, 0.0, None)
-    ax.scatter(map_x(taps), map_y(tap_values), s=10, color=BLUE, edgecolor="white", linewidth=0.25, transform=ax.transAxes, zorder=3)
-    for tap, value in zip(taps, tap_values):
-        ax.plot([map_x(tap), map_x(tap)], [map_y(0), map_y(value)], color=LIGHT_GRAY, lw=0.35, transform=ax.transAxes)
-    ax.text(x0 + 0.5 * width, y + 0.18, r"$z_{i,k},\ k=1,\ldots,9$", transform=ax.transAxes, ha="center", fontsize=7.2)
-    ax.text(x0 + 0.5 * width, y + 0.095, "0.125-chip spacing / PRN", transform=ax.transAxes, ha="center", fontsize=6.0, color=GRAY)
-    ax.text(x0 + 0.03, y + 0.65, "prompt", transform=ax.transAxes, fontsize=5.7, color=GRAY)
-    ax.text(x0 + width - 0.055, y + 0.65, "replica", transform=ax.transAxes, fontsize=5.7, color=BLUE, ha="center")
-
-    # Stage 2: deterministic measurement model, explicitly not a classifier.
-    x0, width, _ = stages[1]
-    sub_width = width - 0.034
-    labels = [
-        (y + 0.67, "normalize + rotate"),
-        (y + 0.48, "two-path dictionary"),
-        (y + 0.27, r"$\widehat{\delta}_i,\ q_i$"),
-    ]
-    for yy, label in labels:
-        rectangle = FancyBboxPatch(
-            (x0 + 0.017, yy - 0.075),
-            sub_width,
-            0.115,
-            boxstyle="round,pad=0.004,rounding_size=0.008",
-            facecolor="white",
-            edgecolor=BLUE if "delta" in label else "#999999",
-            linewidth=0.7,
-            transform=ax.transAxes,
-        )
-        ax.add_patch(rectangle)
-        ax.text(x0 + 0.5 * width, yy - 0.018, label, transform=ax.transAxes, ha="center", va="center", fontsize=6.5)
-    for yy0, yy1 in [(y + 0.58, y + 0.54), (y + 0.39, y + 0.34)]:
-        ax.add_patch(FancyArrowPatch((x0 + 0.5 * width, yy0), (x0 + 0.5 * width, yy1), arrowstyle="-|>", mutation_scale=7, color="#777777", lw=0.7, transform=ax.transAxes))
-    ax.text(x0 + 0.5 * width, y + 0.105, "measurement, not ML", transform=ax.transAxes, ha="center", fontsize=5.8, color=GRAY)
-
-    # Stage 3: held-out satellite LOS geometry in a compact projected sky view.
-    x0, width, _ = stages[2]
-    spoof = epoch["scenarios"]["carryoff_spoof"]
-    los = np.asarray(spoof["los"], dtype=float)
-    prns = list(spoof["prns"])
-    observed = np.asarray(spoof["observed"], dtype=float)
-    centered = observed - np.mean(observed)
-    maximum = max(float(np.max(np.abs(centered))), 1e-6)
-    receiver = np.asarray([x0 + 0.5 * width, y + 0.23])
-    projected_x = x0 + 0.5 * width + 0.37 * width * (los[:, 0] + 0.32 * los[:, 1])
-    projected_y = y + 0.28 + 0.39 * (0.18 * los[:, 1] + 0.82 * los[:, 2])
-    theta = np.linspace(0, 2 * np.pi, 200)
-    ax.plot(x0 + 0.5 * width + 0.39 * width * np.cos(theta), y + 0.28 + 0.075 * np.sin(theta), color="#B8B8B8", lw=0.55, transform=ax.transAxes)
-    for px, py in zip(projected_x, projected_y):
-        ax.plot([receiver[0], px], [receiver[1], py], color="#D4D4D4", lw=0.45, transform=ax.transAxes, zorder=0)
-    colors = plt.get_cmap("coolwarm")((centered / maximum + 1.0) / 2.0)
-    ax.scatter(projected_x, projected_y, s=18, c=colors, edgecolor="black", linewidth=0.3, transform=ax.transAxes, zorder=2)
-    sorted_by_x = np.argsort(projected_x)
-    label_positions = np.linspace(0, len(prns) - 1, min(4, len(prns)), dtype=int)
-    for index in sorted_by_x[label_positions]:
-        ax.text(projected_x[index], projected_y[index] + 0.025, prns[index], transform=ax.transAxes, ha="center", fontsize=5.0)
-    ax.scatter([receiver[0]], [receiver[1]], marker="^", s=24, color="#333333", transform=ax.transAxes, zorder=3)
-    target = np.asarray(epoch["target_chips"], dtype=float)
-    target /= np.linalg.norm(target)
-    end = receiver + np.asarray([0.055 * target[0], 0.12 * (0.25 * target[1] + target[2])])
-    ax.add_patch(FancyArrowPatch(receiver, end, arrowstyle="-|>", mutation_scale=8, color=ORANGE, lw=1.25, transform=ax.transAxes))
-    ax.text(end[0] + 0.005, end[1], r"$\mathbf{d}$", transform=ax.transAxes, color=ORANGE, fontsize=7.5, fontweight="bold")
-    ax.text(x0 + 0.5 * width, y + 0.105, r"$\widehat{\delta}_i\!\approx\!-\mathbf{u}_i^{\mathsf{T}}\mathbf{d}+c$", transform=ax.transAxes, ha="center", fontsize=7.2)
-
-    # Stage 4: clock-centered nested models and the finite-support correction.
-    x0, width, _ = stages[3]
-    model_specs = [
-        (y + 0.66, r"$\mathcal{H}_0:\ \widehat{\delta}_i=c$", r"$\mathrm{SSE}_0$"),
-        (y + 0.49, r"$\mathcal{H}_1:\ \widehat{\delta}_i=-\mathbf{u}_i^T\mathbf{d}+c$", r"$\mathrm{SSE}_1$"),
-    ]
-    for yy, model, residual in model_specs:
-        ax.text(x0 + 0.018, yy, model, transform=ax.transAxes, fontsize=5.8, va="center")
-        ax.text(x0 + width - 0.016, yy, residual, transform=ax.transAxes, fontsize=5.8, va="center", ha="right", color=BLUE if "1" in residual else GRAY)
-    ax.plot([x0 + 0.02, x0 + width - 0.02], [y + 0.39, y + 0.39], color="#BBBBBB", lw=0.55, transform=ax.transAxes)
-    ax.text(x0 + 0.5 * width, y + 0.30, r"$F=\frac{(1-r_G)(N-4)}{3r_G}$", transform=ax.transAxes, ha="center", fontsize=7.0)
-    ax.text(x0 + 0.5 * width, y + 0.205, r"upper tail $p_F$", transform=ax.transAxes, ha="center", fontsize=6.5, color=PURPLE)
-    calibration = FancyBboxPatch((x0 + 0.022, y + 0.06), width - 0.044, 0.085, boxstyle="round,pad=0.003,rounding_size=0.006", facecolor="white", edgecolor=PURPLE, linestyle="--", linewidth=0.7, transform=ax.transAxes)
-    ax.add_patch(calibration)
-    ax.text(x0 + 0.5 * width, y + 0.102, r"clean only $\rightarrow\eta=0.0603$", transform=ax.transAxes, ha="center", va="center", fontsize=5.8)
-
-    # Stage 5: support gate first, then causal persistence and three outcomes.
-    x0, width, _ = stages[4]
-    cx = x0 + 0.5 * width
-    diamond_y = y + 0.59
-    diamond = Polygon(
-        [[cx, diamond_y + 0.09], [cx + 0.075, diamond_y], [cx, diamond_y - 0.09], [cx - 0.075, diamond_y]],
-        closed=True,
-        facecolor="white",
-        edgecolor="#777777",
-        linewidth=0.7,
-        transform=ax.transAxes,
-    )
-    ax.add_patch(diamond)
-    ax.text(cx, diamond_y + 0.012, "support / rank", transform=ax.transAxes, ha="center", va="center", fontsize=5.8)
-    ax.text(cx, diamond_y - 0.028, "LOS conditioning", transform=ax.transAxes, ha="center", va="center", fontsize=5.5)
-    ax.add_patch(FancyArrowPatch((cx, diamond_y - 0.095), (cx, y + 0.43), arrowstyle="-|>", mutation_scale=7, color="#777777", lw=0.7, transform=ax.transAxes))
-    ax.text(cx, y + 0.39, r"$p_F\leq\eta$ in $\geq3/5$ bins", transform=ax.transAxes, ha="center", fontsize=6.1, fontweight="bold")
-    outputs = [
-        (y + 0.30, BLUE, r"$\bullet$", "Spoof-like alarm"),
-        (y + 0.205, ORANGE, r"$\times$", "Multipath / noncoherent"),
-        (y + 0.11, PURPLE, r"$\triangle$", "Gate fail: abstain"),
-    ]
-    for yy, color, marker, label in outputs:
-        ax.text(x0 + 0.025, yy, marker, transform=ax.transAxes, color=color, fontsize=9.2, va="center")
-        ax.text(x0 + 0.052, yy, label, transform=ax.transAxes, fontsize=5.7, va="center")
-
-
 def build_principle_figure(output_dir: Path) -> tuple[Path, Path, list[Path]]:
     epoch = _load_representative_epoch()
-    figure = plt.figure(figsize=(7.16, 2.55))
-    axis = figure.add_axes([0.005, 0.01, 0.99, 0.98])
-    _draw_architecture(axis, epoch)
+    figure = plt.figure(figsize=(3.45, 4.75), constrained_layout=True)
+    grid = figure.add_gridspec(2, 1, height_ratios=(0.82, 1.18))
+    ax0 = figure.add_subplot(grid[0, 0])
+    ax1 = figure.add_subplot(grid[1, 0])
+    _plot_nine_tap_principle(ax0)
+    _plot_observed_vs_fitted(ax1, epoch)
     pdf = output_dir / "wcl_cgc_principle.pdf"
     png = output_dir / "wcl_cgc_principle.png"
-    figure.savefig(pdf, bbox_inches="tight", pad_inches=0.015)
-    figure.savefig(png, bbox_inches="tight", pad_inches=0.015)
+    figure.savefig(pdf, bbox_inches="tight")
+    figure.savefig(png, bbox_inches="tight")
     plt.close(figure)
     return pdf, png, list(epoch["sources"])
 
