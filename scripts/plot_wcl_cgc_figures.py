@@ -383,22 +383,46 @@ def _plot_texbat_pre_post(ax: mpl.axes.Axes, texbat: dict[str, object]) -> None:
     _panel_label(ax, "(c)")
 
 
-def _plot_openif_false_alarm(ax: mpl.axes.Axes, openif: dict[str, object]) -> None:
-    result = openif["s1_result"]
-    values = [
-        100.0 * result["legacy_unadjusted_persistent_spoof_alarm_rate"],
-        100.0 * result["persistent_spoof_alarm_rate"],
+def _plot_openif_false_alarm(
+    ax: mpl.axes.Axes,
+    openif_s1: dict[str, object],
+    openif_s2: dict[str, object],
+) -> None:
+    results = [openif_s1["s1_result"], openif_s2["s2_result"]]
+    legacy = [
+        100.0 * result["legacy_unadjusted_persistent_spoof_alarm_rate"]
+        for result in results
     ]
+    corrected = [100.0 * result["persistent_spoof_alarm_rate"] for result in results]
     x = np.arange(2)
-    ax.bar(x, values, color=[GRAY, BLUE], width=0.62, edgecolor="black", linewidth=0.45)
+    width = 0.32
+    ax.bar(
+        x - width / 2,
+        legacy,
+        color=GRAY,
+        width=width,
+        edgecolor="black",
+        linewidth=0.45,
+        label="Unadjusted",
+    )
+    ax.bar(
+        x + width / 2,
+        corrected,
+        color=BLUE,
+        width=width,
+        edgecolor="black",
+        linewidth=0.45,
+        label="Partial-F",
+    )
     ax.axhline(5.0, color=ORANGE, linestyle="--", lw=0.9, label="Frozen 5% gate")
-    for index, value in enumerate(values):
-        ax.text(index, value + 0.55, f"{value:.2f}%", ha="center", fontsize=7)
-    ax.set_xticks(x, ["Unadjusted", "Partial-F\nsupport corrected"])
+    for offsets, values in ((-width / 2, legacy), (width / 2, corrected)):
+        for index, value in enumerate(values):
+            ax.text(index + offsets, value + 0.45, f"{value:.2f}", ha="center", fontsize=6.4)
+    ax.set_xticks(x, ["S1 pedestrian", "S2 vehicle"])
     ax.set_ylim(0, 15.2)
     ax.set_ylabel("Persistent false alarms (%)")
-    ax.set_title("Real GNSS-OpenIF S1 multipath")
-    ax.legend(frameon=False, loc="upper right")
+    ax.set_title("Real GNSS-OpenIF multipath-rich negatives")
+    ax.legend(frameon=False, loc="upper right", ncols=2, fontsize=6.2)
     ax.spines[["top", "right"]].set_visible(False)
     _panel_label(ax, "(d)")
 
@@ -408,25 +432,34 @@ def build_evidence_figure(output_dir: Path) -> tuple[Path, Path, list[Path]]:
     aperture_path = ROOT / "artifacts/cgc_rf_ga_v1/condition_aperture_summary.csv"
     seven_tap_path = ROOT / "docs/results/cgc_rf_7tap_aperture_audit_v1_condition_summary.csv"
     texbat_path = ROOT / "docs/results/cgc_texbat_external_v1_summary.json"
-    openif_path = ROOT / "docs/results/gnss_openif_s1_real_multipath_v1_summary.json"
+    openif_s1_path = ROOT / "docs/results/gnss_openif_s1_real_multipath_v1_summary.json"
+    openif_s2_path = ROOT / "docs/results/gnss_openif_s2_real_multipath_v1_summary.json"
     train = json.loads(train_path.read_text(encoding="utf-8"))
     aperture = pd.read_csv(aperture_path)
     seven_tap = pd.read_csv(seven_tap_path)
     aperture = pd.concat([aperture, seven_tap], ignore_index=True)
     texbat = json.loads(texbat_path.read_text(encoding="utf-8"))
-    openif = json.loads(openif_path.read_text(encoding="utf-8"))
+    openif_s1 = json.loads(openif_s1_path.read_text(encoding="utf-8"))
+    openif_s2 = json.loads(openif_s2_path.read_text(encoding="utf-8"))
 
     figure, axes = plt.subplots(2, 2, figsize=(7.16, 4.35), constrained_layout=True)
     _plot_auc_ablation(axes[0, 0], train)
     _plot_aperture(axes[0, 1], aperture)
     _plot_texbat_pre_post(axes[1, 0], texbat)
-    _plot_openif_false_alarm(axes[1, 1], openif)
+    _plot_openif_false_alarm(axes[1, 1], openif_s1, openif_s2)
     pdf = output_dir / "wcl_cgc_evidence.pdf"
     png = output_dir / "wcl_cgc_evidence.png"
     figure.savefig(pdf, bbox_inches="tight")
     figure.savefig(png, bbox_inches="tight")
     plt.close(figure)
-    return pdf, png, [train_path, aperture_path, seven_tap_path, texbat_path, openif_path]
+    return pdf, png, [
+        train_path,
+        aperture_path,
+        seven_tap_path,
+        texbat_path,
+        openif_s1_path,
+        openif_s2_path,
+    ]
 
 
 def main() -> int:
