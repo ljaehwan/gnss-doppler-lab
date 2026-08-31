@@ -34,7 +34,7 @@ from gnss_doppler_lab.gcmr_geometry import (  # noqa: E402
 
 DEFAULT_CONFIG = ROOT / "configs/experiments/jammertest2023_jt17_cgc_v1.json"
 PROTOCOL = ROOT / "docs/results/jammertest2023_jt17_cgc_protocol_v1.md"
-RELEASE_TOKEN = "RELEASE-JAMMERTEST2023-JT17-CGC-V1"
+RELEASE_TOKEN = "RELEASE-JAMMERTEST2023-JT17-CGC-V2"
 
 
 def resolve(value: str | Path) -> Path:
@@ -55,7 +55,7 @@ def validate_config(config: dict[str, Any]) -> None:
     analysis = config["analysis"]
     if analysis["analysis_seconds"] != [40.0, 556.0]:
         raise ValueError("JammerTest analysis interval drifted")
-    if int(analysis["minimum_prns"]) != 8 or int(analysis["minimum_epochs_per_prn_bin"]) != 200:
+    if int(analysis["minimum_prns"]) != 8 or int(analysis["minimum_epochs_per_prn_bin"]) != 40:
         raise ValueError("JammerTest detector support rule drifted")
     detector = config["frozen_detector"]
     if detector["partial_f_p_alarm_threshold"] != 0.06028418845288192:
@@ -300,6 +300,11 @@ def run(config_path: Path) -> dict[str, Any]:
     delays = fgi_detector.delay_rows(
         run_dir, estimator, set(healthy_map), config["analysis"]
     )
+    stable_lo = int(support["recording_timing"]["first_full_stable_bin_index"])
+    stable_hi = int(support["recording_timing"]["last_full_stable_bin_exclusive"])
+    delays = [
+        row for row in delays if stable_lo <= int(row["bin_index"]) < stable_hi
+    ]
     geometry = geometry_rows(delays, healthy_map, position["ecef"], tow0, config)
     primary = summarize(geometry, config)
     write_csv(output / "delay_estimates.csv", delays)
@@ -309,8 +314,8 @@ def run(config_path: Path) -> dict[str, Any]:
     state["score_accessed_at_utc"] = datetime.now(timezone.utc).isoformat()
     state_path.write_text(json.dumps(state, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     summary = {
-        "schema": "gnss-doppler-lab.jammertest2023-jt17-cgc-result.v1",
-        "schema_version": 1,
+        "schema": "gnss-doppler-lab.jammertest2023-jt17-cgc-result.v2",
+        "schema_version": 2,
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "release": release,
         "config": {"path": str(config_path), "sha256": sha256(config_path)},

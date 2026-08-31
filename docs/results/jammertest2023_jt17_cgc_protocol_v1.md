@@ -1,6 +1,20 @@
-# Frozen JammerTest 2023 JT23-17.1.6 CGC protocol v1
+# Frozen JammerTest 2023 JT23-17.1.6 CGC protocol v2
 
-Date frozen: 2026-08-31
+Date frozen: 2026-08-31, before any tap value, signed-delay estimate, or CGC
+score from this recording was accessed.
+
+## Score-free amendment from v1
+
+The v1 support program stopped before score access. Two receiver-interface
+assumptions were wrong: the tracking dump is exactly 50 Hz rather than the
+assumed 1 kHz, and the receiver makes one 80 ms time correction during initial
+clock settling. The raw tracking log independently confirms eight authentic
+GPS tracks from startup. Protocol v2 therefore requires 40 of 50 epochs per
+PRN/bin (80% coverage), fits GPS time on the longest cadence-consistent
+observables segment, and excludes any one-second bin not fully contained in
+that stable segment. The nine taps, delay template, PRN count, evaluation
+regions, partial-F threshold, persistence rule, and terminal gates are
+unchanged. This is an input-adapter amendment, not detector tuning.
 
 ## Question
 
@@ -49,15 +63,19 @@ support preflight may read only PRN identities, sample counters, schema names,
 observables timing, and broadcast ephemerides. It must not read tap values,
 load the signed-delay template, or compute a CGC score.
 
-A PRN/bin requires at least 200 tracking epochs in a one-second bin. Duplicate
+A PRN/bin requires at least 40 of the 50 tracking epochs in a one-second bin.
+Duplicate
 channels for the same PRN/bin are consolidated and never counted as extra
 satellites. At least eight healthy GPS PRNs are required in at least 60 clean
 bins, 60 aligned-spoof bins, and 20 of the 30 carry-off-onset bins. Failure is
 reported as `INSUFFICIENT_SUPPORT`; detector scoring is forbidden.
 
 GPS time zero is fitted without detector access from the 50 Hz observables by
-`RX_time = TOW_0 + 0.02 * row_index`, after week-unwrapping. The maximum
-absolute residual is 0.021 s. A checksum-valid NMEA position from the clean
+`RX_time = TOW_0 + 0.02 * row_index`, after week-unwrapping. Cadence-consistent
+segments are split at clock steps, and the longest segment with at least
+10,000 rows is selected. Its maximum absolute residual is 0.021 s; only full
+one-second bins inside that segment are eligible. A checksum-valid NMEA
+position from the clean
 interval is held fixed for every LOS calculation; attacked post-onset PVT is
 not used for detector geometry.
 

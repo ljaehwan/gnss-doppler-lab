@@ -2,8 +2,9 @@
   "schema": "gnss-doppler-lab.jammertest2023-jt17-cgc-config",
   "schema_version": 1,
   "experiment": {
-    "name": "jammertest2023-jt23-17.1.6-cgc-v1",
+    "name": "jammertest2023-jt23-17.1.6-cgc-v2",
     "role": "prospectively frozen external field coherent-carry-off sensitivity test",
+    "support_amendment": "v2 was frozen before tap/score access after v1 exposed a 50-Hz dump-cadence assumption and one initial receiver clock-settle step",
     "threshold_refitting": false,
     "post_release_detector_tuning": false,
     "single_release": true
@@ -45,7 +46,7 @@
   },
   "support": {
     "bin_seconds": 1.0,
-    "minimum_epochs_per_prn_bin": 200,
+    "minimum_epochs_per_prn_bin": 40,
     "minimum_prns": 8,
     "minimum_bins": {
       "clean": 60,
@@ -55,11 +56,11 @@
     "require_complex_nine_tap_schema": true,
     "score_access": false,
     "delay_template_access": false,
-    "output_root": "/home/ubuntu/hdd_data/jammertest2023/analysis/jt23_17_1_6_cgc_v1/support_preflight"
+    "output_root": "/home/ubuntu/hdd_data/jammertest2023/analysis/jt23_17_1_6_cgc_v1/support_preflight_v2"
   },
   "analysis": {
     "bin_seconds": 1.0,
-    "minimum_epochs_per_prn_bin": 200,
+    "minimum_epochs_per_prn_bin": 40,
     "minimum_prns": 8,
     "analysis_seconds": [40.0, 556.0],
     "regions_seconds": {
@@ -71,6 +72,8 @@
     "maximum_ephemeris_toe_age_s": 7200.0,
     "observables_cadence_s": 0.02,
     "observables_tow_fit_max_residual_s": 0.021,
+    "observables_tow_fit_policy": "longest_cadence_consistent_segment",
+    "observables_minimum_stable_rows": 10000,
     "epoch_chunk_size": 50000,
     "cn0_weighting": false
   },
@@ -103,6 +106,6 @@
     "serial_bin_auc_is_descriptive_only": true,
     "decision_rule": "SUPPORTED only if support, clean specificity, one onset-reset 3-of-5 carry-off alarm by 30 s, and median-direction gates all pass"
   },
-  "evaluation_output_root": "/home/ubuntu/hdd_data/jammertest2023/analysis/jt23_17_1_6_cgc_v1/evaluation",
+  "evaluation_output_root": "/home/ubuntu/hdd_data/jammertest2023/analysis/jt23_17_1_6_cgc_v1/evaluation_v2",
   "claim_boundary": "One public outdoor coherent-spoof recording and its first prompt-local carry-off interval; not universal field accuracy and not a labelled multipath-versus-spoof confusion matrix."
 }

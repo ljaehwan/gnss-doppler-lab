@@ -28,7 +28,7 @@ from gnss_doppler_lab.gcmr_geometry import (  # noqa: E402
 
 DEFAULT_CONFIG = ROOT / "configs/experiments/jammertest2023_jt17_cgc_v1.json"
 PROTOCOL = ROOT / "docs/results/jammertest2023_jt17_cgc_protocol_v1.md"
-RELEASE_TOKEN = "RELEASE-JAMMERTEST2023-JT17-SUPPORT-V1"
+RELEASE_TOKEN = "RELEASE-JAMMERTEST2023-JT17-SUPPORT-V2"
 RELEASE_INPUTS = (
     "configs/experiments/jammertest2023_jt17_cgc_v1.json",
     "docs/results/jammertest2023_jt17_cgc_protocol_v1.md",
@@ -56,13 +56,13 @@ def validate_config(config: dict[str, Any]) -> None:
     support = config["support"]
     expected = {
         "bin_seconds": 1.0,
-        "minimum_epochs_per_prn_bin": 200,
+        "minimum_epochs_per_prn_bin": 40,
         "minimum_prns": 8,
         "minimum_bins": {"clean": 60, "aligned_spoof": 60, "carryoff_onset": 20},
         "require_complex_nine_tap_schema": True,
         "score_access": False,
         "delay_template_access": False,
-        "output_root": "/home/ubuntu/hdd_data/jammertest2023/analysis/jt23_17_1_6_cgc_v1/support_preflight",
+        "output_root": "/home/ubuntu/hdd_data/jammertest2023/analysis/jt23_17_1_6_cgc_v1/support_preflight_v2",
     }
     if support != expected:
         raise ValueError("JammerTest support contract drifted")
@@ -94,9 +94,10 @@ def committed_release() -> dict[str, Any]:
 
 
 def infer_recording_start_tow(
-    observables_path: Path, *, cadence_s: float, max_residual_s: float
+    observables_path: Path, *, cadence_s: float, max_residual_s: float,
+    minimum_stable_rows: int = 100,
 ) -> dict[str, Any]:
-    """Fit TOW at receiver second zero from score-free 50 Hz observables."""
+    """Fit TOW zero on the longest score-free cadence-consistent segment."""
     with h5py.File(observables_path, "r") as handle:
         if "RX_time" not in handle:
             raise ValueError("observables MAT is missing RX_time")
@@ -119,20 +120,54 @@ def infer_recording_start_tow(
             unwrapped[index:] += 604800.0
         while unwrapped[index] - unwrapped[index - 1] > 302400.0:
             unwrapped[index:] -= 604800.0
-    x = np.asarray(rows, dtype=np.float64) * float(cadence_s)
-    intercept = float(np.median(unwrapped - x))
-    residual = unwrapped - (intercept + x)
+    row_array = np.asarray(rows, dtype=np.int64)
+    x = row_array.astype(np.float64) * float(cadence_s)
+    intercept_samples = unwrapped - x
+    boundaries = np.flatnonzero(
+        np.abs(np.diff(intercept_samples)) > float(max_residual_s)
+    ) + 1
+    starts = np.r_[0, boundaries]
+    stops = np.r_[boundaries, len(rows)]
+    segments = [(int(start), int(stop)) for start, stop in zip(starts, stops)]
+    stable_start, stable_stop = max(
+        segments, key=lambda pair: (pair[1] - pair[0], pair[0])
+    )
+    if stable_stop - stable_start < int(minimum_stable_rows):
+        raise ValueError(
+            "observables contain no sufficiently long cadence-consistent segment"
+        )
+    stable_rows = row_array[stable_start:stable_stop]
+    stable_values = unwrapped[stable_start:stable_stop]
+    stable_x = stable_rows.astype(np.float64) * float(cadence_s)
+    intercept = float(np.median(stable_values - stable_x))
+    residual = stable_values - (intercept + stable_x)
     maximum = float(np.max(np.abs(residual)))
     if maximum > float(max_residual_s) + 1e-12:
         raise ValueError(f"observables TOW fit residual {maximum} exceeds frozen limit")
     return {
         "recording_start_tow_s": intercept % 604800.0,
         "valid_row_count": len(rows),
+        "stable_row_count": int(stable_stop - stable_start),
+        "excluded_clock_settle_row_count": int(
+            len(rows) - (stable_stop - stable_start)
+        ),
+        "clock_step_count": int(len(boundaries)),
         "first_valid_row_index": rows[0],
         "first_valid_rx_time_s": values[0],
+        "first_stable_row_index": int(stable_rows[0]),
+        "last_stable_row_index": int(stable_rows[-1]),
+        "first_full_stable_bin_index": int(
+            np.ceil(stable_rows[0] * float(cadence_s))
+        ),
+        "last_full_stable_bin_exclusive": int(
+            np.floor((stable_rows[-1] + 1) * float(cadence_s))
+        ),
         "cadence_s": float(cadence_s),
         "maximum_absolute_fit_residual_s": maximum,
-        "fit_method": "median intercept with frozen 0.02 s slope after GPS-week unwrap",
+        "fit_method": (
+            "median intercept on longest cadence-consistent segment with "
+            "frozen 0.02 s slope after GPS-week unwrap"
+        ),
     }
 
 
@@ -250,10 +285,16 @@ def run(config_path: Path) -> dict[str, Any]:
         run_dir / "raw" / "observables.mat",
         cadence_s=float(config["analysis"]["observables_cadence_s"]),
         max_residual_s=float(config["analysis"]["observables_tow_fit_max_residual_s"]),
+        minimum_stable_rows=int(config["analysis"]["observables_minimum_stable_rows"]),
     )
+    stable_eligible = {
+        key: value for key, value in audit["eligible_prns_by_bin"].items()
+        if timing["first_full_stable_bin_index"] <= int(key)
+        < timing["last_full_stable_bin_exclusive"]
+    }
     intervals = {
         name: interval_support(
-            audit["eligible_prns_by_bin"], healthy, interval,
+            stable_eligible, healthy, interval,
             minimum_prns=int(support["minimum_prns"]),
             minimum_bins=int(support["minimum_bins"][name]),
         )
@@ -261,8 +302,8 @@ def run(config_path: Path) -> dict[str, Any]:
     }
     eligible = all(row["support_eligible"] for row in intervals.values())
     result = {
-        "schema": "gnss-doppler-lab.jammertest2023-jt17-support-result.v1",
-        "schema_version": 1,
+        "schema": "gnss-doppler-lab.jammertest2023-jt17-support-result.v2",
+        "schema_version": 2,
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "release": release,
         "config": {"path": str(config_path), "sha256": sha256(config_path)},

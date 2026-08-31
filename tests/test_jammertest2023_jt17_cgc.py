@@ -58,6 +58,23 @@ def test_observables_tow_intercept_fit(tmp_path: Path) -> None:
     assert result["maximum_absolute_fit_residual_s"] < 1e-9
 
 
+def test_observables_tow_fit_excludes_initial_clock_settle(tmp_path: Path) -> None:
+    path = tmp_path / "observables-step.mat"
+    tow0 = 311_646.78
+    rows = np.arange(2_000, dtype=np.float64)
+    rx = (tow0 + rows * 0.02)[:, None]
+    rx[:250] -= 0.08
+    with h5py.File(path, "w") as handle:
+        handle.create_dataset("RX_time", data=rx)
+    result = SUPPORT.infer_recording_start_tow(
+        path, cadence_s=0.02, max_residual_s=0.021, minimum_stable_rows=1_000
+    )
+    assert abs(result["recording_start_tow_s"] - tow0) < 1e-9
+    assert result["clock_step_count"] == 1
+    assert result["first_stable_row_index"] == 250
+    assert result["excluded_clock_settle_row_count"] == 250
+
+
 def test_region_boundaries_and_motion_label_are_frozen() -> None:
     assert CONFIG["dataset"]["official_spoof_rf_onset_s"] == 226.0
     assert CONFIG["dataset"]["planned_carryoff_motion_onset_s"] == 526.0
@@ -76,3 +93,4 @@ def test_threshold_and_persistence_are_unchanged() -> None:
     assert detector["partial_f_p_alarm_threshold"] == 0.06028418845288192
     assert detector["persistence_window_bins"] == 5
     assert detector["persistence_required_bins"] == 3
+    assert CONFIG["support"]["minimum_epochs_per_prn_bin"] == 40
