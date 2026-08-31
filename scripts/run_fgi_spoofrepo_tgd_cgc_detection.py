@@ -43,7 +43,7 @@ from gnss_doppler_lab.tracking_peaks import (  # noqa: E402
 
 DEFAULT_CONFIG = ROOT / "configs/experiments/fgi_spoofrepo_tgd_cgc_detection_v1.json"
 PROTOCOL = ROOT / "docs/results/fgi_spoofrepo_tgd_cgc_detection_protocol_v1.md"
-RELEASE_TOKEN = "RELEASE-FGI-SPOOFREPO-TGD-CGC-DETECTION-V1"
+RELEASE_TOKEN = "RELEASE-FGI-SPOOFREPO-TGD-CGC-DETECTION-V1-1"
 RELEASE_INPUTS = (
     "configs/experiments/fgi_spoofrepo_tgd_cgc_detection_v1.json",
     "docs/results/fgi_spoofrepo_tgd_cgc_detection_protocol_v1.md",
@@ -75,10 +75,20 @@ def verify(record: dict[str, str], label: str) -> Path:
 
 
 def validate_config(config: dict[str, Any]) -> None:
-    if config.get("schema") != "gnss-doppler-lab.fgi-spoofrepo-tgd-cgc-detection-config" or config.get("schema_version") != 1:
+    if config.get("schema") != "gnss-doppler-lab.fgi-spoofrepo-tgd-cgc-detection-config" or config.get("schema_version") != 2:
         raise ValueError("unsupported FGI detector config")
     if config["experiment"].get("threshold_refitting") is not False or config["experiment"].get("post_release_tuning_or_retest") is not False:
         raise ValueError("post-release tuning is forbidden")
+    if config["experiment"].get("name") != "fgi-spoofrepo-tgd-cgc-detection-v1.1":
+        raise ValueError("FGI detector release identity drifted")
+    restart = config["adapter_restart"]
+    if restart.get("required_prior_phase") != "released_before_score_access" or restart.get("required_prior_score_accessed") is not False:
+        raise ValueError("score-free restart boundary drifted")
+    if restart.get("detector_or_gate_change") is not False:
+        raise ValueError("adapter restart may not change detector or gates")
+    receiver = config["receiver"]
+    if receiver.get("observables_first_positive_tow_s") != 480024.02 or receiver.get("observables_attack_onset_relative_s") != 119.98:
+        raise ValueError("FGI observables reference drifted")
     analysis = config["analysis"]
     expected_analysis = {
         "bin_seconds": 1.0,
@@ -132,6 +142,12 @@ def committed_release() -> dict[str, Any]:
 
 
 def verify_context(config: dict[str, Any]) -> dict[str, Any]:
+    prior_path = verify(config["adapter_restart"]["prior_release_state"], "prior stopped release")
+    prior = json.loads(prior_path.read_text(encoding="utf-8"))
+    if prior.get("phase") != config["adapter_restart"]["required_prior_phase"]:
+        raise ValueError("prior release did not stop at the score-free phase")
+    if prior.get("score_accessed") is not config["adapter_restart"]["required_prior_score_accessed"]:
+        raise ValueError("prior release score-access state drifted")
     dataset = config["dataset"]
     iq = resolve(dataset["iq_path"])
     if not iq.is_file() or iq.stat().st_size != dataset["iq_bytes"] or sha256(iq) != dataset["iq_sha256"]:
@@ -397,10 +413,10 @@ def run(config_path: Path) -> dict[str, Any]:
         run_dir / "raw/observables.mat",
         run_dir / "nmea_pvt.nmea",
         ephemerides,
-        configured_tow0_s=float(config["dataset"]["recording_start_tow_s"]),
+        configured_tow0_s=float(config["receiver"]["observables_first_positive_tow_s"]),
         max_toe_age_s=float(config["analysis"]["maximum_ephemeris_toe_age_s"]),
         tow_tolerance_s=0.05,
-        onset_s=float(config["dataset"]["documented_attack_onset_s"]),
+        onset_s=float(config["receiver"]["observables_attack_onset_relative_s"]),
         tracked_prns=set(healthy_map),
         min_prns=int(config["analysis"]["minimum_prns"]),
     )

@@ -1,11 +1,21 @@
 {
   "schema": "gnss-doppler-lab.fgi-spoofrepo-tgd-cgc-detection-config",
-  "schema_version": 1,
+  "schema_version": 2,
   "experiment": {
-    "name": "fgi-spoofrepo-tgd-cgc-detection-v1",
+    "name": "fgi-spoofrepo-tgd-cgc-detection-v1.1",
     "role": "single-release external raw-IF sensitivity and clean false-alarm test",
     "threshold_refitting": false,
     "post_release_tuning_or_retest": false
+  },
+  "adapter_restart": {
+    "reason": "v1 stopped before score access because OAKBAT preflight expects the first positive RX_time rather than RF-start TOW",
+    "prior_release_state": {
+      "path": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_cgc_detection_v1/release_state.json",
+      "sha256": "a27e5568cb08b586197d13b225dd3678d304d2cc7db63d5b88d5ad339eb58cdc"
+    },
+    "required_prior_phase": "released_before_score_access",
+    "required_prior_score_accessed": false,
+    "detector_or_gate_change": false
   },
   "dataset": {
     "name": "FGI-SpoofRepo",
@@ -28,7 +38,9 @@
     "expected_healthy_prns": [5, 7, 8, 9, 13, 14, 15, 18, 20, 22, 27, 30],
     "tap_count": 9,
     "tap_spacing_chips": 0.125,
-    "internal_sample_rate_hz": 6500000
+    "internal_sample_rate_hz": 6500000,
+    "observables_first_positive_tow_s": 480024.02,
+    "observables_attack_onset_relative_s": 119.98
   },
   "support_preflight": {
     "path": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_support_preflight_v3/summary.json",
@@ -76,6 +88,6 @@
     "serial_bin_auc_is_secondary_descriptive_only": true,
     "decision_rule": "SUPPORTED only if all fixed support, clean false-alarm, stable-post detection, and median-direction gates pass"
   },
-  "output_root": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_cgc_detection_v1",
+  "output_root": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_cgc_detection_v1_1",
   "claim_boundary": "One FGI targeted synchronous raw-IF recording; establishes neither universal spoof detection nor real multipath-versus-spoof classification."
 }

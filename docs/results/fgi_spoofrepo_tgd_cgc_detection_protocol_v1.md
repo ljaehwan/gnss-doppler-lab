@@ -1,6 +1,10 @@
-# Frozen FGI-SpoofRepo TGD CGC detection protocol v1
+# Frozen FGI-SpoofRepo TGD CGC detection protocol v1.1
 
 Date frozen: 2026-08-31
+
+## Score-free adapter restart
+
+The committed v1 release stopped before loading the delay estimator or reading tap values; its pinned state is `released_before_score_access` with `score_accessed=false`. The reusable OAKBAT preflight expects the minimum positive observables `RX_time`, whereas FGI stores its first positive value only when pseudorange becomes valid at TOW 480024.02 s. V1.1 uses that value solely for observables/ephemeris validation and keeps RF-start TOW 480006.0 s for NMEA position, LOS, and every detector bin. The corresponding attack onset in the observables reference is 119.98 s. No signal, PRN, interval, template, threshold, persistence, endpoint, or success gate changes from v1.
 
 ## Question and boundary
 
