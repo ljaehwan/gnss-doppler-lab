@@ -1,0 +1,43 @@
+{
+  "schema": "gnss-doppler-lab.fgi-spoofrepo-tgd-support-preflight-config",
+  "schema_version": 3,
+  "experiment": {
+    "name": "FGI-SpoofRepo targeted-DFMC identity-and-cadence-corrected support preflight v3",
+    "detector_score_access": false,
+    "delay_template_access": false,
+    "threshold_refitting": false,
+    "receiver_replay": false
+  },
+  "inputs": {
+    "cadence_corrected_v2_summary": {
+      "path": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_support_preflight_v2/summary.json",
+      "sha256": "3fa43215a4c38a38955cdec22b265e88e43b1c92effb6b5541ffd169a229e9af"
+    },
+    "gps_ephemeris": {
+      "path": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_support_preflight_v1/receiver/gps_ephemeris.xml",
+      "sha256": "bdbeadac3db62746c431896f0b9cbbf2d4467555e34728f7dfd8a466b6425c4a"
+    },
+    "geometry_module": {
+      "path": "src/gnss_doppler_lab/gcmr_geometry.py",
+      "sha256": "781b66b8c485f4a656da3ed4ce82726f47f47a94cc4ea702eeab727708208921"
+    }
+  },
+  "identity_gate": {
+    "acceptance_rule": "GPS ephemeris exists and SV_health == 0",
+    "expected_healthy_prns": [5, 7, 8, 9, 13, 14, 15, 18, 20, 22, 27, 30],
+    "minimum_primary_prns": 8,
+    "minimum_primary_bins_each_interval": 60
+  },
+  "support_contract_inherited_from_v2": {
+    "bin_seconds": 1.0,
+    "minimum_epochs_per_prn_bin": 40,
+    "minimum_telemetry_cadence_occupancy": 0.8,
+    "require_complex_nine_tap": true,
+    "analysis_intervals_seconds": {
+      "clean": [40.0, 120.0],
+      "post_onset_support": [160.0, 230.0]
+    }
+  },
+  "output_root": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_support_preflight_v3",
+  "claim_boundary": "Final score-free input-support audit using only cadence-eligible PRNs with healthy decoded ephemerides; no delay, score, threshold, alarm, latency, or detector-performance claim."
+}
