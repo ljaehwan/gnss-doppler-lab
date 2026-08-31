@@ -1,0 +1,81 @@
+{
+  "schema": "gnss-doppler-lab.fgi-spoofrepo-tgd-cgc-detection-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "fgi-spoofrepo-tgd-cgc-detection-v1",
+    "role": "single-release external raw-IF sensitivity and clean false-alarm test",
+    "threshold_refitting": false,
+    "post_release_tuning_or_retest": false
+  },
+  "dataset": {
+    "name": "FGI-SpoofRepo",
+    "scenario": "TG_DFMC",
+    "official_record": "https://doi.org/10.23729/7a648509-2ca8-4a7d-8223-0b429182f857",
+    "iq_path": "/home/ubuntu/hdd_data/fgi-spoofrepo/TG_DFMC/TGD_L1_E1.dat",
+    "iq_bytes": 9961930752,
+    "iq_sha256": "10aad73665db7c5e530d9ef1d3b2fdb57bab0a7b9b19177a0128867fbad2606b",
+    "recording_start_tow_s": 480006.0,
+    "documented_attack_free_until_s": 130.0,
+    "documented_attack_onset_s": 138.0
+  },
+  "receiver": {
+    "run_dir": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_support_preflight_v1/receiver",
+    "manifest_sha256": "0a3039e0bdf5af313219d7d3fc7279a89b6fe5961312ac7047fba558fb9d65b5",
+    "receiver_config_sha256": "d51f28074fb3bd7fca1baa90681dcfb99274ffe945bdcd1ae8b38ed16f8ef40f",
+    "gps_ephemeris_sha256": "bdbeadac3db62746c431896f0b9cbbf2d4467555e34728f7dfd8a466b6425c4a",
+    "observables_sha256": "2ae110abfc76fc0cad42429ffa43b42bde2aa5d31d77a433d18cc1a78da20382",
+    "nmea_sha256": "0660ae5f48fed225ccbada0e3446f4d56d9106643cce5fddec86588e0a08d9c1",
+    "expected_healthy_prns": [5, 7, 8, 9, 13, 14, 15, 18, 20, 22, 27, 30],
+    "tap_count": 9,
+    "tap_spacing_chips": 0.125,
+    "internal_sample_rate_hz": 6500000
+  },
+  "support_preflight": {
+    "path": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_support_preflight_v3/summary.json",
+    "sha256": "8a8873675b63ee32ec93a342751e6e378c1ce39c39abeb817392e04ef85ce5d3",
+    "required_decision": "SUPPORT_ELIGIBLE",
+    "score_accessed": false
+  },
+  "frozen_detector": {
+    "template_config": {"path": "configs/experiments/correlator_geometry_identifiability_train_v1.json", "sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6"},
+    "threshold_source": {"path": "artifacts/cgc_real_detection_v1/summary.json", "sha256": "d7fa0024628a231dae2ec1da2f2bae6d4b19fb3fdf97886913d9520349aa0a63"},
+    "partial_f_audit": {"path": "artifacts/cgc_partial_f_seven_prn_v1/summary.json", "sha256": "c07dee4ecc82e9d0ce98c98d7e8ba9b00ba6ff86400406e2cbb86821708c07d4"},
+    "partial_f_p_alarm_threshold": 0.06028418845288192,
+    "persistence_window_bins": 5,
+    "persistence_required_bins": 3,
+    "threshold_calibration": "original cleanStatic bins [330,420), fifth percentile; no FGI calibration"
+  },
+  "implementation": {
+    "template_runner": {"path": "scripts/run_cgc_rf_challenge_pilot.py", "sha256": "a1283cb6d4c78697d72e34e4d9afe9048b9ab2fde0aef521ea19bb3a5b836b18"},
+    "persistence_reference": {"path": "scripts/run_cgc_real_detection.py", "sha256": "428e91ce90ecf6e08c0a2bd75c22e4f8a7cc8c00494aeaa7f848c4ab80ad9ec6"},
+    "clock_centered_geometry": {"path": "src/gnss_doppler_lab/clock_centered_geometry.py", "sha256": "b25a00efdb654ceb96540a2597bdc542526a0c6027e393018c739394858a203a"},
+    "correlator_geometry": {"path": "src/gnss_doppler_lab/correlator_geometry.py", "sha256": "74732c182e799c2e82b4719d6572ebbd3dc4f6e16eada5bfe0f8a3d8c236b2b2"},
+    "satellite_geometry": {"path": "src/gnss_doppler_lab/gcmr_geometry.py", "sha256": "781b66b8c485f4a656da3ed4ce82726f47f47a94cc4ea702eeab727708208921"},
+    "geometry_preflight": {"path": "src/gnss_doppler_lab/gcmr_experiment.py", "sha256": "bb0a60ae59211ee3460d49d54cb653bfd4d9c567356a0b4b1f42abb8886c3147"},
+    "tracking_loader": {"path": "src/gnss_doppler_lab/tracking_peaks.py", "sha256": "298bc1931d9bc366a731148583cfa8e7c5b083ed47ff7f352300ff640f14e732"}
+  },
+  "analysis": {
+    "bin_seconds": 1.0,
+    "minimum_epochs_per_prn_bin": 40,
+    "minimum_prns": 8,
+    "analysis_seconds": [40.0, 230.0],
+    "clean_seconds": [40.0, 120.0],
+    "excluded_transition_seconds": [120.0, 160.0],
+    "stable_post_seconds": [160.0, 230.0],
+    "receiver_position_seconds": [40.0, 120.0],
+    "maximum_ephemeris_toe_age_s": 7200.0,
+    "epoch_chunk_size": 50000,
+    "cn0_weighting": false
+  },
+  "evaluation": {
+    "minimum_clean_geometry_bins": 60,
+    "minimum_stable_post_geometry_bins": 60,
+    "maximum_clean_persistent_alarm_rate": 0.05,
+    "minimum_stable_post_persistent_detection_rate": 0.8,
+    "require_post_median_p_below_clean_median_p": true,
+    "serial_bin_auc_is_secondary_descriptive_only": true,
+    "decision_rule": "SUPPORTED only if all fixed support, clean false-alarm, stable-post detection, and median-direction gates pass"
+  },
+  "output_root": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_cgc_detection_v1",
+  "claim_boundary": "One FGI targeted synchronous raw-IF recording; establishes neither universal spoof detection nor real multipath-versus-spoof classification."
+}
