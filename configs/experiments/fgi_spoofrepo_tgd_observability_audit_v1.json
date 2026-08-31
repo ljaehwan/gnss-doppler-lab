@@ -1,0 +1,72 @@
+{
+  "schema": "gnss-doppler-lab.fgi-spoofrepo-tgd-observability-audit-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "fgi-spoofrepo-tgd-observability-audit-v1",
+    "role": "post-hoc exploratory physical root-cause audit after the frozen detector returned NOT_SUPPORTED",
+    "confirmatory_detection_claim": false,
+    "detector_threshold_refitting": false
+  },
+  "dataset": {
+    "name": "FGI-SpoofRepo",
+    "scenario": "TG_DFMC",
+    "recording_start_tow_s": 480006.0,
+    "documented_attack_onset_s": 138.0
+  },
+  "inputs": {
+    "observables": {
+      "path": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_support_preflight_v1/receiver/raw/observables.mat",
+      "sha256": "2ae110abfc76fc0cad42429ffa43b42bde2aa5d31d77a433d18cc1a78da20382"
+    },
+    "nmea": {
+      "path": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_support_preflight_v1/receiver/nmea_pvt.nmea",
+      "sha256": "0660ae5f48fed225ccbada0e3446f4d56d9106643cce5fddec86588e0a08d9c1"
+    },
+    "ephemeris": {
+      "path": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_support_preflight_v1/receiver/gps_ephemeris.xml",
+      "sha256": "bdbeadac3db62746c431896f0b9cbbf2d4467555e34728f7dfd8a466b6425c4a"
+    },
+    "frozen_delay_estimates": {
+      "path": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_cgc_detection_v1_1/delay_estimates.csv",
+      "sha256": "952a513393e8e800b155912d270c0e323b1e8863a849e7a5ec3028fa0d966ce8"
+    },
+    "frozen_geometry_scores": {
+      "path": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_cgc_detection_v1_1/geometry_scores.csv",
+      "sha256": "6700ae270cacba434c20fb7a8dd9954169c734fb36cff79196a34dee0dba443b"
+    },
+    "frozen_detection_summary": {
+      "path": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_cgc_detection_v1_1/summary.json",
+      "sha256": "a969e526e62694878bb079852ceadeecd6a71f1db33017b8a6025aedaea124cc"
+    }
+  },
+  "analysis": {
+    "healthy_prns": [5, 7, 8, 9, 13, 14, 15, 18, 20, 22, 27, 30],
+    "sample_period_s": 0.02,
+    "bin_seconds": 1.0,
+    "minimum_observations_per_prn_bin": 40,
+    "minimum_prns": 8,
+    "analysis_seconds": [40, 230],
+    "settled_clean_baseline_seconds": [43, 120],
+    "excluded_receiver_clock_initialization_seconds": [40, 43],
+    "excluded_transition_seconds": [120, 160],
+    "stable_post_seconds": [160, 230],
+    "nmea_static_position_seconds": [43, 120],
+    "pseudorange_baseline": "per-PRN ordinary-least-squares linear trend fitted only on settled clean bins after subtracting receive-time geometric range",
+    "vector_reference": "componentwise median fitted ECEF displacement over settled clean bins",
+    "chip_rate_hz": 1023000.0,
+    "speed_of_light_mps": 299792458.0,
+    "baseline_start_sensitivity_seconds": [43, 50, 60, 70, 80]
+  },
+  "exploratory_mechanistic_signature": {
+    "minimum_matched_clean_bins": 60,
+    "minimum_matched_stable_post_bins": 60,
+    "minimum_stable_post_nmea_displacement_m": 50.0,
+    "minimum_pseudorange_nmea_median_direction_cosine": 0.95,
+    "maximum_pseudorange_nmea_median_vector_error_m": 10.0,
+    "maximum_local_tap_nmea_median_direction_cosine": 0.5,
+    "minimum_local_to_pseudorange_median_vector_error_ratio": 3.0,
+    "require_frozen_detector_zero_persistent_post_alarms": true,
+    "interpretation": "If all signatures hold, absolute code phase retains the spoof displacement while prompt-local nine-tap shape does not retain a stable common-displacement observable after tracking recentering. This is not an independent detector validation because NMEA is derived from the same receiver observables."
+  },
+  "output_root": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_observability_audit_v1"
+}
