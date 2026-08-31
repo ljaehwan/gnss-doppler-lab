@@ -1,0 +1,62 @@
+{
+  "schema": "gnss-doppler-lab.static-reference-cgc-oakbat-held-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "static-reference-cgc-v2-oakbat-held",
+    "role": "held OAKBAT time-push versus position-push evaluation after the v1 reference-integrity failure",
+    "development_scenarios": ["cleanStatic", "os2", "os3", "os4"],
+    "held_scenarios": ["os5", "os6"],
+    "threshold_refitting": false,
+    "post_eligibility_adaptation": false
+  },
+  "frozen_v1": {
+    "summary": {"path": "artifacts/static_reference_cgc_v1/summary.json", "sha256": "c37b66c1abc659f6e1105ea756ec965b3e1a13e100e4c1284bf23477ea3543d8"},
+    "clean_scores": {"path": "artifacts/static_reference_cgc_v1/oakbat_cleanStatic_scores.csv", "sha256": "99af486a7adbcd8c0c9a4f2fced5b0127c685c17321f71d7be29fae7038259e6"},
+    "partial_f_p_alarm_threshold": 0.7077163430703122,
+    "displacement_alarm_threshold_m": 89.1145618048178,
+    "clean_baseline_eligibility_quantile": 0.99,
+    "clean_baseline_eligibility_threshold_m": 75.68214930502295
+  },
+  "analysis": {
+    "sample_period_s": 0.02,
+    "minimum_observations_per_prn_bin": 30,
+    "minimum_prns": 8,
+    "minimum_baseline_bins_per_prn": 8,
+    "baseline_seconds": [40, 110],
+    "attack_onset_s": 120,
+    "stable_post_seconds": [160, 479],
+    "persistence_window_seconds": 5,
+    "persistence_required_seconds": 3,
+    "geometry_tow0_s": 381618.0
+  },
+  "receiver": {
+    "adapter": {"path": "scripts/run_oakbat_9tap_detection_pipeline.py", "sha256": "2a6db05927b4706ba208d90dfde49df3204183d16e15c14bec0abee19d3625a9"},
+    "executable": {"path": ".tools/gnss-sdr-src/build/src/main/gnss-sdr", "sha256": "fc00d610fdb966358ac85486b616ff2411cb163ca8269dd0b435919c5e197e25"},
+    "sample_rate_hz": 5000000,
+    "duration_s": 480,
+    "tap_count": 9,
+    "tap_spacing_chips": 0.125,
+    "timeout_s": 21600,
+    "minimum_free_gib": 20
+  },
+  "held": [
+    {
+      "id": "os5",
+      "role": "common 2-microsecond time-push negative control",
+      "iq": {"path": "/home/ubuntu/unraid_hdd/oakbat/gps_l1ca/raw/os5.bin", "sha256": "94dd7ad1c38a41767ae6b6a632b18596a4d7b70f67b71dfeb2363ea03aa7c2fb", "bytes": 9600000000}
+    },
+    {
+      "id": "os6",
+      "role": "600-m ECEF-Z position-push positive",
+      "iq": {"path": "/home/ubuntu/unraid_hdd/oakbat/gps_l1ca/raw/os6.bin", "sha256": "a22eec28d83435e347abb86342a24f190392141f020e86c5a1071c7b396fc4ca", "bytes": 9600000000}
+    }
+  ],
+  "decision_gates": {
+    "require_reference_eligible_each_scenario": true,
+    "maximum_os5_persistent_alarm_rate": 0.05,
+    "require_os6_persistent_detection": true,
+    "maximum_os6_detection_delay_s": 60,
+    "minimum_os6_median_ecef_z_direction_cosine": 0.8
+  },
+  "output_root": "/home/ubuntu/hdd_data/oakbat/analysis/static_reference_cgc_v2_oakbat_held"
+}
