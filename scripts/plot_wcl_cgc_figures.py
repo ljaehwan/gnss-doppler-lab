@@ -4,8 +4,8 @@
 The script reads only frozen/archived experiment artifacts.  Figure 1 combines
 the nine-tap measurement principle with one representative held-out receiver-RF
 epoch.  Figure 2 aggregates the preregistered mechanism, the nested-aperture
-audit (including the labeled post-hoc seven-tap result), TEXBAT, and
-real-multipath results used in the paper.
+audit (including the labeled post-hoc seven-tap result), the frozen public
+JammerTest carry-off transfer, and real-multipath results used in the paper.
 """
 
 from __future__ import annotations
@@ -363,22 +363,43 @@ def _plot_aperture(ax: mpl.axes.Axes, aperture: pd.DataFrame) -> None:
     _panel_label(ax, "(b)")
 
 
-def _plot_texbat_pre_post(ax: mpl.axes.Axes, texbat: dict[str, object]) -> None:
-    scenarios = texbat["scenarios"]
-    x = np.asarray([0, 1])
-    for index, item in enumerate(scenarios):
-        values = [item["stable_pre_median_residual"], item["stable_post_median_residual"]]
-        color = [BLUE, ORANGE, GREEN][index]
-        ax.plot(x, values, color=color, marker="o", label=item["scenario"].upper())
-        ax.text(1.035, values[1], f"{item['secondary_serial_bin_auc']:.2f}", color=color, va="center", fontsize=6.6)
-    ax.set_xticks(x, ["Pre-onset", "Stable post"])
-    ax.set_xlim(-0.16, 1.32)
-    ax.set_ylim(0.42, 0.76)
-    ax.set_ylabel("Clock-centered residual")
-    ax.set_title("Real TEXBAT spoof recordings")
-    ax.text(1.03, 0.745, "AUC", fontsize=6.3, color=GRAY)
-    ax.annotate("more spoof-like", xy=(0.03, 0.44), xytext=(0.03, 0.49), arrowprops={"arrowstyle": "->", "lw": 0.7}, fontsize=6.5)
-    ax.legend(frameon=False, loc="upper right")
+def _plot_jammertest_carryoff(
+    ax: mpl.axes.Axes, timeline: pd.DataFrame
+) -> None:
+    seconds = timeline["seconds_after_motion"].to_numpy(dtype=float)
+    p_values = timeline["partial_f_p_value"].to_numpy(dtype=float)
+    score = -np.log10(np.maximum(p_values, np.finfo(float).tiny))
+    raw = timeline["raw_spoof_alarm"].to_numpy(dtype=bool)
+    persistent = timeline["onset_reset_persistent_alarm"].to_numpy(dtype=bool)
+    threshold = -math.log10(0.06028418845288192)
+
+    ax.plot(seconds, score, color=BLUE, marker="o", markersize=2.8, lw=0.9)
+    ax.scatter(
+        seconds[raw], score[raw], facecolor="white", edgecolor=ORANGE,
+        marker="o", s=24, linewidth=0.9, label="Raw alarm", zorder=3,
+    )
+    ax.scatter(
+        seconds[persistent], score[persistent], color=GREEN, marker="D",
+        s=25, linewidth=0.5, label="3-of-5 alarm", zorder=4,
+    )
+    ax.axhline(
+        threshold, color=ORANGE, linestyle="--", lw=0.85,
+        label=r"Frozen $p_F$ threshold",
+    )
+    first_alarm = float(seconds[persistent][0])
+    ax.axvline(first_alarm, color=GREEN, linestyle=":", lw=0.8)
+    ax.annotate(
+        "+23 s", xy=(first_alarm, score[persistent][0]),
+        xytext=(first_alarm - 7.0, score.max() - 0.1),
+        arrowprops={"arrowstyle": "->", "color": GREEN, "lw": 0.7},
+        color=GREEN, fontsize=6.6,
+    )
+    ax.set_xlim(-0.5, 29.5)
+    ax.set_ylim(0.0, max(3.05, float(score.max()) + 0.2))
+    ax.set_xlabel("Seconds after route motion")
+    ax.set_ylabel(r"Geometry evidence $-\log_{10}p_F$")
+    ax.set_title("Public field coherent carry-off")
+    ax.legend(frameon=False, loc="upper left", fontsize=6.0)
     ax.spines[["top", "right"]].set_visible(False)
     _panel_label(ax, "(c)")
 
@@ -431,21 +452,21 @@ def build_evidence_figure(output_dir: Path) -> tuple[Path, Path, list[Path]]:
     train_path = ROOT / "docs/results/correlator_geometry_identifiability_train_v1_summary.json"
     aperture_path = ROOT / "artifacts/cgc_rf_ga_v1/condition_aperture_summary.csv"
     seven_tap_path = ROOT / "docs/results/cgc_rf_7tap_aperture_audit_v1_condition_summary.csv"
-    texbat_path = ROOT / "docs/results/cgc_texbat_external_v1_summary.json"
+    jammertest_path = ROOT / "docs/results/jammertest2023_jt17_cgc_carryoff_timeline_v2.csv"
     openif_s1_path = ROOT / "docs/results/gnss_openif_s1_real_multipath_v1_summary.json"
     openif_s2_path = ROOT / "docs/results/gnss_openif_s2_real_multipath_v1_summary.json"
     train = json.loads(train_path.read_text(encoding="utf-8"))
     aperture = pd.read_csv(aperture_path)
     seven_tap = pd.read_csv(seven_tap_path)
     aperture = pd.concat([aperture, seven_tap], ignore_index=True)
-    texbat = json.loads(texbat_path.read_text(encoding="utf-8"))
+    jammertest = pd.read_csv(jammertest_path)
     openif_s1 = json.loads(openif_s1_path.read_text(encoding="utf-8"))
     openif_s2 = json.loads(openif_s2_path.read_text(encoding="utf-8"))
 
     figure, axes = plt.subplots(2, 2, figsize=(7.16, 4.35), constrained_layout=True)
     _plot_auc_ablation(axes[0, 0], train)
     _plot_aperture(axes[0, 1], aperture)
-    _plot_texbat_pre_post(axes[1, 0], texbat)
+    _plot_jammertest_carryoff(axes[1, 0], jammertest)
     _plot_openif_false_alarm(axes[1, 1], openif_s1, openif_s2)
     pdf = output_dir / "wcl_cgc_evidence.pdf"
     png = output_dir / "wcl_cgc_evidence.png"
@@ -456,7 +477,7 @@ def build_evidence_figure(output_dir: Path) -> tuple[Path, Path, list[Path]]:
         train_path,
         aperture_path,
         seven_tap_path,
-        texbat_path,
+        jammertest_path,
         openif_s1_path,
         openif_s2_path,
     ]
