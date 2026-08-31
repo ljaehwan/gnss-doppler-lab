@@ -1,0 +1,102 @@
+{
+  "schema": "gnss-doppler-lab.static-reference-cgc-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "static-reference-cgc-v1",
+    "role": "preregistered static-receiver extension audit of the existing clock-centered CGC nested model",
+    "new_model": false,
+    "score_access_before_release": false,
+    "claim_boundary": "static receiver and position-carry-off only; retrospective OAKBAT and controlled receiver-RF evidence, not universal field validation"
+  },
+  "analysis": {
+    "sample_period_s": 0.02,
+    "bin_seconds": 1,
+    "minimum_observations_per_prn_bin": 30,
+    "minimum_prns": 8,
+    "minimum_baseline_bins_per_prn": 8,
+    "baseline_seconds": [40, 110],
+    "oakbat_attack_onset_s": 120,
+    "excluded_transition_seconds": [110, 160],
+    "oakbat_stable_post_seconds": [160, 479],
+    "clean_calibration_seconds": [134, 344],
+    "clean_held_seconds": [361, 479],
+    "clean_partial_f_lower_quantile": 0.05,
+    "clean_displacement_upper_quantile": 0.95,
+    "persistence_window_seconds": 5,
+    "persistence_required_seconds": 3,
+    "oakbat_geometry_tow0_s": 381618.0,
+    "synthetic_analysis_seconds": [18, 30],
+    "synthetic_comparison_seconds": [24, 29]
+  },
+  "oakbat": {
+    "official_record": "https://doi.org/10.13139/ORNLNCCS/1664429",
+    "source_iq_sha256": {
+      "cleanStatic": "8e3428abb1b94211118c1ec9f505322ef89fdb176f0cf33961eca3cf3da80dfe",
+      "os2": "17de8e3f54095ad2eafad8a54ca7f5008596936ded35578710dfed17a5b670c1",
+      "os3": "2a3c3c5cf1accaa287fe14181e43070903500e0250c69e3c335f91c89c0cdc6c",
+      "os4": "803f3c76bcc618efbc6b394eb536fe61ed8c3e34b1822c0088b4475621bfa8e4"
+    },
+    "scenarios": [
+      {
+        "id": "cleanStatic",
+        "role": "clean calibration and disjoint held normal",
+        "expected_physics": "no common displacement",
+        "observables": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat_9tap_frozen_champion_20260829/cleanStatic/receiver/oakbat-cleanStatic-method-a-9tap/raw/observables.mat", "sha256": "565d47a55316e848c6dd3afe866f2a96b7f14aada624ed091e457c8dbf7c2b13"},
+        "ephemeris": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat_9tap_frozen_champion_20260829/cleanStatic/receiver/oakbat-cleanStatic-method-a-9tap/gps_ephemeris.xml", "sha256": "6a924d40c0ff08d20769793542a9669f25da25ee8beedd2880f833677e9a7ac8"},
+        "nmea": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/q-comet-oakbat-complex9/cleanstatic/receiver/cleanstatic-complex9/nmea_pvt.nmea", "sha256": "faa63450ab1116828bb8ceebffcbf45903f922a13065bf130cc25c2b39436ded"},
+        "receiver_manifest": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat_9tap_frozen_champion_20260829/cleanStatic/receiver/oakbat-cleanStatic-method-a-9tap/manifest.json", "sha256": "5441f61741e78c6e7b7a5aa796a35b674d630e4df5949c6d460626acb38c2a9d"},
+        "nmea_manifest": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/q-comet-oakbat-complex9/cleanstatic/receiver/cleanstatic-complex9/manifest.json", "sha256": "f3dc116a17b85d47c836f8b9294160945827c4cf06c4d6db3316c0a4fe5b8a1f"}
+      },
+      {
+        "id": "os2",
+        "role": "clock-only spoof negative control",
+        "expected_physics": "2 microsecond common time push",
+        "observables": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat_9tap_frozen_champion_20260829/os2/receiver/oakbat-os2-method-a-9tap/raw/observables.mat", "sha256": "6bde83ca1d51454980b37a0b3b2311fa9e8605eef0e4ecd5b1959bcb3a465a84"},
+        "ephemeris": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat_9tap_frozen_champion_20260829/os2/receiver/oakbat-os2-method-a-9tap/gps_ephemeris.xml", "sha256": "df0b1a66e4b5e77c79311a24750e7953ee6965690e9aaaab4b8d56b5e2676c9f"},
+        "nmea": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat_9tap_frozen_champion_20260829/os2/receiver/oakbat-os2-method-a-9tap/nmea_pvt.nmea", "sha256": "08e6d9daf23afb9b1e98ed7a33db231878e52a588861e4676d302d7c61f3de19"},
+        "receiver_manifest": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat_9tap_frozen_champion_20260829/os2/receiver/oakbat-os2-method-a-9tap/manifest.json", "sha256": "d7fae53620e813d58c98324ce9e9ab3dfe5ba53b6eb8f46533646931ec524d65"}
+      },
+      {
+        "id": "os3",
+        "role": "low-power clock-only spoof negative control",
+        "expected_physics": "2 microsecond common time push",
+        "observables": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat_9tap_frozen_champion_20260829/os3/receiver/oakbat-os3-method-a-9tap/raw/observables.mat", "sha256": "b6746749ad1871bfabe39535051c0d0f41d7addea2e4658e489647f7c201d350"},
+        "ephemeris": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat_9tap_frozen_champion_20260829/os3/receiver/oakbat-os3-method-a-9tap/gps_ephemeris.xml", "sha256": "702e3b83cf36bd2a0dabf6c9241b33ff4957731717bf5a311efb963331c64e40"},
+        "nmea": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat_9tap_frozen_champion_20260829/os3/receiver/oakbat-os3-method-a-9tap/nmea_pvt.nmea", "sha256": "2a74575110b5133631abc32d46e877b12641e60a1c2fc6dfcd5885efb51b7097"},
+        "receiver_manifest": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat_9tap_frozen_champion_20260829/os3/receiver/oakbat-os3-method-a-9tap/manifest.json", "sha256": "5c23b4289d9aa8c96989078029b92d1b63dfcec17562d5989b1ac938a7ddd6ad"}
+      },
+      {
+        "id": "os4",
+        "role": "position-push spoof positive",
+        "expected_physics": "600 m ECEF Z-axis position push",
+        "observables": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat_9tap_frozen_champion_20260829/os4/receiver/oakbat-os4-method-a-9tap/raw/observables.mat", "sha256": "574adc1154e966984a246e3791348d83bd22ea4d5514d5d2f20aaca56a65febf"},
+        "ephemeris": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat_9tap_frozen_champion_20260829/os4/receiver/oakbat-os4-method-a-9tap/gps_ephemeris.xml", "sha256": "d9a5c33081592d4462851c1b9b4c7184800339e26d3d7385c74a7c571d3d4516"},
+        "nmea": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat_9tap_frozen_champion_20260829/os4/receiver/oakbat-os4-method-a-9tap/nmea_pvt.nmea", "sha256": "901c5160a757197a21b35d4c68b5f899beb4134bb6ca879eef9a0583db807d5c"},
+        "receiver_manifest": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/oakbat_9tap_frozen_champion_20260829/os4/receiver/oakbat-os4-method-a-9tap/manifest.json", "sha256": "f79d6579fd7a528dce856a5fe668f1d6b24e25f814faff8f52a48547148ec811"}
+      }
+    ]
+  },
+  "matched_static_multipath": [
+    {
+      "id": "pv1-pair-001",
+      "normal_observables": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/simulation-v4-paired-train-generation-v1/receiver/simv4pt-p001-n_20220101T010000Z/raw/observables.mat", "sha256": "a106074bd5ef2e8749d7381faaf413ab3ed812d1743033be04a11d484529ce55"},
+      "multipath_observables": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cgc-rf-challenge-pilot-v1/receiver/cgc-rf-mp-p001_20220101T010000Z/raw/observables.mat", "sha256": "7811a8c974b148d8ab2559cc062149a114d963b5b65c991e0bb363b31ca88907"},
+      "los_log": {"path": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-001/components/authentic-gps-sdr-sim.log", "sha256": "9270b816532148dea393daa86a4bcc8d93864e8f205e68bc3c1bb6a7d98f5746"}
+    },
+    {
+      "id": "pv1-pair-002",
+      "normal_observables": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/simulation-v4-paired-train-generation-v1/receiver/simv4pt-p002-n_20220101T030000Z/raw/observables.mat", "sha256": "8c77af5ec087fba3ce1a1cb6556f528f8ff4b8a639e0555cb02646ed67997f74"},
+      "multipath_observables": {"path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/cgc-rf-train-replication-v1/pairs/pv1-pair-002/receiver/cgc-rf-mp-p002_20220101T030000Z/raw/observables.mat", "sha256": "a9b49ca3a82e1d5b4331839005b6a3b62b0527afe13434b260be022de596406a"},
+      "los_log": {"path": "artifacts/simulation_v4_paired_train_generation_v1/pairs/pv1-pair-002/components/authentic-gps-sdr-sim.log", "sha256": "70e812ace80d5d9c94734bbbe2f041997f6fd8bbaf8faf6a7f227adccf1e14eb"}
+    }
+  ],
+  "decision_gates": {
+    "minimum_clean_calibration_bins": 10,
+    "maximum_clean_held_persistent_alarm_rate": 0.05,
+    "maximum_clock_push_persistent_alarm_rate": 0.05,
+    "require_os4_persistent_detection": true,
+    "maximum_os4_detection_delay_s": 60,
+    "require_zero_persistent_multipath_alarms_per_pair": true
+  },
+  "output_root": "artifacts/static_reference_cgc_v1"
+}
