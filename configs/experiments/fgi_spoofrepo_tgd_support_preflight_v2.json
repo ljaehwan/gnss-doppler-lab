@@ -1,0 +1,43 @@
+{
+  "schema": "gnss-doppler-lab.fgi-spoofrepo-tgd-support-preflight-config",
+  "schema_version": 2,
+  "experiment": {
+    "name": "FGI-SpoofRepo targeted-DFMC cadence-corrected score-free support preflight v2",
+    "detector_score_access": false,
+    "delay_template_access": false,
+    "threshold_refitting": false,
+    "receiver_replay": false
+  },
+  "dataset": {
+    "name": "FGI-SpoofRepo",
+    "scenario": "TG_DFMC",
+    "official_record": "https://doi.org/10.23729/7a648509-2ca8-4a7d-8223-0b429182f857",
+    "sha256": "10aad73665db7c5e530d9ef1d3b2fdb57bab0a7b9b19177a0128867fbad2606b"
+  },
+  "receiver_output": {
+    "directory": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_support_preflight_v1/receiver",
+    "manifest_sha256": "0a3039e0bdf5af313219d7d3fc7279a89b6fe5961312ac7047fba558fb9d65b5",
+    "receiver_config_sha256": "d51f28074fb3bd7fca1baa90681dcfb99274ffe945bdcd1ae8b38ed16f8ef40f",
+    "mat_file_count": 31,
+    "tap_count": 9,
+    "tap_spacing_chips": 0.125,
+    "telemetry_synchronized_dump_rate_hz": 50,
+    "cadence_evidence_channel": 29,
+    "cadence_evidence_prn": 30
+  },
+  "analysis_intervals_seconds": {
+    "clean": [40.0, 120.0],
+    "post_onset_support": [160.0, 230.0]
+  },
+  "support_gate": {
+    "bin_seconds": 1.0,
+    "minimum_epochs_per_prn_bin": 40,
+    "minimum_telemetry_cadence_occupancy": 0.8,
+    "minimum_primary_prns": 8,
+    "secondary_boundary_prns": 7,
+    "minimum_primary_bins_each_interval": 60,
+    "require_complex_nine_tap": true
+  },
+  "output_root": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_support_preflight_v2",
+  "claim_boundary": "Cadence-corrected support-only compatibility audit; no delay estimate, CGC score, threshold, alarm, latency, or detector-performance claim."
+}
