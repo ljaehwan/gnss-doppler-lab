@@ -1,0 +1,108 @@
+{
+  "schema": "gnss-doppler-lab.jammertest2023-jt17-cgc-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "jammertest2023-jt23-17.1.6-cgc-v1",
+    "role": "prospectively frozen external field coherent-carry-off sensitivity test",
+    "threshold_refitting": false,
+    "post_release_detector_tuning": false,
+    "single_release": true
+  },
+  "dataset": {
+    "name": "FGI Jammer Test 2023 Repository",
+    "scenario": "JT23_17.1.6",
+    "official_record": "https://doi.org/10.23729/fd-06d27736-45cb-3ca2-aff8-725d42c6caeb",
+    "official_testplan": "https://www.jammertest.no/content/files/2026/05/Jammertest-2023---Testplan.pdf",
+    "independent_label_source": "https://doi.org/10.1007/s10291-026-02102-z",
+    "iq_path": "/home/ubuntu/hdd_data/jammertest2023/JT23_17.1.6/JT23_17.1.6_L1_E1.iq",
+    "iq_bytes": 72110000000,
+    "iq_sha256": "4bd6e3963f0b3d6806670db5d1a653de05fd9fe602ec42b005eb6cc4d45931e3",
+    "fairdata_dataset_id": "2eee8cfd-db00-4e46-bd62-d7632c09c700",
+    "fairdata_scope": "JammerTest2023/JT23_17.1.6/JT23_17.1.6_L1_E1.iq",
+    "sample_format": "signed int8 interleaved complex I/Q; LabSat occupied levels are 3-bit",
+    "input_sample_rate_hz": 30690000,
+    "center_frequency_hz": 1575420000,
+    "intermediate_frequency_hz": 0,
+    "official_spoof_rf_onset_s": 226.0,
+    "official_fixed_start_position_seconds": 300.0,
+    "planned_carryoff_motion_onset_s": 526.0,
+    "label_provenance": "RF onset 226 s and +25 dBm are from independent published Table 3; test-group 17 plan fixes the spoofed position for five minutes before route motion, hence 226+300=526 s"
+  },
+  "receiver": {
+    "executable": ".tools/gnss-sdr-method-a-9tap-frozen-fc00",
+    "executable_sha256": "fc00d610fdb966358ac85486b616ff2411cb163ca8269dd0b435919c5e197e25",
+    "output_root": "/home/ubuntu/hdd_data/jammertest2023/analysis/jt23_17_1_6_cgc_v1/receiver",
+    "run_id": "jt23-17-1-6-complex9-560s",
+    "duration_seconds": 560.0,
+    "internal_sample_rate_hz": 6138000,
+    "decimation_factor": 5,
+    "channel_count": 31,
+    "tap_count": 9,
+    "tap_spacing_chips": 0.125,
+    "acquisition_pfa": 0.01,
+    "acquisition_max_dwells": 5,
+    "timeout_seconds": 21600
+  },
+  "support": {
+    "bin_seconds": 1.0,
+    "minimum_epochs_per_prn_bin": 200,
+    "minimum_prns": 8,
+    "minimum_bins": {
+      "clean": 60,
+      "aligned_spoof": 60,
+      "carryoff_onset": 20
+    },
+    "require_complex_nine_tap_schema": true,
+    "score_access": false,
+    "delay_template_access": false,
+    "output_root": "/home/ubuntu/hdd_data/jammertest2023/analysis/jt23_17_1_6_cgc_v1/support_preflight"
+  },
+  "analysis": {
+    "bin_seconds": 1.0,
+    "minimum_epochs_per_prn_bin": 200,
+    "minimum_prns": 8,
+    "analysis_seconds": [40.0, 556.0],
+    "regions_seconds": {
+      "clean": [40.0, 200.0],
+      "aligned_spoof": [246.0, 500.0],
+      "carryoff_onset": [526.0, 556.0]
+    },
+    "receiver_position_seconds": [40.0, 200.0],
+    "maximum_ephemeris_toe_age_s": 7200.0,
+    "observables_cadence_s": 0.02,
+    "observables_tow_fit_max_residual_s": 0.021,
+    "epoch_chunk_size": 50000,
+    "cn0_weighting": false
+  },
+  "frozen_detector": {
+    "template_config": {
+      "path": "configs/experiments/correlator_geometry_identifiability_train_v1.json",
+      "sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6"
+    },
+    "threshold_source": {
+      "path": "artifacts/cgc_real_detection_v1/summary.json",
+      "sha256": "d7fa0024628a231dae2ec1da2f2bae6d4b19fb3fdf97886913d9520349aa0a63"
+    },
+    "partial_f_audit": {
+      "path": "artifacts/cgc_partial_f_seven_prn_v1/summary.json",
+      "sha256": "c07dee4ecc82e9d0ce98c98d7e8ba9b00ba6ff86400406e2cbb86821708c07d4"
+    },
+    "partial_f_p_alarm_threshold": 0.06028418845288192,
+    "persistence_window_bins": 5,
+    "persistence_required_bins": 3,
+    "threshold_calibration": "original cleanStatic bins [330,420), fifth percentile; no JammerTest calibration"
+  },
+  "evaluation": {
+    "minimum_clean_geometry_bins": 60,
+    "minimum_aligned_spoof_geometry_bins": 60,
+    "minimum_carryoff_onset_geometry_bins": 20,
+    "maximum_clean_persistent_alarm_rate": 0.05,
+    "maximum_motion_onset_latency_s": 30.0,
+    "require_motion_onset_median_p_below_clean_median_p": true,
+    "aligned_spoof_alarm_rate_is_descriptive_only": true,
+    "serial_bin_auc_is_descriptive_only": true,
+    "decision_rule": "SUPPORTED only if support, clean specificity, one onset-reset 3-of-5 carry-off alarm by 30 s, and median-direction gates all pass"
+  },
+  "evaluation_output_root": "/home/ubuntu/hdd_data/jammertest2023/analysis/jt23_17_1_6_cgc_v1/evaluation",
+  "claim_boundary": "One public outdoor coherent-spoof recording and its first prompt-local carry-off interval; not universal field accuracy and not a labelled multipath-versus-spoof confusion matrix."
+}
