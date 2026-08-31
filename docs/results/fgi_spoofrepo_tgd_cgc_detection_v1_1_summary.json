@@ -1,0 +1,60 @@
+{
+  "schema": "gnss-doppler-lab.fgi-spoofrepo-tgd-cgc-detection-compact-result",
+  "schema_version": 1,
+  "created_at_utc": "2026-08-31T03:29:35.577003+00:00",
+  "release_commit": "aaff69a9069d06c566252542e73f11942367b515",
+  "release_inputs": {
+    "configs/experiments/fgi_spoofrepo_tgd_cgc_detection_v1.json": "cd9200135e57fbe0de1c3e5640ba42ce06fa86d1ecb480f47c1e70d387bc3acd",
+    "docs/results/fgi_spoofrepo_tgd_cgc_detection_protocol_v1.md": "d43b09ad4babafe2766f71f3831c2a81553eef262981a38a9ac2b7c52d72b0f1",
+    "scripts/run_fgi_spoofrepo_tgd_cgc_detection.py": "1ebb2495730649a2c52b547406137b3390587c854f46a440e78d398846b69150"
+  },
+  "dataset": {
+    "scenario": "TG_DFMC",
+    "iq_bytes": 9961930752,
+    "iq_sha256": "10aad73665db7c5e530d9ef1d3b2fdb57bab0a7b9b19177a0128867fbad2606b",
+    "recording_start_tow_s": 480006.0,
+    "documented_attack_onset_s": 138.0
+  },
+  "detector": {
+    "partial_f_p_alarm_threshold": 0.06028418845288192,
+    "persistence": "causal 3-of-5 consecutive one-second bins"
+  },
+  "input_counts": {
+    "delay_rows": 2263,
+    "geometry_rows": 190,
+    "healthy_ephemeris_prns": 12
+  },
+  "primary": {
+    "status": "NOT_SUPPORTED",
+    "all_preregistered_gates_passed": false,
+    "clean": {
+      "geometry_bins": 80,
+      "minimum_prns": 11,
+      "raw_alarm_rate": 0.0375,
+      "persistent_alarm_rate": 0.0,
+      "median_partial_f_p_value": 0.5546595315449157,
+      "median_geometry_residual": 0.7780643078425749
+    },
+    "stable_post": {
+      "geometry_bins": 70,
+      "minimum_prns": 11,
+      "raw_alarm_rate": 0.08571428571428572,
+      "persistent_detection_rate": 0.0,
+      "median_partial_f_p_value": 0.4706816382393222,
+      "median_geometry_residual": 0.7419881743765835
+    },
+    "secondary_serial_bin_auc": 0.5535714285714286,
+    "persistent_alarm_latency_s": null,
+    "failed_gate": "minimum_stable_post_persistent_detection_rate"
+  },
+  "diagnosis": {
+    "stable_post_nmea_displacement_median_m": 69.84728112208215,
+    "stable_post_nmea_displacement_q90_m": 73.91488895015391,
+    "clean_absolute_delay_median_chips": 0.1625,
+    "stable_post_absolute_delay_median_chips": 0.125,
+    "delay_aperture_edge_fraction": 0.0,
+    "interpretation": "After takeover, prompt-referenced local correlators recenter on the captured spoof signal and do not retain the approximately 70 m absolute common displacement."
+  },
+  "full_result": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_cgc_detection_v1_1/summary.json",
+  "claim_boundary": "One FGI targeted synchronous raw-IF recording; no universal spoof-detection or real multipath-versus-spoof claim."
+}
