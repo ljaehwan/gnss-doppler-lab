@@ -1,0 +1,49 @@
+{
+  "schema": "gnss-doppler-lab.fgi-spoofrepo-tgd-support-preflight-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "FGI-SpoofRepo targeted-DFMC score-free support preflight v1",
+    "detector_score_access": false,
+    "delay_template_access": false,
+    "threshold_refitting": false,
+    "post_preflight_rule_change": false
+  },
+  "dataset": {
+    "name": "FGI-SpoofRepo",
+    "scenario": "TG_DFMC",
+    "signal": "GPS L1 C/A plus Galileo E1",
+    "path": "/home/ubuntu/hdd_data/fgi-spoofrepo/TG_DFMC/TGD_L1_E1.dat",
+    "official_record": "https://doi.org/10.23729/7a648509-2ca8-4a7d-8223-0b429182f857",
+    "expected_bytes": 9961930752,
+    "sha256": "10aad73665db7c5e530d9ef1d3b2fdb57bab0a7b9b19177a0128867fbad2606b",
+    "sample_format": "signed int8 real IF",
+    "input_sample_rate_hz": 26000000,
+    "intermediate_frequency_hz": 6390000,
+    "documented_attack_free_until_s": 130.0,
+    "documented_attack_onset_s": 138.0
+  },
+  "receiver": {
+    "executable": ".tools/gnss-sdr-method-a-9tap",
+    "executable_sha256": "fc00d610fdb966358ac85486b616ff2411cb163ca8269dd0b435919c5e197e25",
+    "duration_seconds": 240.0,
+    "channel_count": 31,
+    "decimation_factor": 4,
+    "internal_sample_rate_hz": 6500000,
+    "tap_count": 9,
+    "tap_spacing_chips": 0.125
+  },
+  "analysis_intervals_seconds": {
+    "clean": [40.0, 120.0],
+    "post_onset_support": [160.0, 230.0]
+  },
+  "support_gate": {
+    "bin_seconds": 1.0,
+    "minimum_epochs_per_prn_bin": 200,
+    "minimum_primary_prns": 8,
+    "secondary_boundary_prns": 7,
+    "minimum_primary_bins_each_interval": 60,
+    "require_complex_nine_tap": true
+  },
+  "output_root": "/home/ubuntu/hdd_data/fgi-spoofrepo/analysis/tgd_support_preflight_v1",
+  "claim_boundary": "Support-only compatibility audit; no delay estimate, CGC score, threshold, alarm, latency, or detector-performance claim."
+}
