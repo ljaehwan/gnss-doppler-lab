@@ -1,0 +1,122 @@
+{
+  "schema": "gnss-doppler-lab.cgc-code-carrier-fresh-static-pool",
+  "schema_version": 1,
+  "experiment": {
+    "name": "cgc-code-carrier-fresh-static-v1",
+    "role": "support-only candidate selection before any 25 MHz RF or CGC score access",
+    "prior_full_rf_pair_reuse": false,
+    "score_access_during_preflight": false
+  },
+  "inputs": {
+    "rinex_nav": {
+      "path": ".tools/gps-sdr-sim-src/brdc0010.22n",
+      "sha256": "7db04513dd2d0e13c0ee20cb4eaa8f71e5a28ab58b65c9b5b789f86eeab436cd"
+    },
+    "simulator": {
+      "path": ".tools/gps-sdr-sim-code-carrier-src/gps-sdr-sim",
+      "sha256": "cd4e218e208698145b2ab7adb93607b58e37ddeba6d4a9a649876b6db5d263e1"
+    }
+  },
+  "preflight": {
+    "duration_seconds": 1,
+    "sample_rate_hz": 1000000,
+    "minimum_startup_los_prns": 10,
+    "slot_order": ["S1", "S2", "S3", "S4", "S5"],
+    "selection_rule": "within each slot, select the first candidate in file order with at least 10 startup LOS PRNs; no score or substitution after selection"
+  },
+  "fixed_campaign": {
+    "duration_seconds": 30,
+    "carryoff_start_seconds": 5.0,
+    "transition_seconds": 5.0,
+    "initial_advantage_db": -30.0,
+    "final_advantage_db": 3.0,
+    "power_ramp_seconds": 5.0,
+    "hold_start_seconds": 12.0,
+    "rf_sample_rate_hz": 25000000,
+    "minimum_analysis_prns": 8,
+    "partial_f_p_alarm_threshold": 0.06028418845288192,
+    "persistence_rule": "3 of the latest 5 available one-second bins"
+  },
+  "candidates": [
+    {
+      "candidate_id": "ccfs-s1-a-tokyo",
+      "slot": "S1",
+      "utc": "2022-01-01T01:15:00Z",
+      "position": {"latitude_deg": 35.6762, "longitude_deg": 139.6503, "altitude_m": 40.0},
+      "target_offset_enu_m": [100.0, 0.0, 0.0],
+      "receiver_seed": 2026092101
+    },
+    {
+      "candidate_id": "ccfs-s1-b-singapore",
+      "slot": "S1",
+      "utc": "2022-01-01T01:45:00Z",
+      "position": {"latitude_deg": 1.3521, "longitude_deg": 103.8198, "altitude_m": 30.0},
+      "target_offset_enu_m": [100.0, 0.0, 0.0],
+      "receiver_seed": 2026092111
+    },
+    {
+      "candidate_id": "ccfs-s2-a-london",
+      "slot": "S2",
+      "utc": "2022-01-01T05:15:00Z",
+      "position": {"latitude_deg": 51.5074, "longitude_deg": -0.1278, "altitude_m": 35.0},
+      "target_offset_enu_m": [0.0, 100.0, 0.0],
+      "receiver_seed": 2026092102
+    },
+    {
+      "candidate_id": "ccfs-s2-b-reykjavik",
+      "slot": "S2",
+      "utc": "2022-01-01T05:45:00Z",
+      "position": {"latitude_deg": 64.1466, "longitude_deg": -21.9426, "altitude_m": 25.0},
+      "target_offset_enu_m": [0.0, 100.0, 0.0],
+      "receiver_seed": 2026092112
+    },
+    {
+      "candidate_id": "ccfs-s3-a-sao-paulo",
+      "slot": "S3",
+      "utc": "2022-01-01T09:15:00Z",
+      "position": {"latitude_deg": -23.5505, "longitude_deg": -46.6333, "altitude_m": 760.0},
+      "target_offset_enu_m": [-80.0, 60.0, 0.0],
+      "receiver_seed": 2026092103
+    },
+    {
+      "candidate_id": "ccfs-s3-b-mexico-city",
+      "slot": "S3",
+      "utc": "2022-01-01T09:45:00Z",
+      "position": {"latitude_deg": 19.4326, "longitude_deg": -99.1332, "altitude_m": 2240.0},
+      "target_offset_enu_m": [-80.0, 60.0, 0.0],
+      "receiver_seed": 2026092113
+    },
+    {
+      "candidate_id": "ccfs-s4-a-sydney",
+      "slot": "S4",
+      "utc": "2022-01-01T13:15:00Z",
+      "position": {"latitude_deg": -33.8688, "longitude_deg": 151.2093, "altitude_m": 30.0},
+      "target_offset_enu_m": [60.0, -80.0, 0.0],
+      "receiver_seed": 2026092104
+    },
+    {
+      "candidate_id": "ccfs-s4-b-auckland",
+      "slot": "S4",
+      "utc": "2022-01-01T13:45:00Z",
+      "position": {"latitude_deg": -36.8509, "longitude_deg": 174.7645, "altitude_m": 45.0},
+      "target_offset_enu_m": [60.0, -80.0, 0.0],
+      "receiver_seed": 2026092114
+    },
+    {
+      "candidate_id": "ccfs-s5-a-nairobi",
+      "slot": "S5",
+      "utc": "2022-01-01T17:15:00Z",
+      "position": {"latitude_deg": -1.2921, "longitude_deg": 36.8219, "altitude_m": 1795.0},
+      "target_offset_enu_m": [60.0, 0.0, 80.0],
+      "receiver_seed": 2026092105
+    },
+    {
+      "candidate_id": "ccfs-s5-b-dubai",
+      "slot": "S5",
+      "utc": "2022-01-01T17:45:00Z",
+      "position": {"latitude_deg": 25.2048, "longitude_deg": 55.2708, "altitude_m": 20.0},
+      "target_offset_enu_m": [60.0, 0.0, 80.0],
+      "receiver_seed": 2026092115
+    }
+  ]
+}
