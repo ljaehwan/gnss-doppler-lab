@@ -1,0 +1,353 @@
+diff --git a/gpssim.c b/gpssim.c
+index 1b01ebf..e3e412d 100644
+--- a/gpssim.c
++++ b/gpssim.c
+@@ -93,6 +93,7 @@ double ant_pat_db[37] = {
+ int allocatedSat[MAX_SAT];
+ 
+ double xyz[USER_MOTION_SIZE][3];
++double xyz_carrier[USER_MOTION_SIZE][3];
+ 
+ /*! \brief Subtract two vectors of double
+  *  \param[out] y Result of subtraction
+@@ -1321,23 +1322,30 @@ void computeRange(range_t *rho, ephem_t eph, ionoutc_t *ionoutc, gpstime_t g, do
+ 	return;
+ }
+ 
+-/*! \brief Compute the code phase for a given channel (satellite)
++/*! \brief Compute code phase and carrier Doppler from independent ranges
+  *  \param chan Channel on which we operate (is updated)
+- *  \param[in] rho1 Current range, after \a dt has expired
++ *  \param[in] rho_code1 Current code range, after \a dt has expired
++ *  \param[in] rho_carrier1 Current carrier-reference range, after \a dt has expired
+  *  \param[in dt delta-t (time difference) in seconds
+  */
+-void computeCodePhase(channel_t *chan, range_t rho1, double dt)
++void computeCodeCarrierPhase(channel_t *chan, range_t rho_code1, range_t rho_carrier1, double dt)
+ {
+ 	double ms;
+ 	int ims;
+-	double rhorate;
++	double code_rhorate;
++	double carrier_rhorate;
++	double code_doppler;
+ 
+-	// Pseudorange rate.
+-	rhorate = (rho1.range - chan->rho0.range)/dt;
++	// Independent pseudorange rates. A standard run supplies the same range to
++	// both inputs and is therefore backward-compatible with gps-sdr-sim.
++	code_rhorate = (rho_code1.range - chan->rho0.range)/dt;
++	carrier_rhorate = (rho_carrier1.range - chan->rho_carrier0.range)/dt;
+ 
+-	// Carrier and code frequency.
+-	chan->f_carr = -rhorate/LAMBDA_L1;
+-	chan->f_code = CODE_FREQ + chan->f_carr*CARR_TO_CODE;
++	// Carrier follows the carrier-reference trajectory. Code follows the code
++	// trajectory even when carrier Doppler is locked to another trajectory.
++	chan->f_carr = -carrier_rhorate/LAMBDA_L1;
++	code_doppler = -code_rhorate/LAMBDA_L1;
++	chan->f_code = CODE_FREQ + code_doppler*CARR_TO_CODE;
+ 
+ 	// Initial code phase and data bit counters.
+ 	ms = ((subGpsTime(chan->rho0.g,chan->g0)+6.0) - chan->rho0.range/SPEED_OF_LIGHT)*1000.0;
+@@ -1357,7 +1365,8 @@ void computeCodePhase(channel_t *chan, range_t rho1, double dt)
+ 	chan->dataBit = (int)((chan->dwrd[chan->iword]>>(29-chan->ibit)) & 0x1UL)*2-1;
+ 
+ 	// Save current pseudorange
+-	chan->rho0 = rho1;
++	chan->rho0 = rho_code1;
++	chan->rho_carrier0 = rho_carrier1;
+ 
+ 	return;
+ }
+@@ -1624,7 +1633,8 @@ int checkSatVisibility(ephem_t eph, gpstime_t g, double *xyz, double elvMask, do
+ 	return (0); // Invisible
+ }
+ 
+-int allocateChannel(channel_t *chan, ephem_t *eph, ionoutc_t ionoutc, gpstime_t grx, double *xyz, double elvMask)
++int allocateChannel(channel_t *chan, ephem_t *eph, ionoutc_t ionoutc, gpstime_t grx,
++	double *xyz_code, double *xyz_carrier_ref, double elvMask)
+ {
+ 	int nsat=0;
+ 	int i,sv;
+@@ -1637,7 +1647,7 @@ int allocateChannel(channel_t *chan, ephem_t *eph, ionoutc_t ionoutc, gpstime_t
+ 
+ 	for (sv=0; sv<MAX_SAT; sv++)
+ 	{
+-		if(checkSatVisibility(eph[sv], grx, xyz, 0.0, azel)==1)
++		if(checkSatVisibility(eph[sv], grx, xyz_carrier_ref, 0.0, azel)==1)
+ 		{
+ 			nsat++; // Number of visible satellites
+ 
+@@ -1663,11 +1673,14 @@ int allocateChannel(channel_t *chan, ephem_t *eph, ionoutc_t ionoutc, gpstime_t
+ 						generateNavMsg(grx, &chan[i], 1);
+ 
+ 						// Initialize pseudorange
+-						computeRange(&rho, eph[sv], &ionoutc, grx, xyz);
++						computeRange(&rho, eph[sv], &ionoutc, grx, xyz_code);
+ 						chan[i].rho0 = rho;
+ 
++						computeRange(&rho, eph[sv], &ionoutc, grx, xyz_carrier_ref);
++						chan[i].rho_carrier0 = rho;
++
+ 						// Initialize carrier phase
+-						r_xyz = rho.range;
++						r_xyz = chan[i].rho_carrier0.range;
+ 
+ 						computeRange(&rho, eph[sv], &ionoutc, grx, ref);
+ 						r_ref = rho.range;
+@@ -1710,6 +1723,7 @@ void usage(void)
+ 		"  -e <gps_nav>     RINEX navigation file for GPS ephemerides (required)\n"
+ 		"  -u <user_motion> User motion file in ECEF x, y, z format (dynamic mode)\n"
+ 		"  -x <user_motion> User motion file in lat, lon, height format (dynamic mode)\n"
++		"  -X <carrier_ref> Independent carrier-reference motion in lat, lon, height format\n"
+ 		"  -g <nmea_gga>    NMEA GGA stream (dynamic mode)\n"
+ 		"  -c <location>    ECEF X,Y,Z in meters (static mode) e.g. 3967283.154,1022538.181,4872414.484\n"
+ 		"  -l <location>    Lat, lon, height (static mode) e.g. 35.681298,139.766247,10.0\n"
+@@ -1718,6 +1732,7 @@ void usage(void)
+ 		"  -T <date,time>   Overwrite TOC and TOE to scenario start time\n"
+ 		"  -d <duration>    Duration [sec] (dynamic mode max: %.0f, static mode max: %d)\n"
+ 		"  -o <output>      I/Q sampling data file (default: gpssim.bin)\n"
++		"  -D <truth_csv>   Optional per-channel code/carrier truth diagnostics\n"
+ 		"  -s <frequency>   Sampling frequency [Hz] (default: 2600000)\n"
+ 		"  -b <iq_bits>     I/Q data format [1/8/16] (default: 16)\n"
+ 		"  -i               Disable ionospheric delay for spacecraft scenario\n"
+@@ -1733,6 +1748,7 @@ int main(int argc, char *argv[])
+ 	clock_t tstart,tend;
+ 
+ 	FILE *fp;
++	FILE *truth_fp = NULL;
+ 
+ 	int sv;
+ 	int neph,ieph;
+@@ -1756,15 +1772,19 @@ int main(int argc, char *argv[])
+ 
+ 	int iumd;
+ 	int numd;
++	int numd_carrier;
+ 	char umfile[MAX_CHAR];
++	char carrierfile[MAX_CHAR];
+ 
+ 
+ 	int staticLocationMode = FALSE;
+ 	int nmeaGGA = FALSE;
+ 	int umLLH = FALSE;
++	int carrierMotionEnabled = FALSE;
+ 
+ 	char navfile[MAX_CHAR];
+ 	char outfile[MAX_CHAR];
++	char truthfile[MAX_CHAR];
+ 
+ 	double samp_freq;
+ 	int iq_buff_size;
+@@ -1800,7 +1820,9 @@ int main(int argc, char *argv[])
+ 	// Default options
+ 	navfile[0] = 0;
+ 	umfile[0] = 0;
++	carrierfile[0] = 0;
+ 	strcpy(outfile, "gpssim.bin");
++	truthfile[0] = 0;
+ 	samp_freq = 2.6e6;
+ 	data_format = SC16;
+ 	g0.week = -1; // Invalid start time
+@@ -1816,7 +1838,7 @@ int main(int argc, char *argv[])
+ 		exit(1);
+ 	}
+ 
+-	while ((result=getopt(argc,argv,"e:u:x:g:c:l:o:s:b:L:T:t:d:ipv"))!=-1)
++	while ((result=getopt(argc,argv,"e:u:x:X:g:c:l:o:D:s:b:L:T:t:d:ipv"))!=-1)
+ 	{
+ 		switch (result)
+ 		{
+@@ -1833,6 +1855,10 @@ int main(int argc, char *argv[])
+ 			strcpy(umfile, optarg);
+ 			umLLH = TRUE;
+ 			break;
++		case 'X':
++			strcpy(carrierfile, optarg);
++			carrierMotionEnabled = TRUE;
++			break;
+ 		case 'g':
+ 			strcpy(umfile, optarg);
+ 			nmeaGGA = TRUE;
+@@ -1854,6 +1880,9 @@ int main(int argc, char *argv[])
+ 		case 'o':
+ 			strcpy(outfile, optarg);
+ 			break;
++		case 'D':
++			strcpy(truthfile, optarg);
++			break;
+ 		case 's':
+ 			samp_freq = atof(optarg);
+ 			if (samp_freq<1.0e6)
+@@ -1975,6 +2004,12 @@ int main(int argc, char *argv[])
+ 	}
+ 	iduration = (int)(duration*10.0 + 0.5);
+ 
++	if (carrierMotionEnabled && staticLocationMode)
++	{
++		fprintf(stderr, "ERROR: -X requires dynamic -x/-u/-g mode.\n");
++		exit(1);
++	}
++
+ 	// Buffer size
+ 	samp_freq = floor(samp_freq/10.0);
+ 	iq_buff_size = (int)samp_freq; // samples per 0.1sec
+@@ -2007,10 +2042,31 @@ int main(int argc, char *argv[])
+ 			exit(1);
+ 		}
+ 
++		if (carrierMotionEnabled)
++		{
++			numd_carrier = readUserMotionLLH(xyz_carrier, carrierfile);
++			if (numd_carrier==-1)
++			{
++				fprintf(stderr, "ERROR: Failed to open carrier-reference motion file.\n");
++				exit(1);
++			}
++			else if (numd_carrier==0)
++			{
++				fprintf(stderr, "ERROR: Failed to read carrier-reference motion data.\n");
++				exit(1);
++			}
++		}
++
+ 		// Set simulation duration
+ 		if (numd>iduration)
+ 			numd = iduration;
+ 
++		if (carrierMotionEnabled && numd_carrier<numd)
++		{
++			fprintf(stderr, "ERROR: Carrier-reference motion is shorter than the simulated code trajectory.\n");
++			exit(1);
++		}
++
+ 		// Set user initial position
+ 		xyz2llh(xyz[0], llh);
+ 	}
+@@ -2027,8 +2083,20 @@ int main(int argc, char *argv[])
+ 		llh2xyz(llh, xyz[0]);
+ 	}
+ 
++	if (!carrierMotionEnabled)
++	{
++		for (i=0; i<numd; i++)
++		{
++			xyz_carrier[i][0] = xyz[i][0];
++			xyz_carrier[i][1] = xyz[i][1];
++			xyz_carrier[i][2] = xyz[i][2];
++		}
++	}
++
+ 	fprintf(stderr, "xyz = %11.1f, %11.1f, %11.1f\n", xyz[0][0], xyz[0][1], xyz[0][2]);
+ 	fprintf(stderr, "llh = %11.6f, %11.6f, %11.1f\n", llh[0]*R2D, llh[1]*R2D, llh[2]);
++	if (carrierMotionEnabled)
++		fprintf(stderr, "Carrier-reference trajectory = %s (independent from code trajectory)\n", carrierfile);
+ 
+ 	////////////////////////////////////////////////////////////
+ 	// Read ephemeris
+@@ -2221,6 +2289,16 @@ int main(int argc, char *argv[])
+ 		fp = stdout;
+ 	}
+ 
++	if (truthfile[0]!=0)
++	{
++		if (NULL==(truth_fp=fopen(truthfile,"wt")))
++		{
++			fprintf(stderr, "ERROR: Failed to open truth diagnostics file.\n");
++			exit(1);
++		}
++		fprintf(truth_fp, "time_s,prn,code_range_m,carrier_range_m,relative_code_range_m,code_rate_mps,carrier_rate_mps,code_frequency_hz,carrier_doppler_hz\n");
++	}
++
+ 	////////////////////////////////////////////////////////////
+ 	// Initialize channels
+ 	////////////////////////////////////////////////////////////
+@@ -2237,7 +2315,7 @@ int main(int argc, char *argv[])
+ 	grx = incGpsTime(g0, 0.0);
+ 
+ 	// Allocate visible satellites
+-	allocateChannel(chan, eph[ieph], ionoutc, grx, xyz[0], elvmask);
++	allocateChannel(chan, eph[ieph], ionoutc, grx, xyz[0], xyz_carrier[0], elvmask);
+ 
+ 	for(i=0; i<MAX_CHAN; i++)
+ 	{
+@@ -2270,6 +2348,7 @@ int main(int argc, char *argv[])
+ 			{
+ 				// Refresh code phase and data bit counters
+ 				range_t rho;
++				range_t rho_carrier;
+ 				sv = chan[i].prn-1;
+ 
+ 				// Current pseudorange
+@@ -2278,19 +2357,32 @@ int main(int argc, char *argv[])
+ 				else
+ 					computeRange(&rho, eph[ieph][sv], &ionoutc, grx, xyz[0]);
+ 
+-				chan[i].azel[0] = rho.azel[0];
+-				chan[i].azel[1] = rho.azel[1];
++				if (!staticLocationMode)
++					computeRange(&rho_carrier, eph[ieph][sv], &ionoutc, grx, xyz_carrier[iumd]);
++				else
++					computeRange(&rho_carrier, eph[ieph][sv], &ionoutc, grx, xyz_carrier[0]);
++
++				chan[i].azel[0] = rho_carrier.azel[0];
++				chan[i].azel[1] = rho_carrier.azel[1];
+ 
+ 				// Update code phase and data bit counters
+-				computeCodePhase(&chan[i], rho, 0.1);
++				computeCodeCarrierPhase(&chan[i], rho, rho_carrier, 0.1);
++				if (truth_fp!=NULL)
++				{
++					fprintf(truth_fp, "%.1f,%d,%.6f,%.6f,%.6f,%.6f,%.6f,%.9f,%.9f\n",
++						subGpsTime(grx, g0), chan[i].prn, rho.range, rho_carrier.range,
++						rho.range-rho_carrier.range,
++						-(chan[i].f_code-CODE_FREQ)*LAMBDA_L1/CARR_TO_CODE,
++						-chan[i].f_carr*LAMBDA_L1, chan[i].f_code, chan[i].f_carr);
++				}
+ #ifndef FLOAT_CARR_PHASE
+ 				chan[i].carr_phasestep = (int)round(512.0 * 65536.0 * chan[i].f_carr * delt);
+ #endif
+ 				// Path loss
+-				path_loss = 20200000.0/rho.d;
++				path_loss = 20200000.0/rho_carrier.d;
+ 
+ 				// Receiver antenna gain
+-				ibs = (int)((90.0-rho.azel[1]*R2D)/5.0); // covert elevation to boresight
++				ibs = (int)((90.0-rho_carrier.azel[1]*R2D)/5.0); // covert elevation to boresight
+ 				ant_gain = ant_pat[ibs];
+ 
+ 				// Signal gain
+@@ -2444,9 +2536,9 @@ int main(int argc, char *argv[])
+ 
+ 			// Update channel allocation
+ 			if (!staticLocationMode)
+-				allocateChannel(chan, eph[ieph], ionoutc, grx, xyz[iumd], elvmask);
++				allocateChannel(chan, eph[ieph], ionoutc, grx, xyz[iumd], xyz_carrier[iumd], elvmask);
+ 			else
+-				allocateChannel(chan, eph[ieph], ionoutc, grx, xyz[0], elvmask);
++				allocateChannel(chan, eph[ieph], ionoutc, grx, xyz[0], xyz_carrier[0], elvmask);
+ 
+ 			// Show details about simulated channels
+ 			if (verb==TRUE)
+@@ -2478,6 +2570,8 @@ int main(int argc, char *argv[])
+ 
+ 	// Close file
+ 	fclose(fp);
++	if (truth_fp!=NULL)
++		fclose(truth_fp);
+ 
+ 	// Process time
+ 	fprintf(stderr, "Process time = %.1f [sec]\n", (double)(tend-tstart)/CLOCKS_PER_SEC);
+diff --git a/gpssim.h b/gpssim.h
+index 4175bb9..1f4e931 100644
+--- a/gpssim.h
++++ b/gpssim.h
+@@ -182,6 +182,7 @@ typedef struct
+ 	int codeCA;	/*!< current C/A code */
+ 	double azel[2];
+ 	range_t rho0;
++	range_t rho_carrier0; /*!< Independent range history used for carrier Doppler */
+ } channel_t;
+ 
+ #endif

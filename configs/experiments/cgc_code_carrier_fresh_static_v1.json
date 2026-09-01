@@ -1,0 +1,137 @@
+{
+  "schema": "gnss-doppler-lab.cgc-code-carrier-fresh-static-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "cgc-code-carrier-fresh-static-v1",
+    "role": "single-release fresh static test of CGC under authentic-Doppler-locked code carry-off",
+    "post_release_pair_substitution": false,
+    "post_release_tuning_or_retest": false
+  },
+  "selection": {
+    "candidate_pool": {
+      "path": "configs/experiments/cgc_code_carrier_fresh_static_pool_v1.json",
+      "sha256": "1fc509f35cdea8f99546533c861f6add9ada86ab4f7e750c86b6170d377dba84"
+    },
+    "preflight_record": {
+      "path": "docs/results/cgc_code_carrier_fresh_static_preflight_v1_summary.json",
+      "sha256": "0db6147ef28b7a0cc58f2080c11753bece6a1644c4f3240d6858b5f3ad22fb82"
+    },
+    "selected_startup_los_counts": {
+      "ccfs-s1-a-tokyo": 11,
+      "ccfs-s2-a-london": 14,
+      "ccfs-s3-a-sao-paulo": 14,
+      "ccfs-s4-a-sydney": 12,
+      "ccfs-s5-a-nairobi": 13
+    }
+  },
+  "pairs": [
+    {
+      "candidate_id": "ccfs-s1-a-tokyo",
+      "slot": "S1",
+      "utc": "2022-01-01T01:15:00Z",
+      "position": {"latitude_deg": 35.6762, "longitude_deg": 139.6503, "altitude_m": 40.0},
+      "target_offset_enu_m": [100.0, 0.0, 0.0],
+      "receiver_seed": 2026092101
+    },
+    {
+      "candidate_id": "ccfs-s2-a-london",
+      "slot": "S2",
+      "utc": "2022-01-01T05:15:00Z",
+      "position": {"latitude_deg": 51.5074, "longitude_deg": -0.1278, "altitude_m": 35.0},
+      "target_offset_enu_m": [0.0, 100.0, 0.0],
+      "receiver_seed": 2026092102
+    },
+    {
+      "candidate_id": "ccfs-s3-a-sao-paulo",
+      "slot": "S3",
+      "utc": "2022-01-01T09:15:00Z",
+      "position": {"latitude_deg": -23.5505, "longitude_deg": -46.6333, "altitude_m": 760.0},
+      "target_offset_enu_m": [-80.0, 60.0, 0.0],
+      "receiver_seed": 2026092103
+    },
+    {
+      "candidate_id": "ccfs-s4-a-sydney",
+      "slot": "S4",
+      "utc": "2022-01-01T13:15:00Z",
+      "position": {"latitude_deg": -33.8688, "longitude_deg": 151.2093, "altitude_m": 30.0},
+      "target_offset_enu_m": [60.0, -80.0, 0.0],
+      "receiver_seed": 2026092104
+    },
+    {
+      "candidate_id": "ccfs-s5-a-nairobi",
+      "slot": "S5",
+      "utc": "2022-01-01T17:15:00Z",
+      "position": {"latitude_deg": -1.2921, "longitude_deg": 36.8219, "altitude_m": 1795.0},
+      "target_offset_enu_m": [60.0, 0.0, 80.0],
+      "receiver_seed": 2026092105
+    }
+  ],
+  "carryoff": {
+    "duration_seconds": 30,
+    "start_seconds": 5.0,
+    "transition_seconds": 5.0,
+    "initial_advantage_db": -30.0,
+    "final_advantage_db": 3.0,
+    "power_ramp_seconds": 5.0,
+    "hold_start_seconds": 12.0
+  },
+  "inputs": {
+    "normal_profile": {
+      "path": "configs/experiments/simulation_v4_normal_independent_validation_v1.json",
+      "sha256": "256977cfb14f0828d6cc98af83f459e7dee0407b41cd1188b0c37cb170593a78"
+    },
+    "controlled_template": {
+      "path": "configs/experiments/correlator_geometry_identifiability_train_v1.json",
+      "sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6"
+    },
+    "rinex_nav": {
+      "path": ".tools/gps-sdr-sim-src/brdc0010.22n",
+      "sha256": "7db04513dd2d0e13c0ee20cb4eaa8f71e5a28ab58b65c9b5b789f86eeab436cd"
+    }
+  },
+  "tools": {
+    "decoupled_simulator": {
+      "path": ".tools/gps-sdr-sim-code-carrier-src/gps-sdr-sim",
+      "sha256": "cd4e218e208698145b2ab7adb93607b58e37ddeba6d4a9a649876b6db5d263e1",
+      "upstream_commit": "28ca29a6719475195e3aabd5930c4ed02d67190f"
+    },
+    "simulator_patch": {
+      "path": "patches/gps-sdr-sim-code-carrier-decoupling-v1.patch",
+      "sha256": "b4a76fafcb7d965409ef2ee4fa9fea0e41dfe671cf6c7024a1f7ac0b36431062"
+    },
+    "receiver": {
+      "path": ".tools/gnss-sdr-src/build/src/main/gnss-sdr",
+      "sha256": "fc00d610fdb966358ac85486b616ff2411cb163ca8269dd0b435919c5e197e25",
+      "channel_count": 11,
+      "timeout_seconds": 1200,
+      "tracking_tap_count": 9,
+      "tracking_tap_spacing_chips": 0.125
+    }
+  },
+  "rf": {
+    "sample_rate_hz": 25000000,
+    "target_composite_cn0_db_hz": 60.5,
+    "normal_target_rms": 22.0,
+    "paired_frontend_noise_between_conditions": true
+  },
+  "analysis": {
+    "bin_seconds": 1.0,
+    "minimum_prns": 8,
+    "partial_f_p_alarm_threshold": 0.06028418845288192,
+    "persistence_rule": "3 of the latest 5 available one-second bins",
+    "primary_interval_start_seconds": 12.0,
+    "pre_attack_interval": "bin_start_s < 5.0"
+  },
+  "evaluation": {
+    "required_pair_count": 5,
+    "required_truth_invariant_pair_count": 5,
+    "required_carrier_coupled_persistent_detection_count": 5,
+    "minimum_doppler_locked_persistent_detection_count": 4,
+    "maximum_total_pre_attack_persistent_alarm_count": 0,
+    "minimum_median_carrier_coupled_hold_raw_alarm_rate": 0.9,
+    "minimum_median_doppler_locked_hold_raw_alarm_rate": 0.5,
+    "maximum_median_doppler_locked_latency_seconds": 10.0
+  },
+  "output_root": "/home/ubuntu/hdd_data/cgc_code_carrier_fresh_static_v1",
+  "claim_boundary": "fresh static simulated receiver-RF robustness of code-domain CGC to authentic-Doppler-locked carry-off; not field validation, universal spoof detection, or a claim that all Doppler detectors fail"
+}

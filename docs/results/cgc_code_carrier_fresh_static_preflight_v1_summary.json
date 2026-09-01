@@ -1,0 +1,47 @@
+{
+  "schema": "gnss-doppler-lab.cgc-code-carrier-fresh-static-preflight-record",
+  "schema_version": 1,
+  "candidate_pool": {
+    "path": "configs/experiments/cgc_code_carrier_fresh_static_pool_v1.json",
+    "sha256": "1fc509f35cdea8f99546533c861f6add9ada86ab4f7e750c86b6170d377dba84"
+  },
+  "protocol": {
+    "path": "docs/results/cgc_code_carrier_fresh_static_preflight_protocol_v1.md",
+    "sha256": "e5d6aa8a34ef238c73f0dc4fcd2c619823906cc31a5b7f94094685b6114c84d9"
+  },
+  "candidate_release_commit": "1f786f6b9230a671eb6b6fa3b39f29f02c988d3d",
+  "source_artifact": {
+    "path": "artifacts/cgc_code_carrier_fresh_static_preflight_v1/summary.json",
+    "sha256": "3f7a94f443d7286940a1da2181bdff6d5a7c1126fd66a6bd5067632453eb8a03"
+  },
+  "score_accessed": false,
+  "probe_iq_retained": false,
+  "selection_rule": "within each slot, select the first candidate in file order with at least 10 startup LOS PRNs",
+  "selected_candidate_ids": [
+    "ccfs-s1-a-tokyo",
+    "ccfs-s2-a-london",
+    "ccfs-s3-a-sao-paulo",
+    "ccfs-s4-a-sydney",
+    "ccfs-s5-a-nairobi"
+  ],
+  "selected_startup_los_counts": {
+    "ccfs-s1-a-tokyo": 11,
+    "ccfs-s2-a-london": 14,
+    "ccfs-s3-a-sao-paulo": 14,
+    "ccfs-s4-a-sydney": 12,
+    "ccfs-s5-a-nairobi": 13
+  },
+  "all_candidate_counts": {
+    "ccfs-s1-a-tokyo": 11,
+    "ccfs-s1-b-singapore": 11,
+    "ccfs-s2-a-london": 14,
+    "ccfs-s2-b-reykjavik": 13,
+    "ccfs-s3-a-sao-paulo": 14,
+    "ccfs-s3-b-mexico-city": 13,
+    "ccfs-s4-a-sydney": 12,
+    "ccfs-s4-b-auckland": 10,
+    "ccfs-s5-a-nairobi": 13,
+    "ccfs-s5-b-dubai": 10
+  },
+  "status": "SUPPORT_ELIGIBLE"
+}

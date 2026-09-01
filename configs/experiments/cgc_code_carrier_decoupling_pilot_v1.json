@@ -1,0 +1,113 @@
+{
+  "schema": "gnss-doppler-lab.cgc-code-carrier-decoupling-pilot-config",
+  "schema_version": 1,
+  "experiment": {
+    "name": "cgc-code-carrier-decoupling-pilot-v1",
+    "role": "development-only static receiver-RF mechanism pilot",
+    "question": "Does code-domain CGC remain informative when a carry-off replica is carrier-Doppler locked to the authentic receiver trajectory?",
+    "outcome_status": "not a fresh confirmatory test; Seoul geometry and conventional carry-off outcomes were used previously"
+  },
+  "static_geometry": {
+    "id": "seoul-static-development",
+    "utc": "2022-01-01T04:00:00Z",
+    "duration_seconds": 30,
+    "position": {
+      "latitude_deg": 37.5665,
+      "longitude_deg": 126.978,
+      "altitude_m": 120.0
+    },
+    "receiver_seed": 20260832,
+    "target_composite_cn0_db_hz": 60.5,
+    "startup_los_prns": 10
+  },
+  "carryoff": {
+    "start_seconds": 5.0,
+    "transition_seconds": 5.0,
+    "target_offset_enu_m": [80.0, 60.0, 0.0],
+    "initial_advantage_db": -30.0,
+    "final_advantage_db": 3.0,
+    "power_ramp_seconds": 5.0,
+    "hold_start_seconds": 12.0
+  },
+  "conditions": [
+    {
+      "id": "carrier-coupled",
+      "code_trajectory": "false carry-off trajectory",
+      "carrier_trajectory": "same false carry-off trajectory",
+      "role": "positive observability control"
+    },
+    {
+      "id": "doppler-locked",
+      "code_trajectory": "same false carry-off trajectory",
+      "carrier_trajectory": "authentic static receiver trajectory",
+      "role": "target decoupled attack"
+    }
+  ],
+  "inputs": {
+    "normal_profile": {
+      "path": "configs/experiments/simulation_v4_normal_independent_validation_v1.json",
+      "sha256": "256977cfb14f0828d6cc98af83f459e7dee0407b41cd1188b0c37cb170593a78"
+    },
+    "controlled_template": {
+      "path": "configs/experiments/correlator_geometry_identifiability_train_v1.json",
+      "sha256": "4b077abc21e44ba84fc01a104bc7b9d357a5dc85ad16828181890b9540e848c6"
+    },
+    "rinex_nav": {
+      "path": ".tools/gps-sdr-sim-src/brdc0010.22n",
+      "sha256": "7db04513dd2d0e13c0ee20cb4eaa8f71e5a28ab58b65c9b5b789f86eeab436cd"
+    },
+    "authentic_component": {
+      "path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-s-seoul-b/authentic_gps_l1ca_s8_iq.bin",
+      "sha256": "b6490121bfae1629224d05b63d9aeed066710e3798ee5db111fdf34a97264027",
+      "bytes": 1495000000
+    },
+    "authentic_los_log": {
+      "path": "artifacts/simulation_v4_normal_independent_validation_v1/components/iv-s-seoul-b/gps-sdr-sim.log",
+      "sha256": "f2dc1bb93ad83394f1eb655c0eeb77b412eedb9e6199bc65cf6c758b6e8c88c8"
+    },
+    "normal_rf_manifest": {
+      "path": "artifacts/simulation_v4_normal_independent_validation_v1/rf/iv-s-seoul-b/manifest.json",
+      "sha256": "e81878615eff35ffb578f240bea811661740014e1966a99605f82d07bad41ec1"
+    },
+    "multipath_geometry_scores": {
+      "path": "artifacts/cgc_rf_ga_v1/geometries/seoul-static/common_multipath/multipath_geometry_scores_9tap.csv",
+      "role": "development comparison only"
+    }
+  },
+  "tools": {
+    "decoupled_simulator": {
+      "path": ".tools/gps-sdr-sim-code-carrier-src/gps-sdr-sim",
+      "sha256": "cd4e218e208698145b2ab7adb93607b58e37ddeba6d4a9a649876b6db5d263e1",
+      "upstream_commit": "28ca29a6719475195e3aabd5930c4ed02d67190f"
+    },
+    "simulator_patch": {
+      "path": "patches/gps-sdr-sim-code-carrier-decoupling-v1.patch",
+      "sha256": "b4a76fafcb7d965409ef2ee4fa9fea0e41dfe671cf6c7024a1f7ac0b36431062"
+    },
+    "receiver": {
+      "path": ".tools/gnss-sdr-src/build/src/main/gnss-sdr",
+      "sha256": "fc00d610fdb966358ac85486b616ff2411cb163ca8269dd0b435919c5e197e25",
+      "channel_count": 11,
+      "timeout_seconds": 1200,
+      "tracking_tap_count": 9,
+      "tracking_tap_spacing_chips": 0.125
+    }
+  },
+  "analysis": {
+    "truth_sample_rate_hz": 1000000,
+    "rf_sample_rate_hz": 25000000,
+    "bin_seconds": 1.0,
+    "minimum_prns": 8,
+    "partial_f_p_alarm_threshold": 0.06028418845288192,
+    "persistence_rule": "3 of the latest 5 available one-second bins",
+    "primary_interval": "bin_start_s >= 12.0",
+    "development_diagnostics": [
+      "code-range equality between coupled and locked counterfeit components",
+      "carrier-range equality between locked counterfeit and authentic reference",
+      "CGC Partial-F AUC against the existing matched Seoul multipath control",
+      "coupled-versus-locked CGC score and detection-latency agreement"
+    ]
+  },
+  "output_root": "/home/ubuntu/hdd_data/cgc_code_carrier_decoupling_pilot_v1",
+  "claim_boundary": "development-only single known static geometry; establishes implementation and receiver observability, not generalization or a confirmatory paper claim"
+}
