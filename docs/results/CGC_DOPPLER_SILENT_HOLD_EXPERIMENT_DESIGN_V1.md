@@ -87,7 +87,12 @@ fresh result.
 
 ### Time-resolved outputs
 
-For every one-second bin and every tracked PRN, record:
+For every one-second bin and every tracked PRN, record the truth, tracking,
+and CGC quantities below. The more expensive actual-IQ delay--Doppler audit
+uses six anchors fixed before its first execution: 4.5, 7.5, 8.5, 12.5, 20.5,
+and 28.5 s. These provide one baseline, two pull-off, and three hold views.
+
+Record:
 
 1. truth primary--secondary carrier-Doppler separation;
 2. blind actual-IQ dual-peak count and estimated frequency separation;
@@ -100,6 +105,13 @@ The truth-based Tu-style availability result is deliberately oracle-favourable:
 if even the known separation is below 3 Hz, a two-frequency-peak residual
 cannot obtain the required observable.  The blind IQ result is reported as a
 mechanism check and must not be tuned to make the comparator fail.
+
+The development IQ parameters are inherited from the earlier Seoul mechanism
+audit: 25 MHz source IQ resampled to 5 MHz, 20 ms coherent integration, 10 Hz
+Doppler grid, a receiver-tracking-centred plus or minus 250 Hz search, and
+dominant peaks with normalized height at least 0.5, prominence at least 0.1,
+and spacing at least 60 Hz. A 25 Hz local probe audits expected frequencies
+after the blind search; it does not choose the search centre.
 
 ## 4. Confirmatory fresh-static campaign
 
