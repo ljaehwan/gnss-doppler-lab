@@ -284,12 +284,18 @@ def iq_anchor_rows(
             frontend_hz = carrier_offset + carrier_drift * time_s
             auth_hz = auth_truth["carrier_doppler_hz"] + frontend_hz
             spoof_hz = spoof_truth["carrier_doppler_hz"] + frontend_hz
-            auth_probe_hz, auth_probe = local_probe(
-                surface.doppler_bins_hz, envelope, auth_hz, half_width_hz=PROBE_HALF_WIDTH_HZ
-            )
-            spoof_probe_hz, spoof_probe = local_probe(
-                surface.doppler_bins_hz, envelope, spoof_hz, half_width_hz=PROBE_HALF_WIDTH_HZ
-            )
+            search_contract_valid = True
+            try:
+                auth_probe_hz, auth_probe = local_probe(
+                    surface.doppler_bins_hz, envelope, auth_hz, half_width_hz=PROBE_HALF_WIDTH_HZ
+                )
+                spoof_probe_hz, spoof_probe = local_probe(
+                    surface.doppler_bins_hz, envelope, spoof_hz, half_width_hz=PROBE_HALF_WIDTH_HZ
+                )
+            except ValueError:
+                search_contract_valid = False
+                auth_probe_hz = auth_probe = float("nan")
+                spoof_probe_hz = spoof_probe = float("nan")
             separation = abs(spoof_hz - auth_hz)
             row = {
                 "pair_id": pair_id,
@@ -304,13 +310,15 @@ def iq_anchor_rows(
                 "dominant_peak_count": len(peaks.frequencies_hz),
                 "dominant_peak_frequencies_hz": ";".join(f"{value:.3f}" for value in peaks.frequencies_hz),
                 "dominant_peak_heights": ";".join(f"{value:.6f}" for value in peaks.normalized_heights),
-                "actual_dual_peak_observed": len(peaks.frequencies_hz) >= 2,
+                "search_contract_valid": search_contract_valid,
+                "actual_dual_peak_observed": search_contract_valid and len(peaks.frequencies_hz) >= 2,
                 "authentic_probe_hz": auth_probe_hz,
                 "authentic_probe_height": auth_probe,
                 "spoof_probe_hz": spoof_probe_hz,
                 "spoof_probe_height": spoof_probe,
                 "expected_pair_visible_at_audit_resolution": (
-                    separation >= DUAL_PEAK_MINIMUM_SEPARATION_HZ
+                    search_contract_valid
+                    and separation >= DUAL_PEAK_MINIMUM_SEPARATION_HZ
                     and auth_probe >= DUAL_PEAK_HEIGHT
                     and spoof_probe >= DUAL_PEAK_HEIGHT
                     and len(peaks.frequencies_hz) >= 2
@@ -328,17 +336,19 @@ def anchor_summary(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         groups.setdefault((str(row["pair_id"]), float(row["time_s"])), []).append(row)
     output = []
     for (pair_id, time_s), group in sorted(groups.items()):
+        valid = [row for row in group if parse_bool(row.get("search_contract_valid", True))]
         output.append({
             "pair_id": pair_id,
             "time_s": time_s,
             "phase": group[0]["phase"],
             "tracked_prn_count": len(group),
+            "iq_evaluable_prn_count": len(valid),
             "tu_oracle_prn_count": sum(parse_bool(row["tu_oracle_prn_eligible"]) for row in group),
-            "actual_dual_peak_prn_count": sum(parse_bool(row["actual_dual_peak_observed"]) for row in group),
-            "expected_pair_visible_prn_count": sum(parse_bool(row["expected_pair_visible_at_audit_resolution"]) for row in group),
+            "actual_dual_peak_prn_count": sum(parse_bool(row["actual_dual_peak_observed"]) for row in valid),
+            "expected_pair_visible_prn_count": sum(parse_bool(row["expected_pair_visible_at_audit_resolution"]) for row in valid),
             "median_truth_abs_doppler_separation_hz": float(np.median([float(row["truth_abs_doppler_separation_hz"]) for row in group])),
-            "median_authentic_probe_height": float(np.median([float(row["authentic_probe_height"]) for row in group])),
-            "median_spoof_probe_height": float(np.median([float(row["spoof_probe_height"]) for row in group])),
+            "median_authentic_probe_height": float(np.median([float(row["authentic_probe_height"]) for row in valid])) if valid else "",
+            "median_spoof_probe_height": float(np.median([float(row["spoof_probe_height"]) for row in valid])) if valid else "",
         })
     return output
 
@@ -438,6 +448,7 @@ def run(campaign_root: Path, output_root: Path, resume: bool) -> Path:
     completed: dict[tuple[str, float, str], dict[str, Any]] = {}
     if resume and iq_csv.is_file():
         for row in read_rows(iq_csv):
+            row.setdefault("search_contract_valid", "True")
             completed[(row["pair_id"], float(row["time_s"]), row["prn"])] = row
     elif iq_csv.exists():
         raise FileExistsError(f"output exists; use --resume: {iq_csv}")
