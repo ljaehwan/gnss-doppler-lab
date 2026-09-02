@@ -1,0 +1,95 @@
+{
+  "artifacts": {
+    "figure": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_three_regime_complementarity_v1/three_regime_timeline.svg",
+      "sha256": "011da528c8d86cc38b16a36c3d341cbba0b0ba61045bed08df5772d120ddf08e"
+    },
+    "regime_summary": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_three_regime_complementarity_v1/regime_summary.csv",
+      "sha256": "5ed8feac7cb35acce44f89f52162ab4cb452d841fe17bc31905aa8e381c27589"
+    },
+    "timeline": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_three_regime_complementarity_v1/timeline.csv",
+      "sha256": "68fdc3b90eb6f097f760c90a02f49918b2ea3ab7e6a59954759517f71671b934"
+    }
+  },
+  "decision": {
+    "not_supported": [
+      "the current CGC signed-delay estimator is robust across locked-Doppler position holds",
+      "an operational carrier/code consistency detector result",
+      "universal superiority over Tu et al. or other Doppler detectors"
+    ],
+    "supported": [
+      "Tu-style carrier dual-peak input is available during the tested consistent-Doppler pull-off",
+      "Tu-style carrier dual-peak input is absent during the tested locked-Doppler pull-off and both position holds",
+      "the truth code/carrier mismatch is large during locked pull-off and collapses in position hold",
+      "CGC is persistent for all five carrier-coupled position holds"
+    ]
+  },
+  "operating_contract": {
+    "code_carrier_mismatch_role": "truth-domain physical observable only; no receiver threshold or detector claim",
+    "code_carrier_relation": "Delta carrier Doppler = 1540 * Delta code rate for GPS L1 C/A consistent-Doppler spoofing",
+    "tu_minimum_carrier_separation_hz": 3.0,
+    "tu_minimum_prns": 5
+  },
+  "regimes": [
+    {
+      "bin_count": 25,
+      "cgc_persistent_detection_pairs": 3,
+      "median_abs_carrier_doppler_difference_hz": 60.7036621215,
+      "median_abs_code_carrier_mismatch_equivalent_hz": 4.164659799243964e-07,
+      "median_abs_code_offset_m": 28.797191999852657,
+      "median_abs_code_rate_difference_chips_s": 0.03941796254366636,
+      "median_pair_cgc_raw_alarm_rate": 0.6,
+      "pair_count": 5,
+      "regime": "consistent_pull_off",
+      "tu_oracle_available_bin_rate": 1.0
+    },
+    {
+      "bin_count": 25,
+      "cgc_persistent_detection_pairs": 0,
+      "median_abs_carrier_doppler_difference_hz": 0.0,
+      "median_abs_code_carrier_mismatch_equivalent_hz": 60.7036623172462,
+      "median_abs_code_offset_m": 28.797191999852657,
+      "median_abs_code_rate_difference_chips_s": 0.03941796254366636,
+      "median_pair_cgc_raw_alarm_rate": 0.2,
+      "pair_count": 5,
+      "regime": "locked_pull_off",
+      "tu_oracle_available_bin_rate": 0.0
+    },
+    {
+      "bin_count": 90,
+      "cgc_persistent_detection_pairs": 5,
+      "median_abs_carrier_doppler_difference_hz": 0.03156432049996738,
+      "median_abs_code_carrier_mismatch_equivalent_hz": 4.321993856137851e-07,
+      "median_abs_code_offset_m": 57.5662659984082,
+      "median_abs_code_rate_difference_chips_s": 2.0496227080002427e-05,
+      "median_pair_cgc_raw_alarm_rate": 0.9444444444444444,
+      "pair_count": 5,
+      "regime": "coupled_position_hold",
+      "tu_oracle_available_bin_rate": 0.0
+    },
+    {
+      "bin_count": 90,
+      "cgc_persistent_detection_pairs": 4,
+      "median_abs_carrier_doppler_difference_hz": 0.0,
+      "median_abs_code_carrier_mismatch_equivalent_hz": 0.03156418970320374,
+      "median_abs_code_offset_m": 57.5662659984082,
+      "median_abs_code_rate_difference_chips_s": 2.0496227080002427e-05,
+      "median_pair_cgc_raw_alarm_rate": 0.3333333333333333,
+      "pair_count": 5,
+      "regime": "locked_position_hold",
+      "tu_oracle_available_bin_rate": 0.0
+    }
+  ],
+  "schema": "gnss-doppler-lab.cgc-three-regime-complementarity-audit",
+  "schema_version": 1,
+  "source": {
+    "campaign_root": "/home/ubuntu/hdd_data/cgc_code_carrier_fresh_static_v1",
+    "summary": {
+      "path": "/home/ubuntu/hdd_data/cgc_code_carrier_fresh_static_v1/summary.json",
+      "sha256": "f57162a2f504f6a9d224889956805e69d4ce3bdf3d19386e506bef7fc70813f7"
+    }
+  },
+  "status": "development_reanalysis_of_exposed_fresh_static_data"
+}

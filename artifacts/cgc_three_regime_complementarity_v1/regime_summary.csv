@@ -1,0 +1,5 @@
+regime,pair_count,bin_count,tu_oracle_available_bin_rate,median_abs_code_offset_m,median_abs_code_rate_difference_chips_s,median_abs_carrier_doppler_difference_hz,median_abs_code_carrier_mismatch_equivalent_hz,median_pair_cgc_raw_alarm_rate,cgc_persistent_detection_pairs
+consistent_pull_off,5,25,1.0,28.797191999852657,0.03941796254366636,60.7036621215,4.164659799243964e-07,0.6,3
+locked_pull_off,5,25,0.0,28.797191999852657,0.03941796254366636,0.0,60.7036623172462,0.2,0
+coupled_position_hold,5,90,0.0,57.5662659984082,2.0496227080002427e-05,0.03156432049996738,4.321993856137851e-07,0.9444444444444444,5
+locked_position_hold,5,90,0.0,57.5662659984082,2.0496227080002427e-05,0.0,0.03156418970320374,0.3333333333333333,4
