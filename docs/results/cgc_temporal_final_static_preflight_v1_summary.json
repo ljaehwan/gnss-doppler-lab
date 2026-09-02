@@ -1,0 +1,47 @@
+{
+  "schema": "gnss-doppler-lab.cgc-temporal-final-static-preflight-record",
+  "schema_version": 1,
+  "candidate_pool": {
+    "path": "configs/experiments/cgc_temporal_final_static_pool_v1.json",
+    "sha256": "f3185bbdb410fef3ae552fe65f0b139f240d34fd2792d2eac02746044f26ab6d"
+  },
+  "protocol": {
+    "path": "docs/results/cgc_temporal_final_static_preflight_protocol_v1.md",
+    "sha256": "fd2d1df253ebb3d72e1b36d42b304944a650c5d417cef7553672f5c1f43b5135"
+  },
+  "candidate_release_commit": "5b59bb264d0724b328d4081634a17cda2f006060",
+  "source_artifact": {
+    "path": "artifacts/cgc_temporal_final_static_preflight_v1/summary.json",
+    "sha256": "9e2707c2eeb8ff6d021e8673a5e2d626030f3fbb39c728b356a3e7cc6685beee"
+  },
+  "score_accessed": false,
+  "probe_iq_retained": false,
+  "selection_rule": "within each slot, select the first candidate in file order with at least 10 startup LOS PRNs; no detector score or post-selection substitution",
+  "selected_candidate_ids": [
+    "ctfs-s1-a-fairbanks",
+    "ctfs-s2-a-punta-arenas",
+    "ctfs-s3-a-casablanca",
+    "ctfs-s4-a-sapporo",
+    "ctfs-s5-a-prince-george"
+  ],
+  "selected_startup_los_counts": {
+    "ctfs-s1-a-fairbanks": 13,
+    "ctfs-s2-a-punta-arenas": 12,
+    "ctfs-s3-a-casablanca": 11,
+    "ctfs-s4-a-sapporo": 13,
+    "ctfs-s5-a-prince-george": 13
+  },
+  "all_candidate_counts": {
+    "ctfs-s1-a-fairbanks": 13,
+    "ctfs-s1-b-tromso": 13,
+    "ctfs-s2-a-punta-arenas": 12,
+    "ctfs-s2-b-ushuaia": 13,
+    "ctfs-s3-a-casablanca": 11,
+    "ctfs-s3-b-nouakchott": 12,
+    "ctfs-s4-a-sapporo": 13,
+    "ctfs-s4-b-harbin": 12,
+    "ctfs-s5-a-prince-george": 13,
+    "ctfs-s5-b-guayaquil": 11
+  },
+  "status": "SUPPORT_ELIGIBLE"
+}
