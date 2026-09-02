@@ -56,6 +56,7 @@ class DecoupledSimulationRequest:
     duration_seconds: int
     sample_rate_hz: int
     mode: str
+    carrier_phase_seed: int | None = None
 
     def validate(self) -> dict[str, Any]:
         if self.mode not in {"coupled", "doppler_locked"}:
@@ -66,6 +67,9 @@ class DecoupledSimulationRequest:
             raise SimulatorError("coupled mode must omit carrier_motion")
         if self.duration_seconds <= 0 or self.sample_rate_hz < 1_000_000:
             raise SimulatorError("duration and sample rate are outside gps-sdr-sim bounds")
+        if self.carrier_phase_seed is not None:
+            if isinstance(self.carrier_phase_seed, bool) or not isinstance(self.carrier_phase_seed, int) or self.carrier_phase_seed < 0:
+                raise SimulatorError("carrier_phase_seed must be a non-negative integer")
         for path in (self.nav, self.code_motion):
             if not path.is_file():
                 raise SimulatorError(f"missing simulator input: {path}")
@@ -115,6 +119,7 @@ class CodeCarrierGpsSdrSimRunner:
             "cli_extension": {
                 "-X": "independent LLH carrier-reference trajectory",
                 "-D": "per-channel code/carrier truth CSV",
+                "-P": "deterministic independent initial carrier phase per PRN",
             },
         }
 
@@ -142,6 +147,8 @@ class CodeCarrierGpsSdrSimRunner:
                 assert request.carrier_motion is not None
                 shutil.copyfile(request.carrier_motion, stage / "carrier.csv")
                 command.extend(["-X", "carrier.csv"])
+            if request.carrier_phase_seed is not None:
+                command.extend(["-P", str(request.carrier_phase_seed)])
             command.extend([
                 "-t", validation["time"].simulator_input_calendar,
                 "-d", str(request.duration_seconds),
@@ -174,6 +181,7 @@ class CodeCarrierGpsSdrSimRunner:
             shutil.rmtree(stage, ignore_errors=True)
         return {
             "mode": request.mode,
+            "carrier_phase_seed": request.carrier_phase_seed,
             "command": command,
             "time": validation["time"].manifest(),
             "inputs": {

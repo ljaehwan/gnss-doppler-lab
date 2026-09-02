@@ -1,0 +1,65 @@
+--- a/gpssim.c
++++ b/gpssim.c
+@@ -5,6 +5,7 @@
+ #include <string.h>
+ #include <math.h>
+ #include <time.h>
++#include <stdint.h>
+ #ifdef _WIN32
+ #include "getopt.h"
+ #else
+@@ -94,6 +95,17 @@
+ 
+ double xyz[USER_MOTION_SIZE][3];
+ double xyz_carrier[USER_MOTION_SIZE][3];
++int carrierPhaseSeedEnabled = FALSE;
++uint64_t carrierPhaseSeed = 0;
++
++double deterministicCarrierPhase(uint64_t seed, int prn)
++{
++	uint64_t x = seed + 0x9E3779B97F4A7C15ULL * (uint64_t)prn;
++	x = (x ^ (x >> 30)) * 0xBF58476D1CE4E5B9ULL;
++	x = (x ^ (x >> 27)) * 0x94D049BB133111EBULL;
++	x = x ^ (x >> 31);
++	return((double)(x >> 11) * (1.0 / 9007199254740992.0));
++}
+ 
+ /*! \brief Subtract two vectors of double
+  *  \param[out] y Result of subtraction
+@@ -1685,7 +1697,7 @@
+ 						computeRange(&rho, eph[sv], &ionoutc, grx, ref);
+ 						r_ref = rho.range;
+ 
+-						phase_ini = 0.0; // TODO: Must initialize properly
++						phase_ini = carrierPhaseSeedEnabled ? deterministicCarrierPhase(carrierPhaseSeed, chan[i].prn) : 0.0;
+ 						//phase_ini = (2.0*r_ref - r_xyz)/LAMBDA_L1;
+ #ifdef FLOAT_CARR_PHASE
+ 						chan[i].carr_phase = phase_ini - floor(phase_ini);
+@@ -1733,6 +1745,7 @@
+ 		"  -d <duration>    Duration [sec] (dynamic mode max: %.0f, static mode max: %d)\n"
+ 		"  -o <output>      I/Q sampling data file (default: gpssim.bin)\n"
+ 		"  -D <truth_csv>   Optional per-channel code/carrier truth diagnostics\n"
++		"  -P <seed>        Deterministic independent initial carrier phase per PRN\n"
+ 		"  -s <frequency>   Sampling frequency [Hz] (default: 2600000)\n"
+ 		"  -b <iq_bits>     I/Q data format [1/8/16] (default: 16)\n"
+ 		"  -i               Disable ionospheric delay for spacecraft scenario\n"
+@@ -1838,7 +1851,7 @@
+ 		exit(1);
+ 	}
+ 
+-	while ((result=getopt(argc,argv,"e:u:x:X:g:c:l:o:D:s:b:L:T:t:d:ipv"))!=-1)
++	while ((result=getopt(argc,argv,"e:u:x:X:g:c:l:o:D:P:s:b:L:T:t:d:ipv"))!=-1)
+ 	{
+ 		switch (result)
+ 		{
+@@ -1883,6 +1896,10 @@
+ 		case 'D':
+ 			strcpy(truthfile, optarg);
+ 			break;
++		case 'P':
++			carrierPhaseSeed = (uint64_t)strtoull(optarg, NULL, 10);
++			carrierPhaseSeedEnabled = TRUE;
++			break;
+ 		case 's':
+ 			samp_freq = atof(optarg);
+ 			if (samp_freq<1.0e6)
