@@ -1,0 +1,117 @@
+{
+  "schema": "gnss-doppler-lab.cgc-temporal-final-static-result-record",
+  "schema_version": 1,
+  "decision": "SUPPORTED",
+  "release_commit": "e578a09e8585e90a86a1d03d63da386f9826981f",
+  "source_result": {
+    "path": "/home/ubuntu/hdd_data/cgc_temporal_final_static_v1/summary.json",
+    "sha256": "b154e411f4447fb534c0e10dee45f2f14f84b0e4e4eeedaa771cfefaf721045d"
+  },
+  "analysis_artifacts": {
+    "delay_estimates_sha256": "d7bf248fddd04394c832881b6da5dfccd37ee6471efb91626c7cd5f10479a2c5",
+    "stabilized_delay_estimates_sha256": "e2b569d0d85434f081e5df8136e6597d010b1c22b0648d625361ad978ebc165a",
+    "geometry_scores_sha256": "1b3056f2dde2fa19a76b208ff9257ef5c5916cf162186b739d9e22d167359f93"
+  },
+  "aggregates": {
+    "pair_count": 5,
+    "condition_count": 20,
+    "supported_condition_count": 20,
+    "truth_invariant_pair_count": 5,
+    "carrier_coupled_persistent_detection_count": 5,
+    "doppler_locked_persistent_detection_count": 5,
+    "normal_persistent_alarm_pair_count": 0,
+    "multipath_persistent_alarm_pair_count": 1,
+    "total_spoof_pre_attack_persistent_alarm_count": 0,
+    "median_doppler_locked_hold_raw_alarm_rate": 1.0,
+    "median_doppler_locked_latency_seconds": 8.0,
+    "doppler_locked_vs_multipath_auc": 0.9800854700854701,
+    "partial_f_only_doppler_locked_vs_multipath_auc": 0.9790598290598291
+  },
+  "bin_level_descriptive_rates": {
+    "normal": {
+      "evaluation_bins": 130,
+      "observable_rate": 0.2153846153846154,
+      "raw_alarm_rate": 0.05384615384615385,
+      "persistent_alarm_rate": 0.0
+    },
+    "multipath": {
+      "evaluation_bins": 130,
+      "observable_rate": 0.6384615384615384,
+      "raw_alarm_rate": 0.13846153846153847,
+      "persistent_alarm_rate": 0.11538461538461539
+    },
+    "carrier_coupled": {
+      "hold_bins": 90,
+      "observable_rate": 1.0,
+      "raw_alarm_rate": 1.0,
+      "persistent_alarm_rate": 0.9444444444444444
+    },
+    "doppler_locked": {
+      "hold_bins": 90,
+      "observable_rate": 1.0,
+      "raw_alarm_rate": 0.9777777777777777,
+      "persistent_alarm_rate": 0.9444444444444444
+    }
+  },
+  "pair_results": [
+    {
+      "pair_id": "ctfs-s1-a-fairbanks",
+      "startup_los_prns": 13,
+      "coupled_detected": true,
+      "locked_detected": true,
+      "locked_latency_seconds": 8.0,
+      "locked_hold_raw_alarm_rate": 1.0,
+      "normal_persistent_alarm": false,
+      "multipath_raw_alarm_rate": 0.0,
+      "multipath_persistent_alarm": false
+    },
+    {
+      "pair_id": "ctfs-s2-a-punta-arenas",
+      "startup_los_prns": 12,
+      "coupled_detected": true,
+      "locked_detected": true,
+      "locked_latency_seconds": 8.0,
+      "locked_hold_raw_alarm_rate": 1.0,
+      "normal_persistent_alarm": false,
+      "multipath_raw_alarm_rate": 0.0,
+      "multipath_persistent_alarm": false
+    },
+    {
+      "pair_id": "ctfs-s3-a-casablanca",
+      "startup_los_prns": 11,
+      "coupled_detected": true,
+      "locked_detected": true,
+      "locked_latency_seconds": 8.0,
+      "locked_hold_raw_alarm_rate": 1.0,
+      "normal_persistent_alarm": false,
+      "multipath_raw_alarm_rate": 0.6538461538461539,
+      "multipath_persistent_alarm": true
+    },
+    {
+      "pair_id": "ctfs-s4-a-sapporo",
+      "startup_los_prns": 13,
+      "coupled_detected": true,
+      "locked_detected": true,
+      "locked_latency_seconds": 8.0,
+      "locked_hold_raw_alarm_rate": 1.0,
+      "normal_persistent_alarm": false,
+      "multipath_raw_alarm_rate": 0.038461538461538464,
+      "multipath_persistent_alarm": false
+    },
+    {
+      "pair_id": "ctfs-s5-a-prince-george",
+      "startup_los_prns": 13,
+      "coupled_detected": true,
+      "locked_detected": true,
+      "locked_latency_seconds": 8.0,
+      "locked_hold_raw_alarm_rate": 0.8888888888888888,
+      "normal_persistent_alarm": false,
+      "multipath_raw_alarm_rate": 0.0,
+      "multipath_persistent_alarm": false
+    }
+  ],
+  "all_preregistered_gates_passed": true,
+  "post_release_pair_substitution": false,
+  "post_release_tuning_or_retest": false,
+  "claim_boundary": "Untouched static simulated receiver-RF support under PRN-independent counterfeit carrier phase; one geometry-aligned multipath hard negative remains and field or moving-receiver validation is not claimed."
+}
