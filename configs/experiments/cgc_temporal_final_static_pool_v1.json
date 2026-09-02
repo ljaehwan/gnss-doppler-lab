@@ -1,0 +1,99 @@
+{
+  "schema": "gnss-doppler-lab.cgc-temporal-final-static-pool",
+  "schema_version": 1,
+  "experiment": {
+    "name": "cgc-temporal-final-static-v1",
+    "role": "support-only selection for an untouched phase-randomized receiver-RF test",
+    "prior_full_rf_pair_reuse": false,
+    "score_access_during_preflight": false
+  },
+  "inputs": {
+    "rinex_nav": {
+      "path": ".tools/gps-sdr-sim-src/brdc0010.22n",
+      "sha256": "7db04513dd2d0e13c0ee20cb4eaa8f71e5a28ab58b65c9b5b789f86eeab436cd"
+    },
+    "simulator": {
+      "path": ".tools/gps-sdr-sim-code-carrier-phase-src/gps-sdr-sim",
+      "sha256": "4ff81c73d8f0c43e1caee67c3d57c4d2cc97b3a7b4fd37f46f4ce82b48508dcb"
+    }
+  },
+  "preflight": {
+    "duration_seconds": 1,
+    "sample_rate_hz": 1000000,
+    "minimum_startup_los_prns": 10,
+    "slot_order": ["S1", "S2", "S3", "S4", "S5"],
+    "selection_rule": "within each slot, select the first candidate in file order with at least 10 startup LOS PRNs; no detector score or post-selection substitution"
+  },
+  "candidates": [
+    {
+      "candidate_id": "ctfs-s1-a-fairbanks", "slot": "S1",
+      "utc": "2022-01-01T00:45:00Z",
+      "position": {"latitude_deg": 64.8378, "longitude_deg": -147.7164, "altitude_m": 140.0},
+      "target_offset_enu_m": [100.0, 0.0, 0.0],
+      "receiver_seed": 2026093001, "counterfeit_phase_seed": 2026103001
+    },
+    {
+      "candidate_id": "ctfs-s1-b-tromso", "slot": "S1",
+      "utc": "2022-01-01T01:45:00Z",
+      "position": {"latitude_deg": 69.6492, "longitude_deg": 18.9553, "altitude_m": 20.0},
+      "target_offset_enu_m": [100.0, 0.0, 0.0],
+      "receiver_seed": 2026093011, "counterfeit_phase_seed": 2026103011
+    },
+    {
+      "candidate_id": "ctfs-s2-a-punta-arenas", "slot": "S2",
+      "utc": "2022-01-01T04:45:00Z",
+      "position": {"latitude_deg": -53.1638, "longitude_deg": -70.9171, "altitude_m": 35.0},
+      "target_offset_enu_m": [0.0, 100.0, 0.0],
+      "receiver_seed": 2026093002, "counterfeit_phase_seed": 2026103002
+    },
+    {
+      "candidate_id": "ctfs-s2-b-ushuaia", "slot": "S2",
+      "utc": "2022-01-01T05:45:00Z",
+      "position": {"latitude_deg": -54.8019, "longitude_deg": -68.3030, "altitude_m": 25.0},
+      "target_offset_enu_m": [0.0, 100.0, 0.0],
+      "receiver_seed": 2026093012, "counterfeit_phase_seed": 2026103012
+    },
+    {
+      "candidate_id": "ctfs-s3-a-casablanca", "slot": "S3",
+      "utc": "2022-01-01T08:45:00Z",
+      "position": {"latitude_deg": 33.5731, "longitude_deg": -7.5898, "altitude_m": 55.0},
+      "target_offset_enu_m": [-80.0, 60.0, 0.0],
+      "receiver_seed": 2026093003, "counterfeit_phase_seed": 2026103003
+    },
+    {
+      "candidate_id": "ctfs-s3-b-nouakchott", "slot": "S3",
+      "utc": "2022-01-01T09:45:00Z",
+      "position": {"latitude_deg": 18.0735, "longitude_deg": -15.9582, "altitude_m": 10.0},
+      "target_offset_enu_m": [-80.0, 60.0, 0.0],
+      "receiver_seed": 2026093013, "counterfeit_phase_seed": 2026103013
+    },
+    {
+      "candidate_id": "ctfs-s4-a-sapporo", "slot": "S4",
+      "utc": "2022-01-01T12:45:00Z",
+      "position": {"latitude_deg": 43.0618, "longitude_deg": 141.3545, "altitude_m": 25.0},
+      "target_offset_enu_m": [60.0, -80.0, 0.0],
+      "receiver_seed": 2026093004, "counterfeit_phase_seed": 2026103004
+    },
+    {
+      "candidate_id": "ctfs-s4-b-harbin", "slot": "S4",
+      "utc": "2022-01-01T13:45:00Z",
+      "position": {"latitude_deg": 45.8038, "longitude_deg": 126.5350, "altitude_m": 150.0},
+      "target_offset_enu_m": [60.0, -80.0, 0.0],
+      "receiver_seed": 2026093014, "counterfeit_phase_seed": 2026103014
+    },
+    {
+      "candidate_id": "ctfs-s5-a-prince-george", "slot": "S5",
+      "utc": "2022-01-01T16:45:00Z",
+      "position": {"latitude_deg": 53.9171, "longitude_deg": -122.7497, "altitude_m": 575.0},
+      "target_offset_enu_m": [60.0, 0.0, 80.0],
+      "receiver_seed": 2026093005, "counterfeit_phase_seed": 2026103005
+    },
+    {
+      "candidate_id": "ctfs-s5-b-guayaquil", "slot": "S5",
+      "utc": "2022-01-01T17:45:00Z",
+      "position": {"latitude_deg": -2.1710, "longitude_deg": -79.9224, "altitude_m": 15.0},
+      "target_offset_enu_m": [60.0, 0.0, 80.0],
+      "receiver_seed": 2026093015, "counterfeit_phase_seed": 2026103015
+    }
+  ]
+}
