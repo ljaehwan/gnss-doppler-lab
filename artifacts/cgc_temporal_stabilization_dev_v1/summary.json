@@ -1,0 +1,254 @@
+{
+  "candidate": {
+    "name": "causal per-PRN signed-delay median before unchanged CGC",
+    "partial_f_p_alarm_threshold": 0.06028418845288192,
+    "persistence": "3 of latest 5 one-second bins",
+    "selected_window_bins": 5,
+    "selection_reason": "matches the existing five-bin decision horizon; chosen before phase-sweep reanalysis",
+    "threshold_changed": false
+  },
+  "claim_boundary": "The same five released exact-lock pairs and five existing synthetic multipath streams were reused for development. The window sweep is adaptive and the phase sweep reuses one Tokyo geometry. A new untouched receiver-RF campaign is required before replacing the frozen CGC or making a confirmatory claim.",
+  "diagnostic_observability_gate": {
+    "centered_delay_rms_threshold_chips": 0.1,
+    "reason": "post-hoc diagnostic of pre-attack overfit; requires independent calibration before use",
+    "used_in_selected_detector": false
+  },
+  "inputs": {
+    "fresh_config": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/configs/experiments/cgc_code_carrier_fresh_static_v1.json",
+      "sha256": "cc15574471c1a9aa890dd9487198f6c1405d578828ddd37255d9db3c2d346d11"
+    },
+    "fresh_delay_estimates": {
+      "path": "/home/ubuntu/hdd_data/cgc_code_carrier_fresh_static_v1/analysis/delay_estimates.csv",
+      "sha256": "85b6fcd9beddbcae749c6630a8510c3ed1d69b02e631188c814c50f98d92942f"
+    },
+    "multipath_config": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/configs/experiments/cgc_rf_geometry_aperture_validation_v1.json",
+      "sha256": "b03093506b5a3b79ff296c640715f38cd44ad3fc50dc6454244a709a43eef2e2"
+    },
+    "phase_summary": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_locked_phase_sweep_dev_v1/summary.json",
+      "sha256": "df4b6165ebc678961e4c10d41d91c7b7bf8010129e62df5c0a59c0703a703eed"
+    }
+  },
+  "role": "development-only candidate selection; not a fresh validation result",
+  "schema": "gnss-doppler-lab.cgc-temporal-stabilization-development",
+  "schema_version": 1,
+  "selected_pair_results": [
+    {
+      "diagnostic_joint_first_persistent_alarm_s": 14.0,
+      "diagnostic_joint_hold_raw_alarm_rate": 0.5555555555555556,
+      "diagnostic_joint_latency_from_onset_s": 9.0,
+      "diagnostic_joint_pre_attack_persistent_alarm_count": 0,
+      "first_persistent_alarm_s": 14.0,
+      "hold_persistent_alarm_rate": 0.5,
+      "hold_raw_alarm_rate": 0.5555555555555556,
+      "latency_from_onset_s": 9.0,
+      "median_hold_p_value": 0.04829390141114376,
+      "pair_id": "ccfs-s1-a-tokyo",
+      "pre_attack_persistent_alarm_count": 0
+    },
+    {
+      "diagnostic_joint_first_persistent_alarm_s": 15.0,
+      "diagnostic_joint_hold_raw_alarm_rate": 0.6111111111111112,
+      "diagnostic_joint_latency_from_onset_s": 10.0,
+      "diagnostic_joint_pre_attack_persistent_alarm_count": 0,
+      "first_persistent_alarm_s": 8.0,
+      "hold_persistent_alarm_rate": 0.6111111111111112,
+      "hold_raw_alarm_rate": 0.6111111111111112,
+      "latency_from_onset_s": 3.0,
+      "median_hold_p_value": 0.03321081181626091,
+      "pair_id": "ccfs-s2-a-london",
+      "pre_attack_persistent_alarm_count": 0
+    },
+    {
+      "diagnostic_joint_first_persistent_alarm_s": 13.0,
+      "diagnostic_joint_hold_raw_alarm_rate": 1.0,
+      "diagnostic_joint_latency_from_onset_s": 8.0,
+      "diagnostic_joint_pre_attack_persistent_alarm_count": 0,
+      "first_persistent_alarm_s": 13.0,
+      "hold_persistent_alarm_rate": 0.9444444444444444,
+      "hold_raw_alarm_rate": 1.0,
+      "latency_from_onset_s": 8.0,
+      "median_hold_p_value": 0.000965872574787295,
+      "pair_id": "ccfs-s3-a-sao-paulo",
+      "pre_attack_persistent_alarm_count": 0
+    },
+    {
+      "diagnostic_joint_first_persistent_alarm_s": 20.0,
+      "diagnostic_joint_hold_raw_alarm_rate": 0.3333333333333333,
+      "diagnostic_joint_latency_from_onset_s": 15.0,
+      "diagnostic_joint_pre_attack_persistent_alarm_count": 0,
+      "first_persistent_alarm_s": 13.0,
+      "hold_persistent_alarm_rate": 0.3333333333333333,
+      "hold_raw_alarm_rate": 0.3333333333333333,
+      "latency_from_onset_s": 8.0,
+      "median_hold_p_value": 0.1291436089180669,
+      "pair_id": "ccfs-s4-a-sydney",
+      "pre_attack_persistent_alarm_count": 0
+    },
+    {
+      "diagnostic_joint_first_persistent_alarm_s": 13.0,
+      "diagnostic_joint_hold_raw_alarm_rate": 0.2777777777777778,
+      "diagnostic_joint_latency_from_onset_s": 8.0,
+      "diagnostic_joint_pre_attack_persistent_alarm_count": 0,
+      "first_persistent_alarm_s": 5.0,
+      "hold_persistent_alarm_rate": 0.2777777777777778,
+      "hold_raw_alarm_rate": 0.2777777777777778,
+      "latency_from_onset_s": 0.0,
+      "median_hold_p_value": 0.17398730088702175,
+      "pair_id": "ccfs-s5-a-nairobi",
+      "pre_attack_persistent_alarm_count": 1
+    }
+  ],
+  "selected_phase_sweep": [
+    {
+      "first_persistent_alarm_s": 14.0,
+      "hold_persistent_alarm_rate": 0.5,
+      "hold_raw_alarm_rate": 0.5555555555555556,
+      "latency_from_onset_s": 9.0,
+      "median_hold_p_value": 0.04829390141114376,
+      "median_truth_direction_r2": 0.4738255776849827,
+      "phase_offset_deg": 0.0,
+      "window_bins": 5
+    },
+    {
+      "first_persistent_alarm_s": 13.0,
+      "hold_persistent_alarm_rate": 0.9444444444444444,
+      "hold_raw_alarm_rate": 1.0,
+      "latency_from_onset_s": 8.0,
+      "median_hold_p_value": 0.0006807618050977453,
+      "median_truth_direction_r2": 0.892352287710499,
+      "phase_offset_deg": 45.0,
+      "window_bins": 5
+    },
+    {
+      "first_persistent_alarm_s": 13.0,
+      "hold_persistent_alarm_rate": 0.9444444444444444,
+      "hold_raw_alarm_rate": 1.0,
+      "latency_from_onset_s": 8.0,
+      "median_hold_p_value": 0.00012876629037270108,
+      "median_truth_direction_r2": 0.9319938618384609,
+      "phase_offset_deg": 90.0,
+      "window_bins": 5
+    },
+    {
+      "first_persistent_alarm_s": 9.0,
+      "hold_persistent_alarm_rate": 1.0,
+      "hold_raw_alarm_rate": 1.0,
+      "latency_from_onset_s": 4.0,
+      "median_hold_p_value": 1.6919690934167727e-05,
+      "median_truth_direction_r2": 0.9618955431754508,
+      "phase_offset_deg": 135.0,
+      "window_bins": 5
+    },
+    {
+      "first_persistent_alarm_s": 10.0,
+      "hold_persistent_alarm_rate": 0.6111111111111112,
+      "hold_raw_alarm_rate": 0.6666666666666666,
+      "latency_from_onset_s": 5.0,
+      "median_hold_p_value": 0.0028197375129397117,
+      "median_truth_direction_r2": 0.8538703735253095,
+      "phase_offset_deg": 180.0,
+      "window_bins": 5
+    }
+  ],
+  "window_sweep": [
+    {
+      "diagnostic_joint_multipath_raw_alarm_rate": 0.013422818791946308,
+      "diagnostic_joint_pre_attack_persistent_alarm_count": 0,
+      "diagnostic_joint_spoof_hold_raw_alarm_rate": 0.4111111111111111,
+      "diagnostic_rms_gated_auc": 0.9294556301267711,
+      "median_truth_direction_r2": 0.43420402325757496,
+      "multipath_bins": 149,
+      "multipath_persistent_alarm_rate": 0.0,
+      "multipath_raw_alarm_rate": 0.026845637583892617,
+      "partial_f_auc": 0.8383296047725578,
+      "pre_attack_persistent_alarm_count": 0,
+      "spoof_hold_bins": 90,
+      "spoof_hold_persistent_alarm_rate": 0.3,
+      "spoof_hold_raw_alarm_rate": 0.4111111111111111,
+      "window_bins": 1
+    },
+    {
+      "diagnostic_joint_multipath_raw_alarm_rate": 0.0,
+      "diagnostic_joint_pre_attack_persistent_alarm_count": 0,
+      "diagnostic_joint_spoof_hold_raw_alarm_rate": 0.4888888888888889,
+      "diagnostic_rms_gated_auc": 0.9656226696495154,
+      "median_truth_direction_r2": 0.515957834469757,
+      "multipath_bins": 149,
+      "multipath_persistent_alarm_rate": 0.013422818791946308,
+      "multipath_raw_alarm_rate": 0.020134228187919462,
+      "partial_f_auc": 0.9118568232662193,
+      "pre_attack_persistent_alarm_count": 0,
+      "spoof_hold_bins": 90,
+      "spoof_hold_persistent_alarm_rate": 0.4222222222222222,
+      "spoof_hold_raw_alarm_rate": 0.4888888888888889,
+      "window_bins": 2
+    },
+    {
+      "diagnostic_joint_multipath_raw_alarm_rate": 0.0,
+      "diagnostic_joint_pre_attack_persistent_alarm_count": 0,
+      "diagnostic_joint_spoof_hold_raw_alarm_rate": 0.5,
+      "diagnostic_rms_gated_auc": 0.9609246830723341,
+      "median_truth_direction_r2": 0.49141276370803255,
+      "multipath_bins": 149,
+      "multipath_persistent_alarm_rate": 0.026845637583892617,
+      "multipath_raw_alarm_rate": 0.040268456375838924,
+      "partial_f_auc": 0.8960477255779269,
+      "pre_attack_persistent_alarm_count": 0,
+      "spoof_hold_bins": 90,
+      "spoof_hold_persistent_alarm_rate": 0.4444444444444444,
+      "spoof_hold_raw_alarm_rate": 0.5,
+      "window_bins": 3
+    },
+    {
+      "diagnostic_joint_multipath_raw_alarm_rate": 0.0,
+      "diagnostic_joint_pre_attack_persistent_alarm_count": 0,
+      "diagnostic_joint_spoof_hold_raw_alarm_rate": 0.5555555555555556,
+      "diagnostic_rms_gated_auc": 0.9787472035794182,
+      "median_truth_direction_r2": 0.5219906279888424,
+      "multipath_bins": 149,
+      "multipath_persistent_alarm_rate": 0.006711409395973154,
+      "multipath_raw_alarm_rate": 0.020134228187919462,
+      "partial_f_auc": 0.9482475764354958,
+      "pre_attack_persistent_alarm_count": 1,
+      "spoof_hold_bins": 90,
+      "spoof_hold_persistent_alarm_rate": 0.5333333333333333,
+      "spoof_hold_raw_alarm_rate": 0.5555555555555556,
+      "window_bins": 5
+    },
+    {
+      "diagnostic_joint_multipath_raw_alarm_rate": 0.0,
+      "diagnostic_joint_pre_attack_persistent_alarm_count": 0,
+      "diagnostic_joint_spoof_hold_raw_alarm_rate": 0.5888888888888889,
+      "diagnostic_rms_gated_auc": 0.9876957494407159,
+      "median_truth_direction_r2": 0.5377906132920917,
+      "multipath_bins": 149,
+      "multipath_persistent_alarm_rate": 0.0,
+      "multipath_raw_alarm_rate": 0.013422818791946308,
+      "partial_f_auc": 0.9647278150633856,
+      "pre_attack_persistent_alarm_count": 1,
+      "spoof_hold_bins": 90,
+      "spoof_hold_persistent_alarm_rate": 0.5,
+      "spoof_hold_raw_alarm_rate": 0.5888888888888889,
+      "window_bins": 7
+    },
+    {
+      "diagnostic_joint_multipath_raw_alarm_rate": 0.0,
+      "diagnostic_joint_pre_attack_persistent_alarm_count": 0,
+      "diagnostic_joint_spoof_hold_raw_alarm_rate": 0.5444444444444444,
+      "diagnostic_rms_gated_auc": 0.9629381058911262,
+      "median_truth_direction_r2": 0.5332079879585895,
+      "multipath_bins": 149,
+      "multipath_persistent_alarm_rate": 0.0,
+      "multipath_raw_alarm_rate": 0.013422818791946308,
+      "partial_f_auc": 0.9753169276659209,
+      "pre_attack_persistent_alarm_count": 1,
+      "spoof_hold_bins": 90,
+      "spoof_hold_persistent_alarm_rate": 0.5,
+      "spoof_hold_raw_alarm_rate": 0.5555555555555556,
+      "window_bins": 9
+    }
+  ]
+}

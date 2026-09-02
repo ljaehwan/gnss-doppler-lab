@@ -1,0 +1,42 @@
+{
+  "claim_boundary": "These five train-normal streams predate the temporal candidate, but the 0.10-chip diagnostic gate and five-bin median were inspected against other reused results before this audit.",
+  "inputs": {
+    "config": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/configs/experiments/cgc_normal_detector_freeze_audit_v1.json",
+      "sha256": "4fe2a1a97ceaa4ce7bebd679396e8ef1d3ed0fbf5fb6395a3334b6ce9b9771bf"
+    },
+    "delay_estimates": {
+      "path": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_normal_detector_freeze_audit_v1/analysis/normal_delay_estimates.csv",
+      "sha256": "a1ff32c1b22d4974c70af7c9820a9d5ca058cc92af9dbfed8d18368a60da58e4"
+    }
+  },
+  "role": "post-hoc train-normal diagnostic; not an independent validation",
+  "rows": [
+    {
+      "centered_delay_rms_95th_percentile_chips": 0.16880055634039037,
+      "centered_delay_rms_median_chips": 0.1143613238673557,
+      "diagnostic_joint_persistent_alarm_pair_count": 0,
+      "diagnostic_joint_persistent_alarm_rate": 0.0,
+      "diagnostic_joint_raw_alarm_rate": 0.06206896551724138,
+      "eligible_bins": 145,
+      "persistent_alarm_pair_count": 1,
+      "persistent_alarm_rate": 0.027586206896551724,
+      "raw_alarm_rate": 0.09655172413793103,
+      "window_bins": 1
+    },
+    {
+      "centered_delay_rms_95th_percentile_chips": 0.10571968973215548,
+      "centered_delay_rms_median_chips": 0.0696990282963439,
+      "diagnostic_joint_persistent_alarm_pair_count": 0,
+      "diagnostic_joint_persistent_alarm_rate": 0.0,
+      "diagnostic_joint_raw_alarm_rate": 0.0,
+      "eligible_bins": 145,
+      "persistent_alarm_pair_count": 2,
+      "persistent_alarm_rate": 0.041379310344827586,
+      "raw_alarm_rate": 0.0896551724137931,
+      "window_bins": 5
+    }
+  ],
+  "schema": "gnss-doppler-lab.cgc-temporal-benign-controls-development",
+  "schema_version": 1
+}

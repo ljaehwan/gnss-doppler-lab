@@ -1,0 +1,74 @@
+{
+  "claim_boundary": "S1 and S2 were previously accessed and the temporal/observability candidate was designed later. This checks compatibility only; it cannot validate the new detector.",
+  "inputs": {
+    "S1": {
+      "config": {
+        "path": "/home/ubuntu/projects/gnss-doppler-lab/configs/experiments/gnss_openif_s1_real_multipath_v1.json",
+        "sha256": "50b68d52cbfff9e66b475c1396fc689e6baa087c290b728d6c2537c2233a0e12"
+      },
+      "delay_estimates": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/gnss-openif-s1-real-multipath-v1/evaluation/delay_estimates.csv",
+        "sha256": "75cf9bf90f6b028fed4f9d027648030dbe6fcde58eb8e8eaa84986a4372a048f"
+      }
+    },
+    "S2": {
+      "config": {
+        "path": "/home/ubuntu/projects/gnss-doppler-lab/configs/experiments/gnss_openif_s2_real_multipath_v1.json",
+        "sha256": "7e06e7dc7dfa32f55382c2e9acd835eae1a3221541c4eb1afe8eca04b99a3d1e"
+      },
+      "delay_estimates": {
+        "path": "/home/ubuntu/ssd_data/gnss-early-detection/artifacts/gnss-openif-s2-real-multipath-v1/evaluation/delay_estimates.csv",
+        "sha256": "7dc486a6a0e70d601273faa20ce4f9e12ded8138cc6ed29e91dc023d8c44af06"
+      }
+    }
+  },
+  "role": "post-hoc real-multipath specificity diagnostic; not a frozen external result",
+  "rows": [
+    {
+      "centered_delay_rms_median_chips": 0.10229855911126431,
+      "diagnostic_joint_persistent_alarm_count": 2,
+      "diagnostic_joint_persistent_alarm_rate": 0.023809523809523808,
+      "diagnostic_joint_raw_alarm_rate": 0.07142857142857142,
+      "evaluated_bins": 84,
+      "persistent_alarm_rate": 0.023809523809523808,
+      "raw_alarm_rate": 0.09523809523809523,
+      "scenario": "S1",
+      "window_bins": 1
+    },
+    {
+      "centered_delay_rms_median_chips": 0.08635021956267472,
+      "diagnostic_joint_persistent_alarm_count": 0,
+      "diagnostic_joint_persistent_alarm_rate": 0.0,
+      "diagnostic_joint_raw_alarm_rate": 0.047619047619047616,
+      "evaluated_bins": 84,
+      "persistent_alarm_rate": 0.0,
+      "raw_alarm_rate": 0.07142857142857142,
+      "scenario": "S1",
+      "window_bins": 5
+    },
+    {
+      "centered_delay_rms_median_chips": 0.11252154527724906,
+      "diagnostic_joint_persistent_alarm_count": 3,
+      "diagnostic_joint_persistent_alarm_rate": 0.03409090909090909,
+      "diagnostic_joint_raw_alarm_rate": 0.07954545454545454,
+      "evaluated_bins": 88,
+      "persistent_alarm_rate": 0.03409090909090909,
+      "raw_alarm_rate": 0.11363636363636363,
+      "scenario": "S2",
+      "window_bins": 1
+    },
+    {
+      "centered_delay_rms_median_chips": 0.0902757680644172,
+      "diagnostic_joint_persistent_alarm_count": 0,
+      "diagnostic_joint_persistent_alarm_rate": 0.0,
+      "diagnostic_joint_raw_alarm_rate": 0.011363636363636364,
+      "evaluated_bins": 88,
+      "persistent_alarm_rate": 0.03409090909090909,
+      "raw_alarm_rate": 0.10227272727272728,
+      "scenario": "S2",
+      "window_bins": 5
+    }
+  ],
+  "schema": "gnss-doppler-lab.cgc-temporal-openif-controls-development",
+  "schema_version": 1
+}
