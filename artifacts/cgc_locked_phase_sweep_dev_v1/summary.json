@@ -1,0 +1,75 @@
+{
+  "claim_boundary": "One global phase offset on one reused geometry isolates carrier phase but does not establish performance over independent per-PRN phase, other geometries, or field spoofers.",
+  "pair_id": "ccfs-s1-a-tokyo",
+  "role": "development-only causal phase intervention; not a released validation set",
+  "rows": [
+    {
+      "first_persistent_alarm_s": 23.0,
+      "hold_persistent_alarm_rate": 0.2777777777777778,
+      "hold_raw_alarm_rate": 0.3888888888888889,
+      "latency_from_onset_s": 18.0,
+      "median_cn0_db_hz": 47.184505462646484,
+      "median_partial_f_p_value": 0.14835126094488865,
+      "median_quadrature_fraction": 0.050113185568267035,
+      "median_truth_direction_r2": 0.3360568265489269,
+      "phase_offset_deg": 0.0,
+      "receiver_manifest": "/home/ubuntu/hdd_data/cgc_code_carrier_fresh_static_v1/pairs/ccfs-s1-a-tokyo/receiver/cgc-cc-fresh-ccfs-s1-a-tokyo-doppler-locked/manifest.json",
+      "receiver_manifest_sha256": "83bd6ff4287917e43a8840da1ea6bfe5afce1125fa42d198de9e290c1c34c0d8"
+    },
+    {
+      "first_persistent_alarm_s": 11.0,
+      "hold_persistent_alarm_rate": 1.0,
+      "hold_raw_alarm_rate": 0.7777777777777778,
+      "latency_from_onset_s": 6.0,
+      "median_cn0_db_hz": 46.916582107543945,
+      "median_partial_f_p_value": 0.003856952378291113,
+      "median_quadrature_fraction": 0.06901333655266219,
+      "median_truth_direction_r2": 0.7462281096444463,
+      "phase_offset_deg": 45.0,
+      "receiver_manifest": "/home/ubuntu/hdd_data/cgc_locked_phase_sweep_dev_v1/receiver/cgc-locked-phase-dev-ccfs-s1-a-tokyo-phase-0045p0deg/manifest.json",
+      "receiver_manifest_sha256": "9e099a31d905c60a7ec48dbd4cec88fed23b3619b08c217c9ce9e25fc80c5c3a"
+    },
+    {
+      "first_persistent_alarm_s": 10.0,
+      "hold_persistent_alarm_rate": 1.0,
+      "hold_raw_alarm_rate": 1.0,
+      "latency_from_onset_s": 5.0,
+      "median_cn0_db_hz": 46.96117973327637,
+      "median_partial_f_p_value": 0.0004168160337885143,
+      "median_quadrature_fraction": 0.13739137343502025,
+      "median_truth_direction_r2": 0.8888228198452293,
+      "phase_offset_deg": 90.0,
+      "receiver_manifest": "/home/ubuntu/hdd_data/cgc_locked_phase_sweep_dev_v1/receiver/cgc-locked-phase-dev-ccfs-s1-a-tokyo-phase-0090p0deg/manifest.json",
+      "receiver_manifest_sha256": "9b2670b2293ab77b5467c69f2fee3c1fbc6b79b2daa01c751e7d0db7d838f81b"
+    },
+    {
+      "first_persistent_alarm_s": 7.0,
+      "hold_persistent_alarm_rate": 1.0,
+      "hold_raw_alarm_rate": 1.0,
+      "latency_from_onset_s": 2.0,
+      "median_cn0_db_hz": 44.0534782409668,
+      "median_partial_f_p_value": 2.3213447402088633e-05,
+      "median_quadrature_fraction": 0.29575713832615913,
+      "median_truth_direction_r2": 0.949987736558444,
+      "phase_offset_deg": 135.0,
+      "receiver_manifest": "/home/ubuntu/hdd_data/cgc_locked_phase_sweep_dev_v1/receiver/cgc-locked-phase-dev-ccfs-s1-a-tokyo-phase-0135p0deg/manifest.json",
+      "receiver_manifest_sha256": "54b10d5d92fea6d96c4e2c4687522d7711905f497379f2f7dddb5c03bbfb1611"
+    },
+    {
+      "first_persistent_alarm_s": 19.0,
+      "hold_persistent_alarm_rate": 0.6111111111111112,
+      "hold_raw_alarm_rate": 0.6111111111111112,
+      "latency_from_onset_s": 14.0,
+      "median_cn0_db_hz": 39.85179138183594,
+      "median_partial_f_p_value": 0.03398693108455939,
+      "median_quadrature_fraction": 0.21594757186184224,
+      "median_truth_direction_r2": 0.7155723896100515,
+      "phase_offset_deg": 180.0,
+      "receiver_manifest": "/home/ubuntu/hdd_data/cgc_locked_phase_sweep_dev_v1/receiver/cgc-locked-phase-dev-ccfs-s1-a-tokyo-phase-0180p0deg/manifest.json",
+      "receiver_manifest_sha256": "b1597b903ebd66b2de1334aa2d0f03333a8a1fc725ca2a2e74c1f1e02263bf44"
+    }
+  ],
+  "schema": "gnss-doppler-lab.cgc-locked-phase-sweep-development",
+  "schema_version": 1,
+  "source_phase_diagnosis": "/home/ubuntu/projects/gnss-doppler-lab/artifacts/cgc_locked_phase_root_cause_v1/summary.json"
+}

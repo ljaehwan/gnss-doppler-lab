@@ -1,0 +1,46 @@
+{
+  "campaign_root": "/home/ubuntu/hdd_data/cgc_code_carrier_fresh_static_v1",
+  "epoch_step": 20,
+  "hold_bin_medians": {
+    "absolute_centered_correlation": {
+      "carrier-coupled": 0.925478820675671,
+      "doppler-locked": 0.6589414713698074
+    },
+    "cn0_db_hz": {
+      "carrier-coupled": 48.19105911254883,
+      "doppler-locked": 49.56344985961914
+    },
+    "estimated_to_truth_spread_ratio": {
+      "carrier-coupled": 1.1283882949339532,
+      "doppler-locked": 1.0016016182166083
+    },
+    "partial_f_p_value": {
+      "carrier-coupled": 0.0007329753154712247,
+      "doppler-locked": 0.0956458687300317
+    },
+    "quadrature_fraction": {
+      "carrier-coupled": 0.09946678517096197,
+      "doppler-locked": 0.04389430614563417
+    },
+    "template_distance": {
+      "carrier-coupled": 0.04864297350286419,
+      "doppler-locked": 0.036235610962045264
+    },
+    "truth_direction_r2": {
+      "carrier-coupled": 0.8565110559144796,
+      "doppler-locked": 0.43420402325757496
+    }
+  },
+  "hold_start_bin": 12,
+  "interpretation_boundary": "The audit can identify a deterministic zero-relative-phase degeneracy in this simulator campaign and its association with lost quadrature information and weaker delay-geometry recovery. It cannot establish performance over arbitrary real-spoofer initial phases without a receiver-in-loop phase sweep.",
+  "role": "development-only post-release causal diagnosis",
+  "schema": "gnss-doppler-lab.cgc-locked-phase-root-cause-audit",
+  "schema_version": 1,
+  "simulator_phase_evidence": {
+    "independent_code_carrier_update_found": true,
+    "interpretation": "Each separately generated component starts with zero carrier phase. When the spoof carrier trajectory is locked to the authentic trajectory, their relative carrier phase is therefore fixed at zero in this campaign.",
+    "path": "/home/ubuntu/projects/gnss-doppler-lab/.tools/gps-sdr-sim-code-carrier-src/gpssim.c",
+    "sha256": "05b6b6032be7dc7ae95a0fa8de10bbc29dd24d5ae76ab409a30aeac8521c9237",
+    "zero_carrier_phase_initializer_count": 1
+  }
+}
