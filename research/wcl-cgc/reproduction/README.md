@@ -75,6 +75,10 @@ gates, and per-pair results—match and the three regenerated CSV files have the
 same SHA-256 as the sealed files. Output is written only below the requested
 `--output-dir`.
 
+The 2026-09-03 fresh-clone execution at commit `d93dc04` returned
+`EXACT_MATCH`; its committed audit note is
+[`../../../docs/results/WCL_CGC_FRESH_CLONE_REPRODUCTION_V1.md`](../../../docs/results/WCL_CGC_FRESH_CLONE_REPRODUCTION_V1.md).
+
 ## Recompute the equation audit
 
 The equation audit currently writes its three tracked outputs in place. Run it

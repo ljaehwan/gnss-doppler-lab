@@ -27,7 +27,7 @@ Thumbs.db
 .env.*
 
 # Project artifacts
-.tools/
+.tools
 *.tmp
 artifacts/*
 !artifacts/.gitkeep
