@@ -1,0 +1,403 @@
+{
+  "schema": "gnss-doppler-lab.paper-code-map",
+  "schema_version": 1,
+  "paper": {
+    "short_name": "WCL CGC",
+    "method": "clock-centered correlator geometry consistency",
+    "primary_endpoint": "cgc-temporal-final-static-v1",
+    "claim_boundary": "Second-stage physical cause classification in a locally observable two-component carry-off interval; final performance evidence is static simulated receiver-RF, while public records are separate transfer audits."
+  },
+  "classifications": [
+    "paper_core",
+    "paper_support",
+    "development_only",
+    "negative_or_failed",
+    "superseded",
+    "legacy_other_direction",
+    "shared_infrastructure",
+    "uncommitted_review"
+  ],
+  "entries": [
+    {
+      "claim_id": "C0_CORE_IMPLEMENTATION",
+      "classification": "paper_core",
+      "paper_use": "method equations and executable implementation",
+      "tracked_files": [
+        "src/gnss_doppler_lab/correlator_geometry.py",
+        "src/gnss_doppler_lab/clock_centered_geometry.py",
+        "src/gnss_doppler_lab/static_reference_geometry.py",
+        "src/gnss_doppler_lab/temporal_cgc.py",
+        "src/gnss_doppler_lab/code_carrier_sim.py",
+        "src/gnss_doppler_lab/satellite_multipath.py",
+        "src/gnss_doppler_lab/peak_mixture_law.py",
+        "src/gnss_doppler_lab/tracking_peaks.py",
+        "tests/test_correlator_geometry.py",
+        "tests/test_clock_centered_geometry.py",
+        "tests/test_static_reference_geometry.py",
+        "tests/test_temporal_cgc.py",
+        "tests/test_code_carrier_sim.py",
+        "tests/test_satellite_multipath.py",
+        "tests/test_peak_mixture_law.py",
+        "tests/test_tracking_peaks.py"
+      ]
+    },
+    {
+      "claim_id": "C1_COMPLEX_SIGNED_DELAY",
+      "classification": "paper_core",
+      "paper_use": "matched-profile mechanism metrics in Results and Fig. 2a",
+      "tracked_files": [
+        "scripts/audit_correlator_geometry_identifiability.py",
+        "scripts/validate_correlator_geometry_identifiability.py",
+        "configs/experiments/correlator_geometry_identifiability_train_v1.json",
+        "configs/experiments/correlator_geometry_identifiability_validation_v1.json",
+        "docs/results/correlator_geometry_identifiability_train_v1.md",
+        "docs/results/correlator_geometry_identifiability_train_v1_summary.json",
+        "docs/results/correlator_geometry_identifiability_validation_v1.md",
+        "docs/results/correlator_geometry_identifiability_validation_v1_summary.json",
+        "tests/test_correlator_geometry_validation.py"
+      ]
+    },
+    {
+      "claim_id": "C3_FRESH_RF_MECHANISM",
+      "classification": "paper_core",
+      "paper_use": "three held-out receiver-RF mechanism pairs and Fig. 1 source",
+      "tracked_files": [
+        "scripts/preflight_cgc_rf_fresh_candidates.py",
+        "scripts/run_cgc_rf_fresh_test_v2.py",
+        "configs/experiments/cgc_rf_fresh_candidate_pool_v2.json",
+        "configs/experiments/cgc_rf_fresh_test_v2.json",
+        "docs/results/cgc_rf_fresh_candidate_preflight_protocol_v2.md",
+        "docs/results/cgc_rf_fresh_candidate_preflight_v2_summary.json",
+        "docs/results/cgc_rf_fresh_test_protocol_v2.md",
+        "docs/results/CGC_RF_FRESH_TEST_V2_RESULT.md",
+        "docs/results/cgc_rf_fresh_test_v2_summary.json",
+        "tests/test_preflight_cgc_rf_fresh_candidates.py",
+        "tests/test_cgc_rf_fresh_test_v2.py"
+      ],
+      "local_artifacts": [
+        {
+          "path": "artifacts/cgc_rf_fresh_test_v2",
+          "required_for_manifest_audit": false
+        },
+        {
+          "path": "artifacts/simulation_v5_fresh_test_generation_v2",
+          "required_for_manifest_audit": false
+        }
+      ]
+    },
+    {
+      "claim_id": "C4_FINAL_STATIC",
+      "classification": "paper_core",
+      "paper_use": "primary outcome-unseen Table I and final detector metrics",
+      "tracked_files": [
+        "scripts/preflight_cgc_temporal_final_static.py",
+        "scripts/run_cgc_temporal_final_static_v1.py",
+        "configs/experiments/cgc_temporal_final_static_pool_v1.json",
+        "configs/experiments/cgc_temporal_final_static_v1.json",
+        "docs/results/cgc_temporal_final_static_preflight_protocol_v1.md",
+        "docs/results/cgc_temporal_final_static_preflight_v1_summary.json",
+        "docs/results/cgc_temporal_final_static_protocol_v1.md",
+        "docs/results/CGC_TEMPORAL_FINAL_STATIC_V1.md",
+        "docs/results/cgc_temporal_final_static_v1_summary.json"
+      ],
+      "local_artifacts": [
+        {
+          "path": "/home/ubuntu/hdd_data/cgc_temporal_final_static_v1",
+          "required_for_manifest_audit": false,
+          "summary_sha256": "b154e411f4447fb534c0e10dee45f2f14f84b0e4e4eeedaa771cfefaf721045d"
+        }
+      ]
+    },
+    {
+      "claim_id": "C5_FORMULA_ACCURACY",
+      "classification": "paper_support",
+      "paper_use": "same-stream simulator-truth validation; numerical summary only",
+      "manuscript_figure": false,
+      "tracked_files": [
+        "scripts/audit_cgc_formula_accuracy_v1.py",
+        "docs/results/CGC_FORMULA_ACCURACY_AUDIT_V1.md",
+        "docs/results/cgc_formula_accuracy_audit_v1_summary.json",
+        "docs/results/figures/cgc_formula_accuracy_audit_v1.pdf",
+        "docs/results/figures/cgc_formula_accuracy_audit_v1.png"
+      ]
+    },
+    {
+      "claim_id": "C6_TAP_APERTURE",
+      "classification": "paper_support",
+      "paper_use": "same-stream 3/5/7/9-tap aperture and finite-support limitation",
+      "result_status": "structured support with failed preregistered aggregate gates; 7-tap is post-hoc",
+      "tracked_files": [
+        "scripts/run_cgc_rf_geometry_aperture_validation.py",
+        "scripts/audit_cgc_rf_7tap_aperture.py",
+        "scripts/plot_cgc_rf_geometry_aperture_validation.py",
+        "configs/experiments/cgc_rf_geometry_aperture_validation_v1.json",
+        "docs/results/cgc_rf_geometry_aperture_validation_protocol_v1.md",
+        "docs/results/CGC_RF_GEOMETRY_APERTURE_VALIDATION_V1_RESULT.md",
+        "docs/results/cgc_rf_geometry_aperture_validation_v1_summary.json",
+        "docs/results/cgc_rf_geometry_aperture_validation_v1_condition_aperture_summary.csv",
+        "docs/results/cgc_rf_7tap_aperture_audit_v1_summary.json",
+        "docs/results/cgc_rf_7tap_aperture_audit_v1_condition_summary.csv",
+        "docs/results/figures/cgc_rf_geometry_aperture_validation_v1.png",
+        "tests/test_cgc_rf_geometry_aperture_validation.py"
+      ],
+      "local_artifacts": [
+        {
+          "path": "artifacts/cgc_rf_ga_v1",
+          "required_for_manifest_audit": false
+        }
+      ]
+    },
+    {
+      "claim_id": "C7A_JAMMERTEST_TRANSFER",
+      "classification": "paper_support",
+      "paper_use": "separate public coherent-spoof transfer check",
+      "tracked_files": [
+        "scripts/audit_jammertest2023_jt17_support.py",
+        "scripts/run_jammertest2023_jt17_receiver.py",
+        "scripts/run_jammertest2023_jt17_cgc_detection.py",
+        "configs/experiments/jammertest2023_jt17_cgc_v1.json",
+        "docs/results/jammertest2023_jt17_cgc_protocol_v1.md",
+        "docs/results/jammertest2023_jt17_cgc_result_v2.md",
+        "docs/results/jammertest2023_jt17_cgc_carryoff_timeline_v2.csv",
+        "tests/test_jammertest2023_jt17_cgc.py"
+      ]
+    },
+    {
+      "claim_id": "C7B_TEXBAT_TRANSFER",
+      "classification": "paper_support",
+      "paper_use": "pre/post direction and latency; no independent-multipath class",
+      "tracked_files": [
+        "scripts/run_cgc_texbat_external.py",
+        "configs/experiments/cgc_texbat_external_v1.json",
+        "docs/results/cgc_texbat_external_protocol_v1.md",
+        "docs/results/CGC_TEXBAT_EXTERNAL_V1_RESULT.md",
+        "docs/results/cgc_texbat_external_v1_summary.json",
+        "tests/test_cgc_texbat_external.py"
+      ]
+    },
+    {
+      "claim_id": "C7C_OPENIF_MULTIPATH",
+      "classification": "paper_support",
+      "paper_use": "two recording-level real urban-multipath negative controls",
+      "tracked_files": [
+        "scripts/run_gnss_openif_s1_receiver.py",
+        "scripts/evaluate_gnss_openif_s1_cgc.py",
+        "configs/experiments/gnss_openif_s1_real_multipath_v1.json",
+        "configs/experiments/gnss_openif_s2_real_multipath_v1.json",
+        "docs/results/gnss_openif_s1_real_multipath_v1.md",
+        "docs/results/gnss_openif_s1_real_multipath_v1_summary.json",
+        "docs/results/gnss_openif_s2_real_multipath_protocol_v1.md",
+        "docs/results/gnss_openif_s2_real_multipath_v1.md",
+        "docs/results/gnss_openif_s2_real_multipath_v1_summary.json",
+        "tests/test_gnss_openif_s1_real_multipath.py"
+      ]
+    },
+    {
+      "claim_id": "C8_MANUSCRIPT_FIGURES",
+      "classification": "paper_core",
+      "paper_use": "two vector figures included by the manuscript",
+      "tracked_files": [
+        "scripts/plot_wcl_cgc_figures.py",
+        "docs/results/figures/wcl/wcl_cgc_figure_manifest.json",
+        "docs/results/figures/wcl/wcl_cgc_principle.pdf",
+        "docs/results/figures/wcl/wcl_cgc_principle.png",
+        "docs/results/figures/wcl/wcl_cgc_evidence.pdf",
+        "docs/results/figures/wcl/wcl_cgc_evidence.png"
+      ]
+    },
+    {
+      "claim_id": "D1_TEMPORAL_AND_PHASE_SELECTION",
+      "classification": "development_only",
+      "paper_use": "method selection and phase-ambiguity explanation, not final performance",
+      "tracked_files": [
+        "scripts/run_cgc_locked_phase_sweep_dev.py",
+        "scripts/audit_cgc_locked_phase_root_cause.py",
+        "scripts/evaluate_cgc_temporal_stabilization_dev.py",
+        "scripts/audit_cgc_temporal_benign_controls_dev.py",
+        "scripts/audit_cgc_temporal_openif_controls_dev.py",
+        "docs/results/CGC_LOCKED_PHASE_ROOT_CAUSE_V1.md",
+        "docs/results/CGC_TEMPORAL_STABILIZATION_DEV_V1.md"
+      ]
+    },
+    {
+      "claim_id": "D2_CODE_CARRIER_EXPLORATION",
+      "classification": "development_only",
+      "paper_use": "research direction and intervention design only",
+      "tracked_files": [
+        "scripts/run_cgc_code_carrier_decoupling_pilot.py",
+        "scripts/audit_cgc_code_carrier_doppler_observability.py",
+        "scripts/audit_cgc_doppler_silent_hold_development.py",
+        "configs/experiments/cgc_code_carrier_decoupling_pilot_v1.json",
+        "docs/results/cgc_code_carrier_decoupling_pilot_protocol_v1.md",
+        "docs/results/CGC_CODE_CARRIER_DECOUPLING_PILOT_V1.md",
+        "docs/results/CGC_DOPPLER_SILENT_HOLD_DEVELOPMENT_V1_RESULT.md",
+        "docs/results/CGC_THREE_REGIME_RESEARCH_DIRECTION_V2.md"
+      ]
+    },
+    {
+      "claim_id": "N1_RETAINED_NEGATIVE_RESULTS",
+      "classification": "negative_or_failed",
+      "paper_use": "claim-boundary evidence only",
+      "tracked_files": [
+        "scripts/run_cgc_normal_detector_freeze_audit.py",
+        "configs/experiments/cgc_normal_detector_freeze_audit_v1.json",
+        "docs/results/CGC_NORMAL_DETECTOR_FREEZE_AUDIT_V1_NEGATIVE_RESULT.md",
+        "docs/results/cgc_normal_detector_freeze_audit_v1_summary.json",
+        "tests/test_cgc_normal_detector_freeze_audit.py",
+        "scripts/run_fgi_spoofrepo_tgd_cgc_detection.py",
+        "configs/experiments/fgi_spoofrepo_tgd_cgc_detection_v1.json",
+        "docs/results/FGI_SPOOFREPO_TGD_CGC_DETECTION_V1_1_NEGATIVE_RESULT.md",
+        "docs/results/fgi_spoofrepo_tgd_cgc_detection_v1_1_summary.json",
+        "tests/test_fgi_spoofrepo_tgd_cgc_detection.py",
+        "scripts/run_cgc_real_detection.py",
+        "configs/experiments/cgc_real_detection_v1.json",
+        "docs/results/CGC_REAL_DETECTION_V1_INPUT_SUPPORT_FAILURE.md",
+        "tests/test_cgc_real_detection.py",
+        "scripts/audit_cgc_three_regime_complementarity.py",
+        "docs/results/CGC_THREE_REGIME_COMPLEMENTARITY_V1_RESULT.md",
+        "tests/test_cgc_three_regime_complementarity.py"
+      ]
+    },
+    {
+      "claim_id": "S1_SUPERSEDED_CGC_CAMPAIGNS",
+      "classification": "superseded",
+      "paper_use": "historical development; replaced by C4 final-static or C7 public audits",
+      "tracked_files": [
+        "scripts/preflight_cgc_code_carrier_fresh_static.py",
+        "scripts/run_cgc_code_carrier_fresh_static_v1.py",
+        "configs/experiments/cgc_code_carrier_fresh_static_pool_v1.json",
+        "configs/experiments/cgc_code_carrier_fresh_static_v1.json",
+        "docs/results/CGC_CODE_CARRIER_FRESH_STATIC_V1_RESULT.md",
+        "tests/test_cgc_code_carrier_fresh_static_preflight.py",
+        "scripts/run_cgc_rf_locked_test.py",
+        "configs/experiments/cgc_rf_locked_test_v1.json",
+        "docs/results/CGC_RF_LOCKED_TEST_V1_TERMINAL_RESULT.md",
+        "tests/test_cgc_rf_locked_test.py",
+        "scripts/run_cgc_rf_state_validation.py",
+        "configs/experiments/cgc_rf_state_validation_v1.json",
+        "docs/results/CGC_RF_STATE_VALIDATION_V1_RESULT.md",
+        "tests/test_cgc_rf_state_validation.py",
+        "scripts/run_cgc_rf_transfer_sweep.py",
+        "configs/experiments/cgc_rf_transfer_sweep_v1.json",
+        "docs/results/CGC_RF_TRANSFER_SWEEP_V1_RESULT.md",
+        "tests/test_cgc_rf_transfer_sweep.py",
+        "scripts/run_cgc_rf_observability_anchors.py",
+        "configs/experiments/cgc_rf_observability_anchors_v1.json",
+        "docs/results/CGC_RF_OBSERVABILITY_ANCHORS_V1_RESULT.md",
+        "tests/test_cgc_rf_observability_anchors.py",
+        "scripts/run_cgc_observability_boundary.py",
+        "configs/experiments/cgc_observability_boundary_v1.json",
+        "docs/results/CGC_OBSERVABILITY_BOUNDARY_V1_RESULT.md",
+        "tests/test_cgc_observability_boundary.py",
+        "docs/results/CGC_REAL_DETECTION_V1_RESULT.md",
+        "scripts/run_cgc_sequential_ds8.py",
+        "configs/experiments/cgc_sequential_ds8_v1.json",
+        "docs/results/CGC_SEQUENTIAL_DS8_V1_RESULT.md",
+        "tests/test_cgc_sequential_ds8.py"
+      ],
+      "replaced_by": [
+        "C4_FINAL_STATIC",
+        "C7A_JAMMERTEST_TRANSFER",
+        "C7B_TEXBAT_TRANSFER",
+        "C7C_OPENIF_MULTIPATH"
+      ]
+    },
+    {
+      "claim_id": "L1_LEGACY_OTHER_DIRECTIONS",
+      "classification": "legacy_other_direction",
+      "paper_use": "not used for current CGC claims",
+      "documented_prefixes": [
+        "docs/BINOMIAL_TAIL_GATE_BASELINE.md",
+        "docs/RAW_IQ_NOISE_CONTINUITY_SECOND_METHOD.md",
+        "src/gnss_doppler_lab/gcmr_",
+        "src/gnss_doppler_lab/receiver_state_tail.py",
+        "src/gnss_doppler_lab/quality_conditioned_tail.py"
+      ]
+    },
+    {
+      "claim_id": "I1_SHARED_RF_INFRASTRUCTURE",
+      "classification": "shared_infrastructure",
+      "paper_use": "indirect simulator, receiver, RF, ephemeris, and trajectory support",
+      "tracked_files": [
+        "src/gnss_doppler_lab/gps_sdr_sim.py",
+        "src/gnss_doppler_lab/gnss_sdr.py",
+        "src/gnss_doppler_lab/rf_config.py",
+        "src/gnss_doppler_lab/rf_impairments.py",
+        "src/gnss_doppler_lab/simulation_v4.py",
+        "src/gnss_doppler_lab/gcmr_geometry.py",
+        "src/gnss_doppler_lab/rinex_nav.py",
+        "src/gnss_doppler_lab/trajectory.py"
+      ]
+    },
+    {
+      "claim_id": "I2_PAPER_CODE_MAP_TOOLING",
+      "classification": "shared_infrastructure",
+      "paper_use": "repository provenance and lifecycle management",
+      "tracked_files": [
+        "README.md",
+        "configs/paper/wcl_cgc_v1_manifest.json",
+        "docs/RESEARCH_ARTIFACT_LIFECYCLE.md",
+        "docs/WCL_CGC_CODE_MAP.md",
+        "scripts/audit_wcl_cgc_manifest.py",
+        "tests/test_wcl_cgc_manifest.py"
+      ]
+    }
+  ],
+  "uncommitted_review": [
+    {
+      "path": "docs/results/WCL_THREE_CONDITION_AUDIT_V1.md",
+      "likely_line": "legacy B0/GRU and binomial-tail detector",
+      "action": "keep uncommitted until ownership and intended branch are confirmed"
+    },
+    {
+      "path": "scripts/build_gnss_openif_s1_gru_input.py",
+      "likely_line": "legacy B0/GRU external multipath adapter",
+      "action": "review with its tests; not part of CGC paper"
+    },
+    {
+      "path": "scripts/eval_external_btail_negative_control.py",
+      "likely_line": "legacy B0/binomial-tail negative control",
+      "action": "review with its tests; not part of CGC paper"
+    },
+    {
+      "path": "scripts/eval_external_support_sensitivity.py",
+      "likely_line": "legacy B0 post-hoc support sensitivity",
+      "action": "review; sensitivity result is not a primary CGC endpoint"
+    },
+    {
+      "path": "scripts/eval_tap_and_aggregation_ablation.py",
+      "likely_line": "legacy learned-detector tap/aggregation ablation",
+      "action": "do not confuse with the CGC physical tap-aperture audit"
+    },
+    {
+      "path": "scripts/prepare_tap_subset_ablation.py",
+      "likely_line": "legacy learned-detector tap input preparation",
+      "action": "do not confuse with the CGC same-stream receiver aperture audit"
+    },
+    {
+      "path": "tests/test_external_btail_negative_control.py",
+      "likely_line": "test for uncommitted legacy B0 script",
+      "action": "review with implementation"
+    },
+    {
+      "path": "tests/test_gnss_openif_s1_gru_input.py",
+      "likely_line": "test for uncommitted legacy B0 adapter",
+      "action": "review with implementation"
+    },
+    {
+      "path": "tests/test_prepare_tap_subset_ablation.py",
+      "likely_line": "test for uncommitted legacy tap input script",
+      "action": "review with implementation"
+    },
+    {
+      "path": "tests/test_tap_and_aggregation_ablation.py",
+      "likely_line": "test for uncommitted legacy learned-detector ablation",
+      "action": "review with implementation"
+    },
+    {
+      "path": "uv.lock",
+      "likely_line": "environment lock candidate",
+      "action": "verify it was intentionally generated before committing"
+    }
+  ]
+}

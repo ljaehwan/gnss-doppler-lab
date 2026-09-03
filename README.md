@@ -1,8 +1,35 @@
 # GNSS Doppler Lab
 
-## Current frozen detector
+## Current WCL CGC paper line
 
-The current operational research baseline is the normal-only, tap9-only
+The active WCL manuscript studies **clock-centered correlator geometry
+consistency (CGC)** as a second-stage physical cause classifier. It converts
+per-PRN complex multi-tap correlation profiles to signed secondary delays and
+tests whether their cross-satellite pattern is explained by one 3-D
+displacement plus a common clock term.
+
+Use these two files as the entry point before changing or rerunning experiments:
+
+- [`docs/WCL_CGC_CODE_MAP.md`](docs/WCL_CGC_CODE_MAP.md): claim-to-code,
+  configuration, result, and artifact map;
+- [`configs/paper/wcl_cgc_v1_manifest.json`](configs/paper/wcl_cgc_v1_manifest.json):
+  machine-readable classification of paper-core, supporting, development,
+  negative, legacy, and uncommitted-review material.
+
+Validate the map without regenerating RF data:
+
+```bash
+python scripts/audit_wcl_cgc_manifest.py
+```
+
+No experiment has been physically moved or deleted during this classification
+pass. Existing paths and hash-sealed provenance therefore remain valid. The
+formula-accuracy audit figure is a developer diagnostic retained in this lab
+repository; it is not a manuscript figure.
+
+## Legacy B0 detector line (not the current CGC paper)
+
+The normal-only detector line's frozen baseline is the tap9-only
 PRN-local GRU plus the clean-calibrated exact binomial-tail PRN-set support gate:
 
 ```text
