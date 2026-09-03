@@ -10,6 +10,9 @@ displacement plus a common clock term.
 
 Use these two files as the entry point before changing or rerunning experiments:
 
+- [`research/wcl-cgc/`](research/wcl-cgc/): folder-oriented paper package for
+  figures, equations, simulation, data locations, and experiment roles;
+- [`research/legacy/`](research/legacy/): earlier research kept outside the paper line;
 - [`docs/WCL_CGC_CODE_MAP.md`](docs/WCL_CGC_CODE_MAP.md): claim-to-code,
   configuration, result, and artifact map;
 - [`configs/paper/wcl_cgc_v1_manifest.json`](configs/paper/wcl_cgc_v1_manifest.json):

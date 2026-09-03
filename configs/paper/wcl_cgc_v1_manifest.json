@@ -339,7 +339,15 @@
         "docs/RESEARCH_ARTIFACT_LIFECYCLE.md",
         "docs/WCL_CGC_CODE_MAP.md",
         "scripts/audit_wcl_cgc_manifest.py",
-        "tests/test_wcl_cgc_manifest.py"
+        "tests/test_wcl_cgc_manifest.py",
+        "research/README.md",
+        "research/wcl-cgc/README.md",
+        "research/wcl-cgc/figures/README.md",
+        "research/wcl-cgc/equations/README.md",
+        "research/wcl-cgc/simulation/README.md",
+        "research/wcl-cgc/data/README.md",
+        "research/wcl-cgc/experiments/README.md",
+        "research/legacy/README.md"
       ]
     }
   ],
