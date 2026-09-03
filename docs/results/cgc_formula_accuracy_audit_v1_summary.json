@@ -1,0 +1,315 @@
+{
+  "artifacts": {
+    "figure_pdf": "docs/results/figures/cgc_formula_accuracy_audit_v1.pdf",
+    "figure_png": "docs/results/figures/cgc_formula_accuracy_audit_v1.png"
+  },
+  "claim_boundary": [
+    "Post-hoc descriptive truth audit of the existing frozen final-static campaign.",
+    "It verifies the measurement/model chain but is not a new independent detection test.",
+    "The five geometries are simulated static receiver--RF cases, not field measurements.",
+    "The fixed-startup-LOS comparison includes both first-order range approximation and LOS aging over the 30 s recording."
+  ],
+  "decision": "SUPPORTIVE_DESCRIPTIVE_AUDIT",
+  "descriptive_checks": {
+    "fixed_startup_los_max_error_at_most_0p002_chip": true,
+    "median_absolute_norm_error_at_most_0p15": true,
+    "median_direction_cosine_at_least_0p95": true,
+    "stabilized_delay_mae_at_most_0p075_chip": true,
+    "stabilized_sign_accuracy_at_least_0p90": true
+  },
+  "operational_los_approximation": {
+    "count": 11160,
+    "interpretation": "Exact simulator code-range difference minus the first-order prediction from the fixed startup LOS used by CGC; therefore this conservatively includes both range linearization and up to 30 s of LOS aging.",
+    "mae_chips": 0.0004319775628414737,
+    "mae_m": 0.12659199937936935,
+    "maximum_absolute_error_chips": 0.001416441817218117,
+    "maximum_absolute_error_m": 0.41509147018358356,
+    "rmse_chips": 0.0005134632044813251
+  },
+  "schema": "gnss-doppler-lab.cgc-formula-accuracy-audit",
+  "schema_version": 1,
+  "signed_delay_accuracy": {
+    "causal_five_bin_median": {
+      "absolute": {
+        "bias_chips": 0.005768205272189216,
+        "count": 1966,
+        "mae_chips": 0.05559153197349264,
+        "pearson_correlation": 0.916470604764009,
+        "rmse_chips": 0.08212385415936249,
+        "sign_accuracy": 0.9348086124401914,
+        "sign_eligible_count": 1672,
+        "sign_truth_min_abs_chips": 0.05
+      },
+      "by_condition": {
+        "carrier-coupled": {
+          "bias_chips": -0.0016837650998286168,
+          "count": 981,
+          "mae_chips": 0.05433045963286024,
+          "pearson_correlation": 0.9159935038203075,
+          "rmse_chips": 0.08142809904047742,
+          "sign_accuracy": 0.9338146811070999,
+          "sign_eligible_count": 831,
+          "sign_truth_min_abs_chips": 0.05
+        },
+        "doppler-locked": {
+          "bias_chips": 0.013189913835589718,
+          "count": 985,
+          "mae_chips": 0.05684748320817321,
+          "pearson_correlation": 0.9183056401437972,
+          "rmse_chips": 0.08281097409581116,
+          "sign_accuracy": 0.9357907253269917,
+          "sign_eligible_count": 841,
+          "sign_truth_min_abs_chips": 0.05
+        }
+      },
+      "by_pair": {
+        "ctfs-s1-a-fairbanks": {
+          "bias_chips": 0.01083624980633847,
+          "count": 396,
+          "mae_chips": 0.04307429839604503,
+          "pearson_correlation": 0.9377059018551076,
+          "rmse_chips": 0.0743094780592763,
+          "sign_accuracy": 0.9660493827160493,
+          "sign_eligible_count": 324,
+          "sign_truth_min_abs_chips": 0.05
+        },
+        "ctfs-s2-a-punta-arenas": {
+          "bias_chips": 0.025370466415573126,
+          "count": 391,
+          "mae_chips": 0.06264688633047087,
+          "pearson_correlation": 0.8818163589668062,
+          "rmse_chips": 0.09494974267241627,
+          "sign_accuracy": 0.9070422535211268,
+          "sign_eligible_count": 355,
+          "sign_truth_min_abs_chips": 0.05
+        },
+        "ctfs-s3-a-casablanca": {
+          "bias_chips": 0.004609823269036621,
+          "count": 387,
+          "mae_chips": 0.050927810898150475,
+          "pearson_correlation": 0.9282620324269564,
+          "rmse_chips": 0.0741620046251508,
+          "sign_accuracy": 0.9354005167958657,
+          "sign_eligible_count": 387,
+          "sign_truth_min_abs_chips": 0.05
+        },
+        "ctfs-s4-a-sapporo": {
+          "bias_chips": -0.006200658468389809,
+          "count": 396,
+          "mae_chips": 0.05697542391521614,
+          "pearson_correlation": 0.933913274363919,
+          "rmse_chips": 0.07787705419100416,
+          "sign_accuracy": 0.96875,
+          "sign_eligible_count": 288,
+          "sign_truth_min_abs_chips": 0.05
+        },
+        "ctfs-s5-a-prince-george": {
+          "bias_chips": -0.005553678228055388,
+          "count": 396,
+          "mae_chips": 0.06431632942380998,
+          "pearson_correlation": 0.8637871834969552,
+          "rmse_chips": 0.08729170740320115,
+          "sign_accuracy": 0.9025157232704403,
+          "sign_eligible_count": 318,
+          "sign_truth_min_abs_chips": 0.05
+        }
+      },
+      "clock_centered": {
+        "bias_chips": 1.1294232193541776e-18,
+        "count": 1966,
+        "mae_chips": 0.055299592560446455,
+        "pearson_correlation": 0.9163519089956272,
+        "rmse_chips": 0.07867430006676472,
+        "sign_accuracy": 0.928,
+        "sign_eligible_count": 1750,
+        "sign_truth_min_abs_chips": 0.05
+      }
+    },
+    "raw_one_second": {
+      "absolute": {
+        "bias_chips": 0.0059271574593713116,
+        "count": 1966,
+        "mae_chips": 0.07139892692241465,
+        "pearson_correlation": 0.8643744697362936,
+        "rmse_chips": 0.10772866785514844,
+        "sign_accuracy": 0.9043062200956937,
+        "sign_eligible_count": 1672,
+        "sign_truth_min_abs_chips": 0.05
+      },
+      "by_condition": {
+        "carrier-coupled": {
+          "bias_chips": -0.0024610331936104706,
+          "count": 981,
+          "mae_chips": 0.0718841869028345,
+          "pearson_correlation": 0.8604584790474404,
+          "rmse_chips": 0.10837811986198728,
+          "sign_accuracy": 0.9001203369434416,
+          "sign_eligible_count": 831,
+          "sign_truth_min_abs_chips": 0.05
+        },
+        "doppler-locked": {
+          "bias_chips": 0.01428128439396535,
+          "count": 985,
+          "mae_chips": 0.07091563754090004,
+          "pearson_correlation": 0.8697716424613786,
+          "rmse_chips": 0.10707793817643811,
+          "sign_accuracy": 0.9084423305588585,
+          "sign_eligible_count": 841,
+          "sign_truth_min_abs_chips": 0.05
+        }
+      },
+      "by_pair": {
+        "ctfs-s1-a-fairbanks": {
+          "bias_chips": 0.012098876068964733,
+          "count": 396,
+          "mae_chips": 0.0552386940877108,
+          "pearson_correlation": 0.9088335926638537,
+          "rmse_chips": 0.09165038751449871,
+          "sign_accuracy": 0.9475308641975309,
+          "sign_eligible_count": 324,
+          "sign_truth_min_abs_chips": 0.05
+        },
+        "ctfs-s2-a-punta-arenas": {
+          "bias_chips": 0.023548215776186935,
+          "count": 391,
+          "mae_chips": 0.07260289044208172,
+          "pearson_correlation": 0.8361132567450801,
+          "rmse_chips": 0.11292219869168138,
+          "sign_accuracy": 0.895774647887324,
+          "sign_eligible_count": 355,
+          "sign_truth_min_abs_chips": 0.05
+        },
+        "ctfs-s3-a-casablanca": {
+          "bias_chips": 0.006063311641129648,
+          "count": 387,
+          "mae_chips": 0.0629701290415693,
+          "pearson_correlation": 0.8817370733845756,
+          "rmse_chips": 0.09661739673154271,
+          "sign_accuracy": 0.8888888888888888,
+          "sign_eligible_count": 387,
+          "sign_truth_min_abs_chips": 0.05
+        },
+        "ctfs-s4-a-sapporo": {
+          "bias_chips": -0.004496113013844363,
+          "count": 396,
+          "mae_chips": 0.07761848336563298,
+          "pearson_correlation": 0.8670590875894254,
+          "rmse_chips": 0.11220001912542378,
+          "sign_accuracy": 0.9236111111111112,
+          "sign_eligible_count": 288,
+          "sign_truth_min_abs_chips": 0.05
+        },
+        "ctfs-s5-a-prince-george": {
+          "bias_chips": -0.007352920652297816,
+          "count": 396,
+          "mae_chips": 0.08838807564646904,
+          "pearson_correlation": 0.7684232779904908,
+          "rmse_chips": 0.12212785565842398,
+          "sign_accuracy": 0.8710691823899371,
+          "sign_eligible_count": 318,
+          "sign_truth_min_abs_chips": 0.05
+        }
+      },
+      "clock_centered": {
+        "bias_chips": -1.2423655412895952e-18,
+        "count": 1966,
+        "mae_chips": 0.0719093724092562,
+        "pearson_correlation": 0.8643115683780939,
+        "rmse_chips": 0.10301890746139174,
+        "sign_accuracy": 0.8908571428571429,
+        "sign_eligible_count": 1750,
+        "sign_truth_min_abs_chips": 0.05
+      }
+    }
+  },
+  "source_campaign": {
+    "conditions": [
+      "carrier-coupled",
+      "doppler-locked"
+    ],
+    "data_root": "/home/ubuntu/hdd_data/cgc_temporal_final_static_v1",
+    "hold_start_s": 12.0,
+    "name": "cgc-temporal-final-static-v1",
+    "pair_count": 5,
+    "receiver_rf": "25 MHz simulated I/Q processed by modified GNSS-SDR",
+    "source_record": "docs/results/cgc_temporal_final_static_v1_summary.json",
+    "source_record_sha256": "27b3d688af079f856d05b4e4044e583ef21f4fa34f1a9ba0af3aad4797e7ab78"
+  },
+  "three_dimensional_recovery": {
+    "absolute_norm_relative_error": {
+      "maximum": 0.3792464172053779,
+      "median": 0.09004283245549027,
+      "minimum": 6.960371776831842e-05,
+      "q25": 0.05165690281428459,
+      "q75": 0.14737493237858793
+    },
+    "by_condition": {
+      "carrier-coupled": {
+        "absolute_norm_relative_error_median": 0.10873017415643554,
+        "direction_cosine_median": 0.9536187077303719,
+        "vector_error_m_median": 36.29724318939488
+      },
+      "doppler-locked": {
+        "absolute_norm_relative_error_median": 0.08142205608632513,
+        "direction_cosine_median": 0.9701372031105808,
+        "vector_error_m_median": 26.863529552453645
+      }
+    },
+    "by_pair": {
+      "ctfs-s1-a-fairbanks": {
+        "absolute_norm_relative_error_median": 0.09281499962743056,
+        "direction_cosine_median": 0.969100387832625,
+        "vector_error_m_median": 27.7371931275223
+      },
+      "ctfs-s2-a-punta-arenas": {
+        "absolute_norm_relative_error_median": 0.07798834185126674,
+        "direction_cosine_median": 0.9395087433796869,
+        "vector_error_m_median": 34.37933271032642
+      },
+      "ctfs-s3-a-casablanca": {
+        "absolute_norm_relative_error_median": 0.05779811793189027,
+        "direction_cosine_median": 0.9701372031105808,
+        "vector_error_m_median": 26.417498789377653
+      },
+      "ctfs-s4-a-sapporo": {
+        "absolute_norm_relative_error_median": 0.09606564090978709,
+        "direction_cosine_median": 0.9576110719494573,
+        "vector_error_m_median": 33.45875070270735
+      },
+      "ctfs-s5-a-prince-george": {
+        "absolute_norm_relative_error_median": 0.15288445431800662,
+        "direction_cosine_median": 0.9743251876947813,
+        "vector_error_m_median": 29.96285136705294
+      }
+    },
+    "clock_centered_geometry_residual": {
+      "maximum": 0.388719535725258,
+      "median": 0.09339173114793718,
+      "minimum": 0.0027973417673953383,
+      "q25": 0.0498836300482627,
+      "q75": 0.18022071129157596
+    },
+    "direction_cosine": {
+      "maximum": 0.9996142111149952,
+      "median": 0.9668075364858741,
+      "minimum": 0.541747648333816,
+      "q25": 0.9034906540964497,
+      "q75": 0.9842105626922995
+    },
+    "fit_count": 180,
+    "norm_ratio": {
+      "maximum": 1.3745884412369385,
+      "median": 1.052268789114795,
+      "minimum": 0.6207535827946221,
+      "q25": 0.9515444486874279,
+      "q75": 1.1070838872189581
+    },
+    "vector_error_m": {
+      "maximum": 93.87977540427525,
+      "median": 30.25455055138572,
+      "minimum": 3.6826501008239987,
+      "q25": 20.49620115862535,
+      "q75": 43.83485809532351
+    }
+  }
+}
