@@ -22,6 +22,7 @@ complex nine taps -> signed delay -> causal median -> observability
 | [`simulation/`](simulation/) | Final frozen receiver--RF simulation, conditions, positions, and commands |
 | [`data/`](data/) | Committed summaries versus local HDD/SSD IQ and receiver artifacts |
 | [`experiments/`](experiments/) | Paper-core, supporting, development-only, negative, and superseded experiments |
+| [`reproduction/`](reproduction/) | Clean-clone environment, retained-output replay, and full-RF rebuild boundary |
 
 ## Authoritative endpoint
 

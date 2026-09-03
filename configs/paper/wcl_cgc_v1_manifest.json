@@ -98,7 +98,11 @@
         "docs/results/cgc_temporal_final_static_preflight_v1_summary.json",
         "docs/results/cgc_temporal_final_static_protocol_v1.md",
         "docs/results/CGC_TEMPORAL_FINAL_STATIC_V1.md",
-        "docs/results/cgc_temporal_final_static_v1_summary.json"
+        "docs/results/cgc_temporal_final_static_v1_summary.json",
+        "scripts/reproduce_wcl_cgc_final_analysis_v1.py",
+        "tests/test_reproduce_wcl_cgc_final_analysis_v1.py",
+        "requirements/wcl-cgc-v1.txt",
+        "research/wcl-cgc/reproduction/README.md"
       ],
       "local_artifacts": [
         {

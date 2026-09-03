@@ -16,6 +16,13 @@ rerun until the dataset is restored.
 
 The final full `summary.json` SHA-256 is
 `b154e411f4447fb534c0e10dee45f2f14f84b0e4e4eeedaa771cfefaf721045d`.
+The retained folder is approximately 1.5 GB and contains component truth,
+simulator logs, receiver manifests, 9-tap tracking outputs, and the three final
+analysis CSV files. The 25 MHz intermediate IQ files were removed after
+successful receiver processing; their paths, sizes, and hashes remain in each
+pair's `retention.json`. See the
+[`manual reproduction guide`](../reproduction/README.md) for the consequence of
+that retention policy.
 
 ## Public transfer datasets
 
